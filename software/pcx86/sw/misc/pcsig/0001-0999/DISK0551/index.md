@@ -46,6 +46,52 @@ machines:
     Suggested Registration:  $10.00 per disk.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES551.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  551  LETUS A-B-C #14                                      v1  DS2
+---------------------------------------------------------------------------
+Literature Evaluation Table User Service - A database of articles and
+letters from third quarter 1984 magazines about IBM PCs.  It requires
+PC-FILE III and can be searched using keywords, author names, article
+titles, issue numbers, page numbers and descriptive text.
+ 
+PCMAG85B DTA  PC Magazine Second Quarter 1985 reference files
+PCMAG85B HDR  PC Magazine Second Quarter 1985 reference files
+PCMAG85B INX  PC Magazine Second Quarter 1985 reference files
+PCMAG85B KWD  PC Magazine Second Quarter 1985 reference files
+PCPRO85B DTA  PC Professional Second Quarter 1985 reference files
+PCPRO85B HDR  PC Professional Second Quarter 1985 reference files
+PCPRO85B INX  PC Professional Second Quarter 1985 reference files
+PCPRO85B KWD  PC Professional Second Quarter 1985 reference files
+PCW85B   DTA  PC WORLD Magazine Second Quarter 1985 reference files
+PCW85B   HDR  PC WORLD Magazine Second Quarter 1985 reference files
+PCW85B   INX  PC WORLD Magazine Second Quarter 1985 reference files
+PCW85B   KWD  PC WORLD Magazine Second Quarter 1985 reference files
+PCJRW85B DTA  PCjr WORLD Second Quarter 1985 reference files
+PCJRW85B HDR  PCjr WORLD Second Quarter 1985 reference files
+PCJRW85B INX  PCjr WORLD Second Quarter 1985 reference files
+PCJRW85B KWD  PCjr WORLD Second Quarter 1985 reference files
+PCTEC85B DTA  PC Tech Journal Second Quarter 1985 reference files
+PCTEC85B HDR  PC Tech Journal Second Quarter 1985 reference files
+PCTEC85B INX  PC Tech Journal Second Quarter 1985 reference files
+PCTEC85B KWD  PC Tech Journal Second Quarter 1985 reference files
+PCOMP85B DTA  Personal Computing Second Quarter 1985 reference files
+PCOMP85B HDR  Personal Computing Second Quarter 1985 reference files
+PCOMP85B INX  Personal Computing Second Quarter 1985 reference files
+PCOMP85B KWD  Personal Computing Second Quarter 1985 reference files
+PJ85B    DTA  Programmers Journal Second Quarter 1985 reference files
+PJ85B    HDR  Programmers Journal Second Quarter 1985 reference files
+PJ85B    INX  Programmers Journal Second Quarter 1985 reference files
+PJ85B    KWD  Programmers Journal Second Quarter 1985 reference files
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0551
 

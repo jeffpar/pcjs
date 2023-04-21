@@ -31,6 +31,64 @@ machines:
     your disk library with these descriptions.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES981.TXT
+
+{% raw %}
+```
+Disk No  981
+Program Title: MASTERFILE version 1.2
+PC-SIG version 1.2
+ 
+MASTERFILE is a disk file-cataloging program that lets you locate files
+on your floppies or hard disk by name or description without having to
+search every floppy or subdirectory.
+ 
+With MASTERFILE you can view a catalogue that describes the contents of
+a file without having to use the program (word processor, spreadsheet)
+that created the file.  The program lets you give any file a unique
+description, or you can select a group of files and give these files a
+common description.
+ 
+MASTERFILE lets you add a seventy-five-character description to your
+disk files (including hidden and system files), no matter what program
+created them.  It can also print the catalog of the disks, giving you a
+hardcopy of your catalog.
+ 
+Limitations of this shareware version:
+ 
+Shareware version begins with a request to register, delaying immediate
+use of program by 5 seconds. Two other features are not enabled: one to
+delete files from a directory, and one to remove a directory entirely.
+These two features are of minor interest and are not a fundamental part of
+the program. They are there for convenience more than anything else.
+ 
+Usage:  Disk Management System.
+ 
+System Requirements:  256K memory and two disk drives.
+ 
+How to Start:  Type MASTER (press enter).
+ 
+Suggested Registration:  $20.00
+ 
+File Descriptions:
+ 
+MASTER   EXE  Main program of MASTERFILE.
+MASTERPU EXE  Pop-up (terminate and stay resident) portion of MASTERFILE.
+READ     ME   List of improvements from earlier versions.
+MASTER   DOC  Documentation (ASCII format).
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0981
 

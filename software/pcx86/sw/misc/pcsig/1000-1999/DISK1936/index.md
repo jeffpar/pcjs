@@ -41,6 +41,51 @@ machines:
     easily try out the program's various features.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1936.TXT
+
+{% raw %}
+```
+Disk No: 1936                                                           
+Disk Title: MyFamily                                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: MYFAMILY                                                 
+Author Version: 1.1                                                     
+Author Registration: $25.00                                             
+Special Requirements: 512RAM, 2 Floppy Disks or a  Hard Drive and a Prin
+                                                                        
+Genealogical records and family histories can be easy to maintain.      
+MYFAMILY puts an emphasis on flexibility and menu-driven ease of use.   
+Records may be entered in any order.  There are no limits placed on the 
+number of children or previous marriages entered for each individual.   
+The program accommodates children from previous marriages.  When reports
+are produced children are automatically ordered by birthdate, and       
+previous marriages by date of marriage.  The Programmable Macro Key     
+feature allows the user to assign values to seven function keys to ease 
+the data entry and editing processes.                                   
+                                                                        
+MYFAMILY produces 14 different types of reports, including ancestor and 
+descendant charts, individual and family sheets, various types of lists,
+and blank charts or sheets.  Reports may be displayed on the screen,    
+printed to a printer, or saved to a disk file.  The File Manager feature
+allows the user to copy files, erase files, and view a directory listing
+without leaving the program.  Selected records may be copied from one   
+genealogy file to another.  The Date Calculator feature allows you to   
+view a calendar for a selected date and perform arithmetic on dates.  A 
+sample genealogy file SAMPLE.DBF is included on the program diskette so 
+that you may easily try out the program's various features.             
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1936
 

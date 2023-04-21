@@ -33,6 +33,38 @@ machines:
     to the printer, each with its own answer key.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## NOTE.TXT
+
+{% raw %}
+```
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+╔═════════════════════════════════════════════════════════════════════════╗
+║   This disk has been withdrawn by the author from the PC-SIG library.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1066
 

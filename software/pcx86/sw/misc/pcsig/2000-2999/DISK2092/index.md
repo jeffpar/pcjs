@@ -35,8 +35,321 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## MITESIZE.DOC
+
+{% raw %}
+```
+Mite-Size
+A Set of Merges to Minimize Code Size
+for RBBS 17.3
+
+by Ken Goosens (data line 703-978-6360)
+
+                 What These Merges Do
+
+These merges allow you select what functions to eliminate
+from RBBS in order to reduce the size of the compiled program
+and reduce the amount of memory needed.
+
+WARNING!!!  These merges must be applied to the UNMODIFIED
+source code to RBBS 17.3.  The merges substitute code for
+code in RBBS, and therefore may destroy other changes you
+have made to RBBS.   If you have fixes, you may want first to
+reduce the code, then add in the fixes.
+
+                   History of Changes
+
+01-10-90. Lit code rewritten to conform to "periodless" base code.
+          END SUB written into line containing omitted subroutine
+          for uniformity, and to save a few extra ASCII bytes.
+          Most subroutine descriptions and 'SUBTITLEs' removed
+          when subs .lit-ted out.
+
+08-06-89.  Problem fixed when omitting fossil driver.
+ 
+07-30.     Incorporated changes made in 17.2B.
+
+05-22.     More variables added.  Recommend using BLED 2.2,
+        since 2.1 had a bug that would cause erroneous warnings.
+
+12-27-88.  Corrections to doc.  Should only use BLED 2.1.
+        Variables added.  More code removeable.
+
+12-13.     Two variables left out of 12-11 release of SETLIT.INC:
+        DOORRTN, and ASMFREESP.  Added.
+
+        Three LIT files added:  ASMANSI (omits ANSI.OBJ) by using only
+           Basic screen writes.   CONFERENCE (no conferences).  And
+           DOORS (no doors).
+        
+        Documentation (this file) corrected:  base should use is
+           17.2A, and QB 4.5 added as possible compiler.
+
+01-09   Updated all .LIT files to recognize line numbers at the beginning
+        of every subroutine.  (These were made available in the Base dated
+        01/09/88.
+
+01-09   Corrected SUB4LIT.MRG to correctly identify NOVIEW.LIT.  Also
+        created the file (NOVIEW.LIT) since it was not in the archive.
+ 
+01-09   Added reference to DOORS.LIT to RBBSLIT.MRG.
+
+01-09   Added reference to DOORS3.LIT to SUB3LIT.MRG.
+
+01-09   Corrected CORVUS.LIT to use BRKFNAME as was being done in the
+        original code.
+
+01-09   Created SUB5HDR.LIT so that we are consistant.
+
+01-09   All SUBxHDR.LIT files were updated to identify that it is part
+        of a MITE SIZE program list.
+
+01-09   Standardized headings of each LIT file.
+
+01-15   Line should have been omitted for PCNET.  Doors code reduction
+        corrected.
+
+01-16   Four new LIT variables added.
+
+              Why Code Reduction May be Needed
+
+In the absence of an overlay linker or optimizing compiler for
+BASIC, RBBS has gotten steadily larger in code size as new functions
+have been added, and will continue to do so rather than not add
+new functions.  The increase in code size causes a problem on
+systems that wish to run 2 nodes within 640K of memory, or
+otherwise has only a restricted amount of memory to use.
+
+These merges allow sysops with a supported BASIC compiler to
+reduce code size.  This is achieved by eliminating the code
+for unused functions, redundant code (typically doing the same
+thing in both BASIC and assembler), and functions which the
+sysop is willing to sacrifice.
+
+RBBS can then continue to grow while still supporting sysops
+with limited memory.
+
+
+               How to Apply the Merges
+
+1st, you need a copy of the unmodifed source code for 17.2A.
+Put this in a separate subdirectory (e.g. 172A)
+
+2nd, in the subdirectory where you normally recompile RBBS,
+copy all the files in this application.
+
+3rd, modify the file MAKELIT.BAT by putting in the drive/path
+for the original code (the first parm to BLED).  The lines
+you should modify all begin with "*$", which is the default
+for a BLED metacommand.   The lines beginning with "* " are
+BLED comments, which are ignored in a merge.
+
+4th, get BLED version 2.2 or higher.  The latest is 2.2.
+Earlier versions lack the necessary features.
+Either put BLED in with the merges or in your
+path.  The new BLED functions are documented in BLED.DOC.
+
+5th, use your favorite text editor to modify the file
+SETLIT.INC.   Directions are right in the file.   Here is where
+you specify what options use are using and which you don't
+want.   This is the fundamental "driver" used.   The typical
+way you remove code is by setting a variable to the value
+"OFF", e.g. BAUD450 to "OFF" to save code by not supporting
+changing 300 baud to 450, or LIBRARY to "OFF" if not using the
+Library section.
+
+6th, execute the MAKELIT.BAT, which will generate the code
+needed to support your application (a new RBBS-PC.BAS,
+RBBSSUB2.BAS, and RBBSSUB3.BAS).  The version will say
+"17.2A Mite-Sized".  You should get no BLED warnings.
+
+7th, recompile.  Hint:  QB 3 produces the largest code.
+QB 2.01 is smaller, and QB 1.02 is the smallest.   QB 4.5
+works but produces the largest code of all.
+Also when removing certain routines it is possible to
+further reduce the size of the resulting .EXE file by
+removing the associated .OBJ from the link step. i.e.
+If you specify MULTNODE = NETBIOS then you can remove
+BDRIVEC2.OBJ, PCNET.OBJ, RBBSML.OBJ, 10NET.OBJ and
+RBBSDV.OBJ from the link parameters.
+
+Never use the /E option in linking.  You should
+get no errors when recompiling.
+
+8th, reconfigure RBBS for the reduced code, if needed.  For example,
+disable the commands for functions you remove, such as taking out
+the 'A' command if you turn questionnaires off.
+
+
+                   What the Files Mean
+
+SETLIT.INC - An file shared by all merges, which sets the
+options the sysop wants and does not want.  Basically
+defines BLED metavariables.
+
+RBBSLIT.MRG, SUB1LIT.MRG,SUB2LIT.MRG, SUB3LIT.MRG, SUB4LIT.MRG,
+SUB5LIT.MRG.
+
+The fundamental BLED merges for rbbs-pc.bas, rbbssub1.bas,
+rbbssub2.bas, rbbssub3.bas, rbbssub4.bas and rbbssub5.bas
+respectively.  Each reads in (includes) SETLIT.INC to set
+the metavariables, then uses the values to determines what
+merges to process in the run.
+
+*.LIT.  Files that reduce the code.
+
+
+You are welcome to enhance these merges with further code reduction.
+Please report any problems to Ken Goosens, data # 703-978-6360.
+Realize that there is no way I can test the many different
+environments or all the combinations of choices.
+```
+{% endraw %}
+
+## FFS.DOC
+
+{% raw %}
+```
+Supplemental Documenation for RBBS 17.3
+Fast File Search
+by Ken Goosens, 10-22-89
+
+RBBS 17.3 has a signficant enhancement to the way searches for a requested
+file are done in and upload and download.   This enhancement has two
+big improvements:
+
+(a)  File searches are much faster.  In the case of very slow devices like
+     a CD-ROM, this can be the difference between sub-second response and
+     a 45 second response.   File searches are now virtually instantaneous.
+
+(b)  File not stored on this system can trigger macros.   This allows
+     requests for files stored elsewhere, either off line on backups,
+     or on other cooperating systems, to trigger later processing.
+
+
+Fast File Searching
+
+For directories DOS uses chained "buckets" in multiple locations, 
+searched sequentially.   This results in very slow performance when
+the number of files to search gets into the thousands.   RBBS now
+supports a fast file search than more than compensates for the
+inefficent operation in DOS.
+
+The basis for the fast file search is a file, configuration
+parameter 267, which is a sorted list of file names available for
+downloading.    The default name is FIDX.DEF.
+
+The format of this file is:
+
+columns 1-12:  file name
+columns 13-16: location index (1, 2, 3, ...)
+columns 17-18: carriage return line feed.
+
+All data is stored as character data and the file is editable.   The file
+names must be stored with no internal spaces and a period separating the
+prefix from the extension.   The list of file names MUST BE SORTED BY
+FILE NAME in order for the fast file search to work.
+
+The location index is the record number (line number) of the locator file,
+whose default name is LIDX.DEF, and has the following layout:
+
+columns 1-63:  location of file
+column  64:    any character.  MAKEFIDX puts in a period.
+columns 65-66: carriage return line feed.
+
+This file is all character data and is editable.   Essentially, the location
+index points to a record in the location file.   E.g. if FIDX.DEF has
+
+RBBS-BAS.ZIP   2
+HARPIE.ARC     3
+
+and LIDX.DEF has
+
+C:\DOWN1\
+C:\DOWN2\
+C:\UP\
+
+Then RBBS-BAS.ZIP is located in directory C:\DOWN2 (2nd record) and 
+HARPIE.ARC is located in C:\UP (3rd record).
+
+The location field should be a drive/path terminating with a "\" if
+any path is given, and file must be filled with blanks through column
+63 if the path is shorter.  You must put some character in column 64.
+Many editors delete trailing blanks, so you should probably put in
+a non-blank.  A period is a suitable choice.
+
+RBBS will use a binary search on the first 12 characters in FIDX.DEF.
+This binary search can be significantly speeded by provided "tabs" for
+this file, indicating the record at which the first file is that begins
+with the symbols "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ".   This is like
+the "tabs" you see on dictionaries, so you can directly turn to the B's,
+for example.   A tab file has the same prefix as the file name file,
+except that it adds a "T".  For "FIDX.DEF", the tab file would be
+"FIDXT.DEF".   RBBS will automatically detect and use a tab file if
+available.   The tab has 72 characters in it.   Each 2 bytes represents
+a binary integer whose value is the record number in FIDX.DEF where the
+first file occurs that begins with the respective symbols above.  Thus
+bytes 3-4 show where files begin with "1" and bytes 69-70 where files
+begin with "Y".
+
+Two utilities with source code are provided for setting up the fast file
+searches.   The source, for compiling under QB 4.5, is included.
+
+MAKEFIDX will create both the file name list (FIDX.DEF) and the
+location file (LIDX.DEF), from a list of directories (see MAKEFIDX.CFG)
+or a list of file names, or both.
+
+You must next sort FIDX.DEF by file name.  A good shareware utility for
+this is QSORT (QSORT FIDX.DEF /1:12).
+
+MAKETABS will create a tab file (FIDXT.DEF) from the sorted file list
+FIDX.DEF.
+
+The batch file I use for recreating my fast file system is MAKEFFS.BAT.
+It uses MAKEFIDX.EXE, QSORT.EXE, MAKETABS.EXE, and configuration file
+MAKEFIDX.KG.   You need only edit MAKEFIDX.KG to change the filespecs
+(/FileSpec=) to match where your files are, and where to write the
+index files.
+
+
+Reconfiguring to Take Maximal Advantage of Fast File Searches
+
+The fast file search is virtually instantaneous on an 8088 with a tab
+file for 5000 file entries.   The savings on wear and tear on the hard
+disk can be very significant as well.   And the time it takes to set up
+the fast file search is only a few minutes.  Most sysops, therefore, will
+want to implment fast file searching, whether or not they have a slow
+device like a CD-ROM.
+
+RBBS will first search through the drive/paths specified in config
+to be available for downloading, as it always did.   Files not found
+there will then be searched using the fast file search system.
+The way the fast file search works is that a file found in its list is
+looked for only in the designated location.  Nothing else is searched.
+
+The optimal way to implement fast file searching is to reconfigure the
+drive/pathes available for downloading down to at most the upload
+directory, and let the fast file search handle everything else.   That
+way, files will be searched first in the upload area, and those not found
+at first will then be searched using the fast file search system.
+Note that every file in the fast file search list is considered
+to be available for downloading whether or not its drive/path
+is listed in the configuration program as a downloadable area.   Note
+that you can have separate fast file search systems available for each
+subboard, if desired.   You can also use the fast file search for common
+files and have a separate download area for the subboards.
+
+Note:  whenever you relocate files, you must re-create the fast file
+search system.   This is not hard since it takes little time and can be
+automated.
+
+
+```
+{% endraw %}
+
 ## MAKEFIDX.BAS
 
+{% raw %}
 ```bas
 DECLARE SUB TRIM (TRIM.PARM$)
 DECLARE SUB BRKFNAME (FILENAME$, DRVPATH$, PREFIX$, EXTENSION$, FOR.JOINING%)
@@ -352,9 +665,11 @@ RETURN
       END SUB
 
 ```
+{% endraw %}
 
 ## MAKETABS.BAS
 
+{% raw %}
 ```bas
 DEFINT A-Z
 PassedArguments$ = COMMAND$ + " "
@@ -477,9 +792,1093 @@ PRINT "Created TAB file "; OutFile$
 END
 
 ```
+{% endraw %}
+
+## MU-EDIT.DOC
+
+{% raw %}
+```
+Doc file for  MU-EDIT v0.22  30 May 87
+
+
+Sysop,
+ MU-EDIT is a prototype of a program which I'm developing. The reason for 
+  releasing it in this form, is to invite opinions, and suggestions. Also, in 
+  it's current form it has lot of features that SysOp's can make use of.  I 
+  and at least 3 other SysOp's use this program for various reason.  As 
+  delivered, it is believed to be as reliable as a production version would 
+  be.
+
+ Please keep in mind that this program has lots of rought edges !!!.  It was 
+ intended that several features function the same as in RBBS.  This is true in 
+ most cases. There are places where this editor doesn't function as RBBS does.
+
+
+
+
+Program Load
+------------
+ From the commandline specify ...
+MU-EDIT [msg filespec] [/first name to scan for] [/second name to scan for] 
+
+ ex.
+ MU-EDIT mainm.def /sysop/kim wells
+
+ The names SYSOP and Kim Wells will be flagged if the program detects msgs 
+ have been written or are waiting for those names. The name in the first 
+ switch will be the name used in the  NAME FROM  when repling to msgs.
+
+
+Global commands
+---------------
+ These commands can be used with those functions in which one would possible 
+do multiple times. 
+ A        Do the the specified function to  ALL  messages
+ M        Do the the specified function to  MY   messages 
+ F        Do the the specified function to  MSGS FROM  me
+ T        Do the the specified function to  MSGS TO   me
+ -        From the Specifed msg backwards
+ +        From the Specifed msg forwards
+ *        From the last msg read forwards
+
+
+Menu commands
+-------------
+D)oors    - Allows you to run and external program (not one written in BASIC)
+             If no program was specifed SYSOP will simply drop to DOS.
+             Ex.    D;C:\DOS\DISKCOPY a: b:
+
+E)nter    - Brings up the message editor
+
+G)oodbye  - Terminates the program
+ 
+H)elp     - Display a summary of what the commands are
+
+J)oin     - Allows you to join a conference. The function works just the 
+             commandline on program load. The conference file name must be a 
+             full DOS FILESPEC. If you want the program to scan the message 
+             base for a name, you can specify which names by adding them to 
+             the join command.
+             Ex.    J;H:MAINM.DEF /SYSOP/Kim Wells
+
+K)ill     - Kills a message
+            Ex.     K;4570
+
+P)ersonal - Scans the current file for your messages.
+
+Q)uick    - Display message subjects like that in RBBS
+             Ex.   Q;4571
+ 
+R)ead     - Allows you to read the specified messages.
+             Ex.   R;1299;2194
+
+           When reading msgs, a new menu will be shown that allows the 
+            following commands:
+
+            C)opy      - Copy the current msg to a new conference
+            F)ile      - Copy the current msg to a file called RBBS.MSG
+            H)eader    - Modify the msgs header,  FROM, TO, SUBJ.
+            K)ill      - Kill the current msgs
+            M)ove      - Move the current msg to a new conference
+            P)rint     - Print the current msg
+            Q)uit      - Quit reading msgs
+            R)eply     - Reply to the current msg
+
+
+S)can     - Display the message header like in RBBS
+             Ex.   S;3019
+
+V)eiw     - Not functioning
+
+W)ho      - Not functioning
+
+3         - Recovers messages that were killed
+             Ex.   3;t
+
+8         - File message(S) to a file called RBBS.MSG located on the drive 
+             that the current conference file is.
+             Ex.
+
+9         - Print message(s) to the default printer
+             Ex.   9;t
+
+10        - Not functioning
+
+11        - Not functioning
+
+12        - Not functioning
+
+13        - Not functioning
+
+14        - Diplay the comtent of the checkpoint record
+
+15        - Diplay message(s) headers
+             Ex.  15;3465;1985 
+
+16        - Inport a file to the message base. Suggest that the file be 
+             formatted to have less then 72 characters per line.
+
+17        - Re-edit a message
+
+18        - Move message(s) to a different conference.
+             Ex.  18;t;4325;9847
+
+19        - Copy message(s) to a different conference
+             Ex.  19;f;2341;8759
+
+
+
+Notes...
+ The commands K,Q,R,S,3,8,9,10,14,15,16,17,18,19  will take multiple 
+  message numbers and global commands which are separated by semi-colons.
+
+ The commands that are listed as   !! DO NOT USE !! are currently undergoing 
+ work.
+
+ Additional features of; msg and user file purging and resizing, and user file
+ editing are to be added.
+
+ Kim Wells
+D:301-350-1299
+V:301-350-4570
+
+```
+{% endraw %}
+
+## MU-PURGE.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                   MU-PURGE   v3.0
+                           for the  RBBS-PC message system
+                                 v  CPC12-3B  &  up
+                            (C)  Copyright  1985, 86, 87
+
+
+
+
+
+                                    Kim E. Wells
+                                1206 Pickering Circle
+                              Upper Marlboro, MD, 20772
+                           D:301-350-1299  V:301-350-4570
+                              SEAdog / FidoNet 109/652
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        1
+
+
+
+
+
+
+
+
+     -- RBBS Compatibility --
+
+          This program has been tested with all versions of the RBBS-PC
+     conference and user files from CPC12.3B to CPC15.1A
+
+
+
+     -- Introduction --
+
+          MU-PURGE.EXE in conjunction with its .DOC file is a program to purge
+     the RBBS-PC conference and user type files of killed msgs and old or
+     inactive users independently of CONFIG.EXE.  In doing so, MU-PURGE
+     simplifies system maintenance since it can be used as a free standing
+     program or executed via a batch file.
+
+          It was originally conceived to solve two different problems:
+
+          1.  To fix a message file which contained blank records for Dave
+     William's Amateur Radio RBBS in Billings Montana(406-656-8124)
+
+          2.  To be able to have the message file on my RBBS purged while I was
+     out of town for several days at a time.
+
+          Prior to the release of RBBS Version CPC 12-3A, message file purging
+     code was contained in RBBS-PC.EXE, then removed and placed into CONFIG.EXE.
+     Since CONFIG.EXE can not be executed via modem, remote sysops can not purge
+     the message file as they once could when the code was included in RBBS-PC.
+
+          MU-PURGE has been in use on my 24 hour, 60 call a day RBBS and
+     executed from an "EBL" (Extended Batch Language) batch file since it was
+     first written in early May 1985.
+
+
+
+     -- Implementation --
+
+          MU-PURGE can be used as a free standing program to purge the message
+     and user files or it can used in a DOS or EBL batch file.   Execution via
+     either method is the same.  On the command line you supply the name MU-
+     PURGE and the name of the message or user file you want purged.If necessary
+     you may need to supply the drive and the file extension if appropriate.
+     You must supply a valid filespec in order for MU-PURGE to work.  This
+     program is so written not to make any assumptions.
+
+          To execute MU-PURGE.EXE one need only specify the following at the DOS
+     Prompt:
+
+          For Message files:
+
+          A:MU-PURGE MESSAGES /MSG:        or
+          A:MU-PURGE E:Messages /MSG:      or
+          A:MU-PURGE E:CHESSM.DEF /MSG:
+
+
+
+
+
+                                        2
+
+
+
+
+
+
+
+
+          For User files:
+
+          A:MU-PURGE USERS /USR:           or
+          A:MU-PURGE E:USERS /USR:         or
+          A:MU-PURGE E:CHESSU.DEF /USR:
+
+          For CONTROL-FILES:
+
+          A:MU-PURGE C:\RBBS\DAILY.CTL
+
+          Earlier versions of this program required you to have at least the
+     same amount of free space on the disk as the size of the message or user
+     file you are purging.  Not so with this version.  Several new options have
+     been and are implemented with a command line switch.  The most significant
+     option is the ability to "PACK IN PLACE" (PIP) any message or user type
+     file.  This feature simply shuffles active message records towards the
+     beginning of the file by overwriting previously killed messages.  In the
+     case of a user file, deleted users records are overwritten with a blank
+     record.  Using this method to purge the message file does not leave you
+     with a backup file.
+
+          Immediately after the first backslash on the commandline, MSG: or USR:
+     must be specified.  This tells MU-PURGE what type of file it is.
+
+          A complete list of the optional parameters for msg files is as
+     follows;
+
+          Commands to be placed in  Switch 1;
+
+          D###             Purge Msgs over ### days old
+          IN               Initialize Node Records
+          K                Kill (delete) the back-up file .OLD
+          LOG              Log program operations to MU-PURGE.LOG
+          NO               No, don't default to PIP
+          PIP              Pack-In-Place the  FILESPEC  file
+          REMOTE           Send screen output to current DOS console
+
+          Commands to be placed in Switch 2;
+
+          EF$....$         Exclude from purging a File of To: / From: name(s)
+          EF#....#         Exclude from purging a File of Mgs Numbers
+          EL$....$         Exclude from purging a To: / From: name(s) listed on
+     the commandline
+          EL#....#         Exclude from purging a Msg number listed on the
+     commandline
+          CHR$(#)          Character in subject field that signifies exclusion
+
+          Commands to be placed in Switch 3;
+
+          NF(....)         Compare NAME FROM in a msg to a selected user file
+          NT  "            Compare NAME TO   in a msg to a selected user file
+          O   "            Check to see if this message has been read by the
+     receiver
+
+
+
+
+                                        3
+
+
+
+
+
+
+
+
+          A complete list of the optional parameters for user files is as
+     follows;
+
+          Commands in Switch 1;
+
+          D###             Purge Inactive Users over ### days old
+          K                Kill (delete) the back-up file .OLD
+          LOG              Log program operations to MU-PURGE.LOG
+          NO               No, don't default to PIP
+          PIP              Pack-In-Place the  FILESPEC  file
+          REMOTE           Same as above.
+
+          Commands in Switch 2;
+
+          ###              Minimum Logon Security level
+          Same as CONFIG.EXE parameter #101
+
+          Commands in Switch 3;
+
+          ###              Security Level Exempt From Purging
+          Same as CONFIG.EXE parameter #117
+
+          (msg file spec)  A compatible message file checkpoint record can be
+     updated to reflect the current number of users in a user file
+
+          Explanation of available commands
+
+          D###             Purge Msgs over ### days old"
+
+          K                Kill (delete) the back-up file .OLD
+
+          Then purging the selected message file in a NON-PIP mode a backup
+     message file is created.  You can kill that file with this command.
+
+          IN               Initialize Node Records"
+
+          Adding the letters "IN" to the first commandline switch
+     willreinitialize all of the NODE records in the message file.  This feature
+     was added to help those SYSOP's who have had trouble with RBBS doing
+     strange things when the node records have been corrupted.
+
+          This feature will save them the trouble of having to make a new
+     message file or attempt to correct the problem manually.
+
+          NO               No, don't default to PIP
+
+          If the PIP mode of purging wasn't selected, MU-PURGE will check to see
+     if enough free disk space is available to purge by creating a new message
+     file.  If enough free disk disk space isn't available the program will
+     terminate if NO was specified or it will default back to purging via the
+     PIP mode.
+
+
+
+
+
+
+                                        4
+
+
+
+
+
+
+
+
+          PIP              Pack-In-Place the  FILESPEC  file
+
+          Pack-In-Place is purging by rewriting Active Msgs over Killed Msgs.
+     This method is rather fast in that MU-PURGE scans the message file looking
+     for the first killed msg and THEN starts rewriting over the killed
+     messages.
+
+          REMOTE           Send screen output to current DOS console
+
+          IBM BASIC sends its' screen output directly to screen memory.  By
+     specifying on the command REMOTE all output that would normally be written
+     to the users local screen will now be written to the current DOS console.
+     While MU-PURGE could have been executed after using RBBS SYSOP function 7,
+     now they'll be able to see what's happening also.
+
+          Dots represent user supplied information
+
+          EF$.............$ EXCLUDE a file of NAMES
+          EF#.............# EXCLUDE a file of NUMBERS
+
+          Between the two dollar and or number signs, you can provide the
+     filespec of an ASCII file that contains names or msgs numbers that are to
+     be excluded from purging.  A separate file must be used for numbers and
+     names.
+
+          EL$.............$
+          EL#.............#
+
+          Similarly you and do the same thing on the commandline with names or
+     numbers.  A semicolon is used as a delimiter.  When using the D###
+     function to delete msgs that where over ### days old, a way was needed to
+     retain certain msgs.  By adding an "EL# or EL$" to the commandline switch
+     you can exclude certain messages from purging by either specifying a msg
+     number(s) or a name(s) as used in the TO / FROM block  or you specify both
+     ways.  Implementation of this function is a little tricky.  Study the
+     examples in APPENDIX B.  When using the same exclusion commands in a
+     control file, those commands aren't reloaded.  That is, if the first
+     message file your purged read a file of names to exclude and the next
+     message file is to use the same file of names, that file has been loaded
+     once and won't be reread.
+
+          CHR$(#)          Character Exclusion
+
+          Exclude from purging a To: / From: name(s) listed on the commandline
+     or in a file, IF AND ONLY IF the characters "" CHR$(#) "" with some number
+     of an ASCII character between the parans, are located in SWITCH2 and that
+     equates to the ASCII value of the first character in the subject field.
+
+          NF(....)         Compare NAME FROM in a msg to a selected user file
+     Message will be purged if the sender isn't in the selected USER file.  A
+     msg on the screen will display that the msg was purged, why it was purged
+     (RNR ... Receiver Not Registered) and the intended receivers name.
+
+
+
+
+
+                                        5
+
+
+
+
+
+
+
+
+          NT  "            Compare NAME TO   in a msg to a selected user file
+     Message will be purged if the receiver isn't in the selected USER file. A
+     msg on the screen will display that the msg was purged, why it was purged
+     (SNR ... Sender Not Registered) and the senders name.
+
+          O   "            Check to see if this message has been read by the
+     receiver. Message will be purged if and only if the receiver has read the
+     message and it is protected.  A msg on the screen will display that the msg
+     was purged, why it was purged, (RRM ... Receiver Read Mail) and the
+     receivers name and high msg read.
+
+          When purging messages that are compared to a users file, the user
+     should beware that the SYSOP's real name is rarely, if ever, entered in the
+     users files.  Therefore, the SYSOP's real name should always be excluded
+     from an automatic purge operation.  The statistics that are displayed at
+     the programs end show active and purged messages as well as used and unused
+     message records.  The numbers that are displayed may be different then what
+     RBBS reports due to RBBS considering node records as message records.  A
+     similar situation will appear when purging a USERS file.  MU-PURGE shows
+     the totals of active, exempt, and locked-out users which when combined will
+     total what RBBS calls the current amount of active users.
+
+          Appropriate error messages are generated for abnormal conditions.
+
+
+
+     -- Control files --
+
+          MU-PURGE can read a list of user and message files that are to be
+     purged from a ASCII file that properly contains a list of those files and
+     all the required parameters.  All entries in that file are similar in
+     structure to those that can be entered on a DOS commandline.  A CONTROL-
+     FILE must have a file name extension of ".CTL".  It must not contain any
+     blank lines.
+
+          SEE APPENDIX B for command parameter examples.
+
+          MU-PURGE can be used in a normal DOS batch file, but since DOS batch
+     files can't count, an additional program is required to count the number of
+     times the batch file has been executed.  See appendix A for a sample batch
+     file and program to count execution times.  "EBL" batch files run much
+     faster than DOS Batch files.  The advantage to  using "EBL" over DOS batch
+     files is not only speed of execution but you no longer need a separate to
+     count the number of times the file has executed.  That ability and many
+     others are included with "EBL".
+
+          It should be noted that familiarity with "EBL" is essential in order
+     to correctly drive your RBBS with this type of batch file and "EBL" only
+     works with PC-DOS and the IBM Personal Computer or true compatiables.  See
+     appendix A for a sample EBL batch file.
+
+
+
+
+
+
+
+                                        6
+
+
+
+
+
+
+
+
+     -- Program Limitations: --
+
+          1.  ALL the limitations that accompany the use of the Microsoft
+     QuickBASIC compiler  version 3.0
+
+          2.  MU-PURGE is not medicine to fix a message file that for some
+     reason is in an ill state of format.  It is requested that you send me a
+     copy of your bad message file on diskette or via upload to my bbs so that I
+     can include code in future releases of this program, to fix similar
+     problems.
+
+
+
+     -- Future Releases --
+
+          Future Releases are at irregular intervals as the need arises.  You
+     can always get the latest version from my RBBS.  (301-350-1299)
+
+
+
+     -- Programming and Compilation --
+
+          MU-PURGE was compiled using the Microsoft QuickBASIC Compiler v3.0.
+     Several ASM routines from ADVBAS.LIB  by Thomas Hanlin and
+
+          Super BASIC LIB by Marilyn Fleming were used to overcome limitations
+
+          of BASIC.
+
+
+
+     -- Limited License --
+
+          This software is copyrighted but a limited license is granted and you
+     are free to use and share it under the following conditions:
+
+          1.  MU-PURGE v3.0 is not distributed in modified form,
+
+          2.  No fee or other consideration is charged for MU-PURGE itself, and
+
+          3.  Reference to the copyright and author is retained.
+
+          4.  Use of this program to maintain a subscription BBS is prohibited
+     without the express permission of the author.
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        7
+
+
+
+
+
+
+
+
+     -- Warranty --
+
+          MU-PURGE is provided "AS IS" without warranty of any kind, either
+     expressed or implied, including, but not limited to the implied warranties
+     of merchantability and fitness for a particular purpose.  The entire risk
+     as to the quality and performance of this program is with the user and
+     should the program prove defective, the user and not the author will assume
+     the entire cost of all necessary remedies.  The author does not warrant
+     that the functions contained in the program will meet any users
+     requirements or that the operation of the program will be uninterrupted or
+     error free.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        8
+
+
+
+
+
+
+
+
+     -- Acknowledgements --
+
+          RBBS-PC  (C)
+          D. Thomas Mack
+          Address Below
+
+          ADVBAS  (C)
+          Thomas Hanlin
+          Address Below
+
+          EXTENDED BAT LANGUAGE  (BAT)   (C)
+          Frank Canova
+          Seaware Corp   P.O. Box 1656  Delray Beach, Florida 33444
+          305-276-5072
+
+          IBM
+          International Business Machines Inc.
+          P.O. Box 1328-S  Boca Raton, Florida  33432
+
+          QuickBASIC  (C)
+          Microsoft Corp
+          16011 NE 36th Way  Box 97017  Redmond, WA. 98073-9717
+
+          SuperBASIC (C)
+          Fleming Software  PO Box 528  Oakton, Va. 22124
+
+          
+
+          "Special Thanks" for their ideas and assistance in the preparation and
+     testing of this program and its' documentation to:
+
+          Roger Fajman     21 Bannister Court, Gaithersburg, Md, 20879
+
+          Phil Grier      3375 Sudlerville South, Laurel, Md,  20707
+
+          Thomas Hanlin III    6812 Syndenstricken Rd, Springfield, VA. 22152
+
+          Tom Mack    10210 Oxfordshire Road, Great Falls, Virginia 22066
+
+          Data: 703-759-5049 & 703-759-9659
+
+          Tanya Metaska   6112 Thomas Drive, Springfield, Va,  22150
+
+          Data: 703-971-4491
+
+          Richard Moreland    345 Raven Wing Drive, Porter, Texas, 77365
+
+          William Silva    14103 Dub Drive, Laurel, Maryland. 20708
+
+          Lori Wells     1206 Pickering Circle, Upper Marlboro, Md.  20772
+
+          Dave Williams     11 Gatewood Drive, Billings, Mt, 59102
+
+
+
+
+
+                                        9
+
+
+
+
+
+
+
+
+     -- APPENDIX A --    Batch File Information
+
+          *** In order for MU-PURGE to be executed from a batch file, Parameter
+     #123 in the RBBS-PC Configuration Program "CONFIG.EXE" must have been
+     previously set to "SYSTEM" recycle.
+
+          Sample DOS Batch file drive RBBS with MU-PURGE
+
+          (code for WATCHDOG.COM included)
+
+          IF NOT EXIST A:RCTTY.BAT GOTO LOCAL
+          A:WATCHDG1 OFF
+          DEL A:RCTTY.BAT
+          :LOCAL
+          IF EXIST BATCH.CTL GOTO SYSTEM
+          A:MU-PURGE MESSAGES
+          :SYSTEM
+          A:BASICA COUNTER    ( *** or   COUNTER.EXE  *** )
+          A:RBBS-PC
+          IF EXIST A:RCTTY.BAT GOTO REMOTE
+          A:RBBS.BAT
+          :REMOTE
+          A:WATCHDG1 ON
+          A:RCTTY.BAT
+
+          Sample BASIC Program to count the passes thru a DOS batch file.
+
+          1   ON ERROR GOTO 13
+          2   OPEN "BATCH.CTL" AS 2
+          3   NAME "COUNTER.DAT AS "KIM" :NAME "KIM" AS "COUNTER.DAT"
+          5   OPEN "COUNTER.DAT" AS 1 LEN = 4
+          6   FIELD 1,2 AS C1$, 2 AS C2$
+          7   C1 = VAL(C1$) :C2$ = VAL(C2$)
+          8   IF C1 >= C2 THEN CLOSE 2 :KILL "BATCH.CTL"
+          9   C1 = C1 + 1
+          10  RSET C1$ = STR(C1) :PUT 1,1
+          12  SYSTEM
+          13  IF ERR = 53 AND ERL = 3 THEN OPEN "COUNTER.DAT" AS 1
+          14  FIELD 1, 2 AS C1$, 2 AS C2$
+          15  RESET C1$ = "0" :RESET C2$ = "3" :PUT 1,1
+          17  RESUME 7
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        10
+
+
+
+
+
+
+
+
+          Sample EXTENDED LANGUAGE BATCH FILE
+
+          BAT
+          bat %I = 0
+          bat -start.over
+          bat stateof A:RCCTY.BAT    | if %r = 0  call -sub.local
+          RBBS-PC
+          BAT
+          bat stateof A:RCTTY.BAT    | if %r = 0  goto -sub.remote
+          bat %I = %I + 1| if %I =20  call -sub.purge
+          bat goto -start.over
+
+          bat -sub.purge
+          MU-PURGE MESSAGES /K
+          MU-PURGE CHESSM.DEF /K
+          BAT
+          bat %I = 0 | return
+
+          bat sub-local
+          WATCHDG1 OFF
+          Del RCTTY.BAT
+          BAT
+          bat return
+
+          bat -sub.remote
+          WATCHDG1 ON
+          RCTTY
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        11
+
+
+
+
+
+
+
+
+     -- APPENDIX B --    Command Examples
+
+          The general command structure is as follows;
+
+          At the DOS prompt type:
+
+          MU-PURGE message.filespec /MSG: [option(s)/option(s)/option(s)]"
+          where the message.filespec is
+
+               [drive:] [path] filename [.filename extension]
+
+          
+
+          At the DOS prompt type ......
+
+          A>MU-PURGE C:MESSAGES /MSG:PIPD45 /EL#1111;2222;3333;4444#
+
+          The above command will call MU-PURGE from the default drive A:, purge
+     the message file called MESSAGES on the C: drive, invoke a PACK in PLACE
+     mode of operation, purge all messages over 45 days old and exclude from
+     purging messages 1111, 2222, 3333, 4444 unless anyone of them had been
+     previously killed in RBBS.
+
+          The syntax for msg pruging exclusion requires that the message
+     number(s) must be enclosed with the number sign (#) and the entire list of
+     number(s) must be prefaced with an "EL".  Additionally the same applies for
+     a list of name(s) which must be enclosed with a dollar sign ($).  To
+     implement both functions simply list both on the commandline.
+
+          A>MU-PURGE C:MSGS /MSG:PIPD45 /EL#1111#EL$Kim Wells;Dave Willaims$
+
+          The above command will do all of the previous example and exclude from
+     purging the names Kim Wells and Dave Willaims.  MU-PURGE will convert any
+     lower case to UPPER CASE.  A maximum of 100 names and / or  50 numbers can
+     be used.
+
+          A>MU-PURGE C:MESSAGES /MSG:PIPD45 /EL$Kim Wells$ /NTNFO(H:USERS)
+
+          The above command will purge all messages over 45 days old, exclude
+     any msg with the name KIM WELLS in it from being purged, and then compare
+     msg SENDER'S, RECEIVERS to those names in the selected user file and delete
+     the msg(s) if a sender or receiver wasn't found.  Additionally, if a
+     receiver had read their protected mail, that msg will be deleted.
+
+          A>MU-PURGE C:USERS  /USR:D45 /5 /11 (C:MESSAGES)
+
+          The above command will purge the selected users file of anyone who
+     hasn't logged on in the last 45 days and update checkpoint record in the
+     file C:MESSAGES's to reflect the new user file totals.  Those users who
+     have a security level of 5 (locked-out) will be retained as well as those
+     with a security level of 11 or greater (purge exempt). Those values for
+     your system can be found in CONFIG.EXE parameters numbers #### and ####.
+
+
+
+
+
+                                        12
+
+
+
+
+
+
+
+
+          A>MU-PURGE C:DAILY.CTL
+
+          The above command will load into memory all the commands found in
+     thecontrol file DAILY.CTL
+
+          The Following are examples of the two control files that I use. One is
+     for daily purging and the second is for monthly purging.
+
+          Ex. 1  Daily
+
+          H:MESSAGES  /MSG:PIP
+          H:TESTM.DEF /MSG:PIP
+          H:USERS    /USR:D45 LOG /5 /11 (H:MESSAGES)
+          H:MESSAGES /MSG:D45 LOG PIP /EL$KIM WELLS;SYSOP$ /NTO(H:USERS)
+
+          **  ALL  MU-PURGE  commands can be stacked after the first slash when
+     placed in their proper switch positions.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        13
+
+
+
+
+
+     Ex. 2  Monthly
+
+
+     -- APPENDIX C --    Revision Information
+
+          Version 3.0   12 Nov 86
+
+          1.  Program was completely rewritten
+
+          2.  Features to have certain message(s) excluded from purging were
+     added.  The user can specify a list of names or numbers on the commandline
+     or from a file or both.
+
+          3.  Code to purge a user file(s) was added
+
+          Version 2.0    8 March 86
+
+          1.  Program code was rewritten in the general format that RBBS-PC is
+     written in.
+
+          2.  Command line switches were added which adds the ability to Pack in
+     Place any message type file, eliminating the need for extra disk space;
+     Buffering all read/write operations as this  program purges the msg file
+     with either type purging mode; deleting messages that are to old based on
+     their age in days; and finally  the option of a small opening screen was
+     added.
+
+          Version 1.2    1 December 85
+
+          1.  Each message header is now checked for a valid message number and
+     a minimum number of records per message in addition to a valid active /
+     killed status flag.  If any of the above are not present or not in proper
+     form, the message header and following records are purged until a good
+     message header is found.
+
+          2.  A possible bug was fixed which could have over written node
+     records.
+
+          3.  Sample DOS and EBL batch files and the counter program in the
+     main doc file were updated.
+
+          4.  Program code was made smaller.
+
+          Version 1.1   20 October 85
+
+          1.  First release
+
+          Version 1.0  --------------
+
+          1.  If you've got it........I didn't write it.
+
+          Kim Wells
+
+          *****  End of MU-PURGE  Documentation  *****
+
+
+
+
+
+
+                                        14
+
+
+```
+{% endraw %}
 
 ## RECONFIG.BAS
 
+{% raw %}
 ```bas
    DECLARE FUNCTION StrTok$(Source$,Delim$)
    DECLARE SUB box (ybox%, xbox%, boxrows%, boxcols%, style%)   'draw a box
@@ -1823,9 +3222,100 @@ SUB Line17 (HelpText$)
    PRINT HelpText$;
    END SUB
 ```
+{% endraw %}
+
+## RECONFIG.DOC
+
+{% raw %}
+```
+ RECONFIG Version 17.3 DOCUMENTATION
+
+  RECONFIG is a conversion utility for RBBS-PC systems.  This version is ONLY
+  for  SYSOP's  of  RBBS-PC  version  14  through  17.2B who are upgrading to
+  RBBS-PC version 17.3.  It should NOT be used to convert  from/to  ANY other
+  versions!
+
+  What it does:
+
+  RECONFIG reads the RBBS-PC configuration file (RBBSnPC.DEF) and extracts as
+  much  information  as  possible  in order to create a working .DEF file for
+  RBBS-PC version 17.3.  Your existing version  14  through  16 DEF file WILL
+  NOT WORK with version 17.3.  Instead of re-typing all your custom settings,
+  run  RECONFIG  before  setting  up  your  new  17.3 system.  17.1 and  17.2
+  versions will work but RECONFIG will fill in sensible values  for  the  new
+  parameters in 17.3.
+
+ How to use it:
+
+  RECONFIG.EXE  will  prompt  you  for the necessary input, or it will accept
+  input on the command line in the form:
+
+  RECONFIG [drive:\path\]input-file version [drive:\path\]output-file
+
+   input-file is the name of your existing RBBS-PC configuration
+   version is the version of your file (14.1D, 15.1A/B/C, 16.1A,
+       17.1A/B/C/D or 17.2A/B only)
+   output-file is the name of your desired RBBS-PC version 17.3 file
+
+  For example,
+
+            RECONFIG RBBS-PC.DEF 17.1D 173-NU.DEF
+
+  will read configuration file RBBS-PC.DEF, treat it as a 17.1D version,
+  and convert it to 17.3 format, writing out file 173-NU.DEF.
+
+  If  you  do  not  specify  an  input  file and version, and an output file,
+  RECONFIG will prompt you for the proper input.   You COULD specify the same
+  name for both input and output (so RECONFIG will write the new .DEF file on
+  top of the old one), but this is NOT recommended!  You will be left WITHOUT
+  your original .DEF file!
+
+  If  the command line is specified correctly, you will be shown your options
+  one more time to make sure.  Since RECONFIG will write the output file even
+  if a  file  already exists with the same name, be careful in your choice of
+  output file names!
+
+  Once  you  run  RECONFIG,  You  should  inspect  your  new  .DEF  file with
+  CONFIG.EXE for 17.3.  There are some new changes to RBBS-PC and CONFIG that
+  you  will  want to know about.  Where possible, RECONFIG uses your existing
+  settings to choose  values  for settings that are new to version 17.3.  You
+  can view these new settings by selecting CONFIG option 190.
+
+ NOTICE:
+
+    This program was conceived and written by:
+         Doug Azzarito
+      of TECHNOLOGY CONSULTANTS of the Palm Beaches, Inc.
+         P.O. Box 31024
+         Palm Beach Gardens, FL.  33418
+         VOICE: (407) 627-9767   DATA: (407) 627-6969 or 627-6862
+
+  The  purpose  of  this  program is to ease the migration to RBBS-PC version
+  17.3.  Since most of the code  was  taken  directly from RBBS-PC and CONFIG
+  code,  PLEASE respect the RBBS-PC copyright!  You  may  use  this  program,
+  distribute it  freely  in unmodified form, but do NOT accept any payment or
+  other consideration for copying  or  distributing this program.  Do NOT use
+  portions of this code in another program without  first  getting permission
+  from the copyright owner of RBBS-PC!
+
+  NOTE:   due  to  space  limitations,  you  may  not  receive source code to
+  RECONFIG.   Source  for  17.3  of  RECONFIG  can be downloaded from  either
+  RBBS-PC "home" systems:
+
+  BBS                     Phone                   Sysop
+  Your Place              202-978-6360            Ken Goosens
+  Technology Consultants  407-627-6969/6862       Doug Azzarito
+
+  Feel  free  to  call  either  system and download source to RECONFIG.  This
+  version of RECONFIG was compiled with  Microsoft QuickBasic 4.5, but will
+  also compile under BASCOM 7.0.
+
+```
+{% endraw %}
 
 ## RVAR0227.BAS
 
+{% raw %}
 ```bas
 ' $SUBTITLE: 'Arrays passed between various components of RBBS-PC'
 ' $PAGE
@@ -2536,6 +4026,7 @@ COMMON SHARED _
 
 DEF FNOffOn$ (Switch) = MID$("OffOn", 1 - 3 * (Switch <> 0), 3)
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

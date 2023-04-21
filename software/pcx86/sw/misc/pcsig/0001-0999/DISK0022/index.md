@@ -50,6 +50,7 @@ machines:
 
 ## BMENU.BAS
 
+{% raw %}
 ```bas
 10 '
 20 ' DO NOT RENUM OR RENAME OR COMPILE THIS PROGRAM.
@@ -172,9 +173,110 @@ machines:
 1750 IF (ERR=53) AND (ERL=1190) THEN GOTO 1760 ELSE ON ERROR GOTO 0
 1760 PRINT:PRINT "File " ARRAY$(P) ".BAS not found":RESUME 1700
 ```
+{% endraw %}
+
+## BMENU.DOC
+
+{% raw %}
+```
+
+
+                 BASIC MENU (BMENU) PROGRAM FOR THE IBM PC
+                               VERSION 1.0
+
+The program BMENU provides a sorted menu display of the BASIC programs
+on your diskette and allows for menu selected execution of the BASIC
+programs.
+
+Two versions of BMENU are supplied. BMENU.BAS requires Advanced BASIC
+and uses function keys F1-F5 while BMENUD.BAS will run on Disk BASIC
+without the use of F1-F5. BMENU is also larger in size than BMENUD.
+The remainder of this document refers to both versions with significant
+differences noted.
+
+BMENU (BMENUD) is easy to use and only requires that you copy the
+program onto your diskette containing your BASIC programs. First time
+execution of the program will display some tutorial information. Read
+this information before continuing as it will be overwritten and never
+displayed again (unless of course the diskette is write protected).
+
+Speaking of writing to your diskette - BMENU (BMENUD) does indeed write
+to your diskette and you should be aware of the following: BMENU
+(BMENUD) as distributed knows nothing about which BASIC files are
+contained on your diskette. After the tutorial information mentioned
+above is displayed the following steps are executed to capture and
+retain the names of the BASIC programs on your diskette.
+
+  1. Clear the screen
+  2. Issue the files"*.bas command
+  3. Read the file names from the screen
+  4. Sort the file names
+  5. Kill"bmenu.tmp if it exists
+  6. Save the file names in bmenu.tmp
+  7. Merge bemnu.tmp into lines 500-999
+  8. Save"bmenu.bas (or bmenud.bas)
+  9. Kill"bmenu.tmp
+ 10. Display the updated menu
+
+Every attempt has been made to ensure that the program works correctly
+without causing unwanted side effects or loss of data. However, you
+would be wise to first try the program on a backed-up diskette until
+you are sure you have received a complete and working copy. You can
+also execute the above steps by entering option F1 after you add or
+delete BASIC programs from your diskette. Option F1 is the slowest
+executing part of BMENU but produces a fast (for BASIC) menu display
+when completed. If you are not adding or deleting BASIC programs from
+your diskette then option F1 is only executed once. For BMENUD the
+update option is executed by entering a 99 (instead of F1) for the
+program number.
+
+BMENU changes the definition of function key F10 to run"bmenu (ENTER)
+so that you may easily return to BMENU by pressing F10 after executing
+your BASIC program. If however, your BASIC program changes the
+definition of F10 then type run"bmenu (ENTER) to run BMENU. For
+BMENUD use F10 or run"bmenud (ENTER).
+
+
+
+
+The program was written for 40 character displays and works equally
+well on 80 character displays. Before executing a BASIC program the
+screen is switched to WIDTH 80. If you want to stay in WIDTH 40 then
+change the line WIDTH 80:CLS:PRINT "Press etc. to WIDTH 40: (CAUTION -
+be sure to make a backup copy of your diskette first). Do not change
+other WIDTH statements in the program. Run the program and enter F1
+(option 99 for BMENUD.BAS) and your modified program will be saved.
+For double sided diskettes containing more than 63 BASIC programs
+(up to 112) the display is changed to WIDTH 80.
+
+The menu is defined to display in reverse video on the monochrome
+monitor and uses color on color monitors. BMENU has a more elaborate
+color display than BMENUD.
+
+The function keys F1-F5 have been defined for BMENU (not availale for
+BMENUD) to the following:
+
+  1. F1 - Update BMENU
+  2. F2 - Help
+  3. F3 - Return to BASIC
+  4. F4 - Return to DOS
+  5. F5 - Display the date and time
+
+Do NOT renum, compile or change the name BMENU (BMENUD) or otherwise
+modify the program since it is self modifying, line number dependent
+and not very tolerant of program bugs.
+
+                                       Bob Stephens
+                                       San Jose, Ca.
+                                       12/1/82
+
+
+```
+{% endraw %}
 
 ## BMENUD.BAS
 
+{% raw %}
 ```bas
 10 '
 20 ' DO NOT RENUM OR RENAME OR COMPILE THIS PROGRAM.
@@ -281,9 +383,110 @@ machines:
 1650 IF (ERR=5) AND (ERL=1560) THEN RESUME 1660 ELSE ON ERROR GOTO 0
 1660 ON ERROR GOTO 0:CHAIN MERGE "BMENU.TMP",1570,ALL:GOTO 1570
 ```
+{% endraw %}
+
+## CHECKDIR.DOC
+
+{% raw %}
+```
+	CHECKDIR - Compare Directory with XDIR Catalog
+	       Russ Williams, San Jose PC Club
+
+CHECKDIR reads diskette	directories and	compares them with a given
+catalog	file, as produced by XDIR 3.0.
+
+OPERATION: To run the program, make sure DOS is	active and the
+diskette containing CHECKDIR.EXE is in the default drive, and
+type
+
+     CHECKDIR fileid [outputid]
+
+where "fileid" is the id of the XDIR catalog file (including the
+"DAT" extension), and "outputid" is the id of the output file
+(shown in brackets to indicate that it is optional).  If
+"outputid" is omitted, it defaults to "con:".  Type "lpt1:" to
+print on the printer.  If neither parameter is included, the
+program	will display "PARMLIST:" and wait for you to type in the
+parameter(s).
+
+The remainder is repeated for each diskette to be tested.
+
+CHECKDIR will display the message "Enter the name of the diskette
+to be tested, or null".  Insert a diskette in drive B and enter
+its name, or else just press the ENTER key to end the program.
+
+METHOD:	The test diskette's directory is read into main storage,
+and each entry in the catalog file is checked against the
+directory.  If a file-id match is found, both the catalog entry
+and the	directory entry	are displayed.	Example:
+
+     --------------------------------
+     PACMAN  .BAS 10/28/82 TESTDISK
+     PACMAN  .BAS  8/29/81 ADX000X
+     --------------------------------
+
+Note that the ordering of this list will reflect the ordering of
+the XDIR catalog.  When	the entire catalog has been read, a
+separate list is displayed showing any directory entries that
+were never matched.
+
+RESTRICTIONS: CHECKDIR runs under DOS, and currently handles only
+DOS 160KB diskettes.  The catalog to be	referenced must	be the same
+format as is written by	XDIR30.	 (This format is not compatible
+with previous versions of XDIR.)
+     nced must	be the same
+format as is written b
+```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #22, version v1.1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  PC-MAP  .BAS         CRC = C9 96
+
+--> FILE:  CHECKDIR.EXE         CRC = 44 A1
+
+--> FILE:  CHECKDIR.DOC         CRC = D8 74
+
+--> FILE:  LDIR    .BAS         CRC = 0B F3
+
+--> FILE:  BMENU   .BAS         CRC = FB 64
+
+--> FILE:  BMENUD  .BAS         CRC = 55 F6
+
+--> FILE:  BMENU   .DOC         CRC = A3 13
+
+--> FILE:  LDIRC   .BAS         CRC = 7C 44
+
+ ---------------------> SUM OF CRCS = 63 4F
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## LDIR.BAS
 
+{% raw %}
 ```bas
 10 'Display File Allocation Table and Directory
 20 CLS 'Requires Advanced Basic with 512 byte file buffer: BASICA /S:512
@@ -401,9 +604,11 @@ machines:
 1140 RETURN
 1150 SAVE "LDIR.BAS"
 ```
+{% endraw %}
 
 ## LDIRC.BAS
 
+{% raw %}
 ```bas
 10 REM for compilation only - not to be interpreted
 20 'Display File Allocation Table and Directory
@@ -520,9 +725,11 @@ machines:
 1130 IF RET<>0 THEN PRINT"Disk error status: ";RIGHT$("0"+HEX$(RET),2) :END
 1140 RETURN
 ```
+{% endraw %}
 
 ## PC-MAP.BAS
 
+{% raw %}
 ```bas
 1 '*********************************************************************
 2 '*   PC-MAP.  This program recreates a PC-File database into a new   *
@@ -760,6 +967,7 @@ machines:
 60991 LOCATE 25,1:PRINT"Hit any key to continue";
 60992 K$=INKEY$:IF K$="" THEN 60992 ELSE RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

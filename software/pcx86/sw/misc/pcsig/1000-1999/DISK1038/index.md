@@ -37,6 +37,64 @@ machines:
     your quest!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1038.TXT
+
+{% raw %}
+```
+Disk No  1038
+Program Title: EAMON ADVENTURE, ASSAULT on the CLONE MASTER (Disk 3 OF 4)
+PC-SIG version 1
+
+    That last adventure of yours was a little scary. Fighting all those
+monsters made you more expereinced, but at what price? You were nearly
+killed! As you lay back on your bed tring to rest from the excitement
+of the past few days, you start to feel strange. You hear a high
+pitched buzzing and then see a bright light--then everything goes dark.
+
+    You open your eyes and the surroundings have changed. Not again, you
+say to yourself. As you are walking along a strange path, you come across a
+group of people. Being friendly, you decide to speak with them. They
+sympathize with your position and agree to help you get back to where you
+came from--but only after you do them a small, insignificant favor. They
+tell you that you must kill the evil Clone Master and destroy The
+Cloneatorium or they will kill you. Hearing this, you think for a few
+minutes and, since they have such a way with words, you decide to help.
+
+Usage: Entertainment
+
+System Requirements: 256K memory and one disk drive
+
+How to Start: After loading EAMON from disk #296 and selecting a new
+adventure from your six options, insert this disk when it prompts you and
+follow the instructions.
+
+Suggested Registration: $5.95 + $2.50 shipping for new adventures.
+
+File Descriptions:
+
+ASSAULT  EXE  Sub-program file.
+EAMON    ART  Data file.
+EAMON    DES  Data file.
+EAMON    DIR  Data file.
+EAMON    EFF  Data file.
+EAMON    EXE  Main program file.
+EAMON    MON  Data file.
+EAMON    NAM  Data file.
+EAMON    ROM  Data file.
+ROOM     NAM  Data file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1038
 

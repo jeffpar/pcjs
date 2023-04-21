@@ -14,6 +14,31 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2806.TXT
+
+{% raw %}
+```
+Disk No: 2806                                                           
+Disk Title: The Dragon Sword                                            
+PC-SIG Version: S2.71                                                   
+                                                                        
+Program Title: The Dragon Sword                                         
+Author Version: 2.71                                                    
+Author Registration: $15.00                                             
+Special Requirements: A graphics card.                                  
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2806
 

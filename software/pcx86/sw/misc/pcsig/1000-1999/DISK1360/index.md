@@ -68,6 +68,87 @@ machines:
     WGCAP    COM  GEM/ING graphics screen capture for Windows.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1360.TXT
+
+{% raw %}
+```
+Disk No: 13605
+Program Title:  ALCHEMY DESKTOP PUBLISHING UTILITY
+PC-SIG version 1
+
+If your desktop publishing efforts seem a little plain, spice them up
+using this collection of seven utilities for Xerox's Ventura Publisher!
+
+GCAP imports charts, graphs, pictures or anything else in graphics mode
+that you want to use in desktop publishing.  These files are written
+directly to disk, complete with compression and a suitable GEM/IMG file
+header.  GCAP will work with a CGA, EGA or Hercules graphics card.
+
+HP-SLASH hacks unwanted characters out of your soft fonts to create
+leaner, faster files.  It works by creating a new soft font from an
+existing one but only including the characters you want.
+
+MAC2IMG converts standard MacPaint image files into GEM/IMG-compatible
+paint files, suitable for use with Ventura 1.1.  MAC2PCX converts them
+to PC Paintbrush-compatible PCX files.
+
+MCOPY is an enhanced COPY command for copying several files onto
+floppies.  It sorts through the files to be copied and begins with the
+largest one that will fit on a disk.  It fills in the remaining space
+with smaller ones to use as much of the floppy as possible.  If there
+are still files to be copied when the disk is full, the program will
+pause and ask for another floppy, which it will then proceed to fill as
+well.  MCOPY also performs an authentic 16-bit CRC check on every file.
+
+SCOOP allows your PC to look at PC Paintbrush, MacPaint or GEM/IMG
+pictures.
+
+VENTURA FONT MACHINE is a menu-driven front-end to create width tables
+for soft fonts used with the Hewlett Packard LaserJet Plus compatible
+printer.
+
+Synopsis:  Seven file management and graphics utilities for Xerox's
+Ventura Publisher.  Spice up and speed up your desktop publishing.
+
+Usage:  Utilities/Graphics/Desktop Publishing/File Management.
+
+Special Requirements:  Xerox Ventura Publisher
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $5.00 per utility. $20.00 for source code.
+
+File Descriptions:
+
+GCAP     COM  GEM/ING graphics screen capture.
+GEMSCOOP EXE  GEM/ING file reader.
+HP-SLASH EXE  LaserJet Plus soft font file reducer.
+MAC2IMG  EXE  MacPaint to GEM/ING translator.
+MAC2PCX  EXE  MacPaint to PC Paintbrush translator.
+MACSCOOP EXE  MacPaint file reader.
+MCOPY    EXE  Multiple file copier.
+PCXSCOOP EXE  PC Paintbrush file reader.
+READ     ME   Initial information.
+SLASH    BAT  Used with HP-SLASH.EXE
+SLASH1   BAT  Used with HP-SLASH.EXE
+TCAP     COM  GEM/IMG text screen capture.
+TESTFILE MAC  MacPaint file sample.
+VFM      EXE  Ventura font machine width table generator.
+VFM      TBL  Sample file for use with VFM.EXE
+WGCAP    COM  GEM/ING graphics screen capture for Windows.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1360
 

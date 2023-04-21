@@ -53,6 +53,63 @@ machines:
     laptop computers.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1829.TXT
+
+{% raw %}
+```
+Disk No: 1829                                                           
+Disk Title: Minimax and Executive Editor                                
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: MiniMax                                                  
+Author Version: 1.5                                                     
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+This text editor and a free form database were created as quick and easy
+alternatives to bulky, complex programs.  They may not do everything,   
+but they are straightforward and fast.                                  
+                                                                        
+MINIMAX is a full featured text editor for use with database, desktop   
+publishing, and spreadsheet programs.  Install MINIMAX and you can      
+easily create ASCII text files of up to 64K length for inclusion in your
+database reports, spreadsheets, desktop publishing files, etc.  MINIMAX 
+can also create and edit batch files.  MINIMAX includes multiple window 
+editing (the number of windows is limited only by available memory) and 
+file/block copying/importing.                                           
+                                                                        
+MINIMAX is simple and fast, just what you want when writing or          
+correcting a text for your publishing efforts or when putting together a
+new batch file.  MINIMAX--the maximum text-editing capacity for the     
+minimum hassle.                                                         
+                                                                        
+Program Title: Executive Editor                                         
+Author Version: 1.5                                                     
+Author Registration: $20.00                                             
+Special Requirements: Hard drive.                                       
+                                                                        
+EXECUTIVE EDITOR is a text editor/freeform database that will handle as 
+many 64K files within the database as disk space allows.  EXECUTIVE     
+EDITOR is perfect for the laptop user to retain key information, draft  
+and store notes and memos, or maintain a dairy of contacts.             
+                                                                        
+EXECUTIVE EDITOR allows keyword search (exact and fuzzy search), multi- 
+window editing, import-export (in ASCII), and supports over 50 keyboard 
+editor commands - though only six or seven are needed for most uses.    
+On-line help prompts you through all operations making a manual         
+redundant for all but extreme power users.                              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1829
 

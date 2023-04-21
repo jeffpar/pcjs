@@ -44,6 +44,158 @@ machines:
     also features full graphics to round out the package.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES606.TXT
+
+{% raw %}
+```
+Disk No:  606
+Program Title: POLYMATH version 4.0
+PC-SIG version: 2.2
+
+POLYMATH is a language developed for number processing.  Much like
+Forth, POLYMATH is highly modulated and based upon function words.
+
+Most words are defined with very simple tasks.  These simple words are
+then used and integrated with other words to build more powerful words
+functions.  An entire programming dictionary of function words can then
+be developed which is actually custom created by the author.
+Specifically Polymath has a wide variety of applications and special
+uses.  It has a strong on-line documentation application which takes the
+first time user through a menu driven tutorial.  It also has explain
+files that will explain the syntax and usage of any word currently in
+its main dictionary.
+
+POLYMATH as a function processor works much like the Hewlett Packard
+programmable calculators.  Although a language, POLYMATH can be used
+just as a calculator.  Those familiar with the HP Reverse Polish
+Notation (RPN) know how simply complex formulas can be entered into the
+calculator.  POLYMATH uses this same scheme, but with defined words or
+functions.  Specifically Polymath has a number stack and an alpha stack
+which revolves numbers through it as new computations are created and
+old values are stored.  Included on this diskette are a few dictionaries
+and application programs.  It is best to view these application programs
+with a text editor, they all end in ".pm" and will be very informative
+when learning the language.  POLYMATH also has full graphic features to
+well round this language package.
+
+The actual package has a few more features including more DOS features
+and a 128k dictionary of predefined words and functions.  The full
+featured version also has more variable power.  POLYMATH is rather
+large, so it will require at least 192k and a color monitor is
+recommended.  In short POLYMATH is a powerful, easy to use language much
+like Forth in structure.  Polymath was developed to bridge the gap
+between programmable calculators and personal computer languages.
+Anyone in the scientific or technical fields will find this program
+extremely useful for its number handling abilities and ease of use.
+
+Usage:  Programming.
+
+Special Requirements:  CGA graphics card.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $40.00
+
+File Descriptions:
+
+!README  1ST  Notes on starting up.
+CGA      BGI  CGA screen graphics driver.
+COLORS   PM   Screen color configuration file.
+EGAVGA   BGI  EGA/VGA screen graphics driver.
+GOTH     CHR  Font file (Gothic).
+GUIDE    HLP  On-screen tutorial (documentation file).
+GUIDE    PKG  On-screen tutorial (dictionary file).
+HERC     BGI  Hercules screen graphics driver.
+LITT     CHR  Font file (small font).
+PLOTS    BLK  Plotting demo (source file accessible from the editor).
+PLOTS    HLP  Plotting demo (documentation screen).
+PLOTS    PKG  Plotting demo (dictionary file).
+PM       EXE  The Polymath executable.
+PM       HLP  Polymath word documentation.
+PM       PKG  Polymath main dictionary.
+REGISTER DOC  How to and what you get by registering.
+SANS     CHR  Font file (sans-serif).
+SCRATCH  BLK  Data file.
+TRIP     CHR  Font file (triplex).
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## REGISTER.DOC
+
+{% raw %}
+```
+
+
+Polymath is distributed under a marketing approach call Shareware.  The disk
+may be freely copied and shared to allow others to try it out before deciding
+on a purchase.  If you use Polymath, you are expected to register.  If you do
+not register, then you are not supporting the concept that brought you
+Polymath in the first place and should not continue to use it.
+
+Registration for $40 brings you in addition to this disk:
+
+        - Latest version
+        - Additional manual on disk, formatted for printing
+        - General math pack with source includes:
+             Matrix Calculator       Complex Numbers
+             Polynomial Regression   Function Solver & Integrator
+        - Postscript printer driver available for an additional $20
+        - Free technical support
+        - One week satisfaction guarantee
+
+You may use the following form to order:
+
+
+
+
+                          POLYMATH REGISTRATION FORM
+
+Date _______________
+
+
+Mail to:     Lobster Software
+             5534 W. Alder Ave.
+             Littleton, Colorado  80123
+
+             Phone:  (303) 973-1028
+
+
+Name    ________________________________________________________________
+
+Address ________________________________________________________________
+
+        ________________________________________________________________
+
+City    ________________________________________________________________
+
+
++-----------------------------------------------------------------------+
+| Product                        Quantity   Unit Price   Total Price    |
++-----------------------------------------------------------------------+
+| Polymath (Evaluation disk)     ________      $10       ___________    |
+|                                                                       |
+| Polymath (Registered disk)     ________      $40       ___________    |
+|                                                                       |
+| Colorado residents add 4.6% sales tax:                 ___________    |
+|                                                                       |
+| Please pay  total amount  --->                         ____________   |
++-----------------------------------------------------------------------+
+
+Please make checks payable to:  Lobster Software
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0606
 

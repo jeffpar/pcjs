@@ -31,6 +31,207 @@ machines:
     time from 1750 B.C. to the present.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES920.TXT
+
+{% raw %}
+```
+Disk No:  920
+Program Title:  MAPTAB WORLD CULTURE DATABASE DEMO
+PC-SIG version: 1.3
+
+MAPTAB is a complex data-management program which allows you to search
+for data concerning different cultures, their beliefs, practices, and
+their region across the world.
+
+This version of MAPTAB is a partial but useful sample of the program
+that contains ethnographic data on 186 societies worldwide. 177
+variables pertaining to these cultures are provided, including kinship
+relations, social stratification, incidence of aggression, climactic
+information, and types of marriage customs.  In addition to these items,
+the documented societies range in time from 1750 B.C. to present.
+
+In order to use the program, the codes for ethnographic variables and
+societies must be printed out.  Then they can be entered to get
+correlational data for a particular variable between any number of the
+given societies.  In addition, two variables can be cross-tabulated.
+For example, one could find the degree of aggression associated with
+monogamous vs. polygamous societies.  The program can generate a world
+map that presents the code for a particular variable in its appropriate
+geographic location.
+
+Usage:  Research Database.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $25.00
+
+File Descriptions:
+
+3#2           Data file.
+AGREMTPC SIG  Text file.
+BROWSE   COM  File viewing utility.
+BROWSE   INS  Data file for BROWSE.COM.
+C1            Data files.
+C2            Data files.
+C3            Data files.
+C4            Data files.
+C5            Data files.
+C6            Data files.
+C7            Data files.
+C8            Data files.
+C9            Data files.
+CDIV???? ???  Data files (7 files).
+COORD    DAT  Data file.
+GETYN    ASM  Source code for GETYN.COM.
+GETYN    COM  Program accessed by batch files.
+GETYN    DOC  Manual for GETYN.COM.
+GO       BAT  Batch file to start program.
+KEY-FAKE COM  Sub-program.
+LOGO3         Data file.
+MAP117        Data file.
+MAP177        Data file.
+MAPBASE       Data file.
+MAPTAB   DIR  Data file.
+MAPTAB   EXE  Main program.
+MAPTAB   INS  Instructions for using MAPTAB.
+PATCHES  CRD  Data file.
+READ     BAT  Documentation screen presentation file.
+READER   EXE  Sub-program.
+SN            Data file.
+STDSAMP? ???  Data files (11 files).
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## GETYN.ASM
+
+{% raw %}
+```
+
+;Get y/n response, return as errorlevel 0 (n), 1 (y)
+;Released to public domain by Bob Wallace, Quicksoft.  No rights reserved.
+
+locode  segment public 'CODE'
+        assume  cs:locode,ds:locode,es:locode,ss:locode 
+        org     100h            ;for com file
+getgo:  mov     bl,128          ;param loc
+        xor     bh,bh           ;index
+        mov     bl,0[bx]        ;param len
+        mov     word ptr 129[bx],'( ' ;terminate
+        mov     word ptr 131[bx],'/y' ;terminate
+        mov     word ptr 133[bx],')n' ;terminate
+        mov     word ptr 135[bx],'$ ' ;terminate
+        mov     dx,130          ;point to parm
+        mov     ah,9            ;print string
+        int     33              ;give prompt
+        mov     ah,0Dh          ;disk reset
+        int     33              ;dos
+getyn:  mov     ah,1            ;get a key
+        int     33              ;dos
+        xor     ah,ah           ;return for 'n'
+        cmp     al,'n'          ;'n'?
+        je      getok           ;yes
+        cmp     al,'N'          ;'N'?
+        je      getok           ;yes
+        inc     ah              ;return for 'y'
+        cmp     al,'y'          ;'y'?
+        je      getok           ;yes
+        cmp     al,'Y'          ;'Y'?
+        je      getok           ;yes
+        cmp     al,13           ;enter?
+        je      getgo           ;yes
+        mov     dl,8            ;backspace
+        mov     ah,2            ;put a char
+        int     33              ;dos
+        jmp     getyn           ;no
+getok:  push    ax              ;save
+        mov     dl,13           ;carriage return
+        mov     ah,2            ;put a char
+        int     33              ;dos
+        mov     dl,10           ;line feed
+        mov     ah,2            ;put a char
+        int     33              ;dos
+        pop     ax              ;back
+        mov     al,4Ch          ;terminate
+        xchg    ah,al           ;setup
+        int     33              ;dos
+locode  ends
+        end     getgo
+```
+{% endraw %}
+
+## GETYN.DOC
+
+{% raw %}
+```
+                                  GETYN
+
+GETYN can be used in a batch file to get a yes/no response.  It echoes its
+command line to the screen, followed by "(y/n)", then waits for a keystroke.
+A response of N or n sets ERRORLEVEL to 0, a response of Y or y sets it to 1.
+No other response is accepted.
+
+For example, the batch file sequence:
+
+    GETYN Do you have a color monitor?  Press N if unsure
+    IF ERRORLEVEL 1 ECHO %%C >> %1ed.def
+
+will prompt the user as follows:
+
+    Do you have a color monitor?  Press N if unsure (y/n)
+
+and if the user presses Y or y, appends the line "%C" to the end of the file
+named ED.DEF.  Note by the way that:
+  1. ECHO's output can be re-directed.
+  2. The >> redirection appends the line to the end of the file.
+  3. The % must be doubled to %%, to get a single % to echo.
+
+I wrote GETYN, and hereby release it into the public domain.
+
+Bob Wallace, Quicksoft.
+
+```
+{% endraw %}
+
+## STDSAMPL.TXT
+
+{% raw %}
+```
+The Standard Sample: Introduction
+
+     The Standard Cross-Cultural Sample (Murdock and White 1969, ETHNOLOGY 8: 
+329-369) consists of 186 societies, each pinpointed to a particular time and 
+place for purposes of coding.  By society we mean a specific local population 
+which reproduces a way of life, the description of which may vary depending on 
+which of many possible foci is chosen for study, within some larger unit.  No 
+attempt is made to generalize the descriptions of these individualized ways of 
+life to an entire "society" in terms of the largest groups that might be 
+included under the ethnic or national designations of the particular units.
+
+     This sample is designed for testing propositions about human societies, 
+cultures, and behaviors.  The order in which the societies are listed below 
+corresponds to the order of the records in the datafiles with descriptive 
+variables on these societies.  The numbers running from 1 to 186 traverse the 
+societies from the southern tip of Africa up through Europe, on through Asia 
+and the Pacific, into North America and down to the tip of South America.  The 
+dates are the focal date, which is often the earliest reliable ethnographic 
+description.  The sample will be listed under the following headings:
+
+ No. Societal Name   Date
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0920
 

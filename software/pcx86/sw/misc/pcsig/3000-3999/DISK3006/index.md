@@ -14,6 +14,39 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE3006.TXT
+
+{% raw %}
+```
+Disk No: 3006
+Disk Title: Well Connected Software
+PC-SIG Version: S1
+
+Program Title: Well Connected Software
+Author Version: 2.3SD
+Author Registration: $89.00
+Special Requirements: No special requirement
+
+WELL CONNECTED SOFTWARE (WCR) is an interesting mix between a contact
+manager, a calendar program, and a personal information manager.  It
+lets you schedule your appointments, record your contacts, make notes,
+and organize information in a hypertext-type environment.  An example
+of the hypertext feature would be an agenda linked to an appointment
+for a meeting.  It also includes an event reminder, and task management
+and people tracking abilities.  The shareware versions limit the amount
+of information the program can handle.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1992 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3006
 

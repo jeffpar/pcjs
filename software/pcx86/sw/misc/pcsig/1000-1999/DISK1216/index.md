@@ -29,6 +29,39 @@ machines:
     and condensed characters.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1216.TXT
+
+{% raw %}
+```
+Disk No: 1216                                                           
+Disk Title: Fast Statement Writer                                       
+PC-SIG Version: S3.5                                                    
+                                                                        
+Program Title: Fast Statement Writer                                    
+Author Version: 3.5                                                     
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+FAST STATEMENT WRITER creates billing statements for your business in a 
+quick and orderly fashion.                                              
+                                                                        
+In about 60 seconds, FAST STATEMENT WRITER turns out a numbered,        
+professional-looking statement and prints as many copies as you want.   
+Then it prints mailing labels and payment return stubs.  It also prints 
+your firm's name, address and phone number on the statement in expanded 
+and condensed characters.                                               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1216
 

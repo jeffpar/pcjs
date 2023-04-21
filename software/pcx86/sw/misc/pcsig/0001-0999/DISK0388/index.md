@@ -135,6 +135,130 @@ machines:
     JBRSM         Job advertisement inquiry.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES388.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 388   Form Letters                                      V1.1 DS2
+------------------------------------------------------------------------
+Extensive samples of commonly used business letters that can be tailored
+to your individual needs.
+ 
+1LTSCHRA      Overdue account letters.
+1SLPYBS          "      "       "
+2LTSCHRA         "      "       "
+2SLPYBS          "      "       "
+3LTSCHRA         "      "       "
+3SLPYBS          "      "       "
+4LTSCHRA         "      "       "
+4SLPYBS          "      "       "
+5LTSCHRA         "      "       "
+5SLPYBS          "      "       "
+6SLPYBS          "      "       "
+ABSNTRCD      Attendance notice.
+ACKNORDR      Acknowledge order.
+AD            Information about other programs and what is on this disk.
+AFTRSLSL      Proposal follow up.
+APOLOGYC      Apology for incorrect collection letter.
+BADCHK        Bad check notice.
+BDBHVR        Bad behavior notice.
+BDRSK         Bad risk notice.
+BLLNGMST      Billing error.
+BNKDPST       Idle bank account inquiry.
+BSAPPCTN      Credit account denial.
+BSCLSD        Layoff notice.
+CHRGACCT      New charge account acceptance.
+CLAIMS        Response to complaint about employee behavior.
+CLLCTN        Request for bill due date extension.
+CMPLNTAD      Product defect and replacement request to supplier.
+CNCLCNTR      Certified letter canceling the order.
+COMPLNT       Incomming product variance notice.
+COND          Sympathy letter for co-workers death.
+COPLCY        Company policy denial of donation request.
+CRDTINFR      Request to supplier for a credit account.
+CRDTRQST      Response from supplier granting credit request.
+CRDTSTND      Response from supplier turning down credit request.
+CRDTSUSP      Response from supplier suspending credit.
+CRVOUCH       Neutral response to credit reference inquiry.
+CSTMRTHS      Customer thank you letter.
+DCLDN         Dinner invitation turn down letter.
+DLVRMTH       Delivery method error refund letter.
+DLYDCRD       Delayed returned merchandise refund.
+DTHOTHER      Death sympathy.
+EMPLMNT       Job inquiry turn down letter.
+EXPNSVGT      Return of an expensive gift from a client.
+FLLUPREP      Mailing list follow up letter.
+FLLWUP        Customer sales visit follow up letter.
+FNDRSNG       Decline charity sponsorship request.
+FNDSLMT       Turn down charity donation request.
+FOLLWUP       Follow up to phone call when customer not in.
+FURN          Furniture store grand opening.
+GDCRDTST      Positive response to credit reference inquiry.
+GVNGLTR       Cancel incorrect service charges.
+HSPTYGFT      Hospitality gift thank you letter.
+ILL           Ill employee response letter.
+ILLHLTH       Ill health resignation letter.
+INACTVCS      Inactive customer status inquiry.
+INACTVE       Inactive customer sales inquiry.
+INCMTXCO      Tax consultant sales mailer.
+INCOMPL       Letter of sales exchange.
+INJURY        Injury gift.
+INTROSLS      Sales introduction.
+JBDNWL        Christmas rush employee effort commendation letter.
+JBRSM         Job advertisement inquiry.
+LFINSRNC      Life insurance policy inquiry.
+LTDLVY        Late delivery due to engraving.
+MNRNIMG       Gift return by civil court judge.
+MSMTNG        Apology for missed meeting.
+NOINFRMT      Incomplete credit application response.
+NWCSTMR       New customer thank you.
+OPNACCT       Request for credit account.
+ORDRCNFR      Mail order request.
+ORDRCONF      Mail order request.
+PERSCRDT      Incomplete credit application response.
+PERSCRE       Credit account offer mailer.
+PMPTPMNT      Thank you for prompt credit account payments.
+POSUNSTE      No position available response to job inquiry.
+PRCRDIT       Order refusal due to bad credit history.
+PRCRDT        Negative response to credit reference inquiry.
+PRINTLET EXE  Program to print all the letters out to a printer.
+PRPY          Credit denial.
+PRQUOTE       Request for quote.
+PRSNLCRD      Credit line denial.
+QUESTNNR      Sample credit questionnaire.
+RECMMD        Neutral response to company reference inquiry.
+REFPR         Deny price discount request.
+REFRNCE       Positive response to company reference inquiry.
+REFUND        Wrong product refund.
+RESCHDLO      Request production schedule change.
+RESIGN        Resignation letter.
+RETRMNT       Retirement congratulations.
+RJCTREF       Negative response to employement reference.
+RSMJOB        Resume cover letter.
+SECYRCM       Positive response to employement reference.
+SERVCHRG      Service charge increase announcement.
+SHRTEPMT      Negative credit application response.
+SLS           Mail inquiry response letter.
+SLSGRMTN      Sales agreement cancellation confirmation.
+SLSLLPRD      Negative response to slow selling product return request.
+SLSVLM        Salesman congratulation for landing a new account
+STATEMNT      Correction for billing error.
+STMTER        Corrected statement cover letter.
+THNKYOU       COD shipment denial, holding product for payment.
+UNSATCRD      Negative response to credit reference inquiry.
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite D
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0388
 

@@ -53,6 +53,30 @@ machines:
     still your own ideas, expressed in your own words.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES.TXT
+
+{% raw %}
+```
+CREATIVITY PACKAGE - Set of three disks
+
+R.K. West Consulting
+P.O. Box 8059
+Mission Hills, CA 91346
+
+Disk #3: Contains the program VERSIFIER
+
+VERSE.EXE     Executable program file
+HAIKU.DBF     \
+VERSE.DBF      > Vocabulary files
+WORDS.DBF     /
+VERSEDOC.COM Instruction manual (command is VERSEDOC)
+FILES.TXT     List of files on the disk
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2077
 

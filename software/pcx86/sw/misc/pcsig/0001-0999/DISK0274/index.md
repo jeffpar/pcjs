@@ -48,6 +48,7 @@ machines:
 
 ## BREAKOUT.BAS
 
+{% raw %}
 ```bas
 10 REM ibm pc spinout
 20 REM K.R. Sloan, Jr.
@@ -214,9 +215,196 @@ machines:
 1520 PUT(PL,PY),PADDLE,XOR
 1530 RETURN
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #274, version v1 
+ 
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on this disk.  If the CRC numbers do not match the following
+list you may have a bad file.  To use type:  CRCK4 <filespec>
+ 
+CRCK4 output for this disk:
+ 
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  GAMES   .TXT         CRC = A0 96
+
+--> FILE:  CASTLE  .EXE         CRC = 3E FC
+
+--> FILE:  CASTLE  .RAN         CRC = A5 D8
+
+--> FILE:  SPACEVAD.EXE         CRC = 96 CE
+
+--> FILE:  PACKMAN .EXE         CRC = F7 32
+
+--> FILE:  PACKMAN .DOC         CRC = AC A0
+
+--> FILE:  BREAKOUT.BAS         CRC = 35 25
+
+--> FILE:  LANDER  .BAS         CRC = 68 3B
+
+--> FILE:  LANDER  .BIN         CRC = 2D 3E
+
+--> FILE:  LANDER  .SCR         CRC = A9 78
+
+--> FILE:  BUGS    .EXE         CRC = 03 68
+
+--> FILE:  BUGS!   .SCR         CRC = 8C 44
+
+--> FILE:  LIFE2   .EXE         CRC = AD 95
+
+--> FILE:  LIFE2   .BAS         CRC = 64 EA
+
+--> FILE:  WIZARD  .BAS         CRC = 87 92
+
+--> FILE:  XWING   .BAS         CRC = 55 33
+
+--> FILE:  FILES   .TXT         CRC = 8B DF
+
+ ---------------------> SUM OF CRCS = 3E EF
+
+DONE 
+ 
+These and other Public Domain and user-supported programs from:
+ 
+PC Software Interest Group (PC-SIG)
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## FILES.TXT
+
+{% raw %}
+```
+This disk is a collection of some of the better games in the PC-SIG
+library.  All games run on the PCjr (though you may have to type
+"mode co80" first).
+ 
+GAMES    TXT  Comments from the person who selected these programs
+CASTLE   EXE  Find your way out of the castle and get treasures, kill monsters
+CASTLE   RAN  Part of CASTLE game
+SPACEVAD EXE+ Shoot invaders before they invade earth
+PACKMAN  EXE+ Gobble power pellets and eat monsters
+PACKMAN  DOC  Documentation for PACKMAN.EXE
+BREAKOUT BAS+ Try to break out of a brick wall, like tennis
+LANDER   BAS+ Land a space ship on a pad without crashing
+LANDER   BIN  Part of LANDER
+LANDER   SCR  Part of LANDER
+BUGS     EXE  Shoot crawling creatures before they get you
+BUGS!    SCR  Part of BUGS
+LIFE2    EXE  Try to make your bacteria live
+LIFE2    BAS  Source code for LIFE2
+WIZARD   BAS  A role game to find the ORB of ZOT
+XWING    BAS+ Try to destroy the deathstar
+FILES    TXT  Files on this disk
+```
+{% endraw %}
+
+## GAMES.TXT
+
+{% raw %}
+```
+ 
+Hello, my name is Jason and I would like to tell you more about the games
+that PC-SIG has and give you my opinion of them.  PC-SIG games range from
+boring to plain fun.  I will tell you all about the fun games.  You may
+have already read my article in the previous Newsletter and now I will give
+you more information and some hints.
+ 
+CASTLE (#198)
+ 
+One of the better games that PC Software has.  It has good graphics, is fun
+to play and is very dangerous because you have to kill ogres and demons.
+I'll give you some hints.  To go to the dungeon you must have the key from
+the desk in the king's study.  When you get in the dungeon, there are traps
+and if you don't have the necklace, located on the king's statue you will
+die.  You'll need the necklace for the dungeon and the maze.  To go down
+the staircase in the kitchen you must have the lamp, it's in the garden.
+To get the treasures type "get" and the treasure you want.  When you want
+to drop something type "drop" and what you want to drop.
+ 
+SPACEVAD (#176)
+ 
+This is a great game, a modified version of SPACE INVADERS.  It has
+excellent graphics and is fun to play.  I think that you should destroy all
+your bases first because they just get in the way when you fire and can
+cause your death.  When you are destroyed, I recommend getting under a line
+of invaders and shoot them down while they are slowed down.  Since you are
+getting a new ship, get under the invaders and fire or you may get
+SPACEDOUT.
+ 
+XWING (#174)
+ 
+Have you watched "Star Wars", well if you have your going to like this
+game.  Your a XWING fighter pilot and you have to get to the DEATHSTAR and
+destroy it.  You have to get by TY FIGHTERS and DARTH VADAR.  If you really
+hate Darth Vadar, you have your chance to blow him out of the sky.  I don't
+like to brag, but I've done it before with the greatest of ease.  Here's a
+hint.  When you meet him or a TY Fighter, slow to mach 1 and destroy them.
+If you don't, they may decide to destroy you and after that he will laugh
+at you.
+ 
+PACKMAN (#24)
+ 
+PACKMAN is almost the same as the arcade game with good graphics and one of
+the most fun games of PC-SIG.  When you eat a power pellet, you should eat
+as many dots as you can unless you can get close enough to eat some of the
+ghost monsters.
+ 
+ 
+BREAKOUT (#177)
+ 
+This is a very fun and fast game in which you have to BREAKOUT of a brick
+wall.  You must not let the ball go by you or you'll lose that ball.  You
+only have three balls.  You've got to be very fast and skillful to line the
+pad up with the ball.  If you don't BREAKOUT, I advise you not to BREAKOUT
+and go CRAZY with your vunerable computer.
+ 
+WIZARD (#71)
+ 
+IPCO WIZARDS CASTLE is a fun game where you play roles.  Like DUNGEONS &
+DRAGONS, you are in a castle trying to get treasures.  Oh yes, there are
+monsters and all sorts wierd creatures.  It's your choice to get killed in
+this game.  You may not like this game because there are no graphics, but I
+think it's fun.
+ 
+LANDER (#55)
+ 
+This is neat game because you get to land a space ship.  Sounds simple,
+doesn't it?  The drawbacks to landing the space ship are; having to go over
+mountains, lining up your ship to a little pad and a limited amount of
+fuel.  It's a lot of fun and I recommend it.  If you do crash, please crash
+without making too big of a mess.
+ 
+BUGS (#177)
+ 
+This is like the popular video game CENTIPEDE.  Don't be confused by the
+weird shapes.  The weird shapes are there to block you from shooting the
+centipede.  BUGS is a simple and very easy game to play.  You must be able
+to look in several places at once.  To keep the board clear, you must kill
+the little guy who makes the blocks.  I think this is a fun game and it
+will keep you occupied.
+ 
+The games I've just mentioned are excellent and very fun games to play.
+I recommend them highly.  I have played these games several times and
+they never get boring to me.  Of course, you may have another opinion.
+Nevertheless, get involved and enjoy the games that PC-SIG has by
+yourself or with your family.
+ 
+```
+{% endraw %}
 
 ## LANDER.BAS
 
+{% raw %}
 ```bas
 10 CLEAR,,2000:A$="VERSION   1.0"  ' Program : LANDER.BAS
 20 DEF SEG=&H40: EQUIP=PEEK(&H10)
@@ -618,9 +806,11 @@ machines:
 3980 LOCATE ,,1,12,13 'turn on monochrome cursor position
 3990 RETURN
 ```
+{% endraw %}
 
 ## LIFE2.BAS
 
+{% raw %}
 ```bas
 1 '   LIFE = The game of LIFE by John Conway - a simulation
 2 '    This version by John Sigle        2/21/83
@@ -811,9 +1001,115 @@ machines:
 65002 IF ADDR.%<>0 THEN RUN DRIVE$+":"+"START"
 65005 END
 ```
+{% endraw %}
+
+## PACKMAN.DOC
+
+{% raw %}
+```
+                PACKMAN PROGRAM DESCRIPTION 
+                =========================== 
+SCREEN LAYOUT 
+------------- 
+The score appears at the upper left.  The screen number is shown at the 
+far right.  The remaining PACKMEN are also shown in the upper right. 
+The prompt area is in the center of the status area above the center 
+"tunnel" exit.  The prompts indicate readiness to satrt/resume play, display
+display bonus points for capturing a monster or prize, etc. 
+  
+CONTROLS 
+-------- 
+The player controls PACKMAN's direction using either the four arrow keys 
+(make sure [NumLock] is not accidently pressed!) or, optionally, via 
+joystick.  The player indicates his choice simply by pressing either a 
+cursor key or joystick "fire" button to start/resume play in response to 
+the READY! prompt.  Thus, it is even possible to alternate between keyboard 
+and joystick(s) during the game.  The joystick button may also be used to 
+respond affirmatively to the new game prompt. 
+  
+Pressing [CTRL][END] during play causes the program to end immediately and 
+return to DOS. 
+  
+Note:  This program assumes the joysticks are wired such that resistance 
+values increase from left to right and top to bottom, following the con- 
+vention for screen pel coordinates. 
+  
+SCORING 
+------- 
+Dots:....................10 points 
+Power Capsules:..........50 points 
+"Scared" Monsters:......200,400,800, or 1600 points 
+Prizes: 
+     Screen 1:..........100 points (Cherries) 
+     Screen 2:..........300 points (Strawberry) 
+     Screen 3:..........500 points (Apple) 
+     Screen 4:..........700 points (Grapes) 
+     Screen 5:.........1000 points (Key) 
+     Screen >=6:.......2000 points (Randomly chosen symbol) 
+  
+A bonus PACKMAN is awarded at each 10,000 point plateau. 
+  
+GAME DESCRIPTION 
+================ 
+The objective is for PACKMAN to score as many points as possible by 
+devouring dots, prizes, power capsules, and "scared" monsters, while 
+avoiding fatal collisions with "mean" monsters.  A screen ends when 
+all 180 dots and four power capsules are cleared. The game ends when 
+the player loses his last PACKMAN. 
+  
+As play starts/resumes, the four monsters emerge from their "pen" in 
+the center and begin searching for PACKMAN.  At first, they move 
+randomly about the maze, checking out the corridors ahead and to the 
+sides.  As soon as a monster sees PACKMAN, it begins to chase him. 
+PACKMAN may be spotted even if only partially visable in a corridor. 
+  
+Chasing basically entail this: If PACKMAN is in sight, the monster will 
+head directly toward him.  If PACKMAN then ducks out of sight, the 
+monster will remember where he was last seen and the direction he 
+turned, and will try to proceed to that point and turn the same way, 
+after which it reverts to its searching algorithm.  The monsters also 
+forget the trail when exiting the tunnels or passing in front of the 
+pen exit. 
+  
+  
+  
+                          PACKMAN                              Page 2 
+  
+The monsters normally do not look backwards or reverse their direc- 
+tions arbitrarily.  Therefore, PACKMAN can follow a monster without 
+being seen.  However, since the monsters cannot run over each other, 
+collisions between monsters may resuld in one or both suddenly revers- 
+ing their course, unexpectedly trapping PACKMAN if he is careless. 
+  
+When PACKMAN eats a power capsule, all monsters outside the pen turn 
+blue, slow to half-speed, and attempt to flee if they see PACKMAN. 
+The first monster PACKMAN catches is worth 200 points, doubling for 
+each subsequent monster.  When a monster is captured, its disembodied 
+eyes make a beeline back to the pen, where it is reincarnated and re- 
+emerges.  After a short time, the blue monsters flash white three times 
+and revert to their normal dangerous state. 
+  
+The prize appears twice per screen, staying for a time for PACKMAN to 
+claim it, then disappearing.  The first appearance is sometime after 
+one-third to two-thirds of the dots are cleared from the screen. 
+  
+Each screen is progressively more difficult than the last.  For the 
+first several screens, PACKMAN is considerably faster than the monsters 
+in open corridors, so he can usually out-run them unless he gets him- 
+self trapped or is slowed by eating a long string of dots (eating slows 
+his speed by one-third).  However, with each screen, the monsters 
+become faster relative to PACKMAN, and remain frightened for shorter 
+length of time.  By the tenth screen, the power capsules cease to have 
+any effect at all.  Also, the prizes appear for progressively shorter 
+intervals. 
+creen, the power capsules cease to have 
+any
+```
+{% endraw %}
 
 ## WIZARD.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -1760,9 +2056,11 @@ machines:
 10170 RETURN
 10180 IF SAMP$="YES" THEN CHAIN "SAMPLES",1000 ELSE  END
 ```
+{% endraw %}
 
 ## XWING.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -2497,6 +2795,7 @@ machines:
 8020  PLAY "L1 N0":PLAY "L1 N0"
 8030   GOTO   1300
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -34,6 +34,53 @@ machines:
     follow the bouncing ball.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES839.TXT
+
+{% raw %}
+```
+Disk No  839
+Program Title: GREETINGWARE CHRISTMAS MEDLEY and BIRTHDAY MEDLEY
+PC-SIG version 1
+ 
+    CHRISTMAS MEDLEY is a Christmas card on disk. The card plays 6
+Christmas songs, which your family and friends can sing along with in old
+fashion fun. The program will put the words on the screen, then just follow
+the bouncing ball to sing along.
+ 
+    BIRTHDAY MEDLEY is a birthday card on disk, performing in the same
+function as the CHRISTAMS MEDLEY, as you blow out the candles on the cake.
+ 
+Usage: Computer Greeting Card
+ 
+System Requirements: 95K memory and one disk drive.
+ 
+How to Start: Type; XMASCARD (press enter).  Type; BDAYCARD (press enter).
+ 
+Suggested Registration:  $14.95 XMASCARD, $14.95 BDAYCARD.
+ 
+File Descriptions:
+ 
+GW0617   MSG  Data file.
+XMASCARD EXE  Main Christmas medley program.
+REGISTER GWX  Registration form for XMASCARD.
+-------- ---
+GW1023   MSG  Data file.
+BDAYCARD EXE  Main birthday medley program.
+README   1ST  Introduction file.
+REGISTER GWB  Registration form for BDAYCARD.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0839
 

@@ -30,6 +30,112 @@ machines:
     report options, will like this program.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2030.TXT
+
+{% raw %}
+```
+Disk No: 2030                                                           
+Disk Title: Micro Accounting System                                     
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Micro Accounting System                                  
+Author Version: 2.0                                                     
+Author Registration: $95.00                                             
+Special Requirements: 512K RAM, and a hard drive recommended.           
+                                                                        
+Those looking for a single entry general ledger accounting program need 
+look no further.  MAS [Micro Accounting System] provides a service      
+needed by many small businesses.  In addition to the general ledger     
+functions, MAS has banking and budgeting functions.  These additional   
+sections are not included by most other programs.                       
+                                                                        
+Those who do not need invoicing, accounts receivable or payable         
+functions, and who need a simple to use general ledger with ample report
+options, will like this program.                                        
+                                                                        
+The program menus pop up quickly but do not contain instructions on how 
+to return to a previous menu [YOU MUST PRESS ESC].  The program is easy 
+to set up and use.  It uses non-standard account numbers [Ex: A09100]   
+and the program is not easy to correct if an entry is incorrect or      
+results in the statement being out of balance.                          
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+
+```
+{% endraw %}
+
+## INSTALL.DOC
+
+{% raw %}
+```
+=============================================================================
+             Micro Accounting System - Installation Procedures
+=============================================================================
+
+If the INSTALL.EXE program fails then you can install the program by
+following the instructions below:
+
+HARD DISK INSTALLATION:
+
+   1.  Create a sub directory on your hard disk to place the program.
+   2.  Change to that subdirectory
+   3.  Change to drive A:
+   4.  Type:  PKUNZIP MAS <drive>
+
+   -   Installation is Complete
+
+   Example:
+
+   1.  C> MD ACCOUNT
+   2.  C> CD\ACCOUNT
+   3.  C> A:
+   4.  A> PKUNZIP MAS C:
+
+   To run the program change to drive 'C' and type:  MAS
+
+
+FLOPPY DISKETTE INSTALLATION:
+
+   Note:  You will need three formatted diskettes to use this system.
+          They will be PROGRAM, OVERLAY, & DATA Diskettes.
+
+   1.  Insert Original Diskette into drive A:
+   2.  Insert PROGRAM (1st blank diskette) into drive B:
+   3.  Change to drive A:
+   4.  Type:  PKUNZIP MAS B: MAS.EXE
+   5.  Remove PROGRAM Diskette from drive B:
+   6.  Insert OVERLAY (2nd blank diskette) into drive B:
+   7.  Type:  PKUNZIP MAS B: @floppy
+
+   -   Installation is complete
+
+   Example:
+
+   3.  A:
+   4.  PKUNZIP MAS B: MAS.EXE
+   7.  PKUNZIP MAS B: @floppy
+
+   To run the program do the following:
+
+   1.  Insert PROGRAM Diskette into drive A:
+   2.  Insert DATA Diskette into drive B:
+   3.  Change to drive B:
+   4.  Type A:MAS
+
+   This will create all data files on drive B:
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2030
 

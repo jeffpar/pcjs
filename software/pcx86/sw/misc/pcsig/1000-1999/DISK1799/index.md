@@ -35,6 +35,47 @@ machines:
     valuable additional information.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1799.TXT
+
+{% raw %}
+```
+Disk No: 1799                                                           
+Disk Title: A-Filter                                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: A-Filter                                                 
+Author Version: 02/15                                                   
+Author Registration: $35.00                                             
+Special Requirements: None.                                             
+                                                                        
+This program calculates the resistor and capacitor values for various   
+operational amplifier based active filter circuits.  A-FILTER is menu   
+driven and covers high and low pass, equal value Sallen-Key filters to  
+the 4th order.                                                          
+                                                                        
+Calculations will simultaneously include 7 response curves for each filt
+(greater than 1st order); Best delay, Compromise, Flattest, Slight dips,
+1db dips, 2db dips and 3db dips.  These filter configurations can be cas
+to make bandpass filters.                                               
+                                                                        
+The screens are laid out in a format similar to the illustrations in    
+"The Active Filter Cookbook" by Don Lancaster.  The screens refer to    
+pages in the book which show the shape of each curve.  Although it is   
+not necessary to have this book to run A-FILTER, the book provides      
+valuable additional information.                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1799
 

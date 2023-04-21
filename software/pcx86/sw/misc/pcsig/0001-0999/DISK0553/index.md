@@ -36,6 +36,99 @@ machines:
     ???????? FOR  LLSQ FORTRAN source code modules
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES553.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  553  LLSQ  (FORTRAN PROGRAMS)                             v1  DS2
+---------------------------------------------------------------------------
+This disk contains LLSQ, a package of fourteen basic, high-quality
+mathematical FORTRAN subprograms, that can be utilized in your applications
+programs.  These first appeared in the "IMSL Numerical Computations Newsletter", "User
+News", and/or "Directions".
+ 
+LINK?    BAT  Batch files to properly link the various modules
+PROG?    FOR  Test drivers for the various modules
+???????? FOR  LLSQ FORTRAN source code modules
+NOTES553 TXT  A list and comprehensive explanation of the modules
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+## NOTES553.TXT
+
+{% raw %}
+```
+Program name:       LLSQ
+
+Authors names:      Charles L. Lawson and Richard J. Hanson    
+
+Address:            Not given
+
+Telephone Number:   Not given
+
+Suggested Donation: None
+
+Program Description: 
+
+LLSQ is a package of fourteen basic, high-quality mathematical FORTRAN 
+subprograms which can be utilized for your applications programming.  These 
+first appeared in the "IMSL Numerical Computations News letter", "User 
+News", and/or "Directions", and are reprinted here with only editorial 
+changes.
+
+The following lists the subprogram names and provides a brief statement of 
+the usage of each module.
+
+
+Subroutine                       Purpose
+
+ - NNLS        Solve a constrained least squares problem Ax ~ b, subject
+               to all solution components being non-negative.  Using LDP,
+               one of the other codes, a least squares solution of systems
+               Ax ~ b, subject to general inequality constraints Gx >= h
+               can be found.
+
+ - SVA and     Solve a least squares problem Ax ~ b using the singular
+   SVDRS       value decomposition of the matrix A.
+
+ - HFTI        Solve a least squares problem Ax ~ b using the Golub-
+               Businger algorithm for least squares problems.
+
+ - BNDACC and  Solve a least squares problem Ax ~ b using Householder
+   BNDSOL      transformations.  This subprogram works with a banded
+               matrix that arises in curve or surface fitting of discrete
+               data by B-splines, for example.
+ 
+The user must generally provide input and output of data to all the 
+routines.  With the exception of routine SVA, the subprograms in the package 
+do not do any significant reading or writing of data.
+ 
+These routines are exceptionally well documented in the Prentice-Hall book, 
+"Solving Least Squares Problems", by Charles L. Lawson and Richard J. 
+Hanson.  This book is, in fact, almost a prerequisite to properly use these 
+routines.   
+ 
+The sources on this disk were provided on tape by IMSL.  Thanks to 
+Exploration Systems, Inc., for the use of their PRIME computer used to 
+convert the source from tape to disk.
+ 
+For additional information, or a little help, write to me, Jeff Fried, c/o 
+PC-SIG TECHNICAL DEPARTMENT.
+
+System requirements aren't listed.  If you have a FORTRAN compiler on your 
+system, you should be able to use these modules.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0553
 

@@ -51,8 +51,83 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILES989.TXT
+
+{% raw %}
+```
+Disk No  989
+Program Title: BASIC LINE NUMBERING
+PC-SIG version 1
+ 
+    BASIC LINE NUMBERING removes unreferenced line numbers or adds line
+numbers from BASIC programs saved in an ASCII format. You can delete line
+numbers, use an ASCII editor to easily move sections of a code, then add
+line numbers to produce a usable interpreted BASIC code. You can add line
+numbers to a BASIC file while leaving any existing line numbers unchanged,
+and add new numbers to unnumbered lines in the same way as existing line
+numbers. Line numbers can be added to a file written in compiler BASIC for
+debugging purposes. You can also easily switch between interpreters that
+require line numbers and compilers that do not require line numbers.
+ 
+    This disk contains four GWBASIC programs to solve a learning curve
+problem, which is a straight line drawn on log paper depicting a continuing
+reduction in unit costs for some product or process. A Least Squares
+Regression Analysis on existing data can be run to determine what best fit
+learning curve could be applied to your actual situation. Data must be
+entered into the Basic program, then can get an output of the analysis
+either on the screen or printer.
+ 
+    WEIGHT and MEASURE CONVERSION is an excellent utility for converting
+from the metric system to the English system, and vice versa. It is menu-
+driven and easy to operate. It handles linear measures, square measures,
+cubic measures, measures of capacity (both dry and liquid), avoirdupois
+weights, apothecaries' weight (Troy weight), and apothecaries' fluid
+measure. Both the U.S. and British systems for measures of capacity can be
+converted to metric.
+ 
+Usage: BASIC Utilities
+ 
+System Requirements: 64K memory and one disk drive.
+ 
+How to Start: Type: BASLIN (press enter) to start BASIC LINE
+NUMBERING. Consult your BASIC manual for instruction on
+how to load the programs written in BASIC. Type: RUN (press enter) to start
+MEASUREMENT CONVERSION.
+ 
+Suggested Registration: $9.99 for BASIC LINE NUMBERS
+ 
+File Descriptions:
+ 
+BASLIN   EXE  Main program.
+FILES    TXT  File descriptions.
+MANUAL   TXT  Documentation.
+PRINTMAN BAT  Prints MANUAL.TXT.
+SHARE    BAT  Creates back-up copy.
+LSQRSC   BAS  Least Squares program - screen output.
+LSQRPR   BAS  Least Squares program - printer output.
+LRNCRVPR BAS  Learning Curves program - screen output.
+LRNCRVSC BAS  Learning Curves program - printer output.
+READ     TXT  Documentation.
+CONVPR   ONE  Conversion program.
+CONVPR   TWO  Conversion program.
+CONVPR   003  Conversion program.
+CONVPR   004  Conversion program.
+BASIC    EXE  Basic, needed for executing the programs.
+RUN      BAT  Batch file to automatically execute program.
+README        Introduction to this disk.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
 ## LRNCRVPR.BAS
 
+{% raw %}
 ```bas
 0    REM LRNCRVPR REV.PC  OCT. 4,1987 (C) R. GIOVANONI
 5 GOTO 3100
@@ -458,9 +533,11 @@ machines:
 3160 IF A$="" THEN 3155
 3165 GOTO 10
 ```
+{% endraw %}
 
 ## LRNCRVSC.BAS
 
+{% raw %}
 ```bas
 0    REM LRNCRVSC REV.PC OCT. 4,1987 (C) R. GIOVANONI
 5 GOTO 3100
@@ -863,9 +940,11 @@ machines:
 3160 IF A$="" THEN 3155
 3165 GOTO 10
 ```
+{% endraw %}
 
 ## LSQRPR.BAS
 
+{% raw %}
 ```bas
 10 REM FILENAME <LSQRPR> REV.0 10/3/87 (C) R.GIOVANONI
 1600 REM SEPARATE <<LEAST SQUARES>> PROGRAM (C) R.GIOVANONI SEPT 1987
@@ -980,9 +1059,11 @@ machines:
 3160 IF A$="" THEN 3155
 3165 GOTO 1700
 ```
+{% endraw %}
 
 ## LSQRSC.BAS
 
+{% raw %}
 ```bas
 10 REM FILE NAME <LSQRSC> REV.0 10/3/87 (C) R.GIOVANONI
 1600 REM SEPARATE <<LEAST SQUARES>> PROGRAM (C) R.GIOVANONI SEPT 1987
@@ -1097,6 +1178,1087 @@ machines:
 3160 IF A$="" THEN 3155
 3165 GOTO 1700
 ```
+{% endraw %}
+
+## MANUAL.TXT
+
+{% raw %}
+```
+
+
+
+	   Amaryllis
+
+	    Software
+
+
+
+
+
+
+
+
+
+
+  BASIC Line Numbers
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    Version 1.0
+    For IBM Personal Computers and compatibles with
+    64K and DOS 2.0 or later.  Deletes line numbers
+    from or adds line numbers to BASIC programs
+    saved in ASCII format.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  BASIC Line Numbers
+
+
+     User's Guide
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    Version 1.0
+    Amaryllis Software
+    Program and documentation written by Carol Poster.
+
+
+
+
+
+
+
+
+
+
+
+       This software and manual are copyright
+       Amaryllis Software. Portions are copy-
+       right Microsoft Corp. Copying of both is
+       restricted as described later in this
+       manual.
+
+       This program was  developed using Micro-
+       soft's QuickBASIC.  This manual was com-
+       posed and printed on a Star Micronics
+       SR-10 printer using the Hammerlabs'
+       Lettrix Banker, Prestige,  and OCR-A
+       fonts.
+
+
+
+
+
+
+
+
+
+
+
+
+      Portions c Microsoft Corp.
+      c Amaryllis Software 1987
+
+
+
+
+
+		CONTENTS
+
+
+
+
+    Introduction ..................................  1
+    Backing Up Your Disk ..........................  2
+    Creating Shareware Disks ......................  3
+    Getting Started ...............................  4
+    BASIC Line Numbers Initial Menu ...............  5
+    Disk Drive Selection ..........................  5
+    Select Filename ...............................  7
+    Line Numbering Menu ...........................  8
+    Source Code ................................... 11
+    Technical Support ............................. 12
+    Other Amaryllis Software Products ............. 13
+
+
+
+
+		 FIGURES
+
+
+
+    Figure 1: Title Display .......................  4
+    Figure 2: BASIC Line Numbers Initial Menu .....  6
+    Figure 3: Disk Drive Selection ................  6
+    Figure 4: Line Numbering Menu .................  9
+
+ 
+
+
+
+
+	       INTRODUCTION
+
+    Amaryllis Software's BASIC Line Numbers pro-
+    vides the following capabilities:
+
+        Delete Line Numbers:  Removes unrefer-
+	  enced line numbers from BASIC programs.
+        Add Line Numbers:  Numbers lines in a
+	  BASIC file,  by leaving any existing line
+	  numbers unchanged, and adding new numbers to
+	  unnumbered lines in a manner compatible with
+	  existing line numbers.
+
+    You can use BASIC Line Numbers for many devel-
+    opment tasks, including:
+
+        Enter code with your favourite ASCII text
+	  editor, then add line numbers before running
+	  the program with a BASIC interpreter.
+        Switch easily between interpreters  which re-
+	  quire line numbers and compilers which do
+	  not require line numbers.
+        Add line numbers to a file written in com-
+	  piler BASIC for debugging purposes.
+        Delete line numbers, use a text editor to
+	  move sections of code (something very dif-
+	  ficult within most BASIC editors),  then add
+	  line numbers to produce usable interpreted
+	  BASIC code.
+
+    The ability to produce unnumbered lines so that
+    you can edit BASIC code  with an ASCII text editor
+    is extremely useful for converting a "quick and
+    dirty" program into a production program by re-
+    structuring and/or reorganizing the code into
+    modules.
+
+
+
+
+
+
+			   - 1 -
+
+
+
+
+
+	   BACKING UP YOUR DISK
+
+    Before you try to use this software you should
+    make two copies of your original disk.  You should
+    use one of the copies as a working disk; reserve
+    the other copy for archival purposes. You will
+    only need to use the original if both copies
+    fail during a backup.
+
+    Floppy Disk Based Systems
+    Put your DOS disk in drive a: and turn on your
+    computer. If you have a single floppy drive sys-
+    tem, type:
+
+	      DISKCOPY A: A:	[ENTER]
+
+    and follow the displayed instructions. For a
+    dual floppy system, type:
+
+	      DISKCOPY A: B:	[ENTER]
+
+    and then follow the displayed instructions.
+
+    Hard Disk Based Systems
+    Turn on your computer system. If you want this
+    program in your root directory, place your orig-
+    inal disk in floppy drive a: and type:
+
+	      COPY A:*.* C:    [ENTER]
+
+    To place BASIC Line Numbers in a subdirect-
+    ory, create the subdirectory with the MKDIR com-
+    mand if it does not already exist, then copy the
+    original disk to the desired subdirectory. For ex-
+    ample, if you want to place BASIC Line Numbers
+    in a subdirectory called "BASIC", you should type:
+
+	      MKDIR \BASIC     [ENTER]
+	      COPY A:*.* C:\BASIC     [ENTER]
+
+
+
+			   - 2 -
+
+
+
+
+
+
+	 CREATING SHAREWARE DISKS
+
+    Amaryllis Software's BASIC Line Numbers is a
+    type of program known as "shareware". We believe
+    that it is difficult or impossible to tell if a
+    program really will be useful for your purposes
+    unless you can try it for a few weeks. Therefore
+    we allow you to make copies of our software for
+    your friends and co-workers. We do not authorize
+    you to sell our programs -- only to share them.
+
+    The batch file, "SHARE.BAT", on your disks, cre-
+    ates a "shareable" BASIC Line Numbers disk.
+    The only differences between the shareable version
+    and the registered one are that we give registered
+    users a complete printed manual, GWBASIC source
+    code, and technical support. We hope that this
+    will give owners of the shareware version of our
+    software an incentive to register, and also reward
+    those users who have paid for their software.
+
+    To create a shareable BASIC Line Numbers disk,
+    first make sure that a complete copy of your soft-
+    ware (either version) is located on the current
+    directory of your default disk drive. Type:
+
+	 SHARE	  [ENTER]
+
+    and follow displayed directions.
+
+    The new disk should contain the following files:
+
+	 FILES.TXT
+	 MANUAL.TXT
+	 PRINTMAN.BAT
+	 SHARE.BAT
+	 BASLIN.EXE
+
+
+
+			   - 3 -
+
+
+
+
+
+
+	     GETTING STARTED
+
+    Once you have backed up your disk (see page 2),
+    starting BASIC Line Numbers is very easy. If
+    your copy of BASIC Line Numbers is in the cur-
+    rent directory of the default drive just type:
+
+	 BASLIN    [ENTER]
+
+    If BASIC Line Numbers is located elsewhere,
+    invoke it using the complete filename, including
+    drive and pathname,  as described in your DOS
+    manual.
+
+    After you invoke BASIC Line Numbers,  you will
+    see the title display (Figure 1) on the screen.
+
+
+
+
+
+
+
+
+
+   *********************************
+   * OMITTED FROM SHAREWARE MANUAL *
+   *********************************
+
+
+
+
+
+
+
+
+
+
+
+
+    FIGURE 1: Title Display
+
+
+			   - 4 -
+
+
+
+
+
+
+     BASIC LINE NUMBERS INITIAL MENU
+
+    Press [enter] as prompted by the title display.
+    BASIC Line Numbers will display its initial
+    menu (Figure 2). From this menu, you can either
+    exit to DOS  or start the file selection process.
+
+
+	  DISK DRIVE SELECTION
+
+    The disk drive selection menu (Figure 3) allows
+    you to select drives a:, b:, c:, or d: or display
+    a directory of your default or selected drive. If
+    you don't remember which disk or drive contains
+    your file, look at a directory before making a
+    selection.
+
+    If you have configured part of your memory as a
+    RAM disk, copy your BASIC file to your RAM disk
+    before running BASIC Line Numbers. Since this
+    is a disk-intensive program, placing your BASIC
+    file on a RAM disk will increase performance
+    dramatically.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			   - 5 -
+
+
+
+
+
+
+
+
+
+   *********************************
+   * OMITTED FROM SHAREWARE MANUAL *
+   *********************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+    FIGURE 2: BASIC Line Numbers Initial Menu
+
+
+
+
+
+
+
+
+
+
+
+
+   *********************************
+   * OMITTED FROM SHAREWARE MANUAL *
+   *********************************
+
+
+
+
+
+
+
+
+
+    FIGURE 3: Disk Drive Selection
+
+
+
+			   - 6 -
+
+
+
+
+
+
+	     SELECT FILE NAME
+
+    The file name selection menu enables you to either
+    select a filename  or look at the directory of the
+    selected drive.  If you choose the filename sel-
+    ection  option, you will be prompted for the file-
+    name. Enter the complete filename including ex-
+    tension. BASIC Line Numbers will verify that
+    the file is present on the selected drive.	If the
+    file is not found, you will be prompted to enter a
+    new filename or select a different drive.
+
+    If you cannot find your BASIC file on the selected
+    drive, you can press [CTRL]-[BREAK] to exit the
+    program.
+
+    Remember that BASIC Line Numbers works ONLY on
+    ASCII files; it will not work on tokenized files
+    produced by the regular SAVE function of the BASIC
+    interpreter. To save a file from the interpreter
+    in ASCII format, you should type:
+
+	 SAVE "file.bas",A     [ENTER]
+
+
+    Special Filename
+    BASIC Line Numbers uses a file named $TEMP for
+    a temporary workspace. If you have a file named
+    $TEMP in the same directory as your BASIC file, it
+    will be destroyed.
+
+    If BASIC Line Numbers terminates abnormally,
+    (you press [CTRL]-[BREAK] or reboot your system)
+    $TEMP may not be deleted. If you find $TEMP on
+    your disk, delete it.
+
+
+
+
+
+
+
+			   - 7 -
+
+
+
+
+
+
+
+	   LINE NUMBERING MENU
+
+    The Line Numbering Menu (Figure 4)	enables you to
+    add or delete line numbers or return to the ini-
+    tial menu.
+
+
+    Add Line Numbers
+    Option 1, "Add line numbers to program.", adds
+    line numbers to all unnumbered lines in the speci-
+    fied file. If some line numbers are already pre-
+    sent in the file, it leaves them unchanged, and
+    preserves their sequence. For example, if a seg-
+    ment of code read:
+
+	 100 PRINT "A=";A
+	     A=A+1
+	 200 PRINT "A=";A
+	     GOTO 300
+
+    BASIC Line Numbers would number it as follows:
+
+	 100 PRINT "A=";A
+	 101 A=A+1
+	 200 PRINT "A=";A
+	 201 GOTO 300
+
+    BASIC Line Numbers uses the file $TEMP for
+    temporary workspace while adding line numbers to
+    your file.
+
+
+
+
+
+
+
+
+
+
+
+
+			   - 8 -
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   *********************************
+   * OMITTED FROM SHAREWARE MANUAL *
+   *********************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    FIGURE 4: Line Numbering Menu
+
+
+
+
+			   - 9 -
+
+
+
+
+
+
+    Remove Line Numbers
+    Option 2, "Remove line numbers from program.", re-
+    moves all unreferenced line numbers from the file.
+    Referenced line numbers are not changed. For ex-
+    ample, if a section of code read:
+
+	 100 ' START LOOP
+	 110 A=A+1
+	 120 IF A<100 THEN GOTO 110
+	 130 PRINT "A=";A
+
+    BASIC Line Numbers would number it as follows:
+
+	     ' START LOOP
+	 110 A=A+1
+	     IF A<100 THEN GOTO 110
+	     PRINT "A=";A
+
+    BASIC Line Numbers uses the file $TEMP for
+    temporary workspace while removing line numbers
+    from your file.
+
+    Garbage In Garbage Out
+    If the specified file is not a valid BASIC file,
+    you may get errors. The most common errors are:
+
+        Tokenized File:   You saved your file
+	  from a BASIC interpreter in a tokenized
+	  form. Go back to the interpreter and save
+	  the file in an ASCII format.
+        Non-ASCII File:  You edited your file
+	  with a non-ASCII word processor. Try ex-
+	  porting your file to ASCII.
+        Not BASIC:  BASIC Line Numbers is
+	  designed to work with BASIC files.  Although
+	  it may be modified to work with other files,
+	  results may be unpredictable.
+
+
+
+			   - 10 -
+
+
+
+
+
+
+	       SOURCE CODE
+
+    Commented GWBASIC source code, saved in ASCII for-
+    mat is provided to REGISTERED USERS ONLY.
+
+
+
+
+
+
+
+   *********************************
+   * OMITTED FROM SHAREWARE MANUAL *
+   *********************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			   - 11 -
+
+
+
+
+
+	    TECHNICAL SUPPORT
+
+    Technical support is available to REGISTERED USERS
+    ONLY. If you have any question or problems, please
+    write us at:
+
+   *********************************
+   * OMITTED FROM SHAREWARE MANUAL *
+   *********************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			   - 12 -
+
+
+
+
+
+
+     OTHER AMARYLLIS SOFTWARE PRODUCTS
+
+    Other products offered by Amaryllis Software are
+
+	 Aerobic Points:   Have you ever wondered
+	   how much exercise you need? Do you want
+	   to track how much exercise you are getting?
+	   This program will keep track of all your
+	   aerobic activities for you, and let you ev-
+	   aluate whether you are meeting your exer-
+	   cise requirements.
+
+	 Computer Media Database:  Information
+	   about several hundred computer and tech-
+	   nology related periodicals in PC-File
+	   and mail-merge formats.
+
+	 PC-F Pack:   Improves the performance of
+	   applications using Buttonware's PC-File
+	   III or PC-File/R databases.
+
+	 Star Printer Setup: This menu-driven
+	   program allows you to access many of the
+	   capabilities of your Star Micronics printer
+	   without the need to use complex escape code
+	   sequences.
+
+	 WizBreaker:  Enables players of Sir-
+	   Tech's Wizardry to modify or restore
+	   characters.
+
+    All Amaryllis Software products run on MS DOS com-
+    puters with 64K RAM and one disk drive, DOS ver-
+    sions 2.0 and later. We market all our products as
+    shareware.
+
+
+
+
+
+
+
+			   - 13 -
+
+
+-------------------------------------------------------------------------------
+			      REGISTRATION FORM
+-------------------------------------------------------------------------------
+PRODUCT 				QTY	PRICE EACH	 PRICE EXTENDED
+BASIC Line Numbers (1 copy)		 1	 $9.99		 $_____________
+BASIC Line Numbers (2-4 copies)        ___	 $9.00		 $_____________
+BASIC Line Numbers (5-10 copies)       ___	 $8.00		 $_____________
+BASIC Line Numbers (over 10 copies)    ___	 $7.00		 $_____________
+PC-F Pack			       ___	 $9.99		 $_____________
+Star Printer Setup		       ___	 $9.99		 $_____________
+WizBreaker			       ___	 $9.99		 $_____________
+Aerobic Points			       ___	$25.00		 $_____________
+Computer Media Database 	       ___	$25.00		 $_____________
+-------------------------------------------------------------------------------
+						       SUBTOTAL  $_____________
+Utah residents add 6.25% sales tax			    TAX  $_____________
+					  SHIPPING AND HANDLING  $	   3.00
+							  TOTAL  $_____________
+_______________________________________________________________________________
+
+Please make checks payable to Amaryllis Software or provide appropriate credit
+card number.  COD orders are not accepted.  NOTE: allow 2-3 weeks for personal
+checks to clear.  We cannot fill your order until your check has cleared.
+
+MasterCard _____  or  Visa _____		     Expiration Date __________
+
+Card Number ___________________________________________________________________
+
+Signature _____________________________________________________________________
+
+Name __________________________________________________________________________
+
+Address _______________________________________________________________________
+
+	_______________________________________________________________________
+
+City _________________________________	State ________	Zip ___________________
+_______________________________________________________________________________
+
+Please send registration form to:
+
+			      Amaryllis Software
+			      525 Parkview Drive
+			      Park City UT 84060
+
+_______________________________________________________________________________
+
+
+
+			   - 14 -
+```
+{% endraw %}
+
+## READ.TXT
+
+{% raw %}
+```
+The included program disk contains 4 GWBASIC programs named <LRNCRVSC> and      <LRNCRVPR> for LEARNING CURVES supplemented by <LSQRSC> and <LSQRPR> for the    calculation of LEAST SQUARES best-fit lines from existing actual data. Note :
+ SC indicates SCreen output and PR a PRinter output. Together these programs    should enable you to work any Learning Curve problem in the output format you   need.
+
+If you want to delve mre deeply into the theory and application of Learning     Curves, you should consult  your library for books on Industrial Engineering    and Estimating. I have assumed that you are at least familiar with their use.
+
+Very briefly, a LEARNING CURVE is a STRAIGHT line drawn on LOG paper which      depicts a continuing reduction in unit costs for some product or process. It    usually shows costs in terms of HOURS rather than DOLLARS per unit since this
+tends to eliminate the impact of inflation or labor contracts. It is useful to  look at costs in DOLLARS also to see if reductions in maufacturing hours are    enough to maitain a viable market position in terms of TOTAL COST. A fact that  is vital.
+
+CURVES are usually given designations like 76% or 80% etc. indicative of the    rate of reduction in costs that occurs as the number of units manufactured      doubles. For examples see FIG. 1. Let us assume that the 15th Super Bomber has  
+taken 1,000,000 manhours to complete and historical an 80% CURVE has been the   experience on similar work. We can project that unit 30 will take 800,000 hrs.  Likewise unit 60 should come in at 640,000 and so on. We now have a way to  
+make Long Range forecasts. It is the only way we can go to the CONGRESS for a   shot at our slice of the DOD budget with a rational presentation.
+
+The major attractions of LEARNING CURVES as a working tool are the appeal of a  "scientific" base and simplicity of use. Any can extrapolate along a straight   line. Even Engineers and Accountants can agree at that level. FIG. 2 shows how 
+the same type of "curves" would look on regular graph paper. Obviously much     more difficult to use and interpert. The compression of scale with each cycle   on the LOG paper also makes it easier to track a greater range of units and 
+costs. At least by a factor of 10 on the average 8 1/2 X 11 page format.
+
+In terms of method of Construction and Use, I have chosen the STRAIGHT LINE     UNIT system. It is possible to use calculations that treat the reduction on the basis of a STRAIGHT LINE CUM AVERAGE, as  was done in the early work. But I do
+not see this in my applications, thus the basis for my choice.
+
+Some working conventions in terminology are used in the MENU and INSTRUCTIONS   as you go along. They can be undestood by reference to the definitions given    in the section that follows.
+
+******************  FORMULAE AND VARIABLE DEFINITIONS  **********************   
+
+< B > An Exponent used in many of the formulas. It corresponds to the SLOPE of  the LEARNING CURVE involved. If it has a MINUS value costs are going down if    it is PLUS you are headed out of business.
+
+< T1 > The VALUE of UNIT 1 on the CURVE.
+
+< TU > The VALUE of some UNIT that you want to calculate on a specified CURVE.
+
+< U > Any specified UNIT NUMBER.
+
+< C,CM,CT > A CUM TOTAL VALUE for a GROUP of UNITS somewhere on the CURVE.
+
+< TF > The NUMBER of the FIRST UNIT in the GROUP.
+
+< TL > The NUMBER of the LAST  UNIT in the GROUP.
+
+< SERIES > A set of specified UNIT NUMBERS along the CURVE.
+
+< SF > The NUMBER of the FIRST UNIT in the SERIES of INDIVIDUAL UNITS whose     VALUES you want the program to calculate.
+
+< SL > The NUMBER of the LAST  UNIT in the SERIES of INDIVIDUAL UNITS whose     VALUES you want the program to calculate.
+
+< SO > The SLOPE of the CURVE expressed as a percent ( 76%, 85% etc. ). The     program takes care of turning it into the proper decimal format.
+
+< DOGLEG > A LEARNING CURVE composed of two segments with different SLOPES that meet at a common BEND POINT. Operations with a lot of fixed machine time can    produce such situations. See FIG. 4.
+
+< BP > The UNIT NUMBER of the BEND POINT on a DOGLEG CURVE. See FIG. 4.
+
+< TA, TB > Used to keep track of the T1 VALUES of the FIRST and SECOND parts    of a DOGLEG CURVE respectively.
+
+< BU, BS > The BASE UNIT NUMBER and BASE STANDARD VALUE used as the Starting    Points of an Estimating System. I use T500 as the BASE UNIT for MENU OPTIONS    <6> <7> <8> and T1000 for <9> with fixed slopes in each case. Only a VALUE for
+the BASE STANDARD has to be entered when I used these standard setups. You can  substitute your own setups to meet your requirements. Options <1> to <5> are    the all-purpose variety.
+
+ < RUN TIME, SETUP > With OPTION <5> you can have the RUN TIME on a CURVE and    keep the SETUP time constant and allocated as many times as you whish for the   situation involved. UNIT and SERIES calculations deal ONLY with RUN TIME.
+
+< FACTORS > RUN TIME and SETUP VALUES often are STANDARDS which do not include  actual performance. To get a true cost projection you may have to apply some    FACTOR . 75% perf. = a FACTOR of 1.33. Only OPTION <5> allows FACTORS.
+
+B = (LOG(SO/100)/LOG(2)
+Z = 1 + B
+TU = EXP(LOG(T1)+(LOG(U)*B))
+T1 = EXP(LOG(TU)-(LOG(U)*B))
+C = (T1/Z)*(((TL+.5)^Z)-((TF-.5)^Z))
+T1 = (CT*Z)/(((TL+.5)^Z)-((TF-.5)^Z))
+
+< LEAST SQUARES > OPTION <10> allows you to run a Least Squares Regression      Analysis on historical data to determine what BEST FIT LEARNING CURVE could be  applied to your actual situation. It coverts eveything to LOGS so that you get  
+the proper results. Your actuals are input as sets into DATA LINES in the body  of the program and must be DELETED before using on another project. If you      want to save your DATA and be able to use it again it is better to use the
+<LSQRSC> or <LSQRPR> programs and <SAVE> them with an appropriate filename so   that they can be used again. You may have DATA that should be evaluated in two  or more sections to see if a DOGLEG condition exists.
+
+
+******************** PROGRAM OPERATION **********************
+
+Operation is very straight forward. <LOAD> and <RUN> as you would any BASIC     program. Make sure you decide first if you want SCREEN or PRINTER output if     you are going to do a lot of LEAST SQUARES work it is best to use the LSQRPR    
+first , <SAVE> your information and then <LOAD> one of the LEARNING CURVE       programs and make use of analysis as input and in making your choice of OPTION.
+
+The MENU and INSTRUCTIONS included in the programs should be sufficient.
+
+NOTE: Once you have become familiar with the programs and want to avoid the     opening credits and instructions, you can do a quick start by typing <RUN 10>   for LEARNING CURVES  or <RUN 1800> for LEAST SQUARES.
+
+
+******************* PROGRAM STRUCTURE ***********************
+
+
+There are ( 3 ) major segments to the LEARMING CURVE programs.
+     1. LINES 0 - 1600  LEARNING CURVE section
+     2. LINES 1700 - 2999 LEAST SQUARES section
+     3. LINES 3000 - end  Titles and Introductions
+ 
+The Main MENU choices <1> to <9> tie in with the program sections beginning at  LINES 100, 200, ....... 900 which handle the setup functions for each option    and then hand off control to sections at 1000 or 1200 to do the actual math.    
+OPT <10> sends the program to 1700 for LEAST SQUARES work. LINES 2500 - 2999    are reserved for the <DATA> LINES used to hold the numbers to be analysed.      The separate programs LSQRSC and LSQRPR are just extracts of the LINES 1700 -  
+3165 with a little editing of the instructions
+
+****************** SOME EXAMPLES TO REVIEW **********************
+
+EXAMPLE 1 : T1 and SLOPE.
+GIVEN : T1 = 1234 Hrs, SLOPE = 76%
+FIND : T65, T100, T500
+       CUM for 1 to 212
+       Each UNIT VALUE for the SERIES 1 to 10
+
+ANSWERS: Use OPTION <1>
+UNIT 65=236, UNIT 100=199, UNIT 500=105
+CUM 1 to 212 = 50670
+SERIES 1 to 10 : 1234,938,799,713,652,607,571,542,517,496
+
+EXAMPLE 2 : A UNIT other than T1 and a SLOPE.
+GIVEN : T500 = 575, on a 80% CURVE
+FIND : T1, T420
+       CUM for 25 to 195
+       Each UNIT VALUE for the SERIES 35 to 41
+
+ANSWERS: Use OPTION <2>
+UNIT 1=4251, UNIT 420=608
+CUM 25 to 195 = 169444
+SERIES 35 to 41 : 1354,1341,1330,1318,1307,1297,1286
+
+EXAMPLE 3 : DOGLEG CURVE
+GIVEN : Slope of 80% flattening out to 85% at UNIT 100.
+        BASE UNIT NO. = T500
+        BASE STD HRS at T500 = 850 hrs.
+        Note: this is like FIG.4
+FIND : T1, T100
+       CUM for 75 to 200
+       Each UNIT VALUE for the SERIES 96 to 105
+ 
+ANSWERS: Use OPTION <3>
+UNIT 1=5460, 100=1240
+CUM 75 to 200 = 146961
+SERIES 96 to 105 : 1256,1252,1248,1244,1240,1237,1234,1231,1228,1226
+>>>>> NOTE: Check this one by using OPTION <6> by just entering the t500 VALUE
+
+EXAMPLE 4 : RUN TIME and SETUP
+GIVEN : RUN TIME = 200 hrs at UNIT 1000
+        SETUP = 500 hrs for each batch of 20 units.
+        CURVE = 90%
+        RUN TIME FACTOR = 1.25.  SETUP FACTOR = 1.90
+FIND : TOTAL HRS needed to make 200 UNITS.
+
+ANSWER: Use OPTION <5>
+Total NO. of SETUPS = 200/20 = 10
+
+TOTAL SETUP TIME (10)      =  9500
+TOTAL RUN TIME for 1 to 200= 74996
+                            --------
+       TOTAL MFG. HRS        84496
+
+EXAMPLE 5 : LEAST SQUARES ANALYSIS
+GIVEN : Actual Historical Data shown in FIG.3
+        UNIT        HRS          UNIT        HRS
+          1        48500         100        8000
+          2        40000         125        6800
+          4        33000         150        6600
+          6        26500         175        6000
+          8        20000         200        6300
+         10        18000         220        5900
+         12        17000         250        5200
+         15        19000         270        5000
+         20        12000         300        4800
+         25        10500         330        4800
+         30        12000         350        5200
+         35        12500         380        4700
+         40        11500         400        5100
+         45        10250         420        4650
+         50        10400         450        4500
+         60         9200         480        4450
+         70         8800         500        4350
+         80         8000         520        4400
+         90         7800         550        4380
+       
+You would start out your DATA LINES like this:
+
+2500 DATA 1,48500,2,40000,4,33000,6,26500,8,20000, 10,18000
+2501 DATA 12,17000,15,19000,20,12000,25,10500,30,12000,35,12500
+.
+.
+.
+Using 5 or 10 DATA SETS per line until the last line.
+2510 DATA 450,4500,480,4450,500,4350,525,4400,550,4380,0,0
+>>>> NOTE the final 0,0 entry.
+
+For a REAL analysis you would use EVERY possible set of values available. The   EXAMPLE picked a few samples to make it easier for me to type in.
+
+I'll let you work this answer by yourself. Plot the answer and see if it makes  sense. It is a way of makeing sure  you got the correct data input. Don"t       forget to use submenu item <3> to review the input on the screen.
+
+>>>>> CUSTOMIZING MAIN MENU OPTIONS <6> thru <9> <<<<<
+
+As the programs now stand they contain options <6> <7> <8> and <9> which are    custom fitted to some common curve combinations that I have found useful in my  own work. OPTIONS <1> thru <5> can do the same tasks but take extra input 
+steps  for values already built into the STANDARD choices. The next two         examples will show you how to set up your own STANDARD versions.
+
+EXAMPLE I
+     You want to make your own OPT <8> that uses an 80% CURVE instead of 85%    and also sets your BASE STD. HRS at UNIT 250 iplace of 500. Because you will be making changes in OPT <8>, you will be revising program lines starting at 800.
+
+PROCEDURE:
+ > Use OPT <2> with input of 80% for the SLOPE and 10000 HRS at UNIT 250.
+ > Solve for UNIT 1  (T1)
+ > T1 = 59151
+ > Move decimal point 4 places to left = 5.9151
+ > Now EDIT the following lines as shown below. KEEP SAME SPACING AS ORIGINAL      in order to keep screen format the same.
+     LINE 801 PRINT   GIVEN: CURVE = 80%, BASE VALUE SET AT T250.":PRINT
+     LINE 802 INPUT"     ENTER T250 BASE VALUE ";BS:PRINT
+     LINE 806 T1 = BS*5.9151
+     LINE 807 B=(LOG(.80))/.693148: Z = 1+B
+
+ > Now EDIT LINE 28 to give your own TITLE to OPT <8>.
+ > To make sure everything is correct run a test using your new <8> and <2> to     see if you get the same answer.
+ > Did you notice that the factor used in LINE 806 was derived above ?
+
+EXAMPLE II
+     You want to make your own OPT <6> that uses a DOGLEG combination of 75/80  instead of 80/85, and a BEND POINT of 200 inplace of 100. You also want to set  your BASE STD at UNIT 1000 rather than 500. Your choice of <6> means  you make  
+changes starting at line 600 in the program.
+
+PROCEDURE:
+ >Use OPt <2> with an 80% CURVE and a BASE VALUE of 10000 set at UNIT NO. 1000.
+ > Solve for T1 and T200
+ > T1 = 92424. Move decimal left 4 places = 9.2424.
+ > T200 = 16789. Move decimal left 4 places = 1.67889
+ > Use OPT <2> again. This time input 75% CURVE and a BASE VALUE of 16789 at     UNIT NO, 200.
+ > Solve for T1
+ > T1 = 151369. Move decimal left 4 places = 15.1369
+ > Now EDIT the Program lines as shown below. Maintain original spacing format.
+
+     LINE 601 PRINT"   GIVEN : DOGLEG 75/80 CURVE, BEND POINT AT UNIT 200, BASE      VALUE AT T1000.
+     LINE 602 INPUT"    ENTER T1000 VALUE "; BS:PRINT
+     LINE 607 TA=BS*15.1369 : TB=BS*9.2424
+     LINE 610 TP=BS*1.6789
+     LINE 612 B1=(LOG(.75))/.693148 : Z1=1+B1
+     LINE 614 B2=(LOG(.80))/.693148 : Z2=1+B2
+     LINE 615 BP=200
+ 
+ > Now EDIT LINE 24 to give it your title for <6>.
+ > to make sure eveything is correct run a test using your new <6> and <3> on   the same input to see if you get the same answer.
+
+
+##################### END OF DOCUMENTATION #####################
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

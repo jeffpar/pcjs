@@ -44,6 +44,55 @@ machines:
     without having to enter your own information.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1639.TXT
+
+{% raw %}
+```
+Disk No: 1639                                                           
+Disk Title: Owl Personal Portfolio Manager                              
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: Owl Personal Portfolio Manager                           
+Author Version: 2.1                                                     
+Author Registration: $25.00                                             
+Special Requirements: CGA, EGA, or Hercules graphics.                   
+                                                                        
+OWL PERSONAL PORTFOLIO MANAGER is a program that can manage and analyze 
+investments and finances for individual investors.  With this program   
+you may keep a record of your security investment transactions and      
+other assets and liabilities, and produce charts and reports to assist  
+you with investment decisions, tax reporting, and loan applications.    
+                                                                        
+From the data entered, the program can produce on-screen or printed     
+reports on security transactions, dividend income, security performance 
+rankings, portfolio status summaries, and net worth.  You can even      
+select which portofolios to include in a given report.                  
+                                                                        
+This program can display several charts and graphs on-screen for        
+analysis.  These include price/volume graphs with multiple moving       
+averages, relative performance charts which show the price strength of a
+security relative to the overall market or other securities, and stock  
+and index correlates.  The correlation charts allow the user to see how 
+much change in price of a security is influenced by the larger market   
+index and helps pinpoint abnormal price changes known as breakout       
+points.                                                                 
+                                                                        
+OWL PERSONAL PORTFOLIO MANAGER has documentation which either can be    
+printed or read screen-by-screen on the monitor.  Also included on this 
+disk is sample data to allow you to become familiar with the program    
+without having to enter your own information.                           
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1639
 

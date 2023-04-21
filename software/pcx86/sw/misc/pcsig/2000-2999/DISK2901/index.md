@@ -14,6 +14,37 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2901.TXT
+
+{% raw %}
+```
+Disk No: 2901
+Disk Title: Movie Guide 2 of 2 (also 2379)
+PC-SIG Version: S3.0
+
+Program Title: Movie Guide
+Author Version: 3.0
+Author Registration: $30.00
+Special Requirements:
+512K RAM, graphics card, and a printer. Hard drive recommended.
+
+MOVIE GUIDE is a relational database for almost 200 movies featuring
+.PCX picture supports.  It provides a unique actor/director lookup and
+displays the film history of the stars.  Mouse-supported pull-down
+menus make accessing your data a snap.  Many fields with user-defined
+series make the database flexible.  Written in Pascal and Assembly.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2901
 

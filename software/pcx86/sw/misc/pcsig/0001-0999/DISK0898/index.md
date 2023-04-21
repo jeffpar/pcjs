@@ -55,6 +55,56 @@ machines:
     README        Program introduction.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE898.TXT
+
+{% raw %}
+```
+Disk No:  898                                                           
+Disk Title: PC-Ted and CopyFit-It                                       
+PC-SIG Version: S2.0                                                    
+                                                                        
+Program Title: PC-Ted                                                   
+Author Version: 1.5                                                     
+Author Registration: $30.00                                             
+Special Requirements: None.                                             
+                                                                        
+Programmers -- A text editor written especially for you to enter and    
+edit source code files.                                                 
+                                                                        
+PC-TED can process two files at the same time; has full horizontal-     
+vertical screen editing; adjustable horizontal-vertical screen edit;    
+file comparison; full find/replace functions; block commands; an ASCII  
+table; and a DOS exit and command processor.  Print files, encrypt      
+files, and select a file to load from a directory list.  Help screens   
+are available.                                                          
+Program Title: CopyFit-It                                               
+Author Version: 1.1                                                     
+Author Registration: $54.00                                             
+Special Requirements: None.                                             
+                                                                        
+Copyfitting is the process of figuring out what typesetting format will 
+make a text fit the space available for it in a layout.  Try various    
+typeface (or typefaces) from those available from your typesetter.      
+COPYFIT-IT makes copyfitting faster and easier.                         
+                                                                        
+The essential data needed is the character count and the type size.     
+COPYFIT-IT can calculate the height and number of lines for paragraphs. 
+Determine the line length, the characters per line and number of        
+characters in the line.  This program can copyfit individual lines of   
+type with the same or different type sizes, paragraphs, paragraphs and  
+individual lines together, or long texts.                               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0898
 

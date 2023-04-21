@@ -46,6 +46,88 @@ machines:
     DEMO*    GFL  Demo files for PC-Picture containing graphic immages
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #136, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  PCPG    .FT1         CRC = 12 10
+
+--> FILE:  PCPG    .FT2         CRC = 2F E8
+
+--> FILE:  PCPG    .FT3         CRC = 1B C3
+
+--> FILE:  PCPG    .FT4         CRC = B2 F0
+
+--> FILE:  PCPG    .FT5         CRC = 05 C5
+
+--> FILE:  PCPG    .SYM         CRC = 9E D8
+
+--> FILE:  PCPG    .EXE         CRC = 7F 1F
+
+--> FILE:  PCPG    .HLP         CRC = BD 26
+
+--> FILE:  PCPG    .PIC         CRC = C5 82
+
+--> FILE:  DEMO2   .GRF         CRC = D5 9D
+
+--> FILE:  DEMO3   .GRF         CRC = 2E 4C
+
+--> FILE:  DEMO1   .GRF         CRC = 0E 0E
+
+--> FILE:  DEMO4   .GRF         CRC = D9 A7
+
+--> FILE:  DEMO5   .GRF         CRC = 7D A2
+
+--> FILE:  DEMO6   .GRF         CRC = B9 BE
+
+--> FILE:  DEMO7   .GRF         CRC = 40 BA
+
+--> FILE:  DEMO8   .GRF         CRC = B4 C3
+
+--> FILE:  DEMO9   .GRF         CRC = 44 85
+
+--> FILE:  DEMO10  .GRF         CRC = B5 F1
+
+--> FILE:  DEMO    .GFL         CRC = 00 00
+
+--> FILE:  AUTOEXEC.BAT         CRC = 00 00
+
+--> FILE:  BLOB    .GRF         CRC = 47 C6
+
+--> FILE:  BLOB    .BAS         CRC = 66 5A
+
+--> FILE:  CRC     .TXT         CRC = 17 44
+
+--> FILE:  CRCK4   .COM         CRC = BD 22
+
+ ---------------------> SUM OF CRCS = 4C 86
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0136
 

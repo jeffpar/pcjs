@@ -30,6 +30,40 @@ machines:
     though you may have an older PC with only 128K or 256K of RAM.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1883.TXT
+
+{% raw %}
+```
+Disk No: 1883                                                           
+Disk Title: The Swap Utilities                                          
+PC-SIG Version: S1.70                                                   
+                                                                        
+Program Title: The SWAP Utilities                                       
+Author Version: 1.70                                                    
+Author Registration: $25.00 per utility.                                
+Special Requirements: None.                                             
+                                                                        
+SWAP reduces the memory usage of four popular memory resident programs  
+so you can use them even though you may have a shortage of RAM memory.  
+Consisting of four separate utilities, SWAP will reduce Borland's       
+SideKick and SideKick Plus memory usage to below 9,000 bytes each.      
+Micro Logic's Tornado will need less that 8,000 bytes.  Microlytic's    
+GOfer will need less than 8,500 bytes.                                  
+                                                                        
+The upshot is that you can squeeze more clout into your computer even   
+though you may have an older PC with only 128K or 256K of RAM.          
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1883
 

@@ -43,6 +43,103 @@ machines:
     could even use it to track the contents of video tapes.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1317.TXT
+
+{% raw %}
+```
+Disk No: 1317
+Program Title:  RECIPE INDEX SYSTEM
+PC-SIG version: 1
+
+The RECIPE INDEX SYSTEM lets you index your recipes and then search
+through that index to quickly locate the names of recipes containing
+specific ingredients or of a certain category.  It does not store the
+actual recipes themselves.  You enter the principal ingredients of each
+recipe, not the steps used to create the food.  The reports created by
+the search function do not create shopping lists or give portion size.
+
+The RECIPE INDEX SYSTEM is completely menu driven and fully documented.
+The most common use of this software is by people who have many
+cookbooks and food journals.  They enter in the name of the recipes they
+like, the ingredients, a source (name of book or journal) for the recipe
+(including page number), and category and style fields.  When they use
+the Search function to look for recipes that meet certain criteria, the
+source and page number information are used to find complete details
+about the recipe.  This saves from having to enter into the computer
+endless details that are already in the books and journals.
+
+Although originally designed to work with food recipes, this system can
+also index other concerns - like contents of drawers and storage boxes,
+or books and the major topics they cover.  Any endeavor that can be
+broken into entries and subparts (like ingredients) can be indexed.  You
+could even use it to track the contents of video tapes.
+
+Usage:  Recipe Index.
+
+Special Requirements:  320K and two floppy drives.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $30.00
+
+File Descriptions:
+
+RISDEMO  DBF  Demo database.
+RISFILE  MEM  Key parameters file.
+RISEMPTY DBF  Database structure file.
+RISCOPY  BAT  Install program.
+RIS      EXE  Main program.
+RIS      DOC  Documentation file.
+CONFIG   SYS  Config file.
+LSRPT1P  FRM  Report format file.
+FILES    TXT  List of files.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## FILES.TXT
+
+{% raw %}
+```
+
+This is a listing of all files on the diskette, and their purposes:
+------------------------------------------------------------------
+
+RISDEMO  DBF    A demo database           
+
+RISFILE  MEM    File used to hold key parameters
+
+RISEMPTY DBF    Database structure used to create new databases
+
+RISCOPY  BAT    Batch file to install RIS system
+
+RIS      EXE    The RIS executable code 
+
+RIS      DOC    The RIS Documentation, set up for an EPSON compatible printer
+
+CONFIG   SYS    Config.sys file to be used if none available
+
+LSRPT1P  FRM    A report format          
+
+FILES    TXT    Listing of all files   
+
+
+
+
+
+ 
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1317
 

@@ -61,8 +61,74 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #89, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  PRNT2   .BAS         CRC = 12 01
+
+--> FILE:  XUP     .BAS         CRC = D3 C9
+
+--> FILE:  MAIL    .BAS         CRC = C3 4A
+
+--> FILE:  MAIL    .TXT         CRC = 65 BC
+
+--> FILE:  PR1     .LET         CRC = 69 29
+
+--> FILE:  MINICALC.DOC         CRC = 6E F5
+
+--> FILE:  PC-LIB  .BAS         CRC = 1D 6D
+
+--> FILE:  PC-LIB  .DOC         CRC = 05 A9
+
+--> FILE:  VOLSER  .DOC         CRC = 52 96
+
+--> FILE:  VOLSER  .COM         CRC = 30 C1
+
+--> FILE:  MSPOOL  .COM         CRC = 7A 77
+
+--> FILE:  MSPOOL  .DOC         CRC = 8F 1E
+
+--> FILE:  COLBLNK1.COM         CRC = 11 F6
+
+--> FILE:  MONBLNK1.DOC         CRC = 7C 64
+
+--> FILE:  MONBLNK1.COM         CRC = 7D 4E
+
+--> FILE:  MINICALC.EXE         CRC = 15 77
+
+--> FILE:  TEXTTOOL.DOC         CRC = 3B 2C
+
+--> FILE:  PRNT3   .BAS         CRC = CD BF
+
+ ---------------------> SUM OF CRCS = C0 FA
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## MAIL.BAS
 
+{% raw %}
 ```bas
 1000 '  Program to create form letters and mailing lables
 1010 CLS
@@ -126,9 +192,425 @@ machines:
 1590 NIN=9-(P0 MOD 8):L$=MID$(L$,1,P0-1)+STRING$(NIN," ")+MID$(L$,P0+1,LEN(L$))
 1600 GOTO 1580 '  any more tabs ?
 ```
+{% endraw %}
+
+## MAIL.TXT
+
+{% raw %}
+```
+. this is a sample input file to the program MAIL.BAS
+. As with many text formatters lines beginning with a "." are
+. interperted as commands.  They will not be printed on
+. the final output but may be used to control processing of
+. the program.
+.
+. The following is an example input file to MAIL.BAS.  In the letter
+. mode it will generate inividual letters to each address listed.  Text
+. in the file PR1.LET will be used for the body of the letter.	Text may
+. be inserted into the body of the letter by dividing the "boiler plate"
+. part into 2 files and including the unique part in this file. There
+. are probably other uses for this program such a creating custom legal
+. contracts.  This file provides a record of what has been sent without
+. tying up a lot of storage. Non printing comments may also be inserted
+. as you can see from this text.
+.
+PC Magazine
+One Park Ave
+New York, NY 10016
+.use pr1.let
+Softtalk for the IBM PC
+11160 McCormick St
+North Hollywood, CA 91601
+.use pr1.let
+Personal Computer Age
+8138 Foothill Blvd.
+Sunland, CA 91107
+.use pr1.let
+PC Tech Journal
+The World Center Suite 212
+Baltimore, MD 21202
+.use pr1.let
+PC World
+555 DeHaro St.
+San Francisco, CA 94107
+.use pr1.let
+```
+{% endraw %}
+
+## MINICALC.DOC
+
+{% raw %}
+```
+DOCUMENTATION FOR MINICALC.BAS
+
+MiniCalc gives the user an 11 by 22 matrix of cells to work with.  
+The layout of the matrix is similiar to that of the popular 
+spreadsheet applications with the rows labeled 1-22 and the 
+columns labeled A-K.  The program will work with one disk drive 
+and 48K with no problem.  It will also work with either the 
+monochrome adapter or the color monitor adapter.  It does need an 
+80 column display.  This program was written for an Epson MX-80 
+printer, although most printers should work.
+
+When the program is run, it comes up with the matrix on the 
+screen and the inverse video cursor in the top left corner, 
+position A01.  The cursor keys at the right of the keyboard move 
+the inverse video cursor through the matrix.  At the bottom of 
+the screen are two status indicators.  The bottom left indicator 
+tells the user whether the Caps Lock key is on or off.  This is 
+handy as the matrix locations must be entered in Caps.  The 
+bottom right indicator tells what mode the numeric keypad is 
+currently in.  If the cursor mode is active, it will display 
+Cursor.  If the number mode is active it will display Number.  
+when the program is first run, it initializes the Caps indicator 
+to Caps On and the Keypad indicator is set to Cursor.
+
+At the top of the screen, the user will see the status line, 
+indicating the current cursor location and the assignment for 
+that cursor location.  At any particular cell in the matrix, you 
+have the option of entering a number, entering a label or 
+performing a command.  To enter a number, simply type in the 
+number and press return.  To enter a label, type in the label and 
+press return.  MiniCalc recognizes anything starting with a 
+number as a number and anything starting with a letter as a 
+label.  If you do not press return when entering a label, 
+MiniCalc will make that label temporary.
+
+To perform a command, press the "/" key.  Then the status line 
+will show "Special Command (A,B,C,D,E,G,H,L,N,P,Q,R,S,T,>)?" 
+indicating the command options available to the user.  Pressing a 
+carriage return at this point will abort the special command 
+procedure.  To perform a command, simply enter the appropriate 
+command letter.  The commands are:
+
+A - Average.  Allows the user to average a series of cells in a 
+row or column and put the result in another cell.  The format for 
+entering a cell location is "ann" where "a" is the column 
+coordinate (in caps) and "nn" is the row coordinate (always two 
+digits i.e. - A01).  In response to entering "/A" the status line 
+will be cleared and filled with "AVERAGE. Enter coordinates:".  
+This is the user's prompt to enter the range of coordinates for 
+the average, and the cell where the result will be placed.  For 
+example, say the values 1, 2 and 3 were in locations A01, B01 and 
+C01, respectively, and that you wanted to put the results in 
+location A03.  For the above prompt to enter the coordinates, the 
+user would enter "A01" and the system would acknowledge that with 
+".." indicating you should enter the next coordinate.  You would 
+then enter "C01" and the third coordinate you would enter would 
+be "A03".  After all of this was entered, MiniCalc would write 
+the equation for this average at location A03, make that 
+calculation and then move the cursor to that location.  The 
+status line would read "A03 = 2  A01+B01+C01/3".  Thus the 
+coordinates asked for are the beginning and ending range of 
+numbers to be averaged in a row or column followed by the 
+location where the result should be placed.
+
+B - Blank.  This allows the user to erase whatever is in the 
+current cursor location.  For example, if the current cursor 
+location is A01 and has the value 250 in it and the user presses 
+"/B", then A01 will be erased and the status line will show A01 
+assigned a value of zero.
+
+C - Compute.  This allows the user to make a computation between 
+two numbers and store the result at a third location.  In 
+response to "/C" the system will clear the status line and 
+display "COMPUTE. Function (+,-,*,/) ?".  This is asking which 
+operation is to be performed on the two locations.  After 
+selecting one of the four operations, the system will display 
+"Enter Coordinates:", asking for the two locations to perform the 
+operation on and the location to store the result.  For example, 
+if A01 had 1 in it and B01 had 2 in it and we wanted to add these 
+two locations together and store the result in A03 then in 
+response to the "Function" prompt, we would press "+" and then 
+enter "A01", "B01" and "A03" in response to the MiniCalc prompts 
+in the same manner the Average command worked.
+
+D - Delete.  Allows the user to delete a series of locations in 
+either a row or a column.  To use this command, you would enter 
+"/D" and Minicalc would respond with "DELETE. Enter 
+Coordinates:".  In this case, you would enter the starting and 
+ending location in the series to be deleted and MiniCalc would 
+then erase those locations.
+
+E - Equation.  This command has two options.  The first allows 
+the user to enter an equation for the current cursor location.  
+The equation must be simple, allowing only the four operators to 
+be used in the equation.  The equation will be evaluated from 
+left to right.  The second option tells MiniCalc to compute all 
+of the equations in the matrix.  This is the only method used by 
+MiniCalc to make the calculations based on the equations in the 
+current matrix.  An example of entering an equation for a 
+particular location:  The cursor is at location A03 and we want 
+to put the average of locations A01 and B01 plus whatever is in 
+C01 at the current cursor location.  In response to the "Equation 
+or Compute" prompt, we would press "E" and then enter 
+"A01+B01/2+C01" and press return.  This would enter that equation 
+for location A03, although it would not automatically compute the 
+value.  The "Compute" option would perform that function.
+
+G - Graph.  The graphing function allows the user to create a bar 
+graph for a particular row or column.  This graph can then be 
+dumped to the printer.  In response to "/G" the system would 
+clear the screen and ask whether a column or a row was to be 
+graphed (C or R).  If the user selected "R", for example, then 
+MiniCalc would ask for the row (1-22) to be plotted.  For the 
+first row, the user would enter "01".  Then the user would see 
+the bar graph for row 01 and would be given the option of dumping 
+the graph on the printer or going to the MiniPlot Menu.  The 
+MiniPlot Menu gives the user the option of quitting, plotting 
+another row or column or returning to MiniCalc.
+
+H - Help.  The help function displays a brief one-line 
+description of the command in question on the status line.  for 
+example, in response to "/H" MiniCalc would prompt for the 
+command in question.  If the user selected "A", MiniCalc would 
+give a one-line description of the Average command.
+
+L - Load.  This function allows the user to load a matrix from 
+the diskette that has been saved with the Save command.  In 
+response to "/L" MiniCalc will ask for the filespec of the file 
+to be loaded.  At this point, pressing return will abort the load 
+sequence and take the user back to MiniCalc.  If a drive is not 
+specified, the MiniCalc will look for the file on the current 
+drive.  For example, to load a file "SALES.DAT" from drive B, the 
+user would enter "B:SALES.DAT" for the filespec.  Upon entering a 
+filespec and pressing return, MiniCalc will prompt the user to 
+ready the drive that is to contain "SALES.DAT" and press return.  
+At this point MiniCalc will load the file, make the appropriate 
+calculations and display them on the screen.
+
+N - New.  Allows the user to start MiniCalc over, as in entering 
+"RUN" in BASIC.  This clears the entire MiniCalc matrix, so any 
+data worth saving should be saved prior to execution of this 
+command.
+
+P - Print.  Takes the current MiniCalc Matrix and dumps it to the 
+printer.  The printer should be readied prior to executing this 
+command.
+
+Q - Quit.  Exits the MiniCalc program, giving appropriate 
+credits.  Any data not saved from the MiniCalc matrix will be 
+lost when this command is executed.
+
+R - Replicate.  A function that allows the user to generate a 
+series of numbers based on one of the locations in the MiniCalc 
+matrix and a constant.  For example, if the user wanted the 
+numbers 1 through 22 in locations A01 through A22 then the user 
+would move to location A01, blank out the previous contents and 
+enter the number 1 there.  Then use the "/R" command to create 
+the rest of the numbers by adding one to to location A01.  In 
+response to the "/R" command MiniCalc would respond with 
+"REPLICATE.  Function (+,-,*,/) ?".  The user would enter the 
+operation to be performed on each location ("+" in this case) and 
+MiniCalc would respond with "Value?".  We are adding one, so "1" 
+and return would be the appropriate response.  MiniCalc would 
+then prompt with "Enter coordinates:" and the user would respond 
+with "A01", "A02" and "A22", telling MiniCalc to use location A01 
+as the source for the operation and to perform the operation on 
+locations A02 through A22.  MiniCalc would perform the 
+calculations and move the cursor down to A22, the status line 
+showing "A22 = 22  A21+1".  In the equation shown on the status 
+line, the location will always be the previous location, the 
+operation will be the operation the user entered ("+" in this 
+case), and the constant will be the value the user entered ("1" 
+in this case).
+
+S - Save.  This function allows the user to save a MiniCalc 
+matrix to diskette.  In response to "/S" MiniCalc will ask for 
+the filespec of the file to be saved.  At this point, pressing 
+return will abort the save sequence and take the user back to 
+MiniCalc.  If a drive is not specified, the MiniCalc will put the 
+file on the current drive.  For example, to save the current 
+matrix to a file "SALES.DAT" on drive B, the user would enter 
+"B:SALES.DAT" for the filespec.  Upon entering a filespec and 
+pressing return, MiniCalc will prompt the user to ready the drive 
+that is to contain "SALES.DAT" and press return.  At this point 
+MiniCalc will save the file to the appropriate drive and return 
+to MiniCalc.  The Load command is used to load a file from 
+diskette.
+
+T - Total.  The Total command allows the user to sum a series of 
+locations in a row or column and store the result in a particular 
+location.  In response to "/T" MiniCalc will display "TOTAL.  
+Enter Coordinates:".  MiniCalc is looking for the start of the 
+range to be summed, to end of the range to be summed and the 
+location to store the results.  For example, if the user had 
+sales figures in positions A02 through A11 and wanted to put the 
+sum of those sales figures in position K03, the user would enter 
+the locations "A02", "A11" and K03.  MiniCalc would move to 
+location K03 and display the sum and the equation to create that 
+sum.
+
+> - Goto.  Allows the user to jump to any location on the 
+MiniCalc matrix.  This command can be executed directly from the 
+MiniCalc matrix by entering ">" or can be executed with the slash 
+command by entering "/>".  MiniCalc will respond by prompting for 
+the location to move to.  The format for the location is "ann" 
+where "a" is a letter between "A" and "K" and "nn" is a number 
+between "01" and "22".  This allows the user quick access to any 
+location on the MiniCalc matrix.
+
+MiniCalc recognizes equations and labels.  When a matrix is saved 
+to diskette, all the values, equations and labels are stored as 
+well.  For a label to be a "permanent" label, the carriage return 
+must be pressed after entering the label.  Otherwise the label is 
+temporary and will not be stored.
+
+In the listing, the lowercase i with an arrow over the top of it 
+has a decimal value of 140.  This functions as a form feed for 
+the Epson MX80 when the program is listed on the printer.
+
+
+```
+{% endraw %}
+
+## MONBLNK1.DOC
+
+{% raw %}
+```
+I've noticed lately that many terminals and computers have the
+ability to blank their screens after a period of inactivity
+in order to keep the phosphor from being eaten away.  I thought
+this was a silly frill until I blanked my monochrome display
+in reverse video and looked closely.  And I've had it less
+than a year!
+
+The MONBLNK1.COM program disables the video on a monochrome display
+The COLBLNK1.COM program disables the video on the Color Display
+
+after five minutes of inactivity.  Everything disappears except the
+flashing cursor.  The display is re-enabled when either a video I/O
+or keyboard interrupt occur.  Note that some programs (for example
+Wordstar 3.0, or Monoclok.com), access the video ram directly and
+thus circumvent the video I/O interrupt.  If you are using such a
+program and don't touch the keyboard for five minutes, the screen
+will blank even if there is video I/O going on.  If this happens,
+just press any key, even a shift key, and the display will return.
+
+Run the program once in DOS and it will stay resident until power
+down or re-boot.
+
+To adjust the time delay, get into debug with the program and patch
+the bytes at 0129H and 014AH with a new value.  The delay will be
+about 14 seconds times the number at these locations.
+
+Rich Winkel
+*******************************************************************
+Rich has uploaded New versions for the color and the mono which do
+work . as of 07/17/83
+CAPITAL PC Softsig. 301-949-8848 IBMPC
+s uploaded New versions for 
+```
+{% endraw %}
+
+## MSPOOL.DOC
+
+{% raw %}
+```
+
+                          Multi Spooler
+
+     So what does the world need another print spooler for?
+     I've been dissatisfied with all the spoolers I've seen, for 
+various reasons.  Some can't even drive an Epson at full speed, 
+some interfere with interrupt handling (as when downloading over 
+a COM port and printing at the same time), some spend more time 
+in wait loops than they do printing, some have a set, unchangable 
+buffer size, some are so inefficient that it's a wonder the 
+computer gets anything else done, and most are insensitive to 
+competing demands for CPU time, making the term 'background job' 
+inapplicable.  
+     I wrote this spooler with speed, flexibility and background 
+execution in mind.  Unlike most other spoolers I've seen, it is 
+not driven by the timer interrupt.  It's driven by an excellent 
+indicator of free CPU time, the keyboard I/O interrupt.  Any time 
+a program requests keyboard input, it can be assumed it has a 
+little free time on it's hands, especially since the keyboard is 
+the slowest I/O device on the computer; and since keyboard I/O 
+gets high priority in any interactive program, it's assured that 
+the spooler will be called often enough to drive a printer at a 
+good clip, usually at top speed.
+     As far as flexibilty, the size of the spooler buffer is 
+specified in 8K increments at startup, as well as which printer 
+(LPT1-LPT3) to spool for.  In fact, 3 printers can be spooled 
+simultaneously by running the spooler 3 times, specifying each 
+printer in turn.
+     Once the spooler is installed, it's buffer can be purged in 
+the middle of a print by running the spooler again, specifying 
+the appropriate printer (if it's not LPT1).  If the program finds 
+there is already a spooler for that printer installed, it will 
+ask if you want to purge the buffer.  
+     The spooler has 3 modes of operation.  In one mode, if the 
+buffer gets filled, it will begin printing a character for each 
+character it puts in the buffer, until things get caught up.  The 
+second mode arises when a keyboard I/O call is made which 
+requests that the keyboard routine return the next character in 
+the keyboard buffer, or if there is none, wait until one is 
+entered and then return it.  This is the optimum mode for the 
+spooler.  If there is no character in the keyboard buffer, it 
+will begin looping and printing until one is entered, and then 
+release control (BASIC often makes I/O calls of this type).  The 
+third mode is used when a keyboard I/O call is made which only 
+requests the status of the buffer. (i.e. return a character if 
+one is there, but don't wait for it.)  In this event, the spooler 
+will print one character and exit. (WordStar makes use of this 
+type of I/O call).  Depending on the activity of the program 
+making the call, type three will drive a printer at a rate 
+anywhere from tolerable to top speed.  Using WordStar, my 
+Okidata 82A is run at full tilt.  The other two modes will drive 
+a printer at full speed.
+     Use the HEX2BIN program to convert MSPOOL.HEX to MSPOOL.COM.
+
+SYNTAX:
+
+     To install:
+     A>mspool a b
+
+     To purge buffer:
+     A>mspool a
+
+Where: a (= 1, 2 or 3) specifies the printer, and
+       b (= 1 - 7) is the size of the buffer in 8K blocks.
+
+Limitations:
+
+     This program will not spool for a serial printer, even if 
+          the MODE LPT#:=COMn command is in effect.
+     Programs such as QSWAP, which switch the entries in the 
+          printer table in the ROM bios data area, will not 
+          affect this spooler once it is installed.  (In the 
+          interest of speed, the appropriate entry in this table 
+          is put into the spooler code itself at initialization)
+     Programs which bypass INT 16 for keyboard I/O will stop the 
+          spooler. (This is conceivable, although I've never seen 
+          such a program.  The program would have to have very 
+          specific I/O requirements, such as, perhaps, APL.)
+     In order for the buffer purge routine to work, the spooler 
+          should be the last resident routine loaded which 
+          intercepts INT 17 (printer I/O).  This is because the 
+          spooler looks at where the INT 17 vector is pointing to 
+          determine whether it has already been installed.  If 
+          more than one printer is being spooled, the spooler 
+          will pick it's way though all the installed spoolers in 
+          an attempt to find one configured for the printer 
+          specified in the command.  When/if it finds one, it 
+          asks whether you want to purge it.  If it lands in
+          unfamiliar territory, it assumes there is not yet a 
+          spooler installed for that printer, and proceeds 
+          accordingly.  
+     When more than one printer is being spooled, in some 
+          circumstances (i.e. in mode 2 above), the last spooler 
+          loaded will have priority, then the second to last.
+
+Rich Winkel
+Columbia, Mo.
+
+```
+{% endraw %}
 
 ## PC-LIB.BAS
 
+{% raw %}
 ```bas
 0 DIM DUPL$(20),PRO$(9),LIBFILE$(10),MUNIQUE(500),NUNIQUE(500),INF$(112)
 1 DIM B$(10),A$(14),BIT(15)
@@ -519,9 +1001,172 @@ machines:
 30000 CLS:GOSUB 1510:LOCATE 10,1:PRINT"Remember to sort your new disk library file:";LFNA$:LOCATE 11,1:PRINT"before using any other PC-File features":GOSUB 1910
 30005 END
 ```
+{% endraw %}
+
+## PC-LIB.DOC
+
+{% raw %}
+```
+        This file gives some of the suggested standard codes to be used in 
+describing the programs you catalog using PC-LIB.  The program is best used for 
+keeping track of extensive software libraries such as those of a user's group.
+Of course it can be used for other purposes as you see fit.
+
+Limitations:
+        The program must be used with PC-FILE and follow its rules.
+        It operates under DOS 2.0.
+        It will read files from drive A,B or C but cannot handle subdirectories 
+so its use with hard disks is limited.  This is a function of the machine 
+language used to read the FAT and is not easily changed.  Any suggestions in 
+that regard would be appreciated.
+        It will not annotate your files for you unless you already have an
+annotated MASTER.DTA library file such as that on our BBS(which only covers
+the public domain programs we have on hand)
+
+                            Public Domain Software 
+
+                 Proposed classification for use with PC-LIB
+
+     It will help if different users groups could use the same 
+classification scheme so that they could more easily compare the public 
+domain software they currently have in their group software library.  Here 
+is the list of codes I used in making up the MASTER.DTA file for the QCPC 
+User's Group as available on our BBS at 319-332-7648.
+     It is also suggested that you use disk labels so that you can remember 
+your VOL labels for later reference.  The best labels are those on disk 
+which you can set up when formatting or using a Norton utility or 
+VOLSER.COM.
+     We'd be happy to receive NUNIQUE files from other users groups so that 
+we can see what other interesting software we're missing. Hopefully a more 
+unified public domain cataloging system may result in better dissemination 
+of high quality author-donated software.  
+
+
+Hardware requirements: REQ
+--------------------------
+     Display-  E-- Either display card
+               G-- Color graphics card only
+               M-- Monochrome card only
+
+     Input     J-- Joystick 
+     Device    L-- Lightpen
+ 
+     System    1-- 64K
+     Memory    2-- 128K
+               3-- 192K
+               4-- 256K
+               5-- 320K
+               6-- 384K
+               7-- 446K
+               8-- 510K
+               9-- 574K
+
+     Other     P-- Printer
+     Devices   X-- Modem
+               O-- Other
+
+DOS version required: DOSV#
+---------------------------
+               1-- MSDOS 1.1 Only
+               2-- MSDOS 1.1 or 2.0
+               3-- MSDOS 2.0 Only
+               6-- CP/M 86 
+               7-- UCSD Pascal
+               9-- Other
+
+Software function: FN
+---------------------
+ 0 GAMES
+  00 Adventure- ADVENTURE, MAZE, NEWALIEN, PIRATE
+  01 Arcade- PC-MAN, 747, PONG, STARTREK, METEOR, ARTILLERY, CANNON
+  02 Board- CHESS, GOMOKU, MONOPOLY, CRIBBAGE, DOMINOES, OTHELLO
+  03 Casino/card- BLACKJACK, YAHTZEE, KENO, SLOTMACH, POKER
+  04 Logic- RUBIK, CRYPTO, WORDPUZL, T-T-TOE, BOGGLE, CIAGAME, BLACKBOX, HANOI
+  05 Sport- GOLF
+  06 Text- HANGMAN
+  09 Miscellaneous-
+
+ 1 MUSIC/ SOUND
+  10 Music demo- MAGDALEN, JUKEBOX, BALLAD, JOY-BACH, WILLTELL, MINUET, 
+TUNES3, SOLFE
+  11 Music utilities- MUSIC, SOUNDS
+  19 Miscellaneous-
+
+ 2 GRAPHICS
+  20 Graphic demo- KALEIDO, BALL, 3DHAT, USALIST, WORLDMAP, CLOCK, STAR3D, 
+GLOBE, BUTTFLY, BLIMP, NUDES, 3DSURF, DARTH, SATURN, LIFE, BUCKY, COOKIES, 
+FROGGY, CRZBAL, LINES
+  21 Graphics utilities- TABLET, DRAW, 3DPLOT
+  29 Miscellanous-
+
+ 3 PERSONAL
+  30 Education- ARITHA, ALGEBRA, MATHTEST
+  31 Finance- BUDGET
+  32 Health-
+  39 Misc- MPG, MORSE, CALCULAT, BOOKINV
+
+ 4 BUSINESS
+  40 Accounting- 
+  41 Application aids
+         Wordstar- UNWS, DEBUGS, WSINDEX
+         1,2,3- UNP123, RANGE123, TREND123
+  42 Database- PCFILE, EFS, AUTOFILE, MAIL
+  43 Financial- AMORT, FINANCE
+  44 Graphics- BARCHART, BESTLINE
+  45 Spreadsheet- MINICALC
+  46 Wordprocessing- FRED, STOPGAP, EDIT, PC-PAD, ET4
+  49 Miscellaneous-
+
+ 5 PROGRAMMING
+  50 Assembler- PRIMER, COM2ASM2
+  51 BASIC subroutines- sort, search, menus, data input, config, read DIR, 
+curve fit, find/replace, day of week
+  52 BASIC utilities- COMPACT, XREF, PROFILER, ASM>DATA, B-SIMPLE, BASICAID
+  53 Languages- MVPFORTH, BASIC to FORTRAN converter
+  54 Learning- ARCHIE, POKEPEEK, HELPCOMM
+  59 Miscellaneous-
+
+ 6 UTILITIES
+  60 Batch file aids- TUNE, ASK 
+  61 Display- mono/color switch(in DOS), unused screen blank, screen clocks, 
+redefine text characters
+  62 DOS enhancers- SD, SYSTAT, VDEL(selective delete)
+  63 File alteration- VOLSER, ALTER ,FILTER, un/hide, un/protect, un/delete
+  64 File maintenance- PCLIB, ARCHIVE, DSAVER(bit copier)
+  65 Keyboard- reset DOS fn keys, redefine all keys
+  66 Printer- setup(from DOS/BASIC), listing formatters, graphics dumps
+  67 System- soft resets, ramdisks, spoolers
+  69 Miscellaneous- drive tester, diagnostic programs, head cleaner
+
+ 7 COMMUNICATIONS
+  70 File modifiers- BIN2HEX/CVTHEX, ADDLF, UN/SQUISH
+  71 Host programs- RBBS, HOST
+  72      Utilities- DISKPGM2(file xfer time)
+  73 Terminal programs- PCTALK III, MODEM, DUMTERM
+  74      Enhanncements- PCTIII 450, SPLITSCREEN
+  75      Utilities- TALKSORT, PCTDIR, PCTKEY
+  79 Miscellaneous
+
+ 8 SPECIAL APPLICATIONS
+  80 Education-
+  81 Engineering-
+  82 Health care-
+  83 Legal-
+  84 Membership organizations-
+
+DESCRIPTIONS
+        I propose using a leading * in the description field to mark programs 
+that are the best or most recent for their function.  If this method is 
+followed you can use PC-FILE to dump out a shorter list of the most desirable 
+programs only.  Quality is in the eye of the user but we have marked our MASTER 
+to reflect what we thought we the most useful programs we had on hand.
+
+```
+{% endraw %}
 
 ## PRNT2.BAS
 
+{% raw %}
 ```bas
 1000 '   Wild card print program
 1010 CLS
@@ -698,9 +1343,11 @@ machines:
 2720 NIN=9-(P0 MOD 8):L$=MID$(L$,1,P0-1)+STRING$(NIN," ")+MID$(L$,P0+1,LEN(L$))
 2730 GOTO 2710 '  any more tabs ?
 ```
+{% endraw %}
 
 ## PRNT3.BAS
 
+{% raw %}
 ```bas
 1000 '   Wild card print program
 1010 CLS
@@ -876,9 +1523,107 @@ machines:
 2720 NIN=9-(P0 MOD 8):L$=MID$(L$,1,P0-1)+STRING$(NIN," ")+MID$(L$,P0+1,LEN(L$))
 2730 GOTO 2710 '  any more tabs ?
 ```
+{% endraw %}
+
+## TEXTTOOL.DOC
+
+{% raw %}
+```
+
+Texttools from RPSoft
+
+
+Texttools is a set of three text processing tools for the IBM PC.
+
+The first one, PRNT2, produces listings of all files matching one or more
+file descriptors.  For example specifing "*.*" would produce a listing of
+all files on a disk.  Pages are numbered and labeled with filename and
+date.  An index is printed at the end to all files listed.  PRNT3 is a
+version for PRNT2 which should be used when BASIC was loaded from a disk
+containing directories.
+
+The program MAIL.BAS allows custom letters to be generated from a file of
+names and addresses.  Mailing labels may also be generated from the same
+name and address file.
+
+XUP creates multiple columns from a single column of data.  The user may
+select the number of columns, width of columns and the number of lines per
+page.
+
+All programs are written in BASIC and require BASIC to be loaded.
+
+
+Files contained on release disk
+------------------------------------------------------------------------
+MAIL	 BAS  Mailmerge program
+MAIL	 TXT  Sample input file for MAIL.BAS with instructions for use
+PR1	 LET  Sample letter for MAIL.BAS
+PRNT2	 BAS  Wild card print program - prints all files *.* or other file spec
+PRNT3	 BAS  Version of PRNT2 to use when running BASIC from a disk with
+	      directories
+XUP	 BAS  Prints textfiles in columnar tables
+TEXTTOOL DOC  This file
+
+If you find any texttools from RPSoft useful, a suggested donation of $25
+(or whatever you think they are worth) to RPSoft, 1271 Palamos
+Sunnyvale, CA 94086 would be appreciated.  If there is enough interest I
+will develop more such tools and will notify contributors. Whether or not
+you contribute please feel free to pass along copies of these programs to
+your friends, but please do not remove the file headers and distribute all
+files together.
+
+```
+{% endraw %}
+
+## VOLSER.DOC
+
+{% raw %}
+```
+                                               VOLSER
+                                                   Command
+
+            
+    
+    Purpose:    This command allows the user to alter/create
+                volume labels.
+            
+    Format:     VOLSER [d:][/V]
+            
+    Type:       Internal        External
+                                  ***
+            
+    Remarks:    This command is designed to be used 
+                interactively. If a drive identifier is not
+                specified, drive A: is assumed. The /V(ersion)
+                parameter display the current version number.
+                
+    Example:    VOLSER
+
+                This command line expects a disk to be labeled
+                in drive A:
+            
+                VOLSER b:/v
+            
+                Displays the current version number at prompts
+                the user for a volume label, and if one did not
+                exist, creates it.
+            
+            C>VOLSER /V
+            
+            VOLSER Version X.XX (C)Copyright T A Davis, 1983
+                
+            Volume in drive B is not labeled
+            
+            Enter new label (11 chars) or ENTER ? AP783_
+                
+            Diskette label changed.
+
+```
+{% endraw %}
 
 ## XUP.BAS
 
+{% raw %}
 ```bas
 1000 '   program to print columns of text side by side
 1010 CLS
@@ -935,6 +1680,7 @@ machines:
 1520 NIN=9-(P0 MOD 8):L$=MID$(L$,1,P0-1)+STRING$(NIN," ")+MID$(L$,P0+1,LEN(L$))
 1530 GOTO 1510 '  any more tabs ?
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

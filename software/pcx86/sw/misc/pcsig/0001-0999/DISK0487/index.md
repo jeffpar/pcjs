@@ -48,8 +48,63 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILES487.TXT
+
+{% raw %}
+```
+ 
+-----------------------------------------------------------------------
+Disk No  487  REFLEX POINT                                      v1 DS2
+-----------------------------------------------------------------------
+       This is a basic program in which you a Freedom Fighter combat
+    the evil Invid Alien Invaders. Through the course of the game your
+    cyclone changes into battle armor, then when you reach the alpha
+    fighter you can can change into battloid form. Reach the Reflex
+    Point and kill the evil prince.
+ 
+ALPHA    PIC  Image file of Alpha Fighter
+CYCLONE  KEY  Subprogram for REFLEX.BAS
+CYCLONE  PIC  Image of Cyclone
+CYCLONE2 PIC  Image of jumping Cyclone
+POWER    PIC  Graphic image
+REFLEX   BAS  Reflex Point game
+REFLEX   KEY  Subprogram for REFLEX.BAS
+REFLEX   PIC  Image of Reflex Point
+RP-HELP  BAS  Tips on how to play
+TITLE    PIC  Image of title screen
+```
+{% endraw %}
+
+## NOTES487.TXT
+
+{% raw %}
+```
+-----------------------------------------------------------------------
+Disk No  487  PROBLEMS and COMMENTS                             v1 DS2
+-----------------------------------------------------------------------
+ 
+                             REFLEX POINT
+ 
+          This game was originally patterned from the TV show
+        ROBOTECH. It follows the same basic storyline as the
+        show with the Freedom Fighters trying to reach the Reflex
+        Point so they can destroy the evil Invid Prince. REFLEX with
+        its good graphics and sound is a game that seems like its been
+        compiled but in fact is written in basic. The only problem
+        that I encountered was that the key buffer can easily be
+        filled while in Battle Armor mode causing a lapse in response.
+        If you have have any questions or suggestions get in touch with
+        the author:
+ 
+                                Eric Iwasaki
+                                107 Via Plasqual
+                                Rendondo Beach, Ca 90277
+```
+{% endraw %}
+
 ## REFLEX.BAS
 
+{% raw %}
 ```bas
 10 CLS:SCREEN 1:DEF SEG=&HB800:BLOAD"TITLE.PIC",0:DEF SEG
 11 FOR I=1 TO 1000:NEXT I:LOCATE 24,1:PRINT"Press<Space Bar>";:LOCATE 1,1
@@ -128,9 +183,11 @@ machines:
 689 GOTO 670
 690 RUN"cyclone.key"
 ```
+{% endraw %}
 
 ## RP-HELP.BAS
 
+{% raw %}
 ```bas
 1 CLS
 10 ON ERROR GOTO 60000:SCREEN 1
@@ -232,6 +289,7 @@ machines:
 60020 RESUME 60030
 60030 ON ERROR GOTO 0:END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

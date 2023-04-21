@@ -49,6 +49,116 @@ machines:
     XXXXXXXX XX5  Data file.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES161.TXT
+
+{% raw %}
+```
+Disk No:  161
+Program Title:  PC Firing Issue #2A
+PC-SIG version: 1.1
+
+Usage:  Reference.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  None.
+
+File Descriptions:
+
+SPLITB   BAT  Batch file.
+T86      BAT  Batch file.
+GC       EXE  Sub-programs.
+GRABBAG  EXE  Sub-programs.
+T86D     EXE  Sub-programs.
+FORTH    BAT  Will display the FORTH.MSG file
+FORTH    MSG  Tells you how to create a self-booting FORTH disk
+FORTH    OBJ  Object code to create a self-booting FORTH disk
+MANUAL   BAT  File to print the Manual for Programmer's Calculator
+MANUAL   DOC  Documentation for PC.EXE
+PC       EXE  Programmer's Calculator
+POLYMAZE EXE  Maze Program
+SQ       C    C source code for SQ.EXE
+SQ       EXE  Program to compress files
+T86TXT1  TXT  Text file.
+T86TXT2  TXT  Text file.
+XXXXXXXX XX2  Data file.
+XXXXXXXX XX3  Data file.
+XXXXXXXX XX4  Data file.
+XXXXXXXX XX5  Data file.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 198,85,86,87,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## T86TXT1.TXT
+
+{% raw %}
+```
+ 
+ 
+                          TRACE86  DEMONSTRATION
+ 
+This demonstration of TRACE86 shows the trace screen where the program
+code, registers, stack and memory are displayed. There is also a command
+screen that is disabled for the demonstration version.  Most of the
+file and data handling commands are executed from the command screen.
+The trace screen does allow control of the trace action and memory
+display.  The following commands are available for your use.
+1. The SPACE BAR starts and advances the single instruction step mode.
+   Each time you press the space bar, the white line advances to the
+   next instruction to be executed.
+2. The ENTER key starts the continuous tracing action.
+3. The "P" key causes the entire trace screen to be printed where the
+   active trace line is printed with a row of equal (=) signs.
+4. The "C" key causes the program to run at full trace speed until the
+   CX register is zero.
+5. The "K" key will run a called subroutine at full speed until the
+   subroutine is completed.
+ 
+              *****  Commands Continued *****
+ 
+```
+{% endraw %}
+
+## T86TXT2.TXT
+
+{% raw %}
+```
+ 
+ 
+6. The "F" key sets a called subroutine to run at full speed.
+7. The "S" key sets a called subroutine to run at trace speed.
+8. The "B" key causes the memory display to be in byte format
+   with the ASCII characters displayed also.
+9. The "W" key causes the memory display to be in word format.
+10. The "PgUp" and "PgDn" keys will display the previous or next
+    256 bytes of memory.
+11. The "up arrow" and "down arrow" on the numeric key pad will
+    display the previous or next 16 bytes of memory.
+12. The "left arrow" and "right arrow" on the numeric key pad will
+    display the previous or next byte of memory.
+13. The "F3" key will toggle between the last and current instruction.
+    The single step mode must be used for two instructions before
+    using the F3 key. Also the white line must be on the current
+    instruction in order to continue tracing.
+14. The "F4" key toggles between displaying hex numbers in upper
+    or lower case.
+15. The "F5" key toggles between showing or not showing ASCII characters
+    in memory monitor, when in byte mode.
+16. The "Esc" key ends the demonstration and returns to DOS.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0161
 

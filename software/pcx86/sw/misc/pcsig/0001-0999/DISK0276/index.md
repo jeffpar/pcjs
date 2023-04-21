@@ -32,8 +32,17 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## $$COLLST.TXT
+
+{% raw %}
+```
+hRELEASE 2.0 - For any ASCII printer                           pCollst is copyright protected. If you like Collst and use it  qyou must license it with On-Disk Software. Print file license rby entering                                                   ±COPY LICENSE PRN:                                             vIf someone has deleted file LICENSE please write On-Disk and  wlet us know. We will let you know about current releases and  xhow to get the latest copy.                                   uOn-Disk Software                                              vP.O. Box 661                                                  wLincoln, MA  01773 USA                                        nCollst lists files onto any printer, making full use of the   oprinter's width. For full run instructions, please consult    pthe documentation, which is available on the Collst installa- qtion disk. To obtain a new installation disk, write to:       g
+```
+{% endraw %}
+
 ## LISTER.BAS
 
+{% raw %}
 ```bas
 10 DEFINT A-Z: TRUE=-1: FALSE=0:SPAC$="      "
 20 CLS: INPUT "What is the name of the file to be listed?", A$: OPEN A$ FOR INPUT AS #1
@@ -55,6 +64,36 @@ machines:
 180 A$="lpt2:":RETURN
 190 A$="com1:":RETURN
 ```
+{% endraw %}
+
+## START.TXT
+
+{% raw %}
+```
+
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ On-Disk Installation Procedure: Backup copy check                           │
+├─────────────────────────────────────────────────────────────────────────────┤
+│ IF YOU HAVE NOT MADE A BACKUP COPY, DO SO NOW.                              │
+│                                                                             │
+│   1  HIT Ctrl-Break                                                         │
+│                                                                             │
+│   2  ANSWER "Y" TO Terminate batch job (Y/N)?                               │
+│                                                                             │
+│   3  USE THE DOS PROGRAM "DISKCOPY"                                         │
+├─────────────────────────────────────────────────────────────────────────────┤
+│                                                                             │
+│ If you have made a backup, then:                                            │
+│                                                                             │
+│   Read the license. It's short.                                             │
+│   The license has just printed, or is printing if you are using spooling    │
+│        software.                                                            │
+│                                                                             │
+└─────────────────────────────────────────────────────────────────────────────┘
+ 
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -40,6 +40,52 @@ machines:
     science students or space enthusiasts.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1689.TXT
+
+{% raw %}
+```
+Disk No: 1689                                                           
+Disk Title: Space Shuttle Tracking System                               
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Space Shuttle Tracking System                            
+Author Version: 2.6                                                     
+Author Registration: $10.00                                             
+Special Requirements: CGA or EGA (will work with HGCIBM color emulator).
+                                                                        
+Look to the heavens to find the space shuttle, but first consult your   
+computer and the SPACE SHUTTLE TRACKING SYSTEM.  You don't have to be an
+astronaut to successfully chart the course of the space shuttle and     
+figure out what time of night it will be visible overhead.  You'll be   
+shown the flight pattern taken around the world on an impressive looking
+map of the globe.  You can plot the shuttle's location for any specified
+time into the flight, or watch the shuttle's progress during the real-  
+time simulation of the flight.  You can also speed up the flight to     
+watch a simulation of several hours of flight time in just a few        
+minutes.                                                                
+                                                                        
+This program is great for all ages.  It doesn't require you to          
+understand longitude and latitude lines, but merely asks for some basic 
+flight information which varies with every flight:  direction of the    
+launch, orbit time or altitude, and inclination.  This information is   
+readily available through the media prior to the launch.  By looking at 
+the orbit charted on the map of the world, you can accurately predict   
+when the shuttle will be overhead in your area.  An excellent tool for  
+science students or space enthusiasts.                                  
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1689
 

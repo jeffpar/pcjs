@@ -80,6 +80,7 @@ machines:
 
 ## ADD-LF.BAS
 
+{% raw %}
 ```bas
 10 INPUT"INPUT THE FILENAME THAT WAS DOWNLOADED WITHOUT LF'S (D:FILENAME)",A$
 20 INPUT"INPUT THE NEW NAME FOR THE DOWNLOADED FILE (d:filename) ",B$
@@ -126,9 +127,11 @@ machines:
 380 S$=""
 390 RETURN
 ```
+{% endraw %}
 
 ## BALL.BAS
 
+{% raw %}
 ```bas
 0 WIDTH 80
 10 REM BALL.BAS  2/16/82
@@ -193,9 +196,11 @@ machines:
 670 PRINT USING "###.#";GMS(7)/GMS(0);:RETURN
 680 CLS:KEY ON:END
 ```
+{% endraw %}
 
 ## CONV.BAS
 
+{% raw %}
 ```bas
 10 ' COPYRIGHT 1982, RICHARD M. SCHINNELL
 20 ' This Program is called CONV.BAS
@@ -267,9 +272,104 @@ machines:
 680 PRINT "try again Charlie........
 690 END
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #79, version V1-1 
+ 
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on this disk.  If the CRC numbers do not match the following
+list you may have a bad file.  To use type:  CRCK4 <filespec>
+ 
+CRCK4 output for this disk:
+ 
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  DISPLAY .TXT         CRC = 40 53
+
+--> FILE:  DISPLAY .BAS         CRC = FB 5E
+
+--> FILE:  QD      .EXE         CRC = 16 53
+
+--> FILE:  QM      .EXE         CRC = B4 95
+
+--> FILE:  QDXT    .EXE         CRC = B8 DE
+
+--> FILE:  QMXT    .EXE         CRC = 1E 24
+
+--> FILE:  QUADRAM .DOC         CRC = 45 5E
+
+--> FILE:  MEMORY  .COM         CRC = FE BA
+
+--> FILE:  MEMORY  .DOC         CRC = 71 11
+
+--> FILE:  PEEKPOKE.TXT         CRC = 17 B2
+
+--> FILE:  DSKTST  .BAS         CRC = 8A 10
+
+--> FILE:  DRIVETST.BAS         CRC = 4D B9
+
+--> FILE:  LIFE    .EXE         CRC = A9 54
+
+--> FILE:  LIFE    .ASM         CRC = 95 5E
+
+--> FILE:  MAIL1   .BAS         CRC = 75 88
+
+--> FILE:  MAIL1   .DOC         CRC = 8D 6D
+
+--> FILE:  KEYLOC  .EXE         CRC = B3 A9
+
+--> FILE:  KEYLOC  .ASM         CRC = 5C F2
+
+--> FILE:  KEYLOC  .DOC         CRC = 23 96
+
+--> FILE:  ADD-LF  .BAS         CRC = F8 61
+
+--> FILE:  CONV    .BAS         CRC = 78 D9
+
+--> FILE:  QSPOOL  .COM         CRC = 0D E6
+
+--> FILE:  QSWAP   .COM         CRC = B0 54
+
+--> FILE:  SETPRTR .EXE         CRC = EE 91
+
+--> FILE:  SETPRTR .C           CRC = AD E8
+
+--> FILE:  DESIGN  .BAS         CRC = 90 13
+
+--> FILE:  ROD     .BAS         CRC = C8 EB
+
+--> FILE:  BALL    .BAS         CRC = 7D 8F
+
+--> FILE:  LUNAR   .BAS         CRC = BC 63
+
+--> FILE:  AD      .COM         CRC = D2 EC
+
+--> FILE:  LIFE2   .BAS         CRC = 64 EA
+
+--> FILE:  LIFE2   .EXE         CRC = AD 95
+
+ ---------------------> SUM OF CRCS = 3C 5F
+
+DONE 
+ 
+These and other Public Domain and user-supported programs from:
+ 
+PC Software Interest Group (PC-SIG)
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## DESIGN.BAS
 
+{% raw %}
 ```bas
 0 ' == D E S I G N . B A S == Version 2.0
 1 ' Graphic formulas from Bob Boothe, from 80-Microcomputing, April-June 1981,      and TRSColor Computer routines from Jake Commander and Kavlos Gesamte, in       80-Micro, March 1982.
@@ -741,9 +841,11 @@ machines:
 65110 WIDTH 80: LOCATE ,,1,12,13:SCREEN 0,0,0
 65120 RETURN
 ```
+{% endraw %}
 
 ## DISPLAY.BAS
 
+{% raw %}
 ```bas
 100 REM DISPLAY ROUTINE TEST PROGRAM
 110 REM ***** SAMPLE STRING ARRAY GENERATION *****
@@ -775,9 +877,79 @@ machines:
 370 GOSUB 270: OPEN "R",1,"DISPLAY.COM",1:FIELD 1,1 AS N$: X$="&H"
 380 FOR X%=1 TO 51: LSET N$=MID$(DSPLY$,X%,1):PUT 1: NEXT: CLOSE: END
 ```
+{% endraw %}
+
+## DISPLAY.TXT
+
+{% raw %}
+```
+IBM PC  USER UPDATES   UU-12  Feb, 1983
+
+Hardware Tip
+
+Faster Screen Printing from PC Displays
+
+Faster screen printing in text made may be obtained when using either the IBM
+Monochrome Display or color monitors.
+
+If your BASIC programs contain text data in charachter arrays-indexed by a
+pointer array-moves, copies, replicates, etc.  are done by arithmetic
+manipulation of the pointer array, rather than string manipulation.  This
+results in faster execution and reduced use of string heap space.
+
+You may avoid BASIC extra line feeds and unwanted scrolls associated with
+writing into lines 24 and 25 by moving data directly into the screen buffers.
+The example below addresses the frist text screen page.  (Subsequent screens can
+be accessed by changing address offsets.)
+
+Note that a BASIC string setup may be displayed on a screen by calling to the
+machine language routine.  The call uses five parameters:
+*The string data itself
+*Starting position in the string for the move
+*Length of the move
+*Screen area (&HB000 for monochrome, &HB800 for color)
+*Screen location
+
+The screen location is used similarly to PRINT @ in other BASIC implementations,
+with 0 at the top left corner, 160 at the start of the next line, 320 for the
+third, etc.  (The increment is two bytes per character, because of the
+interlaced color information.)
+
+You may use the BGN% parameter for horizontal scrolling, or for using portions
+of a string (similiar to MID$).
+
+If both monochrome and color monitors are available, data may be written to both
+without complex screen switching.
+
+Parameter checking is the responsibility of the using program!
+
+Additionally, this program may be used to create a .COM file for use with DEBUG.
+
+NO checksums are done on the machine code.  Careful entry is advised, since
+errors may require powering down to recover.
+
+For use with the BASIC Compiler, a Call Absolute would be required; however, a
+compiled POKE loop runs quickly also.
+
+This example favors clarity when using a machine language over faster parameter
+passing and more compact code because this technique minimizes the possibility
+of wrong offsets being used which could affect any storage location.
+--------------------------------------------------------------------------------
+Comment:  The above is directly taken from the IBM User Updates Bulletin.  The
+DISPLAY.BAS program was printed on the back of the bulletin.  What is
+particulary exciting about this little routine is that it provides a means to
+utilize both displays without the CLS that occurs whenever one toggles from one
+display to the other using the normal method of poking the equip_flag.  BASIC's
+print and graphic functions could always apply to the color display, while this
+routine provided a means of printing to the monochrome display.  The equivalent
+of LINE INPUT A$ on the monochrome display can be developed using the INPUT(1)
+statement which does not, of itself, echo to the screen.    H.Shear, 7/12/83
+```
+{% endraw %}
 
 ## DRIVETST.BAS
 
+{% raw %}
 ```bas
 10 'Disk Drive Test
 15 'Modified by Jim Serwer, PO Box 555, Cupertino, CA 95015
@@ -825,9 +997,11 @@ machines:
 900 STOP
 1000 SAVE "c:drivetst
 ```
+{% endraw %}
 
 ## DSKTST.BAS
 
+{% raw %}
 ```bas
 10 ' DISK DRIVE TEST
 20 ' BASED ON A PROGRAM BY JOE McDERMOTT WHICH WAS COPIED
@@ -892,9 +1066,724 @@ machines:
 600 LOCATE 7,30: IF ERR = 61 THEN PRINT "* * *DISK FULL* * *" ELSE PRINT ERR: STOP
 610 NUM= VAL(V$): GOTO 340 'ON ERROR (NUM=VAL(V$))=MAX NUMBER OF FILES READ & ERRASED.
 ```
+{% endraw %}
+
+## KEYLOC.ASM
+
+{% raw %}
+```
+		page	64,132
+
+
+
+
+
+
+
+
+
+
+Comment @
+    This is a patch to the ROM BIOS keyboard routine.  When the patch is
+    loaded, the Alt, Ctrl, Left Shift and Right Shift keys toggle between
+    their shifted and unshifted states.
+
+    There are two main entry points.
+
+    1.  'Keyloc' sets up the keyboard interupt vector to point to the patch 
+	instead of the normal BIOS routine.  After Keyloc executes, it 
+	leaves the new interupt handler resident in memory. 
+   
+    2.  'Ikeyloc' is the new keyboard interupt handler.  The first section 
+	is a duplication of the ROM BIOS routine until a point where tests 
+	for the input of a Alt, Ctrl, Left Shift or Right Shift key can be 
+	made.  If it is one of those keys, the appropriate bits in the 
+	keyboard flag byte are twiddled. 
+
+    John Black
+    5225 Pooks Hill Rd. #1715 N.
+    Bethesda MD. 20814
+@
+
+port_b		equ	60h	; 8255 port a addr
+timer		equ	40h
+kb_data		equ	60h	; keyboard scan code port
+kb_ctl		equ	61h	; control bits for keyboard sense data
+
+abso		segment at 0
+		org	24h
+kb_vector	label	dword
+abso		ends
+
+bioscode 	segment at 0F000h
+;		...locations in ROM BIOS used to return from interupt
+		org	0E9AFh
+K16		label	far		; resume code if not shift
+
+		org	0EC24h
+K62		label	far
+
+		org	0EA23h
+K23		label	far		; break for shift key
+
+		org	0EA5Eh
+K26		label	far		; return from interupt
+bioscode 	ends
+
+biosdata	segment	at 40h
+
+		org	17h
+kb_flag		label	byte
+;	...bit definitions for kb_flag
+ins_state	equ	80h		; insert state is active
+caps_state	equ	40h		; caps lock state has been toggled
+num_state	equ	20h		; num lock state has been toggled
+scroll_state	equ	10h		; scroll lock state has been toggled
+alt_shift	equ	08h		; alternate shift key depressed
+ctl_shift	equ	04h		; control shift key depressed
+left_shift	equ	02h		; left shift key depressed
+right_shift	equ	01h		; right shift key depressed
+
+;	...scan codes
+num_key		equ	69
+scroll_key	equ	70
+alt_key		equ	56
+ctl_key		equ	29
+caps_key	equ	58
+left_key	equ	42
+right_key	equ	54
+ins_key		equ	82
+del_key		equ	83
+biosdata	ends
+
+keylocs	segment	para public 'CODE'
+		assume	cs:keylocs
+
+keyloc_ident	db	'KEYLOC'
+ident_length	equ	6
+ikeyloc		proc	far		; interupt entry point 
+		sti			; begin copy of ROM BIOS
+		push	ax
+		push	bx
+		push	cx
+		push	dx
+		push	si
+		push	di
+		push	ds
+		push	es
+		cld	
+		mov	ax,biosdata
+		mov	ds,ax
+		in	al,kb_data
+		push	ax
+		in	al,kb_ctl
+		mov	ah,al
+		or	al,80h
+		out	kb_ctl,al
+		xchg	ah,al
+		out	kb_ctl,al
+		pop	ax
+		mov	ah,al
+		cmp	al,0FFh
+		jnz	keylocpatch
+		jmp	K62
+					; End of rom code copy
+keylocpatch:
+		push	ax
+		assume	ds:biosdata
+
+		and	al,01111111b	; mask out break indicator
+		cmp	al,alt_key
+		je	alt_in
+		cmp	al,ctl_key
+		je	ctrl_in
+		cmp	al,left_key
+		je	leftshift_in
+		cmp	al,right_key
+		je	rightshift_in
+;		...return to normal bios keyboard routine
+retbioskey:	pop	ax
+		jmp	K16
+
+
+alt_in:
+		mov	al,alt_shift
+		call	Depress_lock
+;		... if this is a break, enter bios at K23
+		pop	ax
+		mov	ah,alt_shift
+		test	al,80h			;  if
+		jz	fi			;  .
+		test	kb_flag,alt_shift	;  .
+		jnz	fi			;  .
+						;  / break and not depressed
+	    					;  .
+		or	kb_flag,alt_shift	;  .  Reset depressed flag
+		jmp	K23			;  .  Return in case using
+						;  .  alt keypad entry
+fi:						;  fi
+		jmp	K26
+
+ctrl_in:
+		mov	al,ctl_shift
+		call	Depress_lock
+		jmp	retdone
+leftshift_in:
+		mov	al,left_shift
+		call	Depress_lock
+		jmp	retdone
+rightshift_in:
+		mov	al,right_shift
+		call	Depress_lock
+		jmp	retdone
+
+retdone:	pop	ax
+		jmp	K26
+ikeyloc		endp
+
+;---------------------------------------------
+;
+;   Depress_lock
+;
+;	For keys that normally are depressed and held down
+;	while another key is depressed. (Cntl for example)
+;
+;	ah	input key, with break indicator (80h)
+;	al	contains depressed indicator bit mask
+;
+Down		db	?	; indicates the key is held down
+Depress_lock	proc	near
+		push	dx
+		test	ah,80h			; if1
+		jnz	fi1			; .
+		test	Down,al			; .
+		jnz	fi1			; .
+						; / make and not down
+		test	kb_flag,al		; .   if2
+		je	else2			; .   .
+						; .   / depressed
+		call	high_beep		; .   .
+		call	delay			; .   .
+		call	low_beep		; .   .
+		mov	dl,al			; .   . dl:=depressed bit
+		not	dl			; .   .
+		and	kb_flag,dl		; .   . key := not depressed
+		jmp	fi1			; .   .
+else2:						; .   / not depressed
+		call	low_beep		; .   .
+		call	delay			; .   .
+		call	high_beep		; .   .
+		or	kb_flag,al		; .   . key := depressed
+fi1:						; fi1 fi2
+
+		test	ah,80h			; if5
+		jnz	else5			; .
+						; / make
+		or	Down,al			; .  down := true
+		jmp	fi5			; .
+else5:						; / break
+		mov	dl,al			; .
+		not	dl			; .
+		and	Down,dl			; .  down := false
+fi5:						; fi5
+		pop	dx
+		ret
+Depress_lock	endp
+
+
+;---------------------------------
+h_cycles	equ	20
+h_half		equ	300
+l_cycles	equ	h_cycles / 3
+l_half		equ	h_half * 3
+
+low_beep	proc
+		push	dx
+		push	bx
+		mov	bx,l_cycles
+		mov	dx,l_half
+		call	beep
+		pop	bx
+		pop	dx
+		ret
+low_beep	endp
+
+high_beep	proc
+		push	dx
+		push	bx
+		mov	bx,h_cycles
+		mov	dx,h_half
+		call	beep
+		pop	bx
+		pop	dx
+		ret
+high_beep	endp
+
+;---------------------------------
+; Adapted from BIOS Beep routine
+;
+;  bx = # of cycles
+;  dx = length of half cycle
+
+beep		proc	near
+		push	ax
+		push	cx
+		in	al,kb_ctl
+		push	ax
+k65:
+		and	al,0FCh
+		out	kb_ctl,al
+		mov	cx,dx
+k66:		loop	k66
+		or	al,2
+		out	kb_ctl,al
+		mov	cx,dx
+k67:		loop	k67
+		dec	bx
+		jnz	k65
+		pop	ax
+		out	kb_ctl,al
+		pop	cx
+		pop	ax
+		ret
+beep		endp
+
+;--------------------------------
+delay		proc	near
+		push	cx
+		mov	cx,15000
+		loop	$
+		pop	cx
+		ret
+delay		endp
+
+ikeylast	equ	$	; last location + 1 to remain in memory
+
+stacks		segment	stack 'STACK'
+		db	64 dup('stack   ')
+stacks		ends
+
+;-------------------------------------
+loaded_mess	db	'KEYLOC loaded$'
+err_mess	db	'error - KEYLOC is already loaded$'
+keyloc		proc	far
+		push	ds
+		sub	ax,ax
+		push	ax
+		push	ds			; save program seg
+
+;		...Check to see if a copy of KEYLOC has
+;		   already been loaded by comparing Keyloc_ident
+;		   with the same locations relative the the current
+;		   keyboard interupt routine ( it is pointed to by the
+;		   the keyboard interupt vector)
+		cld					; increment
+		assume	ds:abso
+		mov	ax,abso
+		mov	ds,ax
+		mov	si,offset keyloc_ident
+		mov	ax,kb_vector+2			; segment
+		mov	di,kb_vector			; offset to ident
+		sub	di,ident_length
+		mov	es,ax
+		assume	ds:keylocs
+		mov	ax,keylocs
+		mov	ds,ax
+		mov	cx,ident_length
+		repne	cmpsb				; ds:[si],es:[di]
+		cmp	cx,0				; if
+		je	NotLoaded			; .
+							; / already loaded
+		mov	ah,9h				; .  print string
+		mov	dx,offset err_mess		; .
+		int	21h				; .
+		pop	ds				; . get rid of pseg
+		ret					; . return to DOS
+NotLoaded:						; fi
+
+;		...set up keyboard interupt vector
+		mov	ah,9h
+		mov	dx,offset loaded_mess
+		int	21h
+		assume	ds:abso
+		mov	ax,abso
+		mov	ds,ax
+		mov	ax,offset ikeyloc		; ip
+		mov	kb_vector,ax
+		mov	ax,seg ikeyloc			; cs
+		mov	kb_vector+2,ax
+;		...return to DOS, but leave ikeyloc resident
+		pop	es				; get program segment
+		mov	es:byte ptr 1,27h		; change int 20 to 27
+		mov	dx,offset ikeylast+100h		; dx:=lastaddr+1+prfx
+		ret
+keyloc		endp
+
+keylocs		ends
+
+		end	keyloc
+```
+{% endraw %}
+
+## KEYLOC.DOC
+
+{% raw %}
+```
+Keyloc  -  Keyboard Lock Program
+--------------------------------
+
+    Keyloc is a patch to the BIOS keyboard routine.  It modifies the 
+    operation of the Alt, Ctrl, Left Shift and Right Shift keys. It allows 
+    one finger typing by locking those keys in their shifted state. 
+
+    Normally the Ctrl, Alt, Left Shift, and Right Shift keys have to be held 
+    down with one finger, while another finger is used to type another key. 
+    For example, if a program requires you enter a ^P, you must hold down 
+    the Ctrl key with one finger, then depress the "P" key with another. 
+
+    When Keyloc is loaded in memory, it changes the way these keys operate. 
+    To type in a ^P, you first type and release the Ctrl key. This locks the 
+    Ctrl key in it's shifted state. Next the "P" key is depressed and 
+    release.  This enters a ^P. Depressing Ctrl again takes the key from 
+    it's shifted to unshifted state. 
+
+    Keyloc gives an audio signal so the user can tell when he is shifting or 
+    unshifting a key.  The first time the Ctrl key is depressed, a low tone 
+    followed by a high tone is sounded.  This signals that the key has been 
+    put in the shifted state. The next time the Ctrl key is depressed, a low 
+    tone followed by a high tone is sounded.  This signals that the key has 
+    been returned to the unshifted state. 
+
+Loading Keyloc Into Memory
+--------------------------
+
+    The program Keyloc is loaded into memory by executing the program 
+    KEYLOC. This can be done by typine in the name of the program, KEYLOC, 
+    with the the file KEYLOC.EXE on the diskette in the default drive. 
+
+    Keyloc remains loaded in memory until the system is rebooted.  It uses 
+    approximately 500 bytes of memory. 
+
+```
+{% endraw %}
+
+## LIFE.ASM
+
+{% raw %}
+```
+Comment  $
+        ********************************
+        *                              *
+        *       The Game of Life       *
+        *                              *
+        ********************************
+
+
+        John Conway's mathematical game of life, implemented on
+        the IBM/PC, by Simson L. Garfinkel.
+
+        Written in 8088 assembly language using the Microsoft
+        Macro Assembler.
+
+        Notes on running the program:
+
+          When program is run:
+
+                1.  Screen clears.
+                2.  User enters first generation from keyboard.
+                    Arrow keys move the cursor. INS key deposits
+                    a live cell, DEL removes a live cell, (in case
+                    the user makes a mistake.)
+                3.  Pressing ESC starts program.
+                4.  For each generation, cells which will have life
+                    on the next turn are inverted.
+                5.  Screen is updated to next generation.
+                6.  Keyboard is interrogated for command.
+                7.  If ESC is pressed, program terminates.
+                8.  If a number 0-9 is pressed, speed is selected.
+                    At speed 0, approx. 2.7 generations/sec are performed.
+                    At speed 9, each generation takes 3.5 sec.
+                9.  Program loops to #4.
+
+        $
+
+        ;global definitions
+
+live    equ  02         ;character for a live cell
+dead    equ  00         ;character for a dead cell
+
+rev     equ  70h        ;reverse video (marks cell to live)
+dark    equ   2         ;normal video  (marks cell to die)
+
+time    equ 300         ;time delay base
+
+TERM    equ 27          ;Character to exit mode
+
+cseg    segment para public 'code1'
+start   proc far
+        assume cs:cseg,ds:nothing,ss:stack,es:nothing
+                        ;set up return location
+        push  ds
+        sub   ax,ax
+        push  ax        ;now I can go home when I'm finished
+
+
+        call  Enter     ;Enter board
+        mov   cx,0      ;initial delay, 0
+main:
+        push  cx        ;save delay variable
+        cmp   cx,0
+        jz    s13
+
+s1:     push cx
+          mov   cx,time
+s11:      push  cx
+            mov   cx,time
+s12:        loop  s12
+          pop  cx
+          loop s11
+        pop  cx
+        loop s1         ;what a time delay!
+
+s13:    call count      ;Count up every cell's neighbours,
+        call update     ;Update screen
+        pop  cx         ;get back the time delay
+
+        mov  ah,1       ;See if user has pushed a key
+        int  16h
+        jz   main       ;nope - loop back
+
+        mov  ah,0       ;get the character out of the buffer
+        int  16h
+
+        cmp  al,TERM
+        jnz  s2
+        ret             ;finished - go back to ms/dos
+
+s2:     cmp  al,'0'     ;see if it is a speed command
+        jb   main
+        cmp  al,'9'
+        jnbe main
+                        ;It's a number
+        sub  al,'0'     ;now it goes from 0 to 9
+        mov  ah,0
+        mov  cx,ax      ;put it in cx
+        jmp  main
+start   endp
+
+
+Enter   proc  near      ;Subroutine to enter board
+                        ;define scan codes:
+left    equ   75
+right   equ   77
+up      equ   72
+down    equ   80
+point   equ   82
+del     equ   83
+esc     equ    1
+
+        call  cls       ;clear the screen
+
+        ;Registers are used as follows:
+        ;DH - Y position
+        ;DL - X position
+
+        mov  dh,12
+        mov  dl,40
+
+e1:     mov  bh,0       ;move the cursor to x,y position
+        mov  ah,2       ;code for cursor move
+        int  10h        ;interrupt for cursor move
+
+        mov  ah,0       ;set up to read the next keypress
+        int  16h        ;keypress read
+
+        cmp  ah,left    ;make a rational decision about the user's
+        jz   go_left    ;entry
+        cmp  ah,right
+        jz   go_right
+        cmp  ah,up
+        jz   go_up
+        cmp  ah,down
+        jz   go_down
+        cmp  ah,point
+        jz   go_point
+        cmp  ah,del
+        jz   go_del
+
+        cmp  ah,esc
+        jnz  e1         ;loop back - unknown command
+        mov  dx,23*256  ;put the cursor at lower left hand corner
+        mov  ah,2
+        int  10h
+        ret             ;go back to caller
+
+go_left:                ;move left if I can
+        cmp  dl,0       ;in leftmost column?
+        jz   e1         ;yes - go back
+        sub  dl,1       ;no  - subtract one
+        jmp  e1         ;go back
+
+go_right:               ;move right if I can
+        cmp  dl,79
+        jz   e1
+        add  dl,1
+        jmp  e1
+
+go_up:                  ;go up if I can
+        cmp  dh,0
+        jz   e1
+        sub  dh,1
+        jmp  e1
+
+go_down:                ;go down if I can
+        cmp     dh,24
+        jz      e1
+        add     dh,1
+        jmp     e1
+
+go_point:               ;put a live dot where the cursor is -- don't move it
+        mov     al,live ;it's the live character
+gp2:    mov     cx,1    ;one character to write
+        mov     ah,10   ;code to write character
+        int     10h     ;do it
+        jmp     e1      ;get next command
+
+go_del:                 ;delete character at cursor
+        mov     al,dead
+        jmp     gp2     ;let go_point do the rest
+Enter   endp
+
+
+Cls     proc    near    ;Subroutine to clear the screen
+        mov     ax,6*256
+        mov     cx,0
+        mov     dx,24*256+79
+        mov     bh,2
+        int     10h
+        ret
+cls     endp
+
+Count   proc    near    ;Subroutine to count every cells neighbours
+        ;Registers used:
+        ;DH,DL: Y,X of current cell being interrogated
+        ;DS   : Base offset - into screen memory
+        ;DI   : offset for character presently being looked at
+        ;
+        ;Outline for each character
+        ;  1.   Count up number of neighbours
+        ;  2.   If three neighbours, or if two and cell is live, put
+        ;       a rev on the screen at the attribute position, else
+        ;       put a dark
+        ;  3.   Go to next character
+
+chk     macro   yy,xx
+        local   ch1,offs
+offs    equ     (xx+yy*80)*2
+        mov     cx,[di+offs]    ;get byte to check
+        cmp     cl,live         ;check to see if this cell is alive
+        jnz     ch1             ;nope
+        add     al,1            ;yes - increase neighbour count
+ch1:
+        endm
+        mov     ax,0B000H
+        mov     ds,ax           ;offset value for monochrome display
+
+        mov     dh,1            ;Start at 1,1 and fo to 23,78
+        mov     dl,1            ;to prevent wrap-around
+
+c1:     mov     ax,160          ;get true offset from ds into screen memory
+        mul     dh
+
+        mov     cx,dx
+        mov     ch,00           ;just get dl
+        add     ax,cx
+        add     ax,cx           ;ax:=(dh*80+dl)*2
+
+        mov     di,ax           ;di:=ax
+        mov     ax,0            ;ax will be used for neighbour counting
+
+        chk     -1,-1           ;count number of neighbours
+        chk     -1, 0
+        chk     -1,+1
+        chk      0,-1
+        chk      0,+1
+        chk     +1,-1
+        chk     +1, 0
+        chk     +1,+1           ;test all of the neighbours
+
+        mov     cx,[di]         ;get byte to check
+        cmp     al,3
+        jz      give_life       ;life if it has three neighbours
+        cmp     cl,live         ;is it alive?
+        jnz     give_death      ;no
+        cmp     al,2            ;he lives if he has 2 neighbours and he is already
+                                ;alive
+        jnz     give_death      ;nope
+
+give_life:                      ;make this one alive
+        mov     ch,rev
+        jmp     c2
+
+give_death:
+        mov     ch,dark
+c2:     mov     [di],cx         ;put back on screen
+
+next_cell:
+        cmp     dl,78           ;am I at the end of the X line?
+        jz      c3              ;yes
+        add     dl,1            ;nope
+        jmp     c1
+c3:     mov     dl,1
+        cmp     dh,23           ;am I at the end of the Y line?
+        jz      c4              ;yes
+        add     dh,1            ;nope
+        jmp     c1
+c4:     ret                     ;yes - go home!
+Count   Endp
+
+Update  proc    near            ;This updates the generation on the screen
+        mov     ax,0B000H       ;Get screen offset
+        mov     ds,ax
+
+        mov     bx,24*80*2-2    ;loop through all of the screen but last line
+u1:     mov     cx,[bx]         ;line
+        cmp     ch,rev          ;is it to live?
+        jnz     u2              ;no
+        mov     cl,live         ;yes
+        jmp     u3
+u2:     mov     cl,dead         ;no
+u3:     mov     ch,dark         ;turn off reverse
+        mov     [bx],cx         ;put it back on the screen
+        sub     bx,2            ;loop back until done with the screen
+        jg      u1
+        ret                     ;go back to caller
+Update  endp
+cseg    ends
+
+stack   segment para stack 'stack'
+        db  30  dup('stack  ')
+stack   ends
+
+        end
+
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
 
 ## LIFE2.BAS
 
+{% raw %}
 ```bas
 1 '   LIFE = The game of LIFE by John Conway - a simulation
 2 '    This version by John Sigle        2/21/83
@@ -1085,9 +1974,11 @@ machines:
 65002 IF ADDR.%<>0 THEN RUN DRIVE$+":"+"START"
 65005 END
 ```
+{% endraw %}
 
 ## LUNAR.BAS
 
+{% raw %}
 ```bas
 10 REM DSNAME=LUNAR.BAS
 20 REM THIS VERSION COMPLETED 5/27/82.  FOR COMMENTS AND SUGGESTIONS,
@@ -1134,9 +2025,11 @@ machines:
 430 INPUT "Press RETURN to continue? ",A$
 440 RETURN
 ```
+{% endraw %}
 
 ## MAIL1.BAS
 
+{% raw %}
 ```bas
 5 '
 10 '   ******************************************
@@ -1685,9 +2578,290 @@ machines:
 9995 Z$ = INKEY$ : IF Z$ = "" THEN 9995 ELSE CLOSE : RUN
 9999 END
 ```
+{% endraw %}
+
+## MAIL1.DOC
+
+{% raw %}
+```
+23:59:55  01-02-1983
+JOE LONG
+     MAILING LIST PROGRAM  v1.0  by Joe Long
+
+     This is a straightforward mailing list program written as an exercise.    
+It is fairly powerful, allowing sorting by four fields and keying printing of
+labels by any field.  It will print one across or two across labels.  It was
+repeatedly modified and expanded in scope as it grew, so it is not as elegantly
+structured as it should be.  It has had little testing, so probably has bugs --
+please report any bugs to me at the address listed in the program heading.
+
+     The program has five files open at once, and uses the function keys,  so
+BASICA must be called with five file buffers specified.  Call as
+"BASICA/F:5/S:512".
+
+     The program is nearly self-explanatory.  Use the "tab" key or cursor
+control keys to move about the form.  "Tab" only moves forward.  "Esc" deletes
+the current record from the file.  You are always given a chance to change your
+ind before the disc is modified, except when inputting a new record.
+
+     Sorting is done by maintaining a separate index file for the four sort
+fields.  Only these files are sorted, the main file is never shuffled. 
+Searches are done by a binary search, so the index files must be sorted before
+a search if even one record has been changed.  An insertion sort is used, which
+is fast when the list is almost in order (as will be the case when only a few
+records have been changed since the last sort).  If you enter a large number of
+new records, the sort can get very slow.  I have a compiled version available,
+which I have not uploaded because of its large size (42K).  You can get it by
+sending me a blank, formatted disc in a self-addressed return mailer WITH
+POSTAGE.
+
+     The program does a LOT of disc I/O.  It will run much faster if you have a
+"ramdisc" (a virtual disc drive in high RAM).  Just change the drive
+specification on lines 160, 180, 200, 220, and 240 to the ramdrive.
+
+     Feel free to modify or expand this program as you wish.  It is fairly
+well self-documented, so modification should not be difficult.
+
+     If you have a color monitor, change the values of FG, BG, BD, and HI to
+whatever colors suit you.  They are now set for B/W monitors.
+
+     My only reason for the 1,000 record limit is the feeling that by that time
+the program will have gotten intolerably slow anyway, at least until the
+compiled version is done.  If you have the disc space, and a compiler, you may
+wnat to increase this.  Notice that I maintain dynamic file allocation; 
+eleted records are re-used to keep the file from growing unnecessarily.  Up to
+50 deleted record numbers are saved at one time.
+
+     If you have any questions, write me or leave a message on the Capitol BBS.
+eted record numbers are saved at on
+```
+{% endraw %}
+
+## MEMORY.DOC
+
+{% raw %}
+```
+                        MEMORY DOCUMENTATION
+                        ====================
+
+VERSION 1.01   8 NOV 1982    (C)  MICROLIFE, INC.  (301) 799-5509
+
+
+Memory is a utility to allow dynamic setting/resetting of the amount
+
+of memory used by DOS.  The major advantage is that the system switches
+
+can be set to anything your heart desires, with the knowledge that you
+
+should not have to open up the PC to set switches while using MEMORY.
+
+For example, some games (like ZORK and Adventure) seem to require a
+
+maximum of 320K, the switches can be set for the 128K and then MEMORY
+
+can be run to set DOS for larger amounts or smaller amounts of memory
+
+as required.  MEMORY can be used in batch files or simply run from the
+
+system prompt to set DOS memory size from 64K (lowest switch setting)
+
+up to 640K.  More specific parameter information is as follows:
+
+MEMORY          Restores DOS memory size to what it was prior to
+                running MEMORY.  Follow the example below:
+
+                Step 1  MEMORY 3        Sets DOS to 192K
+                Step 2  MEMORY 5        Sets DOS to 320K
+                Step 3  MEMORY          Restores DOS to 192K
+
+MEMORY 0        Forces DOS read the value of the switches on the
+                motherboard.
+
+MEMORY N        (Where N can be a decimal number from 1 to 10).  Installs
+                N times 64K of memory to DOS.  That is, assuming N was 7,
+                7 * 64K = 448K.  A very important note here is that the
+                DOS can now be set to beyond the value of the switches
+                (544K Maximum) to 640K !!
+
+
+An example of MEMORY used in an Autoexec file:
+
+Commands                Description of each command
+.............................................................................
+
+PWRUPCLK                Sets the System time equal to the Quadboard time
+MEMORY 9                Sets DOS memory size to 9 * 64K =  576K !!!
+RAMDISK 10/A            Creates a Ramdisk of size 10 * 32K = 320K
+COPY *.* D:             Copies all of Drive A: to Drive B:
+D:                      Logs onto Drive D:
+CHKDSK                  Checks the Disk Parameters
+
+............................................................................
+
+
+
+
+
+
+Special Notes:
+
+1. MEMORY resets the system when run, except in the cases of bad para-
+   meters entered or when the same command is run more than once.
+2. MEMORY will only install up to the available RAM present in the system.
+   For example, you have 320K in the system, a command like MEMORY 6 would
+   result in an error and no change from the present memory size.
+3. The QD Ramdisk software provided with the Quadboard reads the memory
+   size from the switches on the motherboard, not what DOS thinks it has.
+   By doing so, the maximum size of memory under the Ramdisk (reading
+   the switches) is 544K bytes.  {Since the preceding was written QDXT,
+   QM, and QMXT, which do not read the motherboard switches, have been
+   released.  Note that the current QD, Ver 2.4, still reads the switches.
+   H. Shear 7/7/83}
+
+
+
+```
+{% endraw %}
+
+## PEEKPOKE.TXT
+
+{% raw %}
+```
+
+
+					 * * * POKES & PEEKS * * *
+
+     Did you know that ...  there is a lot of information that may be accessed
+from the ROM BIOS area in your IBM PC, regarding the operating characteristics
+and  options  found on your own IBM PC?  After carefull analysis of data found
+in the IBM Technical Reference manual a summary of the most useful information
+and where/how it may be referenced has been prepared.  
+
+     By  specifying  a  DEF  SEG=&H40  in any BASIC program, it is possible to
+reference the following vectors (fields) in the ROM BIOS area by using a  PEEK
+function  and the following offsets from the current segment as defined by the
+DEF SEG statement.  
+
+&H0  -  RS232  Addresses on your IBM PC.  This will allow you to tell how many
+	(up to four) async cards are attached, if any.  
+
+&H8  -  Printer  Addresses  on  your  IBM PC.  This will tell you what printer
+	addresses,  and  how many (up to four) exist.  Each is addressed by a two
+	byte Hex value.  
+
+&H10  -  Equipment  Flag.   This  field  describes  the setting of the options
+	switches.  It describes what optional devices are attached to the system.
+	The following lists the bit-significance of this field: 
+
+	Bit 0 - indicates that there  are  diskette    drives  on the system.  
+	Bit 1 - not used.  
+	Bit 2,3 - Planar Ram Size (00=16K 10=32K 01=48K 11=64K) 
+	Bit 4,5 - Initial  Video  Mode (00=Unused  10=40x25  Color 01=80x25 Color 1		1=80x25 Mono) 
+	Bit 6,7 - Number of Disk Drives (00=1 10=2 01=3 11=4) only if bit 0 = 1	 	Bit 8 -  Unused
+	Bit 9,10,11 - Number of RS232 Cards attached 
+	Bit 12 - Game I/O Attached 
+	Bit 13 -  Not  used  
+	Bit  14,15 - Number of printers attached 
+
+&H13 - Memory Size in K bytes.  
+
+&H15  - I/O RAM Size in K bytes.   
+
+&H17  - Keyboard Flag -- the following lists the masks set to describe current
+	keyboard status: 
+
+Byte  1;  
+
+	&H80 - Insert  state  active  
+	&H40 - Caps Lock State Has been toggled 
+	&H20 - Num Lock State has been toggled 
+	&H10 - Scroll  Lock  State  has  been  toggled  
+	&H08 - Alternate  Shift  key depressed 
+	&H04 - Control Shift key depressed 
+	&H02 - Left Shift key depressed 
+	&H01 - Right Shift key depressed 
+	
+Byte 2; 
+		
+	&H80 - Insert Key is depressed 
+	&H40 - Caps Lock  Key  is  depressed  
+	&H20 - Num  Lock  Key  is depressed  
+	&H10 - Scroll  Lock  key is depressed 
+	&H08 - Suspend key has been toggled 
+	&H49 - Current CRT mode &H00 - 40x25 BW  
+	&H01 - 40x25  Color  
+	&H02 - 80x25  BW  
+	&H03 - 80x25  Color 
+	&H04 - 320x200 Color 
+	&H05 - 320x200 BW 
+	&H06 - 640x200 BW 
+	&H07 - 80x25 B&W Card -- specialized use, used internal  to  the
+			video  routines.   
+	&H4A - Number of CRT columns 
+	&H50 - Cursor Position (one of eight) 
+	&H60 - Current cursor mode  
+	&H6C - Low word of Timer count 
+	&H6E - High word  of Timer count 
+	&H71 - &H07 - Break key depressed 
+	&HFA6E - Beginning of character regen memory  
+	&HFF53 - PRTSC routine address  
+```
+{% endraw %}
+
+## QUADRAM.DOC
+
+{% raw %}
+```
+The Quadram RAM Drive has the very nice feature of looking exactly
+like a floppy.	They are compatible with FORMAT, DISKCOPY and
+DISKCOMP.  This permits copying software program disks containing hidden
+and/or system files to ramdrive.
+
+The size of the drives can be adjusted in relatively small increments
+at installation.  Parameter values of 5 or 10 yield full single sided
+or double sided drives suitable for diskcopy operations.  Other parm
+values result in a portion of the disk being `bad sectored.' Except
+for diskcopy operations the result is a perfectly good intermediate
+sized disk.
+
+Except as noted memory size is determined by MEMORY_SIZE at 0000:0413.
+Thus it is possible to utilize memory above the PC system board switch
+limit of 544KB.
+
+Don't let the XT in the names mislead you.  They work fine on the PC.
+
+QD.EXE	  Version 2.4A
+Generates RAMdrive up to 320KB.  Use form QD n where n is a number from 0
+to 10 indicating the number of 32KB blocks allocated to RAMdrive.  In an
+AUTOEXEC.BAT file use the form QD n/A .  Reads memory size from system
+board switch settings.
+
+QDXT.EXE    DOS 2.0 Version 1.0A
+Nine sector tracks, n 36KB blocks up to 360KB, reads MEMORY_SIZE.
+
+QM.EXE	  Version 1.0A
+Multidrive version, eight sector tracks, reads MEMORY_SIZE.
+
+QMXT.EXE    DOS 2.0 Version 1.0A
+Nine sector track version of QM.EXE.
+
+QSPOOL.COM    Version 1.02
+Use form QSPOOL n where n is the number of 8KB blocks assigned to print
+spooling.
+
+QSWAP.COM     Version 1.0
+     Swaps LPT1: and LPT2:
+
+AD.COM	  Version 1.00
+     Alphabetical directory listing.
+
+
+```
+{% endraw %}
 
 ## ROD.BAS
 
+{% raw %}
 ```bas
 0 ' THIS PROGRAM IS CALLED ROD, AUTHOR UNKNOWN
 2 KEY OFF
@@ -1724,6 +2898,7 @@ machines:
 1020 PRINT "THIS PROGRAM REQUIRES BASICA AND THE COLOR GRAPHICS ADAPTOR "
 1030 END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

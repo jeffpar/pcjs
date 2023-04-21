@@ -33,8 +33,86 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILES590.TXT
+
+{% raw %}
+```
+----------------------------------------------------------------------------
+Disk No  590  Nuclear Magnetic Resonance (NMR)                       v1.3
+----------------------------------------------------------------------------
+This diskette contains a highly technical and useful NMR analysis program.
+Nuclear Magnetic Resonance is used in many advanced chemistry applications
+and this program allows the analysis of this technique.  Written by a
+professor of chemistry at the University of South Florida, this package is
+unique in the fact that it displays the calculated spectrum including
+adjustable peak broadening.  Simulated plotting of very complex molecules,
+such as protein spectra are also allowed. Parameters for up to 7 spins
+(nucleii) can be calculated.
+ 
+------------- NMR submissions
+NMR      BAT  Batch file to start program
+NMR      DOC  Short documentation about the program
+NMR?     BAS  Basic code for program modules 0 - 7
+NMR?     EXE  Compiled version of module 0 - 7
+SCRATCH  MNR  Misc data file for program
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+## NMR.DOC
+
+{% raw %}
+```
+BEFORE BEGINNING DO THE FOLLOWING:
+
+     1)  Format a new disk with DOS in residence (preferably DOS 2).
+     2)  Copy the programs of form NMR?.EXE on to a separate disk.
+	 With these files, also copy NMR.BAT.
+     3)  Do the same for the files of form NMR?.BAS.
+
+     This set of programs is given to you in two versions.  The first have 
+the format NMR?.BAS for their file designations.  These are the listings of
+the routines in BASIC.	This coding is provided for your convenience; the
+versions given here compile with the MicroSoft BASIC compiler without use of
+the BASRUN module.  If you wish to modify the programs to make use of this,
+just get rid of the statements producing or using the file, "SCRATCH.NMR" and
+reinstate the COMMON statement.
+
+     Also included are files of the form "NMR?.EXE."  These can be run
+at once provided you have copied them on to a disk with DOS present.  If you
+do not own the MicroSoft compiler, use the routines as given.  To use these
+routines (provided you have also copied NMR.BAT), just type NMR and the
+programs will execute.
+
+     The programs should be easy to use; the programs are menu driven and
+instructions a fairly staight-forward.	Read all menues carefully and
+follow instructions faithfully.  With a little experience, you should find
+these routines both easy and fun to use.
+
+     If you have any questions or problems, you may reach me as follows:
+
+	  Milton D. Johnston, Jr.
+	  Department of Chemistry
+	  University of South Florida
+	  Tampa, Florida  33620
+
+	  1-813-974-2535
+
+D. Johnston, Jr.
+	  Department of Chemistry
+	  University of South Florida
+	  Tampa, Fl
+```
+{% endraw %}
+
 ## NMR0.BAS
 
+{% raw %}
 ```bas
 10 'Program "NMR0"--Entry to NMRCALC routines.
 20 DEFINT I-N
@@ -58,9 +136,11 @@ machines:
 160 CHAIN "NMR1"
 170 PRINT: INPUT"Hit <Return> to continue.",A$: PRINT: RETURN
 ```
+{% endraw %}
 
 ## NMR1.BAS
 
+{% raw %}
 ```bas
 1 'Program NMR1 (of NMRCALC package).
 2 'This comprises the main I/O routines.
@@ -607,9 +687,11 @@ machines:
 63998 LOOPER = 0
 63999 IF IPFLAG = 1 THEN RETURN ELSE PRINT:INPUT"Hit <Return> to continue.",A$:       RETURN
 ```
+{% endraw %}
 
 ## NMR2.BAS
 
+{% raw %}
 ```bas
 1 'Program NMR2
 10 'Part 2 of NMRCALC package.
@@ -787,9 +869,11 @@ machines:
 60020 CHAIN "nmr1"
 63999 IF IPFLAG = 1 THEN RETURN ELSE PRINT:INPUT"Hit <Return> to continue.",A$         :PRINT:RETURN
 ```
+{% endraw %}
 
 ## NMR3.BAS
 
+{% raw %}
 ```bas
 1  'NMR3--Part 3 of NMRCALC package.
 2  'Calculates line frequencies and intensities.
@@ -890,9 +974,11 @@ machines:
 62020 RETURN
 63999 IF IPFLAG = 1 THEN RETURN ELSE PRINT: INPUT"Hit <Return> to continue.",A$        :RETURN
 ```
+{% endraw %}
 
 ## NMR4.BAS
 
+{% raw %}
 ```bas
 1  'Program NMR4--Part 4 of NMRCALC
 10 DEFINT I-N
@@ -1249,9 +1335,11 @@ machines:
 60020 RESUME 100
 63999 IF IPFLAG = 1 THEN RETURN ELSE PRINT:INPUT"Hit <Return> to continue.",A$:        :RETURN
 ```
+{% endraw %}
 
 ## NMR5.BAS
 
+{% raw %}
 ```bas
 1 'NMR5--Part 5 of NMRCALC package.  Plotting routines.
 10 DEFINT I-N
@@ -1482,9 +1570,11 @@ machines:
 60020 RESUME 100
 63999 IF IPFLAG = 1 THEN RETURN ELSE PRINT:INPUT"Hit <Return> to continue.",A$         :RETURN
 ```
+{% endraw %}
 
 ## NMR6.BAS
 
+{% raw %}
 ```bas
 1 'NMR6--Part 6 of NMRCALC package.  Energy level diagrams.
 10 DEFINT I-N
@@ -1673,6 +1763,51 @@ machines:
 60020 RESUME 100
 63999 IF IPFLAG = 1 THEN RETURN ELSE PRINT: INPUT"Hit <Return> to continue.",A$:       RETURN
 ```
+{% endraw %}
+
+## NOTES590.TXT
+
+{% raw %}
+```
+Program name: NMR submissions
+ 
+Author name:  Milton D Johnston, Jr.
+Address:      Department of Chemistry
+              University of South Florida
+              Tampa, Florida  33620
+ 
+Tel number:   1-813-974-2535
+ 
+Suggested Donation: None specified
+ 
+Program Description:
+ 
+This NMR submission program package comprises a set of modules that make up
+the NMR program.  This is a Nuclear Magnetic Resonance analysis package.
+This program is highly technical, at the graduate or higher college level.
+It aids in the analysis of the NMR technique used in many chemical
+procedures.  The uniqueness of this package lie in the display of the
+calculated spectrum including adjustable peak broadening.  A seventh module
+is now present for combining plots of several spin systems saved from the
+fifth module.  This enables simulated plotting of very complex molecules,
+such as protein spectra.  Input parameters allow NMR to calculate up to 7
+spins (nucleii).  Although written in modules, this program is menu driven
+with a large number of options to chose from.  Data is entered either
+manually from the keyboard, or can be recalled from a data file already
+saved.  Adjustments for spin basis functions as well as altering coupling
+constants is available.  Useful calculations of eiganvalues and eiganvectors
+as well as screen plots are possible.  Hamiltonian functions and Lorentzian
+lineshapes are calculated, displayed and stored.  An extensive plot routine
+has also been established to nicely display the results of the analysis.  The
+main spectrometer frequency is also a variable.  Although this program is
+menu driven, it does not come complete with documentation.  Someone having a
+definite use for this package must have a strong knowlege of NMR analysis and
+terms since the documentation is short.  Those having a good knowlege of this
+field will find this program not only timesaving, but easy to use.  Again,
+this is a technical program with highly specialized uses.  Written by a
+college professor, he should be happy to answer any questions!
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -31,6 +31,41 @@ machines:
     entered, you can edit, display, add, delete, and print the records.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0963.TXT
+
+{% raw %}
+```
+Disk No:  963
+Disk Title: Pay-Time Payroll System (#1034 also)  (Disk 1 of 2)
+PC-SIG Version: S3
+
+Program Title: Pay-Time Payroll System
+Author Version: 3.00
+Author Registration: $25.00
+Special Requirements: Hard drive, printer, and NEBS 9024 check stock.
+
+For most of us, payday is one of the most important times of the week.
+Shouldn't you do your employees, and yourself, a favor by making this
+time one of the most error-free periods as well?
+
+PAY-TIME figures out your company payroll and writes the paychecks for
+your employees.  Several sample data files are included to familiarize
+you with the program.  Store information for each employee, including
+the person's name, mailing address, employee ID, Social Security number,
+and payroll status.  Once all the information for the tax files are
+entered, you can edit, display, add, delete, and print the records.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0963
 

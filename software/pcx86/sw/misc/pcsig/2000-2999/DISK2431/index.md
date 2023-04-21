@@ -40,6 +40,48 @@ machines:
     them.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2431.TXT
+
+{% raw %}
+```
+Disk No: 2431                                                           
+Disk Title: Code to Code                                                
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Code to Code                                             
+Author Version: 1.2                                                     
+Author Registration: $29.00                                             
+Special Requirements: None.                                             
+                                                                        
+CODE-TO-CODE, the "Norton Utilities" of desktop publishing does two     
+things to make desktop publishing (DTP) easier.  First it lets you edit 
+and change your typesetting codes from DTP programs like Ventura        
+Publisher, XyWrite III, Magna, Penta, or any word processor that can    
+produce an ASCII version (most do) of a file.                           
+                                                                        
+To do this it takes a DTP file and separates it into two file; one with 
+the typesetting codes and one with the written text.  Now you can edit  
+the text file in your favorite word processor and use CODE-TO-CODE's    
+search and replace features to make changes to the typesetting code     
+file. Then when your done making changes, CODE-TO-CODE will combine the 
+two files the same way it split them.                                   
+                                                                        
+CODE-TO-CODE also makes working with large files easier.  It's easily   
+splits large files into smaller ones.  You can do this by either        
+specifying a group of characters to split on, or a maximum size of the  
+split files (64K maximum).  Then CODE-TO-CODE easily recombines them.   
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2431
 

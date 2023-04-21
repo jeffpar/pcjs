@@ -34,6 +34,7 @@ machines:
 
 ## MAIN.BAS
 
+{% raw %}
 ```bas
 2 PRINT FRE(0)
 3 DEFDBL X         
@@ -1847,6 +1848,7 @@ machines:
 61475 X(TGTRN) = XHLD3
 61480 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

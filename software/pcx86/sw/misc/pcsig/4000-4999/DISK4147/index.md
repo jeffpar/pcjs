@@ -14,6 +14,21 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## README.DOC
+
+{% raw %}
+```
+  To use Letter Attack type A:ATTACK
+and press [ENTER].
+  To Install Letter Attack on your
+hard drive, type A:INSTALL and press
+[ENTER].
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #4147
 

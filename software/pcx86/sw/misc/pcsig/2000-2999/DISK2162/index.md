@@ -33,6 +33,36 @@ machines:
     The shareware version only lets you play one ball each game.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2162.TXT
+
+{% raw %}
+```
+Disk No: 2162                                                           
+Disk Title: Moraff's Pinball                                            
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: MORAFF'S PINBALL                                         
+Author Version: 5.0                                                     
+Author Registration: $10.00                                             
+Special Requirements: EGA.                                              
+                                                                        
+If arcade pinball is your game, then try MORAFF'S PINBALL.  This program
+has all the elements pinball gamers love, including bumpers, side traps,
+double scores, flippers, and lots of color, music and fast action.  Is  
+your best game good enough to enter into the MORRAF'S PINBALL hall of   
+fame?                                                                   
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2162
 

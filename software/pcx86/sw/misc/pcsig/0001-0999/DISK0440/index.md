@@ -73,6 +73,7 @@ machines:
 
 ## AMORT.BAS
 
+{% raw %}
 ```bas
 1000 REM SAVE "AMORT.BAS"
 1010 REM THOMAS E. RADKIEWICZ
@@ -209,9 +210,11 @@ machines:
 2320 PRINT USING "INT. RATE =  #######.##_%";INTR * 1200
 2330 RETURN
 ```
+{% endraw %}
 
 ## AMRTMENU.BAS
 
+{% raw %}
 ```bas
 1000 REM SAVE "AMRTMENU.BAS"
 1010 REM THOMAS E. RADKIEWICZ
@@ -228,9 +231,11 @@ machines:
 1120 IF (CHOICE = 3) THEN SYSTEM
 1130 GOTO 1040
 ```
+{% endraw %}
 
 ## FILEFIX.BAS
 
+{% raw %}
 ```bas
 100 'fixfile version 1.0              2-17-1985
 110 'by Bill Buoy for CE Vetco Services
@@ -278,9 +283,517 @@ machines:
 530 PRINT"     Job Complete - press fn 2 to run another.":KEY ON
 540 COLOR 14:CLOSE:BEEP:END
 ```
+{% endraw %}
+
+## FILEFIX.DOC
+
+{% raw %}
+```
+This program takes an ASCII text file with CR/LF delimiters and
+prepares it for use with WordPlus PC or PCjr.  WordPlus expects its
+.TXT files padded with nulls.  It will not successfully allow 
+modification of files obtained from downloads or files generated
+by EDLIN.  Three versions of these programs are on the disc.  Two
+versions of the BASIC version are on the disk with the extension 
+.BAS and .ASC.  These are commented internally to allow the user to
+modify the program.  As written, the program replaces the '@' symbol
+with the WordPlus open format marker.  This is consistent with the
+files the program was originally designed to work with.  The other two 
+versions, (.PAS and .COM), are the TurboPascal and Pascal object 
+versions respectively.  The .COM version may be run directly from the
+DOS prompt by typing FILEFIX.  There are three possible ways to run it
+from DOS.  The first is to type FILEFIX at the prompt.  The program
+will request a filename and extension for input.  The rootname and
+drive will be extracted, then the extension '.FIX' will be appended.
+The second method is to call the program with the input filename 
+separated from the program call by a space.  As above, the rootname
+and drive will be extracted and the extension '.FIX' will be appended.
+The third method is to specify both the input and output filename from
+the DOS prompt.  In any case, the two names are checked to be sure they
+are different, then both files are opened and the files processed.
+The '.COM' version displays each line of the file as it is processed,
+but the BASIC version does not.  When the process is complete, the
+console bell is sounded and the process terminates.  The Pascal source
+is commented for the benefit of those who have a Pascal compiler and
+wish to modify it.
+
+```
+{% endraw %}
+
+## FILES440.TXT
+
+{% raw %}
+```
+Disk No:  440
+Program Title: Business Sampler #6
+PC-SIG version: 1.5
+
+A mixture of BASIC and Pascal programs that perform a variety of
+personal and business tasks.
+
+The Printed Circuit Board (PCBD.BAS) assists in estimating the
+production cost of double-sided printed circuit boards.  The Restaurant
+House Charge Billing System (GBILL) lets you record each of your guest's
+house charges and produce mail-ready bills and stubs.  The bills that
+the system produces provide your "open account" customers with
+year-to-date account totals, and helps your account management.
+
+Usage:  Business/Personal.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $28.00 for GBILL.
+
+File Descriptions:
+
+AMORT    ABS  Abstract of the AMORT.BAS program.
+AMORT    BAS  Calculates Loan Amortization - results to the printer.
+AMRTMENU ABS  Abstract of the AMRTMENU.BAS program.
+AMRTMENU BAS  Program that selects AMORT.BAS or SCRNAMRT.BAS.
+AUTOEXEC BAT  Boot file.
+CAPSLOCK COM  Program to set Caps Lock to on. Place in Autoexec.bat.
+CLEAR    EXE  Program to clear screen.
+COMMENT  MEM  Memory file used in Disk-File.
+FILEFIX  ABS  Abstract of the FILEFIX.BAS program.
+FILEFIX  ASC  ASCII text file of the Basic source code.
+FILEFIX  BAS  Prepares ASCII text files with CR/LF delimiters for import.
+FILEFIX  DOC  Documentation file (2K).
+FILEFIX  PAS  Source file.
+FILEFIX  COM  Main program for FILEFIX.
+GBILL    DOC  Documentation (15K).
+GBILL    EXE  Main program for GBILL.
+HOLD     DAT  Data file.
+IRA      BAS  Basic program.
+IRA      DAT  Data file.
+PCBD     ABS  Abstract of the PCBD.BAS program.
+PCBD     ASC  ASCII text file of the Basic source code.
+PCBD     BAS  Source file.
+PCBD     DOC  Documentation for PCBD.BAS (4K).
+PRINT    BAS  BASIC print program.
+READ     BAT  Batch file to run DISKFILE.DOC.
+READ     ME   Explains the file extensions of the Basic programs.
+READ-ME       Notes for printing documentation and installing system.
+SCRNAMRT ABS  Abstract of the SCRNAMRT.BAS program.
+SCRNAMRT BAS  Calculates Loan Amortization - results to the screen.
+SETUP    EXE  Setup program.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1986,87,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## GBILL.DOC
+
+{% raw %}
+```
+
+
+
+
+
+              RESTAURANT HOUSE CHARGE BILLING SYSTEM
+
+
+                          VER 1.0
+
+
+                 (C)Copyright Bob Dexter, 1985
+                   All rights reserved.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    Bob Dexter
+    P. O. Box 17672
+    Milwaukee,  WI  53217
+
+
+
+
+
+
+
+    TABLE OF CONTENTS
+
+
+         SYSTEM DESCRIPTION ......................................  1
+
+         GETTING STARTED  ........................................  1
+
+         THINGS YOU SHOULD KNOW  .................................  2
+
+         THE MAIN MENU SCREEN  ...................................  2
+
+         ADDING YOUR FIRST CUSTOMER ..............................  2
+
+         ADDING CHARGES AND PAYMENTS .............................  2
+
+         DELETING INFORMATION  ...................................  3
+
+         YEAR END PROCEDURES  ....................................  3
+
+         GROUP CODES .............................................  4
+
+         THE SOFTWARE ............................................  5
+
+         DISCLAIMER  .............................................  5
+
+         PERMISSION TO COPY  .....................................  5
+
+         THE SOURCE CODE LICENSE  ................................  5
+
+         ORDER FORM  .............................................  6
+
+
+         RESTAURANT HOUSE CHARGE BILLING SYSTEM      -PAGE  1-
+
+    The Restaurant House Charge Billing system allows you to easily record 
+each of your guests house charges and print mail ready bills and stubs.  
+The bills, that the system produces, provide your open account customers 
+with year to date account totals and help you manage and collect your 
+house charges.  The system has been designed to be easy to use and is 
+entirely menu driven.  Preprinted forms are not required as the system 
+prints a complete bill on 8 1/2 X 11 paper.  The system is so easy you 
+will be using it in no time.
+
+         EQUIPMENT REQUIREMENTS
+
+    * IBM PCjr/PC/XT/AT or 100% PC compatible
+    * 128k  memory
+    * 1  360k diskette drive
+    * Printer  (almost any type will due)
+    * DOS 2.0 or higher
+
+         GETTING STARTED
+
+1.  Before using the system you will need to install the software on a DOS 
+diskette.  To perform this step you may need to reference the section in 
+your DOS manual which describes the FORMAT command.
+
+    * * * * * *   DUAL DISKETTE SYSTEM INSTRUCTIONS  * * * * * *
+    * Insert your DOS disk in drive A: and turn the power on.
+    * Type  FORMAT B:/S  and press return.
+    * Insert a blank diskette in disk drive B: and press return.
+    * Wait for the format to complete.
+    * Answer N to the more disks to format question.
+
+2.  Next you will copy 3 programs to the disk you just created.
+    * Insert the distribution disk in drive A:
+    * type  COPY A:CLEAR.EXE B:  and press return
+    * type  COPY A:SETUP.EXE B:  and press return
+    * type  COPY A:GBILL.EXE B:  and press return
+    * Remove the disk in drive A: and label it as:
+         "HOUSE CHARGE BILLING MASTER"
+
+3.  Now use the CLEAR program to create data files.
+    * Insert the "HOUSE CHARGES BILLING MASTER" disk in drive A:
+    * Type  CLEAR  and press return.
+    * Answer the clear your data question with a  Y  press return.
+    * The clear program takes over 2 min. to run so be patient.
+
+4.  Next use the SETUP program to customize the system for yourself.
+    * Answer the questions and test your printer heading alignment.
+
+5.  You may want to put an autoexec file on the new diskette.
+    * Type  COPY CON: A:AUTOEXEC.BAT and press return.
+    * Type  GBILL  and press return.
+    * Press function key 6 and press return.
+
+              RESTAURANT HOUSE CHARGE BILLING SYSTEM      -PAGE  2-
+
+
+    6.  Make a copy of the "HOUSE CHARGE BILLING MASTER" disk and store 
+the MASTER copy in a safe place.
+         * Use the DOS diskcopy program to make a copy of the disk.
+         * Label the new disk "HOUSE CHARGE BILLING 19XX".
+
+    7.  Inform the system of the current year.
+         * Insert the "HOUSE CHARGE BILLING 19XX" disk back in drive A:.
+         * After the A: prompt type GBILL and press return.
+         * Use selection 4 CHANGE YEAR to enter the current year.
+
+         THINGS YOU SHOULD KNOW
+
+    The system is set up to provide monthly billings.  Each customers 
+payment and charge information is collected for an entire month.  Bills 
+should be printed and mailed on the first day of the new month to minimize 
+customer confusion.  At the end of the year you will need to follow an end 
+of the year closing procedure which is described in detail later.  When 
+you are done closing you will use a new disk to collect the next years 
+information.  Save the old disk in a safe place as you may get customer 
+requests for copies of old bills.
+
+         THE MAIN MENU SCREEN
+
+    The Main Menu screen is displayed by the system and is used to access 
+all system functions.  To make a menu selection type the number of the 
+desired selection and press return.  The program that displays the Main 
+Menu is GBILL, so if you don't use a AUTOEXEC file to start the system you 
+will need to enter GBILL and press return to get the system started.  Now 
+go ahead and start the system and follow the instructions for adding a 
+customer to the system.
+
+         ADDING YOUR FIRST CUSTOMERS
+
+    From the Main Menu use selection 3 UPDATE CUSTOMER LIST.  If this is 
+your very first customer the screen will have a 1 in the upper left hand 
+corner of the screen.  As you add new customers a menu of customers will 
+be built.  Now add your first customer by typing the number 1 and pressing 
+return.  Fill in the customer information as it is requested.  The balance 
+forward field should only be used for an outstanding balance which was 
+billed last year.  Don't be concerned with the GROUP CODE, just press 
+return when it is requested.  If you are switching over from a manual 
+system then any outstanding balance from the current year should be added 
+as a charge.  When switching over from a manual system you may want to go 
+back a month or 2 and create bills to get a feel for this system.
+
+         ADDING CHARGES AND PAYMENTS
+
+    Adding new charges and payments is very similar to adding customers.  
+From the Main Menu use selection 1 CHANGE OR ADD CHARGES AND PAYMENTS.  
+Next select the customer that the charges are for.  Enter the requested 
+information.
+
+
+   RESTAURANT HOUSE CHARGE BILLING SYSTEM      -PAGE  3-
+
+         DELETING INFORMATION
+
+    To delete information from a field on the screen use the back space 
+key.  To delete a customer from the system simply use Main Menu selection 
+3 UPDATE CUSTOMER LIST and select the customer to be deleted.  When the 
+customer name is displayed use the back space key to delete all the 
+characters in the field and press return.  The best time to delete a 
+customer is during your year end closing procedures, see the section on 
+year end procedures for more information.
+
+
+         YEAR END PROCEDURES
+
+    At the end of the year you will need to follow this procedure.  This 
+procedure will allow you to save last years billing information and 
+provide an empty disk for next years bills.  The new disk will have your 
+customers on it so you can start saving this years charges.  To perform 
+this procedure you will need to have the following:
+
+                 * Last years HOUSE CHARGE BILLING disk.
+                 * The HOUSE CHARGE BILLING MASTER disk.
+                 * A list of the Balances due.
+                 * A blank diskette.
+
+    1.  Place a protect tab on last years HOUSE CHARGE BILLING disk.
+         Step 1. is very important please do not skip it.
+
+    2.  Next make a copy of the  "HOUSE CHARGE BILLING MASTER" disk.  Use 
+the DISKCOPY function to perform this step.  When the DISKCOPY is complete 
+put the "HOUSE CHARGES BILLING MASTER" disk back in a safe place and label 
+the new disk "HOUSE CHARGES BILLING 19XX".  The XX in the label should 
+contain the new year.
+
+    3.  Next you will copy the customer file from last years disk to the 
+new years disk.
+         * Insert last years HOUSE CHARGE BILLING disk in drive A.
+         * Insert the new HOUSE CHARGE BILLING disk in drive B.
+         * After the A prompt type COPY A:CUST.FLE B: and press return.
+         * When the copy completes, store last years disk in a safe place.
+
+    4.  Change the system year using selection number 4 CHANGE YEAR on the 
+Main Menu.
+         * Insert the new HOUSE CHARGE BILLING disk in drive A.
+         * Start the system by typing GBILL and pressing return.
+         * Use Main Menu selection 4 CHANGE YEAR to change the date.
+
+
+              RESTAURANT HOUSE CHARGE BILLING SYSTEM      -PAGE  4-
+
+5.  Now is the time to delete the customers who are no longer charging.  
+To delete an old customer use Main Menu selection 3  UPDATE CUSTOMER 
+LIST.  When the customer menu displays, select a customer to delete.  Use 
+the backspace key to blank out the customer name and press return.  When 
+the system sees a blank customer name it deletes that customer from the 
+menu.  All other customers below the one being deleted will be moved up to 
+fill the hole left by the customer you deleted.
+
+    6.  Next you will update the balance forward information for each 
+customer.  Use selection 3 on the Main Menu to modify customer 
+information.  Now update the balance forward amount for each customer to 
+reflect the balance due as of the last day of the old year.  To reach the 
+balance forward field without changing any of the other information, 
+simply press return on each field you don't want to change.
+
+    7.  You are now ready to start entering the new years charges and 
+payments.  On February 1, you will be able to print bills which reflect 
+the outstanding balance from last year.  The year to date balances shown 
+on the bill will not reflect any balance forward amounts.
+
+
+         GROUP CODES
+
+    The use of group codes is optional.  Each customer is assigned a group 
+code of "A" when the system is set up.  Group codes can be changed by 
+using selection 3 UPDATE CUSTOMER LIST.  Changing a group code has no 
+effect on any calculations or the contents of the bills.
+
+         SO WHAT ARE GROUP CODES FOR?
+
+    Group codes are used to control the printing of bills.  Main Menu 
+selection number 2 PRINT BILLING allows you to print bills which are in a 
+specific group.  When selecting a group to print it is important to enter 
+the exact group code, "A" and "a" are different group codes.  Group codes 
+can be used for many things, here are some examples:
+
+    ** Customers with balances over 90 days past due could be placed in a 
+special group.
+
+    ** If your business is divided into multiple corporations you might 
+want to assign each corporation a group code.  Then each customer could be 
+assigned to it's corporation.  In this way you could produce bills for 
+each corporation and determine the total accounts receivable for each 
+corporation.
+
+    ** Customers could be divided into two groups, the hand delivered 
+group and the mail delivered group.  In this way you could print your 
+mailed bills in one print run, and the hand delivered bills in a second 
+run.
+
+
+
+              RESTAURANT HOUSE CHARGE BILLING SYSTEM      -PAGE  5-
+
+         THE SOFTWARE
+
+    The HOUSE CHARGE BILLING SYSTEM is written in PC BASICA that has been 
+compiled.  The system is easy to modify and upgrade.  If you plan to run 
+this system on a non IBM PC you may need to recompile it on your PC.
+    This copy of the software is provided as an evaluation copy.  The 
+label printing feature has been disabled in this evaluation copy of the 
+software.  When you register your copy of the program you will receive a 
+diskette with a complete working version of the program.
+
+
+              DISCLAIMER
+
+THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EITHER 
+EXPRESSED OR IMPLIED, INCLUDING, WITHOUT LIMITATION, IMPLIED WARRANTIES OF 
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
+
+
+IN NO EVENT WILL THE AUTHOR BE LIABLE TO YOU FOR ANY DAMAGES, INCLUDING 
+ANY LOST PROFITS, LOST SAVINGS OR OTHER INCIDENTAL OR CONSEQUENTIAL 
+DAMAGES ARISING OUT OF THE USE OF OR INABILITY TO USE THESE PROGRAMS, EVEN 
+IF THE AUTHOR HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES, OR FOR 
+ANY CLAIM BY ANY OTHER PARTY.
+
+         PERMISSION TO COPY
+
+    Individuals are granted permission to make UNMODIFIED COPIES of this 
+evaluation version of the RESTAURANT HOUSE CHARGE BILLING SYSTEM programs 
+and documentation for their own use or to allow others to evaluate this 
+software.
+
+    Modifications to the programs or documentation are prohibited.
+
+         THE SOURCE CODE LICENSE
+
+    A single computer source code license is available for the RESTAURANT 
+HOUSE CHARGE BILLING SYSTEM.  The source code license provides you with, 
+and allows you to make modifications to the source code for use on one 
+computer.  See the order form for prices and ordering information.
+
+              RESTAURANT HOUSE CHARGE BILLING SYSTEM      -PAGE  6-
+
+
+   - - - - - - - - - - - -  ORDER FORM  - - - - - - - - - - - - - - - -
+
+Bob Dexter                Your Name
+P.O. Box  17672                      -----------------------------------
+Milwaukee,  WI 53217        Address
+                                     -----------------------------------
+
+                                     -----------------------------------
+
+                                     -----------------------------------
+                         Your Phone
+                                     -----------------------------
+
+
+ITEM                                     UNIT    
+DESCRIPTION                              PRICE      QTY   TOTALS
+========================                 ========   ===   =======
+RESTAURANT HOUSE CHARGE BILLING SYSTEM     $28.00 
+(Includes production version on disk)               ---     -----
+
+
+SOURCE CODE LICENSE                        $87.00
+(Includes BASIC program listings on                 ---     -----
+ the disk with the production version
+ of the system)
+
+                           5% sales tax
+                           (Wisconsin residents)            -----
+
+                                               TOTAL 
+                                                            -----
+
+   Please make check payable to: Bob Dexter
+
+
+
+              SUGGESTIONS
+
+
+--------------------------------------------------------------------
+
+
+--------------------------------------------------------------------
+
+
+--------------------------------------------------------------------
+
+
+--------------------------------------------------------------------
+
+
+
+              RESTAURANT HOUSE CHARGE BILLING SYSTEM      -PAGE  7-
+
+
+         NOTES
+
+
+```
+{% endraw %}
 
 ## IRA.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 12 SCREEN 0
@@ -584,9 +1097,11 @@ machines:
 6760 '
 7000 PRINT "ERROR"ERR" - at line"ERL: STOP: RESUME
 ```
+{% endraw %}
 
 ## PCBD.BAS
 
+{% raw %}
 ```bas
 10 REM PRINTED CIRCUIT BOARD COST ESTIMATOR
 20 REM (c) 1983 BY BILL BUOY
@@ -706,9 +1221,102 @@ machines:
 1150 LPRINT CHR$ (12)
 1160 END
 ```
+{% endraw %}
+
+## PCBD.DOC
+
+{% raw %}
+```
+Assists in estimating the production cost of double sided printed
+circuit boards.  The user need only make an estimate of the time
+required to lay out the board and count the components as they are 
+prompted for.  The board size and complexity are taken into account.
+A variable and crossreference listing is provided below.  The user may
+change the variables listed in line xyz to adjust for local pricing.
+The method used is the one described to me by a local board layout and
+fabrication company.  It consists of estimating the total number of
+hours to actually lay out the board, and adding a surcharge based on
+the board density.  The surcharge kicks in above a density of 1.0 EIC's
+per square inches.  Then the total number of plated thru holes is
+counted.  This is where the program helps--these totals are
+automatically tracked, all you need do is count the number of ic's, 
+resistors, capacitors and other components.  Then a pricing breakdown
+is printed on the screen, and the total cost of producing all the 
+boards is distrubuted among the number of boards you are going to make.
+The program prompts for all required inputs.  The final results may be
+printed on the system printer when finished.
+It is up to the user to keep the board dimensions and the number of
+components practical.
+CREATED ON 05-26-1985 AT 21:15:33
+  120              150   190   240   340   490   540   590   640 
+  140              110 
+  290              330 
+  340              300 
+  460              480 
+  490              470 
+  540              520 
+  560              580 
+  590              570 
+  610              630 
+  640              620   690 
+  700              670 
+  880              900 
+  910              890 
+ 1160              870 
+A$                 860   870   900 
+AC                 220   220   220   770  1010 
+AREA               670   670   680   690   710   760 
+CA                 440   740  1100 
+CH                 140   770 
+CPB                770   830   840   850   960   970   980 
+CT                 400   480   480   750 
+D                  420   730  1080 
+DA$                170   990 
+DENSITY            760   760   760  1030 
+EIC                750   760 
+FMT1$              780   810   820   830   840   850   940   950 
+                   960   970   980  1010  1020 
+FMT2$              790  1030 
+HT                 730   730   730   730   730   730   730   730 
+                   740   740   740   740   740   740   740   740 
+                   750   750   750   770 
+I                  920   920 
+I1                 270   730  1040 
+I2                 280   730  1050 
+IL                 290   300   310  1060 
+JOB$               180   930 
+L                  650   670 
+LC                 770   810   840   850   940   980 
+LT                 260   310   310   730 
+MC                 140   710   710   830   840   850   960   970 
+                   980 
+NAM$               160   990 
+NB                 700   710   830   840   850   850   960   970 
+                   980   980 
+NC                 460   470   480  1120 
+NM                 610   620   630 
+NP                 310   310   480   480   530   530   580   580 
+                   630   630 
+NS                 510   520   530  1130 
+NT                 560   570   580 
+P                  450   740  1110 
+Q                  410   740  1070 
+R                  430   740  1090 
+RC                 140   220 
+SCHG               760   760   770 
+SW                 500   530   530   750 
+TA                 710   710 
+TL                 230   820   840   850   950   980  1020 
+TM                 600   630   630 
+TT                 550   580   580   750  1140 
+W                  660   670 
+
+```
+{% endraw %}
 
 ## PRINT.BAS
 
+{% raw %}
 ```bas
 2000 DEFDBL A
 2010 OPEN "HOLD.DAT" FOR INPUT AS 1
@@ -853,9 +1461,11 @@ machines:
 8020 LPRINT CHR$(12)
 9000 CLOSE:END
 ```
+{% endraw %}
 
 ## SCRNAMRT.BAS
 
+{% raw %}
 ```bas
 1000 REM SAVE "SCRNAMRT.BAS"
 1010 REM THOMAS E. RADKIEWICZ
@@ -990,6 +1600,7 @@ machines:
 2300 PRINT USING "INT. RATE =  #######.##_%";INTR * 1200
 2310 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

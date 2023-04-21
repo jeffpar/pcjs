@@ -14,6 +14,42 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2544.TXT
+
+{% raw %}
+```
+Disk No: 2544                                                           
+Disk Title: Home Helper                                                 
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Home Helper                                              
+Author Version: 1.3                                                     
+Author Registration: $15.00                                             
+Special Requirements: 512K RAM. 640K RAM, and a hard drive recommended. 
+                                                                        
+HOME HELPER computerize routine household tasks.  The program includes  
+an electronic phone book with mailing labels, a recipe filer, audio and 
+video tape library database, and a record system for the valuable       
+appliances in your home and more.                                       
+                                                                        
+In addition, your commitments and personal appointments can be recorded 
+with the personal scheduler.  HOME HELPER also stores credit card       
+information that will prove invaluable if your cards are ever lost or   
+stolen.  Finally, with Home Helper, emergency telephone numbers are but 
+a keystroke away.  The program is completely menu-driven with context-  
+sensitive pop-up help screens.                                          
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989-1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2544
 

@@ -59,6 +59,7 @@ machines:
 
 ## 0.BAS
 
+{% raw %}
 ```bas
 1 REM --ZERO------------END PROGRAM-----------------------------------
 11 REM -------Gary West, Allendale SC 29810 (10/12/84)---------------
@@ -78,9 +79,11 @@ machines:
 85 A$=INKEY$:IF A$="" THEN 85
 90 RUN "title2.bas"
 ```
+{% endraw %}
 
 ## 1.BAS
 
+{% raw %}
 ```bas
 1 REM --ONE---------SPELLING BEE--------------------------
 2 REM --------------USING SC SIGHT WORD LIST--------------
@@ -198,9 +201,11 @@ machines:
 980 CLS:LOCATE 7,1:PRINT NA$;",":PRINT "You worked with these words:":PRINT "(X marks those you missed.)
 985 PRINT:FOR T=1 TO NBR:PRINT TAB(5);WORDS$(T):NEXT T:PRINT:PRINT "PRESS ANY KEY.":CNT=1:Z=1:FLAG=1:GOSUB 970:GOTO 180
 ```
+{% endraw %}
 
 ## 10.BAS
 
+{% raw %}
 ```bas
 10 REM --TEN-------------------AGE IN DAYS--------------------------
 11 REM BIRTHDAY UPDATED 5-5-77 TO "MITS" BY D. NIXON
@@ -368,9 +373,11 @@ machines:
 1620 A$=INKEY$:IF A$<>"1" AND A$<>"2" THEN 1620
 1630 IF A$="1" THEN RUN ELSE RUN "MENU.BAS"
 ```
+{% endraw %}
 
 ## 11.BAS
 
+{% raw %}
 ```bas
 1 REM -----ELEVEN--------WORD MATCH-------------------------
 2 REM -------------------USING SC SIGHT WORD LIST-----------
@@ -497,9 +504,11 @@ machines:
 998 GO$=INKEY$:IF GO$<>" " THEN 998
 999 GOTO 219
 ```
+{% endraw %}
 
 ## 12.BAS
 
+{% raw %}
 ```bas
 1 REM -----TWELVE-------WORD MATCH-------------------------
 2 REM -------------------USING SC SIGHT WORD LIST-----------
@@ -626,9 +635,11 @@ machines:
 998 GO$=INKEY$:IF GO$<>" " THEN 998
 999 GOTO 219
 ```
+{% endraw %}
 
 ## 13.BAS
 
+{% raw %}
 ```bas
 1 REM --THIRTEEN-----------------HANGMAN-----------------------------
 2 REM
@@ -761,9 +772,11 @@ machines:
 10015 IF A$="5" THEN LST=975:OPEN "GRADE-5.LST" FOR INPUT AS #1:GOTO 10016
 10016 LOCATE 21,6:PRINT "READING AS FAST AS I CAN.":LOCATE 22,6:PRINT "OF ";LST;" WORDS IN THIS LIST.":FOR T=1 TO LST:LOCATE 22,1:PRINT T:INPUT#1,WORD$(T):NEXT T:CLOSE#1:FOR I=1 TO N:CNT=INT(LST*RND(1))+1:WORD1$(I)=WORD$(CNT):NEXT I:CLOSE#1:RETURN
 ```
+{% endraw %}
 
 ## 14.BAS
 
+{% raw %}
 ```bas
 1 REM --FOURTEEN----------------WORD SCRAMBLE---------------------------
 2 REM -----------ADAPTED FROM PROGRAM BY FREDERICK HOLTZ----------------
@@ -843,9 +856,11 @@ machines:
 10015 IF A$="5" THEN LST=975:OPEN "grade-5.lst" FOR INPUT AS #1:GOTO 10016
 10016 LOCATE 21,6:PRINT "READING AS FAST AS I CAN.":LOCATE 22,6:PRINT "OF ";LST;" WORDS IN THIS LIST.":FOR T=1 TO LST:LOCATE 22,1:PRINT T:INPUT#1,WORD$(T):NEXT T:CLOSE#1:RETURN:END
 ```
+{% endraw %}
 
 ## 15.BAS
 
+{% raw %}
 ```bas
 1 REM --FIFTEEN---------------WORD SCRAMBLE------------------------
 2 REM ----------------------FOR TWO STUDENTS-----------------------
@@ -931,9 +946,11 @@ machines:
 550 LOCATE 22,1:COLOR 15:PRINT "THAT IS NOT RIGHT.  TRY AGAIN. (YOU'VE LOST 10 POINTS.)":COLOR 14:RETURN
 560 RETURN
 ```
+{% endraw %}
 
 ## 16.BAS
 
+{% raw %}
 ```bas
 1 REM --SIXTEEN--------------SCREEN MACHINE--------------------------------
 2 REM ---------------FOR IBM PCjr WITH 128K RAM----------------------------
@@ -1255,9 +1272,11 @@ machines:
 10991 GO$=INKEY$:IF GO$<>" " THEN 10991
 10999 RETURN
 ```
+{% endraw %}
 
 ## 17.BAS
 
+{% raw %}
 ```bas
 1 REM --NINE---------------MAZES-----------------------------------------
 2 REM  WRITTEN BY JACK HAUBER UPDATED 5-21-77  D. NIXON
@@ -1472,9 +1491,11 @@ machines:
 2010 Y$=INKEY$:IF Y$<>" " THEN 2010
 2020 RESUME 100
 ```
+{% endraw %}
 
 ## 2.BAS
 
+{% raw %}
 ```bas
 1 REM --TWO--------ALPHABETICAL ORDER------------------------------
 10 REM ------------K.WEST (8/10/84)--------------------------------
@@ -1578,9 +1599,11 @@ machines:
 1110 CLS
 1120 RETURN
 ```
+{% endraw %}
 
 ## 20.BAS
 
+{% raw %}
 ```bas
 1 REM --TWENTY-----------------PROGRAM DESCRIPTIONS------------------
 2 REM -----------------------------GARY WEST-------------------------
@@ -1857,9 +1880,11 @@ machines:
 5030 Y$=INKEY$:IF Y$<>" " THEN 5030
 5040 CLS:RESUME 25
 ```
+{% endraw %}
 
 ## 3.BAS
 
+{% raw %}
 ```bas
 1 REM --THREE--------BOWLING GAME------------------------------------
 2 REM --FROM COMPUTES! PC&PCjr MAGAZINE------------------------------
@@ -1953,9 +1978,11 @@ machines:
 1002 DATA 234,31,29,29,29,29,234,28,234,31
 1003 DATA 29,29,234,28,234,31,29,29,234,31,234
 ```
+{% endraw %}
 
 ## 4.BAS
 
+{% raw %}
 ```bas
 1 REM --FOUR-----------GRAPHIC DISPLAYS---------------------------------
 2 REM --FROM CREATIVE COMPUTING MAGAZINE--------------------------------
@@ -2003,9 +2030,11 @@ machines:
 360 IF Q$<>"1" AND Q$<>"2" THEN 340
 361 IF Q$="1" THEN RUN 30 ELSE CLS:SCREEN 0:RUN "MENU.BAS"
 ```
+{% endraw %}
 
 ## 5.BAS
 
+{% raw %}
 ```bas
 1 ' --FIVE--------------MAXIT GAME--------------------------
 1000 '   MAXIT  FROM PET
@@ -2178,9 +2207,11 @@ machines:
 5040 RETURN
 6000 LOCATE 24,1:COLOR 1,7:PRINT "MOVE MARKER WITH <SPACE BAR>;          ";:LOCATE 25,1:PRINT "TAKE POINTS WITH <ENTER> KEY.          ";:COLOR 7,1
 ```
+{% endraw %}
 
 ## 6.BAS
 
+{% raw %}
 ```bas
 1 REM --SIX-------------OTHELLO GAME---------------------------------
 1000 REM  OTHELLO -- PET VERSION -- MODIFIED BY PATRICK   LEABO
@@ -2429,9 +2460,11 @@ machines:
 3440 RETURN
 3450 END 
 ```
+{% endraw %}
 
 ## 7.BAS
 
+{% raw %}
 ```bas
 1 REM --SEVEN---------WORDIES-------------------------------------
 1000 REM  WORDIES - a word problem generating program
@@ -2779,9 +2812,11 @@ machines:
 5035 CLS
 5040 RESUME 1440
 ```
+{% endraw %}
 
 ## 8.BAS
 
+{% raw %}
 ```bas
 1 REM --EIGHT-------------FIND-A-WORD PUZZLE--------------------
 2 REM ----------REVISED 10/15/84 FROM PC BLUE COLLECTION--------
@@ -3057,9 +3092,11 @@ machines:
 2530 Y$=INKEY$:IF Y$<>" " THEN 2530
 2540 RESUME 30
 ```
+{% endraw %}
 
 ## 9.BAS
 
+{% raw %}
 ```bas
 1 REM --NINE---------------MAZES-----------------------------------------
 2 REM  WRITTEN BY JACK HAUBER UPDATED 5-21-77  D. NIXON
@@ -3274,9 +3311,11 @@ machines:
 2010 Y$=INKEY$:IF Y$<>" " THEN 2010
 2020 RESUME 100
 ```
+{% endraw %}
 
 ## BRIEFLY.BAS
 
+{% raw %}
 ```bas
 1 REM --BRIEFLY--------------------------------------------------
 5 DIM L$(18)
@@ -3334,9 +3373,102 @@ machines:
 136 DATA "Have fun with the programs that you find here."
 137 DATA " "
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #241, version V1 
+ 
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on this disk.  If the CRC numbers do not match the following
+list you may have a bad file.  To use type:  CRCK4 <filespec>
+ 
+CRCK4 output for this disk:
+ 
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  MENU    .BAS         CRC = 7A 64
+
+--> FILE:  AUTOEXEC.BAT         CRC = 00 00
+
+--> FILE:  11      .BAS         CRC = 0B 35
+
+--> FILE:  12      .BAS         CRC = 4D C4
+
+--> FILE:  0       .BAS         CRC = A7 80
+
+--> FILE:  2       .BAS         CRC = F9 15
+
+--> FILE:  3       .BAS         CRC = C1 7C
+
+--> FILE:  4       .BAS         CRC = AA 23
+
+--> FILE:  5       .BAS         CRC = B7 79
+
+--> FILE:  6       .BAS         CRC = 85 AE
+
+--> FILE:  7       .BAS         CRC = 47 14
+
+--> FILE:  8       .BAS         CRC = 8D B6
+
+--> FILE:  10      .BAS         CRC = 92 DC
+
+--> FILE:  15      .BAS         CRC = 94 43
+
+--> FILE:  9       .BAS         CRC = 9E 43
+
+--> FILE:  13      .BAS         CRC = 7A 61
+
+--> FILE:  BRIEFLY .BAS         CRC = 69 70
+
+--> FILE:  ACS     .PIC         CRC = B1 1E
+
+--> FILE:  1       .BAS         CRC = F1 80
+
+--> FILE:  GRADE-2 .LST         CRC = E4 F3
+
+--> FILE:  GRADE-3 .LST         CRC = 11 7B
+
+--> FILE:  17      .BAS         CRC = 5F 8E
+
+--> FILE:  GRADE-1 .LST         CRC = 78 9B
+
+--> FILE:  GRADE-4 .LST         CRC = 22 8F
+
+--> FILE:  14      .BAS         CRC = 79 40
+
+--> FILE:  16      .BAS         CRC = 5C B4
+
+--> FILE:  README  .DOC         CRC = 8B 6D
+
+--> FILE:  TITLE   .BAS         CRC = 70 DC
+
+--> FILE:  TITLE2  .BAS         CRC = 00 00
+
+--> FILE:  GRADE-5 .LST         CRC = 05 5A
+
+--> FILE:  20      .BAS         CRC = 21 5B
+
+ ---------------------> SUM OF CRCS = 27 6B
+
+DONE 
+ 
+These and other Public Domain and user-supported programs from:
+ 
+PC Software Interest Group (PC-SIG)
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 1 REM -------------------------------MENU----------------------------
 2 REM -----------------------------GARY WEST-------------------------
@@ -3379,9 +3511,62 @@ machines:
 540 GOSUB 200
 550 RESUME 60
 ```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+                     EDUCATIONAL PROGRAMS FOR THE IBM PCjr
+                           ALLENDALE COUNTY SCHOOLS
+                              ALLENDALE SC 29810
+      
+           If the SYS files and the COMMAND.COM file are not on this 
+      disk, you can start the programs by typing AUTOEXEC at the DOS 
+      prompt and pressing <ENTER>.  To make the disk self-booting, 
+      follow these instructions:
+      
+      (1) format a new disk using the FORMAT/S command; the "/S" will 
+      copy the SYS files and COMMAND.COM to your new disk after the 
+      formatting is completed;
+      
+      (2) copy each file on this disk to your new disk by using the
+      COPY A:*.* B: command; this disk should be disk A: and your newly 
+      formatted disk should be disk B:; you will have to swap disks 
+      several times (once for each file on this disk); put a write- 
+      protect tab on this disk before you begin to copy it; and
+      
+      (3) copy BASICA.COM from your DOS disk to your new disk by using 
+      the COPY A:BASICA.COM B: command, where the A: disk is your DOS 
+      disk and the B: disk is your newly formatted disk.
+      
+           The following files are necessary for the disk to function 
+      properly:
+      
+           AUTOEXEC.BAT      TITLE.BAS       ACS.PIC     BRIEFLY.BAS
+           TITLE2.BAS        MENU.BAS        0.BAS       1.BAS
+           2.BAS             3.BAS           4.BAS       5.BAS
+           6.BAS             7.BAS           8.BAS       9.BAS
+           10.BAS            11.BAS          12.BAS      13.BAS
+           14.BAS            15.BAS          16.BAS      17.BAS
+           20.BAS            GRADE-1.LST     GRADE-2.LST GRADE-3.LST
+           GRADE-4.LST       GRADE-5.LST     BASICA.COM
+
+           If the SYS files and the COMMAND.COM file are also on your 
+      disk, you can start it by simply putting the disk in the drive and 
+      turning on your jr or with the <CTRL>+<ALT>+<DEL> key combination 
+      (if your jr is already on).
+
+
+      
+      
+
+```
+{% endraw %}
 
 ## TITLE.BAS
 
+{% raw %}
 ```bas
 1 REM --TITLE--------------------------------------------
 5 KEY OFF
@@ -3397,9 +3582,11 @@ machines:
 49 FOR X=1 TO 1250:NEXT X
 50 RUN "BRIEFLY.BAS"
 ```
+{% endraw %}
 
 ## TITLE2.BAS
 
+{% raw %}
 ```bas
 10 CLEAR,,,65536.
 20 SCREEN 5:CLS
@@ -3408,6 +3595,7 @@ machines:
 50 FOR X=1 TO 2000:NEXT X
 60 SYSTEM
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

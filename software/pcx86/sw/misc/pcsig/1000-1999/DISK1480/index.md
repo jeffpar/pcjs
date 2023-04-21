@@ -70,6 +70,58 @@ machines:
     SUPPORT       Support information.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1480.TXT
+
+{% raw %}
+```
+Disk No: 1480
+Disk Title: QIP #4 (1477-1478-1479)
+PC-SIG Version: 1.1
+
+Program Title: QIP - The Quick Information Processor
+Author Version: 1.1
+Author Registration: None stated.
+Special Requirements: 500K free memory, hard disk drive.  286 or faster
+
+This is the fourth disk of a four disk set.  Please refer to disk
+#1477 for a full program description.
+
+File Descriptions:
+
+PKUNZIP  EXE  Unarchiving utility.
+QSYSTEM  V01  Contains system.
+SUPPORT       Support information.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+       ╔═══════════════════════════════════════════════════════╗
+       ║              >>>> Disk #1480  QIP <<<<                ║
+       ╟───────────────────────────────────────────────────────╢
+       ║                                                       ║
+       ║       To install program to hard drive,               ║
+       ║       install disk #1 and type: INSTALL C             ║
+       ║                                                       ║
+       ║       To print documentation insert disk #1           ║
+       ║       and type: COPY MANUAL.TXT PRN:                  ║
+       ║                                                       ║
+       ╚═══════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1480
 

@@ -14,6 +14,58 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILES758.TXT
+
+{% raw %}
+```
+Disk No   758
+Program name:  FRENCH VERB CONJUGATOR version 2.02
+PC-SIG version 1.2
+ 
+The FRENCH VERB CONJUGATOR lets you work on mastering your French verbs
+without the need of a partner.  The program is set up so that you may
+search for a specific verb (in English), and the matching verb (in
+French) will be highlighted.  You may also, with the flick of a key,
+change the tense of the verb from present to past, future, or any of the
+other five tenses.
+ 
+Usage:  Educational.
+ 
+Special Requirements:  None.
+ 
+How to Start:  Type GO (press enter).
+ 
+Suggested Registration:  $39.95
+ 
+File Descriptions:
+ 
+FRENVERB EXE  Main program.
+READ     ME   Documentation File.
+FRENCH   REF  Reference Data file.
+FRENCH   SUB  Reference Data file.
+FRENCH   CON  Data file.
+FRENCH   DAT  Data file.
+FRENCH   HLP  Help file.
+FRENCH   TNS  Data file.
+FRENCH   BAT  Batch file to start program.
+FRENCH   INF  Data file.
+FRENCH   INN  Data file.
+FRENCH   LST  Data file.
+REGISTER HLP  Help file.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0758
 

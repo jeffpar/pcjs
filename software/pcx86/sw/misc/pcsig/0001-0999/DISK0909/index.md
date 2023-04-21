@@ -40,6 +40,56 @@ machines:
     this description by up to 99 lines of 60 characters and spaces.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0909.TXT
+
+{% raw %}
+```
+Disk No:  909
+Program Title:  BILLING MANAGER 1 (Disk 1 of 2)
+PC-SIG version:  3
+
+This financial system helps you, the owner of a small business, with
+your client billing by providing current Accounts Receivable totals,
+past-due account aging, and present-maximum clarity in the clients'
+statements.  The program has a provision for adding state sales tax to
+taxable items billed to the client.  But the most unique features of
+DTIME KEEPER are recording billing time by the minute, the "Billing
+Notes" extension of the billing transaction description, multiple "Time
+Keepers" (employees), and automatic (recurrent) billing of standard
+monthly or quarterly charges to a client, such as a retainer or monthly
+or quarterly bookkeeping services.  DTIME KEEPER is completely
+menu-driven, and prompts you for all required entries.
+
+Please Note: This is the first disk of a two disk set.  The second half
+of the program is on disk #910.
+
+Usage:  Time and Billing Manager.
+
+Special Requirements:  400K RAM, one disk drive, hard disk, and a
+printer.
+
+How to Start: Type GO (press enter).
+
+Suggested Registration:  $29.00
+
+File Descriptions:
+
+BM1_BGIN BAT  Installation batch file.
+BM1_DSK1 EXE  Self-unarchiving file containing program files.
+BM1_READ ME   Start-up instructions.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0909
 

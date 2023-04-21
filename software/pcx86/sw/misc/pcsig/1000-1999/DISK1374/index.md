@@ -27,6 +27,46 @@ machines:
     eliminating manual data entry and math errors.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1374.TXT
+
+{% raw %}
+```
+Disk No: 1374
+Program Title: THE PRICEBOOK version 1.0 (Disk 2 of 2)
+PC-SIG version: 1
+
+The PRICEBOOK is a two disk set (#1373 & 1374), this disk contains the
+documentation for THE PRICEBOOK, for a full description of the program
+refer to disk #1373.
+
+Synopsis:  A centralized item pricing log for businesses with many items
+to track that also generates quotes, orders and invoices with pricing
+data automatically entered and calculated, eliminating manual errors.
+
+Usage:  Business/Inventory/Bookkeeping.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press Enter).
+
+Suggested Registration:  $99.95
+
+File Descriptions:
+
+PBDOC         Main program documentation.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale, CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1374
 

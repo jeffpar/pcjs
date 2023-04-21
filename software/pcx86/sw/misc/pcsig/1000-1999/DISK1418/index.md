@@ -37,6 +37,47 @@ machines:
     print function.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1418.TXT
+
+{% raw %}
+```
+Disk No: 1418                                                           
+Disk Title: Slide.PC                                                    
+PC-SIG Version: S2.0                                                    
+                                                                        
+Program Title: SLIDE.PC                                                 
+Author Version: 2.1                                                     
+Author Registration: $25.00                                             
+Special Requirements: 7/16" x 1 7/8" pin-fed labels and a dot matrix pri
+                                                                        
+SLIDE.PC gives shutterbugs an efficient way to print caption information
+on labels to identify slides and photos, and at the same time store the 
+information to disk for exporting to a database.                        
+                                                                        
+Besides the printed label information, the program lets you include tech
+notes and comments in the data file.  The data file format is compatible
+with Quattro, Lotus 1-2-3, dBase III, and several other popular         
+databases.  The data file can also be converted to ASCII text format to 
+export into any wordprocessor.  You can then print a complete catalog of
+your photo collection.  Because each slide entry takes up one long line,
+you need to use a wide carriage printer in condensed font, or a standard
+dot matrix printer using a sideways-printing utility.                   
+                                                                        
+The menu-driven program also prints 7/16" by 1-7/8" pin-feed labels.  A 
+thoughtful routine helps you line up the labels before you execute the  
+print function.                                                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1418
 

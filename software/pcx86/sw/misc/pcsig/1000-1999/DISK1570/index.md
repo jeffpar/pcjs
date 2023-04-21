@@ -42,6 +42,58 @@ machines:
     The work may already be done for you.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1570.TXT
+
+{% raw %}
+```
+Disk No: 1570                                                           
+Disk Title: Pen Pal                                                     
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Pen Pal                                                  
+Author Version: 1.01                                                    
+Author Registration: $25.00                                             
+Special Requirements: 512K free RAM.                                    
+                                                                        
+Is it a mailmerging text editor that works great as an address          
+manager?  Or is it a super address manager for business or personal use 
+that also automates mass correspondence?  Or is it the perfect printing 
+utility that lets you print Rolodex cards, envelopes, labels, and more a
+from the same program?  It is all of these things and none the worse for
+being so versatile.                                                     
+                                                                        
+With PEN PAL you don't have to worry about getting your wordprocessor to
+talk to your database and vice versa.  This is a truly integrated system
+that takes out the middleman.  Even the ambitious beginner can be mass  
+producing letters the first time through the program.  You will find    
+features that help you improve your correspondence, such as the ability 
+customize the salutation for each individual in your database.  It is   
+completely menu-driven for fast effective use and the screen design is  
+easy to follow.  You can save up to 99 different letters on file for    
+future editing and use.  The program even supports common database      
+format for easy data exchange into other program should you need them.  
+                                                                        
+Before you go to all the trouble of building a database/wordprocessing  
+system and configuring it all for custom printing, consider PEN PAL.    
+The work may already be done for you.                                   
+                                                                        
+File Descriptions:                                                      
+                                                                        
+PENPAL   DOC  Documentation file that explains all commands and features
+PENPAL   EXE  Self-configuring program file.                            
+README   1ST  Brief and easy installation tips.                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1988 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1570
 

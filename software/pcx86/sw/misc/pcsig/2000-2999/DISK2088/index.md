@@ -32,6 +32,46 @@ machines:
     day.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2088.TXT
+
+{% raw %}
+```
+Disk No: 2088                                                           
+Disk Title: 20th Century FARO                                           
+PC-SIG Version: 1                                                       
+                                                                        
+Program Title: 20th Century FARO                                        
+Author Version: 8/89                                                    
+Author Registration: $15.00                                             
+Special Requirements: CGA.                                              
+                                                                        
+Play the oldest gambling card game in the world. 20TH CENTURY FARO is   
+the only Faro simulation game around.  All bets which could be placed in
+the casino game are emulated in this program for one player.  Play this 
+game of luck against the computer without traveling to a casino or      
+betting a dime.                                                         
+                                                                        
+The casekeeper is displayed in the same way as it would appear in a     
+casino.  All bets are paid and money is tracked by the program.  A      
+'Farobank' is established to give players an incentive to win. 20TH     
+CENTURY FARO keeps track of all money lost by, or paid to players over  
+their initial stake.  It is the house that, as usual, acquires more     
+money than is paid out.  Another touch of realism.                      
+                                                                        
+If you enjoy casino games such as Roulette or Wheel of Fortune, you'll  
+enjoy this fast-moving card game.                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2088
 

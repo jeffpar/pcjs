@@ -28,6 +28,38 @@ machines:
     this program great for home use.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1966.TXT
+
+{% raw %}
+```
+Disk No: 1966                                                           
+Disk Title: Cash Control                                                
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: Cash Control                                             
+Author Version: 1.2S                                                    
+Author Registration: $29.95 (US), $34.95 (Canadian)                     
+Special Requirements: 320 K RAM                                         
+                                                                        
+CASH CONTROL simplifies your home financial records by managing your    
+accounts in the same manner as your standard checkbook register.  You   
+can enter transactions from checking, savings or charge accounts,       
+balance your account with your bank statement, remind yourself when     
+payments are due, and prepare reports based on your recorded            
+transactions.  An easy to follow interface and good documentation make  
+this program great for home use.                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1966
 

@@ -32,6 +32,41 @@ machines:
     disk guide.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1512.TXT
+
+{% raw %}
+```
+Disk No: 1512                                                           
+Disk Title: Mark Record Plus 1 of 2 (also 2310)                         
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: Mark Record Plus                                         
+Author Version: 2.82                                                    
+Author Registration: $20.00                                             
+Special Requirements: Printer.                                          
+                                                                        
+MARK RECORD PLUS allows teachers to harness the power of their PCs to   
+avoid much of the drudgery involved in keeping and calculating their    
+students' marks.                                                        
+                                                                        
+MARK RECORD PLUS can handle up to 50 students per course and up to 50   
+grades per student.  Reports can be generated using either the students'
+real names or their aliases (for privacy).  Any combination of reports  
+such as student ranking, weighted marks, and distribution curves can be 
+printed or saved to disk.  The teacher easily can generate bar graphs   
+for visual representations.  Includes 17 page on-disk guide.            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1512
 

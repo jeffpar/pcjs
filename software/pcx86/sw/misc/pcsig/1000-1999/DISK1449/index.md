@@ -39,6 +39,49 @@ machines:
     computer at home.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1449.TXT
+
+{% raw %}
+```
+Disk No: 1449                                                           
+Disk Title: EZK-Quizzer (formerly PC-Quizzer)                           
+PC-SIG Version: S2.1                                                    
+                                                                        
+Program Title: EZK-Quizzer                                              
+Author Version: 3.0                                                     
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+Since 1800, who are the only two brothers who have served in the Senate 
+at the same time?  What is a hematophagouse?  What was the first X-rated
+film to win the Best Picture Oscar award?  What building is on the back 
+of the five dollar bill?  Who cares?  PC-QUIZZER does!                  
+                                                                        
+PC-QUIZZER is a computer trivia game that uses various subjects to get  
+its questions.  Before answering a question, you are asked what category
+tickles your fancy and then you must answer the question before time    
+runs out.  The categories range from television to mathematics, sports  
+to history, and a potluck category where you never know what type of    
+question will pop up.  There are three rounds of questions and each     
+round gets harder, so the points given when you answer a question       
+correctly get higher also.  After the first round, you can start to wage
+your points against the computer so hopefully by the end of the third   
+round you have enough points to be in the Hall of Fame.                 
+                                                                        
+By the way, this program is so good I hear Alex Trubeck has it on his   
+computer at home.                                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1449
 

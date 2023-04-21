@@ -36,6 +36,46 @@ machines:
     code to add personal touches to PBWINDOWS.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2182.TXT
+
+{% raw %}
+```
+Disk No: 2182                                                           
+Disk Title: PBWindows                                                   
+PC-SIG Version: S2.10                                                   
+                                                                        
+Program Title: PBWindows                                                
+Author Version: 2.10                                                    
+Author Registration: $25.00                                             
+Special Requirements: Power Basic program, V2.10.                       
+                                                                        
+PBWINDOWS is a wonderful windowing utility for users of Spectra         
+Publishing's PowerBASIC.  Just include PBWINDOW.INC into your program   
+and start creating all types of windows and menus.                      
+                                                                        
+With PBWINDOWS, you can create any size window with a variety of        
+colors.  Add titles and shadows to your window and you have an enviable 
+display screen.  Make menus with a variety of selection options:        
+scrolling, non-scrolling, arrowed, single-key selection.  And when      
+you're finished, pop the windows off the screen with RemoveBox and      
+you're back where you began.                                            
+                                                                        
+PBWINDOWS comes with easy-to-read documentation.  Programming           
+with PBWINDOWS is simple and gives your display screen that             
+professional look.  Registered users receive additional source          
+code to add personnal touches to PBWINDOWS.                             
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2182
 

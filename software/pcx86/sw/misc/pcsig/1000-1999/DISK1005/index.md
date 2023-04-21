@@ -26,6 +26,80 @@ machines:
     experiences you might have had with the person/institution.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1005.TXT
+
+{% raw %}
+```
+Disk No: 1005
+Program Title:  APPLY
+PC-SIG version: 1.1
+
+APPLY helps you keep track of the applications (for jobs, grants,
+contests, etc.) you have sent out.  APPLY stores the relevant data and
+merges it with text files which you create.  It orders dossiers and
+prints your letters, resumes, and envelopes.  APPLY also keeps track of
+any past experiences you may have had with the person/institution before
+you try again.
+
+Usage:  Applicant Database.
+
+Special Requirements:  A printer, SORT.EXE and FIND.EXE from your DOS
+diskette.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $10.00
+
+File Descriptions:
+
+APPLY    EXE  Main program.
+AUTOEXEC BAT  Batch file to automatically start the program.
+MANUAL   APP  Manual for APPLY.
+MANUAL   ASC  Manual for PRINTASC.
+PARA     APP  Data file.
+PARA     ASC  Data file.
+PMANUALS BAT  Batch file to print the documentation.
+PRINTASC EXE  Program to print the documentation.
+APPLY    MM   Data file.
+END      MM   Data file.
+HEAD     MM   Data file.
+WSMODEL  MM   Data file.
+PROFESS       Data file.
+UNWS     DOC  Documentation for un-Wordstar program.
+UNWS     EXE  Un-Wordstar program.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## UNWS.DOC
+
+{% raw %}
+```
+UNWS converts text files into pure ASCII format.  
+
+To use UNWS, at the MS-DOS prompt, type 
+
+		UNWS <>.  
+
+The program will prompt you to name the input and the output file names.  
+
+The input file must have an extension or the program will abort.  The program 
+does not require your output file name to have an extension.
+
+Gene Plantz created UNWS and put it in the public domain.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1005
 

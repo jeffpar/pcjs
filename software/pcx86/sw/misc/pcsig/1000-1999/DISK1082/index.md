@@ -32,6 +32,78 @@ machines:
     installations, and 11 pages of understandable documentation.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1082.TXT
+
+{% raw %}
+```
+Disk No: 1082                                                           
+Disk Title: Easy Project                                                
+PC-SIG Version: S1.5                                                    
+                                                                        
+Program Title: Easy Project                                             
+Author Version: 3.62                                                    
+Author Registration: $49.00                                             
+Special Requirements: 512K RAM and two floppy drives.                   
+                                                                        
+For the office manager on the go, EASY PROJECT is a comprehensive       
+project management, tracking, and controlling system.  Context-sensitive
+help screens are a standard feature of this menu-driven package, and the
+files it creates are compatible with dBase III.                         
+                                                                        
+EASY PROJECT supports up to 20 user-defined project phases and an       
+unlimited number of resources.  It uses variable-scale Gantt charts to  
+show planned-versus-actual dates of completion, and has extensive       
+reporting abilities.  It has two automatic installation programs, which 
+simplify the setup process for either hard disk or dual floppy disk     
+installations, and 11 pages of understandable documentation.            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## VENDOR.DOC
+
+{% raw %}
+```
+
+
+
+        ATTENTION DISK VENDORS!
+
+        Any disk vendor who is a member in good standing of the
+        Association of Shareware Professionals (ASP) may distribute
+        Easy Project in accordance with our license agreement contained
+        in the EP.DOC file.
+
+        Vendors that are NOT members of the ASP, must ask for written
+        permission from Parcell Software BEFORE distributing.  Please send
+        a current catalog when requesting permission.
+
+        In all cases, the following must be followed when distributing
+        Easy Project:
+
+        1.  That the EASY PROJECT disk will be distributed in whole
+        and unmodified in anyway.
+
+        2)  That the disk you sell is not sold for more than $10.00
+
+        3)  The Shareware concept is explained in a clear manner
+
+        4)   That you will promptly update your inventory when a new
+        release of EASY PROJECT is sent.
+
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1082
 

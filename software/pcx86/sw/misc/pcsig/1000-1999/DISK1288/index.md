@@ -65,6 +65,53 @@ machines:
     included. Works great with or without a mouse.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1288.TXT
+
+{% raw %}
+```
+Disk No: 1288
+Program Title:  ZOOMRACKS
+PC-SIG version: 1
+
+This is the second disk of the ZOOMRACKS package which contains a
+tutorial on how to run the program.  This disk contains various racks
+which can be used by the main program.  You need disk #1287 to use this
+disk.
+
+Usage:  Database/General Multiuse Computing Platform.
+
+Special Requirements:  384K memory.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $89.95
+
+File Descriptions:
+
+ZR       EXE  Main program file to start ZOOMRACKS.
+F1HELP   ZRX  A rack of help for use within ZOOMRACKS.
+KEYHELP  ZRX  More help in the form of a rack.
+MACDEMO  ZRX  A rack of macros to be loaded for use with QDEMO.
+PCSIG    ZRX  A rack with program information.
+QCHECKS  ZRX  A sample rack of checkbook entries.
+QDEMO    ZBK  File used with ZRX.
+QDEMO    ZRX  A rack to demonstrate the capabilities of ZOOMRACKS.
+QFORMS   ZRX  A sample rack of output formats from ZOOMRACKS.
+QINVOICE ZRX  A sample rack of invoices.
+QLETTERS ZRX  A sample rack of letters.
+QNAMES   ZRX  A sample rack of names and addresses.
+
+PC-SIG
+1030D E. Duane Avenue
+Sunnyvale, CA 94086
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1288
 

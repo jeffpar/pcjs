@@ -14,6 +14,39 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2645.TXT
+
+{% raw %}
+```
+Disk No: 2645                                                           
+Disk Title: The Animated Memory Game                                    
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: The Animated Memory Game                                 
+Author Version: 1.0                                                     
+Author Registration: $6.00                                              
+Special Requirements: 640K RAM, EGA or VGA, and hard drive.  Mouse optio
+                                                                        
+A new twist on an old favorite, THE ANIMATED MEMORY GAME uses animated  
+pictures to test memory skills. Match pairs of hidden pictures to get   
+colorful animated rewards and eventually win the game.                  
+                                                                        
+Options include selecting from 14 different tile patterns, changing the 
+background color, and even a mini-movie theater. Various difficulty     
+levels challenge all ages including adults! Supports both a keyboard and
+mouse.                                                                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2645
 

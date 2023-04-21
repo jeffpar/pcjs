@@ -74,6 +74,104 @@ machines:
     XSTITCH  ZRX  List of books with cross-stitch patterns.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1290.TXT
+
+{% raw %}
+```
+Disk No: 1290
+Disk Title:  HOME STARTER KIT for ZOOMRACKS
+PC-SIG version: 1.1
+
+Get rid of those manilla envelopes and those shoe boxes full of old
+records, this Home Starter Kit for ZOOMRACKS lets you put all your home
+management paperwork on a computer painlessly.
+
+ZOOMRACKS, the program selected as the best database for 1989 by
+Compute!  Magazine, uses a revolutionary but simple "cards-and-racks"
+approach to data management that will let you harness the power of
+computing without complicating your life.
+
+This collection of 35 templates, 35 output forms for printing, and 2
+macros, works within ZOOMRACKS to help you:
+
+Find phone numbers, keep track of birthdays, document warrantees,
+service and partsf information about your appliances or car repairs,
+keep track of appointments and things to do, record what was said in
+important phone calls, how much did you make, and how much is left,
+where that favorite recipe is, find that clipping you saved, notes of
+your letters and who wrote last?
+
+What book had the pattern with the owl, what coupons can you use, record
+your family's medical history, what's in the freezer and where, know
+what both you and they gave last year, did we loan someone that ?, where
+did we store that ?, insurance records in case of theft, note the
+dividends and expenses for tax records, keep track of sicknesses,
+catalog your tapes, print shopping lists, renew your subscriptions only
+when they expire, and much more.
+
+All templates can be changed to best serve your particular needs.  You
+will need ZOOMRACKS described in the BUSINESS section to run the HOME
+STARTER KIT.
+
+Usage:  Home Management.
+
+Special Requirements:  The ZOOMRACKS program on disk #1287.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  None.
+
+File Descriptions:
+
+APLIANCE ZRX  Appliance records.
+BOOKS    ZRX  Library of books.
+CALENDAR ZRX  Daily Calendar of appointments, events, and things.
+CALLREC  ZRX  Record of phone calls and what said.
+CAMPEQP  ZRX  Used to list camping equipment.
+CANNING  ZRX  List of home canned items, recipes, inventory.
+CKBKINDX ZRX  Index to recipes in cookbooks.
+CLIPPING ZRX  List of Magazine and newspaper clippings and location.
+CLOTHSIZ ZRX  Keep track of people's clothes sizes and styles.
+CORRSPND ZRX  Keep track of letters sent and received.
+COUPON   ZRX  List of Grocery Coupons.
+CRDTCRDS ZRX  List of Credit cards for limits and stolen.
+DISKINDX ZRX  Index of Atari Disks.
+EATERIES ZRX  Where to go for dinner?  search and sort.  Comments.
+FAMCNTRT ZRX  Record Family contracts and agreements.
+FAMHLTH  ZRX  Keep information on illnesses, vaccinations, sickness.
+FRZRINVT ZRX  Keep freezer/ refrigerator inventory.
+GIFTS    ZRX  Record of gifts given and received.
+HCHECKS  ZRX  Used to balance checkbook and keep track of expense.
+HFORMS   ZRX  Rack of output forms for use with Home starter pack.
+HNAME    ZRX  Names Addresses, phone numbers, christmas cards, etc.
+HOMEINV  ZRX  Home inventory records for insurance purposes.
+HOMKIT   ZRX  List of all the racks on this disk.
+IMPDATES ZRX  List important dates in date order.
+INVEST   ZRX  Keep track of stock investments.
+ITEMLOAN ZRX  Record Items loaned.
+LOCATOR  ZRX  List of locations of things (and who took them).
+PETS     ZRX  Keeps updated on health information.
+PRESCRIP ZRX  Keep of prescriptions for family members.
+RECIPES  ZRX  Recipe card file.
+RECORDS  ZRX  Phonograph records catalog.
+SHOPPING ZRX  Shopping List.
+SOURCES  ZRX  Keep track of information sources on subjects of interest.
+SUBSCRIP ZRX  List of subscriptions and expiration date.
+USINGZR  ZRX  Rack of hints and suggestions on Using Zoomracks.
+XSTITCH  ZRX  List of books with cross stitch patterns.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1290
 

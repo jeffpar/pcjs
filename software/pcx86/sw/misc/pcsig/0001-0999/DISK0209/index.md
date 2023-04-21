@@ -43,8 +43,54 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #209, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  JUMPJOE2.DOC         CRC = 20 1B
+
+--> FILE:  JUMPJOE2.EXE         CRC = 46 F2
+
+--> FILE:  DATNOIDS.BAS         CRC = 8E A5
+
+--> FILE:  NUKE-NY .BAS         CRC = 72 B2
+
+--> FILE:  HS      .DAT         CRC = B1 88
+
+--> FILE:  XXX     .            CRC = C4 A5
+
+--> FILE:  CRC     .TXT         CRC = F0 BF
+
+--> FILE:  CRCK4   .COM         CRC = BD 22
+
+ ---------------------> SUM OF CRCS = 8C 72
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## DATNOIDS.BAS
 
+{% raw %}
 ```bas
 5 REM DATNOIDS Copyright (c) 1982 By Casey Roche
 10 KEY OFF:WIDTH 80:COLOR 0,1,0:CLS:PLAY"mb":COLOR 4,0:LOCATE 24,1:PRINT" "+STRING$(78,219):SOUND 1000,1:PRINT" ░░░░░░      ░░░░    ░░░░░░░░  ░░   ░░    ░░░░░░   ░░░░░░░░  ░░░░░░      ░░░░░":SOUND 2000,1
@@ -308,9 +354,281 @@ machines:
 9300 CLS:IF LEV$="1"THEN SK=INT(SK-(SK/2)):IF SK<1 THEN SK=1
 9310 GOTO 470
 ```
+{% endraw %}
+
+## JUMPJOE2.DOC
+
+{% raw %}
+```
+			   FINDING EVERYTHING IN JUMPJOE
+			   _____________________________
+
+
+	This file will give you MOST of the solutions to the Game
+JUMPJOE2.EXE, which was written by Kevin Bales.  
+
+	First, I will talk about the different levels.  Level 1 is
+obviously the easiest.  You should have very little problems
+completeing this, but there is one skill you should know that I
+find works rather well on Level 1, but not so well as you
++rogress.  I don't know exactly why this works, but I think it is
+due to the fact that the program looks for a white space for JOE
+to land on.  When you near robots, and you are having problems
+jumping them, try this.  Jump and hold down the space bar UNTIL
+you have landed on the ground again.  This, for some reason, may
+cause you to `bounce' off the robots head if you fall short on
+the jump.  Once you hit the ground again, release the space bar
+(Or the button if you are using a joystick) IMMEDIATELY.  If you
+hold it down too long, JOE may jump again when he hits the
+ground.  And, if you are on a Level other than 1, this will
+usually give the robots time to catch up with you, meaning death.
+Also, I have found that there is only one robot you MUST jump to
+complete all 5 stations.  The one robot is the lowest robot (the
+one nearest the ground) on Station 1.  This, of course is the
+first robot you will encounter.
+
+	The second Station (The Slides) is one of the more difficult
+ones to find all the easy routes on.  If you are on Level 1, it
+isn't extremely difficult, but it gets harder if you are on Level
+4 or 5.  To get by this Station, you do NOT have to jump the
+robot on the island near the bottom center of the screen.  All
+you have to do is jump on the island he is on when he is at the
+opposite end.  Then, quickly run to the center and go down the
+slide.  This will put you on a smaller island below the one with
+the robot.  From here jump to the left.  Move JOE using the 1 key
+until the middle of his body is directly under the right leg of
+the ladder.  From here, he won't fall down the slide on his left.
+If you move any closer though, he will fall, and so you will have
+to do it all over again.  Once up the ladder, it is relatively
+easy.  Continue until you are up to the island in the top left
+hand corner.  To get this key quickly, wait until the robot gets
+to the very left of the island.  Then dodge up and to the right.
+Go down and grab the key then use the right ladder to go down.
+From this island (the one right below the top one) you use the
+slide to go down and get the next key.  But, don't be lax.
+Immediately after using the slid, press the 2 (down) key, so that
+JOe won't continue to the right.  If you aren't near the extreme
+left of this island, use the 1 key to get there.  Now, jump to
+the right.  You should be near the extreme left now.  Time you
+run so that when you get the key, and fall down the middle slide,
+you won't hit the robot below.  After getting the key, let JOE
+continue and he fall down the slide and (if you have timed it
+correctly) he won't hit the robot.  He will pass the first island
+(with the robot) and will continue down to the next one.  From
+here jump left and go down the slide.  Then go back to the right
+and continue up the ladder.  From here jump to the right from the
+point directly above the ladder.  You should be able to get the
+key on this island by using the 1 key to move to the right.  Once
+you have the key, jump back to the left and then take a running
+jump and jump from the extreme right of the island.  This will
+put you past the slide in the island to the right.  From here,
+continue over and up until you get to the island where the robot
+is.  Wait for the robot to go all the way down to the left of
+this island, then go up and left and down the slide, all in one
+move.  Watch that JOE isn't moving either way when you get to the
+bottom of the slide by pressing 2.  Then just go left and get the
+key.  
+
+	Station 3 (The Elevators) is one of the easier ones once you
+learn how to use the elevators.  They are rather difficult to
+use, because must center yourself everytime.  The elevator on the
+right side is an up elevator as is the one on the left.  The one
+in the middle is a down elevator.  To use an up elevator, move
+JOE until he is below it, then stop him using the 2 key.  From
+here, jump and JOE will move upwards.  To get off, you move JOE
+either left or right, depending on which way the platforms are.
+Watch it, because if you get off and you are too high up for the
+particular platform you want to use, you will die.  To get on an
+elevator fomr a platform it is a little more difficult.  Move JOE
+onto the elelvator like you were moving across a platform.  Then,
+once he is moving up and is in the middle of the elevator, press
+2, so that he will stay put and won't continue all the way across
+and out the other side.  To finish this station, if you make sure
+of getting all the key on the right hand side first, it makes it
+much more easy.  Then, simply use the center elevator to go all
+the way down to the first platform, and go right.  Let JOE go all
+the way across the left elevator, and drop on the platform to the
+left.  Then from this platform, jump left and get the key.  Jump
+right and continue up on the elevator, but make sure you don't
+get off prematurely, else you perish.  Continue collecting the
+rest of the keys.
+
+	Station 4 (The Invisible Ladders) I find to be the most
+difficult of all.  First, let me tell you where the invisible
+ladders are.  One of them extends from ground level to the
+island near the right hand side of the screen with the key on it.
+To use it, simply do as you would for a regular ladder.  It may
+seem difficult to find at first, but just keep moving left and
+right with the 1 and 3 keys and you will find it.  The other
+ladder extends from the very leftmost tiny island to the larger
+one near the top (not at the very top), which has a key on it.
+This is on the right side of the screen also.  This one is also
+difficult to find, but you should be able to find it.  To
+complete this station, get the key on the tiny platform with the
+invisible ladder first.  Jump off the platform while running to
+the left.  This will put JOE near the ladder you have to use to
+get up to the rest of the screen.  Go up this ladder, and go
+left.  Get the key that is on the mid-size island on the right
+hand side of the screen near the top.  Move all teh way across
+the top of the screen and get the key on the right side of the
+screen at the top.  There is one dangerous jump on the way.  It
+is the one between the two large platforms at the top of the
+screen.  It is a possible jump, although difficult.  After
+getting the key, go down the ladder near you.  Time it so that
+the robot will be on the right of you when you get to the bottom.
+From here, go left.  And then go down when you get to the next
+ladder.  Make sure that the robot is way down at the right hand
+side, else he will catch up with you.  Then, go left and get the
+next key.  You have to make it back to the ladder that goes down
+though, so watch out for the robot.  Go down when you get to the
+ladder.  Then, you should be able to get the key that is at the
+bottom of the screen on the mid-right.  Watch that you don't
+over-jump the little islands.  Once you have gotten this key, go
+back up, and then go over to where the remaining key is.  It is
+on a little platform to the right of the big platform.  Take the
+jump, pick up the key and continue to the island on the right.
+From here go down.  Then from this little platform, go right.
+Search for the hidden ladder using the 1 and 3 keys (remember you
+have to use 2 to go up it).  At the top is the last key.  This
+station takes the longest, so don't be surprised when you only
+get 500 or so bonus points.  I haven't figured out a better way
+of doing it, and if you can, I'd be more than happy to hear about
+it.  
+
+	The last station (The Movers) is relatively simple.  The
+movers won't fling you off, so don't worry about that.  To begin,
+climb up to the first robot.  Watch the jump over to the little
+island though, its a longer than usual one.  Once there, wait
+until the robot goes all the way to the left, then follow him
+and go up when you get to the ladder, go up it.  From here, pick
+up the key, and go up the next ladder.  Jump to the mover, but be
+careful not to overjump it.  It will take you across.  To
+continue, jump off of it to the right. Don't try walking off the
+movers, you will fall off and die.  Then, once on the island, go
+halfway down the ladder and stop by using either the 4 or 6 key.
+Wait until the robot below has moved all the way to the left, and
+then go down and to the right as quickly as possible.  From here
+continue right over the little islands, and get the key at the
+top left hand side.  Then, go back down the ladder, but watch out
+when you jump to the little island from the bigger one.  You will
+continue left and fall off if you don't either hit the 2 key or
+jump right away again.  After getting to the little island before
+the one with the robot, it is possible to jump to the ramped one
+from here, although very risky.  Rather than risk this, you
+should wait until the robot goes all the way to the left again,
+then jump to his island, then drop off it to the right.  This
+will put you on the ramped one.  From the ramped one, just drop
+to the next mover.  From the mover, time it so that you can land
+on the little island with the ladder when you walk off.  From
+this island, jump left.  Then walk off this island to the left.
+You will fall on another little one.  Fall left again.  Then jump
+left, and go down the ladder.  From the next island, jump left
+and fall left from the next one.  Once you are on the mover, just
+go all the way across.  Go up the little ladder and get the key.
+Come back down and jump right.  Go up the long ladder, and
+jump back on to the mover you used to get there.  If it doesn't
+move at first, use the 3 key and move to the right.  Then, on the
+right side, jump to the little island.  From here use the ladder
+and go down.  Then fall left and right.  Then just go right and
+get the last key.  This is one of the quickest stations, and will
+earn you lots of bonus points.  
+
+After the last station, there will be an intermission.  The
+nature of it will depend on what level you have completed.  I am
+not going to tell you any more about it, because you have to see
+them yourself.  
+
+
+
+				   A FEW MORE UNKNOWNS
+
+	The "Special Room" can be found on station 1.  To get into
+it, you have to go to the extreme right of the screen while at
+ground level.  Jump up, and soon a ladder and island will appear.
+Climb the ladder and go right.  You are now in the "Special
+Room", and completeing it is rather simple.  This is where you
+really get the points.  And the JOES for that matter.  
+
+	To start the game at any level (this is revealed in the
+"Special Room"), all you have to do is type "JOEn" at the menu
+where it gives you all the game commands (the one that is boxed
+in and is displayed after each game).  Then just hit "P" and the
+level you want.  The n in JOEn should be the number of the
+station you want to begin at.  This is good for easily clearing
+station 5 on all 5 levels to see all the intermissions.  
+
+
+					  THE ROBOTS
+
+Level 1: The robots always follow a predicted pattern in level 1.
+They will go from one end of an island to the other and back
+again.  This makes their paths extremely predictable.
+Level 2: The robots will chase you.  Once they see you they will
+travel towards you.  This makes jumping them a little more
+difficult.  Stay out of there sight by keeping your neck just
+below ladder/island levels.  After jumping one, move away, else
+he will turn around and pounce on you.
+Level 3: Robots will shoot.  They will not turn around and follow
+you until after they have shot.  Robots always pause movement for
+a tiny bit before shooting, so try and jump during this period so
+you will be in the air during there shots.  
+Level 4: Robots move twice as fast, but won't shoot, otherwise
+this is the same as level 2.
+Level 5: Robots move twice as fast, and shoot, making this like
+level 3, but nearly impossible.  Good luck with all 5 stations here.
+
+	The game continues with level 5 again and again after
+completing it.  
+
+
+				    ACKNOWLEDGEMENTS
+
+
+This game was written by Kevin Bales, 16 years old, using BASIC.
+It was then compiled.  This makes up for lost speed.  My thanks
+to Kevin for putting it in the Public Domain.  Kevin should have
+put a "beg screen" as he calls it, in the game, but he only 
+thought of this afterwards.  Kevin lives somewhere in Georgia,
+and he would probably love to hear some feedback from the users,
+and since his phone number is in the game, why not call him?  I
+did, but none of the material contained here was derived from our
+conversation.  I don't think he knows I did this, and I hope he's
+not angry.  Also, I invite all of you to try Kevin's second
+Public Domain game CASTLE.EXE.  This is a graphic adventure, and
+I think the best public domain program available.  It requires
+the CASTLE.RAN file to run it.  (It's not the type of graphics
+adventure you're probably thinking about, you have this little
+guy you move around on the screen, and you can also type in
+commands, too.)
+
+	Thanks, Kevin!
+
+										
+All information contained in this text was obtained and compiled by me.
+Tim McClarren
+1235 Casa Solana
+Wheaton, IL  60187
+312-682-3062 (voice); 312-682-1786 (data)
+For a copy of both games, call the XTBBS in Georgia at
+404-396-2078.  They have all the necessary information, and an
+address for mailing if you want a copy of JUMPJOE or CASTLE and
+don't want to download.
+
+NOTE:  The old version of JUMPJOE had a bug in the Elevator
+station.  If this is occuring on your copy, look for a new one on
+the above board or wherever you can find it.  It SHOULD be called
+JUMPJOE2.EXE.  Other than fixing the bug, this version is exactly
+the same with the exception of the titlepage.  Also, Kevin has
+told me that a sequeal should be available soon, but he wants
+input on what you people want.  So call him!  Pending name: JUMPJIM.EXE
+LOOK FOR IT!
+
+```
+{% endraw %}
 
 ## NUKE-NY.BAS
 
+{% raw %}
 ```bas
 
 10 REM-Nuclear attack simulator
@@ -701,6 +1019,7 @@ machines:
 
 
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

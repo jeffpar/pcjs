@@ -44,6 +44,56 @@ machines:
     README        Listing of included files
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #103, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  ALCATRAZ.BBS         CRC = 80 3C
+
+--> FILE:  CS-BUS  .            CRC = AE 96
+
+--> FILE:  CS-INSTR.            CRC = 00 78
+
+--> FILE:  CS-POST .            CRC = B0 C5
+
+--> FILE:  CS-PRO  .            CRC = AD 90
+
+--> FILE:  CS-TRAVL.            CRC = 3D 34
+
+--> FILE:  EMC80   .BBS         CRC = EE 94
+
+--> FILE:  MIDWEST .BBS         CRC = 90 38
+
+--> FILE:  README  .            CRC = DA 22
+
+ ---------------------> SUM OF CRCS = 23 C1
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0103
 

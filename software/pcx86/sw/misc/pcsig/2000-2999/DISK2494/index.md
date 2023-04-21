@@ -14,6 +14,42 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2494.TXT
+
+{% raw %}
+```
+Disk No: 2494                                                           
+Disk Title: EZX-WORD                                                    
+PC-SIG Version: S1.5                                                    
+                                                                        
+Program Title: EZX-Word                                                 
+Author Version: W30                                                     
+Author Registration: $49.00                                             
+Special Requirements: None.                                             
+                                                                        
+EZX-WORD is a full-function word processor that takes less 100K of      
+memory -- it's perfect for laptops!  EZX-WORD includes common-sense,    
+pull-down menus to help most users get "up and running" in minutes.  It 
+includes all the standard features like multiple windows, on-line help, 
+headers/footers, search and replace, pagination, undo, adjustable       
+margins, block commands, a spell checker, and much more.                
+                                                                        
+EZX-WORD doesn't have any program documentation -- but with the plain   
+English menus and on-line help, most users won't need any.  It supports 
+most popular printers and 43/50 line EGA/VGA displays.  Also great for  
+single drive computers.                                                 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2494
 

@@ -42,6 +42,65 @@ machines:
     computers with ADA compilers -- even on mainframes.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1529.TXT
+
+{% raw %}
+```
+Disk No: 1529
+Program Title: ADA-TUTR
+PC-SIG version 1
+
+ADA-TUTR, the interactive Ada tutor, will teach you to be an excellent
+Ada programmer in minimum time.
+
+Ada is an ideal programming language, because Ada programs tend to have
+fewer errors, to be easier to read, and to be much easier to modify
+later.  The U.S.  Department of Defense mandated the use of Ada in
+mission-critical systems (DoD Directive 3405.2, 1987).
+
+Not just a "quiz," ADA-TUTR is a thorough course of interactive
+instruction that even checks "homework" assignments.  ADA-TUTR
+concentrates on teaching good program design, not just syntax, so that
+programs will take advantage of the features of Ada that make them more
+reliable and easier to maintain.  ADA-TUTR was written by John J. Herro,
+Ph.D., who taught a graduate course in Ada at the State University of
+New York at Binghamton, and taught Ada to employees of General Electric
+Co. and Grumman Aerospace Corp.
+
+When ADA-TUTR is run on a PC, an Ada compiler is helpful, but not
+required.  A list of Ada compilers available for the PC is included.
+Since ADA-TUTR comes with Ada source code, it will run on other
+computers with Ada compilers---even on mainframes.
+
+Synopsis: Learn this ideal programming language in a minimum amount of
+time.
+
+Usage:  Programming/Ada Tutorial/Educational.
+
+Special Requirements:  A hard disk or 3-1/2 disk.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $25.00
+
+Author:  John J. Herro, Software Innovations Technology
+
+File Descriptions:
+
+INSTALL  EXE  Installation program that creates the needed files.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1529
 

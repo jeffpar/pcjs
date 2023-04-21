@@ -14,6 +14,35 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2779.TXT
+
+{% raw %}
+```
+Disk No: 2779
+Disk Title: 1000 Icons for Windows & LICO
+PC-SIG Version: S1
+
+Program Title: 1000 Icons for Windows
+Author Version: 7/91
+Author Registration: None.
+Special Requirements: Windows.
+
+What can be said about 1000 ICONS for Windows? If you want a full color
+icon for a particular application, you will probably find it here.
+Icons for hundreds of popular applications, games, utilities,
+and hardware are contained on this disk.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2779
 

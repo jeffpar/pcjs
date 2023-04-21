@@ -40,8 +40,52 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #25, version v1.1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  FINANCE .BAS         CRC = 7A F8
+
+--> FILE:  KALCOL  .BAS         CRC = 97 27
+
+--> FILE:  PRLIST  .BAS         CRC = 46 8D
+
+--> FILE:  GROWTH  .BAS         CRC = 71 00
+
+--> FILE:  REPORTS .BAS         CRC = 8F 51
+
+--> FILE:  FINANCE1.BAS         CRC = CF D8
+
+--> FILE:  GROWTH1 .BAS         CRC = 26 31
+
+ ---------------------> SUM OF CRCS = 4F 06
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## FINANCE.BAS
 
+{% raw %}
 ```bas
 5 REM * PUBLIC DOMAIN SOFTWARE *
 10 COLOR 15:CLS:KEY OFF:SCREEN 0,0,0:WIDTH "SCRN:",80
@@ -649,9 +693,11 @@ machines:
 6040 INPUT "AND TRY AGAIN.  PRESS ENTER FOR MENU. ";A$:RUN 
 6100 REM * PUBLIC DOMAIN SOFTWARE *
 ```
+{% endraw %}
 
 ## FINANCE1.BAS
 
+{% raw %}
 ```bas
 10 '
 50 CLEAR 2000
@@ -832,9 +878,11 @@ machines:
 5120 RETURN
 9500 FOR Z=1 TO 6000:NEXT:RETURN
 ```
+{% endraw %}
 
 ## GROWTH.BAS
 
+{% raw %}
 ```bas
 5 'THIS PROGRAM REQUIRES BASICA AND A COLOR MONITOR
 10 KEY OFF
@@ -921,9 +969,11 @@ machines:
 2120 NEXT J
 2130 RETURN
 ```
+{% endraw %}
 
 ## GROWTH1.BAS
 
+{% raw %}
 ```bas
 10 REM  this program calculates interest compounded annually
 20 REM  written by: J.M. ROBICHAUD (WTC-TORONTO)
@@ -978,9 +1028,11 @@ machines:
 510 PRINT " ........... HAVE A GOOD DAY .............."
 520 END
 ```
+{% endraw %}
 
 ## KALCOL.BAS
 
+{% raw %}
 ```bas
 10 'kaleidoC.bas
 20 WIDTH 40
@@ -1023,9 +1075,11 @@ machines:
 65130 'switch to color
 65140 KEY OFF:CLS:LOCATE ,,0:DEF SEG=0:POKE &H410,(PEEK(&H410) AND &HCF) OR &H10:DEF SEG:WIDTH 40:LOCATE ,,1,6,7:END
 ```
+{% endraw %}
 
 ## PRLIST.BAS
 
+{% raw %}
 ```bas
 10 REM PRINTER
 20 REM PROGRAM TO DEAL WITH THE IBM 80 CPS PRINTER
@@ -1167,9 +1221,11 @@ machines:
 1380 IF X$ = "" THEN 1370
 1390 RETURN
 ```
+{% endraw %}
 
 ## REPORTS.BAS
 
+{% raw %}
 ```bas
 10 '  BUDGET MANAGEMENT - REPORT
 100 CLEAR (3600) : DEFINT I - N
@@ -1374,6 +1430,7 @@ machines:
 9900 I = ERR / 2 + 1 : IF I = 54 THEN E = 1 : GOSUB 5000 : RESUME 9510
 9910 PRINT : PRINT "UNEXPECTED ERROR #"I"IN LINE" ERL "-- RUN ABORTED" : END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

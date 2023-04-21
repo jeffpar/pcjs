@@ -36,6 +36,50 @@ machines:
     BID      BR   Data file.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES890.TXT
+
+{% raw %}
+```
+Disk No  890
+Program Title:  TURBO-BRIDGE
+PC-SIG version 1
+ 
+    TURBO-BRIDGE is a computer bridge game that lets you practice playing
+bridge against yourself or against the computer. Not only is this a fun
+card game, but this program can help you learn the strategies of the game.
+Optionally you can have all four playing hands displayed on the table,
+allowing you to play the hands of as many of the players as you wish or,
+after bidding, you may let the computer play out the game. You may or may
+not wish for the computer to see your own hand. Not only are the cards in
+your hand (and optionally others) displayed, but also the played cards are
+listed.
+ 
+Usage: Game
+ 
+System Requirements: 192K and one disk drive.
+ 
+How to Start: Type: BRIDGE (press enter).
+ 
+File Descriptions:
+ 
+BID      BR   Data file
+BRIDGE        Script file
+BRIDGE   COM  Main program
+BRIDGE   PAS  Pascal source code
+???????? BR   Data file (6 files).
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0890
 

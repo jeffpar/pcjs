@@ -50,6 +50,42 @@ machines:
     created by recording a sequence of commands as they are used.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0670.TXT
+
+{% raw %}
+```
+Disk No:  670                                                           
+Disk Title: Grapphime II 2 of 2 (669 1st disk)  (Disk 2 of 2)           
+PC-SIG Version: S3.3                                                    
+                                                                        
+Program Title: Graphtime II                                             
+Author Version: 3.00                                                    
+Author Registration: $49.95                                             
+Special Requirements: 512K RAM, CGA or EGA graphics.                    
+                                                                        
+GRAPHTIME II is a business-presentation graphics program.  GRAPHTIME II 
+does various line, column and pie charts.  The charts can be printed or 
+plotted, viewed individually, or set up to run as an unattended ``slide 
+show'' on the monitor.  It accepts data from dBase II/III, Multiplan,   
+and Lotus 1-2-3, or you can enter data directly.  It has a font editor, 
+macro editor and math functions including moving averages.  There is    
+even an ``undo'' function.  A Microsoft mouse (or compatible) is        
+recommended.                                                            
+                                                                        
+This version will plot 24 data points and will print ``paint''          
+files, but will not save them.                                          
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0670
 

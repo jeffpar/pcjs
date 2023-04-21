@@ -92,8 +92,328 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## ALTER.DOC
+
+{% raw %}
+```
+typ alter.doc
+                                                   ALTER
+                                                   Command
+
+            
+    
+    Purpose:    This command allows the user to change 
+                file attributes. 
+            
+    Format:     ALTER [d:][path]filename[/V][/N|/R/H/S/A|/B]
+            
+    Type:       Internal        External
+                                  ***
+            
+    Remarks:    This command can be used to mark files as 
+                hidden, readonly, system or normal and to set
+                or reset the archive bit. It is also possible
+                to make subdirectory entries hidden. Hidden
+                files/directories will not be displayed by 
+                the TREE or DIR commands. The XDIR command 
+                will display all files regardless of the files
+                attributes; however, it will not display hidden
+                directories. 
+            
+    Example:    ALTER c:\top\urgent.dat/v/r/h
+
+                This command line displays the current version
+                number and alters file C:\TOP\URGENT.DAT to be
+                READ_ONLY and HIDDEN. Read only files cannot be
+                changed or deleted.
+
+                ALTER \top\secret/h
+            
+                This command line alters the directory 
+                \top\secret as a HIDDEN directory. This 
+                directory can only be accessed by those who 
+                know the path.
+            
+                ALTER \top\secret\letter.007/v
+            
+                This command line displays the current 
+                attribute settings for the file and prompts
+                the user for new attributes for the file.
+            
+
+                
+            
+            
+                                    10-26a
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                   ALTER
+                                                   Command
+            
+            A sample display for this interactive mde
+            is shown:
+                
+            C>ALTER \top\secret
+            
+            ALTER Version X.XX (C)Copyright T A Davis, 1983
+            
+            Attributes are (DRHB) for file \TOP\SECRET
+             
+            Enter new attributes (RHSNBA) or ENTER ? NA_
+            
+            Attributes are (DA) for file \TOP\SECRET
+            
+            The identifiers used to display the files 
+            attributes  are listed below:
+            
+                        R - READ_ONLY
+                        H - HIDDEN
+                        S - SYSTEM
+                        A - ARCHIVE SET
+                        D - SUB_DIRECTORY
+                        B - ARCHIVE NOT SET
+            
+            You may specify N for NORMAL as a parameter 
+            or as a response to the prompt. This identifier 
+            is not listed as an attribute for the file, 
+            but is offered as an easy means to remove all 
+            attributes.
+                            
+            Consult your DOS 2.00 manual, page C-4 for more 
+            information on file attributes. 
+                            
+            NOTES:
+            
+                The attributes of a BASE directory cannot 
+                be altered. You MUST specify at least 4 
+                characters for the path\filename. 
+                
+                There is no way to display hidden 
+                sub-directories. Care should be taken to ensure 
+                that any directory once hidden, can be found.
+
+            
+
+                                                    10-26b
+
+
+SIG/Access: 
+```
+{% endraw %}
+
+## ASK.DOC
+
+{% raw %}
+```
+                                                   Batch
+                                                   Commands
+
+    ASK subcommand
+
+
+    Purpose:    This command allows the user to set the BATCH
+                environment ERRORLEVELS interactively.
+
+    Format:     ASK [prompt line]
+
+    Type:       Internal        External
+                                  ***
+
+    Remarks:    This command is designed to be used
+                interactively. It allows the user some manual
+                input into the BATCH envirionment. The 'prompt
+                line' parameter is optional.
+
+    Example:    ASK Do you want to go to PAS2 ?
+
+                This command accepts a single character from
+                the user and sets ERRORLEVEL based on whether
+                Y or N was entered. Y or y will set ERRORLEVEL
+                0, N or n will set ERRORLEVEL 1
+
+                ASK
+
+                Displays 'Press Y or N ' on the console and
+                waits for a keypress.
+
+                (Sample BATCH file)
+
+                ASK
+                IF ERRORLEVEL 1 GOTO PRESSEDNO
+                ECHO You pressed Y or y.
+                GOTO end
+                :PRESSEDNO
+                ECHO You pressed N or n
+                :end
+
+            NOTES:
+
+                    ASK accepts only Y, y, N, or n as a
+                    response in this version.
+
+
+                                                     6-34a
+
+
+SIG/Access:
+
+```
+{% endraw %}
+
+## CISEXE.DOC
+
+{% raw %}
+```
+                        CompuServe Executive
+
+
+CISEXE is an assembly language program originally written for the
+Z-100 (I think) and extensively modified by S.  Loftesnes and J.  R.
+Cummins to run on the IBM PC using PC-DOS.  Full cursor control is
+included in the executive as well as error checking upload/download
+using the CIS "A" protocol.  It was uploaded by itself and seems to
+work OK but read the cautions below.
+
+Several bugs may still be present in the program.  One that I haven't
+figured out causes the program to "hang" after some (undetermined)
+number of downloads are done.  I have re-booted, restarted the program
+and continued without losing the telephone connection; I hope others
+can do the same if it happens to them.  There has not been any dialing
+or other modem controls put in; this is a do-it- yourself task.  The
+clocks OK but I think I might move it to a different part of the
+screen.
+
+If you use this program or if you modify it please let the authors
+know so that we can share the benefits of your labor.  It would be
+nice to make the executive interrupt driven; also to implement an
+ASCII transmit and receive capability (I'll be adding that but don't
+plan to upload it.).
+
+A HEX file is (or will be) present for those without the IBM MASM.  It
+will need to be converted to a .COM file using the CVTHEX.BAS or
+CVTHEX.EXE programs.
+
+                If I can help leave Email or a note on PC-SIG.
+                        Jim R. Cummins
+                        [72155,1174]
+
+
+SIG/Access:
+
+```
+{% endraw %}
+
+## CL.ASM
+
+{% raw %}
+```
+cseg segment para
+assume cs:cseg, ds:cseg
+main proc far
+push ax
+push bx
+push cx
+push dx
+mov ax,3
+int 10h
+mov ah,1
+mov ch,0
+mov cl,6
+int 10h
+mov ax,600H
+mov bh,16H
+mov cx,0
+mov dh,25
+mov dl,80
+int 10h
+mov dx,03d9H
+mov ax,1
+out dx,ax
+pop dx
+pop cx
+pop bx
+pop ax
+int 20h
+main endp
+cseg ends
+end
+```
+{% endraw %}
+
+## CL.DOC
+
+{% raw %}
+```
+CL.ASM is an Assembler routine which, after assembly, linking, and
+conversion to a .COM file, will set an 80 column color monitor to a
+foreground color of yellow (6) and background and border colors of blue (1).
+The cursor is changed from a line to a block.
+
+This routine is an Assembler equivilent of the BASIC statements:
+
+        COLOR 6,1,1
+        LOCATE ,,,1,6
+        CLS
+
+End of Documentation.
+
+```
+{% endraw %}
+
+## COLOR.DOC
+
+{% raw %}
+```
+           Documentation for COLOR2.COM and COLOR3.COM
+
+COLOR2.COM/COLOR3.COM Version 2.00 (C)Copyright T A Davis, 1983
+
+This program requires DOS 2.00 and ANSI.SYS. It allows the user to alter
+display attributes in a form similar to BASIC's color staement To use
+it,enter 'COLOR N1,N2,N3' where N1 is foreground, N2 is background, and
+N3 is border. All values for N(x) must be in the range 0-7.
+
+Examples                                Resulting display attributes
+
+                                        FG      BG      Border
+
+COLOR 1,2,                      ;       blue    green   cyan
+COLOR 4,5,6                     ;       red     magenta yellow (brown)
+COLOR 4                         ;       red     ( not affected )
+COLOR 2,6,6                     ;       green   yellow  yellow
+
+
+Terry Davis [70040,1162]
+
+```
+{% endraw %}
+
 ## EDITNO.BAS
 
+{% raw %}
 ```bas
 1000 ' Numeric Editing routines for PC Basic-Basica
 1010 ' Michael Krieger, June 1983
@@ -172,9 +492,57 @@ machines:
 1940 '  leave EMAIL for me, Michael Krieger at 74065,1344
 1950 '  or call at (212) 741 2828  or (516) 883 7016
 ```
+{% endraw %}
+
+## EDITNO.DOC
+
+{% raw %}
+```
+        EDITNO consists of three BASIC subroutines for editing numeric
+fields in a way that PRINT USING can not, especially for printing
+Date and Time fields edited with a delimiter other than a comma, i.e.;
+12/21/82   12-15-77  10:15 to 12:30, for example.
+
+        You tell EDITNO the number of significant digits desired in the
+output field, LEFT of the decimal point if any ( ISIG ) and the
+number of digits to the RIGHT of the decimal point ( IDEC ).
+the DELIMITER to be used (such as a slash or colon ) is stored in the
+string constant DLM$.  If the number you supply to the routine is smaller
+than the number of significant digits you requested, the field will be
+padded to the left with the left pad character LPAD$.  This would normally
+be either a blank, a zero, or an asterisk, for example.
+             " "      "0"          "*"
+
+        For example, you might want the number 415 to appear as " 04:15 "
+or the number 62782 to appear " 6/27/82 " in print.
+
+INSTRUCTIONS FOR USE:
+1.  You should have a " DEFINT I " statement in your program for speediest
+    execution of the routines.
+2.  Renumber the routine as needed to be merged into your program
+    with the BASIC editor, if necessary.
+3.  You PASS the field you want edited to the routine by setting variable
+    "A2" equal to it:
+    100 DATE = 60283: A2 = DATE ' set input field for routine
+4.  the paramers discussed above are set for the desired options:
+    110 ISIG = 6% ' Number of significant digits desired for date field
+    120 IDEC = 0  ' No decimal places - for date field
+    130 DLM$ = "/"  ' Edit with slashes
+    140 LPAD$=" "   ' Pad to the left with blanks, i.e. Leading Zero Supress!
+5.  GOSUB to the desired routine (Take note when RENUM ming)
+    200 GOSUB 1730 ' First add the leading blank if required
+    210 GOSUB 1600 ' Stick Slash after every 2nd Character (including blanks)
+6.  Use the RETURNED field from O$ as your edited field:
+    220 DATX$=O$: PRINT DATX$  ' Print Result Field
+     6/27/83
+7.  Remember the field is returned as O$ and you set YOUR field equal to O$.
+
+```
+{% endraw %}
 
 ## ET4.BAS
 
+{% raw %}
 ```bas
 100   ON ERROR GOTO 8020:DEFSTR A-D:DEFINT E-Z:DIM A(1000):DL=STRING$(79,205)
 110   'Line 100 is a copy of line 4985 to satisfy the BASIC Compiler - T.Hall 7-20-83
@@ -526,9 +894,11 @@ machines:
 8080   CLOSE:PRINT B2;"*** Error"; ERR;"in line"ERL" ***":GOSUB 1960 :GOTO 2260
 8100   '-------------------- END ------------------------------
 ```
+{% endraw %}
 
 ## FCBCRT.BAS
 
+{% raw %}
 ```bas
  10 CLS:PRINT"This basic program was created by CONVERT.BAS":KEY OFF:DEFINT A-Z:FALSE=0:TRUE=NOT FALSE
  20 PRINT"Copyright 1983 ,Rich Schinnell Rockville,MD. Not for Sale."
@@ -562,9 +932,11 @@ machines:
 5005 PRINT X$;",";CHECK
 5010 KEY ON:CLOSE:END
 ```
+{% endraw %}
 
 ## FCBEXM.BAS
 
+{% raw %}
 ```bas
 100 DEF SEG=&H1F94  'Dependent upon your memory
 110 '   This sample program serves as both an example and the documentation
@@ -609,9 +981,354 @@ machines:
 500 PRINT FILENAME$,STATUS%
 510 IF STATUS%>=0 THEN GOTO 490
 ```
+{% endraw %}
+
+## FILES80.TXT
+
+{% raw %}
+```
+Disk No  80
+Program Title: DOS UTILITIES No. 3
+PC-SIG version 2
+ 
+    Here's a little bit of everything for anyone looking to add some
+functionality to their system. DOS UTILITIES No. 3 has some great routines;
+including two improved directory utilities, SD20 and XDIR, which let you
+alter file attributes EASILY! (Keep someone from erasing those important
+files!) Also of interest is MOVE, which can combine the functions of COPY
+and ERASE (much quicker, too). There are also color-setting routines, an
+expanded ANSI.SYS driver, modification to let you use the ALT, CTRL, and
+SHIFT keys as toggles (on/off). Toggle on/off functions can help people who
+have problems depressing multiple keys to more safely use their PC
+functions. There's much more--explore and enjoy!
+ 
+Usage: System Enhancement and Customization.
+ 
+System Requirements: 128K memroy, one disk drive, monochrome monitor.
+Some programs require color graphics. Programs with a "+" symbol after the
+name mean that they require color.
+ 
+How to Start:   To run an EXE or COM program, simply type its name and
+press <ENTER>. For instructions on running BASIC programs, please refer to
+the GETTING STARTED section in this catalog.  For instructions on ASM
+listings, refer to your Assembler manual. To read DOC files, simply enter
+TYPE filename.ext and press <ENTER>.
+ 
+User Comments:  "I like the compact, but full information display it
+presents."  "Odd mix of utilities and BASIC games/word processors." "Some
+utilities (Alter, Ask, Move) were useful; rest were either too specialized
+or outdated."  "Super utilities."
+ 
+File Descriptions:
+ 
+ALTER    COM  Utility to change file attributes  (DOS 2.0).
+ALTER    DOC  Documentation file for ALTER.COM.
+ASK      COM  Allows interactive input to a batch file  (DOS 2.0).
+ASK      DOC  Documentation file for ASK.COM.
+BIGANSI  SYS  Enlarged ANSI.SYS, allows for redefinition of 40 keys.
+CISEXE   COM  Communications program that supports CompuServe protocol.
+CISEXE   DOC  Documentation file for CISEXE.COM.
+CL       ASM+ Source for CL.COM.
+CL       COM+ Sets blue background.
+CL       DOC  Documentation file for CL.COM.
+COLOR    COM+ Machine language equivalent of BASIC's COLOR statement.
+COLOR    DOC  Documentation file for COLOR.COM.
+EDITNO   BAS  Formats numeric output in ways that PRINT USING cannot.
+EDITNO   DOC  Documentation file for EDITNO.BAS.
+ET4      BAS  BASIC text file line editor - an alternative to EDLIN.
+ET4      EXE  Compiled BASIC version.
+FCBCRT   BAS  Creates loadable program for reading directories from BASIC.
+FCBEXM   BAS  Demonstrates use of BLOADable file.
+FCBREAD  BSV  BLOADable file created by FCBCRT.BAS.
+FKREST   ASM  Source for FKREST.COM.
+FKREST   COM  Companion to FKSET.COM - resets keys to original functions.
+FKSET    ASM  Source for FKSET.COM.
+FKSET    COM  Upgrade of function key definition routine for DOS 2.0.
+FLIGHT   NEW  How to modify Flight Simulator for color on a RGB monitor.
+HIQUE    BAS+ Board game that supports light pen input.
+KEYLK    DOC  Documentation for KEYLK and KEYLK3.
+KEYLK3   ASM  Source code for KeyLock progra. for latest BIOS ROM
+KEYLK3   EXE  KeyLock program for BIOS ROM..
+MEM640   DOC  Documentation file for MEM640.ZAP.
+MEM640   ZAP  Modifies BIOS to handle memory greater than 544KB.
+MOVE     COM  Utility to move files across dir.ctories without copying
+MOVE     DOC  Documentation file for MOVE.COM.
+OKIMOD   DOC  Documentation on how to modify MODE.COM for different printers.
+SD20     COM  Sorted directory for DOS 2.0.  Includes several run options.
+SD20     DOC  Documentation file for SD20.COM.
+SOLFE    BAS  Plays "Solfeggietto" by Carl Phillip Emanual Bach.
+WMTELL   BAS  Plays William Tell Overture.
+XDIR     COM  Extended directory - shows file attributes.
+XDIR     DOC  Documentation file for XDIR.COM.
+LOAD-US  COM  Enables you to use Lotus and Symphony on hard disk.
+LOAD-US  DOC  Documentation for LOAD-US.
+NUMZAP   EXE  Removes line numbers from BASIC programs.
+NUMZAP   DOC  Documentation for NUMZAP.
+NUMZAP   BAS  BASIC source code for NUMZAP.
+RENUM    EXE  Renumbers a file that has been through NUMZAP.
+RENUM    BAS  BASIC source code for RENUM.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+## FKREST.ASM
+
+{% raw %}
+```
+TITLE FKRESET - ASSEMBLER PROGRAM TO RESET FUNCTION KEYS IN DOS 2.0
+;
+;
+;               VERSION 1.0 04/27/83
+;
+;
+CSEG    SEGMENT PARA PUBLIC 'CODE'
+        ORG     100H                    ;MAKE IT A .COM FILE
+START   PROC    FAR
+        ASSUME CS:CSEG,DS:CSEG,ES:NOTHING
+        PUSH    CS                      ;MOVE THE WORKAREA ADDRESS INTO DS
+        POP     DS
+        MOV     DX,OFFSET MESSAGE       ;TEL'EM THE KEYS ARE RESET
+        MOV     AH,9                    ;FUNCTION 9 IS PRINT STRING
+        INT     21H                     ;CALL DOS TO DO IT
+        MOV     DX,OFFSET F10           ;RESET F10 KEY
+        MOV     AH,9                    ;FUNCTION 9 IS PRINT STRING
+        INT     21H                     ;CALL DOS TO DO IT
+        MOV     DX,OFFSET F9            ;RESET F9 KEY
+        MOV     AH,9                    ;FUNCTION 9 IS PRINT STRING
+        INT     21H                     ;CALL DOS TO DO IT
+        MOV     DX,OFFSET F8            ;RESET F8 KEY
+        MOV     AH,9                    ;FUNCTION 9 IS PRINT STRING
+        INT     21H                     ;CALL DOS TO DO IT
+        MOV     DX,OFFSET F7            ;RESET F7 KEY
+        MOV     AH,9                    ;FUNCTION 9 IS PRINT STRING
+        INT     21H                     ;CALL DOS TO DO IT
+        MOV     DX,OFFSET F6            ;RESET F6 KEY
+        MOV     AH,9                    ;FUNCTION 9 IS PRINT STRING
+        INT     21H                     ;CALL DOS TO DO IT
+        MOV     DX,OFFSET F5            ;R
+        MOV     AH,9                    ;FUNCTION 9 IS PRINT STRING
+        INT     21H                     ;CALL DOS TO DO IT
+        MOV     DX,OFFSET F4            ;RESET F4 KEY
+        MOV     AH,9                    ;FUNCTION 9 IS PRINT STRING
+        INT     21H                     ;CALL DOS TO DO IT
+        MOV     DX,OFFSET F3            ;RESET F3 KEY
+        MOV     AH,9                    ;FUNCTION 9
+        INT     21H                     ;CALL DOS TO DO IT
+        MOV     DX,OFFSET F2            ;RESET F2 KEY
+        MOV     AH,9                    ;FUNTION 9 IS PRINT STRING
+        INT     21H                     ;CALL DOS TO DO IT
+        MOV     DX,OFFSET F1            ;RESET F1 KEY
+        MOV     AH,9                    ;FUNCTION 9 IS PRINT STRING
+        INT     21H                     ;CALL DOS TO DO IT
+        MOV     DX,OFFSET UP8           ;RESET UP-ARROW (8)KEY
+        MOV     AH,9                    ;FUNCTION 9 IS PRINT STRING
+        INT     21H                     ;CALL DOS TO DO IT
+        MOV     DX,OFFSET PGUP          ;RESET PGUP(9) KEY
+        MOV     AH,9                    ;FUNCTION 9 IS PRINT STRING
+        INT     21H                     ;CALL DOS TO DO IT
+        MOV     DX,OFFSET ENDK          ;RESET END(1) KEY
+        MOV     AH,9                    ;FUNCTION 9 IS PRINT STRING
+        INT     21H                     ;CALL DOS TO DO IT
+        MOV     DX,OFFSET DN2           ;RESET DOWN-ARROW(2) KEY
+        MOV     AH,9                    ;FUNCTION 9 IS PRINT STRING
+        INT     21H                     ;CALL DOS TO DO IT
+EXIT:   INT     20H                     ;EXIT TO DOS
+;
+;       NOW LET'S GET THE NECESSARY STRINGS TO DO THE RESET
+;
+MESSAGE DB      ' The Function Keys have been reset.$'
+F10     DB      27,'[0;68;0;68p$'       ; No trick to reseting the
+F9      DB      27,'[0;67;0;67p$'       ; keys; just set them to
+F8      DB      27,'[0;66;0;66p$'       ; themselves! NOTE: Do NOT
+F7      DB      27,'[0;65;0;65p$'       ; set the keys to NULL, i.e.,
+F6      DB      27,'[0;64;0;64p$'       ;    27,'[0;xxp$'  (xx is key)
+F5      DB      27,'[0;63;0;63p$'       ; This will cause the system
+F4      DB      27,'[0;62;0;62p$'       ; to crash.
+F3      DB      27,'[0;61;0;61p$'
+F2      DB      27,'[0;60;0;60p$'
+F1      DB      27,'[0;59;0;59p$'
+UP8     DB      27,'[0;72;0;72p$'
+PGUP    DB      27,'[0;73;0;73p$'
+ENDK    DB      27,'[0;79;0;79p$'
+DN2     DB      27,'[0;80;0;80p$'
+START   ENDP
+;
+;
+CSEG    ENDS
+        END     START
+```
+{% endraw %}
+
+## FKSET.ASM
+
+{% raw %}
+```
+TITLE FK204 - ASSEMBLER PROGRAM TO SET FUNCTION KEYS IN DOS 2.0
+;
+;
+;               Version 1.4 05/01/83
+;        Version 1.4 moves the DOS 'copy previous' (F3) to the
+;              'end' key on the numeric/cursor keypad, the DOS
+;               'copy to' (F2) to the up-arrow(8), the DOS 'delete
+;               to' (F4) to the down-arrow(2), and the DOS 'accept
+;               but keep editing' (F5) to the PgUp (9) key.
+;
+;       Use FKRESET to reset the keys to their original definitions.
+;
+;  Use the following commands to convert this file to a .COM file.
+;
+;               MASM FK204
+;               LINK FK204
+;               EXE2BIN FK204
+;               REN FK204.BIN FK.COM
+;
+;
+;**                 Important Note                  **
+;  For this routine to work, you must create a file called
+;
+;                      Config.Sys
+;
+; with Edlin or from the console and put the statement DEVICE=ANSI.SYS
+; in it. The DOS 2.0 file ANSI.SYS should be on your boot disk. This
+; This cause the file ANSI.SYS to be loaded when the system is booted.
+;**                                                 **
+;
+cseg    segment para public 'CODE'
+        org     100H                    ;let's us make this a .COM
+start   proc    far
+        assume cs:cseg,ds:cseg,es:nothing
+        push    cs                      ;move the workarea address into DS
+        pop     ds
+; ******           Start screen display           ****
+        mov     dx,offset clear
+        mov     ah,9
+        int     21h
+        mov     dx,offset k1
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset k2
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset k3
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset k4
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset k5
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset k6
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset k7
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset k8
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset k9
+        mov     ah,9                    ;funtion 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset k10
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+; ***            Start key assignments                ***
+        mov     dx,offset mvf2          ;move F2 to up-arrow (8) key
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset mvf3          ;move F3 to End (1) key
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset mvf4          ;move F4 to down-arrow (2) key
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset mvf5          ;move F5 to PgUp (9) key
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f1            ;Assign F1 - F10
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f2
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f3
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f4
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f5
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f6
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f7
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f8
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f9
+        mov     ah,9                    ;funtion 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset f10
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+        mov     dx,offset cls2home      ;make Home key clear screen
+        mov     ah,9
+        int     21h
+        int     20h             ; Traditional return to DOS
+;
+; The next section of code set ups the parameters for each function
+; key. To make a key 'hot' add the following after the string ending
+; quote - for example, 27,'[0;62;"Chkdsk";13p$'  The 13 is decimal for
+; a carriage return
+;
+clear   db      27,'[33;44m',27,'[2J      Function Keys Reassigned$'
+cls2home        db      27,'[0;71;"Cls";13p$'
+mvf2    db      27,'[0;72;0;60p$'
+mvf3    db      27,'[0;79;0;61p$'
+mvf4    db      27,'[0;80;0;62p$'
+mvf5    db      27,'[0;73;0;63p$'
+f1      db      27,'[0;59;"Dir "p$'
+f2      db      27,'[0;60;"Type "p$'
+f3      db      27,'[0;61;"Debug "p$'
+f4      db      27,'[0;62;"Copy "p$'
+f5      db      27,'[0;63;"Edlin "p$'
+f6      db      27,'[0;64;"Chkdsk "p$'
+f7      db      27,'[0;65;"BasicA "p$'
+f8      db      27,'[0;66;"Rename "p$'
+f9      db      27,'[0;67;"A:"p$'
+f10     db      27,'[0;68;"B:"p$'
+k1      db      27,'[3;10HF1 = "Dir "    $'
+k2      db      27,'[4;10HF2 = "Type "   $'
+k3      db      27,'[5;10HF3 = "Debug "  $'
+k4      db      27,'[6;10HF4 = "Copy "   $'
+k5      db      27,'[7;10HF5 = "Edlin "  $'
+k6      db      27,'[8;10HF6 = "Chkdsk " $'
+k7      db      27,'[9;10HF7 = "BasicA "  $'
+k8      db      27,'[10;10HF8 = "Rename " $'
+k9      db      27,'[11;10HF9 = "A:"      $'
+k10     db      27,'[12;10HF10= "B:"      $'
+start   endp
+;
+;
+cseg    ends
+        end     start
+```
+{% endraw %}
 
 ## HIQUE.BAS
 
+{% raw %}
 ```bas
 1 '             *** HIQUE ***
 2 '             by Wes Meier (70215,1017)
@@ -756,9 +1473,753 @@ machines:
 141 LOCATE 23,1
 142 END'of program.
 ```
+{% endraw %}
+
+## KEYLK.DOC
+
+{% raw %}
+```
+Keyloc  -  Keyboard Lock Program
+--------------------------------
+
+    Keyloc is a patch to the BIOS keyboard routine.  It modifies the
+    operation of the Alt, Ctrl, Left Shift and Right Shift keys. It allows
+    one finger typing by locking those keys in their shifted state.
+
+    Normally the Ctrl, Alt, Left Shift, and Right Shift keys have to be held
+    down with one finger, while another finger is used to type another key.
+    For example, if a program requires you enter a ^P, you must hold down
+    the Ctrl key with one finger, then depress the "P" key with another.
+
+    When Keyloc is loaded in memory, it changes the way these keys operate.
+    To type in a ^P, you first type and release the Ctrl key. This locks the
+    Ctrl key in it's shifted state. Next the "P" key is depressed and
+    released. This enters a ^P. Depressing Ctrl again takes the key
+    from it's shifted to unshifted state.
+
+    Keyloc gives an audio signal so the user can tell when he is shifting or
+    unshifting a key.  The first time the Ctrl key is depressed, a low tone
+    followed by a high tone is sounded.  This signals that the key has been
+    put in the shifted state. The next time the Ctrl key is depressed, a high
+    tone followed by a low tone is sounded.  This signals that the key has
+    been returned to the unshifted state.
+
+Loading Keyloc Into Memory
+--------------------------
+
+    The program Keyloc is loaded into memory by executing the program
+    KEYLOC. This can be done by typing in the name of the program, KEYLOC,
+    with the the file KEYLOC.EXE on the diskette in the default drive.
+
+    Keyloc remains loaded in memory until the system is rebooted.  It uses
+    approximately 500 bytes of memory.
+
+Which Version of Keyloc to Use
+------------------------------
+
+    Because Keyloc is only a patch to a program that already exists in
+    the ROM of the IBM PC, it may not work if changes are made to the
+    code in the ROM.
+
+    There are at least 3 versions of ROM-BIOS for the IBM PC and the new
+    IBM XT.  The original Keyloc patch worked for the first two versions,
+    but changes to it were required by the latest version of ROM-BIOS.
+
+    The original Keyloc is "KEYLOC.EXE".  It should work if you purchased
+    your PC before the release of the IBM XT.
+
+    A modified version of Keyloc is "KEYLOC_3".  This should work if you
+    have an IBM XT or an IBM PC purchased after the XT was released.
+
+    You can find out which version of ROM-BIOS you computer has by
+    using the DEBUG program to print out the release marker of
+    your ROM.  Type in "DEBUG" to start the program, then type the
+    command "D F000:FFF5 L 8".  A date will be displayed that indicates
+    which ROM you computer has.
+
+        "04/24/81"  - Version 1, use "KEYLOC.EXE"
+        "10/19/81"  - Version 2, use "KEYLOC.EXE"
+        "10/27/82"  - Version 3, use "KEYLOC_3.EXE"
+
+```
+{% endraw %}
+
+## KEYLK3.ASM
+
+{% raw %}
+```
+                page    64,132
+
+Comment @
+    This is a patch to the ROM BIOS keyboard routine.  When the patch is
+    loaded, the Alt, Ctrl, Left Shift and Right Shift keys toggle between
+    their shifted and unshifted states.
+
+    There are two main entry points.
+
+    1.  'Keyloc' sets up the keyboard interupt vector to point to the patch
+        instead of the normal BIOS routine.  After Keyloc executes, it
+        leaves the new interupt handler resident in memory.
+
+    2.  'Ikeyloc' is the new keyboard interupt handler.  The first section
+        is a duplication of the ROM BIOS routine until a point where tests
+        for the input of a Alt, Ctrl, Left Shift or Right Shift key can be
+        made.  If it is one of those keys, the appropriate bits in the
+        keyboard flag byte are twiddled.
+
+    John Black
+    5225 Pooks Hill Rd. #1715 N.
+    Bethesda MD. 20814
+@
+
+port_b          equ     60h     ; 8255 port a addr
+timer           equ     40h
+kb_data         equ     60h     ; keyboard scan code port
+kb_ctl          equ     61h     ; control bits for keyboard sense data
+
+abso            segment at 0
+                org     24h
+kb_vector       label   dword
+abso            ends
+
+rom_version = 3
+
+   if   (rom_version eq 1) or (rom_version eq 2)
+bioscode        segment at 0F000h
+;
+;  Location definitions from Technical Reference Manual for Versions
+;  04/24/81 or 10/19/81 of BIOS rom.
+;
+                org     0E9AFh          ; page A-27 of Technical Reference
+K16             label   far             ; resume code if not shift
+
+                org     0EA23h          ; page A-27
+K23             label   far             ; break for shift key
+
+                org     0EA5Eh          ; page A-27
+K26             label   far             ; return from interupt
+
+                org     0EC24h          ; page A-31
+K62             label   far             ; error
+bioscode        ends
+   endif
+
+
+    if  rom_version eq 3
+bioscode        segment at 0F000h
+;
+;  Location definitions from Technical Reference Manual for Version
+;  10/27/82 of BIOS rom
+;
+                org     0E9ADh          ; page A-30 of Technical Reference
+K16             label   far             ; resume code if not shift
+
+                org     0EA1Eh          ; page A-30
+K23             label   far             ; break for shift key
+
+                org     0EA59h          ; page A-31
+K26             label   far             ; return from interupt
+
+                org     0EC27h          ; page A-35
+K62             label   far             ; error
+bioscode        ends
+    endif
+
+biosdata        segment at 40h
+
+                org     17h
+kb_flag         label   byte
+;       ...bit definitions for kb_flag
+ins_state       equ     80h             ; insert state is active
+caps_state      equ     40h             ; caps lock state has been toggled
+num_state       equ     20h             ; num lock state has been toggled
+scroll_state    equ     10h             ; scroll lock state has been toggled
+alt_shift       equ     08h             ; alternate shift key depressed
+ctl_shift       equ     04h             ; control shift key depressed
+left_shift      equ     02h             ; left shift key depressed
+right_shift     equ     01h             ; right shift key depressed
+
+;       ...scan codes
+num_key         equ     69
+scroll_key      equ     70
+alt_key         equ     56
+ctl_key         equ     29
+caps_key        equ     58
+left_key        equ     42
+right_key       equ     54
+ins_key         equ     82
+del_key         equ     83
+biosdata        ends
+
+keylocs segment para public 'CODE'
+                assume  cs:keylocs
+
+keyloc_ident    db      'KEYLOC'
+ident_length    equ     6
+ikeyloc         proc    far             ; interupt entry point
+                sti                     ; begin copy of ROM BIOS
+                push    ax
+                push    bx
+                push    cx
+                push    dx
+                push    si
+                push    di
+                push    ds
+                push    es
+                cld
+                mov     ax,biosdata
+                mov     ds,ax
+                in      al,kb_data
+                push    ax
+                in      al,kb_ctl
+                mov     ah,al
+                or      al,80h
+                out     kb_ctl,al
+                xchg    ah,al
+                out     kb_ctl,al
+                pop     ax
+                mov     ah,al
+                cmp     al,0FFh
+                jnz     keylocpatch
+                jmp     K62
+                                        ; End of rom code copy
+keylocpatch:
+                push    ax
+                assume  ds:biosdata
+
+                and     al,01111111b    ; mask out break indicator
+                cmp     al,alt_key
+                je      alt_in
+                cmp     al,ctl_key
+                je      ctrl_in
+                cmp     al,left_key
+                je      leftshift_in
+                cmp     al,right_key
+                je      rightshift_in
+;               ...return to normal bios keyboard routine
+retbioskey:     pop     ax
+                jmp     K16
+
+
+alt_in:
+                mov     al,alt_shift
+                call    Depress_lock
+;               ... if this is a break, enter bios at K23
+                pop     ax
+                mov     ah,alt_shift
+                test    al,80h                  ;  if
+                jz      fi                      ;  .
+                test    kb_flag,alt_shift       ;  .
+                jnz     fi                      ;  .
+                                                ;  / break and not depressed
+                                                ;  .
+                or      kb_flag,alt_shift       ;  .  Reset depressed flag
+                jmp     K23                     ;  .  Return in case using
+                                                ;  .  alt keypad entry
+fi:                                             ;  fi
+                jmp     K26
+
+ctrl_in:
+                mov     al,ctl_shift
+                call    Depress_lock
+                jmp     retdone
+leftshift_in:
+                mov     al,left_shift
+                call    Depress_lock
+                jmp     retdone
+rightshift_in:
+                mov     al,right_shift
+                call    Depress_lock
+                jmp     retdone
+
+retdone:        pop     ax
+                jmp     K26
+ikeyloc         endp
+
+;---------------------------------------------
+;
+;   Depress_lock
+;
+;       For keys that normally are depressed and held down
+;       while another key is depressed. (Cntl for example)
+;
+;       ah      input key, with break indicator (80h)
+;       al      contains depressed indicator bit mask
+;
+Down            db      ?       ; indicates the key is held down
+Depress_lock    proc    near
+                push    dx
+                test    ah,80h                  ; if1
+                jnz     fi1                     ; .
+                test    Down,al                 ; .
+                jnz     fi1                     ; .
+                                                ; / make and not down
+                test    kb_flag,al              ; .   if2
+                je      else2                   ; .   .
+                                                ; .   / depressed
+                call    high_beep               ; .   .
+                call    delay                   ; .   .
+                call    low_beep                ; .   .
+                mov     dl,al                   ; .   . dl:=depressed bit
+                not     dl                      ; .   .
+                and     kb_flag,dl              ; .   . key := not depressed
+                jmp     fi1                     ; .   .
+else2:                                          ; .   / not depressed
+                call    low_beep                ; .   .
+                call    delay                   ; .   .
+                call    high_beep               ; .   .
+                or      kb_flag,al              ; .   . key := depressed
+fi1:                                            ; fi1 fi2
+
+                test    ah,80h                  ; if5
+                jnz     else5                   ; .
+                                                ; / make
+                or      Down,al                 ; .  down := true
+                jmp     fi5                     ; .
+else5:                                          ; / break
+                mov     dl,al                   ; .
+                not     dl                      ; .
+                and     Down,dl                 ; .  down := false
+fi5:                                            ; fi5
+                pop     dx
+                ret
+Depress_lock    endp
+
+
+;---------------------------------
+h_cycles        equ     20
+h_half          equ     300
+l_cycles        equ     h_cycles / 3
+l_half          equ     h_half * 3
+
+low_beep        proc
+                push    dx
+                push    bx
+                mov     bx,l_cycles
+                mov     dx,l_half
+                call    beep
+                pop     bx
+                pop     dx
+                ret
+low_beep        endp
+
+high_beep       proc
+                push    dx
+                push    bx
+                mov     bx,h_cycles
+                mov     dx,h_half
+                call    beep
+                pop     bx
+                pop     dx
+                ret
+high_beep       endp
+
+;---------------------------------
+; Adapted from BIOS Beep routine
+;
+;  bx = # of cycles
+;  dx = length of half cycle
+
+beep            proc    near
+                push    ax
+                push    cx
+                in      al,kb_ctl
+                push    ax
+k65:
+                and     al,0FCh
+                out     kb_ctl,al
+                mov     cx,dx
+k66:            loop    k66
+                or      al,2
+                out     kb_ctl,al
+                mov     cx,dx
+k67:            loop    k67
+                dec     bx
+                jnz     k65
+                pop     ax
+                out     kb_ctl,al
+                pop     cx
+                pop     ax
+                ret
+beep            endp
+
+;--------------------------------
+delay           proc    near
+                push    cx
+                mov     cx,15000
+                loop    $
+                pop     cx
+                ret
+delay           endp
+
+ikeylast        equ     $       ; last location + 1 to remain in memory
+
+stacks          segment stack 'STACK'
+                db      64 dup('stack   ')
+stacks          ends
+
+;-------------------------------------
+loaded_mess     db      'KEYLOC loaded$'
+err_mess        db      'error - KEYLOC is already loaded$'
+keyloc          proc    far
+                push    ds
+                sub     ax,ax
+                push    ax
+                push    ds                      ; save program seg
+
+;               ...Check to see if a copy of KEYLOC has
+;                  already been loaded by comparing Keyloc_ident
+;                  with the same locations relative the the current
+;                  keyboard interupt routine ( it is pointed to by the
+;                  the keyboard interupt vector)
+                cld                                     ; increment
+                assume  ds:abso
+                mov     ax,abso
+                mov     ds,ax
+                mov     si,offset keyloc_ident
+                mov     ax,kb_vector+2                  ; segment
+                mov     di,kb_vector                    ; offset to ident
+                sub     di,ident_length
+                mov     es,ax
+                assume  ds:keylocs
+                mov     ax,keylocs
+                mov     ds,ax
+                mov     cx,ident_length
+                repne   cmpsb                           ; ds:[si],es:[di]
+                cmp     cx,0                            ; if
+                je      NotLoaded                       ; .
+                                                        ; / already loaded
+                mov     ah,9h                           ; .  print string
+                mov     dx,offset err_mess              ; .
+                int     21h                             ; .
+                pop     ds                              ; . get rid of pseg
+                ret                                     ; . return to DOS
+NotLoaded:                                              ; fi
+
+;               ...set up keyboard interupt vector
+                mov     ah,9h
+                mov     dx,offset loaded_mess
+                int     21h
+                assume  ds:abso
+                mov     ax,abso
+                mov     ds,ax
+                mov     ax,offset ikeyloc               ; ip
+                mov     kb_vector,ax
+                mov     ax,seg ikeyloc                  ; cs
+                mov     kb_vector+2,ax
+;               ...return to DOS, but leave ikeyloc resident
+                pop     es                              ; get program segment
+                mov     es:byte ptr 1,27h               ; change int 20 to 27
+                mov     dx,offset ikeylast+100h         ; dx:=lastaddr+1+prfx
+                ret
+keyloc          endp
+
+keylocs         ends
+
+                end     keyloc
+```
+{% endraw %}
+
+## MEM640.DOC
+
+{% raw %}
+```
+                            640K Memory Size Support
+
+                        A Modification to PC-DOS 2.0 BIOS
+
+                                      By
+                                John A. Chapman
+                               CIS [70205,1217]
+
+                              844 S. Madison St.
+                           Hinsdale, Illinois  60521
+
+   Machine Configuration
+
+   This  modification  applies ONLY to those machines which  have  installed
+   more  than 544K byte of contiguous main storage,  AND DO NOT HAVE THE NEW
+   BIOS  CHIP.  The  new BIOS chip IBM supplies,  both  with  the  expansion
+   interface  and new 256K motherboard PC's already supports 640K of memory.
+   Please note that attempts to use this modification on machines with  less
+   than 608K storage may cause the system to fail.
+
+   Limitation and Disclaimer
+   Since  this modification alters the behavior of BIOS in a static fashion,
+   use  of  the modified system is thereafter LIMITED to machines  WITH  THE
+   SAME MEMORY SIZE, since there is no dynamic size determination capability
+   in this version of the mod.
+
+   THIS MODIFICATION IS SUPPLIED ON AN AS-IS BASIS. EACH USER MUST DETERMINE
+   THE FITNESS AND APPLICABILITY OF THIS CHANGE FOR THE SPECIFIC ENVIRONMENT
+   IN  WHICH  IT  WILL BE INSTALLED.   THE AUTHOR ASSUMES NO  LIABILITY  FOR
+   FAILURE  OR  DAMAGE  CAUSED  BY  THIS  MODIFICATION.
+
+   This  modification  is  in  use  on the  author's  system,  which  is  an
+   "original"  PC  (the old 16K mother board with the OLD bios  chip)  which
+   has the following equipment installed on it:
+
+             Vista MAXI-RAM     (576K memory board)
+             ABM OMNI-Board     (Clock 2-serial, 1-parallel, game adapter)
+             IBM Disk Controller (2 TEAC FD-55B's 1 Tandon 101-4)
+             IBM Color Graphics Adapter
+
+   This  modification  works on the configuration described  above.  If  you
+   report a bug,  please include a description of the configuration on which
+   the  bug  was encountered.   No known bugs exist in this version  of  the
+   modification,  which has been in use since DOS 2.0 was released.   Please
+   report any bugs you find to the author, at the address shown above.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                       1
+
+
+
+
+
+
+   Overview
+
+   Older  PC's are limited by the BIOS code and switch setting  support  (in
+   the  ROM  BIOS chip) to 544K.  It is possible to add 576K to the machine,
+   giving a total memory of 640K, or even 704K, if you don't have, and don't
+   need  the monochrome display.   To access this memory it is necessary  to
+   have it recognized at BOOT time.   DOS 2.0 maintains pointers to the  top
+   of memory which are set at initialization.  This modification to the INIT
+   routine of DOS 2.0 BIOS,  initializes the memorsize field in low memory
+   to 640K, and leaves a "footprint" similar to the one left by the keyboard
+   routine when ALT-CTRL-DEL sequence is detected.
+
+   The code added to BIOS does three things:
+
+             1) Checks for the "footprint" and skips all MEM640 processing
+                if the footprint is present (We've been here before) -
+                This prevents conflict with RAMDRIVE software that causes
+                a "warm" re-boot to alter memory size, to allocate memory
+                for the ramdrive.
+
+             2) Modifies the memory locations containing memory size and
+                I/O-bus memory size, in the system data segment at X'40'
+
+             3) Clears the memory above 544K to zeros.
+
+ {   Installing the Modification
+
+   To use this modification on a 640K machine, simply run the DEBUG script
+   contained in the file MEM640.ZAP, as follows:
+
+        a) B: drive must contain the DOS 2.0 formatted disk to be modified
+        b) A: drive must contain the DEBUG command, and the file MEM640.ZAP
+
+   When the disks are in the correct drives, the command:
+
+              a:debug <b:MEM640.ZAP
+
+   will  invoke  the DEBUG script supplied.  A listing of the actions  taken
+   will  display on the screen,  and eventually the DOS prompt will  return.
+   After the script has run,  the newly modified diskette should be  booted,
+   to  assure  that the modification was correctly  installed.   The  CHKDSK
+   command can be used to verify that the additional memory is accessable.
+
+   The  code  sequences to support greater that 544K are simple and  static.
+   The code should be easy to understand,  and easy to modify.  A listing of
+   the debug script, with the comments and indications of where changes must
+   be  made to support other memory sizes,  is included as Attachment  I  to
+   this document.
+
+
+
+
+
+
+
+
+
+
+                                       2
+
+
+
+   ATTACHMENT I: The DEBUG Script
+
+
+
+   l100,1,5,1              <======== First line of script
+   e10b,20
+   w100,1,5,1
+   nb:ibmbio.com
+   l
+   r                       <==== Action of script begins here
+   R CX
+   1230                    <== change length of BIOS before rewriting
+   A12d0,12ff              <== Begin assembly entry of mod
+   PUSH    AX
+   PUSH    ES
+   PUSH    DI
+   XOR     AX,AX
+   MOV     ES,AX
+   MOV     DI,0472          Change the two values pointed to below if
+   MOV     AX,4321           you wish to support a memory size between
+   ES:                       544 and 640.
+   CMP     AX,[DI]
+   JZ      12F7
+   MOV     DI,0413
+   MOV     AX,0280         <-- TOTAL MEMORY SIZE IN HEX        <<CHANGE>>
+   STOSW
+   MOV     AX,0240        <-- I/O bus Memory  (Total - 64K)    <<CHANGE>>
+   STOSW
+   CALL    1300           <-- invoke memory clear routine to prevent
+   MOV     DI,0472            parity checks on read references to memory
+   MOV     AX,4321        <-- OUR FOOTPRINT !!!
+   STOSW
+   POP     DI
+   POP     ES
+   POP     AX
+   MOV     AL,02
+   STOSB
+   JMP     08DC             <-- Jump back to BIOS init code
+   PUSH    CX   <===========Routine to clear ememory above 544K
+   PUSH    DX                (If you have less than 640K you don't have
+   PUSH    SI                 to change this routine, but If you have
+   MOV     DX,8800            704K or 768K, start and length values
+   MOV     AH,03              must be changed.
+   MOV     AL,00
+   MOV     ES,DX
+   MOV     CX,8000
+   SUB     DI,DI
+   REPZ                              {
+   STOSB
+   ADD     DX,0800
+   DEC     AH
+   JNZ     130A
+   XOR     AX,AX
+   MOV     ES,AX
+   POP     SI
+   POP     DX
+   POP     CX
+   RET
+   NOP                    [[[ Continued on next Page ]]]
+
+
+                                       3
+
+
+
+
+
+
+   ATTACHMENT I: The DEBUG Script
+
+
+   NOP
+   NOP
+   NOP       <======= This section pads out the MOD to an even boundary
+   NOP
+   NOP
+{
+   E,3E7,B0,00
+   A8D9
+   JMP     12D0       <====== Jump to the additional INIT code
+
+   W
+   l100,1,5,1
+   e10b,27            <====== This sequence resets IBMBIO.COM to Hidden
+   w100,1,5,1                 and System attributes, updating the directory
+   Q
+
+
+
+<*><*><*>  END of DOCUMENT  <*><*><*>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                       4
+
+
+SIG/Access:
+
+```
+{% endraw %}
+
+## MOVE.DOC
+
+{% raw %}
+```
+The purpose of the MOVE command is to use DOS function call 56H to
+rename a file across directories. This provides for the effective
+movement of a file between directories without having to actually copy
+the data. If the to and from paths are the same, this command acts
+as a straight RENAME.
+
+The Syntax of the MOVE command is:
+
+      MOVE  \path\name.ext \path\name.ext
+
+   where:the first operand is the from path\name, and the second
+         operand is the to path\name.
+There are no other options.
+
+Restrictions:
+The data is not physically moved, therefore, a 'move' can only be done
+between datasets on the SAME drive.
+
+The MOVE command is for DOS 2.0 ONLY. It is not supported by DOS 1.1.
+
+Author: Original by Mike Turner, modified by Brian Pierce
+
+
+SIG/Access:
+
+```
+{% endraw %}
 
 ## NUMZAP.BAS
 
+{% raw %}
 ```bas
 10000 '======================================
 10010 ' PROGRAM NUMZAP  Version 1.00
@@ -1092,9 +2553,989 @@ machines:
 13290 SOUND 100,5: CLS: PRINT "====NUMZAP aborted from keyboard===="
 13300 END
 ```
+{% endraw %}
+
+## NUMZAP.DOC
+
+{% raw %}
+```
+
+
+
+                                   READ
+                                   THIS
+                                  BEFORE
+                                 PRINTING!!!!
+
+      This document has been formated in a special way. Virtually all dot
+      matrix printers have a condensed mode which prints 132 characters
+      across a standard 8 1/2 inch page.  When this file is printed out in
+      condensed mode, the resulting printed pages can be cut down to 5 1/2 X
+      8 1/2 inches.  The cut pages will fit nicely in the back of your
+      DOS manual for storage.
+
+      Typically, you can turn on this mode by sending a special control
+      sequence to the printer from BASIC.  For example, you can turn on the
+      condensed mode of the IBM/Epson printer with the BASIC statement:
+      LPRINT chr$(15).  If your printer has such a condensed mode, turn it
+      on now, before printing the rest of this document.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                         (tm)
+                                   NUMZAP
+
+                         Selective Line Number Removing
+                     Utility for the IBM Personal Computer
+
+                                User's Manual
+
+                          (c) 1983 by David Whitman
+
+                                 Version 1.00
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      David Whitman
+      136 Wellington Terrace
+      Lansdale, PA 19446
+
+      (215) 362-8526 (evenings)
+      (215) 641-7114 (days)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                     1
+
+
+
+
+
+                            Table of Contents
+
+
+            I. What does NUMZAP do?..........................2
+
+            II. Programming with NUMZAP......................4
+
+            III. Running NUMZAP..............................5
+
+            IV. Using Converted Programs.....................7
+
+            V. Comments about Optimization...................8
+
+            VI. Miscellaneous and a Word From Our Sponsor....9
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                     2
+
+      I. What does NUMZAP do?
+
+      NUMZAP is a utility for removing line numbers from BASIC
+      programs.  Just removing the line number from the beginning of
+      each line is rather easy, and somewhat pointless.  NUMZAP is
+      slightly more selective, however.  NUMZAP removes only those line
+      numbers which are not referenced from other parts of the program.
+      For example, consider the following short BASIC program:
+
+          100 PRINT "Help me out of this loop!"
+          110 C$ = INKEY$: IF C$<>"" THEN STOP
+          120 GOTO 100
+
+      After passing through NUMZAP, the program will look like:
+
+          100 PRINT "Help me out of this loop!"
+              C$ = INKEY$: IF C$ <>"" THEN STOP
+              GOTO 100
+
+      You might think that this selective filtering is just as
+      pointless as removing *all* the line numbers.  Certainly the
+      resulting file is not usable by the BASIC interpreter.  The
+      reason for this particular conversion is to take advantage of a
+      little used feature of the IBM/Microsoft BASIC compiler.  The
+      following is quoted from the BASIC compiler manual, page 42, in
+      the section on compiler parameters:
+
+      "/N     The /N parameter tells the compiler to relax line
+              numbering constraints.  When /N is specified, line
+              numbers in your source file may be in any order, or they
+              may be eliminated entirely.  Any line numbers which exist
+              have nothing to do with the sequence of the lines; they
+              serve only as labels for GOSUBs, GOTOs, and any other
+              statements which use line numbers as references for
+              branching.
+
+              With /N, lines are compiled normally, but unnumbered
+              lines cannot be targets for GOTOs or GOSUBs."
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                     3
+
+             " There are three advantages to using /N:
+
+               *   Elimination of line numbers increases program
+                   readability.
+
+               *   The BASIC compiler optimizes over entire blocks of
+                   code rather than single lines (for example in
+                   FOR...NEXT loops).
+
+               *   BASIC source code can more easily be included in a
+                   program with $INCLUDE."
+
+      Another advantage, not mentioned in the manual, is that reducing
+      the number of numbered lines will enable the compiler to handle
+      larger source files.   Since BASCOM only uses 64K regardless of
+      the actual memory available, remembering the offset of each line
+      number in a large program can soon eat up all the usable memory.
+      When this happens, BASCOM rather ungracefully begins to emit an
+      unending series of TC (Too Complex) error messages until it
+      reaches the end of your program.
+
+      NUMZAP, then, is a utility to allow effective use of BASCOM's /N
+      parameter.  When programs are passed through NUMZAP prior to
+      compilation, BASCOM can do a better job of optimizing the
+      resulting object code.  The object code produced tends to be
+      tighter, more compact, and faster running.  As an added bonus,
+      since fewer line numbers need to be remembered, larger programs
+      can be compiled.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                     4
+
+      II. Programming With NUMZAP
+
+      There are four steps to producing an optimized BASIC program with
+      NUMZAP:
+
+         1. Enter the program using the BASIC interpreter's screen
+            editor.
+
+         2. Run and debug the program from within the interpreter.
+
+         3. Pass the debugged program through NUMZAP.
+
+         4. Compile the 'zapped program with BASCOM, using the /N
+            parameter.
+
+         5. Link the compiled program with LINK.
+
+      It is assumed that users are familiar with steps 1,2 and 5. Steps
+      3 and 4 will be covered in the following sections.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                     5
+
+      III. Running NUMZAP
+
+      Your program must be in ASCII format or NUMZAP will be unable to
+      read it.  This means that you must use the "A" option when saving
+      the program from BASIC:
+
+          SAVE"myprog.bas",A
+
+      There are two ways to start up NUMZAP:
+
+      1. Prompt mode:
+
+         From DOS, type:
+
+             NUMZAP
+
+         After a few seconds, NUMZAP prints a hello screen, then
+         prompts:
+
+             Input file name? [.bas]
+
+         Type in the name of the program you want converted.  If you
+         don't provide an extension, NUMZAP assumes it to be .BAS.  If
+         NUMZAP is unable to find the file, you will be given the
+         option of naming another file, or returning to DOS.  The same
+         options will be presented to you if NUMZAP discovers that the
+         file is not in ASCII mode.
+
+         Once the input file has been specified, NUMZAP will prompt:
+
+             Output file name? [.zap]
+
+         Type in a name for the converted program.  If you just press
+         enter, the name defaults to that of the input file, with an
+         extension of .ZAP.
+
+         NUMZAP will now convert your program.  Two passes are made
+         over the program.  On the first pass, NUMZAP builds a table of
+         all the referenced line numbers.  On the second pass, the
+         converted program is built.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                     6
+
+         During the conversion process, a status line is maintained on
+         the screen, letting you know how much progress has been made.
+         You may abort and return to DOS at any time by pressing the
+         Esc key.
+
+         When finished, NUMZAP returns you to DOS, and you see the
+         prompt:
+
+                  A>
+
+      2. Expert mode:
+
+         You can specify the input and output filenames when you invoke
+         NUMZAP.  The syntax is:
+
+            NUMZAP [inputname[.ext]] [outputname]
+
+         The defaults are as under prompt mode.  If you leave off the
+         extension on the input filename, NUMZAP assumes it to be .BAS.
+         If you don't provide the output filename, it will default to
+         the input name with a .ZAP extension.  If there are any
+         problems with the input file, NUMZAP will dump you out to
+         prompt mode.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                     7
+
+      IV.  Using Converted Programs
+
+         You must use the /N option when compiling programs converted
+         with NUMZAP.  Thus, to compile MYPROG.ZAP you would type:
+
+            BASCOM myprog.zap /n;
+
+         or (Prompts upper case, your responses in lower case):
+
+            bascom
+            SOURCE FILENAME [.BAS]: myprog.zap /n
+            OBJECT FILENAME [MYPROG.OBJ]: <return>
+            SOURCE LISTING  [NUL.LST]: <return>
+
+         If you forget to specify the /N, BASCOM will deluge you with
+         error messages.  Unlike other, more friendly programs, there
+         is no way to abort compilation once started.  Just sit through
+         the messages and try again.
+
+         Hang onto your un'zapped source file!  Zapped programs can NOT
+         be read by the BASIC interpreter (you'll get a "Direct
+         statement in File" message).  If you intend to do any further
+         debugging under the interpreter, don't erase your source file.
+
+         A rudimentary renumbering utility is provided on your NUMZAP
+         disk, but don't depend on RENUM if you do extensive editing of
+         the 'zapped file.  RENUM simply adds line numbers
+         sequentially, with a step size of one.  If you add too many
+         new lines, there won't be enough line numbers to use between
+         the existing numbers.
+
+         If this happens, RENUM will abort with a "Fatal Error"
+         message.  Your only recourse should this happen is to split
+         the file at the point where the Fatal Error occurred, and
+         renumber the parts separately.  The moral of all this is to do
+         your editing on the original BAS file, and use ZAP files
+         for compilation only.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                     8
+
+      V.  Comments About Optimization
+
+          In general, programs passed through NUMZAP prior to
+          compilation will be both smaller and faster running.  The
+          magnitude of these effects will vary from program to program.
+
+          As a rule, the larger the program, the more noticable will
+          the the reduction in size.  This is because all compiled
+          BASIC programs have a constant size contribution from the
+          various run-time routines which are either linked in, or are
+          a part of BASRUN.EXE.
+
+          It turns out that the smallest compiled BASIC program will
+          take up almost 20K, the size of the run-time enviroment.  If
+          you have a 22K compiled program, the *percent* change in size
+          after using NUMZAP is not going to be very big, since most of
+          the size is the invarient run-time stuff which NUMZAP can't
+          affect.  Larger programs, in which more of the size is
+          actually caused by the code you write, will show more
+          noticable shrinkage, even though the decrease in size per
+          line is about the same.
+
+          The increase in speed noted will depend on just what the
+          program *does*.  Programs which do a lot of number crunching,
+          or screen handling, will show the greatest improvements.
+
+          On the other hand, programs which do a lot of disk access
+          will show little if any speed enhancement.  These programs
+          are "I/O bound" -  the program is killing time waiting for
+          the disk drives to catch up.   In cases such as this, making
+          the program code more efficient doesn't help, since you just
+          end up waiting longer for the disk.  NUMZAP version 1.0 is in
+          fact I/O bound, and shows no improvement in speed after
+          operating on itself.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                     9
+
+      VI.  Miscellaneous and A Word From Our Sponsor...
+
+           A. System Requirements:
+
+              NUMZAP requires 64K of memory, and at least one disk
+              drive. Obviously, BASCOM is required for the program to
+              have any utility.
+
+           B. Programming Notes:
+
+              NUMZAP was written in BASIC, and passed through itself
+              prior to compilation.  The source code for NUMZAP is
+              distributed along with the compiled version, in case
+              you'd care to customize.  I would appreciate hearing
+              about any improvements people make, for possible
+              inclusion in future releases.
+
+              If you attempt to modify NUMZAP, you should be aware that
+              the machine language subroutine which reads the DOS
+              command line to handle "expert mode" is incompatible with
+              the BASIC interpreter.  If you attempt to run NUMZAP's
+              source code under the interpreter without disabling this
+              subroutine, a system crash will result, and you'll have
+              to reboot.  This routine only gets called once, and I
+              generally convert the call into a comment while debugging
+              with the interpreter.
+
+           C. Red Tape and Legal Nonsense:
+
+              1. Disclaimer:
+
+                 NUMZAP is distributed as is, with no guarantee that it
+                 will work correctly in all situations.  In no event
+                 will the Author be liable for any damages, including
+                 lost profits, lost savings or other incidental or
+                 consequential damages arising out of the use of or
+                 inability to use this program, even if the Author has
+                 been advised of the possibility of such damages, or
+                 for any claim by any other party.
+
+                 Despite the somewhat imposing statement above, it *is*
+                 my intention to fix any bugs which are brought to my
+                 attention.  Drop me a line if you think you've found a
+                 problem.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                    10
+
+              2. Copyright Information:
+
+                 The entire NUMZAP distribution package, consisting of
+                 source, object, and documentation files, is copyright
+                 (c) 1983 by David Whitman.  The author reserves the
+                 exclusive right to distribute this package, or any
+                 part therof, for profit.  The name NUMZAP (tm) applied
+                 to a microcomputer programming utility is a trademark
+                 of David Whitman.
+
+                 This package may be copied freely by individuals for
+                 evaluation purposes.  It is expected that those who
+                 find the package useful will make a contribution
+                 directly to the author of the program, regardless of
+                 where they obtained their copy.
+
+          D. Tanstaafl (i.e. There Ain't No Such Thing As a Free Lunch)
+
+             CHASM is distributed under the Freeware marketing scheme,
+             developed by Andrew Fluegelman, whose efforts are
+             gratefully acknowleged.
+
+             Anyone may obtain a free copy of this program by sending a
+             blank, formatted diskette to the author.  An addressed,
+             postage-paid return mailer must accompany the disk (no
+             exceptions, please).
+
+             A copy of the program, with documentation, will be sent by
+             return mail.  The program will carry a notice suggesting a
+             contribution to the program's author.  Making a
+             contribution is totally voluntary on the part of the
+             users.  Regardless of whether a contribution is made, the
+             user is encouraged to share the program with others.
+             Payment for use is discretionary on the part of each
+             subsequent user.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                    11
+
+             The underlying philosophy here is based on three
+             principles:
+
+                First, that the value and utility of software is best
+                   assessed by the user on his/her own system.  Only
+                   after using a program can one really determine
+                   whether it serves personal applications, needs, and
+                   tastes.
+
+                Second, that the creation of independent personal
+                   computer software can and *should* be supported by
+                   the computing community.
+
+                Finally, that copying and networking of programs should
+                  be encouraged, rather than restricted.  The ease with
+                  which software can be distributed outside traditional
+                  commercial channels reflects the strength, rather
+                  than the weakness, of electronic information.
+
+      If you like this way of distributing software, please support it.
+      Send a contribution, and tell your friends and collegues about
+      software you find useful.  Write to the editor of your favorite
+      computer magazine and tell *him* (or *her*) also.  Only with your
+      support can authors of programs such as this continue to provide
+      quality software under a system so favorable to YOU, the user.
+
+               David Whitman
+               136 Wellington Terrace
+               Lansdale, PA 19446
+               (215) 641-7114
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                    12
+
+
+
+             ==============Also Available===============
+
+      CHASM is a full featured assembler for the IBM personal computer.
+      Much simpler than the IBM Macro Assembler, CHASM is well suited
+      for learning assembly language, as well as for production coding.
+
+      Programs assembled by CHASM do not require linking, and are
+      already in the fast loading COM format produced by the DOS
+      utility EXE2BIN.  This design decision eliminates two "hidden"
+      steps involved in producing a running program with the Macro
+      Assembler.
+
+      CHASM supports two distinct, simple ways to get machine language
+      subroutines into programs written in BASIC, the most popular
+      language for the IBM personal computer.  (The only way to use the
+      Macro Assembler with BASIC is long, convoluted and confusing.)
+
+      CHASM comes complete with sixty pages of documentation, plus
+      a twenty page primer which introduces assembly language for total
+      beginners.
+
+      CHASM is available in two forms, an interpreted version and a
+      compiled version.  The interpreted version is available free of
+      charge for evaluation.  Those who find the program useful are
+      requested to make a contribution to the author.  A compiled
+      version, which runs about 6 times faster, is available as a free
+      upgrade to those who make a contribution of $30 or more.
+
+      To obtain a copy of CHASM, send a blank, formatted diskette, plus
+      a stamped return mailer (no exceptions, please) to:
+
+         David Whitman
+         136 Wellington Terrace
+         Lansdale, PA 19446
+
+      If you would prefer to directly receive the compiled version,
+      enclose a check for $30 with your disk.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
+
+## OKIMOD.DOC
+
+{% raw %}
+```
+    This file describes modifications to MODE.COM to enable its use
+with the OKIDATA 82A printer.  The method described will also work
+with other printers whose control codes are different from the EPSON/
+IBM printers.
+    First, enter DEBUG as follows:
+
+        A>DEBUG MODE.COM
+
+    Next, verify the present code (to ensure that you don't have a
+different level of MODE.COM from mine):
+
+        -D 0862 0863
+        xxxx:0862 B3 12
+        -D 0872 0873
+        xxxx:0872 B3 0F
+        -D 089A 089B
+        xxxx:089A B3 32
+        -D 08A5 08A6
+        xxxx:08A5 B3 30
+
+    Then make the following entries:
+
+        -E 0863 1E   (or your printer's code for 80-character line)
+        -E 0873 1D   (or your printer's code for 132-character line)
+        -E 089B 36   (or your printer's code for 6 LPI)
+        -E 09A6 38   (or your printer's code for 8 LPI)
+
+    And write them back onto the disk:
+
+        -W
+
+    Finally, exit DEBUG:
+
+        -Q
+
+   Your new MODE.COM now has the correct control codes to set line
+spacing and number of characters per line.  It is probably a good idea
+to rename the new MODE.COM to avoid confusion (I renamed mine OKIMODE.COM).
+
+```
+{% endraw %}
 
 ## RENUM.BAS
 
+{% raw %}
 ```bas
 10000 '==================================
 10010 ' PROGRAM RENUM  Version 1.00
@@ -1407,9 +3848,34 @@ machines:
 13070 SOUND 100,5: CLS: PRINT "====RENUM aborted from keyboard===="
 13080 END
 ```
+{% endraw %}
+
+## SD20.DOC
+
+{% raw %}
+```
+                          SD.COM
+
+                  Developed by: John Chapman
+
+The SD.COM program will sort the disk directory with the options:
+
+      /A - all files
+      /X - by extension
+      /S - by size
+      /D - by date-time
+      /E - without screen erase
+         - (no option) sorts all normal files
+
+The /e option can be used in conjuction with other options to
+sort without screen clear.
+
+```
+{% endraw %}
 
 ## SOLFE.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF:WIDTH 80:LOCATE 10
 15 FOR I = 1 TO 35:A$=A$+CHR$(205):NEXT I
@@ -1460,9 +3926,11 @@ machines:
 460 PLAY "o3 c16. p16 p8 p4 p2 "
 470 END
 ```
+{% endraw %}
 
 ## WMTELL.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0,1:WIDTH 80
 20 COLOR 6,1,1
@@ -1579,6 +4047,68 @@ machines:
 1130 DATA "ee4p8.o2ee2
 1140 'Last Line of File: WMTELL.BAS
 ```
+{% endraw %}
+
+## XDIR.DOC
+
+{% raw %}
+```
+                XDIR.EXE (C)Copyright 1983, T A Davis
+
+XDIR.EXE - Documentation.
+
+XDIR gives you an extended directory listing for the default directory
+of the drive specified; as in 'XDIR A:'.  If you do not specify a drive
+letter, it will assume the default drive.
+
+You will see a listing similar to this:
+
+Directory of C:\
+
+IBMBIO   COM      4608  3-08-83  12:00  RHSA
+IBMDOS   COM     17152  3-08-83  12:00  RHSA
+COMMAND  COM     17664  3-08-83  12:00     A
+CONFIG   SYS       128  6-12-83  19:24     A
+ANSI     SYS      1664  3-08-83  12:00     A
+VDISK360 COM       768  4-09-83  16:52     A
+VDISK    COM       672  6-08-83  14:40     A
+CONFIG   OLD       128  6-12-83  19:23     A
+CONFIG   NEW       128  6-12-83  19:24     A
+CONFIG   ALT       128  6-12-83  19:24     A
+XDIR     ASM     10496  6-14-83  21:18     A
+XDIR     HEX      3840  6-14-83  21:22     A
+XDIR     OBJ      1710  6-14-83  21:20     A
+XDIR     LST     28537  6-14-83  21:20     A
+XDIR     CRF      1934  6-14-83  21:20     A
+XDIR     MAP       384  6-14-83  21:20     A
+XDIR     EXE      1792  6-14-83  21:20     A
+XDIR     REF      4666  6-14-83  21:20     A
+XDIR     DOC       256  6-14-83  20:41     A
+         19 File(s)
+
+This display differs form the DIR output in four ways:
+
+1 - HIDDEN, SYSTEM, and READONLY files are listed.
+
+2 - These file attributes are listed in the last field.
+
+        R - READONLY file; file can be read, but not written to.
+        S - SYSTEM file; such as IBMBIO.COM and IBMDOS.COM.
+        H - HIDDEN file; does not appear in normal file searches.
+        A - not ARCHIVED; modified since last BACKUP.
+
+3 - Sub-directories are not listed.
+
+4 - You CANNOT specify a PATH -- ie: XDIR \TOP\PASCAL (at least not yet.)
+
+Please address all comments via EMAIL.
+
+T A Davis
+
+[70040,1162]
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

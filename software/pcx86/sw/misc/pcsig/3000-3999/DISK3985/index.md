@@ -14,6 +14,99 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## CANFIELD.TXT
+
+{% raw %}
+```
+Canfield v1.01 Copyright (c) 1991,1991 by Daniel Thomas
+
+                      _______
+                 ____|__     |                (R)
+              --|       |    |-------------------
+                |   ____|__  |  Association of
+                |  |       |_|  Shareware
+                |__|   o   |    Professionals
+              -----|   |   |---------------------
+                   |___|___|      MEMBER
+
+
+This small file will help you install Canfield.  Here are the files you
+should have:
+
+    CANFIELD.EXE - program file
+    CANFIELD.HLP - help file
+    CANFIELD.TXT - this file (may have been renamed READ.ME)
+    CANFIELD.REG - Shareware registration form
+    VENDOR.TXT   - Shareware vendor information
+
+To install Canfield, copy the files to your hard disk (in any directory),
+and add CANFIELD.EXE to one of your Program Manager groups.  Run it by
+clicking on the icon.
+
+You may also run it by clicking on CANFIELD.EXE from File Manager.
+
+For information on how to play the game, select "Help" from the program
+menu.
+
+Enjoy, and thanks for trying out Canfield!
+
+Dan Thomas
+
+(PS - if you like this game and want to continue using it, you must register.
+Click on the "Registration Form" button on the "reminder" screen - or print
+the file CANFIELD.REG, and fill in the blanks.  Thanks again.)
+```
+{% endraw %}
+
+## VENDOR.TXT
+
+{% raw %}
+```
+Candfield v1.01 Copyright (c) 1991,1992 by Daniel Thomas
+
+                      _______
+                 ____|__     |                (R)
+              --|       |    |-------------------
+                |   ____|__  |  Association of
+                |  |       |_|  Shareware
+                |__|   o   |    Professionals
+              -----|   |   |---------------------
+                   |___|___|      MEMBER
+
+SHAREWARE VENDOR INFORMATION
+----------------------------
+
+If you are a Shareware Vendor, this information is for you.
+
+You are free to distribute this program and its associated files freely,
+as long as you charge nothing for them.  You may charge a small handling
+fee for the diskette(s) - I do expect you to make _some_ money, after all!
+(Basically, I expect you to charge like most other Shareware Vendors do.)
+
+Required Files for Distribution:
+
+    CANFIELD.EXE - program file
+    CANFIELD.HLP - help file
+    CANFIELD.TXT - read-me file (you may rename this to READ.ME, or similar)
+    CANFIELD.REG - Shareware registration form
+    VENDOR.TXT   - this file
+
+    NEVER DISTRIBUTE THE FILE CANFIELD.INI.  Thank You.
+
+If you include this program in any catalogs, please use the following
+description (or one very similar to this):
+
+"Canfield is a Shareware solitaire card game for Windows 3.0.  Lots of bells
+and whistles (plus some surprises), such as: Cheating(!), Card-Dragging,
+Skill Levels, Top Scores, Unlimited Undo, On-Screen Hints, Animated Card
+Backs, and more.  Author:Dan Thomas, Member Association of Shareware
+Professionals and author of Calculation Solitaire."
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3985
 

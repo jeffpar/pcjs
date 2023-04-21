@@ -33,6 +33,44 @@ machines:
     individualize callers having the same ID. The source code is included.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0212.TXT
+
+{% raw %}
+```
+Disk No:  212                                                           
+Disk Title: RBBS-PC 1 of 5 (334,621,622,2092)             
+PC-SIG Version: S8.3                                                    
+                                                                        
+Program Title: RBBS-PC                                                  
+Author Version: 17.3                                                    
+Author Registration: $35.00.                                            
+Special Requirements: A hard drive and modem.                           
+                                                                        
+The RBBS is the bulletin board system of choice for many IBM PC         
+bulletin boards. It is a large system on four disks and                 
+supports the PC-SIG LIBRARY ON CD ROM.                                  
+                                                                        
+RBBS-PC's internal structure continued to become significantly more     
+modularized and structured.  Major enhancements included a File         
+Management System for directories, additional file exchange protocols,  
+support for managing subscriptions, the ability to run as a local       
+application on a network, configurable command letters, the ability to  
+use any field or to define a new field to identify callers, the ability 
+to individuate callers having the same ID, multiple uploads on a single 
+command line, new A)nswer and V)erbose ARC list commands, and context   
+sensitive help. Source code is included.                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0212
 

@@ -14,6 +14,130 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILES.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No             Title: The Stock Trader     Version 7.0
+---------------------------------------------------------------------------
+      The Stock Trader is a menu driven program tracking stock performance
+      and generating buy and sell signals according to the technical market
+      indicators, placed in the program by the user, for each stock.
+
+      The program generates a high quality 100 day graph with recommendations
+      for trading the stock, futures, or mutual fund equity. There are 3
+      stocks at the start for demo purposes. Stocks may be added, deleted,
+      updated and graphed.
+
+      Version 7.0 adds an entirely new feature - a stock importing
+      module.  This can import stock quotes from Compuserve, Prodigy,
+      and any quotes service that supplies the user with and ASCII file.
+      Registration activates the Stock Portfolio Manager.
+
+
+------------  The Stock Trader -------------------------------------------
+
+  FILES        DESCRIPTION
+
+AUTOLOAD EXE    Import quotes program
+AUTOLOAD DAT    Capture mask data file
+BROWSE   COM    Utility program for reading text files
+BRT71EFR EXE    Runtime module
+CONVERT  EXE    Stock data file conversion program
+DEFAULT  EXE    Printer default setting program
+DEFAULT  DAT       "       "    data file
+FILES    TXT    The file your now reading
+FOLIO    EXE    Stock portfolio Manager
+FOLIO    DAT    Data file for above
+GRAPHICS EXE    Archived GRAPHICS.COM public domain programs
+INFO     BAT    Information BAT file for the Stock Trader
+INSTALL  BAT    Installation batch file
+INSTALLB BAT    Secondary installation batch file
+NOTES    TXT    Notes file for the Stock Trader
+QUOTES   TXT    Sample data file
+READ     ME     Additional documentation for the Stock Trader
+README   SIF    Special shareware instruction file
+SPLIT    EXE    Stock splitting program
+STOCKDAT EXE    Archived main data file
+STOCK    DOC    Stock trader Manual
+STOCK    HDR    Stock header data file
+STOCK    IDX    Stock data file index
+STOCK    EXE    Introduction program
+STOCKEDT EXE    Stock editing program
+STOCK7   EXE    Main program
+STOCKPRT EXE    Stock printing program
+STOCK    IDX    Stock data file index
+
+
+
+FreeBooter(tm) Software
+P.O. Box 19624
+Portland, OR  97219
+(503) 244-4800    Compuserve 70214,3352
+Copyright 1987-1992 FreeBooter(tm) Software
+```
+{% endraw %}
+
+## NOTES.TXT
+
+{% raw %}
+```
+Program name:  The Stock Trader
+
+Author name:   Freebooter Software
+Address:       P.O. Box 19624
+               Portland, OR  97280
+
+Telephone Number: (503) 244-4800  Fax: (503) 244-0268
+    Orders Only : (800) 366-4012 or order through Compuserve 70214,3352
+
+Registration Fee:  $49.95 + $1.75 postage ($5.00 foreign)
+
+Program Description:
+
+The Stock Trader is a menu driven program tracking stock performance
+and generating buy and sell signals according to the technical market
+indicators, placed in the program by the user, for each stock.
+
+The program generates a high quality 100 day graph with recommendations
+for trading the stock, futures, or mutual fund equity. There are 3
+stocks at the start for demo purposes. Stocks may be added, deleted,
+updated and graphed.
+
+Version 7.0 adds an entirely new feature - a stock importing
+module.  This can import stock quotes from Compuserve, Prodigy,
+and any quotes service that supplies the user with and ASCII file.
+Registration activates the Stock Portfolio Manager.
+
+Please don't forget the authors if you decide these programs are useful
+to you.  The small charge they ask for their work is only appropriate
+compensation.
+
+Review the README file for more in depth information.
+
+
+FreeBooter(tm) Software
+P.O. Box 19624
+Portland, OR  97219
+(503)244-4800   Compuserve 70214,3352
+Copyright 1987 - 1992 FreeBooter(tm) Software
+```
+{% endraw %}
+
+## QUOTES.TXT
+
+{% raw %}
+```
+AT&T                        1044     43.750    42.375   43.250   0.375   4:33
+Hewlett Packard             8200     79.625    78.000   78.000   0.000   4:02*
+HP                           291     24.500    23.750   24.500   0.750   4:04*
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3293
 

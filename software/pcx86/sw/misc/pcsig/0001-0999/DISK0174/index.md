@@ -46,6 +46,7 @@ machines:
 
 ## CIA.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -319,9 +320,11 @@ machines:
 3410 IF Z$="Y" THEN RUN
 3420 SYSTEM
 ```
+{% endraw %}
 
 ## CIVILWAR.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -596,9 +599,11 @@ machines:
 3420 FOR I=1 TO 2000:NEXT I
 3430 SYSTEM
 ```
+{% endraw %}
 
 ## COMBOT.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -1265,9 +1270,76 @@ machines:
 7340 DATA 135,94,134,95,135,95,132,96,133,96,134,96,135,96,136,96,131,97,132,97,133,97,134,97,135,97,136,97,137,97,138,97
 7350 ' --------------------------------------------------------------
 ```
+{% endraw %}
+
+## COMBOT.DOC
+
+{% raw %}
+```
+Begin Documentation
+
+This is documentation for the COMBOTS game, a game that pits two                "combat robots" against each other to a fight to the finish.
+
+The program was done to learn a little about how to detect a                    collision between objects and the method used in this instance                  was the POINT function in BASIC.
+
+Each COMBOT may be programmed to perform ten actions, each action               selected from a list of three possibilities, over and over again in             the order determined at the time the COMBOT is programmed.
+
+In order to simplify the shapes used to represent the COMBOTS there             was nothing included to show "facing" of each COMBOT unless the unit            is moving or firing.
+
+Shapes are moved using the standard GET-PUT format after each shape             is originally drawn using DATA statements to set the points and the             colors.
+
+Collisions (between the laser beams used as weapons and each combot)            are detected by using the POINT function to read the color of each              point in a straight line from the firing unit to the target point.
+
+This target point is determined by extending a straight line from               the firing unit's facing position point by point until either a                 color is detected or the absolute point reached is on the boundary              of the field.
+
+This point by point process is EXTREMELY slow and I suggest that an             improved game would use a test against the current endpoint of the              laser versus the actual points in the target unit.  Also you could
+compile the BASIC program for more speed.
+
+Problems encountered with this program include the following:
+1) Shapes "jumping" from one location to another, on top of each                   other.  Apparently there was some error that caused the variable                used to hold the current COMBOTs position not to be purged.
+   This would account for the "jump" to the other COMBOTs position                 for no apparent reason.  I believe this is fully corrected now.
+2) Colored points left on the screen due to COMBOTs attempting to                  move into the boundary.  This was remedied by setting absolute                  limits to movements rather than depending on checking the color   
+   of the point to be moved to.  If such a colored point was hit by                a laser the firing unit would thus score in error.
+3) Colored points left on screen and/or boundary points shot away by               the results of firing units hitting the colored boundary.  This                 was patched rather than fixed.  The patch simply redraws a small 
+   inner portion of the colored boundary.  
+
+The game does everything I wanted it to do except that I wanted to              have six COMBOTs on the screen at once.  Until a better method is               found to check for hits though this really isn't possible.
+
+End Documentation
+
+
+```
+{% endraw %}
+
+## FILES174.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No  174  Game Mixture                                     v1.1 DS2
+------------------------------------------------------------------------
+?        BAT  Letter A-L for MENU.BAT
+CIA      BAS  CIA adventure simulation
+CIVILWAR BAS  Civil war simulation
+COMBOT   BAS  Program two robots to fight each other with lasers
+COMBOT   DOC  Documentation for COMBOT.BAS
+FOOTBAL  BAS  Big-8 football simulation - K.U. versus your choice
+FOOTBALL BAS  Another football simulation
+FROG     EXE  Good Frogger type game - graphics required
+GRINCH   BAS  El Grinch game - cute, neat game
+MARS-ESC BAS  Escape from Mars adventure
+MENU     BAT  Menu for the files on this disk
+MENU     SCR  Part of MENU.BAT
+RACECAR  BAS  Good race car game
+SEAWOLF  BAS  Excellent game - sink subs, PT's, tankers
+SOLITARE BAS  Solitare card game - you can't cheat with this one
+XWING    BAS  Re-live Star Wars - outstanding game - graphics req'd
+```
+{% endraw %}
 
 ## FOOTBAL.BAS
 
+{% raw %}
 ```bas
 5 CLS
 9 WIDTH 80: PRINT
@@ -1584,9 +1656,11 @@ machines:
 3170 GOTO 2300
 3180 SYSTEM
 ```
+{% endraw %}
 
 ## FOOTBALL.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -1991,9 +2065,11 @@ machines:
 4720 DATA .1,19,.4,35,.2,100,.1 
 4730 SYSTEM
 ```
+{% endraw %}
 
 ## GRINCH.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -2170,9 +2246,11 @@ machines:
 2440 LOCATE R,Q :PRINT CHR$(32) :GOTO 2380
 2450 GOTO 2380
 ```
+{% endraw %}
 
 ## MARS-ESC.BAS
 
+{% raw %}
 ```bas
 10 DEFINT A-Z:KEY OFF:CLS:COLOR 10,0:RANDOMIZE VAL(RIGHT$(TIME$,2))
 20 PRINT TAB(12);"Welcome to the ESCAPE FROM MARS Adventure":PRINT:PRINT
@@ -2402,9 +2480,11 @@ machines:
 2260 PLAY"o2l8eeel3c"
 2270 'Last Line of MARSESC.BAS
 ```
+{% endraw %}
 
 ## RACECAR.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -2689,9 +2769,11 @@ machines:
 3510 DATA 85,20,10,196,1,1,*,22,10,002,2
 3520 DATA 86,20,11,196,1,1,*,22,11,002,2
 ```
+{% endraw %}
 
 ## SEAWOLF.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -2880,9 +2962,11 @@ machines:
 2560   SYSTEM
 2570   SYSTEM
 ```
+{% endraw %}
 
 ## SOLITARE.BAS
 
+{% raw %}
 ```bas
 10 REM $LINESIZE:132
 20 REM ----------------------------------------------------------------------
@@ -3184,9 +3268,11 @@ machines:
 2980  DATA "532","535","539"
 2990 'Last Line of SOLITAIR.BAS
 ```
+{% endraw %}
 
 ## XWING.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -3921,6 +4007,7 @@ machines:
 8020  PLAY "L1 N0":PLAY "L1 N0"
 8030   GOTO   1300
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

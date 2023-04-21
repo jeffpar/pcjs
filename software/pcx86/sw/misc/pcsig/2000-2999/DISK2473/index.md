@@ -43,6 +43,53 @@ machines:
     the actual decision, but it can help you think it through more clearly!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2473.TXT
+
+{% raw %}
+```
+Disk No: 2473                                                           
+Disk Title: Udecide                                                     
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Udecide                                                  
+Author Version: 1.02                                                    
+Author Registration: $35.00                                             
+Special Requirements: None.                                             
+                                                                        
+We all know the best way to make tough decisions is to make a list of   
+options, assign relative values to them, and choose the option with the 
+highest score.  But how many of us really do that?  That was before     
+UDECIDE!                                                                
+                                                                        
+UDECIDE helps you make tough decisions - for example, which database    
+program to purchase.  The options could be PC-File, File Express, and   
+Wampum.  When looking at the different programs (purchase options), you 
+would develop categories of comparison like:  power, flexibility, ease  
+of use, and dBase compatibility.  You would then assign number values to
+their relative importance of each category.  Now evaluate each program  
+and determine how they score in each category.  Some would be easier to 
+use and others more powerful, etc.                                      
+                                                                        
+By entering the importance you associate with each rating category and  
+how each program is rated in that category, UDECIDE determines a        
+weighted average score for each program.  The program with the highest  
+score is the best one for your needs.  You can then either print out the
+complete analysis or change the ratings and perform a "what-if"         
+analysis.  Use UDECIDE to decide which project to pursue, which college 
+to select, which stocks to buy, or just about anything.   It can't make 
+the actual decision, but it can help you think it through more clearly! 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2473
 

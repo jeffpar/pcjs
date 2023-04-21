@@ -78,6 +78,75 @@ machines:
     M_MULTIP C    Multiply matrix 1 x matrix 2.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES429.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 429   Elementary C                                      v1 DS2
+-----------------------------------------------------------------------
+A collection of C language routines that will help a programmer learn
+the language and will also provide a shortcut library for more
+experienced users.  Included are some basic data movement routines,
+a "help facility", amortization programs, and matrix manipulation.
+A short but succinct example shows how to initialize a Hayes Smart-
+modem out of Lattice C.  An entire set of functions is provided for
+string processing of a list of arguments, with an example showing how
+to use these functions for Command Tail Processing.
+ 
+ABOUT    C    Elementary "help facility" for C functions
+ABOUT    DAT  Descriptions for ABOUT.C "help facility"
+ABOUT    EXE  Object code for "help facility"
+AMORTIZ1 C    Link of AMORTIZE.EXE
+AMORTIZ2 C    "
+AMORTIZ3 C    "
+AMORTIZE EXE  Amortization, where user or PC specifies payment
+AMORTPRN EXE  Same as AMORTIZE.EXE with data also sent to disk
+BACKUP   C    Create backup copy of a file with
+BACKUP   EXE  "                  the extension .BAK
+C        DOC  Description of some of files on diskette
+CLS      C    Clear screen
+DOSDATE  C    Return system date in characters
+DOSTIME  C    Return system time in characters
+GETPOS   C    First part of comments on Lynn's routines
+INTEREST C    Link of AMORTPRN.EXE
+LOCATE   C    Position cursor
+LYNN     DOC  Middle part of comments on Lynn's routines
+LYNN     LIB  Object code only
+MAT      H    Matrix source and object code
+MATRIX   3L   Matrix manipulation subroutine descriptions
+MATRIX   S    Matrix manipulation subroutine descriptions
+MENU     C    Link of AMORTPRN.EXE
+M_COFACT C    Cofactor of element of matrix
+M_COPY   C    Duplicate copy of matrix
+M_DETERM C    Determinant of matrix
+M_DUMP   C    Print matrix
+M_INVERT C    Inverse of matrix
+M_MULTIP C    Multiply matrix 1 x matrix 2
+M_READ   C    Read into matrix
+M_SOLVE  C    Matrix linear equations
+M_TRANSP C    Transpose matrix
+OUTSTNG  C    Short section of LYNN.DOC
+PRINT    C    Print from ASCII file, with tabs
+PRINT    EXE  "
+PRINTAB  C    Print from ASCII file, with spaces
+PRINTAB  EXE  "
+PRTSCN   C    Print screen to printer
+PYMT     C    Link of AMORTPRN.EXE
+SETHAYES C    Hayes Smartmodem initialization routine
+STRINGS  C    String processing of list of arguments
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0429
 

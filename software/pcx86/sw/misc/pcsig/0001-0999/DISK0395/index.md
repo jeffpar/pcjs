@@ -33,6 +33,75 @@ machines:
     reports on specific categories.  A must for every homeowner!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES395.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 395   HOME INVENTORY SYSTEM                             v2.1
+------------------------------------------------------------------------
+Keeps track of everything you own (furniture, collections, etc.).  Data
+can be stored and retrieved by several categories, rooms, etc.  The
+documentation for the system is very complete; in fact it occupies
+approximately 80% of the diskette.
+ 
+RUNFIRST BAS  Copy of the Cover Letter.  Like a README File.
+PRINTERS BAS  Modifications to use Different Printers.
+ 
+    Documentation
+    -------------------------------------------------------------------
+TEXTPROC BAS  Text Processor, to produce the documentation.
+DIRECTOR      The Program Directory.  What's What and How to Start.
+TABLEOFC      Title, Copyright, and Table of Contents
+INTRODUC      Introduction and Care of Diskettes
+FIRSTIME      First Time Usage, Startup and Backup
+GENINFOR      General Information
+CREATFIL      Creating and Extending Data Files
+INTROPER      Introduction to Personalization
+PERVECT1      Personalizing the Rooms
+PERVECT2      Personalizing the Owners
+PERARRAY      Personalizing the General Categories
+PERSUBAR      Personalizing the Specific Categories
+PERVECT3      Personalizing the Colors
+DATAENTR      Data Entry
+RECDELET      Record Deletion
+INQUIRYS      Formation of Inquiries
+REDISPLA      Redisplay the Menu
+STOPPING      How to Stop
+TERMCOND      Terms and Conditions
+ 
+    Main Program
+    -----------------------------------------------------------------
+YOURVOWN BAS  To enter, inquire, personalize and report data.
+ 
+    Data Files
+    ------------------------------------------------------------------
+MESSAGES      Messages used by both the programs and documentation.
+DOCHANGE      Documentation unique to YOUR VERY OWN Home Inventory.
+VECTOR1       Initial Content of the Rooms
+VECTOR2       Initial Content of the Owners
+VECTOR3       Initial Content of the Colors
+ARRAY         Initial Content of the General Categories
+SUBARRAY      Initial Content of the Specific Categories
+HIGH          Initial Setting of Highest Records Used.
+ 
+    Other
+    ----------------------------------------------------------------
+CLEANDOC BAT  To remove the documentation programs and files from the
+              Data Diskette.
+ 
+PC-SIG
+1030DE Duane, Suite
+Sunnyvale, CA 94086
+(408) 730-9291
+(c) Copyright PC-SIG
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0395
 

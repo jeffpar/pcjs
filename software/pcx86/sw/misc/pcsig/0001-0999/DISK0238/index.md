@@ -63,6 +63,7 @@ machines:
 
 ## BASTOD.BAS
 
+{% raw %}
 ```bas
 10 '*
 15 '*************************************************************************
@@ -1609,9 +1610,76 @@ machines:
 7617 RESTORE
 7618 RETURN
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #238, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  SPRITE  .COM         CRC = A6 24
+
+--> FILE:  SPRITE  .SAV         CRC = 02 05
+
+--> FILE:  SPRITE  .BAS         CRC = E8 FF
+
+--> FILE:  SPRITE  .DOC         CRC = 33 08
+
+--> FILE:  BASTOD  .BAS         CRC = 57 70
+
+--> FILE:  SEIV    .DOC         CRC = 70 D4
+
+--> FILE:  CVTBIN  .BAS         CRC = 0A 74
+
+--> FILE:  TIMER   .            CRC = FD 9F
+
+--> FILE:  QUIET   .DOC         CRC = C6 09
+
+--> FILE:  HARDBO  .DOC         CRC = C6 A2
+
+--> FILE:  NKYPKY  .TXT         CRC = 31 C1
+
+--> FILE:  TKSOLVER.UNP         CRC = 88 24
+
+--> FILE:  PROKEY  .UNP         CRC = 95 83
+
+--> FILE:  LAYOUT  .UNP         CRC = 1D 17
+
+--> FILE:  RBASE   .UNP         CRC = 70 5C
+
+--> FILE:  SK      .UNP         CRC = AB 2A
+
+--> FILE:  PC-PRINT.DOC         CRC = 85 3D
+
+--> FILE:  PC-PRINT.EXE         CRC = 22 E4
+
+ ---------------------> SUM OF CRCS = 51 58
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## CVTBIN.BAS
 
+{% raw %}
 ```bas
 10 ' CVTBIN.BAS
 20 '
@@ -1689,9 +1757,902 @@ machines:
 740 END
 750 ' of CVTBIN.BAS
 ```
+{% endraw %}
+
+## HARDBO.DOC
+
+{% raw %}
+```
+
+	The following procedure can be used to prepare a hard
+
+disk system so that it is not necessary to have a floppy disk
+
+inserted for operations except for the initial power on booting.
+
+	The assumptions are that the maker of your disk system
+
+has included a DOS2.x compatible device driver which is installed
+
+during the boot procedure from the CONFIG.SYS file.
+
+	The root directory on the hard disk should have the
+
+following at a minimum:
+
+	AUTOEXEC.BAT
+	COMMAND.COM
+
+	The AUTOEXEC.BAT on the hard disk should set up the path
+
+and do those things that you are probably doing in the autoexec
+
+you are presently using on your floppy disk.
+
+My AUTOEXEC.BAT has the following:
+
+	path=c:;c:\dos;c:\usr;c:\user1
+	pwrupclk	(sets clock from quadram card)
+	mode com1:24,,,,p	(sets the async port parameters)
+	qspool 2	(sets a printer spooler)
+	prompt	$p$g	(I like a different prompt)
+	chkdsk		(I check the disk each time I power up)
+
+
+	To get going you must boot from the floppy disk,  this
+
+disk must contain the driver for the hard disk at a minimum.
+
+Include any other drivers you use.  The CONFIG.SYS must be
+
+included to select the driver and an AUTOEXEC.BAT.  The
+
+AUTOEXEC.BAT of the floppy is different from that on the hard
+
+disk.
+
+	My floppy disk boot has the following:
+
+	ANSI.SYS	(DISPLAY/KEYBOARD DRIVER)
+	TECDRIVE.SYS	(HARD DISK DRIVER FOR TECHMAR UNIT)
+	SPEEDISK.SYS	(DRIVER FOR RAM-DISK)
+	CONFIG.SYS	(REQUIRED BY DOS TO SELECT THE DRIVERS)
+	AUTOEXEC.BAT	(NOTE: NOT THE SAME AS ON THE HARD DISK)
+
+	The CONFIG.SYS has the following:
+
+	device=tecdrive.sys -p3 (install the hard disk driver)
+	device=speedisk.sys -k128 (install 128k of ram disk)
+	device=ansi.sys 	(install keyboard/display driver)
+	buffers=5		(set number of dos buffers)
+	break=off		(or other config.sys commands you use)
+	shell=c:\command.com c:\ /p
+
+	The shell command is the one that is important to allow
+
+you to remove the floppy disk and not get the 'load disk with
+
+command.com' message.
+
+	Notice that the floppy disk does not even contain the
+
+command.com file.
+
+	The AUTOEXEC.BAT file on the floppy is very simple:
+
+	c:		(change to the hard disk)
+	autoexec.bat	(execute the AUTOEXEC.BAT file on the hard disk)
+
+	The sequence of actions for the booting is as follows.
+
+	system does a power on reset, testing the hardware and memory.
+
+	DOS2.x is loaded from the floppy in drive A:, this
+
+consists of two files not normally seen by the user, DOS itself
+
+and an interface to the PROM BIOS in the machine.
+
+	The floppy disk is checked for a CONFIG.SYS file, which
+
+is found and then acted on.  This file causes, at a minimum, a
+
+device driver for the hard disk to be installed and a shell to be
+
+installed.  If there is no shell command then the COMMAND.COM
+
+file fill be used as the shell.  In our case the shell comes from
+
+the hard disk (driver previously attached).  The second part of
+
+the shell command informs the COMMAND.COM program that it can
+
+find itself on the C: root directory and that it is to remain in
+memory permantly.
+
+	Then the floppy drive is checked for an AUTOEXEC.BAT
+
+file, which is found and acted on.  This AUTOEXEC.BAT simply
+
+passes control to the hard disk (C:) and executes that
+
+AUTOEXEC.BAT file found on the hard disk. The commands in the
+
+hard disk AUTOEXEC.BAT file would be those you normally use.
+
+	The system will now be logged into the hard disk at the
+
+root directory and ready for the user.	The floppy is no longer
+
+necessary.
+
+	I have been using this set of commands for the past few
+
+months without problems and hope this example will help you set
+
+up your system.
+
+		Michael E. Walraven
+(revised 84/6/30, set comspec= not required on autoexec.bat in
+
+hard disk)
+
+
+```
+{% endraw %}
+
+## NKYPKY.TXT
+
+{% raw %}
+```
+
+				NEWKEY/PROKEY
+			    EVALUATION/COMPARISON
+
+
+I have been playing around with NEWKEY and now feel that I can make a
+decent evaluation of the program in comparison to PROKEY.
+
+Firstly, the operation of NEWKEY is extremely similar to that of PROKEY, and
+considering the copyright date of NEWKEY, the author may have had a good look
+at PROKEY before writing his program.  Curiously, though, the author states
+in his documentation that he began writing this program when only DOS 1.1
+was available, and therefore, a couple of features will not work with
+DOS 2.0.  Maybe David Rose saw NEWKEY and wrote first!	I do not mean to imply
+infringement on the either's part, only that the keystroke usage is somewhat
+similar, such as the selection of the primary key to begin macro definition.
+To be sure, NEWKEY is very good and accomplishes its goals of easily
+redefining keys to replace boilerplate input, redundant combinations of
+keystrokes, and unwieldly combinations of keystrokes.  If a user is not
+familiar with PROKEY, then he, or she, would probably think that NEWKEY is the
+greatest program in the world, a definite "must have".  However, PROKEY being
+a commercial product, it seems quite a bit more polished and user friendly as
+I shall describe shortly.  NEWKEY may still be the best program in the world
+considering its price.
+
+The following is an evaluation and direct comparison of the techniques and
+features of NEWKEY and PROKEY:
+
+1.  Both programs use "ALT-=" to begin definition and the next keystroke
+is the key, or key combination, to be redefined.  You then type the
+keystrokes you want.  Both programs can accept literal keystrokes, variable
+length keystroke fields, and fixed length keystroke fields as input.  Whereas
+NEWKEY makes you depend on the reliability of the program that you are, in
+fact, inputting to a macro, PROKEY puts up a nice prompt line that tells you
+"inputting text", etc.  This prompt line, as well as the command line which
+is explained later, can be relocated on the screen in any position that you
+prefer via the command line.  Both programs can accept input from within
+another program and are interactive so that what you see is what you get in
+your application.
+
+2.  Both programs are resident and use their own buffers to store macros.
+These macros can be saved to file and later recalled when needed.  The
+buffers are adjustable in size.  Any macro in memory, and not saved to disk,
+is lost at reboot.  Both programs have a merge function to combine memory
+macros with macros loaded from file.
+
+3.  Both programs have a "toggle" switch which will ON/OFF the program while
+remaining resident.  For NEWKEY, this must be done from DOS, whereas with
+PROKEY you can also do it from within the application via a command processor
+and prompt line.  PROKEY's command line from within an application can control
+the toggle switch, a help line, the "typing speed" of PROKEY (to accomodate
+the type of keyboard buffer the application uses), a "disk wait" function
+(disables PROKEY while the disk is spinning), one-finger operation (for
+the handicapped in using combination keystroke redefinition such as Wordstar
+control key combos), and very importantly, the location of the command and
+prompt lines.
+
+3. A difference in the programs is the way in which you can view your macros
+on the screen when not actually using them in an application.  NEWKEY saves
+the macros to file in hex and then "translates" them on the screen with the
+NEWKEY1 utility.  PROKEY, on the other hand, saves them to file in ASCII
+format,  but will not put them on the screen.  In order to see the macros
+you must use a text editor or TYPE, LIST, MORE, etc. The advantage in PROKEY
+is that you can edit without having to key-in the whole macro again (I have
+a couple of 150-200 character macros for Lotus).  This method also allows
+you to put in remarks for your personal use which are not read into PROKEY.
+NEWKEY has the edge if you just want to see the macro.
+
+That wraps up my evaluation/comparison.  I'm still pro-PROKEY because of its
+added user friendly features, but I may switch depending on how Philippe Kahn
+handles PROKEY.  He implies that PROKEY is written "dirty", but it sure
+works with more programs than does SK.	He says that he will make SK
+compatible with PROKEY.  If so I will definitely stick with PROKEY; if not
+then I will have to do some soul-searching since I love both programs dearly.
+
+I'm sorry to have rambled on so, but I felt it necessary to compare the
+programs decently.  The real strength of this type of program for a lazy
+person like myself is, on my HD, the ability to call my subdirectories and
+sub-subdirectories with single key input. My AUTOEXEC.BAT installs my macro
+that redefines the F-keys to call my main subdirectories on the root.  The
+ALT, CTRL, and SHIFT-F-keys call the subdirectories of the subdirectories.
+My applications programs are called up from batch files which clear the
+current PROKEY macro, install any macros needed for the application, run
+the application, clear these macros, and finally, reinstalls the F-keys
+macro.	Minimal keystrokes to be in an application, out, and back where I
+started.  Try it, EITHER one you'll like it!!!....Connie
+```
+{% endraw %}
+
+## PC-PRINT.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                               PC-PRINT
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    Robert Hendrix
+    1084 Bouldercrest Dr.
+    Watkinsville, Ga.  30677
+
+
+    Version 2.0
+    copyright 1984
+
+
+
+
+
+
+***************************************************************************
+**                                                                       **
+**     PC-PRINT comes with no warranties of any kind.  The author        **
+**     would like to know of any problems that users may encounter, but  **
+**     there is no promise or guarantees that any fixes will be made.    **
+**     In no event will the author be liable for damages arising from    **
+**     the use of this program.                                          **
+**   _________________________________________________________________   **
+**                                                                       **
+**      If you find that this program is useful to you, then a           **
+**      contribution ( $20.00 suggested ) would be appreciated.  Any     **
+**      suggestions as to the features of this program are welcome.      **
+**      A current and up-to-date version may be obtained from the        **
+**      the author by sending a check or money order and a formatted     **
+**      blank diskette to the address listed below.                      **
+**                                                                       **
+**      send to :     Robert Hendrix                                     **
+**                    1084 Bouldercrest Dr.                              **
+**                    Watkinsville, Ga.  30677                           **
+**                                                                       **
+**  copyright 1984                                                       **
+***************************************************************************
+
+
+The prominent feature of this program is PC-TYPE, which can be reached from
+the main option menu by selecting option "A".  PC-TYPE emulates a one line
+memory typewriter by allowing you to use your computer and printer to type short
+letters and notes or create interesting documents with a combination of PC-TYPE
+and PC-PRINT. Also PC-TYPE allows you to type Spanish and German characters on
+your EPSON printer. The other main menu options allow the owners of dot
+matrix printer, to set print pitches, dress-up modes, and forms controls.  Some
+of the other brands of dot matrix printers are also designed using the same
+control codes as the EPSON and this program should have the same results with
+these printers.  I suggest you experiment with your printer and this program 
+if you have any question about it's compatibility.
+ 
+      To start this program, insert the disk containing PC-PRINT into the
+default disk drive and type PC-PRINT <RETURN>.  You are then presented
+with a menu of your options.  Most of these options are self-explanatory,
+there is a brief explanation of the different options on the following page. 
+To set the printer into the mode you would like, just press the corresponding
+key. The program will accept either upper or lowercase letters and there is
+NO NEED to press the <RETURN> key, your selection is automatically sent to the
+printer.  A short tone will sound signaling the completion of your request.
+After the printer is set you will be prompted to enter your next selection.
+You may add to your previous selection i.e., some of the printer codes may be
+combined to create various print modes.  Simply enter another selection after
+the primary selection, this will create a combination.  You should check with
+your manual to see how to create certain modes, or you can just experiment
+with the program to see what combinations provide which results.  Certain
+control codes override or cancel other codes (for example Elite and Pica 
+modes).  Some of the more popular combinations are offered as main menu
+selections.
+
+
+
+                                  MENU OPTIONS
+
+   A          This selection invokes PC-TYPE, which emulates a typewriter..
+              There is further discussion on the following page.
+
+   B-P        The menu selections  B - P  send the control codes for changing
+              print pitches and modes.  Just press a key.
+
+   Q          Banner, This selection will print a five letter high, ten letter
+              long banner or message on the printer. You are limited to ten  
+              letters but you may alter the printer mode.  The only characters 
+              acceptable are A - Z, 0 - 9, *, $, and Space.
+
+   R          This selection is a master reset code which returns the printer to
+              its power-up state.
+
+   S          This will advance the paper (1) one line.
+
+   T          This advances the paper (1) one page.  A page being defined
+              as eleven inches.
+
+   U          This selection sets the page length to eleven inches and skips
+              over the perforation in the paper.  The perforation should be
+              positioned three lines above the printer ribbon and then the
+              power to the printer should be turned off and then back on.
+              If the paper is properly positioned when the printer is first
+              powered up , then it is not necessary to power it off and on
+              again.  This control code causes the printer to 'remember' the  
+              page length, even when not using the PC-PRINT program.  The  
+              printer will continue to skip three lines before the perforation
+              and three lines after the perforation until another control code
+              resets the printer memory or the power to the printer is turned
+              off.  This is a very nice setting to use and after you have used
+              it a few times you will always want to use it.
+
+   X          This selection simply returns you to the DOS operating system.
+
+
+
+** Note: Pressing the <RETURN> key after a main menu selection is not necessary.
+         Just by pressing a key your selection is activated.
+
+
+                   
+                     
+                                 PC-TYPE 
+
+  PC-TYPE can be used many different ways.  It functions much the same as a one
+  lined buffer typewriter would.  You can type one entire line (80 characters)
+  and make corrections to it before printing it.  You can go back and forth 
+  between PC-TYPE and PC-PRINT changing the print modes and therefore altering 
+  the printed text.  Upon entering PC-TYPE you are shown the default menu, 
+  these defaults may be changed by pressing the key corresponding to the 
+  letter of the item you wished changed. You may choose a Left Margin value
+  from 1 - 80, a Right Margin value from 5 - 80, and a Tab value from 1 - 50. 
+  The Tab key is the key located over the Ctrl key on the left side of the key
+  board, upon pressing this key the cursor will skip the number of spaces that 
+  has been given for the Tab value.  You also have the options of typing in 
+  Spanish or German Characters.  The keys for these language selections act as 
+  toggle switches, pressing one will either turn the feature on or off 
+  depending on the state it is in.  Only one language feature will be active at
+  one time.  There are certain key combinations that are needed to activate the
+  special language characters, there is a breif description on the following 
+  page.  To begin PC-TYPE press the "H" key the values you have choosen 
+  will take effect and you may begin typing.  A 'Ruler' will appear on the 
+  first line of your display and the left and right margins will be marked with 
+  astericks.  What you type will not be sent to the printer until you press the 
+  <RETURN> key, until then you may backspace with the key located directly over
+  the <RETURN> key.  This is a destructive back-space and letters will be
+  deleted as they are passed over.  A bell will sound five spaces before you 
+  reach the value set for the right margin, and the bell will sound with each
+  character entered after you have reached the right margin.  There is a line 
+  counter provided in the lower right corner of the screen, you want to watch 
+  this so you can determine when you have filled a page.  When you press the
+  <RETURN> key the line is transmitted to the printer and you may continue 
+  typing with the next line.  If you would like to end the PC-TYPE program then 
+  press the ESC key and you will be returned to the PC-PRINT menu.  ** When
+  you use the ESC key, any un-transmitted line will not be saved or printed.
+       Experiment with the different combinations that you can create with this 
+  program and if there is a feature that you think is needed, let me know.  
+  User comments are welcome!
+       PC-TYPE is not intended to be a word processor nor does it offer the
+  flexibility of one.  You may find several uses for PC-TYPE.  Some possible 
+  uses for PC-TYPE include; printing headings before printing files with the 
+  ability of setting different print styles, Using your printer and computer as 
+  a typewriter, Printing notes or ideas that you don't wish to devote disk 
+  space for, Formatting pages of documents.  Use the Spanish or German Language 
+  features for shoolwork.
+ 
+ 
+** NOTE: The Underline setting from PC-PRINT underlines an entire line, 
+         begining with the LEFT side of the page continuing to the last 
+         character typed.
+
+                                                                   
+
+
+
+To display and print Spanish characters these key combinations must be used.
+             
+   * Press the keys marked with the inscriptions identical to the 
+     inscriptions inside the < > brackets, listed here.
+     That is the Alt key and a letter key combination.
+
+                   <Alt> <q>  = an upside down question mark
+                   <Alt> <n>  = an "n" with a tilde over it
+                   <Alt> <a>  = an "a" with an accent
+                   <Alt> <i>  = an "i" with an accent
+                   <Alt> <e>  = an "e" with an accent
+                   <Alt> <o>  = an "o" with an accent
+                   <Alt> <u>  = a  "u" with an accent
+                   <Alt> <1>  = an upside down exclamation point  
+
+    * Press the <Shift> key and the <tab> key simultaneously and then press the
+      following key to produce a capital letter.
+
+                   <n>  = an "N" with a tilde over it                  
+
+------------------------------------------------------------------------------- 
+
+To display and print German characters these key combinations must be used.
+
+    * Press the keys marked with the inscriptions identical to the 
+      inscriptions inside the < > brackets, listed here.
+      That is the Alt key and a letter key combination.      
+
+                   <Alt> <a>  = an "a" with two dots over it
+                   <Alt> <o>  = an "o" with two dots over it
+                   <Alt> <u>  = a  "u" with two dots over it
+                   <Alt> <b>  = a  "B" (displayed differently)
+                                                                         
+    * Press the <Shift> key and the <tab> key simultaneously and then press the 
+      following keys to produce capital letters.
+
+                   <a>  = an "A" with two dots over it
+                   <o>  = an "O" with two dots over it
+                   <u>  = a  "U" with two dots over it
+
+-------------------------------------------------------------------------------
+
+
+      PC-TYPE will run marginally slower utilizing the Special Language 
+      features.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+i
+```
+{% endraw %}
+
+## QUIET.DOC
+
+{% raw %}
+```
+
+    How to quiet your double density Tandon Drives. Valid for DOS 2.0 only.
+    Gives patches for disks and includes a ProKey macro. This file combines two
+    files known as QUIET.DOC and QUIET.PRO. (7-bit ASCII File. 18 blocks.)
+
+
+
+QUIET.DOC & QUIET.PRO (combined)
+
+PATCHES TO QUIET TANDON DD DRIVES (Author Unknown)
+
+
+      The vibration in the drive is caused by the vibration that occurs
+when the read/write arm steps to a new location on the disk.  This step-
+ing (or the rate thereof) is controled by an entry in something called
+the Diskette Parameter Table. There's a pointer at 0000:0078 to
+0000:007B that locates this table in memory. Thus, if you want to modify
+this table for whatever reason, you can construct your own table and
+change these pointer values.  The first byte of this table contains what
+is known as a step rate.  In DOS 1.1, this was set to EIGHT microseconds
+it was decreased to SIX microseconds in DOS 2.0.  it turns out, however,
+that FOUR microseconds gives the best result.  Therefore the following
+patch, which describes how you go about modifying this parameter.
+Please pay careful attention.
+
+      NOTE: This patch is valid for DOS 2.0 and Tandon double density
+drives ONLY!
+
+      In DOS 2.0, the parameter table is stored on the boot record of the
+system disk.  The first patch modifies the approiate byte in this boot
+record.  For some reason, however, this table is only used on a warm
+boot.  On a cold boot, IBMBIO.COM constructs its own parameter table in
+memory.  Thus the second patch modifies IBMBIO.COM.  To insert this patch
+make a copy of your system disk and put it in drive A.	From the DOS
+prompt enter:
+
+       A>DEBUG
+
+to which Debug returns with its hyphen prompt.	Then type:
+
+       L 0 0 0 10
+
+and hit return. Type:
+
+       E21
+
+Debug responds:
+
+       xxxx:0021  DF.
+
+Type EF, hit return, and then type:
+
+       E1FC6
+
+Debug replies:
+
+       xxxx:1FC6 DF.
+
+Type EF again, hit return, then type:
+
+       W 0 0 0 10
+
+Finally, type Q to quit debug.
+
+Then reboot on the new, patched, DOS and enjoy the QUIET!
+
+
+		*  *  *  *  *  *  *  *	*  *
+
+
+If you have PROKEY 3.0, you may use this macro to accomplish the above,
+using Alt-Q. Default drive doesm't matter, but DEBUG must be on it and
+the disk that will be patched will be the one in Drive A:
+
+<begdef><altq>DEBUG<enter>
+L 0 0 0 10<enter>
+E 21<enter>
+EF<enter>
+E1FC6<enter>
+EF<enter>
+W 0 0 0 10<enter>
+Q<enter>
+<enddef>
+*
+
+
+```
+{% endraw %}
+
+## SEIV.DOC
+
+{% raw %}
+```
+
+
+	Sieve benchmark (Slightly modified from Byte Magazine version)
+		8-22-84 Chuck Forsberg Omen Technology Inc
+
+Modifications consist of placing the variables in the "best" place
+and shortening the variable names to make keyboarding easier.  There
+have been slight differences in the variable names which should not affect
+the benchmark results.	The correct answer is 1899 primes.  The order of
+register declarations is important on some machines.  This benchmark gives a
+shorter program and runs somewhat faster than the original Byte Magazine
+version due to the register declarations.  Size in bytes refers to the main()
+function text size only.
+
+siev.c:
+#define S 8190
+char f[S+1];
+main()
+{
+	register int i,p,k,c,n;
+	for (n = 1; n <= 10; n++) {
+		c = 0;
+		for (i = 0; i <= S; i++) f[i] = 1;
+		for (i = 0; i <= S; i++) {
+			if (f[i]) {
+				p = i + i + 3; k = i + p;
+				while (k <= S) { f[k] = 0; k += p; }
+				c++;
+			}
+		}
+	}
+	printf("\n%d primes.\n", c);
+}
+
+		Results "32 bit" systems
+
+		Sorted by Execution real time
+Compile - Link		Execute
+Real	User	Real	User	Bytes	System
+
+1.8	.31	.37	0.2	200	Ahmdal 470-V8 + UTS (160 users) %
+25	1.3	0.8	.45	224	Gould SEL 32/87 (loaded) %
+27	6.6	1.1	1.0	140	Charles Rivers + Unos %
+22	1.8	2.0	1.2	144	Parallel 68k + Zenix #
+9	2.4	2.3	2.3	140	SUN 68010 4.2 BSD 6/84
+8.1	1.8	2.6	2.2	104	4.2 BSD VAX 11/780
+18.2	4.4	2.7	2.5	72	H-P 32 bit mini
+14.6	-	3.3	-	148	Sun Microsystems 68k
+22	1.8	3.7	1.3	144	Parallel 68k + Zenix %#
+26	8.7	5	4.9	148	Cosmos 10 mHz
+31	5.5	5.0	4.5	148	Momentum Hawk 32
+38	6.8	5.0	3.9	148	CYB Multibox (Sun Board)
+41	7.3	6.0	5.2	148	Lisa + Unisoft
+33	9.8	7.0	5.1	136	CIE 680/30 + Regulus 4.03 -L $
+15	3.8	9	6	88	VAX 11/730 + 4.1 BSD
+46	2.8	9	7.7	142	CIE 680/20 + Regulus -L
+45	8.2	9.0	8.2	128	NS16032 6mHz + "4.1 BSD" &&
+
+		Sorted by Compile/link real time
+Compile - Link		Execute
+Real	User	Real	User	Bytes	System
+
+1.8	.31	.37	0.2	200	Ahmdal 470-V8 + UTS (160 users) %
+8.1	1.8	2.6	2.2	104	4.2 BSD VAX 11/780
+9	2.4	2.3	2.3	140	SUN 68010 4.2 BSD 6/84
+14.6	-	3.3	-	148	Sun Microsystems 68k
+15	3.8	9	6	88	VAX 11/730 + 4.1 BSD
+18.2	4.4	2.7	2.5	72	H-P 32 bit mini
+22	1.8	2.0	1.2	144	Parallel 68k + Zenix #
+22	1.8	3.7	1.3	144	Parallel 68k + Zenix %#
+25	1.3	0.8	.45	224	Gould SEL 32/87 (loaded) %
+26	8.7	5	4.9	148	Cosmos 10 mHz
+27	6.6	1.1	1.0	140	Charles Rivers + Unos %
+31	5.5	5.0	4.5	148	Momentum Hawk 32
+33	9.8	7.0	5.1	136	CIE 680/30 + Regulus 4.03 -L $
+38	6.8	5.0	3.9	148	CYB Multibox (Sun Board)
+41	7.3	6.0	5.2	148	Lisa + Unisoft
+45	8.2	9.0	8.2	128	NS16032 6mHz + "4.1 BSD" &&
+46	2.8	9	7.7	142	CIE 680/20 + Regulus -L
+
+		Results 8-16 bit systems
+
+		Sorted by real execution time
+Compile/Link	Execute 	Text
+Real	User	Real	User	Bytes	System
+
+18	1.1	2.0	1.5	96	11/70 + V7 (loaded)
+26	3.7	2.1	2.0	110	Zilog Model 11
+16	3.3	2.7	2.2	96	Plexus P-25 5 mHz SYS III 1.1
+-	-	2.9	-	126	PC-ATx Mark Williams C DOS 3.0 8/84 @
+9	5.9	3.0	2.6	136	Intel 310 6 mHz 1ws 80286 + Xenix 6/84
+21	6.4	3.2	2.8	98	Plexus P-40 4 mHz
+9.3	-	3.73	-	135	PC-ATx DOS 3.0 Lattice 2 8/84 @
+14.4	-	3.73	-	135	PC-ATx DOS 3.0 Lattice 2 8/84
+-	-	4.22	-	161	PC-ATx DOS 3.0 C86 2.10j 8/84 @
+33	9.8	5.0	3.7	114	CIE 680/30 + Regulus 4.03 16 bit ints
+105	-	5.9	-	126	NEC APC CP/M + CC86 one drive ^
+217	-	5.9	-	126	NEC APC CP/M + CC86 two drives ^
+31.7	-	6	-	126	Mark Williams C Sperry PC 7mHz 8/84
+50	3.3	7.0	5.7	114	CIE 680/20 + Regulus
+95	-	7.8	-	126	Control-C CC86 IBMPC CP/M-86 5"fd ^
+-	-	8.2	-	126	Mark Williams C IBM PC	8/84 @
+31.1	8.5	8.7	8.0	126	Coherent +IBMPC-XT
+46	14.7	9	8.2	122	PC-XT Venix 6/84
+49	16.7	9.4	7.9	117	PC-XT SCO XENIX 6/84
+75	-	10	-	135	Zenith Z100 5"fd + Lattice C 1.01 ^
+-	-	10	-	194	Introl 6809 C 2mHz *
+82	-	11	-	135	IBMPC 5"fd PCDOS1.1 + Lattice 1.01 ^
+65	-	-	-	135	IBMPC 5"fd PCDOS2.0 + Lattice 1.01 &
+18.4	-	11	-	135	IBMPC E-disk PCDOS1.1+JEL+Lattice 1.01
+39	-	11.1	-	135	IBMPC DOS 2.1 Lattice 2 8/84 @
+32	13	11	.3	112	PC-XT PCIX 6/84
+32	5.9	13	12	152	IBM 4954 (Series/1 middle)
+37	-	13.4	-	161	IBMPC DOS 2.1 C86 2.10j 8/84 @
+35	-	13.6	-	165	IBMPC DOS 2.1 C86 2.07a @
+38	-	13.6	-	165	IBMPC DOS 2.1 C86 2.00a @
+-	-	14	-	244	Telecon C on 2mHz 6809 **
+-	-	22	-	-	CII C86 1.26 IBMPC CP/M-86 5"fd ^!
+17.5	-	23.7	-	-	Televideo 820H +BDS C + L2 + EX ^
+19	-	31	-	-	Z89+ CDI MEG-6 +BDS C + L2 + EX ^
+
+		Sorted by real compile/link time
+Compile/Link	Execute 	Text
+Real	User	Real	User	Bytes	System
+
+9	5.9	3.0	2.6	136	Intel 310 6 mHz 1ws 80286 + Xenix 6/84
+9.3	-	3.73	-	135	PC-ATx DOS 3.0 Lattice 2 8/84 @
+14.4	-	3.73	-	135	PC-ATx DOS 3.0 Lattice 2 8/84
+16	3.3	2.7	2.2	96	Plexus P-25 5 mHz SYS III 1.1
+17.5	-	23.7	-	-	Televideo 820H +BDS C + L2 + EX ^
+18	1.1	2.0	1.5	96	11/70 + V7 (loaded)
+18.4	-	11	-	135	IBMPC E-disk PCDOS1.1+JEL+Lattice 1.01
+19	-	31	-	-	Z89+ CDI MEG-6 +BDS C + L2 + EX ^
+21	6.4	3.2	2.8	98	Plexus P-40 4 mHz
+26	3.7	2.1	2.0	110	Zilog Model 11
+31.1	8.5	8.7	8.0	126	Coherent +IBMPC-XT
+31.7	-	6	-	126	Mark Williams C Sperry PC 7mHz 8/84
+32	13	11	.3	112	PC-XT PCIX 6/84
+32	5.9	13	12	152	IBM 4954 (Series/1 middle)
+33	9.8	5.0	3.7	114	CIE 680/30 + Regulus 4.03 16 bit ints
+34	-	13.6	-	165	IBMPC DOS 2.1 C86 2.07a @
+37	-	13.4	-	161	IBMPC DOS 2.1 C86 2.10j 8/84 @
+38	-	13.6	-	165	IBMPC DOS 2.1 C86 2.00a @
+39	-	11.1	-	135	IBMPC DOS 2.1 Lattice 2 @
+46	14.7	9	8.2	122	PC-XT Venix 6/84
+49	16.7	9.4	7.9	117	PC-XT SCO XENIX 6/84
+50	3.3	7.0	5.7	114	CIE 680/20 + Regulus
+65	-	-	-	135	IBMPC 5"fd PCDOS2.0 + Lattice 1.01 &
+75	-	10	-	135	Zenith Z100 5"fd + Lattice C 1.01 ^
+82	-	11	-	135	IBMPC 5"fd PCDOS1.1 + Lattice 1.01 ^
+95	-	7.8	-	126	Control-C CC86 IBMPC CP/M-86 5"fd ^
+105	-	5.9	-	126	NEC APC CP/M + CC86 one drive ^
+217	-	5.9	-	126	NEC APC CP/M + CC86 two drives ^
+
+Notes:
+	$ Compiled with "register long" and -L option "for large programs".
+16 bit integers vs. 32 bit pointers cause portability problems, especially
+with printf and scanf control strings.
+	% Outer loop increased to 100 and result times adjusted because of
+fast execution times indicated.
+
+	# Siginificant difference between real and user times not due
+to system load (user time suspect).
+
+	&& System still being developed. Compiles size dropped from 136
+to 128 bytes and times by >40% during the Unicom show.	Stay tuned ...
+
+	^ Real time measured from beginning of program execution to program
+finish (omitting loading and reboot time).
+
+	& Compile/link times; sequenced by "batch" file; 20 buffers, NO verify.
+Verify adds about 15 seconds.
+
+	! A much faster code generator has been promised.
+
+	* Data from compiler vendor re Byte Magazine version.
+
+	**Data from compiler vendor re Byte Magazine version.
+A optimizer under development provides about 30% improvement in code density
+and execution speed.
+
+	@ compiler/linker Executables on hard disk, other files on
+electronic disk IBM PC, DOS 2.1, Maynard WS-1 Hard Disk except for
+IBMPC-AT(extended) as shown.
+		-------------- Comment ------------
+
+These times are approximate and may improve as product development
+proceeds on the newer systems.	They should be used as general
+information regarding the levels of performance possible and not in any
+specific purchasing decision without independent confirmation.
+It should be noted that the short loops
+in this program may penalize highly pipelined machines such as the
+16032 more than other (more representative of normal usage) programs.
+
+The Regulus software is listed with different times in 16 and 32 bit
+categories because the compiler uses 16 bit integers and defaults to
+16 bit addressing except for pointers.
+
+On some systems, there is a considerable discrepancy between the real
+and user times that cannot be explained by other demands on the
+system.  Usually, the real and user times are nearly the same when a
+cpu bound program is run on an otherwise unloaded Unix(TM) system.
+
+The compile/link times are often more significant in predicting how
+responsive a system will be in a software development context.
+
+On BDS C, the variables are made externs to optimize 8080 execution
+speed and code density.  BDS C lacks longs, floats, and some other
+aspects of C, but it produces reasonable code density and is an
+excellent compromise for the CP/M environment.
+
+Compile times were influenced by the structure of the compiler.  The
+Unix(TM) compilers had up to 5 passes (preprocessor, c0, c1, c2, as) while
+Lattice and BDS C have but two passes to produce object code (BDS uses
+no intermediate file).	Lattice, C86 and Coherent/CC86 bypass the assembly
+pass.
+
+The compile/link times are affected by the size of the library
+that must be scanned.  This tends to penalize the more nearly complete
+implementations such as C86 and Coherent/Mark Williams.
+
+Some MS-DOS implementations place uninitialized externs in the .exe
+file.  For example, the Lattice C v2.0 results in a 19584 byte .exe
+file for siev, while the C86 v2.10j .exe file is 9466 bytes!
+
+Unix, Zenix, VAX, et al. are trade-marks.
+From lanl-a!jlg Wed May 11 14:39:55 1983
+Subject: sieve
+Newsgroups: net.micro
+
+The sieve program used in BYTE was not really a very good benchmark of
+larger machines.  The problem is, there is too much stuff in the algorithm
+that is not necessary (ie. never used or printed).  A good compiler on a
+large machine will probably 'optimize' all of this stuff out.  The result
+is that the same algorithm is not performed on each machine.
+
+No one with access to both IBM and CRAY machines will really beleave that
+the IBM numbers in the January BYTE are correct.  The CRAY fortran numbers
+(CFT is not very good at global optimization) are pretty accurate,  also
+a hand coded assembly version of the algorithm (which implements the whole
+benchmark with nothing optimized out) beats the best IBM numbers by 50%.
+The advantage of vector arch....
+
+This may not seem to be relevant to the discussion of micros, but the newer
+machines now and in the near future will be a lot more sophisticated than
+those most micro fans are familiar with.  Be on the lookout for bad benchmarks!
+Mainframe people have had to face this problem many times.
+
+			   J.L. Giles
+			   (...!lasl-a!jlg)
+
+From ixn5h!dcn Thu May 12 05:48:56 1983
+Subject: Re: Aztec C Review
+Newsgroups: net.micro.apple
+
+
+	I decided to quantify my complaint about the slow compilation
+	of Aztec C on the Apple by running the benchmark program in
+	the January 1983 issue of Byte.  I still have the interpreted
+	version, V1.03, with two drives.  I was also lazy enough to
+	leave off the comments.  The results for the sieve program are:
+
+		Compile:	compile  = 1:03 (min:sec)
+				assemble = 0:33
+				link	 = 1:17
+				total	 = 2:53
+		Execute:	6:37 or 397 seconds
+
+	I also tried the Pascal version, with these results:
+
+		Compile: 0:18
+		Execute: 8:31 or 511 seconds
+
+	By comparsion, the Integer BASIC execute time was 1850 seconds
+	and Applesoft BASIC was 2806 seconds.
+
+	I know Pascal is easy to compile, but should it take so long to
+	compile the C code?  The compile times for other machines in the
+	article were an order of magnitude faster, so maybe it's just not
+	optimized for the Apple.  I'm looking forward to trying the native-
+	code compiler.
+					Dave Newkirk
+
+```
+{% endraw %}
 
 ## SPRITE.BAS
 
+{% raw %}
 ```bas
 1000 REM USE THE FOLLOWING INTEGER ARRAY DIM AS A PATTERN
 1010 DIM I%( 321)
@@ -1734,6 +2695,7 @@ machines:
 2310 DATA -21846,-21846,-21846,-21846,     0,     0,     0,     0,     0,     0
 2320 DATA      0,     0
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -38,6 +38,78 @@ machines:
     program is the cure for the congenitally disorganized.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1481.TXT
+
+{% raw %}
+```
+Disk No: 1481                                                           
+Disk Title: Active Life for MS-Windows                                  
+PC-SIG Version: S1.31                                                   
+                                                                        
+Program Title: Active Life for MS-Windows                               
+Author Version: 1.2                                                     
+Author Registration: $149.00                                            
+Special Requirements: Microsoft Windows. 512K RAM. Hard drive and mouse 
+                                                                        
+ACTIVE LIFE is an ambitious daily scheduling program which makes the    
+desk calendar obsolete.                                                 
+                                                                        
+Keep track of all of your daily time commitments.  Entering individual  
+items is as simple as noting on a desk calendar.  There is a great deal 
+of flexibilty in that an event can occur at a specific or ``floating''  
+time frame.  Rescheduling events is a matter of one or two keystrokes.  
+Daily, weekly, monthly, or even annually recurring events can be        
+automatically added to the system saving repetitive entries.  Comments  
+can also be associated with events using ACTIVE LIFE's helpful notepad  
+editor.                                                                 
+                                                                        
+ACTIVE LIFE will generate printed reports of up to three months of      
+activity and automatically saves past events for easy retrieval.  Since 
+ACTIVE LIFE is a MS Windows application, it can be run quickly from any 
+other Windows application, is easy to use and is mouse-compatible. This 
+program is the cure for the congenitally disorganized.                  
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## README.TXT
+
+{% raw %}
+```
+                        How to Install Active Life 1.2
+                        ------------------------------
+The installation process allows you to select which directory you would like
+to contain Active Life files. The directory you name will be created if it
+doesn't already exist, and the files will be copied from the diskette(s) to
+this target directory. Some files are in compressed form on the diskette(s)
+and will be automatically uncompressed as they are installed.
+
+Step 1: Insert the Active Life diskette into drive A: and type A:
+
+Step 2: Type one of the following, depending on the version you're installing:
+
+        ALWIN       (Active Life for Windows)
+        ALDOS       (Active Life for DOS)
+        ALPM        (Active Life for OS/2 Presentation Manager)
+
+Step 3: Turn to the Active Life User's Guide for further information.
+        If you have a packaged copy of Active Life 1.2, the manual will be
+        in the box. Evaluation disks contain an abridged user's guide in a
+        file called AL.DOC. Use the DOS Print command to print this file:
+
+        C> Print AL.DOC
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1481
 

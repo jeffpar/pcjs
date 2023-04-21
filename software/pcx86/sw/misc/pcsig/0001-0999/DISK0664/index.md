@@ -90,6 +90,7 @@ machines:
 
 ## ERROR.BAS
 
+{% raw %}
 ```bas
 1 SCREEN 1:COLOR 0,2
 2 FOR E=1 TO 3:SOUND 250,7:SOUND 30000,2:NEXT E:SOUND 99,15:SOUND 30000,15
@@ -100,9 +101,65 @@ machines:
 50004 PRINT:PRINT:PRINT"P.S.  Make sure you weren't just trying to list a program, because that could   be an error also."
 50005 A$=INKEY$:IF A$="" THEN 50005 ELSE RUN"menu2
 ```
+{% endraw %}
+
+## FILES664.TXT
+
+{% raw %}
+```
+----------------------------------------------------------------------------
+Disk No 664   Educational Mix                                        V1.5
+----------------------------------------------------------------------------
+This diskette contains a mix of educational programs designed to help
+both the teacher and the student.  The first program, Register, is a
+grade database that will keep track of students' marks by course.  This
+is a fully featured demo version of the larger register package.  The
+Atlas Software group as developed three color graphics and sound
+programs to drill students on history, our solor system and mathematical
+factors.  Another program will generate star charts.  Each program has
+well developed on-line documentation and Register comes with over 40k of
+documentation.
+ 
+------------- Atlas Package
+ATLAS    BAS  Screen Image for Atlas package
+ATLASARM BAS  Screen Image
+ERROR    BAS  Atlas program routine
+HQ       BAS  Program: Historomaina
+NTP      BAS  Program: Name That Planet
+MENU     BAS  Main Menu program, run this first
+MENU2    BAS  Atlas program routine
+MULTID   BAS  Program: Multitime
+REGISTER      Atlas registration information
+ 
+------------- Register Program (v1.8)
+GRADE    000  Demonstration data
+GRADE    COM  Main register program
+GRADES   111  Demonstration data
+INSTALL  COM  Installation program, read manual
+MANUAL   DOC  Documentation for Register, about 40k
+NAMES    11   Demonstration data
+READ     ME   Startup information
+SAMPLES  DOC  Samples documentation file
+FLOPPY   BAT  Installation for floppy system
+HARD     BAT  Installation for hard disk users
+REGISTER      Order form
+ 
+------------- Star Program
+STAR     BAS  BASIC program, Star, will run from BASIC only
+STAR     DAT  Program information
+READSTAR ME   Startup information
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1986,87 PC-SIG
+```
+{% endraw %}
 
 ## HQ.BAS
 
+{% raw %}
 ```bas
 5 'I finally started!!!
 6 SCREEN 1:COLOR 1,1:ON ERROR GOTO 50000
@@ -724,9 +781,1270 @@ machines:
 10000 CLS:PRINT"fgsghlg"
 50000 RUN"error
 ```
+{% endraw %}
+
+## MANUAL.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            The Register (tm)
+
+
+
+             Copyright (c) 1986,1987   All rights reserved
+
+
+
+                         Denis L. Latkowski 
+                        417 Tantallion Court 
+                     Baltimore, Maryland  21212 
+                            301-435-1544 
+
+
+                         TABLE OF CONTENTS
+
+     SYSTEM REQUIREMENTS .............................   4
+     GENERAL INFORMATION .............................   4
+     FILES ON DISK ...................................   5
+         INSTALL.COM .................................   5
+         GRADE.COM ...................................   5
+         GRADE.000 ...................................   5
+         READ.ME .....................................   5
+         MANUAL.DOC ..................................   5
+         NAMES.11 ....................................   5
+         GRADES.111 ..................................   5
+         HARD.BAT ....................................   5
+         FLOPPY.BAT ..................................   5
+     IMPORTANT NOTE ..................................   5
+     GETTING STARTED .................................   6
+         batch files .................................   6
+         INSTALL.COM .................................   6
+             TEACHER'S NAME ..........................   7
+             SCHOOL NAME .............................   7
+             SCHOOL PHONE # ..........................   7
+             ABSENCE POLICY ..........................   7
+             MINIMUM PASSING GRADE ...................   7
+             PRINTER SELECTION .......................   7
+
+             AUTOEXEC.BAT file .......................   7
+         Required files ..............................   7
+     LEVEL ...........................................   7
+     QUARTER .........................................   8
+     CLASS NAME ......................................   8
+     OPTIONAL START UP ...............................   8
+     information line ................................   8
+     MAIN menu .......................................   8
+         move along the menu .........................   8
+         menu and submenu selections .................   9
+         ESC..........................................  10
+     grade book ......................................  10
+     disk activity ...................................  10
+     RAM disk ........................................  10
+     ERROR MESSAGES ..................................  10
+     MENU INFORMATION ................................  11
+         Names .......................................  11
+             Create  --  n / c .......................  11
+             NAME ....................................  11
+             COUNSELOR ...............................  11
+             HOMEROOM ................................  11
+             PHONE # .................................  11
+             NOTE ....................................  11
+             "dummy" students ........................  11
+         Add to, Delete from  n / a  OR  n / d .......  11
+         cHange  -- n / h ............................  12
+             number ..................................  12
+             CHANGE MENU .............................  12
+             HINT ....................................  12
+
+         Print  -- n / p .............................  13
+         Show  -- n / s ..............................  13
+         phoNe # -- n / n ............................  13
+     Grades ..........................................  13
+         three categories ............................  13
+         long list ...................................  14
+         --- .........................................  14
+         MAKE NO ENTRY ...............................  14
+         Create  --  g / c............................  14
+             50% grades ..............................  14
+             30% grades ..............................  14
+             20% grades ..............................  14
+             absences ................................  14
+         Add to  --  g / a ...........................  15
+             NOTE ....................................  15
+         cHange  --  g / h ...........................  15
+         checK -- g / k ..............................  16
+     Quarter .........................................  16
+         Compute --  q / c ...........................  16
+             check for ...............................  16
+             failures ................................  16
+             NOTE ....................................  16
+         Print  --  q / p ............................  16
+             top of the page .........................  16
+             cancel ..................................  17
+             error message ...........................  17
+             EXAMPLE .................................  17
+     Print ...........................................  17
+         Print reports --  p / p .....................  17
+             message .................................  17
+             individual messages .....................  18
+             EXAMPLE .................................  18
+         Name listing  --  p / n .....................  19
+         nuMber listing  --  p / m ...................  19
+         SPOOLING PROGRAM ............................  19
+     Finals ..........................................  19
+         Exams -- f / e ..............................  19
+             1/5 (20%) of the final grade ............  19
+             20% of the 4th quarter grade ............  19
+         No exams  --  f / n .........................  19
+         FINAL GRADE .................................  20
+         summary .....................................  20
+     Level ...........................................  20
+         change Level  --  l / l .....................  20
+         change Dir  --  l / d .......................  20
+             CAUTION .................................  20
+         * save Names  --  l / n .....................  21 
+         * save Grades --  l / g .....................  21
+             CAUTION .................................  21
+     Miscellaneous ...................................  21
+         Erase file  --  m / e .......................  21
+         Rename file  --  m / r ......................  21
+         Directory  --  m / d ........................  21
+         eXit  -- m / x ..............................  21
+     Help  h / ??? ...................................  22
+     overlay file GRADE.000 ..........................  22
+
+     EXAMPLES OF PRINTOUTS ...........................  22
+         Names / Show (screen only) ..................  22
+         Names / phoNe #  (screen only) ..............  22
+         Compute / Print quarter .....................  23
+         Compute / Stats .............................  23
+         Print / Print Reports .......................  24
+         Progress and Deficiency .....................  24
+         Print / print Name ..........................  25
+         NOTE ........................................  25
+
+     HINT #1 (RAM disk) ..............................  25
+     HINT #2 (printer codes) .........................  27
+
+     (Need IBM compatible printer for sample screens)
+     SAMPLE SCREENS ..................................  file SAMPLES.DOC
+         Information Line and Main Menu ..............  28
+         Menu and Submenus ...........................  28
+         Level / Level ...............................  30
+         Names / Create ..............................  30
+         Names / cHange ..............................  31
+         Grades / Create  (screen one) ...............  31
+         Grades / Create  (screen two) ...............  32
+         Finals / Exams  (1/4 4th quarter) ...........  32
+         Miscellaneous / Directory ...................  32
+         Print / Progress reports (indiv message) ....  33
+         Error message (printing) ....................  33
+         full screen (Level / Level) .................  34
+
+
+page 4
+
+                            The Register 
+
+                         Denis L. Latkowski 
+                        417 Tantallion Court 
+                     Baltimore, Maryland  21212 
+                            301-435-1544 
+
+                      SYSTEM REQUIREMENTS 
+
+                      PC/XT or true compatible 
+                      (untested on AT) 
+                      DOS 2.xx or higher 
+                      1 DSDD drive 
+                      192 K 
+                      mono or color graphic card 
+                      RGB monitor recommended 
+                      printer (dot matrix recommended) 
+                         (IBM compatible to print last 5 pages
+                          of manual; otherwise, any ASCII printer) 
+
+                   GENERAL INFORMATION 
+ 
+Written in Turbo Pascal (tm of Borland International Inc.), version 3.0 (IBM (tm
+International Business Machines)).  My thanks to Borland for their menu system
+and screen routines from their product "Turbo Editor Toolbox."
+
+Written by a teacher for teachers  and tested in the classroom.   
+ 
+Grades are entered as NUMBERS only.  The program is not prepared to work with
+letter grades.  If you work with letter grades, you will have to translate the
+numeric averages into letter grades yourself. 
+
+page 5
+
+                             FILES ON DISK  
+     INSTALL.COM .............  installation program; run this first   
+                                before any other program; will create
+                                file GR.ADE to be used by the main program.  
+     GRADE.COM ...............  main grade program 
+     GRADE.000 ...............  overlay file that must be in current  
+                                directory or subdirectory for HELP to  
+                                be available  
+     READ.ME    ..............  information on program and its use 
+     MANUAL.DOC ..............  manual
+                                can use your word processor to print
+                                this file out since it's stored on disk
+                                in ASCII format, or use the TYPE       
+                                command to send it to the screen or add 
+                                > PRN for printing (must have IBM or
+                                compatible printer for last 5 pages)
+                                TYPE MANUAL.DOC > PRN                           
+     NAMES.11 ................  list of student names and information  
+                                for you to learn the program (sample) 
+     GRADES.111 ..............  list of grades for above students
+     HARD.BAT.................  batch file to install on HARD disk
+     FLOPPY.BAT...............  batch file to install on FLOPPY disk
+
+       
+                         IMPORTANT NOTE 
+     
+It may take some getting used to, but grades must be entered as three digit
+numbers which will require that you add a 0 at the beginning of a two digit
+number; therefore, an 80 would be entered as 080, 66 as 066, 0 as 000.  Secondly
+these three-digit grades are entered in one long stream without spaces.  In most
+cases (except for 100), all you have to do is add 0 to the beginning of a grade.
+
+Example,
+      
+        GRADES:   76    55    0    99    92    78    55  100 
+        BECOME:  076   055  000   099   092   078   055  100 
+ 
+        ENTERED AS:   076055000099092078055100 
+ 
+You will find that entering grades in one long stream to be easier since you
+won't have to press return after each grade but only at the end of one line. 
+You must therefore be careful to enter a zero (0) as the first digit, unless the
+grade is 100 -- don't add anything.  If a student's grade computes at higher
+than 100, you have probably entered a digit other than zero.  You will be warned
+whenever an average computes to over 100.  Use the Grade / cHange program to
+check if an error has been made.  (Remember, a zero (0) must be entered as 000.)
+
+
+page 6  
+                      GETTING STARTED 
+ 
+1. DO NOT USE ORIGINAL DISK TO WORK FROM. 
+      
+Format a new disk with the FORMAT B:/S/V command for a 2 drive system.  At the
+volume name prompt, type in 'GRADES'.  THEN put the original disk in drive A:
+and the newly formatted disk in drive B:. 
+      
+   Type COPY A:*.* B: and press return.  This will give you a working
+   copy of the program and files. Store the original disk. 
+
+   If you are working with a hard disk, you can also run the program   
+   from the hard disk.  Create a subdirectory on the hard disk called
+   \GRADE.
+       
+              MD C:\GRADE            (assuming hard disk is C:) 
+       
+   Then copy the following files to the \GRADE subdirectory: 
+                GRADE.COM 
+                GRADE.000 
+                GR.ADE 
+              Put disk in drive A: 
+              To copy files to hard disk: 
+     
+              COPY  A:\GR*.*   C:\GRADE
+              C:
+              CD GRADE
+              INSTALL    (will create file GR.ADE)
+
+There are two batch files provided for installation of the program.  The file
+HARD.BAT will install all necessary programs on your hard drive in a directory
+called \GRADE, will run the INSTALL program, and then run the GRADE program. 
+   USAGE:    hard [hard drive letter:] <RET>  <-- note colon
+   EXAMPLE:  hard d: <RET>
+
+The file FLOPPY.BAT will install the program on a disk in drive B: with the
+original in drive A:.  After the necessary files have been copied to drive B:,
+you will be prompted to put the copy disk in drive A: and the INSTALL program
+will be run. 
+ 
+2.  If working from a floppy, place the copy in drive A: and type INSTALL.  The
+INSTALL.COM program will prompt you for information to be used in the GRADE
+program.  If using a hard drive, change to the GRADE directory ( CD C:GRADE ),
+and then run INSTALL. 
+
+page 7 
+     You will be prompted for: 
+      
+     1.  TEACHER'S NAME  --  limited to 25 characters 
+     2.  SCHOOL NAME     --  limited to 35 characters 
+     3.  SCHOOL PHONE #  --  limited to nnn-nnnn 
+                             (n is a number from 0 to 9) 
+     4.  ABSENCE POLICY      (explained fully when INSTALL is run) 
+                             Note: if your school has no such 
+                             absence policy, enter the number 99. 
+     5.  MINIMUM PASSING GRADE   --  a number (usually 70) 
+     6.  PRINTER SELECTION  --  select yours if listed  
+         NOTE SMALL AND CAPITAL LETTERS! 
+         (if your printer is not listed,  select the NOT LISTED     
+          option and enter the ASCII codes for ELITE print.) 
+ 
+Before running the GRADE program, you must remember when first starting your
+computer to either set the correct TIME and DATE yourself or to have it done in
+the AUTOEXEC.BAT file.  This information is used by the program in its printouts
+and for screen display.  If you do not set the correct date and time, your
+printouts will contain a date that is not current and the wrong time and date
+will appear on the screen.      
+     
+3.  Running the GRADE program 
+ 
+    Required files: 
+ 
+           GRADE.COM         main program 
+           GRADE.000         overlay HELP file 
+           GR.ADE            file created by INSTALL program
+    (GRADE.000 is not required for the program to run but is required
+    for HELP to be available.)
+         
+Type GRADE and press return.  After "The Register" logo and copyright are
+displayed, the screen will clear and you will be prompted for the following
+information:
+ 
+          LEVEL         2 characters
+          QUARTER       1 character
+          CLASS NAME    limited to 20 characters
+ 
+   LEVEL: 
+       Enter 2 digits, letters, or combination. 
+       This will allow you to distinguish between classes. 
+      
+1.  1st class is 11th grade:  LEVEL might be < 11 > or < 01 > or < AA >
+2.  4th class is 8th grade:   LEVEL might be < 08 > or < 04 > or < DD >
+3.  all classes are 12th grade:  LEVEL might be < 12 > or whatever
+
+#3 assumes you are entering ALL names in one list, but not to exceed
+150 names (in registered version).
+
+page 8 
+
+QUARTER: 
+    Enter the quarter you're working on -- 1, 2, 3, or 4.  A GRADES  
+    file is created and used EACH quarter; so at the end of the year,  
+    you'll have four different GRADES files.  You may erase the file at 
+    the END of each quarter if you want.  Recommend waiting until end  
+    of year. The program will accept ONLY 1, 2, 3, or 4.   
+ 
+CLASS NAME: 
+    Enter the name of the class you're teaching. 
+    < English 4 >   < Chemistry 3 >   < Algebra >  < Cabinet Making > 
+ 
+If you change to another level and are prompted for a new CLASS NAME, you can
+simply press return if the name is the same, instead of retyping it. 
+
+NOTE: The files created by the program are named this way:             
+     After entering LEVEL as  09  and QUARTER as  1   
+       student file = NAMES. + [LEVEL] = NAMES.09 
+       grade file = GRADES. + [LEVEL + QUARTER] = GRADES.091  
+      
+OPTIONAL START UP
+
+You can also start the grade program by including LEVEL, QUARTER, and CLASS on
+the DOS prompt line after the name of the program GRADE. 
+
+  EXAMPLE:    grade 11 1 English 1 <RET>
+              grade aa 2 Chemistry 3 <RET>
+  Each MUST be separated by a space; the class name is limited to TWO words
+  only! 
+
+The screen will clear and an information line will appear at the top of the
+screen, consisting of the following information:
+ 
+   -DIR:           [e.g.  DIR: A:\ ]    current directory or subd 
+   -CLASS:         [e.g.  CLASS: Chemistry 3 ]  current class
+   -L:             [e.g.  L: 11 ]       current LEVEL 
+   -Q:             [e.g.  Q: 1 ]        current QUARTER 
+      
+   e.g.:    -DIR: A:\   -CLASS: Chemistry 3   -L: 11  -Q: 1 
+ 
+The MAIN menu will then appear with the first, NAMES, highlighted:
+
+  ----------------------------------------------------------------------
+  |[Names]  Grades  Compute  Print  Finals  Level  Miscellaneous  Help |
+  ---------------------------------------------------------------------- 
+ 
+You can move along the menu and make a selection in any of three ways:
+   1.  Use the LEFT or RIGHT arrow keys on the right of the keyboard to 
+       move  along the menu.  When your selection is highlighted, press 
+       return. The submenu options will then appear.
+   2.  Use ^D to move RIGHT or ^S to move left.  See #1 above to        
+       continue.
+   3.  The  easiest is to simply press the CAPITAL letter in the
+       selection you desire. For example, if you want to use the Print
+       option, press P and the submenu will appear immediately. You do not
+       have to press the CAPITAL letter; the small letter will be sufficient.
+
+page 9
+
+The complete menu and submenu selections are: 
+ 
+      Names   Grades  Quarter   Print     Finals   Level    Misc   Help
+        |        |     |          |          |       |        |     | 
+      Create     |     |          |          |       |        |     | 
+      Add to     |     |          |          |       |        |     | 
+      Delete     |     |          |          |       |        |     | 
+      cHange     |     |          |          |       |        |     | 
+      Print      |     |          |          |       |        |     | 
+      Show       |     |          |          |       |        |     | 
+      phoNe #    |     |          |          |       |        |     |
+              Create   |          |          |       |        |     | 
+              Add to   |          |          |       |        |     | 
+              cHange   |          |          |       |        |     | 
+              checK    |          |          |       |        |     | 
+                    Compute       |          |       |        |     | 
+                    Print quarter |          |       |        |     | 
+                    Stats         |          |       |        |     |
+                              Print reports  |       |        |     | 
+                              nuMber listing |       |        |     | 
+                              Name listing   |       |        |     | 
+                                           Exams     |        |     | 
+                                           No exams  |        |     | 
+                                               change Level   |     | 
+       Moving along the submenus:              change Dir     |     | 
+       Use UP or Down arrow keys and then      * save Names   |     | 
+         press RETURN                          * save Grades  |     | 
+       Use ^X for down or ^E for up and then             Erase file | 
+         press RETURN                                    Rename file| 
+       Press the CAPITAL letter in the                   Directory  | 
+         the selection you desire                        eXit       | 
+                                                                Names 
+       To select the 'Print Reports' option                     Grades
+       under 'Print', the easiest way is to                     Compute
+       press p in the MAIN menu and then p                      Print
+       in the SUBMENU. You do not have to                       Finals
+       type capital letters!                                    Level
+                                                                Misc 
+                                                                Keys 
+
+page 10 
+
+NOTE: Once you make a selection and a window opens, you can cancel the option by
+pressing ESC (the escape button) at the first prompt.  This way, if you make the
+wrong selection, you can back out of it. 
+ 
+The program is designed to be used in conjunction with your grade book.  After
+you have entered the student information in your book, somewhere, sometime,
+student names are added or they are changed, which usually makes the book
+resemble a mass of colored lines or a calamity. 
+
+After filling out your record book, you can begin entering information using the
+GRADE program.  You will need STUDENT'S FULL NAME, COUNSELOR, HOMEROOM, and
+PHONE NUMBER (optional).  After entering names, when the time comes, you can add
+new students or delete any of the old students simply and effortlessly. 
+      
+You will notice disk activity each time you start from a submenu and also when
+you leave a submenu. You do not have to save your files yourself. The program
+automatically does this so the files are constantly updated and will contain 
+the latest information. For this reason, I recommend using a RAM disk drive.
+ 
+ERROR MESSAGES 
+ 
+If you make an error either in data entry, changing to a directory or
+subdirectory that doesn't exist, an error line will appear at the very top of
+the screen replacing the information line.  After reading the message, press ESC
+(the escape button) and the information line will reappear and you can continue
+with the program,
+ 
+     File does not exist. 
+     Read error or directory not found 
+     Write error 
+     Invalid Directory Path 
+     Unexpected end of file 
+     Printer error; printing cancelled. 
+     No entries at all!
+     Error in GRADE entry -- 3 digits each -> 75 = 075 
+     Entry not valid (ESC, RETURN); try again. 
+     GRADE file missing. Use Grade / Create. 
+     Overlay GRADE.000 missing or bad. HELP turned off. 
+     NAMES file missing. Use Names / Create. 
+     Maximum entries (20). Can add no more. 
+     All choices are NO. Cancelling GRADES entry. 
+     WARNING! 8 entries for grades.     
+     Final exam grade over 100. 
+     Disk write error occurred. 
+     Directory is full. 
+     File has disappeared. 
+     No GRADES for [student name]
+     Grade average wrong. Check GRADES for [student name]
+
+
+page 11 
+
+MENU INFORMATION  
+I  Names 
+ 
+1.  Create  --  n / c 
+first program that must be used. You will be prompted to enter the full    
+name, the counselor,the homeroom, and the phone number of each student in     
+your class or classes.   
+      
+         NAME -- maximum of 25 characters, spaces, punctuation, etc. 
+         COUNSELOR -- maximum of 10 
+         HOMEROOM -- maximum of 4 
+         PHONE # -- maximum of 8   (optional entry)
+      
+When you're finished entering all the names, enter the number <1> when prompted
+for FULL NAME and the data will be recorded on disk. 
+  
+NOTE: If you attempt to Create a names file that you've already worked on, the
+program will prompt you if you wish to continue or not.  If you answer y (YES),
+the file you've worked on WILL BE ERASED to make room for the new one.  The
+prompt is a safety catch to make sure you don't mistakenly erase a file. 
+ 
+HINT: If you're going to enter all your classes at one time, I recommend
+entering two "dummy" students at the end of each class.  Enter '----' for each
+entry.  When you add students to your grade book, they are always entered at the
+bottom of the list.  Without these dummy entries, you would have to enter them
+at the very end of this long list; so when it comes time to enter grades, you
+have to remember as you're following your grade book that the new students will
+be at the end of the computer program's list and not where they appear in your
+gradebook. 
+ 
+When a student is added to your class, use the Names / cHange option to replace
+the '----' with the student's correct information.  If you leave the '----'
+entries unchanged, be forewarned that the statistics given at the end of each
+printout will be slightly inaccurate since the computer will see '----' as a
+real student and include its grades in statistical computations.  You can always
+delete these "dummies" before running any of the print options; but once
+deleted, you cannot add them BETWEEN CLASSES. 
+         
+2, 3.  Add to, Delete from  n / a  OR  n / d 
+You MUST have entered grades for students BEFORE using these options.  To enter
+grades, press g / c.  AFTER entering grades, you may then ADD names or DELETE
+names from your class list.  After using either of these options, you should
+PRINT out a new listing (n / p).  The added students will be placed at the end
+of your current students. 
+
+
+page 12
+4. cHange  -- n / h 
+Use this option to correct any information about a student.  You may have
+misspelled a name; counselor or homeroom may have changed.  You can change or
+correct the name, counselor, homeroom, or any of the four quarter grades. 
+         
+When the window opens, you will be prompted for the number of the student to
+change.  Consult your printed list of names and enter the number you want to
+change.  If you enter a number larger than the number of students in your class,
+the entry will be refused and the computer will wait for a new entry.  DO NOT
+USE THE THREE DIGIT ID NUMBER. 
+         
+If you make an error and select this option by mistake, cancel the option by
+pressing the ESC button.  This will work only the first time the window opens. 
+
+   CHANGE MENU:
+             p - phone
+             n - name 
+             c - counselor 
+             h - homeroom 
+             1 - quarter 1 
+             2 - quarter 2 
+             3 - quarter 3 
+             4 - quarter 4 
+ 
+        Enter NUMBER to change:  1   <-- default #
+ 
+Using these options for change, press the letter/# you desire and enter the new
+information.  The corrected information will replace the old and you will be
+prompted to make another change for the SAME student.  Check that you entered
+the information correctly.  If you did not, press y and redo.  If there are no
+further errors, press n and you can make corrections for ANOTHER student.  If
+you have no further corrections, press n again and the file will be updated to
+disk. 
+
+When you request to change the name or the counselor, you will be given the
+current spelling to correct.  DO NOT TYPE ANY LETTER AT THIS POINT.  If you do,
+the entire line will be erased.  Use the left arrow (or ^S) to move to the
+error, delete the error, and then type in the correct information; finally,
+press RETURN. 
+ 
+HINT: If a student has been added to your list in, say, the third quarter, you
+can use this option to enter the missing QUARTER grades which the computer will
+assign as zeroes. 
+
+page 13 
+5. Print  -- n / p 
+Use this option to print out a listing of student information.  The information
+will be:
+      
+        #    NUM     NAME      COUNSELOR     HOME   PHONE #
+ 
+        #      a number starting at 1 and counting up  -- you will need
+               this number for cHange, Delete options.   
+        NUM    student ID number,  used for printed lists for posting. 
+        NAME   --  COUNSELOR  --  HOME --  PHONE #  list student information. 
+ 
+6. Show  -- n / s
+When this option is used, the screen will clear and you will be given a list of
+your students, their counselors, homerooms and four quarter grades.  The CURRENT
+quarter grade is highlighted.  After 22 names are presented, the screen is
+frozen for your inspection until you press any of the letter keys. 
+
+7. phoNe # -- n / n
+This option will give you a listing on the screen of number, student ID number,
+name, counselor, homeroom, and phone number for each student in your NAMES file.
+
+
+II  Grades 
+ 
+The program uses three categories of grades: 
+        50%           30%           20% 
+     (tests)      (quizzes)     (homework)
+ 
+ 50%  -- the average of these grades will be 50% of the FINAL quarter 
+ 30%  -- the average of these grades will be 30% of the FINAL quarter
+ 20%  -- the average of these grades will be 20% of the FINAL quarter
+ 
+          50% grades           30% grades            20% grades 
+               75                   89                   25      
+               88                   77                   91 
+              100                   66                  100
+               86                   88                 -----  
+               98                 ----- 
+              ----- 
+     total    447 (/ 5)            320 (/ 4)            216 (/ 3) 
+     avg      89.4                 80.0                 72.0  
+       * .5 = 44.7          * .3 = 24.0          * .2 = 14.4       
+     FINAL average =  44.7 + 24.0 + 14.4 = 83.10 
+ 
+
+page 14
+        
+***************************************************************** 
+*     Grades are entered in one long list WITHOUT SPACES.       * 
+*             Each grade MUST BE 3 digits.                      * 
+*                                                               * 
+*    Example:      If you have the following grades,            * 
+*        25    98   88   0  100   34   76   Each grade becomes  * 
+*       025   098  088 000  100  034  076                       * 
+*   Enter the above 7 grades as :   025098088000100034076       * 
+*              Press RETURN to continue entering.               *      
+***************************************************************** 
+
+NOTE: If a student has NOT done an assignment use three dashes (---) for the
+grade.  This will make it easier if you have to change it when and if the
+student makes it up.  The computer will automatically count any grade entered as
+'---' to be a zero (0) until and unless you change it.  When entering grades,
+the program will ONLY accept the numbers 0 to 9 and the dash ( - ).  The dash is
+equivalent to an Incomplete grade that counts as a zero if not made up. 
+     
+Remember that you must use three dashes '---' and you may NOT mix the dash and
+numbers (e.g.  '-89'; this the computer will see as a 0.)
+ 
+If you do not want a grade or grades to count at all for a student, MAKE NO
+ENTRY AT ALL.  The computer uses the grades entered to compute the average; so
+it matters not if one student has fewer grades than the rest. 
+ 
+1. Create  --  g / c
+
+     Enter 50% grades?
+     Enter 30% grades?
+     Enter 20% grades?
+     Enter absences?
+ 
+After entering student information, use this to enter the grades you have.  You
+will be asked first, if you want to enter 50%, 30%, 20% grades, or absences. 
+Simply press y for YES or any other LETTER for NO.  You do not have to record
+all of the categories at one time.  You will NOT be allowed to use the Quarter /
+Compute option if there are no entries in any of the grade categories (50, 30,
+20) since that would cause division by zero, not allowed in mathematics nor by
+many computers. 
+ 
+Enter absences to date; the computer will keep a cumulative total for you.  If
+you enter NO for absences, you must remember the NEXT time to enter absences
+from the LAST time you recorded absences. 
+
+
+page 15
+ 
+If you make an error entering grades, you can either use the backspace key to
+erase everything up to the error and then retype, or use the LEFT arrow key to
+go back to the first character of the error, press the DELETE key three times to
+erase the error, then type in the correct number, press the RIGHT arrow to
+return to the end of the grades and then continue. 
+     
+It might be to simpler to take note of the student you made the error for,
+continue entering information, and when finished, using the Grade / cHange
+option to correct. 
+ 
+ 2.  Add to  --  g / a 
+After entering grades for your students, you can add more grades to the list at
+any time.  At the questions of entering 50%, 30%, and 20% grades, or absences,
+answer y or n.  You will then be asked to enter the new grades. 
+     
+Notice that the space to enter further grades is smaller.  This way you will
+know how much room you have left for new grades.  Remember, you are not allowed
+to enter more than 22 grades in each category. 
+      
+NOTE: The program will SKIP any name that has the maximum grades (22).  You must
+be aware of those names that already have 22 grades.  You will be warned that a
+student has the maximum grades but not in which category. 
+ 
+ 
+3.  cHange  --  g / h 
+
+You can change, correct, or even add to the grades already entered.  You will be
+asked for the NUMBER to change.  Enter the number of the student you want to
+change.  Do NOT use the three digit student ID number.  Use the printed list
+number; if the student is the fifth name on the list, enter 5 and then press
+RETURN.  You'll be shown the number of absences so far.  To correct, press y,
+and you will be prompted for the new information.  Then you will be shown the
+50% grades.  If you want to change any, press y. 
+
+DO NOT ENTER ANY NUMBER at this point! If you do, the entire line will be
+erased.  RATHER, use the left arrow key to move, type in the addition, or use
+the DELETE key to erase and then type in the new grade.  The other grades will
+move over to make room.  Or use the backspace key to erase to the left; THEN
+make any changes.  Press RETURN when you're finished.  You do NOT have to return
+the cursor to the end of the line.  Simply make your changes and press RETURN. 
+Follow the same procedure for the 30% and the 20% grades. 
+
+
+page 16
+
+You will then have the chance to correct another student or to end.  If you have
+no further changes, the grades will be recorded. 
+      
+WordStar(tm) users can also use ^S  and ^D to move right or left. 
+
+4.  checK -- g / k 
+Use this option BEFORE computing the grade averages to make sure that each
+student has at least one entry for each of the three categories of grades.  You
+will be informed on the top line of the students who do NOT have an entry.  This
+allows you to check only those students who are missing a grade. 
+
+III  Quarter  
+1.  Compute --  q / c 
+The program will automatically compute your quarter grades based on the entries
+made for each student.  When finished, you will be shown a list of your students
+and their current quarter grades highlighted.  If a quarter grade computes to
+over 100, you will be notified at the top of the screen; you'll be given the
+name of the student; press ESC to continue computing.  The grade is NOT changed.
+
+You probably entered a grade incorrectly unless extra credit work sent the
+average over 100.  You should check that student's grades. 
+
+You will then be asked if you want the program to check for failures because of
+absences.  If you do NOT want the program to check, simply press n for NO.  If
+you do want to check, you will be prompted only for those students whose
+absences exceed the limit you set in the INSTALL program.  Press y if you want
+the student to fail; any other letter will leave the grade untouched.  If you do
+press y, the program will subtract 5 points from your school's minimum grade. 
+
+     e.g.   quarter average is  77.1 
+            student's been absent 11 times 
+            school policy is set at 8 absences 
+            school minimum passing grade is 70 
+                    
+  If you press y, the student's grade will be 65   (70 - 5 = 65) 
+ 
+NOTE: If there are NO grades for any of the categories (e.g., 50%), the program
+will stop COMPUTING or PRINTING REPORTS at that point.  Therefore, make sure you
+have entered at least one grade for each student before selecting Compute /
+Compute OR any of the Print options. 
+ 
+2.  Print  --  q / p 
+Make sure your printer is turned on and then press 'y' to print.  If you use a
+print spooling program, you will not have to wait very long to regain use of
+your computer.  Make sure your paper is set at the top of the page since 50
+names will be printed on a single sheet. 
+
+
+page 17
+
+If your printer is not ready or you change your mind, press <ESC> or any letter
+EXCEPT 'y' to cancel the printing. 
+ 
+If your printer isn't turned on, and you give the go-ahead ('y') to begin
+printing (we're all familiar with 'Murphy's Law'), DOS may interrupt the program
+with its "Abort,Retry,Ignore" message even though there is a built in error trap
+for this situation If the printer is turned off when you ask the program to
+print, an error message should appear at the top of the screen almost
+immediately.  If, however, the printer has been turned on but is off line when
+the call to print is made, it may appear that the program is suddenly doing
+nothing for a long period of time.  This is because DOS makes five attempts at
+printing before giving up and giving the "Abort message." If the wait seems
+unusually long (over 15 or 20 seconds), try waiting a bit longer.  If nothing
+happens, you will probably have to reboot. 
+     
+If you get the "Abort,Retry,Ignore" message, press 'A' for Abort if your printer
+is not on line or turned on.  If the printer was off line, turn it on and then
+press 'R'.  To get the screen back to normal, press n / s.  It is also possible
+that this may halt the program or freeze the computer; so if you're planning on
+printing any information, be sure the printer is ready and on line BEFORE
+running the program. 
+
+At the end of the printout, you will be given a summary of the number of grades
+given in a set range, the percent, and the total students. 
+
+EXAMPLE:  
+ 
+     QUARTER 1 AVERAGES    78.1    0.0    0.0    0.0 
+     QUARTER 1 count 
+      90 -- 100    2    7.14% 
+      80 --  89    4   14.29
+      70 --  79   11   39.29 
+      60 --  60    9   32.14 
+      below 60     2    7.14
+      total students = 28 
+  
+3. Statistics  --  q / s
+This will print out on the SCREEN the statistics given directly above.  This is
+provided for a quick reference as to how the students are doing as a group
+without having to print anything out. 
+ 
+ IV  Print 
+ 1.  Print reports --  p / p 
+     Before printing progress / deficiency reports, you will be asked: 
+      a.  "Do you want a message to appear on ALL reports?" 
+          Answer y if you have a message that you want all the parents
+          to be aware of, e.g., date a novel must be read, homework
+          due,etc.   
+
+page 18
+             
+         You are limited to a total of 76 characters/spaces for your
+         message. Do not add a period at the end since the program
+         will automatically provide the period. Therefore, you cannot
+         ask a question in this message area. 
+ 
+         The long, highlighted line is the space that you have for the 
+         message. You will be able visually see how much space is left 
+         while you're typing. 
+ 
+ b.  "Do you want individual messages printed?" 
+       Answer  y  if you do.  You will be prompted for each student
+       in your class.  If you have a message, press y and enter it. 
+
+       Each individual message will begin with the student's 
+       first name;  YOU DO NOT HAVE TO ENTER THE NAME.  The program
+       will do it for you. You are limited to 76 characters.
+ 
+     EXAMPLE:  for John Smith, you pressed y to enter a  message. 
+        "John" will automatically appear above the space to type 
+             
+         You might then enter: 
+             
+         [has been doing very well on tests but poorly on homework] 
+             You would have typed everything in brackets above. 
+ 
+   John has been doing very well on tests but poorly on homework. 
+                 The above will appear on the report. 
+ 
+If a student's average is one point above your minimum for passing, say, 71, you
+will get one copy of the progress report.  If the average is below that, you
+will receive two copies of the deficiency.  In either case, the student can take
+the one home, have his/her parent(s) sign it, and return it to you.  In the case
+of a deficiency, the second copy is for your records, for the counselor, etc.. 
+ 
+The computer takes whatever number you entered in the INSTALL program for the
+absence policy, halves the number and adds one to it, e.g.  8 entered; (8/2) + 1
+= 5.  In this section for printing, if a student has that number of absences or
+above (5 or above), a warning will be printed that excessive absence can result
+in failure. 
+ 
+Not all comments made by the program are negative.  If a student has above a 90
+average, the message "[FIRST NAME] should be commended for such excellent work."
+will be printed.  If a student has zero absences, the message "[FIRST NAME]
+should be commended for such excellent attendance." will be printed.  You can
+also add your own positive or negative statements in the individual message. 
+
+
+page 19
+ 
+2.  Name listing  --  p / n 
+    This will produce a listing for you to use for parent conferences
+    or for your own information.  Each student will have four lines 
+    of information.   
+a.  full name . . 4 quarter grades . .absences for current quarter 
+b.  listing of all 50% grades .. average of grades .. points (avg * .5)
+c.  same as above for 30% grades   -- points (avg * .3) 
+d.  same as above for 20% grades   -- points (avg * .2) 
+           
+At the end of the list, you will be given the average of all the QUARTER grades
+for each quarter. 
+
+3.  nuMber listing  --  p / m 
+The same information as above will be presented EXCEPT for one item.  Instead of
+the students' names being used, the 3 digit ID numbers will be used.  Therefore,
+you can post this list in the classroom for the students to inspect.  Of course,
+you must give each student his/her number beforehand. 
+ 
+I STRONGLY RECOMMEND USING A SPOOLING PROGRAM SINCE THESE PRINTOUTS CAN TAKE A
+VERY LONG TIME -- the more names, the longer.  I also recommend using a dot
+matrix printer since a daisy wheel can take forever to print this much material;
+however, don't use the NLQ mode since that will also increase the amount of time
+to print. 
+ 
+V  Finals 
+1.  Exams -- f / e 
+
+You will be asked to enter the exam score for each of your students.  If, by
+chance, a student has earned a zero on the exam, simply press return.  When you
+have entered all of the scores, you will then be asked how the computer should
+average the final grade for the year:
+ 
+    <1>  the final exam will count 1/5 (20%) of the final grade.
+    FINAL GRADE =
+          (quarter 1 + quarter 2 + quarter 3 + quarter 4 + exam) / 5 
+ 
+    <2>  the final exam will count 20% of the 4th quarter grade.
+          quarter 4  = (quarter 4 * .8) + (final exam * .2)
+    FINAL GRADE =
+          (quarter 1 + quarter 2 + quarter 3 + quarter 4) / 4 
+ 
+After you press 1 or 2, the computer will then compute the final averages.  YOU
+then determine the final grades -- see next page. 
+ 
+ 2. No exams  --  f / n 
+    The program will compute the final average: 
+    FINAL GRADE =
+     (quarter 1 + quarter 2 + quarter 3 + quarter 4) / 4 
+ 
+    YOU will then determine the final grade for each student. 
+
+page 20
+
+VI  FINAL GRADE 
+The program will now give you the following information for EACH student:
+ 
+     a  quarter grades ***
+     b  final exam grade (if any) 
+     c. final average 
+
+*** If you elected the final exam to count 20% of the fourth quarter grade, the
+fourth quarter grade will INCLUDE the final exam grade. 
+
+You now decide what final grade will be given each student.  Type in the final
+grade, press RETURN, and move on to the next.  Each time you press RETURN, the
+information is sent to the printer for a hardcopy.  Therefore, you must make
+sure your printer is on and press any LETTER at the printer prompt.  Pressing
+ESC will cancel the selection and NO PRINTING will be done. 
+ 
+The final exam grades and the final grades will NOT be saved on disk.  You will
+be given a printed list of this information. 
+ 
+At the end of the printout, you will be given a summary of the final grades
+given:
+ 
+       FINAL GRADES AVERAGE    73.2 
+       FINAL GRADES count 
+        90 -- 100    2    7.14% 
+        80 --  89    4   14.29
+        70 --  79   11   39.29 
+        60 --  60    9   32.14 
+        below 60     2    7.14 
+        total students = 28 
+ 
+ 
+VII  Level 
+1.  change Level  --  l / l
+Use this option to change to a different class for entering information. 
+ 
+2.  change Dir  --  l / d 
+Use this option to change to a different drive, subdirectory, etc. 
+ 
+CAUTION: this will NOT create a subdirectory for you.  The subdirectory MUST
+have been created before using this option. 
+ 
+If the change is successful, all further disk activity will occur in the new
+directory.  If you need a NAMES and/or GRADES file, you must make sure they are
+already in the new directory or else create them.  The file GRADE.000 MUST be in
+the new directory/drive or the program will ignore any HELP calls if it cannot
+find the file in the new drive/directory. 
+
+
+page 21  
+ 3.  * save Names  --  l / n  / * save Grades  --  l / g 
+ 
+     CAUTION: USE THESE OPTIONS ONLY IF THERE IS A DISK WRITE ERROR.   
+      
+     It's possible your disk might be full and there's no room for a  
+     NAMES or GRADES file you just created.         
+
+     DON'T PANIC. Follow these steps: 
+ 
+     a. check directory of disk  --  m / d 
+     b. note any file(s) you can erase from the disk. Press any key. 
+     c. press m / e  to erase one file at a time. 
+     d. THEN  use this option -- information is still in memory and 
+        this MAY save the NAMES or GRADES file or possibly both. 
+ 
+     If there is a write error again, try inserting a BLANK, FORMATTED
+     disk in the drive you're using, and try this option again.  If
+     this doesn't work either, you'll have to begin anew. Sorry.   
+     
+     DO NOT USE THIS OPTION IF THERE IS NO WRITE ERROR. 
+     Files are constantly and automatically saved. 
+ 
+VII  Miscellaneous 
+1. Erase file  --  m / e 
+This will allow you to erase a file on disk.  You will be asked if you are sure
+if you want the file erased.  You will be told if the erasure was successful OR
+You will given an error message if there is no such file. 
+ 
+2. Rename file  --  m / r 
+This will allow you to rename a file on disk.  You will be prompted to enter the
+old file name and the new.  If the renaming was successful, you will be returned
+to the main menu; otherwise, you will be given an appropriate error message. 
+ 
+3. Directory  --  m / d 
+This will give you a directory listing for any drive you specify.  the wild
+cards '*' and '?' may be used. 
+ 
+4. eXit  -- m / x 
+Use this when you're finished and wish to quit the program and return to DOS. 
+
+
+page 22 
+
+VIII  Help  h / ??? 
+          
+This is the HELP facility built into the program which can be accessed only
+through the main menu.  All of the help screens are contained in the overlay
+file GRADE.000 which must be on the directory, subdirectory, drive you're
+working on.  If this file is not, you will be given an error message that the
+file is missing and all subsequent calls to Help will be ignored. 
+ 
+When you press Help from the main menu, you will be offered eight choices from
+the submenu.  The first seven correspond to the seven parts of the main menu
+(Names Grades Quarter Print, etc.).  The last is Keys which will explain the
+various ways to move through the main menu and the submenus.  At the conclusion
+of the help screens you will be returned to the main menu. 
+ 
+ EXAMPLES OF PRINTOUTS 
+ 
+--- Names / Show (screen only) 
+                                       highlighted if quarter 1 
+                                                  | 
+#  1 155  Roger Bakersville     Williams   909   72.6   0.0   0.0   0.0
+#  2 160  Joyce Callings        Price      910   52.3   0.0   0.0   0.0
+#  3 161  Henry Frier           Groons     901   76.8   0.0   0.0   0.0
+#  4 164  George Gallsworthy    Williams   920   75.1   0.0   0.0   0.0
+#  5 169  Betty Kims /aka Akers Price      902   34.5   0.0   0.0   0.0
+#  6 170  Herman Killinsworth   Price      918   78.1   0.0   0.0   0.0
+#  7 175  Steven Mollins        Groons     911   77.9   0.0   0.0   0.0
+#  8 176  Henrietta Nance       Price      914    0.0   0.0   0.0   0.0
+#  9 178  Victor Petty          Williams   907   73.2   0.0   0.0   0.0
+# 10 179  Charles Robbinson     Price      907   67.9   0.0   0.0   0.0
+# 11 181  Henry Stimanski       Williams   918   84.8   0.0   0.0   0.0
+# 12 185  Karen Wise            Price      920   80.0   0.0   0.0   0.0
+# 13 188  Dummy Data            End        000   93.8   0.0   0.0   0.0
+ 
+                      Press a letter to continue. 
+
+
+--- Names / phoNe #  (screen only)
+
+#  1 203  Denise Harvey             Price      909     111-0000
+#  2 207  Roger H. Thomasinon       Wills      901     435-1544
+#  3 211  Joyce Hershell            Griner     908     333-1212
+#  4 212  Henry Higgins             Price      918     234-1546
+
+page 23
+ 
+--- Compute / Print quarter 
+ 
+   TEACHER NAME 
+   CLASS            DATE            QUARTER 1 
+
+   NAME/HOMEROOM                     QUARTER GRADES        ABS  AVG  
+   Roger Bakersville         909   72.6   0.0   0.0   0.0   0   72.6 
+   Joyce Callings            910   52.3   0.0   0.0   0.0   0   52.3 
+   Henry Frier               901   76.8   0.0   0.0   0.0   0   76.8 
+   George Gallsworthy        920   75.1   0.0   0.0   0.0   0   75.1 
+   Betty Kims /aka Akers     902   34.5   0.0   0.0   0.0   0   34.5 
+   Herman Killinsworth       918   78.1   0.0   0.0   0.0   0   78.1 
+   Steven Mollins            911   77.9   0.0   0.0   0.0   0   77.9 
+   Henrietta Nance           914    0.0   0.0   0.0   0.0   0    0.0 
+   Victor Petty              907   73.2   0.0   0.0   0.0   0   73.2 
+   Charles Robbinson         907   67.9   0.0   0.0   0.0   0   67.9 
+   Henry Stimanski           918   84.8   0.0   0.0   0.0   0   84.8 
+   Karen Wise                920   80.0   0.0   0.0   0.0   0   79.9 
+   Dummy Data                000   93.8   0.0   0.0   0.0   0   93.8 
+
+   QUARTER AVERAGES:     66.68   0.0   0.0   0.0 
+    90 -- 100   1    7.69% 
+    80 --  89   2   15.38% 
+    70 -- 79    6   46.15% 
+    60 -- 69    1    7.69% 
+    below 60    3   23.08% 
+    # students = 13 
+
+
+
+---  Quarter / Statistics  (screen only)
+
+      LEVEL:    11      QUARTER:  1
+
+      90 -- 100    0     0.00%
+      80 -- 89     3    12.50
+      70 -- 79    16    66.67
+      60 -- 69     4    16.67
+      below 60     1     4.17
+
+      total students = 24
+
+
+page 24
+ 
+ 
+--- Print / Print Reports 
+     This is an example of a progress report -- one copy printed 
+ 
+ 
+     Your High School                        Current Date, 19?? 
+     Progress Report                 Quarter 1 
+     To the parents of Karen Wise 
+     Homeroom:  920                  Counselor:  Price 
+     Karen has an average of 80.0 in CLASS NAME for quarter 1. 
+     QUARTER AVERAGES: 
+       1st:   80.0      2nd:   0.0      3rd:   0.0     4th:    0.0 
+     Cumulative final average as of CURRENT DATE:  80.0 
+     Grades for quarter 1 
+       4  50%  79  80  81  81   avg: 80.25    pts: 40.1 
+       3  30%  80  80  79     avg: 79.67    pts: 23.9 
+       4  20%  79  80  80  81   avg: 80.0    pts: 16.0 
+     NOTE:  first novel to be read by 10/15/86.       (+) 
+     Karen needs to concentrate more on homework.     (++) 
+     Thus far Karen has been absent 0 time(s) this quarter. 
+        Karen should be commended for such excellent attendance. 
+ 
+     TEACHER'S NAME           CLASS NAME 
+ 
+     Name/Date_____________________Name/Date________________________ 
+                          [please sign and return] 
+ 
+        (+)  message added to ALL reports at your option 
+        (++) individual message added at your option 
+ 
+     Differences between printed Progress and Deficiency reports 
+ 
+     a.  deficiency given if grade equals or is below minimum passing  
+         grade. 
+     b.  Statement is printed for deficiency:  "Perhaps a conference is 
+         indicated. The school phone number is PHONE #." 
+     c.  Statement is printed for progress if grade is 90 or better: 
+         "'FIRST NAME' should be commended for such excellent work." 
+     d.  2 copies printed of Deficiency 
+ 
+In the third and fourth quarters, if the cumulative average (thinking of the
+FINAL GRADE) is equal to or below the minimum passing grade, the following is
+printed:
+
+         +++POSSIBLE FAILURE FOR THE YEAR+++  
+
+page 25
+ 
+--- Print / print Name 
+ 
+    CLASS NAME       TEACHER NAME      Quarter 2        March 19, 1986 
+    Henry Jones         76.0    66.6    0.0    0.0    3 
+      7  50%   --  88  99  77  44  88  89   avg: 69.3   pts: 34.6 
+      4  30%  100  88  76  56   avg: 80.0   pts: 24.0 
+      5  20%   --  --  00 100 100   avg: 40.0   pts: 8.0 
+    Sally Smith         76.0    66.6    0.0    0.0    3 
+      7  50%   --  88  99  77  44  88  89   avg: 69.3   pts: 34.6 
+      4  30%  100  88  76  56   avg: 80.0   pts: 24.0 
+      5  20%   --  --  00 100 100   avg: 40.0   pts: 8.0 
+    (same information for rest of students in class) 
+ 
+--- Print / print nuMber 
+ 
+    CLASS NAME       TEACHER NAME      Quarter 2        March 19, 1986 
+    163 ......       76.0    66.6    0.0    0.0    3 
+      7  50%   --  88  99  77  44  88  89   avg: 69.3   pts: 34.6 
+      4  30%  100  88  76  56   avg: 80.0   pts: 24.0 
+      5  20%   --  --  00 100 100   avg: 40.0   pts: 8.0 
+    165 ......       76.0    66.6    0.0    0.0    3 
+      7  50%   --  88  99  77  44  88  89   avg: 69.3   pts: 34.6 
+      4  30%  100  88  76  56   avg: 80.0   pts: 24.0 
+      5  20%   --  --  00 100 100   avg: 40.0   pts: 8.0 
+    (same information for rest of students in class) 
+     
+ 
+NOTE: All printouts are printed continuously.  This was done to minimize paper;
+a class of 40 students could use up anywhere from 40 to 80 pages of paper if
+printed one to a page.  You will have to cut the progress/deficiency reports
+yourself with a ruler.  Enough space is given between each to make this an easy
+task. 
+       
+HINT #1: If your NAMES file contains many names, the disk activity can take a
+long time.  Remember that files are saved continuously.  To make the delay as
+little as possible, I recommend using a RAM disk for storing the NAMES and the
+GRADES file(s).  You should also have the file GRADE.000 on the RAM disk to use
+the Help screens.  If you're starting the program from the RAM disk, you'll also
+need the files GR.ADE as well as GRADE.COM.  You must also remember to copy the
+NAMES and GRADES files to disk after exiting the program. 
+
+
+page 26
+
+ 
+Sample batch file to create a RAM disk as drive C: and run the program from
+drive A: using the SUPERDRV.COM program provided by AST. 
+
+      drive C:/1           (create RAM disk of about 160K) 
+      copy GR.ADE C: 
+      copy GRADE.000 C: 
+      copy NAMES.* C:     (copy any NAMES files to RAM disk) 
+      copy GRADES.* C: 
+      grade 
+      copy C:NAMES.* A:   (after exiting program, files will be saved
+
+      copy C:GRADES.* A:     on A:\ drive) 
+ 
+After entering the level, the quarter, and the class to work on, use the Level /
+change Directory command to use the C:\ RAM disk for all input and output of
+files. 
+
+
+HINT #2: The spacing for all printouts is 6 lines per inch.  When printing the
+deficiencies/progress reports, you may want to save paper by having them printed
+8 lines to an inch.  To do this, run the INSTALL program again, complete all
+information as usual, but for the printer use NOT LISTED as your choice.  You'll
+be prompted for the codes to set ELITE print and will be asked for 6 numbers. 
+You can use the first two numbers to set ELITE mode and the next two numbers to
+set 8 LINES PER INCH.  You can even set CONDENSED mode instead of elite.  For
+example these would be the codes for and EPSON printer for ELITE mode, 8 LINES
+PER INCH:
+
+     27  77  27  48  0  0
+
+When the reports are printed, run the INSTALL program again after exiting the
+program and select your printer.  This will set ELITE mode; then turn your
+printer OFF and then ON to cancel the 8 LINES PER INCH. 
+
+
+```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 10  '
 11 '
@@ -764,9 +2082,11 @@ machines:
 1002 GOTO 1001
 50000 RUN"error
 ```
+{% endraw %}
 
 ## MENU2.BAS
 
+{% raw %}
 ```bas
 1 CLS:SCREEN 2:SCREEN 1:ON ERROR GOTO 50000
 2 DEF SEG=&HB800:BLOAD"atlasarm",0:DEF SEG:
@@ -787,9 +2107,11 @@ machines:
 400 SYSTEM
 50000 RUN"error
 ```
+{% endraw %}
 
 ## MULTID.BAS
 
+{% raw %}
 ```bas
 1 ON ERROR GOTO 50000
 5 CLS:Y=1
@@ -2394,9 +3716,112 @@ machines:
 36737 BEEP:GOTO 36703
 50000 RUN"error
 ```
+{% endraw %}
+
+## NOTES664.TXT
+
+{% raw %}
+```
+Program name: Atlas Software Package
+ 
+Author name:  Atlas Software
+Address:      P.O. Box 1638
+              Temple City, CA 91780
+ 
+Tel number:   Not listed
+ 
+Suggested donation: $5.00
+ 
+------------------------------------------------------------------------------
+ 
+Program name: STAR
+ 
+Author name:  Alan Farmer
+Address:      2743 McElroy Drive
+              Charlottesville, Va  22903
+ 
+Tel number:   Not listed
+ 
+Suggested donation: $5.00
+ 
+------------------------------------------------------------------------------
+ 
+Program name: The Register
+ 
+Author name:  Denis L. Latkowski
+Address:      417 Tantallion Court
+              Baltimore, Maryland  21212
+ 
+Tel number:   301-435-1544
+ 
+Suggested donation: $45.00 - includes registration and update information.
+ 
+------------------------------------------------------------------------------
+ 
+Program descriptions:
+ 
+This diskette contains a multitude of educational software for both the
+teacher's aid and also for the student's benefit.  The following is a
+short description of each program contained on this disk.  Please note
+that some programs do require a color monitor.  Each program was found
+to be very well written and easy use.
+ 
+ 
+GRADE.COM:
+This program is the demo version of the Register package.  Please note
+that the demo version is fully functional, but the registered version
+contains many extended features.
+ 
+Written by a teacher for teachers and tested in the classroom.  The
+program is primarily intended for junior and senior high school
+teachers; however, college teachers can find it useful also.  These
+instructors do not have to worry about the concept of working in
+"quarters," nor will they be likely to use the progress reports; but the
+computational parts of the program will prove useful.  In this program,
+grades are entered in a structured format and teachers can keep track of
+each student's marks via a database of students' scores.  Reports can be
+generated and modifications of the database are available.  Register
+contains a well written documentation file about 40k.
+ 
+Requirements for Register: PC/XT or true compatible (untested on AT),
+DOS 2.xx or higher, 1 DSDD drive, 128 K, mono or color graphic card, RGB
+monitor recommended, printer (dot matrix recommended).
+ 
+ 
+STAR.BAS
+is a program which maps the night sky as seen from any point on
+earth at any time.  This program would be much improved if you use IBM's
+Basic Compiler, but I don't have it myself.
+ 
+STAR.DAT
+is a database of about 200 star locations and magnitudes used
+by STAR.BAS.
+ 
+ 
+MENU.BAS
+is a program which will bring the user into three wonderfully
+written educational programs, Name That Planet, Multitime, and
+Historomania.  Written by Atlas Software, these programs each contain
+color graphics and fine computer-student interaction.  In Name That
+Planet, each planet in our solar system is displayed on the screen in
+color and graphics and the student is to name the planet.  Planet
+relative size and placement are displayed as hints.  Historomania is a
+history trivia quiz program with different levels of difficulty.
+Lastly, Multitime will drill students on multiplication factors.  Each
+program can be run from the master menu which selects each from a nice
+graphic image of the atlas; this program has color, graphics and sound.
+ 
+PC Software Interest Group (PC-SIG)
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1986
+```
+{% endraw %}
 
 ## NTP.BAS
 
+{% raw %}
 ```bas
 1 SCREEN 1:ON ERROR GOTO 50000
 19 CLS
@@ -2545,9 +3970,11 @@ machines:
 55556 PRINT"You got it! "
 55557 FOR V=7 TO 0 STEP -1:FOR H=90 TO 0 STEP -1:PRESET (H,V):NEXT H:NEXT V
 ```
+{% endraw %}
 
 ## STAR.BAS
 
+{% raw %}
 ```bas
 10 DEF FNHM(X)=SGN(X)*(INT(ABS(X)/100)+(ABS(X) MOD 100)/60)
 20 DIM RA(600),DEC(600),MAG(600),ED(12)
@@ -2666,6 +4093,7 @@ machines:
 1140 RA(K%)=.2618*RA:DEC(K%)=DEC*RADIAN:MAG(K%)=MAG
 1150 K%=K%+1:GOTO 1070
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

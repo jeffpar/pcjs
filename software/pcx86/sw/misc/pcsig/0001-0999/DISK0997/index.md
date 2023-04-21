@@ -32,6 +32,45 @@ machines:
     ``GRADUUUUUUUU'' (Grad + eight U's = Grad-u-eight).  Have fun!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES997.TXT
+
+{% raw %}
+```
+Disk No  997
+Program Title: OPUS 1 BRAIN TEASERS
+PC-SIG version 1
+ 
+    This is a trivia-oriented game for up to four people. Some of the 25
+different categories you can choose from are Body Talk, TV & Film, 1-2-3,
+two-Way words, Books/Plays, and more. The game is played much like
+Charades. The clues are brought up as a graphic clue. For example, The
+Graduate had a clue of GRADUUUUUUUU.
+ 
+Usage: Entertainment
+ 
+System Requirements: 128K memory and one disk drive.
+ 
+How to Start: Type: EPQUIZ (press enter).
+ 
+File Descriptions:
+ 
+EPQUIZ   EXE  Main Program.
+NDF#1         Data file.
+NDF#2         Data file.
+README   1ST  Documentation file.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0997
 

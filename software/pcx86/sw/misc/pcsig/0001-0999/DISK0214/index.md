@@ -131,6 +131,7 @@ machines:
 
 ## ASCII.BAS
 
+{% raw %}
 ```bas
 3 DEFDBL X         
 4 DEFINT A-W,Y-Z
@@ -503,9 +504,11 @@ machines:
 51110 PRINT " -BYE, Have a nice day
 51120 END
 ```
+{% endraw %}
 
 ## CFILE.BAS
 
+{% raw %}
 ```bas
 4 DEFINT A-W,Y-Z
 5 DIM F$(15),FLDN$(17,40),FTY(17,40),FL(17,40) 
@@ -1141,9 +1144,11 @@ machines:
 62990 PRINT CHR$(CH);
 63000 GOTO 62190
 ```
+{% endraw %}
 
 ## CFORM.BAS
 
+{% raw %}
 ```bas
 4 DEFINT A-W,Y-Z
 5 DIM F$(17),FLDN$(17,30),FTY(17,30),FL(17,30),IOPT(30)
@@ -1780,9 +1785,11 @@ machines:
 62990 PRINT CHR$(CH);
 63000 GOTO 62190
 ```
+{% endraw %}
 
 ## CHANGE.BAS
 
+{% raw %}
 ```bas
 3 DEFDBL X         
 4 DEFINT A-W,Y-Z
@@ -2785,9 +2792,11 @@ machines:
 61810 IF INKEY$ = "" THEN 61810
 61820 RETURN
 ```
+{% endraw %}
 
 ## CINPUT.BAS
 
+{% raw %}
 ```bas
 4 DEFINT A-W,Y-Z
 5 DIM F$(17),FLDN$(17,30),FTY(17,30),FL(17,30),IOPT(30)
@@ -3630,9 +3639,11 @@ machines:
 62990 PRINT CHR$(CH);
 63000 GOTO 62190
 ```
+{% endraw %}
 
 ## CLIMITS.BAS
 
+{% raw %}
 ```bas
 4 DEFINT A-W,Y-Z
 5 DIM F$(15),FLDN$(17,40),FTY(17,40),FL(17,40) 
@@ -4110,9 +4121,72 @@ machines:
 62990 PRINT CHR$(CH);
 63000 GOTO 62190
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #214, version v2 
+ 
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on this disk.  If the CRC numbers do not match the following
+list you may have a bad file.  To use type:  CRCK4 <filespec>
+ 
+CRCK4 output for this disk:
+ 
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  MAIN    .BAS         CRC = FB A4
+
+--> FILE:  SCAN    .BAS         CRC = 9D 97
+
+--> FILE:  CHANGE  .BAS         CRC = E0 A1
+
+--> FILE:  FORM    .BAS         CRC = 3E B3
+
+--> FILE:  TRANSFER.BAS         CRC = 3D CB
+
+--> FILE:  SORT    .BAS         CRC = 5F C0
+
+--> FILE:  CFILE   .BAS         CRC = BC E7
+
+--> FILE:  CINPUT  .BAS         CRC = CD 21
+
+--> FILE:  CTRANSFE.BAS         CRC = 6E 70
+
+--> FILE:  CFORM   .BAS         CRC = 17 E6
+
+--> FILE:  CLIMITS .BAS         CRC = 91 45
+
+--> FILE:  CREAL   .BAS         CRC = 53 59
+
+--> FILE:  CSCREEN .BAS         CRC = 62 C0
+
+--> FILE:  ASCII   .BAS         CRC = A4 B5
+
+--> FILE:  TESTASCI.BAS         CRC = 3D 17
+
+--> FILE:  READ    .ME          CRC = EF B9
+
+ ---------------------> SUM OF CRCS = 7F 5B
+
+DONE 
+ 
+These and other Public Domain and user-supported programs from:
+ 
+PC Software Interest Group (PC-SIG)
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## CREAL.BAS
 
+{% raw %}
 ```bas
 4 DEFINT A-W,Y-Z
 5 DIM F$(15),FLDN$(17,40),FTY(17,40),FL(17,40) 
@@ -4687,9 +4761,11 @@ machines:
 62990 PRINT CHR$(CH);
 63000 GOTO 62190
 ```
+{% endraw %}
 
 ## CSCREEN.BAS
 
+{% raw %}
 ```bas
 4 DEFINT A-W,Y-Z
 5 DIM F$(15),FLDN$(17,40),FTY(17,40),FL(17,40) 
@@ -5352,9 +5428,11 @@ machines:
 62990 PRINT CHR$(CH);
 63000 GOTO 62190
 ```
+{% endraw %}
 
 ## CTRANSFE.BAS
 
+{% raw %}
 ```bas
 4 DEFINT A-W,Y-Z
 5 DIM F$(17),FLDN$(17,30),FTY(17,30),FL(17,30),IOPT(30)
@@ -6131,9 +6209,11 @@ machines:
 62990 PRINT CHR$(CH);
 63000 GOTO 62190
 ```
+{% endraw %}
 
 ## FORM.BAS
 
+{% raw %}
 ```bas
 3 DEFDBL X         
 4 DEFINT A-W,Y-Z
@@ -6620,9 +6700,11 @@ machines:
 51200 PRINT "BYE - Have a nice day "
 51300 END
 ```
+{% endraw %}
 
 ## MAIN.BAS
 
+{% raw %}
 ```bas
 2 PRINT FRE(0)
 3 DEFDBL X         
@@ -8436,9 +8518,11 @@ machines:
 61475 X(TGTRN) = XHLD3
 61480 RETURN
 ```
+{% endraw %}
 
 ## SCAN.BAS
 
+{% raw %}
 ```bas
 3 DEFDBL X         
 4 DEFINT A-W,Y-Z
@@ -9457,9 +9541,11 @@ machines:
 51110 PRINT " -BYE, Have a nice day
 51120 END
 ```
+{% endraw %}
 
 ## SORT.BAS
 
+{% raw %}
 ```bas
 4 DEFINT K,F,T,L,R,N
 5 DIM K$(55)
@@ -9906,9 +9992,11 @@ machines:
 61960 IF C2 = 77 THEN C = 4 
 61970 RETURN
 ```
+{% endraw %}
 
 ## TESTASCI.BAS
 
+{% raw %}
 ```bas
 100 OPEN "I",#1,"ASCIDATA"
 200 LINE INPUT #1,A$
@@ -9916,9 +10004,11 @@ machines:
 400 IF EOF(1) = 0 THEN 200
 500 END
 ```
+{% endraw %}
 
 ## TRANSFER.BAS
 
+{% raw %}
 ```bas
 3 DEFDBL X         
 4 DEFINT A-W,Y-Z
@@ -10526,6 +10616,7 @@ machines:
 51200 PRINT "BYE - Have a nice day "
 51300 END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

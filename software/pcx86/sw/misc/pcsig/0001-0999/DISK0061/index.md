@@ -60,6 +60,7 @@ machines:
 
 ## BANNER.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -180,9 +181,11 @@ machines:
 1880 DATA 499,273,511,273,415,0,387,398,312,483,487,0
 1890 WAIT 0,1,1:END
 ```
+{% endraw %}
 
 ## EPSONUTL.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -245,9 +248,65 @@ machines:
 1300 LPRINT CHR$(27);"8";:RETURN
 1310 END
 ```
+{% endraw %}
+
+## FILES61.TXT
+
+{% raw %}
+```
+Disk No:   61
+Program Title:  Printgr and IPCO Programs
+PC-SIG version: 1.1
+
+An early and quite good set of printer utilities for users of the
+EPSON/compatible printers who want to produce graphics.  The two
+programs, PRINTGR1 and PRINTGR2, will produce printed copies of screen
+displays in either medium (320x200) or high (640x200) resolution mode.
+PRINTGR1 prints a small (5.3"W x 2.5"H) upright image.  PRINTGR2 prints
+an expanded (6.6"W x 8.9") image that is rotated clockwise by 90
+degrees.  The IPCO package contains several printer utilities, as well
+as some games for a change of pace.
+
+Usage:  Epson Printer Utilities.
+
+Special Requirements:  Graphic compatible printer and a version of
+BASIC.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $9.00
+
+File Descriptions:
+
+PC-PAD   LST  Part of PC-PAD.BASappend.
+PC-PAD   BAS  Editor, spreadsheet, and printing program.
+BANNER   BAS  IPCO Creates large letters on printer.
+SLOTMACH BAS  IPCO Roulette type game YAHTZEE  BAS  IPCO game.
+STATCAPS BAS  IPCO Names, states and capitals - needs BASICA.
+ITALICS  BAS  IPCO Prints in italics on Epson MX-80 printer.
+NFL-PK   BAS  IPCO Picks point spreads between the 29 teams of the NFL.
+MEMSIZE  BAS  IPCO Resets top of memory to avoid startup delay.
+-------- ---  PRINTGR, prints screen graphics on Epson printer.
+EPSONUTL BAS  IPCO Epson printer utility.
+PRINTGR1 EXE  Prints medium/high resolution graphics - 5.3"x2.5".
+PRTSC_2  ASM  Assembly language source for PRINTGR2.EXE.
+PRTSC_1  ASM  Assembly language source for PRINTGR1.EXE.
+PRINTGR  ASM  Common assembly language source for PRINTGR1&2.EXE.
+PRINTGR2 EXE  Prints medium/high resolution graphics - 6.6"x8.9".
+PRINTGR  DOC  Documentation for PRINTGR1&2.BAS.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1985,86,87,88.89 PC-SIG, Inc.
+
+```
+{% endraw %}
 
 ## ITALICS.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 A$=STRING$(80,205)
@@ -356,9 +415,11 @@ machines:
 1900 GOTO 1830
 1910 ' SAVE"prtital2",a
 ```
+{% endraw %}
 
 ## MEMSIZE.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -433,9 +494,11 @@ machines:
 1450 T=VAL(T$) : H=INT(T/256) : L=T-H*256 : RETURN
 1460 END
 ```
+{% endraw %}
 
 ## NFL-PK.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -634,9 +697,11 @@ machines:
 2660 FIELD 1,20 AS T$,2 AS O$,2 AS D$,2 AS PS$,2 AS PG$,2 AS G$, 2 AS W$,96 AS ZZ$
 2670 RETURN
 ```
+{% endraw %}
 
 ## PC-PAD.BAS
 
+{% raw %}
 ```bas
 20 SCREEN 0,0,0:WIDTH 80:CLS:KEY OFF:LOCATE 5,1:Q$=SPACE$(20):PRINT Q$;"          PC\PAD  (ver. 1.3)":PRINT Q$;"an editor/spreadsheet/printing program":PRINT:PRINT:PRINT Q$;"     If you are using this program"
 70 PRINT Q$;"         and find it of value,":PRINT Q$;"   a $20 contribution is suggested.":PRINT:PRINT Q$;"               (c) 1983":PRINT Q$;"             P. Fraundorf":PRINT Q$;"            P.O. Box 11394"
@@ -777,9 +842,429 @@ machines:
 10000 '
 10010 ON ERROR GOTO 5000 :NROW0=FNV(2,6):NCOL0=FNV(3,6):NROW=FNV(4,6):NCOL=FNV(5,6) :GOSUB 9630 :I=NROW0+NROW:J=NCOL0-1:X$="Column Totals":GOSUB 9920 :I=NROW0-2:J=NCOL0+NCOL:X$="Row Totals":GOSUB 9920 :GOTO 460
 ```
+{% endraw %}
+
+## PRINTGR.ASM
+
+{% raw %}
+```
+PAGE 50,132
+TITLE PRINT_GRAPHICS (PRINTGR1.ASM)
+COMMENT *
+================================================================
+            PROGRAM DESCRIPTION
+This program will print medium and high-resolution screen graphics
+on an Epson MX-80 printer equipped with GRAFTRAX.  It may be
+invoked at any time by pressing Alt-PrtSc.
+
+        Author:    Steve Titcomb
+                   Sherman Fairchild Laboratory
+                   Lehigh University
+                   Bethlehem, PA  18015
+
+        Version:   1.0
+        Date:      2/18/83
+
+I am distributing this program as FREEWARE (tm) and encouraging 
+copying.  A contribution of 9$ would be greatly appreciated.
+
+       copyright (c) 1983 Steve Titcomb
+
+===============================================================
+*
+        EXTRN   PRTSC_1:FAR
+;Equates.
+KB_DATA EQU     60H
+ALT_SHIFT       EQU     08H
+;
+BIOS    SEGMENT AT 0F000H
+        ORG     0E987H
+KB_INT  LABEL   FAR
+BIOS    ENDS
+;
+BIOS_DATA SEGMENT AT 40H
+        ORG     17H
+KB_FLAG LABEL   BYTE
+BIOS_DATA ENDS
+;
+STACK   SEGMENT PARA STACK 'STACK'
+        DB      16 DUP('STACK   ')
+STACK   ENDS
+;
+CSEG    SEGMENT PARA PUBLIC 'CODE'
+START   PROC    FAR
+        ASSUME  CS:CSEG,DS:BIOS_DATA
+        JMP     FAR PTR INITIALIZE
+START   ENDP
+;
+SUBTTL NEW KEYBOARD INTERRUPT ENTRY POINT
+        PAGE
+NEW_INT PROC    FAR
+        STI
+        PUSH    AX
+        PUSH    DS
+        CLD
+        MOV     AX,BIOS_DATA
+        MOV     DS,AX
+        IN      AL,KB_DATA
+        CMP     AL,55           ;PrtSc key?
+        JNZ     NEW_RET
+        TEST    KB_FLAG,ALT_SHIFT ;Alt key depressed?
+        JZ      NEW_RET
+        CALL    PRTSC_1
+NEW_RET LABEL   NEAR
+        POP     DS
+        POP     AX
+        JMP     KB_INT
+NEW_INT ENDP
+SUBTTL INITIALIZATION ROUTINE
+        PAGE
+INITSEG SEGMENT PARA 'CODE'
+INITIALIZE      PROC    FAR
+        ASSUME  CS:INITSEG
+        CLI
+        PUSH    DS           ;set up return to beginning of
+        SUB     AX,AX        ;program segment prefix
+        PUSH    AX
+        MOV     BX,0CH       ;get present load segment
+        MOV     ES,[BX]
+        MOV     AX,SS
+        MOV     ES:[103H],AX ;command.com gets new load segment
+        ;Set up new keyboard interrupt vector
+        SUB     AX,AX
+        MOV     DS,AX
+        MOV     BX,24H
+        MOV     AX,OFFSET NEW_INT
+        MOV     [BX],AX
+        MOV     AX,CS
+        MOV     [BX+2],AX
+        STI
+        RET
+INITIALIZE ENDP
+INITSEG ENDS
+        END     START
+```
+{% endraw %}
+
+## PRINTGR.DOC
+
+{% raw %}
+```
+ 
+              The two programs, PRINTGR1 and  PRINTGR2,  will  produce
+         printed  copies of screen displays in either medium (320x200)
+         or high (640x200) resolution mode.  PRINTGR1 prints  a  small
+         (5.3"W  x  2.5"H) upright image.  PRINTGR2 prints an expanded
+         (6.6"W  x  8.9")  image  that  is  rotated  clockwise  by  90
+         degrees.
+ 
+              Only  one  of these may be active at a time.  To install
+         either program type PRINTGR1  (or  PRINTGR2)  from  DOS.   It
+         then  becomes an extension of DOS and may be activated at any
+         time by holding the 'Alt' key and pressing the  'PrtSc'  key.
+         Caution:  These programs change the keyboard interrupt vector
+         and so will not work with other programs which  do  the  same
+         (there  are some).  Both programs will terminate if a printer
+         timeout error occurs.  This keeps the system from hanging  up
+         if the printer is not ready for some reason.
+ 
+              I  am  very  interested  in  the  FREEWARE  idea so I am
+         encouraging copying of both the executable programs  and  the
+         source  code  (which  is included on the disk in .ASM files).
+         I am requesting a contribution  of  $9  (nine)  if  you  find
+         these  programs to be useful.  Also, if you have any problems
+         I will be happy to try and help you with them (letters  only,
+         please, unless it's a real emergency).
+ 
+             
+                   Steve Titcomb
+                   Sherman Fairchild Laboratory
+                   Lehigh University
+                   Bethlehem, PA  18015
+
+```
+{% endraw %}
+
+## PRTSC_1.ASM
+
+{% raw %}
+```
+PAGE 50,132
+TITLE PRTSC_1 - DUMP SCREEN GRAPHICS TO PRINTER
+;               PROLOG - MODULE DESCRIPTION
+;This subroutine dumps the displayed screen graphics to the printer.
+;It will print either 320x200 or 640x200 graphics.  The former is
+;printed with the printer in 480 mode, and the latter is printed 
+;with the printer in 960 mode.
+;  All registers are preserved.
+CRT_MODE        EQU    49H     ;offset into BIOS data area
+CSEG    SEGMENT PARA PUBLIC 'CODE'
+GRMASK  DB      ?
+PRTSC_1 PROC    FAR
+        ASSUME  CS:CSEG
+        PUBLIC  PRTSC_1
+        PUSH    DS
+        PUSH    SI
+        PUSH    AX
+        PUSH    BX
+        PUSH    CX
+        PUSH    DX
+        MOV     AX,40H
+        MOV     DS,AX   ;BIOS data segment
+        MOV     AL,DS:[CRT_MODE]
+        TEST    AL,6
+        JNZ     PR1
+        JMP     PRTSC_RET
+PR1     LABEL   NEAR
+        MOV     CL,'K'          ;480 mode
+        MOV     CS:GRMASK,0C0H  ;320X200 graphics
+        CMP     AL,6
+        JL      PR2
+        MOV     CL,'L'          ;960 mode
+        MOV     CS:GRMASK,080H  ;640X200 graphics
+PR2     LABEL   NEAR
+        MOV     AX,0B800H       ;screen segment
+        MOV     DS,AX
+        MOV     AX,0141H        ;send ESC A 8 to printer for
+        MOV     BL,8            ; 8/72" linefeeds
+        CALL    ESC_SEQ
+ROW     LABEL   NEAR
+        MOV     AH,2            ;sen ESC K (or L) n1 n2 to printer
+        MOV     AL,CL
+        MOV     BX,0140H        ;=320 dots
+        CMP     AL,'L'
+        JNZ     RO1
+        SHL     BX,1            ;=640 dots
+RO1     LABEL   NEAR
+        CALL    ESC_SEQ
+        XOR     BX,BX
+        PUSH    CX
+COLUMN  LABEL   NEAR
+        MOV     AH,CS:GRMASK
+COL1    LABEL   NEAR
+        MOV     DX,8000H
+        MOV     CX,4
+        MOV     SI,0
+COL2    LABEL   NEAR
+        MOV     AL,[BX][SI]
+        AND     AL,AH
+        JZ      COL3
+        OR      DL,DH
+COL3    LABEL   NEAR
+        SHR     DH,1
+        MOV     AL,[BX+2000H][SI]
+        AND     AL,AH
+        JZ      COL4
+        OR      DL,DH
+COL4    LABEL   NEAR
+        SHR     DH,1
+        ADD     SI,50H
+        LOOP    COL2
+        PUSH    AX
+        MOV     AL,DL
+        MOV     AH,0
+        XOR     DX,DX
+        INT     17H
+        POP     AX
+        SHR     AH,1
+        MOV     AL,CS:GRMASK
+        TEST    AL,40H
+        JZ      COL5
+        SHR     AH,1
+COL5    LABEL   NEAR
+        OR      AH,AH
+        JNZ     COL1
+        INC     BX
+        MOV     AL,BL
+        CMP     AL,50H
+        JL      COLUMN
+        MOV     AX,000AH        ;linefeed to printer
+        XOR     DX,DX
+        INT     17H
+        TEST    AH,1
+        JNZ     PRTSC_RET
+        MOV     AX,DS
+        ADD     AX,14H
+        CMP     AL,0F4H
+        MOV     DS,AX
+        POP     CX
+        JNE     ROW
+        MOV     AX,0032H        ;send ESC 2 to printer
+        CALL    ESC_SEQ         ;sets printer to 6 lines/inch
+PRTSC_RET       LABEL   NEAR
+        POP     DX
+        POP     CX
+        POP     BX
+        POP     AX
+        POP     SI
+        POP     DS
+        RET
+PRTSC_1 ENDP
+SUBTTL SUBROUTINE TO SEND ESC SEQUENCE TO PRINTER
+        PAGE
+;           PROLOG - MODULE DESCRIPTION
+;This subroutine sends an ascii ESC character to the printer followed by the
+;character in AL.  AH specifies the number of characters to follow the first
+;two (0 if none, 1, or 2).  The first of these is in BL and the second in BH.
+;All registers except AX are preserved.  AH contains printer status on return.
+;The routine returns immediately on a timeout error.
+ESC_SEQ PROC    NEAR
+        PUSH    BX
+        PUSH    CX
+        PUSH    DX
+        MOV     CX,AX           ;Save AX
+        XOR     DX,DX           ;DX=0 indicates printer 1
+        MOV     AX,001BH        ;AL='ESC'
+        INT     17H             ;printer_io
+        TEST    AH,1            ;timeout?
+        JNZ     ESC_RET
+        MOV     AL,CL           ;retrieve character
+        MOV     AH,0
+        INT     17H
+        TEST    AH,1
+        JNZ     ESC_RET
+E1      LABEL   NEAR
+        MOV     AL,CH
+        CMP     AL,0            ;anymore characters to send?
+        JZ      ESC_RET         ;return if done
+        MOV     AL,BL           ;get next character
+        MOV     AH,0
+        INT     17H
+        TEST    AH,1
+        JNZ     ESC_RET
+        MOV     BL,BH           ;put next character in BL
+        DEC     CH
+        JMP     E1              ;do until all characters sent
+ESC_RET LABEL   NEAR
+        POP     DX
+        POP     CX
+        POP     BX
+        RET
+ESC_SEQ ENDP
+CSEG    ENDS
+        END
+```
+{% endraw %}
+
+## PRTSC_2.ASM
+
+{% raw %}
+```
+PAGE 50,132
+TITLE PRTSC_2 - DUMP SCREEN GRAPHICS TO PRINTER
+;               PROLOG - MODULE DESCRIPTION
+;This subroutine dumps the displayed screen graphics to the printer.
+;It will print either 320x200 or 640x200 graphics.  Both are
+;printed with the printer in 480 mode, and are rotated 90 degrees.
+;Final size is 6.6"x8.9" .
+;  All registers are preserved.
+CSEG    SEGMENT PARA PUBLIC 'CODE'
+PRTSC_1 PROC    FAR
+        ASSUME  CS:CSEG
+        PUBLIC  PRTSC_1
+        PUSH    DS
+        PUSH    AX
+        PUSH    BX
+        PUSH    CX
+        PUSH    DX
+        MOV     AX,0B800H       ;screen segment
+        MOV     DS,AX
+        MOV     AX,0141H        ;send ESC A 8 to printer for
+        MOV     BL,8            ; 8/72" linefeeds
+        CALL    ESC_SEQ
+        MOV     BX,1EF0H
+        PUSH    BX
+ROW     LABEL   NEAR
+        PUSH    BX
+        MOV     AX,024BH        ;ESC K n1 n2
+        MOV     BX,400          ;n1=144, n2=1 (256)
+        CALL    ESC_SEQ
+        POP     BX
+        MOV     CX,100
+R1      LABEL   NEAR
+        MOV     AL,[BX+2000H]
+        XOR     AH,AH
+        XOR     DX,DX
+        INT     17H
+        XOR     AH,AH
+        INT     17H
+        MOV     AL,[BX]
+        XOR     AH,AH
+        INT     17H
+        XOR     AH,AH
+        INT     17H
+        SUB     BX,50H
+        LOOP    R1
+        MOV     AX,000AH        ;linefeed to printer
+        XOR     DX,DX
+        INT     17H
+        TEST    AH,1
+        JNZ     PRTSC_RET
+        POP     BX
+        INC     BX
+        PUSH    BX
+        CMP     BL,40H
+        JNZ     ROW
+        POP     BX
+        MOV     AX,0032H        ;send ESC 2 to printer
+        CALL    ESC_SEQ         ;sets printer to 6 lines/inch
+PRTSC_RET       LABEL   NEAR
+        POP     DX
+        POP     CX
+        POP     BX
+        POP     AX
+        POP     DS
+        RET
+PRTSC_1 ENDP
+SUBTTL SUBROUTINE TO SEND ESC SEQUENCE TO PRINTER
+        PAGE
+;           PROLOG - MODULE DESCRIPTION
+;This subroutine sends an ascii ESC character to the printer followed by the
+;character in AL.  AH specifies the number of characters to follow the first
+;two (0 if none, 1, or 2).  The first of these is in BL and the second in BH.
+;All registers except AX are preserved.  AH contains printer status on return.
+;The routine returns immediately on a timeout error.
+ESC_SEQ PROC    NEAR
+        PUSH    BX
+        PUSH    CX
+        PUSH    DX
+        MOV     CX,AX           ;Save AX
+        XOR     DX,DX           ;DX=0 indicates printer 1
+        MOV     AX,001BH        ;AL='ESC'
+        INT     17H             ;printer_io
+        TEST    AH,1            ;timeout?
+        JNZ     ESC_RET
+        MOV     AL,CL           ;retrieve character
+        MOV     AH,0
+        INT     17H
+        TEST    AH,1
+        JNZ     ESC_RET
+E1      LABEL   NEAR
+        MOV     AL,CH
+        CMP     AL,0            ;anymore characters to send?
+        JZ      ESC_RET         ;return if done
+        MOV     AL,BL           ;get next character
+        MOV     AH,0
+        INT     17H
+        TEST    AH,1
+        JNZ     ESC_RET
+        MOV     BL,BH           ;put next character in BL
+        DEC     CH
+        JMP     E1              ;do until all characters sent
+ESC_RET LABEL   NEAR
+        POP     DX
+        POP     CX
+        POP     BX
+        RET
+ESC_SEQ ENDP
+CSEG    ENDS
+        END
+```
+{% endraw %}
 
 ## SLOTMACH.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -1201,9 +1686,11 @@ machines:
 4890 PRINT CHR$(219);CHR$(219);CHR$(32);CHR$(32);CHR$(32);CHR$(219);CHR$(219)
 4900 RETURN
 ```
+{% endraw %}
 
 ## STATCAPS.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -1738,9 +2225,11 @@ machines:
 6050 WIDTH 80
 6060 CLS':LIST 3880-3920
 ```
+{% endraw %}
 
 ## YAHTZEE.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -2383,6 +2872,7 @@ machines:
 7100 KB$="":WHILE KB$="":KB$=INKEY$:WEND
 7110 IF KB$=CHR$(27) THEN 5100 ELSE RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

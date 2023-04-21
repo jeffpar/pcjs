@@ -53,6 +53,74 @@ machines:
     you want.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2313.TXT
+
+{% raw %}
+```
+Disk No: 2313                                                           
+Disk Title: PSEARCH                                                     
+PC-SIG Version: S4.4A                                                   
+                                                                        
+Program Title: PSEARCH                                                  
+Author Version: 4.4A                                                    
+Author Registration: $20.00                                             
+Special Requirements: None.                                             
+                                                                        
+PSEARCH will quickly locate any file by name or text the file contains! 
+You can have many search criteria, patterns like *TOM*.* to find files  
+with TOM in the name, or ^REVIEW to find filenames sounding like        
+REVIEW.  Search for files containing 1-5 strings or words.  Look for    
+filenames in .ARC, .ZIP, .LZH. Search algorithm is fast! Can search a   
+directory, path, or all disks on your system automatically. Menu or     
+command line driven.                                                    
+                                                                        
+Here are a list of some of the many possible uses for PSEARCH;          
+                                                                        
+~ List all files on a hard disk that match a wildcard specification.    
+                                                                        
+~ Show the names of any files containing specified text                 
+                                                                        
+~ Show text lines of any file containing a specified string.            
+                                                                        
+~ Look for word "Mrs" in any file and preserve case in search.          
+                                                                        
+~ Find 123 files containing the word "BUDGET" and print their name.     
+                                                                        
+~ Compile all C programs that refer to the "RECDESC.H" include file.    
+                                                                        
+~ Find a word processing document containing the name "Wiffle".         
+                                                                        
+~ Delete any *.DOC files containing "To: Mr. Johnson".                  
+                                                                        
+~ Locate all readonly files existing on a disk.                         
+                                                                        
+~ List all files updated today.                                         
+                                                                        
+~ Build a DOS command to archive manually selected files from one or    
+more directories.                                                       
+                                                                        
+~ Search multiple drives attached to the system for text or a file name 
+                                                                        
+~ Search for a file name even if it has been archived into .ZIP, .ARC or
+.LZH formats.                                                           
+                                                                        
+~ Limit text search to WORDS, PREFIXES, or SUFFIXES. This greatly       
+enhances the search by returning only the data you want.                
+                                                                        
+~ Ability to exclude files from the search process to greatly improve   
+search performance.                                                     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989, 1990 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2313
 

@@ -14,6 +14,38 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+                TO INSTALL THE LAUNCH PAD
+            -------------------------------
+      JUST PLACE THE DISK <1> INTO <A>: DRIVE
+      TYPE <INSTALL> AND FOLLOW INSTRUTIONS
+
+      TO GET BACK INTO THE LAUNCH PAD AFTER LEAVING
+      ---------------------------------------------
+      AT PROMPT...TYPE   <CD\LAUNCH>  & <ENTER>
+      THEN TYPE   <L>  & <ENTER>
+
+ REQUIRES: COLOR DISPLAY ..HARD DRIVE  ..IBM or Compatible
+           CGA  EGA  VGA
+***************************************************
+FOR BEST RESULTS ADD ON FIRST COMMAND LINE IN YOUR
+AUTOEXEC.BAT FILE <CD\LAUNCH>..NEXT LINE..<L.BAT>
+THIS WILL ALLOW THE LAUNCH PAD TO BE BOOTED FIRST
+
+To print an order form, type:  COPY ORDFORM PRN <ENTER>
+
+
+IF YOU HAVE ANY QUESTIONS, OR SUGGESTIONS PLEASE CALL US AT:
+(602) 644-1068  OR FAX: (602) 644-0168
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2525
 

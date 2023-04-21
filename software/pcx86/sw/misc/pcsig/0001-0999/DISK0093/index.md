@@ -49,8 +49,91 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## DETAB.DOC
+
+{% raw %}
+```
+
+     DETAB Filter
+     Command
+    
+     --------------------------------------------------
+     Purpose:  This filter reads text from the standard
+     		   input device, replaces all tab characters
+     		   with the corresponding number of spaces
+     		   and then writes it to the standard output
+     		   device.
+             
+     
+     Format:   DETAB [n1 n2 n3 ... nx][/n]
+
+     
+     Type:     Internal  External
+                           ***
+     
+     Remarks:  The default expansion is tab stops every
+     		   four characters, this may be overridden
+     		   in two ways using the optional parameters.
+
+               The n1 n2 ... nx parameters are a list of x
+               integers separated by spaces, that specify
+               the columns for the first x tab stops.
+               
+               The /n parameter is an integer indicating
+               that tabs are to be set every n columns after
+               the current one.
+
+             
+	 Example:  A>DETAB <detab.doc
+	 		   
+	 		   Will output this document to the screen, with
+	 		   each tab expanded to four characters. (It will
+	 		   look diferent than if the file is TYPE'd since
+	 		   type expands tabs to eight characters).
+             
+               A>DETAB 2 4 6 /3 <fname.ext >fname.lst
+                
+               Will expand the first three tabs on a line 
+               to two spaces and the rest to three spaces
+               placing the file with expanded tabs in the
+               .lst file.
+
+
+     Notes:    1.   The two methods of specifying tabs can
+     				be used independently, or together as in
+     				the second example, but the /n parameter
+     				must follow any list of numbers (if only
+     				a list of numbers is specified, the tabs
+     				after the lists end will be every four 
+     				columns).
+
+     		   2.	There are an almost unlimited number of 
+     		   		tab stops posible, but any tabs occuring 
+     		   		beyond the 100'th column will be expanded
+     		   		to a single space.
+
+     		   3.	Tab stops may be specified at every column
+     		   		if desired, but each tab character will be
+     		   		expanded into at least one space.
+
+               4.   For anyone desiring the source code 
+                    for DETAB, it is written in C, and I will
+                    provide it to anyone who sends me a PC
+                    formated, single sided diskette with 
+                    return postage and a check for $5.
+                    (my address is: Michael Hanson,
+                                   4032 Burton Pl. W.,
+                                   Seattle, WA 98199)
+
+
+              Written by Michael Hanson
+
+```
+{% endraw %}
+
 ## FLASHCRD.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -302,9 +385,11 @@ machines:
 3190 NEXT I
 3200 RETURN
 ```
+{% endraw %}
 
 ## FLIPPER.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -427,9 +512,11 @@ machines:
 1900 LOCATE 20,1:PRINT "(PRESS ANY KEY)":LOCATE 21,4:PRINT "(TO PLAY)"
 1910 G$=INKEY$:IF G$="" THEN 1910 ELSE RETURN
 ```
+{% endraw %}
 
 ## LOANANAL.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -1268,9 +1355,11 @@ machines:
 9060 PRINT:GOTO 1190
 9070 END
 ```
+{% endraw %}
 
 ## MORSECOD.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF
 20 SCREEN 0,0,0
@@ -1342,9 +1431,11 @@ machines:
 8010 DATA -.,---,.--.,--.-,.-.,...,-,..-,...-,.--,-..-,-.--,--..
 9999 END
 ```
+{% endraw %}
 
 ## TANK.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -1516,9 +1607,11 @@ machines:
 2390 LOCATE 22,26:COLOR 0,7:PRINT"TO END GAME PRESS THE ESC BUTTON":COLOR 7,0
 2400 LOCATE 1,38:COLOR 0,7:PRINT"TANK!":COLOR 7,0:RETURN
 ```
+{% endraw %}
 
 ## WORLDMAP.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -1711,6 +1804,7 @@ machines:
 2600 SCREEN 0,0,0,0 : WIDTH 80 : CLS
 2610 END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

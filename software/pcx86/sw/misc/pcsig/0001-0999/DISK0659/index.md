@@ -56,6 +56,109 @@ machines:
     Contributions to Date
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## DESCRIP.DOC
+
+{% raw %}
+```
+------------------------------------------------------------------------
+VIANSOFT(R) CHURCH CONTRIBUTION SYSTEM             
+------------------------------------------------------------------------
+THIS IS AN EASY TO USE SOFTWARE PROGRAM THAT ALLOWS YOU TO RECORD 
+PLEDGED AND UNPLEDGED CONTRIBUTIONS FOR EACH MEMBER OF YOUR CHURCH IN  
+240 DIFFERENT CONTRIBUTION CATEGORIES.  IT PRINTS OUT REPORTS ON 
+MEMBERSHIP, PLEDGES AND CONTRIBUTIONS BASED ON THIS INFORMATION.  IT WILL 
+PRINT MAILING LABELS AND FORM DATA FILES FOR WORD PROCESSING.  IT CREATES 
+DATA FILES OF MEMBER TIME AND TALENT RESOURCES AND PRINTS OUT LISTS BASED 
+ON 240 TALENT CATEGORIES.  IT IS CURRENTLY BEING USED BY CHURCHES 
+THROUGHOUT THE WORLD.
+
+CHURCH   EXE  VIANSOFT(R) CHURCH CONTRIBUTION MAIN PROGRAM
+CHURCH   OVR  OVERLAY FOR CHURCH.COM
+TUTOR    ARC  TUTORIAL FOR CHURCH CONTRIBUTION SYSTEM
+MEMBER2  DAT  SAMPLE DATA FOR TUTORIAL
+MEMBER2  XEV                "
+MEMBER2  XNM                "
+CONTR2   DAT                "
+CONTR2   XEV                "
+TALENTS2 DAT                "
+TALENTS2 XTT                "
+TALENTS2 XEV                "
+TALCAT2  DAT                "
+SYSINFO2 DAT                "
+MANUAL   ARC  MANUAL FOR CHURCH CONTRIBUTION SYSTEM
+README        NOTES ON HOW TO BEGIN
+README   BAT  BATCH FILE TO TYPE OUT README
+HD       BAT  BATCH FILE TO INSTALL HARD DISK VERSION
+TUTOR    BAT  BATCH FILE TO PRINT TUTOR.ARC (15 PAGES)
+MANUAL   BAT  BATCH FILE TO PRINT MANUAL.ARC (87 PAGES)
+PKXARC   COM  PROGRAM TO PRINT .ARC FILES IN CORRECT FORMAT
+DESCRIP  DOC  DESCRIPTION OF SOFTWARE AND FILES ON DISK
+NOTES    ARC  UPDATES AND CHANGES TO USER'S MANUAL
+NOTES    BAT  BATCH FILE TO PRINT NOTES
+
+```
+{% endraw %}
+
+## FILE0659.TXT
+
+{% raw %}
+```
+Disk No:  659                                                           
+Disk Title: Church Contribution System                                  
+PC-SIG Version: S3.2                                                    
+                                                                        
+Program Title: Church Contribution System                               
+Author Version: 3.02                                                    
+Author Registration: $70.00                                             
+Special Requirements: Two floppy drives or a hard drive, printer (option
+                                                                        
+This is an easy to use shareware program that allows you to record      
+pledged and unpledged contributions for each member of your church in   
+20 different categories. It prints out reports on membership, pledges   
+and contributions based on this information. It will print mailing      
+labels and form data files for word processing. It creates data files   
+of member time and talent resources and prints out lists based on these 
+talent categories.  It is currently being used by churches throughout   
+the united states.                                                      
+                                                                        
+  ~ Easy entry of contributions                                         
+  ~ Two formats for Member Summary                                      
+  ~ Contribution List by date (Ledger Sheet)                            
+  ~ Contribution totals for period of time by category                  
+  ~ Mailing Labels                                                      
+  ~ Member Directories with any combination of the following:           
+       Name                                                             
+       Family Members                                                   
+       Address                                                          
+       Phone                                                            
+       Envelope Number                                                  
+       Pledge Amount                                                    
+       Contributions to Date                                            
+                                                                        
+System Requirements:  128K, two disk drives, or one floppy and a hard   
+disk, a monochrome monitor and an IBM compatible printer.               
+                                                                        
+How to Start:  Type README and press <ENTER> for program instructions.  
+To print the documentation file, type COPY TUTOR.DOC PRN or COPY        
+MANUAL.DOC PRN and press <ENTER>. Load DOS and type CHURCH to enter     
+the main program.                                                       
+                                                                        
+Suggested Registration: Sending in $60.00 will secure the password to   
+turn your DEMO into a working version and receive a complete, bound     
+manual.                                                                 
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0659
 

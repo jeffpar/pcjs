@@ -47,6 +47,58 @@ machines:
     accounting management system.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1871.TXT
+
+{% raw %}
+```
+Disk No: 1871                                                           
+Disk Title: Account & Plus                                              
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Account + Plus                                           
+Author Version: 7.50                                                    
+Author Registration: $49.00                                             
+Special Requirements: 512K, 2 Floppy's or Hard Drive.                   
+                                                                        
+Do you need an integrated Accounting Management System for your         
+business?  ACCOUNT + PLUS is the ideal choice, providing everything     
+a small business needs in one package.                                  
+                                                                        
+ACCOUNT + PLUS consists of individual modules; Payroll, Bookkeeping,    
+Inventory, Checkbook, Receivables, Payables, and Report Generation.     
+                                                                        
+The Payroll module handles all types of employee payroll.  Deductions   
+include federal, state taxes, insurance, and pension.  Earning may be   
+by hour, week, month, or commission.                                    
+                                                                        
+The Bookkeeping module operates as a general ledger, keeping track of   
+all of your income and expenses.  It will also write the checks you need
+to issue in paying your bills.                                          
+                                                                        
+The Inventory module lets you maintain an inventory database with add,  
+delete, and change record functions.  Many report generation options    
+are available here.                                                     
+                                                                        
+The Checkbook module is a complete Checkbook Management System.  It will
+keep track of your deposits, your withdrawals, your checks, balancing of
+your checkbook, and several report printing options.                    
+                                                                        
+ACCOUNT + PLUS is menu driven with an on-line help facility that does   
+away with the need to constantly refer to printed documentation.  No    
+small business should be without ACCOUNT + PLUS, the integrated         
+Accounting Management System.                                           
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1871
 

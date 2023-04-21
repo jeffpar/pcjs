@@ -14,6 +14,45 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2508.TXT
+
+{% raw %}
+```
+Disk No: 2508                                                           
+Disk Title: PC-Schematics                                               
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: PC-Schematics                                            
+Author Version: 3.2                                                     
+Author Registration: $20.00                                             
+Special Requirements: 512K RAM, CGA, and DOS 3.0+                       
+                                                                        
+PC-SCHEMATIC lets you draw electrical schematics, create printed circuit
+art work, draw electronic timing and clock diagrams, block diagrams, and
+more.  After starting the program, you are shown a empty drawing board. 
+To start drawing, simply use the cursor keys to draw lines or select any
+of the standard characters or electrical components from the menus.     
+                                                                        
+Use the standard components (336 are included) or create your own; PC-  
+SCHEMATIC lets you store up to 4096 components that can be used again   
+and again.  You can also copy, move, and automatically repeat           
+components.  You can even work on two drawings at one time.             
+                                                                        
+When you're finished drawing, you can save to disk or print to a        
+standard dot matrix printer.  Ample documentation and on-screen help get
+you started -- you decide where to stop.                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989-1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2508
 

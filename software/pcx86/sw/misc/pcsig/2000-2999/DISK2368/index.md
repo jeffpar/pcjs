@@ -33,6 +33,43 @@ machines:
     of C++.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2368.TXT
+
+{% raw %}
+```
+Disk No: 2368                                                           
+Disk Title: C++ Tutor 1 of 2 (#2369 also)                               
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: C++ Tutor                                                
+Author Version: 2.0                                                     
+Author Registration: $39.95                                             
+Special Requirements: C++ compiler.                                     
+                                                                        
+C++ TUTOR is a comprehensive instructional course for the C++           
+programming language which assumes the user has a moderate amount of    
+programming experience.                                                 
+                                                                        
+The C++ source code is included for a large example program to          
+illustrate how to use C++ in a practical sense. This example is         
+meant to be studied, compiled, and run by the student.                  
+                                                                        
+All of the points of C++ language, including properly-structured        
+programming techniques, are covered at the elementary level.  The       
+description and instruction are applicable to Borland's implementation  
+of C++.                                                                 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2368
 

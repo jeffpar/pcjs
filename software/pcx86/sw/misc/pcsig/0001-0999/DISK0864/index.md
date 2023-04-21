@@ -40,6 +40,44 @@ machines:
     wasn't just luck, maybe it really was a bad (or good) day when you met.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0864.TXT
+
+{% raw %}
+```
+Disk No:  864                                                           
+Disk Title: Catalist 1 of 2 (also 865)  (Disk 1 of 2)                   
+PC-SIG Version: S5.1                                                    
+                                                                        
+Program Title: CataList                                                 
+Author Version: 3.31                                                    
+Author Registration: $69.00                                             
+Special Requirements: Two floppy drives or a hard drive.                
+                                                                        
+CATALIST is a comprehensive list manager to produce labels, envelopes,  
+Rolodex cards, and bulk-mail flyers.  It formats data from each entry   
+that is easily merged into more than 15 of the most popular             
+wordprocessing packages, including PC-WRITE.  The program can also      
+format for foreign addresses including postal codes for 106 countries.  
+                                                                        
+At least one help screen is given for each main screen in the system,   
+giving beginner and intermediate users plenty of needed help.  For data 
+entry and modification, a legend is shown at the bottom of each screen  
+defining the function keys and their specific functions.                
+                                                                        
+ASCII file format is used throughout the entire database system, which  
+helps in compatability with most other software in the computer world.  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0864
 

@@ -31,6 +31,57 @@ machines:
     Add that personal touch that people never forget!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES996.TXT
+
+{% raw %}
+```
+Disk No  996
+Program Title: DO-IT-YOURSELF PROMO KIT
+PC-SIG version 1
+ 
+    The concept of this program is very simple: why send a piece of
+cardboard or paper to express your feelings, when you can send a disk that
+can play music? The programs on this disk are set up for birthdays and
+Christmas, but, with the editor included on the disk, you can write your
+own cards. The cards run on either a monochrome or color system, without
+the need for a graphics card.
+ 
+Usage: Personal
+ 
+System Requirements: 128K memory, two disk drives, and a printer.
+ 
+How to Start: Type: BDAYCARD (press enter), XMASCARD (press enter), or
+and CHNGMSG (press enter).
+ 
+Suggested Registration: $24.95
+ 
+File Descriptions:
+ 
+BDAYATOB BAT  Batch file to create a birthday card disk from A: to B:.
+BDAYCARD EXE  Birthday card program.
+BDAYCTOA BAT  Batch file to create a birthday card disk from C: to A:.
+CHGMSG   EXE  Message editing program.
+???????? MSG  Card message data file (4 files).
+XMASATOB BAT  Batch file to create a Christmas card disk from A: to B:.
+XMASCARD EXE  Christmas card program.
+XMASCTOA BAT  Batch file to create a Christmas card disk from C: to A:.
+README   1ST  Documentation file.
+REGISTER GWX  Program registration form.
+REGISTER GWB  Program registration form.
+REGISTER KIT  Program registration form.
+REGISTER OP1  Commercial for another disk from the author.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0996
 

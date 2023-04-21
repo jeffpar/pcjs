@@ -37,8 +37,225 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILES538.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  538  Astronomy Collection #1                               v1 DS2
+---------------------------------------------------------------------------
+Moonbeam is a program that takes the date and time, as well as your time zone,
+and gives you a lot of general information regarding the position of the moon
+and its relationship to Earth.
+ 
+Sunset accepts the date, time and location of position and displays general
+information about the sun in relation to Earth.
+ 
+Solar is a duplicate of the Sunset program mentioned above, with some slight
+variations.
+ 
+Optics gets optical parameters from the sophisticated lens user and returns a
+myriad of technical information about reflecting lenses or telescopes.
+ 
+Storm is an amusing program which accepts detailed storm infor- mation
+incrementally by time and plots the movement of that storm in the area.
+ 
+------------  Moonbeam (V1.0)
+MOONBEAM COM  Executable program for Moonbeam
+MOONBEAM DOC  Documentation for the use of the program
+STAR     REC  Yale Observatory Bright Star database
+------------  Sunset
+SUNSET   BAS  Basic program in source code
+------------  Solar
+SOLAR    BAS  Basic program in source code
+------------  Optics
+OPTICS   COM  Executable code to run Optics
+OPTICS   PAS  Source code in Pascal for Optics
+------------  Storm
+STORM    BAS  Storm program
+STORM    DOC  Documentation for Storm.BAS
+????????.     Files with no extensions are data files for storm program
+ 
+PC-SIG (PC-Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+## MOONBEAM.DOC
+
+{% raw %}
+```
+Hi,
+
+        The program MOONBEAM determines the phase, position, and
+illumination of the moon. It will also plot the moon on a screen
+generated star chart using the Yale Observatory Bright Star 
+database. To accomplish this the data base needed to be packed to
+fit on a single floppy along with the program, hence this disk 
+should have three files on it. 
+
+                        1). This read.me file
+                        2). moonbeam.com
+                        3). star.rec
+
+The plotting routine will not work if star.rec is not present in 
+the default drive. Also, the ploting routine requires the something
+that looks like an IBM Color Graphics Card. If you have a graphics
+printer, the star chart can be printed by issuing the MS/DOS 
+graphics command before running moonbeam. Then use the PRT SC command
+when the star chart is on the crt. To start the program just type moonbeam.
+
+					May clear skies be with you!
+
+					Fred Mendenhall
+
+```
+{% endraw %}
+
+## NOTES538.TXT
+
+{% raw %}
+```
+Program name:    Moonbeam (V1.0)
+ 
+Author name:     Fred T. Mendenhall
+Address:         2209 Tam-O-Shanter Ct.
+                 Carmel, IN  46032
+Telephone Number:NONE
+ 
+Suggested Donation:$5.00
+ 
+Program Description:
+ 
+Moonbeam is a nifty little software tool geared toward the
+amateur and the professional astronomer. This program gets any
+date, time and North American time zone and immediately outputs a
+lot of statistical information about the moon. It indicates the
+surface percentage of the visible moon, the angles of ascension
+and declination, the azimuth, ets.  Once these facts have been
+displayed, you are prompted as to whether you want a graphic
+diagram of the night sky. If you have a monochrome or color
+graphics card you will be able to display the starchart.  If you
+have answered 'Y' to the prompt, you are then asked to what
+degree you would like the stars plotted.  Entering a degree of 1
+causes only the most brightly lit star≤ to be plotted and on the
+other end of the spectrum you can enter a 7. I might warn you
+that entering the 7 will cause the output to be generated in
+about 5 minutes.  The moon is also displayed, of course.  The
+star chart may be printed by pressing the shft-PrtSc keys to-
+gether, provided you have a graphics printer. The star charts are
+contained in a database file provided by the Yale Observatory.
+This program requires a minimum of 128K RAM.  Additionally, the
+graphic hardware will be needed to get the star chart displays.
+ 
+ 
+Program name:      Sunset
+ 
+Author name:       NONE
+Address:           NONE
+ 
+Telephone Number:  NONE
+ 
+Suggested Donation:NONE
+ 
+Program Description:
+ 
+This appears to be a simple, but useful program for the amateur
+astronomer and possibly a number of other people needing general
+information about the sun in relation to Earth. The user enters
+the date and time and location in longitude and latitude.  Soon
+the time of sunrise and sunset (in both local and Grenich
+Meantime), the angle of azmith, the declination of the sun and
+the equation of time are displayed to the screen.  Since the
+program is written in uncompiled BASIC, you must have a copy of
+BASICA yourself. But, at the same time, you may also peek at the
+source code to see how this program was put together.  This
+program requires the most minimum in both hardware and software
+to operate.
+ 
+ 
+Program name:      Solar
+ 
+Author name:       Michael A. Syczylo
+Address:           NONE
+ 
+Telephone Number:  NONE
+ 
+Suggested Donation:NONE
+ 
+Program Description:
+ 
+This program closely parallels the previously described program,
+Sunset.  According to the BASIC source code, this program is the
+result of a sixth grade science project.  Since the results ob-
+tained were close to those of the previously described program, I
+would suspect that it is somewhat accurate and I would venture
+that the source code is available through a number of sources.
+The main difference between this program and that of Sunset is
+that this program only computes the output for time zones in the
+North American continent.  Minimum configurations and BASICA
+needed.
+ 
+ 
+Program name:       Optics
+ 
+Author name:        NONE
+Address:            NONE
+ 
+Telephone Number:   NONE
+ 
+Suggested Donation: NONE
+ 
+Program Description:
+ 
+Although an apparently sophisticated piece of software which
+probably deserves merit in the area of mathematical calculations,
+I cannot think of many uses for Optics.  It declares on the open-
+ing screen that it computes various parameters for reflecting
+telescopes.  I was hard pressed to find the input which would
+lead to the secondary screen, which had calculated such things as
+P.F. scale, Magnitude limit, Dawes limit, effective F-stop and
+power and when I did, I was prompted for further information
+(aperture, Mirror Field Length and Eyepiece F.L.).  The final
+output was a chart of field of vision and astigma.  If you're
+into telescopes or cameras to that degree maybe it will be of
+use.  The pascal source code is provided along with the compiled
+code and absolutely no documentation.
+ 
+ 
+Program name:       Storm (V2.0)
+ 
+Author name:        WHMC (modified by Thomas Pesek)
+Address:            Sugarland TX
+ 
+Telephone Number:   NONE
+ 
+Suggested Donation: NONE
+ 
+Program Description:
+ 
+If meteorology is of great interest to you, or you may be in-
+clined to write a graduate thesis regarding hurricane patterns in
+the southeast, then this is definitely the program for you. This
+program accepts data input from the user in the form of specific
+storm statistics and plots the movement of the hurricane on a
+nice map of the Caribbean and the southeast of North America. If
+you enter one of the key cities, and the storm comes too close
+then a warning is issued also.  Along with this program comes
+several data files of hurricanes of the recent past, all with
+their official names.  To get a good idea of what this program
+does, I found it useful to load one of these data files and dis-
+play the data and the output.  This program requires a minimum of
+128K RAM and ideally a color graphics setup.  It will work with
+the monochrome system, but doesn't look nearly as nice.
+```
+{% endraw %}
+
 ## SOLAR.BAS
 
+{% raw %}
 ```bas
 1             'SOLAR DATA PROGRAM
 2             'SCIENCE PROJECT
@@ -175,9 +392,11 @@ machines:
 1050 ND=31
 1100 GOTO 770
 ```
+{% endraw %}
 
 ## STORM.BAS
 
+{% raw %}
 ```bas
 100 ' **************************************************************
 110 ' *******               HURRICANE TRACKER              *********
@@ -795,9 +1014,28 @@ machines:
 6220 SCREEN 0,0,0:WIDTH 80
 6230 RETURN
 ```
+{% endraw %}
+
+## STORM.DOC
+
+{% raw %}
+```
+
+The file STORM.LBR contains the data files for STORM.BAS.
+To extract the data files, use LUE.COM. 
+Copy STORM.LBR and LUE.COM to another disk and type LUE STORM.
+To run STORM, you must have BASICA, then type BASICA STORM.
+
+FOR MORE INFORMATION, WRITE
+THE PUBLIC (SOFTWARE) LIBRARY
+P.O.BOX 61565
+HOUSTON, TX 77208
+```
+{% endraw %}
 
 ## SUNSET.BAS
 
+{% raw %}
 ```bas
 10 REM One note regarding azimuth angles: In the SOUTHERN hemisphere,
 20 REM this program assumes that the South Pole is zero degrees, and
@@ -884,6 +1122,7 @@ machines:
 830 RETURN
 840 END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

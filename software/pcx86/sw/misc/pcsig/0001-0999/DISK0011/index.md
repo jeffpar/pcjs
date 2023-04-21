@@ -94,6 +94,7 @@ machines:
 
 ## B.BAS
 
+{% raw %}
 ```bas
 5 'SAVE "B"
 100 KEY OFF: CLS
@@ -102,9 +103,11 @@ machines:
 215 KEY ON
 220 CHAIN "MENU"
 ```
+{% endraw %}
 
 ## BASICPRT.BAS
 
+{% raw %}
 ```bas
 10 REM==================================================================
 20 REM==============  Print a BASIC source program   ===================
@@ -213,9 +216,11 @@ machines:
 1040    PRINT "Program aborted due to error code = ";ERR
 1050    END                                  '
 ```
+{% endraw %}
 
 ## C.BAS
 
+{% raw %}
 ```bas
 5 'SAVE "C"
 100 KEY OFF: CLS
@@ -224,9 +229,11 @@ machines:
 215 KEY ON
 220 CHAIN "MENU"
 ```
+{% endraw %}
 
 ## CANNON.BAS
 
+{% raw %}
 ```bas
 10 PRINT TAB(30);"CANNONEER"
 20 PRINT:PRINT:PRINT
@@ -297,9 +304,11 @@ machines:
 670 PRINT "You deserve some R&R. See you later."
 680 END
 ```
+{% endraw %}
 
 ## CHRSET.BAS
 
+{% raw %}
 ```bas
 5 CLS
 10 FOR N=1 TO 255
@@ -310,9 +319,11 @@ machines:
 70 PRINT "THAT'S A PRINTOUT OF ALL PRINTABLE CHARACTERS...."
 80 PRINT "            244 OUT OF 255!"
 ```
+{% endraw %}
 
 ## DEFEND.BAS
 
+{% raw %}
 ```bas
 1 REM WRITTEN JAN 1982 BY ED DAVIS
 2 GOSUB 65019
@@ -489,9 +500,11 @@ machines:
 65025 WIDTH 40
 65026 RETURN
 ```
+{% endraw %}
 
 ## DISPLAY.BAS
 
+{% raw %}
 ```bas
 9000 INPUT;"COLOR OR MONOCHROME";A$
 9010 IF "C" = LEFT$(A$,1) OR "c" = LEFT$(A$,1) THEN GOSUB 9500:END
@@ -514,9 +527,80 @@ machines:
 9660 WIDTH 80
 9670 RETURN
 ```
+{% endraw %}
+
+## FILES011.TXT
+
+{% raw %}
+```
+Disk No 11
+Program Title: SPEEDUP
+PC-SIG version 1
+ 
+Some of the programs on this disk and on disk no 12 were used as part of
+the original IBM PC dealer demo.
+ 
+Usage: general
+ 
+System Requirements: IBM PC or close compatible with Color graphics
+                     adapter, 2 disk drives, printer, and Dos 2.0 or later
+                     and a version of BASIC.
+ 
+File Descriptions:
+ 
+SPEEDUP  COM  Speeds up disk operations - do not use with Visicalc
+SPEEDUP  BAS  Source to create SPEEDUP.COM on system disk in drive A
+AUTOEXEC BAT  Sample AUTOEXEC file to load SPEEDUP and request date
+TWOSIDE  COM  Allows 2 double-sided disk drives addressed A,B,C,D
+TWOSIDE  BAS  Source for TWOSIDE.COM; contains setup instructions
+HEAPSORT BAS  Heapsort demo
+QSORT    BAS  Quick internal sort for array - string or numeric
+PRINT    BAS  Prints or displays any ASCII text file
+BASICPRT BAS  Prints basic programs with highlighted rems & print ctrl
+MENU     BAS  Program from dealer demo A-disk
+IBMDIY   BAS  Program from dealer demo A-disk
+IBMMC    BAS  Program from dealer demo A-disk
+IBMCS    BAS  Program from dealer demo A-disk
+B        BAS+ Switches display to monochrome
+C        BAS+ Switches display to color
+LUNAR    BAS  Game - apollo lunar landing
+PRDEMO   BAS  Prints all 12 mx80 printer fonts
+CHRSET   BAS  Prints all 244 printable chars - 244 out of 255
+TRANDUMP BAS  Hex file display program
+CANNON   BAS  Cannon firing game - elev control and sound effects
+NIM      BAS  Game of nim
+START    BAS+ Color display demo consisting of 17 programs and one data
+              file
+GTEST    BAS+ "   (requires color display and basica)
+PSTYLES  BAS+ "
+DISPLAY  BAS+ "
+SATURN   BAS+ Picture of Saturn
+TESTSCRN BAS+ "
+PLOTTER  BAS+ "
+GRAPH1   BAS+ Draw on screen with 8 cursor keys or light pen
+WAITIN   BAS+ "
+HAPPYB   BAS+ "
+LOGOC    BAS+ IBM logo
+SCREENS     + Data file for GRAPH1.BAS
+MX80     BAS+ Selects fonts
+PEOPLE   BAS+ Game of 20 questions  (may need empty peoplef file)
+SNOW1    BAS+ Random patterns
+SNOW2    BAS+ "
+SNOW3    BAS+ "
+PATTERNS BAS+ More random patterns
+DEFEND   BAS+ Animated war game - uses joy stick controllers
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 ## GRAPH1.BAS
 
+{% raw %}
 ```bas
 2 REM    ****************************************************************
 3 REM    **                                                            **
@@ -830,9 +914,11 @@ machines:
 9904 GOSUB 9800
 9905 END
 ```
+{% endraw %}
 
 ## GTEST.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF
 20 KEY 1,"":KEY 2,"":KEY 3,"":KEY 4,""
@@ -856,9 +942,11 @@ machines:
 4000 COLOR 0,1:RETURN 5000
 5000 CLS:CHAIN "A:SATURN"
 ```
+{% endraw %}
 
 ## HAPPYB.BAS
 
+{% raw %}
 ```bas
 5 FOR X%=1 TO 15:Y$=INKEY$:NEXT X%
 6 IF INKEY$="" THEN 6
@@ -871,9 +959,11 @@ machines:
 59 IF INKEY$="" THEN 59
 60 CHAIN "A:PLOTTER
 ```
+{% endraw %}
 
 ## HEAPSORT.BAS
 
+{% raw %}
 ```bas
 100 CLEAR 5000
 110 CLS               ' Sort Program     Heap Sort
@@ -955,9 +1045,11 @@ machines:
 720 PRINT"Enter a stop code to indicate the end of list"
 740 RETURN
 ```
+{% endraw %}
 
 ## IBMCS.BAS
 
+{% raw %}
 ```bas
 5 'SAVE "IBMCS"
 10 '
@@ -1232,9 +1324,11 @@ machines:
 3462 LOCATE 24,1:PRINT USING "&";"Press the Space bar";
 3465 LOCATE 14,44,0:DELAY=0:BRANCH$="■*$&IBMDIY■":RETURN
 ```
+{% endraw %}
 
 ## IBMDIY.BAS
 
+{% raw %}
 ```bas
 5 'SAVE "IBMDIY"
 10 '
@@ -1686,9 +1780,11 @@ machines:
 3975 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
 3978 LOCATE 4,52,0:DELAY=0:BRANCH$="■*$&IBMMC■":RETURN
 ```
+{% endraw %}
 
 ## IBMMC.BAS
 
+{% raw %}
 ```bas
 5 'SAVE "IBMMC"
 10 '
@@ -2124,9 +2220,11 @@ machines:
 3939 COLOR 15,0:LOCATE 24,1:PRINT USING "&";"Press the Space bar";
 3942 LOCATE 24,13,0:DELAY=0:BRANCH$="■*$&IBMDIY■":RETURN
 ```
+{% endraw %}
 
 ## LOGOC.BAS
 
+{% raw %}
 ```bas
 1155 REM switch to color/graphics adapter
 1156 DEF SEG=0
@@ -2178,9 +2276,11 @@ machines:
 3400 FOR X%=1 TO 15:Y$=INKEY$:NEXT X%
 3401 IF INKEY$="" THEN 3401
 ```
+{% endraw %}
 
 ## LUNAR.BAS
 
+{% raw %}
 ```bas
 10 PRINT TAB(33);"LUNAR"
 20 PRINT:PRINT:PRINT
@@ -2231,9 +2331,11 @@ machines:
 430 I=A-G*S*S/2-V*S+Z*S*(Q/2+Q^2/6+Q^3/12+Q^4/20+Q^5/30):RETURN
 440 PRINT:PRINT:PRINT:PRINT "try again??":GOTO 70
 ```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 5 'SAVE "MENU"
 10 '
@@ -2369,9 +2471,11 @@ machines:
 3060 COLOR 7,0:PRINT USING "&";"  Option";
 3063 LOCATE 23,10,1:DELAY=0:BRANCH$="■1$&TEXT■2$&IBMDIY■3$&SAMPLES■4$&COMM■5$&DEMO3■6$&C■7$&B■":RETURN
 ```
+{% endraw %}
 
 ## MX80.BAS
 
+{% raw %}
 ```bas
 1 'MX-80 Printer Control Program
 2 'R.D.Presson        11/30/81
@@ -2416,9 +2520,11 @@ machines:
 50100 '
 60000 COLOR 7:LOCATE 14,10:LPRINT CHR$(27)+CHR$(72):PRINT"Double Strike mode":LOCATE 14,30:PRINT"3":OPT3%=0:RETURN
 ```
+{% endraw %}
 
 ## NIM.BAS
 
+{% raw %}
 ```bas
 10 REM Game of NIM. Author: J. E. Steitz 2-14-82
 20 OPTION BASE 1
@@ -2661,9 +2767,11 @@ machines:
 2390 PRINT
 2400 RETURN
 ```
+{% endraw %}
 
 ## PATTERNS.BAS
 
+{% raw %}
 ```bas
 20 ' PATTERNS    ED DAVIS 1-2-82
 30 ' Comments welcome
@@ -2776,9 +2884,11 @@ machines:
 65025 WIDTH 40
 65026 RETURN
 ```
+{% endraw %}
 
 ## PEOPLE.BAS
 
+{% raw %}
 ```bas
 10 'PEOPLE LEARNING PROGRAM
 20 'BY R.D.PRESSON  11/15/81
@@ -2881,9 +2991,11 @@ machines:
 990 PRINT
 1000 RETURN
 ```
+{% endraw %}
 
 ## PLOTTER.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF
 20 W%=40
@@ -2973,9 +3085,11 @@ machines:
 7101 LABL$="COMBINATION PLOT":K%=999:GOTO 5000
 9999 SCREEN 1,0:COLOR 1:CHAIN "A:LOGOC
 ```
+{% endraw %}
 
 ## PRDEMO.BAS
 
+{% raw %}
 ```bas
 10 REM IBM 80-CPS Printer Character Set Demonstration
 20 REM Displays all twelve character fonts
@@ -3049,9 +3163,11 @@ machines:
 700 FOR I%=1 TO 1000: NEXT I%: 'Delay for a couple of seconds
 710 RESUME
 ```
+{% endraw %}
 
 ## PRINT.BAS
 
+{% raw %}
 ```bas
 10 REM
 20 REM-----------------------------------------
@@ -3129,9 +3245,11 @@ machines:
 810 RETURN 370
 820 REM
 ```
+{% endraw %}
 
 ## PSTYLES.BAS
 
+{% raw %}
 ```bas
 10 A$="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"
 11 A$=A$+A$+A$+A$
@@ -3201,9 +3319,11 @@ machines:
 525 LPRINT CHR$(18);LEFT$(BAR$,80)
 530 LPRINT CHR$(24);CHR$(27);"H"
 ```
+{% endraw %}
 
 ## QSORT.BAS
 
+{% raw %}
 ```bas
 50000 REM QUICKER SORT 03/11/82 VER: 1
 50020 REM by W. Pickett
@@ -3242,9 +3362,11 @@ machines:
 50680 REM Initialize array for test of sort
 50700 DIM ARRAY$(TEST%):FOR I = 1 TO TEST%:ARRAY$(I)="A"+STR$(TEST%-I): NEXT I: RETURN
 ```
+{% endraw %}
 
 ## SATURN.BAS
 
+{% raw %}
 ```bas
 1980 FOR X%=1 TO 15:Y$=INKEY$:NEXT X%
 1981 IF INKEY$="" THEN 1981
@@ -3264,9 +3386,11 @@ machines:
 2046 IF INKEY$="" THEN 2046
 2050 CHAIN "A:GRAPH1"
 ```
+{% endraw %}
 
 ## SNOW1.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 FOR I = 1 TO 9000
@@ -3274,9 +3398,11 @@ machines:
 40 PRINT "*"
 50 NEXT I
 ```
+{% endraw %}
 
 ## SNOW2.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 FOR I = 1 TO 9000
@@ -3284,9 +3410,11 @@ machines:
 40 PRINT CHR$(RND*255)
 50 NEXT I
 ```
+{% endraw %}
 
 ## SNOW3.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 FOR I = 1 TO 9000
@@ -3295,9 +3423,11 @@ machines:
 40 PRINT CHR$(RND*255)
 50 NEXT I
 ```
+{% endraw %}
 
 ## SPEEDUP.BAS
 
+{% raw %}
 ```bas
 10 FOR I = 1 TO 37
 11   READ N
@@ -3324,9 +3454,11 @@ machines:
 60 DATA 223,2,37,2,8,42,255,80,246,0,4
 65 DATA 3866
 ```
+{% endraw %}
 
 ## START.BAS
 
+{% raw %}
 ```bas
 1 SCREEN 0,1:COLOR 7,1
 2 KEY OFF
@@ -3346,9 +3478,11 @@ machines:
 100 SCREEN 0,0
 110 CHAIN "A:GTEST"
 ```
+{% endraw %}
 
 ## TRANDUMP.BAS
 
+{% raw %}
 ```bas
 100 DEFINT A-Z
 110 CLS : CLOSE
@@ -3404,9 +3538,11 @@ machines:
 610 '
 620 END
 ```
+{% endraw %}
 
 ## TWOSIDE.BAS
 
+{% raw %}
 ```bas
 10 '           Basic program       TWOSIDE.BAS         3-6-82
 20 '
@@ -3454,13 +3590,16 @@ machines:
 440 DATA 246,91,88,156,255,30,18,0,31,7
 450 DATA 91,90,202,2,0,11596
 ```
+{% endraw %}
 
 ## WAITIN.BAS
 
+{% raw %}
 ```bas
 10000 FOR X%=1 TO 32:Y$=INKEY$:NEXT X%
 10001 IF INKEY$="" THEN 10001
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

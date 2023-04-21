@@ -32,6 +32,7 @@ machines:
 
 ## A0.BAS
 
+{% raw %}
 ```bas
 10 ' ====> A0.bas
 20 OPEN"i",#1,"data.dat":INPUT#1,MONO,LSN$,PAGE:CLOSE
@@ -74,9 +75,11 @@ machines:
 380 IF INPUT$(1)<>" " THEN 110
 390 SYSTEM
 ```
+{% endraw %}
 
 ## A1.BAS
 
+{% raw %}
 ```bas
 0 ' ====> A1.bas
 1 PG=1:PG$="01":GOSUB 100:NEW
@@ -103,9 +106,235 @@ machines:
 108 COLOR C2,C1:LOCATE 25:PRINT "Pg "+LSN$+".";PG$;"  --";CHR$(26);"  F1 BACKUP  F2 FORWARD  F3 REPEAT  F8 MENU  F9 CONTENTS  F10 INDEX";:COLOR C1,C2:LOCATE LIN,1
 109 OPEN "o",#1,"data.dat":WRITE#1,MONO,LSN$,PG:CLOSE:RETURN
 ```
+{% endraw %}
+
+## A1.TXT
+
+{% raw %}
+```
+-----
+Introduction to BASIC
+
+        |BASIC~ is one of many computer |languages~.  The name BASIC is short for
+|B~eginner's |A~ll-purpose |S~ymbolic |I~nstruction |C~ode.  Because it is one of the
+easiest computer languages to learn and master, BASIC has become the most
+popular language for the computer novice.
+
+        BASIC consists of |statements~, |commands~ and |functions~.  These are
+English words which have special meaning to the computer.  BASIC |programs~ are
+simply many statements, commands and functions grouped together to perform a
+specific task.
+
+        In the following chapters, new statements, commands and functions will
+be introduced to you one at a time.  You then will be given a chance to try
+them out and see them in action.  |The most important thing to remember is to~
+|try each one out~.  Don't worry about making mistakes, you won't hurt the
+computer's feelings.  If you do make a mistake, the computer will tell you so.
+If this happens, just try again, a little differently the second time.
+
+        Remember to press |F2~ when you are ready to continue.
+-----
+The PRINT Statement
+
+        The first thing we need to learn is how to make the computer write
+something on the screen.  This is done with a |PRINT~ statement.  The PRINT
+statement tells the computer to write on the screen whatever you put after the
+PRINT.
+                |YOU TYPE~                      THE COMPUTER PRINTS
+        
+                |PRINT 5~                               5
+
+        If you want the computer to write the answer to a math problem, put the
+problem after the PRINT.
+                
+                |YOU TYPE~                      THE COMPUTER PRINTS
+
+                |PRINT 3+2~                             5
+
+        Now try both of the above examples, by typing what is |under~ the words
+|YOU TYPE~ and pressing the |return~ key.  Then remember to press |F2~ to continue.
+-----
+The PRINT Statement (continued)
+
+        If you want the computer to print words on the screen, you have to
+enclose the words in quotes (|" "~).
+
+                |YOU TYPE~                      THE COMPUTER PRINTS
+
+        |PRINT "Whatever comes to mind."~       Whatever comes to mind.
+
+        If you want the computer to print both words and the answer to a math
+problem, you must separate the two with either a comma (|,~) or a semi-colon (|;~).
+
+                |YOU TYPE~                      THE COMPUTER PRINTS
+
+        |PRINT "The answer to 3+2 is";3+2~      The answer to 3+2 is 5
+        |PRINT "The answer to 3+2 is",3+2~      The answer to 3+2 is        5
+
+        The difference between using the comma and the semi-colon is the amount
+of space the computer leaves between items it prints.  Now try the three
+examples above by typing what is under the words |YOU TYPE~.
+
+(In IBM BASIC you may omit the semi-colon, but many versions require its use.)
+-----
+Variable
+
+        The next thing you need to understand is a |variable~.  A variable is a
+symbol (usually a letter of the alphabet) that is used to represent a number.
+A variable can represents various values.  They are extremely important when
+programming a computer.  Here is how a variable works:
+
+        In the algebraic expression
+
+                |9=X+3~,
+
+        |X~ is the variable.  For the expression |9=X+3~ to be true, the value of |X~
+must be |6~ (because |9~ and |6+3~ are equal).
+
+        In the expression
+
+                |SUM=A+B~,
+
+        |SUM~, |A~ and |B~ are variables.  |A~ and |B~ may have any values, and the
+variable |SUM~ is the total of those values.
+-----
+Variable (continued)
+
+        As you can see, a variable name may be more than one letter of the
+alphabet.  In fact, it can be upto 40 |characters~.  The first character of the
+variable must be a letter, but the next 39 can be either letters or numerals.
+There are many |reserved words~ that can not be used as variable names.  A list
+of those words can be found by looking up |reserved words~ in your IBM BASIC
+manual.
+
+        Listed are invalid variable names and reasons why they are invalid.
+
+        |FAT@~  - All characters must be letters or numerals, |@~ is neither.
+        |2TALL~ - The first character must be a letter, |2~ is a numeral.
+        |PRINT~ - |PRINT~ is a reserved word, as are all BASIC statements.
+
+        It is a good idea to make variable names as descriptive as possible.
+If you want to write a program that averages two numbers, use the variable
+names |AVERAGE~, |NUM1~ and |NUM2~.  This helps you to identify what the variables
+are used for, but it doesn't help the computer.  A variable name directs the
+computer to a place in its memory where the value of that variable is stored.
+-----
+LET Statement
+
+        The |LET~ statement assigns an expression to a variable.  In IBM BASIC,
+the word LET is optional.  The equal sign is sufficient as in the following
+examples:
+
+                        |LET A=3~     or     |A=3~
+
+        In both of these statements, the value |3~ is assigned to the variable |A~.
+
+                    |LET SUM=A+B~     or     |SUM=A+B~
+
+        Here, the sum of the variables |A~ and |B~ is assigned to the variable |SUM~.
+
+                      |LET K=K+1~     or     |K=K+1~
+
+        In algebra the expression |K=K+1~ would be false (how can a number be
+equal to itself plus 1?).  But in BASIC this means that the |new~ value of |K~ will
+be set equal to the |old~ value of |K~ plus |1~.
+-----
+PRINT and LET Statements
+
+        Until a variable has been assigned a value (by using a LET statement),
+it will be equal to zero.  If you use a variable in a PRINT statement, the
+value of the variable will be PRINTed, and not the variable name.  Type in the
+following five lines to see how the PRINT and LET statements work together.
+
+        |PRINT NUM1;NUM2;SUM~
+        |LET NUM1=45~
+        |LET NUM2=5~
+        |SUM=NUM1+NUM2~
+        |PRINT "The sum of";NUM1;"and";NUM2;"is";SUM~
+-----
+Line numbers
+
+        As you learned earlier, a program is a group of statements.  In order
+for the computer to remember, organize and execute the statements in a program,
+each statement must have a |line number~.  The computer performs each
+statement in the order of its line number.
+
+        In the following statements
+
+                |10~ PRINT 3+2
+                |20~ PRINT 3+3
+
+        |10~ and |20~ are line numbers.
+-----
+LIST Command
+
+        Typing |LIST~ and pressing return will print the program currently in
+memory.  Type the following program and then type |LIST~ and press return.
+
+                |10 PRINT 3+2~
+                |20 PRINT 3+3~
+                |30 PRINT 3+4~
+                |40 PRINT 3+5~
+-----
+LIST Command (continued)
+
+        The computer normally executes the program in numerical order beginning
+with the lowest numbered line.  If you want to put the statement |PRINT 3+1~
+before line |10~, then assign it a line number less than 10.
+
+        Type in the following:
+
+                |10 PRINT 3+2~
+                |20 PRINT 3+3~
+                |30 PRINT 3+4~
+                |40 PRINT 3+5~
+                 |5 PRINT 3+1~
+
+        Now type |LIST~ and press return.  The LIST command will display the
+program in numerical order.  Conventionally, programs are given line numbers in
+increments of 10.  The computer will |re-number~ the lines for you if you type
+the word |RENUM~ and press return.  Try this out and then |LIST~ the program
+again to see what happens.
+-----
+RUN Command
+
+        The |RUN~ command executes your program.  When you typed in PRINT 3+2
+earlier and pressed return, the computer executed the PRINT immediately.  Now
+when you place a line number before a statement, the computer places that
+statement in its memory and waits for a RUN command to execute the program.
+
+        Type in the following, type |RUN~ and press return.
+
+                |10 PRINT 3+1~
+                |20 PRINT 3+2~
+                |30 PRINT 3+3~
+                |40 PRINT 3+4;~
+                |50 PRINT 3+5~
+
+        (Note that the semi-colon keeps the |8~ on the same line as the |7~.)
+-------
+End of Lesson One
+
+        This is the end of lesson one.  Review the statements and commands
+you've covered in this lesson before going on.  BASIC is an easy language to
+learn, but you shouldn't try to learn everything at once.  Take some time to
+play with what you've learned before beginning lesson two.
+
+	If you are using the BASIC Prof,		|The PC-Prof.~
+let me know who you are!  Send your name		|P.O. Box 26~
+and address to:						|Salina, Kansas~
+							|67402-0026~
+
+	If you like the Prof, include a contribution ($30 - $50 suggested) to
+help support development of additional volumes.  Please copy and share the
+Prof. with other IBM P.C. users.
+-----
+```
+{% endraw %}
 
 ## A2.BAS
 
+{% raw %}
 ```bas
 0 ' ====> A2.bas
 1 PG=1:PG$="01":GOSUB 100:NEW
@@ -130,9 +359,166 @@ machines:
 108 COLOR C2,C1:LOCATE 25:PRINT "Pg "+LSN$+".";PG$;"  --";CHR$(26);"  F1 BACKUP  F2 FORWARD  F3 REPEAT  F8 MENU  F9 CONTENTS  F10 INDEX";:COLOR C1,C2:LOCATE LIN,1
 109 OPEN "o",#1,"data.dat":WRITE#1,MONO,LSN$,PG:CLOSE:RETURN
 ```
+{% endraw %}
+
+## A2.TXT
+
+{% raw %}
+```
+-----
+INPUT Statement
+
+        The |INPUT~ statement allows you to input from the keyboard while the
+program is running.  When the computer comes to an INPUT statement, the program
+stops, displays a question mark, and waits until you enter a number, then it
+continues with the next line.  After the word INPUT you need to place a
+variable.
+
+        example:  10 INPUT X
+
+        You can place a |prompt~ (words, in quotes, to remind you what to
+enter) between the word INPUT and the variable.  If a semi-colon follows the
+prompt, then a question mark will be displayed after it.  If a comma follows
+the prompt, then no question mark will be displayed.
+-----
+INPUT Statement (continued)
+
+        This is what an INPUT statement might look like in a program.
+
+                |10 INPUT "What is X equal to";X~
+                |20 PRINT X;"+ 3 =";X+3~
+
+        Try typing in this program, running it and watch what happens.  After
+you do that, change the semi-colon in line |10~ to a comma and |RUN~ it.  To
+execute the program again for a different variable value, type |RUN~ and put in a
+different number when the computer asks for X.
+-----
+String variables
+
+        Variables can represent letters and text as well as numbers.  A
+variable representing a string of letters is called a |string variable~.
+
+        String variables are written like |numeric~ variables with a trailing
+dollar sign.
+                
+                example: |XYZ$~="Greetings from sensible software!"
+ 
+        You can input a string variable just like you did a numeric variable.
+Try running this sample program.
+
+        |10 INPUT "What is your name";N$~
+        |20 PRINT "It's nice to meet you ";N$;", I'm the IBM Personal Computer."~
+-----
+More on the LET Statement
+
+        Now that you can input and output from the computer, let's really make
+the computer do something.  Mathematical calculations can be performed in BASIC
+with the LET statement you were introduced to in lesson one.  The LET statement
+will set a variable equal to some numeric expression.  Here are the basic
+|arithmetic operators~ and how they are handled in BASIC.
+
+              FORM              DESCRIPTION             EXAMPLES
+                |+~               addition              A|+~B   6|+~12
+                |-~               subtraction           A|-~B   23|-~7
+                |*~               multiplication        A|*~B   3|*~(2-1)
+                |/~               division              A|/~B   (8+2)|/~4
+                |^~               exponentiation        A|^~B   (5*3)|^~2
+-----
+More on LET (continued)
+
+        Here are two specific examples of the LET statement.
+
+                CELSIUS TO FAHRENHEIT CONVERSION
+
+                        |10 LET F=1.8*C+32~
+
+                YEARLY INTEREST
+
+                        |10 INTEREST=PRINCIPLE*RATE~
+
+        Try writing a program that lets you input a Celsius temperature and
+have the computer convert it to Fahrenheit and PRINT the result.  (Use the
+|INPUT~, |LET~ and |PRINT~ statements.)  Remember, the IBM version of BASIC allows
+you to omit the word LET if you wish.
+-----
+More LET (continued)
+
+        Here is one way to write the previous program.
+
+                |10 INPUT "Enter the Celsius temperature.",C~
+                |20 F=1.8*C+32~
+                |30 PRINT F;"Fahrenheit equals";C;"Celsius."~
+-----
+SAVE Command
+
+        You can |SAVE~ a program on a diskette with the SAVE command.  This
+will save your program so that you can retrieve and run it again.  You must
+have a diskette ready for use to use this command (you can SAVE a few programs
+on the BASIC Prof diskette, but you should use a different diskette for large
+programs.)
+
+        To SAVE a program, type |SAVE"name"~.  The |name~ can be anything you wish,
+but must be eight or less characters with no blank spaces.
+
+        |Invalid characters are~
+
+                        |+ = : ; , . ?~
+
+        Type in the following program.  SAVE it with the name "INTEREST" by
+typing |SAVE"INTEREST"~.
+
+        |10 INPUT "Enter the amount of principle.",PRIN~
+        |20 INPUT "What is the interest rate (use decimal)";RATE~
+        |30 INTEREST=PRIN*RATE~
+        |40 PRINT "$";INTEREST;"on $";PRIN;"at";RATE;"%"~
+------
+LOAD Command
+
+        The |LOAD~ command retrieves a program from the diskette and |loads~ it
+into the computer's memory.  Hopefully you were able to SAVE your program from
+the previous page.  The next time you want to use it, type |LOAD"name"~ (in
+this case |name~ is |INTEREST~).  Typing LIST will print the program on the screen.
+
+        Try the |LOAD~ command now and |LIST~ the program.
+------
+NEW Command
+
+        The |NEW~ command |deletes~ the program that is currently in memory.
+It will also clear all variables.  When you want to begin writing a new
+program, you need to clear any old program remaining in the computer's memory.
+Otherwise, you may get lines from the old program mixed in with lines from the
+new program.
+
+        The format for the NEW command is simply type NEW and press return.
+Try out the NEW command by typing |LOAD"INTEREST"~, press return and |LIST~
+the program.  Now type |NEW~ and press return and try to |LIST~ the program
+again.  This will |not~ erase the program from the |diskette~, |only~ from the
+computer's |memory~.
+-----
+End of Lesson Two
+
+        One more lesson finished.  These first two lessons are the foundation
+for the rest that you will learn.  From this point on, programming really
+starts getting fun.  By the end of the next lesson you should be able to write
+your own simple games, but only if you understand everything covered so far.
+If you don't really understand about variables or the INPUT statement now,
+review the first two lessons before you continue with lesson three.
+
+	If you are using the BASIC Prof,		|The PC-Prof.~
+let me know who you are!  Send your name		|P.O. Box 26~
+and address to:						|Salina, Kansas~
+							|67402-0026~
+
+	If you like the Prof, include a contribution ($30 - $50 suggested) to
+help support development of additional volumes.  Please copy and share the
+Prof. with other IBM P.C. users.
+-----
+```
+{% endraw %}
 
 ## A3.BAS
 
+{% raw %}
 ```bas
 0 ' ====> A3.bas
 1 PG=1:PG$="01":GOSUB 100:NEW
@@ -157,9 +543,173 @@ machines:
 108 COLOR C2,C1:LOCATE 25:PRINT "Pg "+LSN$+".";PG$;"  --";CHR$(26);"  F1 BACKUP  F2 FORWARD  F3 REPEAT  F8 MENU  F9 CONTENTS  F10 INDEX";:COLOR C1,C2:LOCATE LIN,1
 109 OPEN "o",#1,"data.dat":WRITE#1,MONO,LSN$,PG:CLOSE:RETURN
 ```
+{% endraw %}
+
+## A3.TXT
+
+{% raw %}
+```
+-----
+DATA and READ Statements
+
+        In the last lesson you learned about the INPUT statement.  Another way
+  to tell the computer something is with |DATA~ and |READ~ statements.
+
+        The DATA statement is |not~ executed.  Data is taken from it when the
+computer does a READ statement.  After the word DATA, you put numbers or groups
+of letters in quotes separating them with commas.  This creates a DATA line.
+The |first~ time the computer comes across a READ statement it will read the
+|first~ value in the DATA line; the |second~ time, the |second~ value, and so on.
+
+        Try typing in and |RUN~ning |either~ of the following two examples.
+
+        |10 DATA 7,11                   10 DATA "FRED","BARNEY"~
+        |20 READ X                      20 READ X$~
+        |30 PRINT X                     30 PRINT X$~
+        |40 READ X                      40 READ X$~
+        |50 PRINT X                     50 PRINT X$~
+-----
+DATA and READ Statements (continued)
+
+        When the computer runs out of data, an |error~ stops the program and an
+|error message~ is displayed.  Try typing in the following program.
+
+        |10 DATA 10,"Twenty"~
+        |20 READ X~
+        |30 PRINT 1,X~
+        |40 READ X$~
+        |50 PRINT 2,X$~
+        |60 READ X~
+        |70 PRINT 3,X~
+        
+        Because there is no third value to read, the computer runs out of data
+and stops, giving an |error~ in line number |60~.  |RUN~ it and see what happens.
+-----
+GOTO Statement
+
+        The |GOTO~ statement is the simplest to understand, yet one of the most
+important statements in BASIC.  It tells the computer to go to a different line
+number instead of doing the next one in order.
+
+        In the following sample program, the computer will |loop~ (re-do over
+and over) lines |20~, |30~ and |40~ until it runs out of data.
+-----
+IF THEN Statement
+
+        The |IF THEN~ statement gives the computer a |choice~ of what to do.  |IF~ a
+condition is |true~ the computer does what follows the word |THEN~, |IF~ it is |not~
+|true~, the computer goes to the |next line~.  Usually a GOTO statement will
+follow the THEN.
+
+        |Relational operators~ compare two values in an IF THEN statement. The
+most common relational operators follow.
+
+        |=~  equal to           |<~ less than        |<=~ less than or equal to
+        |<>~ not equal to       |>~ greater than     |>=~ greater than or equal to
+-----
+IF THEN Statement (continued)
+
+        By placing a unique number at the end of a DATA line, and following the
+READ statement with an IF THEN statement to test for that number, you can avoid
+the |Out of DATA~ error.  This program finds the average of the numbers in a
+DATA statement, and uses |99~ as an |end of data~ signal.
+-----
+IF THEN Statement (continued)
+
+        Here are a couple sample programs.  One will count the numeric
+constants in a DATA statement.  The other will pick the numbers greater than 50
+out of a DATA statement, and print them.  In both cases if the number is |999~
+the computer will stop.  Try typing in and |RUN~ning them.
+
+        |10 DATA 10,69,2,45,100,74,12,999       10 DATA 10,69,2,45,100,74,12,999~
+        |20 READ X                              20 READ X~
+        |30 IF X=999 THEN GOTO 60               30 IF X=999 THEN STOP~
+        |40 LET K=K+1                           40 IF X<=50 THEN GOTO 20~
+        |50 GOTO 20                             50 PRINT X~
+        |60 PRINT K                             60 GOTO 20~
+-----
+Logical Operators
+
+        |Logical operators~ can make the IF THEN statement more versatile.  The
+logical operators in IBM BASIC are:
+
+                         |AND~, |OR~, |NOT~, |XOR~, |IMP~, |EQV~
+        
+        The first two are pretty straight forward, and are the most widely
+used.  Consult your IBM BASIC manual for truth tables and explanations of the
+other operators.  The |AND~ and |OR~ operators are used when you want to test two
+conditions with an |IF THEN~ statement.  Here is an example of their use in a
+program.  Try typing it in and |RUN~ning it, then change the values in the DATA
+statement and |RUN~ it again.
+
+                |10 DATA 5,23,17,34,29,45,999~
+                |20 READ X~
+                |30 IF X=999 THEN GOTO 70~
+                |40 IF X<20 OR X>30 THEN LET A=A+1~
+                |50 IF X>=20 AND X<=30 THEN LET B=B+1~
+                |60 GOTO 20~
+                |70 PRINT A;"numbers either less than 20 or more than 30 and";~
+                |B;"between 20 and 30."~
+-----
+ELSE Statement
+
+        Another |option~ of the IF THEN statement is the |ELSE~ statement.
+Without the ELSE, the program would |drop~ through the IF THEN and go to the
+next line when the condition of the IF THEN is false.  If the word ELSE follows
+the IF THEN, it will be executed rather than dropping through to the next line.
+
+        Here is the last program modified to show the ELSE statement.  Type it
+in and |RUN~ it.
+
+                |10 DATA 5,23,17,34,29,45,999~
+                |20 READ X~
+                |30 IF X=999 THEN GOTO 60~
+                |40 IF X<20 OR X>30 THEN LET A=A+1 ELSE LET B=B+1~
+                |50 GOTO 20~
+                |60 PRINT A;"numbers either less than 20 or more than 30 and";~
+                |B;"between 20 and 30."~
+-----
+Multiple Statement Lines
+
+        Another useful feature of BASIC on the IBM is the use of |multiple~
+|statement~ lines.  You can put two or more statements on the same line number by
+separating them with a colon (|:~).  This is very helpful with IF THEN
+statements.
+
+        Here is a sample program that illustrates the use of multiple statement
+lines.  Type it in and |RUN~ it, then change the values in the DATA statement and
+|RUN~ it again.
+
+        |10 DATA 5,23,17,34,29,45,999~
+        |20 READ X~
+        |30 IF X=999 THEN PRINT A;"lower than 20,";B;"between 20 and 30, and";C;~
+        |"above 30.":END~
+        |40 IF X<20 THEN PRINT X;"is less than 20.":LET A=A+1:GOTO 20~
+        |50 IF X<30 THEN PRINT X;"is between 20 and 30.":LET B=B+1:GOTO 20~
+        |60 PRINT X;"is greater than 30.":LET C=C+1:GOTO 20~
+-----
+End of Lesson Three
+
+        You have reached the end of lesson three.  This lesson contains some of
+the most important concepts of programming.  Loops and conditionals will most
+likely make up the major portion of any program you write.  Be sure you have a
+thorough understanding of this lesson before going on to lesson four.
+
+	If you are using the BASIC Prof,		|The PC-Prof.~
+let me know who you are!  Send your name		|P.O. Box 26~
+and address to:						|Salina, Kansas~
+							|67402-0026~
+
+	If you like the Prof, include a contribution ($30 - $50 suggested) to
+help support development of additional volumes.  Please copy and share the
+Prof. with other IBM P.C. users.
+-----
+```
+{% endraw %}
 
 ## A4.BAS
 
+{% raw %}
 ```bas
 0 ' ====> A4.bas
 1 PG=1:PG$="01":GOSUB 100:NEW
@@ -188,9 +738,268 @@ machines:
 108 COLOR C2,C1:LOCATE 25:PRINT "Pg "+LSN$+".";PG$;"  --";CHR$(26);"  F1 BACKUP  F2 FORWARD  F3 REPEAT  F8 MENU  F9 CONTENTS  F10 INDEX";:COLOR C1,C2:LOCATE LIN,1
 109 OPEN "o",#1,"data.dat":WRITE#1,MONO,LSN$,PG:CLOSE:RETURN
 ```
+{% endraw %}
+
+## A4.TXT
+
+{% raw %}
+```
+-----
+REM Statement
+
+        All right!  You have successfully completed three lessons in BASIC.  By
+now you should be fairly confident with the language.
+
+        The |REM~ statement allows you to insert explanatory |rem~arks into the
+program.  These remarks are |ignored~ by the computer when it executes the
+program, but provide the programmer with information about the program.  They
+appear only when you LIST the program.  The REM statement can begin with either
+the letters |REM~ or an apostrophe (|'~) followed by the remark itself.
+
+        Here is an example of REM statements in a program.
+
+                10 DATA 45,24,97,65,47,15,80,38,77,999
+                20 READ X:IF X=999 THEN 60      |'If end of data goto line 60.~
+                30 IF X>=50 THEN LET G=G+1      |'Count numbers G.T.E. to 50.~
+                40 IF X<50 THEN LET L=L+1       |'Count number L.T. 50.~
+                50 GOTO 20                      |'Get the next number.~
+                60 PRINT "Of the numbers,";L;"were less than 50 and";
+                70 PRINT G;"were greater than or equal to 50."
+
+        Try typing in and |RUN~ning this program.
+-----
+STOP and END Statements
+
+        There are four ways to stop the execution of a program in BASIC.
+
+        1.  The program automatically stops when it runs out of lines to
+            execute.
+        2.  |STOP~ Statement.  When the computer comes to a STOP statement, it
+            prints |Break in N~ (where |N~ is the |line number~ of the STOP
+            statement) and stops.
+        3.  |END~ Statement.  This is similar to the STOP statement except that
+            the computer does not print the Break message.
+        4.  Pressing the |Ctrl~ key and the |Break~ key (Scroll lock) together
+            stops the program during execution and prints a |Break in N~
+            message.  If you want to continue with the program, simply type
+            |CONT~ (short for |cont~inue) and press the return key.  If you haven't
+            edited the program, the computer will continue with the program
+            right where it was interrupted (this works if you used a STOP
+            statement as well, but not if you used an END statement).
+-----
+STOP and END Statements (continued)
+
+        Try out these statements and commands by typing in and |RUN~ning the
+following program.
+
+                |10 PRINT "Type CONT and press return."~
+                |20 STOP~
+                |30 PRINT "GOOD!  You continued the program."~
+                |40 PRINT "Use the Ctrl and Break keys any time now!":GOTO 40~
+-----
+EDIT Command
+
+        When you make (or discover) a mistake in a program line, you can
+correct it by simply typing the line over.  However, it is much faster to use
+the BASIC Program Editor.  To do this, simply type |EDIT N~ (where |N~ is the line
+number to edit) and then move to the mistake using the cursor control keys, and
+correct it by typing over, inserting or deleting.
+
+        If you want to completely erase that line of the program, you can do so
+by typing the line number itself and pressing return.  If there are several
+lines you want to delete, type |DELETE N1-N2~ (where |N1~ is the first line and |N2~
+is the last line to delete) and press return.  This will delete all lines
+between and including |N1~ and |N2~.
+-----
+AUTO Command
+
+        When you are first writing a program, you spend a good deal of time
+just typing in the line numbers.  The |AUTO~ command will take care of that for
+you.  Type the word AUTO and the computer will put the line numbers in
+automatically.
+
+        Here is the correct form, or syntax, for the AUTO command.
+
+                                AUTO [|B~[,|I~]]
+
+        |B~ is the line number at which the AUTO command will begin.  If you do
+not give a value for |B~ the computer will |default~ to (automatically start
+at) line number 10.
+
+        |I~ is the increment value.  It is the value that will be added to each
+line number to get the next line number.  If you do not enter a number for |I~,
+it will default to 10.
+-----
+AUTO Command (continued)
+
+        If you want to start at some line number other than 10, say 200, type
+AUTO 200 and your line numbers will begin at 200 and increase in increments of
+10.  If you want to start at 100 and increase by 5's then type AUTO 100,5.
+When you finish typing in your program, shut off the AUTO command by pressing
+the |Ctrl~ key and the |Break~ key together.
+
+        Try typing in the following program using the AUTO command.
+
+                |100 INPUT "What is the first number";A~
+                |105 INPUT "What is the second number";B~
+                |110 PRINT A;"+";"B";"=";A+B~
+                |115 PRINT A;"-";"B";"=";A-B~
+                |120 PRINT A;"*";"B";"=";A*B~
+-----
+TRON and TROFF Commands
+
+        If a program doesn't work properly when you try running it, it is said
+to have a |bug~ in it.  Much of a programmer's time is spent |de-bugging~ his
+or her programs.  A feature that sometimes makes this easier is the |TRON~
+command.  TRON is short for program |TR~acer |ON~.  When you type TRON and then RUN
+your program, the computer will print each line number, in brackets (|[]~) as
+it is executed.  Other program output will also be printed, but only the
+executed line numbers will be printed in brackets.
+
+        For this program:       |10 DATA 17,23,99~
+                                |20 READ NUM~
+                                |30 IF NUM<>99 THEN PRINT NUM:GOTO 20~
+                                |40 PRINT "The END."~
+        The output using TRON
+        would look like this:   |[10][20][30] 17~
+                                |[20][30] 23~
+                                |[20][30][40]The END.~
+
+        When you have found your bug and want to run your program without the
+line numbers being displayed, type |TROFF~ which is short for program |TR~acer |OFF~.
+This returns the computer to normal program execution.
+-----
+TRON and TROFF Commands (continued)
+
+        The following program is supposed to count and print the values in a
+DATA statement, but for some reason it gets stuck on the first value and goes
+crazy.  By using the TRON and TROFF commands, try and find the bug in this
+program.
+
+                |10 DATA 34,67,12,9,65,38,84,999~
+                |20 READ NUM:IF NUM=999 THEN GOTO 60~
+                |30 COUNT=COUNT+1~
+                |40 PRINT "Value number";COUNT;"is";NUM~
+                |50 GOTO 30~
+                |60 PRINT "There are";COUNT;"numbers in the data statement."~
+
+        First, type in the program and try to |RUN~ it.  After a few seconds
+press the |Ctrl~ and |Break~ keys to stop the program.  Then type |TRON~ to turn the
+tracer on.  Again |RUN~ the program and when you have identified the problem,
+stop the program and fix the bug.  Now turn the tracer off by typing |TRON~ and
+|RUN~ the program a third time.
+-----
+TRON and TROFF Commands (continued)
+
+        Here is the same program from the last page.  Hopefully you found the
+bug in line |50~.
+
+                10 DATA 34,67,12,9,65,38,84,999
+                20 READ NUM:IF NUM=999 THEN GOTO 60
+                30 COUNT=COUNT+1
+                40 PRINT "Value number";COUNT;"is";NUM
+                |50 GOTO 30~
+                60 PRINT "There are";COUNT;"numbers in the data statement."
+
+        The line should have read |50 GOTO 20~.  As it was, the program never
+read a new value for the variable |NUM~, so it never got to |999~ to signal the
+|end of DATA~.
+
+        If you found the bug, congratulations!  If not make sure you understand
+how the TRON and TROFF commands work and better luck next time.
+-----
+RND Function
+
+        The |RND~ function returns a random number between 0 and 1.  If you
+want a random number between 0 and 1000, then just multiply by 1000.
+
+                example- LET |X=RND~       [this returns |X~ such that |0~ < |X~ <| 1~]
+                         LET |Y=RND*100~   [this returns |Y~ such that |0 ~< |Y~ <| 100~]
+
+        Here is a sample program that lets you input an |upper bound~ number,
+and the computer prints a list of random numbers between 0 and your upper
+bound.  You will have to use the |Ctrl~ and |Break~ keys to stop this program.
+
+                |10 INPUT "Enter a number to be the upper bound.",MAX~
+                |20 PRINT RND*MAX~
+                |30 GOTO 20~
+-----
+INT Function
+
+        The |INT~ function returns the largest integer less than or equal to
+the number in parentheses.
+
+                example- |LET A=INT(9.2)~    [in this statement, |A~ will equal  |9~]
+                         |LET K=INT(-7.6)~   [in this statement, |K~ will equal |-8~]
+
+        Here is a program that uses the RND and INT functions to quiz you on
+the INT function.  Once again, press the |Ctrl~ and |Break~ keys when you have
+had enough.
+
+        |10 NUMBER=RND*200-100~ 'pick a random number between -100 and 100
+        |20 PRINT "What is the INT of";NUMBER;:INPUT ANSWER~
+        |30 IF ANSWER<>INT(NUMBER) THEN PRINT "The answer is";INT(NUMBER)~
+        |40 GOTO 10~
+-----
+ABS Function
+
+        The |ABS~ function returns the |absolute value~ of an expression.  The
+absolute value is just the positive value of a number.
+
+                example- |LET X=ABS(-5)~    [in this statement, |X~ will equal  |5~]
+                         |LET C=ABS(12*4)~  [in this statement, |C~ will equal |48~]
+
+        Here is a program that uses the RND, INT and ABS functions to quiz you
+on the ABS function.  Once again, press the |Ctrl~ and |Break~ keys when you
+have had enough.
+
+        |10 NUMBER=INT(RND*200-100)~ 'pick integer between -100 and 100
+        |20 PRINT "What is the ABS of";NUMBER;:INPUT ANSWER~
+        |30 IF ANSWER<>ABS(NUMBER) THEN PRINT "The answer is";ABS(NUMBER)~
+        |40 GOTO 10~
+-----
+ABS and INT functions (continued)
+
+        Here is another short program that you can try out.  It uses the ABS
+and INT functions to find the |G~reatest |C~ommon |D~enominator of two numbers.
+
+                |10 INPUT "Enter the first number.",NUM1~
+                |20 INPUT "Enter the second number.",NUM2~
+                |30 NUM1=ABS(NUM1):NUM2=ABS(NUM2)~
+                |40 LET R=NUM1-NUM2*INT(NUM1/NUM2)~
+                |50 IF R=0 THEN GOTO 70~
+                |60 NUM1=NUM2:NUM2=R:GOTO 40~
+                |70 PRINT "The greatest common denominator is";NUM2~
+-----
+End of Lesson Four
+
+        Congratulations on completing the |Beginning BASIC~ Course.  Now to bring
+together much of what you've learned, try writing the following programs.
+
+        1. A program that will find the average and the sum of a series of
+           numbers in a DATA statement.
+        2. A number guessing game program.  (|Hint~: Have the computer pick a
+           number between 1 and 1000 and then INPUT guesses as to what the
+           number is.)
+
+If you have trouble, type  |LOAD"AVERAGE"~ for the average program,
+                           |LOAD"GUESS_1"~ for one guessing game, or
+                           |LOAD"GUESS_2"~ for a different version of the game.
+
+and then |LIST~ to give a listing of the sample program.  Type |NEW~ to erase the
+sample program and start one of your own.
+ 
+	If you would like information on how to obtain a	|The PC-Prof.~
+copy of "Intermediate BASIC", volume two of the BASIC Prof.	|P.O. Box 26~
+series, send your name and address to:				|Salina, Ks.~
+								|67402-0026~
+-----
+```
+{% endraw %}
 
 ## AVERAGE.BAS
 
+{% raw %}
 ```bas
 10 DATA 76,93,88,69,100,75,84,999
 20 READ NUM:IF NUM=999 THEN GOTO 100 'get a number, check if last number
@@ -200,9 +1009,11 @@ machines:
 100 PRINT "The sum of the";COUNT;"numbers is";SUM
 110 PRINT "and the average is";SUM/COUNT
 ```
+{% endraw %}
 
 ## BACKUP.BAS
 
+{% raw %}
 ```bas
 0 ' ====> BACKUP.bas
 1 OPEN"i",#1,"data.dat":INPUT#1,MONO,LSN$,PAGE:CLOSE
@@ -216,9 +1027,11 @@ machines:
 9 KEY 10,"RUN"+CHR$(34)+"INDEX"+CHR$(34)+CHR$(13)
 10 CHAIN "A"+LSN$,PAGE-1,ALL
 ```
+{% endraw %}
 
 ## CONTENTS.BAS
 
+{% raw %}
 ```bas
 0 ' ====> CONTENTS.bas
 1 ON KEY(1) GOSUB 8:KEY (1) ON
@@ -267,9 +1080,78 @@ machines:
 44 LOCATE 24,79,0:PRINT P2$;
 45 CHAIN"a"+LSN$,VAL(PG$),ALL
 ```
+{% endraw %}
+
+## CONTENTS.TXT
+
+{% raw %}
+```
+-----
+                             Table of Contents
+
+Introduction to BASIC......................................................1.01
+PRINT Statement............................................................1.02
+PRINT Statement (continued)................................................1.03
+Variable...................................................................1.04
+Variable (continued).......................................................1.05
+LET Statement..............................................................1.06
+PRINT and LET Statements...................................................1.07
+Line numbers...............................................................1.08
+LIST Command...............................................................1.09
+LIST Command (continued)...................................................1.10
+RUN Command................................................................1.11
+End of Lesson One..........................................................1.12
+-----
+                        Table of Contents (continued)
+
+INPUT Statement............................................................2.01
+INPUT Statement (continued)................................................2.02
+String Variables...........................................................2.03
+More on the LET Statement..................................................2.04
+More on LET (continued)....................................................2.05
+More LET (continued).......................................................2.06
+SAVE Command...............................................................2.07
+LOAD Command...............................................................2.08
+End of Lesson Two..........................................................2.09
+-----
+                        Table of Contents (continued)
+
+DATA and READ Statements...................................................3.01
+DATA and READ (continued)..................................................3.02
+GOTO Statement.............................................................3.03
+IF THEN Statement..........................................................3.04
+IF THEN Statement (continued)..............................................3.05
+IF THEN Statement (continued)..............................................3.06
+Logical Operators..........................................................3.07
+ELSE Statement.............................................................3.08
+Multiple Statement Lines...................................................3.09
+End of Lesson Three........................................................3.10
+-----
+                        Table of Contents (continued)
+
+REM Statement..............................................................4.01
+STOP and END Statements....................................................4.02
+STOP and END Statements (continued)........................................4.03
+EDIT Command...............................................................4.04
+AUTO Command...............................................................4.05
+AUTO Command (continued)...................................................4.06
+TRON and TROFF Commands....................................................4.07
+TRON and TROFF Commands (continued)........................................4.08
+TRON and TROFF Commands (continued)........................................4.09
+RND Function...............................................................4.10
+INT Function...............................................................4.11
+ABS Function...............................................................4.12
+ABS and INT Functions (continued)..........................................4.13
+End of Lesson Four.........................................................4.14
+
+                           End of Table of Contents
+-----
+```
+{% endraw %}
 
 ## DATA1.BAS
 
+{% raw %}
 ```bas
 0 ' ====> DATA1.bas
 1 ON KEY(1) GOSUB 10:KEY (1) ON
@@ -313,9 +1195,11 @@ machines:
 39 LOCATE 19,1:PRINT "Out of DATA in 20":RESUME 40
 40 ON ERROR GOTO 0:NEW
 ```
+{% endraw %}
 
 ## DATA2.BAS
 
+{% raw %}
 ```bas
 0 ' ====> DATA2.bas
 1 ON KEY(1) GOSUB 10:KEY (1) ON
@@ -366,9 +1250,28 @@ machines:
 46 FOR C=15 TO 19:LOCATE 20,C:PRINT CHR$(26);:FOR P=1 TO PAUSE:NEXT:LOCATE 20,C:PRINT CHR$(32);:NEXT
 47 LOCATE 22,1:PRINT "AVERAGE IS";SUM/COUNT:NEW
 ```
+{% endraw %}
+
+## FILES105.TXT
+
+{% raw %}
+```
+-------------------------------------------------------------------------
+Disk No 105   PC Professor BASIC Tutorial                       v1.1 DS2
+-------------------------------------------------------------------------
+PC-Professor is a well liked tutorial for teaching the BASIC programming
+language.  Start by running the BASIC program "intro".
+ 
+INTRO    BAS  Part of PC-Professor - program to run first
+AUTOEXEC BAT  Batch file to start PC-Professor
+*        *    Other PC-Professor files called from INTRO.BAS
+ 
+```
+{% endraw %}
 
 ## FORWARD.BAS
 
+{% raw %}
 ```bas
 0 ' ====> FORWARD.bas
 1 OPEN"i",#1,"data.dat":INPUT#1,MONO,LSN$,PAGE:CLOSE
@@ -382,9 +1285,11 @@ machines:
 9 KEY 10,"RUN"+CHR$(34)+"INDEX"+CHR$(34)+CHR$(13)
 10 CHAIN "A"+LSN$,PAGE+1,ALL
 ```
+{% endraw %}
 
 ## GUESS_1.BAS
 
+{% raw %}
 ```bas
 10 NUMBER=INT(RND*1000)+1       'pick a random integer between 1 and 1000
 20 COUNT=0                      'initialize the counter
@@ -397,9 +1302,11 @@ machines:
 90 PRINT "You got it in";COUNT;"guesses!  Would you like to play again (Y/N)";
 100 INPUT AGAIN$:IF AGAIN$="Y" OR AGAIN$="y" THEN 10
 ```
+{% endraw %}
 
 ## GUESS_2.BAS
 
+{% raw %}
 ```bas
 10 RANDOMIZE 're-seeds the random number generator (keep the game interesting!)
 20 NUMBER=INT(RND*1000)+1       'pick a random integer between 1 and 1000
@@ -420,9 +1327,11 @@ machines:
 170 INPUT "Would you like to play again (Y/N)";AGAIN$
 180 IF AGAIN$="Y" OR AGAIN$="y" THEN 20
 ```
+{% endraw %}
 
 ## IFTHEN.BAS
 
+{% raw %}
 ```bas
 0 ' ====> IFTHEN.bas
 1 ON KEY(1) GOSUB 10:KEY (1) ON
@@ -468,9 +1377,11 @@ machines:
 41 LOCATE 22,1:PRINT "SUM OF THE NUMBERS FROM 1 TO 10 IS";SUM
 42 NEW
 ```
+{% endraw %}
 
 ## INDEX.BAS
 
+{% raw %}
 ```bas
 0 ' ====> INDEX.bas
 1 ON KEY(1) GOSUB 8:KEY (1) ON
@@ -518,9 +1429,85 @@ machines:
 43 LOCATE 24,79,0:PRINT P2$;
 44 CHAIN"a"+LSN$,VAL(PG$),ALL
 ```
+{% endraw %}
+
+## INDEX.TXT
+
+{% raw %}
+```
+-----
+                                   INDEX
+ABS Function.........................................................4.10, 4.11
+AND........................................................................3.07
+Apostrophe.................................................................4.01
+Arithmetic Operators.......................................................2.04
+CONT Command...............................................................4.02
+Colon......................................................................3.09
+Comma................................................................1.03, 2.01
+Commands...................................................................1.01
+DATA Statement.......................................................3.01, 3.02
+DELETE Command.............................................................4.04
+De-bugging.....................................................4.05, 4.06, 4.07
+EDIT Command...............................................................4.04
+ELSE Statement.............................................................3.08
+END Statement........................................................4.02, 4.03
+End of Lesson Four.........................................................4.12
+End of Lesson One..........................................................1.12
+End of Lesson Three........................................................3.10
+End of Lesson Two..........................................................2.09
+Functions..................................................................1.01
+GOTO Statement.............................................................3.03
+-----
+                               INDEX (continued)
+IF THEN Statement..............................................3.04, 3.05, 3.06
+INPUT Statement......................................................2.01, 2.02
+INT Function.........................................................4.09, 4.11
+Illustrations..................................................................
+        DATA, READ, IF THEN................................................3.05
+        DATA, READ.........................................................3.03
+        IF THEN............................................................3.04
+        LET................................................................1.06
+        Variables..........................................................1.04
+Introduction...............................................................1.01
+LET Statement......................................1.06, 1.07, 2.04, 2.04, 2.06
+LIST Command.........................................................1.09, 1.10
+LOAD Command...............................................................2.08
+Line numbers...............................................................1.08
+Logical Operators..........................................................3.07
+Looping....................................................................3.03
+Multiple Statement Lines...................................................3.09
+OR.........................................................................3.07
+PRINT Statement................................................1.02, 1.03, 1.07
+Prompt.....................................................................2.01
+-----
+                               INDEX (continued)
+READ Statement.......................................................3.01, 3.02
+REM Statement..............................................................4.01
+RENUM Command..............................................................1.10
+RND Function...............................................................4.08
+RUN Command................................................................1.11
+Relational Operators.......................................................3.04
+SAVE Command...............................................................2.07
+STOP Statement.......................................................4.02, 4.03
+Sample Programs................................................................
+        Greatest Common Denominator........................................4.10
+        Interest...........................................................2.07
+        Temperature Conversion.............................................2.06
+Semi-colon...........................................................1.03, 2.01
+Statements...........................................................1.01, 1.08
+String Variables...........................................................2.03
+TROFF Command..................................................4.05, 4.06, 4.07
+TRON Command...................................................4.05, 4.06, 4.07
+Variable.............................................................1.04, 1.05
+
+                                End of INDEX
+-----
+```
+{% endraw %}
 
 ## INTRO.BAS
 
+{% raw %}
 ```bas
 0 ' ====> INTRO.bas
 1 DEF SEG=0:IF (PEEK(&H410) AND &H20)=&H20 THEN 5
@@ -575,9 +1562,11 @@ machines:
 50 MONO=NOT MONO:IF MONO THEN C1=7:C2=0:C3=8:C4=2 ELSE C1=(VAL(RIGHT$(TIME$,2)) MOD 6)+2:C2=0:C4=0:C3=(C1+2)+(6*(C1>5))
 51 OPEN"o",#1,"data.dat":WRITE#1,MONO,"0","0":CLOSE:GOTO 31
 ```
+{% endraw %}
 
 ## K0.BAS
 
+{% raw %}
 ```bas
 0 ' ====> K0.bas
 1 DEF SEG=&H40:POKE &H17,&H20 ' -- turn everything off but Num Lock
@@ -792,9 +1781,11 @@ machines:
 210 LOCATE R,1:PRINT LEFT$(TEXT$,P-1):TEXT$=RIGHT$(TEXT$,LEN(TEXT$)-P)
 211 GOTO 207
 ```
+{% endraw %}
 
 ## K1.BAS
 
+{% raw %}
 ```bas
 0 ' ====> K1.bas
 1 LOCATE 1:PRINT STRING$(80,219)
@@ -964,9 +1955,11 @@ machines:
 165 LOCATE R,43:PRINT LEFT$(TEXT$,P-1):TEXT$=RIGHT$(TEXT$,LEN(TEXT$)-P)
 166 GOTO 163
 ```
+{% endraw %}
 
 ## K2.BAS
 
+{% raw %}
 ```bas
 0 ' ====> K2.bas
 1 LOCATE 1:PRINT STRING$(35,219)+STRING$(19,32)+STRING$(26,219)
@@ -1005,9 +1998,11 @@ machines:
 34 DEF SEG:POKE 91,24:POKE 92,25:LOCATE 24,1
 35 GOTO 35
 ```
+{% endraw %}
 
 ## LET.BAS
 
+{% raw %}
 ```bas
 0 ' ====> LET.bas
 1 ON KEY(1) GOSUB 8:KEY (1) ON
@@ -1085,9 +2080,11 @@ machines:
 73 IF INKEY$<>" " THEN 73 ELSE LOCATE 23,1:PRINT SPACE$(80);:RETURN
 74 PRINT CHR$(218);STRING$(3,196);CHR$(191);CHR$(31);STRING$(5,29);CHR$(179);"   ";CHR$(179);CHR$(31);STRING$(5,29);CHR$(192);STRING$(3,196);CHR$(217):RETURN
 ```
+{% endraw %}
 
 ## REPEAT.BAS
 
+{% raw %}
 ```bas
 0 ' ====> REPEAT.bas
 1 OPEN"i",#1,"data.dat":INPUT#1,MONO,LSN$,PAGE:CLOSE
@@ -1101,9 +2098,11 @@ machines:
 9 KEY 10,"RUN"+CHR$(34)+"INDEX"+CHR$(34)+CHR$(13)
 10 CHAIN "A"+LSN$,PAGE,ALL
 ```
+{% endraw %}
 
 ## VARIABLE.BAS
 
+{% raw %}
 ```bas
 0 ' ====> VARIABLE.bas
 1 ON KEY(1) GOSUB 8:KEY (1) ON
@@ -1140,6 +2139,7 @@ machines:
 32 IF INKEY$<>"" THEN 32
 33 IF INKEY$<>" " THEN 33 ELSE LOCATE 20,1:PRINT SPACE$(80);:RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

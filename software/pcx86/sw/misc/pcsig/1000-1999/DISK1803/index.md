@@ -38,6 +38,48 @@ machines:
     viewing text files, and locating files in any subdirectory by name or
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1803.TXT
+
+{% raw %}
+```
+Disk No: 1803                                                           
+Disk Title: EZDoss                                                      
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: EzDoss                                                   
+Author Version: 3.40                                                    
+Author Registration: $10.00                                             
+Special Requirements: None.                                             
+                                                                        
+It's a DOS shell that the novice will love for its menus and            
+verification prompts, yet the experienced user will appreciate for      
+"Quick Key" command execution, "Expert Mode" to let the more experienced
+user work faster, and a unique operational design that provides faster  
+disk access.                                                            
+                                                                        
+One of the most annoying feature of many DOS shells is each time a drive
+is selected a time-consuming search for subdirectories takes place. With
+EZDOSS this is greatly reduced by having the program create a disk file 
+the first time it reads a hard disk.  This disk file keeps track of     
+where all the files are so when the drive is selected again, the disk   
+file can be read faster than searching for subdirectories.              
+                                                                        
+The power of using a DOS shell is realized through features like        
+multiple file manipulation, precise ``tagging'' control by pattern,     
+masking, viewing text files, locating files in any subdirectory by name 
+or part of their name, and there's even a built-in editor.              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1803
 

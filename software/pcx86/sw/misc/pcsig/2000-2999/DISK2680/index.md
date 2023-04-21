@@ -14,6 +14,40 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2680.TXT
+
+{% raw %}
+```
+Disk No: 2680
+Disk Title: Scripture Quest
+PC-SIG Version: S1.0
+
+Program Title: Scripture Quest
+Author Version: 4.0
+Author Registration: None.
+Special Requirements: None.
+
+You won't be getting the same question very often with this Bible game.
+SCRIPTURE QUEST tests you with over 1600 questions from the Old
+Testament, the New Testament, or both.
+
+Subjects include people, places, words, commandments, and doctrines of
+the Bible.  Print-out quizzes, pop-up windows, referenced answers, and a
+``Top Ten'' score chart are among its features.  Play by yourself, or
+make it a group game for up to nine people!  Play against the clock for
+better scores!
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2680
 

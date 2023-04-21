@@ -31,6 +31,47 @@ machines:
     programs or functions.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1975.TXT
+
+{% raw %}
+```
+Disk No: 1975                                                           
+Disk Title: PC-SuperMenu Plus Disk 1 of 2 (1976 also                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: PC-SuperMenu Plus                                        
+Author Version: 2.6S                                                    
+Author Registration: $30.00                                             
+Special Requirements: None.                                             
+                                                                        
+SUPERMENU PLUS menu system allows users to group programs by program    
+functions rather than by the drive directories.  Special libraries for  
+word processing, database, finance, DOS functions, CADD, graphics, etc. 
+may be created.  Up to 25 program libraries consisting of 9 programs    
+each may be created with the MENUMAKER and read by the SUPERMENU system.
+                                                                        
+The system is designed for the inexperienced user.  It is 100%          
+menu-driven and requires little instruction to set up.  SUPERMENU may be
+operated from any floppy or hard drive and can access to up to 225      
+programs or functions.                                                  
+                                                                        
+SUPERMENU consists of three routines and up to 25 program libraries,    
+however, only the SUPERMENU system and its library menus need be present
+to operate.  The MENUMAKER and CONFILE utilities may be located on      
+another drive or floppy disk that is only loaded as needed.  A desirable
+feature for users with limited disk space.                              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1975
 

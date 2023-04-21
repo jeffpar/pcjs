@@ -38,6 +38,56 @@ machines:
     FILES         Small text file.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1428.TXT
+
+{% raw %}
+```
+Disk No: 1428
+Program Title: EVERY OTHER PAGE version 1
+PC-SIG version 1
+
+EVERY OTHER PAGE paginates your text files so you can print on the front
+and back of pages while maintaining the proper text sequence.  The
+program saves you paper, helps your documents fit into one binder, and
+gives your reports the the look of printed books.
+
+EVERY OTHER PAGE takes any text file and breaks it up into 56 lines per
+page, and into odd pages (1,3,5...) which are to be printed on one side
+and even pages (2,4,6...), which get printed on the other side.  It then
+prints the odd-numbered pages and when finished prompts you to reverse
+the paper in the printer so the other side can be printed with the
+even-numbered pages.
+
+Synopsis:  Paginates your files into even and odd pages for printing
+both sides of a sheet of paper.
+
+Usage:  Printer Utility/Pagination
+
+Special Requirements:  Printer.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $15.00
+
+File Descriptions:
+
+CON_TEXT  EXE Main program.
+GO        BAT Batch start file.
+READ      ME  Small documentation file.
+FILES         Small text file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1428
 

@@ -65,6 +65,53 @@ machines:
     MERGE    EXE  DOS extension -- merge text lines from multiple files.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES586.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  586  DOS EXTENSIONS (Disk 2 of 2)                         v1 DS2
+---------------------------------------------------------------------------
+This disk is the second of the series.  It contains all but one of the
+actual DOS extensions in this package.
+ 
+ATT      EXE  DOS Extension - View or change file attributes
+ALARM    EXE  DOS Extension - Sound a controllable tone
+CAT      EXE  DOS Extension - Concatenate files
+CLK      EXE  DOS Extension - Measure elapse time of programs or commands
+CMD      EXE  DOS Extension - Execute programs, commands, or batch files
+CP       EXE  DOS Extension - Copy files
+DIRSRT   EXE  DOS Extension - Directory sorter
+GPM      EXE  DOS Extension - Find text patterns in files
+INFO     EXE  DOS Extension - Display system, disk, or memory information
+INP      EXE  DOS Extension - Input data to a DOS pipe
+MERGE    EXE  DOS Extension - Merge text lines from multiple files
+MV       EXE  DOS Extension - Move files
+PRNT     EXE  DOS Extension - Output selected text lines of files
+RENDIR   EXE  DOS Extension - Rename a subdirectory
+RENM     EXE  DOS Extension - Rename files
+RM       EXE  DOS Extension - Delete files
+SED      EXE  DOS Extension - File editor
+SELECT   EXE  DOS Extension - Visual selector
+SLEEP    EXE  DOS Extension - Pause command
+STAT     EXE  DOS Extension - Statistical text file information
+TEE      EXE  DOS Extension - DOS pipe output controller
+TXLAT    EXE  DOS Extension - Character translator
+UNDEL    EXE  DOS Extension - Retreive a deleted file
+UNIQ     EXE  DOS Extension - Duplicate text line handler
+VOLM     EXE  DOS Extension - View or change volume name
+WHEREIS  EXE  DOS Extension - File locator
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0586
 

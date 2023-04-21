@@ -44,6 +44,54 @@ machines:
     ~  Up to 4500 names may be stored in a single file.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1823.TXT
+
+{% raw %}
+```
+Disk No: 1823                                                           
+Disk Title: Letters'n Labels                                            
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Letters'n Lables                                         
+Author Version: 2.11                                                    
+Author Registration: $30.00                                             
+Special Requirements: Printer.                                          
+                                                                        
+LETTERS n LABELS is designed as a very simple to use mailing list       
+manager, with a few extra goodies tossed in to keep your work as        
+enjoyable as possible.  Prepare mailing labels and form letters in a    
+snap, as well as print general purpose lists.  Best of all, almost no   
+setup is required.                                                      
+                                                                        
+LETTERS n LABELS features:                                              
+                                                                        
+~  Enter & Sort data.                                                   
+                                                                        
+~  Create mailing labels (1 to 4 wide)                                  
+                                                                        
+~  Print form letters created with your W/P program.                    
+                                                                        
+~  Report style listings.                                               
+                                                                        
+~  Sort/select by file, specific names, zip codes, 4-digit codes, etc.  
+                                                                        
+~  Use the 2-line miscellaneous field for your notes.                   
+                                                                        
+~  Read & write data from/to other programs in ASCII.                   
+                                                                        
+~  Up to 4500 names may be stored in a single file.                     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1823
 

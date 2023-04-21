@@ -57,6 +57,7 @@ machines:
 
 ## AID.BAS
 
+{% raw %}
 ```bas
 10 'SAVE"AIDb
 11 '**** save"aidadd",a   Use to merge with aidbnew.  If that works ok, then merge with aidb and aide.  Then compile aide. *****
@@ -652,9 +653,60 @@ machines:
 10750  VALGOOD = TRUE:  RETURN
 10760 ' ==============================
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #141, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  123PREP .DOC         CRC = FE 1E
+
+--> FILE:  123PREP .EXE         CRC = 4A 4F
+
+--> FILE:  AID     .BAS         CRC = 22 57
+
+--> FILE:  AID     .BAT         CRC = 5B BD
+
+--> FILE:  AID     .DOC         CRC = F6 91
+
+--> FILE:  AID     .EXE         CRC = 0F 7E
+
+--> FILE:  SCREENIN.BAS         CRC = C4 F4
+
+--> FILE:  SCREENIN.DOC         CRC = 18 FB
+
+--> FILE:  W20     .COM         CRC = 65 67
+
+--> FILE:  READ    .ME          CRC = D2 4A
+
+ ---------------------> SUM OF CRCS = E2 30
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## SCREENIN.BAS
 
+{% raw %}
 ```bas
 10 ' DEMONSTRATION PROGRAM TO CALL SUBROUTINE GENIN
 14 ' *********************************************************************
@@ -723,6 +775,7 @@ machines:
 10320 INP.REL!=VAL(INP.STR$):IF INP.REL!=0 THEN INP.REL!-0
 10330 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

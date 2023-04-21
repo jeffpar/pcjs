@@ -50,8 +50,301 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## DESCRIBE.TXT
+
+{% raw %}
+```
+SETIT.BAS is a program which will set an Epson FX series or compatible printer.
+It is completly menu driven and very ease to use.
+
+SETIT.DOC is the documentation for SETIT.BAS, and is eight pages long, and page
+formatted.
+
+README.1st tells how to copy the document to the printer.
+
+P.S.  --  Anyone wishing to purchase direct from me can do so. Please include
+the sum of $5.00 to cover the cost of media, postage, etc.
+
+Thank you,
+
+Robin Peak
+Peak Enterprises
+P.O. Box 120
+Hadlock, Wa. 98339
+```
+{% endraw %}
+
+## FILE1069.TXT
+
+{% raw %}
+```
+Disk No  1069
+Program Title: PRINTER UTILITIES No 7
+PC-SIG version 1
+
+    A collection of useful utilities for your printer that PC-SIG feels you
+shouldn't be without. X-PRINT is a memory-resident printer utility for
+Epson and compatible printers. It lets you change the printing style to
+pica, elite, compressed or near letter quality, and change the lines per
+page to 66, 51 or 33. Once loaded, X-PRINT stays in memory and can be
+activated at any time by pressing a certain key, even if you are in the
+middle of executing a program.
+
+    LINES takes any ASCII text file, and converts certain selected
+characters into line drawing characters. These line drawing characters are
+part of the IBM extended character set which can be used to make very
+professional-looking forms and charts right on the screen or the printer.
+However, many wordprocessors cannot display these characters, and even in
+the ones that do, the process of looking up which of the 38 characters to
+use for line intersections and entering these characters using the Alt key
+quickly becomes a chore. But with this program, using any wordprocessor or
+editor, you can simply include special marks of where you want horizontal
+or vertical lines and intersections. LINES scans the ASCII file and
+intelligently converts the marks to the line drawing characters in a few
+seconds. Good for making forms, charts, and boxes on your screen or
+printer.
+
+    DISK LABLER makes disk labels using one of three different sizes of
+labels: 1" x 3", 1" x 3.5", and 2.75" x 2.75" It lets you enter the title
+for the disk, the program version, the disk number, whether or not it is a
+master or back-up copy, whether or not the program is public domain, the
+program category, and a one-line comment. The program is very easy to use
+and the menu is self-explanatory. This program requires color graphics.
+
+    SETIT is a menu-driven BASIC program that sets up an Epson FX series or
+compatible printer. No longer will you have to change the printer's dip
+switches or use BASIC to set-up your printer. It can set the printing style
+to Near Letter Quality (NLQ), draft, proportional, condensed, double-wide,
+double-high, emphasized, double strike, superscript, subscript and
+underline. You can also select which character set to be used: either the
+Epson character graphics, italics, or one of the international character
+sets. Besides printing style, SETIT can also control printer operations
+such as the paper-out sensor, auto-sheet feed mode, full or half speed, and
+form feed. SETIT can also set up the margins, the inch-line spacing,
+intercharacter space, and NLQ justification.
+
+    GIFTWRAP provides a new style for giftwrapping your presents. Just
+enter a short and personal message and the program prints it out in the
+format you specify. The words appear either as slanted stripes or as
+zigzags on the paper. You can print either by page or line, and you can
+specify the number of lines or pages that are going to be printed.
+Pagelength, line width, and perforation skip can be specified from the menu
+of this program. Instead of sending the information to the printer, the
+giftwrap design can be sent instead to the screen or to a file on a disk.
+Many people have expressed satisfaction with this new kind of giftwrap,
+which gives a surprise on both sides of the box.
+
+Usage: Printer Utility
+
+System Requirements: 128K memory, one floppy disk drive, and an IBM or
+EPSON compatible printer (DISK LABELER requires color graphics).
+
+How to Start: Type X-PRINT (press enter) for X-PRINT, LINES (press enter)
+for LINES, PGLABEL (press enter) for DISK LABELER, and GIFTWRAP (press
+enter) for GIFTWRAP. In order to run SETIT you must first load BASIC then
+load the file SETIT.BAS.
+
+Suggested Registration: $15.00 for X-PRINT, $15.00 for DISK LABLER,
+$25.00 for SETIT and $5.00 for GIFTWRAP.
+
+File Descriptions:
+
+------------  Xprint
+README   TXT  Documentation for XPRINT
+X-PRINT  COM  XPRINT program (version 1.0)
+------------  Lines
+LINES    DOC  Documentation for LINES.
+FORM     TXT  Sample form.
+FORM     PIC  Sample converted form.
+LINES    C    Source code.
+LINES    EXE  Main program (version 2.0).
+------------  Disk Labler
+PGLABEL  EXE  DISK LABELER program (requires color graphics) (version 2.0)
+------------  Setit
+SETIT    DOC  Documentation for SETIT
+SETIT    BAS  SETIT Basic program (version 1.0).
+README   1ST  How to read the documentation
+DESCRIBE TXT  File descriptions
+------------  Giftwrap
+GIFTWRAP EXE  Giftwrap main program (version 3.05).
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## FORM.TXT
+
+{% raw %}
+```
+                              A SAMPLE FORM
+========*=============================*===========================*========
+NAME    "                             |                           |
+--------*------------*-last-----------*------------first----------*-middle-
+ADDRESS "            |                                            |
+--------*---number---*-----------street---------------*-----------*--apt---
+TOWN    "                                             |           |
+--------*--city----------------*-------------*--------*---state---*--zip---
+STORE   "                      " SALESPERSON "
+========*======================*=============*=============================
+========*====================================================*=============
+   QTY  |                     ITEM                           |     COST
+========*====================================================*========*====
+        |                                                    |        |
+--------*----------------------------------------------------*--------*----
+        |                                                    |        |
+--------*----------------------------------------------------*--------*----
+        |                                                    |        |
+--------*----------------------------------------------------*--------*----
+        |                                                    |        |
+--------*----------------------------------------------------*--------*----
+        |                                                    |        |
+========*========================================*===========*========*====
+     *------------------------*                  " SUBTOTAL  |        |
+VISA |                        |                  *-----------*--------*----
+     *------------------------*                  " SALES TAX |        |
+MC   |                        |                  *-----------*--------*----
+     *------------------------*                  " TOTAL     |        |
+                                                 *===========*========*====
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+                  X-Print is Copyright 1988 Dan Little Computing.
+                  ───────────────────────────────────────────────
+
+
+       There is a small manual that comes with X-Print.  To view it, type...
+
+                                    TYPE README.TXT
+
+                                          or
+
+                             In order to print the manual
+
+                                 TYPE README.TXT>PRN
+
+```
+{% endraw %}
+
+## README.TXT
+
+{% raw %}
+```
+
+                                   X-PRINT
+
+                     Copyright 1988 Dan Little Computing
+                    PO Box 1443 Morgantown, WV  26507-1443
+
+REQUIREMENTS
+============
+You need an IBM PC, XT, or AT { or compatible }.  Since X-print uses only
+about 11k of memory, memory concerns are probably not necessary.
+
+The edition you have is programmed for Epson & compatible printers.  Even if
+you have a different printer, you can load X-print and see how it works.
+Get in touch with me at the address at the bottom of this document for rates
+on customizing X-print for your printer.
+
+LOADING
+=======
+Loading X-print is a snap.  At the DOS prompt { A> } type X-PRINT <RETURN>.
+The screen will display the program title, invocation key { key to start ie
+ALT-X }, and Edition name.  The program is loaded and waiting patiently in
+memory for you to use.  X-print defaults to an invocation key of ALT-X.  If
+you would like some other key to activate X-print, you would type X-PRINT /N.
+In this instance Alt-N would start X-print.  You can replace N with any ALPHA
+key.  IF YOU USE OTHER MEMORY RESIDENT PROGRAMS, YOU MUST INSTALL X-PRINT
+FIRST.  IF YOU DO NOT, X-PRINT MAY DE-ACTIVATE SOME/ALL OF THEM.
+
+
+OPERATING
+=========
+To use X-print, press ALT-X { or the optional key you substituted for X --
+see "LOADING" }.  The FULL SCREEN menu display shows.  Notice there are 2
+arrow keys displaying to the left of the menu.  These arrows show the
+current setting of the printer (assuming the printer was not set).  You can
+move the highlight bar down by pressing:
+                                               Right Arrow
+                                               Down Arrow
+                                               Space Bar
+                                               Plus Key
+You can move the highlight bar up by pressing:
+                                               Left Arrow
+                                               Up Arrow
+                                               Back Space
+                                               Minus Key
+By utilizing all of these to move the band, the keystrokes are compatible
+with most any software.
+
+When the band is over the selection you want, press RETURN.  The printer will
+be set and the screen will return to its previous state.
+
+PAPER CONSIDERATIONS
+====================
+You will have no doubt noticed the page size selections which the second arrow
+concerns itself with.  The following chart will show how you may be able to
+save on paper costs (especially if you use your printer constantly).
+
+ ___________________________________________________________________________
+|                    |                       |                              |
+|Paper Size          |Lines Per Inch         |Notes                         |
+|---------------------------------------------------------------------------|
+|                    |                       |                              |
+|9½ (8½) X 11        |66                     |Standard Paper                |
+|                    |                       |                              |
+|12 (11) X 8½        |51                     |Allows for wider reports than |
+|                    |                       |standard and is less expensive|
+|                    |                       |than the 15 X 11.             |
+|                    |                       |                              |
+|9½ (8½) X 5½        |33                     |This is actually ½ pages and  |
+|                    |                       |can save you $$ for everyday  |
+|                    |                       |printing & reporting needs.   |
+|                    |                       |You do not lose a full page   |  
+|                    |                       |everytime you line your paper.|  
+-----------------------------------------------------------------------------
+
+
+TEXT & GRAPHICS
+===============
+X-print is designed to work over any text mode.  Since X-print checks the
+video mode upon each entrance, you may alter between monitors.  No set up is
+necessary as X-print makes the adjustments.
+X-print will not come up over graphics (sorry).  Should you make this
+attempt, X-print will beep and send the invocation key into your application.
+
+REGISTERING
+===========
+You will enjoy using X-print.  Under the guidelines of Shareware, you are
+required to register X-print should you find it of use (placing it in your
+autoexec.bat file or frequent loading indicates that you need to register).
+Registration is only $ 15.00.  Upon receipt, you will receive documentation on
+loading memory resident applications without "interference".  As indicated
+earlier, I will set up X-print to work with your non-epson printer for a
+reasonable cost which depends on the printer.  Updates will be made available
+at a cost of $ 3.00 as they are developed.  Suggestions and feedback are
+welcome.
+
+You may send your registration to:
+
+          Dan Little Computing
+          PO Box 1443
+          Morgantown, WV  26507-1443
+
+```
+{% endraw %}
+
 ## SETIT.BAS
 
+{% raw %}
 ```bas
 10 SER$="PC-SIG SHAREWARE"
 20 WIDTH 80
@@ -554,6 +847,7 @@ machines:
 4990 COLOR 7,0
 5000 LOCATE 20,20:INPUT"Press  <ENTER>  to continue:",ZZ$:CLS:GOTO 220
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

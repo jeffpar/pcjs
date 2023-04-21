@@ -18,6 +18,7 @@ machines:
 
 ## ANCOV.BAS
 
+{% raw %}
 ```bas
 1 '  ANCOVA & COMPARING REGRESSION LINES -- ANCOV.BAS -- by Dr Russell Langley
 2 GOTO 400
@@ -348,9 +349,11 @@ machines:
 579 GOSUB 160:PRINT:DO$="modify this data & re-analyse it":GOSUB 20:IF Z$="Y" THEN 449 ELSE 10
 580 'end
 ```
+{% endraw %}
 
 ## ANOV1.BAS
 
+{% raw %}
 ```bas
 1 '          1-WAY ANOVA   ---   ANOV1.BAS   ---  by  Dr Russell Langley
 2 GOTO 400
@@ -647,9 +650,11 @@ machines:
 543 GOSUB 160:GOTO 10
 544 'end
 ```
+{% endraw %}
 
 ## ANOVK.BAS
 
+{% raw %}
 ```bas
 1 '         ANOVA by RANKS  ---  ANOVK.BAS ---  by  Dr Russell Langley
 2 GOTO 400
@@ -956,9 +961,11 @@ machines:
 682 GOTO 10
 683 END
 ```
+{% endraw %}
 
 ## ANOVR.BAS
 
+{% raw %}
 ```bas
 1 '      2-WAY ANOVA, REPLICATED  ---  ANOVR.BAS  ---  by  Dr Russell Langley
 2 GOTO 400
@@ -1256,9 +1263,11 @@ machines:
 547 VA=SA/DA:VB=SB/DB:VI=SI/DI:VE=SE/DE:GOTO 513
 548 'end
 ```
+{% endraw %}
 
 ## ANOVU.BAS
 
+{% raw %}
 ```bas
 1 '      2-WAY ANOVA, UNREPLICATED  --  ANOVU.BAS  --  by  Dr Russell Langley
 2 GOTO 400
@@ -1561,9 +1570,11 @@ machines:
 540 GOSUB 160:GOTO 10
 541 ' end
 ```
+{% endraw %}
 
 ## CONTY.BAS
 
+{% raw %}
 ```bas
 1 '        CONTINGENCY TABLES  ---  CONTY.BAS  ---  by  Dr Russell Langley
 2 GOTO 400
@@ -1823,9 +1834,11 @@ machines:
 584 IF PR=1 THEN GOSUB 160:GOTO 10
 585 'end
 ```
+{% endraw %}
 
 ## COREL.BAS
 
+{% raw %}
 ```bas
 1 '           CORRELATIONS  ---  COREL.BAS  ---  by  Dr Russell Langley
 2 GOTO 400
@@ -2188,9 +2201,11 @@ machines:
 920 GOTO 10
 921 END
 ```
+{% endraw %}
 
 ## CORMT.BAS
 
+{% raw %}
 ```bas
 1 '          RMAT & DMAT  ---  CORMT.BAS  ---  by  Dr Russell Langley
 2 GOTO 400
@@ -2456,9 +2471,11 @@ machines:
 506 GOSUB 162:GOSUB 165:PRINT #2,"DATA USED";E$;"Transform = ";T$(T%):FOR I=1 TO N:FOR J=1 TO M:PRINT #2,X(I,J);:NEXT J:PRINT #2,:NEXT I:PRINT #2,:GOTO 498
 507 'end
 ```
+{% endraw %}
 
 ## DATFL.BAS
 
+{% raw %}
 ```bas
 1 '        DATA FILER & EDITOR  ---  DATFL.BAS ---  by  Dr Russell Langley
 2 GOTO 400
@@ -2673,9 +2690,139 @@ machines:
 510 LPRINT CHR$(10)STRING$(80,61)STRING$(4,10):GOTO 429
 511 'end
 ```
+{% endraw %}
+
+## INDEX.TXT
+
+{% raw %}
+```
+                      EASY-STATS PROGRAMS by LANGLEY
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ 1 Ancova & Comparing Regression Lines    11 Descriptive Statistics  
+ 2 Anova, 1-way                           12 Mathematical Functions
+ 3 Anova, 2-way, unreplicated             13 Matrix Operations
+ 4 Anova, 2-way, replicated               14 Probabilities of Z, t, F, r, chisq
+ 5 Anova by Ranks                         15 Regression, 1 or 2 predictors
+ 6 Bonferroni Critical Z, t, F, r, chisq  16 Regroup datafile by categories
+ 7 Contingency Table Analyses             17 Remake an Upper Triangular Matrix
+ 8 Correlation & Dispersion Matrices      18 Standard Scores
+ 9 Correlations, various                  19 t Tests
+10 Data Filer & Editor                    20 Tabulation, 1- & 2-way
+                                          21 Wilcoxon's Tests                    
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        INDEX OF TESTS & FUNCTIONS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Analysis of Covariance, 1-way, 1 covariate & 1 criterion [1]
+Analysis of Variance, 1-way, weighted means [2]
+Analysis of Variance, 1-way, unweighted means [2]
+Analysis of Variance, 2-way, equal replicates [4]
+Analysis of Variance, 2-way, unequal replicates, weighted means [4]
+Analysis of Variance, 2-way, unequal replicates, unweighted means [4]
+Analysis of Variance, 2-way, unreplicated [3]
+Association measures for contingency tables [7]
+Binomial Probabilities [14]
+Biserial Correlation [9]
+Change row & column order of upper triangular matrices [17]
+Characteristic Roots [13]
+Chi-squared tests for contingency tables [7]
+Combinations [12]
+Concordance Coefficient, Kendall & Smith's W [5]
+Correlation Coefficient, Pearson's r, from grouped data [2]
+Correlation Coefficients [9]
+Correlation Coefficients, averaging 2 or more [9]
+Correlation Coefficients, comparing 2 or more [9]
+Correlation Coefficients, 1st & 2nd order partials [9]
+Correlation Matrix [8]
+Correlation, serial coefficient [11,15]
+Cramer's C coefficient [7]
+Critical values of Z, t, F, r, or Chi-squared for specified P-values [6]
+Datafiles, changing [10,16,17]
+Datafiles, making [10]
+Derivatives of functions [12]
+Dispersion Matrix, variances & covariances [8]
+Durbin & Watson's d [15] 
+Eigenvalues & Eigenvectors [13]
+Equations, polynomial [12]
+Experimentwise error rate, controlling [6]
+Exponential Curve Fitting [12]
+F Test, Variance Ratio, [1,2,3,4,15]
+Factorials [12]
+Fisher's Exact Test for 2 x 2 contingency tables [7]
+Friedman's Test, 2-way Anova by Ranks [5]
+Function Plotter [12]
+Goodness of Fit Test for R x 1 contingency tables [7]
+Graph Plotter [12]
+Guttman's Lambda [7]
+Histogram [11,15]
+Hotelling's T-squared [3]
+Integration of functions [12]
+Interpolations, linear, reciprocal, curvilinear [12]
+Inverse of a Matrix [13]
+Kruskal & Wallis' Test, 1-way Anova by Ranks [5]
+Kurtosis Coefficient [11]
+Lambda, Guttman's [7]
+Matrix Inversion [13]
+Matrix Operations, A', A*A', A+B, A*B, A*k, A'*B*A, etc. [13]
+Mean, harmonic [2,4]
+Median [5,21]
+Normality Tests [11]
+Normalizing Vectors or Matrices [13]
+Odds Ratio [7]
+Pearson's r [9]
+Permutations [12]
+Phi coefficient [7]
+Point Biserial Correlation [9]
+Poisson Probabilites [14]
+Polynomial root extraction [12]
+Probabilities for specified values of Z, t, F, r, & Chi-squared [14]
+Probabilities, combining [14]
+Probability, Binomial [14]
+Probability, Poisson [14]
+Product Moment Correlation = Pearson's r [2,8,9]
+Quadratic Forms A'*B*A etc [13]
+Range [11]
+Rank Biserial Correlation [9,21]
+Rearrange row & column order of upper triangular matrices [17]
+Regression Analysis, with 1 or 2 predictors [15]
+Regression Lines, comparing 2 or more [1]
+Regroup datafiles to rearrange order of rows [16]
+Residuals, analysis & plots [15]
+Roots of polynomials [12]
+Scattergram [1,11,15]
+Serial Correlation Tests [11,15]
+Simultaneous Linear Equations, solving [12]
+Skewness Coefficient [11]
+Solving Linear Equations [12]
+Sort rows of datafiles into a different group order [16]
+Spearman's Rank Correlation [9]
+Square Root of Matrices [13]
+Standard Deviation [11]
+Standard Error [11]
+Standard Scores from raw measurements [18]
+Student's t Test, 1 sample [19]
+Student's t Test, 2 sample, independent or matched [19]
+t Tests, 1 or 2 sample [19]
+Tabulation, 1-way frequencies [20]
+Tabulation, 2-way contingency or "cross-tabs" [20]
+Tetrachoric r [9]
+Thompson-Grubbs' Test for Outliers [11,15]
+Upper Triangular Matrix [8,10,13]
+Variance Ratio, F Test, [1,2,3,4,15]
+Variance [11]
+Vector Operations [13]
+von Neumann Ratio [11]
+Wilcoxon's Signed Ranks Test [21]
+Wilcoxon's Sum of Ranks Test [21]
+Yates' chi-squared test for 2 x 2 contingency tables [7]
+Yule's Q coefficient [7]
+Z Scores (standard scores) [18]
+                  --------------- end ----------------
+```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 1 '      MENU for EASY-STATS  ---  MENU.BAS  ---  by  Dr Russell Langley
 2 KEY OFF:CLEAR:SCREEN 0,0,0,0:CLS:DEFINT A-Z:DIM OP$(40,1)
@@ -2722,9 +2869,200 @@ machines:
 62 DATA Wilcoxon's Tests,WILCX.BAS
 63 DATA END,END
 ```
+{% endraw %}
+
+## SAMPLE.TXT
+
+{% raw %}
+```
+          3 Sample Pages from Langley's "UNDERSTANDING EASY-STATS".
+       Best print 12 characters/inch (Elite) with 1 inch left margin.
+-------------------------------------------------------------------------------
+                                                           ANOVA 1-Way
+But how could "small" or "big" be assessed objectively?  Fisher saw that since 
+the variance of means is defined by Var(XBAR) =  Var(X) / n, cross-multiplying 
+Var(XBAR) by n will give another statistic which will be an UNBIASED ESTIMATOR 
+OF THE POPULATION VARIANCE.  He called this the BETWEEN-SAMPLES MEAN SQUARE ---
+
+                MS_between =  SS_between / df_between
+
+where  SS_between  =  n *  Σ (XBAR_i - XDOUBLEBAR)²,
+  &    df_between  =  g - 1.
+
+
+F TEST
+------
+It is important to realize that Between and Within MS's are INDEPENDENT of one 
+another.  The spread between means needn't affect the spread within samples, 
+and vice versa.  This fact permitted the development of the F TEST to compare 
+these 2 estimates of some σ² (common to the populations from which the sample 
+have been drawn), using the famous formula ---
+
+                F(df_betw, df_within)  =  MS_betw / MS_within
+
+which tests ---
+                H0:  σ²_between = σ²_within
+                H1:  σ²_between > σ²_within          (1-tail)
+
+Note (1): These hypotheses are exactly equivalent to those expressed in terms
+          of µ_i, at the top of this section.
+Note (2): This is a 1-tail test because σ²_between must be abnormally large if
+          there is a real difference between the population means.  σ²_between
+          can only become very small if the means are very close together.
+Note (3): F Tables for interpreting the variance ratio values only show the
+          right hand tail (F values > 1), since ANOVA is their main use.
+             [See VARIANCE RATIO TEST for their use as 2-tailed tests.]
+Note (4): Big values of F are produced by much spread between sample means, 
+          and will reject H0. 
+Note (5): Values of F < 1 occur if the sample means are closer together than
+          expected with random sampling.  This will happen sometimes by chance
+          when H0 is true.  But don't guess.  See the "F TABLES" notes herein
+          for how to find its probability --- if P > 5% accept H0, otherwise
+          suspect some violation of assumptions such as non-random sampling or
+          unequal population variances.    [Ref: Bennett & Franklin 7.25]
+Note (6): See ANOVA ASSUMPTIONS, which tells when you can trust this F Test. 
+
+
+TOTAL MEAN SQUARE
+-----------------
+A third variance can also be computed from multiple samples, namely, the TOTAL 
+MEAN SQUARE.  This is a measure of the spread of all the sampled measurements 
+around their grand mean ---
+
+                MS_total =  SS_total / df_total
+
+where  SS_total =  Σ (X - XDOUBLEBAR)²,
+  &    df_total =  N - 1,
+  &    N  = Σn_i = total number of measurements in all g samples.
+
+All these SS's, df's, and MS's are displayed in an ANOVA TABLE, together with 
+the F Test.  The MS_total is not independent of the other two MS's, so isn't 
+used for testing these hypotheses.
+-------------------------------------------------------------------------------
+
+
+UNDERSTANDING EASY-STATS                         CORRELATION, Grouped Data
+
+A scattergram of these figures would be like this ---
+
+Aggression Score    50+
+      Y               |                               o
+                    40+               o
+                      |                               o
+                    30+               2
+                      |
+                    20+       o
+                      |       o
+                    10+-------+-------+-------+-------+ 
+                      0       1       2       3       4
+                                Birth Order, X
+
+To get Pearson's r, you could enter these pairs into CORRELATIONS (VARIOUS), 
+but it will be quicker, and you'll get a LINEARITY TEST of the relationship, 
+if you use our REGROUP program to regroup the pairs by the X-variable, then 
+look on X as a sample ID, and enter the Y-values into the 1-WAY ANOVA program,
+thus ---    Sample #       Scores
+               1           20  15
+               2           39  28  29
+               4           46  37
+
+Choose a Weighted Means Analysis, and when asked ---
+"Are the levels of Factor `A' Quantitative?"   - answer Y for yes, then
+"Enter `E' if Equally spaced, otherwise enter their 3 values in free format:"
+- enter 1 2 4 to suit the present case.
+
+For a more detailed analysis of relationships with repeated X's, use our 
+REGRESSION program.
+
+
+
+                             CORRELATION, PARTIAL
+                            ----------------------
+
+"Partialling" was introduced by Yule (1897) to correct an observed correlation 
+between 2 variables for the disturbing influence of other variables (which are 
+then said to be "partialled out" of the main correlation).
+
+E.g. the correlation between reading and writing computed from a random sample 
+of children of various ages could be wrong because the relationship may depend 
+in part on age.  Instead of restricting the sample to children of the same age 
+("experimental control"), we can statistically "partial out" the effect of age 
+on the reading and writing scores.  This could be done by using each child's 
+reading and writing DEVIATE SCORE from the mean of his/her age group.  The 
+unadulterated correlation could then be obtained by correlating these deviate 
+scores, from which the influence of age has been purged.  In practice, 
+alternative formulations, based on the correlations between all possible pairs 
+of variables, are used.  The net result will be AS THOUGH the childrens' ages 
+had been constant in the sample.
+-------------------------------------------------------------------------------
+
+
+UNDERSTANDING EASY-STATS                         NON-PARAMETRIC TESTS
+
+It must be stressed that parametric tests (e.g. Student's t) have been 
+formulated to apply to random samples from populations with certain 
+characteristics (e.g. Normal Distribution).  You must not expect them to give 
+true answers if applied to data from populations which don't conform to such 
+specifications (e.g. if the population is Lognormal when a test assumes a 
+symmetrical distribution).  Don't take this too lightly --- it is my 
+experience that about 50% of biological measurements are Lognormal.
+
+Non-parametric tests are generally safe to use when analysing measurements and 
+you're not sure about their scale &/or population features.  Accordingly, they 
+have much to recommend for novices.  But let's face it, if the assumptions for 
+a parametric test are met, the use of a parametric test will usually give a 
+somewhat stronger test (i.e. smaller P-values) than a non-parametric 
+alternative.  And furthermore, the mathematical restrictions of ranks and 
+counts is why they cannot be used for sophisticated analyses like ANCOVA or 
+multiple regression.                               [Ref: Bradley Chap 2]
+
+
+
+                                NORMALITY TESTS
+                               -----------------
+
+The EASY-STATS Descriptive Statistics provides the following tests to 
+assess whether your sample measurements are likely to derive from a Normally 
+Distributed population or not ---
+     HISTOGRAM of Z SCORES.
+     THOMPSON & GRUBBS' TEST [see OUTLIERS].
+     SKEWNESS COEFFICIENT & KURTOSIS COEFFICIENT.
+     RANGE/SD RATIO [see OUTLIERS].
+Other programs in this package also use these tests when appropriate.
+
+
+
+                                  ODDS RATIO
+                                 ------------
+                         See ASSOCIATION, STRENGTH OF.
+
+
+
+                                   OUTLIERS
+                                  ----------
+
+Outliers are measurements which differ considerably from the rest of the 
+values in your sample.  Outliers may be extreme-but-valid members of the 
+parent population (in which case discarding them would bias results), or they 
+may be truly illegal values (in which case results will be biased unless you 
+do discard them).
+
+If the smallest or largest value in the sample can be traced to a clerical or 
+instrumental error, discard it and re-test the remaining values.  If the 
+parent population is expected to have a Normal Distribution, outliers should 
+be detected by any NORMALITY TEST (e.g. below), though these tests vary in the 
+features to which they are most sensitive.
+
+However, if you are unsure about the distribution the parent population, you 
+should analyse the data WITH and WITHOUT the suspect outlier (and discard the 
+whole sample and start afresh if the outcomes differ importantly --- you 
+mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
+```
+{% endraw %}
 
 ## DSTAT.BAS
 
+{% raw %}
 ```bas
 1 '     DESCRIPTIVE STATISTICS  ---  DSTAT.BAS  ---  by  Dr Russell Langley
 2 GOTO 400
@@ -3019,9 +3357,11 @@ machines:
 493 GOSUB 290:GOTO 430
 494 END
 ```
+{% endraw %}
 
 ## GROUP.BAS
 
+{% raw %}
 ```bas
 1 '          REGROUP   ---   GROUP.BAS    by  Dr Russell Langley
 2 GOTO 400
@@ -3204,9 +3544,11 @@ machines:
 486 GOTO 10
 487 'end
 ```
+{% endraw %}
 
 ## MATHF.BAS
 
+{% raw %}
 ```bas
 9 GOTO 40
 15                                                                                                                                                   :
@@ -3535,9 +3877,11 @@ machines:
 1630 RUN "menu.bas"
 1635 END
 ```
+{% endraw %}
 
 ## MATOP.BAS
 
+{% raw %}
 ```bas
 1 '        MATRIX OPERATIONS  ---  MATOP.BAS  ---  by  Dr Russell Langley
 2 GOTO 400
@@ -3944,9 +4288,11 @@ machines:
 672 RETURN
 673 'end
 ```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 1 '      MENU for EASY-STATS  ---  MENU.BAS  ---  by  Dr Russell Langley
 2 KEY OFF:CLEAR:SCREEN 0,0,0,0:CLS:DEFINT A-Z:DIM OP$(40,1)
@@ -3993,9 +4339,11 @@ machines:
 62 DATA Wilcoxon's Tests,WILCX.BAS
 63 DATA END,END
 ```
+{% endraw %}
 
 ## PROBS.BAS
 
+{% raw %}
 ```bas
 1 '          PROBABILITIES  ---  PROBS.BAS   by  Dr Russell Langley
 9 GOTO 400' ◙◙--- Sub Y=DLOGE(X)
@@ -4144,9 +4492,11 @@ machines:
 505 ON ERROR GOTO 0
 506 END
 ```
+{% endraw %}
 
 ## REGRS.BAS
 
+{% raw %}
 ```bas
 1 '      REGRESSION (1-2 predictors) --- REGRS.BAS --- by  Dr Russell Langley
 2 GOTO 400
@@ -4642,9 +4992,11 @@ machines:
 963 GOSUB 160: GOTO 800
 964 'End of file.
 ```
+{% endraw %}
 
 ## REMAK.BAS
 
+{% raw %}
 ```bas
 1 '          REMAKE U.T.M.  ---  REMAK.BAS  ---  by  Dr Russell Langley
 2 GOTO 400
@@ -4813,9 +5165,11 @@ machines:
 451 PRINT"I'm now ready to file your revised matrix as an Upper Triangular Matrix.":GOSUB 140:GOTO 10
 452 'end
 ```
+{% endraw %}
 
 ## TABDOC.BAS
 
+{% raw %}
 ```bas
 1 '         TABULATION DOC  ---  TABDOC.BAS  ---  by  Dr Russell Langley
 2 GOTO 400
@@ -4884,9 +5238,11 @@ machines:
 457 GOSUB 5:IF IN$="L" THEN 423 ELSE IF IN$="M" THEN RUN "MENU.BAS" ELSE IF IN$="S" THEN NEW ELSE 457
 458 END
 ```
+{% endraw %}
 
 ## TABLE.BAS
 
+{% raw %}
 ```bas
 1 '           TABULATION  ---  TABLE.BAS  ---  by  Dr Russell Langley
 2 GOTO 400
@@ -5047,9 +5403,11 @@ machines:
 718 INPUT"◙Enter another pair of question numbers (Null = No More)";Z$:GOTO 702
 1000 DATA <end>
 ```
+{% endraw %}
 
 ## TTEST.BAS
 
+{% raw %}
 ```bas
 1 '         STUDENT'S t TESTS  ---  TTEST.BAS  ---  by  Dr Russell Langley
 2 GOTO 400
@@ -5426,9 +5784,11 @@ machines:
 761 CLS:GOSUB 43:NS=2:N(1)=N:N(2)=N:KN(1)=N:KN(2)=2*N:N=KN(2):FOR I=1 TO N(2):X(I+N(1),1)=X(I,2):NEXT I:CLS:GOTO 600
 762 END
 ```
+{% endraw %}
 
 ## WILCX.BAS
 
+{% raw %}
 ```bas
 1 '          WILCOXON'S TESTS  ---  WILCX.BAS  ---  by  Dr Russell Langley
 2 GOTO 400
@@ -5707,9 +6067,11 @@ machines:
 661 CLS:COLOR 23,0:GOSUB 43:COLOR 7,0:FOR I=1 TO N:X(I+N,1)=X(I,2):NEXT I:QB=3:NS=2:M=1:N(1)=N:N(2)=N:KN(1)=N:KN(2)=2*N:N=KN(2):GOTO 500
 662 END
 ```
+{% endraw %}
 
 ## ZSCOR.BAS
 
+{% raw %}
 ```bas
 1 '        STANDARD SCORES  ---  ZSCOR.BAS  ---  by  Dr Russell Langley
 2 GOTO 400
@@ -5797,6 +6159,7 @@ machines:
 442 GOSUB 160:GOTO 10
 443 'end
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -14,6 +14,45 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2760.TXT
+
+{% raw %}
+```
+Disk No: 2760
+Disk Title: Thinking Man's Solitaire 2 of 2 (2759)
+PC-SIG Version: S1
+
+Program Title: Thinking Man's Solitaire
+Author Version: 1.00
+Author Registration: $18.00
+Special Requirements: 491K RAM and EGA.
+
+Are you familiar with the standard Solitaire game that builds a stack of
+cards from Ace to King?  It's not so hard, especially if you don't have
+to stick to one suit.  THINKING MAN'S SOLITAIRE presents a new twist:
+the order isn't as simple as Ace, 2, 3.  In fact, you build four
+different stacks, each in a different order.  Have trouble remembering
+what card comes next?  Ask THINKING MAN'S SOLITAIRE to keep the order
+posted on your screen.
+
+The documentation on the disk makes it easy to get started.  Watch the
+colorful deck magically shuffle three times, cut, and stack.  Deal the
+cards one by one, and see each one move to the stack you designate as
+your score mounts.  If you have a mouse, you may use it.  Otherwise, the
+keyboard does just fine.  The hardest part of this entertaining game is
+stopping.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2760
 

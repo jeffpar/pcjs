@@ -53,6 +53,47 @@ machines:
     references.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1352.TXT
+
+{% raw %}
+```
+Disk No: 1352
+Program Title: CROSS ASSEMBLER for the IBM 370 version 4.2 (Disk 3 of 3)
+PC-SIG version: 3.3
+
+PC/370 VIRTUAL MACHINE is a cross assembler that runs on the IBM-PC, AT,
+or XT and lets you compile and run IBM 370 assembly language programs.
+Please note that this is the second disk of a three disk set.  The other
+two disks are #402 and 1352.
+
+Usage:  For beginning through advanced S/370 assembly language
+programmers.
+
+Special Requirements:  None.
+
+How to Start:  Type GO and press (press enter).
+
+Suggested Registration:  $45.00
+
+File Descriptions:
+
+CBL     <DIR> Contains CBL Micro Focus VS COBOL demo program source
+              code along with demo PC/370 assembler subroutine
+              source code.
+UTIL    <DIR> Contains utility program ALC source code.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1352
 

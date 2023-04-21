@@ -66,8 +66,705 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## BIGBMW.TXT
+
+{% raw %}
+```
+00 00 0 000 016	LP MS KEY FOB	& 8 Z	    5.00<R>
+00 00 0 000 150	LP PEN&PENCIL SET	& 8 Z	   49.89<R>
+00 00 0 000 151	NLA	& Z 8	    5.38<R>
+00 00 0 000 152	NLA	& Z 8	   10.77<R>
+00 00 0 000 160	LP-GREY CROSS PEN	& Z 8	   25.50<R>
+00 00 0 000 161	LP-CROSS SELECTIP	& Z 8	   37.50<R>
+00 00 0 000 178	LP SILVER PEN	& Z 8	   49.54<R>
+00 00 0 000 179	LP PEN/PENCIL SET	& Z 8	   15.54<R>
+00 00 0 000 180	LP BALL PEN(BLK)	& Z 8	    5.38<R>
+00 00 0 000 181	LP BALL PEN(WHT)	& Z 8	    5.38<R>
+00 00 0 000 182	LP CLICK-PEN(BLK)	& Z 8	    1.25<R>
+00 00 0 000 183	LP PEN DESK SET	& Z 8	   10.46<R>
+00 00 0 000 184	LP REFILL(BLUE)	& Z 8	    2.15<R>
+00 00 0 000 185	LP REFILL(RED)	& Z 8	    2.15<R>
+00 00 0 000 186	LP TOTE BAG	& Z 8	    4.60<R>
+00 00 0 000 187	LP BEER STEIN	& Z 8	    6.25<R>
+00 00 0 000 188	LP COFFEE MUG	& Z 8	    4.95<R>
+00 00 0 000 189	LP ASHTRAY(BMW)	& Z 8	    3.40<R>
+00 00 0 000 190	LP LIGHTER(CHRM)	& Z 8	   21.60<R>
+00 00 0 000 191	LP LIGHTER(BLK)	& Z 8	   21.60<R>
+00 00 0 000 192	LP LIGHTER(LTHR)	& Z 8	   26.00<R>
+00 00 0 000 193	LP LIGHTER(LTHR)	& Z 8	   26.00<R>
+00 00 0 000 194	LP REFILL(LIGHTER)	& Z 8	    2.05<R>
+00 00 0 000 195	LP MUG-LOWENBRAU	& Z 8	   10.45<R>
+00 00 0 000 196	LP MUG-HOFBRAUHAUS	& Z 8	   10.45<R>
+00 00 0 000 197	LP MUG-SPATENBRAU	& Z 8	   10.45<R>
+00 00 0 000 198	NLA -GOBLET*KALTENBERG*	& Z 8	    9.54<R>
+00 00 0 000 199	NLA -GOBLET*KULMBACHER*	& Z 8	    9.54<R>
+00 00 0 000 200	NLA -GOBLET*BAYERN*	& Z 8	   14.51<R>
+00 00 0 000 201	SHOPPING BAG	& Z 8	    0.30<R>
+00 00 0 000 202	BMW MONEY CLIP	& Z 8	   13.50<R>
+00 00 0 000 203	BMW LETTER OPENER	& Z 8	   17.65<R>
+00 00 0 000 204	LUGGAGE TAG	& Z 8	    9.70<R>
+00 00 0 000 205	KEY TAG SLVR.	& Z 8	    5.20<R>
+00 00 0 000 206	KEY TAG (BMW)	& Z 8	    6.00<R>
+00 00 0 000 207	PULL-APART KEY RING	& Z 8	   12.75<R>
+00 00 0 000 208	SLIM PULL-APART KEY RING	& Z 8	   11.60<R>
+00 00 0 000 210	BMW TIE TACK	& Z 8	    5.15<R>
+00 00 0 000 211	BMW LAPEL PIN	& Z 8	    5.15<R>
+00 00 0 000 212	BMW STICK PIN	& Z 8	    5.15<R>
+00 00 0 000 213	LAPEL PIN(318I)	& Z 8	    5.45<R>
+00 00 0 000 214	LAPEL PIN(325E)	& Z 8	    5.45<R>
+00 00 0 000 215	LAPEL PIN(524TD)	& Z 8	    5.45<R>
+00 00 0 000 216	LAPEL PIN(528E)	& Z 8	    5.45<R>
+00 00 0 000 217	LAPEL PIN(535I)	& Z 8	    5.45<R>
+00 00 0 000 218	LAPEL PIN(635CSI)	& Z 8	    5.45<R>
+00 00 0 000 219	LAPEL PIN(735I)	& Z 8	    5.45<R>
+00 00 0 000 718	LP KN-SHIRT MWHS	$ Z 8	   19.00<R>
+00 00 0 000 719	LP KN-SHIRT MWHM	$ Z 8	   19.00<R>
+00 00 0 000 720	LP KN-SHIRT MWHL	$ Z 8	   19.00<R>
+00 00 0 000 721	LP KN-SHIRT MWHXL	$ Z 8	   19.00<R>
+00 00 0 000 722	LP KN-SHIRT MBLS	$ Z 8	   19.00<R>
+00 00 0 000 723	LP KN-SHIRT MBLM	$ Z 8	   19.00<R>
+00 00 0 000 724	LP KN-SHIRT MBLL	$ Z 8	   19.00<R>
+00 00 0 000 725	LP KN-SHIRT MBLXL	$ Z 8	   19.00<R>
+00 00 0 000 728	BMW VISOR	$ Z 8	   10.45<R>
+00 00 0 000 729	T-SHIRT W/N S	$ Z 8	    6.10<R>
+00 00 0 000 730	T-SHIRT W/N M	$ Z 8	    6.10<R>
+00 00 0 000 731	T-SHIRT W/N L	$ Z 8	    6.10<R>
+00 00 0 000 732	T-SHIRT W/N XL	$ Z 8	    6.10<R>
+00 00 0 000 733	YOUTH T-SHIRTS	$ Z 8	    4.75<R>
+00 00 0 000 734	YOUTH T-SHIRT M	$ Z 8	    4.75<R>
+00 00 0 000 735	YOUTH T-SHIRT L	$ Z 8	    4.75<R>
+00 00 0 000 736	T-SHIRT W/B S	$ Z 8	    6.10<R>
+00 00 0 000 737	NLA -T-SHIRT W/B M	$ Z 8	    6.10<R>
+00 00 0 000 738	NLA -T-SHIRT W/B L	$ Z 8	    6.10<R>
+00 00 0 000 739	NLA -T-SHIRT W/B XL	$ Z 8	    6.10<R>
+00 00 0 000 740	T-SHIRT BLK.S	$ Z 8	    6.90<R>
+00 00 0 000 741	T-SHIRT BLK.M	$ Z 8	    6.90<R>
+00 00 0 000 742	NLA -T-SHIRT BLK.L	$ Z 8	    6.90<R>
+00 00 0 000 743	NLA -T-SHIRT BLK.XL	$ Z 8	    6.90<R>
+00 00 0 000 744	T-SHIRT W/N S	$ Z 8	    4.95<R>
+00 00 0 000 745	T-SHIRT W/N M	$ Z 8	    4.95<R>
+00 00 0 000 746	T-SHIRT W/N L	$ Z 8	    4.95<R>
+00 00 0 000 800	TENT CARD(50)	& Z	   16.15<R>
+00 00 0 000 850	ATTACHE CASE	& Z 8	  599.23<R>
+00 00 0 000 851	KEY FOB	& Z 8	   11.46<R>
+00 00 0 000 852	DATEBOOK	& Z 8	  142.69<R>
+00 00 0 000 853	POCKET SECRETARY	& Z 8	   56.54<R>
+00 00 0 000 854	CHECKBOOK COVER	& Z 8	   39.92<R>
+00 00 0 000 855	ADDRESS BOOK	& Z 8	   85.62<R>
+00 00 0 000 856	LUGGAGE TAG	& Z 8	    4.77<R>
+00 00 0 000 857	MEMO FOLDER	& Z 8	  114.15<R>
+00 00 0 000 860	T/NECK SHIRT-SMALL	$ Z 8	   34.60<R>
+00 00 0 000 861	T/NECK SHIRT-MED.	$ Z 8	   34.60<R>
+00 00 0 000 862	T/NECK SHIRT-LARGE	$ Z 8	   34.60<R>
+00 00 0 000 863	T/NECK SHIRT- XL	$ Z 8	   34.60<R>
+00 00 0 000 864	POLO SHIRT WHITE-SMALL	$ Z 8	   42.00<R>
+00 00 0 000 865	POLO SHIRT WHITE-MED.	$ Z 8	   42.00<R>
+00 00 0 000 866	POLO SHIRT WHITE-LARGE	$ Z 8	   42.00<R>
+00 00 0 000 867	POLO SHIRT WHITE-XL	$ Z 8	   42.00<R>
+00 00 0 000 868	POLO SHIRT BLACK-SMALL	$ Z 8	   42.00<R>
+00 00 0 000 869	POLO SHIRT BLACK-MED.	$ Z 8	   42.00<R>
+00 00 0 000 870	POLO SHIRT BLACK-LARGE	$ Z 8	   42.00<R>
+00 00 0 000 871	POLO SHIRT BLACK-XL	$ Z 8	   42.00<R>
+00 00 0 000 872	SPORT HAT-WHITE	$ Z 8	   10.60<R>
+00 00 0 000 873	SPORT HAT-BLACK	$ Z 8	   10.60<R>
+00 00 0 000 874	SPORT VISOR-WHITE	$ Z 8	    8.10<R>
+00 00 0 000 875	SPORT T-SHIRT--SM.	$ Z 8	    7.30<R>
+00 00 0 000 876	SPORT T-SHIRT--MED.	$ Z 8	    7.30<R>
+00 00 0 000 877	SPORT T-SHIRT--LG.	$ Z 8	    7.30<R>
+00 00 0 000 878	SPORT T-SHIRT--XL.	$ Z 8	    7.30<R>
+00 00 0 000 879	YOUTH SHIRT-SM.	$ Z 8	    6.50<R>
+00 00 0 000 880	YOUTH SHIRT-MED.	$ Z 8	    6.50<R>
+00 00 0 000 881	YOUTH SHIRT-LARGE	$ Z 8	    6.50<R>
+00 00 0 000 900	PRODUCT TAG (50)	& Z	   18.46<R>
+00 00 0 000 916	LP-KEY FOB BLK.	& Z	    5.00<R>
+00 00 0 000 990	EXEC. TRAVEL LIBRARY	& Z 8	   33.38<R>
+01 00 9 760 750	OBS NLA FILM 11/81	H X	    5.11<R>
+01 00 9 796 021	01099099161	V	   40.12<R>
+01 00 9 796 022	NLA -BELTKAT R51/2-R68	V	   18.58<R>
+01 00 9 796 023	NLA -TABLE	V	   13.77<R>
+01 00 9 796 538	01019796538	VV	    9.23<R>
+01 00 9 796 758	01019796758	VV	    9.23<R>
+01 01 9 750 451	NLA -BROCHURE	H X	    0.00<R>
+01 01 9 766 341	NLA -NLA	XYZ	    0.00<R>
+01 01 9 796 311	LGR-R80G/S R80ST FILM	Z	    9.23<R>
+01 01 9 796 318	SML.R80GS-R80ST FILM	Z	    9.23<R>
+01 01 9 796 341	LGR-R45 R65LS FILM	Y	    9.23<R>
+01 01 9 796 351	SML.R45-R65LS FILM	Y	    9.23<R>
+01 01 9 796 371	LGR-R50/5-R90S FILM	W	    9.23<R>
+01 01 9 796 378	R50/5-R90S FILM	W	    9.23<R>
+01 01 9 796 381	01019796521	X	    9.23<R>
+01 01 9 796 388	01019796528	X	    9.23<R>
+01 01 9 796 441	NLA -BATTERY DISPLAY	WXYZ	   49.83<R>
+01 01 9 796 451	NLA -WINDOW DISPLAY	WXYZ	   31.37<R>
+01 01 9 796 491	LGR-R60/7-R80RT	XZ	    9.23<R>
+01 01 9 796 498	SML.R60/7RSORT FILM	XZ	    9.23<R>
+01 01 9 796 521	LGR-R100/7-R100RT	X	    9.23<R>
+01 01 9 796 528	SML.R100/7-R100 FILM	X	    9.23<R>
+01 01 9 796 531	K100-RS PT-FILM LGR.	VV	    9.23<R>
+01 01 9 796 538	K-100 PARTS FILM	VV	    9.23<R>
+01 01 9 796 611	PARTS CATALOG	Z	   45.00<R>
+01 01 9 796 620	NLA -PTS.CTLG.R60/R80	X	    0.00<R>
+01 01 9 796 621	PARTS CATALOG	X	   45.00<R>
+01 01 9 796 671	R80-R80RT/85 LGR.	Z	    9.23<R>
+01 01 9 796 678	R80-R80RT/85	Z	    9.23<R>
+01 01 9 796 751	K75C-S M.FISCHE LRG.	VV	    9.23<R>
+01 01 9 796 758	K-75 MICROFISCHE	VV	    9.23<R>
+01 09 9 099 161	PARTS CATALOG	V	   37.11<R>
+01 09 9 099 480	BINDER             *	FX	    8.65<R>
+01 09 9 760 251	01009796370	H X	    0.00<R>
+01 09 9 760 255	NLA -MICRO FISCHE	WX	    0.00<R>
+01 09 9 760 261	01099796024	WX	   35.14<R>
+01 09 9 760 341	NLA -NLA	WX	    0.00<R>
+01 09 9 796 024	01099796332	WX	   40.12<R>
+01 09 9 796 026	NLA -MICRO FILM R65	Y	   14.68<R>
+01 09 9 796 028	01009796340	X	    0.00<R>
+01 09 9 796 068	LGR.ACCES.FILM	WXYZ	    0.00<R>
+01 09 9 796 069	NLA -POCKET ACCESS BOOK	WXYZ	    2.75<R>
+01 09 9 796 319	LGR-NO. INDEX FILM	WXYZ	    0.00<R>
+01 09 9 796 320	SML.NO INDEX FILM	WXYZ	    0.00<R>
+01 09 9 796 330	PARTS CATALOG	Y	   37.11<R>
+01 09 9 796 332	01019796621	WX	   33.26<R>
+01 09 9 796 389	SML.ACCESSORIES	VWXYZ	    0.00<R>
+01 09 9 798 307	OBS-NLA -MICRO FILM SERVI	WXYZ	    8.65<R>
+01 09 9 798 407	NLA -FILM 1	WXYZ	    0.00<R>
+01 21 9 796 561	DISPLAY CATALOG	WXYZ	    0.00<R>
+01 27 9 796 367	NLA -HELMET PAMPHLET	Z	    0.00<R>
+01 29 9 796 019	NLA -PARTS-SERVICE FILE	X	    0.00<R>
+01 29 9 796 239	NLA -SML. ACCS. BOOK	WXYZ	    3.46<R>
+01 29 9 796 785	TEMPLATE	VV	    0.47<R>
+01 30 9 099 810	INDEX	AX	    0.00<R>
+01 30 9 760 500	NLA -N/A	H X	    0.00<R>
+01 31 9 099 323	NLA -PUB BOARD	G X	    7.35<R>
+01 38 9 760 161	81249404002	ACBFGHI X	 1244.65<R>
+01 38 9 760 188	81249404016	G X	   10.65<R>
+01 39 9 099 250	NLA -PTS/SERV	G X	    4.48<R>
+01 39 9 099 254	NLA -PARTS BINDER	WX	    0.00<R>
+01 39 9 099 275	01399099840	A X	    0.00<R>
+01 39 9 099 840	01309099810	AX	    0.00<R>
+01 39 9 796 079	NLA -FILE	XYZ	   13.91<R>
+01 40 9 099 100	RIDERS MANUAL /5	W	   15.00<R>
+01 40 9 099 150	REPAIR MANUAL	W	   45.00<R>
+01 40 9 760 450	RIDERS MANUAL /6	W	   15.00<R>
+01 40 9 760 460	REPAIR MANUAL	W	   45.00<R>
+01 41 9 099 116	NLA -RIDER'S MANUAL	W	    8.48<R>
+01 41 9 760 457	NLA -RIDER'S MANUAL	W	    8.48<R>
+01 41 9 760 467	NLA -RIDER'S MANUAL	X	    8.48<R>
+01 41 9 798 011	NLA -HAND BOOK /7 1978	X	    4.26<R>
+01 41 9 798 017	RIDERS MANUAL	X	    8.48<R>
+01 41 9 798 031	HAND BOOK R65 1979	Y	    4.26<R>
+01 41 9 798 037	RIDER'S MANUAL	Y	    8.48<R>
+01 41 9 798 047	OBS RIDER'S MANUAL	X	    8.48<R>
+01 41 9 798 048	OBS RIDER'S MANUAL	X	    8.48<R>
+01 41 9 798 098	RIDER'S MANUAL	Y	    8.48<R>
+01 41 9 798 099	NLA -RIDER'S MANUAL	XZ	    8.48<R>
+01 41 9 798 261	NLA -HANDBOOK /7 19	X	    4.00<R>
+01 41 9 798 321	01419798447	VV	    6.12<R>
+01 41 9 798 447	01479798447	VV	    6.12<R>
+01 43 9 798 443	RIDER MANUAL	VV	    8.48<R>
+01 47 9 798 257	RIDER'S MANUAL	Y	    8.48<R>
+01 47 9 798 258	SUPPLEMENT	Z	    8.00<R>
+01 47 9 798 267	RIDER'S MANUAL	X	    8.48<R>
+01 47 9 798 277	RIDER'S MANUAL	XZ	    8.48<R>
+01 47 9 798 317	RIDER'S MANUAL	Y	    8.48<R>
+01 47 9 798 447	RIDER'S MANUAL	VV	    8.48<R>
+01 47 9 798 491	RIDER'S MANUAL	Z	    8.48<R>
+01 47 9 798 547	K-75 RIDERS MANUAL	VV	    8.48<R>
+01 48 9 798 138	RIDER'S MANUAL	Z	    8.48<R>
+01 51 9 099 021	NLA -SHOP MANUAL	W	   48.85<R>
+01 51 9 099 022	NLA-OBS-NLA -SUPPLEMENT #	W	    0.00<R>
+01 51 9 099 051	NLA -SHOP MANUAL /5	W	   19.57<R>
+01 51 9 599 041	01519798461	X	   58.63<R>
+01 51 9 798 052	NLA -SUPPLEMENT #1	X	    0.00<R>
+01 51 9 798 055	01559798465	X	   47.71<R>
+01 51 9 798 065	SUPPLEMENT #2	X	    0.00<R>
+01 51 9 798 092	01579798467	Y	   37.51<R>
+01 51 9 798 094	NLA -SUPPLEMENT #3	Y	    0.00<R>
+01 51 9 798 461	01519798055	X	   47.71<R>
+01 55 9 798 115	NLA -SUPPLEMENT R65	Y	    0.00<R>
+01 55 9 798 125	NLA -SHOP MAN.FILM 80GS	Z	   10.60<R>
+01 55 9 798 465	REPAIR MANUAL	X	   47.71<R>
+01 57 9 798 022	NLA -NLA -SUPPLEMENT #4	X	    0.00<R>
+01 57 9 798 027	SUPPLEMENT#3	Y	    0.00<R>
+01 57 9 798 357	REPAIR MANUAL	Z	   47.71<R>
+01 57 9 798 457	REPAIR MANUAL	VV	   15.91<R>
+01 57 9 798 467	REPAIR MANUAL	Y	   47.71<R>
+01 57 9 798 517	REPAIR MANUAL R80RT	YZ	   15.91<R>
+01 57 9 798 557	K-75 REPAIR MANUAL	VV	   15.91<R>
+01 59 9 099 176	NLA -N.L.A.	V	   32.62<R>
+01 60 9 798 164	NLA-OBS-NLA -FLAT RATE-SU	WXYZ	    0.00<R>
+01 61 9 760 701	NLA -INSPECTION FORMS 50	XYZ	    3.91<R>
+01 61 9 798 061	NLA-OBS-NLA -FLAT RATE 19	X	   29.35<R>
+01 61 9 798 081	OBS-NLA -FLAT RATE BOOK R	Y	   16.23<R>
+01 61 9 798 084	NLA-OBS-NLA -FLAT RATE 19	Y	   29.35<R>
+01 61 9 798 141	NLA -FLAT RATE BOOK	X	   33.94<R>
+01 61 9 798 161	NLA-OBS-NLA -FLAT RATE R8	Z	    8.15<R>
+01 61 9 798 191	NLA -INSP-FORM	WXYZ	    2.05<R>
+01 70 9 796 210	FILM HOLDER	WXYZ	    6.12<R>
+01 71 9 760 477	NLA-OBS-TECH.DATA + SERVI	X	    7.83<R>
+01 71 9 798 001	NLA-OBS-NLA -FLAT RATE BO	Z	    8.65<R>
+01 71 9 798 071	NLA-OBS-NLA -TECH DATA &	X	    7.83<R>
+01 71 9 798 077	NLA-OBS-TECH DATA & SERVI	X	    7.83<R>
+01 71 9 798 078	NLA-OBS-TECH DATA & SERVI	X	    7.83<R>
+01 80 9 750 010	NLA	G X	    0.58<R>
+01 80 9 750 012	NLA	G X	    0.98<R>
+01 80 9 772 211	88888999785	G X	    0.00<R>
+01 80 9 772 214	DECAL 4CM-NLA	G X	    0.00<R>
+01 80 9 772 220	DECAL HELMET-NLA	G X	    0.00<R>
+01 88 9 099 670	NLA -TAG FOR WARRANTY PAR	VWXYZ	    0.00<R>
+01 89 9 099 668	OBS-IBM PENCIL	G X	   10.52<R>
+01 89 9 099 669	NLA -BOX OF REFILLS FOR P	VWXYZ	    9.98<R>
+01 89 9 798 029	NLA -WARRANTY CLAIMS	VWXYZ	    0.00<R>
+01 90 9 099 150	NLA -DLR LIST EUROPE	VWXYZ	    2.43<R>
+01 90 9 099 190	DEALER LIST EURO	VWXYZ	    2.60<R>
+01 90 9 798 470	CATALOG	WXYZ	   49.20<R>
+01 90 9 798 473	86 WIRING FILE	WXYZ VV	    0.00<R>
+01 91 9 099 094	NLA -ELECTRIC DIAGRAM	X	    2.38<R>
+01 91 9 099 097	NLA -ELECTRIC DIAGRAM	X	    2.38<R>
+01 99 9 099 187	S.I.DIVIDERS WHT.	VWXYZ	    1.63<R>
+01 99 9 099 188	S.I.DIVIDERS YEL.	VWXYZ	    3.26<R>
+01 99 9 099 191	01999099153	G X	    1.72<R>
+01 99 9 099 199	S.I.BINDER	VWXYZ	    8.15<R>
+07 11 0 014 100	NLA -PISTON RING STD.	V	    2.45<R>
+07 11 0 014 112	OBS-NLA -OIL RING STD.	V	    2.94<R>
+07 11 0 014 116	NLA -OIL RING + 1MM	V	    2.62<R>
+07 11 0 014 123	OBS-OIL RING + 05	V	    3.58<R>
+07 11 0 014 124	OBS-OIL RING + 1MM	V	    3.58<R>
+07 11 0 014 127	OBS-PISTON RING STD.	V	    2.77<R>
+07 11 0 014 128	OBS-PISTON RING + 05	V	    2.77<R>
+07 11 0 014 538	NLA-OBS-NLA -PISTON RING	V	    3.91<R>
+07 11 0 014 539	OBS-NLA -PISTON RING + 1M	V	    3.91<R>
+07 11 0 014 543	OBS-NLA -OIL RING STD.	V	    3.58<R>
+07 11 0 014 544	NLA -OIL RING 05	V	    3.18<R>
+07 11 0 014 545	NLA -OIL RING + 1MM	V	    3.18<R>
+07 11 0 014 577	OBS-PISTON RING STD.	V	    2.20<R>
+07 11 0 014 578	NLA -PISTON RING + 05	V	    2.20<R>
+07 11 0 014 579	NLA -PISTON RING 1MM	V	    2.20<R>
+07 11 9 900 105	OBS-SCREW	V	    0.17<R>
+07 11 9 900 147	OBS-SCREW 8X10	WXYZ	    0.49<R>
+07 11 9 900 719	SCREW 5X18	WX	    0.17<R>
+07 11 9 900 744	NLA -SCREW 6X25	WX	    0.25<R>
+07 11 9 900 810	07119900811	J X	    0.18<R>
+07 11 9 900 820	NLA -SCREW 6 X 20	WX	    0.42<R>
+07 11 9 900 869	SCREW 8X20	CIX	    0.46<R>
+07 11 9 900 873	OBS-BOLT	Y	    0.25<R>
+07 11 9 900 875	BOLT 10 X 30	WXYZ	    0.74<R>
+07 11 9 900 878	BOLT M8X25	VV	    0.23<R>
+07 11 9 901 310	NLA -SCREW 4X8	V	    0.08<R>
+07 11 9 901 322	NLA -NLA	V	    0.05<R>
+07 11 9 901 428	NLA-OBS-NLA -SCREW  6 X 2	WXY	    0.32<R>
+07 11 9 901 682	SCREW 4 X 8	H WX	    0.18<R>
+07 11 9 901 692	07119928420	W	    0.25<R>
+07 11 9 901 720	07119928439	GWXH	    0.18<R>
+07 11 9 901 763	OBS-SCREW 5 X 12	W	    0.17<R>
+07 11 9 901 797	NLA -NLA	V	    0.00<R>
+07 11 9 901 849	NLA -SCREW 6 X 20	WX	    0.17<R>
+07 11 9 902 137	OBS-SCREW 3.5 X 13	X	    0.17<R>
+07 11 9 902 321	07119902403	W	    0.17<R>
+07 11 9 902 403	METAL SCREW	HI X	    0.18<R>
+07 11 9 902 429	B3.5X16 SCREW	WXY	    0.17<R>
+07 11 9 902 475	METAL SCREW	BHFJMVV	    0.18<R>
+07 11 9 902 512	OBS-NLA -BOLT	WXY	    0.09<R>
+07 11 9 902 513	BZ4.2X19 SCREW	WXY	    0.17<R>
+07 11 9 902 514	BZ4.2X16 SCREW	XY	    0.17<R>
+07 11 9 902 527	BOLT B4.2X13	VV	    0.17<R>
+07 11 9 902 638	BOLT M6X12	VV	    0.26<R>
+07 11 9 902 654	BOLT M8X35	VV	    0.42<R>
+07 11 9 902 656	07119902654	VV	    0.32<R>
+07 11 9 903 196	NLA -STUD 6X30         LA	G X	    1.60<R>
+07 11 9 903 208	STUD 6X12	V	    1.11<R>
+07 11 9 903 209	07119903208	V	    1.55<R>
+07 11 9 903 300	NLA -STUD  8 X 12	WXY	    0.05<R>
+07 11 9 903 303	NLA -STUD 8 X 15	V	    0.89<R>
+07 11 9 903 306	OBS-STUD 8X18	W	    0.91<R>
+07 11 9 903 339	07129903338	G X	    1.11<R>
+07 11 9 903 436	OBS-OBS-NLA-STD	G X	    1.26<R>
+07 11 9 903 503	NLA-OBS-NLA -STUD 8 X 1 X	V	    0.89<R>
+07 11 9 903 530	NLA -STUD 8 X 1 X 28	V	    1.46<R>
+07 11 9 903 540	OBS-OBS-SCREW	V	    1.14<R>
+07 11 9 905 325	WRENCH	VV	    3.69<R>
+07 11 9 905 437	STUD	Z	    0.38<R>
+07 11 9 905 660	SCREW	VW	    0.49<R>
+07 11 9 906 008	TOOL	WX	    1.46<R>
+07 11 9 906 014	OBS-ALLEN WRENCH 4MM	VWXY	    0.98<R>
+07 11 9 906 020	07119906026	G X	    1.26<R>
+07 11 9 906 026	NLA -ALLEN WRENCH M6	B X	    1.26<R>
+07 11 9 906 032	NLA -ALLEN WRENCH 78	B X	    1.69<R>
+07 11 9 906 327	46631241080	YXZ	    0.17<R>
+07 11 9 906 328	O-RING	WXYZ	    0.17<R>
+07 11 9 906 400	OBS-BOLT	Z	    0.17<R>
+07 11 9 906 412	SCREW 5 X 10	WX	    0.17<R>
+07 11 9 906 415	OBS-OBS-SCREW	B X HIJM	    0.18<R>
+07 11 9 906 416	M5X25 SCREW	VV	    0.17<R>
+07 11 9 906 431	SCREW 5X12	WXY	    0.49<R>
+07 11 9 906 432	SCREW	FHIJMX	    0.18<R>
+07 11 9 906 433	SCREW 5 X 16	WXY	    0.49<R>
+07 11 9 906 434	OBS-SCREW 4 X 12	WXYZ	    0.17<R>
+07 11 9 906 435	BOLT	X	    0.17<R>
+07 11 9 906 702	OBS-BOLT	X	    0.17<R>
+07 11 9 906 714	BOLT BZ3.5X16	VV	    0.17<R>
+07 11 9 906 734	OBS-SCREW	JMN Y	    0.18<R>
+07 11 9 906 737	METAL SCREW B3.9X13	HIJ VV	    0.18<R>
+07 11 9 906 747	SCREW 4.2 X 16	X	    0.17<R>
+07 11 9 906 754	SCREW	W	    0.25<R>
+07 11 9 906 758	NLA-OBS-OBS-METAL SCREW	H X	    0.05<R>
+07 11 9 906 762	SCREW	HMXFIJN	    0.18<R>
+07 11 9 906 763	BOLT	J X	    0.18<R>
+07 11 9 906 772	SCREW 4.2 X 19	Y	    0.17<R>
+07 11 9 906 812	SCREW 4X10         *	F Z HMN	    0.18<R>
+07 11 9 906 822	HEAD SCREW	HFIJMYZVV	    0.18<R>
+07 11 9 906 832	SCREW	Z	    0.17<R>
+07 11 9 907 058	OBS-OBS-NLA -SCREW 4 X 8	WX	    0.25<R>
+07 11 9 907 101	NLA -SCREW	VW	    0.08<R>
+07 11 9 907 430	SCREW 6X12	WYZ VV	    0.65<R>
+07 11 9 907 450	SCREW WITH NOSE	VW	    0.82<R>
+07 11 9 907 581	NLA -HEAD SCREW	VV	    0.17<R>
+07 11 9 907 582	5 X 12 SCREW	VV	    0.17<R>
+07 11 9 907 589	BOLT	VV	    0.17<R>
+07 11 9 907 590	07119907589	VV	    0.17<R>
+07 11 9 907 591	AM4X30 SCREW	VV	    0.17<R>
+07 11 9 907 592	BOLT AM4X10	P VV	    0.15<R>
+07 11 9 907 593	BOLT AM4X20	VV	    0.17<R>
+07 11 9 907 594	BOLT AM5X10	VV	    0.17<R>
+07 11 9 907 595	BOLT AM5X12	VV	    0.17<R>
+07 11 9 907 602	SCREW	X IMN	    0.18<R>
+07 11 9 907 603	SCREW 3 X 8	XYZ	    0.17<R>
+07 11 9 907 604	AM3X10 SCREW	H X JMN	    0.18<R>
+07 11 9 907 614	SCREW 4X10	Z	    0.17<R>
+07 11 9 907 616	AM4X10 SCREW	B X	    0.18<R>
+07 11 9 907 623	SCREW	AGXHN	    0.18<R>
+07 11 9 907 624	5X10 SCREW	X	    0.15<R>
+07 11 9 907 626	07119907697	G X	    0.18<R>
+07 11 9 907 631	OBS-SCREW 5X20	WX	    0.25<R>
+07 11 9 907 639	L S SCREW	AGFIJXVV	    0.18<R>
+07 11 9 907 643	SCREW 3.5 X 25	WXYZ	    0.29<R>
+07 11 9 907 646	OBS-SCREW 6 X 10	WXY	    0.17<R>
+07 11 9 907 657	SCREW AM4X6	MH VV	    0.18<R>
+07 11 9 907 687	NLA -SCREW 4 X 6	WXYZ	    0.17<R>
+07 11 9 907 688	SCREW	AG22XHFIJM	    0.18<R>
+07 11 9 907 701	B2.9X6.5 SCREW	F X HIJ	    0.18<R>
+07 11 9 907 712	OBS-OBS-NLA	B X	    0.18<R>
+07 11 9 907 733	SCREW B4,2X13	AGHXFIJM	    0.18<R>
+07 11 9 907 737	OBS-BOLT	Y	    0.17<R>
+07 11 9 907 741	07119907794	AB X	    0.18<R>
+07 11 9 907 744	07119907790	B X	    0.03<R>
+07 11 9 907 773	SCREW B3,5X13	I X J	    0.18<R>
+07 11 9 907 774	SCREW	B X I	    0.18<R>
+07 11 9 907 794	OBS-OBS-SCREW	BXHFIJMN	    0.18<R>
+07 11 9 907 801	BOLT BZ4.2X19	NIM VV	    0.17<R>
+07 11 9 907 804	SCREW	VV	    0.23<R>
+07 11 9 907 808	BOLT 3.5X13	Z	    0.17<R>
+07 11 9 907 809	4.2X19 SCREW	VV	    0.17<R>
+07 11 9 907 812	SCREW	VV	    0.17<R>
+07 11 9 907 909	3.5X13 SCREW	P VV	    0.15<R>
+07 11 9 907 910	SCREW 3.9X9.5	Z	    0.17<R>
+07 11 9 907 911	B3.5X13 SCREW	Y	    0.17<R>
+07 11 9 907 913	SCREW	FJMN VV	    0.18<R>
+07 11 9 907 941	OBS-SCREW 4.2X9.5	XY	    0.17<R>
+07 11 9 907 943	SCREW	JN ZVV	    0.18<R>
+07 11 9 907 944	BZ4.2X13 SCREW	WX	    0.17<R>
+07 11 9 907 945	SCREW	CM X FIN	    0.18<R>
+07 11 9 907 946	OBS-SCREW	IXJ	    0.18<R>
+07 11 9 907 947	SCREW 4.2X 1.5X2.5	JN VV	    0.18<R>
+07 11 9 907 949	SCREW	NMIFHJZ	    0.18<R>
+07 11 9 907 951	BOLT BZ.5X13	VV	    0.17<R>
+07 11 9 907 957	SCREW	MIJN VV	    0.18<R>
+07 11 9 907 975	4.8X16 SCREW	VV	    0.17<R>
+07 11 9 907 984	4.2X16 SCREW	VV	    0.25<R>
+07 11 9 908 255	NLA -STUD	A  G X	    1.42<R>
+07 11 9 908 308	33111233225	WX	    0.65<R>
+07 11 9 908 327	SCREW	B X	    0.60<R>
+07 11 9 908 328	07129908137	B X	    1.11<R>
+07 11 9 908 336	07129908145	V	    0.00<R>
+07 11 9 908 370	33111233226	WX	    1.06<R>
+07 11 9 908 378	07129908174	WX	    1.38<R>
+07 11 9 908 385	07119903436	W	    1.38<R>
+07 11 9 908 391	STUD 10 X 35	WXY	    1.55<R>
+07 11 9 910 405	NLA	A  G X	    0.22<R>
+07 11 9 910 407	SCREW	  I X	    0.28<R>
+07 11 9 910 409	OBS-BOLT 6X18	W	    0.25<R>
+07 11 9 910 417	BOLT M5X16	VV	    0.17<R>
+07 11 9 910 418	BOLT M5X30	VV	    0.17<R>
+07 11 9 911 214	07119911218	G X	    0.18<R>
+07 11 9 911 218	SCREW	X HIJMN	    0.18<R>
+07 11 9 911 605	BOLT 8 X 1 X 12	VXY	    0.32<R>
+07 11 9 911 621	BOLT M10X1X22	VV	    0.32<R>
+07 11 9 911 628	07119911631	V	    0.32<R>
+07 11 9 911 631	BOLT 10 X 1 X 20	W	    0.32<R>
+07 11 9 912 192	NLA -BOLT 5 X 30	V	    0.25<R>
+07 11 9 912 199	HEX BOLT	XYZ	    0.17<R>
+07 11 9 912 256	OBS-BOLT 6X25	A X	    0.22<R>
+07 11 9 912 282	OBS-BOLT 6X30-NLA	A   G X	    0.22<R>
+07 11 9 912 303	M6X35 BOLT	IJHFN Y 34	    0.18<R>
+07 11 9 912 312	BOLT 6X40	WX	    0.32<R>
+07 11 9 912 316	NLA -BOLT 6X42	V	    0.25<R>
+07 11 9 912 326	OBS-BOLT 6X45	WXY	    0.32<R>
+07 11 9 912 335	07119912337	G X	    0.32<R>
+07 11 9 912 337	BOLT 6X50	HFIJMNXA	    0.18<R>
+07 11 9 912 357	SCREW	FIJMXB34	    0.28<R>
+07 11 9 912 360	OBS-SCREW	I X M	    0.38<R>
+07 11 9 912 364	SCREW	VV 3 4	    0.75<R>
+07 11 9 912 453	07119919756	X	    0.57<R>
+07 11 9 912 507	BOLT	H X	    0.28<R>
+07 11 9 912 513	OBS-OBS-BOLT 8 X 50	YZ	    0.32<R>
+07 11 9 912 515	07119912517	A X	    0.62<R>
+07 11 9 912 525	BOLT 8X55-NLA	A     G X	    0.51<R>
+07 11 9 912 563	NLA -BOLT M8X85	Z	    0.00<R>
+07 11 9 912 629	07119913868	W	    0.49<R>
+07 11 9 912 646	BOLT 10X50	    G X	    0.60<R>
+07 11 9 912 858	OBS-BOLT 12X60	Y	    0.98<R>
+07 11 9 912 859	OBS-BOLT 12 X 70	Y	    0.78<R>
+07 11 9 913 021	NLA-OBS-NLA -SCREW	VW	    0.17<R>
+07 11 9 913 077	4X8 HEX BOLT	VV	    0.15<R>
+07 11 9 913 082	BOLT	F X I	    0.45<R>
+07 11 9 913 097	OBS-SCREW	X 22 23	    0.34<R>
+07 11 9 913 210	BOLT 5X8          LA	G X	    0.22<R>
+07 11 9 913 211	M5X12 BOLT	X VV	    0.17<R>
+07 11 9 913 212	BOLT	BM X	    0.18<R>
+07 11 9 913 222	BOLT 5X10	G X VV	    0.18<R>
+07 11 9 913 227	07119913231	AGX 32	    0.18<R>
+07 11 9 913 235	NUT	BXFI	    0.18<R>
+07 11 9 913 250	NLA-OBS-NLA -BOLT 5X20	WX	    0.17<R>
+07 11 9 913 252	PD M5X20 HEX NUT	X	    0.17<R>
+07 11 9 913 405	OBS-BOLT 6X6	Y	    0.32<R>
+07 11 9 913 408	BOLT M6X6	VV	    0.32<R>
+07 11 9 913 412	BOLT	VV	    0.31<R>
+07 11 9 913 418	07119913420	BC 24 25 X	    0.18<R>
+07 11 9 913 425	07119913439	A  G X	    0.03<R>
+07 11 9 913 426	7-BOLT SPEC	QXIJMNHF 3	    0.18<R>
+07 11 9 913 430	NLA-OBS-NLA -BOLT 6X10	Y	    0.22<R>
+07 11 9 913 432	BOLT	A X	    0.18<R>
+07 11 9 913 436	M6X20 HEX BOLT	VV	    0.49<R>
+07 11 9 913 441	BOLT 6X12	G X	    0.28<R>
+07 11 9 913 442	BOLT 6X12	IJMNHF3 VV	    0.18<R>
+07 11 9 913 445	OBS-BOLT 6 X 12	V	    0.65<R>
+07 11 9 913 451	M6X14 BOLT	XY	    0.17<R>
+07 11 9 913 464	BOLT 6X16	VXYZ	    0.17<R>
+07 11 9 913 465	M6X16 BOLT	VXYZ	    0.17<R>
+07 11 9 913 466	07119913442	BFIJM X 32	    0.17<R>
+07 11 9 913 470	NLA-BOLT 6X18	G X	    0.18<R>
+07 11 9 913 472	SET SCREW 6X15     *	AGMHFIJNX	    0.18<R>
+07 11 9 913 476	M6X20 HEX BOLT	XYZ	    0.18<R>
+07 11 9 913 477	11131252369	G VV 3 4	    0.03<R>
+07 11 9 913 478	07119913477	B VV 3 4	    0.22<R>
+07 11 9 913 480	BOLT 6X25	AG X JM VV	    0.18<R>
+07 11 9 913 482	OBS-NLA-BOLT	G X	    0.28<R>
+07 11 9 913 483	BOLT 6X25	HFIJMNX2	    0.18<R>
+07 11 9 913 484	BOLT 6X28          *	HFIJMNX3VV	    0.20<R>
+07 11 9 913 499	BOLT 6 X 28	WX HN	    0.28<R>
+07 11 9 913 500	BOLT M6X30	MN/VV	    0.15<R>
+07 11 9 913 502	BOLT M6X28	Z	    0.17<R>
+07 11 9 913 554	BOLT 6X16	A X	    0.18<R>
+07 11 9 913 566	BOLT 6X20	WX	    0.49<R>
+07 11 9 913 567	BOLT 6 X 22	XY VV	    0.25<R>
+07 11 9 913 573	BOLT	XY	    2.57<R>
+07 11 9 913 575	BOLT 6X30	2FHIJMN3VV	    0.18<R>
+07 11 9 913 590	OBS-BOLT 6X25	WX	    0.49<R>
+07 11 9 913 607	OBS BOLT 8X16	Y	    0.32<R>
+07 11 9 913 618	BOLT EURO	X I N VV	    0.18<R>
+07 11 9 913 620	BOLT 8X15	G X	    0.32<R>
+07 11 9 913 624	BOLT 8X16	22HXFI32JN	    0.17<R>
+07 11 9 913 627	BOLT 8X18	GIJMX22HF	    0.18<R>
+07 11 9 913 640	BOLT 8X20	BC X	    0.18<R>
+07 11 9 913 652	BOLT 8X22	FHIJMN22X	    0.28<R>
+07 11 9 913 656	BOLT 8X25	B X	    0.18<R>
+07 11 9 913 662	BOLT 8X30	HFIJMN3X4	    0.18<R>
+07 11 9 913 668	BOLT 8 X 32	V	    0.25<R>
+07 11 9 913 674	BOLT M8X35	A X	    0.28<R>
+07 11 9 913 678	BOLT 8X40	Z	    0.18<R>
+07 11 9 913 831	OBS-BOLT 10X25	VWXY	    0.49<R>
+07 11 9 913 837	BOLT 10X30	HMNIJ22X23	    0.28<R>
+07 11 9 913 839	BOLT 10 X 30	XYZ	    0.49<R>
+07 11 9 913 844	BOLT 10 X 35	WX	    1.38<R>
+07 11 9 913 849	33531232705	WX	    0.89<R>
+07 11 9 913 853	BOLT 10 X 45	WXY	    0.82<R>
+07 11 9 913 855	BOLT 10X45   *	AFHIJXM	    0.46<R>
+07 11 9 913 868	07119913853	WXY	    1.63<R>
+07 11 9 913 880	07119913842	CBFI2X3HJM	    0.18<R>
+07 11 9 913 891	OBS-NLA -BOLT 12 X 25	V	    0.65<R>
+07 11 9 913 912	BOLT M12X45	VV	    0.55<R>
+07 11 9 913 920	BOLT M6X25	VV	    0.42<R>
+07 11 9 913 921	BOLT M6X12	VV	    0.29<R>
+07 11 9 913 922	BOLT M5X10	VV	    0.17<R>
+07 11 9 913 923	BOLT M5X12	VV	    0.17<R>
+07 11 9 913 944	M6X40 SCREW	VV	    0.32<R>
+07 11 9 914 005	NLA-OBS-NLA -BOLT 8X1X15	V	    0.32<R>
+07 11 9 914 062	NLA -BOLT	V	    0.32<R>
+07 11 9 914 093	OBS-BOLT 8 X 1 X 100	V	    0.65<R>
+07 11 9 914 096	NLA -BOLT 8 X 1 X 110	V	    0.82<R>
+07 11 9 914 347	BOLT	V	    1.55<R>
+07 11 9 914 364	BOLT	V	    3.43<R>
+07 11 9 914 626	BOLT M12X1.5X45	H X J	    0.60<R>
+07 11 9 914 665	NLA -BOLT 12 X 1.5 X 82	V	    1.14<R>
+07 11 9 915 014	OBS-OBS-BOLT	FHIJMN VV	    0.18<R>
+07 11 9 915 015	SCREW	FHIJ Z	    0.18<R>
+07 11 9 915 021	HEX SCREW          *	BFHIJMN VV	    0.25<R>
+07 11 9 915 027	OBS-OBS-BOLT	FHIJ VV	    0.28<R>
+07 11 9 915 030	BOLT WITH LOCK WASHER	WXYZ	    0.17<R>
+07 11 9 915 036	BOLT M6X22	VV	    0.25<R>
+07 11 9 915 051	SCREW	I J VV	    0.38<R>
+07 11 9 915 063	BOLT M6X 16	JI VV	    0.62<R>
+07 11 9 915 068	OBS-SCREW	JHFM VV	    0.42<R>
+07 11 9 915 096	NLA -BOLT	BM 3 4 X	    0.00<R>
+07 11 9 915 100	6X14 HEX BOLT	VV	    0.42<R>
+07 11 9 915 104	M5X12 BOLT	VV	    0.17<R>
+07 11 9 915 112	BOLT M5X12	VV	    0.26<R>
+07 11 9 915 124	OBS-BOLT	XY	    0.34<R>
+07 11 9 916 614	NLA -BOLT	X	    0.00<R>
+07 11 9 916 810	07119907941	WX	    0.17<R>
+07 11 9 917 411	OBS-BOLT	V 2	    1.42<R>
+07 11 9 918 407	AM5X10 SELF TAPPING SCREW	Z	    0.17<R>
+07 11 9 918 415	07119915024	F X	    0.32<R>
+07 11 9 918 606	BOLT 5 X 16	Y VV	    1.38<R>
+07 11 9 918 619	M6X25 BOLT	VV	    0.18<R>
+07 11 9 918 655	M8X50 BOLT	VV	    0.32<R>
+07 11 9 918 828	BOLT 8 X 75	Y	    0.82<R>
+07 11 9 918 850	MIDX25 BOLT	Z VV	    0.46<R>
+07 11 9 918 859	BOLT M8X35	VV	    0.32<R>
+07 11 9 919 006	BOLT M8X1	VV	    0.29<R>
+07 11 9 919 007	M8X1 PLUG	VV	    0.23<R>
+07 11 9 919 108	PLUG 10 X 1	NV 32 VV	    0.63<R>
+07 11 9 919 112	07119919108	BCM XVV 32	    0.63<R>
+07 11 9 919 123	07119919124	WXYZ VV	    0.65<R>
+07 11 9 919 124	PLUG	VV	    0.51<R>
+07 11 9 919 209	07119919212	X 3 4	    1.00<R>
+07 11 9 919 212	BOLT M 8X1	X 3 4	    0.65<R>
+07 11 9 919 216	HEX PLUG 710	AG X	    0.45<R>
+07 11 9 919 225	PLUG               *	FHMWXYZ3VV	    2.11<R>
+07 11 9 919 226	07119919225	FXIJM	    0.65<R>
+07 11 9 919 313	SCREW 3 X 8	W	    0.17<R>
+07 11 9 919 358	OBS-SCREW	G X	    0.18<R>
+07 11 9 919 367	CYLINDER HEADSC	BC22XHFIJM	    0.18<R>
+07 11 9 919 373	SCREW	A X	    0.18<R>
+07 11 9 919 381	SCREW 4 X 12	WY	    0.17<R>
+07 11 9 919 386	SCREW 4 X 15	V	    0.17<R>
+07 11 9 919 420	OBS-OBS-NLA-SCREW	G X	    0.28<R>
+07 11 9 919 467	32722072219	VW	    0.32<R>
+07 11 9 919 522	M8X70 SCREW	VV	    0.49<R>
+07 11 9 919 594	BOLT M10X100	VV	    2.43<R>
+07 11 9 919 607	OBS-SCREW 6X12	YZ	    0.25<R>
+07 11 9 919 611	BOLT 5X8	WZ	    0.25<R>
+07 11 9 919 612	BOLT 5 X 10	WYZ VV	    0.17<R>
+07 11 9 919 613	BOLT 5 X 12	J WYZ VV	    0.23<R>
+07 11 9 919 614	BOLT 5 X 16	WYZ	    0.25<R>
+07 11 9 919 615	07119918606	M WXYZVV	    0.17<R>
+07 11 9 919 617	BOLT 5 X 20	WYZ	    0.25<R>
+07 11 9 919 619	BOLT 5 X 30	X	    0.25<R>
+07 11 9 919 621	BOLT 6 X 16	P Y VV	    0.15<R>
+07 11 9 919 623	OBS-SCREW          *	G X	   12.65<R>
+07 11 9 919 630	OBS-HEAD SCREW M6X50	XFM	    0.28<R>
+07 11 9 919 631	BOLT	YZ VV	    0.49<R>
+07 11 9 919 635	BOLT	WYZ	    0.65<R>
+07 11 9 919 637	OBS-BOLT 8 X 12	X	    0.65<R>
+07 11 9 919 638	BOLT 8 X 45	XYZ VV	    0.49<R>
+07 11 9 919 640	BOLT 8 X 15	WY	    0.32<R>
+07 11 9 919 643	SCREW	H3 4 23 VV	    0.43<R>
+07 11 9 919 646	BOLT	VV	    0.22<R>
+07 11 9 919 647	BOLT	Z	    0.25<R>
+07 11 9 919 648	SCREW 8X40	X 24 25 VV	    0.94<R>
+07 11 9 919 649	BOLT 8 X 50	W	    0.34<R>
+07 11 9 919 651	BOLT 8 X 55	W	    0.82<R>
+07 11 9 919 653	OBS-BOLT	WYZ	    0.82<R>
+07 11 9 919 656	BOLT 8 X 80	WYZ	    0.82<R>
+07 11 9 919 658	BOLT	WXYZ	    0.82<R>
+07 11 9 919 662	BOLTM10X12	H2XMN VV	    0.35<R>
+07 11 9 919 670	07119919672	XY	    0.00<R>
+07 11 9 919 672	BOLT 10 X 45	XZ VV	    1.14<R>
+07 11 9 919 680	BOLT M10X40	VV	    0.29
+
+```
+{% endraw %}
+
+## FILES978.TXT
+
+{% raw %}
+```
+Disk No:  978
+Program Title:  MMAKE, FIXER, EGABLANK, & PLOT
+PC-SIG version: 1.2
+
+MMAKE allows programmers to automate the process of compiling and
+linking a program that is contained in several (or numerous) source
+files.  It can be used with any programming language and with any
+compiler that can be run from the MS-DOS command line.  MMAKE can
+speed-up program development enormously, both by making recompilation of
+a program go much faster, and by preventing errors when a changed file
+is not recompiled.  MMAKE is based on the UNIX make utility.
+
+FIXER lets you edit the extended ASCII character set.  The program has a
+bar-menu on the top of the screen and a full screen editor for your
+ASCII character set.  On-line help is also available most of the time
+and is in a pop-up window.
+
+Along with this ASCII full-screen editor, you have two other modules.
+The first one is called BREAKER and it "breaks" a file and makes it
+smaller.  BREAKER can also reverse the process by putting two files
+together.  The second file is called STRIPPER.  It reads an input text
+file and produces an output file by replacing any control character
+visible (other choices are also possible).
+
+PLOT provides a quick and easy-to-use set of tools for technical
+plotting.  It handles rectilinear, polar, and vector plotting, and after
+plotting your data lets you review a tabulation of all plotted points.
+PLOT also graphs two simultaneous equations.  On-line help is included
+for each plotting program, and the graphs are automatically scaled so
+all your equations are always completely displayed.  The graphs can be
+displayed on the screen and/or printed on your printer via DOS
+GRAPHICS.COM.
+
+Finally there is EGABLANK, which as the name suggests, blanks your EGA
+screen after two minutes of inactivity.  Pressing any key will allow you
+to see the text on your screen again.
+
+Usage:  Programmer's Utility.
+
+Special Requirements:  EGABLANK requires an EGA card.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $20.00 for MMAKE, $20.00 for FIXER and $35.00
+for PLOT.
+
+File Descriptions:
+
+DESCRIPT      Author's description of the program.
+MMAKE    DOC  Documentation file.
+MMAKE    EXE  Main program file.
+!READ    ME   Information on how to start FIXER and user's conditions.
+AR-REORD DBF  Data base file.
+ASCEDIT  @@@  ASCII edit working file.
+BIGBMW   TXT  Data file.
+BREAKER  EXE  The BREAKER main program.
+BUDG     PRN  Data file.
+FIXER    EXE  The FIXER main program.
+HELP     ASC  The help file for FIXER.EXE.
+SPECIAL  DOC  Special ASCII characters.
+STRIPPER EXE  The STRIPPER main program.
+TESTMAIL DBF  Data base file.
+EGABLANK COM  Main program
+HLP3     BAS  Help file.
+README   DOC  Documentation.
+IPLOT    BAS  Program for plotting y=f(x) equations.
+PLIC     BAS  License statement.
+PLOG     BAS  Opening screen files.
+PLOT     BAT  Batch file for start-up.
+PLOTM    BAS  Plot menu.
+PPLOT    BAS  Program for polar plotting.
+SPLOT    BAS  Program for plotting two simultaneous equations.
+VPLOT    BAS  Program for vector plotting.
+IQBUILD  BAS  Program for testing your IQ.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
 ## HLP3.BAS
 
+{% raw %}
 ```bas
 100 'HLP3 - HELP FILE FOR SHAREWARE VERSION OF 'PLOT'.  05/08/87
 110 'COPYRIGHT 1985,1986,1987, Prowess, Inc.
@@ -259,9 +956,11 @@ machines:
 1970 CLS:CHAIN "PLIC
 1980 END
 ```
+{% endraw %}
 
 ## IPLOT.BAS
 
+{% raw %}
 ```bas
 100 'IPLOT - SHAREWARE F(X) PLOT WITH INTEGRATION
 110 'COPYRIGHT 1985,1986,1987 Prowess, Inc.
@@ -520,9 +1219,11 @@ machines:
 2640 LOCATE 21,25:K$=INKEY$:IF K$="" THEN 2640
 2650 GOSUB 530:GOTO 330
 ```
+{% endraw %}
 
 ## IQBUILD.BAS
 
+{% raw %}
 ```bas
 10 REM ======================================================================
 20 REM ============================= IQ Builder =============================
@@ -573,9 +1274,686 @@ machines:
 490 REM Display highlighted selection arrow at Y,X.                       ===
 500 REM ======================                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 ```
+{% endraw %}
+
+## MMAKE.DOC
+
+{% raw %}
+```
+ 
+
+
+
+
+
+
+
+
+                                Mmake
+
+                      Version 1.3 User's Manual
+
+
+
+
+
+                             MicroSystems
+                             P.O. Box 471
+                          Carbondale, IL  62903
+  
+
+
+
+REGISTRATION
+
+This program is made available to the public as shareware.  You are free
+to make and distribute an unlimited number of copies. You are to also
+entitled to use the program without cost on a trial basis, to see if 
+it is of value to you.
+
+If you decide to use the program, you are requested to register by
+sending $20 along with your name and address to the address on the
+cover of this manual.
+
+The existence of user-supported software as an alternative to costly
+commercial software depends on the good faith and cooperation of the
+software's users.  Your $20 registration will enable us to continue 
+to upgrade this product and to develop others.   Commercial versions 
+of the make utility cost between $89 and $150.
+
+Registered users are entitled to free support and to at least one
+free upgrade. 
+
+
+FEEDBACK and SUPPORT
+
+Registered users will be given assistance if any problems are
+encountered using this program.  If you enclose a self-addressed,
+stamped envelope with your questions, it will help us to answer you 
+more quickly.
+
+Support is not guaranteed to non-registered users.  However, we do 
+appreciate feedback from all users, registered or otherwise.  If you
+encounter a bug when using this program, please let us know so that
+we can correct it and save others from similar aggravation.  When 
+reporting a problem, the more detail you can provide to us, the more
+likely it is that we will be able to reproduce (and fix) the bug.  
+In addition to a description of the problem, it will help if you send
+us copies of the files that were being processed when the problem 
+occured, or "dummy" files that cause the same problem. 
+
+We also welcome suggestions for improvements and added features, and 
+we are interested in hearing about how you have used Mmake.
+
+
+
+
+
+WHAT MMAKE DOES
+
+Mmake is based on the Unix "make" utility and performs the same 
+function, though it does not yet provide all of the sophisticated
+features of the Unix utility.
+
+Mmake is used by programmers to automate the process of compiling and 
+linking a program that is contained in several (or numerous) source 
+files.   It can be used with any language and with any compiler that 
+can be run from the Ms-Dos command line.  It can speed development
+enormously, both by making recompilation of a program go much more 
+quickly, and by preventing errors when a changed file is not recompiled.
+
+When creating or editing a complex program, it is often difficult to 
+remember which source files or modules have been changed and need to 
+be recompiled.  Mmake automates this process so that the programmer
+can forget about it.  After editing files, the programmer simply 
+runs Mmake and the modules that have been changed will be recompiled.
+Files that have not been changed are not recompiled. 
+
+Without a make utility, there are two basic strategies to compiling and
+linking a program as it is being developed or when it is changed.    The 
+first is to simply recompile and re-link all of the source files that 
+make up the program, every time any of them are changed.  This has the 
+serious drawback of vastly increasing the amount of time spent recompiling 
+the program.  The other strategy is to break the program into modules 
+which can be compiled separately, then trying to keep track of which ones 
+have been changed or added.  This can be difficult, especially when an
+"include" file is edited; any source files that include that "include"
+file need to be recompiled, while others do not.   This puts the burden of
+keeping track of which modules have been affected on the programmer, who 
+should be free to think about the program being written.  It also introduces 
+the possibility that a module that should be recompiled may not be, 
+thus generating errors in the program and wasting even more of the 
+programmer's time in debugging.
+
+Mmake saves the time that is wasted by compiling files unnecessarily, 
+while preventing the errors that result when a programmer forgets to 
+recompile a module that has been changed.  It also frees the programmer
+to think about the program being written.  When the program is ready to
+be recompiled, Mmake automatically determines which source files have
+been changed or affected by changes, and runs the commands necessary to
+re-make the program.
+
+Mmake does this by comparing the last modification times of the files you
+are creating with the modification times of the files which are used to
+create them.  Depending on which files have been changed,  Mmake runs
+the appropriate programs to bring them up to date -- compilers, 
+assemblers, linkers, or any other executable Ms-Dos program.  
+
+We have used Mmake with 'C' compilers, the Clipper DBase compiler, the 
+Macro Assembler, and with programs that contained all three.  It will
+work with any compiler that can be run from the Ms-Dos command line.
+
+
+
+WHAT MMAKE DOES, continued
+
+While Mmake is designed as a tool for programmers, it can be used in
+any situation in which an action must be taken for files which have 
+changed and not taken for those which have not.  For example, a large 
+document consistng of many files could be run through a spell-checker or
+text formatter, using Mmake to insure that all the files changed, and
+only the files changed, were spell-checked or formatted.  Or Mmake could 
+compare modification times of files on a source disk and files on a backup 
+disk, and copy the source to the backup when the source file was the 
+more-recently changed.   
+
+
+MEMORY REQUIREMENTS
+
+The amount of memory needed to run Mymake depends on the commands in your
+make file.  Mymake.exe itself takes up about 25 K of memory while it
+is running.  In addition, you must have enough memory to load and run
+any command line in your make file.  
+
+
+
+
+ 
+HOW TO USE MMAKE
+
+The first step in using Mmake is to create a "make file," which is 
+a description of the relationships among the files in the program
+you are making.  The format of the make file is described in detail
+below.  Once the make file is created, the process of developing a 
+program or modifying an existing program is greatly simplified; the 
+time invested in creating the make file is soon repaid.  Make files 
+also help to document a program, since they show all of the source 
+files contained in it and the relationships among them.  Of course,
+as you add new source files to your program, you have to add those 
+files to the make file as well.
+  
+Once a make file is created, using Mmake is extremely simple.
+The command line syntax is:
+
+     Mmake /F filename /H /S /D /I 
+
+Everything after "Mmake" is optional, including the filename, which is 
+part of the /F option.  The options can be given in any order.  The 
+meaning of the command lines options are as follows:
+
+     /F filename - Use "filename" for the make file.  If this
+          option is not given, Mmake uses the default file 
+          name "makefile".
+
+     /H - Help: display a list of Mymake's options.
+                
+     /S - Silent: don't display commands before running them. 
+          Normally, Mmake displays each command as it is run. 
+          This option turns off that display.  Note that the 
+          output of the programs themselves are not turned off, 
+          just Mmake's display of the command line.
+
+     /D - Display only: display commands but don't run them.
+          With this option, Mmake will show you the commands
+          that would be run, based on the modification times of
+          files, but it does not actually run the commands.
+
+    /I - Ignore exit codes:  normally, Mmake will stop running if a
+         compiler or other program returns with an exit code other
+         than zero.  Most programs use non-zero exit codes to indicate
+         an error, so this is normally desirable.  However, it you
+         need to run a program that returns a non-zero exit code, the
+         /I option can be used.  It tells Mmake to simply ignore the
+         exit codes of the programs it runs.
+   
+For all options, a dash (-) may be used instead of the slash (e.g.,
+-D or -S).
+
+
+
+HOW TO USE MMAKE, continued
+
+As Mmake runs, it will display the commands that it is executing (unless 
+the /S option is used).  If no files have been changed since the last
+time they were compiled or linked, Mmake simply displays a message that
+all files are up to date.  If any of the programs that Mmake runs 
+encounter an error, Mmake will display the error code returned by the 
+program, and stop.  Once you have corrected the source of the problem,
+run Mmake again and it will take up where it left off, making only 
+those files that still need to be made.
+
+Note that since Mmake uses the modification times of files, the date and
+time must be kept current on your system (which is a good idea in any 
+case).   By far the most convenient way to do this is with a battery-
+powered clock chip.  If you don't have such a chip in your computer, 
+you will have to enter the date and time before editing source files.  
+(Usually, this is done when booting Dos).
+
+
+
+SETTING UP THE MAKE FILE
+
+Mmake requires a "make file," which describes to it the files in your
+program and the dependencies among them.  You can use Mmake for as 
+many different projects as you like, by setting up a separate make 
+file for each program.
+
+The make file is a plain ascii text file; it can be created with any 
+text editor or word processor that will create ascii files.  You can 
+name the make file anything you like.  One convention is to name the 
+make file the same name as the program you are creating, but without 
+any extension.  For example, using "chess" as the name of a make file 
+that creates a program named "chess.exe."  If you do not give Mmake a 
+make file name, it will use a file named "makefile" in the default directory.  
+
+The make file consists of a number of records.  Each record starts with
+a filename, which is the file to be created.  This is followed by a 
+colon, then a list of files upon which the file being created depends.
+This "dependency line" is followed by one or more command lines, which 
+are the commands to be executed in order to create the file being created.
+
+The general format of a make file record is as follows:
+
+File to be created:  files on which it depends
+	command to create the file   
+
+An example will help make this clear.  Below is a simple make file
+for an imaginary chess program, followed by an explanation of its 
+contents.  (In the example, only three files are being created.  In
+fact up to 256 files can be created by each make file):
+
+# chess - make file for chess.exe    
+# dummy file used for example only
+# 7/12/87
+
+Chess.exe : Chess.obj   drawscrn.obj
+	link Chess drawscrn;
+
+Chess.Obj : Chess.c  Games.h
+	cl -c Chess;
+
+Drawscrn.obj : a:\chessboard\drawscrn.asm
+	masm  a:\chessboard\drawscrn;
+
+
+The first three lines of this file are comments, and have no effect on 
+Mmake's actions.  Comment lines can be placed anywhere in the file, 
+as long as the first non-space character of a comment line is "#".
+Similarly,  blank lines may be inserted to improve readability;
+they are ignored by Mmake.
+
+
+
+SETTING UP THE MAKE FILE, continued
+
+In the example make file, the first dependency line tells Mmake that
+Chess.exe "depends on" each of the two .obj files listed on that line.
+That is, if either of these files change, Chess.exe must be remade.   
+Mmake will compare the modification times of the two .Obj files with 
+that of chess.exe; if either of them have been changed since Chess.exe 
+was last created, Chess.exe will be remade.   Chess.exe will also be
+created if it does not exist.
+
+The next line of the sample make file is a command line.  It begins with a 
+tab character, and tells Mmake how to remake Chess.exe if it decides to 
+do so. This example command line tells Mmake to run the link program,
+passing the names of the two .obj files to link as arguments.  Mmake
+will look for the link program in the current directory, then look in the
+directories specified by the Dos PATH string. This command line, 
+like the others in this example, is just an example; any linker or 
+compiler could be used -- or, for that matter, any .com or .exe file.  
+An exact description of what commands can be used appears below.
+
+The next record tells Mmake that the Chess.obj file depends on two other
+files, Chess.c and Games.h.  If either of these two files has a later
+modification date than Chess.obj, Mmake will remake Chess.obj.  In this
+example, it would run the cl compiler with the -c argument. 
+
+The drawscrn.obj record is interpreted in a similar manner.  Note that
+this record contains a full path and drive specification; any
+file name in any record can include a drive and/or directory specification.
+If the path of a command is not given, Mmake will look in the current 
+directory and the directories listed in the Ms-Dos PATH	environment
+string.  Files other than commands have to include thier full path
+name unless they are in the current directory.
+
+RECORD ORDER
+
+In some commercially-available versions of the make utility, the above
+make file would not work because of the order in which the files are
+listed.  If, for example,  Chess.c were changed, Chess.obj would get
+remade.  But Chess.exe would not, because by the time Chess.obj was 
+remade, the dependency line for Chess.exe would have already been checked.
+
+This is not true of Mmake.  In the above example, before it decides
+whether or not to remake Chess.exe, it will look ahead to see if any
+of the files Chess.exe depends on need to be remade; if so, it will remake
+those fles (looking ahead again, if necessary) before deciding whether or 
+not to make Chess.exe.  
+
+Therefore, the order of records in the make file is not critical. 
+However, Mmake will run a little faster if the records are arranged to 
+minimize look-ahead.  In the example, if the record for Chess.exe were 
+last, the make process would go faster.  Minimizing look-ahead can also 
+help if you encounter a "Stack Overflow" error when running Mmake; see 
+error messages, below.
+
+
+
+LONG LINES
+
+If a dependency line is too long to fit on a single 80-column line,
+it can be extended by placing a backslash (\) just before the end of 
+the line.  Any lines ending in a backslash are considered as 
+continuing on the next line; for example, the lines
+
+Chess.exe : Chess.obj   drawscrn.obj   mymove.obj   \
+Scorkeep.obj  Highscr.obj  Newgame.obj  Replay.obj  
+
+are treated by Mmake as a single line.  There is no limit to the number
+of lines that can be "connected" in this way.  The backslash must be
+the very last character on the line.
+
+
+COMMAND LINES
+
+Each command line MUST begin with either a tab character or the '@'
+character; this is how Mmake distinguishes the commands from the 
+dependency lines.
+
+In the example above, only one command line is shown for each dependency
+line.  However, there is no limit to the number of command lines that
+can follow a dependency line, as long as each one begins with a tab
+or '@' character.  
+
+A command line that begins with the '@' character must have that
+character in the first column; the '@' is stripped off.  This can be
+used if you are using a word processor or editor that makes it
+inconvenient to use the tab character.  The '@' can be followed by
+spaces for clarity.  For example, the sample make file shown above
+could have been written as follows:
+
+# chess - make file for chess.exe    
+# dummy file used for example only
+# 7/12/87
+
+Chess.exe : Chess.obj   drawscrn.obj
+@   link Chess drawscrn;
+
+Chess.Obj : Chess.c  Games.h
+@   cl -c Chess;
+
+Drawscrn.obj : a:\chessboard\drawscrn.asm
+@   masm  a:\chessboard\drawscrn;
+
+
+The characters after the '@' can be either tabs or spaces; Mmake uses
+the '@' in the first column to recognize the line as a command.
+
+
+
+COMMAND LINES, continued
+
+Any .com or .exe file can be specified as the command to be executed.
+In addition, any internal DOS command (such as cd or copy) can be 
+given as one of the commands, as long as it is given in the form
+
+	command /c dir
+
+-- that is, you must run command.com with the /c option, followed by the
+Dos command you want to execute.  Batch files can be run the
+same way; they cannot be run without running a copy of command.com.
+
+Continuing the above example, instead of simply linking the .obj files
+to create Chess.exe, we could also have changed directories, invoked
+an editor to edit a "scores" file, changed directories back to the \Chess 
+directory, then run the Chess program to test it.  The following record 
+in the make file would accomplish this:
+
+Chess.exe : Chess.obj   drawscrn.obj 
+	link Chess drawscrn ;
+	command /c cd scores
+	edlin   highscores
+	command /c cd \Chess
+	Chess
+
+If a command being run by Mmake returns an exit code greater than zero,
+Mmake will stop.  Additional commands will not be processed until you 
+run Mmake again.  You can override this feature by specifying the /I 
+option, which will cause Mmake to ignore exit codes.
+
+
+
+ERROR MESSAGES
+
+Mmake generates two different types of errors. Before it begins processing
+files, Mmake scans the entire make file, looking for errors in the make file
+itself.  Most such errors require that you edit the make file before 
+proceeding.   These errors are listed in alphabetical order under "MAKE 
+FILE ERRORS" below.
+
+The second type of error is generated during the process of making one
+of the files listed in the make file.  These errors are listed in 
+alphabetical order under "PROCESSING ERRORS" below.
+
+
+MAKE FILE ERRORS
+
+ /F option requires make file name.
+        
+         You entered the /F option on the Mmake command line, but
+         did not follow it with the name of the make file.  If you
+         want to use the defualt make file name, "makefile", you 
+         do not need the /F option on the command line.  If you 
+         want to use another file for the make file, enter /F
+         followed by the name of the make file, on the command line.
+
+ File (filename) too big (must be < 32k).
+       
+        The make file must be less than 32 K in size.  If you get
+        this error, you can reduce the size of the make file by
+        removing or shortening comments, or moving some files so 
+        that shorter path names can be used in the make file.  If your
+        make file is still more than 32 K, you can get around this 
+        restriction by creating two separte make files and running
+        Mmake on each of them.  This size limit will be removed in the
+        next version of Mmake.
+
+
+ Illegal file or path name: (file or path from make file)
+
+        The displayed path or file name in the make file 
+        is an illegal name.  This is NOT a "file not found" 
+        message.  It means that a file cannot even be looked 
+        for because the file or path name contains
+        illegal characters, two consecutive backslash ("\") 
+        characters, a colon in the middle of the name, or some
+        other illegal combination of characters.
+
+
+
+MAKE FILE ERRORS (continued)
+ 
+ Mmake creates a temporary file named (filename).
+ A file already exists with that name.
+ Okay to overwrite existing file? (press y or n).
+
+        During operation, Mmake creates a temporary file with the
+        given name, in the default directory.  This file is erased
+        before Mmake finishes running.  You will not see the above
+        message unless a file by that name already exists in the
+        default directory.  If you see this message, pressing 'N'
+        will cause Mmake to stop.  Pressing 'Y' will overwrite the
+        existing temporary file, destroying its contents.
+
+ Missing colon make file line: (line from make file).
+
+        The line displayed is a dependency line, and does not
+        contain a colon separating the file to be created from
+        the files upon which it depends.  Any line in the make file
+        that does not begin with a tab or the '@' character is taken 
+        to be a dependency line unless the line right above it ends 
+        in a backslash, in which case it is considered part of the 
+        line above it.
+
+ Missing dependencies in make file after: (line from make file).
+
+        The dependency line displayed has a file to be created, but
+        no files upon which it depends.  Each dependency line of
+        the make file must contain a file to be created, then a 
+        colon, then one or more dependency files.
+
+ No command line following make file line:  (line from make file).
+
+        The dependecny line displayed is not followed by a command
+        line.  Command lines must begin with a tab or '@' character.
+        Each dependency line must be followed by at least one command
+        line.  Some implementations of the make utility have built-in 
+        rules which are used when no command is given.  It is expected
+        that this feature will be available in future versions of Mmake;
+        this version does not provide built-in make rules.
+
+ Not enough memory to read make file (filename)
+
+        Mmake.exe is unable to get enough memory to read the make file.
+        You need more memory in your machine to run Mmake.  If you have
+        a RAM disk or "Stay Resident" utilities installed, removing them
+        will make more memory available to programs such as Mmake.
+
+        If you receive this error, we would appreciate hearing about it.
+
+
+
+MAKE FILE ERRORS (continued)
+         
+ Too many files; make file must contain less than (number) files.
+        
+        Your make file contains more files to be created than Mmake
+        can handle.  The only solution is to reduce this number of
+        files in the make file; this can be done by splitting it 
+        into two parts and running each part separately.  If you do
+        this, the order in which you run the two make files may be
+        important, if the files in one depend on files in the other.
+
+        If you receive this error, we would appreciate hearing about it.
+
+ Two filenames before colon in make file line: (line from make file)
+
+        The dependency line displayed has more than one file name 
+        before the colon.  Only one file to be created can be 
+        listed in each dependency line, though there can be many
+        dependency files.  
+        
+ Unable to open file (filename) for reading.
+
+        The named file cannot be opened.  Normally, this means the
+        file does not exist, or that it is not in the current 
+        directory and not in one of the directories specified by PATH.
+
+ Unable to create temporary file (filename).
+
+        The temporary file cannot be created.  This may mean that
+        your disk is full, or that there is a directory with the
+        same name as the temp file, in the default directory.  In 
+        the former case, remove some files to make more room on 
+        your disk.  Remember that Mmake can access files on more than
+        one disk; just include the drive letter in the path name in
+        the make file or in the Dos PATH.  
+
+ Unknown command line option: (option)
+
+        You typed a command line option that Mmake does not 
+        recognize.  Type Mmake /H for a list of valid options.
+
+
+PROCESSING ERRORS
+
+ Arg list too long.
+
+        The command line is greater than 128 bytes long.  The total 
+	length of the command line must be less than 128 bytes.	 The
+	best way to overcome this problem is to use a respone file for 
+	the input to your linker or compiler; most compilers and linkers
+	have an option that allows this.
+
+ Can't execute command line: (command line)
+ Commands must have .exe, .com, or no extension.
+
+        Only files ending in .com or .exe can be run as commands on
+        a command line in the make file.  As explained under 
+        "COMMAND LINES" above, .bat files or internal Dos commands
+        can be run by running a copy of command.com with its /c
+        option, followed by the command you wish to run.  If a 
+        command in the make file has no extension, Mmake assumes
+        that it has a .com or .exe extension.
+
+ Exec format error
+
+        The file being run is not an executable file or has been
+        altered in some way which makes it impossible to run.
+
+ Execute error: (error message)
+
+        Mmake is unable to run the program it is attempting to 
+        run, for reasons explained by the error message following
+        the colon.  Each of these error messages appears separately
+        in this list.
+
+ Executing: (command line)
+
+        This is not an error message; it simply tells you what 
+        command or program is being executed by Mmake.  If you
+        started Mmake with the /D (display only) option, this 
+        shows you the commands that would be executed by Mmake
+        if the /D option were not used.
+
+ Exit code: (number)
+
+        The program just run by Mmake ended with an error code; 
+        the exit code printed is from that program.  Consult the
+        manual for the program creating the error to find out what
+        the error code means.  Mmake will stop executing after
+        such an error is returned unless the /I option is used.
+
+ No such file or directory.
+
+        The command you specified cannot be found.
+
+
+
+PROCESSING ERRORS (continued)
+
+ Not enough core.
+
+        There is not enough memory to run the program that Mmake
+        is attempting to run.  If you can free some memory by
+        removing "Terminate but Stay Resident" utilities, RAM
+        disks, print spoolers, etc., Mmake may be able to run
+        the program.
+
+ Stack overflow.
+
+         Mmake has run out of stack space during execution.  The 
+         most common cause of this is a dependency line that
+         has a file dependent on itself, such as 
+
+         Chess.obj : Chess.obj.  
+
+         The solution is to fix the dependency line.
+		         
+         This error may also be caused by a deeply-nested set of
+         dependencies.   In this case, you should be able to overcome
+         the problem by rearranging the make file to minimize 
+         look-ahead, since look-ahead uses stack space.  See the 
+         section above on "RECORD ORDER" for an explanation of how to 
+         minimize look-ahead.
+
+         If you receive this error, we would appreciate hearing
+         about it.
+
+ Unable to find or make (filename).
+
+        The named file is listed in the make file as one upon which 
+        another file depends.  However, the named file does not 
+        exist, and there is no record in the make file indicating
+        how it can be created.  This causes Mmake to stop.  This 
+        usually means that either the file name was incorrectly 
+        typed,  that a record needs to be added to the make file
+        indicating how the named file is to be made, or that the
+        file is in a different directory than the one listed in the
+        make file.
+
+ Unable to make file (filename); no commands.
+
+        There are no commands following the dependency line for 
+        the named file.  If you get this error, we would appreciate
+        hearing about it.
+
+ Warning:  Command line contains more than (number) arguments. Extra ignored.
+
+        The number shown is the maximum number of arguments that can be
+        passed to a program run by Mmake.  The command is still run, 
+        but only the first (number) arguments have been passed.
+
+        If you get this error, we would appreciate hearing about it.        
+
+
+```
+{% endraw %}
 
 ## PLIC.BAS
 
+{% raw %}
 ```bas
 500 'PLIC  -- Prowess, Inc. license agreement 04/28/87
 510 CLS:CLEAR:SCREEN 0,0
@@ -599,9 +1977,11 @@ machines:
 690 LOCATE 23,52:F$=INKEY$:IF F$="" THEN 690
 700 COLOR 7,0:SYSTEM
 ```
+{% endraw %}
 
 ## PLOG.BAS
 
+{% raw %}
 ```bas
 100 'PLOT - LOGO, LICENSE (COLOR SYS)  - SHAREWARE VERSION 2.0 -- 05/08/87
 110 ' COPYRIGHT 1985,1986, 1987, Prowess, Inc.
@@ -664,9 +2044,11 @@ machines:
 680 CHAIN "PLOTM
 690 END
 ```
+{% endraw %}
 
 ## PLOTM.BAS
 
+{% raw %}
 ```bas
 100 'PLOTM - PLOTTING PROGRAM MENU -- SHAREWARE VERSION - 05/07/87
 110 'Copyright 1986, 1987, PROWESS, Inc.
@@ -703,9 +2085,11 @@ machines:
 440 BEEP:GOTO 100
 450 GOTO 100
 ```
+{% endraw %}
 
 ## PPLOT.BAS
 
+{% raw %}
 ```bas
 100 'PPLOT - SHAREWARE POLAR PLOTTING PROGRAM  - revision date: 05/07/87
 110 'Copyright 1985,1986,1987, Prowess, Inc.
@@ -1006,9 +2390,329 @@ machines:
 3060 LOCATE 21,30:K$=INKEY$:IF K$="" THEN 3060
 3070 GOSUB 350:GOSUB 370:GOTO 390
 ```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+
+Readme.doc
+
+
+                             PLOT -- DOCUMENTATION
+
+
+                            PLOT-- LICENSE AGREEMENT
+                     Copyright 1985,1986,1987, Prowess, Inc.
+
+
+     This is a user supported software product.  It is not public domain
+     software, nor is it free software. You are granted a limited license
+     to use this product on a trial basis.   If you continue to use this
+     product after a trial period, you are expected to register by sending:
+
+           $25 (Minimum reg.)          or        $35 (+ $4 S/H) (Full reg.)
+
+           * Technical support                   *  Technical support
+           * Update notification                 *  Latest diskette
+                                                 *  Printed manual
+
+                 Texas residents, please add 7 1/4 % sales tax
+
+         Contact us for information concerning low cost site licenses.
+
+     If you like the shareware concept - try before you buy - please support the
+     companies that provide useful, professional quality products.
+
+       Prowess,Inc. -  203 Lakeridge Village - Suite 102 - Dallas  75238
+
+                               (214) 349-4718
+
+
+     You are encouraged to distribute copies of this software providing
+     that you make no modifications to any of the files and that the copy
+     that you distribute, regardless of the means of distribution, contains
+     all files that came on your product diskette.
+
+                                   DISCLAIMER
+                                   ----------
+
+     This software product and associated instructional material are sold
+     "as is" without warranty as to their performance, accuracy, freedom
+     from error, merchantability or fitness for any particular purpose.
+     The entire risk as to the performance of the software is assumed by
+     the user.
+
+     Under no circumstances, whether in contract or tort, shall Prowess,
+     Inc. be liable for indirect, consequential, special, or exemplary
+     damages such as, but not limited to, loss of revenue or anticipated
+     profits, lost business or other economic loss, arising out of, or
+     in connection with this agreement, or your use, or inability to use
+     any program or sub-program associated with this software product.
+
+          ------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+                                    CONTENTS
+
+                        * File descriptions
+
+                        * Minimum system requirements
+
+                        * Introduction
+
+                        * Working diskette preparation
+
+                        * Loading/running the plot programs
+
+                        * General information about these programs
+
+                        * Other Prowess, Inc. shareware products
+
+          ----------------------------------------------------------------
+
+                               FILE DESCRIPTIONS
+
+          The following files are contained on your product diskette:
+
+ README.DOC                     This file. Documentation for PLOT
+
+ HLP3.BAS                       Help file accessed from PLOTM.BAS. Provides
+                                the most detailed information on all plot
+                                programs.
+
+ IPLOT.BAS                      Program for plotting Y=f(X) type equations.
+                                It also provide integration capability to
+                                find the area under a curve.
+
+ SPLOT.BAS                      Program for plotting two simultaneous
+                                equations.
+
+ PPLOT.BAS                      Program for polar plotting.
+
+ VPLOT.BAS                      Program for vector plotting.
+
+ PLOTM.BAS                      Contains the plot menu. Calls the available
+                                plotting programs and help file.
+
+ PLOT.BAT                       A batch file which loads the opening screen
+                                files via BASIC(A).
+
+ PLOG.BAS                       Opening screen files - logo, etc. Calls
+                                PLOTM.BAS.
+
+ FUNCT.BAS                      Data files containing user defined
+ FCT1.BAS                       equations. These files are automatically
+ FCT2.BAS                       generated when you use the plotting
+ FCT3.BAS                       programs. These file are generated as a
+                                result of running the plotting programs.
+                                They may or may not be present on your
+                                product diskette.
+
+ PLIC.BAS                       License statement.
+
+             --------------------------------------------------------
+
+
+
+
+
+
+
+                          MINIMUM SYSTEM REQUIREMENTS
+
+      * IBM-PC or 100% compatible                    * CGA graphics
+
+      * BASICA (or equivalent, GW-BASIC, etc.)       * 64K RAM
+
+      * DOS 2.1 or above                             * 1 Floppy drive
+
+                   -------------------------------------------
+
+                                  INTRODUCTION
+
+ This program set is designed to provide a quick, easy to use, set of tools
+ for technical plotting. It will handle rectilinear, polar and vector
+ plotting. After plotting, you may review a tabulation of all plotted points
+ (except for the vector program).
+
+ These programs were written in BASICA to take advantage of a unique BASICA
+ capability - the CHAIN MERGE feature. When you enter an equation to be
+ plotted, you may enter it just as you would write it on paper. The
+ program accepts your equation as a string variable, appends your equation
+ to a string that defines a line number then writes the whole string to a
+ file (FCT1.BAS for example). This file is then CHAIN MERGED with the
+ program itself and your equation becomes an executable line of code,
+ complete with a line number in the program. Unfortunately, existing
+ compilers can not compile the CHAIN MERGE statement.
+
+ We felt that being able to enter the equation in standard equation format was
+ so important that we have released these programs in BASIC(A). No other
+ language that we know of allows a chain-merge-like function and writing the
+ function in another language would be a formidable task. Chalk one up for
+ BASIC! Although not extremely fast, we think that you will find the plotting
+ speed of these programs satisfactory.
+
+ SPECIAL NOTE: Because of the technique mentioned above, you will render
+               these programs INOPERATIVE IF YOU RENUMBER THE LINES !!!
+
+ There is a master help file accessable from the main menu (HLP3.BAS). It is
+ a separate program that describes each program in detail. It is your best
+ source of information about program specifics.
+
+ In addition to HLP3.BAS, each program contains a brief help (or
+ instruction) section for quick reference.
+
+                  -----------------------------------------------
+
+                            MAKE A WORKING DISKETTE
+
+ Protect your investment; make a working copy of your PLOT product diskette
+ now!
+
+                1. Format a new diskette (with the system option)
+
+                   Example:  FORMAT B:/S
+
+                   (Assumes system diskette in drive A and new diskette in
+                   drive B.)
+
+
+
+
+
+
+
+
+
+                2. Copy your BASICA.COM to the working diskette.
+
+                               COPY BASICA.COM B:
+
+                   If your system uses a different advanced BASIC,  you will
+                   need to copy it to the working disk AND CHANGE ITS  NAME
+                   TO  BASICA.XXX  (the XXX refers to its original extension-
+                   probably .EXE)
+
+                   Examples:  COPY GW-BASIC.EXE B:BASICA.EXE
+
+                3. Copy all files from your product diskette to the newly
+                   formatted diskette.
+
+                   Example: COPY *.* B:
+
+                   (Assumes product diskette in drive A and formatted diskette
+                   in drive B.)
+
+
+                4. Label your working diskette PLOT.
+
+                5. Put your PLOT product diskette in a safe place.
+
+
+          NOTE: If you are using a hard disk, set up a separate directory
+                for PLOT and start with step #2 above, substituting C: for
+                B:.
+
+            ------------------------------------------------------------
+
+                     LOADING AND RUNNING THE PLOT PROGRAMS
+
+ Put your working diskette in drive A (or get into the PLOT directory if
+ you are using a hard disk). Enter:
+
+                                 PLOT  <return>
+
+ This will cause PLOT.BAT to execute and you should see the logo screen
+ appear.
+
+                NOTE: PLOT.BAT expects to find a program called BASIC (.COM
+                or .EXE). If you forgot to change the name of your BASICA
+                (or other advanced basic clone) to BASIC, you will have a
+                problem. Either ROM basic will be loaded or you will get a
+                "file not found" error.
+
+ Pressing any key from the logo screen will display the Prowess, Inc.
+ license statement. Pressing any key at this point will call the main menu.
+
+ From the main menu, you may select any of the plotting programs. We strongly
+ suggest that you review the main help file (accessable from the main menu)
+ before operating the programs.
+
+ NOTE: If your DOS operating system contains a utility called GRAPHICS.COM
+ (DOS 2.1 and greater), you may want to load it prior to loading the PLOT
+ programs. With GRAPHICS.COM memory resident, you can print the graphs
+ produced by the PLOT package on most wire dot printers by simply pressing
+ <shift-prtSc>. You can load GRAPHICS.COM by entering: GRAPHICS <return> from
+ your system disk.
+
+                 -------------------------------------------------
+
+
+
+
+
+
+
+                              GENERAL INFORMATION
+
+ BASIC is rather unforgiving about comma errors; if you enter a period
+ instead of a comma or fail to put a comma where the program is expecting
+ one, you will see a 'REDO FROM START' error message. If this occurs, you
+ can usually recover by re-entering the data correctly AT THE CURRENT
+ CURSOR POSITION. If you try to move the cursor before correcting your
+ entry, you'll make things worse! In most cases the messy screen will be
+ redrawn when the function is plotted. Specifying the range of X over
+ which to plot, the range of X over which to integrate, and inputting
+ vectors (in both rectangular and polar formats) require entries in the
+ form of M,N. The comma is a requirement!!
+
+ BASICA does not allow error trapping 'division by zero' and 'overflow'
+ (a floating point overflow). Some BASICA equivalents do allow trapping
+ these errors. Error trapping statements exist in the programs to detect
+ these errors; however, they won't operate on the IBM-PC. They will work
+ properly on some clones that use a different advanced BASIC. If you get
+ either of these error messages, from the system, you will have to restart
+ the program. Most syntax errors are trapped and the error traps should
+ work.
+
+ Entering a single 'Q' (for 'quit') and pressing return, at most user inputs,
+ will halt the current operation and display the exit screen.
+
+                ------------------------------------------------------
+
+     If you like this program set, try our other Prowess , Inc. shareware
+     tools:
+
+      * Financial programs (interest, annuities, amortization, etc.)
+      * Pro-menu (an elegant full featured PC menu system-one data file)
+      * Units (easy, fast technical units conversions and more)
+      * Circuit design calculations (DC circuits, RC, RL, Pw., Energy, etc.)
+      * AC circuit design (great graphics,- RF design, Op amps, Xformers, BW)
+      * Magnetics design (great graphics - linear motors, mag. force, etc.)
+      * Automated Planning Form (project planning tools - Gantt-charts, etc.)
+      * Math utilities (equation solving, lines, factors, intersections, etc.)
+      * Geometry for design (great graphics - chords, arcs, triangles, etc.)
+      * Dos-pro (a special menu for executing DOS commands from plain English)
+
+
+```
+{% endraw %}
 
 ## SPLOT.BAS
 
+{% raw %}
 ```bas
 100 'SPLOT - SHAREWARE SIM. EQ. PLOTTING PROGRAM  - revision date: 05/08/87
 110 'Copyright 1985,1986,1987, Prowess, Inc.
@@ -1277,9 +2981,11 @@ machines:
 2710 IF K$="Q" OR K$="q" THEN 2290
 2720 GOSUB 350:GOTO 410
 ```
+{% endraw %}
 
 ## VPLOT.BAS
 
+{% raw %}
 ```bas
 100 'VPLOT - SHAREWARE VECTOR PROGRAM - COPYRIGHT 1985,1986,1987, Prowess, Inc.
 110 'THIS PROGRAM RESOLVES AND PLOTS VECTORS
@@ -1499,6 +3205,7 @@ machines:
 2250 IF QT=3 THEN CLS:CHAIN "PLIC
 2260 BEEP:GOTO 2200
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

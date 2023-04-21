@@ -31,6 +31,116 @@ machines:
     the program you are working on.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2289.TXT
+
+{% raw %}
+```
+Disk No: 2289                                                           
+Disk Title: TechStaff Tools #2 (2288 also)                              
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: TechStaff Tools                                          
+Author Version: 1.01                                                    
+Author Registration: $29.95                                             
+Special Requirements: 640K RAM. Mouse and hard drive recommended for som
+                                                                        
+This is a disk of 12 utilities you can use with your hard drive, floppy 
+drive, mouse or printer;                                                
+                                                                        
+~ TECHSTAFF DISK SIZE (TDS) - Displays the media size of a disk.        
+                                                                        
+~ TECHSTAFF FREE SPACE (TFS) - Displays the number of bytes remaining on
+a disk.                                                                 
+                                                                        
+~ TECHSTAFF VOLUME LABEL (TVL) - Changes the volume label of a disk, and
+verifies that change.                                                   
+                                                                        
+~ TECHSTAFF TEMP CONVERTER (TTC) - Converts and displays a number to    
+fahrenheit and centigrade.                                              
+                                                                        
+~ TECHSTAFF STAMP MANAGER (TSM) - Changes the date and time attributes  
+for a file.                                                             
+                                                                        
+~ TECHSTAFF MOUSE TESTER (TMT) - Tests all functions of a mouse,        
+including sensitivity, buttons, range, cursor color, and cursor         
+visibility. On-line help and mouse driver included.                     
+                                                                        
+~ TECHSTAFF SYSTEM INFORMATION (TSI) - Displays everything about a      
+system.  A second page of info is displayed on 286/386 machines.        
+                                                                        
+~ TECHSTAFF FILE-FINDER (TFF) - A file finder program that will search  
+any disk for a file.  Once a file is located the FILE-FINDER can        
+optionally move to that directory.  File sizes and total bytes of all   
+files in each path searched are displayed.                              
+                                                                        
+~ TECHSTAFF HUGE FILE VIEWER (HFV) - A text viewing utility mostly for  
+286/386 and turbo system but will run on any system.  Displays ASCII and
+WordStar files.  A file to be be viewed can be selected from a the      
+program. The program can also change to different directories, search   
+and find exact text and change text color.  An on-line help screen can  
+be displayed, includes dual action home key and smart line editor       
+features.                                                               
+                                                                        
+~ TECHSTAFF PAGE-PRINTER (TPP) - Can print ASCII and WordStar type      
+files. Pick a file to print from a directory listing or enter a filename
+manually and switch directories all from within the program. Prints up  
+to 2600 copies. A pause function allows a time delay after each sheet is
+printed for single sheet feeding. Draft or near letter quality can be   
+double striked to improve the final copy. Fully menu-driven.            
+                                                                        
+~ TECHSTAFF FILE MANAGER (TFM) - A straightforward copy and delete      
+utility. When a disk gets full simply insert another and continue       
+copying. Displays how much space is left on the target disk and how much
+is required to copy the tagged files. Works well even with a single     
+drive system, and tells exactly what disk to place into the drive for   
+read and write operations.                                              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## TSI.DOC
+
+{% raw %}
+```
+               TSI-TechStaff System Information, Version 1.02
+
+                  TechStaff Tools Collection, Version 1.01
+
+
+
+          Overview:
+
+
+          TSI displays a wide variety of information about the PC.
+          TSI detects if more than one video adapter/monitor is
+          connected and indicates the currently active monitor.
+
+          If run on an 286/386 machine a second page of information
+          can be viewed. Press F2 to access the second page.
+
+	  Invoking TSI with a /B switch will force Monochrome.
+
+	  TSC.COM is the TechStaff Shareware Distribution Notice and
+          must accompany this (and any other TechStaff tool that does
+          not have the Shareware Notice) tool if distributed. 
+	 
+
+
+                  This is not a Public Domain Program.
+
+
+     (C) Copyright 1989, TechStaff Corporation.  All rights reserved.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2289
 

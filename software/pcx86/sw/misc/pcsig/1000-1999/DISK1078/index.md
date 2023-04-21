@@ -36,6 +36,63 @@ machines:
     available.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1078.TXT
+
+{% raw %}
+```
+Disk No  1078
+Program Title: PC-CALIB version 1.03
+PC-SIG Version 1
+
+    Chemists, researchers, and users of analytical instruments will find
+PC-CALIB a multifaceted aid to the sometimes tedious task of instrument
+calibration or verification. PC-CALIB's curves can have up to 8 points with
+3 replicates each, and can be measured in any of 12 different standard
+units. They can be curve-fitted using linear, log-linear, linear-log, or
+log-log equations (log base 10) and either a first- or second-order
+polynomial least-squares fit. Experimental values or controls can be
+entered and checked against a generated curve.
+
+    Data can either be viewed onscreen, printed, or formatted as ASCII
+files for import into other software. Documentation for this menu-driven
+program is 45+ well-written pages, and telephone support is available.
+
+Usage: Math/Scientific/Statistics
+
+System Requirements: 512K memory, one floppy disk drive (a hard
+disk is recommended), and CGA or EGA graphics. A printer is optional.
+
+How to Start: Type INSTALL (press enter).
+
+Suggested Registration: $55.00
+
+File Descriptions:
+
+CALIB    EXE  Main program file.
+USERLIB  EXE  Support program.
+INSTALL  EXE  Installation program.
+BRUN30   EXE  Support program for QuickBASIC v3.0.
+SETUP    SYS  System configuration file.
+CALIBR   DTA  Data file for calibration definition.
+REGISTRN FRM  User registration form.
+PC-CALIB DOC  User documentation manual.
+READ     ME   Opening remarks and recent changes.
+COPYCAL  BAT  Copies files to a working diskette.
+RESULT   DTA  Data file used by installation program.
+RESULT   LBR  Data file used by installation program.
+
+PC-SIG
+1030D E. Duane Avenue
+Sunnyvale, CA 94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1078
 

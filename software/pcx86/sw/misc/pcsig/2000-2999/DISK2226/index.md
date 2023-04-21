@@ -41,6 +41,50 @@ machines:
     as providing menu assistance.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2226.TXT
+
+{% raw %}
+```
+Disk No: 2226                                                           
+Disk Title: inView                                                      
+PC-SIG Version: S1.01                                                   
+                                                                        
+Program Title: inView                                                   
+Author Version: 1.1                                                     
+Author Registration: $45.00                                             
+Special Requirements: 512K RAM. Hard drive recommended, or high density 
+                                                                        
+The key to INVIEW is its simple notepad metaphor.  Like real pages in a 
+notepad, you can make whatever entries you wish, in whatever format you 
+like.  Using hypertext technology, any entry on an INVIEW page can be   
+linked to another INVIEW page, any DOS application and associated file  
+such as word processors or spreadsheets, DOS commands, or even browsers 
+that allow you to examine the contents of a wordprocessing document or  
+spreadsheet without loading the actual application.                     
+                                                                        
+With INVIEW, you can access and organize your PC in a way consistent and
+in tune with the way you work.  Launch applications or quickly locate   
+any file with INVIEW's high speed text search and retrieval.  The built-
+in time manager helps you track your appointments and remind you of     
+upcoming events two minutes or two years from now.                      
+                                                                        
+You are never at a loss for what to do next; INVIEW constantly indicates
+what state it is in and shows you the currently available functions.  A 
+context sensitive help system is built in that explains the system as   
+well as providing menu assistance for automatically selecting INVIEW    
+functions.                                                              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2226
 

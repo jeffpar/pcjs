@@ -27,6 +27,37 @@ machines:
     in almost any application program.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1777.TXT
+
+{% raw %}
+```
+Disk No: 1777                                                           
+Disk Title: ScreenSaver                                                 
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: ScreenSaver                                              
+Author Version: 1.06                                                    
+Author Registration: $14.95                                             
+Special Requirements: Works with all display adapters.                  
+                                                                        
+This memory resident screen blanking utility requires less than 2K of   
+memory.  It works with MDA, HGC, CGA, EGA, and VGA type displays.       
+Unlike other screen blanking utilities that will only blank your screen 
+at a DOS prompt or after a certain period of inactivity, SCREENSAVER    
+will blank your monitor either instantly or automatically while you are 
+in almost any application program.                                      
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1777
 

@@ -14,6 +14,33 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2780.TXT
+
+{% raw %}
+```
+Disk No: 2780
+Disk Title: 26 BMP files for Windows
+PC-SIG Version: S1
+
+Program Title: 26 .BMP files for Windows
+Author Version: 7/91
+Author Registration: None.
+Special Requirements: Windows
+
+Twenty-six different, brightly colored .BMP files based on the Windows
+PAPER.BMP file.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2780
 

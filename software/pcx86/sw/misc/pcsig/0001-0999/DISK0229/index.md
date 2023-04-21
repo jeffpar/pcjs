@@ -34,6 +34,7 @@ machines:
 
 ## EUCHRE.BAS
 
+{% raw %}
 ```bas
 100 REM  **********  "EUCHRE.BAS"  **********
 210 CLEAR,,2000
@@ -631,6 +632,543 @@ machines:
 7175 LOCATE 19,1:PRINT SPC(34):RETURN
 9999 END
 ```
+{% endraw %}
+
+## EUCHRE.DOC
+
+{% raw %}
+```
+                      *****  EUCHRE  *****
+
+RULES OF THE GAME
+
+ 	Euchre is a card game played with only the 9 through Ace.
+	It is played with 4 players with opposite players being
+	partners.  After bidding for trump, each player takes turns
+	playing cards with the object being to take as many tricks
+	as possible.
+
+    Bidding - The dealer gives 5 cards to each player (4 cards remain).
+	The next remaining card is then turned over (the flipped card).
+	Players take turns bidding starting with the player to the left
+	of the dealer and continuing to the left.  A player may either
+	bid a suit, or pass.  In the first round of bidding, the only
+	suit that can be bid is the suit of the flipped card.  If
+	everyone passes then the flipped card is turned upside down and
+	players go through another round of bidding.  In the second 
+	round, any suit may be bid except the suit of the flipped card.
+	If no suit is bid after the second round, the hand is thrown
+	in the the player to the left of the present dealer deals the
+	next hand.
+
+	If a player makes a bid, they have the option of going alone.
+	This means that the bidder's partner puts his cards down and
+	sits out the hand.  A team can get more points by going alone
+	(see scoring).
+
+	If a bid is made in the first round, using the flipped card
+	suit, then the dealer picks up the flipped card and discards
+	any card he chooses (presumably a loser).  This does not happen
+	if a bid is not made until the second round.
+
+    Playing - The player to the left of the dealer leads the first trick
+	and is followed by the player to his left until everybody has
+	played 1 card.  The person with the highest card wins the trick
+	and leads the next one.  If a following player has a card of the
+	same suit as the lead card, then that player must follow suit.  
+	If he can't follow suit, then he can play any card.
+
+	When determining the winner of a trick, a trump card beats
+	any other suit.  If no trump cards are played then the highest
+	card in the suit played by the leader wins the trick.  A non-
+	trump card in a different suit then the lead suit cannot win
+	the trick.
+
+	Bowers - The highest card in the trump suit is the jack (called
+	the Right Bower) followed by the jack of the other suit of the
+	same color (called the Left Bower) and then followed by the Ace,
+	King, Queen, Ten, and Nine.  For example, if Hearts are trump 
+	then the highest trump cards are the Jack of Hearts, the Jack
+	of Diamonds, the Ace of Hearts, King of Hearts, Queen of Hearts,
+	Ten of Hearts, and Nine of Hearts.  The left bower is considered
+	a trump card when following suit.  So if Hearts is trump then
+	if a heart is led, a player can follow suit with the Jack of
+	Diamonds, but if diamonds is led, then a player cannot follow
+	with the Jack of Diamonds unless he has no diamonds in his hand.
+	In all other suits, the Ace is the highest card and the normal
+	order is followed, eg. Ace, King, Queen, Jack (except Left Bower),
+	Ten, and Nine.
+
+    Scoring - 
+
+	BID	# OF TRICKS TAKEN               POINTS
+		(OUT OF 5 POSSIBLE)
+	------------------------------------------------------------------
+        NORMAL  1 OR 2                          2 FOR OPPONENTS (EUCHRE)
+        NORMAL  3 OR 4                          1 FOR BIDDERS
+        NORMAL  5                               2 FOR BIDDERS
+        ALONE   1 OR 2                          4 FOR OPPONENTS (EUCHRE)
+        ALONE   3 OR 4                          1 FOR BIDDERS
+        ALONE   5                               4 FOR BIDDERS
+
+	The game is won when 1 team gets 10 points.
+
+```
+{% endraw %}
+
+## FILES229.TXT
+
+{% raw %}
+```
+Disk No  229
+Program Title: FUNNELS & BUCKETS
+PC-SIG version 1.6
+
+The major program on this disk is FUNNELS, an educational game that teaches
+math in a fun way. It's a way to get young ones interested in math and can
+be a very effective tool -- they'll be too busy having fun to notice that
+they are learning. The other programs are an air-traffic control game,
+which is challenging almost beyond human comprehension, and a good version
+of the Euchre card game.
+
+Usage: Educational and Entertainment.
+
+System Requirements: 128K memory and one disk drive.
+
+How to Start: Type: FUNNELS or ATC (press enter) to start either game. To
+read DOC files, enter: TYPE filename.ext (press enter). For instructions on
+running BASIC programs, please refer to the GETTING STARTED section in this
+catalog.
+
+Suggested Registration: $10.00 for FUNNELS and $15.00 for ATC.
+
+File Descriptions:
+
+FUNNELS  EXE  A user-supported FUNNELS & BUCKETS game.
+FUNNELS  DOC  FUNNELS documentation  (15K).
+FUNNELS  INV  Invoice for author contribution.
+ATC      EXE  AIR TRAFFIC CONTROL game  (US).
+ATC1     BLD  Part of ATC.
+ATC2     BLD  Part of ATC.
+AUTOEXEC BAT  Part of ATC.
+ATC      DAT  Part of ATC.
+ATCCOPY  BAT  Copies ATC from A: to B:.
+EUCHRE   BAS  "Squished" version of EUCHRE.
+EUCHRE   DOC  Rules for the card game EUCHRE.
+EUCHRE   SRC  Source code for EUCHRE including comments.
+EUCHRE   INS  Instructions for computer EUCHRE.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## FUNNELS.DOC
+
+{% raw %}
+```
+
+
+
+
+                                 FUNNELS & BUCKETS
+                                    Version 2.00
+
+                        User-Supported Educational Software
+                                        from
+                                     Data Sage
+                                 Yale Station 2902
+                                New Haven, CT 06520
+
+            ------------------------------------------------------------
+            For:          IBM PC with PC-DOS
+            Requirements: Eighty-column display, one diskette drive,
+                          96K random access memory (RAM)
+            Files Used:   FUNNELS.EXE, FUNNELS.DOC, FUNNELS.INV
+                          FUNNELS.SCR (created by program)
+            ------------------------------------------------------------
+
+
+                 Over dinner one evening,  eight-year-old Jed said, "You 
+            were  right,  Dad,  when you told me learning math would pay 
+            off."
+
+                 His father raised a questioning eyebrow.   "What do you 
+            mean, son?" he asked.
+
+                 "A  boy  in our class said he would  give  anything  if 
+            someone  would  do  the  last row of problems  on  his  math 
+            assignment.  So I did and he paid me a dime."
+
+                 The dime was only the beginning of the payoffs Jed will 
+            get  from  the  time  and  effort  he  invests  in  learning 
+            arithmetic.    Someday  he  may  become  an  accountant   or 
+            financial  advisor and charge hundreds of times that  amount 
+            for essentially the same work: solving number problems.
+
+                 Whatever he does,  his mastery of arithmetic will  mean 
+            he  has  some  useful tools to achieve his  personal  goals.  
+            Unfortunately,  his classmate may never be able to use those 
+            same tools, unless he overcomes his distaste for arithmetic.
+
+                 Funnels  & Buckets is a computer program meant to  help 
+            people   like   Jed  and  his  classmate  learn  and   enjoy 
+            arithmetic.   Although it is aimed at children,  it can help 
+            adults polish their skills.
+
+
+
+            BACKGROUND
+
+                 Funnels  &  Buckets is a  learning  game.   Playing  it 
+            improves your skill in adding, subtracting, multiplying, and 
+            dividing.   The  object  of the game is to POP equations  by 
+            solving them as they fall from a funnel.   The funnel glides 
+            across the ceiling of a room called The Cleaning Closet.
+
+
+
+
+
+
+
+
+            Funnels & Buckets Users Guide
+
+
+
+                 As a player, your job is to type in the correct answers 
+            to the equations before they reach the buckets.   That  will 
+            POP them,  and the more you POP,  the higher your score.  At 
+            fast speeds, POPping will challenge even an adult.
+
+                 The  dastardly  villain Burglar runs  the  funnel.   He 
+            wants  to  fill all the buckets in The Cleaning Closet  with 
+            equations.   Burglar gets his name because he tries to steal 
+            the points you earn from typing in an answer.   Even  worse, 
+            if  you  type the wrong answer when he's around,  he  steals 
+            TWICE  the points.   To avoid losing points,  never type  an 
+            answer when he's around.
+
+                 Meggie,  the  cleaning  woman,  is the game's  heroine.  
+            This is her cleaning closet,  and the buckets belong to her.  
+            She's  busy cleaning,  but she drops by often to reward  you 
+            with bonus points for stopping Burglar.   If you type in the 
+            correct answer when she's around, you get TRIPLE the points.
+
+                 When  you don't know an answer,  Meggie will help  you.  
+            (Her cleaning job is just a money-making sideline.   In real 
+            life  she is a math teacher.)  Press the <space bar> when an 
+            equation is falling and she'll show you how to get the right 
+            answer.  You can remember it for the next time Burglar drops 
+            that equation.
+
+
+
+            START UP
+
+                 To  start  Funnels & Buckets,  place the diskette  into 
+            your logged disk drive and type:
+
+                                    FUNNELS <enter>
+
+            A  title screen will appear.   Press the <space bar> to  get 
+            the main menu.
+
+
+
+            SETTING UP THE GAME
+
+                 Funnels & Buckets allows you to set up the game the way 
+            you  want.   You  control the type  of  problems  (addition, 
+            subtraction,   multiplication,  division,  or  mixed).   You 
+            control  whether you want sound effects.    And you  control 
+            how fast the game will go.
+
+                 The game has already made its own choices.  They appear 
+            in  parentheses to the right of the menu selections  in  the 
+            middle box on the screen.   If you want these choices,  just 
+            press  the  <space bar> to start playing.   If you  want  to 
+            change a choice, press the number key beside it on the menu.
+
+
+
+            Copyright (C) 1984 by Data Sage                            2
+
+
+
+
+
+            Funnels & Buckets Users Guide
+
+
+                 To change the type of problem,  press <1>.   A menu  of 
+            choices will appear in the bottom box on the screen.  Choose 
+            whether  you want to add,  subtract,  multiply,  divide,  or 
+            solve a mixture of problems.   Difficult problems earn  more 
+            points than easy ones: 
+
+                          Addition . . . . . . .  5 points
+                          Subtraction  . . . . . 10 points
+                          Multiplication . . . . 15 points
+                          Division . . . . . . . 20 points
+
+                 To  choose whether you will have sound  effects,  press 
+            <2>.   A  menu will appear in the bottom box on the  screen.  
+            Select quiet or sound. 
+
+                 To choose how fast the equations will fall,  press <3>.  
+            There are six options, ranging from FASTEST to SLOWEST.  You 
+            may   choose  the  speed  you  want.    The  computer   will 
+            automatically  speed  things up as you get better  and  your 
+            score gets higher.
+
+                 You  may  get short instructions from the main menu  by 
+            pressing the <enter> key.  You may quit by pressing <esc>.
+
+
+
+            PLAYING THE GAME
+
+                 When  you  have chosen how you want the game  to  work, 
+            press the <space bar>.   Then use either set of number  keys 
+            to enter answers.   
+
+                 If  you make a mistake typing the first digit of a two-
+            digit number, press the <backspace> key to start over. 
+
+                 Keep  an eye out for Meggie and the Burglar at the  top 
+            of the screen.   If Meggie comes, try to answer the question 
+            right  away  to get bonus points.   If Burglar  comes,  stop 
+            typing until he leaves.  Otherwise you'll lose points.
+
+                 To  get an explanation of a problem,  press the  <space 
+            bar> when an equation is falling.   Meggie will show how  to 
+            solve it.
+
+                 You  may change the speed,  the sound,  and the type of 
+            problems anytime.   This will not cause you to lose  points.  
+            Press the <esc> key to interrupt play.  Make the changes you 
+            want.  Then press the <space bar> to continue play. 
+
+
+
+            EXITING
+
+                 The  <esc>  key always takes you back to  the  previous 
+            screen.   You  may end the game at any time by pressing  the 
+
+
+            Copyright (C) 1984 by Data Sage                            3
+
+
+
+
+
+            Funnels & Buckets Users Guide
+
+
+            <esc> key several times.   The game will also end by  itself 
+            if Burglar succeeds in filling all the buckets. 
+
+                 The  computer  will  compare your score  with  that  of 
+            previous players.   If you beat all previous scores, it will 
+            ask you to enter your name as the new record  holder.   Then 
+            you may decide if you want to play again.
+
+
+
+            GETTING THE MOST FROM THE GAME
+
+                 The  value  of  Funnels  & Buckets  is  that  it  makes 
+            learning fun.   Some people like the excitement of outpacing 
+            the burglar.  They lose track of time as they POP equations.  
+            Others prefer the gentle explanations Meggie gives when they 
+            press the <space bar>.   A player learns best by playing the 
+            game  in  his  or her own way.   That keeps it  fun  without 
+            becoming threatening or boring.  
+
+                 Many children between the ages of four and seven prefer 
+            to watch Meggie's explanation instead of playing for points.  
+            Older children usually prefer both explanations and play.
+
+                 Note  that the game is designed so you only have to use 
+            the numeric keypad, the <space bar>, the <backspace> key and 
+            the <esc> key.  The <esc> key, which is used for exiting, is 
+            separated  from the playing keys to prevent accidental  use.  
+            For children this will make play easier. 
+
+
+
+            SHAREWARE
+
+
+                 Funnels & Buckets is a "user-supported" program.  User-
+            supported software, sometimes known by the name "shareware," 
+            is  an experiment in software distribution.   It is based on 
+            three principles:
+
+                      1.   You  are the best judge of how useful  a 
+                 program is.  By using it on your own computer, you 
+                 can  you see whether it meets your needs.   If  it 
+                 doesn't you shouldn't have to pay for it.
+
+                      2.    The   creation  of  personal   computer 
+                 software  can  and  should  be  supported  by  the 
+                 computing community.  
+
+                 If  you  use  someone else's work,  you  will  want  to 
+            contribute  a small share of the cost,  just as someone  who 
+            uses  your work should do for you.   Supporting  a  software 
+            author  helps  him or her create more software  and  improve 
+            what is already available.
+
+
+
+            Copyright (C) 1984 by Data Sage                            4
+
+
+
+
+
+            Funnels & Buckets Users Guide
+
+
+                      3.   Copying  and sharing software is a  good 
+                 thing  that  should  be  encouraged.
+
+                 Distributing "user-supported" software reduces the cost 
+            of marketing,  advertising,  manufacturing,  packaging,  and 
+            copy-protecting.   It  costs less to distribute,  so you pay 
+            less.   (This is one way your users group or bulletin  board 
+            operator  saves  you  money.)   When  you  use  a  shareware 
+            program,  the  author trusts you to send your fair share  to 
+            help support the program.   
+
+                 We've  tried to make Funnels & Buckets as  high-quality 
+            as any professional program you can buy.   Please give  your 
+            fair share.  For your convenience, we've included an invoice 
+            (FUNNELS.INV) on the disk.  You can print it out and send it 
+            with your check.
+
+
+            ============================================================
+
+                       > > >   SUGGESTED CONTRIBUTION   < < <
+
+                                        $10
+
+            Schools   and  organizations,   please  contribute  $25  per 
+                                     building.
+            ============================================================
+
+
+                 We  encourage you to copy and share Funnels  &  Buckets 
+            with others, if:
+
+                      1.   You  do  not change the program  or  the 
+                 documentation.    (If  even  a  few  persons  made 
+                 changes,  there  would  soon be several  different 
+                 versions   and  it  would  become   difficult   or 
+                 impossible to fix problems.)
+
+                      2.  You copy all three files:
+
+                                  FUNNELS.EXE
+                                  FUNNELS.DOC
+                                  FUNNELS.INV
+
+                 (The  score  file  FUNNELS.SCR  is  optional;  the 
+                 computer will create it if it is not there.)
+
+                      3.    You   do   NOT   charge  any   fee   or 
+                 consideration,  but inform the person to whom  you 
+                 give  a  copy  that this is a  shareware  program.  
+                 (User Groups may charge their normal library fee.)
+
+
+
+
+
+
+            Copyright (C) 1984 by Data Sage                            5
+
+
+
+
+
+            Funnels & Buckets Users Guide
+
+
+
+
+            SUGGESTIONS WELCOME
+
+                 If  you  have suggestions or comments about  Funnels  & 
+            Buckets,  we'd appreciate a letter.   There's also room  for 
+            comments  on  the convenient invoice.   Thank you  for  your 
+            support.
+
+
+
+            ACKNOWLEDGEMENTS
+
+                 Stan W.  Merrill,  Ph.D., created Funnels & Buckets and 
+            programmed the IBM PC version.   An earlier version appeared 
+            in  PC  Disk Magazine (Volume I,  Number 7).   An  Apple  II 
+            version,  programmed  by Paul Ravina,  appeared in  A+  Disk 
+            Magazine (Volume I, Number 4).  Many people have helped test 
+            it, including JoLynn Bennett, Denise Dillman, Tracy Gibbons, 
+            Erica Merrill,  Jed Merrill,  John Roeder, Scott Roeder, and 
+            Tommy Roeder.
+
+
+
+                                       * * *  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Copyright (C) 1984 by Data Sage                            6
+
+
+
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

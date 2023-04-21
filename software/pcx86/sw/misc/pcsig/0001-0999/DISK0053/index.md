@@ -34,6 +34,7 @@ machines:
 
 ## ATTRIB.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 KEY OFF
@@ -46,9 +47,11 @@ machines:
 90 NEXT
 100 SYSTEM
 ```
+{% endraw %}
 
 ## BASECONV.BAS
 
+{% raw %}
 ```bas
 10 'NUMERIC BASE CONVERSION
 20 'WITH ASSISTANCE FROM NATIONAL BUREAU OF STANDARDS `HANDBOOK OF
@@ -116,15 +119,19 @@ machines:
 620 GOTO 310
 630 END
 ```
+{% endraw %}
 
 ## BOMB.BAS
 
+{% raw %}
 ```bas
 10 FOR J=1 TO 1:FOR I=1000 TO 400 STEP -1:SOUND I,0.015625:NEXT:NEXT:FOR I=399 TO 100 STEP -1:SOUND I,0.02:NEXT
 ```
+{% endraw %}
 
 ## CHARMAP.BAS
 
+{% raw %}
 ```bas
 1 CLS : GOTO 20 'STARTER KEY REASSIGNMENT
 2 KEY ON :IF KK9=0 THEN KEY 1,CHR$(27)+"CLS"+CHR$(13)+"LIST  "+CHR$(13)                            ELSE KEY 1,CHR$(27)+"CLS"+CHR$(13)+"LIST  20-"+CHR$(13)
@@ -167,15 +174,19 @@ machines:
 260 LOCATE 23,1 :PRINT SPACE$(65) ;:PRINT USING "###  \\   ";A,CHR$(A)
 270 GOTO 250
 ```
+{% endraw %}
 
 ## CHIRP.BAS
 
+{% raw %}
 ```bas
 10 FOR J=1 TO 5:FOR I=8000 TO 3000 STEP -100:SOUND I,0.015625:NEXT:NEXT
 ```
+{% endraw %}
 
 ## CLOCK.BAS
 
+{% raw %}
 ```bas
 0 '************************************************************
 1 '*                                                          *
@@ -581,15 +592,19 @@ machines:
 10160 NEXT II
 10170 RETURN
 ```
+{% endraw %}
 
 ## COMPUTER.BAS
 
+{% raw %}
 ```bas
 10 FOR S%=1 TO 8:SOUND RND*1000+37,2:NEXT
 ```
+{% endraw %}
 
 ## DISKPGM1.BAS
 
+{% raw %}
 ```bas
 5 ' *DISKPGM1.BAS     PROGRAM TO PRINT WHAT IS ON THE DISK AND GIVE IT A TITLE
 10 CLS
@@ -663,15 +678,94 @@ machines:
 670 IF ERR>23 AND ERR<27 THEN PRINT " PLACE YOUR PRINTER ON LINE PLEASE:
 680 END
 ```
+{% endraw %}
 
 ## ENGINE.BAS
 
+{% raw %}
 ```bas
 10 FOR S%=1 TO 25:SOUND 45,3:SOUND 38,1:SOUND 45,3:SOUND 37,2:NEXT
 ```
+{% endraw %}
+
+## FILES53.TXT
+
+{% raw %}
+```
+Disk No:   53
+Program Title: SOUNDS
+PC-SIG version: 1.2
+
+Sounds is a host of BASIC sound routines that are fun to play around
+with or incorporate in your own programs to give them a unique touch.
+WordStar utilities let you remove those troublesome 'high-order'
+characters, and some handy file routines let you do file or directory
+sorts, control your display, or put a clock on your computer screen.
+
+Usage:  Text and System Tools.
+
+Special Requirements:  BASIC language.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  None.
+
+File Descriptions:
+
+HRSERACE BAS  Horse racing game
+IPCOGOLF BAS  Golf game
+PHOENIX  BAS  BASIC game
+NADAI    BAS  BASIC game
+SESAME   BAS  BASIC game
+STARWARS BAS  BASIC game
+CHARMAP  BAS  Displays character set on screen
+BASECONV BAS  Numeric base conversion
+ATTRIB   BAS  Sets up video display attributes
+ATTRIB   ABS  Abstract for ATTRIB.BAS
+CLOCK    BAS  Displays clock on screen
+DISKPGM1 BAS  Produces alphabetical list of programs on disk
+DISKPGM1 ABS  Abstract for DISKPGM1.BAS
+FILESORT BAS  File sort routine
+KYBDSET  SUB  Keyboard subroutine
+QUICKSRT BAS  Quicksort demo
+SEESWTCH BAS  Displays computers switch settings
+SCROLL   SUB  Scroll subroutine  (In BASIC)
+UNWS     ASM  Source for UNWS.COM
+SHELLSRT BAS  Shellsort demo
+WSFIX2   TXT  Wordstar fixes
+UNWS     COM  Converts Wordstar files to DOS files
+SOUND1   BAS  Makes sound
+-------- ---  SOUNDS
+WSPATCH2 BAS  Installs various printers for Wordstar
+WSMOD    DOC  How to modify Wordstar 3.2 screen/printer controls
+CHIRP    BAS  Makes sound
+PHASER   BAS  Makes sound
+UPBEAT   BAS  Makes sound
+BOMB     BAS  Makes sound
+SIREN    BAS  Makes sound
+TADADADA BAS  Makes sound
+TADAA    BAS  Makes sound
+SORRY    BAS  Makes sound
+SRS      BAS  Makes sound
+ENGINE   BAS  Makes sound
+COMPUTER BAS  Makes sound
+SHIELDS  BAS  Makes sound
+TORPEDOB BAS  Makes sound
+PHASERB  BAS  Makes sound
+LRS      BAS  Makes sound
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1985,86,87,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
 
 ## FILESORT.BAS
 
+{% raw %}
 ```bas
 10 REM ----------------------------------------------
 15 REM
@@ -850,27 +944,35 @@ machines:
 1410 RETURN
 1420 END
 ```
+{% endraw %}
 
 ## LRS.BAS
 
+{% raw %}
 ```bas
 10 FOR S%=1 TO 20:SOUND 300,1:SOUND 350,1:NEXT
 ```
+{% endraw %}
 
 ## PHASER.BAS
 
+{% raw %}
 ```bas
 10 FOR J=1 TO 5:FOR I=15000 TO 6000 STEP -100:SOUND I,0.015625:NEXT:FOR I = 100 TO 50 STEP -1: SOUND I,1:NEXT:NEXT
 ```
+{% endraw %}
 
 ## PHASERB.BAS
 
+{% raw %}
 ```bas
 10 FOR S%=1 TO 15:SOUND 800,0.1:SOUND 200,0.5:SOUND 800,0.3:SOUND 900,0.1:NEXT
 ```
+{% endraw %}
 
 ## QUICKSRT.BAS
 
+{% raw %}
 ```bas
 10 CLS :KEY OFF: LOCATE 1,32 :PRINT "QuickSort"
 20 N=100 : R=VAL(RIGHT$(TIME$,2)) :RANDOMIZE R
@@ -914,9 +1016,11 @@ machines:
 380 RETURN
 390 END
 ```
+{% endraw %}
 
 ## SEESWTCH.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -999,9 +1103,11 @@ machines:
 1530 PRINT NUMBER.OF.DISKS;"- 5 1/4 INCH DISK DRIVES."
 1540 PRINT MEMORY.SIZE#;"(";MEMORY.SIZE#/1024#;"K ) BYTES RANDOM ACCESS MEMORY."
 ```
+{% endraw %}
 
 ## SHELLSRT.BAS
 
+{% raw %}
 ```bas
 10 CLS :LOCATE 2,30 :PRINT "SHELL SORT"
 100 REM SHELL SORT
@@ -1052,15 +1158,19 @@ machines:
 740 RETURN
 750 GOSUB 690 : :PRINT :PRINT : PRINT :PRINT "Time to sort";N9;"items :";TM2-TM1;"seconds" :LOCATE 23 :END
 ```
+{% endraw %}
 
 ## SHIELDS.BAS
 
+{% raw %}
 ```bas
 10 FOR S%=1 TO 25:SOUND RND*1000+37,0.8:NEXT
 ```
+{% endraw %}
 
 ## SIREN.BAS
 
+{% raw %}
 ```bas
 5 SIGNAL = 0
 10 CLS
@@ -1069,51 +1179,446 @@ machines:
 25 NEXT
 50 FOR I = 400 TO 200 STEP - 8:SOUND I,1:NEXT
 ```
+{% endraw %}
 
 ## SORRY.BAS
 
+{% raw %}
 ```bas
 10 SOUND 70,8:SOUND 45,15
 ```
+{% endraw %}
 
 ## SOUND1.BAS
 
+{% raw %}
 ```bas
 10 FOR J=1 TO 5:FOR I=1000 TO 400 STEP -1:SOUND I,0.015625:NEXT:NEXT:FOR I=399 TO 100 STEP -1:SOUND I,0.02:NEXT
 ```
+{% endraw %}
 
 ## SRS.BAS
 
+{% raw %}
 ```bas
 10 FOR S%=1 TO 10:SOUND 550,2:SOUND 450,1:NEXT
 ```
+{% endraw %}
 
 ## TADAA.BAS
 
+{% raw %}
 ```bas
 10 PLAY "l8cl2e"
 ```
+{% endraw %}
 
 ## TADADADA.BAS
 
+{% raw %}
 ```bas
 10 PLAY "L8CEFGP16L8EL4G"
 ```
+{% endraw %}
 
 ## TORPEDOB.BAS
 
+{% raw %}
 ```bas
 10 FOR J=1 TO 1:FOR I=15000 TO 6000 STEP -100:SOUND I,0.015625:NEXT:FOR I = 100 TO 50 STEP -1: SOUND I,1:NEXT:NEXT
 ```
+{% endraw %}
+
+## UNWS.ASM
+
+{% raw %}
+```
+ 
+TITLE NWS - ASSEMBLER PROGRAM TO STRIP HI-ORDER BITS FROM WORDSTAR FILES
+SUBTTL DESCRIPTION OF THE STACK SEGMENT
+        PAGE
+STACK   SEGMENT PARA STACK 'STACK'
+        DB      64 DUP('STACK   ')
+STACK   ENDS
+SUBTTL DESCRIPTION OF THE DATA SEGMENT
+        PAGE
+WORKAREA SEGMENT PARA PUBLIC 'DATA'
+LOGO    DB      '       ***********************************************************************',10,13
+        db      '       *                                                                     *',10,13
+        db      '       *                        UN - Wordstar                                *',10,13
+        db      '       *   A program to remove the high-order bits from Wordstar data        *',10,13
+        db      '       *   files.  You are prompted for the input and output file names.     *',10,13
+        db      '       *                                                                     *',10,13
+        db      '       *     Written as an assembler language example by Gene Plantz         *',10,13
+        db      '       ***********************************************************************',10,10,10,10,13,'$'
+donem   db      '-------->    DONE    <-------------',10,13,'$'
+eofflag db      0
+crlf    db      10,13,'$'       ;issue carriage return-linefeed after input
+fcb1    db      40 dup(0)       ;input file  only needs to be 36 (but safe)
+fcb2    db      40 dup(0)       ;file control block for output
+err0    db      7,7,'--->  ERROR Opening INPUT file  <--------',10,13,'$'
+err1    db      7,7,'--->  ERROR.. not enough disk space for output <---',10,13,'$'
+err2    db      7,7,'--->  ERROR.... bad file name given. <----',10,13,'$'
+parms   db      14              ;max size of reply
+repson  db      ?               ;size of what they typed
+name1   db      20  dup(' ')    ;this is where the users reply goes
+parms2  db      14              ;max size of input
+resp2   db      ?               ;size of what they really typed in
+name2   db      20  dup(' ')    ;this is where the reply goes
+ask1    db      10,10,13,'Please Enter the name of the input file    $'
+ask2    db      'Please Enter the name of the output file   $'
+buffer  db      128 dup(' ')            ;record  buffer
+workarea ends
+;
+subttl desciption of dos interfaces
+cseg    segment para public 'CODE'
+start   proc    far
+        assume cs:cseg,ds:workarea,ss:stack,es:workarea
+        org     100h
+        push    ds                      ;set up starting linkage as per dxample
+        sub     ax,ax                   ;zero this and place on stack
+        push    ax                      ;so that when we do a RET we go to 
+        mov     ax,workarea             ;location 0;  point to our workarea
+        mov     ds,ax                   ;move the workarea address into DS
+        mov     es,ax                   ;also into ES for the function 29H
+        call    cls                     ;call subroutine to clear the screen
+        mov     dh,3                    ;set cursor to row 8
+        mov     dl,0                    ;set cursor to column 0
+        mov     bh,0                    ;use screen number 0
+        mov     ah,2                    ;function 2 to locate cursor
+        int     10h                     ; go do it
+        mov     dx,offset logo          ;display the logo where we put cursor
+        mov     ah,9                    ;function 9 is print string
+        int     21h                     ;call dos to do it
+;
+        mov     dx,offset ask1          ;point to message to display
+        mov     ah,9                    ;tell DOS what function (print string)
+        int     21h                     ;call DOS
+;
+        mov     dx,offset parms         ;point to console input buffer
+        mov     ah,10                   ;read console buffer
+        int     21h                     ;do it
+;
+        mov     si,offset name1         ;put address of name1 into SI
+        mov     di,offset fcb1          ;put address of file control block DI
+        mov     ah,29h                  ;tell DOS to parse filename
+        int     21h                     ;do it
+;
+        mov    dx,offset crlf           ;do a carriage return-line feed
+        mov     ah,9                    ;after the reply 
+        int     21h                     ;to DOS
+;
+        mov     al,[di+1]               ;if DI+1 = blank, no file name
+        cmp     al,20h                  ;if blank, error
+        jnz     isok
+        jmp     error2
+;
+isok:
+        mov     dx,offset ask2          ;ask user for name of new file
+        mov     ah,9                    ;display question
+        int     21h                     ;DOS
+;
+        mov     dx,offset parms2        ;put address of input buffer into DX
+        mov     ah,10                   ;get input from user
+        int     21h                     ;DOS
+;
+        mov     dx,offset crlf          ;another cr,lf
+        mov     ah,9
+        int     21h
+;
+        mov     si,offset name2         ;SI = address of field NAME2
+        mov     di,offset fcb2          ;DI = address of second file control 
+        mov     ah,29h                  ;ask DOS to parse filename
+        int     21h                     ;DOS
+;
+        mov     al,[di+1]               ;if DI+1 = blank, error
+        cmp     al,20h                  ;is it blank??        jz      error2                  ;tell him and leave     yyyyy
+;
+        mov     dx,offset fcb1          ;point to first fcb
+        mov     ah,15                   ;open the input file
+        int     21h                     ;call dos to do it 
+;
+        cmp     al,0                    ;see if ok
+        jnz     error0                  ;tell him and leave
+;
+        mov     dx,offset fcb2          ;address of fcb2
+        mov     ah,16h                  ;create out put file
+        int     21h                     ;this does open, too
+;
+        mov     dx,offset buffer        ;point to out record buffer
+        mov     ah,1ah                  ;tell DOS to put disk data there
+        int     21h                     ;DOS
+;
+readl:  cmp     eofflag,1               ;see if end-of-file was reached
+        jz      closeall                ;yes, wrap it up and leave
+        mov     dx,offset fcb1          ;read from file 1
+        mov     ah,14h                  ;sequential read from disk
+        int     21h                     ;DOS
+;
+        cmp     al,0                    ;see if normal return
+        jz      readok                  ;if zero, ok
+        mov     eofflag,1               ;no, set end-of-file flag
+        jmp     readl                   ;back to read
+;
+readok: 
+        mov     cx,128                  ;size of logical record
+        mov     si,offset buffer        ;SI = address of our buffer
+andloop:
+                                        ;these 3 lines were used because
+                                        ;   AND [SI],7FH    wouldn't assemble
+                                        ;
+        mov     al,[si]                 ;and out the hi-bit 
+        and     al,7fh
+        mov     [si],al                 ;put it back
+;
+        inc     si                      ;bump pointer to next char in buffer
+        loop    andloop                 ;do it 128 times (in CX)
+;
+        mov     dx,offset fcb2          ;point to output fcb
+        mov     ah,15h                  ;sequential write
+        int     21h
+        cmp     al,1                    ;this means disk full
+        jz      error1
+;
+        jmp     readl                   ;do it again
+;
+closeall:
+        mov     dx,offset fcb2          ;close output file
+        mov     ah,10h          
+        int     21h
+;
+        mov     dx,offset donem         ;iisue DONE message
+        mov     ah,9
+        int     21h
+        jmp     exit
+;
+error2: mov     dx,offset err2          ;err mess 2
+        jmp     errorm
+error1: mov     dx,offset err1          ;point to error mess number 1
+        jmp     errorm
+error0: mov     dx,offset err0
+errorm:
+        mov     ah,9                    ;print it
+        int     21h
+        jmp     closeall
+exit:   ret
+start   endp
+;
+;
+subttl clear screen routine
+cls     proc    near
+        mov     cx,0
+        mov     dx,2479h
+        mov     bh,7
+        mov     ax,600h
+        int     10h
+        ret
+cls     endp
+;
+;
+cseg    ends
+        end     start
+65399 '** DONE - PRESS ENTER TO RETURN TO MENU **
+```
+{% endraw %}
 
 ## UPBEAT.BAS
 
+{% raw %}
 ```bas
 10 PLAY "L4CL8DGD"
 ```
+{% endraw %}
+
+## WSFIX2.TXT
+
+{% raw %}
+```
+
+ Command ? re wsfix2.txt
+
+Judy Epstein, COMPTICS, 3303 Dato Ave., Highland Park, Ill., 60035
+February 23, 1983
+
+To use debug to make the same patches to WordStar as INSTALL.BAS + WSPATCH.BAS for v.3.2 :
+DOS in A:    WS diskette in B:
+DEBUG B:WS.COM
+  [just enter the numbers and letters from the left column]
+F 077F L4 03 1B 53 00			^PQ  SUPERSCRIPT
+F 0784 L4 03 1B 53 01			^PW  SUBSCRIPT
+F 0789 L2 01 1B				^PE  ESCAPE
+F 078E L5 04 1B 48 1B 54		^PR  OFF EACH SCRIPT
+F 076B L4 03 1B 57 01			^PA  DOUBLE WIDTH ON
+F 0770 L4 03 1B 57 00			^PN  DOUBLE WIDTH OFF
+F 0793 L2 01 0F				^PY  CONDENSED ON
+F 0798 L2 01 12				^PY  CONDENSED OFF
+F 079D L3 02 1B 40			    INITIALIZE PRINTER [PSINIT]
+F 07AE L3 02 1B 40			    FINALIZE PRINTER [PSFINI]
+F 0775 L4 03 1B 2D 01                   ^PT UNDERLINE ON
+F 077A L4 03 1B 2D 00                   ^PT UNDERLINE OFF
+
+To change default values :		[space bar to keep]
+E 360					HELP LEVEL 3
+  03.					put in 00,01, or 02
+E 362					INSERT ON
+  FF.					put in 00 for OFF
+E 363					DIRECTORY DISPLAY ON
+  FF.					put in 00 for OFF
+E 3D3					PAGE NUMBERING ON
+  00.					put in FF for OFF
+E 386					RIGHT JUSTIFICATION ON
+  FF.					put in 00 for OFF
+E 389					HYPHEN HELP ON
+  FF.					put in 00 for OFF
+E 39A					HYPHEN WORD LENGTHS
+  04.					<4 for shorter, >4 for longer
+E 07C1                                  STRIKEOUT CHARACTER IS "-"
+  2D.                                   put in 2F for "/"
+E 02D2   				TIME DELAY OF MESSAGES
+  10.					put 08 or 04 for less
+W
+Q
+    
+When using WordStar, you can now use
+ ^PQ  SUPERSCRIPTS ON     ^PW  SUBSCRIPTS ON	    ^PR SHUT OFF
+ ^PA  DOUBLE WIDTH ON     ^PN  DOUBLE WIDTH OFF
+ ^PY  CONDENSED ON        ^PY  CONDENSED OFF
+ ^PT  UNDERLINE ON	  ^PT  UNDERLINE OFF
+ ^PE4 ITALICS ON   	  ^PE5 ITALICS OFF
+ ^PEE EMPHASIZED ON       ^PEF EMPHASIZED OFF
+ ^PEG DOUBLE STRIKE ON    ^PEH DOUBLE STRIKE OFF
+ ^PE8 IGNORE PAPER OUT    ^PE9 ENABLE PAPER OUT
+ ^PE< UNIDIRECTIONAL ONE LINE
+ ^PE0 LINE SPACING 1/8"   ^PE1 7/72"                ^PE2 1/6"[DEFAULT]
+ 
+  To work properly, the controls should be nested in proper order.
+  Also, WS does not count ^PE as a place in line, but it does count
+the 4,5,E,F,G,H,8,9 ,<,0,1,2.  Since these are printer controls, they
+are not printed.  Thus the line is missing these charactgers and is too
+short.  Therefore, whenever one of these characters is used, insert an
+extra space for each one used if using right justification.
+And remember to check this if the paragraph is reformed.
+65399 '** DONE - PRESS ENTER TO RETURN TO MENU **
+
+
+```
+{% endraw %}
+
+## WSMOD.DOC
+
+{% raw %}
+```
+
+
+                     MODIFYING WordStar 3.20
+
+               from Central California Users Group
+
+
+This article describes patches that can be applied to WordStar 3.20,
+in order to modify the screen display, printer controls, and default
+settings when the program initializes.
+
+In order to successfully install these patches, you must be familiar
+with the program DEBUG.COM, supplied with PC-DOS 1.1.  If you are
+not comfortable with the operation of DEBUG, please read the section
+of your DOS manual describing its operation.
+
+WordStar modification involves loading it into memory via DEBUG, then
+changing the hexadecimal value of the appropriate address or addresses.
+This altered version is then written back to disk.  The overall process
+looks like this:
+
+              Load DEBUG in Drive A:
+              Load a copy of WordStar in Drive B:
+              Type "DEBUG B:WS.COM"
+              Type "F (Address)(Data)" for desired result 
+              Repeat above step for each change
+              Type "W"
+              Type "Q"
+
+See the November, 1982 issue (number 7) of PC Magazine for further
+information.  Keep in mind, though, that many of the values given in
+that article are inappropriate for WordStar 3.20.
+
+
+CRT DISPLAY MODIFICATION --
+
+The standard WordStar format is to display Menus and Marked Blocks in
+white, and Text in high-intensity white.  The following patch enables
+these to be altered.  See the "COLOR Statement" section of the BASIC
+manual for the values corresponding to different effects.  Remember, 
+although the values listed in this section are in decimal, the values
+entered with DEBUG must, of course, be in hex.
+
+For example, to change the Menu & Marked Block display to high-intensity
+white, you would change the value from 07H to 0FH.  The memory locations
+are:
+
+      Menu & Marked Blocks:  0284
+                      Text:  028B
+
+
+PRINTER ENHANCEMENTS --
+
+As indicated in the PC Magazine article mentioned above, there are four
+Printer Patch Areas, where additional commands specific to your printer
+can be entered. The correct locations are:
+
+		Patch area	Location
+		----------	--------
+		    1		 077F
+		    2		 0784
+		    3		 0789
+		    4		 078E
+
+
+INITIALIZATION PARAMETER MODIFICATIONS --
+
+The following information enables you to change such aspects as the
+default drive, whether insert is on, etc.
+
+For example, to set drive C: as the default drive on initialization,
+type: F 02DC L1 3 [ENTER].
+
+          
+      Address   Data         Change
+      _______   ____         ______ 
+
+        2CF     L1 0         Quicker Messages
+        2DC     L1 3         Sets Drive C as the default drive
+        360     L1 0         Sets initial help level at 0
+        360     L1 2         Sets initial help level at 2
+        362     L1 0         Insert off on initialization
+        385     L1 0         Word wrap off on initialization
+        386     L1 0         Justification off on initialization
+        389     L1 0         Hyphen help off on initialization
+        38A     L1 0         Print control display off on initialization
+        38B     L1 0         Ruler line off on initialization
+        38C     L1 0         Page Break Display off on initialization
+        38E     L1 2         Double Spacing set on initialization
+        395     L1 25        % replaces period for dot commands
+        396     L1 26        & replaces Ctrl-O for non-break space
+        3D3     L1 FF        No page numbers printed
+        3D4     L1 0         Microjustication off on initialization
+        3D5     L1 0         Bidirectional Print off on initialization
+        37B     L1 0         Alternate Pitch becomes default
+        37E     L1 32        Page offset increased from 8 to 50 
+        37F     L1 (n)       Left Margin (n is margin setting in hex)       
+        380     L1 (n)       Right Margin (n is margin setting in hex)
+
+
+We are grateful to the San Francisco IBM PC Users Group for much of
+this information.
+
+
+
+```
+{% endraw %}
 
 ## WSPATCH2.BAS
 
+{% raw %}
 ```bas
 
 
@@ -1296,6 +1801,7 @@ machines:
 
 
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

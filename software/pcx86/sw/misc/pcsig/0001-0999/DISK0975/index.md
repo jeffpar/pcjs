@@ -26,6 +26,62 @@ machines:
     (upper ASCII included) with several good editing and block features.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES975.TXT
+
+{% raw %}
+```
+Disk No:  975
+Program Title:  COLLAGE
+PC-SIG version: 1.1
+
+This program is a computerized Show & Tell Software Package to create
+colorful graphic pictures on your computer screen.  You create and save
+these slides, combine created slides, and present the created and
+combined slides as a show on your computer screen.  COLLAGE also lets
+you create and maintain text files (upper ASCII included) with a number
+of good editing and block features.
+
+The documentation comes as text files with the extensions IMG.  These
+are chained together to present a slide show.  Select the option "Slide
+Show" in the main menu and the "File Slide Projection" option by
+pressing F. Then enter "DOCU" and hit the enter key.  The entire
+documentation is then projected frame-by-frame on your screen.  Hit any
+key to stop or continue, and "Esc" to quit.
+
+Usage:  Business or Educational.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $10.00
+
+File Descriptions:
+
+COLLAGE  EXE  The Main Module.
+MAIN     EXE  Screen Editor.
+COLLAGE  HLP  Beginners HELP file.
+READ     ME!  Introductory file.
+DOCU          Documentation Slide.
+DEMO          Demonstration Slide.
+DISP          Display Slide.
+??????   IMG  COLLAGE files (21 files).
+BASRUN   EXE  Runtime module.
+BASRUN   LIB  Data file.
+AUTOEXEC BAT  Batch file to start program upon boot-up.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0975
 

@@ -41,6 +41,69 @@ machines:
     and is menu-driven for ease of use.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1248.TXT
+
+{% raw %}
+```
+Disk No: 1248
+Program Title:  PRODEX-PLUS version 1.6
+PC-SIG version: 1.1
+
+If your telephone is your livelihood, PRODEX-PLUS may ring your bell by
+combining a telephone directory, report log, and things-to-do scheduler
+to make you more productive.
+
+Names and phone numbers of your personal and business contacts become a
+snap to keep track of and change as needed using the automatic Telephone
+Directory function.  Auto dial is also included.
+
+The Report Log allows you to record the date and time of calls, and make
+'Folders' which act as electronic notepads and mini data files for
+keeping track of important information and follow-up on your phone
+conversations.
+
+The Things-To-Do Scheduler lets you set appointments, planned activities
+and ticklers to remind you of dangling commitments.
+
+With PRODEX-PLUS, you can selectively sort and print mailing labels,
+address lists, phone directory lists, to-do lists, and folders.  The
+program is memory resident and so stays out of your way until needed,
+and is menu driven for ease of use.
+
+Usage:  Business Applications.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $35.00 for latest version; $50.00 for latest
+version plus manual.
+
+File Descriptions:
+
+ADDRESS  DIR  Sample address directory.
+CODE     DIR  Sample code directory.
+FAKEY    COM  Subprogram.
+LOG      DIR  Sample log directory.
+PHON0020 FLD  Sample phone folder.
+PHON0585 FLD  Sample phone folder.
+PHON0610 FLD  Sample phone folder.
+PHONE    DIR  Sample phone directory.
+PX       EXE  PRODEX PLUS program.
+TODO     DIR  Sample todo directory.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1248
 

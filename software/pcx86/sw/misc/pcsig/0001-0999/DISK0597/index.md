@@ -43,6 +43,67 @@ machines:
     0_HIGHLT WRK  Instructions on where to find details
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES597.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  597  Symphony Worksheet #4                              v1 DS2
+---------------------------------------------------------------------------
+This disk contains three LOTUS macros - one for an installment loan
+analyzer, one for producing mailing labels and another for a check
+book ledger with a built in budget.
+ 
+0_HIGHLT WRK  Instructions on where to find details
+0_README WRK  Details about new revisions and location of files
+AUTOLOAD WRK  Macro to display systems on disk
+CHEKBOOK WRK  Check Book Macro
+LOANTABL WRK  Loan Table Macro
+MAILLIST WRK  Mailing List Macro
+PRODUCTS WRK  Brief description of some macros
+0_DESCR  WRK  Instructions on executing demo
+ 
+PC-SIG (SOFTWARE INTEREST GROUP)
+1030 D DUANE AVE.
+SUNNYVALE CA., 94086
+PH# 408-730-9291
+ 
+```
+{% endraw %}
+
+## NOTES597.TXT
+
+{% raw %}
+```
+Program name:        New York Lotus 272
+
+Author name:         N.Y. Lotus Disks
+Address:             Suite 1102, 163 Joralemon St., Brooklyn 11201
+
+Suggested Donation:  ?
+
+Program Description: This disk contains three LOTUS macros ranging from
+                     mailing labels to a check ledger. It would be of
+                     interest to most LOTUS users.
+
+                     The three macros are :
+
+                     1. CHEKBOOK.WRK
+                        A Checkbook ledger with a built-in budget and
+                        on line IRS code.
+
+                     2. MAILLIST.WRK
+                        Produces mailing labels and up to 3  different
+                        form letters.
+
+                     3. LOANTABL.WRK
+                        An installment loan analyzer
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0597
 

@@ -38,6 +38,53 @@ machines:
     password system.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CONVERT.DOC
+
+{% raw %}
+```
+To whom it may concern:                                                          4/4/86
+
+These disks have the new Release 1.2 of Budgetrak. There have been changes
+to several of the programs since the last we've given you. So you should 
+load all of them onto your hard disk or production floppy. There are a 
+couple new ones to help too. BCON is a conversion program from Rel. 1.1 to 
+1.2 and BBAL captures balances form groups of transactions within a trans-
+action file to confirm balances on the Master file. 
+
+We've added an Entry Date to the transactions in addition to the existing
+transaction date. It is a program `session' date that goes into any changed
+or new transaction to give a better audit trail. This means that none of
+the current Transaction files will run in these new Rel 1.2 programs until
+they have been converted, running the program BCON. It is easy to run.
+
+So, lets convert them following this procedure:
+
+	1. Copy all the current transaction files to a backup floppy.
+
+	2. Run BCON. It will read the old transaction file, from your
+	   standard menu file selection and write new longer records 
+	   with the old data. Then when it is thru, it will erase the 
+	   old file.
+
+	3. After you have run with the new Transaction files you should
+	   get a new backup on a floppy and then finally you can erase the 
+	   old backup.
+
+The changes have been described in a new version of Budgdoc, so you should
+print a new user manual too.  
+
+If you know of users who are using BudgeTrak Rel 1.1, do them a favor and
+give them a copy of these Release 1.2 programs. Thanks.
+
+                    Software Associates Laboratories
+                           1747 N. Valencia
+                       San Bernardino, CA 92404
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0519
 

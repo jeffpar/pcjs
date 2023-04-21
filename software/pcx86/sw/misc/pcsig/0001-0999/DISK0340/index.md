@@ -75,8 +75,55 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILES340.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 340  Infobase                                           v1   DS
+------------------------------------------------------------------------
+ 
+Infobase is a forms driven database management system with mailmerge
+capabilities and is similar in function and capability to INFO-STAR
+and VERSA FORM.
+ 
+ATTACH        Documentation and startup information
+CLIENT        Text version of a demo form
+CLIENT   DBS  Demo database
+CLIENT   FOR  Report form
+CLIENTD  FOR  Report form
+FINAL    FOR  Last form in demonstration
+FLETTER       Text version of a demo form
+FLETTER  FOR  Demo form for form letter
+FLETTERD FOR  Demo form for form letter
+FORMGEN  EXE  Generates forms from textfiles
+FTEXT         Help screens for form generation
+IBASE    EXE  Starts Infobase
+INFOBASE DOC  Complete documentation
+INSTALL  BAS  BASIC program for color monitor information
+INVOICE  DBS  Demonstration database
+INVOICE  FOR  Demo invoice form
+INVOICED DBS  Alternate demonstration database
+INVOICED FOR  Alternate demo invoice form
+ITEXT         How to get started with Infobase
+LABEL         Text version of a demo form
+LABEL    FOR  Demo for mailing labels
+LABELD   FOR  Demo for mailing labels
+NARS          A sample form
+NELSON        Introduction letter for Infostar
+REPORT        Program to print reports from forms
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## INSTALL.BAS
 
+{% raw %}
 ```bas
 1000 '  INFO-BASE  INSTALL PROGRAM        May 20 1984
 1010 '             COPYRIGHT COMPUTER REALTY SYSTEMS  1984
@@ -179,9 +226,11 @@ machines:
 1910  LOCATE 24,30,0 : COLOR 16,7 : PRINT "PRESS ANY KEY TO CONTINUE";
 1920  Z$ = INKEY$ : IF Z$ = "" THEN 1920 :ELSE COLOR 0,1 : RETURN
 ```
+{% endraw %}
 
 ## REPORT.BAS
 
+{% raw %}
 ```bas
 1000 ' REPORT PGM    FOR INFO-BASE                MAY 20 1984
 1010 '    COPYRIGHT COMPUTER REALTY SYSTEMS   1984  ALL RIGHTS RESERVED
@@ -321,6 +370,7 @@ machines:
 2260 '
 2270  RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

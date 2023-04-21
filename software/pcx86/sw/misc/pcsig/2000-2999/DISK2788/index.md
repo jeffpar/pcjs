@@ -14,6 +14,49 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2788.TXT
+
+{% raw %}
+```
+Disk No: 2788                                                           
+Disk Title: TutorialWriter                                              
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: TutorialWriter                                           
+Author Version: 2.1                                                     
+Author Registration: $49.50                                             
+Special Requirements: None.                                             
+                                                                        
+Teachers, Parents, Trainers -- TUTORIALWRITER is an educator's toolkit  
+for computer-based training.                                            
+                                                                        
+The computer is the ideal tool for the classroom, but in order to use it
+to the fullest, you have to learn how to program.  Many people have     
+knowledge to share but do not want to learn computer programming in     
+order to do so.  TUTORIALWRITER has closed this gap.  Anyone who can use
+a word processor can create full color computer tutorials with          
+Hypertext, pop-up windows, menus, online Help, tests, quizzes, branching
+on answers, graphics, mouse support, and more.                          
+                                                                        
+Harness the computer's power.  Decide what you want to present, type it 
+into a standard (ASCII) file with a word processor and then enter       
+TUTORIALWRITER's codes where you want them.  Put a title in a fancy box 
+at the top of the screen.  Put CONTINUE and QUIT boxes at the bottom of 
+the screen.  It is that simple.  There are more than forty codes that   
+give the author tremendous control of the computer.  Give the           
+ready-to-run tutorial disk to the people it was written for.            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2788
 

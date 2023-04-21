@@ -49,6 +49,70 @@ machines:
     over 25 years of experience.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1456.TXT
+
+{% raw %}
+```
+Disk No: 1456
+Program Title:  ALGEBRAX
+PC-SIG version:  1.0
+
+No longer do you need to cringe when you see that ominous-looking
+algebra problem!  You now have ALGEBRAX to help you overcome that fear
+of mathematics.
+
+Some of the enhanced features you will find in this package that will be
+hard to find in other tutorials are:
+
+- All problems are randomly generated, you will never have the same
+  problem twice
+
+- There are five levels of difficulty for each lesson plan and each
+  level of difficulty gives five questions
+
+- After each correct answer, you will be branched to a more difficult
+  problem
+
+- There are no multiple choice problems (sorry, no guessing)
+
+- Alternate answers are accepted.  Most programs will allow one correct
+  answer only, but ALGEBRAX knows that there are differents ways to
+  write mathematical solutions
+
+- When a wrong answer is given, ALGEBRAX will take you through the
+  problem step-by-step
+
+- All lesson results are kept by the program and can be reviewed on
+  screen or printer
+
+Most important of all, ALGEBRAX has been written by a math professor
+that has over 25 years of experience, which assures you that he knows
+what type of questions need to be answered.
+
+Usage:  Educational.
+
+Special Requirements:  CGA card.
+
+Suggested Registration:  $30.00
+
+How To Start:  Type GO  (press enter).
+
+File Descriptions:
+
+ALGEBRAX EXE  Main program.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1456
 

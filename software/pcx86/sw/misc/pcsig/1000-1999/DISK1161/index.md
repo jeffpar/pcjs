@@ -49,6 +49,48 @@ machines:
     CHAPTER  6    Text.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1161.TXT
+
+{% raw %}
+```
+Disk No  1161
+Program Title:  FUTURE SYSTEMS (Disk 2 of 2)
+PC-SIG version 1
+
+This is the second disk of FUTURE SYSTEMS.  Both disks #1160 and #1161
+are needed to read the book.  For more information, refer to disk #1160.
+
+Usage:  Book/Reference.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $35.00
+
+File Descriptions:
+
+CHAPTER  7    Chapter 7 text file.
+CHAPTER  8    Chapter 8 text file.
+CHAPTER  9    Chapter 9 text file.
+CHAPTER  10   Chapter 10 text file.
+CHAPTER  11   Chapter 11 text file.
+CHAPTER  12   Chapter 12 text file.
+CHAPTER  13   Chapter 13 text file.
+CHAPTER  14   Chapter 14 text file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1161
 

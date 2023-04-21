@@ -40,6 +40,61 @@ machines:
     correctness.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1366.TXT
+
+{% raw %}
+```
+Disk No: 1366
+Program Title: FREEQUENT FLYER (Disk 2 of 3)
+PC-SIG version 1
+
+FREEQUENT FLYER is a three disk set, this is the second disk of the set.
+All three disks (#1365, #1366, #1367) are needed to run the program.
+Refer to disk #1365 for a full description of the program.
+
+Synopsis:  A menu-driven database of flight & travel info that helps you
+to maximize your frequent flyer bonuses.
+
+Usage:  Business/Airline Travel/Frequent Flyer Bonuses.
+
+Special Requirements:  Hard disk and a CGA card.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $19.95 for current update; $49.95 for quarterly
+updates (4); $79.95 for monthly updates (12).
+
+File Descriptions:
+
+AIRLINE  NTX  Index file.
+AIRLINE2 NTX  Index file.
+AIRLINE3 NTX  Index file.
+AIRLINE4 NTX  Index file.
+AIRLINE5 NTX  Index file.
+ARLNMILE DBT  Data file.
+CITY     NTX  Index file.
+CODE     NTX  Index file.
+COUNTRY  NTX  Index file.
+HOTEL    NTX  Index file.
+HOTEL1   NTX  Index file.
+HOTLMSTR DBF  Database file.
+HOTLMSTR DBT  Data file.
+INITMEM  MEM  Data file.
+NOFREQ   DBF  Database file.
+STATE    NTX  Index file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1366
 

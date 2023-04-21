@@ -39,12 +39,148 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILES666.TXT
+
+{% raw %}
+```
+Disk No  666
+Program Title: STRUCTURED PROGRAMMING LANGUAGE (SPL)
+PC-SIG version 3
+
+The STRUCTURED PROGRAMMING LANGUAGE (SPL) compiler takes an input source
+code and produces an ASCII file in BASIC that can be executed in BASICA
+or compiled using the BASIC compiler. SPL is a sort of mix between BASIC
+and PASCAL. It has the easy to use commands of BASIC and the structured
+architecture of PASCAL. This language has powerful commands that allow
+for the building of procedures, functions and structured programming
+blocks which are enclosed by BEGIN and END statements.
+
+SPL supports many IF THEN style programming codes as well as REPEAT
+WHILE commands. SPL also comes with graphics ability with excellent
+mathematical operators and strong string manipulation commands. In
+short, almost every command available in BASIC is also available in SPL,
+with a few additions. SPL handles arrays and disk input and output
+routines. Those interested in a structured form of BASIC would be very
+interested in SPL; it offers an excellent way to create structured
+programs with a fair amount of ease and lessened toil. SPL comes
+complete with a user's manual which contains an error code list as well
+as feature index. This language is not intended for the novice computer
+operator.
+
+The author has also come out with a programming editor, written using
+the SPL language, called PREDITOR.
+
+Usage:  Programming.
+
+System Requirements:  A version of BASIC and a hard disk.
+
+How to Start:  Call the author, Dennis Baer, for the password to
+uncrunch the manual: 516-694-5872.
+
+Suggested Registration:  $50.00 -- $100.00 for SPL and $35.00 for
+PREDITOR.
+
+File Descriptions:
+
+SPL      ARC  Contains the complete Structured Programming Language
+              system along with other SPL programs.
+SPZENPIC ARC  Contains digitized picture for Zenith Z-100 owners with
+              MSDOS or ZDOS and a monochrome monitor, ZBASIC, and color
+              RAM.
+SPEGAPIC ARC  Contains digitized picture for IBM or compatible owners
+              who own a Thompson EGA Ultra, ATI Small Wonder EGA card or
+              equivalent and a monchrome monitor.
+SPPRNPIC ARC  Contains digitized picture for any MSDOS or PCDOS system
+              who has an EPSON compatible printer with or without
+              GRAPHTRAX.
+              WARNING: This file expands to over 359K! and takes a while
+              to print out. You need to cut and paste the picture together.
+ARC      EXE  Unarchiving program.
+COPYRITE TXT  Copyrite information.
+SPLPRESS      A press release.
+
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## READTHIS.DOC
+
+{% raw %}
+```
+		The Structured Programming Language
+			Picture file
+
+To display my picture you need a pcdos computer system with EGA and an
+RGB monitor of 640 x 350 which can be switched to display shades of
+a monochrome.
+
+Enter
+
+IPICDUMP
+
+For the row length enter 320
+For the scale factor enter 2
+For the file name enter PICTURE
+
+To obtain the Structured Programming Language you can download file 
+SPLLIB.ARC from one of the following systems or distribution channels.
+
+516 334 8221 (1200 baud) 24 hours
+302 655 6342 (2400 baud) 6pm-8am EST
+212 980 0770 (1200 baud) 24 hours
+516 367 9626 (1200 baud) 24 hours
+516 698 4008 (1200 baud) 24 hours
+212 431 1194 (1200 baud) 24 hours
+
+PC SIG Volume 666 (800 245 6717)
+Public Brand Software (800 IBM DISK)
+
+For any questions call the author, Dennis Baer at 516 694 5872 during
+Monday thru Friday from 10am to 6:30pm EST
+
+or send RETURN POSTAGE,Formatted 5 1/4" disk,MAILER to get The Structured
+Programming Language.
+```
+{% endraw %}
+
+## READTHIS.DOC
+
+{% raw %}
+```
+
+
+This file expands to 359k so you should have enough space on your disk.
+When you copy this file to your printer it will produce a picture of
+Dennis Baer, the author of the Structured Programming Language. To
+obtain the Structured Programming Language download file SPLLIB.ARC
+from a bbs at 516 334 8221 (1200 baud) 25 minute download or from
+516 367 9626 (1200 baud). The printer should be EPSON compatible and
+it does NOT require Graphtrax. It will print many minus signs to produce
+the picture that you must cut and paste together. If you have an IBM PC
+with either a Thompson EGA ultra card or ATI Small Wonder EGA card you
+can run the SPL processor on a program called IPICDUMP.SP and with your
+Quick BASIC version 2 or 3 compile it and run it with your monochrome
+monitor and see my picture on your screen. This file set is for those
+who do not have the right EGA that will prduce shades of grey, or have
+no EGA at all, or maybe an MSDOS machine that is not IBM compatible.
+I can be reached at 516 694 5872 from Mon-Fri 10am - 6:30pm NY time.
+```
+{% endraw %}
+
 ## LOADPIC.BAS
 
+{% raw %}
 ```bas
 10 CLS:BLOAD "PICTURE.R":BLOAD "PICTURE.G":BLOAD "PICTURE.B"
 20 GOTO 20
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

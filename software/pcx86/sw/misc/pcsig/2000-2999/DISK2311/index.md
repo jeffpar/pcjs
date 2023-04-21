@@ -38,6 +38,47 @@ machines:
     management analysis and sales support.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2311.TXT
+
+{% raw %}
+```
+Disk No: 2311                                                           
+Disk Title: The Front Office 3 of 3 (also 697, 698)                     
+PC-SIG Version: S2.5                                                    
+                                                                        
+Program Title: The Front Office                                         
+Author Version: 3.3                                                     
+Author Registration: $129.00                                            
+Special Requirements: 640K RAM and a hard drive.                        
+                                                                        
+Open the door to more opportunity with THE FRONT OFFICE (TFO).  TFO is a
+marketing and sales productivity system for prospecting and lead        
+tracking, telemarketing and call reporting, follow-up and sales         
+performance.                                                            
+                                                                        
+TFO is menu-driven and uses a single data-entry system for all data.    
+Data entered in one area is automatically copied to all other applicable
+areas -- cutting down on data-entry costs, time and errors.  It comes   
+with its own wordprocessor and works with others as well.               
+                                                                        
+Letters, envelopes, labels and reports are selectively produced by      
+prospect code, salesperson code, zip code, follow-up date, customer     
+code, product code or your own user-defined fields for efficient and    
+flexible prospect tracking and follow-up.  Call reports include         
+telephone time, sales forecasts and potential sales volume for          
+management analysis and sales support.                                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2311
 

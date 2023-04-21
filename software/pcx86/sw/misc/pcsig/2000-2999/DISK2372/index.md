@@ -45,6 +45,56 @@ machines:
     profiles to disk for future reference.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2372.TXT
+
+{% raw %}
+```
+Disk No: 2372                                                           
+Disk Title: Professional CAM CAD                                        
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Professional Cam Cad                                     
+Author Version: 1.0                                                     
+Author Registration: $35.00                                             
+Special Requirements: 512K RAM, CGA, and a printer.                     
+                                                                        
+PROFESSIONAL CAM CAD guides the novice or engineer through the complex  
+calculations required to design Cams.  Cams are a rotating piece that   
+imparts motion to a roller moving against its edge.  Cams transform     
+rotary motion into a translating or oscillating motion.  The            
+requirements imposed on cams vary from machine to machine due to the    
+speed changes and the type of equipment it is to be used in.            
+PROFESSIONAL CAM CAD allows you to select eight different motion        
+contours from a table.                                                  
+                                                                        
+Various style cam contours are available in PROFESSIONAL CAM CAD.       
+Harmonic, Cycloidal, 3-4-5, Polynomial, Constant Velocity, Matching     
+Constant Velocity, and dwells are available.  You can input one motion  
+contour for a sector and incorporate another motion for another sector  
+in the same cam.                                                        
+                                                                        
+PROFESSIONAL CAM CAD will display the exact contour of the cam and allow
+you to view the cutter path.  The display will permit you to see the    
+final shape using the cutter/cam follower of your choice.  You can      
+even re-plot the cam before actually having manufactured the cam.  This 
+saves countless hours of development time.                              
+                                                                        
+PROFESSIONAL CAM CAD does the hard work for you.  It provides eight     
+different displacement profiles for your selection and then calculates  
+the profiles and displays the contour of your cam.  You can also save   
+the profiles to disk for future reference.                              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2372
 

@@ -44,8 +44,391 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #173, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  CPOKEMAN.EXE         CRC = 92 55
+
+--> FILE:  ESP     .DOC         CRC = A0 8A
+
+--> FILE:  ESP     .EXE         CRC = D8 FD
+
+--> FILE:  PACMANGL.EXE         CRC = BD B6
+
+--> FILE:  XXX     .            CRC = 62 B3
+
+--> FILE:  SELLERS .            CRC = 00 00
+
+--> FILE:  PCMAN   .BAS         CRC = 8C E1
+
+ ---------------------> SUM OF CRCS = B9 26
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## ESP.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            EXTRA SENSORY PERCEPTION
+
+
+
+                                       by
+
+                                Treegoods, Inc.
+
+
+                                  February 84
+
+
+
+
+
+
+                                Copyright Notice
+
+
+        Copyright (c) 1984 by Treegoods, Inc., Box 814, Hockessin, DE
+      19707. All rights reserved.  This document may be copied along with
+      the ESP program under conditions specified for the copying of that
+      program.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      TREEGOODS, INC.                    PSI AND THE ESP COMPUTER PROGRAM
+
+
+
+
+      PSI AND THE ESP COMPUTER PROGRAM
+
+        People have always speculated about the "other" senses: e.g.
+      those beyond the common "sight", "hearing", "touch", etc.  Are
+      there such senses, or are they a part of humankind's fantasy world
+      along with fairies and magic carpets?
+
+        Serious scientific investigation of parapsychology began in
+      Victorian times and led to the founding of The Society for
+      Psychical Research in London.  Alas, things are not always what
+      they seem and this well intentioned start foundered on a lack of
+      controls.  Mediums were found to be frauds and eyewitness reports,
+      even when made by careful observers, were too often in error.
+
+        In despair of finding a workable methodology for dealing with
+      "spontaneous" psychic phenomena, researchers retreated into the
+      laboratory and restricted their investigations to environments that
+      could in theory be controlled.  Thus has grown up a protocol for
+      testing psi abilities.
+
+        The laboratory equipment usually consists of a deck of cards and
+      the subject is asked to perform tasks such as naming the top card
+      or reading the mind of a "sender" who is looking at a card.  In a
+      clairvoyance experiment for example, the cards are shuffled and
+      dealt face down, one at a time.  The subject is required to write
+      down the card without seeing its face.  After the pack has been
+      dealt, the cards are turned up, compared with the subjects' notes
+      and the degree of clairvoyance assessed by statistical formulas
+      that indicate the frequency of chance "hits".
+
+        J.B. Rhine of Duke University found subjects who could produce
+      truly astonishing numbers of "hits" by such techniques.  At first
+      he was rather casual in his protocol, but as time passed and as he
+      or his associates thought of objections to one technique or
+      another, he tightened up his protocol until the subject was even in
+      another building from the deck of cards.  References to his
+      publications are given in the bibliography.
+
+        Since Rhine's publications began appearing, other investigators
+      have found subjects able to produce similar results, but by and
+      large the scientific community has not been too impressed.  The
+      problem is much more difficult that it seems at first thought.  No
+      one seriously disputes the results or impugns the integrity of
+      Rhine or most other serious investigators.  The scientific
+      objections are on other grounds.
+
+        These objections are detailed at length in the literature and
+      they will not be dwelt on here, but to provide some feeling for the
+      difficulties, consider the usual psi test with a deck of 25 Zener
+      cards.  These are ordinary sized cards consisting of 5 each of 5
+      different symbols: star, square, circle, cross, and 3 wavy lines.
+
+
+
+                                     Page 1
+
+
+
+
+
+
+      TREEGOODS, INC.                    PSI AND THE ESP COMPUTER PROGRAM
+
+
+
+      It is no great trick to remember a sequence of 25 cards.  Some
+      people can do it naturally, but most people can be trained to it
+      with the use of mnemonics.  If one can do this, one can also learn
+      to "shuffle" and cut the cards mentally.  Of course a mental
+      shuffle will not necessarily agree with an actual shuffle, but the
+      results will be good enough to throw off the statistical
+      calculations and increase the number of hits to a significant
+      degree.  In one series of 100 shuffles, the average number of hits
+      by such mental gymnastics was raised from the expected value of 5
+      to 8.6. The odds against this are quadrillions to one by the usual
+      statistical formulas.
+
+        This is only one way in which an ESP test can be "beaten".  There
+      are many others depending on how the particular ESP test is
+      conducted.  The ESP computer program avoids them all by generating
+      a sequence of symbols with a pseudo random number generator.  It
+      can be shown that the series of symbols used in an ESP test is too
+      short for the sequence to be "broken" and thus even "lightning
+      calculators" will possess no advantage.  Improper mixing of cards
+      by shuffling is avoided in this way as is any possibility of
+      "trickery" with physical objects such as cards.
+
+        The precognition test is completely foolproof.  However, there is
+      some possibility for error in the telepathy and clairvoyance tests
+      because of the need for human intervention.  For valid results in
+      the clairvoyance test the lower portion of the screen must be
+      completely masked off.  With care in this, the test should be
+      secure.  The telepathic test is open to question because the sender
+      and the receiver are physically present and thus able to signal one
+      another.  Some people have extremely acute senses and others
+      possess great powers of observation.  Conscious chicanery is thus
+      possible, as is the unconscious sensing of body language or
+      subvocalizations.  It is important to remember that one does not
+      have to get all the answers right to succeed with an ESP test, one
+      only needs to increase the odds enough to upset the statistical
+      calculations.  Running the ESP program from a remote terminal might
+      overcome these problems.
+
+        There are some fine points is assessing the statistical
+      significance of results that have confounded even good scientists
+      in the past.  The ESP computer program deals with these and prints
+      out a clear statement of the odds.  In most scientific endeavors,
+      odds of 19 to 1 are considered "significant" and any subject who
+      can consistently produce such odds using the ESP computer program
+      must be considered to possess psi abilities.  Successful subjects
+      reported in the literature usually do considerably better than
+      this: odds exceeding a million to one are common.
+
+
+
+
+
+
+
+
+                                     Page 2
+
+
+
+
+
+
+      TREEGOODS, INC.                                          REFERENCES
+
+
+
+
+      REFERENCES
+
+
+      Douglas, Alfred (1977) Extra-sensory powers.  The Overlook Press,
+         Woodstock, NY.
+      Eysenck, H.J. (1958) Sense and Nonsense in Psychology. Penguin,
+         Baltimore, MD.
+      Hansel, C.E.M. (1980) ESP and parapsychology: a critical
+         reevaluation. Prometheus, Buffalo, NY.
+      Rhine, J.B. (1934) Extra-Sensory Perception. Bruce Humphries,
+         Boston.
+      Rhine, J.B. (1960) The reach of the mind. William Sloane
+         Associates, New York.
+      Schmeidler, Gertrude (ed) (1969) Extrasensory perception. Atherton
+         Press, New York.
+
+      JOURNALS
+
+
+      Journal of Parapsychology. Inst. of Parapsychology. Durham, NC.
+      Journal of the American Society for Psychical Research.  Am. Soc. Psy.
+         Res. NY
+
+      SOCIETIES
+
+
+      American Society for Psychical Research. 5 West 73rd St., New York,
+         NY 10023. (212) 799 05050.
+      Institute of Parapsychology. PO Box 6847, Durham, NC 27708-6847.
+         (919) 688 8241.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     Page 3
+
+
+
+
+
+
+      TREEGOODS, INC.                                          ALGORITHMS
+
+
+
+
+      ALGORITHMS
+
+        The sequence of symbols is generated by a multiplicative
+      congruential random number generator
+
+                              x[i+1] = Ax[i]mod P
+
+      where P=2E31-1 and A=7E5. The starting seed x[0] is obtained from
+      the least significant bits of the computer's clock.
+
+        An evaluation of the properties of this generator and others
+      appears in Fishman, G. S. and Moore, L. R. (1982) A statistical
+      evaluation of multiplicative congruential random number generators
+      with modulus 2E31-1. J. Am. Statist.  Assoc.  77-377, pp129-136.
+
+        Odds are obtained from the binomial distribution by evaluating
+      the incomplete beta function using a partial fraction expansion.
+      Fifteen place accuracy is attained for odds less than 4.5E-15 to 1.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     Page 4
+
+
+
+
+
+```
+{% endraw %}
+
 ## PCMAN.BAS
 
+{% raw %}
 ```bas
 10 REM PAC-MAN Name
 20 REM Version 1.00 (C)Copyright Bob Bison
@@ -427,6 +810,7 @@ machines:
 30025  KILL FILE$
 30030  RETURN 560
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

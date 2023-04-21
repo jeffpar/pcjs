@@ -39,6 +39,55 @@ machines:
     explorer dates, accomplishments and a fourth named POT LUCK.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2298.TXT
+
+{% raw %}
+```
+Disk No: 2298                                                           
+Disk Title: The Explorers                                               
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: The Explorers                                            
+Author Version: 1.4                                                     
+Author Registration: $10.00                                             
+Special Requirements: None.                                             
+                                                                        
+Here's a great tool for anyone that has an interest in early American   
+history.  This program is made up of two parts: the EXPLORER HISTORIES  
+and the EXPLORER QUIZ.                                                  
+                                                                        
+The explorer histories in this collection contain 45 explorers that     
+touched American shores and are considered to have made important       
+historical contributions to America's growth.  You can page through the 
+explorers one by one until you have found the historian you are         
+interested in.  Once the explorer has been chosen, you will be shown    
+his/her full biography.  The biography will include birth/death date,   
+notes of accomplishment, and other interesting facts.                   
+                                                                        
+It is strongly recommended that the user have a good map of the         
+U.S. at hand to follow the various expeditions.                         
+                                                                        
+The EXPLORER QUIZ is a program designed to ask a series of questions on 
+the 45 explorers.  From the main menu you will have a choice of subject 
+area. You may choose to be quizzed on just names of explorers, explorer 
+dates, or accomplishments - there are three subject areas in all. You   
+might also choose a fourth which has been called POT LUCK - it will     
+select each of the other questions at random.                           
+                                                                        
+The information and questions in EXPLORERS is on a high school and      
+college level.                                                          
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2298
 

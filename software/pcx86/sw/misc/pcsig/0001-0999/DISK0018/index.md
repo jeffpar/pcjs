@@ -45,6 +45,7 @@ machines:
 
 ## ANALOG.BAS
 
+{% raw %}
 ```bas
 5 KEY(10) ON:ON KEY(10) GOSUB 600:KEY(9) ON:ON KEY(9) GOSUB 700:DIM A(30):FOR I=1 TO 30:A(I)=I:NEXT I
 10 CLS:R=0:N=0:GOSUB 59980:FOR I=1 TO 100:SWAP A(INT(RND*30+1)),A(INT(RND*30+1)):NEXT I:GOTO 300
@@ -144,9 +145,11 @@ machines:
 59980 RNDTIME$=TIME$:RNDVAL=VAL(LEFT$(RNDTIME$,2))*120+VAL(MID$(RNDTIME$,4,2))*60+VAL(RIGHT$(RNDTIME$,2)):RANDOMIZE RNDVAL:RETURN
 59990 IKEY$=INKEY$:IF IKEY$="" THEN 59990 ELSE RETURN
 ```
+{% endraw %}
 
 ## ANALOG2.BAS
 
+{% raw %}
 ```bas
 310 LOCATE 2,34:PRINT"Analogies 2":COLOR 7,0
 700 RUN "analog3"
@@ -181,9 +184,11 @@ machines:
 5780 DATA ascetic, philanderer,22,21,7,6,2,2
 5790 DATA entrepreneur, profits,19,2,4,16,20,1
 ```
+{% endraw %}
 
 ## ANALOG3.BAS
 
+{% raw %}
 ```bas
 5 KEY(10) ON:ON KEY(10) GOSUB 600:KEY(9) ON:ON KEY(9) GOSUB 700:DIM A(18):FOR I=1 TO 18:A(I)=I:NEXT I
 10 CLS:R=0:N=0:GOSUB 59980:FOR I=1 TO 100:SWAP A(INT(RND*18+1)),A(INT(RND*18+1)):NEXT I
@@ -240,9 +245,11 @@ machines:
 59980 RNDTIME$=TIME$:RNDVAL=VAL(LEFT$(RNDTIME$,2))*120+VAL(MID$(RNDTIME$,4,2))*60+VAL(RIGHT$(RNDTIME$,2)):RANDOMIZE RNDVAL:RETURN
 59990 IKEY$=INKEY$:IF IKEY$="" THEN 59990 ELSE RETURN
 ```
+{% endraw %}
 
 ## ANALOG4.BAS
 
+{% raw %}
 ```bas
 5 KEY(10) ON:ON KEY(10) GOSUB 600:KEY(9) ON:ON KEY(9) GOSUB 700:DIM A(12):FOR I=1 TO 12:A(I)=I:NEXT I
 10 CLS:R=0:N=0:GOSUB 59980:FOR I=1 TO 100:SWAP A(INT(RND*12+1)),A(INT(RND*12+1)):NEXT I
@@ -273,9 +280,11 @@ machines:
 5660 REM
 5670 REM
 ```
+{% endraw %}
 
 ## ANALOG5.BAS
 
+{% raw %}
 ```bas
 30 LOCATE 2,34:PRINT"Analogies 5":COLOR 7,0
 210 IF XX<13 THEN C=A(XX):GOTO 50
@@ -293,9 +302,11 @@ machines:
 5600 DATA nucleus, cell, building, basement, sun, solar system, earth, moon, atomic, energy, cell, amoeba, 2, center to whole
 5610 DATA food, starvation, insulin, coma, battle, defeat, sickness, health, indulge, abstain, pleasure, torture, 1, results of lack
 ```
+{% endraw %}
 
 ## ANALOG6.BAS
 
+{% raw %}
 ```bas
 5 KEY(10) ON:ON KEY(10) GOSUB 600:KEY(9) ON:ON KEY(9) GOSUB 700:DIM A(15):FOR I=1 TO 15:A(I)=I:NEXT I
 10 CLS:R=0:N=0:GOSUB 59980:FOR I=1 TO 100:SWAP A(INT(RND*15+1)),A(INT(RND*15+1)):NEXT I
@@ -318,9 +329,11 @@ machines:
 5630 DATA bear, fur, fish, seaweed, fish, gills, car, sheet metal, bug, wings, food, nutrients, 3, outside cover
 5640 DATA sheep, fold, macherel, school, dog, cat, bluefish, bait, planet, solar system, tortoise, shell, 1, types of herds
 ```
+{% endraw %}
 
 ## ANTONYM.BAS
 
+{% raw %}
 ```bas
 5 KEY(10) ON:ON KEY(10) GOSUB 600:KEY(9) ON:ON KEY(9) GOSUB 700:DIM P(35):FOR I=1 TO 35:P(I)=I:NEXT I
 10 CLS:T=0:N=0:GOSUB 59980:FOR I=1 TO 100:SWAP P(INT(RND*35+1)),P(INT(RND*35+1)):NEXT I
@@ -392,9 +405,11 @@ machines:
 59980 RNDTIME$=TIME$:RNDVAL=VAL(LEFT$(RNDTIME$,2))*120+VAL(MID$(RNDTIME$,4,2))*60+VAL(RIGHT$(RNDTIME$,2)):RANDOMIZE RNDVAL:RETURN
 59990 IKEY$=INKEY$:IF IKEY$="" THEN 59990 ELSE RETURN
 ```
+{% endraw %}
 
 ## ANTONYM2.BAS
 
+{% raw %}
 ```bas
 30 LOCATE 2,35:PRINT"Antonyms 2":COLOR 7,0
 700 RUN "b:iqbuild"
@@ -434,9 +449,11 @@ machines:
 5830 DATA denounce, commend, rebut, behold, dissemble, establish, 1
 5840 DATA abet, compress, install, polarize, hinder, uncover, 4
 ```
+{% endraw %}
 
 ## BACKGAM.BAS
 
+{% raw %}
 ```bas
 2430 KEY OFF:CLS:COLOR 0,7:LOCATE 1,30:KEY(10) ON:ON KEY(10) GOSUB 5000:PRINT" B A C K G A M M O N ":COLOR 7,0
 2440 FOR X=1 TO 2:LOCATE 12,1:PRINT SPC(79):LOCATE 12,1:PRINT"Enter the name of player #" X;:PLAY "mbc":INPUT " - " ,A$(X):NEXT X
@@ -563,9 +580,11 @@ machines:
 59980 RNDTIME$=TIME$:RNDVAL=VAL(LEFT$(RNDTIME$,2))*120+VAL(MID$(RNDTIME$,4,2))*60+VAL(RIGHT$(RNDTIME$,2)):RANDOMIZE RNDVAL:RETURN
 59990 ON KEY(1) GOSUB 5000:IKEY$=INKEY$:IF IKEY$="" THEN 59990 ELSE RETURN
 ```
+{% endraw %}
 
 ## BLACK.BAS
 
+{% raw %}
 ```bas
 10 REM=======================================================================
 20 REM============================ BLACKJACK ================================
@@ -964,9 +983,11 @@ machines:
 59980 RNDTIME$=TIME$:RNDVAL=VAL(LEFT$(RNDTIME$,2))*120+VAL(MID$(RNDTIME$,4,2))*60+VAL(RIGHT$(RNDTIME$,2)):RANDOMIZE RNDVAL:RETURN
 59990 IKEY$=INKEY$:IF IKEY$="" THEN 59990 ELSE RETURN
 ```
+{% endraw %}
 
 ## FRANK.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:WIDTH 80:CLS:DEFINT A-Z:CU$="     "
 70 Z=0:GOSUB 3000:FOR X=13 TO 15:LOCATE X,1:PRINT STRING$(80,"█");:NEXT X
@@ -1092,9 +1113,11 @@ machines:
 59970 IF TIMEOUT > TIME3 - TIME2 THEN 59960 ELSE RETURN
 59990 IKEY$=INKEY$:IF IKEY$="" THEN 59990 ELSE RETURN
 ```
+{% endraw %}
 
 ## IQBUILD.BAS
 
+{% raw %}
 ```bas
 10 REM ======================================================================
 20 REM ============================= IQ Builder =============================
@@ -1193,9 +1216,11 @@ machines:
 990 REM $s2
 1000 COLOR 7,0:RUN "menu"
 ```
+{% endraw %}
 
 ## MASTER.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:WIDTH 80:CLS:DEFINT A-Z:GOSUB 59980:KEY(10) ON:ON KEY(10) GOSUB 2700
 20 GOSUB 500:DIM GT(15,6),PO(6,4)
@@ -1323,9 +1348,11 @@ machines:
 59980 RNDTIME$=TIME$:RNDVAL=VAL(LEFT$(RNDTIME$,2))*120+VAL(MID$(RNDTIME$,4,2))*60+VAL(RIGHT$(RNDTIME$,2)):RANDOMIZE RNDVAL:RETURN
 59990 IKEY$=INKEY$:IF IKEY$="" THEN 59990 ELSE RETURN
 ```
+{% endraw %}
 
 ## MATH.BAS
 
+{% raw %}
 ```bas
 5 REM This program is MATH
 10 CLS:KEY OFF:CLEAR 100:GOSUB 100:GOSUB 1000
@@ -1472,9 +1499,11 @@ machines:
 59980 RNDTIME$=TIME$:RNDVAL=VAL(LEFT$(RNDTIME$,2))*120+VAL(MID$(RNDTIME$,4,2))*60+VAL(RIGHT$(RNDTIME$,2)):RANDOMIZE RNDVAL:RETURN
 59990 IKEY$=INKEY$:IF IKEY$="" THEN 59990 ELSE RETURN
 ```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 10 REM ============================= ADX008 =================================
 20 REM This program presents a menu of the programs available on this     ===
@@ -1560,9 +1589,11 @@ machines:
 840 BEEP:LOCATE 2,1:PRINT "Please make another selection."
 850 FOR I=1 TO 1000:NEXT I:RUN
 ```
+{% endraw %}
 
 ## NIM.BAS
 
+{% raw %}
 ```bas
 10 REM Game of NIM. Author: J. E. Steitz 2-14-82
 20 OPTION BASE 1
@@ -1805,9 +1836,11 @@ machines:
 2390 PRINT
 2400 RETURN
 ```
+{% endraw %}
 
 ## NUM2.BAS
 
+{% raw %}
 ```bas
 5 KEY(10) ON:ON KEY(10) GOSUB 500:KEY(9) ON:ON KEY(9) GOSUB 600:DIM S(25):FOR I=1 TO 25:S(I)=I:NEXT I
 10 CLS:LOCATE 1,34:COLOR 0,15:PRINT" IQ Builder ":COLOR 15,0
@@ -1888,9 +1921,11 @@ machines:
 59980 RNDTIME$=TIME$:RNDVAL=VAL(LEFT$(RNDTIME$,2))*120+VAL(MID$(RNDTIME$,4,2))*60+VAL(RIGHT$(RNDTIME$,2)):RANDOMIZE RNDVAL:RETURN
 59990 IKEY$=INKEY$:IF IKEY$="" THEN 59990 ELSE RETURN
 ```
+{% endraw %}
 
 ## NUM3.BAS
 
+{% raw %}
 ```bas
 20 LOCATE 2,32:PRINT"Number Series 3":COLOR 7,0:GOSUB 59980
 600 RUN "iqbuild"
@@ -1920,9 +1955,11 @@ machines:
 5730 DATA 7,9,8,10,9,11,10,12,11,13,4,-1
 5740 DATA 1,2,5,5,9,8,13,11,17,14,4,+3
 ```
+{% endraw %}
 
 ## NUMBERS.BAS
 
+{% raw %}
 ```bas
 5 DEFINT A-Z:KEY(10) ON:ON KEY(10) GOSUB 500:KEY(9) ON:ON KEY(9) GOSUB 600
 10 CLS:LOCATE 1,34:COLOR 0,15:PRINT" IQ Builder ":COLOR 15,0
@@ -1997,9 +2034,11 @@ machines:
 59970 IF TIMEOUT > TIME3 - TIME2 THEN 59960 ELSE RETURN
 59990 IKEY$=INKEY$:IF IKEY$="" THEN 59990 ELSE RETURN
 ```
+{% endraw %}
 
 ## READING.BAS
 
+{% raw %}
 ```bas
 5 REM This program is Reading
 10 KEY OFF:WIDTH 80:CLS:DEFSTR C,R,S,Z:DEFINT I,L,T
@@ -2041,9 +2080,11 @@ machines:
 2010 T$=TIME$:T2=VAL(LEFT$(T$,2))*120+VAL(MID$(T$,4,2))*60+VAL(RIGHT$(T$,2))
 2020 IF T>T2-T3 THEN GOTO 2010 ELSE RETURN
 ```
+{% endraw %}
 
 ## SYNONYM.BAS
 
+{% raw %}
 ```bas
 5 KEY(10) ON:ON KEY(10) GOSUB 600:KEY(9) ON:ON KEY(9) GOSUB 700:DIM P(35):FOR I=1 TO 35:P(I)=I:NEXT I
 10 CLS:T=0:N=0:GOSUB 59980:FOR I=1 TO 100:SWAP P(INT(RND*35+1)),P(INT(RND*35+1)):NEXT I
@@ -2115,9 +2156,11 @@ machines:
 59980 RNDTIME$=TIME$:RNDVAL=VAL(LEFT$(RNDTIME$,2))*120+VAL(MID$(RNDTIME$,4,2))*60+VAL(RIGHT$(RNDTIME$,2)):RANDOMIZE RNDVAL:RETURN
 59990 IKEY$=INKEY$:IF IKEY$="" THEN 59990 ELSE RETURN
 ```
+{% endraw %}
 
 ## SYNONYM2.BAS
 
+{% raw %}
 ```bas
 30 LOCATE 2,35:PRINT"Synonyms 2":COLOR 7,0
 700 RUN "iqbuild"
@@ -2152,9 +2195,11 @@ machines:
 5780 DATA traverse, circle, guard, cross, incriminate, transfer, 3
 5790 DATA unanimity, sterility, distribution, correlation, unity, animated, 4
 ```
+{% endraw %}
 
 ## TRUCKER.BAS
 
+{% raw %}
 ```bas
 5 REM This program is Trucker
 10 KEY OFF:WIDTH 80:CLS:DEFINT C-S
@@ -2542,9 +2587,11 @@ machines:
 59970 IF TIMEOUT > TIME3 - TIME2 THEN 59960 ELSE RETURN
 59990 IKEY$=INKEY$:IF IKEY$="" THEN 59990 ELSE RETURN
 ```
+{% endraw %}
 
 ## WORDS.BAS
 
+{% raw %}
 ```bas
 10000 DATA fat,cat,act,can,fast,hat,hand,last,man,ran,have
 10010 DATA red,hen,let,get,help,next,pet,men,went,bed,said
@@ -2583,6 +2630,7 @@ machines:
 10340 DATA write,knew,know,wrote,lamb,talk,walk,laugh,climb,eight
 10350 DATA one,two,three,four,five,six,seven,eight,nine,ten
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

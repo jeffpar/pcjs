@@ -14,6 +14,40 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2522.TXT
+
+{% raw %}
+```
+Disk No: 2522                                                           
+Disk Title: Unoscore                                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: UNOSCORE                                                 
+Author Version: 09/90                                                   
+Author Registration: $5.00                                              
+Special Requirements: CGA.                                              
+                                                                        
+UNOSCORE is an eye-popping version of card game UNO.  In UNO there are  
+four sets of numbered cards; each set is a different color.  You are    
+dealt seven cards to start the game; you have to match the last card    
+laid down, in color or number.  If you don't have a match, you have to  
+draw a card.  The winner is the first to play all his cards.            
+                                                                        
+Great graphics make UNOSCORE a joy to play.  UNOSCORE is easy to learn, 
+yet challenging for all ages.  It's also a great way to teach young     
+children pattern matching skills while having fun!                      
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989-1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2522
 

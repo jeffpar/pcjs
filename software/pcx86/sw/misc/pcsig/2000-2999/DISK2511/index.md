@@ -14,6 +14,44 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2511.TXT
+
+{% raw %}
+```
+Disk No: 2511                                                           
+Disk Title: The Complete Sales Automation System                        
+PC-SIG Version: S5.0                                                    
+                                                                        
+Program Title: The Complete Sales Automation System                     
+Author Version: 5.0A                                                    
+Author Registration: $69.00                                             
+Special Requirements: 640K RAM and a hard drive.                        
+                                                                        
+THE COMPLETE SALES AUTOMATION SYSTEM, an inclusive program for salesmen 
+and business owners, offers sales-oriented databases in an easy-to-use  
+menu-driven interface to track clients, product inventory, vendors and  
+orders.  Generate invoices, quotes, and order-detail tickets from       
+information obtained and merged from each database.                     
+                                                                        
+Nice touches include the ability to work with profit margins, and       
+discreetly view comments about clients.  The report function prints     
+summaries of sales and orders, as well as lists of clients, vendors,    
+and products.  Print out unsold quotations to follow up potential       
+leads.  THE COMPLETE SALES AUTOMATION SYSTEM is also compatible on many 
+network systems: Novell, 3COM, IBM Token Ring, Banyan, LANtastic (read  
+only), and PC/MOS.                                                      
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2511
 

@@ -45,8 +45,2750 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## ART.TXT
+
+{% raw %}
+```
+ACC036605
+!U08,22@       THE GREAT CHICAGO FIRE
+
+  Chicago. Sunday evening, October 8,
+1871.  Mrs. O'Leary of 558 De Koven
+Street finished milking her cow and
+returned to the house, leaving her lan-
+tern in the barn.  That much is fact.
+Legend has it that the cow kicked the
+lantern over into the straw and started 
+what is known as the Great Chicago Fire.
+STOP
+  The rest is history.  Three days of 
+raging fire, leaving 250 persons dead
+and 100,000 homeless.  Three days of 
+flames, spreading over 3.5 square miles
+of Chicago and destroying property
+valued at $195,000,000.
+  National Fire Prevention Week is ob-
+served each year during the week con-
+taining the tragic anniversary of this
+disastrous fire.  Originally, there was 
+only a single day, October 8, set aside
+STOP
+to mark the catastrophic event.  But
+because of the number of lives lost and
+the amount of property damaged yearly,
+President Harding decided that a full 
+week was necessary to remind people of 
+the importance of fire prevention.
+  Each one of us plays an important role
+in fire prevention.  Because 60 percent
+of all fires are preventable, it's up to
+us to learn more about the causes of 
+fire and its prevention.
+STOP
+  Every year thousands of people die in 
+fires, usually in their homes or apart-
+ments.  According to the National Bureau
+of Standards, many people underestimate
+the time it takes a fire to spread.  But
+when fire strikes, it's the seconds and 
+minutes that count.  This is because fire 
+spreads 1,100 percent in the first four 
+minutes.  And heat travels upward at the 
+rate of 90 feet per second.
+STOP
+  The Bureau states that it may take 
+only two minutes from the time a fire
+begins until it engulfs an entire room.
+  The best way to prevent fire is to be 
+on the lookout for possible fire haz-
+ards--to stop fire before it has a 
+chance to start.  This means being alert 
+and cautious not only during the second
+week in October, but every day of the 
+year.
+END
+EOF
+RET
+```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #211, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  ART     .TXT         CRC = 31 3C
+
+--> FILE:  EYE     .TXT         CRC = 55 D0
+
+--> FILE:  JUSTIFY .ASM         CRC = 63 51
+
+--> FILE:  JUSTIFY .EXE         CRC = 50 67
+
+--> FILE:  LINEBUG .BAS         CRC = 63 2A
+
+--> FILE:  SR      .BAS         CRC = 3E B8
+
+--> FILE:  TIMED   .TXT         CRC = A9 FF
+
+--> FILE:  TUTOR2  .            CRC = 9D 76
+
+--> FILE:  TUTORIAL.            CRC = 0C 54
+
+--> FILE:  XXX     .            CRC = F9 E6
+
+--> FILE:  CRC     .TXT         CRC = 50 DF
+
+--> FILE:  CRCK4   .COM         CRC = BD 22
+
+ ---------------------> SUM OF CRCS = 38 56
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## EYE.TXT
+
+{% raw %}
+```
+TEXT
+&Very good, READER.
+Now here's another speed reading drill--
+the EYE MOVEMENT EXERCISE.  This one is
+designed to train your eyes to move
+quickly across a line of print.  Try to
+take in the whole phrase at a glance.
+The speed will be set a little faster 
+(10% faster, actually) than your present
+reading rate.
+\GYour present reading rate is GWPM words/minute.
+END
+EYEM|0201|03|36
+Most of us/ find ourselves
+occasionally wanting/ to be
+something different/ from what we are.
+Secretaries want/ to be photographers.
+Photographers want/ to be airline pilots.
+Airline pilots want/ to be professors.
+And professors dream/ of being
+great Olympic heroes./ Dreams generally help
+give us a goal/ to strive for
+and keep us/ from falling
+into a rut./ They make us excel
+by spurring/ our ambitions.
+STOP
+But dreams/ can hurt us, too---
+when we begin/ to covet
+those abilities/ which we lack.
+This kind/ of envy
+causes unhappiness/ and discontent
+because jealous people/ often overlook
+their own strengths/ while they begrudge
+those of others./ So keep your dreams
+in check/ by reminding yourself
+of your own/ strong points
+and making the most/ of them.
+And the next time/ you find yourself
+STOP
+yearning to be/ what you aren't,
+remember the story/ of the shoemaker
+who joined the throngs/ of people
+welcoming home/ a conquering monarch.
+People threw flowers/ in the hero's path
+and cheered themselves hoarse./	But the shoemaker
+stood silent./ "Why aren't
+you cheering?"/ someone demanded.
+"You're gazing on/ the greatest man
+of our times,"/ a bystander confirmed.
+"Oh, him,"/ the shoemaker replied.
+"He can't even make/ a pair of shoes."
+END
+ASK
+&How was that, READER?
+Would you like to try another one? (Y/N)
+STOP
+2YNY+05N+00
+ENTER Y or N
+
+END
+EOF
+RET
+
+
+END
+EYEM|0172|03|29
+When the shrill blare/ of the alarm
+rouses you,/ how do you
+greet the day?/ Do you rise and shine,
+cheerfully humming/ your favorite tune?
+Or do you/ drag yourself
+wearily out of bed/ with a resentful scowl?
+Recent research/ conducted by
+the Health Promotions/ Department
+of St. Louis/ University Hospital
+suggests that/ your attitude upon waking
+can influence/ your entire day.
+STOP
+So if you start off/ grumpy and irritable,
+kiss the rest/ of the day goodbye.
+And beware/ of the snooze alarm.
+That 10-minute catnap/ is apt
+to make you/ even more lethargic.
+Though getting up/ may be
+no laughing matter,/ the researchers say
+the following wake-up plan/ will produce
+a positive attitude/ toward yourself
+and your day:/ Get up immediately
+after awakening./ Stand with your hands
+STOP
+on the back/ of your hips,
+palms facing upward./ Now, begin to laugh.
+Let your laughter/ feed off itself
+and spread/ throughout your body.
+Keep laughing/ for a few minutes.
+When you feel comfortable,/ stop laughing.
+Then proceed with/ your morning routine.
+END
+EOF
+RET
+```
+{% endraw %}
+
+## JUSTIFY.ASM
+
+{% raw %}
+```
+        PAGE  60,132
+TITLE JUSTIFY - PRINTER JUSTIFY PROGRAM
+JUS_STACK SEGMENT PARA STACK 'STACK'
+          DB    128 DUP('STACK   ')
+JUS_STACK    ENDS
+WORKAREA SEGMENT PARA  'DATA'
+AREA     DB    512 DUP(?)
+FCB      DB    2
+FILENAME DB    'PRNTFILE'
+EXTEN    DB    '   '
+CURBLK   DW    0
+RECSIZ   DW    0
+FILSIZ   DW    0
+DATE     DW    0
+TIME     DW    0
+         DB    '        '
+REC      DB    0
+RANREC   DD    0
+COL      DB    0
+TRTAB    DW    396 DUP(0)
+         DW              0B             ;!
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW      111100100B
+         DW      111100100B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B             ;"
+         DW              0B
+         DW              0B
+         DW      111000000B
+         DW      111000000B
+         DW              0B
+         DW              0B
+         DW      111000000B
+         DW      111000000B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B             ;#
+         DW        1010000B
+         DW        1010000B
+         DW      111111100B
+         DW      111111100B
+         DW        1010000B
+         DW        1010000B
+         DW      111111100B
+         DW      111111100B
+         DW        1010000B
+         DW        1010000B
+         DW              0B
+         DW              0B             ;$
+         DW        1100000B
+         DW       11101000B
+         DW       10101000B
+         DW       10101000B
+         DW      111111100B
+         DW      111111100B
+         DW       10101000B
+         DW       10101000B
+         DW       10111000B
+         DW         110000B
+         DW              0B
+         DW              0B             ;%
+         DW      111000000B
+         DW      111000100B
+         DW      101001000B
+         DW      111011000B
+         DW      111110000B
+         DW        1111100B
+         DW       11011100B
+         DW      110011000B
+         DW      100011100B
+         DW          11100B
+         DW              0B
+         DW              0B             ;&
+         DW              0B
+         DW              0B
+         DW       11001100B
+         DW      111011110B
+         DW      100110110B
+         DW      101111100B
+         DW       11011100B
+         DW      111011000B
+         DW         111100B
+         DW         100100B
+         DW              0B
+         DW              0B             ;'
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW      110100000B
+         DW      111100000B
+         DW      111000000B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B             ;(
+         DW              0B
+         DW              0B
+         DW              0B
+         DW        1110000B
+         DW       11111000B
+         DW      110001100B
+         DW      100000100B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B             ;)
+         DW              0B
+         DW              0B
+         DW              0B
+         DW      100000100B
+         DW      110001100B
+         DW       11111000B
+         DW        1110000B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B             ;*
+         DW         100000B
+         DW       10101000B
+         DW       11111000B
+         DW        1110000B
+         DW      111111100B
+         DW      111111100B
+         DW        1110000B
+         DW       11111000B
+         DW       10101000B
+         DW         100000B
+         DW              0B
+         DW              0B             ;+
+         DW         100000B
+         DW         100000B
+         DW         100000B
+         DW         100000B
+         DW      111111100B
+         DW      111111100B
+         DW         100000B
+         DW         100000B
+         DW         100000B
+         DW         100000B
+         DW              0B
+         DW              0B             ;,
+         DW              0B
+         DW              0B
+         DW              0B
+         DW           1101B
+         DW           1111B
+         DW           1110B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B             ;-
+         DW              0B
+         DW         100000B
+         DW         100000B
+         DW         100000B
+         DW         100000B
+         DW         100000B
+         DW         100000B
+         DW         100000B
+         DW         100000B
+         DW              0B
+         DW              0B
+         DW              0B             ;.
+         DW              0B
+         DW              0B
+         DW              0B
+         DW           1100B
+         DW           1100B
+         DW           1100B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B            ;/
+         DW              0B
+         DW            100B
+         DW           1100B
+         DW          11000B
+         DW         110000B
+         DW        1100000B
+         DW       11000000B
+         DW      110000000B
+         DW      100000000B
+         DW              0B
+         DW              0B
+         DW              0B             ;0
+         DW              0B
+         DW        1110000B
+         DW       11111000B
+         DW      110001100B
+         DW      100000100B
+         DW      100000100B
+         DW      110001100B
+         DW       11111000B
+         DW        1110000B
+         DW              0B
+         DW              0B
+         DW              0B             ;1
+         DW              0B
+         DW              0B
+         DW       10000100B
+         DW      110000100B
+         DW      111111100B
+         DW      111111100B
+         DW            100B
+         DW            100B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B             ;2
+         DW              0B
+         DW              0B
+         DW       10000100B
+         DW      110001100B
+         DW      100011100B
+         DW      100110100B
+         DW      101100100B
+         DW      111000100B
+         DW      110000100B
+         DW              0B
+         DW              0B
+         DW              0B             ;3
+         DW              0B
+         DW              0B
+         DW      100000100B
+         DW      100000100B
+         DW      100000100B
+         DW      101000100B
+         DW      111100100B
+         DW      110111100B
+         DW      100011100B
+         DW              0B
+         DW              0B
+         DW              0B             ;4
+         DW              0B
+         DW          10000B
+         DW         110000B
+         DW        1110000B
+         DW       11010000B
+         DW      110010000B
+         DW      111111100B
+         DW      111111100B
+         DW          10000B
+         DW          10000B
+         DW              0B
+         DW              0B             ;5
+         DW              0B
+         DW      111101000B
+         DW      111101100B
+         DW      100100100B
+         DW      100100100B
+         DW      100100100B
+         DW      100111100B
+         DW      100011100B
+         DW      100000000B
+         DW              0B
+         DW              0B
+         DW              0B             ;6
+         DW              0B
+         DW              0B
+         DW        1110000B
+         DW       11111000B
+         DW      110101100B
+         DW      100100100B
+         DW         100100B
+         DW         111100B
+         DW          11000B
+         DW              0B
+         DW              0B
+         DW              0B             ;7
+         DW              0B
+         DW      100000100B
+         DW      100001100B
+         DW      100011000B
+         DW      100110000B
+         DW      101100000B
+         DW      111000000B
+         DW      110000000B
+         DW      100000000B
+         DW              0B
+         DW              0B
+         DW              0B             ;8
+         DW              0B
+         DW       11011000B
+         DW      111111100B
+         DW      100100100B
+         DW      100100100B
+         DW      100100100B
+         DW      100100100B
+         DW      111111100B
+         DW       11011000B
+         DW              0B
+         DW              0B
+         DW              0B             ;9
+         DW              0B
+         DW       11000000B
+         DW      111100000B
+         DW      100100000B
+         DW      100100100B
+         DW      100101100B
+         DW      100111000B
+         DW      111110000B
+         DW       11100000B
+         DW              0B
+         DW              0B
+         DW              0B            ;:
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW       11001100B
+         DW       11001100B
+         DW       11001100B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B            ;;
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW       11001101B
+         DW       11001111B
+         DW       11001110B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B            ;<
+         DW              0B
+         DW              0B
+         DW              0B
+         DW         100000B
+         DW        1110000B
+         DW       11011000B
+         DW      110001100B
+         DW     1000000100B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B            ;=
+         DW              0B
+         DW              0B
+         DW        1010000B
+         DW        1010000B
+         DW        1010000B
+         DW        1010000B
+         DW        1010000B
+         DW        1010000B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B            ;>
+         DW              0B
+         DW              0B
+         DW              0B
+         DW      100000100B
+         DW      110001100B
+         DW       11011000B
+         DW        1110000B
+         DW         100000B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B            ;?
+         DW              0B
+         DW       10000000B
+         DW      110000000B
+         DW      100000000B
+         DW      100110100B
+         DW      100100100B
+         DW      100100000B
+         DW      111000000B
+         DW       11000000B
+         DW              0B
+         DW              0B
+         DW              0B            ;@
+         DW       11111000B
+         DW      111111100B
+         DW      100000100B
+         DW      100000100B
+         DW      100100100B
+         DW      101110100B
+         DW      101010100B
+         DW      101010100B
+         DW      101010100B
+         DW      111110100B
+         DW       11110100B
+         DW              0B             ;A
+         DW        1111100B
+         DW       11111100B
+         DW       10010000B
+         DW       10010000B
+         DW      100010000B
+         DW      100010000B
+         DW       10010000B
+         DW       10010000B
+         DW       11111100B
+         DW        1111100B
+         DW              0B
+         DW              0B             ;B
+         DW              0B
+         DW      100000100B
+         DW      111111100B
+         DW      111111100B
+         DW      100100100B
+         DW      100100100B
+         DW      100100100B
+         DW      100100100B
+         DW      111111100B
+         DW       11011000B
+         DW              0B
+         DW              0B             ;C
+         DW              0B
+         DW       11111000B
+         DW      111111100B
+         DW      100000100B
+         DW      100000100B
+         DW      100000100B
+         DW      100000100B
+         DW      100000100B
+         DW      110001100B
+         DW       10001000B
+         DW              0B
+         DW              0B             ;D
+         DW      100000100B
+         DW      100000100B
+         DW      111111100B
+         DW      111111100B
+         DW      100000100B
+         DW      100000100B
+         DW      100000100B
+         DW      100000100B
+         DW       11111000B
+         DW       11111000B
+         DW              0B
+         DW              0B             ;E
+         DW              0B
+         DW      111111100B
+         DW      111111100B
+         DW      100100100B
+         DW      100100100B
+         DW      100100100B
+         DW      100100100B
+         DW      100000100B
+         DW      100000100B
+         DW              0B
+         DW              0B
+         DW              0B             ;F
+         DW              0B
+         DW      111111100B
+         DW      111111100B
+         DW      100100000B
+         DW      100100000B
+         DW      100100000B
+         DW      100100000B
+         DW      100000000B
+         DW      100000000B
+         DW              0B
+         DW              0B
+         DW              0B             ;G
+         DW       11111000B
+         DW      111111100B
+         DW      100000100B
+         DW      100000100B
+         DW      100100100B
+         DW      100100100B
+         DW      100100100B
+         DW      100100100B
+         DW      100111100B
+         DW         111000B
+         DW              0B
+         DW              0B             ;H
+         DW              0B
+         DW      111111100B
+         DW      111111100B
+         DW         100000B
+         DW         100000B
+         DW         100000B
+         DW         100000B
+         DW      111111100B
+         DW      111111100B
+         DW              0B
+         DW              0B
+         DW              0B             ;I
+         DW              0B
+         DW              0B
+         DW      100000100B
+         DW      100000100B
+         DW      111111100B
+         DW      111111100B
+         DW      100000100B
+         DW      100000100B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B             ;J
+         DW              0B
+         DW          11000B
+         DW          11100B
+         DW            100B
+         DW      100000100B
+         DW      100000100B
+         DW      111111100B
+         DW      111111000B
+         DW      100000000B
+         DW      100000000B
+         DW              0B
+         DW              0B             ;K
+         DW              0B
+         DW      111111100B
+         DW      111111100B
+         DW         100000B
+         DW        1110000B
+         DW        1110000B
+         DW       11011000B
+         DW      110001100B
+         DW      100000100B
+         DW              0B
+         DW              0B
+         DW              0B             ;L
+         DW      111111100B
+         DW      111111100B
+         DW            100B
+         DW            100B
+         DW            100B
+         DW            100B
+         DW            100B
+         DW            100B
+         DW            100B
+         DW              0B
+         DW              0B
+         DW              0B             ;M
+         DW      111111100B
+         DW      111111100B
+         DW      100000000B
+         DW      110000000B
+         DW       11000000B
+         DW       11000000B
+         DW      110000000B
+         DW      100000000B
+         DW      111111100B
+         DW      111111100B
+         DW              0B
+         DW              0B             ;N
+         DW              0B
+         DW      111111100B
+         DW      111111100B
+         DW      110000000B
+         DW       11000000B
+         DW        1100000B
+         DW         110000B
+         DW      111111100B
+         DW      111111100B
+         DW              0B
+         DW              0B
+         DW              0B             ;O
+         DW       11111000B
+         DW      111111100B
+         DW      100000100B
+         DW      100000100B
+         DW      100000100B
+         DW      100000100B
+         DW      100000100B
+         DW      100000100B
+         DW      111111100B
+         DW       11111000B
+         DW              0B
+         DW              0B             ;P
+         DW      111111100B
+         DW      111111100B
+         DW      100100000B
+         DW      100100000B
+         DW      100100000B
+         DW      100100000B
+         DW      100100000B
+         DW      100100000B
+         DW       11000000B
+         DW       11000000B
+         DW              0B
+         DW              0B             ;Q
+         DW       11111000B
+         DW      111111100B
+         DW      100000100B
+         DW      100000100B
+         DW      100000100B
+         DW      100100100B
+         DW      100010100B
+         DW      100001000B
+         DW      111111100B
+         DW       11111100B
+         DW              0B
+         DW              0B             ;R
+         DW              0B
+         DW      111111100B
+         DW      111111100B
+         DW      100100000B
+         DW      100100000B
+         DW      100100000B
+         DW      100110000B
+         DW      100111000B
+         DW      111101100B
+         DW       11000100B
+         DW              0B
+         DW              0B             ;S
+         DW       11001000B
+         DW      111101100B
+         DW      100100100B
+         DW      100100100B
+         DW      100100100B
+         DW      100100100B
+         DW      100100100B
+         DW      100100100B
+         DW      110111100B
+         DW       10011000B
+         DW              0B
+         DW              0B             ;T
+         DW      100000000B
+         DW      100000000B
+         DW      100000000B
+         DW      100000000B
+         DW      111111100B
+         DW      111111100B
+         DW      100000000B
+         DW      100000000B
+         DW      100000000B
+         DW      100000000B
+         DW              0B
+         DW              0B             ;U
+         DW      111111000B
+         DW      111111100B
+         DW            100B
+         DW            100B
+         DW            100B
+         DW            100B
+         DW            100B
+         DW            100B
+         DW      111111100B
+         DW      111111000B
+         DW              0B
+         DW              0B             ;V
+         DW              0B
+         DW      111000000B
+         DW      111100000B
+         DW         110000B
+         DW          11000B
+         DW           1100B
+         DW          11000B
+         DW         110000B
+         DW      111100000B
+         DW      111000000B
+         DW              0B
+         DW              0B             ;W
+         DW      111111100B
+         DW      111111100B
+         DW          11000B
+         DW         110000B
+         DW        1100000B
+         DW        1100000B
+         DW         110000B
+         DW          11000B
+         DW      111111100B
+         DW      111111100B
+         DW              0B
+         DW              0B             ;X
+         DW              0B
+         DW      100000100B
+         DW      110001100B
+         DW       11011000B
+         DW        1110000B
+         DW         100000B
+         DW        1110000B
+         DW       11011000B
+         DW      110001100B
+         DW      100000100B
+         DW              0B
+         DW              0B             ;Y
+         DW      100000000B
+         DW      110000000B
+         DW       11000000B
+         DW        1100000B
+         DW         111100B
+         DW         111100B
+         DW        1100000B
+         DW       11000000B
+         DW      110000000B
+         DW      100000000B
+         DW              0B
+         DW              0B             ;Z
+         DW              0B
+         DW      100000100B
+         DW      100001100B
+         DW      100011100B
+         DW      100110100B
+         DW      101100100B
+         DW      111000100B
+         DW      110000100B
+         DW      100000100B
+         DW              0B
+         DW              0B
+         DW              0B            ;[
+         DW              0B
+         DW              0B
+         DW      111111100B
+         DW      111111100B
+         DW      100000100B
+         DW      100000100B
+         DW      100000100B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B            ;\
+         DW              0B
+         DW      100000000B
+         DW      110000000B
+         DW       11000000B
+         DW        1100000B
+         DW         110000B
+         DW          11000B
+         DW           1100B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B            ;]
+         DW              0B
+         DW              0B
+         DW      100000100B
+         DW      100000100B
+         DW      100000100B
+         DW      100000100B
+         DW      111111100B
+         DW      111111100B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW    12 DUP(0)
+         DW              0B             ;_
+         DW              0B
+         DW              1B
+         DW              1B
+         DW              1B
+         DW              1B
+         DW              1B
+         DW              1B
+         DW              1B
+         DW              1B
+         DW              0B
+         DW              0B
+         DW              0B             ;`
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW      111000000B
+         DW      111100000B
+         DW      110100000B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B             ;a
+         DW           1000B
+         DW        1011100B
+         DW        1010100B
+         DW        1010100B
+         DW        1010100B
+         DW        1010100B
+         DW        1010100B
+         DW        1011100B
+         DW         111000B
+         DW            100B
+         DW              0B
+         DW              0B             ;b
+         DW              0B
+         DW      111111100B
+         DW      111111100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW        1111100B
+         DW         111000B
+         DW              0B
+         DW              0B
+         DW              0B             ;c
+         DW              0B
+         DW         111000B
+         DW        1111100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW              0B
+         DW              0B             ;d
+         DW              0B
+         DW         111000B
+         DW        1101100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW      111111100B
+         DW      111111100B
+         DW              0B
+         DW              0B             ;e
+         DW         111000B
+         DW        1101100B
+         DW        1010100B
+         DW        1010100B
+         DW        1010100B
+         DW        1010100B
+         DW        1010100B
+         DW        1110100B
+         DW         110000B
+         DW              0B
+         DW              0B
+         DW              0B             ;f
+         DW              0B
+         DW              0B
+         DW         100000B
+         DW         100000B
+         DW       11111100B
+         DW      111111100B
+         DW      100100000B
+         DW      100100000B
+         DW      100000000B
+         DW              0B
+         DW              0B
+         DW              0B             ;g
+         DW              0B
+         DW         111000B
+         DW        1101100B
+         DW        1000101B
+         DW        1000101B
+         DW        1000101B
+         DW        1000101B
+         DW        1111101B
+         DW        1111111B
+         DW             10B
+         DW              0B
+         DW              0B             ;h
+         DW              0B
+         DW      111111100B
+         DW      111111100B
+         DW        1000000B
+         DW        1000000B
+         DW        1000000B
+         DW        1000000B
+         DW        1000000B
+         DW        1111100B
+         DW         111100B
+         DW              0B
+         DW              0B             ;i
+         DW              0B
+         DW              0B
+         DW        1000100B
+         DW        1000100B
+         DW      101111100B
+         DW      101111100B
+         DW            100B
+         DW            100B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B             ;j
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              1B
+         DW        1000001B
+         DW        1000001B
+         DW      101111111B
+         DW      101111111B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B             ;k
+         DW              0B
+         DW              0B
+         DW      111111100B
+         DW      111111100B
+         DW          10000B
+         DW         111000B
+         DW        1101100B
+         DW        1000100B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B             ;l
+         DW              0B
+         DW              0B
+         DW              0B
+         DW      100000100B
+         DW      100000100B
+         DW      111111100B
+         DW      111111100B
+         DW            100B
+         DW            100B
+         DW              0B
+         DW              0B
+         DW              0B             ;m
+         DW        1111100B
+         DW        1111100B
+         DW        1000000B
+         DW        1000000B
+         DW         111100B
+         DW        1111100B
+         DW        1000000B
+         DW        1000000B
+         DW        1111100B
+         DW         111100B
+         DW              0B
+         DW              0B             ;n
+         DW              0B
+         DW        1111100B
+         DW        1111100B
+         DW        1000000B
+         DW        1000000B
+         DW        1000000B
+         DW        1000000B
+         DW        1000000B
+         DW         111100B
+         DW         111100B
+         DW              0B
+         DW              0B             ;O
+         DW              0B
+         DW         111000B
+         DW        1111100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW        1111100B
+         DW         111000B
+         DW              0B
+         DW              0B             ;p
+         DW              0B
+         DW        1111111B
+         DW        1111111B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW        1111100B
+         DW         111000B
+         DW              0B
+         DW              0B             ;q
+         DW              0B
+         DW         111000B
+         DW        1111100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW        1111111B
+         DW        1111111B
+         DW              0B
+         DW              0B             ;r
+         DW              0B
+         DW        1111100B
+         DW        1111100B
+         DW         100000B
+         DW        1000000B
+         DW        1000000B
+         DW        1000000B
+         DW        1000000B
+         DW        1000000B
+         DW              0B
+         DW              0B
+         DW              0B             ;s
+         DW              0B
+         DW        1110100B
+         DW        1110100B
+         DW        1010100B
+         DW        1010100B
+         DW        1010100B
+         DW        1010100B
+         DW        1011100B
+         DW        1011100B
+         DW              0B
+         DW              0B
+         DW              0B             ;t
+         DW              0B
+         DW        1000000B
+         DW        1000000B
+         DW      111111000B
+         DW      111111100B
+         DW        1000100B
+         DW        1000100B
+         DW        1000100B
+         DW            100B
+         DW            100B
+         DW              0B
+         DW              0B             ;u
+         DW              0B
+         DW        1111000B
+         DW        1111100B
+         DW            100B
+         DW            100B
+         DW            100B
+         DW            100B
+         DW        1111100B
+         DW        1111000B
+         DW            100B
+         DW              0B
+         DW              0B             ;v
+         DW              0B
+         DW        1000000B
+         DW        1100000B
+         DW         110000B
+         DW          11000B
+         DW           1100B
+         DW          11000B
+         DW         110000B
+         DW        1100000B
+         DW        1000000B
+         DW              0B
+         DW              0B             ;w
+         DW              0B
+         DW        1111100B
+         DW        1111100B
+         DW           1000B
+         DW          10000B
+         DW         100000B
+         DW          10000B
+         DW           1000B
+         DW        1111100B
+         DW        1111100B
+         DW              0B
+         DW              0B             ;x
+         DW              0B
+         DW              0B
+         DW        1101100B
+         DW         111000B
+         DW          10000B
+         DW          10000B
+         DW         111000B
+         DW        1101100B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW              0B             ;y
+         DW              0B
+         DW        1000000B
+         DW        1100001B
+         DW         110011B
+         DW          11110B
+         DW            100B
+         DW          11000B
+         DW         110000B
+         DW        1100000B
+         DW        1000000B
+         DW              0B
+         DW              0B             ;z
+         DW              0B
+         DW        1000100B
+         DW        1001100B
+         DW        1001100B
+         DW        1010100B
+         DW        1010100B
+         DW        1110100B
+         DW        1100100B
+         DW        1000100B
+         DW              0B
+         DW              0B
+         DW              0B             ;{
+         DW              0B
+         DW              0B
+         DW              0B
+         DW         100000B
+         DW      111011100B
+         DW      110001100B
+         DW      100000100B
+         DW      100000100B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW    12 DUP(0)
+         DW              0B             ;}
+         DW              0B
+         DW              0B
+         DW              0B
+         DW      100000100B
+         DW      100000100B
+         DW      110001100B
+         DW      111011100B
+         DW         100000B
+         DW              0B
+         DW              0B
+         DW              0B
+         DW    1032 DUP(0)
+         DW              0B             ;¢
+         DW              0B
+         DW        1110000B
+         DW       11111000B
+         DW       10001000B
+         DW       10001000B
+         DW      111111100B
+         DW      111111100B
+         DW       10001000B
+         DW       10001000B
+         DW              0B
+         DW              0B
+         DW    1560 DUP(0)
+LINE2    DB 128 DUP(32)
+         DB    255
+L1       DB 960 DUP(0)
+         DB    255
+L2       DB 960 DUP(0)
+         DB    255
+         DB    970 DUP(255)
+COL59    DB    0
+HCOL     DB    0
+LCOL     DB    0
+C12      DB    12
+IBITS    DW    0
+IREM     DW    0
+C24      DB    24
+L1SUB    DW    0
+HSI1     DW    0
+HSI2     DW    0
+HSI3     DW    0
+HSI4     DW    0
+HSI5     DW    0
+HSI6     DW    0
+HSI9     DW    0
+HSI7     DW    0
+HBYTE1   DB    0
+HBYTE2   DB    0
+HWORD    DW    0
+ENDSW    DW    0
+LINCNT   DW    0
+PAGESIZE DW    61
+HOLDDX   DW    0
+PRTPRMPT DB    'ENTER PRINTER TYPE         1 = IBM'
+         DB    0DH
+         DB    0AH
+         DB    0AH
+         DB    '                           2 = EPSON MX80 OR MX100'
+         DB    0DH
+         DB    0AH
+         DB    0AH
+         DB    '                           3 = EPSON FX80 OR FX100'
+         DB    0DH
+         DB    0AH
+         DB    0AH
+         DB    '                           4 = STAR MICRONICS GEMINI 10X OR 15X'
+         DB    0DH
+         DB    0AH
+         DB    0AH
+         DB    '                           5 = STAR MICRONICS DELTA 10 OR 15'
+         DB    0DH
+         DB    0AH
+         DB    0AH
+         DB    '<1>'
+         DB    24H
+PRMPEL   DB    0DH
+         DB    0AH
+         DB    'ENTER LAST LINE ON PAGE'
+         DB    0DH
+         DB    0AH
+         DB    '<60> '
+         DB    24H
+PRMPPS   DB    0DH
+         DB    0AH
+         DB    'ENTER LINES PER PAGE'
+         DB    0DH
+         DB    0AH
+         DB    '<66> '
+         DB    24H
+PRMPFN   DB    0DH
+         DB    0AH
+         DB    'ENTER FILE NAME'
+         DB    0DH
+         DB    0AH
+         DB    '<B:PRNTFILE>'
+         DB    24H
+PRMPLM   DB    0DH
+         DB    0AH
+         DB    'ENTER LEFT MARGIN'
+         DB    0DH
+         DB    0AH
+         DB    '<1>'
+         DB    24H
+PRMPRM   DB    0DH
+         DB    0AH
+         DB    'ENTER RIGHT MARGIN'
+         DB    0DH
+         DB    0AH
+         DB    '<80>'
+         DB    24H
+PRMPSL   DB    0DH
+         DB    0AH
+         DB    'ENTER STARTING LINE'
+         DB    0DH
+         DB    0AH
+         DB    '<6>'
+         DB    24H
+PERR     DB    0DH
+         DB    0AH
+         DB    'PRINTER ERROR'
+         DB    0DH
+         DB    0AH
+         DB    24H
+OPAPR    DB    0DH
+         DB    0AH
+         DB    'PUT PAPER IN PRINTER THEN HIT ENTER'
+         DB    0DH
+         DB    0AH
+         DB    24H
+TOUT     DB    0DH
+         DB    0AH
+         DB    'ENABLE PRINTER THEN HIT ENTER'
+         DB    0DH
+         DB    0AH
+         DB    24H
+OPNERR   DB    0DH
+         DB    0AH
+         DB    'FILE NOT FOUND'
+         DB    0DH
+         DB    0AH
+         DB    24H
+ENDMSG   DB    0DH
+         DB    0AH
+         DB    'TO END PROGRAM, TYPE "E"'
+         DB    0DH
+         DB    0AH
+         DB    24H
+COPYRITE DB    '                           COPYRIGHT (C) 1984 COMFAX'
+         DB    0DH
+         DB    0AH
+         DB    0AH
+         DB    0AH
+         DB    24H
+PRNAME   DB    '                               JUSTIFY BY COMFAX'
+         DB    0DH
+         DB    0AH
+         DB    0AH
+         DB    24H
+BUFFER   DB    20
+         DB    64 DUP(0)
+PRTRCODE DB    '1'
+LMARG    DW    1
+RMARG    DW    80
+SLINE    DW    6
+ELINE    DW    60
+PAGSIZ   DW    66
+FILNAM   DB    13 DUP(32)
+PGCOMD   DB    2
+         DB    '66       '
+SPAC16   DB    27
+         DB    65
+         DB    12
+SPAC19   DB    27
+         DB    65
+         DB    8
+SPAC118  DB    27
+         DB    65
+         DB    4
+DIRPRE   DB    '   '
+DIRAREA  DB    64 DUP(0)
+DIR2PRE  DB    '  '
+DIR2AREA DB    64 DUP(0)
+HOLDBX   DW    0
+PATHSW   DB    0
+HOLDAL   DB    0
+DEFAULT  DB    0
+HOLDDRIV DB    0
+INDENT   DW    0
+HMAR     DB    '   '
+WORKAREA ENDS
+EXTRA    SEGMENT PARA  'DATA'
+LINE1    DB 128 DUP(32)
+         DB    255
+EXTRA    ENDS
+JUS_CSEG SEGMENT PARA  'CODE'
+JUS_PROC PROC FAR
+         ASSUME CS:JUS_CSEG,DS:WORKAREA,SS:JUS_STACK,ES:EXTRA
+         PUSH  DS              ;Set return segment addr to stack
+         SUB   AX,AX             ;Clear a reg
+         PUSH  AX                ;Put zero return addr to stack
+         STI                     ;ENABLE INTERRUPTS
+         MOV   AX,SEG WORKAREA   ;SET SEGREG BASE OF DATA BUFFER
+         MOV   DS,AX
+         MOV   AX,SEG EXTRA      ;SET SEGREG BASE
+         MOV   ES,AX
+         MOV   AH,19H            ;GET DEFAULT DRIVE
+         INT   21H
+         ADD   AL,41H
+         MOV   DEFAULT,AL
+CLSCR:   MOV   AX,600H        ;CLEAR SCREEN
+         MOV   CX,0
+         MOV   DX,2479H
+         MOV   BH,7
+         INT   10H
+         MOV   AH,9           ;DISPLAY PROGRAM NAME
+         LEA   DX,PRNAME
+         INT   21H
+         MOV   AH,9           ;DISPLAY COPYRIGHT NOTICE
+         LEA   DX,COPYRITE
+         INT   21H
+         MOV   AH,9           ;DISPLAY PRINTER PROMPT
+         LEA   DX,PRTPRMPT
+         INT   21H
+         MOV   AH,12          ;READ KEYBOARD CHARACTER AND DISPLAY IT
+         MOV   AL,1
+         INT   21H
+         CMP   AL,13          ;CR?
+         JE    DLM            ;YES--JUMP
+         CMP   AL,'1'         ;CHECK FOR LEGAL PRINTER CODE
+         JL    CLSCR
+         CMP   AL,'6'
+         JGE   CLSCR
+         MOV   PRTRCODE,AL    ;STORE PRINTER CODE
+DLM:     MOV   AH,9           ;DISPLAY LEFT MARGIN PROMPT
+         LEA   DX,PRMPLM
+         INT   21H
+         LEA   DX,BUFFER      ;READ FROM KEYBOARD INTO BUFFER
+         MOV   AL,4
+         MOV   BUFFER,AL
+         MOV   AH,10
+         INT   21H
+         CMP   BUFFER+1,0     ;CR ONLY?
+         JE    DRM            ;YES--JUMP
+         LEA   BX,BUFFER+2    ;CONVET IT TO BINARY
+         MOV   CL,BUFFER+1
+         MOV   CH,0
+         CALL  CONVERT
+         JNC   GOOD1          ;IS IT VALID?
+         JMP   DLM
+GOOD1:   MOV   LMARG,AX       ;STORE LEFT MARGIN
+DRM:     MOV   AH,9           ;DISPLAY RIGHT MARGIN PROMPT
+         LEA   DX,PRMPRM
+         INT   21H
+         LEA   DX,BUFFER      ;READ FROM KEYBOARD INTO BUFFER
+         MOV   AL,4
+         MOV   BUFFER,AL
+         MOV   AH,10
+         INT   21H
+         CMP   BUFFER+1,0     ;CR ONLY?
+         JE    DSL            ;YES--JUMP
+         LEA   BX,BUFFER+2    ;CONVET IT TO BINARY
+         MOV   CL,BUFFER+1
+         MOV   CH,0
+         CALL  CONVERT
+         JNC   GOOD2          ;IS IT VALID?
+         JMP   DRM
+GOOD2:   MOV   RMARG,AX       ;STORE RIGHT MARGIN
+DSL:     MOV   AH,9           ;DISPLAY STARTING LINE
+         LEA   DX,PRMPSL
+         INT   21H
+         LEA   DX,BUFFER      ;READ FROM KEYBOARD INTO BUFFER
+         MOV   AL,4
+         MOV   BUFFER,AL
+         MOV   AH,10
+         INT   21H
+         CMP   BUFFER+1,0     ;CR ONLY?
+         JE    DEL            ;YES--JUMP
+         LEA   BX,BUFFER+2    ;CONVET IT TO BINARY
+         MOV   CL,BUFFER+1
+         MOV   CH,0
+         CALL  CONVERT
+         JNC   GOOD3          ;IS IT VALID?
+         JMP   DSL
+GOOD3:   MOV   SLINE,AX       ;STORE STARTING LINE
+DEL:     MOV   AH,9           ;DISPLAY ENDING LINE
+         LEA   DX,PRMPEL
+         INT   21H
+         LEA   DX,BUFFER      ;READ FROM KEYBOARD INTO BUFFER
+         MOV   AL,4
+         MOV   BUFFER,AL
+         MOV   AH,10
+         INT   21H
+         CMP   BUFFER+1,0     ;CR ONLY?
+         JE    DPS            ;YES--JUMP
+         LEA   BX,BUFFER+2    ;CONVET IT TO BINARY
+         MOV   CL,BUFFER+1
+         MOV   CH,0
+         CALL  CONVERT
+         JNC   GOOD4          ;IS IT VALID?
+         JMP   DEL
+GOOD4:   MOV   ELINE,AX       ;STORE ENDING LINE
+DPS:     MOV   AH,9           ;DISPLAY LINES PER PAGE
+         LEA   DX,PRMPPS
+         INT   21H
+         LEA   DX,BUFFER      ;READ FROM KEYBOARD INTO BUFFER
+         MOV   AL,4
+         MOV   BUFFER,AL
+         MOV   AH,10
+         INT   21H
+         CMP   BUFFER+1,0     ;CR ONLY?
+         JE    DFN            ;YES--JUMP
+         LEA   BX,BUFFER+2    ;CONVET IT TO BINARY
+         MOV   CL,BUFFER+1
+         MOV   CH,0
+         CALL  CONVERT
+         JNC   GOOD5          ;IS IT VALID?
+         JMP   DPS
+GOOD5:   MOV   PAGSIZ,AX      ;STORE LINES PER PAGE
+DFN:     MOV   AH,9           ;DISPLAY FILE NAME
+         LEA   DX,PRMPFN
+         INT   21H
+         LEA   DX,BUFFER      ;READ FROM KEYBOARD INTO BUFFER
+         MOV   AL,64
+         MOV   BUFFER,AL
+         MOV   AH,10
+         INT   21H
+         CMP   BUFFER+1,0
+         JNE   NINIT
+         JMP   INITPRT
+NINIT:   CMP   BUFFER+1,1
+         JNE   FNA
+         JMP   ZRODFLT
+FNA:     CMP   BUFFER+1,2
+         JNE   FNB
+         JMP   ZRODFLT
+FNB:     CMP   BUFFER+3,':'
+         JE    FNC
+         JMP   ZRODFLT
+FNC:     MOV   AL,BUFFER+2
+         CMP   AL,96
+         JBE   NOCONV1
+         CMP   AL,122
+         JG    NOCONV1
+         SUB   AL,32
+NOCONV1: CMP   AL,'A'
+         JL    DFN
+         CMP   AL,'H'
+         JGE   DFN
+         MOV   DIRPRE,AL
+         MOV   DIRPRE+1,':'
+         MOV   DIRPRE+2,'\'
+         MOV   DIR2PRE,AL
+         MOV   DIR2PRE+1,':'
+         SUB   AL,40H
+         MOV   FCB,AL
+         MOV   HOLDDRIV,AL
+         MOV   CX,8
+         MOV   SI,0
+LUPBLK1: MOV   AL,32
+         MOV   FILENAME[SI],AL
+         INC   SI
+         LOOP  LUPBLK1
+         MOV   BX,OFFSET BUFFER+4
+         MOV   SI,0
+         MOV   CX,8
+LUPFN1:  MOV   AL,[BX]
+         MOV   HOLDBX,BX
+         CMP   AL,'\'             ;WAS A PATH SPECIFIED
+         JE    PRCP1              ;YES--JUMP
+         JMP   LFN1Y
+PRCP1:   MOV   SI,0
+         MOV   PATHSW,1
+         MOV   AL,[BX]
+LUPP1:   CMP   AL,96
+         JBE   NOCONV2
+         CMP   AL,122
+         JG    NOCONV2
+         SUB   AL,32
+NOCONV2: MOV   DIR2AREA[SI],AL
+         INC   BX
+         INC   SI
+         MOV   AL,[BX]
+         CMP   AL,13
+         JNE   LUPP1
+LUPP2:   DEC   BX
+         DEC   SI
+         MOV   AL,[BX]
+         CMP   AL,'\'
+         JNE   LUPP2
+         CMP   BX,HOLDBX
+         JNE   LUPP3
+         INC   SI
+         MOV   DIR2AREA[SI],0
+         INC   BX
+         MOV   SI,0
+         MOV   CX,8
+         JMP   LFN1Z
+LUPP3:   MOV   DIR2AREA[SI],0
+         INC   BX
+         MOV   SI,0
+         MOV   CX,8
+         JMP   LFN1Z
+LFN1Y:   MOV   AL,[BX]
+         CMP   AL,96
+         JBE   NOCONV3
+         CMP   AL,122
+         JG    NOCONV3
+         SUB   AL,32
+NOCONV3: MOV   FILENAME[SI],AL
+         INC   SI
+         INC   BX
+LFN1Z:   MOV   AL,[BX]
+         CMP   AL,13
+         JE    CKIBMP
+         CMP   AL,'.'
+         JE    PRCEXT
+         JMP   LFN1Y
+PRCEXT:  INC   BX
+         MOV   AL,[BX]
+         CMP   AL,13
+         JNE   CEXT
+         JMP   DFN
+CEXT:    MOV   SI,0
+         MOV   CX,3
+LUPEX1:  MOV   AL,[BX]
+         CMP   AL,96
+         JBE   NOCONV4
+         CMP   AL,122
+         JG    NOCONV4
+         SUB   AL,32
+NOCONV4: MOV   EXTEN[SI],AL
+         INC   SI
+         INC   BX
+         MOV   AL,[BX]
+         CMP   AL,13
+         JE    CKIBMP
+         LOOP  LUPEX1
+CKIBMP:  CMP   PRTRCODE,'1'   ;IBM PRINTER?
+         JE    ISIBM          ;YES--JUMP
+         JMP   INITPRT
+ISIBM:   MOV   SPAC16+1,51
+         MOV   SPAC16+2,36
+         MOV   SPAC19+1,51
+         MOV   SPAC19+2,24
+         MOV   SPAC118+1,51
+         MOV   SPAC118+2,12
+INITPRT: MOV   AX,600H        ;CLEAR SCREEN
+         MOV   CX,0
+         MOV   DX,2479H
+         MOV   BH,7
+         INT   10H
+         MOV   AH,9           ;DISPLAY END MESSAGE
+         LEA   DX,ENDMSG
+         INT   21H
+         MOV   AX,ELINE       ;COMPUTE LINES/PAGE
+         SUB   AX,SLINE
+         INC   AX
+         MOV   PAGESIZE,AX
+         MOV   DX,0              ;SET PAGE SIZE
+         MOV   AH,0
+         MOV   AL,27
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPRA
+         RET
+CKPRA:   MOV   AH,0
+         MOV   AL,67
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   SETFORM
+         RET
+SETFORM: MOV   AX,PAGSIZ
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPR1
+         RET
+CKPR1:   MOV   DX,0           ;SET PRINTER SPACING TO 1/6 INCH
+         MOV   AH,0
+         MOV   AL,SPAC16
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   ACP1
+         RET
+ACP1:    MOV   AH,0
+         MOV   AL,SPAC16+1
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   ACP1Z
+         RET
+ACP1Z:   MOV   AH,0
+         MOV   AL,SPAC16+2
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   ACP2
+         RET
+ACP2:    MOV   AX,SLINE
+         DEC   AX
+         CMP   AX,0
+         JE    CKPATH
+         MOV   CX,AX
+SPACDN1: MOV   AH,0           ;SPACE TO STARTING LOCATION ON PAGE
+         MOV   AL,10
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   ACP3
+         RET
+ACP3:    LOOP  SPACDN1
+CKPATH:  CMP   PATHSW,1         ;WAS A PATH SPECIFIED?
+         JNE   AFTINIT          ;NO--JUMP
+         MOV   DL,FCB           ;MOVE DRIVE NUMBER
+         LEA   SI,DIRAREA
+         MOV   AH,47H
+         INT   21H
+         MOV   AH,3BH
+         CMP   HOLDDRIV,0     ;WAS A DRIVE SPECIFIED?
+         JNE   DRIVESPC       ;YES--JUMP
+         LEA   DX,DIR2AREA
+         INT   21H
+         JMP   AFTINIT
+DRIVESPC: LEA  DX,DIR2PRE
+         INT   21H
+AFTINIT: LEA   DX,FCB         ;GET LOCATION OF FCB
+         MOV   AH,15          ;OPEN FILE
+         INT   21H
+         MOV   HOLDAL,AL      ;STORE RETURN CODE
+         CMP   PATHSW,1       ;WAS A PATH SPECIFIED?
+         JNE   CMPHAL         ;NO--JUMP
+         MOV   AH,3BH
+         CMP   HOLDDRIV,0     ;WAS A DRIVE SPECIFIED:
+         JNE   DRIVSP2        ;YES--JUMP
+         MOV   AL,DEFAULT     ;MOVE DEFAULT DRIVE
+         MOV   DIRPRE,AL
+         MOV   DIRPRE+1,':'
+         MOV   DIRPRE+2,'\'
+         LEA   DX,DIRPRE
+         INT   21H
+         JMP   CMPHAL
+DRIVSP2: LEA   DX,DIRPRE
+         INT   21H
+CMPHAL:  CMP   HOLDAL,0
+         JE    SETRS
+         MOV   AH,9
+         LEA   DX,OPNERR
+         INT   21H
+         RET
+SETRS:   MOV   RECSIZ,512     ;SET RECORD SIZE
+         LEA   DX,AREA        ;GET LOCATION OF BUFFER
+         MOV   AH,26          ;SET DISK TRANSFER ADDRESS
+         INT   21H
+         MOV   CX,1           ;CHARACTER COUNT=1
+         MOV   BX,OFFSET LINE1
+READIT:  MOV   HOLDDX,DX      ;SAVE DX
+         MOV   ENDSW,0
+         LEA   DX,FCB         ;GET LOCATION OF FCB
+         MOV   AH,20          ;READ FILE
+         INT   21H
+         CMP   AL,1           ;END OF FILE?
+         JNE   NE1            ;NO--JUMP
+         JMP   ENDF1
+NE1:     MOV   DX,HOLDDX      ;RESTORE DX
+         MOV   HSI5,-1        ;SUBSCRIPT
+INCSUB:  INC   HSI5           ;INCREMENT SUBSCRIPT
+         MOV   SI,HSI5
+         CMP   SI,512         ;END OF RECORD?
+         JE    READIT
+         MOV   AL,AREA[SI]    ;MOVE BYTE
+         CMP   AL,10          ;NEWLINE?
+         JNE   CMPHOF1        ;NO--JUMP
+         JMP   MOVBX2
+ZRODFLT: MOV   CX,8
+         MOV   SI,0
+LUPBLK2: MOV   AL,32
+         MOV   FILENAME[SI],AL
+         INC   SI
+         LOOP  LUPBLK2
+         MOV   AL,0
+         MOV   FCB,AL
+         MOV   BX,OFFSET BUFFER+2
+         MOV   SI,0
+         MOV   CX,8
+         JMP   LUPFN1
+CMPHOF1: CMP   AL,12          ;SKIP TO HEAD OF FORM?
+         JE    SKP1           ;YES--JUMP
+         CMP   AL,13          ;ELIMINATE VOLKSWRITER SPECIAL CHARACTERS
+         JE    INCSUB
+         CMP   AL,26
+         JNE   NE2
+         JMP   ENDF1
+NE2:     CMP   AL,20
+         JE    INCSUB
+         CMP   AL,21
+         JE    INCSUB
+         CMP   AL,24
+         JE    INCSUB
+         CMP   AL,25
+         JE    INCSUB
+         MOV   ENDSW,1
+         CMP   AL,155         ;CENT SIGN?
+         JNE   NE2XX          ;NO--JUMP
+         MOV   AL,212         ;CONVERT TO PRINTER CENT SIGN
+NE2XX:   MOV   ES:[BX],AL
+         INC   BX             ;INCREMENT POINTER
+         JMP   INCSUB
+SKP1:    MOV   AH,0           ;TELL PRINTER TO SKIP TO HOF
+         MOV   AL,12
+         MOV   DX,0
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CHKDP1
+         RET
+CHKDP1:  MOV   DX,0           ;SET PRINTER SPACING TO 1/6 INCH
+         MOV   AH,0
+         MOV   AL,SPAC16
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   ACP4
+         RET
+ACP4:    MOV   AH,0
+         MOV   AL,SPAC16+1
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   ACP5
+         RET
+ACP5:    MOV   AH,0
+         MOV   AL,SPAC16+2
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   ACP5X
+         RET
+ACP5X:   MOV   AX,SLINE
+         DEC   AX
+         CMP   AX,0
+         JE    ZZZLN
+         MOV   CX,AX
+SPACDN2: MOV   AH,0           ;SPACE TO STARTING LOCATION ON PAGE
+         MOV   AL,10
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   ACP3X
+         RET
+ACP3X:   LOOP  SPACDN2
+ZZZLN:   MOV   LINCNT,0        ;ZERO LINE COUNT
+         MOV   BX,OFFSET LINE1  ;MOVE SPACES TO LINE1
+FSL1:    MOV   AL,255
+         CMP   ES:[BX],AL     ;END OF LINE?
+         JE    SOFFL1         ;YES--JUMP
+         MOV   AL,32          ;MOVE A SPACE
+         MOV   ES:[BX],AL
+         INC   BX
+         JMP   FSL1
+SOFFL1:  MOV   BX,OFFSET LINE1
+NLLUP:   INC   HSI5
+         MOV   SI,HSI5
+         CMP   SI,512         ;END OF RECORD
+         JNE   CKNL1          ;NO--JUMP
+         MOV   HOLDDX,DX      ;SAVE DX
+         MOV   ENDSW,0
+         LEA   DX,FCB         ;GET LOCATION OF FCB
+         MOV   AH,20          ;READ FILE
+         INT   21H
+         CMP   AL,1           ;END OF FILE?
+         JNE   MOVZSI         ;NO--JUMP
+         JMP   ENDF1
+MOVZSI:  MOV   DX,HOLDDX
+         MOV   SI,0
+CKNL1:   MOV   AL,AREA[SI]    ;SEARCH FOR NEWLINE
+         CMP   AL,10
+         JNE   NLLUP
+         JMP   INCSUB
+MOVBX2:  MOV   AH,6           ;READ KEYBOARD CHARACTER
+         MOV   DL,0FFH
+         INT   21H
+         CMP   AL,'E'         ;END IT?
+         JNE   COMPSE
+         JMP   EOJ
+COMPSE:  CMP   AL,'e'
+         JNE   MOVBX8         ;NO--JUMP
+         JMP   EOJ
+MOVBX8:  MOV   AH,0BH
+         INT   21H
+         MOV   BX,OFFSET LINE2
+         JMP   INCSUB2
+READIT2: MOV   HOLDDX,DX      ;SAVE DX
+         MOV   ENDSW,999
+         LEA   DX,FCB         ;GET LOCATION OF FCB
+         MOV   AH,20          ;READ FILE
+         INT   21H
+         CMP   AL,1           ;END OF FILE?
+         JNE   NE2B           ;NO--JUMP
+         JMP   ENDF1
+NE2B:    MOV   DX,HOLDDX      ;RESTORE DX
+NEWLN1:  MOV   HSI5,-1        ;SUBSCRIPT
+INCSUB2: INC   HSI5           ;INCREMENT SUBSCRIPT
+         MOV   SI,HSI5
+         CMP   SI,512         ;END OF RECORD?
+         JE    READIT2
+         MOV   AL,AREA[SI]    ;MOVE BYTE
+         CMP   AL,10          ;NEWLINE?
+         JNE   CKSHOF2        ;NO--JUMP
+         JMP   NEWLN3
+CKSHOF2: CMP   AL,12          ;SKIP TO HEAD OF FORM
+         JE    SKP2           ;YES--JUMP
+         CMP   AL,13          ;ELIMINATE VOLKSWRITER SPECIAL CHARACTERS
+         JE    INCSUB2
+         CMP   AL,26
+         JNE   NE3
+         JMP   ENDF1
+NE3:     CMP   AL,20
+         JE    INCSUB2
+         CMP   AL,21
+         JE    INCSUB2
+         CMP   AL,24
+         JE    INCSUB2
+         CMP   AL,25
+         JE    INCSUB2
+         CMP   AL,155         ;CENT SIGN?
+         JNE   NE3XX          ;NO--JUMP
+         MOV   AL,212         ;CONVERT TO PRINTER CENT SIGN
+NE3XX:   MOV   [BX],AL
+         MOV   ENDSW,2
+         INC   BX             ;INCREMENT POINTER
+         JMP   INCSUB2
+MVZ1:    MOV   IBITS,0
+         MOV   IREM,0
+         JMP   MOVSI1
+SKP2:    MOV   AX,PAGESIZE
+         SUB   AX,2
+         MOV   LINCNT,AX
+         JMP   INCSUB2
+FSL2:    MOV   AL,255
+         CMP   [BX],AL          ;END OF LINE?
+         JE    SOFFL2           ;YES--JUMP
+         MOV   AL,32            ;MOVE A SPACE
+         MOV   [BX],AL
+         INC   BX
+         JMP   FSL2
+SOFFL2:  MOV   BX,OFFSET LINE2
+NLLUP2:  INC   HSI5
+         MOV   SI,HSI5
+         CMP   SI,512            ;END OF RECORD?
+         JNE   CKNL2             ;NO--JUMP
+         MOV   HOLDDX,DX         ;SAVE DX
+         MOV   ENDSW,999
+         LEA   DX,FCB            ;GET LOCATION OF FCB
+         MOV   AH,20             ;READ FILE
+         INT   21H
+         CMP   AL,1              ;END OF FILE?
+         JNE   MOVZSI2           ;NO--JUMP
+         JMP   ENDF1
+MOVZSI2: MOV   DX,HOLDDX
+         MOV   SI,0
+CKNL2:   MOV   AL,AREA[SI]       ;SEARCH FOR NEWLINE
+         CMP   AL,10
+         JNE   NLLUP2
+         JMP   INCSUB2
+NEWLN3:  MOV   AL,255
+         CMP   [BX],AL
+         JE    MOVOFF
+         MOV   AL,32
+         MOV   [BX],AL
+         INC   BX
+         JMP   NEWLN3
+MOVOFF:  MOV   AX,LINCNT
+         CMP   AX,PAGESIZE
+         JNE   MVO
+         MOV   DX,0           ;SET PRINTER SPACING TO 1/6 INCH
+         MOV   AH,0
+         MOV   AL,SPAC16
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   ACP7K
+         RET
+ACP7K:   MOV   AH,0
+         MOV   AL,SPAC16+1
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   ACP7L
+         RET
+ACP7L:   MOV   AH,0
+         MOV   AL,SPAC16+2
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   ACP7M
+         RET
+ACP7M:   MOV   AH,0
+         MOV   AL,12
+         MOV   DX,0
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPR3
+         RET
+CKPR3:   MOV   LINCNT,0
+         MOV   AX,SLINE
+         DEC   AX
+         CMP   AX,0
+         JE    MVO
+         MOV   CX,AX
+SPACDN4: MOV   AH,0                ;SPACE TO STARTING LOCATION ON PAGE
+         MOV   AL,10
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   ACPJJ
+         RET
+ACPJJ:   LOOP  SPACDN4
+MVO:     MOV   BX,OFFSET LINE1
+         ADC   BX,RMARG
+         DEC   BX
+         MOV   AX,RMARG
+         DEC   AX
+         MOV   COL,AL
+         MOV   AL,COL
+         SUB   AL,12
+         MOV   COL59,AL
+         MOV   SI,LMARG
+         DEC   SI
+         CMP   LINE1[SI],'.'            ;CHANGE MARGIN?
+         JE    NM1                      ;YES--JUMP
+         JMP   MOVIND
+NM1:     CMP   LINE1+1[SI],'.'
+         JE    NM2
+         JMP   MOVIND
+NM2:     CMP   LINE1+3[SI],'M'
+         JNE   CKSMALM
+CKLARGA: CMP   LINE1+4[SI],'A'
+         JNE   CKSMALA
+CKLARGR: CMP   LINE1+5[SI],'R'
+         JNE   CKSMALR
+CKLARGG: CMP   LINE1+6[SI],'G'
+         JNE   CKSMALG
+CKLARGL: CMP   LINE1+2[SI],'L'
+         JNE   CKSMALL
+         JMP   SETLEFT
+CKSMALM: CMP   LINE1+3[SI],'m'
+         JE    CKLARGA
+         JMP   MOVIND
+CKSMALA: CMP   LINE1+4[SI],'a'
+         JE    CKLARGR
+         JMP   MOVIND
+CKSMALR: CMP   LINE1+5[SI],'r'
+         JE    CKLARGG
+         JMP   MOVIND
+CKSMALG: CMP   LINE1+6[SI],'g'
+         JE    CKLARGL
+         JMP   MOVIND
+CKSMALL: CMP   LINE1+2[SI],'l'
+         JNE   CKRIGHT
+         JMP   SETLEFT
+CKRIGHT: CMP   LINE1+2[SI],'R'
+         JNE   CKRGT2
+         JMP   SETRIGHT
+CKRGT2:  CMP   LINE1+2[SI],'r'
+         JE    JSR
+         JMP   MOVIND
+JSR:     JMP   SETRIGHT
+SETLEFT: MOV   CX,0
+         CMP   LINE1+7[SI],' '
+         JNE   NM2B
+         JMP   MOVIND
+NM2B:    CMP   LINE1+7[SI],10
+         JNE   NM3
+         JMP   MOVIND
+NM3:     CMP   LINE1+7[SI],13
+         JNE   NM4
+         JMP   MOVIND
+NM4:     MOV   CX,1
+         CMP   LINE1+8[SI],' '
+         JE    PLEFT
+         CMP   LINE1+8[SI],10
+         JE    PLEFT
+         CMP   LINE1+8[SI],13
+         JE    PLEFT
+         MOV   CX,2
+         CMP   LINE1+9[SI],' '
+         JE    PLEFT
+         CMP   LINE1+9[SI],10
+         JE    PLEFT
+         CMP   LINE1+9[SI],13
+         JE    PLEFT
+         MOV   CX,3
+PLEFT:   LEA   BX,HMAR
+         MOV   AL,LINE1+7[SI]
+         MOV   HMAR,AL
+         MOV   AL,LINE1+8[SI]
+         MOV   HMAR+1,AL
+         MOV   AL,LINE1+9[SI]
+         MOV   HMAR+2,AL
+         CALL  CONVERT
+         JNC   CNVLM
+         JMP   MOVIND
+CNVLM:   MOV   LMARG,AX
+         JMP   CKPR15
+SETRIGHT: MOV   CX,0
+         CMP   LINE1+7[SI],' '
+         JNE   NM5
+         JMP   MOVIND
+NM5:     CMP   LINE1+7[SI],10
+         JNE   NM6
+         JMP   MOVIND
+NM6:     CMP   LINE1+7[SI],13
+         JNE   NM7
+         JMP   MOVIND
+NM7:     MOV   CX,1
+         CMP   LINE1+8[SI],' '
+         JE    PRIGHT
+         CMP   LINE1+8[SI],10
+         JE    PRIGHT
+         CMP   LINE1+8[SI],13
+         JE    PRIGHT
+         MOV   CX,2
+         CMP   LINE1+9[SI],' '
+         JE    PRIGHT
+         CMP   LINE1+9[SI],10
+         JE    PRIGHT
+         CMP   LINE1+9[SI],13
+         JE    PRIGHT
+         MOV   CX,3
+PRIGHT:  LEA   BX,HMAR
+         MOV   AL,LINE1+7[SI]
+         MOV   HMAR,AL
+         MOV   AL,LINE1+8[SI]
+         MOV   HMAR+1,AL
+         MOV   AL,LINE1+9[SI]
+         MOV   HMAR+2,AL
+         CALL  CONVERT
+         JNC   CNVRM
+         JMP   MOVIND
+CNVRM:   MOV   RMARG,AX
+         JMP   CKPR15
+MOVIND:  MOV   BX,OFFSET LINE1
+         CLC
+         ADC   LINCNT,1
+         CLC
+         ADC   BX,RMARG                  ;LOCATE LAST NON-BLANK CHARACTER
+         DEC   BX
+         MOV   AX,RMARG
+         DEC   AX
+         MOV   COL,AL
+         MOV   AL,COL
+         SUB   AL,18
+         MOV   COL59,AL
+         MOV   SI,LMARG
+         DEC   SI
+         MOV   INDENT,0
+         CMP   LINE1[SI],' '
+         JNE   CKBLK1
+         MOV   INDENT,1
+         CMP   LINE1+1[SI],' '
+         JNE   CKBLK1
+         MOV   INDENT,2
+         CMP   LINE1+2[SI],' '
+         JNE   CKBLK1
+         MOV   INDENT,3
+         CMP   LINE1+3[SI],' '
+         JNE   CKBLK1
+         MOV   INDENT,4
+         CMP   LINE1+4[SI],' '
+         JNE   CKBLK1
+         MOV   INDENT,5
+         CMP   LINE1+5[SI],' '
+         JNE   CKBLK1
+         MOV   INDENT,6
+         CMP   LINE1+6[SI],' '
+         JNE   CKBLK1
+         JMP   NOJUS1
+CKBLK1:  MOV   AL,ES:[BX]              ;BLANK?
+         CMP   AL,32
+         JNE   FB1                     ;NO--JUMP
+         DEC   COL                     ;DECREMENT COLUMN
+         MOV   AL,COL59
+         CMP   COL,AL                  ;COLUMN 59?
+         JE    NOJUS1                  ;YES--JUMP
+         DEC   BX                      ;DECREMENT POINTER
+         JMP   CKBLK1
+NOJUS1:  MOV   IBITS,0
+         MOV   IREM,0
+         JMP   MOVSI1
+FB1:     MOV   AX,RMARG                 ;COMPUTE BITS TO INSERT
+         SUB   AL,COL
+         DEC   AL
+         CMP   AL,0
+         JNE   FB1Z
+         JMP   MVZ1
+FB1Z:    MUL   C12
+         MOV   HWORD,AX
+         MOV   AL,COL
+         SUB   AX,LMARG
+         SUB   AX,INDENT
+         MOV   HCOL,AL
+         INC   HCOL
+         MOV   AX,HWORD
+         DIV   HCOL
+         MOV   HBYTE1,AL
+         MOV   HBYTE2,AH
+         CBW
+         MOV   IBITS,AX
+         MOV   AL,HBYTE2
+         CBW
+         MOV   IREM,AX
+MOVSI1:  MOV   AX,LMARG
+         ADD   AX,INDENT
+         DEC   AX
+         MOV   HSI9,AX
+         MOV   L1SUB,0
+         MOV   LCOL,0
+         MOV   AX,LMARG            ;SKIP TO STARTING COLUMN
+         ADD   AX,INDENT
+         DEC   AX
+         CMP   AX,0
+         JE    LUP1
+         MUL   C12
+         MOV   CX,AX
+         MOV   AL,0
+MOVZR1:  MOV   SI,L1SUB
+         MOV   L1[SI],AL
+         MOV   L2[SI],AL
+         INC   L1SUB
+         LOOP  MOVZR1
+LUP1:    MOV   SI,HSI9
+         MOV   AL,LINE1[SI]
+         MUL   C24
+         MOV   HSI2,AX
+         MOV   CX,12
+LUP2:    MOV   SI,HSI2
+         MOV   AX,TRTAB[SI]
+         MOV   SI,L1SUB
+         SAR   AX,1
+         MOV   L1[SI],AL
+         MOV   SI,HSI2
+         MOV   AX,TRTAB[SI]
+         AND   AL,1B
+         SAL   AL,1
+         SAL   AL,1
+         SAL   AL,1
+         SAL   AL,1
+         SAL   AL,1
+         SAL   AL,1
+         SAL   AL,1
+         MOV   SI,L1SUB
+         MOV   L2[SI],AL
+         INC   L1SUB
+         INC   HSI2
+         INC   HSI2
+         LOOPNZ LUP2
+         CMP   IBITS,0
+         JE    CKRM1
+         MOV   CX,IBITS
+LUP3:    MOV   SI,L1SUB
+         MOV   L1[SI],0
+         MOV   L2[SI],0
+         INC   L1SUB
+         LOOPNZ LUP3
+CKRM1:   CMP   IREM,0
+         JE    CKE1
+         DEC   IREM
+         MOV   SI,L1SUB
+         MOV   L1[SI],0
+         MOV   L2[SI],0
+         INC   L1SUB
+CKE1:    CMP   L1SUB,960
+         JGE   NEWLN4
+         INC   HSI9
+         JMP   LUP1
+NEWLN4:  MOV   AL,255
+         INC   BX
+         CMP   ES:[BX],AL
+         JE    LUP8B
+         MOV   AL,32
+         MOV   ES:[BX],AL
+         JMP   NEWLN4
+LUP8B:   MOV   HSI4,-1        ;SUBSCRIPT
+         MOV   DX,0           ;PRINTER NUMBER
+         MOV   AH,0           ;SET PRINTER SPACING TO 1/9 INCH
+         MOV   AL,SPAC19
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPR4
+         RET
+CKPR4:   MOV   AH,0
+         MOV   AL,SPAC19+1
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPRZ1
+         RET
+CKPRZ1:  MOV   AH,0
+         MOV   AL,SPAC19+2
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPRZZ
+         RET
+CKPRZZ:  MOV   AH,0
+         MOV   AL,27          ;SET PRINTER TO DUAL DENSITY GRAPHICS
+         MOV   DX,0
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPRZ2
+         RET
+CKPRZ2:  MOV   AH,0
+         MOV   AL,76
+         MOV   DX,0
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPR5
+         RET
+CKPR5:   MOV   AH,0
+         MOV   AL,192
+         MOV   DX,0
+         INT   17H
+         MOV   AH,0
+         MOV   AL,3
+         MOV   DX,0
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   LOOPCHR
+         RET
+LOOPCHR: MOV   DX,0           ;PRINTER NUMBER
+         INC   HSI4           ;BUMP SUBSCRIPT
+         MOV   SI,HSI4
+         MOV   AL,L1[SI]
+         MOV   AH,0
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPR6
+         RET
+CKPR6:   INC   SI
+         CMP   SI,960         ;END OF TABLE?
+         JNE   LOOPCHR        ;NO--BRANCH
+         MOV   AH,0           ;CARRIAGE RETURN
+         MOV   AL,13
+         MOV   DX,0
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPR7
+         RET
+CKPR7:   MOV   AH,0           ;LINE FEED
+         MOV   AL,10
+         MOV   DX,0
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   NOTE9
+         RET
+NOTE9:   MOV   HSI4,-1          ;SUBSCRIPT
+         MOV   DX,0           ;PRINTER NUMBER
+         MOV   AH,0           ;SET PRINTER SPACING TO 1/18 INCH
+         MOV   AL,SPAC118
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPR8
+         RET
+CKPR8:   MOV   AH,0
+         MOV   AL,SPAC118+1
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPR9
+         RET
+CKPR9:   MOV   AH,0
+         MOV   AL,SPAC118+2
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPR10
+         RET
+CKPR10:  MOV   AH,0
+         MOV   AL,27          ;SET PRINTER TO DUAL DENSITY GRAPHICS
+         MOV   DX,0
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPR11
+         RET
+CKPR11:  MOV   AH,0
+         MOV   AL,76
+         MOV   DX,0
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPR12
+         RET
+CKPR12:  MOV   AH,0
+         MOV   AL,192
+         MOV   DX,0
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPR12Z
+         RET
+CKPR12Z: MOV   AH,0
+         MOV   AL,3
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   LOOPCH2
+         RET
+LOOPCH2: MOV   DX,0           ;PRINTER NUMBER
+         INC   HSI4           ;BUMP SUBSCRIPT
+         MOV   SI,HSI4
+         MOV   AL,L2[SI]
+         MOV   AH,0
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPR13
+         RET
+CKPR13:  INC   SI
+         CMP   SI,960         ;END OF TABLE?
+         JNE   LOOPCH2        ;NO--BRANCH
+         MOV   AH,0           ;CARRIAGE RETURN
+         MOV   AL,13
+         MOV   DX,0
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPR14
+         RET
+CKPR14:  MOV   AH,0           ;LINE FEED
+         MOV   AL,10
+         MOV   DX,0
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   CKPR15
+         RET
+CKPR15:  MOV   SI,OFFSET LINE2
+         MOV   DI,OFFSET LINE1
+         MOV   CX,LENGTH LINE2
+ REP     MOVS  LINE1,LINE2
+         CMP   ENDSW,888
+         JE    EOJ
+         JMP   MOVBX2
+ENDF1:   CMP   ENDSW,0
+         JE    EOJ
+         MOV   ENDSW,888
+         JMP   NOJUS1
+EOJ:     MOV   AH,0           ;TELL PRINTER TO SKIP TO HOF
+         MOV   AL,12
+         MOV   DX,0
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   EOJZZ
+         RET
+EOJZZ:   MOV   DX,0           ;SET PRINTER SPACING TO 1/6 INCH
+         MOV   AH,0
+         MOV   AL,SPAC16
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   EOJZ1
+         RET
+EOJZ1:   MOV   AH,0
+         MOV   AL,SPAC16+1
+         INT   17H
+         CALL  CHKPRTR
+         CMP   AH,99
+         JNE   EOJZ2
+         RET
+EOJZ2:   MOV   AH,0
+         MOV   AL,SPAC16+2
+         INT   17H
+         CALL  CHKPRTR
+         RET
+JUS_PROC ENDP
+CONVERT  PROC  NEAR
+         PUSH  BX                           ;SAVE BX AND CX
+         PUSH  CX
+         SUB   AX,AX                        ;TO START, RESULT=0,
+         SUB   DX,DX                        ; DECIMAL COUNT=0,
+         MOV   DI,0FFH                      ; ASSUME NO BAD CHARACTERS
+         CMP   CX,7                         ;STRING TOO LONG?
+         JA    NO_GOOD               ;IF SO, GO SET CF AND EXIT
+BLANKS:  CMP   BYTE PTR [BX],' '     ;SCAN PAST LEADING BLANKS
+         JNE   CHK_NEG
+         INC   BX
+         LOOP  BLANKS
+CHK_NEG: CMP   BYTE PTR [BX],'-'     ;NEGATIVE NUMBER?
+         JNE   CHK_POS
+         INC   BX                    ;IF SO, INCREMENT POINTER,
+         DEC   CX                    ; DECREMENT THE COUNT,
+         CALL  CONV_AB               ; AND CONVERT THE STRING
+         JC    THRU
+         CMP   AX,32768              ;IS THE NUMBER TOO SMALL?
+         JA    NO_GOOD
+         NEG   AX                    ;NO, COMPLEMENT THE RESULT
+         JS    GOOD
+CHK_POS: CMP   BYTE PTR [BX],'+'     ;POSITIVE NUMBER?
+         JNE   GO_CONV
+         INC   BX                    ;IF SO, INCREMENT POINTER,
+         DEC   CX                    ; DECREMENT THE COUNT,
+GO_CONV: CALL  CONV_AB               ; AND CONVERT THE STRING
+         JC    THRU
+         CMP   AX,32767              ;IS THE NUMBER TOO BIG?
+         JA    NO_GOOD
+GOOD:    CLC
+         JNC   THRU
+NO_GOOD: STC                         ;IF SO, SET CARRY FLAG
+THRU:    POP   CX                    ;RESTORE REGISTERS
+         POP   BX
+         RET                         ; AND EXIT
+CONV_AB: PUSH  BP                    ;SAVE SCRATCH REGISTERS
+         PUSH  BX
+         PUSH  SI
+         MOV   BP,BX
+CHK_PT:  CMP   DX,0                  ;DECIMAL POINT ALREADY FOUND?
+         JNZ   RANGE                 ; IF SO, SKIP FOLLOWING CHECK
+         CMP   BYTE PTR DS:[BP],'.'  ;DECIMAL POINT?
+         JNE   RANGE
+         DEC   CX                    ;IF SO,DECREMENT COUNT,
+         MOV   DX,CX                 ; AND RECORD IT IN DX
+         JZ    END_CONV              ; EXIT IF CX=0
+         INC   BP                    ; INCREMENT POINTER
+RANGE:   CMP   BYTE PTR DS:[BP],'0'  ;IF THE CHARACTER IS NOT A DIGIT
+         JB    NON_DIG
+         CMP   BYTE PTR DS:[BP],'9'
+         JBE   DIGIT
+NON_DIG: MOV   DI,BP                 ;PUT ITS ADDRESS IN DI,
+         STC                         ; SET THE CARRY FLAG,
+         JC    END_CONV              ; AND EXIT
+DIGIT:   MOV   SI,10                 ;THE CHARACTER IS A DIGIT,
+         PUSH  DX
+         MUL   SI                    ; SO MULTIPLY AX BY 10
+         POP   DX
+         MOV   BL,DS:[BP]            ; FETCH ASCII CODE,
+         AND   BX,0FH                ; SAVE ONLY HIGH BITS,
+         ADD   AX,BX                 ; AND UPDATE PARTIAL RESULT
+         JC    END_CONV              ; EXIT IF RESULT IS TOO BIG
+         INC   BP                    ; OTHERWISE, INCREMENT
+         LOOP  CHK_PT                ; BP AND CONTINUE
+         CLC                         ; WHEN DONE, CLEAR CARRY FLAG
+END_CONV:  POP SI                    ; RESTORE REGISTERS
+         POP   BX
+         POP   BP
+         RET
+CONVERT  ENDP
+CHKPRTR  PROC  NEAR
+         PUSH  AX
+         PUSH  DX
+         TEST  AH,1
+         JNZ   TIMEOUT
+         TEST  AH,32
+         JNZ   OUTPAPR
+         TEST  AH,8
+         JNZ   IOERR
+         JMP   RTRN
+IOERR:   MOV   AH,9
+         LEA   DX,PERR
+         INT   21H
+         POP   DX
+         POP   AX
+         MOV   AH,99
+         RET
+TIMEOUT: PUSH  AX
+         PUSH  DX
+         MOV   AH,9
+         LEA   DX,TOUT
+         INT   21H
+DRDK:    LEA   DX,BUFFER
+         MOV   AL,2
+         MOV   BUFFER,AL
+         MOV   AH,10
+         INT   21H
+         POP   DX
+         POP   AX
+         INT   17H
+RTRN:    POP   DX
+         POP   AX
+         RET
+OUTPAPR: PUSH  AX
+         PUSH  DX
+         MOV   AH,9
+         LEA   DX,OPAPR
+         INT   21H
+         JMP   DRDK
+CHKPRTR  ENDP
+JUS_CSEG ENDS
+         END   JUS_PROC
+```
+{% endraw %}
+
 ## LINEBUG.BAS
 
+{% raw %}
 ```bas
 10  CLS
 13  LOCATE 3,29
@@ -84,9 +2826,11 @@ machines:
 2300 CLOSE #1
 2400 SYSTEM
 ```
+{% endraw %}
 
 ## SR.BAS
 
+{% raw %}
 ```bas
 0 '  "sr.BAS  4/16/84 ...JC
 1 GOTO 3000
@@ -1113,6 +3857,80 @@ machines:
 51003 XY=FRE(""):RETURN
 51304 ,12:MAXLENGTH=4:GOSUB 100:LOCATE,,0,7,7
 ```
+{% endraw %}
+
+## TIMED.TXT
+
+{% raw %}
+```
+TEXT
+PLEASE READ THESE INSTRUCTIONS CAREFULLY:
+
+
+1. When you press <SPACE BAR> to begin,
+   the reading will appear.  I'll be timing
+   you, so start reading right away.
+2. As soon as you finish reading each 
+   screen, "turn the page" by pressing
+   the <SPACE BAR> as directed.
+3. Read at your normal pace so that you 
+   understand what you're reading.
+4. Reread these instructions.
+END
+TREAD302
+!U04,33@   THE SINKING OF AN UNSINKABLE SHIP
+
+  It was pitch black on that April night
+in 1912 and there had been iceberg warn-
+ings off the southern coast of Newfound-
+land.  But the White Star Liner Titanic
+continued full speed ahead on her maiden
+voyage from Southampton to New York.
+  The "fastest ship afloat," as she had
+been called by the newspapers, was trying
+to break a speed record for the trans-
+atlantic crossing.
+STOP
+  Yet despite rumors of icebergs that
+circulated through the salons and dining
+rooms that evening, none of the 2,200
+passengers and crew seemed the least bit
+concerned.  After all, they reassured one
+another, what could possibly happen.
+The Titanic was unsinkable, wasn't she?
+  Well, the Titanic did make the headlines
+the next day as a recordbreaker.  But in-
+stead of going down in history as the
+fastest crossing,  it will be remembered
+STOP
+as one of the greatest sea disasters of
+all time. The "unsinkable" luxury liner
+had sliced her bow on an iceberg and sunk
+in a matter of hours, taking 1,517 sur-
+prised and unbelieving people to the bot-
+tom with her.  It turned out that there 
+were only enough lifeboats for a fraction
+of the people on board.  The assurance of
+her builders that she was unsinkable and
+the ambition of her captain that she win
+a record turned out to be no match for
+STOP
+the dangers of the open sea.
+  Still, it might be said that some good
+did come out of this tragic event.  In the
+wake of the Titanic disaster came a wave
+of maritime reforms designed to ensure
+safer passage on the high seas.  Perhaps
+the lives lost that night were not lost
+in vain, and those who went down with the
+Titanic helped to prevent countless others
+in the years since from meeting a similar
+fate.
+END
+EOF
+RET
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

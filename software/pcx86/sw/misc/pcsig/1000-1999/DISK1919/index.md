@@ -36,6 +36,39 @@ machines:
     payments per year, loan interest rate, and loan principal.  Upon
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1919.TXT
+
+{% raw %}
+```
+Disk No: 1919                                                           
+Disk Title: Finance Plus                                                
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Finance Plus                                             
+Author Version: 11/22                                                   
+Author Registration: $25.00                                             
+Special Requirements: 384RAM.                                           
+                                                                        
+Finance Plus provides the user with a means to enter data and calculate 
+the unknown for Return on Investments, Periodic Deposits, Periodic      
+Withdrawals, Financial Planning, Loan Evaluation, and Bond Analysis.    
+                                                                        
+Easy to follow screen design and clear information make this            
+multi-function investment/loan calculator a quick easy way to weigh     
+your financial options.  Changing variables for ``What if'' comparisons 
+is a snap.                                                              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1919
 

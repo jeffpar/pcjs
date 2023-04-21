@@ -29,6 +29,57 @@ machines:
     foes are skilled.  Conquering the world can be difficult!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1322.TXT
+
+{% raw %}
+```
+Disk No: 1322                                                           
+Disk Title: NCRisk                                                      
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: NCRisk                                                   
+Author Version: 1.70                                                    
+Author Registration: $10.00                                             
+Special Requirements: Hercules graphics, CGA, EGA or VGA.               
+                                                                        
+This colorful strategy game, a clone of the Parker Brothers' game Risk, 
+pits you and your army against the armies of up to three other players  
+in a worldwide conflict.                                                
+                                                                        
+Strategy involves trying to pick up extra armies by occupying whole     
+continents.  At the same time, you must protect yourself against        
+unexpected moves by your opponents.  Do not expect a short game if your 
+foes are skilled.  Conquering the world can be difficult!               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+    ╔══════════════════════════════════════════════════════════════════╗
+    ║                 <<< Disk #1322  NCRisk >>>                       ║
+    ╠══════════════════════════════════════════════════════════════════╣
+    ║                                                                  ║
+    ║  To start program type:  NCRISK                                  ║
+    ║                                                                  ║
+    ║  To print manual type:   COPY NCRISK PRN                         ║
+    ║                                                                  ║
+    ╚══════════════════════════════════════════════════════════════════╝
+    (c) Copyright 1990, PC-SIG Inc.
+~
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1322
 

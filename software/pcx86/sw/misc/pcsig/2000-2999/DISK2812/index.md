@@ -14,6 +14,36 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2812.TXT
+
+{% raw %}
+```
+Disk No: 2812                                                           
+Disk Title: *DAYO RMS (Return Management System)                        
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: DAYO RMS (Return Management System)                      
+Author Version: 2.0                                                     
+Author Registration: $45.00                                             
+Special Requirements: 520K RAM, hard drive, and DOS 3.3.                
+                                                                        
+DAYO RMS (RETURN MANAGMEENT SYSTEM) provides a means to record and      
+track returns of your product. DAYO RMS integrates to DAYO Inventory    
+(#2401) and its multiple warehouses to allow tracking of items being    
+returned (i.e. breakages, warranties, return to vendors). Creates RMA   
+numbers.                                                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2812
 

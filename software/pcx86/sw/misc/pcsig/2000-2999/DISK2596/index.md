@@ -14,6 +14,55 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2596.TXT
+
+{% raw %}
+```
+Disk No: 2596                                                           
+Disk Title: Test Maker 2 of 2 (#1551 also)                              
+PC-SIG Version: S2.8                                                    
+                                                                        
+Program Title: Test Maker                                               
+Author Version: 2.8                                                     
+Author Registration: Single $29.95; Network $49.95; School License $75.0
+Special Requirements: Hard drive. A printer is recommended.             
+                                                                        
+Teachers, teacher's aides, and parents -- TMAKER is here to help you at 
+test time.  Tell TMAKER the subject and how many questions should be in 
+the test and stand back!  Produce a quiz for the fourth period civics   
+class and a quiz for the sixth period class, cover the same material and
+yet, have two different tests.  Someone miss a test?  Generate one for  
+him to take as make-up.  No need to worry if people have been comparing 
+notes.                                                                  
+                                                                        
+Create a database of up to 200 questions and answers in each file with  
+as many files as you have the memory to support.  You don't have to     
+enter them all at once.  As you create test questions and answers, put  
+them in the database.  The next time you create a test in that subject, 
+enter any new questions and answers into the same database.             
+                                                                        
+Tests can be printed and taken in a group or the computer can run a     
+single test for a student.  This one-on-one version is also good for    
+tutorials and can be used by the students to create personalized study  
+guides. (Optional password protection keeps private information         
+private.)  Exact answers are required for the computer-driven option so 
+it's ideal for questions with exact answers such as names, dates,       
+numbers, yes or no, multiple choice and fill-the-blanks.                
+                                                                        
+The software is menu-driven, has a full help function and requires no   
+special computer expertise to operate.                                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2596
 

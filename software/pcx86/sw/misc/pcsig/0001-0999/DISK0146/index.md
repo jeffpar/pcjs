@@ -62,6 +62,7 @@ machines:
 
 ## EASYRITE.BAS
 
+{% raw %}
 ```bas
 10 CLS:REM EASYRITE -- A FULLY FORMATED WORD/MEMO PROCESSING SYSTEM FOR THE IBM
 30 REM VERSION 1.5 -- REVISED 05/10/84
@@ -564,9 +565,42 @@ machines:
 13520 CLS:LOCATE 10,30:PRINT"FILE CLEARED":FOR TD=1 TO 1000:NEXT:RETURN
 13570 END
 ```
+{% endraw %}
+
+## FILES146.TXT
+
+{% raw %}
+```
+-------------------------------------------------------------------------
+Disk No 146   EasyRite/LabelFile from GINACO                         v3.1
+-------------------------------------------------------------------------
+------------  EasyRite
+ER       EXE  Word processor program (compiled)
+DEMOFILE      Sample Word Processor file
+EASYRITE BAS  Word processor source code
+FACTS         EasyRite instructions
+TEXT     ONE  Sample text file - information about EasyRite/LabelFile
+TEXT     TWO  Sample text file - information about Blueberry from GINACO
+------------  LabelFile
+LF       EXE  Label/File program (compiled)
+LABLFILE BAS  Source for Label/File program
+README        Notes about using programs (short!)
+GENLEGER BAS  Basic general ledger program
+GL       EXE  A general ledger program
+GLEGER   DAT  Data for general ledger
+README2       Notes about EASYRITE and LABLFILE
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1986,87 PC-SIG
+```
+{% endraw %}
 
 ## GENLEGER.BAS
 
+{% raw %}
 ```bas
 60 ' ===== GENERAL ACCOUNTING JOURNAL ENTRY PROGRAM FOR PC/XT/AT (IBM)
 70 ' ===== DEVELOPED BY BRUNO LARSEN, GINACO, NOVEMBER 1984
@@ -1465,9 +1499,11 @@ machines:
 9050 GOTO 1290
 9060 END
 ```
+{% endraw %}
 
 ## LABLFILE.BAS
 
+{% raw %}
 ```bas
 10 CLS:REM LABLFILE BY GINACO: BRUNO LARSEN, SUN CITY, ARIZONA
 30 REM (C) 1984 BY BRUNO M. LARSEN, G I N A C O
@@ -1867,6 +1903,7 @@ machines:
 15520 END
 15580 RUN"EASYRITE.BAS"
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -80,6 +80,90 @@ machines:
     ~ LaserJet compatible checks
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2131.TXT
+
+{% raw %}
+```
+Disk No: 2131                                                           
+Disk Title: Takin' Care O Bz 2 (2130 + Module(s))                       
+PC-SIG Version: S1.02                                                   
+                                                                        
+Program Title: TAKIN' CARE OF BUSINESS                                  
+Author Version: 1.0A                                                    
+Author Registration: $39.95 to $49.95 per module, $219.70 for complete p
+Special Requirements: 640K RAM and a hard drive.                        
+                                                                        
+A complete professional accounting system for non-accountants, TAKIN'   
+CARE OF BUSINESS (TCB) improves on the top rated Finance Manager II by  
+increasing speed, number of transactions and ease of use.               
+                                                                        
+Features include:                                                       
+                                                                        
+~ User definable data and time masks                                    
+                                                                        
+~ User definable decimal and comma characters                           
+                                                                        
+~ Ability to add/modify accounts while entering transactions            
+                                                                        
+~ unlimited number of transactions                                      
+                                                                        
+~ Drop-to-DOS                                                           
+                                                                        
+~ Seven digit check numbers                                             
+                                                                        
+~ Context-sensitive help                                                
+                                                                        
+~ Greatly enhanced menuing system                                       
+                                                                        
+~ Over 3,000 screen color selections                                    
+                                                                        
+~ Pop-up, pull-down menus                                               
+                                                                        
+~ Exploding windows                                                     
+                                                                        
+~ User controllable sound effects                                       
+                                                                        
+~ EMS memory for faster speed                                           
+                                                                        
+~ Datafile backup utility                                               
+                                                                        
+~ Full screen mouse support                                             
+                                                                        
+~ Screen burn-in saver                                                  
+                                                                        
+~ On-the-fly check writing                                              
+                                                                        
+~ Check-like transaction input screen                                   
+                                                                        
+~ Net subtotal type accounts for income statement                       
+                                                                        
+~ Alphanumeric account numbers                                          
+                                                                        
+~ User definable check layout                                           
+                                                                        
+~ Ten character reference field                                         
+                                                                        
+~ Automatic sales tax calculation                                       
+                                                                        
+~ Graphing capabilities (pie, bar, chart)                               
+                                                                        
+~ Cash requirements report                                              
+                                                                        
+~ Multiple state tax tables                                             
+                                                                        
+~ LaserJet compatible checks                                            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2131
 

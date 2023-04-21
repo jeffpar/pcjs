@@ -50,6 +50,140 @@ machines:
     pick them for you. Good fun!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## ASP.TXT
+
+{% raw %}
+```
+Gene P. Davis                              (tm)  ┌─────────┐
+Author LOTTO PROPHET                       ┌─────┴───┐     │  MEMBER
+President                                ──│         │o    │──────────────────
+DataMicro, Inc.                            │   ┌─────┴╨──┐ │  Association of
+P.O. Box 3527                              │   │         │─┘  Shareware
+Port Charlotte, FL 33949                   └───│    o    │    Professionals
+813 629-7720                             ──────│    ║    │────────────────────
+                                               └────╨────┘    
+
+Gene P. Davis is a member of the Association of Shareware Professionals (ASP).
+ASP wants to make sure that the shareware principle works for you. If you are
+unable to resolve a shareware-related problem with an ASP member by contacting
+the member directly, ASP may be able to help. The ASP Ombudsman can help you
+resolve a dispute or problem with an ASP member, but does not provide technical
+support for members' products. Please write to the ASP Ombudsman at P.O.
+Box 5786, Bellevue, WA 98006 or send a Compuserve message via easyplex to ASP
+Ombudsman 70007,3536
+
+```
+{% endraw %}
+
+## FILE1006.TXT
+
+{% raw %}
+```
+Disk No: 1006
+Program Title: DATAMICRO'S PROPHET version 2.7
+PC-SIG version:  1.4
+
+LOTTO PROPHET has been completely redesigned, rewritten and expanded to
+become the most complete lottery software package on the market today.
+New point and shoot screens plus additional well documented programs
+make it nice to look at and easy to use.  The best just got better.  The
+PROPHET is a lottery statistical compiler and forecaster.  The program
+has four main parts:
+
+(1) Allows for file control, update, editing and sorts and prints the
+files showing repeat numbers.
+
+(2) Produces statistical reports based on the most frequent drawn
+numbers, current HOT numbers, numbers that have appeared the most with
+other numbers and numbers that have appeared the most in any certain
+month.  Prints prophet cards, graphs, trend charts, etc...
+
+(3) Stores numbers and checks for winners for up to 3 different
+lotteries at a time.  Each may have eight players, each player can have
+6 scores.  Prints the players and their scores plus the results of the
+drawing - 4 out of 6 etc... great for groups of players.
+
+(4) If you desire, the Prophet's Prognosticator will select numbers for
+you and even scroll out a definite opinion of them, easily switching
+from 3 pick back to 6 pick etc.  Works on all the State LOTTOS,
+Australian Gold, Canadian 649 etc...
+
+LOTTO PROPHET can help you predict, store and check your numbers using
+the latest scientific methods or you can let the opinionated randomizer
+pick them for you.  This program is fun and entertaining.
+
+Usage:  Lottery Winning/Database
+
+Special Requirements:  A printer is recommended.
+
+How to start:  Type GO (press enter).
+
+Suggested Registration:  $39.50
+ 
+File Descriptions:
+
+PROPHET  COM  Starter program for LOTTO PROPHET.
+LOTTO    CHN  The main program module.
+HOLDCHK  CHN  The Holdum/Checkum program module.
+LOTTO3   CHN  RANDO, The random tester.
+LOTTO4   CHN  The Registration module.
+PRO      FIL  Maintains a list of the available PROPHET files.
+PRO      CFG  Opinions file & work file for numbers selection.
+MANUAL27 DOC  Complete program documentation.
+PROLOT   DOC  LOTTO PROPHET Registration information.
+INFOS    FIL  Identification, Disclaimer and Copyright.
+READIT   BAT  Start up procedures -=- warns to make backup.
+FILES    TXT  A description of the files on the disk.
+PRINTDOC BAT  Prints the Manual.
+PROPHET  4    'Gotham State'  test numbers file (no bonus numbers).
+PROPHET  13   'Gotham State1' test numbers file (1 bonus).
+PROPHET  27   'Gotham State2' test numbers file (2 bonus).
+PROPHET  ARC  All the files on this disk Archived.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## FILES.TXT
+
+{% raw %}
+```
+
+                        D A T A M I C R O' S
+=============================================================================
+ 'LOTTO PROPHET' VER 2.7 -=- LIST OF THE FILES ON THIS DISK -=-
+=============================================================================
+
+    PROPHET.COM =  Starter Program for 'LOTTO PROPHET'
+    LOTTO.CHN   =  The main program module
+    HOLDCHK.CHN =  The Holdum/Checkum program module
+    LOTTO3.CHN  =  RANDO, The random tester
+    LOTTO4.CHN  =  The Registration module
+    PRO.FIL     =  Maintains a list of the available PROPHET (History) files.
+    PRO.CFG     =  Opinions file & work file for numbers selection
+    MANUAL27.DOC=  Complete program documentation
+    PROLOT.DOC  =  LOTTO PROPHET Registration information
+    INFOS.FIL   =  Identification, Disclaimer and Copyright
+    READIT.BAT  =  Start up procedures -=- warns to make backup
+    FILES.TXT   =  A description of the files on the disk (this file)
+    PRINTDOC.BAT=  Prints the Manual
+    PROPHET.4   =  'Gotham State'  test numbers file (no bonus numbers)
+    PROPHET.13  =  'Gotham State1' test numbers file (1 bonus)
+    PROPHET.27  =  'Gotham State2' test numbers file (2 bonus)
+    PROPHET.ARC = All the files on this disk Archived
+ 
+                                                               
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1006
 

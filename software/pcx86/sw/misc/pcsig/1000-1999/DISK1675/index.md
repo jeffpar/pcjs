@@ -38,6 +38,47 @@ machines:
     If you're not going to eat that Twinkie...
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1675.TXT
+
+{% raw %}
+```
+Disk No: 1675                                                           
+Disk Title: The Nutritionist 2 of 2 (1148 also)                         
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: Nutritionist, The                                        
+Author Version: 3.2.1                                                   
+Author Registration: $36.00                                             
+                                                                        
+Put down that Twinkie and pick up THE NUTRITIONIST; a high-powered      
+package for health-conscious hackers!                                   
+                                                                        
+THE NUTRITIONIST has just about everything you could possibly want      
+to know about bringing health and nutritional balance into your daily   
+diet.                                                                   
+                                                                        
+Massive amounts of useful data are provided.  Some topics covered are:  
+food items, caloric content, ideal body weight, minimum daily           
+requirements (MDR's), meal planning, calorie consumption calculations   
+for various types of physical activity, portion planning, and recipe    
+creation.  A handy printer routine uses condensed type to print on      
+tractor-feed 4X6-inch file cards for easy kitchen counter reference.    
+Give THE NUTRITIONIST a look if you want a full-featured package for    
+improving dietary habits.                                               
+                                                                        
+If you're not going to eat that Twinkie...                              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1675
 

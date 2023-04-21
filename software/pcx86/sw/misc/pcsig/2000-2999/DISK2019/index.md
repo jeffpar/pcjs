@@ -49,6 +49,67 @@ machines:
     be written.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2019.TXT
+
+{% raw %}
+```
+Disk No: 2019                                                           
+Disk Title: Speaker/HexEdit/DiskTest                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: SPEAKER                                                  
+Author Version: 1.0                                                     
+Author Registration: $10.00                                             
+Special Requirements: Graphics adapter, graphics printer.               
+                                                                        
+This program performs Thiele-Small alignments for any given speaker in a
+vented enclosure.  This means it will determine the optimum cabinet and 
+vent size for the driver entered.  It requires the Thiele-Small         
+parameters for the driver (available on most data sheets) to perform the
+analysis.                                                               
+                                                                        
+It will graph the speakers response on screen along with all the        
+calculated results.  It can also graph the speakers thermal and         
+displacement limit curves and a simulated square wave response.  The    
+user can request the screen to be printed.  The program includes a data 
+file that contains almost every driver made by JBL.  New drivers can be 
+added to this file from within the program.                             
+Program Title: HexEdit                                                  
+Author Version: 1.0                                                     
+Author Registration: $10.00                                             
+Special Requirements: None.                                             
+                                                                        
+This program allows the user to view, modify, and write any file.  It   
+edits the file in hex so it can edit .exe, .com, or data files.  It     
+provides basic editing functions such as insert, delete, search,        
+insert/overstrike mode, load new file, save, and a 100-level undo.  Help
+is available with the F1 key.  It can edit any size file up the limit of
+available memory.                                                       
+Program Title: DiskTest                                                 
+Author Version: 2.3                                                     
+Author Registration: $10.00                                             
+Special Requirements: None.                                             
+                                                                        
+This program performs read and write tests on any floppy or standard    
+hard disk.  If it detects any errors, it shows the exact error that     
+occurred and the sector in which it occurred.  When finished it shows   
+how many errors were corrected by retries or recalibration.  It allows  
+the user to specify to starting and ending sectors to test and the      
+number of test loops.  It allows the user to choose read-only, write-   
+only, or write and read testing.  The user provides the data pattern to 
+be written.                                                             
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2019
 

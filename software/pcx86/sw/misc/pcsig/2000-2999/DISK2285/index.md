@@ -42,6 +42,52 @@ machines:
     And much, much more!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2285.TXT
+
+{% raw %}
+```
+Disk No: 2285                                                           
+Disk Title: PC-Write Macros Vol II                                      
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: PC-Write Macros, Volume 2                                
+Author Version: 1.0B                                                    
+Author Registration: $10.00                                             
+Special Requirements: PC-Write 3.0.                                     
+                                                                        
+This program offers another 100 special commands for the popular        
+wordprocessing program PC-Write, and helps you place them on the keys   
+of your choice. With PC-WRITE MACROS, VOL. 2, you can;                  
+                                                                        
+~ Speed up PC-Write.                                                    
+                                                                        
+~ Call up a Notepad, for sending notes to printer or file.              
+                                                                        
+~ Convert your documents for WordPerfect or Macintosh.                  
+                                                                        
+~ Instantly set up page formats for elite fonts.                        
+                                                                        
+~ Adjust page breaks to avoid splitting paragraphs.                     
+                                                                        
+~ Triple-space in a double-spaced document.                             
+                                                                        
+~ Experiment with a Dvorak keyboard.                                    
+                                                                        
+~ Test and install macros without leaving your document.                
+                                                                        
+And much, much more!                                                    
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2285
 

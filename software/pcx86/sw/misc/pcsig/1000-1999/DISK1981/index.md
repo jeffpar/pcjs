@@ -14,6 +14,101 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1981.TXT
+
+{% raw %}
+```
+Disk No: 1981                                                           
+Disk Title: The Electrical DBS Disk    Disk 5 of 5                      
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: The Electrical DBS disk                                  
+Author Version: 02/12                                                   
+Author Registration: $45.00                                             
+Special Requirements: None.                                             
+                                                                        
+THE ELECTRICAL REFERENCE DATABASE gives electricians, engineers,        
+designers, and panel shop operators one place on your computer where you
+can go to and find those little notes that only experience produces.  In
+this case an experienced professional has given you his experience and  
+created a forum for you to add your own.                                
+                                                                        
+Databases include:                                                      
+                                                                        
+~ D.C.  MOTORS                                                          
+                                                                        
+~ SINGLE PHASE MOTORS                                                   
+                                                                        
+~ THREE PHASE INDUCTION MOTORS                                          
+                                                                        
+~ THREE PHASE WOUND ROTOR MOTORS                                        
+                                                                        
+~ THREE PHASE SYNCHRONOUS MOTORS                                        
+                                                                        
+~ NEMA DATA                                                             
+                                                                        
+~ MOTOR FRAME SIZES                                                     
+                                                                        
+~ THREE PHASE CONDUCTORS AMPACITIES                                     
+                                                                        
+~ SINGLE PHASE CONDUCTOR AMPACITIES                                     
+                                                                        
+~ MAXIMUM CONDUCTORS IN CONDUIT                                         
+                                                                        
+~ THREE PHASE TRANSFORMERS                                              
+                                                                        
+~ RECOMMENDED COPPER WIRE AND TRANSFORMER SIZES                         
+                                                                        
+Motor databases provide information as to full load currents, motor over
+current protection rating, the size or guage of the wire required to    
+connect one motor of that particular horsepower in a general purpose    
+application, the conduit trade size required to house the wire, the NEMA
+size starter recommended,the amperage and the recommended fusing.       
+                                                                        
+The present data is referred to as "seed" data just to get you started. 
+You may add and delete data as you like.  Each data base may can handle 
+a maximum of 32000 entries.                                             
+                                                                        
+Each database is menu-driven and complete with it's own help function   
+and notes field.  Use this data base as a tool - not as a replacement   
+for the NATIONAL ELECTRICAL CODE manual!  All information assumes a     
+single motor installation.  Consult your N.E.C. manual for the details  
+of your particular installation.                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+
+```
+{% endraw %}
+
+## FILES_5.DOC
+
+{% raw %}
+```
+
+ Volume in drive A has no label
+ Directory of  A:\
+
+NEC      COM    19049   1-01-80   1:51a
+YOURSYS  COM    26516   9-22-87   1:25a
+SBMIO    COM    11291   9-22-87   1:25a
+MESSAGE  1        178   1-01-80  12:51a
+RUN      BAT       64   1-01-80  12:47a
+SBMSIO   CHN    27209   9-22-87   1:25a
+MANUAL   DOC     5802   1-01-80  12:32a
+HELP     TXT     2762   9-22-87   1:25a
+THREXFMR CHN    23128   1-01-80  12:35a
+FILES_5  DOC        0   2-12-89  11:23a
+       10 File(s)    240640 bytes free
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1981
 

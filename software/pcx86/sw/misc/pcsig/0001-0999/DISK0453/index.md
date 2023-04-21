@@ -50,6 +50,45 @@ machines:
     to be picked up by a helicopter. Where are your mittens?
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES453.TXT
+
+{% raw %}
+```
+Disk No  #453
+Program Title: AdventureWare version 1.51
+PC-SIG version 1.1
+ 
+Here is a collection of 5 text adventure games, ranging from a mystery
+adventure to an out and out horror film adventure.
+ 
+Usage: entertainment
+ 
+System Requirements: IBM PC or close compatible, 1 disk drive, Dos 2.0 or later.
+ 
+How to Start: To start a program, type in its name. For example, to start the
+              game CRIME.EXE, type CRIME.
+ 
+File Descriptions:
+ 
+CRIME    EXE  Adventure game
+HAUNT    EXE  Adventure game
+ISLAND   EXE  Adventure game
+SUB      EXE  Adventure game
+TERROR   COM  Adventure game
+TERROR   DAT  Data file for TERROR.COM
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0453
 

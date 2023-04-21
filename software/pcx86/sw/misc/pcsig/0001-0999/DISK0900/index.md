@@ -63,6 +63,54 @@ machines:
     TOPIC     000  Overlay file.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES900.TXT
+
+{% raw %}
+```
+Disk No  900
+Program Title: ESL WRITER version 1 (Disk 2 of 2)
+PC-SIG version 1
+ 
+    This is the second disk of ESL WRITER, and contains several programs
+that help students develop their writing ability. INVISIBLE WRITER lets the
+user type without seeing the text, which can be brought to the screen with
+a single command. This feature helps writers concentrate more on their
+thought processes and content, rather than the grammar, punctuation, or
+spelling errors. LISTER asks simple questions and provides ideas to help
+the writer develop a topic and choose a thesis. 1001 TOPICS contains 1358
+topics in 21 categories that are suitable for many different types of
+composition.
+ 
+Usage: Word Processing
+ 
+System Requirements: 128K memory, one disk drive and a printer.
+ 
+How to Start: Type: PREWRITE (press enter).
+ 
+Suggested Registration: $15.00 to $50.00
+ 
+File Descriptions:
+ 
+LIST     COM  Lister.
+PREWRITE COM  Main program.
+TOPIC    COM  1001 TOPICS.
+INVISIBL COM  INVISIBLE WRITER.
+INFO     COM  Program information.
+TOPIC    000  Overlay file.
+READ     ME   Introduction.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0900
 

@@ -14,6 +14,44 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2959.TXT
+
+{% raw %}
+```
+Disk No: 2959                                                           
+Disk Title: *EASY*GEN (#2958, #2960 also)                               
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: EASY*GEN Employee Attitude Survey Generator              
+Author Version: 2.1A                                                    
+Author Registration: $95.00                                             
+Special Requirements: 640K RAM, graphics card, hard drive, DOS 3.3+, and
+                                                                        
+EASY*GEN allows you to easily design a customized and fully computerized
+employee attitude survey using a database of over 500 questions covering
+41 topics. Your own questions (both multiple-choice quantitative and    
+open-ended qualitative) and topics, introductory text, and demographic  
+questions can be included as well.                                      
+                                                                        
+The surveys, which are designed by you, can be conducted interactively  
+on a PC or with questionnaires. Custom reports and graphs with trend    
+analysis and breakdowns by demographic categories can be produced.      
+                                                                        
+EASY*GEN can also be used to computerize your organization's existing   
+surveys or to develop other types of surveys (Employee Attitudes,       
+Training Needs Assessment, etc.).                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2959
 

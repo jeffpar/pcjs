@@ -14,6 +14,43 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2738.TXT
+
+{% raw %}
+```
+Disk No: 2738                                                           
+Disk Title: Poker Slot 2 of 2 (2737 also)                               
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Poker Slot                                               
+Author Version: 2.00                                                    
+Author Registration: $15.00                                             
+Special Requirements: 360K RAM, EGA. Hard drive recommended; supports mo
+                                                                        
+POKER SLOT is a gambling game found in casinos in Nevada and New        
+Jersey.  Before playing POKER SLOT, choose one of four variations of the
+game -- Second Chance Poker, Joker Wild, Deuces Wild, and Double Down.  
+                                                                        
+The object of the game is to get a poker hand of Jacks or better.  You  
+will be paid off according to your poker hand.   For each round, insert 
+one to five coins worth $1.00 each.  (POKER SLOT will keep track of the 
+total coins bet.)  You will be dealt five cards in each round and you   
+may choose which ones to hold or discard.                               
+                                                                        
+POKER SLOT can be played with a mouse or keyboard, and has a detailed   
+screen layout using EGA graphics.                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2738
 

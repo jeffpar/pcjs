@@ -34,6 +34,119 @@ machines:
     program, you can access your songs.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES722.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No 722   COMPOSER version 1.1                                   v1
+---------------------------------------------------------------------------
+The programs on this disk consist of a basic music editor  with  a
+three octave range, and programs to make the  tunes  created  with
+COMPOSER accessable to TURBO PASCAL (tm)  applications  and  batch
+files.
+ 
+------------  COMPOSER (V1.1)
+COMPOSER COM  Main program
+COMPOSER DOC  Manual for COMPOSER
+ERROR    MSG  Error message overlay
+COMPOSER PIF  Screen file for COMPOSER
+4X6      FON  Part of COMPOSER
+8X8      FON  Part of COMPOSER
+SONGS    DTA  Data file used by COMPOSER/TUNES/LISTSONG
+TEMPSCRN      Screen file for COMPOSER
+------------
+TUNES    COM  Plays tunes in SONGS.DTA
+SONG     BAT  Batch file that plays contents of SONGS.DTA using TUNES.COM
+------------
+LISTSONG COM  Sends titles of tunes in song file (ex. SONGS.DTA) to printer
+------------
+TRBOTUNE SYS  Allows access to tunes in TRBOTUNE.LIB for TURBO Pascal
+TRBOTUNE LIB  Data file used by TRBOTUNE.SYS
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+ 
+If you want to print the manual, at the `A>' type:
+            COPY COMPOSER.DOC PRN: <enter>
+ 
+If you want to read the manual, at the `A>' type: TYPE COMPOSER.DOC <enter>
+ 
+If you want to hear some tunes (there are 8), type: SONG <enter>
+ 
+If you want to run COMPOSER, type: COMPOSER <enter>
+ 
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+## NOTES722.TXT
+
+{% raw %}
+```
+Program name: COMPOSER  V1.1
+ 
+Author name: BOB AMAN
+Address:     2829 MOURNING DOVE WAY
+             TITUSVILLE, FLORIDA 32780
+ 
+Telephone Number: None listed
+ 
+Suggested Donation: None, but registration requested to allow author to
+                    map distribution
+ 
+Program Description:
+ 
+COMPOSER turns the row of keys from "A" to ":" into a keyboard that allows
+the user to make single-voice tunes (one note at a time). Function keys
+define commands and menus for adjusting tempo, making notes sharp or flat,
+editing, loading, saving, changing from piano to organ voices, and changing
+octaves. The edit menu allows placement of notes and rests, and allows for
+the variation of note timing from 1/16 note to 4 whole notes (the length of
+time a note is sustained).
+ 
+Tunes can saved to a file whose default title is SONGS.DTA but can also be
+a Turbo Pascal(tm) library file (.LIB). Up to 40 tunes can be saved to this
+file which can then be accessed through a of other programs included.
+LISTSONG.COM sends a list of the titles in SONGS.DTA to a printer for
+hard-copy output. TUNES.COM will read the tunes in SONGS.DTA and can be
+used in a batch file to play tunes in sequence. SONG.BAT is an example of
+how this works.
+ 
+TRBOTUNES.SYS can be included in Turbo Pascal(tm) applications and will
+call the contents of TRBOTUNES.LIB.
+ 
+COMPOSER.COM requires an IBM PC or compatible with 256K Ram, and an IBM CGA
+or compatible color graphics adapter. TRBOTUNE.SYS requires Turbo Pascal
+and a Songs library created with COMPOSER. TUNES.COM requires a Songs
+library created with COMPOSER and named SONGS.DTA.
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0722
 

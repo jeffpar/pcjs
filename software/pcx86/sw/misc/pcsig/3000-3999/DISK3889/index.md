@@ -14,6 +14,38 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## REGFORM.TXT
+
+{% raw %}
+```
+       (To print, enter "PRINT REGFORM.TXT" at the DOS prompt.)
+REGISTRATION FORM
+HorseCalc, DOS version 1.0 
+
+Enclose check or money order for:  $29.00
+payable to:  Richard Johnson 
+
+Mail to:  P.O. Box 12591
+          Portland, OR 97212
+
+Your name:     ____________________________________
+Your address:  ____________________________________
+               ____________________________________
+               ____________________________________
+               ____________________________________
+
+In return for your registration fee, you will receive:
+     An updated version of the program, a printed manual,
+     a betting strategy, an analysis of the logic behind
+     HorseCalc, and a FREE greyhound handicapping program. 
+     
+(pcsig)
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3889
 

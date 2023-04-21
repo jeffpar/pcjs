@@ -30,6 +30,42 @@ machines:
     operation using the PC keyboard.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2355.TXT
+
+{% raw %}
+```
+Disk No: 2355                                                           
+Disk Title: From CP/M toDOS                                             
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: From CP/M to DOS                                         
+Author Version: 04/90                                                   
+Author Registration: $25.00 for 22Disk, $40.00 for 22Nice.              
+Special Requirements: High density drive.                               
+                                                                        
+                                                                        
+22DISK -  Converts, formats and manipulates diskettes in over           
+100 CP/M 2.2 formats (300 in registered version) to/from DOS files.     
+                                                                        
+22NICE - This is a companion product to 22DISK.  22NICE emulates the    
+CP/M 2.2 operating system and permits most CP/M programs to run under   
+DOS.  Once installed, the DOS-CP/M integration is seamless. Will make   
+use of NEC V20 or V30 CPU chip if present.  Emulates most terminals and 
+provides a keyboard-remapping function to obtain the best operation     
+using the PC's keyboard.                                                
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2355
 

@@ -41,6 +41,51 @@ machines:
     powerful for the command-line user.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1853.TXT
+
+{% raw %}
+```
+Disk No: 1853                                                           
+Disk Title: DirUtils                                                    
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: DIRUTILS                                                 
+Author Version: 3.00                                                    
+Author Registration: $30.00                                             
+Special Requirements: None.                                             
+                                                                        
+Here is a collection of directory-related programs that will excite you.
+ADVOCATE SCOUT is a "file finder" with features such as simultaneous    
+multiple searches and path-specific searching.  Now you can find files  
+if you know virtually anything about them -- any part of the name,      
+something like it, or just its approximate date.  Comes complete with   
+batch files to automate your most frequent searches.  For example,      
+simply type ``TODAY'' for all of today's files.                         
+                                                                        
+ADVOCATE DIR masquerades as a typical, modern DIR replacement, but when 
+you want to compare several directories or sets of files, up to four can
+be displayed side by side as easily as one.                             
+                                                                        
+ADVOCATE TREE is the useful TREE replacement you've waited for.  Far    
+more informative than TREE, it includes size of directory and           
+percentage of the drive it occupies, and operates at twice the speed.   
+                                                                        
+CDX is a fast way to change directories with a single command.  It also 
+changes drives and directories with one three-stroke command.  All      
+utilities work great within menus, but they're especially powerful for  
+the command-line power user.                                            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1853
 

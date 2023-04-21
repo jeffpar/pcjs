@@ -49,6 +49,60 @@ machines:
     you and your family are financially.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1864.TXT
+
+{% raw %}
+```
+Disk No: 1864                                                           
+Disk Title: CCI Home Budget                                             
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: CCI Home Budget                                          
+Author Version: 05/90                                                   
+Author Registration: $25.00                                             
+Special Requirements: None.                                             
+                                                                        
+CCI HOME BUDGET is a menu-driven program designed to help you and your  
+family monitor and control common everyday household income and         
+expenditures.  Make financial decisions without massive                 
+number-crunching.                                                       
+                                                                        
+Some of the helpful features included in CCI HOME BUDGET:               
+                                                                        
+~ 96 user-defined categories such as food, housing, utilities, etc.     
+                                                                        
+~ 16 transaction types such as credit, cash, check, refund, etc.        
+                                                                        
+~ 10 user-defined accounts in savings, checkings, stocks, etc.          
+                                                                        
+~ 24 pre-defined common entries for faster posting                      
+                                                                        
+~ Custom/automatic posting of paychecks to various categories           
+                                                                        
+~ Custom entry-sorting for bank reconciliation, trends, etc.            
+                                                                        
+~ Individual/automatic entry group editing                              
+                                                                        
+~ Custom budget totals monthly, quarterly, annually, etc.               
+                                                                        
+~ Custom monthly totals in savings, utilities, automobile, etc.         
+                                                                        
+~ Prints entries, monthly totals and budget totals.                     
+                                                                        
+Track your expenditures and use the data you amass to analyze just      
+where you and your family are, financially.                             
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1864
 

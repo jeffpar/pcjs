@@ -45,8 +45,39 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILES342.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 342  Golf Scorecard                                     v1
+------------------------------------------------------------------------
+ 
+A menu-driven system that keeps track of golf scores.  Keeps track of a
+number of golfers, courses, and golf rounds.  Good way to track the
+improvement of your golf game.
+ 
+COURSE   DAT  Golf course data
+COURSPTR DAT  Pointer for number of courses in COURSE.DAT
+GOLFCARD BAS  Basic source for GOLFCARD program
+GOLFCARD EXE  Main program [type in to run GOLFCARD program]
+GOLFERS  DAT  Contains data on golfers
+GOLFPTR  DAT  Pointer for the number of golfers in GOLFERS.DAT
+README   DOC  Introduction
+ROUND    DAT  Golfers round data
+ROUNDPTR DAT  Pointer for the number of rounds in ROUND.DAT
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## GOLFCARD.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 DEFINT A - Z:CC$="*"
@@ -865,6 +896,40 @@ machines:
 33110 A$=INKEY$:IF A$="" THEN 33110
 33120 RESUME 1000
 ```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+
+Dear Sir, 
+     This disk contains a program (both the compiled and uncompiled versions)
+which keeps track of golf scores.  The program is called GOLFCARD and, from
+what you wrote in your September column in "Softtalk for the IBM Personal
+Computer", appears to be similar to PC-GOLF.  I haven't prepared any docu-
+mentation, but the program is menu-driven and, I hope, quite self-explanatory.
+     I would be very happy to give this program to anyone who wants it, 
+so please feel free to use or distribute it as you wish.  Also on this disk
+are six data files which I have created in using the program.  If you care
+to explore it, you may find it easier to use these files than to create
+your own data base. 
+     I should tell you that this is my first attempt at programming, so you may
+find that the program is both amateurish and inefficient.  I find it surpri-
+singly functional, but I would be very interested in comments and/or
+criticisms.
+     Please take whatever you would like from this disk and return it with a
+copy of PC-GOLF.  I look forward to comparing the two programs.
+
+     Thank you for your attention.
+
+                                       Yours Sincerely,
+
+                                       David Epstein
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

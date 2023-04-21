@@ -38,6 +38,31 @@ machines:
     FINANCE  EXE  Main program
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES227.TXT
+
+{% raw %}
+```
+-----------------------------------------------------------------------------
+Disk No  227 Financial Programs                                     v1.2
+-----------------------------------------------------------------------------
+This program was originally developed on an IBM mainframe computer and is
+used to teach present value concepts in basic and advanced financial
+management courses at the university level.
+ 
+FINANCE  EXE  Finance program file
+FINANCE  DOC  Documentaion file
+ 
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0227
 

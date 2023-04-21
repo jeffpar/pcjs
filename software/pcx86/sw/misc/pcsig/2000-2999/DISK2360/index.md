@@ -37,6 +37,7 @@ machines:
 
 ## ALPHA.BAS
 
+{% raw %}
 ```bas
 	'
 	' Alpha.bas
@@ -784,6 +785,178 @@ Data 12801,256,212,25345,0,186,-20992,0,166,4096,0,238,22528,0,56,2048,0,28,0,0,
 ' ████████████████ End of Program ████████████████████
 ' ████████████████████████████████████████████████████
 ```
+{% endraw %}
+
+## FILE2360.TXT
+
+{% raw %}
+```
+Disk No: 2360                                                           
+Disk Title: Megadraw                                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Megadraw                                                 
+Author Version: 4.0                                                     
+Author Registration: $40.00                                             
+Special Requirements: EGA.                                              
+                                                                        
+Megadraw is a program designed to create 12 frame animation sequences   
+which can be incorporated into any program.  Megadraw can write         
+self-standing Quickbasic code (for CGA and EGA) which you can insert    
+into you own program, modify and use as you wish. Furthermore, the      
+animation sequences can be used by any language.                        
+                                                                        
+Animation is created by rapidly drawing 12 different images in          
+succession, one on top of the other.  This is the same technique        
+used in commercial (i.e. television) animation.  The core of the        
+program is the drawing section, where the user draws each frame of      
+his/her sequence, and then places it somewhere in the sequence of       
+12 pictures (A-L).  Many different functions are available, such as     
+moving the image up, down, left or right, changing a color in the       
+drawing (i.e. light blue-->dark blue), or even performing               
+mathematical functions between pictures (XOR pictures 3 and 5).         
+                                                                        
+The help system is very comprehensive and is found by pressing          
+the F1 key.  A list of all the Megadraw functions and their keys is     
+given.  For more information on a Megadraw function, press the          
+relevant key for that function, for example press the 'A' key for       
+information about animation, the 'j' key about joystick use, or F1      
+for information about the program (help about help).                    
+                                                                        
+In addition to animation, this program can be used to create Typefaces  
+(fonts).  Having you own typeface for your program adds a level of      
+perfection not found in most programs.  In addition, unlike normal      
+typefaces where the character is entirely the same color, your          
+characters can be a mix of colors.  I have never seen a font maker      
+(commercial or shareware) which gave the possibility of creating fonts  
+in multiple colors.  In addition, because this is an animation program, 
+you can also make your fonts MOVE. Stunning business or game graphics   
+could be created by having your full color text move around the screen. 
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## MEGADRAW.DOC
+
+{% raw %}
+```
+                          Megadraw 4.0
+              General Introduction and Instructions
+
+
+     Megadraw is a program designed to create 12 frame animation
+sequences which can be incorporated into any program.  Megadraw can
+write self-standing Quickbasic code (for CGA and EGA) which you can
+insert into you own program, modify and use as you wish. 
+Furthermore, the animation sequences can be used by any language.
+
+     Megadraw requires an Enhanced Graphics Adapter (EGA) or better
+(i.e. VGA) display to run though it can create animation that will
+work on computers with EGA and CGA.
+
+     Animation is created by rapidly drawing 12 different images in
+succession, one on top of the other.  This is the same technique
+used in commercial (i.e. television) animation.  The core of the
+program is the drawing section, where the user draws each frame of
+his/her sequence, and then places it somewhere in the sequence of
+12 pictures (A-L).  Many different functions are available, such as
+moving the image up, down, left or right, changing a color in the
+drawing (i.e. light blue-->dark blue), or even performing
+mathematical functions between pictures (XOR pictures 3 and 5).
+
+     The help system is very comprehensive and is found by pressing
+the F1 key.  A list of all the Megadraw functions and their keys is
+given.  For more information on a Megadraw function, press the
+relevant key for that function, for example press the 'A' key for
+information about animation, the 'j' key about joystick use, or F1
+for information about the program (help about help).  
+
+     Though I realize many users like to have a text file with all
+the instructions, Megadraw was designed for people who like to get
+hands-on a program as quickly as possible, without having to read
+lengthy documentation beforehand.  Megadraw was made to be fun to
+use, so go ahead and have fun using it!  Please note that
+registered users are provided with an on-disk text file of all the
+documentation, complete bound and printed documentation, in
+addition to the on-line documentation present in the shareware
+version.
+
+     The best way to learn Megadraw is to try it, to fool around
+with it.  The program has just about every function one would need
+to create animation frames, most of which you will never need. 
+However, they are provided to give you many possibilities in
+animation.  Some, such as the mathematical functions between
+images, are unique to this program and are not to be found in any
+program; commercial, shareware or otherwise.  This function may not
+seem immediately useful, but it can produce extremely interesting
+color effects unmatched anywhere.  Again, the rule is to
+experiment, to try all the effects and determine which ones you
+like.
+    In addition to animation, this program can be used to create
+Typefaces (fonts).  Having you own typeface for your program adds
+a level of perfection not found in most programs.  In addition,
+unlike normal typefaces where the character is entirely the same
+color, your characters can be a mix of colors.  I have never seen
+a font maker (commercial or shareware) which gave the possibility
+of creating fonts in multiple colors.  In addition, because this is
+an animation program, you can also make your fonts MOVE. Stunning
+business or game graphics could be created by having your full
+color text move around the screen.  
+
+     This program was originally developed to complement another
+Logika program which made a running television display for a
+college TV station.  (this program is for sale--for more
+information, please write)  Megadraw created animation which was
+incorporated into the television display.  For example, Megadraw
+created an ad with a little boy flying a kite.  The kite had the
+message "Watch BCTV" emblazoned on it, with the whole kite AND the
+words shaking in the wind while the boy ran across the screen.  The
+possibilities for visual impact are tremendous.  An example of the
+typeface possibilities is provided on the disk with the Quickbasic
+ALPHA.BAS program.  
+
+     This program was completely written in Quickbasic 3.0.
+Registration costs $40.  Registered users of this program receive
+the following: (1) the previously mentioned Documentation text
+file (2) updates of Megadraw are mailed to registered users as
+they become available (3) Complete printed, bound documentation (4)
+a variety of complementary program and assorted goodies to help the
+animation artist are included with the registration packet. 
+
+     The source code to this program is also available for an
+additional $40.  Users are welcome to modify the program to fit
+their needs as long as they do not distribute their modified copy.
+
+     We are currently in the process of upgrading Megadraw so that
+it can write self-standing Assembly Language code which could then
+be LINKed to a programmer's library and used directly in any
+language.  The idea is to make animation creation available to the
+programming amateur.  All registered users will receive a free copy
+of this upgrade as soon as it becomes available.
+
+     Be sure to include your name, address and phone number with
+your registration check.  Please make checks payable to John
+Buckman.  Logika also carries several other shareware programs. 
+These are available for free if you send two 5 1/4 inch disks in a
+postage paid envelope to the address below.  
+
+     If you have any comments or questions about Megadraw or any
+other Logika product, please feel free to write. Thank you for your
+support of the Shareware concept,
+
+                          John Buckman
+                             Logika
+                    4 Lexington Ave, suite 4M
+                        New York NY 10010
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

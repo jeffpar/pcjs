@@ -47,6 +47,64 @@ machines:
     everything you need to set up and run your own service business.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1622.TXT
+
+{% raw %}
+```
+Disk No: 1622                                                           
+Disk Title: Call Master (1623 also)                                     
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Call Master disk 1/2                                     
+Author Version: 2.08                                                    
+Author Registration: $129.00                                            
+Special Requirements: 512K RAM, hard drive and a floppy drive.          
+                                                                        
+CALL MASTER is a simple to use service call management system with a    
+full accounts receivable subsystem, specifically designed for Pest      
+Control, Lawn Care, Air Conditioning, and other service businesses.     
+CALL MASTER is completely menu driven with functions selected through   
+the use of one key lightbar scrolling. CALL MASTER is extremely         
+flexible.  You define the service provided, the number of calls required
+by each service contract, and the frequency between each service call.  
+Once defined, each service can be tracked in a wide variety of ways.    
+Services are automatically rescheduled upon posting of invoices.        
+                                                                        
+The capability of projecting current service contracts into the future  
+will be an invaluable aid when planning vacations, or projecting cash   
+flow.  Each client can be assigned to multiple service locations.  Each 
+location can have service contracts for every service you provide.  Each
+provided service can have its own schedule and rate.                    
+                                                                        
+CALL MASTER also performs basic accounting functions.  Reports are      
+provided with recaping of all dollar activity in a format that allows   
+you to prepare entries for any type of accounting system you are        
+currently using.  Standard reports of aged accounts receivable and      
+monthly statements are only a few of the reports provided.              
+                                                                        
+In addition to reports, CALL MASTER will print mailing labels,          
+envelopes, rolodex cards, service maintenance records, service call     
+schedules, client telephone listings, and statements.  CALL MASTER is   
+everything you need to setup and run your own service business.         
+FILE DESCRIPTION:                                                       
+                                                                        
+CALLMAST EXE  Main program.                                             
+CM?      OVL  Overlay programs.                                         
+CMMANUAL ???  Documentation.                                            
+CMQSTART DOC  Introductory Documentation.                               
+README   1ST  Installation text file.                                   
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1988 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1622
 

@@ -39,6 +39,52 @@ machines:
     to get any beginning user off the ground quickly.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2475.TXT
+
+{% raw %}
+```
+Disk No: 2475                                                           
+Disk Title: PFAS  1 of 2 (#2476 also)                                   
+PC-SIG Version: S1.9                                                    
+                                                                        
+Program Title: PFAS (Personal Financial Accounting System)              
+Author Version: 1.9                                                     
+Author Registration: $25.00                                             
+Special Requirements: None.                                             
+                                                                        
+PERSONAL FINANCIAL ACCOUNTING SYSTEM (PFAS) is a small business         
+checkbook manager to make bank reconciliation much faster and easier.   
+                                                                        
+PFAS provides the necessary information to get through any bank         
+reconciliation statement.  It can handle 1000 transactions for each     
+account for a full calendar year.  An outstanding feature lets you      
+configure a customized chart of accounts to properly track your         
+expenditures.  This is a strong plus at tax time.                       
+                                                                        
+PFAS has full edit, insert, and delete features, and the current        
+bank balance and true account balance are posted at the top of the      
+screen.  You can issue date-specified reports to the screen and/or      
+printer.  You can search and list transactions to screen only, or       
+printer, by any whole or partial "issued to" name, by date, or by check 
+number.                                                                 
+                                                                        
+Screens look very similar to many dBase programs in their style of      
+screen prompting.  As a result, PFAS offers good, clear-cut instructions
+to get any beginning user off the ground quickly.                       
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2475
 

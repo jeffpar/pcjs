@@ -37,6 +37,83 @@ machines:
     system of menus, or referenced from the index. Information is also
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1516.TXT
+
+{% raw %}
+```
+Disk No: 1516
+Program Title:  HOME BARTENDER (Disk 1 of 2)
+PC-SIG version 1
+
+You may not learn how to juggle bottles in the air like Tom Cruise did
+in the movie COCKTAIL, but HOME BARTENDER will teach you the secrets to
+mixing all those histerical drinks you saw being happily quaffed down by
+his patrons!
+
+Learn how to make drinks like a professional bartender, including the
+Alabama Slammer, Colorado Bulldog, Fuzzy Navel, Harvey Wallbanger,
+Orgasm, Rusty Nail, Singapore Sling, and a 142 more libatious favorites.
+
+The drinks are divided into categories which include frozen drinks,
+polynesian drinks, cream drinks, non-alcoholic drinks, martinis and
+manhattans, champagne and wine drinks, and coffee drinks, etc.  For each
+drink HOME BARTENDER provides the ingredients, the directions, and what
+type of glass that should be used.  All the drinks may be selected from
+a system of menus, or referenced from the index.  Information is also
+given on bar equipment, types of glasses, and measurements.
+
+Synopsis:  The Alabama Slammer, Colorado Bulldog, Fuzzy Navel, Harvey
+Wallbanger, Orgasm, Rusty Nail, Singapore Sling, and a 142 more
+libatious favorites---here's how to mix them!
+
+Usage:  Cooking/Drinks/Recipes/Home Bartending.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $5.00
+
+Author: B.M.W. Programs
+
+File Descriptions:
+
+------------  First Disk
+DRINKS   EXE  Main program.
+D1       EXE  Drink program file.
+D2       EXE  Drink program file.
+D3       EXE  Drink program file.
+D4       EXE  Drink program file.
+D5       EXE  Drink program file.
+D6       EXE  Drink program file.
+D7       EXE  Drink program file.
+D8       EXE  Drink program file.
+README   EXE  Documentation.
+------------  Second Disk
+D1       EXE  Drink program file.
+D2       EXE  Drink program file.
+D3       EXE  Drink program file.
+D4       EXE  Drink program file.
+D5       EXE  Drink program file.
+D6       EXE  Drink program file.
+D7       EXE  Drink program file.
+D8       EXE  Drink program file.
+DRINKS   EXE  Main program.
+INDEX    DOC  Index of drinks.
+README   EXE  Documentation.
+
+The PC-SIG Library
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1516
 

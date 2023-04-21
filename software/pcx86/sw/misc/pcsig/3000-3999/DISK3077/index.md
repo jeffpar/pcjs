@@ -14,6 +14,63 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE3077.TXT
+
+{% raw %}
+```
+Disk No: 3077                                                           
+Disk Title: Solmenu1                                                    
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: Solmenu1                                                 
+Author Version: 2.0                                                     
+Author Registration: $10.00                                             
+Special Requirements: CGA or better.                                    
+                                                                        
+SOLMENU1 consists of five solitaire games: Canfield, Golf, Monte Carlo, 
+Grand Duchess and Frog.  The cards are graphically represented either   
+in CGA or EGA resolution.  Each game can be played from one menu.       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## SOLMENU1.DOC
+
+{% raw %}
+```
+ The files on this disk are:
+ SOLMENU1.DOC                            This file - general information
+ SOLMENU1.HNT                            Hints for SOLMENU1
+ SOLMENU1.INS                            Instructions for SOLMENU1
+ SOLORDER.FRM (C,E)                      Registration/order form
+ SOLMENU1.EXE (C,E)                      The menu & configuration program
+ BRUN30  .EXE (C,E)                      Microsoft's run-time library
+ SOLMENU .LIB (C,E)                      Library of subprograms
+ CGASOL  .CFG (C)    EGASOL  .CFG (E)    Configuration CGA/EGA
+ CGASOL  .NUM (C)    EGASOL  .NUM (E)    Draw macros   CGA/EGA
+ Game programs; these may be accessed directly from your DOS prompt:
+ CGACNF  .EXE (C)    EGACNF  .EXE (E)    Canfield      CGA/EGA
+ CGAFRG  .EXE (C)    EGAFRG  .EXE (E)    Frog          CGA/EGA
+ CGAGD   .EXE (C)    EGAGD   .EXE (E)    Grand Duchess CGA/EGA
+ CGAGLF  .EXE (C)    EGAGLF  .EXE (E)    Golf          CGA/EGA
+ CGAMC   .EXE (C)    EGAMC   .EXE (E)    Monte Carlo   CGA/EGA
+
+ To conserve hard disk space, only some of the above files need to be copied.
+ The files with (E) are mandatory for the EGA system of SOLMENU1; the files
+ with (C) are mandatory for the CGA system of SOLMENU1.
+
+ Type in   SOLMENU1   and press [Enter] to start the games.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3077
 

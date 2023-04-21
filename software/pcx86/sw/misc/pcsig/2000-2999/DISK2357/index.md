@@ -46,6 +46,58 @@ machines:
     requires a 1.2M diskette drive.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2357.TXT
+
+{% raw %}
+```
+Disk No: 2357                                                           
+Disk Title: Within & Beyond DOS                                         
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Within & Beyond DOS                                      
+Author Version: 04/90                                                   
+Author Registration: Teledisk $20.00   Raindos,Eagle16, HP150, & Sharp56
+Special Requirements: Modem for Teledisk. High density drives for the re
+                                                                        
+TELEDISK is like a diskette FAX machine. It turns any diskette into a   
+compressed DOS file, suitable for sending over a modem or network.      
+Reconstructs an EXACT duplicate of the diskette from the image file.    
+Nice windowed, color operation.  This is great for those bootable       
+diskettes or those with complex subdirectories. It even works with some 
+"copy-protected" diskettes.                                             
+                                                                        
+RAINDOS is a DOS device driver which provides an absolutely transparent 
+way to read, write and format DEC Rainbow 100 DOS diskettes. Supports AL
+DOS functions; requires a 1.2M diskette drive.                          
+                                                                        
+Eagle16 is another DOS device driver which provides an absolutely       
+transparent way to read, write and format Eagle 1600 DOS diskettes.     
+Supports ALL DOS functions; requires a 1.2M diskette drive.             
+                                                                        
+                                                                        
+HP150.SYS is the DOS device driver which provides an absolutely         
+transparent way to read, write and format Hewlett Packard HP150         
+diskettes. It also supports ALL DOS functions; requires a 1.2M diskette 
+drive.                                                                  
+                                                                        
+SHARP56 Another of our compatibility series.  This is a DOS device      
+driver which provides an absolutely transparent way to read, write and  
+format Sharp 5600 series diskettes.  Supports ALL DOS functions;        
+requires a 1.2M diskette drive.                                         
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2357
 

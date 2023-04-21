@@ -33,8 +33,122 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #156, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  MASTHEAD.            CRC = FE 8E
+
+--> FILE:  SCREEN  .BAS         CRC = B2 9C
+
+--> FILE:  PCKEY   .BAS         CRC = AF DB
+
+--> FILE:  NEWS    .EXE         CRC = 35 A8
+
+--> FILE:  GERTRUD .NL          CRC = DB 9B
+
+--> FILE:  CLUSTADP.NL          CRC = 26 FA
+
+--> FILE:  KRUGGEL .NL          CRC = 4A 99
+
+--> FILE:  HARRIS  .NL          CRC = E6 39
+
+--> FILE:  NISLEY  .NL          CRC = 70 EA
+
+--> FILE:  CLUSTATT.NL          CRC = 33 30
+
+--> FILE:  CLUSTKIT.NL          CRC = A4 2B
+
+--> FILE:  SLIMLINE.NL          CRC = D7 63
+
+--> FILE:  TODD    .NL          CRC = DE 72
+
+--> FILE:  PORTABLE.NL          CRC = 1B 4B
+
+--> FILE:  WHITHEAD.NL          CRC = 54 22
+
+--> FILE:  SCRIPT  .NL          CRC = C0 E3
+
+--> FILE:  EDTORIAL.NL          CRC = CE E4
+
+--> FILE:  HAMMOND .NL          CRC = 29 2B
+
+--> FILE:  CREBS   .NL          CRC = A2 04
+
+--> FILE:  PRNTSCRN.NL          CRC = 08 40
+
+--> FILE:  RICHTER .NL          CRC = 2B 06
+
+--> FILE:  ADDRESS .NL          CRC = C7 C9
+
+--> FILE:  MACK    .NL          CRC = 9F EA
+
+--> FILE:  GYNN    .NL          CRC = 17 C7
+
+--> FILE:  SUPPORT .NL          CRC = 11 03
+
+--> FILE:  CLUSTPG .NL          CRC = B7 A2
+
+--> FILE:  HOSKINS .NL          CRC = 77 55
+
+--> FILE:  ALBERT  .NL          CRC = 7E D3
+
+--> FILE:  SEC4    .PIC         CRC = 12 D1
+
+--> FILE:  SEC6    .PIC         CRC = F8 8C
+
+--> FILE:  SEC5    .PIC         CRC = 29 20
+
+--> FILE:  SEC7    .PIC         CRC = E7 D1
+
+--> FILE:  SEC9    .PIC         CRC = 32 BD
+
+--> FILE:  SEC1    .PIC         CRC = D3 AA
+
+--> FILE:  SEC0    .PIC         CRC = 03 C4
+
+--> FILE:  SEC3    .PIC         CRC = A3 14
+
+--> FILE:  SEC8    .PIC         CRC = CC 49
+
+--> FILE:  NEWSLOGO.PIC         CRC = B4 A6
+
+--> FILE:  PCUGNEWS.TOC         CRC = 6F C2
+
+--> FILE:  READ    .ME          CRC = 73 FB
+
+--> FILE:  CRC     .TXT         CRC = 39 43
+
+--> FILE:  CRCK4   .COM         CRC = BD 22
+
+ ---------------------> SUM OF CRCS = 28 BC
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## PCKEY.BAS
 
+{% raw %}
 ```bas
 10 REM ***** PC - KEY *****
 20 KEY OFF : CLS
@@ -92,9 +206,11 @@ machines:
 540 KEY 10,"SCREEN 0,0,0"+CHR$(13)    'normal basic softkeys turned    back on
 550 END
 ```
+{% endraw %}
 
 ## SCREEN.BAS
 
+{% raw %}
 ```bas
 10 ' DEMONSTRATION PROGRAM TO CALL SUBROUTINE GENIN
 14 ' *********************************************************************
@@ -163,6 +279,7 @@ machines:
 10320 INP.REL!=VAL(INP.STR$):IF INP.REL!=0 THEN INP.REL!-0
 10330 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

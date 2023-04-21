@@ -14,6 +14,40 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE_ID.TXT
+
+{% raw %}
+```
+One-Nil    -     This is a highly sophisticated soccer
+                 management simulation game. You manage
+                 all aspects of a team in either Scottish
+                 or English Leagues: players, tactics,
+                 staff, financial, etc. Game by game visual
+                 gameplay allows you to monitor and make
+                 moment to moment changes in single player
+                 or entire team tactics.
+              
+
+```
+{% endraw %}
+
+## FILE_ID.TXT
+
+{% raw %}
+```
+Rockstar    -    Try to become a megastar in the crazy
+                 world of sex, drugs, and rock 'n' roll.
+                 To succeed you must work hard: tour
+                 extensively and plan a campain for world
+                 domination. WARNING: Rockstar contains
+                 language that some might find offensive.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3908
 

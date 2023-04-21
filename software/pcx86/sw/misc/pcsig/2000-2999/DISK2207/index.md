@@ -28,6 +28,63 @@ machines:
     Registered users get free Compuserve signup and $15 credit.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## VENDOR.DOC
+
+{% raw %}
+```
+The BATUTIL and STACKEY programs are copyright 1988-90 by Barry
+Simon and Richard Wilson c(o), all rights reserved.
+
+You are spefically authorised to copy these disks for others if no
+fee is charged.  A copying fee may only be charged if one or more
+of the following holds:
+  - you are a non-profit user's group
+  - you are an authorised vendor of the Association of Shareware Professionals
+  - you have WRITTEN permission from Ctrlalt Associates
+
+If you charge a fee, you must distribute all of the files below as
+one package.
+
+The following files comprise the STACKEY package
+BOXES    COM      FLUSH    ASM       SEECOLOR BAT
+CGACOLOR BAT      FLUSH    COM       SKRES    COM
+COLOR    BAT      GAVOTTE  COM       SOUNDS   BAT
+EGAPAL   COM      MAKEMESS ASM       STACKEY  COM
+FILEKEY  COM      MONTEV   COM       STACKEY  DOC
+FLASH    ASM      MUSIC    ASM       STACKEY  HLP
+FLASH    BIN      POP      COM       VGAPAL   COM
+                  SAMPLE   MSG
+
+And the following files comprise the Batutil package
+BATUTIL  DOC      EQUIP    BAT       SOUNDEMO BAT
+BATUTIL  HLP      INPUTDEM BAT       BATUTIL  EXE
+BUDEMO   BAT      MENUDEMO BAT       WHATEL   EXE
+COLORDEM BAT      SHOWDEMO BAT
+
+You MUST also include this vendor.doc file but you need not 
+include our compression scheme (LHARC), our installation batch 
+files or our readme.com file.
+
+To become an ASP approved vendor, write
+        Vendor Membership Coordinator
+        Association of Shareware Professionals
+        PO Box 5786
+        Bellevue,WA 98006
+
+To contact Ctrlalt Associates, write to
+        CTRLALT Associates
+        Suite 133
+        260South Lake Ave.
+        Pasadena, CA. 91101
+
+Thank you.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2207
 

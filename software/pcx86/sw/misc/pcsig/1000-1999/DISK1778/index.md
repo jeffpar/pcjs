@@ -41,6 +41,51 @@ machines:
     they stand at all times, and you can, too.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1778.TXT
+
+{% raw %}
+```
+Disk No: 1778                                                           
+Disk Title: The ProGrade System disk 1 of 2 (also #1779)
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: The ProGrade System                                      
+Author Version: 4.4                                                     
+Author Registration: $45.00                                             
+Special Requirements: 348K RAM, and two floppy drives or a hard drive.  
+                                                                        
+THE PROGRADE SYSTEM is a full-featured grading program for educators.   
+It was designed by an educator and has been rigorously tested by        
+"non-computer expert" educators to meet their specific needs.  The      
+documentation manuals are complete.  Once you've read the documentation 
+and figured out how the system works, you will find that the system's   
+power and flexibility is worth the time it takes to learn.              
+                                                                        
+THE PROGRADE SYSTEM will accept letter or numerical grades and lets YOU 
+decide the letter grade numerical equivalents.  THE PROGRADE SYSTEM lets
+you enter grades in ANY order -- any assignment for any student at any  
+time.  THE PROGRADE SYSTEM calculates weighted grades or unweighted     
+grades, points, percents, or letter grades.  And every floppy disk can  
+store dozens of class files, each with up to 35 students, 45 assignments
+per student.                                                            
+                                                                        
+PROGRADE computes class averages, comparisons of grades, ranked or      
+alphabetical class lists, averages of all tests, homeworks, etc.  And it
+will provide individual progress reports with averages for all          
+assignment categories.  Your students and their parents can KNOW where  
+they stand at all times, and you can, too.                              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989, 1990 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1778
 

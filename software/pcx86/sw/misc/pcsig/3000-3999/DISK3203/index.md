@@ -14,6 +14,28 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## NOTE.DOC
+
+{% raw %}
+```
+
+
+*----------------------------------------------------------------------*
+*------------------------------- Note ---------------------------------*
+*----------------------------------------------------------------------*
+  
+This program works in conjunction with SALE_A25.ZIP and cannot be used
+properly stand-alone.
+
+The self-extracting files cannot be extracted onto 360K floppies.
+
+.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3203
 

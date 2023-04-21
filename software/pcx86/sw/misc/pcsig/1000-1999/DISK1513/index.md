@@ -34,6 +34,78 @@ machines:
     medications in I.V. fluids.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1513.TXT
+
+{% raw %}
+```
+Disk No: 1513
+Program Title:  EKG - TRACING - PUMP FOR NURSES
+PC-SIG version 1
+
+EKG FOR NURSES provides review and practice tests for studying the
+electrical system of the heart and interpreting tracings made by an
+electrocardiograph.  This program also correlates EKG waves with the
+anatomy of the heart and shows the proper placement of EKG electrodes on
+the body.
+
+TRACING tests medical students on their knowlege of heart functions by
+displaying an EKG tracing and asking for the cardiac rhythm to be
+identified.  Each answer then shows the correct cardiac rhythm with a
+short description.
+
+PUMP tests nurses on the math of administering proper dosages of
+medications in I.V. fluids.
+
+Synopsis: Teaches nurses and medical students about heart functions and
+how to interpret basic EKG tracings.
+
+Usage:  Education/ Medicine/ EKG Training.
+
+Special Requirements:  CGA card.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $5.00
+
+File Descriptions:
+
+EKG      COM  EKG FOR NURSES, main program.
+EKG      ???  Program files for EKG.COM (22 files).
+TRACINGS COM  TRACINGS, main program.
+PUMP     COM  PUMP, main program.
+CODE     000  Support files for PUMP.COM.
+CODE     001  Support files for PUMP.COM.
+NOTES    TXT  Introductory notes.
+GO       BAT  Batch file for starting all three programs.
+
+The PC-SIG Library
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## NOTES.TXT
+
+{% raw %}
+```
+     
+
+     This disk contains a review of the chambers of the heart and
+the large blood vessels entering and leaving the heart.
+     The electrical system of the heart is review then the waves
+made by EKG tracings are labeled.
+     Another section shows the placement of the EKG electrodes and
+another a discription of the paper used for tracings.
+     The last menu lists 13 Tracings with their interpertations.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1513
 

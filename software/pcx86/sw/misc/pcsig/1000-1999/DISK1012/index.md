@@ -50,6 +50,7 @@ machines:
 
 ## ANNUITY.BAS
 
+{% raw %}
 ```bas
 100 'ANNUITY - VERSION 2.2 -- 07/08/88
 110 'Copyright 1987,1988 PROWESS, Inc.
@@ -323,9 +324,11 @@ machines:
 2790 LOCATE 21,28:K$=INKEY$:IF K$="" THEN 2790
 2800 GOTO 530
 ```
+{% endraw %}
 
 ## BFC.BAS
 
+{% raw %}
 ```bas
 100 'BFC  --  BASIC FINANIAL CALCULATIONS - VERSION B-2.2 -- 07/08/88
 110 'Copyright 1987,1988 PROWESS, Inc.
@@ -482,9 +485,11 @@ machines:
 1620 LOCATE 19,2:PRINT STRING$(77,32):GOSUB 350
 1630 GOTO 590
 ```
+{% endraw %}
 
 ## CI1.BAS
 
+{% raw %}
 ```bas
 100 'COMPOUND INTEREST - 1 - VERSION 2.2 -- 07/08/88
 110 'Copyright 1987,1988 PROWESS Inc.
@@ -642,9 +647,11 @@ machines:
 1630 LOCATE 21,27:K$=INKEY$:IF K$="" THEN 1630
 1640 GOSUB 320:GOTO 530
 ```
+{% endraw %}
 
 ## CI2.BAS
 
+{% raw %}
 ```bas
 100 'COMPOUND INTEREST - 2  with fixed additions- VERSION 2.2 -- 07/08/88
 110 'Copyright 1987,1988 PROWESS inc.
@@ -809,9 +816,11 @@ machines:
 1700 LOCATE 21,27:K$=INKEY$:IF K$="" THEN 1700
 1710 GOSUB 320:GOTO 530
 ```
+{% endraw %}
 
 ## CI3.BAS
 
+{% raw %}
 ```bas
 100 'COMPOUND INTEREST - 3 with non-periodic add/sub - VERSION 2.2 - 07/08/88
 110 'Copyright 1987, 1988  PROWESS Inc.
@@ -998,9 +1007,11 @@ machines:
 1920 LOCATE 21,27:K$=INKEY$:IF K$="" THEN 1920
 1930 GOSUB 340:GOTO 570
 ```
+{% endraw %}
 
 ## DPC.BAS
 
+{% raw %}
 ```bas
 100 'DPC  --  LOGO FOR $PRO (COLOR VERSION)
 110 CLEAR : SCREEN 1, 0, 0
@@ -1061,9 +1072,11 @@ machines:
 660 LOCATE 23, 52: F$ = INKEY$: IF F$ = "" THEN 660
 670 CHAIN "MONYM"
 ```
+{% endraw %}
 
 ## DPM.BAS
 
+{% raw %}
 ```bas
 100 'DPM - LOGO & LICENSE FOR $PRO (MONO) - VERSION 2.2 -- 07/08/88
 110 'Copyright 1987,1988 Prowess, Inc.
@@ -1101,9 +1114,64 @@ machines:
 440 CHAIN "MONYM
 450 END
 ```
+{% endraw %}
+
+## FILE1012.TXT
+
+{% raw %}
+```
+Disk No: 1012
+Program Title: Dollar-Pro
+PC-SIG version: 1.2
+
+DOLLAR-PRO is a set of quick, easy-to-use tools for performing necessary
+financial calculations.
+
+DOLLAR-PRO includes three compound interest programs, as well as a basic
+financial calculator, an annuity program that calculates monthly
+payments on a loan, and a gross profit margin program that lets you
+solve one- and two-tier GPM problems.  A learning curve program is also
+included.
+
+Each of the DOLLAR-PRO programs has its own help file that you can
+access upon entering the program, and we suggest that you read through
+these help files before working with the programs.
+
+Usage:  Financial Utility.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $25.00
+
+File Descriptions:
+
+BRUN40   EXE  Run time file. Must be present for programs to run.
+DPC      EXE  Opening screens for color (CGA) systems.
+DPM      EXE  Opening screens for monochrome systems.
+MONYM    EXE  The financial program menu.
+CI1      EXE  Simple compound interest program.
+CI2      EXE  Simple compound interest program.
+CI3      EXE  Simple compound interest program.
+BFC      EXE  Basic financial calculations program.
+ANNUITY  EXE  Program for calculating annuities and amortization tables.
+GL       EXE  Calculates learning curve parameters.
+PLIC     EXE  License statement.
+???????? BAS  Basic source code for the program (10 files)
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
 
 ## GL.BAS
 
+{% raw %}
 ```bas
 100 'GL - GPM & LEARNING CURVE -- VERSION 2.2 -- 07/08/88
 110 'Copyright 1987,1988 PROWESS, Inc.
@@ -1432,9 +1500,11 @@ machines:
 3340 IF K$="Q" OR K$="q" THEN 380
 3350 GOTO 540
 ```
+{% endraw %}
 
 ## MONYM.BAS
 
+{% raw %}
 ```bas
 100 'MONYM -- VERSION 2.2 -- 07/08/88
 110 'Copyright 1987,1988 PROWESS, Inc.
@@ -1496,9 +1566,11 @@ machines:
 670 CHAIN "GL
 680 GOTO 310
 ```
+{% endraw %}
 
 ## PLIC.BAS
 
+{% raw %}
 ```bas
 500 'PLIC  -- Prowess, Inc. license agreement 07/08/88
 510 CLS:CLEAR:SCREEN 0,0
@@ -1522,6 +1594,7 @@ machines:
 690 LOCATE 23,52:F$=INKEY$:IF F$="" THEN 690
 700 COLOR 7,0:SYSTEM
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

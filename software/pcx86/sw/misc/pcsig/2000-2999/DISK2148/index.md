@@ -40,6 +40,50 @@ machines:
     VACATION PLANNER first.  Don't leave home without it!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2148.TXT
+
+{% raw %}
+```
+Disk No: 2148                                                           
+Disk Title: Vacation Planner                                            
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: VACATION PLANNER                                         
+Author Version: 4.5                                                     
+Author Registration: $20.00                                             
+Special Requirements: None.                                             
+                                                                        
+The nicest thing to happen to car trips since highways, VACATION        
+PLANNER gives you personalized trip information on the shortest route,  
+cities en route, mileages, and travel time.  It takes your starting     
+city, all the interesting intermediate spots where you want to          
+sightsee, and your destination city, and calculates the shortest route. 
+It also tells you the distance between each town along the way, and the 
+time and distance it takes.                                             
+                                                                        
+VACATION PLANNER manages to give you all this information quite         
+painlessly.  There is step-by-step documentation if you feel you need   
+it, and a special two page "Easy-Doc" instruction set for all of us     
+impatient people.  VACATION PLANNER offers clear menu choices and an    
+option that keeps the instructions on screen while you follow them.     
+VACATION PLANNER comes with a general USA map and detailed California   
+state map.                                                              
+                                                                        
+VACATION PLANNER doesn't ask much of you and gives back a lot.          
+If you're planning any trips out of town this year, plan to consult     
+VACATION PLANNER first.  Don't leave home without it!                   
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2148
 

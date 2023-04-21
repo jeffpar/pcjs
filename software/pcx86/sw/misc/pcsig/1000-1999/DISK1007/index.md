@@ -43,6 +43,46 @@ machines:
     than in the dBase language.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1007.TXT
+
+{% raw %}
+```
+Disk No: 1007                                                           
+Disk Title: C-Window Toolkit disk 1 of 2 (1705)                         
+PC-SIG Version: S3                                                      
+                                                                        
+Program Title: C-Window Toolkit                                         
+Author Version: 2.02                                                    
+Author Registration: $35.00                                             
+Special Requirements: A version of Turbo C or Microsom C.               
+                                                                        
+C-WNDW TOOLKIT is designed for both novice and intermediate C           
+programmers who want full screen, color, cursor control, and windowing  
+abilities without programming complex escape sequences or DOS-level     
+interrupts.  It's also designed for experienced programmers who need a  
+set of fast I/O windowing and disk access functions.  A full set of file
+access functions are given that trap and handle all usual errors.       
+Access is supported to ASCII, dBase III+, hashed random, and relative   
+files.                                                                  
+                                                                        
+C-WNDW TOOLKIT provides input and output windowing abilities that       
+operate at professional speeds.  The output windowing facilities use    
+memory mapping for instant screen display.  They take full advantage of 
+color monitors, and provide automatic editing of entry and output       
+fields.  Pull-down and pop-up menu functions, help screens, and         
+multi-layered windows provide a sophisticated user interface.           
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1007
 

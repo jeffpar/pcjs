@@ -51,8 +51,58 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #107, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  SCRNSAVE.COM         CRC = D7 00
+
+--> FILE:  SCRNSAVE.DOC         CRC = 2D A3
+
+--> FILE:  MUSIC   .BAS         CRC = 7E 17
+
+--> FILE:  SETUP   .BAT         CRC = 00 00
+
+--> FILE:  FOS     .BAS         CRC = 44 DC
+
+--> FILE:  FOS2    .BAS         CRC = B5 0E
+
+--> FILE:  FOS-DESC.            CRC = EA D4
+
+--> FILE:  FINANCE .BAS         CRC = 18 1C
+
+--> FILE:  TAX1982 .VC          CRC = CD 2D
+
+--> FILE:  HAL-PC  .TXT         CRC = D5 7C
+
+ ---------------------> SUM OF CRCS = 22 3D
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## FINANCE.BAS
 
+{% raw %}
 ```bas
 5 REM FINANCE  VERSION 1.0  MARCH 4, 1982
 10 COLOR 15:CLS:KEY OFF:SCREEN 0,0,0:WIDTH "SCRN:",80
@@ -521,9 +571,11 @@ machines:
 6010 RUN
 6030 PRINT "ERROR";ERR;"HAS OCCURR
 ```
+{% endraw %}
 
 ## FOS.BAS
 
+{% raw %}
 ```bas
 10 ' Financial Operating System
 15 '
@@ -1224,9 +1276,11 @@ machines:
 6870 FD2$=LEFT$(KB$,2)+"-"+MID$(KB$,3,2)+"-"+RIGHT$(KB$,2):Y2$=RIGHT$(KB$,2):D2$=LEFT$(KB$,4)
 6880 LOCATE Y%,X%:PRINT FD2$:RETURN
 ```
+{% endraw %}
 
 ## FOS2.BAS
 
+{% raw %}
 ```bas
 10 ' FOS Program Section 2
 15 '
@@ -1708,9 +1762,335 @@ machines:
 4720 IF ERR=6 THEN PRINT"Number too large... re-enter: ":RESUME
 4730 ON ERROR GOTO 0:RESUME
 ```
+{% endraw %}
+
+## HAL-PC.TXT
+
+{% raw %}
+```
+                            H A L - P C
+
+               The Houston Area League of PC Users
+
+
+     People wishing to start users groups frequently write us 
+asking for guidelines and for information on how HAL-PC was 
+organized.
+
+MEETING SPACE:
+
+     HAL-PC was organized in the early spring of 1982 by a few 
+people who got together at a ComputerLand. As the group grew, 
+meetings were moved to a nearby church.  Again the group quickly 
+outgrew the space available to us at the church, so meetings were 
+moved to a Sears Business Center (SBC).
+
+     At the SBC, the group once again grew quickly from about 50 
+to over a hundred, and the search was on for a place that would 
+hold at least 150.  At the time, we wanted to find a place that 
+would let us meet for free.  The University of Houston provided 
+lecture halls that fit the bill, but it is not conveniently 
+located, and traffic is a problem.
+
+     After one meeting at UH, a local blood bank center offered 
+us a beautiful meeting room, free parking, central location, and 
+free refreshments.  They never even asked for blood!  But they 
+could only hold 150, and after two meetings, we had outgrown that 
+space. With great reluctance we left the blood center and moved 
+back to UH for one meeting while we searched for quarters that 
+would hold at least 250. There are not that many free 250-seat 
+auditoriums around, we found out.
+
+     Hotel meeting rooms would normally be beyond our budget, but 
+a member found a very nice one that would let us have a 250+ seat 
+room for $100, with more room available for future expansion. We 
+decided that it was worth that much to have a permanent home, and 
+took it.  We have had three meetings there and everyone seems to 
+like it.  Members no longer have to guess at where the next 
+meeting is going to be. Our membership is now over 300 with about 
+250 members and guests at the last meeting in September.
+.pa
+SPECIAL INTEREST GROUPS (SIGS):
+
+     In December 1982, it appeared that the membership, then at 
+about 100, was too large to meet everybody's needs at one monthly 
+meeting.  Members were given a SIG survey form to fill out 
+indicating areas of interest.  Those who indicated a willingness 
+to lead a SIG were given a list of people who had shown a high 
+level of interest in that SIG and were left to their own devices 
+to organize their SIG. 
+
+     We had hoped that SIGs would not attract more than about 20 
+members each. A small group can meet almost any where and would 
+be more conducive, we felt, to more informal and participative 
+meetings. Meeting space, as expected has not been much of a 
+problem. The first SIG meetings were held at KINDERKARE, which 
+has child care centers all over Houston, but no PCs.  A local 
+computer center, COMNET, has been generous in allowing the SIGS 
+to meet at their centrally-located store which has PCs to use.
+
+     The first few meetings of each SIG were awkward because 
+nobody really knew what a SIG is supposed to do.  We assured 
+potential SIG leaders that expertise was not required, only the 
+desire to organize.  A SIG could always invite an expert to come 
+to a meeting to lecture or answer questions, if desired. 
+
+     The SIGs have become quite successful, thanks to some 
+terrific people who have contributed their time to lead the 
+groups. Our current active SIGs are Accounting/Business, Assembly 
+Language, BASIC, Beginning Users, APL, DBASE II, 1-2-3, Graphics, 
+Games, Hardware, Stock Market, and Telecommunications. We 
+encourage anyone to put their name and phone number in the 
+newsletter if they want to get a SIG going. SIGs under 
+development include Engineering, Petroleum & Geology, "C", 
+Utilities, Fortran, and Medical.
+
+     The two lessons that we learned about forming SIGs is that 
+people are willing to help organize if you let them and that 
+people should not be concerned about not being an "expert" in the 
+area nor knowing exactly what the SIG is going to do.
+
+
+THE SOFTWARE LIBRARY:
+
+     Maintaining and distributing the software library has been 
+the most difficult aspect of running HAL-PC.  We quickly had 
+about a dozen single-sided disorganized disks. There was a lot of 
+duplication and "junk" (non-working) programs mixed in with some 
+good stuff. As for distribution, people came early to meetings at 
+the Sears Business Center and used the computers there to copy 
+the library. They usually kept copying while the meeting was 
+going on, making it difficult to have a good meeting. That 
+problem was solved when we moved to meeting locations that had no 
+computers to use, but that made it even harder to get copies.
+
+     By January 1983, we had over 30 single-sided disorganized 
+disks with virtually no means of distribution.  We asked for 
+volunteers and started working on sorting out the software, 
+getting rid of duplications and programs that did not work. 
+Although people were willing to help organize the software, 
+coordinating their work was probably harder for the software 
+librarian than if he had simply done all the work himself to 
+start with. It may be best to just have one person do all the 
+work on the library, if anyone has the time.
+
+     At one meeting, we asked how many still had single-sided 
+drives. About three people out of over a hundred raised their 
+hands, so we switched to doubled-sided disks. Not enough people 
+are using DOS 2.0 to allow going to 9-sector disks.
+
+     To make it easier for people to find and get copies of 
+software in their main areas of interest, we grouped programs 
+onto disks in the following areas:  Accounting/Business, 
+Communications, Demo, Games, Utilities and Word Processing.      
+With the massive amount of excellent public domain software 
+coming out each month, it is a big job trying to keep up with it. 
+We plan on having a "disk of the month" with new stuff on it for 
+people who already have the rest of library, and also integrating 
+the new programs into the library by category, to maintain order 
+over the long run.
+
+     We had intended to give each SIG leader a copy of the 
+library and use the SIGs for distributing software; however, the 
+SIGs had the same problems with copying disrupting meetings that 
+we had at the main meeting. Also, only about half the members 
+(maybe less) ever go to SIG meetings.
+
+     We offered to give a set of disks to anyone who would make 
+sets for at least ten other members. It remains to be seen how 
+this will go over. We have also taken to selling sets to members 
+at $3.50 a disk. This allows a small profit to go the person 
+making the copies to compensate for wear and tear on their disk 
+drives. Unfortunately, some Freeware-types have taken a stand 
+against User Groups charging a copying fee for distributing their 
+software (specifically, PC-TALK).
+
+     We have not tried selling our library to outsiders yet, but 
+we plan to start exchanging with other groups soon. We currently 
+get most of the new software from a member (now living in 
+Georgia) who is constantly downloading programs from bulletin 
+boards. We have a disk file library program (written by a HAL-PC 
+member and available to any group who wants it) that we use to 
+keep track of the library and to automatically compare it to 
+other libraries.
+
+     
+LEADERSHIP:
+
+     Being an officer in a user group is personally rewarding. 
+It is a well known axiom that what you get out of an endevour is 
+relative to what you put into it.  On the other hand, it is a lot 
+of work. So we have election of officers every six months, with 
+burn-out time probably being shorter than that.
+
+     HAL-PC has a President who presides over the monthly 
+main meeting and directors meeting.  The Vice President's primary 
+specific responsibility is to find speakers for the monthly 
+meeting.  In general, the VP, like the other officers, is always 
+thinking of activities for the group and of ways to promote the 
+group.  The other elective offices are Secretary and Treasurer. 
+All elected officers are on the Board of Directors.
+
+     The newsletter editor probably carries the greatest workload 
+and is not elected, so he has no way to get out from under. Heh, 
+heh! We planned it that way. We also have a Group Purchase person 
+and a Liaison person who are "appointed" (anyone who volunteers) 
+to their positions.
+
+     The SIG leaders are the people who originally volunteered 
+and no provision has been made to let them escape through 
+elections. We leave the running of each SIG up to the SIG. We do 
+require that all people attending SIGs be members of HAL-PC.
+The SIG leaders are automatically on the Board of Directors.
+
+     The Board of Directors meets once a month, 45 minutes before 
+the main meeting, to vote on major issues such as amount of dues, 
+HAL-PC expenditures, etc. The purpose of forming a Board of 
+Directors was to make it easier to taken action on behalf of the 
+group without having to bring everything to a vote of the 
+membership.
+
+
+NEWSLETTER AND MAILING LIST:
+
+     The newsletter is a vital element of HAL-PC.  In our mobile 
+days, it was only way to alert members as to where the next 
+meeting would be. Standard features of the newletter are the 
+agenda for the next meeting, a recap of the last meeting, and the 
+times and places for upcoming SIG meetings, as well as reports on 
+SIG meetings. Another section features selections from the 
+software library each month. The rest of the 15-25 page 
+newsletter consists of articles contributed by members.
+
+     Advertising space is sold at moderate rates, and the mailing 
+list is sold to appropriate vendors for one-time use. We have a 
+bulk mailing permit. It saves the group money on postage, but 
+takes more time and effort to mail the newsletters.
+
+     The newsletter is uploaded from the PC of the editor to the 
+mainframe of a company who has donated the computer time and 
+supplies. The mainframe formats the text and prints it out on a 
+laser printer. We normally print about 500 issues, with the 
+extras going to visitors, magazines, other groups, and local 
+computer stores.
+
+     
+DUES AND OTHER MONEY MATTERS:
+
+     HAL-PC charges dues of $25 a year, the bulk of which goes 
+for room rent and newsletter expenses.  Although the newsletter 
+printing is donated, the sorting, labeling, stapling, stamping 
+and mailing cost money.
+
+     At the present time, we are not involved in any money-
+raising activities. Our rationale is that money raised by selling 
+items to the members is the same money we could get by raising 
+the dues, if needed, so why complicate things. In addition, we 
+have several vendors who regularly come to meetings and sell 
+disks and other supplies at very good prices.  We do make group 
+purchases, but the discounts are passed on directly to the 
+purchasers.
+
+     All memberships expire on May 31 of each year. People who 
+join during the fiscal year pay prorated dues. The advantage is 
+that we do not have to keep track of everyone's expiration date 
+and that we can have one big push per year for membership 
+renewals. On the downside, all the money comes at once, and must 
+be carefully budgeted to last a year. My feeling is that it would 
+be better to let memberships expire and be renewed year-round.
+
+     One time, about $2500 worth of membership dues were 
+deposited without first recording the names - a big mistake that 
+caused a lot of problems when many of those people (including 
+myself) were dropped from the newsletter mailing list for non-
+payment of dues.
+
+     We charge vendors a token amount of $5 to introduces 
+themselves at the start of the meeting and to set up a table to 
+vend from at the end of the meeting. One vendor, Paige Computer 
+Consultants, has been with the group from the start and has done 
+a lot for us. One of his services is to provide a dial-up 
+bulletin board (at 713-933-7353) where members can exchange 
+messages and download software.
+
+     
+GETTING SPEAKERS:
+
+     Getting speakers whose topic will interest most of 300 
+different people is a problem.  For instance, a lecture on BASIC 
+programming would probably appeal to only about half the people 
+to start with, and for many of those people the lecture is likely 
+to be either too simple or too technical. As a result, we leave 
+narrow areas of interest to the SIGs.
+
+     Our recent speakers have been representatives from Digital 
+Research, from MicroPro, and from Tandy (with the Model 100). 
+At future meetings, we have reps from Microsoft and from Grid 
+Computers scheduled. These speakers are local representatives 
+from these companies, they do not have PR people at headquarters 
+that fly around giving presentations to user groups. 
+
+     We ask the speakers to present a general overview of their 
+products and not get too involved in technical details.  When 
+a speaker gets in front of a group of 250 and tries to show on a 
+13-inch monitor how some program works, he is sure to bomb. After 
+the formal meeting is over, detailed demonstrations are given for 
+those who want to cluster around the monitors. It would be nice 
+to have a giant-screen TV with RGB input, but those cost about 
+$10,000 and nobody has offered to donate one.
+
+     We usually have about 15 minutes for general questions and 
+answers about the PC hardware and software problems and about 20 
+minutes for announcements. We tried letting SIG leaders tell 
+about their monthly meetings, but not everyone was interested, 
+and we now confine that to the newsletter.  
+
+     The most important thing about the monthly meeting is to 
+have subjects that are very general and to keep the meeting 
+moving briskly.  An hour and a half is a long time to sit still 
+and listen.  At our meetings, only the main speaker for the 
+evening gets to talk for more than two minutes at a time, and he 
+is asked to keep his talk to no more than 20 minutes.  We start 
+right on time and leave time for informal discussions after the 
+meeting is over.
+
+
+MISCELLANEOUS:
+
+      There a lot of things the group could do that we are not 
+presently involved in. We tried having a hardcopy library of 
+magazines and books, but the idea died out from not having a 
+place to store the materials. A good alternative is to have a 
+database of subjects of articles published in PC-related 
+magazines.
+
+     I would like to see PC user groups across the country band 
+together to facilitate exchanging ideas and software - maybe even 
+have an annual meeting somewhere.  One example of such 
+cooperation would be to have a survey form that each group would 
+have its members fill out. The compiled results reported from 
+each group could provide some valuable information that could 
+help companies and users communicate.
+
+     Someone suggested that we devise a "New Member Package" 
+consisting of a disk with some of the best public domain software 
+on it, a catalog of the entire library and this write-up of our 
+history. The same person suggested that we give something like a 
+couple of blank disks to anyone contributing an article to the 
+newsletter. I expect that we will act on both of these 
+suggestions soon.
+
+
+IN CONCLUSION,
+
+     That's our life story. I would like to hear back from other 
+groups. Have fun!
+```
+{% endraw %}
 
 ## MUSIC.BAS
 
+{% raw %}
 ```bas
 10 CLS: WIDTH 80
 20 CLS:KEY OFF
@@ -1850,6 +2230,39 @@ machines:
 1340 RETURN
 1350 END
 ```
+{% endraw %}
+
+## SCRNSAVE.DOC
+
+{% raw %}
+```
+
+         
+         Scrnsave.doc is a screen utility developed by John Socha and
+         appeared in Softalk magazine in December of 1983.  The
+         program supplied and dated 12/83 was assembled from the
+         assembly file supplied with the article.
+         
+         This utility will turn off the screen display if no keys have
+         been touched for three minutes.  When a key is pressed the
+         display will return.  With continues use of the key board the
+         time is continually reset and the display does not turn off. 
+         Probably the best key to press to regain the display after it
+         has been turned off is the Scroll Lock.
+         
+         This utility has the advantage of saving the screen form
+         damage due to continues display in one location, such as the
+         bottom line or in a certain location designated by a game. 
+         Continues bright display in one location can cause burning of
+         the phosphor and a dark spot.
+         
+         Jim Jacques
+         227 White Pine Rd.
+         Delafield, WI 53018
+         
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

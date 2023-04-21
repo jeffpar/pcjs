@@ -61,6 +61,73 @@ machines:
     tracking data required for income tax filing.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1159.TXT
+
+{% raw %}
+```
+Disk No: 1159
+Disk Title: Construction Estimator and More
+PC-SIG Version: S1.6
+
+Program Title: Construction Estimator
+Author Version: 1.9
+Author Registration: $25.00
+Special Requirements: 512K RAM and CGA.
+
+For the home handyman and amateur builder who likes to tackle major
+projects, CONSTRUCTION ESTIMATOR provides a menu-driven aid for
+estimating building project costs.
+
+Estimation calculations are provided for concrete footings, stem walls,
+and floor slabs; block and wood walls; ceiling and floor joists; roof
+and floor sheeting; sheetrock; and roof cut and stack.  Hardcopy of cost
+totals can be obtained by using the print command.
+Program Title: Banker
+Author Version: 1.1
+Author Registration: $35.00
+Special Requirements: None.
+
+BANKER is a financial program that computes just about anything
+involving loans, savings, bonds, securities, and credit.  Surpassing the
+needs of most laymen, BANKER meets the majority of computational needs
+of the finance professional.  It computes commercial and installment
+loans, savings, etc., and provides information and definitions of
+various financial instruments.
+
+Under commercial and installment loans, you find the payment per period,
+compute the principal, annual percentage rate, and find early payoff
+amounts (rule of 78's).  Savings information includes the time required
+to save a given amount, nominal-to-effective rates, and interest on
+savings.  General applications are present value (simple interest),
+present value (compound interest), and the present value of an annuity
+in advance.
+
+Calculations for bonds and securities offered are the yield of
+discounted securities, yield-periodic interest payments, yield-interest
+at maturity, future value (compound interest), future value of an
+annuity, and a comparison of interest to discount rate.
+Program Title: Stock
+Author Version: 1.25
+Author Registration: $10.00
+Special Requirements: None.
+
+STOCK tracks an unlimited number of stock portfolio files with up to 200
+entries each.  You fill out basic information, and the program generates
+loss or gain figures and annual and total percent value changes.  Record
+keeping and evaluation meets most personal information needs, including
+tracking data required for income tax filing.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1159
 

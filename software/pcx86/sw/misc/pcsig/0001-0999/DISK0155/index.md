@@ -56,8 +56,50 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## DESCRIPT.DOC
+
+{% raw %}
+```
+MUSICFIL    BAS   MUSIC CLASS MANAGEMENT PROGRAM
+JHBAND      MUS   SAMPLE DATA CREATED BY MUSICFIL.BAS
+JHORCH      MUS   SAMPLE DATA CREATED BY MUSICFIL.BAS
+SHORCH      MUS   SAMPLE DATA CREATED BY MUSICFIL.BAS
+MEDLEY      BAS   NAME THAT TUNE (PLAYS FAVORITE SONGS) REQUIRES DOS 2.0
+```
+{% endraw %}
+
+## FILES155.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No  155  Budgetrack 4.3                                         v1.1
+------------------------------------------------------------------------
+BUDGETRK is a program written to track business type budget disbursements.
+It tracks these Disbursements on three levels, DISBURSEMENTs being the
+lowest level, ITEMs the middle level and PROJECTs the highest level.
+ 
+BUDGETRK BAS  Tracks project costs versus budget
+BUDGETRK DOC  Documentation for BUDGETRK.BAS
+LEAS-BY1 BAS  Lease - buy analysis for auto purchase or lease
+LOAN-MTG BAS  Loan mortagage schedules, after tax impact
+LOANSVGS BAS  Loan payment payment solutions
+DESCRIPT DOC  Taskplan documentation
+TASKPLAN BAS  Task planning program (22K)
+SAMPLE   TPN  Sample taskplan
+????????      Data files
+ 
+PC-SIG
+1030d E Duane Avenue
+Sunnyvale, Ca 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
 ## LEAS-BY1.BAS
 
+{% raw %}
 ```bas
 1000 CLS:KEY OFF
 1010 COLOR 0,7:PRINT "AUTO PURCHASE (WITH LOAN) compared to CLOSED END LEASE:";:COLOR 7:PRINT "  AN ANALYSIS."
@@ -283,9 +325,11 @@ machines:
 3120 'Ewa Beach, HI 96706
 3130 END
 ```
+{% endraw %}
 
 ## LOAN-MTG.BAS
 
+{% raw %}
 ```bas
 1000 CLS:KEY OFF
 1010 V=1:W=0:T=7:X=0:Z=0:L=0:R=0:U=0
@@ -810,9 +854,11 @@ machines:
 6200 'Ewa Beach, HI 96706
 6210 END                                                                        CLS
 ```
+{% endraw %}
 
 ## LOANSVGS.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -1651,9 +1697,11 @@ machines:
 9060 PRINT:GOTO 1190
 9070 END
 ```
+{% endraw %}
 
 ## TASKPLAN.BAS
 
+{% raw %}
 ```bas
 10 ' TASKPLAN     Version 1.0
 20 '
@@ -2360,6 +2408,7 @@ machines:
 7030 IF G="00" OR G="0." OR G=".0" OR G=".00" OR G="00." OR G="0.0" OR G="00.0" OR G="00.00" OR G="0.00" THEN G = "0"
 7040 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

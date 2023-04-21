@@ -73,6 +73,7 @@ machines:
 
 ## CONFIG.BAS
 
+{% raw %}
 ```bas
 1 REM KEEP IN TOUCH (tm) -- CONFIGURATION PROGRAM
 3 REM (C) COPYRIGHT 1984 -GNOSSOS SOFTWARE- ALL RIGHTS RESERVED
@@ -408,9 +409,11 @@ machines:
 63952 NEXT T1
 63960 FOR T1=1 TO 10:READ M$(T1,0,1):NEXT:RETURN
 ```
+{% endraw %}
 
 ## DEMO.BAS
 
+{% raw %}
 ```bas
 1 REM KEEP IN TOUCH (tm)
 3 REM (C) COPYRIGHT 1984 -GNOSSOS SOFTWARE- ALL RIGHTS RESERVED
@@ -1051,9 +1054,11 @@ machines:
 63952 NEXT T1
 63960 FOR T1=1 TO 10:READ M$(T1,0,1):NEXT:RETURN
 ```
+{% endraw %}
 
 ## DEMOSET.BAS
 
+{% raw %}
 ```bas
 40000 REM (c) 1984 Gnossos Software.  All Rights Reserved.
 40010 CLS:KEY 10,"CLS"+CHR$(13):KEY 8,"?fre(0)"+CHR$(13)
@@ -1083,9 +1088,67 @@ machines:
 40250 FOR X=100 TO 1000 STEP 100:SOUND X,1:NEXT
 40260 LOCATE 1,1:RUN "DEMO"
 ```
+{% endraw %}
+
+## FILES387.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 387   Keep In Touch                                     V1.1 DS
+------------------------------------------------------------------------
+     Keep in Touch is a networking tool for of people and organizations.
+Networking  is maintaining contact with people and organizations thereby
+sharing and distributing information, products, services, and ideas.
+Keep in Touch uses a menu structure similar to Lotus 1-2-3.
+ 
+This disk works best if the files are transferred to a disk that has
+the system file COMMAND.COM and BASIC on it.
+ 
+FEATURES:
+     - Call using your automatic dialer.
+     - Display the elapsed time of a call.
+     - Show the Things-To-Do list.
+     - Hang up the telephone and show elapsed time.
+     - Check the time or use the alarm clock.
+     - Games, visual relaxation and amusement.
+     - Use the built-in calculator.
+     - Examine information on your contacts and clients.
+     - Create reports about your contacts and clients.
+     - Print a phonelist report.
+     - Print a report of dates.
+     - Print mailing labels using Avery Tabulabel 4146 4" format.
+     - Check the amount of memory available.
+ 
+AUTOEXEC BAT  Starts Keep In Touch when the system is booted.
+CONFIG   BAS  Configures hardware, monitor, printer, telecommunications
+              and personalizes the program.
+CONFIG   KIT  Configuration data file.
+DEMO     BAS  Keep In Touch demonstration program.
+DEMO     BAT  Batch file to start the Keep In Touch demonstration.
+DEMO     KIT  Demo data file.
+DEMOSET  BAS  Part of the demonstration program.
+FILES    KIT  Directory data file.
+JAPAN    DAT  Sample file.
+KEYSET   BAS  Author's comments and copyright notice.
+KIT      BAS  The Keep In Touch program.
+KIT      BAT  Same as AUTOEXEC.BAT.
+KIT      DOC  Information about Keep In Touch.
+MENU     KIT  Menu data file.
+NEW      DAT  Sample file.
+TODO     DAT  Sample file.
+GO       BAT  Start up instructions
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite D
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## KEYSET.BAS
 
+{% raw %}
 ```bas
 40000 REM
 40010 GOSUB 47000:CLS:KEY 10,"CLS"+CHR$(13):KEY 8,"?fre(0)"+CHR$(13)
@@ -1140,9 +1203,11 @@ machines:
 47220 PRINT:COLOR 0,15:PRINT "Press any key to continue....";:COLOR 7,0
 47230 IF INKEY$="" THEN 47230 ELSE CLS:RETURN
 ```
+{% endraw %}
 
 ## KIT.BAS
 
+{% raw %}
 ```bas
 1 REM KEEP IN TOUCH (TM) BY STEVE KANTOR
 3 REM (C) COPYRIGHT 1985 GNOSSOS SOFTWARE ALL RIGHTS RESERVED
@@ -1712,6 +1777,804 @@ machines:
 63955 NEXT T1
 63960 FOR T1=1 TO 10:INPUT #1,M$(T1,0,1):NEXT:CLOSE #1:RETURN
 ```
+{% endraw %}
+
+## KIT.DOC
+
+{% raw %}
+```
+                                     
+
+
+
+
+
+                               Keep in Touch
+
+
+
+
+                    Copyright (C) 1986 Gnossos Software
+                            All Rights Reserved
+
+
+
+
+
+
+
+                          User Manual Version 0.1
+                              by Steve Kantor
+
+
+
+
+
+
+
+
+                             Gnossos Software
+                             1616 15th St. NW
+                           Washington, DC 20009
+                              202-387-0858
+..page
+..pgno2
+..foot62CPage ##
+                    Customer Support and Update Policy
+
+
+    Keep in Touch is a tool for personal networking of people and
+organizations.  Personal networking is maintaining contact with a variety
+of people and organizations and sharing and distributing information,
+products, services, and ideas.
+
+    Gnossos Software is developing Keep in Touch with long-range plans that
+will be of greatest benefit to early users of the program.  We will provide
+improvements and support.  But we need your help.  It is important that you
+write or call if you have any problems with the program or you can not
+understand a command in the manual. Similarly, we know that everyone and
+every industry has unique needs.  If you have any idea on how to improve
+the program or an idea of a new function you would like to see, please
+write or call. You may be pleasantly surprised at how quickly your
+suggestion may be implemented and sent to you.
+
+    If you have an error message while using the program, please write down
+the error number and the line number of the error as well as a short
+description of what you were doing.  Send it to us or call and we will
+quickly send you a reply and a solution or an updated disk.
+
+    Keep in Touch will continue to grow in capabilities, become even easier
+to use, and faster.  Good software is spread by word-of-mouth.  If you like
+Keep in Touch, please tell your friends using PCs about the program and
+give them a demonstration.  Your investment will grow in value as more and
+more people have the program.  We will convert Keep in Touch to other
+hardware as demand warrants, and by the time we all have personal briefcase
+computers in the late 1980s, Keep in Touch will be a key program built into
+the computer.
+
+    Most of all, enjoy personal networking.  Gnossos lives to connect
+people and information.  We strive to connect people to people and people
+to information. But remember, "the passing of more messages does not imply
+better communication."  Be selective, and sit down tonight to handwrite a
+letter on good parchment to an old friend.
+
+Keep in Touch!
+
+Steve Kantor
+
+
+..page
+                     Setting up your program and disk
+
+    To use the Keep in Touch program you should create a backup copy of the
+program by formatting a blank disk and then using the DISKCOPY command in
+DOS to copy the disk onto your backup.  You are authorized to make only 1
+backup copy.  If you have troubles, send us the disk and $10 and we will
+send you a fresh Keep in Touch disk.
+
+    To start the program when the computer is turned off, place the Keep in
+Touch disk in disk drive A and turn on the computer.  Enter the correct
+date and time and Keep in Touch will automatically begin.  To start the
+program when the computer is already turned on and you are in DOS, place
+the disk in the computer and type KIT.  The most important command to
+learn of any software is how to stop it, to end Keep in Touch, chose
+the Quit command at the far right of the main menu.  When you are finished
+using the program and the DOS prompt returns, you can turn off the computer
+and remove the disk.
+
+                     Running the Demonstration program
+
+    To run the demonstration program, place the disk in the computer and
+type DEMO. You will be asked to press RETURN when you are ready and a
+totally self-running demonstration of Keep in Touch will start.  The
+demonstration lasts about 10 minutes and will run through almost all of the
+Keep in Touch commands. It is a good idea to watch the demo before doing
+anything, after gazing at the manual, and again after using the program a
+few times.  Be sure not to delete the JAPAN example address book.
+    Feel free to make copies of the DEMO program and data files and give
+them to friends and associates.
+
+                 Using Keep in Touch on a hard disk system
+
+    Keep in Touch is not copy-protected because we trust our customers and
+users, and because we want you to get the most out of your investment.
+Many people have unique configurations of hardware, peripherals and
+software, and copy-protected software prevents you from utilizes your
+system to its fullest.
+
+    You can easily transfer Keep in Touch to use on one hard disk system on
+which the program is licensed for use.  If you have more than one
+system, you must either purchase another copy, or more likely, contact
+Gnossos Software to discuss site licensing agreements.  You should create a
+directory on the C drive by typing 
+                          MKDIR C:/KIT  
+You should then copy the disk onto the hard disk drive by putting the Keep
+in Touch disk in drive A and typing 
+                          COPY A:*.* C:/KIT/*.*
+To start the program type
+                          C:
+                          CD \KIT
+                          KIT
+..page
+                                 CONCEPTS
+
+
+Address Books and Contacts
+
+    You want to keep in touch with 'Contacts' which are people and
+organizations. Some of your contacts may be clients, some may be suppliers,
+some may be associates, some may be friends.  Usually, we have an  address
+book or rolodex or pile of business cards on our desk or in our drawers.
+Keep in Touch gathers contacts into 'Address Books.'  Keep in Touch
+provides up to 20 address books on your disk and each  address book
+contains up to 120 contacts.  When you are using Keep in Touch, one address
+book is open at a time.  When you are finished using the address book and
+end the program, the updated address book is saved on your disk. Every
+address book can be given a name of 1 to 8 characters which is used as a
+filename on the disk, and a description of 40 characters so you know what
+is in each address book can be added.
+    Each contact has a card in the address book. Each card has the
+contact's first and last name, company, street address, city, state, zip
+code, phone number, the last date you met the contact, the last date you
+called the contact, and six (6) other fields of information for general
+comments or specific information.  When you run the DEMO program you will
+get an idea of these cards and the fields of information.
+
+
+
+Special Keys on your Keyboard
+
+    Keep in Touch uses certain keys for certain functions.  You should
+acquaint yourself with the keys used by reading this section.
+
+    Direction keys are the keys on the numeric keypad on the right side of
+the computer.  The UP, DOWN, LEFT, RIGHT, HOME, END, PGUP, and PGDN keys
+are all used in the program.  HOME will always bring you to the first
+choice in a menu, or the first field in a contact card, or the first item
+in your To Do list.  The END key will bring you to the last item in all of
+those same areas.  The PGUP and PGDN keys are used to flip through your
+address book from the first 40 contacts to the next 40 and the last 40.
+PGDN brings you to the next 40 and PGUP works backward by 40 people at a
+time. The UP, DOWN, LEFT, and RIGHT keys are used to point in menus and in
+data-entry screens.
+
+    The RETURN key is used to select a menu choice that you are pointing
+to.  It is also used to complete any entry of data.  If you type in the
+name of a person, you must end the entry with a RETURN key which will move
+you forward to the next field of your contact card.
+
+    The DEL key is used to delete any field you are pointing to in a
+data-entry section.  The INS key is only used in the To Do list to make
+room for a new item in your list and move down all the other items one
+notch in priority.  The CTRL D key is used in the contact card section to
+enter today's date in a date field.
+
+    The BACKSPACE key is used to correct mistakes when you are entering
+data.
+
+    The ESC key is used to complete adding a new card, editing a card,
+editing the To Do list, and, in general, to complete any work on data below
+the dividing line and return to the menu at the top.  The ESC key also
+works to back up a menu at a time.
+
+
+Menus
+
+    Keep in Touch uses a menu structure very similar to Lotus 1-2-3 and
+other programs.  Thus, if you are a user of Lotus 1-2-3, Keep in Touch will
+appear very familiar to you.  We want to make life as easy as possible for
+you so we designed the software to use terms that may be familiar to you.
+
+    You make Keep in Touch do things by choosing commands from menus.  A
+menu is a list of commands at the top of your screen.  For example:  
+
+People Clock Reports ToDo Database Games Other Quit
+
+You select a command from a menu by pointing to it using the direction keys
+and pressing the RETURN key to select it.  You use the direction keys to
+highlight a menu command and press RETURN to select the command. Remember
+that the HOME and END keys jump to the first and last menu commands. The
+RIGHT key moves one menu choice to the right, and the LEFT key moves one
+choice to the left.  If you are familiar with the program, you can also
+press the first letter of a command instead of pointing to it and selecting
+it. So, if the command is Next to flip to the next contact card, you can
+just press the letter 'N.' If a menu has more than one command with the
+same first letter, the first command in the menu will be selected.
+
+    A another type of menu is the menu of People showing 40 people or
+companies on the screen at once.  You can also use the UP and DOWN keys to
+point to your choice when using this menu.
+..page
+                                  MENUS AND COMMANDS
+
+Opening Address Books
+
+    When the program starts, you are given a list of your address books on
+the disk. To open an existing address book, use the direction keys and
+press RETURN to select it, then wait while the contacts are read from the
+disk.  When you select NEW to create a new book you will be asked to give a
+short 1-8 character name and a one line description.  The 1-8 character
+name you give the address book will be the filename that will be stored on
+your disk.  For example, if you give the name CLIENTS, the file will be
+called CLIENTS.DAT on your disk.  You will also be asked if you want to
+reserve more room for DETAIL.  DETAIL takes up more memory and reserves an
+extra 10 lines of comments for every contact.  In most cases, you will not
+want to use the DETAIL feature.  Try experimenting.
+
+Main menu
+
+    Here is a quick synopsis of the main menu and the functions of the
+commands:
+
+1. People, Examine information on your contacts and clients.
+2. Clock, Check the time and use the alarm clock.
+3. Reports, Create reports from your information on people
+4. ToDo, Maintain Things-To-Do list
+5. Database, Save your address books, extract files for data transfer.
+6. Games, Games visual relaxation and amusement.
+7. Other, Organize contacts, calculator, change headings, etc.
+8. Quit, Quit the Keep in Touch program
+
+
+    The commands are organized numerically by the numbers 1-8.  Under each
+number may be more menus with a structure 1.1 1.2 1.3, etc.  Use the table
+of contents to help you find the correct section of the manual, and consult
+the command reference page in the back of the manual.
+
+
+1. People,Examine information on your contacts and clients
+
+    People allows you to look at the people in your  address book. You can
+add new people, flip through the contact cards in your book, delete people
+from the book, call up people using the automatic-dialer, and edit or
+change information on any of your contacts.
+
+People Menu
+
+    When you choose People from the main menu, you will see a list of the
+first 40 of your contacts in your  address book by name or company.  You
+can use the direction keys to point to the contact you want and press
+RETURN to pull out their card.  You can use the PGUP and PGDN keys to skip
+to the next 40 contacts or back to the first 40.  You can have up to 120
+contacts per  address book.  When you select a contact, the contact's card
+will be displayed on the screen and you can then do the following:
+
+1.1 Edit,Edit and change information on contact's card
+
+    Edit allows you to edit or change any of the information on the card
+for a contact.  To change a field of data you should point to the field by
+using the direction keys, then type in the new data, and end your entry
+with the RETURN key. Remember to always end any data entry with the RETURN
+key.  You can delete a field by pointing to it and pressing the DEL key.
+If you want to enter today's date in a date field, point to it and press
+CTRL D (Control D).  Dates must be entered with leading zeros and slashes,
+for example 03/17/60, 12/08/84, and 09/01/85 are all correct.  If you are
+typing and make a mistake you can use the BACKSPACE key, but not the left
+arrow key.  NOTE: IF YOU MAKE A MISTAKE ON THE FIRST LETTER OF AN ENTRY YOU
+MUST PRESS RETURN AND THEN LEFT ARROW AND ENTER THE DATA AGAIN!
+    If you have DETAIL for the address book, when editing press PGDN and
+the detail card of 10 lines of notes will appear.  When you are through
+looking at the DETAIL, press ESC and you will return to the menu.
+    When you are finished editing a contact card press the ESC key to
+return to the menu.
+
+1.2 Call,Call your contact on the phone using automatic dialer
+
+    Call allows you to use a Hayes 1200 modem to hook your telephone to the
+modem and use Keep in Touch as an autodialer.  Keep in Touch even puts in
+your MCI or SPRINT number if you have one.  To use the autodialer you must
+contact Gnossos Software so we can send you a new disk with a new version.
+
+1.2.1 Change,Change the information on your contact 
+
+    Change allows you to change or edit the information on your contact
+just like Edit on the People menu.
+
+1.2.2 Elapsed,Display the clock for elapsed time of call 
+
+    Elapsed will show a ticking clock of the elapsed time that you have
+been speaking.  Press any key to return to the menu.
+
+
+1.2.3 To Do,Show Things-To-Do list 
+
+    To Do allows you to change your To Do list while you are on the phone
+with somebody.
+
+1.2.4 Hangup,Hang up the telephone connection and show elapsed time 
+
+    Hangup should be chosen when you have ended the conversation.  You will
+be asked to enter a short description of the conversation and a note of the
+call will be written on your Phone Log.  Keep in Touch then tells you how
+long the call lasted.
+
+1.3 Next,Turn to next contact card
+
+    Next flips to the next contact card in your  address book.
+
+1.4 Previous,Turn to previous contact card
+
+    Previous flips to the previous contact card in your  address book.
+
+1.5 Add,Add a new contact card to your file
+
+    Add allows you to add a new person to your  address book.  You are
+given a blank screen with the data headings at the far left and you should
+enter the data for the new person.  When you are finished, press the ESC
+key and you will see the new contact card appear.  When you return to the
+list of all your contacts you will see the new person added at the end.
+
+1.6 Find,Find a contact by name or company
+
+    A new quick way to pull out a contact card on any contact based upon
+their name or company.  The choice is under the People menu.  You are asked
+to enter part of the name or company, you must use the proper case, upper
+and lower case.  If you have a contact named Kennedy, you could type in
+'Ken' and the contact would pop up.  Or, if a company was 'The Orkand
+Group' you could type in 'Ork' and it would find the contact. If it is
+not the contact you want, respond with No when asked and Keep in Touch
+will flip to the next contact it 'finds.'  Try it, you'll like it!
+
+1.7 Other,Flipping cards, deleting contact, selecting contacts, etc.
+
+    Other brings up a second menu to delete contacts and flip through your
+address book.
+
+
+1.7.1 First,Turn to the first contact
+
+    First flips to the first contact in your  address book.
+
+1.7.2 Last,Turn to the last contact
+
+    Last flips to the last contact in your address book.
+
+1.7.3 Delete,Delete this contact from your file
+
+    Delete allows you to delete a contact from your address book. This is
+the same as erasing someone from your address book. The card will appear as
+<DELETED> on the screen and will not be totally removed until you save your
+address book.
+
+1.7.4 Select,Select a group of contacts
+
+    Select will do a global search for any character string in any contact.
+The search will look on both the contact card and detail card if the
+address book has detail.  You enter the word or characters to search for
+and the contact card will be displayed.  You can then flip to the next
+contact.
+
+1.7.5 Print, Print the contact's information on the printer
+
+    Print will print the address information, special data, and any detail
+on a contact on the printer.  You are then asked if you want to advance the
+printer to the next page.
+
+1.7.6 Organize, Organize contacts by company or names
+
+    If you want to organize the address book by company, then answer Yes.
+If you want it organized by Names answer No.
+
+1.7.7 Headings,Customize contacts information for your needs
+
+    Headings allows you to change the contact card headings to customize an
+address book for your specific needs.  The last 6 fields at the bottom of
+each card can be customized for your needs.  This means that one address
+book may have different headings from another.  To change the headings,
+edit the headings as you wish.  The only rule is that the headings must be
+less than 12 characters long.  The headings on the left are the OLD version
+and the ones on the right, that you will edit, are the NEW headings.  When
+you are through changing them, press the ESC key to return to the menu.
+
+1.7.8 Contacts, Return to the contacts menu
+
+1.8 Menu,Return to a list of all contacts
+
+
+
+2. Clock,Check the time and use alarm clock
+
+    Clock tells you what the time is, the current date, and what time you
+started using the program.  You can also set the alarm clock to ring at a
+certain time to remind you of a meeting.  The time you started using the
+program is displayed so you can see how long you have been using the
+computer and 'keeping in touch'.
+
+2.1 Alarm,Set the alarm clock and turn the alarm clock on
+
+    Alarm allows you to set the alarm clock to go off at a certain time.
+You can set the alarm by entering the time in the DOS format of a 24 hour
+clock.  That is, 6 AM would be 6:00, 2:34 PM would be 14:34, and so forth.
+
+2.2 Off,Turn OFF the alarm clock
+
+    Off allows you to turn off the alarm clock so it does not ring at the
+designated time.
+..page
+3. Reports,Create reports from your information on people
+
+    Reports allows you to create reports on people in your  address book
+such as phonelists, reports of when you last met or called the people, and
+other custom reports.  The reports can also be a selected group of people.
+That is, if you want a report of only a subset or selected group of people,
+you could select only those people who are in California, and create a
+report of that selected group.
+    Please note that you may send any report to the printer for a hard
+copy. If you have selected a group of people to report, after you are asked
+about sending the report to the printer, you will be asked if you only want
+to report that certain group.  If you answer NO you will get a report of
+everybody.  If you answer YES you will get a report of only that selected
+group of your address book that you requested by the Select choice.
+
+3.1 Phonelist,Print a phonelist report 
+
+    Phonelist creates a phonelist report of the first and last name,
+company, and phone number of your contacts.  Like all reports, you can do
+this for the address book you are working with, or a selected group of the
+address book.
+
+3.2 Dates,Print a report of dates 
+
+    Dates creates a report of the last name, company, and last dates you
+met and called the contact.
+
+3.3 Remarks,Print a report of remarks and comments on contacts 
+
+    Remarks creates a report of the name, company, and the remarks in the
+last field of the contact card.
+
+3.4 Custom,Print one of your custom reports or a special report 
+
+    Custom brings up the custom reports menu which is used to write custom
+reports or special one-time reports.
+    Custom reports menu provides 3 custom reports which you design on the
+reports menu for each address book. To design a report, you want to
+chose Design from the reports menu.  You can then chose any of the three
+reports.
+
+3.4.4 Special,Create a unique one-time report 
+
+    Special allows you to create a special one-time report using the same
+procedure described earlier in the Reports menu under Design.
+
+3.4.5 Reports,Return to reports menu
+
+    Reports returns you to the reports menu.
+
+
+3.5 Labels,Mailing labels using Avery Tabulabel 4146 4" format 
+
+    Labels is used to produce mailing labels on your printer.  You should
+only choose this if you have the printer ready.  The labels are designed
+for 4" format similar to Avery model #4146.
+
+3.6 Design,Design custom reports
+
+    Design allows you to design custom reports specific to your address
+book. You can have a total of 3 custom reports for each address book. A
+custom report consists of a columnar report of from 1 to 10 columns.  You
+choose which fields of your cards are in the report, and which order they
+should be in.  You enter the numbers 1 to 10 (but only as high as you want)
+in whatever fields you want. For example, if you want a report of the
+following information:
+
+LAST NAME       LAST MET          PHONE         STATE
+
+    you should enter the number 1 in the last name field, 2 in the last met
+field, 3 in the phone field, and 4 in the state field.  When you are
+finished press the ESC key.  You can then choose Custom and you will see
+your report listed and ready to go.
+    The custom reports that you create are saved with your address book
+when you save it.  So, if you design a report once, save your address book,
+and come back in a week, the same report is all ready to go, you only have
+to design it once.
+
+3.7 Select,Select a subset group of contacts to report 
+
+    Select allows you to select a certain group of contacts from your
+address book for your reports or mailing labels.  For example, if you wish
+to only report those contacts who live in California you would enter CA in
+the state field you are searching on.  If you want to find those people who
+are in a certain city, you would enter the city in the city field.  You are
+shown a blank contact card.  Point to the field you are searching for,
+enter the information you want to match, press RETURN, and then press ESC.
+The WAIT signal will flash as Keep in Touch selects that group of people
+from your address book and tells you how many contacts were selected.  When
+the menu reappears, you can write reports for only those contacts you
+selected.
+
+4. To Do,Maintain Things-To-Do list
+
+    To Do allows you to keep a 'Things To Do' list on your Keep in Touch
+desk which you can refer to at anytime.  The list is 15 items and you can
+add or delete items from the list whenever you want. Your list is saved
+when you finish using the program by choosing the Quit menu choice (see
+#8).  Remember that you can use the INS and DEL keys. When you complete an
+item, and press DEL when pointing to it, Keep in Touch will add the
+information to a log file called TODO.LOG which lists the date and time and
+task you completed.
+..page
+5. Database,Save your files, switch files, and delete files from your data
+disk
+
+    Database allows you to save your  address book, open a new address
+book, show you a list of all the  address books on your disk, and delete an
+address book from your disk.  Also, you can extract a group of people to a
+file that you can use with word-processors and database programs if you are
+a real sharp hacker/programmer/philosopher! This aspect makes Keep in Touch
+a modifiable and programmable tool for integration with your other software
+and information.
+
+5.1 Save,Save your Address Book on your disk 
+
+    Save allows you to save any additions or changes you made to your
+address book on the disk.  Although this is also done when you finish
+using the program, you should do this every 30 minutes or so just in case
+the power fails or lightening sizzles your silicon chips.
+
+5.2 Change,Save your current Address Book and open a different one
+
+    Change allows you to close the address book you are currently looking
+at and open a different address book .  First, your current address book is
+saved on the disk and then you are shown your list of address books. This
+is used when you are working with one address book and you want to change
+to another.  
+
+5.3 List,List all of your Address Books on this disk 
+
+    List shows you a list of all of your address books on your disk and how
+many people you have in each address book.
+
+5.4 Delete,Delete an entire Address Book from your disk - Careful!
+
+    Delete is used to delete or remove an entire address book from your
+disk forever. Forever is a very long time so make sure that you are
+completely sure that you do not want to use that address book ever again.
+
+5.5 Extract,Extract a group of contacts to transfer to another program
+
+    Extract allows you to transfer data from your address book to a disk
+file that can be used by other programs such as Lotus 1-2-3, RBase 4000,
+DBase, Wordstar, Volkswriter, and many others.  You can either extract all
+of your contacts or just a selected group.  You must give a name for the
+disk file such as TRANSFER.  The file will then be named TRANSFER.PRN on
+the disk.  If you wish, you can also preface the filename with a disk drive
+name, e.g. B:TRANSFER.  See the Appendix on Data Transfer for further
+instructions.
+
+5.6 Transfer
+
+    A Transfer command under the Database menu allows you to merge old
+address books from old disks onto your working Keep in Touch disk.  First,
+in DOS copy your address file, such as JAPAN.DAT, onto your working disk.
+Choose Transfer and enter the name, such as JAPAN.  Then enter a
+description.  The program will read the new address book and update your
+list of address books.
+..page
+6. Games,Games, visual relaxation and amusement
+
+    Games allows you to relax and enjoy keeping in touch by seeing a little
+of what your computer can do.  You can play a musical piano or hear random
+notes. If you have a graphics card you can see random pictures. You can
+even hear Yankee Doodle Dandy!
+    Everybody needs some relaxation and diversions during work, and Keep in
+Touch gives you some fun while you are using the program.  If you are a
+very straight-laced Type A, then just ignore this section and never ever
+chose Games.  But if you are a fun-loving artistic type then enjoy.  But
+don't linger here too long, you should be sure to keep in touch with
+people.
+
+6.1 Piano,Play the musical keyboard like a piano 
+
+    Piano gives you a high octave of notes to play.  Press the keys
+a,b,c,d,e,f, or g to play those notes.  You can choose higher octaves by
+using the SHIFT and CTRL keys in conunction with the letters
+'a,b,c,d,e,f,g.'  When you are finished being a modern day Beethoven press
+the ESC key.
+
+6.2 Notes,Play random tones at random intervals and enjoy 
+
+6.3 Lines,Random lines a la Jackson Pollack 
+
+6.4 Circle,Random circles across the heavens 
+
+6.5 Tricky,Cookie monster game 
+
+    Tricky is a ridiculous 'game' which demands Cookies! all over the
+screen at a loud pitch.  Don't worry, it will end soon.  If you can figure
+out what this is all about, or the historic origins of such mania, please
+tell us.
+
+6.6 Quote,Marty Schwimmer's favorite quotation 
+
+6.7 Yankee,Yankee Doodle Dandy 
+..page
+7. Other, Calculator, dialing, memory, configuration
+
+    Other brings up a group of menu choices for specific topics.
+
+7.1 Calc,Use the built-in calculator 
+
+    Keep in Touch now has a simple four-function calculator.  You may add,
+subtract, multiply, and divide.  The proper symbols are +, -, *, and /. The
+Calc choice is under the Other menu choice from the main menu.  You are
+asked to enter a formula, such as 23+45*.654.  Do not put any blank spaces
+in the formula.  You can use the backspace to correct mistakes.  Press
+RETURN when you have finished typing the formula and you'll see
+calculations and the total.  You can transfer the total to any contact
+card.  When you are editing a contact card, if you press CTRL C (Control
+C), the last total will be entered in that field.  This is similar to CTRL
+D for Date.
+
+7.2 Dialing,Special dialing services, information, weather, time
+
+    Dialing will be implemented in a future version
+
+7.3 Bytes,Check the amount of memory that is available for contacts 
+
+    Bytes tells you how many bytes (characters) of memory you have left in
+the program for your address book. If the number is less than 2000 or so,
+you should probably ask to clear the program's memory.  Clearing the memory
+makes more room for your data and takes about 3 minutes, so go get a snack.
+
+7.4 Configure, Switch to the Configuration program
+
+    Configure will start the Keep in Touch configuration program that
+allows you to customize the program for different monitors, printers, and
+PCs, as well as set up the autodialer if you have a modem.  Remember to
+save your address book before you switch to the Configuration program.
+    To use the configuration program, choose an area and then point to the
+configuration that fits your system and press RETURN.  After you customize
+your system, choose Save on the main menu.  Then when you Quit the
+Configuration program, Keep in Touch will automatically start again.
+
+7.5 Utility,Switch from Keep in Touch to Utility programs 
+
+    Utility will switch to the other programs that Keep in Touch will have
+in the future; such as, a Tutorial program, a Utility program to transfer
+data and combine address books, and a Configure program to customize the
+program for your equipment.
+
+7.6 Sort, Sort the address book by name or company
+
+    You can organize your address book by last name or company through the
+People Other Organize command.  When you choose Sort, the address book is
+sorted.  This may take a minute or two, the PC will beep when the sort is
+complete.  You can then save your address book.
+
+7.7 Credits, Credits of author and where to write for advice
+
+    This will list the address for updates, questions, bugs, and
+suggestions.
+
+
+8. Quit,Quit Keep in Touch program
+
+    Quit allows you to finish Keep in Touch, save your To Do list, and save
+your address book. When you choose Quit, you will see the DOS prompt and
+you can then turn off your computer or start another program.
+..page
+                            Appendix D  --  Data Transfer
+
+    Keep in Touch allows data transfer using the Database Extract command
+so you can use Keep in Touch data in Lotus 1-2-3, RBase 4000, Volkswriter,
+Wordstar, BASIC language, and other programs.  By using this feature, you
+can easily create form-letters, large relational contact databases,
+spreadsheets, etc.
+    The extract file is stored with the extension .PRN.  Each file is ASCII
+text, one row per contact, with 16 fields per row.  The field order is
+firstname, lastname, company, street, city, state, zip, phone, last met,
+last call, custom1, custom2, custom3, custom4, custom5, custom6.
+    The files are stored using the WRITE command, so the data is enclosed
+in quotes and separated by commas.  Each record has 16 fields and each
+record ends with a carriage return.
+
+Lotus 1-2-3
+
+    The file is stored as a text file with the extension .PRN.  Enter the
+Lotus program.  To import the Keep in Touch extract file TRANSFER.PRN, use
+the following commands:
+
+    /File Import Numbers
+      and then point to TRANSFER and press RETURN.
+
+Volkswriter
+
+    The file is perfectly configured for Text Merge files for performing
+mail merge of form letters and labels.  Create a letter with the following
+information:
+
+-------------------------------------------------------------------------
+..file\first\last\company\street\city\state\zip\phone\met\call\f1\f2\f3\f4\
+f5\f6
+
+\first \last
+\company
+\street
+\city, \state    \zip
+
+Dear \first,
+
+    Thank you for your interest in our product.  I plan to be visiting
+\city soon and I wonder if I could meet with you.  I am sure that \company
+would benefit greatly from our new product line.
+
+--------------------------------------------------------------------------
+
+Wordstar
+
+    Wordstar is very similar to Volkswriter.  Consult the Mail-Merge manual
+for detailed instructions.
+
+
+RBase 4000
+
+    Keep in Touch extract files can be loaded into RBase databases for
+various purposes.  First, define a database in RBase using a relation which
+has a structure of 16 attributes/fields in the same order as used in Keep
+in Touch (or different if you are really fancy with RBase).  Then, you
+can load the data from the file into the empty RBase database.  Thus,
+Keep in Touch provides an easily upgradeable link to full relational
+databases.  This is especially useful in various offices wish to
+consolidate individual Keep in Touch address books into a large
+relational database.  For example:
+
+DEFINE KITDB
+ATTRIBUTES
+FIRST TEXT 10
+LAST TEXT 15
+COMPANY TEXT 40
+STREET TEXT 40
+CITY TEXT 20
+STATE TEXT 2
+ZIP TEXT 9
+PHONE TEXT 12
+MET DATE
+CALL DATE
+OPEN1 TEXT 40
+OPEN2 TEXT 40
+OPEN3 TEXT 40
+OPEN4 TEXT 40
+OPEN5 TEXT 40
+OPEN6 TEXT 40
+RELATIONS
+PEOPLE WITH FIRST LAST COMPANY STREET CITY STATE ZIP PHONE +
+MET CALL OPEN1 OPEN2 OPEN3 OPEN4 OPEN5 OPEN6
+END
+LOAD PEOPLE FROM TRANSFER.PRN AS ASCII
+SELECT ALL FROM PEOPLE
+
+dBase II and III
+
+    dBase II and III (hereafter dBase) are similar to RBase 4000.  First
+define the structure and then load the database with the extracted Keep in
+Touch file.
+
+    Write or call if you have specific questions or if you have found any
+interesting use of data transfer capabilities.
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

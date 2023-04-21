@@ -44,8 +44,57 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILE1114.TXT
+
+{% raw %}
+```
+Disk No  1114
+Program Title: THI USER LIB
+PC-SIG version 1
+
+    This program is a reminder list of things to do. It has a future
+reminder section, a current section, and an archive or history section. It
+can display all jobs currently active and you can set the option to sort
+the listing by function or priority. You can review a selected list of
+things to do or jobs. You can also add jobs. The jobs can be edited and
+saved in a history file or simply erased. You can also move a job from the
+current section to the future section. The effective date can be chosen
+relative to the current date or by entering the date directly. Some other
+miscellaneous functions also available are: print, change sort order,
+remove a function, and more.
+
+Usage: Job Organization
+
+System Requirements: 192K memory and one disk drive.
+
+How to Start: Type THI (press enter)
+
+Suggested Registration: None
+
+File Descriptions:
+
+BRUN30   EXE  Run time library of Quickbasic.
+??????   THG  Data file for THI.EXE (4 files).
+THI      EXE  Main program.
+THIHIST  EXE  History section for the main program.
+THINGFIL BAS  File utility program for the main program.
+THINGFIL BAT  Batch file to load THINGFIL.BAS.
+THINGS   DOC  Documentation for the main program.
+THISEQ   EXE  Sequence section for the main program.
+USERLIB  EXE  User library of Quickbasic.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
 ## THINGFIL.BAS
 
+{% raw %}
 ```bas
 10 'File utilities program for THINGS program: Version in Stmt 15
 15 VER$="4.0***  3/3/87"
@@ -154,6 +203,203 @@ machines:
 4020 COLOR 7,0,0: CLS
 4030 SYSTEM
 ```
+{% endraw %}
+
+## THINGS.DOC
+
+{% raw %}
+```
+
+              THINGS TO DO Program User Instructions (Version 4.05)
+    Copyright (C) 1986, 1987 by Stan Christman, 1987 - All Rights Reserved
+                See license information on last page (page 4)
+      
+         This program is a reminder list of Things To Do.  It includes a 
+         Future reminder (tickler file) section, a Current section, plus 
+         has an archive, or history, section.
+
+
+         To start the program, enter THI at the DOS prompt.
+
+         The following Commands are offered from the initial "Current" 
+         screen.  For each option, you may hit the Command Number as a 
+         single key entry (which means without <Enter>ing), or you may 
+         use the letter that is shown in UPPER CASE for each Command:
+          
+         <Enter>-list ALL "Things To Do":  Gives a display of all current 
+           Jobs currently active.  Listing will be sorted by Function or 
+           by Priority, depending on option setting (as set by Command 8, 
+           sort Order).
+
+         1-List jobs: This is used to review a selected list of Things To 
+           Do, or Job.  Each Job is assigned a function when entered, and 
+           you are offered a list of the functions to select your listing 
+           on.  The first letter is sufficient, and the <Enter> key means 
+           all functions. 
+          
+         2-Add a job:  This is used to add a Job.  First, a description 
+           is requested (up to 55 characters).  Then, a function is 
+           picked, either using one of the existing ones by entering its 
+           first letter (don't worry about upper or lower case), or a new 
+           Function striking only <Enter>. 
+         
+           Hitting the "Tab" key, will cause "Due " to be added at the 
+           end of the Description, which you can then add a date to. 
+          
+                 (A few words about Functions.  You may create new ones, 
+                 up to maximum of 15, with up to six characters.  No two 
+                 may use the same first character.  Also, there is always 
+                 a <Space> function available, which you can use when no 
+                 Function name is desired.) 
+          
+           Last, the priority is chosen from "A" (being high) to a 
+           low of "E" (Default=E). 
+          
+         3-Edit a job: This is used to revise any aspect of a job entry.  
+           The program will prompt you.  For the description, you may use 
+           the Cursor, Delete, or Insert keys in your editing. 
+          
+         4-Remove a job: You will be asked to choose whether it will be 
+           saved in the history file or simply erased.
+          
+         5-Defer a job: This code will allow you to move a job from the 
+           current Things To Do list to the Future one.  The Effective 
+           date can be chose relative to the current date (in 1 week, in 
+           2 months, etc.), or by entering the date directly.
+
+         THINGS Program User Instructions (Version 4.04)       Page 2
+          
+         6-eXit:  End of program.
+          
+         7-Print: For sending a listing of jobs to your printer.  Options 
+           are offered to print one or all functions.
+
+
+         8-change sort Order: This command toggles (changes back and 
+           forth) from a PRIORITY to a FUNCTION primary sort on jobs are 
+           they are listed or printed. 
+          
+         9-remove a Function:  To drop (or change) a Function name.  To 
+           cancel a function name, simply respond to the input as 
+           requested.  
+
+             To change a function name, immediately after dropping the 
+             old function name, edit one of the jobs that had been using 
+             the deleted name, and when asked if the blank function name 
+             is OK, type N(o).  Then type in the new function name.  It 
+             will automatically be applied to all jobs that had been 
+             using the old function name. 
+          
+         F-Future: Accesses the Future Things To Do part of the program.  
+           Here, Jobs are saved for automatic call-up at a specified date 
+           in the future.  When THINGS is run on or after that date, you 
+           are advised at the beginning of the run that a job is being 
+           loaded from the future file. 
+          
+         H-History: Accesses a search of the history file of Jobs that 
+           were removed and saved in the history file.  More later.
+
+         S-Sequence functions: See FUNCTION SEQUENCE CHANGES later.
+         
+        ===F10 PRIORITY COLOR changing code: This will access a screen
+           with instructions on how to change the colors that are
+           being used if the PRIORITY sort order is being used to
+           display the different priorities.  If you don't like the
+           ones I picked, proceed! 
+          
+          
+         FUTURE THINGS TO DO
+              The Menu commands for this section are as follows:
+          
+         <Enter>-List all:  Lists all jobs in the future file with their 
+           effective dates.
+          
+         2-Add a job: To set up an entry.  You will be asked for the
+           description, the function name, and the Effective Date.
+           This can be entered relative to the current date (in 1 month, 
+           etc.) or directly.  If the direct method is used, begin by 
+           typing in the month in ALPHA (Jan...Feb.); and the computer 
+           will finish the name as soon as it is unique.  Then enter the 
+           day of the month with an <Enter> command.  Lastly, the current 
+           year is suggested as the year.  Change the last digit for a 
+           future year. 
+
+  
+         THINGS Program User Instructions (Version 4.04)      Page 3
+                 
+         3-Edit a job:  This is used to revise the text or the Effective 
+           Date.  It is also used to access an optional feature for 
+           REPEATING FUTURE JOBS.  When originally entered, future jobs 
+           are assumed to be One-time.  During the Edit command, this can 
+           be changed to Weekly, Bi-weekly, Monthly, Quarterly, Semi-
+           Annual, or Annual.  If one of these Repeating options is 
+           chosen, then the future reminder will be repeated at the 
+           selected frequency.  Jobs that have Repeating options have 
+           the option shown in the list by a Cyan letter just to the left 
+           of the date.
+          
+         4-Remove a job:  You will have the opportunity to confirm.
+          
+         6-eXit:  End program.
+
+         7-Print: Prints a listing of the Future Jobs to the Printer.
+          
+         C or <Esc>-Return to Current: Goes to Current Jobs menu.  The C 
+           command will return to a Current Jobs listing, while the <Esc> 
+           command will return to the Current Jobs original menu.
+                    
+         HISTORY COMMAND
+               Options are offered on which functions to list from: 
+         Current, Archived (for no longer used functions), Both groups, 
+         or an option to Select functions.  Then, the choice is offered 
+         whether to list the results on screen, the printer, or a disk 
+         file.  A choice is allowed on the time period to be reviewed.  
+         After each screen, there are options to quit, to edit, or to 
+         continue.  Dates CANNOT be edited.
+          
+         FUNCTION SEQUENCE CHANGES
+              If you wish to change the ORDER that the Functions are 
+         displayed, and their sequence during listing sorted by Function, 
+         use the "S" command from the Current Jobs screen.  Instructions 
+         are indicated by the program as you go. 
+
+         THINGS Program User Instructions (Version 4.04)      Page 4
+        
+         INITIALIZING YOUR DATA FILES
+              The four data files used are CURDAT.THG, FUTDAT.THG, 
+         HISTORY.THG, and HISTARK.THG.  Each of these can be created or 
+         re-created by running THINGFIL, as follows: 
+
+                   "THINGFIL <Enter>"
+
+         You will be prompted by the program for the necessary
+         responses.  You will have the choice of initializing only
+         selected data files, or all of them.
+          
+         In the case of re-creating a HISTORY.THG file, you will be
+         given the choice of including current history data after a
+         specified month and year in the new file.  All of the old
+         data will be saved in a file called HISTOLD.THG.
+          
+                  Stan Christman   July, 1987
+
+                           ***NOTICE***
+
+     There is no license fee for this program.  The author grants the 
+     right to use, copy, and distribute within the following constraint: 
+     No attempt is made to charge for copies or sell the program, or any 
+     modified version of it. The author makes no warranties expressed or 
+     implied as to the quality or performance of this program.  The 
+     author will not be held liable for any direct, indirect, incidental, 
+     or consequential damages resulting from the use of this program.  
+     Your use of the program constitutes your agreement to this 
+     disclaimer and your release of the author from any form of liability 
+     or litigation. 
+
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

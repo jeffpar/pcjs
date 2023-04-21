@@ -37,6 +37,53 @@ machines:
     your quest!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1039.TXT
+
+{% raw %}
+```
+Disk No  1039
+Program Title: EAMON ADVENTURE, QUEST FOR TREZORE (disk 4 of 4)
+PC-SIG version 1
+
+    QUEST FOR TREZORE is a fun, but challenging, adventure for your EAMON
+characters. The challenge is simple: Find Trezore... But what do you do
+once you find him/her/it??? Good luck, you're going to need it. An
+excellent text adventure game. You need THE MAIN HALL, #296, in order to
+run this adventure.
+
+Usage: Entertainment
+
+System Requirements: 256K memory and one disk drive
+
+How to Start: After loading EAMON from disk #296 and selecting the new
+adventure from your six options, insert this disk when it prompts you and
+follow the instructions.
+
+Suggested Registration: $5.95 + $2.50 shipping cost for new adventures.
+
+File Descriptions:
+
+EAMON    ART  Data file
+EAMON    DES  Data file
+EAMON    EFF  Data file
+EAMON    MON  Data file
+EAMON    NAM  Data file
+EAMON    ROM  Data file
+ROOM     NAM  Data file
+TREZORE  EXE  Main Program
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1039
 

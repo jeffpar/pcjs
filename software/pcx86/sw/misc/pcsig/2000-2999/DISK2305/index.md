@@ -42,6 +42,53 @@ machines:
     and record-locking, or the Share command.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2305.TXT
+
+{% raw %}
+```
+Disk No: 2305                                                           
+Disk Title: Brainstorm!                                                 
+PC-SIG Version: S2                                                      
+                                                                        
+Program Title: Brainstorm!                                              
+Author Version: 2.0                                                     
+Author Registration: $349.00 for 25 user version.                       
+Special Requirements: 448K RAM and netBIOS compatible LAN.              
+                                                                        
+BRAINSTORM is a new approach to group problem solving.  It facilitates  
+group discussions on a network by allowing users to respond to any      
+number of organized "topics," instead of individual people.             
+                                                                        
+Most E-Mail packages which come with a network allow user "A" to send a 
+message to user "B," and perhaps send a carbon copy to users "C," "D"   
+and "E."  While this type of message management is ideal for individual 
+communication, it falls short when the goal is to gather feedback from a
+group while keeping everyone abreast of the project status.             
+                                                                        
+BRAINSTORM is not "user" structured, but rather "topic" structured.     
+Messages and replies do not even include a reference to whom the message
+is addressed.  The focal point of a BRAINSTORM message is the "topic."  
+Any user can then go to a topic and read what others have written       
+there.  BRAINSTORM keeps track of what a user has already read,         
+and what's new to read.                                                 
+                                                                        
+Brainstorm is not meant to be a replacement to your existing E-Mail     
+package, but rather as a supplemental program to structure communication
+between your network users.  It is network-compatible with Novell 2.0a  
+and above, Banyan Vines 2.x or above, or any network which supports     
+DOS 3.x file and record locking or the Share command.                   
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2305
 

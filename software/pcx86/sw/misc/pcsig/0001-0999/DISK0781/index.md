@@ -39,6 +39,64 @@ machines:
     percent. Did you know the answer to the above example?
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES781.TXT
+
+{% raw %}
+```
+Disk No  781
+Program Title: BIBLE MEN
+PC-SIG version 1.1
+
+    BIBLE MEN is a neat little quiz program which takes its questions from
+the books of the Bible.  When play begins, you tell the computer to focus
+on either the Old Testament or the New Testament. BIBLE MEN then asks you
+how many people will be playing the game (one to eight people can play at
+once), and for each of their names. Then you choose which part of the Bible
+you wish to deal in.
+
+    BIBLE MEN then gives you a paragraph describing a person from the
+Bible, often written in "first person" (as though written by the person
+described). For example, one question reads
+
+    "I was not ashamed of Paul's chains. When he was in Rome I searched for
+him and found him. I was an Ephesian."
+
+    You are given the opportunity to type the name of the person described.
+If you have no idea who the person being described is you also have the
+option of seeing the answer, seeing the Scripture reference from which the
+question was taken, or moving on to another question. In the above example
+the answer is ONESIPHORUS and the Scripture reference is II TIMOTHY
+1:16-18.  You can look at the answers to a question and move on without
+affecting your score; scoring occurs only when you type an answer. Bible
+Men displays your score as "Trys," "Wrong," "Right," and "Percent."
+
+Usage: Entertainment and Education
+
+System Requirements: 128K and one disk drive.
+
+How to Start: Type BIBLEMEN  (press enter).
+
+Suggested Registration: $15.00
+
+File Descriptions:
+
+BIBLEMEN COM   Bible Men Game Program
+NT       DTA   Data File for New Testament Option
+OT       DTA   Data File for Old Testament Option
+README         General Introduction File
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0781
 

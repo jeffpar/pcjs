@@ -39,6 +39,49 @@ machines:
     different alternatives you have to do a job.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1855.TXT
+
+{% raw %}
+```
+Disk No: 1855                                                           
+Disk Title: Bid-Biz                                                     
+PC-SIG Version: S1.9                                                    
+                                                                        
+Program Title: BID-BIZ                                                  
+Author Version: 1.9                                                     
+Author Registration: None.                                              
+Special Requirements: 512K RAM and a hard drive.                        
+                                                                        
+If you're a contractor looking for an inexpensive but powerful          
+estimating program, try BID BIZ.  This program is for those who bid jobs
+or estimate costs based on a number of different components, phase      
+costs, or various items.  The program uses windows for viewing multiple 
+records, editing, and various searches.  All files have virtually       
+unlimited record capacities.                                            
+                                                                        
+The program allows for two types of burden factors, direct and indirect.
+The direct burdens are applied directly to the unit amounts used in the 
+estimate listings.  This can be useful for such purposes as sales taxes 
+or storage costs on materials, or other increased costs as needed.      
+Indirect burdens are used as overhead factors and added at the end of   
+the direct cost extensions.  They are used for the normal taxes and     
+insurance, bond premiums, general overhead, etc.                        
+                                                                        
+The program allows you to enter notes and comments with various factors 
+used in estimating.  It also makes it easy to compare between the       
+different alternatives you have to do a job.                            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1855
 

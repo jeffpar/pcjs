@@ -30,6 +30,56 @@ machines:
     for a bookmaking operation.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1132.TXT
+
+{% raw %}
+```
+Disk No  1132
+Program Title:  SPORTSBOOK version 1.0
+PC-SIG version 1
+
+Want to be a bookie, then fantasize with SPORTSBOOK. It's a bookie
+simulator thats entertaining and fun.
+
+SPORTSBOOK, the menu-driven "bookie emulator." If you want to make
+college and professional sports wagers and maintain records of those
+transactions, then SPORTSBOOK is for you.
+
+The sports specifically supported by SPORTSBOOK include NBA and NCAA
+basketball; hockey; and NFL, CFL, and NCAA football. SPORTSBOOK performs
+all the necessary record keeping hardcopy generation, and calculations
+required for a bookmaking operation. No documentation is provided, so
+some time must be invested in learning and experimenting with the
+program before a user will become familiar with it.
+
+Usage:  Entertainment/Bookie Simulation
+
+System Requirements:  None.
+
+How to Start:  Type SPORTS (press enter).
+
+Suggested Registration:  None.
+
+File Descriptions:
+
+CONFIG   SYS  Sample file.
+ISAM     EXE  Special Microsoft operating system.
+RUNCOB   EXE  Main program file.
+SPORTS   BAT  Startup batch file.
+???      INT  Secondary program files (8 files).
+
+PC-SIG
+1030-D East Duane Avenue
+Sunnyvale, CA   94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1132
 

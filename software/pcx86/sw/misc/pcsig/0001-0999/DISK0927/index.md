@@ -36,6 +36,46 @@ machines:
     displayed on the logo of the program.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES927.TXT
+
+{% raw %}
+```
+Disk No:  927                                                           
+Disk Title: PRO-DEX Database Management System                          
+PC-SIG Version: S2.1                                                    
+                                                                        
+Program Title: PRO-DEX Database Management System                       
+Author Version: V2.4                                                    
+Author Registration: $50.00                                             
+Special Requirements: 512K RAM and two floppy disk drive.               
+                                                                        
+PRO-DEX is a Rolodex tracking system that stores and maintains an index 
+of names, addresses, telephone numbers, and other vital data.           
+                                                                        
+Add, edit, delete, search, view, or print information.  Search by name, 
+address, city, state, firm/company, or title/position.  Each entry      
+includes a standard industrial code, a busines/home phone, date of      
+contact, a staff initial of connected person, and a comments section.   
+                                                                        
+Flag each entry for mailing and labels, or to call again on a future    
+date.  The entry will appear on the appointments screen when the date is
+within two weeks of the current date.  Print single mailing labels, all 
+names flagged for mailing, or all names flagged with a particular       
+status.  The utilities menu lets you back-up files, update the index,   
+specify the drive/path setting, and enter your company name to be       
+displayed on the logo of the program.                                   
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0927
 

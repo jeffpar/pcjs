@@ -14,6 +14,40 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2648.TXT
+
+{% raw %}
+```
+Disk No: 2648                                                           
+Disk Title: MORAFF'S SUPER BAST                                         
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: Moraff's Super Blast                                     
+Author Version: 1.1                                                     
+Author Registration: Varies.                                            
+Special Requirements: Graphics card.                                    
+                                                                        
+The sequel to the ultimate bricks and paddles is here. SUPER BLAST      
+has 34 levels and up to 17 simultaneous balls. The game contains        
+many special bricks that do things like move, multiply, eat balls, and  
+explode into eight balls. Also included are one way bricks, tunnels to  
+other levels, and paddle expansion and contraction bricks.              
+                                                                        
+This game will work with any graphics card from Hercules to CGA, EGA,   
+and even 800x600 VGA in 16 colors. The game only supports a joystick if 
+you have an AT class computer.                                          
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2648
 

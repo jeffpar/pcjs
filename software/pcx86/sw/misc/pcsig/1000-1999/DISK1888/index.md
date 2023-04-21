@@ -43,6 +43,57 @@ machines:
     and organizing ideas, you'll be interested in IDEA TREE.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1888.TXT
+
+{% raw %}
+```
+Disk No: 1888                                                           
+Disk Title: Idea Tree                                                   
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Idea Tree                                                
+Author Version: 1.01.                                                   
+Author Registration: $29.95  $3.00 Shipping & Handling.                 
+Special Requirements: 2 Floppy or Hard Drive.                           
+                                                                        
+IDEA TREE is a unique brainstorming/organizing tool that lets you       
+examine, expand and organize your thoughts on any subject.  IDEA TREE   
+lets you structure your ideas like a tree.  Add ideas to the tree       
+anywhere, then rearrange and reorganize them as you change your mind    
+and new thoughts take shape.  Focus on the development of one part of   
+an idea by identifying related elements and making them into a          
+separate tree.  When you are finished, move or copy this new tree back  
+into the original.                                                      
+                                                                        
+You can attach up to 1200 characters of notation to an individual       
+idea.  A note stays with an idea as you move or copy it from one place  
+to another.  You can also export notes to your favorite word-           
+processing program and format them any way you want.                    
+                                                                        
+Use IDEA TREE to create, structure, analyze and document reports,       
+books, catalogs, projects and processes, business procedures,           
+organizational structures, job analyses, database planning, system      
+architecture...there's really no limit.                                 
+                                                                        
+IDEA TREE installs painlessly and comes with in-depth documentation,    
+drop down menus and clear tutorials.  If you're interested in ideas     
+and organizing ideas, you'll be interested in IDEA TREE.                
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1888
 

@@ -33,6 +33,43 @@ machines:
     many more winning strategies.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1938.TXT
+
+{% raw %}
+```
+Disk No: 1938                                                           
+Disk Title: Games For EGA                                               
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: GAMES FOR EGA                                            
+Author Version: 06/18                                                   
+Author Registration: $20.00                                             
+Special Requirements: 880K bytes of free space, EGA, and a mouse.       
+                                                                        
+If you like computer games, you'll like EGA GAMES, with arcade quality  
+graphics and playing style.  EGA GAMES includes BlackJack, Poker,       
+pac-man style Squasher, and a 3D version of TicTacToe.                  
+                                                                        
+Choose BlackJack and play with realistic looking cards.  This version   
+can improve your playing skills before your next trip to the casinos.   
+Poker Square is a new variation of the traditional 5 card stud game.    
+Each player has 5 hands and must place each card carefully in order to  
+win this one.  Squasher is pac-man style game that combines action and  
+strategy to retrieve the pots of gold before the monsters squash you. 3D
+TicTacToe is a variation of the original TicTacToe which opens up many  
+more winning strategies.                                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1938
 

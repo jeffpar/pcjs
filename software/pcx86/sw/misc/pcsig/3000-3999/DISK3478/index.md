@@ -14,6 +14,29 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## NOTE.TXT
+
+{% raw %}
+```
+
+
+         Welcome to C Magic,
+
+             The file on this disk, MAGIC.EXE,  is  a  self-extracting
+         archive file.  When you type MAGIC at the DOS prompt, it will
+         decompress into several additional files on the current disk,
+         in  the  current directory.  This requires more space than is
+         available on most floppies, so copy MAGIC.EXE  to  your  hard
+         disk first.
+
+                                                        - Jeff -
+                                                     Another Company
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3478
 

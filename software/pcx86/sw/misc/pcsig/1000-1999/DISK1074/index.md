@@ -53,8 +53,215 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CASINO.DOC
+
+{% raw %}
+```
+
+                            THE LAS VEGAS EGA CASINO
+
+
+     1.  How to start the program
+
+     Put the disk in your disk drive, and type "A:", "B:", or other
+     appropriate specifier to make that the default drive.  Type "casino"
+     and then press the Enter key.  The program will start and the casino
+     menu will appear.  Choose the game you want to play from the menu. 
+     Start the game by pressing the appropriate function key.
+
+     2.  How to get out of the program
+
+     You can exit any game by pressing the Escape (Esc) key.  Pressing the
+     Escape key while in a game will put you back in the casino menu.  At
+     the casino menu, pressing Escape returns control to DOS.
+
+     3.  About the program
+     
+     This program was prepared especially for PC-SIG in the Winter of 1987.
+     It was written by a professional blackjack dealer turned programmer.
+     Every attempt has been made to make the casino games as authentic as
+     possible.
+     
+     4.  Sending money to the author
+     
+     In Las Vegas, it is customary to "toke" the dealer, which means
+     giving the dealer a token of your appreciation for dealing you good
+     cards.  In other words, spread the wealth around.  I think I have
+     dealt you some pretty good cards here.  If you agree, please send an
+     appropriate toke to your dealer at this address:
+      
+                         ******************************* 
+                         *                             *
+                         *     Ted Gruber              *
+                         *     Ted Gruber Software     *
+                         *     P.O. Box 13408          *
+                         *     Las Vegas, NV 89112     *
+                         *                             *
+                         *******************************
+     
+     Any amount over $10.00 will put you on our mailing list for future
+     products.
+
+     5.  What is The Las Vegas EGA Casino?
+     
+     The Las Vegas EGA Casino is a collection of three favorite Las Vegas
+     casino games.  Las Vegas Casino Blackjack is a simulation of the
+     table game, as played on the Las Vegas Strip.  Las Vegas Video Poker
+     is a recreation of the popular video poker machines played in
+     casinos, bars, grocery stores, bowling alleys, convenience stores,
+     airports, and other notorious Nevada hangouts.  Las Vegas Dollar
+     Slots (MicroBucks) is a colorful visual fantasy. 
+
+     6.  How The Las Vegas EGA Casino was written
+     
+     The Las Vegas EGA Casino was written in FORTRAN.  All of the graphics,
+     other video output, and music are performed using FASTGRAPH, a highly
+     optimized proprietary collection of assembly language routines that
+     may be called from several popular FORTRAN and C compilers. FASTGRAPH
+     supports EGA, CGA, Hercules and 16-color Tandy graphics.
+     
+     It is possible that we may wish to market FASTGRAPH in the near
+     future as the ultimate programmer's graphics library.  If you would
+     like more information about FASTGRAPH, please contact the author at
+     the above address.  
+     
+     7.  System requirements for the Las Vegas EGA Casino
+     
+     The Las Vegas EGA Casino runs on IBM PC/XT/AT and compatible systems
+     which have a 256K enhanced graphics adapter (EGA) and an enhanced
+     color display (ECD).  It will also run on the new IBM Personal
+     System/2 computers that are equipped with the video graphics array
+     (VGA) and an EGA/VGA-compatible monitor.
+     
+     The program was developed and tested using DOS 3.2, but it should run
+     on any DOS version 2.1 or above.  It requires at least 256K of memory.
+     
+     8.  What is special about The Las Vegas EGA Casino?
+     
+     The Las Vegas EGA Casino was written to take advantage of the fast
+     and powerful graphics capabilities of the EGA, such as page swapping,
+     direct memory mapping, and a 64-color palette.  It is the resolution
+     and power of the EGA that make The Las Vegas EGA Casino so beautiful 
+     and fast.  
+
+     9.  How to play Las Vegas Casino Blackjack
+
+     At the casino menu level, press F1 to choose Las Vegas Casino
+     Blackjack.  If you need help, or if this is the first time you have
+     played Las Vegas Casino Blackjack, press the F1 key again.  You can
+     get help at any time by pressing the F1 key.  Pressing the F1 key
+     will bring up the help menu.  From this menu, you may choose several
+     options.  For example, you may choose to change the size of your
+     bankroll or minimum bet, you may force a shuffle, you may change the
+     number of decks, or you may view the current status of the deck (how
+     many cards are left and the running count).  You do not need to
+     change any of these things to play the game.  Las Vegas Casino
+     Blackjack begins with a 52 card deck, a $20.00 bankroll and a $2.00
+     minimum bet.  All you have to do to bet is press the up arrow key.
+     Pressing the up arrow once will bet $2.00, pressing it again will
+     increase the bet to $4.00, and so on.  You may also decrease the bet
+     by pressing the down arrow key.  When you are satisfied with the size
+     of the bet, press the Enter key to deal the cards. 
+
+     Las Vegas Casino Blackjack will deal cards from 1, 2, 4, or 6 decks.
+     A new hand will be dealt without shuffling if there are 6 or more
+     cards left in the deck.  If all the cards in the deck are used up in
+     the middle of a hand, the cards that are not showing on the table
+     will be reshuffled and the hand will continue without interruption. 
+     You may force a shuffle by choosing the "change number of decks"
+     option from the help menu (press F1 then F4).  You may not force a
+     shuffle in the middle of a hand.  
+
+     You may bet from $1.00 to $500.00.  You may specify a bankroll of up
+     to $10,000.  There is no limit on how much you can win. 
+
+     Las Vegas Casino Blackjack deals two cards to the player and two
+     cards to the dealer, one of them face down.  You must decide whether
+     to hit, split, double-down, stay, or surrender before you see the
+     dealer's hole card.  Press the space bar to hit and Enter to stay. 
+     Press "D" to double-down and "S" to split.  If you want to surrender,
+     press "Control-S".  If the dealer has an ace showing, you will be
+     asked if you want to take insurance.  Respond with a "Y" if you want
+     to take insurance, or an "N" if you don't.
+
+     You may hit any hand including a blackjack, and you may double down
+     on any hand including a blackjack.  If you have a pair of cards which
+     have the same value, you may split them.  You may resplit pairs up to
+     four times.  Aces that are split receive only one card each and may
+     not be resplit.  You may double-down after you split.  You may
+     surrender your first two cards if the dealer does not have a
+     blackjack (late surrender). 
+
+     The dealer will hit until at least a soft 17 is showing.  If the
+     player busts, the dealer will display the hole card, but will not
+     take any hits.  
+
+     Las Vegas Casino Blackjack displays information about your bankroll,
+     your bet, and your winnings in the upper right corner of the screen. 
+     It also displays a little blue rectangle which represents the number
+     of cards remaining in the deck.  When the entire rectangle is dark
+     blue, the cards have just been shuffled.  When the top 1/4 of the
+     rectangle is light blue, then about 25% of the cards have been dealt
+     out, and so on.  If you want to know the exact number of cards left
+     in the deck, you need to press F1 and then F5. To return to the game,
+     press F1 again.
+
+     For card-counters, and those who would be card-counters, you may
+     check the status of the deck at any time.  Las Vegas Casino Blackjack
+     keeps track of two popular card counts, Stanford Wong's High-Low
+     count and Arnold Snyder's Zen count.  The idea is for the player to
+     practice counting cards in his head and then use Las Vegas Casino
+     Blackjack to check his accuracy.  To get the running count at any
+     time, press F1 and then F5.  To return to the game, press F1 again.
+
+     For more information about the rules of Blackjack and card-counting
+     strategies, see the Blackjack references.
+
+     10.  Blackjack references
+
+     "Professional Blackjack" by Stanford Wong (Pi Yee Press, Morrow &
+     Co., 1975, 1977, 1980, 1981)
+
+     "Blackbelt in Blackjack" by Arnold Snyder (RGE, 1980, 1981, 1982)
+
+     To order these and other fine books on gaming, contact: 
+
+                        The Gamblers Book Club
+                        630 South 11th Street
+                        P.O. Box 4115
+                        Las Vegas, Nevada 89127
+                        (800) 634-6243
+
+     11.  How to play Las Vegas Video Poker
+
+     At the casino menu level, press F3 to choose Las Vegas Video Poker.
+     Use the insert key or the up arrow key to insert coins.  Press Enter
+     to deal five cards.  If you insert five coins, you don't need to hit
+     Enter.  The cards are dealt automatically after the fifth coin.  Use
+     the first five function keys to hold the cards you want to keep.  If
+     you change your mind about keeping a card, you can press the function
+     key again to "unhold" the card.  After you decide which cards to
+     keep, press Enter.  The cards you didn't hold will be discarded, and
+     they will be replaced by new cards.  The game will calculate your
+     winnings.  This game is simple and fun to play.  It is the favorite
+     of Las Vegas locals and millions of tourists.  Las Vegas locals and
+     millions of tourists can't be wrong.
+
+     12. How to play Las Vegas Dollar Slots (MicroBucks)
+
+     At the casino menu level, press F3 to choose Las Vegas Dollar Slots
+     (MicroBucks).  When the slot machine appears, press a key.  Any key
+     except the Escape key will make the reels turn.  The Escape key will 
+     return you to the casino menu.  The NumLock key will toggle the music
+     off and on.  Have fun!
+
+
+```
+{% endraw %}
+
 ## DROGANYA.BAS
 
+{% raw %}
 ```bas
 100 REM *******************
 110 REM * CASTLE DROGANYA *
@@ -971,6 +1178,1042 @@ machines:
 33520 DATA MEETING HALL,HALLWAY,JUNCTION,ANTEROOM,KING'S CHAMBER,SERVANT'S CHAMBER,CHILD'S CHAMBER,ENTRYWAY,CORRIDOR,WIZARD'S CHAMBER,LIBRARY,KITCHEN,WINE CELLAR,ROCKY PASS,CROSSING,DAMP ROOM,COLD ROOM,DEADEND,PEASANT'S HUT,OUTSIDE HUT,BRIDGE
 33530 DATA KING'S VAULT,KING'S CHAMBER,OIL PIT,STUDY ROOM,WORKROOM
 ```
+{% endraw %}
+
+## DROGANYA.DOC
+
+{% raw %}
+```
+Castle Droganya is a biactive adventure game.  The course of the game is
+dictated by your response to the situation.  The goal is to free the souls of
+the townspeople which have been trapped by the evil Lord Droganya.
+
+Responses
+
+The game recognizes over 30 action words.  To move in any direction, type, for
+example, "GO NORTHEAST" or "GO NE" or "NE".  All eight compass points are
+possible directions.  To review the room description, type "LOOK" or "L".  To
+see a list of the objects you are carrying, type "INVENTORY" or "INV" or "I".
+To exit out of the game at any time, type QUIT, END, or STOP.
+
+Except for the responses indicated above, you must always start a response with
+an action word.  Action words include GET, DROP, EXAMINE, OPEN, MOVE, and TURN.
+In addition, do not include articles in your responses (ie., A or THE).
+The maximum response length allowed in this game is four words.
+
+Scoring
+
+Your score is indicated at the bottom right of the screen while playing the 
+game.  Scores are achieved by obtaining objects or solving situations.  The
+maximum score is 5,000 points.
+
+
+Share Ware
+
+This game is "user supported" share ware.  This means that you are free to
+make copies of this game and to distribute them as long as the disk is copied
+in its entirety.  In fact you are encouraged to do so.  If in playing Castle
+Droganya, you gain some enjoyment, please further the share ware cause by
+sending a $5.00 donation to me at the address indicated below.
+
+Errors
+
+Should you run into any errors or bugs or if you have any comments, changes
+or improvements, please write to me at the address indicated below.
+
+Solution
+
+To obtain a map of Castle Droganya and the solution (or hints), please send
+$5.00 to:
+                  Steve Chodes
+                  670 Sotano Drive
+                  Sacramento, CA  95833
+
+Thank you.
+
+```
+{% endraw %}
+
+## FILE1074.TXT
+
+{% raw %}
+```
+Disk No: 1074
+Disk Title: Game Fun for All
+PC-SIG Version: 2
+
+Program Title: Game Fun for All
+Author Version: 2.0A
+Author Registration: $5.00 to $20.00.
+Special Requirements: EGA and a version of BASIC.
+
+LAS VEGAS EGA CASINO is a package of games that use the special features
+of your EGA monitor.  Included are: Las Vegas Casino Black Jack, Las
+Vegas Video Poker, and Las Vegas Dollar Slots (MicroBucks).  You can
+choose any of the three games to play from the program menu.  It has
+great graphics and is so realistic you forget you're playing a computer.
+
+XWORD lets you quickly create a crossword puzzle that can be saved to
+disk and printed.  The crossword puzzle size can be from 15x15 to 23x23.
+You enter words with the cursor onto the puzzle grid.  Afterward, the
+words can be ``deleted'', with the word placed on a ``move'' list where
+it can be recovered and placed in another location.  This program
+maintains word lists for across and down, and clues which you can see at
+any time.  XWORD lets you enter words on the puzzle grid even before the
+clue list is made.  After you finish your puzzle, the program lets you
+print a blank crossword puzzle, a clue list, and the solution to the
+puzzle.  Your crossword puzzle can be saved to disk.  Thus, the amount
+of crossword puzzles you can create is limited only by disk space and
+your own imagination.
+
+CASTLE DROGANYA is a reactive adventure game.  The course of the game is
+dictated by your response to the situation.  The goal is to free the
+souls of the townspeople who have been trapped by the evil Lord
+Droganya.
+
+LIAR'S POKER is a game utility that simplifies playing Liar's Poker, a
+betting game in which each player's ``hand'' is a dollar bill serial
+number.  The program generates random numbers that can be substituted to
+play the game.  It keeps records on disk for up to 20 ``liars''
+(players), each liar having up to 20 numbers which can be printed or
+displayed on the screen.
+
+File Descriptions:
+
+------------  EGA CASINO.
+CASINO   EXE  Main program.
+CASINO   DOC  Documentation.
+------------  XWORD.
+LARGE    XWD  Sample crossword file.
+NEW      XWD  Sample crossword file.
+SMALL    XWD  Sample crossword file.
+SPRINT   EXE  Print utility.
+XWORD    EXE  Main program.
+XWORD-2A TXT  Documentation.
+XWORD-2A MSG  Text file.
+------------  CASTLE DROGANYA.
+DROGANYA BAS  Adventure game.
+DROGANYA DOC  Documentation.
+------------  LIAR'S POKER.
+LPOKER   EXE  Main program.
+LPOKER   DOC  Documentation.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## LPOKER.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                               L I A R S   P O K E R
+                                   Game  Utility
+
+                                    Version 1.0
+                                 January  16, 1988
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                 By David L. Evans
+                             2512 North 13 1/2 Street
+                               Terre Haute, IN 47804
+
+
+
+
+
+
+                             Liars Poker   Version 1.0
+                          Copyright 1988   By D. L. Evans
+
+
+                                 Table Of Contents
+                                 -----------------
+
+                                                                     Page
+         I.   Introduction to Liars Poker ............................ 1
+
+              Hardware Requirements .................................. 1
+
+              Player and Game Requirements ........................... 1
+
+              What is Liars Poker? ................................... 1
+
+              Registering your Liars Poker Game Utility .............. 2
+
+         II.  How To Play Liars Poker ................................ 3
+
+              What Are The Rules? .................................... 3
+
+              Some Basic Strategy .................................... 4
+
+         III. How To Use The Liars Poker Game Utility ................ 6
+
+              Starting Liars Poker ................................... 6
+
+              The Main Menu .......................................... 7
+
+                   BEGIN ............................................. 7
+
+                   RESTORE ........................................... 7
+
+                   ADD ............................................... 8
+
+                   EDIT .............................................. 8
+
+                   PRINT ............................................. 8
+
+                   DISPLAY ........................................... 8
+
+                   SELECT ............................................ 9
+
+                   ! ( shell ) ....................................... 9
+
+                   QUIT .............................................. 9
+
+              Errors and Messages .................................... 9
+
+                   Internal Errors ................................... 9
+
+                   External Errors ................................... 10
+
+
+
+
+
+
+    I.  Introduction To Liars Poker.
+
+    Hardware Requirements
+
+         * An IBM Personal Computer or "compatible" running
+           MS-DOS or PC-DOS 2.0 or later.
+
+         * One 5 1/4" 360K Double Sided Double Density, or
+           5 1/4" 1.2 MB High Density, disk drive.
+
+         * 141K RAM available memory.
+
+         NOTE: An 80 ( or more ) column printer is recommended.
+
+
+    Player and Game Requirements
+
+         * 2 or more players required.
+
+         * Maximum of 20 players allowed.
+
+         * Maximum of 20 games allowed for each player.
+
+
+    What is Liars Poker?
+
+         This Liars Poker program is not a game,  but rather  a  game  utility.
+         This program simplifies and improves the original game of Liars Poker.
+         The  game  is  still played as always.  The computer does not play the
+         game, but it does practically everything else.
+
+         Liars Poker is not a new game.  I did not invent the original game  of
+         liars  poker  and I don't know who did.  This Liars Poker Game Utility
+         however, is unique.
+
+         The original game was/is traditionally played using dollar bill serial
+         numbers for wagering.  The Liars Poker Game  Utility  generates  eight
+         digit  random  numbers.  These numbers can then be substituted for the
+         dollar bill serial numbers needed to play the game.
+
+         The Liars Poker Game Utility offers benefits over the original version
+         of the game. Some of these advantages will be discussed,  some will be
+         discovered by using the Liars Poker Game Utility.
+
+         I  have  included a section in this document for those that have never
+         played Liars Poker before.  There I will provide you  with  the  basic
+         rules of Liars Poker. If you have never played Liars Poker before, get
+         some friends together and give it a try.
+
+         WARNING.  Some  states have laws against pari-mutuel betting.  Playing
+         Liars Poker for money in such a state would be against the law.
+
+
+                                         1
+
+
+
+
+
+
+         If you have played the game of Liars  Poker  before,  then  you  could
+         start  using the Liars Poker Game Utility right after reading the rest
+         of this introduction. But if you do, please come back later and finish
+         the sections pertinent to yourself.
+
+         Be sure and copy the LPOKER.DOC and LPOKER.EXE files to another  disk,
+         and  keep your original disk in a safe place.  Persons with registered
+         copies should also copy the BLACKJAK.EXE and BLACKJAK.DOC files to the
+         other disk.
+
+    Registering your Liars Poker Game Utility.
+
+         If you find the Liars Poker Game Utility  useful,  a  contribution  of
+         $  5.00 would be greatly appreciated.  This contribution will register
+         you with me as a user of the Liars Poker Game Utility,  entitling  you
+         to notification of future releases of the Liars Poker Game Utility.
+
+         If you include,  with your contribution, a self addressed stamped disk
+         mailer and a blank formatted 5 1/4" 360K DS/DD disk,  I  will  include
+         the following for free of charge;
+
+         LPOKER.EXE     An official copy of the Liars Poker Game Utility.
+
+         LPOKER.DOC     The  official documentation on how to play  Liars Poker
+                        and use the game utility.
+
+         BLACKJAK.EXE * Sharpen  your  Blackjack  skills  playing  one  on  one
+                        against  a  casino Blackjack Dealer.  A simulation of a
+                        popular version of the great  game  of  Blackjack.  In-
+                        cludes Splits, Double Downs, Insurance Bets and more.
+
+         BLACKJAK.DOC * Complete instructions for playing the BLACKJAK.EXE ver-
+                        sion of Blackjack.
+
+         *  Note:  BLACKJAK.EXE and BLACKJAK.DOC are only available through the
+         registration of the Liars Poker Game Utility.  The  Blackjack  program
+         has never been submitted to any distributor or user group.
+
+         Please register Liars Poker by sending a $ 5.00 contribution to:
+
+              David L. Evans
+              2512 North 13 1/2 Street
+              Terre Haute, IN 47804
+
+    Unmodified  copies of the Liars Poker Game Utility and documentation may be
+    made for your own use,  to give free of charge to others,  or to distribute
+    within  a  user  group.  User  groups  may  charge  a fee up to $7.50 ( for
+    duplication costs ) to distribute the Liars Poker Game Utility and documen-
+    tation.  All other organizations may not charge a fee.  No  person  or  or-
+    ganization  may  give  or  sell  the  Blackjack program or documentation to
+    others. BLACKJAK.EXE and BLACKJAK.DOC are only to be made available to per-
+    sons registering their use of the Liars Poker Game Utility.
+
+                                         2
+
+
+
+
+
+
+    II. How To Play Liars Poker.
+
+    What Are The Rules?
+
+         Each player has an eight digit number for the game in play. Each digit
+         represents one of eight "cards" that makes up a players'  poker  hand.
+         The numbers ( or "cards" ) are valued as follows;
+
+              NO.  VALUE
+              ---  -----
+              1 -  Ace. Highest Value.
+              0 -  Ten. Second highest value.
+              9 -  Nine.
+              8 -  Eight.
+              7 -  Seven.
+              6 -  Six.
+              5 -  Five.
+              4 -  Four.
+              3 -  Three.
+              2 -  Two. Lowest value.
+
+         The players usually sit in a large circle. A player is chosen to lead.
+         Usually  the  player  that  won or lost the last game "outright" ( ex-
+         plained later ) leads the next game.  The play moves  in  a  clockwise
+         direction. If the last winner/looser is not present, the person to the
+         left of the last winner/looser leads.  Otherwise, flip a coin or some-
+         thing. It's not that critical.
+
+         Each player has the same predetermined amount  at  risk.  This  amount
+         should  be one quarter per player minimum,  to a one dollar per player
+         maximum.  Decide on the amount before beginning.  I am going to assume
+         the  predetermined  amount  to be one quarter for the examples in this
+         document, but it is really up to the group of players.
+
+         Each player takes a turn at bidding.  A bid may  be  one  or  more  of
+         "a kind" only.  No Full Houses or Straights, only "like kinds" are al-
+         lowed. Some example legal bids are;
+
+              Quantity  Number
+              Bid       Bid ("card")        Actual Bid - As Called
+              --------  ------------        ----------------------
+              ( 1 )     2                   "One 2" ( "One Deuce" )
+              ( 3 )     1                   "Three Aces"
+              ( 12 )    7                   "Twelve 7's"
+              ( 4 )     0                   "Four Tens"
+
+         A bid is basically an estimate of how many of a certain number are  in
+         all  the  players hands combined.  The bidders' estimates are based on
+         the bidders' game numbers,  the number of players,  the bidding of the
+         players and on the players themselves.
+
+
+
+                                         3
+
+
+
+
+
+
+         Each player must either overbid the last bidder, or call the last bid-
+         der  a liar.  If you choose to overbid the last bidder,  then the next
+         player must either call you a liar or overbid you. The relationship of
+         the value of bids is as follows;
+
+            LOWER BID     <----        V A L U E        ---->     HIGHER BID
+
+             (1)2 thru (1)Ace, (2)2's thru (2)Aces, (3)2's thru (3)Aces ...
+
+         When all players have said liar, to the same player and bid, the hands
+         are called.  All players indicate the quantity of the bid number  that
+         they have for the current game. The quantities are totaled.
+
+         If there are as many numbers as bid ( or more ),  each player must pay
+         the bidder a quarter.  If there are not as numbers as bid,  the bidder
+         must  pay  each  player  a  quarter.  The bidder in these two examples
+         either wins, or looses, "outright".
+
+         "Outright" means winning or loosing the maximum possible amount. WARN-
+         ING.  A player loosing outright  to  nineteen  other  players  with  a
+         quarter  as  the predetermined wager would have to pay out $ 4.75.  On
+         the other hand,  the same player could win the $ 4.75 and register the
+         use of this program.
+
+         Believe it or not,  that is all the rules.  Beyond the above mentioned
+         rules, anything goes.  That's why it's called Liars Poker.  The object
+         is  to  drive the bid up as high as possible,  using any devious means
+         possible, while trying to not get caught short yourself.
+
+    Some Basic Strategy.
+
+         You don't always have to bid to drive the bid up.  Academy award  win-
+         ning  acting  performances are allowed.  Act like you are about to bid
+         higher, then change your mind after a long pause. Make a comment like;
+              "Well, I imagine that's a good bet, but I'll pass."
+         You really think it is a marginal bet,  but you hope some other sucker
+         will  bid  even  higher  (  by  making  him  think  you are just being
+         careful ).
+
+         The only time lying is not allowed is when the hands are called. After
+         all players have called one bidder a liar,  you must honestly tell how
+         many of the bid number you have.
+
+         You  will  find  That  the  Liars  Poker Game Utility can provide fast
+         checking of any players' numbers. You will be easily caught if another
+         player suspects your being dishonest. Lie all you can when playing the
+         game but don't cheat.
+
+         The best players win and loose less games outright than most  players.
+         The  tendency to want to win "IT ALL" is more temptation than most can
+         stand. The more conservative player will generally do better.
+
+
+                                         4
+
+
+
+
+
+
+         When in doubt,  call the bidder a liar.  You will only be risking  the
+         minimum amount. Generally more games are lost outright than won.
+
+         You  would probably come out ahead more than fifty percent of the time
+         if you never bid at all.  Saying "liar" is similar to passing.  So you
+         can  just keep passing,  knowing there's a good chance that some eager
+         beaver will usually work himself into going bust.
+
+         Liars Poker is one of Americas great underground games. I hope you en-
+         joy playing it.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                         5
+
+
+
+
+
+
+    III. How To Use The Liars Poker Game Utility.
+
+         In the course of the Liars Poker Game Utilities' operation it  creates
+         four  files.  The  names of these files are LPOKER.DBF,  LPOKERNO.DBF,
+         LPOKER.BAK and LPOKERNO.BAK. These files are created and maintained in
+         the current directory ( current at the time LPOKER.EXE is used ).
+
+         Whether you copy the LPOKER.EXE and LPOKER.DOC files to a hard disk or
+         to a floppy,  you have the option of executing Liars  Poker  from  any
+         drive, disk or directory, including RAM. You can start LPOKER.EXE from
+         any directory by typing;
+
+              [drive:][\path\]LPOKER   Note: Fill in "[]"s with your specs.
+
+         and pressing <ENTER>.
+
+         The Liars Poker Game Utility maintains two database files ( LPOKER.DBF
+         and  LPOKERNO.DBF  ).  One of the files contains all the players names
+         and their associated game numbers.  If you start Liars Poker from  the
+         current  directory of a floppy disk ( see Starting Liars Poker ),  you
+         can remove the disk between sessions and stash it  in  a  safe  place.
+         This  will deter persons from cheating.  A person would have to obtain
+         the disk before being able to view game data.
+
+         The other two files ( LPOKER.BAK and LPOKERNO.BAK ) are the BAK  files
+         for  their  associated  *.DBF  files.  These BAK files are created and
+         maintained in the same directory as the database  files.  These  files
+         are security against accidentally beginning a new game when you really
+         meant  to restore an old one.  Refer to the description of the RESTORE
+         function, of the main menu, for further details on the two BAK files.
+
+         The two *.DBF and two *.BAK files require a total  of  7408  bytes  of
+         free  disk  space  in  the current directory from which Liars Poker is
+         started.
+
+         NOTE: When choosing RESTORE from the main  menu,  the  LPOKER.DBF  and
+         LPOKERNO.DBF files must be in the current directory.
+
+    Starting Liars Poker.
+
+         With  LPOKER.EXE  in  the  current  directory  type "LPOKER" and press
+         <ENTER>.  With LPOKER.EXE in other than the  current  directory,  type
+         [drive:][\path\]LPOKER  (  Fill  in  "[]"s with your specs ) and press
+         <ENTER>. The main menu will appear.
+
+
+
+
+
+
+
+
+
+                                         6
+
+
+
+
+
+
+    The Main Menu.
+
+         The main menu provides nine functions.
+
+              RESTORE ... Restore an old game from database.
+              BEGIN ..... Begin a new game of Liars Poker.
+              ADD ....... Add new liars (players) to the game.
+              EDIT ...... Edit (or just browse) liars names.
+              PRINT ..... Print all numbers on the printer.
+              DISPLAY ... Display all numbers on the screen.
+              SELECT .... Select liars to PRINT or DISPLAY.
+              ! ......... Exit temporarily to a DOS shell.
+              QUIT ...... Quit and save all data to database.
+
+    BEGIN begins a new game.  You enter the number of players and the number of
+         games  that you want.  You are asked to confirm your entries.  At this
+         point you may press <ESCAPE> if you mistakenly meant  to  RESTORE  in-
+         stead of BEGIN.  WARNING, any key other than <ESCAPE> or <N> or <n> is
+         considered a "Y" by default.
+
+         After a "Y" confirmation,  the "Enter / Edit  Names"  screen  appears.
+         Here you enter the players names.  Edit each entry using the keys from
+         the on screen menu. Press <ENTER> when your through. Blank and identi-
+         cal entries are not allowed.  If you make a mistake don't  worry,  you
+         can  later  select  EDIT  from the main menu and change or correct any
+         names.  After you enter all the players names you are returned to  the
+         main menu.
+
+         You  may  abandon  the "Enter / Edit Names" screen,  and return to the
+         main menu prematurely,  by pressing <ESCAPE>.  If <ESCAPE> is pressed,
+         the data entered using the BEGIN function is discarded.  Any entry er-
+         rors must be corrected before <ESCAPE> can be used (  see  Errors  and
+         Messages ).
+
+    RESTORE restores an old game. A copy of all current game data is maintained
+         in  two  database  files in the current directory.  To use the data in
+         these database files;
+
+              Make your current  directory  the  same  one  LPOKER.DBF  and
+              LPOKERNO.DBF are in.
+
+              Select RESTORE from the main menu of Liars Poker.
+
+         The  RESTORE function makes it possible to select QUIT,  from the main
+         menu,  right after all players have obtained their game numbers.  This
+         frees the computer for other uses.
+
+
+
+
+
+
+
+                                         7
+
+
+
+
+
+
+         The  database  may  be RESTORED again and again without disturbing any
+         data, until the BEGIN function is used. The BEGIN function is not con-
+         sidered to be used if BEGIN is abandoned  (  by  pressing  <ESCAPE>  )
+         before  it  returns  control to the main menu.  At any time before the
+         BEGIN function is used, Liars Poker may be started and RESTOREd. After
+         using the RESTORE function you may PRINT a players' lost  game  sheet,
+         ADD one or more players to the game,  or do anything else the game al-
+         lows.
+
+         If you want to RESTORE the database files that were active before  the
+         BEGIN  function  was  used,  you  must first rename the LPOKER.BAK and
+         LPOKERNO.BAK files to LPOKER.DBF and LPOKERNO.DBF  respectively.  This
+         must be done from outside the Liars Poker environment ( or from within
+         a shell while inside the Liars Poker environment ).  Refer to your DOS
+         manual for instructions on using the DOS RENAME command.
+
+    ADD adds new players to the current game. This function appends new data to
+         the current database files. The original data remains undisturbed.
+
+    EDIT edits or browses the players names. Blank or identical entries are not
+         allowed.
+
+    PRINT ( See SELECT ) prints all the players' numbers (  unless  interrupted
+         with  the  <ESCAPE>  key  ).  To conserve paper on those printers with
+         tractor feeds to the wrong side of the printer papers' edge ( standard
+         for most printers ),  the paper is advanced 6 1/6" down the page  then
+         pauses before starting to print.  The previous player then removes his
+         game sheet. The next players' numbers don't start printing until a key
+         is pressed.
+
+         After the last players' numbers are printed,  or the <ESCAPE>  key  is
+         pressed, the printer does the two form feeds necessary to position the
+         paper for removal ( printer must be an 11" page at 6 lines/inch ).
+
+         If  you  are lucky enough to have a printer that doesn't waste a sheet
+         of paper every run,  then use SELECT instead of PRINT ( refer  to  the
+         section discussing SELECT ).
+
+    DISPLAY  (  See  SELECT  )  displays all the players numbers on the monitor
+         ( unless interrupted with the <ESCAPE> key ).  This function  has  two
+         purposes.
+
+         First, if you don't have a printer, I don't want you to feel left out.
+         The  DISPLAY function makes it easy for each player to privately write
+         down his game numbers.
+
+         Second,  the DISPLAY function allows checking (  after  a  session  of
+         games is completed ) of all players numbers.
+
+
+
+
+
+                                         8
+
+
+
+
+
+
+    SELECT  selects certain players for which to PRINT or DISPLAY game numbers.
+         Use this function to PRINT or DISPLAY an ADDed players' game  numbers,
+         or to PRINT or DISPLAY a players' lost game numbers.  This function is
+         also useful for printers designed with the tractor on the correct side
+         of the papers' edge ( as  discussed  in  the  PRINT  section  of  this
+         document ). For these printers, SELECT all the names from the list in-
+         stead  of  using  the PRINT function.  The extra form feed will not be
+         generated after the last players' numbers are printed, thus conserving
+         printer paper.
+
+         Use the Up and Down cursor keys to move the  highlighted  bar  to  the
+         name you want to SELECT for the queue.  Press <ENTER> with your selec-
+         tion highlighted. The number is now selected for the queue.
+
+         Names in the queue are indicated  by  flashing.  A  selection  may  be
+         removed from the queue by selecting it a second time.
+
+         When you finish SELECTing,  PRINT or DISPLAY your selections using the
+         function keys outlined  in  the  on  screen  menu.  After  SELECT  has
+         finished  ( or has been prematurely abandoned by pressing the <ESCAPE>
+         key ) you are returned to the main menu.
+
+    !  ( shell ) exits you temporarily to a DOS shell while Liars Poker  stands
+         by in RAM. In this shell you can perform any task, or run any program,
+         that you normally could with the operating system and 141K less avail-
+         able  memory  than  normal ( LPOKER.EXE uses 141K RAM ).  To leave the
+         shell and return to Liars Poker, type EXIT and press <ENTER>.
+
+         To do a shell,  a copy of COMMAND.COM must be where COMSPEC says it is
+         ( refer to your DOS manual, for more information ).
+
+    QUIT  quits  Liars Poker,  closes any open database files,  and returns the
+         user to the operating system.  Note that the data  is  actually  saved
+         before  QUIT  is  selected.  The message to the contrary,  on the main
+         menu,  is more to make a user aware of the  database  than  it  is  to
+         provide accurate technical information.
+
+    Errors and Messages.
+
+         There are two kinds of errors,  internal and external. An internal er-
+         ror is an error that is handled by the Liars Poker environment. An ex-
+         ternal error is an error that the Liars  Poker  environment  does  not
+         handle.
+
+    Internal Errors.
+
+         If an internal error is detected,  it is followed by a message prompt-
+         ing the user as to what action ( if any ) to take. After correcting an
+         internal error, the Liars Poker Game Utility proceeds as usual.
+
+
+
+
+                                         9
+
+
+
+
+
+
+         At the main menu you may get a "Please BEGIN or  RESTORE  first"  mes-
+         sage.  This  indicates that Liars Poker is not ready to continue until
+         the BEGIN or RESTORE function is used.  If you BEGIN or RESTORE  again
+         but still get this message, refer to and read the documentation on the
+         BEGIN and RESTORE functions.
+
+         The  "All  Data Restored" message only confirms that the RESTORE func-
+         tion has been activated.  If the required *.DBF files are not  in  the
+         current  directory,  the  data  will not be restored but the "All Data
+         Restored" message will still be displayed.  When an attempt is made to
+         use  this  falsely restored data,  the "Please BEGIN or RESTORE first"
+         message will indicate the data is not properly restored.
+
+    External Errors.
+
+         If an external error occurs, a message is displayed indicating the er-
+         ror type, and control is returned to the operating system.  You should
+         correct the cause of the error before restarting Liars Poker.
+
+         Note  that  the "Illegal function call" error is usually caused by im-
+         proper setup of the Liars Poker Game Utility. For example, if you do a
+         shell (!) and COMMAND.COM is not where COMSPEC says it is, an "Illegal
+         function call" error will occur. Most of the other external error mes-
+         sages are descriptive enough to identify the cause of the error. Refer
+         to your DOS manual for help with external errors.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                             Liars Poker   Version 1.0
+                          Copyright 1988   By D. L. Evans
+
+                                        10
+
+```
+{% endraw %}
+
+## XWORD-2A.TXT
+
+{% raw %}
+```
+
+                                RELEASE_2a NOTES
+                         XWord (v1.7) by JJO Software
+                                   July 1989
+
+
+     PURPOSE
+
+     XWord is a fast, flexible and compact menu-driven crossword puzzle
+     tool box for the IBM PC and compatibles. While easy to use, it is
+     intended for serious crossword puzzle creators (cruciverbalists).
+     XWord may be used with Turbo Lightning (see below).
+
+     RELEASE NOTES
+
+     This release (#2a) supports color monitors, reduces minimum memory
+     requirements, and speeds up some functions. It also cleans up some
+     anomalies found in earlier versions. Puzzle sizes down to 13x13 are
+     now supported.
+
+     FEATURES
+
+     1. A define function permits entry of puzzle title and size, from
+        13x13 to 23x23 (NY Times Sunday). The default is 21x21.
+
+     2. By means of the cursor, words may be entered in any order and in
+        any location of the puzzle grid; and, cursor speed is adjustable.
+
+     3. Words may be rubbed out (erased) from any location; but, they
+        are saved to a "move" list and can be recovered and placed in
+        another location.
+
+     4. The word lists "across," "down" and "move" and clues may be
+        viewed at any time.
+
+     5. Clues need not be entered at the time words are entered into the
+        puzzle grid. They may be entered and edited whenever it is
+        convenient to do so.
+
+     6. A complete set of printed materials is produced: puzzle blank,
+        list of clues and puzzle solution. Word numbers, blanks and
+        "blocks" are automatically inserted.
+
+     7. All puzzle information, including the "move" list, is saved to a
+        file. Puzzle size is set and words entered automatically when
+        a puzzle file file is loaded.
+
+     8. For safety and ease of use, functions are interlocked to
+        prevent inadvertent loss of work. In addition, you are beeped
+        when you've attempted an illegal operation.
+
+
+     SYSTEM REQUIREMENTS
+
+     System: Any member of the IBM PC or PS/2 family, or compatible,
+     with DOS 2.1, or later.
+
+     Memory: 80 kilobytes, over and above DOS and any resident programs.
+
+     Video: XWord does not require graphics and has been run with VGA,
+     EGA, mono and CGA adapters. A main menu command permits color/mono
+     toggling for the best display.
+
+     Printer: For the puzzle blanks, an IBM ProPrinter (dot matrix) or
+     one which prints the IBM text graphics characters is required. Most
+     recent low-price printers (Epson, Star and Panasonic, for example)
+     have a switch so that you can select either the Epson or the IBM
+     character set. Set the switch to IBM mode.
+
+
+     RUNNING XWORD
+
+     The files XWord.Exe and XWord-2a.Txt, along with any sample files,
+     should be in the current (logged) directory. To run XWord, at the
+     system prompt type Xword. When the logo screen appears, press any key
+     to invoke XWord's main menu. XWord is not case sensitive, so all
+     entries may be in upper or lower case as preferred. Commands are
+     available on the main menu only when their execution is appropriate.
+     They are selected by typing one of the letters, as follows:
+
+     C)lues: View, add or edit clues for words already entered into the
+             current puzzle grid. You may enter or replace clues, or
+             simply scroll through the word lists.
+
+     D)efine: Create a new puzzle definition, i.e., title and size.
+
+     E)dit: Invokes the XWord editor which places the current puzzle
+            grid on the screen and permits words to be entered or rubbed
+            out, in any order and in any location (see XWord Editor).
+
+     I)nfo: Displays this file, if present in the current directory.
+
+     L)oad: Load a puzzle file from disk. A definition record in the
+            file permits the puzzle to be automatically sized and titled.
+            NOTE: Puzzle files are not ASCII files.
+
+     N)ame: Name|rename the current puzzle.
+
+     P)uzzle: View|print (optional) the current puzzle blank, solution
+              (completed puzzle) and numbered list of clues.
+
+     S)ave: Save a puzzle file to disk, i.e., its definition record and
+            three word lists (across, down and move).
+
+     V)ideo: Toggle color on/off for best effect. The XWord title block
+             text will be visible when video is set correctly.
+
+     W)ord: View|print (optional) the current word lists, across, down
+            and move.
+
+     eX)it: Quit. You will be cautioned if changes to the current
+            puzzle have not been saved.
+
+
+     XWORD EDITOR
+
+     Invoked from the main menu via "E," the editor is the XWord
+     engine. Upon entry to the editor, the current puzzle contents, if
+     any, are displayed. The active keys are:
+
+     Cursor: four (4) arrow keys used to position the cursor on the
+             puzzle grin.
+
+     Rate: the numeric keys (1..8) may be used at any time to set cursor
+           speed (advance). When set greater than 1, you may not be able
+           to reach all edges of the grid.
+
+     Insert: the + key is used to insert a word at the current location.
+             You will be prompted to: (1) specify the direction (across
+             or down) with the arrow keys and (2) enter the word.
+
+     Rubout: the - key is used to remove a word from the grid to the
+             move list. You will be prompted for direction, only.
+
+     Move: the * key is used to insert a word from the move list at the
+           current cursor position. You will be prompted for direction.
+           The move list is then displayed for selection of the word to
+           be placed on the grid.
+
+           NOTE: During insert, rubout and move, the function may be
+           aborted via the <Esc> key or by entering an empty word.
+
+     Exit: use <Enter> alone to leave the editor and return to the main
+         menu.
+
+     The editor performs checking that words will fit within the grid if
+     inserted at the prescribed location and direction. If not, you are
+     beeped and the operation is aborted.
+
+
+     TURBO LIGHTNING
+
+     XWord may be used in conjunction with the Turbo Lightning spell
+     checker. To do so, install Lightning first and then run XWord. Within
+     XWord, you can toggle spell checking on/off via <Alt+F5>. All
+     Lightning functions should be accessible - see the Lightning manual.
+
+
+     XWORD RELEASE HISTORY
+
+     1 (V1.3):  Initial release 15x15 to 23x23, mono monitor support only.
+     2 (V1.6):  Same as above, plus bug fixes and support for both color
+       and mono monitors. Not released to PC-SIG.
+     2a (V1.7): Cosmetic and speedup changes, plus size down to 13x13.
+
+
+     UPGRADES
+
+     The next upgrade is expected to be optional "shadowing," wherein a
+     word's opposite hand or shadow blanks are marked or otherwise
+     highlighted. This will make it easier to observe the puzzle diagonal
+     and lateral symmetry conventions.
+
+
+     REGISTRATION
+
+     Communications from all XWord users will be accepted and answered
+     by mail or via CompuServe (73407, 550). However, registered users
+     will be given a daytime phone number (when available) which may be
+     used to discuss upgrades and for technical support. To register, send
+     a $25 check or money order to:
+
+                                 JJO Software
+                              174 Westover Court
+                             Delran, NJ 08075, USA
+
+                                      ***
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

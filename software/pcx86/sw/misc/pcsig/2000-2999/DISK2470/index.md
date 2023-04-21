@@ -31,6 +31,42 @@ machines:
     its help menus.  FORE!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2470.TXT
+
+{% raw %}
+```
+Disk No: 2470                                                           
+Disk Title: Handicap II                                                 
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Handicap II                                              
+Author Version: 02/90                                                   
+Author Registration: Not stated.                                        
+Special Requirements: None.                                             
+                                                                        
+HANDICAP II will make scoring a lot easier for you serious and not-so-  
+serious golfers.  Now you can keep track of up to 20 scores for each of 
+72 golfers.  Just enter each golfer's name, course name, ratings, slopes
+and pars, course handicaps, and gross and net scores; HANDICAP II       
+does the rest.  It will calculate handicap, handicap index, average     
+gross, and average putts - all according to the rules in the "USGA      
+Handicap System and Golf Committee Manual."  In addition, you can print 
+handicap cards, data on all the players, and postings.  HANDICAP II is  
+easy for anyone to use and includes all the instructions you need in    
+its help menus.  FORE!                                                  
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2470
 

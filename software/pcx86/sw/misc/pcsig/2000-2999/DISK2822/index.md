@@ -14,6 +14,52 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2822.TXT
+
+{% raw %}
+```
+Disk No: 2822                                                           
+Disk Title: Model-S  1 of 3 (#2823 & #2824)                             
+PC-SIG Version: S2.5                                                    
+                                                                        
+Program Title: Model-S                                                  
+Author Version: 2.5                                                     
+Author Registration: $49.00                                             
+Special Requirements: A hard drive.                                     
+                                                                        
+MODEL-S is a CASE tool for developing database applications.  This is a 
+quality product that can rival any commercial package in its class.  In 
+fact, our research indicates that MODEL-S is unique in its design and   
+functionality.                                                          
+                                                                        
+MODEL-S is a powerful piece of software that automates the development  
+process yet does not require data processing expertise.  It utilizes the
+rapid prototyping approach to application development, integrated with  
+automatic generation of the dBASE III Plus programs and data files (.PRG
+and .DBF).                                                              
+                                                                        
+Improvements to MODEL-S include menu driven navigation through the      
+system, many prompting features, and a complete User Guide (166 pages)  
+ready for printing.                                                     
+                                                                        
+MODEL-S was designed to enable end users and data processing            
+professionals to engage in a true joint application development, which  
+promotes active participation of both in most aspects of the development
+process.  It helps producing systems on time, within budget, and with   
+complete user satisfaction -- all that at a fraction of the traditional 
+development cost.                                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2822
 

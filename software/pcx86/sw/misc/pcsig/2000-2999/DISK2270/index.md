@@ -40,6 +40,49 @@ machines:
     knowledge and advice in an organized, easily-used format.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2270.TXT
+
+{% raw %}
+```
+Disk No: 2270                                                           
+Disk Title: QHelp                                                       
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: Qwik Help                                                
+Author Version: 4.00                                                    
+Author Registration: $39.95                                             
+Special Requirements: None.                                             
+                                                                        
+QTEXT turns your ordinary text files into stand-alone, instantly        
+executable ".COM" program files, so you or others can easily view their 
+contents simply by typing the file's name -- just like any other file   
+ending with ".COM".  Screens pause where you want them until the user is
+ready to continue, at which point the screen clears and the next section
+is displayed.                                                           
+                                                                        
+QHELP transforms your text into a menu-driven environment.  By a simple,
+one-word key at the head of the file, you determine whether the user    
+will be offered the opportunity to print out the file in a              
+professionally-formatted manner, complete with a header line containing 
+useful information (page and section numbers, date of last file revision
+and title of your choice).  You can also give your users the choice to  
+display the entire file or only chosen sections.                        
+                                                                        
+If you're the de facto "computer expert" for your family or office,     
+preparing such files offers you the chance to thoughtfully provide your 
+knowledge and advice in an organized, easily used format.               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2270
 

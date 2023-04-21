@@ -30,6 +30,40 @@ machines:
     you, you should try THE ASTROLOGER!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2453.TXT
+
+{% raw %}
+```
+Disk No: 2453                                                           
+Disk Title: The Astrologer                                              
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: The Astrologer                                           
+Author Version: 06/90                                                   
+Author Registration: $30.00                                             
+Special Requirements: None.                                             
+                                                                        
+The ASTROLOGER can provide you a personal profile derived from a library
+of over 200 aspects.  In exchange for your name, birthdate, time and    
+place of birth, and latitude and longitude of birthplace, a report is   
+generated whose focus is strictly on your individuality and your desire 
+for self-improvement.                                                   
+                                                                        
+If you are curious about the affects of the positioning of the planets  
+at the time of your birth on your personality, and how you can make a   
+better you, you might want to try THE ASTROLOGER!                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2453
 

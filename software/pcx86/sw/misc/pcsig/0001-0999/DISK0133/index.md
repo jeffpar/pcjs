@@ -14,6 +14,68 @@ machines:
 ---
 
 {% include machine.html id="ibm5160" %}
+{% comment %}samples_begin{% endcomment %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #133, version v2 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  U-ZAP   .EXE         CRC = DE D7
+
+--> FILE:  U-FILE  .EXE         CRC = D7 D8
+
+--> FILE:  SKELETON.BQS         CRC = 41 3C
+
+--> FILE:  U-OPT   .DQC         CRC = 58 08
+
+--> FILE:  TEST    .ATR         CRC = 15 7D
+
+--> FILE:  TEST    .HDR         CRC = 0F 25
+
+--> FILE:  READTHIS.NOW         CRC = BB BF
+
+--> FILE:  U-MIND  .BQS         CRC = D2 87
+
+--> FILE:  U-FORMAT.EXE         CRC = 32 08
+
+--> FILE:  U-MIND  .DQC         CRC = 93 81
+
+--> FILE:  USQ     .COM         CRC = 92 7B
+
+--> FILE:  U-OPT   .EQE         CRC = FC EB
+
+--> FILE:  DOC41   .TQT         CRC = 6D 4E
+
+--> FILE:  DOC42   .TQT         CRC = 29 67
+
+--> FILE:  README  .NOW         CRC = BB BF
+
+ ---------------------> SUM OF CRCS = AA 3E
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0133
 

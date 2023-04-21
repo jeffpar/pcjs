@@ -35,6 +35,46 @@ machines:
     knowledge in the place called THE LAND.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2158.TXT
+
+{% raw %}
+```
+Disk No: 2158                                                           
+Disk Title: The Land 1 of 2 (also 2159)                                 
+PC-SIG Version: 1                                                       
+                                                                        
+Program Title: The Land                                                 
+Author Version: 2.2                                                     
+Author Registration: $25.00                                             
+Special Requirements: CGA, or EGA.                                      
+                                                                        
+THE LAND is a fantasy role-playing game based on the book "The          
+Chronicles of Thomas Covenant". Choose from six character classes, and  
+explore towns, villages, and dungeons in search of treasure and magic.  
+                                                                        
+Buy and trade armor, weapons, food, or magic items from the townspeople,
+who sometimes have helpful hints about the game. Mapping is simple in  
+THE LAND since the program does it for you. As you search a town, a     
+dungeon, or the outside world, an overhead view shows where you are,    
+and how much is left to explore of that region.                         
+                                                                        
+Playing THE LAND you can save your game at any time, or place, which    
+comes in handy if your about to do battle with a dragon, or Hydra.      
+Like Ultima, and Questron this game will take you many hours to complete
+as your character gains experience and knowledge in a place called      
+THE LAND.                                                               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2158
 

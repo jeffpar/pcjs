@@ -34,6 +34,80 @@ machines:
     supplied on-disk along with an excellent tutorial.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## DESCRIP.DOC
+
+{% raw %}
+```
+------------------------------------------------------------------------
+VIANSOFT(R) CHURCH TREASURER
+------------------------------------------------------------------------
+THIS IS AN EASY TO USE PROGRAM TO KEEP TRACK OF BUDGET, INCOME AND 
+EXPENSES FOR YOUR CHURCH.  YOU CAN PRINT OUT VARIOUS REPORTS FOR ANY 
+COMBINATION OF ITEMS.  YOU MAY SET UP TO 500 BUDGET ITEMS, REPORT 
+GROUPING OR FUND CATEGORIES.  IT WILL KEEP TRACK OF UP TO 15 DIFFERENT 
+BANK ACCOUNTS (CHECKING, SAVINGS, CD, ETC.).  ASSISTS IN PROVING BANK 
+STATEMENTS.  WILL ALLOW POSTING TO PREVIOUS DATE WITH AUDIT TRAIL.  WILL 
+TRANSLATE BUDGET ITEM INFORMATION INTO ASCII FILE FOR USE WITH OTHER 
+PROGRAMS.
+
+README        NOTES ON HOW TO BEGIN
+README   BAT  BATCH FILE TO DISPLAY README
+CT1      ARC  VIANSOFT(R) CHURCH TREASURER MAIN PROGRAM
+CT2      ARC  OVERLAY FOR CHURCH TREASURER
+TUTOR    ARC  TUTORIAL FOR CHURCH TREASURER
+TUTOR    BAT  BATCH FILE TO PRINT TUTORIAL
+DATA     ARC  SAMPLE DATA FOR TUTORIAL
+DATA2    ARC  SAMPLE DATA FOR TUTORIAL
+SETUP    BAT  BATCH FILE TO SET UP TUTORIAL DISK
+MANUAL   ARC  MANUAL FOR CHURCH TREASURER
+MANUAL   BAT  BATCH FILE TO PRINT MANUAL
+PROG     BAT  BATCH FILE TO SET UP PROGRAM DISK
+PKXARC   EXE  PROGRAM TO UNARC FILES
+DESCRIP  DOC  DESCRIPTION OF SOFTWARE AND FILES ON DISK
+NOTES    ARC  UPDATE AND CHANGES TO USER'S MANUAL
+NOTES    BAT  BATCH FILE TO PRINT NOTES
+```
+{% endraw %}
+
+## FILE1538.TXT
+
+{% raw %}
+```
+Disk No: 1538                                                           
+Disk Title: Church Treasurer                                            
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: Church Treasurer                                         
+Author Version: 1.05                                                    
+Author Registration: $85.00                                             
+Special Requirements: 384K RAM, two floppy drives or hard drive, printer
+                                                                        
+CHURCH TREASURER helps to automate most of the heavy responsibilities of
+properly overseeing and managing the finances of a large church.  It    
+helps you track your budget, income, and expenses under 500 budget      
+categories of your choosing.  The program supports up to fifteen        
+separate bank accounts including checking, savings, and CDs.  It helps  
+you balance your bank statements.  You can even post to previous dates  
+with an audit trail.                                                    
+                                                                        
+Scores of standard and user-defined financial reports are provided to   
+help you see exactly where funds are being expended.  A useful utility  
+allows you to translate budget item information into ASCII format for   
+use with other programs such as your wordprocessor.  This information   
+can then be included in monthly church reports.  A huge user manual is  
+on-disk along with an excellent tutorial.                               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1538
 

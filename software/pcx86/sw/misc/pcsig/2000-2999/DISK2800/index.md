@@ -14,6 +14,38 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2800.TXT
+
+{% raw %}
+```
+Disk No: 2800
+Disk Title: DAYO Billing & Invoicing
+PC-SIG Version: S1.0
+
+Program Title: DAYO Billing & Invoicing
+Author Version: 3.0
+Author Registration: $75.00
+Special Requirements: 640K RAM, hard disk, and DOS 3.3.
+
+DAYO BILLING & INVOICING permits you to invoice your products while
+keeping an accurate record of all  your 'sales.' Features include:
+multiuser (i.e.: Novell), registers, quote interface, templates, back
+orders, cash drawers, packing/shipping lists, labels, sales graphs,
+special pricing, tax codes, terms codes, credit limits, passwords, MRP
+interface, multiple prices, and many reports. Very similar to DAYO POS,
+and uses the same manual.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2800
 

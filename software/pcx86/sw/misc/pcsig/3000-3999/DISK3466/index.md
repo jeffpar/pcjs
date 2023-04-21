@@ -16,8 +16,309 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## CDROM.TXT
+
+{% raw %}
+```
+        T h e  P C - S I G  L i b r a r y  o n  C D - R O M
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+This may well be the greatest collection of software ever compiled.
+
+The PC-SIG Library on CD-ROM is our premier collection of the entire
+PC-SIG library.  Every shareware program we have is on one disc; over
+900 megabytes of software you can have immediate access to.
+
+Easy to use, all you have to do is insert the disc and type 'INSTALL' at
+the DOS prompt.  We've included all the tools you need for fast easy
+access to the programs and their descriptions.
+
+The WordCruncher text retrieval software allows you to quickly access
+the description for any program you want.  All the programs are indexed
+by title, filename, PC-SIG disk number, and every word within the
+program description.  There couldn't be an easier way to find just the
+right program.  All the programs are logically divided into thirteen
+major categories with subcategories, making it easier to find just the
+right software.
+
+All of the programs have been scanned for viruses.  There are also three
+online virus utilities that can be run from the CD-ROM which will scan,
+screen and clean viruses.  Not only does this save hard disk space, but
+also gives every user added security from viruses.
+
+Whether you're interested in Accounting or Windows, there's a shareware
+program for you on the PC-SIG Library on CD-ROM.
+
+Winner of the Optical Publishing Assn's Best Consumer Product Award.
+
+Shareware for every imaginable need: Accounting Chemistry Educational
+Engineering Games Hypertext Networks Programming Spreadsheets Utilities
+Word Processing
+
+Additional BBS file descriptions are available from PC-SIG so that the
+CD-ROM can be set up quickly on a bulletin board.
+
+System Requirements:
+
+IBM PC/XT/AT PS/2 or compatible with 530K memory DOS 3.1 or higher and
+a graphics monitor (Hercules/EGA/VGA/SVGA).  A mouse is optional.
+
+
+
+
+
+T h e E s s e n t i a l H o m e & B u s i n e s s C o l l e c t i o n
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+"Never before has such a valuable collection of popular shareware been
+compiled on one CD-ROM that everyone can afford." Dr. File Finder a.k.a.
+Michael Callahan
+
+Finally, 368 of the most useful, popular, important shareware programs
+have been put together on one CD. No matter what your need, it's on The
+Essential Home & Business Collection.  Everything from Administration to
+Windows software is here.
+
+The Essential CD incorporates the WordCruncher text retrieval system.
+Every program on the disc is indexed by title, filename, PC-SIG disk
+number, and every word in the program description.  A new utility, Narc,
+is implemented so you can look at the program files and the author's
+on-line documentation without having to first copy the program to your
+hard disk.  By using WordCruncher and Narc, you can quickly find the
+program you want and review it to be sure, without ever having to run it
+from your hard disk.
+
+If you've got a CD-ROM player at home and want to get more use of it and
+your computer, or if you're trying to avoid purchasing another Nintendo
+cartridge, or if you just enjoy looking at new software, you need The
+Essential Home & Business Collection.
+
+System Requirements:
+
+IBM PC/XT/AT PS/2 or compatible with 384K memory DOS 3.1 or higher and
+Microsoft MS-DOS CD ROM extensions.
+
+
+                      The PC-SIG Games CD-ROM
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Now you can play a game a day fo over a year.  This CD-ROM is jammed
+with over 380 shareware games of all types, designed to appeal to the
+new generation of CD-ROM users out for fun.  The CD incorporates a
+hypermedia interface and allows 250 of the games to be played directly
+from the CD-ROM.
+
+The hottest games in shareware are on this disk, including the
+action/arcade games "Jill of the Jungle" and "Wolfenstein 3D," which
+rival or surpass commercial PC and Nintendo for use of animation,
+SoundBlaster audio, and VGA graphics.  There are also games designed to
+teach children mathematics, spelling and even ecology.  All these games
+for less than a dime each!
+
+Over 250 of the games can be played directly from the CD without copying
+them to a floppy or a hard drive.  Being able to run from the CD means
+that users can explore games without using up valuable hard disk space
+or spending time downloading and deleting files.  The hypermedia
+interface makes it easy to browse the titles, read a one line
+description or full review, and copy or start a game by clicking the
+mouse or using the keyboard.
+
+
+To Order in the U.S.A.: Call 800-245-6717 and ask for Customer Service.
+
+Outside the U.S.A. call (408) 730-9291 for the name of the dealer in
+your country.
+```
+{% endraw %}
+
+## LUNAR.TXT
+
+{% raw %}
+```
+LUNAR LANDER 1.0 requires a VGA graphics adapter.
+
+Please address questions or comments to:
+
+                    Way Out West-ware
+                    P.O. BOX 353
+                    Gilbert, AZ  85234
+
+Your feedback is sincerely appreciated.
+
+To start LUNAR LANDER, type LUNAR at the dos prompt.
+```
+{% endraw %}
+
+## LLFINAL.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+Thank you in advance for supporting the SHAREWARE concept!
+
+Please register this copy of LUNAR LANDER by sending a check
+or money order for $5.00 to Way Out West-ware at the above
+address.
+
+Or, if you want to become rich and famous, drive a fast car
+and dine every night in the restaurants of the elite...
+Send $10.00 and receive the QuickBasic source code for
+LUNAR LANDER.  See how it works!  You can do it too!!!
+
+Your SUGGESTIONS and COMMENTS are always appreciated.
+
+
+
+```
+{% endraw %}
+
+## PCSIG.TXT
+
+{% raw %}
+```
+
+
+                            P C  -  S I G
+
+
+
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Welcome to the world of Shareware, state of the art software you can
+actually try before you buy.
+
+Shareware, a term coined in the early eighties, refers to the method of
+distribution chosen by the software authors.  With shareware, you can
+receive a program and put it through its paces without having to pay for
+it. If you find the program useful, and choose to keep the program, then
+you pay a modest registration fee to the author.
+
+For the last nine years, PC-SIG has been providing shareware and public
+domain software to its customers and members.  Since 1982 PC-SIG has
+developed an unprecedented library of shareware programs, constantly
+updated, consistently strong in every category.  Our library of
+shareware contains over 3500 titles divided into 120 logical categories.
+
+Every program we add to the library is thoroughly reviewed and tested to
+insure that each one meets the high standards of reliability and value we
+insist upon and you expect.  As a result, our library doesn't contain
+every shareware program available, just those that really work.
+
+PC-SIG has grown into the premier distributor of shareware and and
+shareware information by producing shareware collections on CD-ROM,
+publishing an encyclopedia of shareware, and by publishing Shareware
+Magazine, a bi-monthly magazine distributed world-wide.
+
+Quality and support - guaranteed.  All of our programs are guaranteed
+virus free.  We've isolated our systems and check every program
+submitted to insure that no viruses make their way to your computer or
+ours.
+
+Our support staff is available by phone as well as on our BBS to help
+you with questions about installation and operation of PC-SIG's
+products.
+
+Through our network of international distributors, PC- SIG strives to
+bring you the most current, exciting, technically advanced software
+available as shareware.
+
+If you can't find the software you need in PC-SIG's library, it may well
+not exist.
+
+To order the latest in Shareware, in the U.S.A: Call (800) 245-6717
+
+Outside the U.S.A. call (408) 730-9291 for the name of the dealer in
+your country.
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+```
+{% endraw %}
+
+## SHAPE.TXT
+
+{% raw %}
+```
+                    SHAPE SHOOTER 1.0
+                    
+           Copyright (C) 1991  Craig P. Thompson
+
+                    Way Out West-ware
+                    P.O. BOX 353
+                    Gilbert, AZ  85234
+                    
+SHAPE SHOOTER is a powerful graphics designer and animator that
+enables programmers to quickly produce high quality graphics
+for use in games and other applications requiring animation.
+
+Even if you are not a programmer, you can have fun designing
+your own animation sequences.  The Microsoft QuickBasic (tm)
+source code (DEMO.BAS) is included to illustrate how to use 
+the data that SHAPE SHOOTER produces in your own QuickBasic (tm)
+programs.
+
+To get started, try loading the shapes TEX1.WOW, TEX2.WOW, and
+TEX3.WOW into the first three frames and select F8 to animate 
+them.  Then you will be ready to create your own Kung-Fu thugs,
+Cosmic Conveyances, and Jungle Slime to use in your own programs.
+
+SHAPE SHOOTER is the copyrighted property of Craig Thompson of
+Way Out West-ware, and is distributed as SHAREWARE.  You are
+granted a limited license to use SHAPE SHOOTER and to copy and
+distribute it, provided that the following conditions are met:
+
+        1.  No fee may be charged for such copying and
+            distribution aside from a nominal disk copying
+            fee.
+
+        2.  SHAPE SHOOTER may only be distributed in its
+            original, unmodified form, complete with data
+            files and this documentation.
+
+You are encouraged to make copies of, and allow others to make
+copies of this program - but only if all original files are
+complete and unmodified.  We retain all other rights.  In no
+case do we give the right to make, copy or distribute modified
+versions of, or works derived from, the executable or document
+files.
+
+As SHAPE SHOOTER is SHAREWARE, if you decide to keep the program
+beyond a two or three day evaluation period, you must register
+it by sending a check or money order for $10.00 to
+Way Out West-ware at the above address.
+
+Alternatively, you can become a registered user of the latest
+release of SHAPE SHOOTER and receive a disk full of demo shapes
+by sending $15.00 to Way Out West-ware.  Please make a
+note of the version you currently have and whether you would
+like 3½" or 5¼" diskettes.
+
+Thank you in advance for supporting the SHAREWARE concept.
+I would also like this opportunity to thank God for giving me
+the ability to write this program, and my wife Robyn Leah for
+her undying patience during the many hours I spent in front of
+the computer.
+
+Microsoft is a registered trademark and QuickBasic is a trademark
+of Microsoft Corporation.
+
+```
+{% endraw %}
+
 ## DEMO.BAS
 
+{% raw %}
 ```bas
 '
 ' DEMO.BAS
@@ -303,6 +604,421 @@ DATA  0
 ' of Microsoft Corporation.
 
 ```
+{% endraw %}
+
+## FINALMSG.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+Thank you in advance for supporting the SHAREWARE concept!
+
+Please register this copy of SHAPE SHOOTER by sending a check
+or money order for $10.00 to Way Out West-ware at the above
+address.
+
+Or, if you would like the latest release of SHAPE SHOOTER and 
+a disk full of sample shapes, send a check or money order for 
+$15.00 to Way Out West-ware at the above address.
+
+Your SUGGESTIONS and COMMENTS are always appreciated.
+
+
+
+```
+{% endraw %}
+
+## SHAPE.DOC
+
+{% raw %}
+```
+                    SHAPE SHOOTER 1.0
+                    
+           Copyright (C) 1991  Craig P. Thompson
+
+                    Way Out West-ware
+                    P.O. BOX 353
+                    Gilbert, AZ  85234
+
+                    Help / Documentation
+                    
+SPACE = PEN UP/DN
+
+      Press the SPACE bar to move your 'Pen' up or down.  With
+      the Pen Down, pressing the cursor keys results in drawing
+      in the current color.  With the Pen Up, you are free to
+      move the cursor around in the frame without drawing.
+
+DEL   = DELETE
+
+      Press the Delete key to toggle between the DRAW and DELETE
+      modes.  In DELETE mode, pressing the cursor keys deletes
+      areas of your shape like a pencil eraser.
+
+C     = CIRCLE
+
+      Press C to mark the center of the circle.  Then move the
+      cursor to any point on the perimeter of the circle, and
+      press C again to complete the circle.
+
+L     = LINE
+
+      Press L to mark the first endpoint of the line.  Then move 
+      the cursor to the second endpoint and press L again to
+      complete the line.
+
+F     = FILL
+
+      Press F to fill an area within the frame with the current
+      color.
+      
+      NOTE:  You must be sure that the area you want to fill is 
+      completely bordered by pixels of the current (fill) color.  
+      Otherwise, the color will 'leak' out filling the whole frame.
+      Be CAREFUL using this option!  It is a good idea to
+      save the frame you are working on before using FILL.
+
+      Also, make sure the Pen is Up, and the cursor is positioned 
+      on a pixel of some color other than the current (fill) color 
+      prior to pressing F.
+
+F1  = FRAME
+      
+      Press F1 to jump to another FRAME.  Up to 64 frames can
+      be edited at one time with this version of SHAPE SHOOTER.
+      
+      Press shift-F1 to dynamically resize the current FRAME.
+      The maximum (default) frame dimensions are 64,48 but you
+      may wish to reduce these when designing small shapes.
+
+F2  = COLOR
+
+      Press F2 to change the current COLOR.  The sixteen color
+      choices are shown at the bottom of the screen.
+
+      Press shift-F2 to change the current COLOR in the opposite
+      direction.
+
+F3  = SHIFT
+
+      Press F3 to SHIFT the shape in the current frame one pixel
+      up, down, left or right.  If you shift part of a shape off
+      the edge of the frame, that portion of the shape is lost,
+      and will not reappear when you shift the shape the opposite
+      direction.
+
+F4  = ANIMATE
+
+      Press F4 to enter ANIMATE mode.  The first frame will appear
+      in the upper right corner of the screen.  Now use the up and
+      down cursor keys to see the shapes you have created (and the
+      shapes you have loaded (F6) into any of SHAPE SHOOTER's 64
+      frames.
+
+      Define the animation sequence to SHAPE SHOOTER by pressing
+      the Enter key on the frames you want to include, in the order
+      you would like them displayed.  If you make a mistake, you
+      can delete the latest frame from the sequence by pressing
+      the Delete key.  Should you really botch things up, you can
+      start over by pressing the Esc key.
+
+      When you have defined the animation sequence, press F4 again.
+      You should see your shapes zipping along in the sequence you
+      established just like the Saturday morning cartoons.
+
+      At this point, you can increase the animation delay by
+      pressing the "D" key, decrease the delay by pressing the
+      "d" key, or exit ANIMATE mode by again pressing F4.
+
+F5  = SAVE
+
+      Press F5 to SAVE the current frame to a disk file.  You can
+      specify the drive and path in addition to the filename.  If
+      you do not specify an extension, '.WOW' will be used (for
+      Way Out West-ware).
+
+F6  = LOAD
+
+      Press F6 to LOAD a shape from disk into the current frame.
+      You can specify the drive and path in addition to the
+      filename.  If you do not specify an extension, '.WOW' will
+      be used (for Way Out West-ware).  To load several shapes
+      from disk, use F6 to load the first one, then use F1 to jump
+      to another frame, then repeat the process.
+
+F7  = COPY
+
+      Press F7 to COPY the current frame to another frame.  This
+      is useful for making slight changes to a basic shape for
+      animation.  After you enter the number of the destination
+      frame, the frame you copied TO becomes the current frame.
+
+F8  = GEN DATA
+
+      Press F8 to GENERATE DATA statements to be used in your own
+      Microsoft QuickBasic (tm) programs.  Enter the name of the
+      file in which you would like SHAPE SHOOTER to place the 
+      CURRENT FRAME data.  You can choose to Append the data to an
+      existing file, or create a new file.  You should not append
+      data to a program that was saved in QuickBasic's fast Load
+      and Save format.  
+      
+      If you are creating a new file, SHAPE SHOOTER will prompt
+      you for a FILE Comment.  This is translated into a QuickBasic
+      label in your program.  Do not put any spaces in the file
+      comment.  It is useful if you need to use the BASIC restore
+      command to reset the data pointer to a particular block of
+      DATA statements.
+
+      Finally, you will be prompted for a FRAME comment.  This can
+      be any sentence you choose to comment the data statements
+      for the current frame.
+
+F9  = CLEAR
+
+      Press F9 to CLEAR (erase) the shape in the current frame.
+      SHAPE SHOOTER asks you to confirm that you want to clear
+      the frame by pressing Y.  Pressing any other key aborts this
+      function.
+
+F10 = FLIP
+
+      Press F10 to FLIP the shape in the current frame from left
+      to right.
+
+      Press shift-F10 to FLIP the shape from top to bottom.
+
+ALT-H = HELP
+
+      This function needs no explanation since you must have
+      pressed it to see this information.  Press ESC to resume
+      editing.
+
+ALT-D = DOS
+
+      Press ALT-D to spawn a DOS shell.  Here you can issue DOS
+      commands, then type EXIT (and press the Enter key) to
+      resume editing.
+
+ESC   = QUIT
+
+      Press ESC to exit SHAPE SHOOTER.  Remember to save (F5) any
+      frames you have updated before exiting SHAPE SHOOTER.
+
+Microsoft is a registered trademark and QuickBasic is a trademark
+of Microsoft Corporation.
+
+```
+{% endraw %}
+
+## SHAREMAG.TXT
+
+{% raw %}
+```
+              S H A R E W A R E  M A G A Z I N E
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Shareware Magazine has distinguished itself as the only internationally
+distributed periodical devoted to the use and business of shareware.
+Shareware Magazine provides detailed reviews of new products,
+hard-hitting comparisons of shareware programs with regular retail
+software, and timely information about changes in the industry and the
+latest technology.
+
+Intriguing columnists and regular features add to the excitement.  The
+beginners section sheds light on new user's concerns regarding
+everything from choosing the right operating system to alleviating the
+intimidation of using on-line systems.
+
+Educational sections focus on how low cost shareware can aid in
+classroom learning, curriculum development, and as a forum for
+discussing the impact of computers and technology in schools.
+
+Graphics Gallery renders expert advice and suggestions on how to better
+work with graphics, desktop publishing, CAD systems, and the Windows
+environment.
+
+Programmers benefit from others experience in developing new programs or
+polishing existing ones as well as choosing the right programming
+language.
+
+And columnists provide that subjective component, sometimes
+controversial, that calls for a closer look at the way we compute and
+how shareware effects what we do.
+
+Published bimonthly, Shareware Magazine is available on a subscription
+or at your local newsstand or computer bookstore.  In conjunction with
+PC-SIG, there are special benefits for subscribers as well as
+opportunities for discount purchases from PC-SIG.
+
+
+To Order, in the U.S.A.: Call 800-245-6717 and ask Customer Service.
+
+Outside the U.S.A. call (408) 730-9291 for the name of the dealer in
+your country.
+```
+{% endraw %}
+
+## SIGORDER.TXT
+
+{% raw %}
+```
+                                      [B]
+
+FROM:  ___________________________
+
+       ___________________________
+
+       ___________________________
+[A]                                                                         [B]
+       ___________________________
+
+
+                                  PC-SIG Inc.
+[A]                                                                         [B]
+                            1030-D East Duane Avenue
+
+                               Sunnyvale  California
+
+                                     94086
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Fold - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - Fold
+
+       HOW TO USE THIS RETURN ENVELOPE
+
+       1.  Place any other pages underneath this page.
+       2.  Using the Fold lines (above) as a guide, fold this flap under.
+       3.  Fold the address flap so it covers this flap.
+       4.  Tape or staple the envelope at the two spots marked [A].
+       5.  Slip in any other enclosures (business cards, cheques, etc.).
+       6.  Tape or staple the envelope at the spots marked [B].
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+THANKS FOR TAKING THE TIME TO PRINT THIS FORM -*- MAIL YOUR ORDER TO:
+PC-SIG Inc. 1030-D East Duane Avenue Sunnyvale CA 94086
+
+
+
+
+
+
+---------------------------------------------------------------------
+
+     Do not mail cash.   Please allow four weeks for processing.
+
+---------------------------------------------------------------------
+
+
+
+
+Check the items desired:
+
+PC-SIG Disks - Member $2.49 for 5.25" or $2.99 for 3.5"
+           Non-member $3.50 for 5.25" or $4.00 for 3.5"
+
+_____  _____  _____  _____  _____  _____  _____  _____  _____
+
+_____  _____  _____  _____  _____  _____  _____  _____  _____
+
+_____  _____  _____  _____  _____  _____  _____  _____  total  ______
+
+One year subscription to Shareware Magazine            $14.95  ______
+
+Super Saver Membership                                 $34.95  ______
+(includes a 1 year subscription to Shareware Magazine,
+ the PC-SIG Encyclopedia on Disk with WordCruncher,
+ and 5 free disks)
+
+The PC-SIG Catalog on Disk                              $7.00  ______
+
+The PC-SIG Encyclopedia on Disk with WordCruncher      $20.00  ______
+
+GAMES CD Amazing Disk - Amazing Price!                 $25.00  ______
+
+*** PC-SIG Library on CD-ROM 12th Edition  ***         $99.00  ______
+
+Upgrade to the 12th Edition from ANY previous edition
+of the PC-SIG Library on CD-ROM!                       $59.00  ______
+
+Upgrade from ANY other shareware CD-ROM just           $59.00  ______
+
+                                                    Subtotal   ______
+
+Shipping and Handling                                          $4.00
+
+                    California residents add 8.25% sales tax   ______
+
+                                                       TOTAL   ______
+
+
+
+      If you have any comments or suggestions, please let us know!
+
+To order by phone with VISA or MASTERCARD call (800)245-6717
+Ask for operator #2351
+```
+{% endraw %}
+
+## START.TXT
+
+{% raw %}
+```
+SHAPE SHOOTER 1.0 requires a VGA graphics adapter.
+
+Please address questions or comments to:
+
+                    Way Out West-ware
+                    P.O. BOX 353
+                    Gilbert, AZ  85234
+
+Your feedback is sincerely appreciated.
+
+To start SHAPE SHOOTER, type SHAPE at the dos prompt.
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

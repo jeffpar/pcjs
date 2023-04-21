@@ -38,6 +38,50 @@ machines:
     development cost.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2071.TXT
+
+{% raw %}
+```
+Disk No: 2071                                                           
+Disk Title: Model-S disk 2 of 2 (2070 also)                             
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: MODEL-S                                                  
+Author Version: 2.0                                                     
+Author Registration: $99.00                                             
+Special Requirements: None.                                             
+                                                                        
+MODEL-S is a CASE tool for developing data base applications. This is a 
+quality product that can rival any commercial package in its class. In  
+fact, our research indicates that MODEL-S is unique in its design and   
+functionality.                                                          
+                                                                        
+MODEL-S is a powerful software that automates the development process   
+yet does not require data processing expertise. It utilizes the rapid   
+prototyping approach to application development, integrated with        
+automatic generation of the dBASE III Plus programs and data files (.PRG
+and .DBF).                                                              
+                                                                        
+MODEL-S was designed to enable end users and data processing            
+professionals to engage in a true Joint Application Development, which  
+promotes active participation of both in most aspects of the development
+process. It helps producing systems on time, within budget, and with    
+complete user satisfaction - all that at an insignificant fraction of   
+the traditional development cost.                                       
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2071
 

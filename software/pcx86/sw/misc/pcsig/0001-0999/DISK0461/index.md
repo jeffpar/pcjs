@@ -45,6 +45,7 @@ machines:
 
 ## CONV.BAS
 
+{% raw %}
 ```bas
 10 ' COPYRIGHT 1982, RICHARD M. SCHINNELL
 20 ' This Program is called CONVERT.BAS VER 1.1 (2-13-83)
@@ -123,9 +124,43 @@ machines:
 740 NEXT I
 750 RETURN
 ```
+{% endraw %}
+
+## FILES461.TXT
+
+{% raw %}
+```
+-----------------------------------------------------------------------
+Disk No 461   Ridgetown College Programs                       v1 DS2
+----------------------------------------------------------------------
+ 
+Here is another fine collection of Farm Management tools submitted from
+Ridgetown College of Ontario. Basica is required.
+ 
+ 
+AVERAGE  DAT  Unkown ??? data file for this disk
+CONV     BAS  Converts programs from EXE or COM to BAS
+LUMBER   BAS  Lumber requirements for building
+LUMBER   DOC  Documentation for LUMBER.BAS
+METRICON BAS  Metric conversion program - source
+METRICON EXE  Metric Conversion program - compiled
+QUIZ     BAS  Do you need a farm computer quiz - source
+QUIZ     EXE  Do you need a farm computer quiz - compiled
+README   DOC  Author supplied user documentation file
+SHRINK   EXE  Shrinks BASIC files prior to compilation
+SILENCE  COM  Silences your computer speaker
+TREEFIX  BAS  Fixes output from TREE.COM
+TREEFIX  BAT  Batch file to produce useful form of TREE.COM
+USLE     BAS  Universal Soil Loss Equation
+USLE     DOC  Documentation for USLE.BAS
+WOODHEAT BAS  Economics of wood heating
+WOODHEAT TXT  Documentation for WOODHEAT.BAS
+```
+{% endraw %}
 
 ## LUMBER.BAS
 
+{% raw %}
 ```bas
 10 REM NEW SHELTER's Material Estimator
 20 REM Copyright 1984 Rodale's NEW SHELTER
@@ -209,9 +244,72 @@ machines:
 790 PRINT "TOTAL COST = $";RT:PRINT:PRINT "<END>"
 800 END
 ```
+{% endraw %}
+
+## LUMBER.DOC
+
+{% raw %}
+```
+
+ COMPUTER CARPENTRY
+
+You're going to build a house or an addition on your present home, 
+and you'll be drawing up the plans yourself and doing much of the
+construction work.  None of that worries you, but figuring out the 
+necessary supplies looks like a headache.  How many studs, joists, 
+rafters, sheets of plywood  and how much wallboard will you need,
+and how much will it all cost?  Can you really afford to do everything 
+you have in mind?
+
+Here's a computer program that will supply the answers.  Based on the
+advise given by Dale Mc Cormick in this month's (NEW SHELTER Magazine
+September 1984) Trade Secrets (page 26), it produces reliable 
+estimates of all the construction materials you will need for your project,
+and it keeps a running total of the costs.
+
+
+             USING THE PROGRAM
+
+For the most part, the program should prove to be self-explanatory, but
+here a few pointers.
+
+1. "On Center" (OC) spacing is the normal way distances are measured 
+between studs, Joists, etc.  An O.C. measurement is the distance from
+the middle of one piece of wook to the middle of the next piece.
+
+2. When estimating the number of joists needed for a floor or ceiling
+the program asks for the length of the "far wall". this is one of the 
+walls that the ends of the joists run into.
+
+3. When estimating the number of joists needed for a floor or ceiling
+the program asks if the joists meet in mid-span.  Sometimes joists run 
+all the way from one side of a room to the other side.  But when a room 
+is very wide, the joists may not be long enough or strong enough to span
+the distance without sagging.  So, short joists are used instead, and where
+they meet in the middle of the room, they are supported at mid-span by 
+a beam or a load-bearing partition.
+
+4. To figure the number of rafters and 4 x 8 sheets of plywood you will
+need for a roof, the program asks if the roof has one pitch or two.  Roofs
+commonly have two pitches, although shed-style roofs have one pitch.
+(Note: The program assumes that the slopes of a two-pitch roof have equal
+dimentions.  If your roof has two pitches of unequal length, treat your
+roof as if it were two shed-style roofs.  For example, the rafters for one of
+the pitches might be 30-foot long, while the rafters for the other might be 26 
+feet.  Estimate the number of 30-foot rafters you'll need for one shed-style
+roof, then estimate the number of 26-foot rafters you'll need for the
+"second" shed-style roof.)
+
+5. The number of studs calculated by the program may seen to be wrong but
+the extra pieces are to be used for the ends and double studs around doors
+and windows. 
+
+```
+{% endraw %}
 
 ## METRICON.BAS
 
+{% raw %}
 ```bas
 10 '
 20 ' THIS SECTION IS USED TO CONVERT THE METRIC SYSTEM TO THE IMPERIAL
@@ -1366,9 +1464,11 @@ machines:
 11510 GOSUB 11250
 11520 RETURN
 ```
+{% endraw %}
 
 ## QUIZ.BAS
 
+{% raw %}
 ```bas
 10 REM QUIZ PROGRAM - DO YOU NEED A COMPUTER?
 20 REM TYPE "CTRL Q" AT THE OPENING MENU TO PRODUCE A SUMMARY AND QUIT
@@ -2317,9 +2417,36 @@ machines:
 9450 LPRINT TAB(25);"-----------"
 9460 RETURN
 ```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+		R.C.A.T. PROGRAMS
+QUIZ     EXE    69632  Do you need a farm computer quiz - compiled
+QUIZ     BAS    32558  Do you need a farm computer quiz - source
+SHRINK   EXE    43904  Shrinks BASIC files prior to compilation
+METRICON BAS    34502  Metric conversion program - source
+METRICON EXE    75520  Metric Conversion program - compiled
+TREEFIX  BAT       78  Batch file to produce useful form of TREE.COM
+TREEFIX  BAS      624  Fixes output from TREE.COM
+USLE     BAS    17920  Universal Soil Loss Equation
+USLE     DOC     7808  Documentation for USLE.BAS
+LUMBER   BAS     3456  Lumber requirements for building
+LUMBER   DOC     2688  Documentation for LUMBER.BAS
+WOODHEAT BAS     2747  Economics of wood heating
+WOODHEAT TXT    20352  Documentation for WOODHEAT.BAS
+SILENCE  COM     7424  Silences your computer speaker
+CONV     BAS     3929  Converts programs from EXE or COM to BAS 
+README   DOC     1024  This file
+
+```
+{% endraw %}
 
 ## TREEFIX.BAS
 
+{% raw %}
 ```bas
 100 ' TREEFIX.BAS -- by Bob Raven -- adapted by PC Magazine
 101 PRINT "DO YOU WISH TO PRINT ON PRINTER? (Y OR N)";:INPUT YN$
@@ -2341,9 +2468,11 @@ machines:
 250 PRINT "Hit any key to continue...";
 260 IF INKEY$="" THEN 260 ELSE CLS:M=0:GOTO 120
 ```
+{% endraw %}
 
 ## USLE.BAS
 
+{% raw %}
 ```bas
 10   CLS:PRINT:PRINT:PRINT
 20   PRINT"This program was prepared by:"
@@ -2705,9 +2834,233 @@ machines:
 18530   IF OPION$="N" THEN 18535
 18532   PRINT#1, USING IMAGE12$;"Average residue cover required is",MINCOV,"%"
 ```
+{% endraw %}
+
+## USLE.DOC
+
+{% raw %}
+```
+
+   
+
+                  Soil Loss Evaluation on Irregular Slopes
+                       Computers Simplify Complexity
+
+
+                                     by
+
+
+                    S. Elwynn Taylor and Minoru Amemiya
+                           Department of Agronomy
+                     Iowa State University, Ames 50011
+
+
+
+
+
+
+INTRODUCTION
+
+     Once a tedious calculation, the evaluation of soil loss is greatly 
+aided by the use of today's computers.  Versions of the Universal Soil Loss 
+Equation have been written for use with tables and graphic aids and some for 
+use with hand calculators.  Most methods assume that the slope of the 
+location being evaluated for soil loss is uniform.  A method of evaluating 
+complex slopes was given by Foster and Wischmeier (1974); but as it was not 
+readily adaptable to tables and nomograms, it has not been widely applied in 
+field evaluations.  With the advent of considerable computational power into 
+personal computers, the formulation can be conveniently utilized in field 
+situations.  Even the pocket-sized computer can accomplish the calculation 
+of soil loss for a field of irregular slope.  The farmer or the conservation 
+specialist can benefit from the speed and efficiency of a computerized aid.  
+Many, if not most, fields have irregular slope, but the effect of the 
+variations has seldom been considered in the estimation of average annual 
+loss.
+     When the average slope is used to compute the average annual soil loss, 
+the computed result underestimates the loss if the slope is actually convex 
+in form.  Similarly a concave slope will lose less soil than is indicated by 
+the uniform slope computational method.  Typically the difference between 
+methods will exceed 15%.
+
+
+
+                     WHY IRREGULAR SLOPE COMPUTATIONS?
+
+    Although separate fields may have identical average slope, there can be 
+a large variation in the amount of potential soil loss between concave, 
+uniform and convex configurations.  When a slope is divided into segments, 
+it is a simple matter to identify the portions where management 
+modifications can make a significant difference in the annual loss of soil.  
+Irregular slope computational methods are ideally suited to evaluate both 
+the total loss and the percent of that loss segment by segment.
+
+
+
+     Soil loss by slope segment is not a highly complex computation, but it 
+doesn't lend itself well to tables and nomograms as do uniform slope 
+evaluations which have become commonplace to conservation workers. The 
+complexity of the irregular slope computation, however, is hardly a 
+challenge for even the simplest computer.  The time for the computations is 
+short.  No extensive collection of tables is required; however, a few tables 
+are still of benefit to the user.  Information needed as input for the 
+computer program is no more a problem to obtain than for the average slope 
+methods.
+     The user must know the length of each segment being considered and the 
+slope for the segment.  Cropping practices and residue cover may be measured 
+in the field or estimated from reported practice.  The erodibility of the 
+soil and the local rainfall factors must be obtained from tables or 
+nomograms for the state or region (which may or may not be included in the 
+computer program itself).
+    
+
+
+POCKET COMPUTER or DESK-TOP MICROCOMPUTER?
+
+     This decision is largely a matter of choice--the pocket computer can do 
+the same job that the desk top computer does, although it may be slower and 
+sometimes a bit awkward.  The field consultant and the advisor who makes an 
+occasional computation can do very well with a pocket computer system.  If 
+extended sessions of computations and "what if" operations are involved, the 
+professional microcomputer may be more desirable.
+     The Universal Soil Loss Equation with options for irregular slope 
+analysis and for evaluation according to the percent of soil cover by crop 
+residue is available for "MS-DOS" computers (IBM compatible), the Apple /// 
+microcomputer and for the Hewlett-Packard pocket computer (HP-41cv or cx).  
+As the microcomputer program is written in BASIC, it is readily adaptable to 
+other computer systems.  Further information concerning the availability of 
+the programs is available from the authors.
+
+
+
+REFERENCES
+
+U. S. Department of Agriculture.  1978.  Predicting Rainfall Erosion Losses.  
+Agricultural Handbook No. 537, Washington, D. C.
+
+Foster, G. R., and W. H. Wischmeier.  1974.  Evaluating irregular slopes for 
+soil loss prediction.  Trans. ASAE 17(2):305-309.
+
+Taylor, S. E., and M. Amemiya.  1982.  Universal Soil Loss Equation.  AG-
+100(11)-HP Revised.  Iowa State University Cooperative Extension Service.  
+Ames.
+
+
+
+
+
+
+
+
+PROGRAMS
+
+See the accompanying file called USLE.BAS for the BASIC program code for the 
+IBM PC.
+
+
+Listing of USLE (written for HP-41CV Pocket Computer)
+
+
+ 01LBL "SOIL"
+
+ 02LBL 07 "SOIL LOSS" AVIEW SF 27 FIX 2 RTN 
+
+ 08LBL 01 .5 STO 11 GTO 05 
+
+ 12LBL 02 .4 STO 11 GTO 05 
+
+ 16LBL 03 .3 STO 11 GTO 05 
+
+ 20LBL 04 RCL 06 5 X<=Y? GTO 01 X<>Y 3 X<Y? GTO 02 X<>Y 1 X<=Y? GTO 03
+   .2 STO 11 
+
+ 35LBL 05 RCL 05 72.6 / RCL 11 Y^X STO 10 RTN 
+
+ 43LBL 06 .01 RCL 06 * ATAN ENTER^ SIN X^2 65.41 * X<>Y SIN 4.56 * +
+   .065 + STO 09 RTN 
+
+ 62LBL A "R=" STO 07 GTO 00 
+
+ 66LBL B FS? 02 GTO 13 "K=" STO 08 GTO 00 
+
+ 72LBL C FS? 02 GTO 20 "SLOPE FT=" STO 05 GTO 00 
+
+ 78LBL D FS? 02 GTO 20 "G%=" STO 06 GTO 00 
+
+ 84LBL a FC? 01 GTO 08 STO 02 "OP C=" GTO 00 
+
+ 90LBL E "P=" ARCL X AVIEW STO 01 RTN 
+
+ 96LBL c FS? 02 GTO 16 FS? 01 XEQ 10 XEQ 11 RCL 04 * RCL 01 * 
+   "A=" FIX 0 ARCL X FIX 2 AVIEW RTN 
+   "RKLS=" XEQ 11 ARCL X AVIEW FC? 55 STOP RCL 10
+   "L=" ARCL X AVIEW FC? 55 STOP
+   "S=" RCL 09 ARCL X AVIEW FC? 55 STOP
+   "LS=" * ARCL X AVIEW FC? 55 STOP
+   "C=" ARCL 04 AVIEW RTN GTO 07 
+
+141LBL 11 XEQ 04 XEQ 06 RCL 07 RCL 08 * RCL 10 * RCL 09 * RTN 
+
+152LBL d "T=" STO 00 GTO 00 
+
+156LBL e FIX 2 FS? 02 GTO 17 FC? 01 GTO 12 XEQ 11 RCL 02 * RCL 01 * 
+   1/X RCL 00 * 
+
+
+170LBL 19 LN .035 / CHS 3 + FIX 0 "MN RS%=" ARCL X AVIEW FIX 2 RTN
+   3 - .035 * CHS E^X RCL 02 * GTO 24 GTO 00 
+
+193LBL 10 RCL 03 3 - .035 * CHS E^X RCL 02 * STO 04 RTN 
+
+205LBL b FC? 01 GTO c STO 03 "% RS=" GTO 00 
+
+211LBL 12 XEQ 11 RCL 01 * 1/X RCL 00 * 
+
+218LBL 24 "MX C=" GTO 00 
+
+221LBL 08 STO 04 "C=" 
+
+224LBL 00 ARCL X AVIEW RTN GTO 07 
+
+229LBL 13 FIX 0 "NO. SEGS? " AVIEW STOP VIEW X .001 * 1 + STO 12 0
+   STO 65 STO 13 STO 64
+
+244LBL 15 FIX 0 XEQ 14
+   " K="   AVIEW STOP FIX 2 VIEW X STO 08 FIX 0 XEQ 14
+   " FT.=" AVIEW STOP VIEW X STO 05 ST+ 13 XEQ 14
+   " G%="  AVIEW STOP VIEW X STO 06
+   "WAIT"  AVIEW XEQ 06 XEQ 04 RCL 13 RCL 11 1 + Y^X 72.6 RCL 11 Y^X
+   / RCL 64 RCL 09 * X<>Y STO 64 RCL 09 * X<>Y - RCL 08 * 0 X>Y? 
+   GTO 23 X<>Y RCL 12 INT 70 + X<>Y STO IND Y ST+ 65 "d" ARCL 12 "~="
+   FIX 2 ARCL X AVIEW TONE 7 ADV FC? 55 STOP ISG 12 GTO 15 
+
+314LBL 22 RCL 65 RCL 13 / STO 66 FIX 3 "KLS=" ARCL X AVIEW FIX 2 
+   STOP FIX 0 RCL 12 INT 1 - .001 * 1 + STO 12 
+
+335LBL 21 XEQ 14 "~=" RCL 12 INT 70 + RCL IND X RCL 65 / 100 * ARCL X
+   "~%d" AVIEW FC? 55 STOP ISG 12 GTO 21 FIX 2 RTN GTO 20 
+
+357LBL 16 FS? 01 XEQ 10 RCL 04 RCL 01 * RCL 07 * RCL 66 * "A=" FIX 0
+   GTO 00 
+
+370LBL 14 "SEG " ARCL 12 RTN 
+
+374LBL 17 RCL 66 RCL 01 * RCL 07 * 1/X RCL 00 * FS? 01 GTO 18 
+   GTO 24 GTO 00 
+
+387LBL 18 RCL 02 / GTO 19 
+
+391LBL 23 "INVALID SEG." AVIEW PSE RCL 05 ST- 13 GTO 22 
+
+398LBL 20 "IRR. SLOPE" AVIEW END
+
+Note: the "~" indicates that the "append" symbol is used here.
+
+```
+{% endraw %}
 
 ## WOODHEAT.BAS
 
+{% raw %}
 ```bas
 10  REM  NEW SHELTER'S WOOD HEAT PROGRAM, WRITTEN BY ROGER RAWLINGS
 20  DIM K$(1),W$(10): GOSUB 320: PRINT "WOOD HEAT PROGRAM": PRINT
@@ -2751,6 +3104,583 @@ machines:
 400  PRINT "IF YOUR PRESENT FUEL COSTS": PRINT "$";FC / PH;" A YEAR AND YOU": PRINT "SWITCH TO ";W$;" COSTING": PRINT "$";CC;" PER CORD.": RETURN
 410  GOSUB 320: PRINT "(END)": END
 ```
+{% endraw %}
+
+## WOODHEAT.TXT
+
+{% raw %}
+```
+
+                                                           INSTRUCTIONS
+
+                                               For Locating, Downloading and Running
+
+                                               THE WOOD HEAT CONVERSION CALCULATOR.
+
+
+
+                               ---------------------------------------------------------------------
+
+
+1.  Print out or download Answer # 3 of this conference.  It contains a list of Stove efficiency figures and fuel BTU contents. 
+
+It is an easy to use reference list for entering the proper figures as you run the Wood Heat Conversion program. 
+
+
+2.  Return to the Source command prompt by typing: Quit   at the Action-> prompt. 
+
+
+3.  Prepare to download the program listing as a BASIC file into your computers memory. 
+
+
+4.  To retrieve the program listing from the Sharefiles area: 
+
+
+     At the command prompt enter:  TYPSHR 
+
+     At the next prompt enter:     BBZ465 
+
+     And then enter the filename:  WOODHEAT 
+
+  
+
+
+The program listing will then be displayed as you are downloading it. 
+
+
+5.  Although this program is written in BASIC and will run on virtually any kind of micro computer, you may have to make a few 
+
+modifications.  In LINE 320 the command: HOME  is used to clear the screen.  Depending on your brand of computer, you may have to 
+
+replace that command with: CLS 
+
+
+6.  You are now ready to run the program using the lists of efficiency and BTU figures as a reference. 
+
+
+
+Answer 2 (of 4) NEW SHELTER, on WED, OCT 24 1984 at 17:21 (4562 characters) 
+
+
+Running the Program 
+
+
+Here are a few tips on how to get the most from the program: 
+
+
+
+1) The program begins by asking several questions about the heating fuel you presently use.  If you use more than one heating 
+
+fuel, choose the one you would like to replace with firewood.  For example, let's say you now use oil for your primary heating 
+
+fuel and electricity for back-up heat.  You want to install a woodstove to replace electricity as your back up.  OK, for you, the 
+
+first questions in the program apply to electricity. 
+
+
+2) The program will ask how many fuel units you used for heat last year.  A "fuel unit" is a gallon, therm, cord, etc.--whatever 
+
+unit of measure applies to the heating fuel you use.  To continue with the example we used above, the unit for electricity is a 
+
+kilowatt hour.  If you used 3000 kilowatt hours for heat last year, type "3000." 
+
+
+Note: Sometimes it's hard to know how much fuel you used for heat and how much you used for other purposes.  Electricity is a case 
+
+in point.  Besides heat, you presumably also used electricity for light, appliances, your computer, etc.  To decide how many 
+
+kilowatt hours probably went for heat, check your electric bills from months when you neither heated the home nor used electric 
+
+air conditioning.  The average electrical consumption from these months is the amount of electricity you normally use for lights, 
+
+appliances, and so forth.  Subtract this amount from the total electrical usage during each month when you used electric heat. 
+
+The result will be a good estimate of the amount of electricity you used for heat.  For example, if you used an average of 1,000 
+
+kilowatt hours during months when you neither heated nor air conditioned, and if you used 5,000 kilowatt hours during January, 
+
+then it's safe to say you used about 4,000 kilowatt hours for heat. 
+
+
+3) When answering the questions, type numbers only.  Don't type "4000 kilowatt hours," for example--just type "4000."  Or when 
+
+telling how much money you spent for 3000 kilowatt hours, don't type" $320," just type 320. 
+
+
+4) The chart in Answer #3 of this conference tells how many BTUs (British Thermal Units) are present in a fuel unit.  For example, 
+
+one kilowatt hour contains 3,413 BTUs. 
+
+
+5) To learn the efficiency rating of your heating system, consult the chart also in Answer #3 of this conference.  Use the same 
+
+chart to learn the efficiency rating of the woodburning device you want to install. 
+
+
+6) The program lets you specify how much heat you want to get from your woodburning device.  It asks, "Percentage of your present 
+
+heater's heat output to be delivered by the woodburning device?"  If you want the woodburner to replace your electric heaters 
+
+completely, type "100" (for 100 percent).  If you want the woodburner to contribute half of the heat that you now get from 
+
+electricity, type "50."  The program will accept any percentage from 1 to 100. 
+
+
+7) The program gives two sets of results.  First, it tells you how many cords of wood you'll have to burn, how much money this 
+
+will cost, and how much you will save each year by burning this amount of wood.  Next, the program tells you how long the 
+
+woodburning device will take to pay for itself.  (Note: If the computer gives you a minus number for annual savings, this means 
+
+wood will cost you more than your present fuel.  Thus, a result of -100 means that wood will cost $100 more each year than your 
+
+present heating fuel.) 
+
+
+8) The program is highly flexible.  After giving you the results of its calculations, it lets you test alternatives.  For example, 
+
+if you're unsure whether you gave an accurate estimate of the amount of electricity you used for heat, the program lets you revise 
+
+your estimate.  The program also lets you revise the type of woodburner you want to buy, the amount of heat you want to get from 
+
+wood, and the type of wood you will burn.  In each case, the program instantly recalculates its results and presents them to you. 
+
+
+9) The program will work on most computers exactly as shown here.  In some rare cases, however, you may need to modify the program 
+
+slightly to suit your computer. For example, we have included several commands on most lines of the program.  Thus, line 130 
+
+consists of three commands, separated by colons.  If your computer will only accept one command per line, you should break line 
+
+130 into three lines: 
+
+
+          130 BC = 19000000 
+
+          131 W$ = "HARDWOOD" 
+
+          132 GOTO 160 
+
+  
+
+
+nOfDATAPAC: parity error 
+
+
+
+Answer 3 (of 4) NEW SHELTER, on WED, OCT 24 1984 at 17:30 (1784 characters) 
+
+
+                                                        System Efficiencies
+
+
+                                             -----------------------------------------
+
+
+
+                                                       Fuel Oil or Kerosene
+
+
+New high-efficiency furnace  .85 
+
+
+Recently tuned furnace with stack damper  .7 
+
+
+Recently tuned furnace with no stack damper  .6 
+
+
+Ordinary, untuned furnace  .5 
+
+
+
+                                                   Natural Gas, LPG, or Propane
+
+
+New high-efficiency furnace  .9 
+
+
+Above-average furnace with pilotless ignition  .8 
+
+
+Recently tuned furnace  .7 
+
+
+Ordinary, untuned furnace  .6 
+
+
+
+                                                               Coal
+
+
+New high-efficiency furnace  .7 
+
+
+Recently tuned furnace with stack damper  .6 
+
+
+Recently tuned furnace with no stack damper  .55 
+
+
+Ordinary, untuned furnace  .5 
+
+
+
+                                                            Electricity
+
+
+Resistance heat  .95 
+
+
+Heat pump used in warm climate  2.0 
+
+
+Heat pump used in cold climate  1.5 
+
+
+
+                                                               Wood
+
+
+Wood furnace or topflight woodstove  .75 
+
+
+Ordinary woodstove  .5 
+
+
+Fireplace or inferior woodstove  .25 
+
+
+
+
+
+                                                           BTU Contents
+
+
+                                                      ----------------------
+
+
+  
+
+Fuel            Unit                       BTUs 
+
+  
+
+Oil             Gallon                     138,700 
+
+Kerosene        Gallon                     135,000 
+
+Natural Gas     Therm                      100,000 
+
+                Cubic Foot                 1,025 
+
+                Hundred Cubic Feet         102,500 
+
+Propane or 
+
+LPG             Therm                      100,000 
+
+                Cubic Foot                 2,500 
+
+                Hundred Cubic Feet         250,000 
+
+                Gallon                     91,000 
+
+                Pound                      21,500 
+
+Coal            Ton                        27,000,000 
+
+Hardwood        Cord                       19,000,000 
+
+Softwood        Cord                       15,000,000 
+
+Electricity     Kilowatt Hour              3,413 
+
+  
+
+
+
+
+Answer 4 (of 4) NEW SHELTER, on WED, OCT 24 1984 at 17:37 (10986 characters) 
+
+
+                                                           New Shelter's
+
+                                                  WOOD HEAT CONVERSION CALCULATOR
+
+
+
+                                                       Program Documentation
+
+
+                                  --------------------------------------------------------------
+
+
+
+LINE 20  The first command dimensions the string variables K$ and W$.  The next commands clear the screen (GOSUB 320), print the 
+
+name of the program, and print a blank line. 
+
+
+LINE 30 prints the sentence "THE FOLLOWING QUESTIONS APPLY TO THE FUEL YOU WANT TO REPLACE WITH WOOD."  Then the second command 
+
+prints a blank line. 
+
+
+LINE 40 gets two inputs: FU (the number of fuel units used for heat last year) and BU (the number of BTUs in one fuel unit). 
+
+
+LINE 50 gets one input: FC (the amount of money spent on the heating fuel).  Then the line clears the screen. 
+
+
+LINE 60  The first three commands get an input: SE (the system efficiency of the present heating system).  The fourth command 
+
+calculates BT (the total number of BTUs supplied by the heating system).  The final two commands go to subroutines. 
+
+
+LINE 70  After clearing the screen, this line prints the question "PERCENTAGE OF YOUR PRESENT HEATER'S HEAT OUTPUT TO BE DELIVERED 
+
+BY THE WOODBURNING DEVICE=" 
+
+
+LINE 80  The first command gets an input: PH (the percentage of the present heater's heat output to be supplied by wood heat). 
+
+The second command divides PH by 100 so that BT (the total number of BTUs) and FC (the amount of money spent on the present 
+
+heating fuel) can be multiplied by PH in lines 330 and 280.  The third command tells the computer to repeat line 80 if PH is less 
+
+than or equal to 0 or if it is greater than 1. 
+
+
+LINE 90 goes to the subroutine at line 330. 
+
+
+LINE 100  After clearing the screen, this line asks "WHAT KIND OF WOOD WILL YOU BURN IN THE NEW WOODBURNING DEVICE?" 
+
+
+LINE 110 prints the three types of wood the user can choose from in answering the question printed by line 100. 
+
+
+LINE 120  The first command gets an input: W (the type of wood to be burned).  The second command sends the computer to the 
+
+appropriate line, based on the type of wood chosen. 
+
+
+LINES 130-150  The first command in each line assigns a value to BC (the number of BTUs in one cord of the type of wood chosen); 
+
+the second command assigns a value to W$ (the name of the type of wood chosen).  The final command in both line 130 and 140 tells 
+
+the computer to proceed to line 160 (line 150 does not need this command, since the computer will automatically go to line 160 
+
+after executing line 150). 
+
+
+LINE 160  After going to the subroutines at lines 390 and 320, line 160 gets an input: CC (the cost of one cord of the type of 
+
+wood to be used in the woodburner). 
+
+
+LINE 170 calculates CO (the number of cords that will be needed to supply the desired amount of heat) and WC (the cost of this 
+
+many cords).  Then the line goes to the subroutine at line 340. 
+
+
+LINES 180-190 present the first batch of results: CO (the number of cords needed), WC (the cost of this many cords), and AS (the 
+
+annual savings achieved by burning wood). 
+
+
+LINE 200  After going to the subroutines at lines 300 and 390, this line sends the computer to either line 210 or 220.  If the 
+
+annual savings reported by line 190 are less than or equal to zero (i.e., if burning wood will not result in financial savings), 
+
+the computer is sent to line 220.  Otherwise, it goes to line 210. 
+
+
+LINE 210 tells how many years the woodburning device will take to pay for itself (PB).  In presenting PB, it uses the formula INT 
+
+(PB * 10) / 10 so that only one decimal position will be printed.  To print all decimal positions, replace the formula with PB. 
+
+Thus, the second command in line 210 would become 
+
+
+                                                     PRINT "IN "; PB; "YEARS"
+
+
+
+Line 210 then goes to two subroutines, and it finishes by sending the computer to line 230. 
+
+
+LINE 220  If the woodburning device will never pay for itself (because the annual savings from burning wood are less than or equal 
+
+to zero), this line delivers the bad news. 
+
+
+LINES 230-240 print the continuation options. 
+
+
+LINE 250 prints a blank line, then it gets an input: OP (the continuation option chosen).  The third command sends the computer to 
+
+the appropriate line, based on the option chosen. 
+
+
+LINE 260  If, at line 250, the user selects options 2 or 4, the computer goes to line 260, which prints a blank line and then gets 
+
+an input: X (the new value for the amount of heat desired or for the amount of money paid for heat).  The fourth command clears 
+
+the screen, then the fifth command sends the computer to either line 270 or 280, depending on the option chosen in line 250. 
+
+
+LINE 270 calculates new values of BT (the total number of BTUs used) and FC (the amount of money spent) so that they correspond to 
+
+the new PH (the percentage of the present heater's heat output to be supplied by wood heat).  The line begins by returning BT and 
+
+FC to their original values.  It does this by dividing BT and FC by the old PH.  (Line 90 sent the computer to the subroutine at 
+
+line 330, where BT and FC were multiplied by PH.  Thus, to reverse the effects of line 330, line 270 divides BT and FC by PH). 
+
+The third command in line 270 then creates a new value for PH (PH = X / 100).  Next, the fourth command in the line goes to the 
+
+subroutine at line 330 where BT and FC are multiplied by the new PH.  Thus, line 270 has cancelled the effect of the old PH and it 
+
+has modified BT and FC so that they correspond to the new PH.  Finally, the fifth command in line 270 sends the computer to line 
+
+170. 
+
+
+LINE 280 calculates a new value for FC (the amount of money spent) before sending the computer to line 170.  It does this by 
+
+multiplying FC by PH (the percentage of the present heater's heat output to be supplied by wood heat).  For example, at line 260 
+
+you may have told the computer that you spent $500 for heat last year. But previously you had set the value of PH at .5 (i.e., you 
+
+had said that you want the woodburner to give 50% as much heat as you got last year from your present heating fuel).  Thus, line 
+
+280 multiplies 500 by .5 to get 250, the new value of FC. 
+
+
+LINE 290  If, at line 250, the user selects option 1, the computer goes to line 290.  After clearing the screen, line 290 resets 
+
+BC (the number of BTUs received from a cord) to its original value.  It does this by dividing BC by WE (the system efficiency of 
+
+the woodburner), thereby reversing the effect of the subroutine at line 380 (the computer has previously gone to the subroutine at 
+
+line 380, thanks to a command in line 160).  Line 290 then goes to the subroutine at line 370 to get new values of WE and CW (the 
+
+cost of the new woodburner).  Next, line 370 goes to the subroutine at line 380 to establish a new value of BC that corresponds to 
+
+the new value of WE.  For example, if the new value of WE is .75, then 75 percent of the BTUs in a cord of wood will be released 
+
+as usable heat.  Thus, if you will be burning hardwoods (which have 19 million BTUs per cord), you will receive 14.25 million BTUs 
+
+from each cord.  Finally, line 290 sends the computer to line 170. 
+
+
+LINE 300 is a subroutine that prints a blank line followed by "PRESS THE RETURN OR ENTER KEY."  The line then gets an input: K$ (a 
+
+keystoke; the computer will not proceed to the next stage of the program until the user presses the Return or Enter key). 
+
+
+LINE 320 is a subroutine that clears the screen.  If your computer uses a screen-clearing command other than HOME, substitute it 
+
+for HOME.  If your computer uses CLS, for example, then line 320 should be 
+
+
+                                                         320  CLS: RETURN
+
+
+LINE 330 is a subroutine that adjusts the value of BT (the total number of BTUs used for heat) and FC (the amount of money spent) 
+
+so that they correspond to the value of PH (the percentage of the present heater's heat output that you want the woodburning 
+
+device to deliver).  For example, if you received 1,000 BTUs from your present heater at a cost of $100, and you want the 
+
+woodburner to deliver 40 percent of the heat your got from your present heater, line 330 will reduce BT to 400 and FC to 40.  That 
+
+is, you want the woodburner to deliver 400 BTUs, and the cost of getting this many BTUs from your present heater is $40. 
+
+
+LINES 340-360 are a subroutine that calculate annual savings and payback. 
+
+
+                                                      -----------------------
+
+
+LINE 340 calculates AS (the annual savings you will achieve by burning wood).  If the annual savings are zero, the second command 
+
+sends the computer to line 360 (the reason for this command is to avoid a division by zero error in line 350). 
+
+
+LINE 350 calculates PB (the number of years the woodburner will take to pay for itself). 
+
+
+LINE 360  If AS is zero (line 340), line 360 sets PB (payback) equal to zero. 
+
+
+                                                      -----------------------
+
+
+LINE 370 is a subroutine that gets two inputs: WE (the system efficiency of the woodburning device you want to install) and CW 
+
+(the cost of buying and installing this woodburner). 
+
+
+LINE 380 is a subroutine that adjusts BC (the number of BTUs received from a cord of wood) to correspond to WE (the system 
+
+efficiency of the woodburning device). For example, if a cord of wood contains 19 million BTUs, and a woodburner has an efficiency 
+
+of .5, then the woodburner will deliver half of those BTUs: 9.5 million. 
+
+
+LINE 390 is a subroutine that prints "A WOODBURNING DEVICE WITH A SYSTEM EFFICIENCY OF " followed by WE (the woodburner's system 
+
+efficiency). 
+
+
+LINE 400 is a subroutine used by both line 210 and 220.  For example, when used in conjunction with line 220, line 400 might leave 
+
+this message on the screen: 
+
+
+                 IF YOUR PRESENT FUEL COSTS 
+
+                 $500 A YEAR AND YOU 
+
+                 SWITCH TO HARDWOOD COSTING 
+
+                 $110 PER CORD. 
+
+
+
+LINE 410  If, at line 250, the user selects option 5, the computer goes to this line which clears the screen, prints "(END)," and 
+
+then ends the run. 
+
+
+
+
+
+                                                         LIST OF VARIABLES
+
+
+                                     ---------------------------------------------------------
+
+
+AS      annual savings from burning wood BC      BTUs in, or received from, a cord of wood BT      total number of BTUs used for 
+
+heat BU      BTUs in one fuel unit CM      cost of a cord of wood CO      number of cords needed FU      number of fuel units used 
+
+for heat K$      a keystroke NV      new value for variable that is to be changed MW      cost of new woodburner OP      option 
+
+chosen PE      percent of home's total heat to be supplied by wood PK      payback period for new woodburner SE      system 
+
+efficiency of present heating system TM      fuel cost (total amount of money spent for heating fuel) WE      system efficiency of 
+
+woodburner you will install WM      cost of the amount of wood you will need to buy WO      type of wood to be burned W$      name 
+
+of type of wood to be burned 
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -14,6 +14,50 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2502.TXT
+
+{% raw %}
+```
+Disk No: 2502                                                           
+Disk Title: PC System Manager 1 of 2 (also #2503)                       
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: PC System Manager                                        
+Author Version: 2.0                                                     
+Author Registration: $19.95                                             
+Special Requirements: Hard drive.                                       
+                                                                        
+PC SYSTEM MANAGER is a hard drive menu system which can make life easier
+for any hard drive user.  No more typing of long DOS and program        
+commands.  Just enter the command once in PC SYSTEM MANAGER and you now 
+have access to that command with just the touch of a key!  Let PC SYSTEM
+MANAGER remember when it's time to run your routine applications.  You  
+can start up to 30 programs automatically based on time, date, day of   
+week and day of month.  Use password protection at the menu and/or      
+program level to help keep confidential files in the right hands.  The  
+user id feature keeps track of who, when and what was done on your PC.  
+Produces four tracking reports.  Features window screens, pop-up        
+messages, and a screen blanking option to help keep your monitor free   
+from screen burn.  Allows "reminder" notes regarding printer setup, disk
+insertion, etc. to be displayed before a program starts.  Customized    
+prompts for command line replaceable parameters may be created.  To get 
+you started, a DOS menu is included with 16 useful commands.  PC SYSTEM 
+MANAGER is loaded with options but is surprisingly easy to learn.       
+There's no need to learn a sophisticated menu language.  The PC System  
+Maintenance Manager walks you through adding, editing or deleting menu  
+entries.                                                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989-1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2502
 

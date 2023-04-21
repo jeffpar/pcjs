@@ -40,6 +40,308 @@ machines:
     ???      BAT  PASCAL batch file utilities
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #132, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  README3 .            CRC = 8A 03
+
+--> FILE:  ARCHIVE .AR          CRC = 55 EA
+
+--> FILE:  CHARCNT .AR          CRC = B1 49
+
+--> FILE:  ECHOARG .AR          CRC = 2B 55
+
+--> FILE:  FINDP   .AR          CRC = 12 3A
+
+--> FILE:  FMT     .AR          CRC = 3F 93
+
+--> FILE:  KWIC    .AR          CRC = 88 67
+
+--> FILE:  LINECNT .AR          CRC = 28 C7
+
+--> FILE:  MACRO   .AR          CRC = 21 5F
+
+--> FILE:  PRIMS   .AR          CRC = AE 5E
+
+--> FILE:  PRINTF  .AR          CRC = 0F BE
+
+--> FILE:  SORTF   .AR          CRC = FA 58
+
+--> FILE:  TED     .AR          CRC = 84 DE
+
+--> FILE:  TRANSLIT.AR          CRC = 9E 4C
+
+--> FILE:  UNIQUE  .AR          CRC = 80 1D
+
+--> FILE:  UNROTATE.AR          CRC = E0 3E
+
+--> FILE:  UTILITY .AR          CRC = 1E FE
+
+--> FILE:  WORDCNT .AR          CRC = 3A 59
+
+--> FILE:  GETFCB  .ASM         CRC = 9F 55
+
+--> FILE:  GLOBCONS.INC         CRC = 9F 9F
+
+--> FILE:  GLOBTYPS.INC         CRC = A4 E3
+
+--> FILE:  GLOBVARS.INC         CRC = 00 00
+
+--> FILE:  ADDSTR  .DCL         CRC = 00 00
+
+--> FILE:  CLOSE   .DCL         CRC = 00 00
+
+--> FILE:  CREATE  .DCL         CRC = 00 00
+
+--> FILE:  CTOI    .DCL         CRC = 00 00
+
+--> FILE:  EQUAL   .DCL         CRC = 00 00
+
+--> FILE:  ERROR   .DCL         CRC = 00 00
+
+--> FILE:  ESC     .DCL         CRC = 00 00
+
+--> FILE:  FCOPY   .DCL         CRC = 00 00
+
+--> FILE:  FLUSH   .DCL         CRC = 00 00
+
+--> FILE:  GDATE   .DCL         CRC = 00 00
+
+--> FILE:  GETARG  .DCL         CRC = 00 00
+
+--> FILE:  GETC    .DCL         CRC = 00 00
+
+--> FILE:  GETCF   .DCL         CRC = 00 00
+
+--> FILE:  GETLINE .DCL         CRC = 00 00
+
+--> FILE:  GTIME   .DCL         CRC = 00 00
+
+--> FILE:  IMAX    .DCL         CRC = 00 00
+
+--> FILE:  IMIN    .DCL         CRC = 00 00
+
+--> FILE:  INDEX   .DCL         CRC = 00 00
+
+--> FILE:  INITIO  .DCL         CRC = 00 00
+
+--> FILE:  ISALPHAN.DCL         CRC = 00 00
+
+--> FILE:  ISDIGIT .DCL         CRC = 00 00
+
+--> FILE:  ISLETTER.DCL         CRC = 00 00
+
+--> FILE:  ISLOWER .DCL         CRC = 00 00
+
+--> FILE:  ISUPPER .DCL         CRC = 00 00
+
+--> FILE:  ITOC    .DCL         CRC = 00 00
+
+--> FILE:  LENGTH  .DCL         CRC = 00 00
+
+--> FILE:  MESSAGE .DCL         CRC = 00 00
+
+--> FILE:  MUSTCREA.DCL         CRC = 00 00
+
+--> FILE:  MUSTOPEN.DCL         CRC = 00 00
+
+--> FILE:  NARGS   .DCL         CRC = 00 00
+
+--> FILE:  OPEN    .DCL         CRC = 00 00
+
+--> FILE:  PUTC    .DCL         CRC = 00 00
+
+--> FILE:  PUTCF   .DCL         CRC = 00 00
+
+--> FILE:  PUTDEC  .DCL         CRC = 00 00
+
+--> FILE:  PUTSTR  .DCL         CRC = 00 00
+
+--> FILE:  REMOVE  .DCL         CRC = 00 00
+
+--> FILE:  SCOPY   .DCL         CRC = 00 00
+
+--> FILE:  CMDFILE .BAT         CRC = 00 00
+
+--> FILE:  LKTOOL  .BAT         CRC = 00 00
+
+--> FILE:  MKFLOP1 .BAT         CRC = 7E D1
+
+--> FILE:  MKFLOP2 .BAT         CRC = EB 56
+
+--> FILE:  MKFLOP3 .BAT         CRC = 34 D1
+
+--> FILE:  MKOBJ   .BAT         CRC = 00 00
+
+--> FILE:  MKPR    .BAT         CRC = 00 00
+
+--> FILE:  MKPRIMS .BAT         CRC = 16 C0
+
+--> FILE:  MKTOOL  .BAT         CRC = 00 00
+
+--> FILE:  MKUT    .BAT         CRC = 00 00
+
+--> FILE:  MKUTILS .BAT         CRC = FE FE
+
+--> FILE:  ADDSTR  .OBJ         CRC = E8 2D
+
+--> FILE:  CLOSE   .OBJ         CRC = BA F8
+
+--> FILE:  CREATE  .OBJ         CRC = 74 F2
+
+--> FILE:  CTOI    .OBJ         CRC = 58 81
+
+--> FILE:  EQUAL   .OBJ         CRC = DC 2E
+
+--> FILE:  ERROR   .OBJ         CRC = 15 A1
+
+--> FILE:  ESC     .OBJ         CRC = 95 75
+
+--> FILE:  FCOPY   .OBJ         CRC = 85 B4
+
+--> FILE:  FLUSH   .OBJ         CRC = 8E 53
+
+--> FILE:  GDATE   .OBJ         CRC = 52 7F
+
+--> FILE:  GETARG  .OBJ         CRC = A9 4E
+
+--> FILE:  GETC    .OBJ         CRC = 96 78
+
+--> FILE:  GETCF   .OBJ         CRC = 75 80
+
+--> FILE:  GETFCB  .OBJ         CRC = 00 00
+
+--> FILE:  GETLINE .OBJ         CRC = A9 F3
+
+--> FILE:  GTIME   .OBJ         CRC = 90 78
+
+--> FILE:  IMAX    .OBJ         CRC = 54 FE
+
+--> FILE:  IMIN    .OBJ         CRC = B2 DD
+
+--> FILE:  INDEX   .OBJ         CRC = 18 75
+
+--> FILE:  INITIO  .OBJ         CRC = 65 45
+
+--> FILE:  ISALPHAN.OBJ         CRC = 8B 5C
+
+--> FILE:  ISDIGIT .OBJ         CRC = 3E 55
+
+--> FILE:  ISLETTER.OBJ         CRC = E6 68
+
+--> FILE:  ISLOWER .OBJ         CRC = EA 83
+
+--> FILE:  ISUPPER .OBJ         CRC = A5 BC
+
+--> FILE:  ITOC    .OBJ         CRC = F5 1E
+
+--> FILE:  LENGTH  .OBJ         CRC = 1F 53
+
+--> FILE:  MESSAGE .OBJ         CRC = 10 3C
+
+--> FILE:  MUSTCREA.OBJ         CRC = 68 C9
+
+--> FILE:  MUSTOPEN.OBJ         CRC = 53 7A
+
+--> FILE:  NARGS   .OBJ         CRC = 49 93
+
+--> FILE:  OPEN    .OBJ         CRC = DC 86
+
+--> FILE:  PUTC    .OBJ         CRC = 58 D2
+
+--> FILE:  PUTCF   .OBJ         CRC = 2C 2A
+
+--> FILE:  PUTDEC  .OBJ         CRC = EE BB
+
+--> FILE:  PUTSTR  .OBJ         CRC = 63 D4
+
+--> FILE:  REMOVE  .OBJ         CRC = AD 4E
+
+--> FILE:  SCOPY   .OBJ         CRC = 14 2F
+
+ ---------------------> SUM OF CRCS = C2 D3
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## GETFCB.ASM
+
+{% raw %}
+```
+	 TITLE	PASCAL CALLABLE ROUTINE TO FILL FCB FROM A DIRECTORY
+	 PAGE  ,132
+;
+; FUNCTION GETFCB (VARS IFCB : DOSFCB;	  {input fcb}
+;		   VARS OFCB : DOSFCB;	  {output fcb}
+;		   CONST FUNC: INTEGER);  {1=RESTART SEARCH, 2=CONTINUE}
+;
+; You fill the IFCB with the filename info, and OFCB will be returned with
+; all the FCB info for the file.  Filename may contain wild characters on
+; initial call.  Returns TRUE if successful, FALSE otherwise.
+;
+;
+CSEG	 SEGMENT
+	 ASSUME CS:CSEG
+PUBLIC	 GETFCB
+GETFCB	 PROC	FAR
+	 PUSH	BP	      ; SAVE BP REG
+	 MOV	DI,DS	      ; SAVE DS FOR PASCAL
+	 MOV	BP,SP	      ; BP = BASE OF PARM LIST
+	 MOV	BX,[BP]+10    ; SET DS/DX TO OUTPUT FCB ADDRESS
+	 MOV	DS,BX
+	 MOV	DX,[BP]+8
+	 MOV	AH,1AH	      ; SET DISK TRANSFER ADDRESS
+	 INT	21H	      ; CALL DOS TO SET DTA
+	 MOV	BX,[BP]+14    ; SET DS/DX TO INPUT FCB ADDRESS
+	 MOV	DS,BX
+	 MOV	DX,[BP]+12
+	 MOV	AH,11H	      ; SPECIFY DOS SEARCH FOR FIRST DIRECTORY ENTRY
+	 MOV	SI,[BP]+6
+	 CMP	SI,02H	      ; SEE IF WE WANT TO CONTINUE INSTEAD
+	 JNE	L1	      ; NOPE
+	 MOV	AH,12H	      ; SPECIFY DOS SEARCH CONTINUE
+L1:
+	 INT	21H	      ; CALL DOS TO GET DIRECTORY ENTRY
+	 CMP	AL,0	      ; SEE IF ZERO RETURN CODE
+	 JNE	L2	      ; NO, SET ERROR CODE
+	 MOV	AX,1	      ; YES, SET RETURN TO 'TRUE'
+	 JMP	RETURN	      ; GET OUT OF HERE
+L2:
+	 MOV	AX,0	      ; SET RETURN TO 'FALSE'
+RETURN:
+	 MOV	DS,DI	      ; RESTORE DS REGISTER
+	 POP	BP	      ; RESTORE BP REG
+	 RET	0AH	      ; RETURN TO PASCAL
+GETFCB	 ENDP
+CSEG	 ENDS
+	 END
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0132
 

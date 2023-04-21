@@ -14,6 +14,72 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2580.TXT
+
+{% raw %}
+```
+Disk No: 2580                                                           
+Disk Title: TEMPLEXX: The Template Multiplexer                          
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: TEMPLEXX: The Template Multiplexer                       
+Author Version: 1.0                                                     
+Author Registration: $15.00                                             
+Special Requirements: A hard drive and applications program.            
+                                                                        
+Keyboard templates are those little plastic instruction lists that lay  
+on your keyboard or around your function keys.  They can be a lot of    
+help -- if you can find one.                                            
+                                                                        
+TEMPLEXX is a program that ends searching and fumbling for templates or 
+other program helpers.  TEMPLEXX is a memory resident (TSR) program that
+lets you ``pop-up'' a helpful template while you're using your favorite 
+word processor, database, or any other application program.             
+                                                                        
+TEMPLEXX is smart!  Press the hot key for a Help template and TEMPLEXX  
+automatically senses the program and grabs the correct template to      
+display.  It finds the help you need to quickly return to your          
+application program.                                                    
+                                                                        
+Create a template for any application if it is not already included in  
+the completed templates for many popular programs.   Templates for the  
+following programs are included:                                        
+                                                                        
+~ dBASE IV                                                              
+                                                                        
+~ DisplayWrite                                                          
+                                                                        
+~ Lotus 1-2-3                                                           
+                                                                        
+~ Microsoft WORD                                                        
+                                                                        
+~ Multimate                                                             
+                                                                        
+~ PFS Professional Write                                                
+                                                                        
+~ QuickBasic and QuickC                                                 
+                                                                        
+~ R:BASE                                                                
+                                                                        
+~ SuperCalc                                                             
+                                                                        
+~ WordPerfect                                                           
+                                                                        
+~ WordStar                                                              
+                                                                        
+~ And more.                                                             
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2580
 

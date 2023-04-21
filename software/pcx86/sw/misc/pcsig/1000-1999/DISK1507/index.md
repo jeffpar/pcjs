@@ -62,6 +62,116 @@ machines:
     instruction manual is included.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1507.TXT
+
+{% raw %}
+```
+Disk No: 1507                                                           
+Disk Title: XYSee 1 of 2 (1508 also)                                    
+PC-SIG Version: S2.2                                                    
+                                                                        
+Program Title: XYSee                                                    
+Author Version: 2.5.0                                                   
+Author Registration: $30.00                                             
+Special Requirements: CGA and a text editor.                            
+                                                                                                                                                
+XYSEE allows teachers to create interactive computer tutorials for      
+teaching high school and college level algebra, geometry and            
+trigonometry.  At last, here's a method for the time-crunched teacher   
+to be able to provide special, individualized help for the struggling   
+student and enrichment for the advanced student!                        
+                                                                        
+XYSEE enhances students' understanding by incorporating graphics to     
+help them visualize the curve represented by a given equation, and the  
+effect upon the form of the curve when parameters within the equation   
+change.  Tackles such subjects as points and lines, intermediate        
+quadratics and trigonometrics, and advanced parametrics and             
+composites.  In addition, interactive coverage is extended to forms     
+such as triangles, user defined polygons (structured spline and         
+free-form), and designs utilizing artistic mathematics.                 
+                                                                        
+The secret of this menu-driven instructional system lies in its use of  
+macros which allow the instructor to formulate complex problems and     
+demonstrate mathematical principles.  System features include moving    
+window displays, function-sensitive statistics, and context-sensitive   
+help screens.  With progressive overlays and multiple import facility,  
+the package offers plot enhancement techniques, and sound and color     
+control.  Both graphic and non-graphic printers are supported.  A       
+demonstration tutorial and an extensive and well-written instruction    
+manual are included.                                                    
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## FILELIST.DOC
+
+{% raw %}
+```
+                        == XYSee Ver. 2.5 Required Files ==
+
+       The following files are required for the program to function properly.
+
+               XYSee.EXE     XYSee.OVR     SetSEE.DTA    MenuSEE.DTA
+               4X6.FON       8X8.FON       ERROR.MSG
+
+       The following documentation and utility files should also be present.
+
+         XYSee.DOC     {documentation diskette}
+
+        *Sine_2X.MAM   Angle.MAM     Imprt.MAM    *XY_Demo.MAM  *Two_D.PZL
+         Equilat.MAG   Point1.MAG    Point2.MAG    Parallel.MAG  TwoLine.PZL
+         Roots.MAQ     C_Circle.MAQ  Parabola.MAQ  Conic.MAQ     Ellipse.MAQ
+         Hyperbol.MAQ  SinPhase.MAT  CosAmp.MAT    TanAmp.MAT    CosecPol.MAT
+         SecAmp.MAT    CotAmp.MAT    Comp1.MAA     Comp2.MAA     Para1.MAA
+         Para2.MAA     Spline.MAA    Distort.IMP   Skewed.IMP   *Normal.IMP
+         AdvEx.PZL     AdvPzl1.PZL   AdvPzl2.PZL   BasPzl1.PZL   BasPzl2.PZL
+         BasPzl3.PZL  *Example.PZL   GeomEx.PZL    IntPzl1.PZL   IntPzl.PZL
+        *Practice.MAM *Practice.PZL  QuadEx.PZL    SineTest.MAM  TrigEx.PZL
+        * = Utility files located on the XYSee Main Program disk.
+
+         We hope you find XYSee both Educational and Enjoyable...2/90
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+                        == Welcome to XYSee Version. 2.5 ==
+
+              XYSee requires MS/PC-DOS Ver. 2.0 or greater to execute.
+
+         COPY: The main program diskette files to a formatted disk
+               having approximately 360K of available space.
+
+                       Two  disk drive example: Copy A:*.* B:
+                       Hard disk drive example: Copy A:*.* C:
+
+         If you are using larger drives than 360K, XYSee can reside on
+         the same diskette as DOS. If your drives are 360K, you must:
+             1. Start your computer with it's normal "system disk".
+             2. Swap the XYSee main program disk with the system disk.
+
+         RUN: Merely enter "XYSee" at the DOS prompt.
+
+         Example:  A>XYSee <ENTER>
+
+         CALL FOR MACROs: Should you develop some interesting MACROs,
+                          Import files, or Puzzles, please send us a
+                          copy to share with others.            2/90
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1507
 

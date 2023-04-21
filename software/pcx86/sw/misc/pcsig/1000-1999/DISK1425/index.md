@@ -25,6 +25,35 @@ machines:
     wild card characters when entering the filename.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1425.TXT
+
+{% raw %}
+```
+Disk No: 1425                                                           
+Disk Title: FindFile                                                    
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: FindFile                                                 
+Author Version: 2.0                                                     
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+FINDFILE searches all your drives and subdirectories for a particular   
+filename, then displays all its locations on-screen.  You can interrupt 
+the search at any time by pressing the ESC key.  FINDFILE lets you use  
+wild card characters when entering the filename.                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1425
 

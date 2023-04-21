@@ -44,6 +44,58 @@ machines:
     will find DOSLOCK a welcome, and long overdue, relief.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1698.TXT
+
+{% raw %}
+```
+Disk No: 1698                                                           
+Disk Title: DOSLOCK                                                     
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: DosLock                                                  
+Author Version: 94086                                                   
+Author Registration: $90.00 single user, $200.00 five user, $2000.00 cor
+Special Requirements: MS DOS 2.0 (or higher) and a hard disk.           
+                                                                        
+File security is a difficult problem when more than one person has      
+access to a PC.  The HAXTON DOSLOCK provides complete file security     
+for up to 26 users on one MS-DOS computer as well as some very useful   
+accounting tools.                                                       
+                                                                        
+With the DOSLOCK the system administrator can create user names         
+and passwords to specify file access and application access, if         
+desired users can be totally locked out of DOS.  After installation     
+the machine can only be used by those with a valid password.  After     
+logging on a main menu appears showing the user all his valid options,  
+there is no control key sequence to break out of DOSLOCK.  On-line      
+help is available which can be customized by the system administrator.  
+                                                                        
+As System most administrators know verbal reminders to back up data     
+are often ignored by users.  DOSLOCK's automatic backup feature solves  
+that problem: before logging out users will prompted to plave a disk in 
+the floppy drive and DOSLOCK does the rest.  DOSLOCK also provides an   
+audit report listing the users' activities with time stamps.  This will 
+help the administrators monitor application use and any improper system 
+use (i.e. not logging out).                                             
+                                                                        
+It should be noted that DOSLOCK an impressive customer list, including  
+Westinghouse and Readers Digest.  Security like this has been available 
+at the mainframe level for quite some time, MIS professionals will find 
+DOSLOCK a welcome, and long overdue, relief.                            
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1698
 

@@ -34,6 +34,61 @@ machines:
     skills at finding patterns in letters.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1158.TXT
+
+{% raw %}
+```
+Disk No  1158
+Program Title:  GRAMARCY THE WORD GAME
+PC-SIG version 1
+
+GRAMARCY is a find-the-word-within-a-word game for children or adults.
+It contains several thousand words, ranging in length from four to
+eleven letters.
+
+You've seen this kind of game in the newspapers:  locate all the words
+hidden in a given word.  Each word given is randomly extracted from one
+of seven files in a word database.  You compete against the clock to
+find all the words you can.  Then you are scored for the number of
+correct words found versus the actual number of words hidden in the key
+word.
+
+GRAMARCY is an excellent tool for anyone who wishes to hone his or her
+skills at finding patterns in letters.
+
+Usage:  Entertainment.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $25.00
+
+GRAMARCY EXE  Main executable file for GRAMARCY.
+GRAMARCY URN  Online help file an instructions for GRAMARCY.
+&             Word files for GRAMARCY.
+&4            Word files for GRAMARCY.
+&5            Word files for GRAMARCY.
+&6            Word files for GRAMARCY.
+&7            Word files for GRAMARCY.
+&8            Word files for GRAMARCY.
+&9            Word files for GRAMARCY.
+&10           Word files for GRAMARCY.
+&11           Word files for GRAMARCY.
+NAMES         Player's name file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1158
 

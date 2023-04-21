@@ -60,6 +60,150 @@ machines:
     SSV      LNK  The link list of binaries for the single precision
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES555.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  555  LINPACK DRIVERS                                      v1  DS2
+---------------------------------------------------------------------------
+The Linear Equation Package (LINPACK) is a set of routines which solves
+systems of linear equations and related problems.  This package was
+developed by the Applied Mathematics Division of Argonne National
+Laboratory; this source code was taken from a distribution disk provided by
+International Mathematics and Statistical Libraries, Inc.  (IMSL).
+ 
+INDEX         An index of all the routines on the library and driver disks
+README        A comprehensive writeup on use of these routines
+SEX      CAL  Undocumented file
+SUD      CAL  Undocumented file
+SCH      FOR  Main routine/driver for testing the SCH routines.
+SEX      FOR  Main routine/driver for testing the exchange routines.
+SG       FOR  Main routine/driver for testing the SG routines.
+SGT      FOR  Main routine/driver for testing the SGT routines.
+SP       FOR  Main routine/driver for testing the SP routines.
+SQR      FOR  Main routine/driver for testing the SQR routines.
+SS       FOR  Main routine/driver for testing the SS routines.
+SSV      FOR  Main routine/driver for testing the SSV routines.
+ST       FOR  Main routine/driver for testing the ST routines.
+SUD      FOR  This is the test driver for matrix update subs.
+SCH      LNK  The link list of binaries for the single precision
+              Cholesky decomposition routines' test.
+SEX      LNK  The link list of binaries for the SEX test set.
+SGT      LNK  The link list of binaries for the single precision
+              general tridiagonal test.
+SP       LNK  The link list of binaries for the single precision
+              positive definite routines' test set.
+SQR      LNK  The link list of binaries for the single precision
+              orthogonal triangular decomposition routines' test set.
+SS       LNK  The link list of binaries for the single precision
+              symmetric routines' test set.
+SSV      LNK  The link list of binaries for the single precision
+              singular value decomposition routines' test set.
+ST       LNK  The link list of binaries for the single precision
+              triangular routines' test set.
+SUD      LNK  An undocumented link list.
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+## NOTES555.TXT
+
+{% raw %}
+```
+Program name:       LINPACK DRIVERS
+
+Author name:        Argonne National Laboratory
+
+Address:            None given
+
+Telephone Number:   None given 
+
+Suggested Donation: None 
+
+Program Description: 
+
+The Linear Equation Package (LINPACK) is a set of routines which solves 
+systems of linear equations and related problems.  This package was 
+developed by the Applied Mathematics Division of Argonne National Laboratory 
+through funding by the National Science Foundation and Department of Energy.  
+The original package was developed and tested on large machines over the 
+years 1976 through 1979.  The source included on these diskettes was taken 
+from a distribution disk provided by International Mathematics and 
+Statistical Libraries, Inc.  (IMSL). 
+
+An excerpt from the LINPACK USER'S GUIDE Introduction: "Many of the 
+subroutines deal with square coefficient matrices, where there are as many 
+equations as unknowns.  Some of the subroutines process rectangular 
+coefficient matrices, where the system may be over- or under-determined.  
+Such systems are frequently encountered in least squares problems and other 
+statistical calculations.  Different subroutines are intended to take 
+advantage of different special properties of the matrices and thereby save 
+computer time and storage."
+
+The total package will handle equations in single, double, complex and 
+complex double precision arithmetic.  For each data type, there are two 
+diskettes: test driver and linpack source.  This diskette contains the 
+single precision version of the LINPACK library.
+   
+The driver disk contains a FORTRAN source and link file list (.LNK) for each 
+test set.  The source for these drivers can be used to study the calling 
+sequences for the various routines.  Since each driver has been successfully 
+tested under MS-DOS using Microsoft FORTRAN (V3.31), it is not necessary for 
+you to rebuild these executable modules.  If you should, however, decide to 
+alter any routines, it would be best to test them using these drivers.  The 
+.LNK files are used with the BUILDS.BAT file, so examine that file if you 
+wish to rebuild the test executables. 
+
+Each of the following test files was successfully constructed and executed:  
+SCH, SGT, SP, SQR, SS, SSV, ST, SG.  Each driver evaluates those single 
+precision routines whose names begin with the same characters as the name of 
+the driver.  The drivers SUD and SEX test the update and exchange routines 
+respectively.
+
+The source disk contains the LINPACK routines along with several of the BLAS 
+routines.  Each source file contains some information about usage, but a 
+fair amount of knowledge about the different techniques for solving systems 
+of equations is required.  If you are unsure where to begin, try 
+implementing the SG* (single precision general) routines first since they do 
+not utilize any special storage techniques.
+
+I offer the following list of references as a sample with which I am most 
+familiar; not necessarily the best, just the ones I know :
+
+LINPACK USER'S GUIDE by Dongarra, Moler, Bunch and Stewart, published by 
+    Society for Industrial and Applied Mathematics 
+        This is "THE BOOK" written by the authors of the LINPACK system.
+
+NUMERICAL METHODS by Ake Bjorck, published by Prentice-Hall 
+        This book has everything, but it is definitely not easy reading. Any 
+        university level book on the subject of numerical methods should 
+        suffice.
+         
+THE THEORY OF MATRICES IN NUMERICAL ANALYSIS by Alston S. Householder, 
+    published by Dover 
+        This is an older, even more theoretical, work than the previous.
+
+If you have any doubts about using these routines, you should at least have 
+the LINPACK USER'S GUIDE.  Don't limit yourself, however, to these books as 
+there are a number of new, very readable textbooks which can be found at 
+most technical or university book stores.
+
+See the "index" directory for an idea of the contents of this disk. If you 
+have any questions or criticisms of this package, please write me (Jeffrey 
+Fried) through the PC-SIG offices.
+
+No system requirements are given.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0555
 

@@ -14,6 +14,46 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2526.TXT
+
+{% raw %}
+```
+Disk No: 2526                                                           
+Disk Title: Technical Editor                                            
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Technical Editor                                         
+Author Version: 2.0                                                     
+Author Registration: $39.95                                             
+Special Requirements: None.                                             
+                                                                        
+TECHNICAL EDITOR is a programmer's editor that lets you edit any size   
+file -- text or binary.  And it's FAST!  TECHNICAL EDITOR has all the   
+standard features you demand from any strong editor plus:               
+                                                                        
+~ 43/50 line EGA/VGA mode                                               
+                                                                        
+~ UNDO command                                                          
+                                                                        
+~ Multi-screen AND multi-windows support                                
+                                                                        
+~ Keystroke macros                                                      
+                                                                        
+~ Redefinable commands                                                  
+                                                                        
+The OS/2 version and source code is available to registered users.      
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989-1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2526
 

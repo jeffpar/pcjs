@@ -56,6 +56,94 @@ machines:
     files up to 64K with one window.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1755.TXT
+
+{% raw %}
+```
+Disk No: 1755                                                           
+Disk Title: Utilities #2                                                
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Utilities #2                                             
+Author Registration: $25.00                                             
+Special Requirements: None.                                             
+                                                                        
+For those who program lots of batch commands, FUGUE UTILITIES #2 brings 
+a disk full of helpful tools including a file editor and a memory       
+resident DOS handler.  This assemblage of eleven programs will make your
+programming day easier.                                                 
+                                                                        
+ACCEPT takes a string as a parameter and appends the accepted           
+information to the end of a string for display or redirection.          
+                                                                        
+ASK is similar to ACCEPT but is more suited to building a menu system   
+from batching.                                                          
+                                                                        
+YESNO is similar to ASK except it accepts only the letters Y,y,N or n.  
+                                                                        
+BEEP emits a half second beep to alert you when a long job is finished. 
+                                                                        
+EDITENV helps set an environment variable from a batch file.            
+                                                                        
+XQT lets you run nests of batch files within other batch files.         
+                                                                        
+EXCLUDE will exclude a list of files from any command by setting hidden 
+bits.                                                                   
+                                                                        
+RENAMED changes the name of a directory without the need to move files  
+out of it, delete it and set it up again under a new name.              
+                                                                        
+SYSDATE remembers the last date you booted and is for those without     
+battery-backed clocks.                                                  
+                                                                        
+DOSH is a memory resident DOS handler that keeps a circular queue of    
+commands and makes them available via arrow commands.                   
+                                                                        
+ED is a simple editor with WORDSTAR-like commands which handles ASCII   
+files up to 64k with one window.                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## REGIST.TXT
+
+{% raw %}
+```
+To:
+
+David J Noakes,
+P.O. Box 942
+WODEN   ACT   2606
+AUSTRALIA
+
+
+From:
+___________________________________________________
+___________________________________________________
+___________________________________________________
+___________________________________________________
+
+
+[ ] I enclose $25 for registration as a user of Fugue Utilities #2
+
+[ ] Please bill my MASTERCARD
+
+
+           ACCT NO _______________________________________
+           EXPIRY DATE _____________
+
+           SIGNED ________________________________________
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1755
 

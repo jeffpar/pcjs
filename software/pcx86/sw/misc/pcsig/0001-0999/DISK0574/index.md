@@ -56,6 +56,84 @@ machines:
     ~ Move, copy, delete and insert columns/rows
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES574.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  574  FREECALC                                               v2.1
+---------------------------------------------------------------------------
+FreeCalc is a spreadsheet program with numerous features.  It has been
+expanded from Version 1.0 and is a mature product.  While it lacks some of
+the features and power of a product like Lotus 1-2-3, it also lacks Lotus'
+high price.  It is a nice spreadsheet program that is more than adequate for
+most applications.  It uses all of available memory (up to 640K), allows
+installation of color if you have a color monitor, and is command bar
+driven.
+ 
+The disk manual is very complete, and is 106 pages long.  It's apparent that
+a lot of thought has gone into developing FreeCalc, and it's paid off!  This
+one is a winner.
+ 
+READ     ME   Instructions on how to print the manual
+FC       EXE  Main FreeCalc program
+FC       HLP  FreeCalc help file
+FC       DOC  106 page FreeCalc manual
+DEMO?    FC   Sample spreadsheets
+COLOR    EXE  Program to set colors for color monitor
+NO-COLOR FIL  Parameter file to set colors to black/white
+ONE2TWO  EXE  Program to convert from FreeCalc V1 to FreeCalc V2
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+## NOTES574.TXT
+
+{% raw %}
+```
+Program name:           FREECALC v2
+ 
+Author name:            Stilwell Software Products
+ 
+Address:                16403 North 43rd Drive
+                        Glendale, AZ 85306
+ 
+Telephone Number:       None given
+ 
+Suggested Donation:     $10 for a simple registration, or $47.50 for a
+                        registration which includes a printed manual,
+                        support, and an auxiliary program, FreeCalc Auditor,
+                        that examines spreadsheets for possible errors and
+                        produces a list of formulas used.
+ 
+Program Description:
+ 
+FreeCalc is a spreadsheet program with numerous features.  It has been
+expanded from Version 1.0 and is a mature product.  While it lacks some of
+the features and power of a product like Lotus 1-2-3, it also lacks Lotus'
+high price.  It is a nice spreadsheet program that is more than adequate for
+most applications.  It uses all of available memory (up to 640K), allows
+installation of color if you have a color monitor, and is command bar
+driven.
+ 
+The disk manual is very complete, and is 106 pages long.  It's apparent that
+a lot of thought has gone into developing FreeCalc, and it's paid off!  This
+one is a winner.
+ 
+System requirements are an IBM PC/XT/AT/Portable with a minimum of 256K
+bytes of RAM, DOS 2.0 or greater, a monochrome or color adapater and
+monitor, 1 disk drive, and a printer.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0574
 

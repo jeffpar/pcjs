@@ -38,6 +38,48 @@ machines:
     DOS
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2026.TXT
+
+{% raw %}
+```
+Disk No: 2026                                                           
+Disk Title: PCHelp & Utilities disk 2 of 2 (1774)                       
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: PCHELP & Utilities                                       
+Author Version: 1.3                                                     
+Author Registration: $20.00                                             
+Special Requirements: None                                              
+                                                                        
+Imagine on-line help for DOS.  This utility is a quick and easy         
+reference guide to DOS commands, their use and proper format.  When you 
+need help, just type PCHELP plus the name of the command you are curious
+about.  An explanation of the command and its proper usage come to the  
+screen.                                                                 
+                                                                        
+Also included on this disk are some of the most popular DOS-like        
+utilities.  These routines do things that DOS should: WHERE will find   
+files on your hard drive, REVDIR will rename a directory, LOCATE will   
+find text in a file, DIRCOMP will compare two directories, and the list 
+goes on.  You can find similar files elsewhere in The PC-SIG Library,   
+but these versions are supported by PCHELP--you get an explanation and  
+syntax help just like any other DOS command.  You'll get helpful        
+information without ever dragging out a DOS                             
+                                                                        
+PCHELP uses no overhead memory and won't get in the way of normal DOS   
+operation for those who don't need the help.                            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2026
 

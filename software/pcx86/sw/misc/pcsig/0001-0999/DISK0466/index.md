@@ -38,6 +38,7 @@ machines:
 
 ## ACTDTL.BAS
 
+{% raw %}
 ```bas
 500  ' COPYRIGHT 1986 TRONOLONE & FOSTER, PC
 1000 REM ACTDTL.BAS
@@ -276,9 +277,2685 @@ machines:
 3380 RETURN
 3390 CLOSE: FOR I = 1 TO 10: LPRINT: NEXT I: RUN "DAILY.BAS": END
 ```
+{% endraw %}
+
+## APNDX-A.TXT
+
+{% raw %}
+```
+ 
+     
+     
+                                                                        97
+     
+     
+                                APPENDIX A
+     
+           CPA-LEDGER AND THE INCOME STATEMENT'S COST OF GOODS SOLD      
+     
+     
+     
+     CPA-LEDGER  can  be used for businesses with merchandise inventory and 
+     purchases (which need a Cost of  Goods  Sold  Section  in  the  Income 
+     Statement)  and for service establishments which do not need a Cost of 
+     Goods Sold section. 
+     
+     CPA-LEDGER senses which one is applicable but looking at the accounts 
+     that you include in your general ledger.  
+     
+          .  If you (1) DO NOT  include  an  account  under  the  purchases 
+             category  while  using Option 1 of the SETUP menu,  AND if you 
+             (2) DO  NOT  identify  an  account  as  beginning  merchandise 
+             inventory  while using Option 2 of the SETUP menu,  AND if you 
+             (3) DO NOT add an account for beginning merchandise  inventory 
+             later while using Option 8 of the DAILY menu,  CPA-LEDGER WILL 
+             NOT PRINT the Cost of Goods Sold section when  preparing  your 
+             Income  Statements.  Stated  another  way,  BOTH the beginning 
+             inventory account AND the purchases related accounts  must  be 
+             absent in order to bypass the Cost of Goods Section. 
+     
+          .  If  you (1) DO include an account under the purchases category 
+             while using Option 1 of the SETUP  menu,  OR  if  you  (2)  DO 
+             identify  an  account as beginning merchandise inventory while 
+             using Option 2 of the SETUP menu,  OR if you  (3)  DO  add  an 
+             account  for  beginning  merchandise  inventory later by using 
+             Option 8 of the DAILY menu,  CPA-LEDGER WILL PRINT the Cost of 
+             Goods  Sold  Section  of the Income Statement.  Stated another 
+             way,  EITHER a beginning  inventory  account  OR  a  purchases 
+             related  account  will cause the Cost of Goods Sold section to 
+             be printed. 
+          
+     
+     It is as simple as that.
+     
+        
+     
+     
+                                                                        98
+     
+     
+     
+
+
+
+                   This page is included for future expansion.
+     
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
+
+## APNDX-B.TXT
+
+{% raw %}
+```
+ 
+                                                                        
+          
+                                                                        
+                                                                        99
+     
+                                   APPENDIX B
+               
+                        USING CPA-LEDGER WITH FIXED DISK
+     
+     The differing versions of CPA-LEDGER are discussed beginning  on  page 
+     99-3.  Information  on  ordering  CPA-LEDGER  from  Tronolone & Foster 
+     begins there also. 
+
+     This version of CPA-LEDGER is for fixed disk.  All of  the  CPA-LEDGER 
+     internal commands and files use the DEFAULT DRIVE, which should ALWAYS 
+     be C:. 
+     
+     Both  CPA-LEDGER and PC-DOS should be on fixed disk.  Also,  you might 
+     want to establish a separate directory for CPA-LEDGER.  Refer to  your 
+     IBM  Disk  Operating  System  reference  manual for details.  The same 
+     reference manual covers other considerations that are beyond the scope 
+     of this appendix, such as: 
+     
+          .  Fixed disk drive letters, and
+     
+          .  How to prepare your fixed disk.
+     
+     Major  advantages  of  fixed  disk  are speed the additional space for 
+     recording your transactions.  A disadvantage is that only ONE  general 
+     ledger  can be recorded for each directory.  If you have more than one 
+     general ledger,  you  might  want  the  CPA-LEDGER  version  that  has 
+     CPA-LEDGER  on  fixed  disk  and your general ledger on a floppy disk. 
+     That way,  you can have as many general ledgers as you wish - one  for 
+     each  separate  floppy.  To  order  other versions of CPA-LEDGER, see 
+     page 99-3. 
+     
+     It is important to understand that CPA-LEDGER needs access to  BASICA. 
+     You  can  make  BASICA available by either (1) copying BASICA onto the 
+     same directory where CPA-LEDGER resides  or  by  (2)  using  the  PATH 
+     command  for  the  access  (see  your  PC-DOS  reference manual for an 
+     explanation of the PATH command).  If you have any questions, call Jim 
+     at (703) 569-2254.  Or, write Jim at 8529 Greeley Blvd.,  Springfield, 
+     Virginia 22152.  As mentioned in the cover page of this manual, always 
+     call  Jim  after 7:30 PM weekdays or anytime during the weekend.  Call 
+     back if the answering machine asks for your message. 
+     
+     A reminder - the  "Program  Disk"  contains  the  CPA-LEDGER  computer 
+     programs  (files  with  an extension of ".BAS") and a practice general 
+     ledger (files with an extension of  ".FIL)  is  on  the  Documentation 
+     Disk.  Before  you start practicing,  copy the practice general ledger 
+     onto a separate floppy to be used as  a  back-up.  Of  course,  ALWAYS 
+     keep  a back-up of the CPA-LEDGER computer programs,  ALWAYS,  ALWAYS, 
+     ALWAYS, ALWAYS!! 
+     
+      
+          
+                                                                       99-1
+     
+     
+     Several chapters in the  User's  Manual  ask  you  to  practice  using 
+     CPA-LEDGER,  which requires use of (1) the practice general ledger AND 
+     (2) the CPA-LEDGER computer programs.  Copy both to your hard disk  by 
+     following this procedure (while  the  default  drive  is  C:,  in  the 
+     directory of your choice): 
+     
+        1.  Follow these procedures: (Before you proceed, you might want to 
+            set up a  separate  directory  for  CPA-LEDGER.  See  your  DOS 
+            User's Manual for the procedure.) 
+         
+           a.  To copy the computer programs  onto  hard  disk,  place  the 
+               "Program Disk" in the A: drive and give this command: 
+     
+                    COPY A:*.BAS C:/V   (and press the return key)
+     
+           b.  To  copy  the practice general ledger onto hard disk,  place 
+               the "Documentation Disk" (the one that  has  files  with  an 
+               extension of .FIL) in the A: drive and give this command: 
+     
+                    COPY A:*.FIL C:/V   (and press the return key)
+     
+               There is no need to copy any part of the  User's  Manual  to 
+               hard disk. 
+     
+           c.  Store  the  "Program Disk" and the "Documentation Disk" in a 
+               safe place. 
+     
+     Once CPA-LEDGER has been loaded onto hard disk, the system is ready to 
+     use.  Follow this procedure each time you wish to use CPA-LEDGER:
+     
+       1.  Boot to PC-DOS.
+     
+       2.  If necessary,  go to the directory where CPA-LEDGER  is  stored. 
+           (That is,  you may have stored CPA-LEDGER in it's own directory. 
+           If  so,  you  will  need  to  tell  PC-DOS,  either  through  an 
+           AUTOEXEC.BAT file or  by  giving  appropriate  commands  at  the 
+           keyboard,  that you wish to go to the directory where CPA-LEDGER 
+           is stored.  AS MENTIONED ABOVE,  PLEASE REMEMBER THAT CPA-LEDGER 
+           M-U-S-T  HAVE  ACCESS  TO BASICA.  See the 5th paragraph on page 
+           99.) 
+     
+       3.  Type  BASICA  and  press the return key.  (If nothing happens at 
+           this point,  you probably haven't followed the proper  procedure 
+           for  allowing  PC-DOS to access BASICA.  Refer to your reference 
+           manual for PC-DOS for the proper procedure.)
+     
+     
+                                                                       99-2
+     
+     
+                      
+       4.  The next command depends on whether you  want  to  start  a  new 
+           general  ledger  or  you  wish process files on a general ledger 
+           that is already on fixed disk. 
+     
+             a.  To start a new general ledger, type:
+     
+                   RUN "SETUP"     (and press the Enter key)
+     
+             b.  To process a general ledger file that is already on  fixed 
+                 disk, type: 
+     
+                   RUN "DAILY"     (and press the Enter key)
+     
+           After you press the Enter key,  CPA-LEDGER's menu  will  appear. 
+           Select  the  option  of  your  choice.  Chapters  in this User's 
+           Manual explain how to use each of the CPA-LEDGER options. 
+     
+     
+        
+                                                                      99-3
+     
+          
+     Nine separate options of CPA-LEDGER are available.   They are:
+     
+
+                                                          When Ordering,
+        Business Type           Processing Option         Ask For Option
+     
+      A. Corporations          #1. Hard Disk Only              A1
+         Corporations          #2. Floppy Disk Only            A2
+         Corporations          #3. Hard Disk & Floppy Disk     A3
+     
+      B. Partnerships          #1. Hard Disk Only              B1
+         Partnerships          #2. Floppy Disk Only            B2
+         Partnerships          #3. Hard Disk & Floppy Disk     B3
+     
+      C. Sole Proprietorships  #1. Hard Disk Only              C1
+         Sole Proprietorships  #2. Floppy Disk Only            C2
+         Sole Proprietorships  #3. Hard Disk & Floppy Disk     C3
+     
+     
+     For EACH Business Type (A, B & C), CPA-LEDGER is used as follows:
+     
+      .  Hard Disk Only - Processing Option #1.
+
+           Both  CPA-LEDGER  and the general ledger files are maintained on 
+           hard disk.  You will need a separate directory for each separate 
+           general  ledger,   with  CPA-LEDGER  in  each  directory. 
+         
+           Read Appendix C regarding  disk  capacities.  Always  make  sure 
+           that  you  have  enough  room  available  on  your hard disk for 
+           CPA-LEDGER  to  record   your   general   ledger   transactions.  
+           Frequently  check  the  space  used  and  make  additional space 
+           available  to  CPA-LEDGER  if  it  is  needed.  Please  do  this 
+           frequently!  Don't  take  the  chance  of running out of room on 
+           your hard disk! 
+     
+      .  Floppy Disk Only - Processing Option #2.
+     
+           CPA-LEDGER is on a diskette in the  B:  drive  and  the  general 
+           ledger  files  are  recorded  on a diskette in the A:  drive.  A 
+           SEPARATE floppy is used for each SEPARATE general  ledger.  This 
+           allows you to secure your general ledger files when they are not 
+           in use - a good security practice.  Also,  if you use CPA-LEDGER 
+           for several clients,  you can have each client's general  ledger 
+           on a separate floppy. 
+     
+           A potential problem,  however,  is that  your  (or  a  client's) 
+           general ledger may become too large,  during the year,  to "fit" 
+           on one floppy disk.  Please remember this - you can use ONLY one 
+           
+     
+     
+                                                                       99-4
+     
+
+           floppy disk for any one  general  ledger.  If  the  floppy  disk 
+           becomes "full",  there is only ONE solution - call me and I will 
+           send you the "hard disk only" version of CPA-LEDGER and you must 
+           convert to  hard  disk  processing.  In  the  interim,  you  may 
+           experience  delays  (waiting  on the disks from me) and you will 
+           PROBABLY have to use the latest back-up  copy  of  your  general 
+           ledger  files  when  you convert to hard disk operations,  which 
+           will cause additional delay in bringing your system  up-to-date.  
+           That means re-entering transactions since your last backup (your 
+           "full"  floppy disk may be unusable).  In other words,  you have 
+           plenty of headaches ahead if you order this version and  one  of 
+           your  floppy  disks become full.  If you have ANY doubts,  DON'T 
+           KEEP YOUR GENERAL LEDGER FILES ON FLOPPY DISK  -  USE  THE  HARD 
+           DISK VERSION.  Appendix C gives you some GENERAL ideas about how 
+           may transactions that may "fit" on a floppy disk.  But,  PLEASE, 
+           use Appendix C to get a general idea of floppy  disk  capacities 
+           and  NOT  for absolute specifics for your case.  As explained in 
+           Appendix C,  YOUR floppy disk capacity depends on many  factors, 
+           including  how  your  enter  your  transactions  and your mix of 
+           transactions. 
+     
+      .  Hard Disk & Floppy Disk - Processing Option #3.
+     
+           CPA-LEDGER is kept on hard  disk  (in  one  directory)  and  the 
+           general ledger files are recorded on a diskette in the A: drive.  
+           A  separate  floppy  is  used  for each separate general ledger.  
+           Like for Floppy Disk Only,  you will  be  able  to  secure  your 
+           general ledger files when they are not in use. 
+     
+           However,  PLEASE read the last two paragraphs under "Floppy Disk 
+           Only  -  Processing  Option  #2",  above  and  be  aware  of the 
+           consequences if a floppy disk becomes  full.  Again,  please  DO 
+           NOT  keep  your general ledger files on floppy disk if you think 
+           there is any chance of the  floppy  becomming  full  during  the 
+           accounting year. 
+     
+          
+     The CPA-LEDGER differences for Business  Types  pertains  to  how  the 
+     Owner's  Equity  section  of  the  Balance  Sheet  is maintained.  The 
+     Business Type for corporations is the one in the public domain and you 
+     should have (through practicing with the system) have an understanding 
+     on  how  it  functions.   Details  on   the   partnership   and   sole 
+     proprietorship Business Types are described below. 
+     
+     PARTNERSHIPS.
+
+     Instead  of  asking  for  information  about  a  corporation's owners' 
+     equity,  the names of  partner's  capital  and  drawing  accounts  are 
+     requested.  This is done in SETUP menu option 1. 
+     
+     
+     
+                                                                       99-5
+       
+
+     The partnership Business Type gives you two options  for  distributing 
+     profits  to  partners.  Either  (one,  not  both)  of  the options are 
+     selected in SETUP menu Option 2.  They are: 
+
+       .  Profits and losses are to be distributed to partners based  on  a 
+          fixed percentage for profits and losses (the same percentage  for 
+          BOTH profits and losses).  You can change the percentages anytime 
+          that you wish.  You may also switch to the second option,  below, 
+          any time that you wish.  However,  any  changes  pertain  to  the 
+          entire  period  for  which you prepare financial statements.  For 
+          example,  assume two partners with a  profit/loss  percentage  of 
+          50/50.  In  June,  you  wish  to change the percentages to 40/60. 
+          After the June changes, the 40/60 is effective since the first of 
+          the year, just as if you had started the year with 40/60. 
+      
+     
+       .  The second option is that  profits  and  losses  are  NOT  to  be 
+          distributed,  automatically,  by  CPA-LEDGER.  Instead,  you  are 
+          asked  to make the allocation after CPA-LEDGER (1) informs you of 
+          the profit or  loss  amount  and  (2)  requests  a  distribution. 
+          CPA-LEDGER asks for the distribution,  by partner name, each time 
+          you use DAILY option 3.  SETUP menu option 2  asks  you  for  the 
+          number  of  partners  in the partnership and each partner's name. 
+          Your allocation of profit/loss amounts  permit  more  flexibility 
+          than  is  provided  by  a  fixed percentage allocation.  Like the 
+          fixed percentage allocation,  above,  any allocation pertains  to 
+          the  entire  period  for  which you request financial statements.  
+          The allocation process proceeds as follows,  after you ask for an 
+          income statement: 
+     
+            .  First,   CPA-LEDGER  informs  you  of  the  profit/loss  for 
+               year-to-date  and  asks  you  to  be  ready  to   make   the 
+               distribution to partners. 
+     
+            .  Second,  CPA-LEDGER displays partner names (there is a limit 
+               on  the  number  of  partners and that limit is 10) and asks 
+               that you enter the profit/loss amount for each  partner,  in 
+               turn. 
+          
+     
+     
+                                                                       99-6
+     
+
+            .  Provided that your allocation equals the profit/loss amount, 
+               CPA-LEDGER  proceeds  to  prepare  the financial statements.  
+               Otherwise, you are returned to the first step, above. 
+     
+     SOLE PROPRIETORSHIPS.
+     
+     Instead  of  asking  for  information  about  a  corporation's owners' 
+     equity,  the names of proprietor's capital and  drawing  accounts  are 
+     requested.  This is done in SETUP menu option 1. 
+     
+     
+     
+     
+       
+                                                                       99-7
+     
+     
+     IF YOU WISH TO ORDER CPA-LEDGER FROM TRONOLONE & FOSTER, PC.
+     
+
+     Requested donations for expanded versions of CPA-LEDGER are identified 
+     below.  As previously mentioned,  the system comes in  nine  different 
+     version.  For  clarity,  we  subdivide  the versions into (1) Business 
+     Types  (there  are  three  -  corporations,  partnerships,   and  sole 
+     proprietorships)  and  Processing Options (there are three - Hard Disk 
+     Only,  Floppy Disk Only,  and Hard Disk and  Floppy  Disk).  Requested 
+     donations are: 
+     
+
+                              ------------ Requested Donation -------------
+                                Your First      Your Second    Your Third
+                                Processing       Processing    Processing
+        Business Type             Option           Option        Option
+     --------------------     ---------------    ----------     ---------
+     Corporations                $45.00            $40.00        $40.00
+     
+     Partnerships                 45.00             40.00         40.00
+     
+     Sole Proprietorships         45.00             40.00         40.00
+     
+     
+     
+     For example,  assume that your first order is for two  Business  Types 
+     (corporations  and  partnerships).  The  total  requested  donation is 
+     $90.00.   Later,   you  order  the  second   Processing   Option   for 
+     corporations.  The  requested donation is $40.00 for the second order. 
+     Your donations are greatly appreciated.  They help defray the costs of 
+     maintaining the system and for  providing  free  consultation  on  the 
+     technical programming of CPA-LEDGER.  
+     
+     Please be sure to specify (1) the Business Type and (2) the Processing 
+     Option that you wish for us to ship to you.  Also please  be  sure  to 
+     show  your current address so that we may update our records.  For any 
+     Business Type and Processing Option ordered from Tronolone  &  Foster, 
+     you  may  obtain updated copies anytime that you wish.  Just send your 
+     request to Tronolone & Foster (address on the cover page of the User's 
+     Manual) along with $5 for postage and handling of each shipment. 
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
+
+## APNDX-C.TXT
+
+{% raw %}
+```
+         
+                                                                     
+                                                                       100 
+     
+                                    APPENDIX C
+               
+                         SOME COMMENTS ON DISK CAPACITIES
+     
+     
+     
+     Daily Option 1 will use your hard disk or floppy  disk  (depending  on 
+     the  version  of  CPA-LEDGER that you have - see Appendix B) to record 
+     your accounting entries.  The entries will be: 
+     
+          .  Posted to the general ledger,
+     
+          .  Added to a data base for monthly income statements, and 
+     
+          .  Added to a TRANSACTION FILE.
+     
+     The main purpose of this appendix is to ask you to  think  about  disk 
+     capacities  BEFORE you start using CPA-LEDGER,  especially if you plan 
+     for your data files to be on floppy disk.  PLEASE REMEMBER THIS  -  if 
+     your  data  disk  becomes  full  during  the year,  there is plenty of 
+     frustration (and possibly a ruined set of  accounting  records)  ahead 
+     for  you.  See  Appendix B for a more detailed discussion.  If you use 
+     floppy disk for your data files and if you think  there  is  a  REMOTE 
+     chance  that  the  disk  may become full before year's end,  we HIGHLY 
+     recommend that you use the CPA-LEDGER version that is  for  hard  disk 
+     only.  Please,  carefully think about your disk capacities  BEFORE you 
+     start using CPA-LEDGER, PLEASE. 
+     
+     These are the three major general ledger files.  (Several other  files 
+     will be on the disk, but their space requirements are minimal.) In the 
+     discussion that follows, we used a floppy disk for comparison purposes 
+     -  a  floppy  that  was  double-sided,  double-density  and  that when 
+     completely erased had 362,496 bytes available.  We  will  assume  that 
+     your  general  ledger  and the data base for monthly income statements 
+     will require no more than 60,000 bytes.  (The general ledger  and  the 
+     monthly  data  base  in  your "Practice Disk" requires less than 60000 
+     bytes.) 
+     
+     To  test  capacities,  we  used  the  floppy  disk  with 362,496 bytes 
+     available.  How many transactions may be added to a  transaction  file 
+     without exceeding the 362,496 byte limitation? 
+     
+     The  disk  space  that  will  be required for your transaction file is 
+     directly related to the (1) the  quantity  of  transactions  that  you 
+     process  and  (2)  HOW  you  use  DAILY  Option  1.  Following  is  an 
+     explanation: 
+     
+          .  At the beginning of EACH complete set of debits  and  credits, 
+             Option 1 adds a 39 character "header" to the transaction file. 
+             This  header  contains  information  such  as  the  date,  the 
+             transaction reference,  and your explanation  of  the  general 
+             ledger entry. The "header" is added each time that you enter a 
+     
+     
+     
+                                                                      101
+     
+
+             "Q"  (for  Quit  -  see  Chapter  6) while you are posting the 
+             general ledger.  So, the more times that you enter a "Q",  the 
+             more "headers" that will be added and the more disk space that 
+             will be required. 
+    
+
+          .  For  each  credit to a bank checking account,  Option 1 adds a 
+             check number and the payee's name  to  the  transaction  data.  
+             So,  the more checks you write,  the more disk space that will 
+             be required. 
+     
+     
+     To conserve space:
+     
+          .  Consolidate your general  ledger  entries.  That  is,  include 
+             several  debits and credits in a single entry.  Avoid "debit", 
+             "credit", "Q" for Quit, "debit", "credit,  "Q" for Quit,  etc. 
+             Instead,  consolidate - like this, "debit", "debit", "credit", 
+             "credit", "Q" for Quit. 
+     
+          .  If  feasible,  consolidate  your checks.  That is,  instead of 
+             writing two checks to the same vendor on the same  day,  write 
+             one   check  for  the  entire  amount,   if  that  suits  your 
+             record-keeping requirements. 
+     
+     
+     To show you the effect this has,  we conducted a small  experiment  in 
+     writing records to the transaction file.  Here is what we did: 
+     
+          .  Using  a copy of a completely erased disk (362,496 bytes),  we 
+             posted two transactions,  over and over again,  until the disk 
+             was full.  One of the transactions included a credit to a bank 
+             account  and  the  other transaction did not.  We recorded the 
+             two transactions in this fashion - "debit", "credit",  "Q" for 
+             Quit, "debit", "credit", and "Q" for Quit.  
+                  
+                . 2,648 transactions were written before the disk was full. 
+     
+                . 5,296 debits and credits were recorded.
+     
+                . 1,324 checks were included in the credits.
+     
+          .  We repeated the  above  experiment,  EXCEPT  the  sequence  of 
+             posting was "debit",  "debit", "credit", "credit", and "Q" for 
+             Quit. 
+     
+                . 3,324 transactions were written before the disk was full. 
+     
+                . 6,648 debits and credits were recorded. 
+     
+                . 1,662 checks were included in the credits. 
+     
+     
+     
+                                                                       102 
+     
+
+     We also tried another mix of transactions,  this time expressed  on  a 
+     monthly  basis.  We  assumed the following mix of monthly transactions 
+     for a twelve month period,  and used 300,000 bytes as available to the 
+     transaction file. 
+     
+          .  75 separate entries.  (That is,  the "Q" for Quit was used  75 
+             times.) 
+     
+          .  Daily sales 24 times, each with one debit and one credit. 
+     
+          .  180  transactions  with  checks,  each  with one debit and one 
+             credit. 
+          
+          .  50 additional transactions, each with one debit and one credit. 
+     
+     
+     The computer program told us that, for a year: 
+     
+          .  6,096 debits and credits  would  have  been  posted  and  that 
+             289,129 of the 300,000 bytes available would have been used. 
+     
+          .  2,160 checks would have been included in the credits. 
+     
+     
+     This should give you some general idea on disk capacity.  HOWEVER,  DO 
+     NOT USE THE ABOVE EXAMPLES AS HARD AND FAST RULES.  The  examples  are 
+     intended for illustration only.  It is impossible for us to predict if 
+     and  when  you will fill your transaction file.  As pointed out,  that 
+     depends on your volume of transactions and on how you enter them. 
+    
+     This means that you should study your transactions very carefully  and 
+     be  very  sure  that all of them,  for the entire year,  can be easily 
+     included on the disk used for your transaction files.  Do NOT take any 
+     chances.  If you have any doubts, do not use CPA-LEDGER.  We recommend 
+     that you DO NOT use  CPA-LEDGER  with  only  one  floppy  drive,  with 
+     CPA-LEDGER and your general ledger files on the same floppy disk. 
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
+
+## APNDX-D.TXT
+
+{% raw %}
+```
+      
+     
+                                                                       103
+                                                                        
+     
+                                   APPENDIX D              
+
+            SOME COMMENTS ABOUT AN ACCOUNTING AND BOOKKEEPING SYSTEM
+     
+     
+     
+     
+     
+     Refer to the Preface of this manual (page 3) for  an  outline  of  the 
+     bookkeeping  knowledge  that you will need in order to effectively use 
+     CPA-LEDGER.  We assume that you have that knowledge and that you  know 
+     how to apply it properly in your business. 
+     
+     Remember  this.  The  more  complex  that  your  business transactions 
+     become, the more bookkeeping and accounting knowledge you should have.  
+     We are not attempting to alarm you or to convince you that you  should 
+     rely  on  others  to  maintain  your accounting system.  However,  you 
+     should know that bookkeeping does require technical knowledge and that 
+     you should possess  that  technical  knowledge  BEFORE  attempting  to 
+     maintain a double-entry bookkeeping system. 
+     
+     In  the  following discussion we will briefly cover several areas that 
+     you should consider before designing your accounting  and  bookkeeping 
+     system. 
+
+          .  First,  we  will  distinguish  between  the cash basis and the 
+             accrual basis of accounting. 
+     
+          .  Second,  we will cover some important procedures and  controls 
+             that should be considered for any accounting system. 
+     
+          .  Third, we will present an overview of the accounting cycle and 
+             tell you where CPA-LEDGER fits into the picture. 
+     
+          .  Fourth,  we  will  briefly  discuss  the Balance Sheet and the 
+             Income Statement. 
+     
+          .  Fifth, we will tell you about the account classifications that 
+             CPA-LEDGER uses in the Balance Sheet and the Income Statement.  
+             We will also tell you about the types  of  accounts  that  are 
+             typically included in each classification. 
+     
+          .  Sixth,  we will make some suggestions on how you can decide on 
+             the specific  accounts  to  be  included  in  your  accounting 
+             system. 
+     
+      
+     
+                                                                       104 
+     
+     
+     CASH VERSUS ACCRUAL BASIS OF ACCOUNTING.
+     
+     The "cash basis" of accounting is used if:
+     
+           .  Income is recorded when cash is COLLECTED, and
+     
+           .  Expenses are recorded when cash is PAID. 
+     
+      The "accrual basis" of accounting is used if:
+     
+           .  Income is recorded when it is EARNED (regardless of when cash 
+              is collected), and 
+     
+           .  Expenses are recorded when they are INCURRED  (regardless  of 
+              when cash is paid). 
+        
+
+     Thus, you have two choices for your accounting system - the cash basis 
+     or  the  accrual  basis.  The method that you choose should be the one 
+     that results in an accurate measurement of  your  company's  operating 
+     results.  The  cash  basis  of  accounting  may  not  be acceptable if 
+     failure to record "accruals"  and  "deferred"  items  will  result  in 
+     material misstatements in the financial statements.  
+
+     Accruals  and  deferred  items  are  discussed  in the section of this 
+     appendix entitled, "ADJUSTING ENTRIES". 
+    
+     The cash basis has advantages,  including simpler and more  economical 
+     bookkeeping.   However,   it  has  disadvantages  also.   Unless  cash 
+     receipts less disbursements closely approximates  your  true  earnings 
+     and  financial  condition,  the cash basis of accounting may result in 
+     materially inaccurate financial statements - as  compared  to  similar 
+     statements that would result from the accrual basis. 
+     
+     A  complete discussion of the advantages and disadvantages,  including 
+     income tax considerations,  of these  two  methods  of  accounting  is 
+     beyond  the  scope  of  this appendix.  The accounting method that you 
+     choose is extremely important,  from both an income tax standpoint and 
+     from  the  standpoint  of  managing  your business.  Consult with your 
+     local CPA if you cannot decide which method is best for you. 
+     
+      
+     
+                                                                       105 
+     
+
+     PROCEDURES AND CONTROLS.
+         
+     The importance of good accounting procedures and  controls  cannot  be 
+     overemphasized.  Following  is  an  outline  of  major points that you 
+     should consider. 
+     
+     
+             .  Decide when your accounting entries will  be  recorded  and 
+                who will record them.  Set a schedule and stick to it. 
+     
+             .  Make  sure  that  anyone  assigned  accounting  duties  is 
+                properly trained. 
+     
+             .  If  feasible,  do  not  allow  any  one  employee  to  have 
+                responsibility  for  any  two or more of the following four 
+                functions  -  (1)  authorization  of  a  transaction,   (2) 
+                recording  the  transaction in the accounting records,  (3) 
+                custody  of  the  assets   involved,   and   (4)   periodic 
+                reconciliation of existing assets to recorded amounts. 
+     
+             .  Decide  on  all  forms  that  you  will need and train your 
+                employees how to use them.  The  forms  should  be  of  two 
+                types  - (1) SOURCE DOCUMENT forms,  discussed in a section 
+                of this appendix to  follow  and  that  is  entitled,  "THE 
+                ACCOUNTING  CYCLE",  and (2) forms to assist in summarizing 
+                entries  to  be  entered   in   your   accounting   system.  
+                Summarizing forms suggested for CPA-LEDGER are contained in 
+                Appendix E. 
+   
+             .  Decide  on  cost effective internal controls that are to be 
+                followed  in  making  sure  that   all   transactions   are 
+                authorized  according  to  approved company policy and that 
+                each entry in your accounting system is: 
+     
+                  .  Complete and supported by proper documentation. 
+    
+                  .  Calculated in the proper amounts. 
+     
+                  .  Entered into the proper accounts. 
+     
+                  .  Recorded in the proper period. 
+     
+                You should also establish controls to be sure that no valid 
+                transactions are omitted from your accounting system. 
+     
+             .  Decide on procedures to be followed in: 
+     
+                  .   Limiting  access  to   assets,   important   records, 
+                     documents,   and   blank   forms  to  only  authorized 
+                     personnel. 
+     
+                                                                          
+                                                                       106     
+     
+                  .  Periodic  comparison  of  amounts  recorded   in  your 
+                     accounting   system   with   independent  evidence  of 
+                     existence and valuation.  Examples include  counts  of 
+                     cash on hand, counts or securities, and reconciliation 
+                     of  bank  accounts.  Your controls should also provide 
+                     for action to be taken on  any  differences  resulting 
+                     from the comparison. 
+     
+     As you can see,  designing an accounting system is not an  easy  task.  
+     Selecting  the  proper accounts to be included requires both technical 
+     knowledge and informed  judgement.  Then,  there  are  the  accounting 
+     controls that you will need.  Without a good balance of cost effective 
+     controls,  one  takes  an undue chance that the accounting system will 
+     not produce accurate results.  If  you  do  not  feel  comfortable  in 
+     designing your accounting system or controls,  consult with your local 
+     CPA.   Know  that  designing  effective  internal  controls   requires 
+     professional  knowledge.  Seek  professional  assistance if you do not 
+     understand how to design effective internal controls in an  accounting 
+     system. 
+          
+     THE ACCOUNTING CYCLE.
+     
+     The accounting cycle begins with collecting economic information about 
+     transactions  that occur in your business and ends with preparation of 
+     formal financial statements.  An accounting system should be  designed 
+     to  accurately  assemble  the economic information in a manner that is 
+     both understandable and meaningful. 
+     
+     Perhaps it would be helpful to step through this "assembling"  process 
+     so that you will have a better understanding of the accounting cycle. 
+                        
+
+          STEP  1  - COLLECTING ECONOMIC INFORMATION.  Economic information 
+     is collected in an accounting system by  means  of  SOURCE  DOCUMENTS.  
+     Examples are: 
+     
+          .  Evidence  of  transactions involving outside parties,  such as 
+             sales invoices, paid checks, notes signed by debtors, invoices 
+             received from creditors, and deposit slips. 
+     
+          .  Other economic events that do not involve outside parties  and 
+             which  must  be  recorded  because  they have an impact on the 
+             company.  Examples are depreciation and estimates of bad  debt 
+             expense. 
+     
+     These  source  documents are the "documentation" which support entries 
+     made in the accounting system.  However,  the entries cannot  be  made 
+     until  the  source documents are analyzed and a decision is made as to 
+     the transaction that occurred and which accounts were affected. 
+     
+      
+     
+                                                                       107 
+     
+
+          STEP   2  -  ANALYZING  SOURCE  DOCUMENTS.   This  step  involves 
+     analyzing the source documents to assess their impact on the  business 
+     in terms of revenues,  expenses,  gains,  losses, assets, liabilities, 
+     and owners' equity.  The analysis forms the basis  for  developing  an 
+     ACCOUNTING  ENTRY.  For  example,  a cash sale increases both an asset 
+     (cash) and revenues (sales).  The accounting entry should be  a  debit 
+     (increase) to cash and a credit (increase) to sales. 
+     
+     It  is  very important that source documents be analyzed thoroughly in 
+     order to determine the proper accounting entry.  This often requires a 
+     high degree of accounting skill.  The accuracy with which it  is  done 
+     determines the reliability of the financial statements. 
+                                                            
+
+          STEP 3 - RECORDING THE TRANSACTION.  Recording the transaction in 
+     the  accounting  system  basically  involves  showing  the date of the 
+     transaction, account(s) debited, account(s) credited,  dollar amounts, 
+     reference information, and a short explanation for future recall.  You 
+     Use  CPA-LEDGER's  DAILY  Option  1  to  record  transactions  in your 
+     accounting system. 
+     
+     Various types of records are used to record  accounting  transactions.  
+     Manual systems usually have (1) a general journal, (2) several special 
+     journals  to  accommodate like-kind transactions such as cash receipts, 
+     cash disbursements, accounts payable, and (3) a general ledger. 
+     
+     The general ledger has an account for each  type  of  asset  (such  as 
+     cash,  account receivable, and buildings), liability (such as accounts 
+     payable, wages payable), owners' equity, revenues, expenses, gains and 
+     losses.  At the end  of  each  accounting  period  (usually  monthly), 
+     information  in  the  general  journal  and in the special journals is 
+     transferred to the general ledger. 
+     
+     This process is often referred to as "posting".  The general ledger is 
+     used for preparing financial statements. 
+
+     Some computerized accounting systems do not use a general  journal  or 
+     the special journals.  Rather,  accounting entries are posted directly 
+     to the general ledger and the general journal and special journals are 
+     reconstructed from a detailed transaction file.  This is  the  process 
+     followed by CPA-LEDGER. 
+                                                        
+
+          STEP  4  -  PREPARING AN UNADJUSTED TRIAL BALANCE.  At the end of 
+     each accounting period (usually a month),  after all entries have been 
+     posted  to the general ledger,  an unadjusted trial balance is usually 
+     prepared.  An unadjusted trial balance is a listing of all accounts in 
+     the general ledger,  and their respective debit and  credit  balances, 
+     before  any  adjusting  entries  have been posted.  CPA-LEDGER's DAILY 
+     Option 2 is used to automatically print an unadjusted trial balance. 
+     
+      
+     
+                                                                       108
+     
+
+          STEP 5 - ADJUSTING ENTRIES.  If your accounting system is kept on 
+     the accrual basis (see the above section of  this  appendix  entitled, 
+     CASH  VERSUS  ACCRUAL  BASIS  OF  ACCOUNTING),  you  will need to make 
+     several adjusting entries to amounts in  your  general  ledger  before 
+     preparing a Balance Sheet or an Income Statement.  Remember,  when the 
+     accrual basis is used: 
+     
+          .  Income should be recorded when EARNED, regardless of when cash 
+             is received. 
+     
+          .  Expenses should be recorded when INCURRED,  regardless of when 
+             cash is paid. 
+     
+     
+     Adjusting entries can be viewed as falling into these categories: 
+     
+          .  ACCRUED  EXPENSES.   During  the  accounting  period,  certain 
+             expenses may have been incurred even  though  payment  is  not 
+             made  until  the  next  accounting period.  An example is rent 
+             expense  that  is  not  billed  until  the   month   following 
+             occupancy. 
+     
+          .  ACCRUED  INCOME.  Certain  income  may  be  earned  during the 
+             accounting period even though cash has not been collected.  An 
+             example is rental income that is not billed  until  the  month 
+             following occupancy. 
+     
+          .  DEFERRED  EXPENSES.  Expenses may have been recorded that will 
+             not to be  used  up  in  the  current  accounting  period.  An 
+             example is rent expense that is paid in advance. 
+     
+          .  DEFERRED INCOME.  You may collect income in advance of when it 
+             due.  An  example  is  rental  income  that  is  collected  in 
+             advance. 
+     
+          .  ESTIMATED ITEMS.  Some adjusting entries are estimated because 
+             they depend on  future  events.  Examples  are  estimates  for 
+             depreciation expense and bad debt expense. 
+     
+          .  INVENTORIES.  Physical inventories must be taken at the end of 
+             each accounting period to determine the inventory amount to be 
+             reported  on  the  Balance Sheet and the Income Statement.  If 
+             perpetual inventory records are kept,  there still  should  be 
+             some  procedure  to  ensure  that  the  perpetual  amounts are 
+             accurate. 
+     
+     
+     With the exception of inventories,  use CPA-LEDGER's DAILY Option 1 to 
+     record  your  adjusting  entries.  DAILY  Option 3 asks for the ending 
+     inventory value and uses the value to  make  the  necessary  adjusting 
+     entry.  Remember  that.  REMEMBER  THAT  OPTION  3 MAKES THE ADJUSTING 
+     ENTRY FOR ENDING INVENTORY. 
+     
+     
+     
+                                                                       109
+     
+
+     Determining  the  proper  adjusting  entries  is not as easy task.  It 
+     requires  detailed  knowledge  of  (1)  bookkeeping  procedures  being 
+     followed,  (2) transactions that have and that have not been recorded, 
+     and (3) careful  analysis.  The  unadjusted  trial  balance  is  often 
+     helpful  in identifying account balances that require adjustment,  but 
+     it must be supplemented with (1), (2), and (3) mentioned above. 
+     
+     To assist  you  in  gaining  a  firmer  grasp  on  adjusting  entries, 
+     following are some illustrations. 
+     
+
+          .  ACCRUED  EXPENSES.  Your  company  has a Note Payable,  in the 
+     amount of $10,000,  recorded on the Balance  Sheet.  Interest  in  the 
+     amount of $1,200 is payable each March 31,  for the preceding 12 month 
+     period.  On December 31 (the date of your financial statements),  $900 
+     of the $1,200 ($100 per month times nine months) in unpaid interest is 
+     unrecorded  and  is  properly  chargeable  to  the  current accounting 
+     period.  The adjusting entry to record the accrued interest is: 
+     
+            Interest Expense                       $900.00
+              Interest Payable                                 $900.00
+     
+
+          .  ACCRUED  INCOME.  Assume  the  same facts shown above,  except 
+     that the Note Payable is a Note Receivable.  The adjusting entry would 
+     be: 
+     
+            Interest Receivable                    $900.00
+              Interest Income                                  $900.00
+     
+
+          .  DEFERRED EXPENSES.  Assume the same facts as shown for ACCRUED 
+     EXPENSES,  except that  the  $1,200  was  paid  and  recorded  at  the 
+     BEGINNING  of  the  interest  period.  The following entry was made on 
+     March 31: 
+     
+            Interest Expense                     $1,200.00
+              Cash                                           $1,200.00
+     
+     The adjusting entry on December 31 would be:
+     
+            Interest Expense Paid in Advance       $300.00  
+              Interest Expense                                 $300.00
+     
+     Notice that,  after  the  adjusting  entry,  $900.00  remains  in  the 
+     Interest  Expense  account.  Interest Expense Paid in Advance is shown 
+     on the Balance Sheet as a Current Asset.  (Some accountants would  use 
+     the  title "Prepaid Interest Expense" in lieu of Interest Expense Paid 
+     in Advance.) 
+          
+      
+                                                                       110
+     
+     
+
+          .  DEFERRED INCOME.  Assume the same facts as shown for  DEFERRED 
+     EXPENSES,  except  that  the  note  is  a Note Receivable and that the 
+     following entry was made on March 31: 
+     
+            Cash                                 $1,200.00
+              Interest Revenue                               $1,200.00
+     
+     The adjusting entry on December 31 would be:
+     
+            Interest Revenue                       $300.00
+              Interest Collected in Advance                    $300.00
+     
+     Notice that $900.00 remains in the Interest Revenue account.  Interest 
+     Collected in Advance is shown  on  the  Balance  Sheet  as  a  Current 
+     Liability.  (Some  accountants  would  use the title "Prepaid Interest 
+     Income" in lieu of Interest Collected in Advance.) 
+     
+
+          .  ESTIMATED ITEMS.  As mentioned,  the amounts of some adjusting 
+     entries  must  be estimated.  This is because the amount of the actual 
+     expense is dependent upon some future  condition  or  event.  Examples 
+     are  provisions  for  depreciation,  bad debts,  and warranty expense. 
+     Consider depreciation as  an  example.  Assuming  that  the  "straight 
+     line"  method  is used,  the annual depreciation charge is based on an 
+     estimated useful life of the asset.  Bad debt expense is based  on  an 
+     estimate  of  amounts  that  will prove to be uncollectible.  Warranty 
+     expense is based on an estimate of the volume of  claims  against  the 
+     warranty.  Sample  adjusting  entries are shown below,  along with the 
+     estimates used to compute the amount of the adjustment. 
+     
+     An item of equipment,  costing $82,000 is estimated to have  a  useful 
+     life  of  10  years.  It  is  estimated that the equipment will have a 
+     salvage value of $2,000 at the end of the 10 year  period.  Using  the 
+     straight  line method of depreciation,  the annual depreciation charge 
+     would be ($82,000 less $2,000, or $80,000 divided by 10 years): 
+     
+          Depreciation Expense - Building           $8,000.00
+            Allowance for Depreciation - Building               $8,000.00
+     
+     After reviewing outstanding Accounts Receivable,  it is estimated that 
+     $10,000 will prove to be  uncollectible.  The  account  Allowance  for 
+     Doubtful  Accounts  has  a  current balance of $8,000.00 The adjusting 
+     entry would be: 
+     
+          Bad Debt Expense                          $2,000.00
+            Allowance for Doubtful Accounts                     $2,000.00
+     
+      
+     
+                                                                       111
+     
+
+          .  INVENTORIES.  Some accountants do not consider  recording  the 
+     ending inventory as an "adjusting entry".  We are including it just to 
+     be  sure  that  you do not overlook it.  We will not allow theoretical 
+     arguments get in the way of our understanding what needs to be done. 
+     
+     As  already  mentioned,   if  perpetual  inventory  records  are   not 
+     maintained,  the  ending inventory should be recorded before financial 
+     statements are prepared.  In a manual system,  the following entry  is 
+     usually  made:   (Assume  that  the  ending  inventory  is  valued  at 
+     $50,000.00.) 
+     
+          Inventory                                $50,000.00
+            Income Summary                                     $50,000.00
+     
+     When you use CPA-LEDGER's DAILY Option 3, the computer system asks you 
+     to enter the inventory value and it makes  the  appropriate  adjusting 
+     entry. 
+     
+     
+     To further assist you in identifying adjusting entries that need to be 
+     made  before  preparing  financial statements,  following is a list of 
+     areas that you should consider.  (The  list  is  not  intended  to  be 
+     complete   because   each   business   usually   has  its  own  unique 
+     characteristics.) 
+     
+          .  Any expense or loss that should be  recorded  in  the  current 
+             accounting period but which has not yet been recorded. 
+     
+          .  Any  revenue  or  gain  that should be recorded in the current 
+             accounting period but which has not yet been recorded. 
+     
+          .  Any expense that  is  paid  in  advance  and  that  should  be 
+             recognized as an expense in some other accounting period. 
+     
+          .  Any  revenue  that  is collected in advance and that should be 
+             recognized as revenue in some other accounting period. 
+     
+          .  Depreciation expense. 
+     
+          .  Bad debt expense. 
+     
+          .  Warranty expense. 
+     
+          .  Ending inventory. 
+     
+      
+     
+                                                                       112
+     
+
+          .  STEP 6 - CLOSING  ENTRIES.  In  a  manual  accounting  system, 
+     closing entries are prepared so that all revenue,  expense,  gain, and 
+     loss accounts will be reduced to  zero  and  be  ready  for  the  next 
+     accounting period. 
+     
+     You  do  not  have  to  worry  about  closing  entries  when  you  use 
+     CPA-LEDGER.  It automatically makes the closing entries for you. 
+     
+     
+          .  STEP  7  -  PREPARING  THE  FINANCIAL  STATEMENTS.  After  the 
+     adjusting  and closing entries have been posted to the general ledger, 
+     you are ready to prepare the financial statements. 
+     
+     CPA-LEDGER's  DAILY  Option  3  prepares  the  statements   for   you, 
+     automatically. 
+     
+     
+          .  STEP  8  -  PREPARING A POST-CLOSING TRIAL BALANCE.  After all 
+     adjusting and closing entries have been posted to the general  ledger, 
+     a  post-closing  trial  balance may be prepared.  It is used to verify 
+     that debits  and  credits  are  equal  at  the  start  of  the  coming 
+     accounting period.  
+     
+     DAILY  Option  9 will print a post-closing trial balance for you.  Use 
+     it as a guide in determining the accounts to be included  in  the  new 
+     general  ledger for the accounting period that is about to start.  See 
+     Chapter 13. 
+     
+     
+          .  STEP 9  -  REVERSING  ENTRIES.  Reversing  entries  are  used, 
+     sometimes,  to back out adjusting entries that were made at the end of 
+     the  previous  accounting  period.   Reversing   entries   are   never 
+     mandatory,  even  in  a manual accounting system.  Their purpose is to 
+     simplify  a  subsequent  accounting  entry.   If  one  remembers   the 
+     adjustments,  and  makes  subsequent accounting entries correctly with 
+     the adjustments  in  mind,  there  is  no  requirement  for  reversing 
+     entries. 
+     
+     Reversing  entries  are never made when using CPA-LEDGER.  There is no 
+     need for them.  That is because a new general ledger is started at the 
+     beginning of each accounting period.  See  Chapter  3  of  the  User's 
+     Manual for details. 
+     
+     
+     THE BALANCE SHEET AND THE INCOME STATEMENT.
+     
+     The  Balance  Sheet,  also sometimes called the Statement of Financial 
+     Position,  summarizes the financial position of a  business  as  of  a 
+     specific  point  in  time.  It presents the assets,  liabilities,  and 
+     owners' equity. 
+     
+     The  Income  Statement,  on  the  other  hand,   summarizes  revenues, 
+     expenses,  gains, and losses for a specified period of time - a month, 
+     a quarter, or a year. 
+     
+      
+     
+                                                                       113
+     
+
+     ACCOUNT CLASSIFICATIONS USED BY CPA-LEDGER.
+     
+     Refer to Chapter 3 of the User's Manual  for  a  list  of  the  account 
+     classifications  used  by CPA-LEDGER.  To assist you while using SETUP 
+     Option 1 (also see Chapter 3), the following is a brief description of 
+     the types  of  accounts  that  should  be  included  in  each  of  the 
+     classifications.  We  will  take  up the Balance Sheet classifications 
+     first. 
+     
+     
+          .  CURRENT ASSETS are cash and other assets that  are  reasonably 
+     expected  to  be (1) converted to cash,  (2) to be sold,  or (3) to be 
+     used by the business during its normal operating cycle or  within  one 
+     year  from  the Balance Sheet date,  whichever is longer.  Examples of 
+     current assets are cash,  accounts receivable,  merchandise inventory, 
+     short-term investments, and prepaid expenses. 
+
+          
+          .  INVESTMENT  AND FUNDS include assets acquired for financial or 
+     investment purposes and funds that are set  aside  for  future  needs.  
+     Examples include investments in real estate, stocks, and bonds.  Funds 
+     set  aside  for future needs includes monies reserved for purchasing a 
+     future building site and for redeeming long-term liabilities. 
+     
+
+          .  OPERATIONAL ASSETS are those facilities  and  equipment  which 
+     are needed (and are being used) by a business in its on-going major or 
+     central  operations.   Examples  include  land,   buildings,  delivery 
+     vehicles, machinery, equipment, and furniture and fixtures. 
+     
+
+          .  INTANGIBLE ASSETS are those assets which provide an  exclusive 
+     right  which  has  a  monetary  value  and  the  monetary value is not 
+     dependent  upon  the  assets'  physical  substance.  Examples  include 
+     goodwill, copyrights, patents, trademarks, and a franchise. 
+     
+
+          .  OTHER  ASSETS  are those assets that are not easily classified 
+     in any one  of  the  above  asset  classifications.  Examples  include 
+     long-term receivables from employees and idle operational assets. 
+     
+
+          .  DEFERRED  CHARGES  are  for  expenses  that  have been paid in 
+     advance and that will  benefit  future  accounting  periods.  Examples 
+     include   machinery   rearrangement   costs  and  long-term  insurance 
+     prepayments.  Deferred charges are distinguished from prepaid expenses 
+     shown under CURRENT  ASSETS  by  the  time  period  involved.  Prepaid 
+     expenses  pertain  to  the  next  accounting period.  Deferred charges 
+     pertain to a longer time. 
+     
+      
+                                                                       114
+     
+     
+
+          .  CURRENT LIABILITIES are those liabilities  that  will  require 
+     the  use  of existing current assets or that will require the creation 
+     of other  current  liabilities.  Examples  include  accounts  payable, 
+     revenue  collected  in  advance,  short-term  notes  payable,  current 
+     maturities  of  long-term  debt,   and  accrued  expenses  for  taxes, 
+     interest, and payroll. 
+     
+
+          .  LONG-TERM  LIABILITIES  are  liabilities that will not require 
+     the use of current assets during the next operating cycle or one  year 
+     from  the  Balance Sheet date,  whichever is longer.  Examples include 
+     long-term bonds payable and long-term notes payable. 
+     
+
+          .  OWNERS' EQUITY.  Depending on the version of  CPA-LEDGER  that 
+     you  ordered,  you  will  see  differing formats in the OWNERS' EQUITY 
+     section of the Balance Sheet.  For a sole proprietorship, you will see 
+     CAPITAL and  DRAWING  accounts.  For  partnerships,  you  will  see  a 
+     separate  CAPITAL  and  DRAWING account for each partner.  The CAPITAL 
+     account represents ownership interest in  the  business.  The  DRAWING 
+     account  represent  withdrawals  from  the business during the current 
+     accounting period.  The OWNERS' equity section for  a  corporation  is 
+     more   extensive   and   the  account  classifications  are  presented 
+     separately below. 
+     
+
+          .  CONTRIBUTED CAPITAL reports the stated or legal capital of the 
+     corporation.  This is  represented,  usually,  by  the  par  value  of 
+     outstanding    capital   stock.    The   corporation's   Articles   of 
+     Incorporation and state  law  specify  the  legal  capital.  See  your 
+     attorney   if   you   have   any  questions  regarding  legal  capital 
+     requirements.   CPA-LEDGER's  SETUP  Option  1  asks  you   how   many 
+     CONTRIBUTED  CAPITAL  accounts  that  you  want to create.  You should 
+     create one account for each class of outstanding capital stock.  SETUP 
+     Option 3 assigns values to each of the accounts. 
+     
+
+          .  OTHER  CONTRIBUTED  CAPITAL  includes  transactions  that  are 
+     related  to CONTRIBUTED CAPITAL.  Examples include amounts received in 
+     excess of par or stated value of capital stock  outstanding,  treasury 
+     stock transactions, and retirements and conversion of stock. 
+     
+
+          .  RETAINED  EARNINGS  is the corporation's accumulated earnings, 
+     less losses and dividends to date. 
+     
+      
+     
+                                                                       115
+     
+
+          .  ALL OTHER EQUITY is  used,  primarily,  to  report  unrealized 
+     losses  and  loss  recoveries  from  application of the lower-of-cost- 
+     or-market rule for long-term investments in  equity  securities.  This 
+     rule  is  discussed  in  Financial  Accounting  Standards Board (FASB) 
+     Statement 12,  and it  is  quite  technical.  We  recommend  that  you 
+     consult  with  your  local  CPA  before  using  the  ALL  OTHER EQUITY 
+     classification to comply with FASB Statement  12.  Also  consult  with 
+     your  CPA  before using this classification for any other transaction.  
+     This is because the ALL OTHER EQUITY  classification  should  be  used 
+     only  in  rare  cases,  and very technical rules cover its use.  These 
+     rules are beyond the scope of this appendix. 
+     
+
+     This  concludes  discussion  of  the  Balance  Sheet  classifications.  
+     Income Statement classifications follow. 
+     
+     
+          .   SALES  is  represented  by  assets  received  or  liabilities 
+     liquidated (or a combination of both)  in  the  sale  of  products  or 
+     services  that  are  related to the business' ongoing major or central 
+     operations.   For  CPA-LEDGER  purposes,  Sales,   Sales  Returns  and 
+     Allowances,   and   Sales   Discount   are   included   in  the  SALES 
+     classification. 
+     
+
+          .  PURCHASES AND RELATED ACCOUNTS are used  to  accumulate  costs 
+     merchandise that will be held for resale to others and that is related 
+     to  the business' ongoing major or central operations.  Accounts under 
+     this  classification   include   Purchases,   Purchase   Returns   and 
+     Allowances, and Purchase Discounts. 
+     
+     
+          .  OPERATING EXPENSES are outflows or other using up of assets or 
+     incurrence  of  liabilities  (or a combination of both) resulting from 
+     rendering services,  delivering or producing goods,  or  carrying  out 
+     other  activities  that  constitute  the  business'  ongoing  major or 
+     central  operations.   Examples   of   accounts   included   in   this 
+     classification  include  Salary  and  Wage Expense,  Supplies Expense, 
+     Depreciation Expense,  Entertainment Expense,  Insurance Expense,  and 
+     Rent Expense. 
+     
+
+          .  OTHER  REVENUES  AND  GAINS  are derived from activities other 
+     than  those  that  constitute  the  company's   ongoing   or   central 
+     operations.  Examples include Interest Income,  Rent Income,  and Gain 
+     on Sale of Nonproductive Assets. 
+                    
+      
+     
+                                                                       116
+     
+
+          .  OTHER EXPENSES AND LOSSES are incurred from  activities  other 
+     than   those   that   constitute  the  company's  ongoing  or  central 
+     operations.  Examples include Interest Expense and  Loss  on  Sale  of 
+     Nonproductive Assets. 
+     
+
+          .  EXTRAORDINARY GAINS AND EXTRAORDINARY  LOSSES  are  gains  and 
+     losses  that  (1)  are  unusual  in  nature  and that (2) do not occur 
+     frequently.   Before  a   gain   or   a   loss   may   be   considered 
+     "extraordinary",  stringent rules must be applied.  These rules, which 
+     almost eliminate the  extraordinary  classification,  are  covered  in 
+     Accounting Principles Board Opinion 30.  We recommend that you consult 
+     with your local CPA before using the extraordinary classification.  
+     
+     
+          .  INCOME TAX EXPENSE is represented  by  income  tax  levied  by 
+     Federal, State, and local jurisdictions. 
+     
+     
+
+     ACCOUNTS TO BE INCLUDED IN YOUR ACCOUNTING SYSTEM.
+     
+     The number and type of accounts maintained for a specific business are 
+     affected by considerations such as what is owned and owed,  the nature 
+     and volume of operations,  and the type of information which is needed 
+     for decisions, tax purposes, and credit purposes. 
+     
+     For example,  one salary expense account may suffice for your company.  
+     Another company may opt  to  set  up  separate  expense  accounts  for 
+     executive, office, and sales salaries. 
+     
+     As  a  general  rule,  the  financial  and  other  reports needed by a 
+     business owner provide a clue as to what accounts need to be  included 
+     in  the  accounting  system.  Accounts  for assets,  liabilities,  and 
+     equity will be needed for the Balance Sheet.  Accounts  for  revenues, 
+     expenses,  gains,  and losses will be needed for the Income Statement.  
+     The level of detail in each of these account classifications  will  be 
+     determined,  to  a large extent,  by the business owners' needs.  Some 
+     elaboration of revenue and expense accounts may be needed for Internal 
+     Revenue purposes.  Other details may be  required  by  creditors.  The 
+     major  question  is  this - What specific accounts do you need for the 
+     information requirements of your business? 
+     
+     You can answer that question by considering  your  type  of  business, 
+     your financial information requirements,  and the past and anticipated 
+     operations of your company.  If available, review financial statements 
+     of businesses  similar  to  yours.  Review  your  own  past  financial 
+     statements.  Read  trade  journals and other publications that discuss 
+     accounting systems for your type of business.  If you think you may be 
+     borrowing funds in the near future,  consult with potential creditors.  
+     These sources should give you some good ideas. 
+     
+     
+
+                                                                       
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
+
+## APNDX-E.TXT
+
+{% raw %}
+```
+       
+     
+     
+                                                                       117
+     
+     
+     
+                                   APPENDIX E 
+     
+                   SOME FORMS THAT MAY BE USED WITH CPA-LEDGER
+     
+     
+     This appendix contains some forms that might be helpful to you in your 
+     use of CPA-LEDGER.  Study each form and,  if required,  revise and add 
+     to them to suit your particular needs. 
+     
+     The  forms  can  be  used  for  either  the  cash  or accrual basis of 
+     accounting.  If you use the cash basis of accounting, however, some of 
+     the forms may not be applicable.  For example,  FORMS 8 and 14  record 
+     sales  and purchases on account.  Unless you keep separate records for 
+     accounts receivable and accounts payable,  you might not wish  to  use 
+     these  two  forms.  Also,  as  indicated in the first paragraph,  your 
+     particular needs may dictate revising the forms that you do use. 
+
+     The forms in this appendix are designed to assist you  in  summarizing 
+     general  ledger  entries.  They  are  NOT  designed to serve as source 
+     documentation  that  support   the   entries.   Examples   of   source 
+     documentation  include  sales invoices,  deposit slips,  cash register 
+     readings to support cash sales,  paid checks,  and vendors'  invoices. 
+     Always  reference  the  source  documentation  on  the  forms  used to 
+     summarize your general ledger entries. 
+     
+     Whether you use  the  forms  in  this  appendix,  or  other  ones,  we 
+     recommend  that  you  adopt a standardized method for documenting each 
+     general ledger entry that you  enter  in  CPA-LEDGER.  ALWAYS  prepare 
+     supporting  source  documentation  for  each  of  your  general ledger 
+     entries BEFORE you post your electronic  books!  Then,  summarize  the 
+     entries  on  forms  such  as are suggested in this appendix,  post the 
+     entries  based  on  the  summarized  data,   and   file   the   source 
+     documentation and summarizing forms for future reference. 
+     
+     Seventeen forms are offered in the pages that follow.  Data on FORM 1, 
+     FORMS  8  -  14,  and  FORMS 16 and 17 are used to make general ledger 
+     entries in CPA-LEDGER.  (All data on FORMS 2 - 7 and 15 are summarized 
+     on FORM 1.) FORM 1 has been assigned the acronym "DCR", for DAILY CASH 
+     REPORT.  Use  that  acronym  (with an assigned number) when giving the 
+     posting reference to CPA-LEDGER.  For other than FORM 1,  use the form 
+     number (such as FORM 8) as the posting reference.  The use of standard 
+     names   for   posting  references  will  facilitate  your  input  into 
+     CPA-LEDGER and will provide a standardized method for referring to the 
+     forms and to the supporting source documentation. 
+     
+     
+
+                                                                       118   
+                                DAILY CASH REPORT
+     
+     FORM 1                                                    DATE: __________
+                                                           DCR NBR.: __________
+     G/L
+     ACCT.
+     NBR.   
+             STARTING CASH - BEGINNING OF DAY                     $ ___________
+             TODAY'S CASH COLLECTIONS:
+     ____     FROM CASH SALES (BEFORE SALES TAX & RETURNS)          ___________
+     ____     FROM SALES TAX ON CASH SALES                          ___________
+              FROM ACCOUNTS RECEIVABLE:                  
+     FORM 2       CASH COLLECTIONS, INCLUDING CHECKS (FROM FORM 2)  ___________
+     FORM 3   FROM OTHER CASH RECEIPTS (FROM FORMS 3 AND 15)        ___________
+     FORM 15
+                TOTAL CASH TO BE ACCOUNTED FOR ...................  ___________
+       
+              CASH COUNT - END OF DAY                               ___________
+     ____     TODAY'S BANK DEPOSITS -  ONE                          ___________
+     ____                           -  TWO                          ___________
+              TODAY'S CASH PAYMENTS:
+     FORM 4     FOR MERCHANDISE PURCHASES (FROM FORM 4)             ___________
+     FORM 5     FOR OPERATING EXPENSES (FROM FORM 5)                ___________
+     FORM 6     FOR SALES RETURNS PAID IN CASH (FROM FORM 6)        ___________
+     FORM 7     FOR OTHER CASH DISBURSEMENTS (FROM FORM 7)          ___________
+              TOTAL CASH ACCOUNTED FOR ...........................  ___________
+     ____     CASH OVER OR (SHORT)                                  ___________
+
+              SALES TAX INFORMATION:
+     ____       WHOLESALE      $ ___________   PREPARED BY ____ CHECKED BY ____
+     ____       RETAIL           ___________   POSTED BY   ____ DATE __________
+     ____       EXEMPT           ___________
+                COLLECTED        ___________
+     ENTRY POSTED TO GENERAL LEDGER (FROM THIS FORM AND FORMS 2 - 7 and 15)
+     G/L ACCT.    DEBIT        CREDIT      G/L ACCT.    DEBIT        CREDIT
+       NBR.                                  NBR.
+      _____  $ __________  $ __________      _____  $ _________  $ __________
+
+      _____    __________    __________      _____    _________    __________
+
+      _____    __________    __________      _____    _________    __________
+
+      _____    __________    __________      _____    _________    __________
+
+      _____    __________    __________      _____    _________    __________
+
+      _____    __________    __________      _____    _________    __________
+
+      _____    __________    __________      _____    _________    __________
+
+      _____    __________    __________      _____    _________    __________
+     
+      ____     __________    __________      _____    _________    __________
+     
+      ____     __________    __________      _____    _________    __________
+
+     TOTALS  $ __________  $ __________             $ _________  $ __________
+     
+     
+     
+                                                                       119
+     
+     
+     Use FORM 1 to (1)  record  summarize  your  daily  cash  receipts  and 
+     disbursements,  (2) account for cash, and to (3) summarize the related 
+     general ledger entry. 
+    
+     Use the G/L ACCT. NBR. column to record the account numbers to be used 
+     in the general ledger entry.  Then summarize the entry at  the  bottom 
+     of FORM 1. 
+     
+     Also notice that FORM 1 is used for summarizing general ledger entries 
+     that are shown on FORMS 2 through 7 and 15.  Thus, FORM 1 is a control 
+     form  for facilitating recording general ledger entries that come from 
+     several sources. 
+     
+     
+                                                                       120
+                         ACCOUNTS RECEIVABLE COLLECTIONS
+     
+     
+     FORM 2                                                   DATE: ________
+     
+      .......... CLIENT ........     . AMOUNT COLLECTED FOR .          TOTAL
+     ACCT.                           SALES   FINANCE  ACCOUNT  CASH    CASH
+     NBR.       NAME       INVOICE    TAX    CHARGES  BALANCE  DISC.   COLLECTED
+                                                  
+     ____ ________________ _______ $_______ $_______ $_______ $_______ $_______
+         
+     ____ ________________ _______  _______  _______  _______  _______  _______
+     
+     ____ ________________ _______  _______  _______  _______  _______  _______
+     
+     ____ ________________ _______  _______  _______  _______  _______  _______
+     
+     ____ ________________ _______  _______  _______  _______  _______  _______
+     
+     ____ ________________ _______  _______  _______  _______  _______  _______
+     
+     ____ ________________ _______  _______  _______  _______  _______  _______
+     
+     ____ ________________ _______  _______  _______  _______  _______  _______
+     
+     ____ ________________ _______  _______  _______  _______  _______  _______
+     
+     ____ ________________ _______  _______  _______  _______  _______  _______
+         
+     TOTALS                        $_______ $_______ $_______ $_______ $_______
+     
+       G/L ACCT. NBR.               _______  _______  _______  _______  _______
+
+
+     RECORD THE GENERAL LEDGER ENTRY BELOW AND TRANSFER IT TO FORM 1.
+     PREPARED BY ____ CHECKED BY ____ TRANSFERRED TO FORM 1 BY ____
+     
+     G/L
+     ACCT.
+     NBR.       DEBIT        CREDIT
+     
+     ____   $ _________  $ _________ 
+     
+     ____     _________    _________
+
+     ____     _________    _________
+     
+     ____     _________    _________ 
+     
+     ____     _________    _________
+             
+     TOTALS $ _________  $ _________
+     
+     NOTE:  SEE NEXT PAGE FOR GUIDELINES ON WHEN  THIS  FORM  IS  USED  FOR 
+     EITHER THE CASH BASIS OR ACCRUAL BASIS OF ACCOUNTING. 
+     
+     
+     
+                                                                       121
+     
+     
+     FORM  2  is  used  to  record  cash  (including  check) collections of 
+     accounts  receivable.  The  accounting  entry  to  record  collections 
+     depends  upon  (1) the procedure for recognizing finance charges,  (2) 
+     local sales tax requirements,  and (3) whether the cash or the accrual 
+     basis of accounting is used. 
+     
+     The  illustration  that  follows  assumes  that (1) client A purchases 
+     $1,000 in merchandise on account,  (2) client A is  allowed  a  $20.00 
+     sales  discount,  (3) the finance charge is 20 percent annually on the 
+     outstanding balance (excluding taxes and discounts) from the  date  of 
+     sale,  and  (4)  the  account  is  collected one month after the sale. 
+     Consult your local sales tax requirements regarding when sales tax  is 
+     payable  to  the taxing authority.  The following illustration assumes 
+     that the tax is payable when the account is  collected  for  the  cash 
+     basis of accounting and when the sale is made for the accrual basis. 
+     
+     
+     1.  CASH BASIS OF ACCOUNTING.
+     
+        A.  DATE OF SALE.  No entry.
+     
+        B.  COLLECTION.
+     
+             Cash                         $ 1,046.33
+             Sales Discount                    20.00
+               Sales                                    $ 1,000.00
+               Finance Charge Revenue                        16.33
+               Sales Tax Payable                             50.00
+     
+     2.  ACCRUAL BASIS OF ACCOUNTING.
+     
+        A.  DATE OF SALE.
+     
+             Accounts Receivable          $ 1,050.00
+               Sales                                    $ 1,000.00
+               Sales Tax Payable                             50.00
+  
+        B.  COLLECTION AND ONE MONTH'S FINANCE CHARGE
+     
+             Cash                         $ 1,046.33
+             Sales Discount                    20.00
+               Accounts Receivable                      $ 1,050.00
+               Finance Charge Revenue                        16.33
+     
+     
+     The  purpose  of  the  entries  above is to illustrate two methods for 
+     recording the transaction.  Dollar amounts shown for entries 1B and 2B 
+     are taken from FORM 2.  Entry 2A is taken from FORM 8.  Note that  the 
+     SALES  TAX  column is used for the cash basis of accounting but is not 
+     used for the accrual basis.  This is  because  Sales  Tax  Payable  is 
+     recorded in entry 2A. 
+     
+     
+                                                                       122
+                               OTHER CASH RECEIPTS
+     
+     FORM 3                                                   DATE: ________
+     
+     G/L
+     ACCT.
+     NBR.            EXPLANATION OF CASH RECEIPT                   AMOUNT
+     
+     ____    _________________________________________________  $ _________
+     
+     ____    _________________________________________________    _________
+     
+     ____    _________________________________________________    _________
+     
+     ____    _________________________________________________    _________
+     
+     ____    _________________________________________________    _________
+     
+     ____    _________________________________________________    _________
+     
+     ____    _________________________________________________    _________
+    
+     
+             TOTAL CASH COLLECTED                               $ _________
+     
+     
+     RECORD THE GENERAL LEDGER ENTRY BELOW AND TRANSFER IT TO FORM 1.
+     PREPARED BY ____ CHECKED BY ____ TRANSFERRED TO FORM 1 BY ____
+
+     G/L
+     ACCT.
+     NBR.       DEBIT           CREDIT
+     
+     ____   $ __________    $ __________  
+          
+     ____     __________      __________
+     
+     ____     __________      __________
+     
+     ____     __________      __________
+     
+     ____     __________      __________
+     
+     ____     __________      __________
+     
+     ____     __________      __________
+     
+     TOTALS $ __________    $ __________
+     
+     NOTE:  USE  THIS FORM TO RECORD DAILY CASH RECEIPTS (INCLUDING CHECKS) 
+           FROM SOURCES OTHER  THAN  CASH  SALES,  COLLECTION  OF  ACCOUNTS 
+           RECEIVABLE,  AND CASH REFUNDS ON PURCHASE RETURNS (SEE FORM 15). 
+           EXAMPLES INCLUDE COLLECTION OF A  NOTE  RECEIVABLE  AND  A  CASH 
+           REFUND ON SECURITY DEPOSITS. 
+     
+      
+                                                                       123
+                     CASH PAYMENTS FOR MERCHANDISE PURCHASES
+     
+     
+     FORM 4                                                 DATE: _______
+                                                                          
+     
+      ............  VENDOR  ............   . FOR ACCTS. PAY. ONLY .   TOTAL    
+     ACCT.                                     INVOICE     CASH       CASH
+     NBR.          NAME            INVOICE    AMT. PAID   DISCOUNT    PAID
+     
+     _____  _____________________  _______ $__________ $__________ $__________
+     
+     _____  _____________________  _______  __________  __________  __________
+     
+     _____  _____________________  _______  __________  __________  __________
+     
+     _____  _____________________  _______  __________  __________  __________
+     
+     _____  ____________________   _______  __________  __________  __________
+     
+     _____  ____________________   _______  __________  __________  __________
+     
+     _____  ____________________   _______  __________  __________  __________
+     
+     _____  ____________________   _______  __________  __________  __________
+     
+     
+      TOTALS                               $__________ $__________ $__________
+     
+      GENERAL LEDGER ACCT. NBR.             __________  __________  __________
+     
+     
+     RECORD THE GENERAL LEDGER ENTRY BELOW AND TRANSFER IT TO FORM 1.
+     PREPARED BY ____ CHECKED BY ____ TRANSFERRED TO FORM 1 BY ____
+     
+     G/L
+     ACCT.
+     NBR.          DEBIT        CREDIT
+     
+     ____      $ _________  $ __________ 
+          
+     ____        _________    __________
+     
+     ____        _________    __________
+     
+     ____        _________    __________
+     
+     ____        _________    __________
+     
+     TOTALS    $ _________  $ __________
+
+     NOTE:  USE  THIS  FORM  TO  RECORD  CASH  (NOT  CHECK)  PAYMENTS  FOR 
+            MERCHANDISE  PURCHASES  AND  FOR  PAYMENTS   ON   ACCOUNT   FOR 
+            MERCHANDISE  PURCHASES PREVIOUSLY RECORDED AS ACCOUNTS PAYABLE. 
+            USE FORM 9 FOR CHECK PAYMENTS FOR  MERCHANDISE  PURCHASES.  USE 
+            FORMS 5 AND 10 FOR PURCHASES RELATED TO OPERATING EXPENSES. 
+    
+   
+                                                                       124
+                         OPERATING EXPENSES PAID IN CASH
+                         (OTHER THAN SALARIES AND WAGES)
+     
+     FORM 5                                                  DATE: ________
+     
+     G/L       .................. VENDOR ...................
+     ACCT.   ACCT.
+     NBR.    NBR.               NAME                   INVOICE          AMOUNT
+     
+     ____   _____  ___________________________________ _______      $ __________
+     
+     ____   _____  ___________________________________ _______        __________
+     
+     ____   _____  ___________________________________ _______        __________
+     
+     ____   _____  ___________________________________ _______        __________
+     
+     ____   _____  ___________________________________ _______        __________
+     
+     ____   _____  ___________________________________ _______        __________
+     
+     ____   _____  ___________________________________ _______        __________
+     
+     ____   _____  ___________________________________ _______        __________
+     
+     
+            TOTAL CASH PAID                                         $ __________
+     
+     
+     RECORD THE GENERAL LEDGER ENTRY BELOW AND TRANSFER IT TO FORM 1.
+     PREPARED BY ____ CHECKED BY ____ TRANSFERRED TO FORM 1 BY ____
+     
+     G/L                                     G/L
+     ACCT.                                   ACCT.
+     NBR.         DEBIT        CREDIT        NBR.      DEBIT       CREDIT
+                                             
+     ____     $ _________  $ __________     _____  $ __________ $ __________ 
+     
+     ____       _________    __________     _____    __________   __________
+     
+     ____       _________    __________     _____    __________   __________
+     
+     ____       _________    __________     _____    __________   __________
+     
+     ____       _________    __________     _____    __________   __________
+     
+      TOTALS  $ ________   $ __________            $ __________ $ __________
+     
+     NOTE: USE  THIS FORM TO RECORD CASH (NOT CHECK) PAYMENTS FOR OPERATING 
+           EXPENSES, SUCH AS POSTAGE,  TRANSPORTATION,  AND OFFICE SUPPLIES 
+           AND  FOR  CASH  PAYMENTS  FOR THESE ITEMS PREVIOUSLY RECORDED AS 
+           ACCOUNTS PAYABLE.  RECORD CHECK PAYMENTS FOR OPERATING  EXPENSES 
+           ON FORM 10. RECORD SALARIES AND WAGES DATA ON FORMS 12 AND 13. 
+     
+      
+     
+                                                                       125
+                           SALES RETURNS PAID IN CASH
+                OR SALES RETURNS CREDITED TO ACCOUNTS RECEIVABLE
+     
+     FORM 6                                                    DATE: _______
+     
+            
+     CLIENT                                 TOTAL                   
+     ACCT.             SALES       ACCT.    CASH   CASH                SALES
+     NBR.    CLIENT    INVOICE     REC.     PAID   DISCOUNT  SALES     TAX
+
+     ____ ____________ _______  $_______ $_______ $_______ $_______  $_______
+     
+     ____ ____________ _______   _______  _______  _______  _______   _______
+                         
+     ____ ____________ _______   _______  _______  _______  _______   _______
+     
+     ____ ____________ _______   _______  _______  _______  _______   _______
+     
+     ____ ____________ _______   _______  _______  _______  _______   _______
+     
+     ____ ____________ _______   _______  _______  _______  _______   _______
+     
+     ____ ____________ _______   _______  _______  _______  _______   _______
+                                                     
+     TOTALS                     $_______ $_______ $_______ $_______  $_______
+     
+     G/L ACCT. NBR.              _______  _______  _______  _______   _______
+
+     
+     
+     RECORD THE GENERAL LEDGER ENTRY BELOW AND TRANSFER IT TO FORM 1.
+     PREPARED BY ____ CHECKED BY ____ TRANSFERRED TO FORM 1 BY ____
+     
+     G/L
+     ACCT.
+     NBR.         DEBIT        CREDIT
+     
+     ____    $ __________  $ __________ (SALES RETURNS AND ALLOWANCES -
+                                         DEBIT)
+     ____      __________    __________
+     
+     ____      __________    __________
+     
+     ____      __________    __________
+
+     ____      __________    __________
+     
+     ____      __________    __________  
+                                                                      
+     TOTALS  $ __________  $ __________
+     
+     NOTE:  USE THIS FORM TO RECORD (1) CASH PAYMENTS AND  (2)  CREDITS  TO 
+            ACCOUNTS  RECEIVABLE  FOR  MERCHANDISE WHICH WAS SOLD AND WHICH 
+            WAS SUBSEQUENTLY RETURNED BY THE CLIENT.  RECORD CHECK PAYMENTS 
+            ON FORM 11.  COLUMNS USED WILL DEPEND UPON THE PREVIOUS GENERAL 
+            LEDGER ENTRY. 
+     
+     
+     
+     
+                                                                       126
+     
+
+     The  general  ledger entry to record the return depends upon the entry 
+     that was made previously to record the sale .  Generally,  the general 
+     ledger entry should cancel (reverse) the previous entry or entries. 
+     
+     For example, assume that this entry was made to record a sale. 
+     
+        Accounts Receivable               $1,000.00
+          Sales                                      $1,000.00
+          
+     If  the client returns all of the merchandise,  before making payment, 
+     the following entry would record the transaction. 
+     
+        Sales Returns and Allowances      $1,000.00
+          Accounts Receivable                        $1,000.00
+     
+     
+     The client's account should also be reduced by $1,000.00,  or whatever 
+     amount  was charged.  Use the "CLIENT ACCT.  NBR." column of FORM 6 to 
+     identify the client's account number. 
+     
+     Cash, in lieu of Accounts Receivable (above), would have been credited 
+     if the client had been reimbursed $1,000.00 in cash.  Also, if a sales 
+     cash discount was allowed before the  merchandise  was  returned,  the 
+     discount should be reversed. 
+     
+
+                                                                       127
+                            OTHER CASH DISBURSEMENTS
+     
+     
+     FORM 7                                                   DATE: _______
+     
+     G/L      .................... VENDOR ......................
+     ACCT.  ACCT.                                          
+     NBR.   NBR.                   NAME                    INVOICE     AMOUNT
+     
+     ____   ____  ________________________________________ _______  $__________
+     
+     ____   ____  ________________________________________ _______   __________
+     
+     ____   ____  ________________________________________ _______   __________
+     
+     ____   ____  ________________________________________ _______   __________
+     
+     ____   ____  ________________________________________ _______   __________
+     
+     ____   ____  ________________________________________ _______   __________
+     
+     ____   ____  ________________________________________ _______   __________
+     
+     
+            TOTAL CASH PAID                                         $__________
+     
+     
+     RECORD THE GENERAL LEDGER ENTRY BELOW AND TRANSFER IT TO FORM 1.
+     PREPARED BY ____ CHECKED BY ____ TRANSFERRED TO FORM 1 BY ____
+     
+     G/L                                  G/L
+     ACCT.                                ACCT.
+     NBR.         DEBIT        CREDIT     NBR.       DEBIT       CREDIT
+     
+     ____     $ __________ $ __________   ____   $ __________ $ __________
+     
+     ____       __________   __________   ____     __________   __________
+     
+     ____       __________   __________   ____     __________   __________
+     
+     ____       __________   __________   ____     __________   __________
+     
+     ____       __________   __________   ____     __________   __________
+     
+     
+     TOTALS   $ __________ $ __________          $ __________ $ __________
+     
+     NOTE: EXCEPT FOR SALARIES AND WAGES, USE THIS FORM TO RECORD ALL OTHER 
+           CASH  (NOT CHECK) DISBURSEMENTS NOT SHOWN FORMS 4 - 6.  EXAMPLES 
+           INCLUDE   ADVANCES  TO  EMPLOYEES AND SECURITY DEPOSITS.  RECORD 
+           SALARIES  AND  WAGES   ON  FORMS  12  AND   13.   RECORD   OTHER 
+           DISBURSEMENTS BY CHECK ON FORM 12.  
+     
+     
+                                                                       128
+                                SALES ON ACCOUNT
+    
+
+     FORM 8                                                   DATE: ________
+     
+     ....... CLIENT ......   SALES                            OTHER
+     ACCT.                   INVOICE      SALES     SALES     G/L              
+     NBR.        NAME        NBR.         AMOUNT    TAX       ACCT.  AMOUNT   
+
+     ____  _______________  _______     $________ $________   ____ $________ 
+
+     ____  _______________  _______      ________  ________   ____  ________  
+
+     ____  _______________  _______      ________  ________   ____  ________  
+
+     ____  _______________  _______      ________  ________   ____  ________  
+
+     ____  _______________  _______      ________  ________   ____  ________  
+
+     ____  _______________  _______      ________  ________   ____  ________  
+
+     ____  _______________  _______      ________  ________   ____  ________  
+
+     ____  _______________  _______      ________  ________   ____  ________  
+
+     ____  _______________  _______      ________  ________   ____  ________  
+
+     ____  _______________  _______      ________  ________   ____  ________  
+
+     ____  _______________  _______      ________  ________   ____  ________  
+
+           TOTALS                       $________ $________        $________
+     
+           GENERAL LEDGER ACCT. NBR.     ________  ________          
+
+
+     RECORD THE ENTRY BELOW AND POST IT TO THE GENERAL LEDGER.
+     PREPARED BY ____ CHECKED BY ____ POSTED BY ____ DATE ________
+
+     G/L
+     ACCT.
+     NBR.        DEBIT        CREDIT
+     
+     ____    $ __________ $ __________ (ACCOUNTS RECEIVABLE - DEBIT)
+     
+     ____      __________   __________
+     
+     ____      __________   __________ 
+     
+     ____      __________   __________ (SALES - CREDIT)
+     
+     TOTALS  $ __________ $ __________
+     
+     NOTE:  USE THIS FORM TO  RECORD  SALES  ON  ACCOUNT  THAT  ARE  TO  BE 
+            CONSIDERED  AS  ACCOUNTS  RECEIVABLE.  POST THE AMOUNTS TO YOUR 
+            GENERAL LEDGER IF ACCOUNTS RECEIVABLE IS INCLUDED IN YOUR CHART 
+            OF ACCOUNTS.  IF A PARTIAL PAYMENT IS RECEIVED ON  A  SALE,  AT 
+            THE TIME OF THE SALE, RECORD THE ENTIRE RECEIVABLE ON THIS FORM 
+            AND THE COLLECTION ON FORM 2. 
+     
+
+     
+                                                                       129
+                    CHECK PAYMENTS FOR MERCHANDISE PURCHASES 
+                
+     
+     FORM 9                                                 DATE: ________
+     
+             ......... VENDOR .........   . FOR ACCTS. PAY. ONLY .
+      CHK.  ACCT.                          INVOICE       CASH        CHECK
+      NBR.  NBR.       NAME      INVOICE   AMT. PAID   DISCOUNT      AMOUNT
+     
+     ____ ____  ________________ _______ $__________ $__________   $__________
+     
+     ____ ____  ________________ _______  __________  __________    __________
+     
+     ____ ____  ________________ _______  __________  __________    __________
+
+     ____ ____  ________________ _______  __________  __________    __________
+
+     ____ ____  ________________ _______  __________  __________    __________
+     
+     ____ ____  ________________ _______  __________  __________    __________
+     
+     ____ ____  ________________ _______  __________  __________    __________
+     
+     ____ ____  ________________ _______  __________  __________    __________
+     
+     ____ ____  ________________ _______  __________  __________    __________
+     
+      TOTALS                             $__________ $__________   $__________
+     
+      GENERAL LEDGER ACCT. NBR.           __________  __________    __________
+     
+     RECORD THE ENTRY BELOW AND POST IT TO THE GENERAL LEDGER.
+     PREPARED BY ____ CHECKED BY ____ POSTED BY ____ DATE ________
+     
+     G/L                                 G/L
+     ACCT. CHK.                          ACCT. CHK.
+     NBR.  NBR.    DEBIT      CREDIT     NBR.  NBR.    DEBIT   CREDIT
+                                       
+     ____  ____ $_________ $_________    ____  ____  $________ $________
+     
+     ____  ____  _________  _________    ____  ____   ________  ________
+     
+     ____  ____  _________  _________    ____  ____   ________  ________
+     
+     ____  ____  _________  _________    ____  ____   ________  ________
+     
+     ____  ____  _________  _________  
+     
+     TOTALS     $_________ $_________                $________ $________
+     
+     NOTE: USE THIS FORM TO RECORD CHECK PAYMENTS FOR MERCHANDISE PURCHASES 
+           AND  FOR  CHECK  PAYMENTS  FOR  MERCHANDISE PURCHASES PREVIOUSLY 
+           RECORDED AS ACCOUNTS PAYABLE.  RECORD THE CHECK NUMBER  AND  THE 
+           PAYEE  FOR  EACH  CREDIT TO A BANK ACCOUNT.  USE FORM 4 FOR CASH 
+           PAYMENTS FOR MERCHANDISE PURCHASES. 
+    
+      
+                                                                       130
+                         OPERATING EXPENSES PAID BY CHECK
+                         (OTHER THAN SALARIES AND WAGES)
+     
+     
+     FORM 10                                                 DATE: ________
+     
+     G/L         ..................... VENDOR ...................
+     ACCT. CHK. INVOICE  ACCT.                                        CHECK
+     NBR.  NBR.  NBR.    NBR.                NAME                     AMOUNT
+     
+     ____  ____ _______ ____  ____________________________________ $ __________
+                        
+     ____  ____ _______ ____  ____________________________________   __________
+     
+     ____  ____ _______ ____  ____________________________________   __________
+     
+     ____  ____ _______ ____  ____________________________________   __________
+     
+     ____  ____ _______ ____  ____________________________________   __________
+     
+     ____  ____ _______ ____  ____________________________________   __________
+     
+     ____  ____ _______ ____  ____________________________________   __________
+     
+     ____  ____ _______ ____  ____________________________________   __________
+     
+     
+            TOTAL                                                  $ __________
+     
+     RECORD THE ENTRY BELOW AND POST IT TO THE GENERAL LEDGER.
+     PREPARED BY ____ CHECKED BY ____ POSTED BY ____ DATE ________
+     
+     G/L                                 G/L
+     ACCT. CHK.                          ACCT. CHK.
+     NBR.  NBR.   DEBIT        CREDIT    NBR.  NBR.    DEBIT      CREDIT
+                                             
+     ____  ____ $_________ $__________  ____  ____ $__________ $__________ 
+                                           
+     ____  ____  _________  __________  ____  ____  __________  __________
+     
+     ____  ____  _________  __________  ____  ____  __________  __________
+     
+     ____  ____  _________  __________  ____  ____  __________  __________
+     
+     ____  ____  _________  __________  ____  ____  __________  __________
+     
+    TOTALS      $_________ $__________             $__________ $__________
+     
+     NOTE: USE  THIS FORM TO RECORD CHECK PAYMENTS FOR OPERATING  EXPENSES, 
+           SUCH  AS  POSTAGE,  TRANSPORTATION,  AND OFFICE SUPPLIES AND FOR 
+           CHECK PAYMENTS FOR THESE ITEMS PREVIOUSLY RECORDED  AS  ACCOUNTS 
+           PAYABLE.  RECORD  THE CHECK NUMBER AND THE PAYEE FOR EACH CREDIT 
+           TO A BANK ACCOUNT.  RECORD CASH PAYMENTS FOR OPERATING  EXPENSES 
+           ON FORM 5.  RECORD SALARIES AND WAGES DATA ON FORMS 12 AND 13. 
+     
+     
+                                                                       131
+                           SALES RETURNS PAID BY CHECK
+     
+     
+     FORM 11                                                   DATE: _______
+     
+     
+           CLIENT
+     CHK.  ACCT.             SALES     ACCTS.   CHECK    CASH            SALES
+     NBR.  NBR.    CLIENT    INVOICE   REC.     AMT.     DISC.   SALES    TAX  
+                                                                         
+     ____ ____ ____________ _______ $_______ $_______ $_______ $_______ $_______
+     
+     ____ ____ ____________ _______  _______  _______  _______  _______  _______
+     
+     ____ ____ ____________ _______  _______  _______  _______  _______  _______
+     
+     ____ ____ ____________ _______  _______  _______  _______  _______  _______
+     
+     ____ ____ ____________ _______  _______  _______  _______  _______  _______
+     
+     ____ ____ ____________ _______  _______  _______  _______  _______  _______
+     
+     ____ ____ ____________ _______  _______  _______  _______  _______  _______
+     
+     
+     TOTALS                         $_______ $_______ $_______ $_______ $_______
+     
+     GENERAL LEDGER ACCT. NBR.       _______  _______  _______  _______  _______
+     
+     
+     RECORD THE ENTRY BELOW AND POST IT TO THE GENERAL LEDGER.
+     PREPARED BY ____ CHECKED BY ____ POSTED BY ____ DATE ________
+     
+     G/L                                  G/L
+     ACCT. CHK.                           ACCT. CHK.
+     NBR.  NBR.     DEBIT      CREDIT     NBR.  NBR.   DEBIT       CREDIT
+     
+     ____  ____ $__________ $__________ (SALES RETURNS AND ALLOWANCES - DEBIT) 
+               
+     ____  ____  __________  __________   ____  ____ $__________ $__________
+     
+     ____  ____  __________  __________   ____  ____  __________  __________
+     
+     ____  ____  __________  __________   ____  ____  __________  __________
+
+     ____  ____  __________  __________   ____  ____  __________  __________
+     
+     ____  ____  __________  __________   ____  ____  __________  __________
+     
+       TOTALS   $__________ $__________              $__________ $__________
+     
+     NOTE: USE THIS FORM TO RECORD CHECK PAYMENTS FOR MERCHANDISE WHICH WAS 
+           SOLD  AND WHICH WAS SUBSEQUENTLY RETURNED BY THE CLIENT.  RECORD 
+           CASH  PAYMENTS  FOR RETURNS ON FORM 6.  COLUMNS USED WILL DEPEND 
+           UPON THE  PREVIOUS   GENERAL  LEDGER  ENTRY.  RECORD  THE  CHECK 
+           NUMBER AND THE PAYEE FOR EACH CREDIT TO A BANK ACCOUNT. 
+     
+    
+                                                                       132
+                            OTHER DISBURSEMENTS BY CHECK
+     
+     
+     FORM 12                                                  DATE: _______
+     
+     G/L           .................. VENDOR ...................
+     ACCT.  CHK. INVOICE  ACCT.
+     NBR.   NBR.   NBR.   NBR.              NAME                      AMOUNT
+     
+     ____   ____ _______ ____  __________________________________  $__________
+     
+     ____   ____ _______ ____  __________________________________   __________
+     
+     ____   ____ _______ ____  __________________________________   __________
+     
+     ____   ____ _______ ____  __________________________________   __________
+     
+     ____   ____ _______ ____  __________________________________   __________
+     
+     ____   ____ _______ ____  __________________________________   __________
+     
+     ____   ____ _______ ____  __________________________________   __________
+     
+     
+            TOTAL                                                  $__________
+     
+     
+     RECORD THE ENTRY BELOW AND POST IT TO THE GENERAL LEDGER.
+     PREPARED BY ____ CHECKED BY ____ POSTED BY ____ DATE ________
+     
+     G/L                                    G/L
+     ACCT. CHK.                             ACCT. CHK.
+     NBR.  NBR.     DEBIT      CREDIT       NBR.  NBR.    DEBIT       CREDIT
+     
+     ____ ____  $__________ $__________     ____  ____ $__________ $__________
+     
+     ____ ____   __________  __________     ____  ____  __________  __________
+     
+     ____ ____   __________  __________     ____  ____  __________  __________
+     
+     ____ ____   __________  __________     ____  ____  __________  __________
+     
+     ____ ____   __________  __________     ____  ____  __________  __________
+     
+     
+     TOTALS     $__________ $__________                $__________ $__________
+     
+     NOTE:  USE THIS FORM TO RECORD ALL OTHER CHECK DISBURSEMENTS NOT SHOWN 
+            FORMS 9 - 11 AND 13.  EXAMPLES INCLUDE  ADVANCES  TO  EMPLOYEES 
+            AND  SECURITY  DEPOSITS.  ALSO  USE  THIS  FORM TO RECORD CHECK 
+            PAYMENTS TO EMPLOYEES FOR PAYROLL - SEE  FORM  13.  RECORD  THE 
+            CHECK  NUMBER  AND THE PAYEE FOR EACH CREDIT TO A BANK ACCOUNT.  
+            RECORD OTHER CASH DISBURSEMENTS ON FORM 7.  RECORD SALARIES AND 
+            WAGES ON FORM 13. 
+            
+     
+     
+                                                                       133
+                               SALARIES AND WAGES
+     
+     
+     FORM 13                                                     DATE: ________
+                                                FOR PAY PERIOD ENDING:_________
+     
+                                                           G/L
+                                                           ACCT.
+                                                           NBR.     AMOUNT
+     FROM PAYROLL REGISTER FOR EMPLOYEES:
+       REGULAR EARNINGS                  $__________       ____ $__________
+                                                           ____  __________
+                                                           ____  __________
+       OVERTIME EARNINGS                  __________       ____  __________
+                                                           ____  __________
+                                                           ____  __________
+       BONUS EARNINGS                     __________       ____  __________
+                                                           ____  __________
+                                                           ____  __________
+       OTHER PREMIUM PAY EARNINGS         __________       ____  __________
+                                                           ____  __________
+                                                           ____  __________
+
+        TOTAL DEBITS ................... $__________            $__________
+     DEDUCTIONS:
+       FEDERAL INCOME TAX                $__________       ____ $__________
+       STATE INCOME TAX                   __________       ____  __________
+       LOCAL INCOME TAX                   __________       ____  __________
+       FICA TAX                           __________       ____  __________
+       U.S. SAVINGS BONDS                 __________       ____  __________
+       CHARITABLE CONTRIBUTIONS           __________       ____  __________
+       OTHER _______________________      __________       ____  __________
+             _______________________      __________       ____  __________
+             _______________________      __________       ____  __________
+
+         TOTAL CREDITS ................. $__________             __________
+
+     FROM PAYROLL REGISTER, INDIVIDUAL
+     TAXES ON EMPLOYERS - CREDITS:
+       AMOUNT SUBJECT TO FICA TAX        $__________
+         FICA TAX                                          ____ $__________
+       AMOUNT SUBJECT TO UNEMPLOYMENT TAX:
+         STATE                            __________ 
+          STATE UNEMPLOYMENT COMP. TAX                     ____  __________
+         FEDERAL                          __________
+          FEDERAL UNEMPLOYMENT COMP.TAX                    ____  __________
+       OTHER EMPLOYER TAXES:
+          ____________________________    __________
+          AMOUNT OF TAX                                    ____  __________
+          ____________________________    __________
+          AMOUNT OF TAX                                    ____  __________
+     
+         TOTAL EMPLOYER TAX - DEBIT ....                        $__________
+     
+     PREPARED BY ____ CHECKED BY ____ POSTED BY ____ DATE ________
+     
+     
+     
+                                                                       134
+     
+     
+     Use  FORM  13 to summarize information that you record on your Payroll 
+     Register.  A Payroll Register is not included with  CPA-LEDGER  or  in 
+     this  User's  Manual.   Consult  with  your  local  CPA  if  you  need 
+     assistance in this area. 
+     
+     You should also know that various federal,  state,  and local laws and 
+     regulations  require  employers  to keep certain data in their payroll 
+     records.  Also,  periodic reports of this data must  be  sent  to  the 
+     governmental  agencies  and  remittances  must  be  made  for  amounts 
+     withheld from employees and for taxes  levied  on  the  employer.  You 
+     should be thoroughly familiar with these laws and regulations.  If you 
+     need assistance in this area, consult with your local CPA. 
+     
+     The  amounts  on  FORM 13 are used to prepare the general ledger entry 
+     for payroll.  Typical general ledger entries  for  payroll  are:  (For 
+     brevity, all possible accounts are not shown.  Consult with your local 
+     CPA  if  you  do  not  understand  the general ledger entries that are 
+     required to record the payroll.) 
+     
+      EMPLOYEES' EARNINGS: 
+     
+       Office Salaries Expense                            Debit $
+       Sales Salaries Expense                             Debit $
+       General and Administrative Salaries Expense        Debit $
+         Employee Federal Income Tax Payable                       Credit $
+         Employee State Income Tax Payable                         Credit $
+         Employee FICA Tax Payable                                 Credit $
+         Employee Bond Deductions Payable                          Credit $
+         Salaries Payable                                          Credit $
+     
+      EMPLOYER'S PAYROLL TAXES:
+     
+       Payroll Tax Expense                                Debit $
+         Employer FICA Tax Payable                                 Credit $
+         State Unemployment Comp. Tax Payable                      Credit $
+         Fed. Unemployment Comp. Tax Payable                       Credit $
+                          
+
+     Use FORM 12 to record the  check  payments  for  the  various  payable 
+     accounts shown above. 
+     
+     
+                                                                       135
+                              PURCHASES ON ACCOUNT
+    
+     FORM 14                                                  DATE: ________
+     
+     ....... VENDOR ......   PURCHASE     MDSE.      OTHER
+     ACCT.                   INVOICE      PURCHASE   G/L             ACCOUNTS  
+     NBR.        NAME        NBR.         AMOUNT     ACCT.  AMOUNT   PAYABLE
+
+     ____  _______________  _______     $________    ____ $________ $________ 
+
+     ____  _______________  _______      ________    ____  ________  ________ 
+
+     ____  _______________  _______      ________    ____  ________  ________ 
+
+     ____  _______________  _______      ________    ____  ________  ________ 
+
+     ____  _______________  _______      ________    ____  ________  ________ 
+
+     ____  _______________  _______      ________    ____  ________  ________ 
+
+     ____  _______________  _______      ________    ____  ________  ________ 
+
+     ____  _______________  _______      ________    ____  ________  ________ 
+
+     ____  _______________  _______      ________    ____  ________  ________ 
+
+     ____  _______________  _______      ________    ____  ________  ________ 
+
+     ____  _______________  _______      ________    ____  ________  ________ 
+
+           TOTALS                       $________         $________ $________
+     
+           GENERAL LEDGER ACCT. NBR.     ________          ________  ________  
+
+
+     RECORD THE ENTRY BELOW AND POST IT TO THE GENERAL LEDGER.
+     PREPARED BY ____ CHECKED BY ____ POSTED BY ____ DATE ________
+
+     G/L                                  G/L
+     ACCT.                                ACCT.
+     NBR.        DEBIT        CREDIT      NBR.       DEBIT       CREDIT
+     
+     ____    $ __________ $ __________    ____   $ __________ $ __________
+     
+     ____      __________   __________    ____     __________   __________
+     
+     ____      __________   __________    ____     __________   __________
+     
+     TOTALS  $ __________ $ __________           $ __________ $ __________
+     
+     NOTE:  USE THIS FORM TO RECORD PURCHASES ON ACCOUNT  THAT  ARE  TO  BE 
+            CONSIDERED  AS  ACCOUNTS  PAYABLE.  POST  THE  AMOUNTS  TO YOUR 
+            GENERAL LEDGER IF ACCOUNTS PAYABLE IS INCLUDED IN YOUR CHART OF 
+            ACCOUNTS.  IF A  PARTIAL PAYMENT IS MADE AT  THE  TIME  OF  THE 
+            PURCHASE,  RECORD  THE  ENTIRE  PURCHASE  ON  THIS FORM AND THE 
+            PARTIAL PAYMENT ON EITHER FORM 4, FORM 5, FORM 9, OR FORM 10. 
+     
+      
+     
+                                                                       136
+                                PURCHASES RETURNS
+     
+     
+     FORM 15                                                   DATE: _______
+     
+            
+      ........ VENDOR .......                                      OTHER
+     ACCT.                       ACCT    CASH   CASH      MDSE.    G/L  
+     NBR.    NAME      INVOICE   PAY.    RECD.  DISCOUNT  PUR.     ACCT.   AMT.
+
+     ____ ____________ ______ $_______ $_______ $_______ $_______  ____ $_______
+     
+     ____ ____________ ______  _______  _______  _______  _______  ____  _______
+                         
+     ____ ____________ ______  _______  _______  _______  ______   ____  _______
+     
+     ____ ____________ ______  _______  _______  _______  _______  ____  _______
+     
+     ____ ____________ ______  _______  _______  _______  _______  ____  _______
+     
+     ____ ____________ ______  _______  _______  _______  _______  ____  _______
+     
+     ____ ____________ ______  _______  _______  _______  _______  ____  _______
+     
+     TOTALS                   $_______ $_______ $_______ $_______       $_______
+     
+     G/L ACCT. NBR.            _______  _______  _______  _______        _______
+
+     
+     RECORD THE GENERAL LEDGER ENTRY BELOW AND TRANSFER IT TO FORM 1.
+
+     PREPARED BY ____ CHECKED BY ____ TRANSFERRED TO FORM 1 BY ____
+     
+     G/L
+     ACCT.
+     NBR.         DEBIT        CREDIT
+     
+     ____    $ __________  $ __________  
+                                         
+     ____      __________    __________
+     
+     ____      __________    __________
+     
+     ____      __________    __________
+
+     ____      __________    __________
+     
+     ____      __________    __________  (PURCHASE RETURNS & ALLOWANCES - 
+                                          CREDIT)
+     TOTALS  $ __________  $ __________
+     
+     NOTE:  USE THIS FORM TO RECORD PURCHASES WHICH WERE  RETURNED  TO  THE 
+            VENDOR.  COLUMNS  USED  WILL  DEPEND  UPON THE PREVIOUS GENERAL 
+            LEDGER ENTRY. 
+     
+     
+     
+     
+                                                                       137
+     
+
+     The  general  ledger entry to record the return depends upon the entry 
+     that was made previously to  record  the  purchase  .  Generally,  the 
+     general  ledger  entry  should  cancel (reverse) the previous entry or 
+     entries. 
+     
+     For example, assume that this entry was made to record a purchase. 
+     
+        Merchandise Purchases             $1,000.00
+          Accounts Payable                          $1,000.00
+          
+     If you return all of  the  merchandise,  before  making  payment,  the 
+     following entry would record the transaction. 
+     
+        Accounts Payable                  $1,000.00
+          Purchase Returns and Allowances           $1,000.00
+     
+     
+     The vendor's account should also be reduced by $1,000.00,  or whatever 
+     amount was credited.  Use the "VENDOR ACCT. NBR." column of FORM 15 to 
+     identify the vendor's account number. 
+     
+     Cash, in lieu of Accounts Payable (above),  would have been debited if 
+     you had received the $1,000.00.  Also, if a purchase cash discount was 
+     allowed  before  the merchandise was returned,  the discount should be 
+     reversed. 
+     
+     
+                                                                      138
+                                             
+                                  DEPRECIATION
+                 FOR PERIOD FROM ____________  TO _____________
+     
+     
+     FORM 16                                              DATE: _________
+     
+     G/L                                         PRIOR
+     ACCT.                                       ACCUMULATED    DEPRECIATION
+     NBR.          ASSET              COST       DEPRECIATION   THIS PERIOD
+     
+     ____    _____________________ $___________  $___________  $___________
+     
+     ____    _____________________  ___________   ___________   ___________
+     
+     ____    _____________________  ___________   ___________   ___________
+     
+     ____    _____________________  ___________   ___________   ___________
+     
+     ____    _____________________  ___________   ___________   ___________
+     
+     ____    _____________________  ___________   ___________   ___________
+     
+     ____    _____________________  ___________   ___________   ___________
+     
+        TOTAL                                                  $___________
+     
+     RECORD THE ENTRY BELOW AND POST IT TO THE GENERAL LEDGER.
+     PREPARED BY ____ CHECKED BY ____ POSTED BY ____ DATE ________
+     
+     G/L
+     ACCT.
+     NBR.         DEBIT       CREDIT
+     
+     ____     $__________ $__________
+     
+     ____      __________  __________
+     
+     ____      __________  __________
+     
+     ____      __________  __________
+     
+     ____      __________  __________
+  
+     TOTALS   $__________ $__________
+     
+     
+     NOTE:  ATTACH  APPROPRIATE  DEPRECIATION SCHEDULES TO THIS FORM.  EACH 
+            DEPRECIATION SCHEDULE  SHOULD,  AT  A  MINIMUM,  SHOW  THE  (1) 
+            ASSET'S COST,  (2) ACCUMULATED DEPRECIATION AT THE BEGINNING OF 
+            THE PERIOD (3) BOOK VALUE AT THE BEGINNING OF THE  PERIOD,  (4) 
+            METHOD   OF   DEPRECIATION  BEING  USED,   (5)  COMPUTATION  OF 
+            DEPRECIATION  EXPENSE  FOR  THE   CURRENT   PERIOD,   AND   (6) 
+            UNDEPRECIATED ASSET BALANCE AT THE END OF THE PERIOD. 
+     
+     
+                                                                       139
+                          OTHER GENERAL LEDGER ENTRIES
+     
+     
+     FORM 17                                             DATE: __________
+     
+     G/L                  .... CLIENT .....      .... VENDOR .....
+     ACCT. CHK. INVOICE  ACCT.                 ACCT.
+     NBR.  NBR.   NBR.   NBR.       NAME       NBR.        NAME        AMOUNT
+     
+     ____ ____  _______ ____ ________________  ____ ________________ $________
+     
+     ____ ____  _______ ____ ________________  ____ ________________  ________
+                                
+     ____ ____  _______ ____ ________________  ____ ________________  ________
+     
+     ____ ____  _______ ____ ________________  ____ ________________  ________
+     
+     ____ ____  _______ ____ ________________  ____ ________________  ________
+     
+     ____ ____  _______ ____ ________________  ____ ________________  ________
+     
+        TOTAL                                                        $________
+     
+     RECORD THE ENTRY BELOW AND POST IT TO THE GENERAL LEDGER.
+     PREPARED BY ____ CHECKED BY ____ POSTED BY ____ DATE ________
+     
+     G/L                                G/L
+     ACCT. CHK.                             ACCT. CHK.
+     NBR.  NBR.      DEBIT      CREDIT      NBR   NBR.    DEBIT       CREDIT
+                                        
+     ____  ____  $__________ $__________    ____  ____ $__________ $__________
+     
+     ____  ____   __________  __________    ____  ____  __________  __________
+     
+     ____  ____   __________  __________    ____  ____  __________  __________
+     
+     ____  ____   __________  __________    ____  ____  __________  __________
+     
+     ____  ____   __________  __________    ____  ____  __________  __________
+     
+     ____  ____   __________  __________    ____  ____  __________  __________
+     
+     TOTALS      $__________ $__________               $__________ $__________
+
+
+     NOTE: USE THIS FORM TO SUMMARIZE ANY GENERAL LEDGER ENTRY NOT PROVIDED 
+           FOR  BY FORMS  1 - 16.  EXAMPLES INCLUDE RECORDING UNCOLLECTIBLE 
+           ACCOUNTS, RECORDING UNREALIZED LOSSES ON SHORT-TERM INVESTMENTS, 
+           RECORDING  AMORTIZATION  OF  INTANGIBLE  ASSETS,  AND  RECORDING 
+           RETIREMENT  OF  AN  ASSET  WHEN  NO  CASH  IS  INVOLVED  IN  THE 
+           TRANSACTION.  RECORD THE CHECK NUMBER AND  THE  PAYEE  FOR  EACH 
+           CREDIT TO A BANK ACCOUNT. 
+
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
 
 ## CHKREG.BAS
 
+{% raw %}
 ```bas
 500  ' COPYRIGHT 1986 TRONOLONE & FOSTER, PC
 1000 REM CHKREG.BAS
@@ -527,9 +3204,693 @@ machines:
 3600 GOTO 3580
 3610 RETURN
 ```
+{% endraw %}
+
+## CHP12-14.TXT
+
+{% raw %}
+```
+ 
+     
+                                                                        
+                                                                        83
+                                   CHAPTER 12
+               
+                             DAILY MENU  -  OPTION 7
+     
+     
+     
+     
+     
+     WHAT OPTION 7 IS USED FOR.
+     
+     DAILY Option 7 is used to print a complete  listing  of  your  general 
+     ledger accounts. 
+          
+     As explained in Chapter 3, SETUP Option 1 is used to identify accounts 
+     that  are to be included in your general ledger.  While SETUP Option 1 
+     is establishing your general ledger,  according to your  instructions, 
+     it also automatically adds extra accounts for use at a later time. 
+     
+          .  The  accounts that you identify to SETUP Option 1 are referred 
+             to as "active accounts". 
+     
+          .  The extra  accounts  that  Option  1  automatically  adds  are 
+             referred to as "inactive accounts". 
+     
+
+     You may use DAILY Option 7 to print:
+     
+          .  Active accounts only, or
+     
+          .  Inactive accounts only, or
+     
+          .  Both active and inactive accounts.       
+
+     
+     A printout from Option 7 will show:
+          
+          .  For each "active account" the:
+
+             .  Account  classification,  such as Current Assets or Current 
+                Liabilities. 
+      
+             .  Account number.
+     
+             .  Account title, such as Cash in Bank.
+     
+             .  Year's opening balance.
+     
+             .  Cumulative sum of all charges to the account.
+         
+     
+     
+                                                                        84
+     
+
+          .  For each "inactive account" the:
+     
+             .  Account classification,  such as Current Assets or  Current 
+                Liabilities. 
+     
+             .  Account number.
+     
+             .  Words "INACTIVE ACCOUNT".
+     
+     If  you  want  to  add another account to the general ledger,  get the 
+     account number (an inactive account) from a DAILY  Option  7  printout 
+     (this  chapter).  Then use that account number in DAILY Option 8 (next 
+     chapter). 
+     
+     Or,  perhaps you will want to use Option  7  to  determine  the  total 
+     values  that  have  been  added  to  each of the active general ledger 
+     accounts.  As explained above, the printout will list the total values 
+     for your review. 
+     
+     
+     OPTION 7 SEQUENCE OF EXECUTION AND AN ILLUSTRATION.
+     
+     Refer to Chapter 2 for the standard messages and  reminders  that  are 
+     part  of  Option  7.  After  the standard messages and reminders,  the 
+     following appears on your computer screen: 
+            
+       WOULD YOU LIKE A BRIEFING ON HOW TO USE THIS PROGRAM TO BE DISPLAYED  
+       ON THE COMPUTER SCREEN? (ENTER `Y' FOR `YES' OR `N' FOR `NO').   _
+     
+     If your response is `Y' the following appears:  (If you  respond  with 
+     `N', the briefing is bypassed.) 
+               
+       THIS COMPUTER PROGRAM PRINTS A CHART OF GENERAL LEDGER ACCOUNTS.  
+       YOU WILL BE GIVEN THE OPTIONS OF:
+     
+        1.  PRINTING ACTIVE ACCOUNTS ONLY, OR
+        2.  PRINTING INACTIVE ACCOUNTS ONLY, OR
+        3.  PRINTING BOTH ACTIVE AND INACTIVE ACCOUNTS.
+     
+       (ACTIVE  ACCOUNTS  ARE  ACCOUNTS  THAT  SETUP  OPTION 1 ADDED TO THE 
+       GENERAL LEDGER,  IN  ACCORDANCE  WITH  YOUR  INSTRUCTIONS.  INACTIVE 
+       ACCOUNTS  ARE  ACCOUNTS  THAT SETUP OPTION 1 AUTOMATICALLY ADDED FOR 
+       FUTURE  EXPANSION  OF  ACTIVE  GENERAL  LEDGER  ACCOUNTS.   INACTIVE 
+       ACCOUNTS  ARE  IDENTIFIED  IN  THE  PRINTOUT  BY THE WORDS `INACTIVE 
+       ACCOUNT'.) 
+     
+       PRESS ANY KEY TO CONTINUE.
+     
+     
+      
+                                                                        85
+     
+
+     After you press a key, Option 7 asks for TODAY'S DATE, as explained in 
+     Chapter 2 (STANDARD MESSAGES  AND  REMINDERS).  After  you  enter  the 
+     date,  Option 7 asks you to enter which accounts you wish to print, as 
+     follows: (The assumed input is "3".) 
+     
+     
+     
+       SELECT THE OPTION OF YOUR CHOICE.
+           ENTER `1' FOR PRINTING ACTIVE ACCOUNTS ONLY, OR
+           ENTER `2' FOR PRINTING INACTIVE ACCOUNTS ONLY, OR
+           ENTER `3' FOR PRINTING BOTH ACTIVE AND INACTIVE ACCOUNTS.   3
+     
+     
+     
+     After making your entry, Option 7 begins printing.
+     
+     
+     ERROR MESSAGES.
+     
+     There  are  several types of errors that you might make while entering 
+     your input into Option 7.  An example is an entry of 13 for  a  month. 
+     Another  example  is  a  number  that is not within a range of numbers 
+     requested. 
+     
+     If you make an input error,  Option 7 refuses to  continue  until  you 
+     reenter  your  answer.  Instructions will be displayed on the computer 
+     screen so that you may determine the correct input. 
+     
+     
+     PRINTED OUTPUT.
+     
+     The following sample printout assumes that all active and all inactive 
+     general  ledger  accounts are to be printed.  For brevity,  only a few 
+     accounts are shown in the sample printout. 
+     
+     
+     
+                                                                        86
+     
+     
+                                                                     PAGE 1
+                                                         RUNDATE   06/16/85
+     
+                               ABC WHOLESALE, INC.
+              CHART OF ACTIVE AND INACTIVE GENERAL LEDGER ACCOUNTS
+     
+     
+    
+     ACCOUNT CLASSIFICATIONS                             ACCOUNT    ACCOUNT
+           AND TITLES                                    BALANCE    NUMBER
+     
+     *************************  BALANCE SHEET  ***************************
+     CURRENT ASSETS
+      INACTIVE ACCOUNT                                              1
+      INACTIVE ACCOUNT                                              2
+      CASH IN BANK                                      20,847.06       3
+        OPENING BALANCE - DEBIT         12,620.10
+        OPENING BALANCE - CREDIT              .00
+        SUM OF PERIOD DEBITS            20,301.04
+        SUM OF PERIOD CREDITS           12,074.08   
+      INACTIVE ACCOUNT                                               4
+      INACTIVE ACCOUNT                                               5
+      INACTIVE ACCOUNT                                               6
+      SHORT-TERM INVESTMENTS                             4,500.00       7
+        OPENING BALANCE - DEBIT          4,500.00
+        OPENING BALANCE - CREDIT              .00
+        SUM OF PERIOD DEBITS                  .00
+        SUM OF PERIOD CREDITS                 .00
+      INACTIVE ACCOUNT                                               8
+      INACTIVE ACCOUNT                                               9
+      INACTIVE ACCOUNT                                              10
+     
+     
+     
+     The printout will continue in a similar manner until all Balance Sheet 
+     accounts are printed.  Then, the Income Statement accounts will start. 
+     
+     
+     Practice.
+     
+     Use Option 7 and your practice general ledger to print all active  and 
+     inactive general ledger accounts. 
+     
+     
+                                                                        87
+     
+                                   CHAPTER 13
+
+                             DAILY MENU  -  OPTION 8
+     
+     
+     
+     
+     
+     WHAT OPTION 8 IS USED FOR.
+     
+     Use  Option  8  whenever  you  want  to  add an account to the general 
+     ledger. 
+     
+     As explained in Chapter 3, SETUP Option 1 is used to identify accounts 
+     that are to be included in your general ledger.  While SETUP Option  1 
+     is  establishing your general ledger,  according to your instructions, 
+     it also automatically adds extra accounts for use at a later time. 
+     
+          .  The accounts that you identify to SETUP Option 1 are  referred 
+             to as "active accounts". 
+     
+          .  The  extra  accounts that are automatically added are referred 
+             to as "inactive accounts". 
+     
+     Use the "inactive accounts" if you want to add new  accounts  to  your 
+     general   ledger.   Option   8  will  remove  the  "inactive  account" 
+     designation and will assign whatever account name that you specify. 
+     
+     It is important WHERE,  in the general ledger,  that  you  add  a  new 
+     account. 
+
+     For example, assume that you want to add the account Sales Returns and 
+     Allowances.  Like any other new account,  this account should be added 
+     so that it will follow the account to which it is related.  (Sales, in 
+     this case.) 
+
+     Another  example  might  be  a  new bank account.  You should add this 
+     account immediately after the bank account that is  currently  in  the 
+     general ledger.  If there is no related account in the general ledger, 
+     add  the  new  account  where  it should normally appear - immediately 
+     before accounts receivable, for a bank account. 
+     
+     The reason for this requirement is related to the logic built into the 
+     computer  programs  that  print  the  Balance  Sheet  and  the  Income 
+     Statement.  The  logic,  with  certain  exceptions,  assumes  that the 
+     accounts are in the order that they should  appear  in  the  financial 
+     statements.  
+     
+     This should not prove to be a problem to you.  Merely use DAILY Option 
+     7  to  print  all  active  and inactive accounts.  Use the printout to 
+     determine the available  accounts  (those  with  the  words  "Inactive 
+     Account") and the account number to be used. 
+     
+      
+     
+                                                                        88
+     
+     
+     So that you can see the results,  we used Option 8 to add new accounts 
+     to your practice general ledger - account numbers 4,  80, 244, and 254 
+     for corporations and account 4 or  partnerships  and  proprietorships. 
+     Look at the Unadjusted Trial Balance that you prepared in the Practice 
+     section  of  Chapter  7.  Notice that the accounts were added in their 
+     logical places for preparation of the financial statements. 
+     
+
+     OPTION 8 SEQUENCE OF EXECUTION AND AN ILLUSTRATION.
+     
+     Refer  to  Chapter  2  for an explanation of the standard messages and 
+     reminders that are part of Option 8.  After the standard messages  and 
+     reminders, the following will appear on your computer screen: 
+     
+     
+     
+       WOULD YOU LIKE A BRIEFING ON HOW TO USE THIS COMPUTER PROGRAM TO BE   
+       DISPLAYED ON THE COMPUTER SCREEN?
+     
+       ENTER `Y' FOR `YES' OR `N' FOR `NO'.    _
+     
+     
+     
+     If  you answer `Y',  the following appears:  (If your response is `N', 
+     the briefing is bypassed.) 
+     
+     
+     
+       THIS COMPUTER PROGRAM IS TO BE USED ONLY FOR ADDING NEW ACCOUNTS  TO 
+       THE GENERAL LEDGER.  EACH NEW ACCOUNT MUST ALREADY BE IN THE GENERAL 
+       LEDGER  AND  BE  CLASSIFIED  AS  AN  `INACTIVE  ACCOUNT'.   YOU  CAN 
+       DETERMINE  WHICH  ACCOUNT  NUMBERS  HAVE  THIS   CLASSIFICATION   BY 
+       RETURNING TO THE DAILY MENU, SELECTING OPTION 7, AND SPECIFYING THAT 
+       ALL ACCOUNTS BE PRINTED. 
+     
+       DO YOU WISH TO CONTINUE THIS SESSION?
+     
+       ENTER `Y' FOR `YES' OR `N' FOR `NO'.    _
+     
+     
+     
+     If your answer is `Y', the following appears:  (If you answer `N', you 
+     will be returned to the DAILY menu.) 
+     
+     
+                                                                        89
+     
+     
+
+       THE COMPUTER IS READY TO START ADDING NEW ACCOUNTS  TO  THE  GENERAL 
+       LEDGER. 
+     
+       THREE  INPUTS  ARE  REQUIRED FOR EACH NEW ACCOUNT.  THEY ARE (1) THE 
+       ACCOUNT NUMBER, (2) THE ACCOUNT TITLE,  AND (3) A `D' FOR `DEBIT' OR 
+       A `C' FOR `CREDIT'. 
+     
+       ONE LINE ON THE COMPUTER SCREEN IS USED FOR ENTERING (1),  (2),  AND 
+       (3) ABOVE. 
+     
+       CPA-LEDGER AUTOMATICALLY ASSIGNS TO EACH ACCOUNT A BEGINNING BALANCE 
+       OF ZERO. 
+     
+       YOU SHOULD PRESS THE RETURN KEY AFTER ENTERING  EACH  OF  THE  THREE 
+       INPUT VALUES. (CAREFULLY NOTE THAT YOU WILL BE REQUIRED TO PRESS THE 
+       RETURN  KEY  THREE  TIMES  -  ONE  TIME  FOR EACH OF THE THREE INPUT 
+       VALUES.) 
+     
+       ERROR MESSAGES WILL APPEAR AT THE TOP OF THE  COMPUTER  SCREEN.  THE 
+       ERROR MESSAGES ARE SELF EXPLANATORY. 
+     
+       PRESS ANY KEY TO CONTINUE. 
+     
+     
+     
+     After  you  press a key,  Option 8 starts asking for information about 
+     the accounts that you wish to add to the general ledger. 
+     
+     In the illustration to follow, we will assume that two accounts are to 
+     be added.  Details are: 
+     
+          .  OFFICE SALARIES EXPENSE is to be added to the Income Statement 
+             accounts.  Reference to an Option 7 printout shows that  SALES 
+             SALARY  EXPENSE  is  currently  in  the  general ledger,  with 
+             account number 207.  The printout shows  that  account  number 
+             208 is an INACTIVE ACCOUNT.  We will assign account number 208 
+             to OFFICE SALARIES EXPENSE, a debit balance account. 
+     
+          .  OFFICE  SUPPLIES is to be added to the Balance Sheet accounts, 
+             as a CURRENT ASSET.  We decide to add this account immediately 
+             after MERCHANDISE INVENTORY which is presently in the  general 
+             ledger  with  account  number  19.  Account  number  20  is an 
+             inactive account.  We will assign account number 21 to  OFFICE 
+             SUPPLIES, a debit balance account. 
+     
+     The Option 8 display and the assumed input, explained above, are: 
+     
+           
+                                                                        90
+     
+
+       ENTER DATA FOR YOUR NEW ACCOUNTS BELOW.  ALWAYS REMEMBER THAT:
+        1.  EACH  NEW  ACCOUNT  REQUIRES  T-H-R-E-E INPUTS (ACCOUNT NUMBER; 
+            ACCOUNT TITLE; AND A `D' FOR A `DEBIT' OR `C' FOR A `CREDIT'.) 
+        2.  YOU MUST PRESS THE RETURN KEY AFTER E-A-C-H OF THE THREE  ABOVE 
+            INPUTS. 
+        3.  CPA-LEDGER   AUTOMATICALLY   ASSIGNS  ZERO  AS  THE  ACCOUNT'S 
+            BEGINNING BALANCE. 
+        4.  ALL MESSAGES WILL APPEAR IN THE  UPPER  PART  OF  THE  COMPUTER 
+            SCREEN. 
+        5.  NEW  ACCOUNTS  REJECTED IN THEIR ENTIRETY ARE TO REENTERED.
+        6.  ENTER `Q` (FOR QUIT) FOR THE ACCT. NBR. AFTER ALL NEW ACCOUNTS 
+            ARE ENTERED. 
+        7.  YOUR COMPUTER'S CAPS-LOCK KEY MUST BE `ON'.
+     **********************************************************************
+     
+               ACCOUNT                                       D=DEBIT
+               NUMBER      ACCOUNT TITLE                     C=CREDIT
+     
+                208        OFFICE SALARIES EXPENSE              D
+                21         OFFICE SUPPLIES                      D
+                Q
+     
+     Each time you add a new account,  the  system  asks  you  if  the  new 
+     account  is for accounts receivable,  beginning merchandise inventory, 
+     retained  earnings  for  corporations  or  the  capital  account   for 
+     partnerships and proprietorships (unless these accounts are already in 
+     the general ledger), or for a new bank account. 
+     
+     After entering `Q', the following appears:
+     
+       YOUR  INPUT  WILL  BE DISPLAYED ON THE SCREEN SO THAT YOU MAY VERIFY 
+       IT.  CAREFULLY NOTE ANY ERRORS SO THAT INCORRECT DATA  WILL  NOT  BE 
+       POSTED TO THE ACCOUNTS. 
+     
+       PRESS ANY KEY TO CONTINUE.
+     
+               
+     After pressing a key, you will see this:
+          
+       YOUR DEBIT ENTRIES (WITH ACCOUNT TITLES) APPEAR BELOW.
+     
+       THE LIST OF DEBIT ENTRIES IS COMPLETE.  NOTE ANY INPUT ERRORS.
+     
+       PRESS ANY KEY TO CONTINUE.
+     
+     
+        ACCOUNT                                             ACCOUNT
+        NUMBER     ACCOUNT TITLE                            BALANCE
+     
+         208       OFFICE SALARIES EXPENSE                      .00
+          21       OFFICE SUPPLIES                              .00
+     
+     
+      
+                                                                        91
+     
+
+     After  you press a key,  a screen similar to the above will appear for 
+     any credit accounts.  For this  illustration,  the  following  wording 
+     would appear where the account information is normally displayed: 
+     
+     
+     
+       **** THERE WERE NO NEW ACCOUNTS WITH CREDITS. *****
+     
+     
+     
+     This  control  is  provided to help you detect any input errors.  (You 
+     might inform Option 8  that  an  account  has  a  debit  balance,  for 
+     example, when you intended to signify that it has a credit balance.) 
+     
+     Continuing with the illustration, the following is next to appear: 
+     
+     
+     
+       DO  YOU  DESIRE  TO  ADD TO THE GENERAL LEDGER THE ACCOUNTS THAT YOU 
+       JUST REVIEWED? 
+     
+       ENTER `Y' FOR `YES' OR `N' FOR `NO'.    _
+     
+     
+     
+     If you answer `Y',  the new account(s) will be added  to  the  general 
+     ledger.  If you answer `N',  they will not be added.  In either of the 
+     two events, the following is next to appear on your screen: 
+     
+     
+     
+       DO YOU DESIRE TO ADD MORE NEW ACCOUNTS TO THE GENERAL LEDGER?
+       ENTER `Y' FOR `YES' OR `N' FOR `NO'.   _
+     
+     
+     
+     If you answer `Y',  Option 8  starts  again  and  asks  you  to  enter 
+     information  about  the  new  accounts,  as already explained.  If you 
+     answer `N', you will be returned to the DAILY menu. 
+     
+     
+     ERROR MESSAGES. 
+     
+     Option 8 monitors your input to help ensure that you  do  not  make  a 
+     mistake.  If  you  make  a  mistake and if instructions explaining the 
+     required input are already on the computer screen, Option 8 refuses to 
+     continue until you reenter your answer. 
+     
+     In other cases,  however,  you will need more detailed instructions on 
+     what you did wrong and how you should proceed.  These cases are: 
+                                                              
+      
+     
+                                                                        92
+     
+
+       AN ACTIVE ACCOUNT NUMBER IS ENTERED.
+     
+       For  this  error,  Option  8  displays  the  following  message  and 
+       question: 
+     
+         YOU  SELECTED  AN  ACTIVE ACCOUNT FOR POSTING.  THE ACCOUNT NUMBER 
+         THAT YOU SELECTED IS NUMBER  (a  number  is  shown).  NEW  GENERAL 
+         LEDGER  ACCOUNTS  MUST  COME  FROM  INACTIVE  ACCOUNTS.   INACTIVE 
+         ACCOUNTS CAN BE IDENTIFIED BY SELECTING  OPTION  7  OF  THE  DAILY 
+         MENU.  DO YOU WISH TO RETURN TO THE DAILY MENU? 
+     
+         ENTER `Y' FOR `YES' OR `N' FOR `NO'.   _
+     
+       If  you  answer  `Y',  none  of the current accounts that you are in 
+       process of entering will be added to the general ledger and you will 
+       be returned to the DAILY menu. 
+     
+       If you answer `N',  Option 8 will resume at the point where you made 
+       the input error. 
+     
+     
+       A NON-EXISTENT ACCOUNT NUMBER IS ENTERED. 
+     
+       This error causes the following message to be displayed: 
+     
+       YOUR INPUT FOR THE ACCOUNT NUMBER IS TOO LARGE.  THE LARGEST ACCOUNT 
+       NUMBER  IN  THE  GENERAL LEDGER IS (a number is shown).  IF DESIRED, 
+       YOU CAN DETERMINE THE ACCOUNT  NUMBERS  IN  THE  GENERAL  LEDGER  BY 
+       SELECTING  OPTION  7  OF  THE  DAILY  MENU  AND  SPECIFYING THAT ALL 
+       ACCOUNTS BE PRINTED. 
+     
+       PRESS ANY KEY TO CONTINUE. 
+     
+       After you press a key,  Option 8 continues where you made the  input 
+       error. 
+     
+     
+       AN ACCOUNT NUMBER IS ENTERED A SECOND TIME. 
+     
+       For this error, Option 8 displays: 
+     
+     
+                                                                        93
+     
+     
+
+       THE  ACCOUNT  NUMBER  (a  number  is  shown)  THAT  YOU SELECTED WAS 
+       ASSIGNED AN OPENING BALANCE DURING THIS OR A PREVIOUS SESSION.  ONLY 
+       INACTIVE ACCOUNT NUMBERS MAY BE SPECIFIED IN THIS COMPUTER  PROGRAM. 
+       YOU  MAY  DETERMINE  WHICH ACCOUNTS ARE INACTIVE BY RETURNING TO THE 
+       DAILY MENU AND SELECTING OPTION 7.  DO YOU WISH  TO  RETURN  TO  THE 
+       DAILY MENU? 
+     
+       ENTER `Y' FOR `YES' OR `N' FOR `NO'.   _
+     
+       If  you enter `Y',  none of the new accounts currently being entered 
+       will be added to the general ledger and you will be returned to  the 
+       DAILY  menu.  If you enter `N',  Option 8 resumes at the point where 
+       you made the input error. 
+     
+     
+     PRINTED OUTPUT. 
+     
+     
+     Using the illustration,  above,  the Option 8 printout would look like 
+     this: 
+     
+     
+     
+                                                                   PAGE  1
+                                                        RUNDATE   06/15/85
+     
+                               ABC WHOLESALE, INC.
+                    NEW ACCOUNTS ADDED TO THE GENERAL LEDGER
+     
+     ACCOUNT                                           BEGINNING BALANCE
+     NUMBER      ACCOUNT TITLE                      DEBIT            CREDIT
+     
+      208        OFFICE SALARIES EXPENSE              .00
+       21        OFFICE SUPPLIES                      .00
+     
+     
+     
+     Practice.
+     
+     Use  Option 8 and your practice general ledger to add two new accounts 
+     to the general ledger.  Use the same account titles  as  used  in  the 
+     above  illustration  (OFFICE  SALARIES  EXPENSE  and OFFICE SUPPLIES). 
+     Determine the account numbers that you should use by  referring  to  a 
+     printout from DAILY Option 7. 
+     
+     
+                                                                        94
+     
+                                  CHAPTER 14
+
+                            DAILY MENU  -  OPTION 9
+     
+
+     WHAT OPTION 9 IS USED FOR.
+     
+     Use  Option  9  at  the  end  of the year,  after all formal financial 
+     statements have been prepared.  The information shown in the  printout 
+     is  used  as  a  guide  in  identifying asset,  liability,  and equity 
+     accounts that are to be included in the new  general  ledger  for  the 
+     coming year, if you use Options 1, 2, and 3 of the SETUP menu. 
+     
+     Account  titles  and  dollar values shown in an Option 9 printout will 
+     agree,  exactly,  with account titles and dollar amounts shown on  the 
+     Balance Sheet. 
+     
+     As mentioned above,  the Option 9 printout is used as a guide for  the 
+     Balance  Sheet accounts that should be in the new general ledger.  Use 
+     the Income Statement as a  guide  for  the  remaining  general  ledger 
+     accounts.  If you use Option 4 of the SETUP menu,  CPA-LEDGER does all 
+     of this for you, automatically. (See Chapter 16.) 
+     
+     Note that the Option 9 printout and the Income Statement are  used  as 
+     GUIDES  in  deciding  on  accounts  to  be included in the new general 
+     ledger.  Determining the accounts is a crucial step. 
+     
+     Carefully consider your  past  and  anticipated  business  operations.  
+     Carefully  identify  every  account  that  might  be needed.  Refer to 
+     Appendix D for additional detail. 
+     
+     IN CASE OF DOUBT, INCLUDE THE ACCOUNT.  It can be annoying,  after the 
+     accounting year has started, to have to constantly add new accounts to 
+     the  general  ledger.  Remember  this  when  deciding  whether  to use 
+     Options 1,  2,  and 3 of the SETUP menu or Option 4 of the SETUP menu. 
+     (Option 4 allows for NO new accounts, active or inactive.) 
+          
+     OPTION 9 SEQUENCE OF EXECUTION. 
+     
+     Refer  to  the  standard  messages and reminders that are discussed in 
+     Chapter 2.  After the standard messages and reminders, Option 9 begins 
+     printing the account balances.  The format of the printout is the same 
+     as for an unadjusted trial balance, as shown in Chapter 7. 
+            
+     ERROR MESSAGES.
+     
+     As mentioned above,  Option 9 is used AFTER the Income  Statement  and 
+     the Balance Sheet have been prepared at the end of the year. 
+     
+     If  you  attempt  to  use  Option  9  before  these two statements are 
+     prepared (by using DAILY Option 3),  the following message will appear 
+     on your computer screen: 
+     
+     
+      
+                                                                        95
+     
+
+       YOU  HAVE  EITHER  (1)  NOT  YET  USED OPTION 3 OF THE DAILY MENU TO 
+       PREPARE AN INCOME STATEMENT AND A BALANCE  SHEET  OR  (2)  YOU  USED 
+       DAILY  OPTION  1  SINCE  YOU LAST USED OPTION 3.  YOU MUST USE DAILY 
+       MENU OPTION 3 BEFORE  THE  CURRENTLY  REQUESTED  POST-CLOSING  TRIAL 
+       BALANCE WILL BE PREPARED. 
+     
+     
+     After pressing a key, you will be returned to the DAILY menu. 
+     
+     
+     Practice. 
+     
+     Use  Option 9 and your practice general ledger to print a post-closing 
+     trial balance.  Remember,  before Option 9  will  execute,  an  Income 
+     Statement  and  a  Balance Sheet (DAILY Option 3) must be printed.  If 
+     you see the error message mentioned above when  you  select  Option  9 
+     from  the  DAILY menu,  execute Option 3 (Chapter 8) and then Option 9 
+     (this Chapter). 
+     
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
 
 ## DAILY.BAS
 
+{% raw %}
 ```bas
 100 'COPYRIGHT 1986 TRONOLONE & FOSTER, PC
 500 ON ERROR GOTO 10000
@@ -638,9 +3999,11 @@ machines:
 20010 IF K$="" THEN GOTO 20000
 20020 RETURN
 ```
+{% endraw %}
 
 ## GENLGR.BAS
 
+{% raw %}
 ```bas
 500  ' COPYRIGHT 1986 TRONOLONE & FOSTER, PC
 1000 REM GENLGR.BAS
@@ -874,9 +4237,11 @@ machines:
 3300 LPRINT"FUNDS, AND OPERATIONAL ASSETS."
 5000 RUN "SETUP.BAS": END
 ```
+{% endraw %}
 
 ## GLACTS.BAS
 
+{% raw %}
 ```bas
 500  ' COPYRIGHT 1986 TRONOLONE & FOSTER, PC
 1000 REM GLACTS.BAS
@@ -1038,9 +4403,11 @@ machines:
 2650 LPRINT SPC(P6) P6$ SPC(P7) "= $" SPC(P1);: LPRINT USING FORMAT3$;I2#: RETURN
 2660 CLOSE: FOR I = 1 TO 10: LPRINT: NEXT I: RUN "DAILY.BAS": END
 ```
+{% endraw %}
 
 ## NEWACT.BAS
 
+{% raw %}
 ```bas
 500  ' COPYRIGHT 1986 TRONOLONE & FOSTER, PC
 1000 REM NEWACT.BAS
@@ -1375,9 +4742,11 @@ machines:
 7020 IF I2$="C" THEN C2=C2-1
 7030 RETURN
 ```
+{% endraw %}
 
 ## OPNBAL.BAS
 
+{% raw %}
 ```bas
 500  ' COPYRIGHT 1986 TRONOLONE & FOSTER, PC
 1000 REM OPNBAL.BAS
@@ -1770,9 +5139,11 @@ machines:
 4860 RETURN
 4870 CLOSE: FOR I = 1 TO 10: LPRINT: NEXT I: RUN "SETUP.BAS": END
 ```
+{% endraw %}
 
 ## PANDL.BAS
 
+{% raw %}
 ```bas
 500  ' COPYRIGHT 1986 TRONOLONE & FOSTER, PC
 1000 REM PANDL.BAS
@@ -2351,9 +5722,11 @@ machines:
 8090 LOCATE 1,1: FOR U= 1 TO 5: LOCATE U,1: PRINT SPACE$(80): NEXT U
 9000 RETURN
 ```
+{% endraw %}
 
 ## POST.BAS
 
+{% raw %}
 ```bas
 500  ' COPYRIGHT 1986 TRONOLONE & FOSTER, PC
 1000 REM POST.BAS
@@ -2742,9 +6115,11 @@ machines:
 4880 CLOSE: FOR I = 1 TO 10: LPRINT: NEXT I: RUN "DAILY.BAS": END
 4900 LOCATE 11,1: PRINT SPACE$(75);: LOCATE 11,15: PRINT"***************** PRESS YOUR CAPS LOCK KEY ***************": RETURN
 ```
+{% endraw %}
 
 ## PSTCLS.BAS
 
+{% raw %}
 ```bas
 500  ' COPYRIGHT 1986 TRONOLONE & FOSTER, PC
 1000 REM PSTCLS.BAS
@@ -2889,9 +6264,11 @@ machines:
 2450 RETURN
 2460 CLOSE: FOR I = 1 TO 10: LPRINT: NEXT I: RUN "DAILY.BAS": END
 ```
+{% endraw %}
 
 ## SELTRA.BAS
 
+{% raw %}
 ```bas
 500  ' COPYRIGHT 1986 TRONOLONE & FOSTER, PC
 1000 REM SELTRA.BAS
@@ -3182,9 +6559,11 @@ machines:
 3830 RETURN
 3840 CLOSE: FOR I = 1 TO 10: LPRINT: NEXT I: RUN "DAILY.BAS": END
 ```
+{% endraw %}
 
 ## SETUP.BAS
 
+{% raw %}
 ```bas
 500  ' COPYRIGHT 1986 TRONOLONE & FOSTER, PC
 1000 KEY OFF: CLS: LOCATE 5,1
@@ -3260,9 +6639,11 @@ machines:
 9700 LOCATE 7,67: PRINT" WEEKENDS."
 9800 RETURN
 ```
+{% endraw %}
 
 ## STOACT.BAS
 
+{% raw %}
 ```bas
 500  ' COPYRIGHT 1986 TRONOLONE & FOSTER, PC
 1000 ' STOACT.  THE ORDER OF DATA IN PASACT.FIL IS:
@@ -3556,9 +6937,11 @@ machines:
 27700 CLOSE: KILL "*.FIL": GOTO 24900
 27800 RETURN
 ```
+{% endraw %}
 
 ## TRIBAL.BAS
 
+{% raw %}
 ```bas
 500  ' COPYRIGHT 1986 TRONOLONE & FOSTER, PC
 1000 REM TRIBAL.BAS
@@ -3682,6 +7065,7 @@ machines:
 2240 RETURN
 2250 CLOSE: FOR I = 1 TO 10: LPRINT: NEXT I: RUN "DAILY.BAS": END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

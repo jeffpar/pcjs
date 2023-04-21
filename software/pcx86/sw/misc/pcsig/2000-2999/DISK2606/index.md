@@ -14,6 +14,43 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2606.TXT
+
+{% raw %}
+```
+Disk No: 2606                                                           
+Disk Title: Financial Wizard                                            
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: Financial Wizard                                         
+Author Version: 3.11                                                    
+Author Registration: $25.00                                             
+Special Requirements: None.                                             
+                                                                        
+FINANCIAL WIZARD is a slick financial calculator for investment and loan
+analysis. Its 22 options cover not only standard financial calculations,
+like future and present value, interest rate, and amortization schedule,
+but also depreciation (straight-line, double-declining balance, and     
+accelerated), discount rate, Treasury Bills, and tax-free investments.  
+                                                                        
+A trio of calendar options makes short work of yield analysis. Results  
+from one calculation can be copied to a notepad for use in another      
+calculation. Short-cut keys and a pop-up calculator further enhance this
+well-designed program. FINANCIAL WIZARD handles any amount less than    
+$10 million. And, as you might suspect, the documentation is terrific!  
+*******************END*******************                               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2606
 

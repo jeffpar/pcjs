@@ -14,6 +14,88 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2939.TXT
+
+{% raw %}
+```
+Disk No: 2939
+Disk Title: Back & Forth Professional 5 of 5
+PC-SIG Version: S2.00
+
+Program Title: Back & Forth Professional
+Author Version: 2.00
+Author Registration: $69.95
+Special Requirements: 512k memory, DOS 3.0+, and EMS, XMS, RAM disk or
+hard disk. Refer to manual (BFP-200.DOC) for further requirements.
+
+BACK & FORTH PROFESSIONAL is a versatile program management tool that
+gives you the power to load up to 20 programs at once. Now you can
+switch between your favorite word processor, database, graphics program,
+and TSR utilities at will without having to exit one to open and use
+another.  Its features include:
+
+~ Delivers a flexible task management environment where up to 20
+  programs may be open in memory, with each provided as much memory as
+  needed.
+
+~ Occupies only 23-40k of memory, less than 1k if loaded high.
+
+~ Offers an easy-to-use, colorful, & customizable environment.
+
+~ Supports CGA, EGA, Hercules, VGA, SVGA, and 1024x768 video modes.
+
+~ Enables the use of a Microsoft-compatible mouse.
+
+~ Uses expanded memory (EMS), extended memory, RAM disks, hard disks,
+  and conventional memory to store swapped programs.
+
+~ Permits you to select the hot keys used to pop up BACK & FORTH, other
+  B&F commands, and all defined programs.
+
+~ Accepts the definition of 50 programs for use within BACK & FORTH.
+
+~ Provides an alternative menu list for use in defining menus and
+  programs for use within BACK & FORTH.
+
+~ Runs a selected list of programs automatically when first loaded.
+
+~ Provides a set of desktop accessories that include an address book,
+  time and event scheduler, graphics screen capture, editor, tape and
+  RPN calculator.
+
+~ Signals when specific appointments occur. Tasks can also be set to run
+  at scheduled times using the Overtime! appointment handler.
+
+~ Lets you cut text from a running program and either place it in a
+  folder for later pasting, print it, or write it to a separate file.
+
+~ Allows you to edit the contents of the cut buffer and save text.
+
+~ Dials a number from the screen if a modem is available.
+
+~ Assigns a sequence of keystrokes to a single macro key for  use in
+  simplifying command execution within a program or DOS.
+
+~ Replaces special abbreviations with commonly-used words, names, and
+  phrases to save typing time.
+
+~ Permits color customization where you can choose the colors that suits
+  your tastes rather than someone else's. Supports all video modes
+  provided by UltraVision.
+
+~ Switches the [Ctrl] and [Caps Lock] keys.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2939
 

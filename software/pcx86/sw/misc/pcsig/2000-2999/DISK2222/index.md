@@ -38,6 +38,54 @@ machines:
     spreadsheets or Galaxy Noids.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2222.TXT
+
+{% raw %}
+```
+Disk No: 2222                                                           
+Disk Title: NOTEable, Compu-Nerd                                        
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: NOTEable                                                 
+Author Version: 1.0                                                     
+Author Registration: $25.00                                             
+Special Requirements: None.                                             
+                                                                        
+NOTEABLE is an easy to use program which teaches music students the     
+notes of both the treble and bass music scales.  It does so in a        
+"competitive game" format, giving scores for quick and accurate         
+recognition of notes.  One can even compete with himself, trying to     
+improve previous scores.  The top ten high scores are kept for each     
+separate scale.  NOTEABLE may be used in both personal and professional 
+environments.                                                           
+Program Title: Compu-Nerd                                               
+Author Version: 1.0                                                     
+Author Registration: Contribution.                                      
+Special Requirements: None.                                             
+                                                                        
+COMPU-NERD is a tongue-in-cheek diagnostic program used to determine    
+whether or not the user has the dread malady COMPUTERUS- NERDITIS or    
+BOZOITIS-JERKONUS.  These terrible and sometimes lethal diseases creep  
+up on one unexpectedly.  By answering a few, simple questions the user  
+can determine if he has either disease, its progress and the remedy for 
+the current stage of development.  This is a sure winner at computer    
+club meetings and parties, or just to show off a bit of the absurd to   
+your friends and prove that computers can be used for more than         
+spreadsheets or Galaxy Noids.                                           
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2222
 

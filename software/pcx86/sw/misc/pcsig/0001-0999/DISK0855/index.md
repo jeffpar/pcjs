@@ -50,6 +50,20 @@ machines:
     presently supported.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## README.DOC
+
+{% raw %}
+```
+Note:
+    ALL PROGRAM DOCUMENTATION IS CONTAINED ON DISK 2 PLEASE READ
+    WARNING.DOC AND INSTALL.DOC BEFORE PROCEEDING WITH FASTBUCKS
+    INSTALLATION...............................................
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0855
 

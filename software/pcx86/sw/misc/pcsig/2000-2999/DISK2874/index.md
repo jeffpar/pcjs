@@ -14,6 +14,96 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2874.TXT
+
+{% raw %}
+```
+Disk No: 2874
+Disk Title: Show Talk
+PC-SIG Version: S1.0
+
+Program Title: Show Talk
+Author Version: 1.3
+Author Registration: $15.00
+Special Requirements: 512K RAM and graphic monitor. EGA/VGA and hard
+                      drive recommended.
+
+Did you ever see the candid camera show where there is a guy hiding in
+the mail box talking to people as they walk by? Well, that is what this
+program is. It is intended to be used to attract people to the computer.
+
+SHOW TALK will draw fancy collages and about every 30 seconds it will
+say catch phrases (in real human speech), to try and catch the person's
+attention. Some of the phrases are:  Hello, is there anyone out there?
+Hey there, good looking (female voice); Hey you over there, come on over
+here; Please get me out of here; Try pressing a key; and many more. When
+the person presses a keyboard key, SHOW TALK will say a joke or sing a
+song or play Name That Tune. This is a great customer catcher for your
+next show. You can also use this in a retail store or to play jokes on
+your friends.  Try it, it really works!!
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+
+
+                	 SHOW TALK (THE SHOW STOPPER)                Vers 1.3
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   Did you ever see the candid camera show where there is a guy hiding
+   in the mail box talking to people as they walk by - Well that is what
+   this product is. It is intended to be used to attract people to the
+   computer (your show booth or retail store), IT'S A REAL HEAD TURNER. 
+
+   This program will draw fancy collages and about every 30 seconds it 
+   will say catch phrases (in real human speech), to try and catch the
+   persons attention. Some of the phrases are: HELLO - IS THERE ANYONE
+   OUT THERE, HEY THERE GOOD LOOKING (FEMALE VOICE), HEY YOU OVER THERE,
+   COME ON OVER HERE, PLEASE GET ME OUT OF HERE, TRY PRESSING A KEY and
+   many more. When the person presses a keyboard key, SHOW TALK will say
+   a joke or sing a song or play name that tune. This is a great CUSTOMER
+   CATCHER for your next show. You can also use this in a retail store or
+   to play jokes on your friends. Try it, it really works !!!!!
+				  ~~~~~~~~~~~~~~~~~~~~~~~
+
+
+        * With REAL HUMAN SPEECH that works thru the PC speaker.
+
+        * HELPS ALLUR CUSTOMERS TO YOUR SHOW BOOTH.
+
+        * SYSTEM REQUIREMENTS:  512K memory,  one floppy disk and
+          any graphic monitor (EGA/VGA and hard drive recommended).
+
+        * Designed to work on any IBM-PC Compatible.
+
+	* Type "RUNME" to start the customer catcher.
+
+        * NOW THE PC CAN TALK.
+
+	* Please register your shareware by sending only $ 15.00 to:
+
+
+
+                    CREATIVE SOFTWARE ENGINEERING Inc.
+			      C.S.E. Inc.
+                             Orlando Dare
+                           3005 Glenmore Ave.
+			  Baltimore, MD 21214
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2874
 

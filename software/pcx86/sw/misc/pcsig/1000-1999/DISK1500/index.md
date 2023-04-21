@@ -45,6 +45,41 @@ machines:
     selections, Americans only, and other parameters.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1500.TXT
+
+{% raw %}
+```
+Disk No: 1500
+Program Title:  WISDOM OF THE AGES version 2.0 (Disk 3 of 4)
+PC-SIG version 1
+
+This is Disk 2 of the four disk WISDOM OF THE AGES package.  See Disk
+1498 for a full description.  All four are required to run the program.
+
+Usage:  Writing/Sayings/Thesaurus of Aphorisms.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  Not stated.
+
+File Descriptions:
+
+FLOPPY2 DAT  Data file.
+
+The PC-SIG Library
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1500
 

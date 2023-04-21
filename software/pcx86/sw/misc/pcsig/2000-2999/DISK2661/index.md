@@ -14,6 +14,38 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2661.TXT
+
+{% raw %}
+```
+Disk No: 2661                                                           
+Disk Title: Problems  2 OF 2 (1526 ALSO)                                
+PC-SIG Version: S4                                                      
+                                                                        
+Program Title: Problems                                                 
+Author Version: 4.0                                                     
+Author Registration: $10.00                                             
+Special Requirements: None.                                             
+                                                                        
+What does the Bible have to say about abortion?  Alcoholism?  Humility? 
+Or vengeance? These and 55 other topic areas are instantly accessed     
+through PROBLEMS. Pick your topic or problem of concern, such as        
+"pride," and the relevant Bible verses pop up on your screen and/or     
+printer. For example: PROVERBS 16:18 "Pride goeth before destruction,   
+and an haughty spirit before a fall." Verses can be added or deleted,   
+thus you may customize this program according to your interests.        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2661
 

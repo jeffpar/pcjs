@@ -56,6 +56,112 @@ machines:
     DISCLAIM      Disclaimer for Freewill program.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES193.TXT
+
+{% raw %}
+```
+Disk No:  193
+Program Title:  FREEWILL
+PC-SIG version: 1.1
+
+The California Legislature approved, effective Jan. 1, 1983 the use of
+a "Fill-in-the-blanks" approach for executing a valid will in
+California.  They apparently felt this was better than having people die
+without a will or with an invalid holographic will.  Two standard will
+forms have been approved.  This diskette contains both forms (printable)
+and a copy of the California civil code that covers the forms.  The
+documentation should provide some background for deciding whether you
+should have a will, whether either of the two California statutory will
+forms can serve your needs, or whether you should obtain the services of
+a lawyer to draft your will.
+
+Usage:  Preparing a Personal Will in California.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  None.
+
+File Descriptions:
+
+PRINTING DOC  Information on printing FREEWILL GROUP.
+FREEWILL DOC  Introduction.
+BANNER   ASC  FREEWILL LOGO.
+C2       BAT  Execute "C2" in default drive for explanation.
+TRUST         Second choice of FORMS.
+WILL          First of two FORMS for your "Do-It-Yourself" will.
+FREEWILL ASC  Explanation text.
+PAGEII   ASC  Explanation text.
+PAGEIII  ASC  Explanation text.
+PAGEIV   ASC  Explanation text.
+PAGEIX   ASC  Explanation text.
+PAGEV    ASC  Explanation text.
+PAGEVI   ASC  Explanation text.
+PAGEVII  ASC  Explanation text.
+PAGEVIII ASC  Explanation text.
+DISCLAIM      Disclaimer for Freewill program.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1985,86,87,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## FREEWILL.DOC
+
+{% raw %}
+```
+
+
+
+THE CALIFORNIA LEGISLATURE APPROVED EFFECTIVE JANUARY 1,1983
+THE USE OF A "FILL-IN -THE-BLANKS" APPROACH FOR EXECUTING A
+VALID WILL IN CALIFORNIA. THEY APPARENTLY FELT THIS WAS BETTER
+THAN HAVING PEOPLE DIE WITHOUT A WILL OR WITH AN INVALID HOLO-
+GRAPHIC WILL. TWO STANDARD WILL FORMS HAVE BEEN APPROVED. THIS
+DISKETTE CONTAINS A COPY OF EACH WHICH CAN BE PRINTED TO YOU PC
+PRINTER. EACH FORM IS 6 PAGES IN LENGTH AND HAS ITS OWN FILE NAME
+WHICH IS USED FOR PRINTING.
+THIS DISKETTE ALSO CONTAINS A COPY OF THE CALIFORNIA CIVIL CODE
+WHICH ESTABLISHED THE CALIFORNIA STATUTORY WILL FORMS, IN ADDITION
+TO OTHER SECTIONS WHICH SET FORTH THE MANNER IN WHICH A PERSON'S
+ESTATE WILL BE DISTRIBUTED. THIS SHOULD PROVIDE SOME BACKGROUND
+FOR DECIDING WHETHER YOU SHOULD HAVE A WILL, WHETHER EITHER OF THE
+TWO CALIFORNIA STATUTORY WILL FORMS CAN SERVE YOUR NEEDS, OR
+WHETHER YOU SHOULD OBTAIN THE SERVICES OF A LAWYER TO DRAFT YOUR
+WILL. THESE CODE SECTIONS INVOLVE 30 PAGES
+			  DISCLAIMER
+IN NO EVENT WILL C2 BE LIABLE TO YOU FOR ANY DAMAGES, INCLUDING
+ANY LOST PROFITS,LOST SAVINGS, OR OTHER DAMAGES ARISING OUT
+OF THE USE OF THE MATERIAL ON THIS DISKETTE.
+
+```
+{% endraw %}
+
+## PRINTING.DOC
+
+{% raw %}
+```
+Printing instructions are given on PAGEIX.ASC.  The files TRUST, WILL and
+FREEWILL.ASC contain control codes applicable to the IBM (or Epson) printer.
+These codes may not be applicable to your printer in which case a few find &
+replace operations with your trusty editor are advisable.
+
+  turns on  compressed pitch
+  kills 
+  turns on double width characters, dies at end of line
+  ????????
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0193
 

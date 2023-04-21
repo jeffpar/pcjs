@@ -35,6 +35,45 @@ machines:
     team high pinfall, and percent of wins vs losses.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1953.TXT
+
+{% raw %}
+```
+Disk No: 1953                                                           
+Disk Title: Bowlstat Disk 1 of 2                                        
+PC-SIG Version: S1.5                                                    
+                                                                        
+Program Title: BowlSTAT                                                 
+Author Version: 1.5                                                     
+Author Registration: $35.00                                             
+Special Requirements: 512K RAM.                                         
+                                                                        
+Bowling statisticians relax, BOWLSTAT keeps track of up to 300 bowlers  
+on as many as 99 teams.  Supports tenpin, candlepin, and 5-pin bowling  
+games.  Generates nightly captain sheets, and yearly statistics for each
+bowler.                                                                 
+                                                                        
+Most "standard" league individual awards have been included along with  
+an option for saving of average sheets to the disk drive for            
+wordprocessor integration.  The program is completely "SMART MENU"      
+driven so there is no need to learn a bunch of commands.                
+                                                                        
+Keeps track of the individual statistics -- name, pinfall, number of    
+strings bolwed, average, high single, high triple, high no mark, 69's;  
+and team statistics -- name, points won, points lost, total pinfall,    
+team high pinfall, and percent of wins vs losses.                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1953
 

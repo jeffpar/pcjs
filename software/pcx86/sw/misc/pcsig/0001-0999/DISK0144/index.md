@@ -75,6 +75,101 @@ machines:
     XREF     BAS  BASIC program
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## DNXSD.DOC
+
+{% raw %}
+```
+                        DNXSD.DOC
+
+	The batch files DN.BAT, DX.BAT, DS.BAT and DD.BAT write
+sorted directories on the screen only. They sort on the directory
+line starting with fileName, eXtension, Size or Date (mm/dd/yy).
+The sorted directory can be stored by modifying the batch files,
+as in the example of DXSAVE.BAT.
+	These batch files have two dummy parameters: drive and
+filename and extension restriction, if any. Thus, to sort the files
+on drive E that satisfy the filename and extension restriction of
+ABC?.*, sorting by size, one uses:
+		DS E ABC?.*
+The spaces between S, E and A are important.
+	Note that if one sorts on a restricted set of files, such as 
+with DX E *.COM, then that amounts to the same thing as DS E *.COM.
+
+```
+{% endraw %}
+
+## SCROLLK.DOC
+
+{% raw %}
+```
+SCROLLK:  This machine-language program is attached to DOS
+whenever you run scrollk.com with the A> prompt showing. It
+allows much better scroll control than <Ctrl-NumLock>. See
+John Socha's article in Softalk for the IBM Personal Computer
+for May 1983 for more information. Scrollk will be handy in 
+using files under Directory 4: "Quick Looks at Distant BBSs".
+
+
+```
+{% endraw %}
+
+## SQ.DOC
+
+{% raw %}
+```
+
+SQ.COM - 
+
+The purpose of this program is to squeeze all types of files. It is 
+most effective on text files and least effective on binary files such
+as .EXE and .COM.
+
+The output file name is changed so that the middle letter in the 
+filetype is changed to a "Q". For example, a file called  ABC.TXT
+would be called  ABC.TQT. The input file is not changed.
+
+To run the squeezer:
+
+SQ filename.filetype               (i.e.  SQ  ABC.TXT)
+
+There are no messages displayed while the program is running. Make sure
+you have enough disk space to handle the output file (which can be 5% to
+50% smaller than the original depending on the type of file).
+
+```
+{% endraw %}
+
+## USQ.DOC
+
+{% raw %}
+```
+
+
+USQ.COM - 
+
+The purpose of this program is to un-squeeze processed by  the SQ.COM
+program. This program will recontruct the files to their original state
+before compression.
+
+You must specify the input and output files names (if missing, you
+will be prompted for them).
+
+To run the un-squeezer:
+
+USQ d:filename.filetype d:newfilename.filetype   (i.e.  SQ  ABC.TQT ABC.TXT)
+
+After specifying the file names, you will be asked if this is a text file.
+Reply as appropriate. The replies are Y or N.
+
+Make sure you have enough disk space to handle the output file which could
+be up to twice the size of the input file.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0144
 

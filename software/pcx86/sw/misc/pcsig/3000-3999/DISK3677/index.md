@@ -14,6 +14,55 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## REG#.DOC
+
+{% raw %}
+```
+
+REGISTRATION FORM
+
+Mail to:        fmROBERTS ENTERPRISES
+                P.O. Box 608
+                Dana Point, CA 92629-0608
+
+From:           __________________________________ your name
+                __________________________________ Company or organization
+                __________________________________ street address
+                __________________________________ City, State, Zip code
+                __________________________________ Country if not USA
+
+Shareware program being registered: Signing NUMBERS, Version 1.0 
+
+Date _______________    Amount enclosed $ ________ ($20 is requested) 
+
+Suggestions for program improvement:
+
+__________________________________________________________________________
+__________________________________________________________________________
+__________________________________________________________________________
+__________________________________________________________________________
+__________________________________________________________________________
+
+About your computer system:
+
+Computer: Brand, CPU, etc. __________________________________________________
+Program run from (1) Floppy disk   Y    N    Size/density _______________________
+Program run from (2) Hard disk      Y    N
+Version of DOS __________
+
+Do you wish to be kept informed about upgrades:         Y       N
+Do you wish to be kept informed about new ASL Shareware Y       N
+Did you like the program?       Y       N       If no, what did you dislike?
+        ____________________________________________________________________
+        ____________________________________________________________________
+        ____________________________________________________________________
+ 
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3677
 

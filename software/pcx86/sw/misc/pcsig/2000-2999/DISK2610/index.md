@@ -14,6 +14,63 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2610.TXT
+
+{% raw %}
+```
+Disk No: 2610                                                           
+Disk Title: Winfract (Fractint for Windows)                             
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Winfract  (Fractint for Windows)                         
+Author Version: 3.1                                                     
+Author Registration: Copyrighted Freeware.                              
+Special Requirements: Windows 3.0 and CGA or Better.                    
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## WINFRACT.DOC
+
+{% raw %}
+```
+This is version 3.1 of Fractint for Windows.  Fractint for Windows 
+requires Microsoft Windows version 3.0 running in either Standard or
+386-Enhanced mode (the program is flat out too big to run in "Real Mode").
+
+This file is only here to ease your mind a bit ("what, no DOC file?"). 
+Other than this file, the only documentation is in the on-line Help screens.
+
+By now, you have discovered that the ZIP file consists of WINFRACT.EXE,
+WINFRACT.HLP, and a few FRM, MAP, IFS and L files.  WINFRACT.EXE and
+WINFRACT.HLP are required to run the program and obtain online Help (and
+you *will* need to look at the on-line help, as it's the only documentation
+you are ever gonna see for this release), and should be copied to
+the same directory.
+
+The FRM, MAP, and IFS files are direct copies of files in version 15.1
+of Fractint-for-DOS and are only required for specific fractal types
+(if you already *have* version 15.1 of FFD, you can use its copies
+of these files instead).
+
+Just unZIP these files into some convenient directory, and either call
+the program manually using the File Manager or the "File Run" option
+of the program manager, or install it permanently using the "File New"
+option of the Program Manager.
+
+Enjoy.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2610
 

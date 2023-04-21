@@ -38,6 +38,46 @@ machines:
     or other complex system design.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0442.TXT
+
+{% raw %}
+```
+Disk No:  442                                                           
+Disk Title: SPA:WN                                                      
+PC-SIG Version: S1.3                                                    
+                                                                        
+Program Title: SPA:WN                                                   
+Author Version: 06/90                                                   
+Author Registration: $50.00                                             
+Special Requirements: None.                                             
+                                                                        
+Learn the concepts of nodal or structured programming with SPA:WN,      
+Structured Programming Automated: Warnier Notation.                     
+                                                                        
+Tutorials are provided on the concepts of structured programming, and a 
+program for use during design and documentation of structured programs  
+in any high-level language.                                             
+                                                                        
+Warnier notation provides a graphic description of relationships        
+between various components.  SPA:WN provides the framework that lets    
+you track these relationships.  It then produces target language source 
+code, again in any high-level language, as well as automatic layout and 
+pagination of a Warnier diagram.                                        
+                                                                        
+The concepts of structured programming are also applicable to computer  
+or other complex system design.                                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0442
 

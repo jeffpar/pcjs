@@ -31,6 +31,147 @@ machines:
     used for examples throughout the tutorial is included.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0580.TXT
+
+{% raw %}
+```
+Disk No:  580                                                           
+Disk Title: Pascal Tutor 2 of 2 (579 1st disk)                          
+PC-SIG Version: S2.2                                                    
+                                                                        
+Program Title: Pascal Tutor                                             
+Author Version: 2.4                                                     
+Author Registration: $15.00 to $39.95.                                  
+Special Requirements: Printer.                                          
+                                                                        
+PASCAL TUTOR is a text-based tutorial on programming with the Pascal    
+language.  The assumption is that you know nothing about Pascal in      
+particular and programming in general.                                  
+                                                                        
+It begins with the most elementary aspects of programming and takes     
+you through each step from dynamic allocation to the use of linked      
+lists.  The program was specifically written for use with Turbo Pascal  
+versions 3.0, 4.0, and 5.0.  The Pascal source code used for examples   
+throughout the tutorial is included.                                    
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## INTDATA.TXT
+
+{% raw %}
+```
+  101  102  103  104
+  105  106  107  108
+  109  110  111  112
+  113  114  115  116
+  117  118  119  120
+  121  122  123  124
+  125  126  127  128
+  129  130  131  132
+  133  134  135  136
+  137  138  139  140
+  141  142  143  144
+  145  146  147  148
+```
+{% endraw %}
+
+## OT.DOC
+
+{% raw %}
+```
+    Filename OT.DOC - Oaktree Documentation   Oct 18, 1988
+
+    The program supplied by IBM and compatible makers named
+    TREE.COM is a nearly unuseable program since it really
+    doesn't tell you much about your directories. Because of
+    that deficiency, OT (OakTree, a more substantial tree)
+    was written.  It will give you more information about
+    your disk than you will ever need, but it is somewhat
+    interesting to see just what is on your disk.
+
+    OT3.PAS was written in TURBO Pascal 3.0 and was debugged
+    using PC-DOS 3.1, but should work on any DOS of 2.X or
+    greater.  OT4.PAS was rewritten in TURBO Pascal 4.0 and
+    uses many of the extensions added to versions 4.0 and 5.0.
+    Neither of these wil work with DOS 1.X since DOS 1.X does
+    not support directories.
+
+    The generalized command format is;
+
+    C>OT [drive:] [filename.ext] [/n] [/p] [/s]
+
+       If no drive is specified, the default drive will be
+       listed.
+
+       The tree, beginning at the current directory, will be
+       listed.  If you are in the root directory, you will get
+       a listing of the entire disk.
+
+       The filename.ext can be supplied with wildcards (* and $)
+       to get a listing of certain types of files.
+
+       /n - filenames will not be listed, only the directory
+            structure of the disk.
+
+       /p - will cause a listing to be sent to the printer with
+            page numbers.
+
+       /s - will result in some extra disk statistics being in-
+            cluded in the listing following the header line.
+
+    Examples of useage;
+
+    C>OT       The tree, starting at the current directory will
+               be displayed on the monitor.
+
+    C>OT *.PAS  All files with extension PAS will be listed in
+               the current tree along with an indication of where
+               they are.
+
+    C>OT WHERE.WHO  If this filename exists on the disk, it will
+               be listed along with what directory it is in.
+               This is useful for finding a lost file.
+
+    C>OT /p /s  The current tree will be listed on the monitor,
+               and also printed out.  The disk statistics will be
+               included in both locations.
+
+    C>OT /n    Lists only the directories in the current tree.
+
+    C>OT A: /p  The information concerning disk drive A will be
+                listed and printed.
+
+    C>OT /p /s  If started from the root directory, this will result
+               in the maximum amount of information.  The listing is
+               very useful in case of a disk crash because it will
+               aid you in restoring the disk to its precrash state.
+```
+{% endraw %}
+
+## REALDATA.TXT
+
+{% raw %}
+```
+    1  23.6  145.45   234.8
+    2  -0.4  -0.05  0.345
+    3 4.0 3456.0    123.0
+    4 77
+    5 -0.003  0.0006  12.345
+    6 1 2 3 4 5
+    7   12.12        13.11               14.14
+    8 2      3        4
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0580
 

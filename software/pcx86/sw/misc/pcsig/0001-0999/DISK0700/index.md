@@ -40,6 +40,50 @@ machines:
     Pass the salad, please.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0700.TXT
+
+{% raw %}
+```
+Disk No:  700                                                           
+Disk Title: MealMate                                                    
+PC-SIG Version: S2.5                                                    
+                                                                        
+Program Title: MEALMATE                                                 
+Author Version: 3.4                                                     
+Author Registration: $25.00                                             
+Special Requirements: None.                                             
+                                                                        
+On a diet?  Need some help?                                             
+                                                                        
+MEALMATE is a planning aid for preparing meals for people on a carefully
+controlled diet.  Although primarily designed for those 10% of us who   
+are diabetic, it can be a big help to anyone preparing meals that have  
+to meet strict requirements for calories, proteins, carbohydrates and   
+fats.  In today's health and nutrition-conscious society, that means    
+everyone including you and your family.                                 
+                                                                        
+Combine information from meal plans or menus to verify the total        
+nutritional content of a meal.  Can't look another head of lettuce in   
+the eye?  Help is provided to plan more varied meals and to choose      
+substitutes for disliked or hard to find items.                         
+                                                                        
+Let's face it.  Nothing's going to make a diet fun but at least you can 
+get help with some of the more dreadful aspects.  MEALMATE is easily    
+operated and presents nutritional information on many common foods.     
+                                                                        
+Pass the salad, please.                                                 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0700
 

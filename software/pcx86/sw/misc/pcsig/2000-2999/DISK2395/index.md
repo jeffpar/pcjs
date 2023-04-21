@@ -32,6 +32,44 @@ machines:
     is being installed.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2395.TXT
+
+{% raw %}
+```
+Disk No: 2395                                                           
+Disk Title: DAYO Menu (Clock & Setup)                                   
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: DAYO Menu (Clock & Setup)                                
+Author Version: 09/90                                                   
+Author Registration: $30.00 (or included in $399.00 DAYO Basic Package) 
+Special Requirements: 640K RAM, hard disk with sufficient disk space, an
+                                                                        
+DAYO MENU is a menu system for use with the DAYO Line of Business       
+Applications as well as any other program on your computer.  It is      
+multiuser when used on a PC-based LAN/Network.  It can, however, be run 
+(like all DAYO products) as a `standalone' application.  The program    
+consists of a Qbasic (tm) menu program and a DOS batch file that you can
+modify/edit.                                                            
+                                                                        
+DAYO CLOCK is a promotional, simple Clock display and optional alarm    
+that can act as a job scheduler.                                        
+                                                                        
+And SETUP of the DAYO MENU (CLOCK & SETUP) disk is the setup system for 
+the DAYO modules and is recommended especially when the entire DAYO     
+system is being installed.                                              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2395
 

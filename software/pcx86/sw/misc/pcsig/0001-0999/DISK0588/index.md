@@ -75,6 +75,122 @@ machines:
     1_CAPEQP WRK  Example file for CAPEQPT worksheet
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES588.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  588  SYMPHONY BANK/INSURANCE/MEDICAL APPLICATIONS         v1 DS2
+---------------------------------------------------------------------------
+The files on this disk demonstrate the uses that Symphony can be put to in
+the Banking, Insurance, and Medical industries.
+ 
+2_APPLIC WRK  Example file for APPLIC worksheet
+2_ASSET  WRK  Example file for ASSET worksheet
+2_BOND   WRK  Example file for BOND worksheet
+2_CASH   WRK  Example file for CASH worksheet
+2_EXCHAN WRK  Example file for EXCHANGE worksheet
+2_HUMANR WRK  Example file for HUMANRES worksheet
+2_MORTGA WRK  Example file for MORTGAGE worksheet
+ASSET    WRK  Assists in asset-liability management.
+AUTODEMO WRK  Autorun Demo
+BOND     WRK  Calculates a bond market price.
+CASH     WRK  Forecasts cash flow.
+DEMO     PIC  Graphics file for demo.
+EXCHANGE WRK  Effects of exchange rates on loan payments.
+HUMANRES WRK  Organizes employee information.
+MORTGAGE WRK  Determines if customer qualifies for mortgage loan
+1_APPLIC WRK  Example file for APPLIC worksheet
+1_AUDIT  WRK  Example file for AUDIT worksheet
+1_CLIENT WRK  Example file for CLIENT worksheet
+1_FORECA WRK  Example file for FORECAST worksheet
+1_IVENTO WRK  Example file for IVENTORY worksheet
+1_LIFE   WRK  Example file for LIFE worksheet
+AUDIT    WRK  Calculate the appropriate amount of home owner insurance.
+CLIENT   WRK  Manage client information. Make follow-up sales call schedule.
+FORECAST WRK  Calculates historical growth figures for insurance products.
+IVENTORY WRK  Maintain, stock and order inventory items.
+LIFE     WRK  Estimate appropriate life insurance coverage for client.
+1_BUDGET WRK  Example file for BUDGET worksheet
+1_CAPEQP WRK  Example file for CAPEQPT worksheet
+1_RESEAR WRK  Example file for RESEARCH worksheet
+1_SCHEDL WRK  Example file for SCHEDULE worksheet
+BUDGET   WRK  Forecast the financial prospects of a medical practice.
+CAPEQPT  WRK  Determine investment quality of potential purchases.
+DEMI     PIC  Graphics file for demo
+RESEARCH WRK  Track and graph patient data. Generate reports from findings.
+SCHEDULE WRK  Schedule patient appointments.
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, California  94086
+(408) 730-9291
+```
+{% endraw %}
+
+## NOTES588.TXT
+
+{% raw %}
+```
+Program name:       SYMPHONY BANK/INSURANCE/MEDICAL APPLICATIONS
+ 
+Author name:  LOTUS CORPORATION
+ 
+Program Descriptions:
+ 
+CASH.WRK shows how you can use Symphony to forecast cash flow.
+
+EXCHANGE.WRK demonstrates the effects of changing exchange rates on loan pay-
+ments made to a bank.
+
+MORTGAGE.WRK shows how Symphony can help you determine whether a customer
+qualifies for a particular mortgage loan, and what the monthly payment 
+schedule might be.
+
+HUMANRES.WRK demonstrates how Symphony can help organize employee information.
+
+ASSET.WRK shows how Symphony can be used to produce a forecasted balance sheet
+broken out by repricing for asset liability management.
+
+BOND.WRK illustrates how Symphony can be used to calculate a bond market price
+according to changes in the required rate.
+
+CLIENT.WRK demonstrates how Symphony can be used to manage client information
+and generate a schedule of follow-up sales calls.
+
+LIFE.WRK demonstrates how Symphony can be used to estimate the appropriate
+life insurance coverage for a client.
+
+AUDIT.WRK demonstrates how Symphony can be used to calculate the appropriate 
+amount of insurance for a home owner.
+
+FORECAST.WRK demonstrates how Symphony calculates historical growth and 
+forecasts growth figures for a line of insurance products.
+
+BUDGET.WRK is an example of Symphony's ability to forecast the financial
+prospects of a medical practice, given a predicted percentage growth rate.
+
+IVENTORY.WRK is an example of how Symphony can be used to maintain, stock
+and order inventory items.
+
+CAPEQPT.WRK is an example of how Symphony can be used to determine whether
+purchases under consideration are a good investment.
+
+RESEARCH.WRK an example of how Symphony can be used to track patient data, 
+graph it, and generate reports from the findings.
+
+SCHEDULE.WRK is an example of how Symphony can be used to schedule patient
+appointments.
+
+System requirements are an IBM or compatible PC with 512K, a monochrome or
+Color Board, two disk drives, the Symphony program disk, and an IBM compati-
+ble 80 column printer.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0588
 

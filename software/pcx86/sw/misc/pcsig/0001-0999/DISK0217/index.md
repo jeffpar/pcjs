@@ -57,8 +57,725 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## ALIGN.DOC
+
+{% raw %}
+```
+
+
+
+
+
+                               ALIGN
+                     Version 1.6 for the IBM PC
+                              5/23/84
+
+              (c) Copyright John L. Dickinson 1983, 1984
+
+COPYING PROVISIONS
+
+   This program and documentation may be freely copied and shared
+   provided it is not modified in any manner and this notice is not
+   bypassed or removed.  Please keep the ALIGN.DOC documentation file
+   on the same diskette with ALIGN.EXE.
+
+   If you find the ALIGN program useful, a contribution will be
+   appreciated.  ($20 suggested.)  Comments or suggestions concerning
+   ALIGN are welcome at any time.
+
+                        John L. Dickinson
+                        2470 N. Tierra Verde Pl.
+                        Tucson, Arizona 85749
+
+
+PROGRAM OVERVIEW
+
+   The ALIGN program allows you to move a diskette drive head to
+   absolute track locations and operate the drive while checks and
+   adjustments are made.  40 track single or double-sided drives are
+   supported.
+
+   ALIGN is one of several tools needed to adjust and service
+   diskette drives.  The ALIGN program does not attempt to teach you
+   how to do an alignment, but it isn't difficult if you have what
+   you need.  In addition to this program, you should have:
+
+     The drive manufacturer's alignment and service procedures.
+
+     An oscilloscope (dual trace with triggered sweep).
+
+     A DYSAN double-sided analog alignment diskette for 40 track
+     drives, 224/2A #800180.
+
+     Extension or external diskette drive signal and power cables are
+     very helpful.
+
+   See the notes at the end of this document for possible sources for
+   these items.
+
+   An analog alignment diskette contains NO data, just special
+   waveforms and can't be copied.  (It's really copy protected!) You
+   can try the program using any diskette.  The ALIGN program does
+   not write on diskettes.
+
+   (It should also be possible to use this program to adjust 80 track
+   drives provided you have the proper alignment diskette.  However,
+   some of the program commands may not be useful since they have
+   track addresses hard coded for the 40 track alignment diskette.)
+
+
+
+
+
+
+
+                        ALIGN Version 1.6                      Page 2
+
+
+SYSTEM AND DISKETTE DRIVE REQUIREMENTS
+
+   ALIGN runs under IBM PC-DOS on a PC or PC/XT with at least 64K and
+   an 80 column display, either monochrome or color.
+
+   Since ALIGN uses standard BIOS interfaces for all I/O, it should
+   also work on most IBM compatibles.  It does not work properly on
+   the PCjr.
+
+   The diskette drives to be adjusted are connected to the PC in the
+   usual manner.  The ALIGN program works with standard IBM (Tandon)
+   diskette drives and should work with others that use the same
+   electrical interface.
+
+
+USING THE ALIGN PROGRAM
+
+   Enter ALIGN after the DOS prompt and press any key to get past the
+   initial screen to the main command menu.  Chances are, you'll be
+   able to use the program without reading any more of this
+   documentation.
+
+   Commands are entered one at a time on the command line.  All
+   commands may be abbreviated and the first letter is sufficient for
+   all but one command.  (INFO requires the 3 letters, INF.)
+
+   Some commands require one operand as listed on the menu.  Numeric
+   operands, such as track number or seconds, are decimal.  The first
+   track is track 0, not track 1.
+
+   If the diskette drive under test is running, pressing any key will
+   cause it to stop in about 2 seconds.  This key may be the first
+   letter of the next command or any key such as the RETURN key.  The
+   drive will stop by itself after 60 seconds.
+
+   If the drive is stopped and and you want to continue the previous
+   motion command, simply press the RETURN key.  This enters a
+   null command which is interpreted just like a GO command.
+
+   Commonly used commands may also be entered using the program
+   function keys as shown on the command menu.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        ALIGN Version 1.6                      Page 3
+
+
+ALIGN PROGRAM COMMANDS
+
+   DRIVE  A..D
+
+     The DRIVE command specifies the letter of the drive under test:
+     A, B, C or D.  The default is drive B.  The DRIVE command does
+     not cause the drive to start.  Examples:
+
+                        DRIVE A         (Set drive A)
+                        D C             (Set drive C)
+
+
+   HEAD  0..1
+
+     The HEAD command selects the lower or upper head (diskette
+     side).  HEAD 0 is the lower head and the only head on a single-
+     sided drive.  HEAD 1 specifies the upper head on a double-sided
+     drive.  The HEAD command does not cause the drive to start.
+     Examples:
+
+                        HEAD 0          (Set head 0, the lower head)
+                        HEAD 1          (Set head 1, the upper head)
+                        H 1             (Set head 1, the upper head)
+
+
+   TRACK  0..39
+
+     The TRACK command moves the head to a specified track and starts
+     drive motion.  The drive will continue to run until a key is
+     pressed or for 60 seconds.  (The 60 second run time may be
+     changed using the SECONDS command.) The track number that may be
+     specified is usually in the range 0 through 39, although the
+     upper track limit may be extended using the MAX command.
+     Examples:
+
+                        TRACK 0      (Move to track 0 and run drive)
+                        T 34         (Move to track 34 and run drive)
+                        T 16         (Move to track 16 and run drive)
+
+
+   IN
+   OUT
+
+     The IN command moves the head to track 32 and then immediately
+     moves it "in" towards track 0 stopping on track 16.  IN is
+     equivalent to the TRACK 32 command followed by TRACK 16.
+
+     The OUT command is similar, but moves the head first to track 0
+     and then "out", away from track 0 stopping on track 16.  OUT is
+     equivalent to a TRACK 0 command followed by TRACK 16.
+
+     Both commands end up on track 16 with the drive running.  Track
+     16 is the radial head alignment track on the Dysan 40 track
+     alignment diskette.
+
+
+
+
+
+
+
+
+
+                        ALIGN Version 1.6                      Page 4
+
+
+     After making a head adjustment it's a good idea to re-seek to
+     track 16 and check the cat's eye pattern again.  Both the IN and
+     OUT commands cause a re-seek to track 16.  The two commands
+     also allow checking the accuracy of seeks (and the resulting
+     head alignment) in both directions.  If there is a difference in
+     the cat's eye patterns in the two directions, you may want to
+     re-adjust the alignment to split the difference.  A difference
+     indicates play in the mechanism or an imprecise head stepper
+     motor.
+
+
+   GO
+
+     If the drive is stopped, the GO command simply starts the drive
+     at whatever track it happens to be on.  A null entry does the
+     same thing, so you can just press the RETURN key with nothing on
+     the command line to start the drive.
+
+
+   SECONDS  3..180
+
+     Normally, each time you start the drive using ALIGN, the drive
+     runs for 60 seconds if not stopped by pressing any key.
+     This is usually enough time to make a check or adjustment and
+     prevents the drive from running "forever".  The SECONDS command
+     allows you to change this 60 second limit anywhere from 3 to 180
+     seconds.  The SECONDS command does not cause the drive to start.
+     Examples:
+
+                        SECONDS 120                (2 minutes)
+                        S 10
+                        S 30
+
+
+   CYCLE
+
+     The CYCLE command starts the drive and cycles the head through
+     tracks 0 through 3 in the following order 3,2,1,0,3,2,1,0,3,2...
+     and so on for the purpose of checking the track 0 switch.  The
+     drive changes tracks every few seconds so you have time to see
+     if the track 0 switch has switched.  In between each track
+     (0,1,2 or 3) the CYCLE command moves the head to track 16 so
+     there is a seek similar to that when a drive is first used after
+     power-on.
+
+     Believe it or not, on Tandon TM-100 series drives, the track 0
+     switch should switch between tracks 1 and 2.  (It's NOT supposed
+     to switch at track 0!) This is a position in the middle of the
+     first four tracks.  The actual track 0 signal on the drive
+     interface is a combination of the track "0" switch and other
+     indications in the drive electronics.
+
+                            Switch here
+                                 |
+                                 V
+                        0     1     2     3
+
+
+
+
+
+
+
+                        ALIGN Version 1.6                      Page 5
+
+
+     While the CYCLE command is active, the PC's speaker sounds rapid
+     beeps equal to the current track number, 1 to 3, each time it
+     changes tracks.  Track 0 is a single longer beep.  These beeps
+     allow you to know what track the drive is on without trying to
+     watch a meter or test light and the PC's display at the same
+     time.  A higher pitch sounds in addition to the track beeps when
+     the switch should switch.  After a little practice, the sound
+     eliminates the need to watch the screen.  As you watch your
+     meter or light, don't be confused by the very brief switch
+     changes when the head moves out to track 16 and then back in.
+
+     While it's always nice to set things "right on," the track 0
+     switch adjustment isn't critical and the drive operates fine
+     even when it switches a whole track off from the ideal point
+     between tracks 1 and 2.
+
+
+   MAX 39..90
+
+     The MAX command sets the maximum track allowed with the TRACK
+     command.
+
+     Normally, the TRACK command accepts track numbers from 0 through
+     39.  The MAX command allows you to change the TRACK command's
+     high track limit all the way up to 90.  The MAX command does not
+     cause the drive to start.
+
+     There really isn't much occasion to use the MAX command.  It's
+     most obvious use is to allow the ALIGN program to be used with
+     80 track drives.  In this case you would specify MAX 79.  (Note
+     that the IN and OUT commands assume a 40 track alignment disk
+     and won't be useful with an 80 track alignment disk.  You can
+     still use the TRACK command to do the equivalent manually.)
+
+     Or, maybe you're looking for the track 39 signal on the DYSAN
+     alignment disk.  If it doesn't appear on what the system thinks
+     is track 39, maybe it will show up at what the system thinks is
+     track 40, or 41 or....
+
+     Actually, there is a limit to how far the head will go past
+     track 39.  You may want to use the MAX command to allow you to
+     investigate just how much further the head will go.  (A copy
+     protection scheme might use one track past the "end" of the
+     disk.)
+
+     However, before you go charging off into the stratosphere of
+     track addressing, realize that when the head hits the upper
+     limit, it does so with the full force of the stepper motor.
+     This alone could knock a drive out of alignment or possibly
+     cause permanent damage.  Use the MAX command at your own risk.
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        ALIGN Version 1.6                      Page 6
+
+
+   RESET
+
+     The RESET command causes a reset of the diskette system (via
+     BIOS INT 13 with AH=0).  RESET does not cause the drive to
+     start.
+
+     The next time any drive is accessed, it will then be
+     "recalibrated." This means that the diskette controller makes no
+     assumptions about which track the head is on, moves the head
+     until track 0 is located as indicated by the drive, and then
+     proceeds with the requested operation.  Once this recalibration
+     process is complete, the diskette controller keeps it's own head
+     position register and simply pulses the head forward or back,
+     one step at a time to get to a desired track.  If one pulse
+     is missed or the head is moved manually with power-on, then the
+     controller's track register won't agree with the physical
+     position of the head.
+
+     "Recalibration" is not an adjustment, but rather a normal
+     operation done by the diskette controller so it can get in sync
+     with the physical head position.  Every drive is "calibrated" by
+     the controller the first time you use it after power-on or boot.
+
+     The RESET command allows you to recalibrate during the drive
+     adjustment procedure.  For instance, assume the the drive is on
+     track 16 (or what you think is track 16).  If you issue a RESET
+     command and then simply start the drive motion (null entry), you
+     will hear the drive move to track 0 and then back out to track
+     16 as the drive is recalibrated.
+
+     The RESET command is useful when servicing drives and you think
+     the drive is not seeking to the correct track.  This could
+     happen while adjusting the track 0 switch.  Also, the drive
+     won't seek to the correct track anytime the head has been moved
+     against the stepper's electrical hold.  This could occur when
+     the head assembly hits it's travel limit at either end.  This
+     isn't normal operation, but when the adjustments are wrong it
+     can (and does) happen.
+
+     If you don't find an alignment disk signal where you think it
+     should be, try the RESET command.  It is also a good idea to use
+     the RESET command just before the final checks on radial head
+     alignment to be sure you're not exactly 1 or 2 tracks off.
+     ALIGN does an automatic RESET between every CYCLE command seek
+     to make track 0 switch adjustment easier.
+
+     Without the RESET command, it would otherwise be necessary to
+     re-boot or turn the machine off-and-on to force a recalibrate
+     operation.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        ALIGN Version 1.6                      Page 7
+
+
+   INFO
+
+     The INFO command causes another screen to be displayed with a
+     brief description of each track on the Dysan 40 track alignment
+     disk.  It's simply for reference.  Pressing any key returns you
+     to the ALIGN command menu screen.
+
+
+   QUIT
+
+     The QUIT command terminates the ALIGN program and returns to
+     DOS.
+
+
+DRIVE SPEED TESTING
+
+   ALIGN does not have the capability to check a drive's spindle
+   speed.  The IBM "Advanced Diagnostics" diskette that comes with
+   the IBM Hardware and Maintenance and Service book provides a good
+   software check of drive speed.  Lacking that, use the ALIGN
+   program to run the drive while you observe the strobe disk on the
+   bottom of the drive.
+
+
+INSTANTANEOUS SPEED VARIATION TESTING
+
+   To test Instantaneous Speed Variation, the Tandon manual says to
+   first "write a 2F (all ones) pattern on any track." The ALIGN
+   program won't write this or anything else on your diskettes.  A
+   totally satisfactory substitute is to simply use the DOS FORMAT
+   command to format a work diskette in the drive under test.  This
+   puts a pattern on every track.  Admittedly, it's not "all ones"
+   but you'll hardly know the difference as you observe the pulse
+   jitter on the oscilloscope.  Also, while Tandon says to use "any"
+   track, the jitter is much worse on the inside (high) tracks.  Use
+   a middle track, such as 16, to check the specification.  Get to
+   know what normal jitter looks like on tracks 0 and 39 too.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        ALIGN Version 1.6                      Page 8
+
+
+TANDON TM-100 SERIES REPAIR TIPS
+
+   LOOSE SCREWS AND NUTS - HEAD MISALIGNMENT
+
+   In my experience, the most frequent cause of head misalignment and
+   drive failure on Tandon TM-100 series drives is a loose Allen head
+   screw on the stepper motor shaft.  This allows the motor shaft to
+   slip where it connects to the split band positioner pulley.
+   Tighten this Allen head screw before doing an alignment.  It's not
+   unusual to tighten it one-half turn holding the short end of an
+   Allen wrench with just your fingers.  Don't over-do it, however,
+   as you could strip the threads.
+
+   The stepper motor shaft is smooth and has no flats or keys.  As
+   long as you are doing an alignment and the Allen screw is tight,
+   the exact pulley position on the shaft usually doesn't matter.
+   But sometimes it can be out of the head alignment cam screw
+   adjuster range.  If this happens, loosen the Allen screw, rotate
+   the pulley a bit, tighten it, and try again.
+
+   While you're at it, check the two nuts that hold the track stepper
+   motor to the casting.  Also, remove the clear plastic cover on the
+   bottom of the head assembly and carefully tighten the little
+   Phillips screw that holds the split band on the pulley.
+
+   If you're not going to do an alignment, don't tighten these screws
+   since just tightening them might change the alignment some.
+
+
+   TRACK 00 SWITCH PROBLEMS - BOOT FAILURE
+
+   The track 0 microswitch frequently becomes intermittent or fails.
+   You can easily check this by powering-off the system and removing
+   plug 11 on the back of the drive.  Push a few pieces of bare wire
+   into the connector and check the switch contacts with an analog
+   ohm meter.  The switch is single pole, double throw (SPDT).
+
+               |     |  |
+               |     |  |  <- wires to switch
+              ------------
+              |          |         COM - common center contact
+              | Plug     |         NC  - normally closed
+              |          |         NO  - normally open
+              |          |
+    Pin # ->  |4  3  2  1|
+              ------------
+             COM     NC NO  <- Switch contacts
+
+   Operate the switch manually.  It is a little hard to get to and
+   you may want to remove the logic board first.  Check to see that
+   contact closure is positive, occurs when the switch clicks,
+   and without any wavering around.
+
+   If the switch is not operating properly, the problem is usually
+   just a very small amount of corrosion or oxidation on the switch
+   contacts.  Rather than replacing the switch, the easy and
+
+
+
+
+
+
+
+                        ALIGN Version 1.6                      Page 9
+
+
+   effective repair is to pass some reasonable current through the
+   switch and operate the switch a few times.  Be sure that plug 11
+   is disconnected from the logic board and that you make connections
+   to just the plug.  Use an external CURRENT LIMITED low voltage
+   supply to burn off the little bit of oxidation.  I don't know how
+   much current to recommend.  I use just enough to cause a little
+   spark when the power supply leads are touched, probably 0.5 or
+   1.0 amp.  Be sure to use a current limited supply or put an
+   appropriate current limiting resistor in series.  If you don't
+   know how to do this, then find someone who does rather than risk
+   any harm or damage.
+
+
+POSSIBLE SOURCES FOR SUPPLIES
+
+   For the type of drives usually used in the PC, the alignment and
+   service procedures are in the Tandon "OEM Operating and Service
+   Manual TM-100-1 and -2 Disk Drives, 48 Tracks per Inch."
+
+   Priority One Electronics sells this as part number 07TND179022001,
+   for $36.00.
+
+                     Priority One Electronics
+                     9161 Deering Ave.
+                     Chatsworth, CA 91311
+                     Telephone (800) 423-5922
+                               (818) 709-5111
+
+   It is also Tandon part number 179022-001, listed at $25.00 on a
+   December 1982 Tandon price list.  I don't know if they will sell
+   it directly to end users.
+
+                     Tandon Corporation
+                     20320 Prairie Street
+                     Chatsworth, CA 91311
+                     Telephone (213) 993-6644
+
+
+   Analog Alignment Diskettes (AAD's) are available directly from
+   Dysan Corporation.
+
+       5.25" Double-sided, 48 TPI, 224/2A #800180         $50.00
+       5.25" Single-sided, 48 TPI, (numbers not known),   $25.00
+       (96 TPI alignment diskettes are also available.)
+
+                     Dysan Corporation
+                     5201 Patrick Henry Drive
+                     Santa Clara, CA 95050
+                     Telephone (800) 551-9000, Dept 50
+                               (408) 988-3472
+
+   Extension or external diskette drive signal and power cables may
+   be difficult to locate or you may have to make your own.  Priority
+   One carries everything you need for the signal cable but not the
+   power cable. (If you know of a source for the male and female
+   power connectors in small quantities, please let me know.)
+
+
+```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #217, version v2 
+ 
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on this disk.  If the CRC numbers do not match the following
+list you may have a bad file.  To use type:  CRCK4 <filespec>
+ 
+CRCK4 output for this disk:
+ 
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  RESWORDS.TXT         CRC = 71 DE
+
+--> FILE:  SUPERDIR.BAS         CRC = 24 25
+
+--> FILE:  SUPERDIR.DOC         CRC = 6C 4C
+
+--> FILE:  DUMPSCRN.BAS         CRC = D0 7F
+
+--> FILE:  DUMPSCRN.MRG         CRC = 18 69
+
+--> FILE:  DUMPSCRN.DOC         CRC = AB 4B
+
+--> FILE:  ALIGN   .EXE         CRC = 02 83
+
+--> FILE:  ALIGN   .DOC         CRC = A1 C7
+
+--> FILE:  NELIST  .DOC         CRC = 38 DB
+
+--> FILE:  NELIST  .COM         CRC = 96 D2
+
+--> FILE:  NEPRN   .DAT         CRC = 00 00
+
+--> FILE:  NEINST  .COM         CRC = 92 38
+
+--> FILE:  NELIST  .PAS         CRC = 28 D3
+
+--> FILE:  NEINST  .PAS         CRC = F7 50
+
+--> FILE:  LETTER  .            CRC = 37 AA
+
+--> FILE:  WA-TOR  .COM         CRC = A3 46
+
+--> FILE:  WA-TOR  .000         CRC = 4E 0D
+
+--> FILE:  WA-TOR  .PAS         CRC = 3C D7
+
+--> FILE:  WA-TOR  .DOC         CRC = 31 1C
+
+ ---------------------> SUM OF CRCS = 53 C4
+
+DONE 
+ 
+These and other Public Domain and user-supported programs from:
+ 
+PC Software Interest Group (PC-SIG)
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## RESWORDS.TXT
+
+{% raw %}
+```
+absolute
+and
+array
+begin
+case
+const
+div
+do
+downto
+else
+end
+external
+file
+for
+forward
+function
+goto
+if
+in
+inline
+label
+mod
+nil
+not
+of
+or
+overlay
+packed
+procedure
+program
+record
+repeat
+set
+shl
+shr
+string
+then
+to
+type
+until
+var
+while
+with
+xor
+```
+{% endraw %}
+
 ## SUPERDIR.BAS
 
+{% raw %}
 ```bas
 100 '   Super Directory for the IBM Personal Computer
 102 '
@@ -167,6 +884,7 @@ machines:
 5350    KEY ON
 5360    KEY LIST: CLOSE: END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -41,6 +41,57 @@ machines:
     action and a large stable of horses.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2145.TXT
+
+{% raw %}
+```
+Disk No: 2145                                                           
+Disk Title: Handicap Horse Racing                                       
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Handicap Horse Racing                                    
+Author Version: 2.00                                                    
+Author Registration: $74.95                                             
+Special Requirements: CGA recommended.                                  
+                                                                        
+Back in the computer's early game-playing days, a horse race            
+involved either waiting for race results from an imaginary track,       
+or watching little dots of light run randomly around the screen.        
+Those days are long since gone. HANDICAP HORSE RACING has brought       
+what used to be a simple game into the world of high stakes and         
+heart-pounding finishes.                                                
+                                                                        
+From someone who used to press a button to start the game, you          
+become The Marshal, or track commissioner, and you do a lot more        
+before, during and after the race. Before you even open the gates       
+to the track, you must prepare the Registry, see to your funds for      
+race pay-offs and rental and fees from your track stables. When         
+your guests arrive, they'll be bringing their own money (play) for      
+a day at the races. The system will make the race call and even         
+help you determine who get how much afterwards.                         
+                                                                        
+With your Registry changing as a result of each race, the excitment     
+will grow every time you play. Your guest will look forward to play-    
+ing their "Best of Breed" against the field.                            
+                                                                        
+The ShareWare version supports a limited number of horses running on    
+an oval track with no betting action. Registered users receive a track  
+construction system, full betting action and a large stable of horses.  
+                                                                        
+"The horses are in the line-up ... and they're off!"                    
+                                                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2145
 

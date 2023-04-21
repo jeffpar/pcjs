@@ -14,6 +14,71 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1555.TXT
+
+{% raw %}
+```
+Disk No: 1555                                                           
+Disk Title: Revelation Tutorial 2 of 2 (also 1554)                      
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Revelation Tutorial                                      
+Author Version: 1.0                                                     
+Author Registration: $30.00                                             
+Special Requirements: None.                                             
+                                                                        
+This is a scriptural tutorial for anyone interested in exploring the    
+Book of Revelations.  The author, a minister, offers a fresh perspective
+of this work to those who have studied the Bible and a measured overview
+to those with little or no background in Revelations.                   
+                                                                        
+Two methods of teaching are used.  One set of exercises provides        
+familiarity with, and tests for, details of the scriptural references   
+covered in the 25 lessons or `projects'.  Multiple-choice, fill-the-    
+blanks, and yes/no quizzes test for knowledge of such items as `How     
+many...?', `Who...?' and `What...?'.  Details are referenced            
+scripturally and at several points in the program, the current material 
+is summarized.  At the end of the second disk, a comprehensive self-test
+is provided.  The othe set of lessons explores the meanings behind the  
+details.  Interpretive exercises are designed to aid insight to the     
+references and symbols used throughout the book.                        
+                                                                        
+The author has used "The New International Version" of the Bible as the 
+source document for the 2-disk tutorial.  Most of the lessons can be    
+completed in an hour or less but some do run longer.  Provision has been
+made to permit the user to leave the tutorial and reenter, at the same  
+point, at a later time.                                                 
+                                                                        
+File Descriptions:                                                      
+                                                                        
+The first disk contains:                                                
+REV      EXE  Initialization procedure; chains into MENU.EXE.           
+MENU     EXE  Project Menu; chains into ???.TBC.                        
+???      TBC  Thirteen lesson projects (REVELATION 1-10).               
+GO       BAT  Displays REV.TUT.                                         
+REV      DOC  Documentation for REVELATION TUTORIAL.                    
+REV      TUT  Displays `get started' commands.                          
+FILES         Displays this file listing.                               
+                                                                        
+The second disk contains:                                               
+REV      EXE  Initialization routine; chains into MENU.EXE.             
+MENU     EXE  Project Menu; chains into ???.TBC.                        
+???      TBC  Twelve lesson projects (REVELATION 11-22)                 
+230      TBC  Self-test covering all of Revelation.                     
+FILES         Displays file listing.                                    
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1988 PC-SIG, Inc.                                         
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1555
 

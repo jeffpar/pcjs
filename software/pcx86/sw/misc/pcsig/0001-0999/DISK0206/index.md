@@ -60,8 +60,262 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CMP.DOC
+
+{% raw %}
+```
+DOCUMENTATION FOR CMP.COM  version 1.0  Sept. 11, 1983
+BY Jack Gersbach
+ 
+CMP.COM is a file comparison utility program that has the power
+to perceive added and deleted sections of a file as well as changes.
+ 
+The files to be compared may be specified on the same line with the
+calling command. If they are not included, you will be prompted for
+the file specifications. This gives you a chance to change disks before
+the compare operation begins. If the file specifications are included
+on the command line, it is assumed that the disk that contains CMP.COM
+is conveniently mounted and you will not get the question "Compare
+more files ?" before exiting to DOS.
+The first specification must have a file name.
+If a drive is not specified, the default drive is assumed. If the second
+specification does not contain a file name, it is assummed to be the
+same name as the first. If there is no second specification, the default
+drive is assumed. If the file specifications are the same or if the
+second defaults to the first, then the file will be compared to itself
+and a warning message is issued. This is a handy way to check for disk
+errors.
+ 
+The output is displayed in chronological order.
+Data unique to the most recent version of the file is listed first and
+labeled "Ins". Following that, data unique to the older version is
+displayed and labeled "Del". There may be only 1 file with unique data.
+If neither files have unique data, then they are identical.
+ 
+The display shows the offset within the file of the leftmost byte
+in hexadecimal notation. This is always aligned to a paragraph
+boundary making the low nibble zero. All data shown in the hex area
+is unique. A double period is displayed if the byte is not unique to
+the file. A dash separates bytes 7 and 8.
+ 
+The ASCII representation appears on the right. A dash is displayed if
+the byte is not unique. A period is displayed for non ASCII characters.
+ 
+               Data unique to  A:FILE1.COM
+ 
+Ins:00030  .. .. .. 4E 65 77 .. ..-.. .. .. .. .. .. .. .. [---New----------]
+Ins:00140  .. .. .. .. 69 .. .. ..-.. BA .. .. 43 .. .. .. [----i----.--C---]
+ 
+               Data unique to  B:FILE1.COM
+ 
+Del:00140  .. 61 .. .. .. .. 58 ..-.. 00 .. .. .. .. .. .. [-a----X--.------]
+ 
+In the above example the format is independent of the order in
+which the file names were entered. The file on drive "A" is listed
+first because it was found to be the most recent. It's data is there-
+for labeled "Inserted". Data unique to the earlier file on drive "B"
+was evidently "Deleted" and is labeled accordingly. The changes would
+be perceived by the person who made them to be the added word "New"
+and later in the file, 3 bytes whose value have been changed but occupy
+the same positions relative to the data surrounding them.
+ 
+Compare does a reasonably good job of deducing differences between
+files that have just a few changes. Some difficulty arises when there
+is a high difference density. This is especially true when a few
+changed bytes are intermixed with added or deleted data. In these cases
+it may be difficult to interpret CMP.COM's output, but at a minimum it
+will let you know that there is a difference of some kind.
+ 
+The algorithm implemented in CMP.COM involves 2 basic parameters.
+a. The maximum scan range or number of bytes to be scanned and
+b. The minimum match length that is considered to be a valid compare.
+The default values are 256 and 16, respectively.
+ 
+The procedure is as follows : When a mismatch is encountered,
+ 
+	1. Scan ahead for matching bytes on the assumption that no
+	   data has been inserted or deleted until matching bytes are
+	   encountered. Save the distance to the matching bytes. The
+           maximum range is scanned.
+ 
+	2. Scan ahead for matching bytes on the assumption that data
+	   has been added to the later file. Save the distance to the
+	   matching bytes. The scan range in the earliest file is
+           twice the minimum match length. The later file is scanned
+	   to the max range.
+ 
+	3. Repeat step 2 with the roles of the files reversed.
+ 
+	4. If steps 2 and 3 did not produce a match, repeat them using
+	   the maximum scan range in both files.
+ 
+	5. Select the minimum of the above 3 lengths and report all
+	   bytes within that distance to be unique to the appropriate
+	   files. In case 1 the data in both files is reported. In case
+	   2 data in the later file is reported and in case 3 data in
+	   the earlier file is reported. If no match was found, report
+	   16 bytes of both files as unique.
+ 
+	6. Load more file data from disk to memory, if appropriate, 
+           and go back to step 1.
+ 
+As data is reported, it is bypassed by the scan pointers and the scan
+resumes at the new pointer positions. The data then need not be at the
+same offset in each file to produce a match, since the pointers can move
+independently. For difficult files, i.e. files with many insertions,
+deletions and/or changes, the maximum range and minimum match length
+parameters may be modified by the user but only after the prompt message
+appears on the screen. Hence the file names must not be included on the
+command line that calls CMP.COM. Both parameters must be specified.
+The syntax is:
+ 
+            /max scan range/min match length [,filespec]
+ 
+Any combination of numbers may be used but the max scan range must be
+more than twice the min match length and the range can't exceed half the
+available memory. i.e. the memory space allocated to one of the files.
+Otherwise the "improper number(s)" message appears and the parameters
+are not accepted.
+ 
+Examples of commands entered while still under DOS's control.
+		CMP FILE1.TXT	FILE2.TEXT
+		CMP A:FILE1.TXT,B:
+ 		CMP A:FILE1.TXT
+ 
+Examples of commands entered while under CMP.COM's control.
+		FILE1.TXT FILE2.TEXT
+		A:FILE1.TXT B:
+ 		A:FILE1.TXT
+		/150/12 a:file1.txt,b:file1.txt
+		/30/6
+ 
+ 
+Prompting messages:
+ 
+        Enter the files to be compared or new parameters
+ 
+This is the prompt message to type in the file specifications or
+new parameters for the scan algorithm. They must be on the same
+line separated by tab, space or comma. The parameters, if present,
+must preceed the file names. If file specifications have been
+entered previously, it is only necessary to press enter to repeat 
+the comparison.
+ 
+              Compare more files (Y/N) ?
+ 
+This message only appears if CMP.COM was called without trailing
+parameters specifying the files. The assumption is made that the
+disk containing CMP.COM was removed from the drive.
+If another compare operation is desired, enter "Y", otherwise
+enter "N" and control is returned to DOS (the command processor).
+ 
+ 
+ 
+Informative messages:
+ 
+ 
+                 Comparing file to itself
+ 
+The file specifications refer to the same file. It is being compared
+to itself to verify the integrity of the disk data.
+ 
+                   Files are identical
+ 
+The files contain identical data and are the same length. The date
+and time might be different.
+ 
+ 
+ 
+Error messages:
+ 
+                   FILESPEC is empty
+ 
+There is no data in the indicated file.
+ 
+                  FILESPEC not found
+ 
+The indicated file could not be found on the specified drive.
+ 
+            Invalid drive or file specification
+ 
+DOS found the drive, file name or file extention to be invalid.
+ 
+                  Improper number(s)
+ 
+The max range was either less than or equal to twice the min match
+length, or greater than half the available memory space, or only one
+parameter was specified.
+ 
+
+```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #206, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  FACTOR  .BAS         CRC = 57 61
+
+--> FILE:  MULTREG .EXE         CRC = 2A 05
+
+--> FILE:  PUNYCALC.BAS         CRC = 32 27
+
+--> FILE:  PUNYCALC.DOC         CRC = D0 C2
+
+--> FILE:  CMP     .COM         CRC = EB 5C
+
+--> FILE:  CMP     .DOC         CRC = 36 95
+
+--> FILE:  PROFILE .MEM         CRC = BC A4
+
+--> FILE:  SORT    .BLD         CRC = 49 4D
+
+--> FILE:  SORT    .DOC         CRC = 79 F5
+
+--> FILE:  SORTEST .BAS         CRC = 44 35
+
+--> FILE:  XXX     .            CRC = A6 71
+
+--> FILE:  KEYPUNCH.BAS         CRC = 41 29
+
+--> FILE:  PERT    .DAT         CRC = 2E 61
+
+--> FILE:  PERTCHT .BAS         CRC = 8A 9E
+
+--> FILE:  VISICOM .DOC         CRC = 9A 2B
+
+--> FILE:  CRC     .TXT         CRC = F4 88
+
+--> FILE:  CRCK4   .COM         CRC = BD 22
+
+ ---------------------> SUM OF CRCS = 56 C9
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## FACTOR.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 KEY OFF
@@ -110,9 +364,11 @@ machines:
 450 GOTO 50
 460 END
 ```
+{% endraw %}
 
 ## KEYPUNCH.BAS
 
+{% raw %}
 ```bas
 10 DEFINT I-K:DIM CARD$(400):BS$=CHR$(29):FALSE=0:TRUE=NOT FALSE
 20 KEY OFF:CLS:LOCATE 25,1:COLOR 0,7:SC$="----^----"
@@ -177,9 +433,11 @@ machines:
 610 IF ERR=72 THEN PRINT"Bad disk. Try another.":RESUME 460
 620 ON ERROR GOTO 0
 ```
+{% endraw %}
 
 ## PERTCHT.BAS
 
+{% raw %}
 ```bas
 10 '     PROGRAM: ENHANCED PERT          SOURCE: BYTE, MAY, 1982, PG. 469ff.
 20 '     FUNCTION: PERT-CHARTING         DATE:   5/1/82
@@ -449,9 +707,11 @@ machines:
 30000 GOTO 20070
 30010 RETURN
 ```
+{% endraw %}
 
 ## PUNYCALC.BAS
 
+{% raw %}
 ```bas
 10 ' PunyCalc (c) 1983 by Stephen Manes.  All rights reserved.
 20 ' no responsibility taken for errors, bugs, or anything else--I write fiction, not programs
@@ -878,9 +1138,160 @@ machines:
 4100 LOCATE 20,10
 4110                         RETURN
 ```
+{% endraw %}
+
+## PUNYCALC.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+    PunyCalc is a four-function desk calculator that runs from Basica.
+         
+             To use it, either enter Basica and type    
+                       run "PunyCalc"
+
+     Or make sure Basica is on this disk and strike any key.
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
+
+## SORT.DOC
+
+{% raw %}
+```
+
+
+-------------------------------  SORT.DOC  ----------------------------------
+
+                        Documentation for SORT.BLD
+                           (C) 1983 Lee M. Buck 
+                               Arlington, VA.
+
+This file provides a brief description of the machine language subroutine
+SORT.BLD.  The subroutine is written in assembly language and has been
+linked and is set up to use directly in a BASIC program.  The sort algorithm
+used in the routine is a Shell-Metzner sort.  The demonstration program
+SORTEST.BAS shows how to use the subroutine and also includes an interpreter
+BASIC version of a Shell-Metzner sort.  This routine will only sort strings
+but it can be used to sort numbers if they are properly converted to a string.
+They should be the same length and have the same number of decimal places, if 
+any.  Dates can be sorted if they are stored YY/MM/DD. Several strings can be 
+concatenated from multiple fields of a record in data base applications to 
+provide fast multi-field sorts in BASIC programs.
+
+The machine language sort routine must be set up using the program SORTBLD.BAS
+before running the test program.  SORTBLD.BAS will create the file SORT.BLD.
+This file is the relocatable machine language sort which is 'BLOADed' into
+memory for use with a BASIC program.  The demonstration program SORTEST.BAS
+uses SORT.BLD to sort random strings into ascending order and then descending
+order.  SORTEST.BAS is set up to run on a 64K memory machine using BASIC
+(NOT BASICA ! - unless the CLEAR stmt argument is reduced).  The program gives
+guidelines for running on a machine with 96K memory or more if you want to test
+larger problems.  If you have less than 64K, the program must be modified to
+reflect less memory (on the same two lines as for more memory - see the listing
+for details - and your BASIC manual).
+
+The demonstration program generates a specified number of varaible length
+strings.  The strings are first sorted into ascending order by an INTERPRETER
+BASIC Shell-Metzner sort algorithm.  The original array is then sorted using
+the machine language subroutine; first ascending and then descending order.
+The results of the sorts and the original array can then be displayed on the
+screen or on a printer.
+
+The subroutine will sort up to 10000 strings --  more than a BASIC program is
+likely to be able to hold in memory.  The strings can be of equal or unequal
+length.
+
+A note on performance:  A comparison to interpreter BASIC is silly for this
+routine, but compared to the BASIC compiler this routine is about 30% faster
+than the compiler when using the BASRUN.EXE module to compile the BASIC code
+for a Shell-Metzner sort.  It is about equal in speed (marginally faster)
+than the compiler when compiled without the BASRUN.EXE module (using the /O 
+option).  This routine will sort 2000 strings (from 1 to 10 characters) in
+about 11 seconds. This is probably SLOWER than will be experienced in 'real'
+problems since the strings that are sorted in the demo are made by repeating
+a randomly generated character 'N' times.  It takes longer to determine that
+JJJJJJJ is less than JJJJJJJJ than to determine that Johnson is less than Jones
+since a difference occurs at the third character for the latter example rather
+than at the eighth character.
+
+
+COMMENT* THIS SUBROUTINE IS A 'FAR' PROCEDURE FOR USE WITH BASIC PROGRAMS. THE
+        MODULE SORTS A STRING ARRAY INTO ASCENDING OR DESCENDING ORDER USING AN
+        ASCII COLLATING SEQUENCE.  THE PARAMETERS THAT MUST BE PASSED TO THE
+        PROCEDURE INCLUDE THE FIRST ELEMENT IN THE ARRAY, THE FIRST ELEMENT IN
+        A POINTER ARRAY AND THE NUMBER OF ELEMENTS TO SORT.
+
+        THE POINTER ARRAY IS AN ARRAY OF INTEGERS THAT ARE USED TO INDICATE THE
+        ORDER OF THE STRING ARRAY.  FOR EXAMPLE, THE VALUE OF POINTER(10)
+        INDICATES THE POSITION OF ARRAY$(10).  INITIALLY, POINTER(10) WOULD
+        HAVE A VALUE OF 10, BUT FOLLOWING THE SORT POINTER(10) WOULD HAVE A
+        VALUE EQUAL TO THE POSITION ARRAY$(10) SHOULD HAVE IN THE ORDERED ARRAY
+
+        THE POINTER METHOD IS USED FOR TWO REASONS.  ONE IS THAT IT IS SLOW TO
+        MOVE STRINGS AROUND, SECONDLY, BASIC DOES NOT WANT YOU MESSING WITH THE
+        'STRING DESCRIPTOR'.  IF YOU SWAP STRINGS OF UNEQUAL LENGTH, THE STRING
+        DESCRIPTORS WILL BE WRONG AND WOULD REQUIRE SOME MESSY ADJUSTMENTS.
+        USING POINTERS IS FASTER AND EASIER.
+
+        THE BASIC CALL IS:
+                           CALL SORT(ARRAY$(1),PTR%(1),N%)
+
+        'SORT' MUST BE SET BY THE CALLING PROGRAM TO THE CORRECT 'ENTRY POINT'
+        IN THE PROCEDURE TO DETERMINE WHETHER AN ASCENDING OR DESCENDING SORT
+        IS PERFORMED.
+
+                ASCENDING SORT  --  SORT = 0 
+
+                DESCENDING SORT --  SORT = 2 
+
+                SET THE CORRECT SEGMENT LOCATION WITH 'DEF SEG...', THEN
+                CALL SORT(ARRAY$(1),PTR%(1),N%)
+
+        UPON RETURN FROM THE ROUTINE, THE PTR% ARRAY IS ADJUSTED TO REFLECT THE
+        CORRECT ORDER OF THE ARRAY$ ELEMENTS.
+
+        NOTE:  THIS ROUTINE IS FOR SORTING ASCII STRINGS, NOT NUMBERS. YOU CAN
+        SORT NUMBERS WITH IT ONLY IF THEY ARE 'PROPERLY' CONVERTED TO STRINGS
+        FIRST. IT WILL NOT WORK WITH COMPILED BASIC PROGRAMS BECAUSE THE STRING
+        DESCRIPTORS USED IN COMP. BASIC ARE 4 BYTES NOT 3 AS IN INTERP. BASIC.
+
+        PROGRAM BY:  LEE M. BUCK
+                     4830 N. 24th STREET
+                     ARLINGTON, VA 22207
+                     703-527-5813
+
+        DATE: 3-27-83           REVISED: 4-23-83
+
+        THIS PROGRAM MAY NOT BE DISTRIBUTED FOR A FEE WITHOUT WRITTEN CONSENT
+        OF THE AUTHOR.  IT IS INTENDED FOR FREE USE BY THE IBM PC USER 
+        COMMUNITY.
+*
+
+```
+{% endraw %}
 
 ## SORTEST.BAS
 
+{% raw %}
 ```bas
 10 'DRIVER PROGRAM FOR TESTING SORT ROUTINES
 20 '
@@ -1050,6 +1461,86 @@ machines:
 1660 SOUND 400,20: SOUND 200,25
 1670 GOTO 1580
 ```
+{% endraw %}
+
+## VISICOM.DOC
+
+{% raw %}
+```
+
+     [[This patch was extracted from the PHOENIX IBM-PC Software 
+Library newsletter. They received it from the HAL-PC users group of
+Houston, TX.  Corrected by Jack Wright.  Many thanks to them.]]
+
+****   CONVERT VISICALC TO A .COM FILE   ****
+
+USE THE FOLLOWING PROCEDURE TO TRANSFER THE 80-COLUMN VISICALC PROGRAM
+FROM THE VISICALC DISK AND WRITE A STANDARD .COM FILE WHICH MAY BE
+LOADED ON A NON-STANDARD DISK DRIVE (WINCHESTER, 8", ETC).
+
+FORMAT A DISK AS FOLLOWS: (FORMAT B:/S(ENTER)).
+START THE DEBUG SYSTEM.
+INSERT THE VISICALC DISK IN DRIVE A:
+THEN TYPE:
+
+-L 100 0 138 2         (LOAD THE VC80 LOAD/DECRYPTER)
+-M 0 3FF 7000          (DUPLICATE IT IN HIGHER MEMORY)
+-R CS                  (INSPECT COMMAND SEGMENT REGISTER)
+
+DEBUG WILL RESPOND WITH THE CONTENTS OF THE CS REGISTER (eg. 04B5) AND
+PROMPT WITH A COLON (:). TYPE THE OLD CONTENTS + 700 (HEX). (eg. 04B5
+BECOMES 0BB5). DO THE SAME WITH THE 'DS' REGISTER. 
+DEBUG response to R CS might be:
+
+CS 04B5    <-Save the value you get, we'll need it later.
+:0BB5      <-Type in your CS value + 700hex here
+-R DS      <-Type
+DS 04B5
+:0BB5      <-Type in your DS value + 700hex here
+
+NEXT:
+Take the low order byte of the CS you saved above and substitute it
+for LL in the next line.  Substitute the high order byte for HH:
+
+-E 107 LL HH           (ENTER BYTE-FLIPPED CS) Ex: -E 107 B5 04
+-E 24D BB A8 00 90     (HARD-WIRE THE DECRYPTION KEY)
+
+NOW, WE MUST RUN THE LOADER/DECRYPTER, TYPE:
+
+-G =1B8 26B            (EXECUTE FROM 1B8 TO 26B)
+
+THE ENTIRE PROGRAM WILL NOW BE LOADED AND DECRYPTED AND A REGISTER DUMP
+SHOULD APPEAR ON THE SCREEN. NOW RESTORE CS AND DS TO THEIR PREVIOUS
+VALUES AND SET THE FILE LENGTH IN CX. Set BX=0:
+
+-R CS
+CS 0BB5     <-Yours might be different
+:04B5       <-Type in the value of CS you saved above
+-R DS
+DS 0BB5
+:04B5       <-Type in the value of DS you saved above
+-R BX
+BX F3FD
+:0
+-R CX
+CX 0000
+:6B64       (LENGTH = 6B64 FOR VERSION 1.1, 6802 FOR VERSION 1.0)
+
+NOW WE MUST NAME THE FILE, WRITE IT AND EXIT.
+REMOVE THE VISICALC DISK FROM A:
+INSERT THE NEW, FORMATTED, EMPTY DISK IN A:
+TYPE:
+
+-N VC.COM               (OR WHATEVER YOU WISH TO NAME IT)
+-W                      (WRITE THE .COM FILE)
+-Q                      (EXIT FROM DEBUG)
+***YOU ARE DONE*****
+Back in DOS, type VC to try it.
+     (WRITE THE .COM FILE)
+-Q                      (EXIT FROM DEBUG)
+***YOU
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

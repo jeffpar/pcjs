@@ -28,6 +28,123 @@ machines:
     later viewing.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1553.TXT
+
+{% raw %}
+```
+Disk No: 1553                                                           
+Disk Title: PartyDot                                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: PARTYDOT                                                 
+Author Version: 1.0                                                     
+Author Registration: $10.00                                             
+Special Requirements: 512K RAM and CGA, EGA, or VGA.                    
+                                                                        
+Generate colorful designs on your computer.  Enjoy a kaleidoscope that  
+you create or let the computer originate one for you.                   
+                                                                        
+PARTYDOT allows you to use pre-defined geometric shapes, colors and     
+graphic designs to create unique screen displays.  Experiment with the  
+various options and menu items and save the designs that you like for   
+later viewing.                                                          
+                                                                        
+File Descriptions:                                                      
+                                                                        
+PARTYDOT EXE  PARTYDOT program.                                         
+PARTYDOT DOC  Documentation for PARTYDOT.                               
+???????? HOP  Data files (19 files).                                    
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1988 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## PARTYDOT.TXT
+
+{% raw %}
+```
+PARTYDOT
+
+DESCRIPTION:  
+	
+Partydot is a user-created art generator similar to a kaleidoscope. 
+There are three main levels of involvement possible. You can start a 
+design by pressing <Enter> and that is the simplest level.  You can 
+specify what sort of shapes the computer should use in creating the 
+art. That is the second level.  Finally you can manipulate the numeric 
+variables the computer uses in drawing the design and that is the most 
+intense level from a user viewpoint. It is also possible to load a set 
+of design parameters from disk. 	The idea for the design generator came 
+from an article in A. K. Dewdney's Computer Recreation column in the 
+September 1986 issue of SCIENTIFIC AMERICAN magazine called Wallpaper 
+of the Mind.  Partydot goes beyond the original concept by allowing 
+smooth dithering between colors, and rapid (or slow, if desired) 
+changes of those colors in EGA and VGA modes giving the impression of a 
+brilliantly hued explosion. 
+
+INTENDED USE:
+
+Partydot is intended for use by 1) The host or hostess of a party who 
+can add the computer display as a light show or by 2) the curious or 
+scientific-minded person. 
+
+FEATURES:
+
+Unique features include the ability to create nearly instantaneous 
+graphics "dazzlers", the ability to save and load the design 
+parameters, and the inclusion of two complete user interfaces, one 
+optimized for entertainment and the other for scientific exploration. 
+
+LIMITATIONS:
+
+The only known limitation is that in CGA mode the tiled triangle option 
+can produce "out of memory" errors.  The tiled triangles were retained 
+anyway so they can be enjoyed for a time before the program "crashes". 
+There does not seem to be a similar problem in the other modes. 
+
+REQUIREMENTS:
+
+Partydot requires 512K memory, one floppy disk drive, and a color 
+system. VGA and EGA are by far the best, but Partydot does use all of 
+the capabilities of CGA for as good a result as can be expected. 
+
+
+
+
+STARTING THE PROGRAM:
+
+To start the program, place the program disk in your floppy drive, type 
+PARTYDOT and <Enter>. 
+
+REGISTRATION:
+
+The registration fee is $10.00 and this entitles you to printed 
+instructions, clues, and background data such as the formula used in 
+creating the designs. Make check out to RITE ITEM  and send it with the 
+word PARTYDOT and your return address to: 
+
+			Jim Preston
+			1622 Xerxes Ave. N.
+			Minneapolis, MN 55411
+			
+PROGRAMS ON THE DISK:
+
+PARTYDOT.EXE:  The Partydot program itself.
+
+PARTYDOT.TXT:  This file
+
+*.HOP:  A few sample designs selected more or less at random.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1553
 

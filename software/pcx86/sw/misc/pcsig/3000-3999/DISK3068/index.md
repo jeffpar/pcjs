@@ -14,6 +14,61 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## READ-ME.DOC
+
+{% raw %}
+```
+
+                          MULTIMEDIA  1 (The Creator)                 Ver. 1.1
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     MULTIMEDIA 1 will allow you to create your own custom presentations, 
+ advertising, demo's, tutorials, courseware authoring, reports, school
+ projects and much more. With this package you can combine real human 
+ SPEECH, MUSIC and sound effects with high resolution IMAGES (up to SVGA). 
+
+     Use this package to create your own custom AUDIO/VIDEO SHOWS on any 
+ subject, place, product or procedure you desire. This package includes:
+ 
+    * OVER 1 MEG.  of speech,  music and sound effects.
+      (Excellent sound quality that plays thru the PC speaker )
+ 
+    *  SOUND BLASTER support.  (Create your own VOC files)
+ 
+    * Display GIF, PCX, PIC, TIFF and TARGA image files.
+      (Supports CGA, EGA, VGA and SVGA)
+ 
+    * MOTION,  SPECIAL EFFECTS and TEXT capability.
+ 
+    * Create an interactive USER MENU for your application.
+ 
+    * INTEGRATED DEVELOPMENT EDITOR with:
+      * Multiple overlapping windows  * Mouse support
+      * Pull down menu  * Copy and Paste features
+ 
+    * IMAGE PROCESOR with:
+      * Scaling * Clipping * Printing * Conversion and much more.
+ 
+    * Allows you to incorporate other popular packages.
+      (Autodesk Animator, Grasp and your custom programs)
+ 
+    * Very Easy to use - No programming experience needed.
+ 
+    * VGA graphic and Hard Drive are required.
+ 
+    * Type "MANUAL" to view the User Manual.
+
+    * Type "INSTALLC" or "INSTALLD" to start.
+ 
+                            C.M.S. Inc.                            
+                         3005 Glenmore Ave.
+                         Balto., MD 21214   USA
+                          (410) 665-0193                          ASP MEMBER
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3068
 

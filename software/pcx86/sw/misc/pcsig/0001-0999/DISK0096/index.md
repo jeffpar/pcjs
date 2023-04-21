@@ -14,6 +14,58 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #96, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  S-CHAT  .            CRC = 10 9C
+
+--> FILE:  S-INFO  .SIG         CRC = 9E 46
+
+--> FILE:  S-INTRO .ED          CRC = EB FA
+
+--> FILE:  S-LBRARY.            CRC = DC 9A
+
+--> FILE:  S-MAIL  .            CRC = 2E 20
+
+--> FILE:  S-MGRAM .            CRC = 0E E6
+
+--> FILE:  S-POST  .            CRC = 73 FC
+
+--> FILE:  S-PUBLSH.            CRC = 78 71
+
+--> FILE:  S-USERS .IBM         CRC = 50 90
+
+--> FILE:  README  .            CRC = 3E 38
+
+ ---------------------> SUM OF CRCS = 2F B1
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0096
 

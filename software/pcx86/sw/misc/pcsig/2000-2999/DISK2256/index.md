@@ -42,6 +42,51 @@ machines:
     entirely menu-driven and provides thorough on-screen instructions.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2256.TXT
+
+{% raw %}
+```
+Disk No: 2256                                                           
+Disk Title: WORD PLAY                                                   
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Word Play                                                
+Author Version: 1.00                                                    
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+This game is the third in a series of visual puzzles from the author of 
+Maze Cube (PC-SIG disk# 1419) and Wreck Tangle (PC-SIG disk# 1836). If  
+you enjoyed these programs, then WORD PLAY will give you an even greater
+challenge.                                                              
+                                                                        
+You're presented with shuffled letters that are required to create      
+given words. Completion of each word displays a matching meaning.  The  
+game continues until exact placement of all letters is correct.  Sound  
+easy?  You will be struggling to approach the top scores on any level   
+without lots of practice.  The exciting challenge is to achieve this in 
+the least number of moves.                                              
+                                                                        
+25 different puzzles of varying degrees of difficulty are included. The 
+top ten scores for each puzzle are recorded and the Masters Scoreboard  
+displays the scores of the world's best player for each level.          
+                                                                        
+A nice feature is the Autoplay facility which replays your best game so 
+you can see where improvements can be made.  You can also easily design 
+your own puzzles, up to a maximum of 99 different games.  WORD PLAY is  
+entirely menu-driven and provides thorough on-screen instructions.      
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2256
 

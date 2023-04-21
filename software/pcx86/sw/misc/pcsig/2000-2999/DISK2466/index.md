@@ -47,6 +47,75 @@ machines:
     customer, or sales category.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2466.TXT
+
+{% raw %}
+```
+Disk No: 2466                                                           
+Disk Title: GIST                                                        
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: GIST                                                     
+Author Version: 4.4                                                     
+Author Registration: $69.00                                             
+Special Requirements: 512K RAM. A hard drive is recommended             
+                                                                        
+If your small business invoices all your sales and uses an outside      
+accounting firm, GIST may make your life easier and save you money.     
+GIST's purpose is two-fold.  First is lets you makes it easy to invoice 
+sales and bill your customers.  Secondly, it captures your sales        
+information in a manner that your accountant will find easy to use.     
+This makes you money by better control of your accounts receivables and 
+saves you money by minimizing your accounting fees.                     
+                                                                        
+In addition to keeping accounts receivables and preparing your sales    
+information for your accountant, GIST provides you a great deal of very 
+useful business information.  The following are just some of GIST's     
+features:                                                               
+                                                                        
+~ Shows customers last sale date and total amount spent                 
+                                                                        
+~ Prints a customer telephone directory                                 
+                                                                        
+~ Prints two customer address directories                               
+                                                                        
+~ Prints customer mailing labels                                        
+                                                                        
+~ You can use handwritten or computer-generated invoices               
+                                                                        
+~ Prints accounts receivable statements with matching mailing labels    
+                                                                        
+~ Prints a list of invoices with totals for time period, sales person, 
+customer, or sales category.                                            
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## SHORT.DOC
+
+{% raw %}
+```
+INCOME & BILLING program for businesses using "Hand-Written"  Customer
+Invoices. Provides all "Income Tracking Information" required by  most
+Accountants. Knowledge of BOOKKEEPING NOT NECESSARY! Prints  Invoices,
+Statements, Labels, Reports, & Invoice/Customer Directories. Does Acc/
+Rec Customer Statements automatically. Holds about 1.5 million records.
+Quickly find any record by ID# or CUSTOMER NAME. Simple!
+
+TypeRight Corp. - Shareware - $69.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2466
 

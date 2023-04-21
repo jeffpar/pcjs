@@ -37,6 +37,46 @@ machines:
     simultaneously.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1815.TXT
+
+{% raw %}
+```
+Disk No: 1815                                                           
+Disk Title: Lotto-Magic                                                 
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: Lotto-Magic                                              
+Author Version: 3.0                                                     
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+Track your state lottery and watch your computer calulate the next most 
+likely winning numbers, generate random numbers or compute your lucky   
+numbers based on astrological information.                              
+                                                                        
+The astrological option uses today's date and your birthdate to compute 
+your lucky numbers, according to the stars.  This is not a random number
+generator and your numbers will change from day to day.                 
+                                                                        
+Random picks are just that.  Numbers generated at random.  Many         
+subroutines have been included to ensure a well-randomized output.      
+                                                                        
+The scientific calculations are compiled by analyzing existing data of  
+past winners.  As each lottery occurs, enter that information into your 
+Lottery database.  LOTTO-MAGIC will work with any lottery using from two
+to six numbers and will track up to five different games simultaneously.
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1815
 

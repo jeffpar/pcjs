@@ -50,6 +50,7 @@ machines:
 
 ## BOMB.BAS
 
+{% raw %}
 ```bas
 230 CLS
 240 CLS:LOCATE 4,28:PRINT "DEFUSE"
@@ -109,9 +110,11 @@ machines:
 780 PRINT "3RD FLOOR!!!":GOTO 710
 790 CLS:RUN"menu.pgm"
 ```
+{% endraw %}
 
 ## BREAKOUT.BAS
 
+{% raw %}
 ```bas
 10 REM ibm pc spinout
 20 REM K.R. Sloan, Jr.
@@ -278,9 +281,62 @@ machines:
 1520 PUT(PL,PY),PADDLE,XOR
 1530 RETURN
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #177, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  BOMB    .BAS         CRC = BD AF
+
+--> FILE:  BREAKOUT.BAS         CRC = 35 25
+
+--> FILE:  BUGS    .EXE         CRC = 03 68
+
+--> FILE:  BUGS!   .SCR         CRC = 8C 44
+
+--> FILE:  CUBE    .BAS         CRC = 46 75
+
+--> FILE:  DRIVER  .BAS         CRC = 03 8F
+
+--> FILE:  HS      .DAT         CRC = 20 90
+
+--> FILE:  JUMPJOE .EXE         CRC = 51 AB
+
+--> FILE:  JUMPJOE .SOL         CRC = 00 33
+
+--> FILE:  PENCIL  .BAS         CRC = B2 02
+
+--> FILE:  XXX     .            CRC = A5 C8
+
+ ---------------------> SUM OF CRCS = 96 BC
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## CUBE.BAS
 
+{% raw %}
 ```bas
 7 ' Source:  Printed copy offered in
 8 '          PC Magazine, Vol. 1, No. 2, pp. 85-87
@@ -681,9 +737,11 @@ machines:
 4450 RETURN
 4460 END
 ```
+{% endraw %}
 
 ## DRIVER.BAS
 
+{% raw %}
 ```bas
 10 '             **************************************************
 20 '             *                                                *
@@ -793,9 +851,11 @@ machines:
 1060 IF TRY$="Q" OR TRY$="q" THEN GOTO 1070 ELSE M=0:B2=B1+10+LEVEL:COLOR C1,C7,C2:CLS:T=(B2-B1)/2+B1:GOTO 550            'centers car, restarts
 1070 CLS:RUN "MENU.PGM"
 ```
+{% endraw %}
 
 ## PENCIL.BAS
 
+{% raw %}
 ```bas
 10 CLEAR:SSSS=1:FAST=0:C=1:DIM Q$(1000):DIM U(1000):DIM CL(1000):ZX=18:STRIG (0) ON:STRIG (4) ON
 20 SCREEN 0,0,0:WIDTH 80:COLOR 2,4,5:KEY OFF:CLS:POKE 106,0
@@ -894,6 +954,7 @@ machines:
 940 P=0:NEXT:LPRINT CHR$ (3);CHR$ (14);:NEXT
 950 FLAG1=1:GOTO 110
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

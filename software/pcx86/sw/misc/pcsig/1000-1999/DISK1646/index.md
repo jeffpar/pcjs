@@ -41,6 +41,49 @@ machines:
     AMORT is menu driven, easy to use, and fully documented.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1646.TXT
+
+{% raw %}
+```
+Disk No: 1646                                                           
+Disk Title: AMORT                                                       
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: AMORT                                                    
+Author Version: 1.09                                                    
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+AMORT generates loan amortization schedules for those of us without our 
+PhD. in mathematics.  A major purchase such as a home or a car can be   
+confusing enough, let alone trying to figure in your loan payments.     
+With AMORT, you provide either the loan principal (in dollars), annual  
+interest rate, loan period (in months), or monthly payment (in dollars).
+As long as you provide three of the four, AMORT can calculate the       
+missing element. In this way AMORT can help you answer questions about  
+how much you can spend assuming a fixed monthly payment, or how much it 
+will cost you each month assuming a certain overall price.              
+                                                                        
+AMORT assumes the annual interest rate is compounded monthly (ordinary  
+or exact interest).  Loan amortization schedules can be sent to the     
+printer, to the display screen or both.  Printed output can also be     
+customized with titles, additional fields indicating who the schedule is
+prepared for and a description of the schedule.                         
+                                                                        
+AMORT is menu driven, easy to use, and fully documented.                
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1646
 

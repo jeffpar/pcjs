@@ -70,6 +70,7 @@ machines:
 
 ## BLASTOFF.BAS
 
+{% raw %}
 ```bas
 5 DIM SHIP(430),SHIP1(430)
 10 CLS:KEY OFF:SCREEN 1:COLOR 1,0
@@ -209,9 +210,11 @@ machines:
 1105 COLOR 8,
 1150 RETURN
 ```
+{% endraw %}
 
 ## BLIMP.BAS
 
+{% raw %}
 ```bas
 10 DIM A(2000)
 20 DIM C(2000)
@@ -266,9 +269,11 @@ machines:
 450 PAINT (1,1),3
 460 PUT (80,2),B,PSET
 ```
+{% endraw %}
 
 ## BUTTRFLY.BAS
 
+{% raw %}
 ```bas
 1 CLEAR
 5 'SAVE "BUTTER"
@@ -394,9 +399,74 @@ machines:
 6180 DATA 56,4,49,4,54,4,56,4,58,4,61,8,59,4,58,2,58,2,58,4,56,2,0,2,54,4,0,4,0,4
 6190 DATA -1,-1
 ```
+{% endraw %}
+
+## DRAW.ASM
+
+{% raw %}
+```
+CODE	SEGMENT PUBLIC
+DOSCALL MACRO	FUNCTION
+	MOV	AH,FUNCTION
+	INT	21H
+	ENDM
+DFCB	EQU	DS:5CH
+OPEN	EQU	0FH
+SET_DTA EQU	1AH
+RB_READ EQU	27H
+	PAGE	,132
+RBR	PROC	FAR
+	ASSUME	CS:CODE,ES:CODE,DS:NOTHING
+	JMP	START
+FCB	DB	1				;DRIVE "A"
+	DB	'USASTATE'
+	DB	'PIC'
+	DB	0,0
+LRECL	DW	0
+	DB	0,0,0,0
+	DB	0,0				;DATE
+	DB	10 DUP(0)			;RESERVED
+	DB	0
+	DB	0,0,0,0
+START:
+	PUSH	DS
+	XOR	AX,AX
+	PUSH	AX
+;
+	MOV	AX,CS
+	MOV	ES,AX
+	MOV	SI,OFFSET DFCB
+	MOV	DI,OFFSET FCB
+	MOV	CX,12
+	CLD
+	REP	MOVSB
+;
+	MOV	AX,0B800H
+	MOV	DS,AX
+	MOV	DX,0
+	DOSCALL SET_DTA 			;SET DTA AT SCREEN
+;
+	MOV	AX,CS
+	MOV	DS,AX				;ADDRESS SEGMENT OF FCB
+	MOV	DX,OFFSET FCB			;
+	DOSCALL OPEN				;ISSUE OPEN
+;
+	MOV	AX,4080H			;SET UP OF 65536 BYTE IO
+	MOV	LRECL,AX			;
+	MOV	CX,5				;SET AT LEAST 5 RECORDS
+	DOSCALL RB_READ 			;RANDOM BLOCK READ
+						;
+	RET
+RBR	ENDP
+CODE	ENDS
+	END
+
+```
+{% endraw %}
 
 ## ELEPHANT.BAS
 
+{% raw %}
 ```bas
 6 FOR I=1 TO 2400: NEXT I
 10 DEFINT A-Z:KEY OFF:K=0:MN=0:Z=0
@@ -508,9 +578,11 @@ machines:
 60210 NEXT I:H(DEC)=H:W(DEC)=W:GOTO 60190
 60220 CLOSE #1:SH=H:SW=W:H(32)=SH:W(32)=SW:RETURN
 ```
+{% endraw %}
 
 ## ESSXFADE.BAS
 
+{% raw %}
 ```bas
 700 REM this is BASICMOV
 710 ' BASIC DEMO TO USE CALL FUNCTION
@@ -557,9 +629,65 @@ machines:
 1105 COLOR 8,
 1150 RETURN
 ```
+{% endraw %}
+
+## FILES015.TXT
+
+{% raw %}
+```
+Disk No 15
+Program Title: COLORDEMO
+PC-SIG version 1
+ 
+Usage: Entertainment
+ 
+System Requirements: IBM PC or close compatible with Color graphics
+                     adapter, 2 disk drives, printer, and Dos 2.0 or later
+                     and a version of BASIC.
+ 
+File Descriptions:
+ 
+PCMAN    BAS+ Color game using joysticks  (untested)
+PATHMAN  BAS+ Color game using keypad - no joysticks needed
+DRAW     EXE+ Block-read a file directly to color/graphics buffer
+DRAW     ASM+ Assembler source for draw.exe
+SCREEN   EXE+ Set color/mono/40/80/low/med/high resolution
+SCREEN   ASM+ Assembler source for screen.exe
+MONSW    BAS+ Another color/mono program  (good as a subroutine)
+PRTGRAF  BAS+ Draw a polygon, optionally print with graftrax
+MONO     EXE+ Set display to monochrome
+COLOR    EXE+ Set display to color
+------------  Colordemo
+COLORDEM BAT+ Part of colordemo - run color demo  (impressive demo)
+START    BAS+ Part of colordemo
+NEXTSHOW BAS+ Part of colordemo
+FAMILYDA Y  + Part of colordemo
+BLASTOFF BAS+ Part of colordemo - rocket blasts off
+ESSXFADE BAS+ Part of colordemo
+FLYBY    BAS+ Part of colordemo - objects in space
+LANDSEQ  BAS+ Part of colordemo - landing
+WELCOME  BAS+ Part of colordemo
+ELEPHANT BAS+ Part of colordemo - dancing elephant
+BUTTRFLY BAS+ Part of colordemo - butterflies flying
+OTHDEMO  BAS+ Part of colordemo - game demonstration
+BLIMP    BAS+ Part of colordemo - blimp flying
+FINISH   BAS+ Part of colordemo - end of demo
+ADVLAND  PIC+ Part of colordemo
+ELEPH    EXE+ Part of colordemo
+ELEPH    DAT+ Part of colordemo
+MCODE    %%%+ Part of colordemo
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 ## FINISH.BAS
 
+{% raw %}
 ```bas
 10 DEFINT A-Z:KEY OFF:K=0:MN=0:Z=0
 15 DEF SEG=&HB800
@@ -766,9 +894,11 @@ machines:
 60210 NEXT I:H(DEC)=H:W(DEC)=W:GOTO 60190
 60220 CLOSE #1:SH=H:SW=W:H(32)=SH:W(32)=SW:RETURN
 ```
+{% endraw %}
 
 ## FLYBY.BAS
 
+{% raw %}
 ```bas
 5 DIM SX%(100),SY%(100)
 10 CLS:KEY OFF :SCREEN 1:COLOR 0,0
@@ -865,9 +995,11 @@ machines:
 1508 RETURN
 2000 FOR KK=1 TO 5:KK=KK+0:NEXT KK:RETURN
 ```
+{% endraw %}
 
 ## LANDSEQ.BAS
 
+{% raw %}
 ```bas
 100 REM this is RUNSHOW
 105 REM "GOTO 1050" TO PICSAVE
@@ -1021,9 +1153,11 @@ machines:
 1372 FOR PAUSE=1 TO 4900:NEXT:RETURN
 1472 FOR PAUSE=1 TO 300:NEXT:RETURN
 ```
+{% endraw %}
 
 ## MONSW.BAS
 
+{% raw %}
 ```bas
 6999 DEFINT A-Z:DIM MON(1,50):GOSUB 7000:END
 7000 DEF SEG=&H40: EQUIP=PEEK(&H10)
@@ -1068,9 +1202,11 @@ machines:
 7615 POKE &H66,&H3F
 7620 DEF SEG: PRINT "Now in hi res": RETURN
 ```
+{% endraw %}
 
 ## NEXTSHOW.BAS
 
+{% raw %}
 ```bas
 15 DEFINT A-Z:KEY OFF:K=0:MN=0:Z=0
 20 DEF SEG=&HB800
@@ -1173,9 +1309,11 @@ machines:
 65050 SECOND=(SECONDS-(MIN*60))
 65060 RETURN
 ```
+{% endraw %}
 
 ## OTHDEMO.BAS
 
+{% raw %}
 ```bas
 100 REM
 102 REM*******  ARRAY DIMENSIONS AND INITIALIZATION  *************
@@ -1349,9 +1487,11 @@ machines:
 19950 GOTO 400
 19999 LOCATE 5,1:CLS:SCREEN 0:KEY ON:WIDTH 80:END
 ```
+{% endraw %}
 
 ## PATHMAN.BAS
 
+{% raw %}
 ```bas
 10 ' PATH MAN  by D N Smith based on:
 20 '++++++++ PC MAN BY ED DAVIS +++++++
@@ -1667,9 +1807,11 @@ machines:
 3090 IF DNS$="1" THEN ZX=  0
 3200 RETURN
 ```
+{% endraw %}
 
 ## PCMAN.BAS
 
+{% raw %}
 ```bas
 5 REM * PUBLIC DOMAIN SOFTWARE *
 10 '++++++++ PC MAN BY ED DAVIS +++++++
@@ -1947,9 +2089,11 @@ machines:
 65025 WIDTH 40
 65026 RETURN
 ```
+{% endraw %}
 
 ## PRTGRAF.BAS
 
+{% raw %}
 ```bas
 5 WIDTH "lpt1:",255
 6 GOSUB 10000
@@ -2008,9 +2152,109 @@ machines:
 20600 NEXT J
 20610 RETURN
 ```
+{% endraw %}
+
+## SCREEN.ASM
+
+{% raw %}
+```
+TITLE	Convert to Color Display
+	PAGE	,132
+NODISP_FLAG  EQU     11001111B			;Turn OFF Monochrom
+COLOR_FLAG   EQU     00100000B			;Turn ON Color
+MONO_FLAG    EQU     00110000B			;Turn ON Monochrom
+DATA	SEGMENT AT 40H
+	ORG	10H
+EQUIPFLAG	DW	?
+DATA	ENDS
+STACK	SEGMENT STACK
+	DW	64 DUP(?)
+STACK	ENDS
+CODE	SEGMENT
+	ASSUME	CS:CODE,DS:DATA
+COLOR	PROC	FAR
+	PUSH	DS				;Establish return vector
+	SUB	AX,AX
+	PUSH	AX
+;
+	MOV	BX,80H				;Offset into PSP
+	ADD	BL,ES:[BX]			;+80H is length of modifier
+	MOV	AL,ES:[BX]			;Get opperand
+	CMP	AL,'0'                          ;if less that ascii 0
+	JL	BAD				;goto error
+	CMP	AL,'6'                          ;if greater that ascii 6
+	JG	BAD				;goto error
+	SUB	AL,30H				;Make binary
+	PUSH	AX				;SAVE ON STACK
+;
+	MOV	AX,DATA
+	MOV	DS,AX				;Set up segment register
+	MOV	AX,EQUIPFLAG
+	AND	AL,NODISP_FLAG			;Turn OFF Monochrom
+	OR	AL,COLOR_FLAG			;Turn on color
+	MOV	EQUIPFLAG,AX			;Restore equipment flag
+	POP	AX				;Do a mode set
+	PUSH	AX
+	INT	10H				;To the video interrupt
+;
+	OR	EQUIPFLAG,MONO_FLAG		;Reset EQUIPFLAG to Monochrom
+	MOV	AX,3				;Do a 80x25 mode set
+	INT	10H
+	MOV	AX,CS				;Set up segment for print
+	MOV	DS,AX
+	MOV	DX,OFFSET MODE_TXT
+	MOV	AH,9
+	INT	21H				;Print first part of message
+	POP	AX				;Get mode set
+	SAL	AX,1				;*2 for table lookup
+	MOV	SI,AX				;Put into DX for printing
+	MOV	DX,CS:[SI+OFFSET MODE]
+	MOV	AH,9
+	INT	21H				;PRINT and return
+	RET
+BAD:
+	MOV	AX,CS				;Set up segment register
+	MOV	DS,AX				;and address text
+	MOV	DX,OFFSET ERM
+	MOV	AH,9H				;PRINT STRING
+	INT	21H
+	RET					;END
+MODE	LABEL	WORD				;TABLE FOR PRINTING CURRECT SET
+	DW	OFFSET	MODE0
+	DW	OFFSET	MODE1
+	DW	OFFSET	MODE2
+	DW	OFFSET	MODE3
+	DW	OFFSET	MODE4
+	DW	OFFSET	MODE5
+	DW	OFFSET	MODE6
+MODE_TXT DB	'Graphics card initialized as $'
+MODE0	DB	'40x80 BW (power on default).',13,10,36
+MODE1	DB	'40x25 Color.',13,10,36
+MODE2	DB	'80x25 BW.',13,10,36
+MODE3	DB	'80x25 Color.',13,10,36
+MODE4	DB	'320x200 Color.',13,10,36
+MODE5	DB	'320x200 BW.',13,10,36
+MODE6	DB	'640x200 BW.',13,10,36
+ERM	DB	7,'Invalid format.',10,13
+	DB	'Correct format is: SCREEN n',10,13
+	DB	'...where "n" is 0 - 6...  0 = 40x25 BW',10,13
+	DB	'                          1 = 40x25 Color',10,13
+	DB	'                          2 = 80x25 BW',10,13
+	DB	'                          3 = 80x25 Color',13,13,10
+	DB	'                          -GRAPHICS MODES-',10,13
+	DB	'                          4 = 320x200 Color',10,13
+	DB	'                          5 = 320x200 BW',10,13
+	DB	'                          6 = 640x200 BW',10,13,'$'
+COLOR	ENDP
+CODE	ENDS
+	END	COLOR
+
+```
+{% endraw %}
 
 ## START.BAS
 
+{% raw %}
 ```bas
 5 'SAVE "C"
 100 KEY OFF: CLS
@@ -2018,15 +2262,19 @@ machines:
 210 WIDTH  40 :SCREEN 1: SCREEN 0: LOCATE ,,1,6,7
 215 RUN"nextshow
 ```
+{% endraw %}
 
 ## TEST.BAS
 
+{% raw %}
 ```bas
 10   PRINT CHR$(16)
 ```
+{% endraw %}
 
 ## WELCOME.BAS
 
+{% raw %}
 ```bas
 5 REM welcome - calls elephant
 10 DEFINT A-Z:KEY OFF:K=0:MN=0:Z=0
@@ -2165,6 +2413,7 @@ machines:
 60210 NEXT I:H(DEC)=H:W(DEC)=W:GOTO 60190
 60220 CLOSE #1:SH=H:SW=W:H(32)=SH:W(32)=SW:RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

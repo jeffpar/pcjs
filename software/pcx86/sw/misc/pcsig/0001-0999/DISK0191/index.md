@@ -104,6 +104,7 @@ machines:
 
 ## BUILGRAF.BAS
 
+{% raw %}
 ```bas
 50 OPEN "GRAfindx.EZG" AS #1 LEN=128
 60 FIELD #1, 10 AS IDX$, 25 AS DESC$
@@ -117,9 +118,11 @@ machines:
 110 PRINT "     INDEX HAS BEEN BUILT"
 120 CHAIN "EASYGRAF"
 ```
+{% endraw %}
 
 ## COLOR.BAS
 
+{% raw %}
 ```bas
 5 'SAVE "C"
 100 KEY OFF
@@ -133,17 +136,21 @@ machines:
 225 CLS
 230 CHAIN PROGRAMID$
 ```
+{% endraw %}
 
 ## COLRGRAF.BAS
 
+{% raw %}
 ```bas
 8 CLS
 10 WIDTH 80:DEF SEG=0:A=PEEK(&H410):POKE &H410,(A AND &HCF)OR &H20:WIDTH 40:SCREEN 1:SCREEN 0:LOCATE ,,1,6,7:COLOR 15,9,4:CLS:KEY OFF
 20 CHAIN "easygraf"
 ```
+{% endraw %}
 
 ## DIGIDRAW.BAS
 
+{% raw %}
 ```bas
 1 CLEAR,,1024 : ON ERROR GOTO 30000 : SCREEN 2 : KEY OFF : CLS
 2 DEF SEG=&HB800 : BLOAD "LOGO.BIN",0
@@ -361,9 +368,11 @@ machines:
 30040 TIME$=PTIME$ : FOR I=1 TO 14 : KEY(I) ON : NEXT I : KEY ON
 30050 RESUME 90
 ```
+{% endraw %}
 
 ## DISPGRAF.BAS
 
+{% raw %}
 ```bas
 1 DEF SEG=&HB800
 10 SCREEN 0,1
@@ -391,9 +400,11 @@ machines:
 280 PRINT " "
 300 CHAIN "EASYGRAF"
 ```
+{% endraw %}
 
 ## DISPGRDR.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0,1
 20 COLOR 15,9,1
@@ -428,9 +439,11 @@ machines:
 560 PRINT " "
 570 GOTO 430
 ```
+{% endraw %}
 
 ## DRAWGRAF.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0,1
 20 COLOR 15,9,1
@@ -456,9 +469,11 @@ machines:
 380 GOTO 220
 500 CHAIN "EASYGRAF"
 ```
+{% endraw %}
 
 ## EASEL.BAS
 
+{% raw %}
 ```bas
 1 ON ERROR GOTO 0
 2 TITLE1$="EASEL Drawing Board":TITLE2$="Version 1.0"
@@ -512,9 +527,11 @@ machines:
 1210 NSP%=(LH%-IL%)/2
 1220 RETURN
 ```
+{% endraw %}
 
 ## EASYGRAF.BAS
 
+{% raw %}
 ```bas
 1 DEF SEG=0
 2 IF (PEEK(&H410) AND &H30)=&H30 THEN GOTO 400
@@ -577,9 +594,68 @@ machines:
 610 KEY ON
 620 END
 ```
+{% endraw %}
+
+## FILES191.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No 191   DVED Screen Editor, Easel & Easygraf                   v1.2
+---------------------------------------------------------------------------
+COLOR    BAS  Part of PIECHART.BAS
+DIGIDRAW BAS  Nifty drawing program  (Requires graphics & BASICA)
+DIGIDRAW DOC  Documentation for DIGIDRAW.BAS
+DVED     COM  Good screen-oriented text editor (Version 6.02) - Can use with mouse
+READ     ME   Part of DVED.COM
+GRAPH    BAS  Graphs data (x, y coordinates and function)
+GRAPH2   BAS  Graphs data (x, y coordinates and function)
+HISTGRAM BAS  Displays and prints simple histogram
+INFO     BIN  Binary file for DIGIDRAW.BAS
+LOGO     BIN  Binary file for DIGIDRAW.BAS
+PIECHART BAS  Draws pie charts - Version 1.0
+PLOT     BAS  Creates plots from your coordinates
+SKETCH   BAS  Etch-a-sketch with cursor keys
+------------  EASEL
+EASEL    BAS  Easel drawing package  (Requires light pen, color graphics)
+EASEL    ASC  Part of EASEL.BAS - documentation
+PENCIRC  BAS  Part of EASEL.BAS - draw circles
+PENCLEAR BAS  Part of EASEL.BAS - clear screen
+PENDRAW  BAS  Part of EASEL.BAS - draw dots
+PENLINE  BAS  Part of EASEL.BAS - draw lines
+PENPAINT BAS  Part of EASEL.BAS - demo - color train with light pen
+PENSAVE  BAS  Part of EASEL.BAS - save drawing
+------------  EASYGRAF
+EASYGRAF BAS  EasyGraf drawing package  (Requires color graphics)
+BUILGRAF BAS  Part of EASYGRAF.BAS - build graph file
+COLRGRAF BAS  Part of EASYGRAF.BAS
+DISPGRAF BAS  Part of EASYGRAF.BAS - display graph
+DISPGRDR BAS  Part of EASYGRAF.BAS - display graph directory
+DRAWGRAF BAS  Part of EASYGRAF.BAS - draw a graph
+EASYGRAF ASC  Part of EASYGRAF.BAS - documentation
+EZGDOCM  BAS  Part of EASYGRAF.BAS - use BASIC LIST to view
+GRAPHIT  BAS  Part of EASYGRAF.BAS - draws with cursor & function keys
+MONOGRAF BAS  Part of EASYGRAF.BAS - monochrome graph
+PRINGRAF BAS  Part of EASYGRAF.BAS
+PRN2GRAF BAS  Part of EASYGRAF.BAS
+PRNTGRAF BAS  Part of EASYGRAF.BAS
+PRNTSAVE BAS  Part of EASYGRAF.BAS
+SAMPDRAW BAS  Part of EASYGRAF.BAS - sample drawing - part of house
+SAVEGRAF BAS  Part of EASYGRAF.BAS
+TEMPGRAF BAS  Part of EASYGRAF.BAS - temporary graph storage
+TESTPRNT BAS  Part of EASYGRAF.BAS
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1986,1987 PC-SIG
+```
+{% endraw %}
 
 ## GRAPH.BAS
 
+{% raw %}
 ```bas
 110 PRINT :PRINT :PRINT :PRINT :PRINT
 1000 REM: GRAPH
@@ -711,9 +787,11 @@ machines:
 5000 REM ***   Y=F(X) GOES HERE   ***
 5010 RETURN
 ```
+{% endraw %}
 
 ## GRAPH2.BAS
 
+{% raw %}
 ```bas
 1 SCREEN 2
 10 '**********************************
@@ -861,9 +939,11 @@ machines:
 11520 IF Y>YU THEN YP=16:RETURN
 11530 YP=176-D:RETURN
 ```
+{% endraw %}
 
 ## GRAPHIT.BAS
 
+{% raw %}
 ```bas
 10 CLEAR
 20 SCREEN 2,1
@@ -972,9 +1052,11 @@ machines:
 1020 RETURN
 1050 RETURN
 ```
+{% endraw %}
 
 ## HISTGRAM.BAS
 
+{% raw %}
 ```bas
 0 KEY OFF
 1 DIM VALUE(100):DIM DESC$(100):WIDTH "lpt1:",132:ON ERROR GOTO 20000
@@ -1022,17 +1104,21 @@ machines:
 10110 RETURN
 20000 RESUME
 ```
+{% endraw %}
 
 ## MONOGRAF.BAS
 
+{% raw %}
 ```bas
 8 CLS
 10 DEF SEG=0:A=PEEK(&H410):POKE &H410,A OR &H30:WIDTH 80:LOCATE ,,1,12,13:COLOR 15,9,4:CLS:KEY OFF
 20 END
 ```
+{% endraw %}
 
 ## PENCIRC.BAS
 
+{% raw %}
 ```bas
 2 ON ERROR GOTO 300
 5 COMMON DRIVEID$,DRIVEID2$,TITLE1$,TITLE2$
@@ -1055,9 +1141,11 @@ machines:
 210 CHAIN DRIVEID$+"easel"
 300 RESUME 20
 ```
+{% endraw %}
 
 ## PENCLEAR.BAS
 
+{% raw %}
 ```bas
 2 DEF SEG=&HB800
 3 COMMON DRIVEID$,DRIVEID2$,TITLE1$,TITLE2$
@@ -1068,9 +1156,11 @@ machines:
 210 CHAIN DRIVEID$+"easel"
 300 RESUME 20
 ```
+{% endraw %}
 
 ## PENDRAW.BAS
 
+{% raw %}
 ```bas
 2 DEF SEG=&HB800
 3 COMMON DRIVEID$,DRIVEID2$,TITLE1$,TITLE2$
@@ -1086,9 +1176,11 @@ machines:
 210 CHAIN DRIVEID$+"easel"
 300 RESUME 20
 ```
+{% endraw %}
 
 ## PENLINE.BAS
 
+{% raw %}
 ```bas
 2 DEF SEG=&HB800
 3 COMMON DRIVEID$,DRIVEID2$,TITLE1$,TITLE2$
@@ -1105,9 +1197,11 @@ machines:
 210 CHAIN DRIVEID$+"easel"
 300 RESUME 20
 ```
+{% endraw %}
 
 ## PENPAINT.BAS
 
+{% raw %}
 ```bas
 5 F3=0
 10 KEY OFF
@@ -1152,9 +1246,11 @@ machines:
 410 IF X<0 OR X>319 OR Y<0 OR Y>199 THEN GOTO 230
 420 GOTO 280
 ```
+{% endraw %}
 
 ## PENSAVE.BAS
 
+{% raw %}
 ```bas
 2 DEF SEG=&HB800
 3 COMMON DRIVEID$,DRIVEID2$,TITLE1$,TITLE2$
@@ -1168,9 +1264,11 @@ machines:
 210 CHAIN DRIVEID$+"easel"
 300 RESUME 20
 ```
+{% endraw %}
 
 ## PIECHART.BAS
 
+{% raw %}
 ```bas
 965 COMMON LEFT,RIGHT,TOP,BOT,RES%,PROGRAMID$:LEFT=150:RIGHT=150:TOP=1:BOT=170:RES%=1:PROGRAMID$="piechart"
 975 DEF SEG: POKE 106,0
@@ -1253,9 +1351,11 @@ machines:
 1740 IF A$="Y" OR A$="y" THEN 1400
 1750 GOTO 1680
 ```
+{% endraw %}
 
 ## PLOT.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 2
 40 INPUT " xmin, xmax, increment ";X1,X2,X4
@@ -1295,9 +1395,11 @@ machines:
 435 IF X<X2 THEN 290 ELSE 460
 460             END
 ```
+{% endraw %}
 
 ## PRINGRAF.BAS
 
+{% raw %}
 ```bas
 1 DEF SEG=&HB800
 2 COMMON LEFT,RIGHT,TOP,BOT,RES%
@@ -1334,9 +1436,11 @@ machines:
 300 IF RES% = 1 THEN CHAIN "PRNTGRAF"
 310 IF RES% = 2 THEN CHAIN "PRN2GRAF"
 ```
+{% endraw %}
 
 ## PRN2GRAF.BAS
 
+{% raw %}
 ```bas
 200 REM This program currently only prints using 960 bit graphics.  You could convert to 480 bit graphics to get lower  resolution.
 250 WIDTH "lpt1:",255
@@ -1364,9 +1468,11 @@ machines:
 510 PRINT "    PRINT COMPLETE"
 520 CHAIN "easygraf"
 ```
+{% endraw %}
 
 ## PRNTGRAF.BAS
 
+{% raw %}
 ```bas
 250 WIDTH "lpt1:",255
 252 LPRINT CHR$(27);"3";CHR$(24)
@@ -1393,9 +1499,11 @@ machines:
 510 PRINT "    PRINT COMPLETE"
 520 CHAIN "easygraf"
 ```
+{% endraw %}
 
 ## PRNTSAVE.BAS
 
+{% raw %}
 ```bas
 250 WIDTH "lpt1:",255
 252 LPRINT CHR$(27);"3";CHR$(24)
@@ -1418,9 +1526,11 @@ machines:
 510 PRINT "    PRINT COMPLETE"
 520 CHAIN "easygraf"
 ```
+{% endraw %}
 
 ## SAMPDRAW.BAS
 
+{% raw %}
 ```bas
 1 J2=0
 5 SCREEN 1 :CLS
@@ -1437,9 +1547,11 @@ machines:
 140 DRAW "a=j2:xd$;xe$;xf$;xg$;xh$;xi$;xj$;"
 150 END
 ```
+{% endraw %}
 
 ## SAVEGRAF.BAS
 
+{% raw %}
 ```bas
 1 DEF SEG=&HB800
 2 BSAVE "tempgraf",0,&H4000
@@ -1496,9 +1608,11 @@ machines:
 1120 PRINT "     USE ANOTHER DISKETTE"
 1130 CHAIN "EASYGRAF"
 ```
+{% endraw %}
 
 ## SKETCH.BAS
 
+{% raw %}
 ```bas
 10 'INTERACTIVELY SKETCH PICTURES.
 20      'USES INKEY$ TO MONITOR THE KEYBOARD AND RECEIVE INSTRUCTIONS.
@@ -1561,9 +1675,11 @@ machines:
 570 GOTO 470
 580 IF INKEY$ = " " THEN 580
 ```
+{% endraw %}
 
 ## TESTPRNT.BAS
 
+{% raw %}
 ```bas
 250 WIDTH "lpt1:",255
 265 CRL = 0
@@ -1580,6 +1696,7 @@ machines:
 500 PRINT " "
 510 PRINT "    PRINT COMPLETE"
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

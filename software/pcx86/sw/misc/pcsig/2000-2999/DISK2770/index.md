@@ -14,6 +14,54 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2770.TXT
+
+{% raw %}
+```
+Disk No: 2770
+Disk Title: Equator
+PC-SIG Version: S1.0
+
+Program Title: Equator
+Author Version: 1.0
+Author Registration: $29.00
+Special Requirements: CGA,EGA, or VGA, a hard disk or high density drive
+
+EQUATOR facilitates quick and easy entry, storage and evaluation
+of equations.The program automatically decodes the equation entered on to
+screen, recognizing functions and standard constants. Greek and special
+characters are available. Once entered, the equation is stored in a
+categorized file for easy access in the future. Graphs of the results or
+other text data files may be plotted with linear or logarithmic axes on
+the screen graphics printer or on an HPGL plotter. The program helps by
+calculating optimum ranges for the axes which the user may accept or
+redefine before plotting the graph.
+
+Features:
+
+ Symbolic equations
+ Report-quality linear or logarithmic graphs
+ Inspection of each graph data point with cursor
+ Trigonometric and hyperbolic functions
+ Complex numbers
+ Greek and special characters
+ Variables and constants stored for reference
+ Context sensitive help system
+ Automatic graph scaling
+ Menu driven
+ Graphs on HP Laserjet, IBM and Epson printers
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2770
 

@@ -35,6 +35,49 @@ machines:
     up to four players.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2276.TXT
+
+{% raw %}
+```
+Disk No: 2276                                                           
+Disk Title: Dino Picture Database & Memor-E                             
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Dino Picture Database                                    
+Author Version: 2.1                                                     
+Author Registration: 14.95                                              
+Special Requirements: CGA.                                              
+                                                                        
+If you like dinosaurs then you'll love the DINO DATABASE.  The program  
+tells you the common and scientific names of a dinosaur ans lists other 
+dinosaurs in the same family.  A world map graphically displays habitats
+and how many years ago they lived.                                      
+                                                                        
+Kids will like the option to "paint" the dinosaurs and change the screen
+colors. A function to print the screen is also available. This program  
+makes it fun and entertaining for kids or adults who want to learn about
+dinosaurs.                                                              
+Program Title: Memor-E                                                  
+Author Version: 1.0                                                     
+Author Registration: $10.00                                             
+Special Requirements: None                                              
+                                                                        
+A computer version of "Concentration." Match 18 pairs of pictures in a  
+36 square grid.  You can get on-line help, hints, or even where all the 
+pairs reside.  The game can be played by one player against the clock,  
+or by up to four players.                                               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2276
 

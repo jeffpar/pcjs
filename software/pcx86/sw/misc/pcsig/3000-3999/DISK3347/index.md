@@ -14,6 +14,27 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## ABOUT.DOC
+
+{% raw %}
+```
+Komputer Kitchen
+
+Komputer Kitchen is an easy-to-use Windows based cookbook and recipe manager.
+With it you can enter your own recipes, use the existing recipes, 
+put together a menu and, from that, create  a shopping list. 
+When working with the recipes you can choose to simply view them, 
+edit them and/or print them. Editing the shopping list is also a convenient 
+feature as you can add other items not located on your chosen recipes 
+to simplify your shopping needs. Komputer Kitchen can also tailor the recipes 
+to the number of people you are serving. This program requires Windows 3.0 or 
+higher and a hard disk.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3347
 

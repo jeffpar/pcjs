@@ -31,6 +31,45 @@ machines:
     observation points around the earth.  Others can be added easily.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2241.TXT
+
+{% raw %}
+```
+Disk No: 2241                                                           
+Disk Title: PC-TRACK                                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: PC-Track                                                 
+Author Version: 1.1                                                     
+Author Registration: $15.00                                             
+Special Requirements: 512K RAM, EGA, and two floppy drives. A hard drive
+                                                                        
+PC-TRACK is a general purpose satellite tracking package designed to    
+take the complexity and confusion out of finding where an earth orbiting
+satellite is in space and providing the antenna pointing data necessary 
+to transmit signals to or receive signals from them.                    
+                                                                        
+This package is intended for anyone with a desire to keep track of the  
+positions of satellites. This includes Amateur Radio operators tracking 
+amateur radio satellites, amateur or professional weather satellite     
+users tracking weather satellites, or any other similar application. The
+package includes orbital data for a number of amateur radio and weather 
+satellites, and includes position data for a number of observation      
+points around the earth. Others are can easily added by the user.       
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2241
 

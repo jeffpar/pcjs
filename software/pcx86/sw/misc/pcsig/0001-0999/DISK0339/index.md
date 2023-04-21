@@ -50,6 +50,7 @@ machines:
 
 ## CREATOR.BAS
 
+{% raw %}
 ```bas
 1 'THE CREATOR WAS ORIGINALLY WRITTEN ON 1/16/80 BY BRUCE W. TONKIN
 2 'AND WAS ADAPTED FOR CP/M AND MICROSOFT BASIC 5.01 ON 5/11/80
@@ -298,9 +299,378 @@ machines:
 2250 PRINT #1,JL+6;"PRINT ";CV$
 2260 PRINT"Your commands have been accepted. Ready for your next command.":GOTO 2030
 ```
+{% endraw %}
+
+## CSORT.DOC
+
+{% raw %}
+```
+
+
+                   CHEAPSORT (level I AND II) DOCUMENTATION
+
+                          CAPABILITIES OF CHEAPSORT
+     CHEAPSORT  is a disk-based sort/merge program.  It will sort  data  files 
+which  have fixed-length records and fixed-length fields.  The data file being 
+sorted may be of any size,  but may not contain more than 32,767 records. This 
+should be sufficient for most uses.
+     CHEAPSORT  will  not sort sequential data files,  such as  those  written 
+using a word processor;  nor will it sort data files written under the UCSD or 
+CP/M-86 operating systems, unless the data is somehow transferred to PC DOS.
+     CHEAPSORT appears to work correctly under PC DOS 1.1 and 2.0, and on hard 
+disk,  floppy disk,  and RAM (or memory) disk. CHEAPSORT is not copy protected 
+in  any  way,  and  may  be backed up or transferred freely  to  other  media. 
+CHEAPSORT  is copyrighted and trademarked,  and should not be sold  except  as 
+noted in this documentation.
+     You may sort data of any type commonly used in BASIC. Valid types include 
+ASCII data (numbers or letters,  in alphabetic order),  byte,  packed integer, 
+packed single precision,  packed double precision,  and any user-defined  data 
+type  adhering  to Microsoft's floating point format.  Many other  sorts  have 
+difficulty with other than ASCII data types.
+     CHEAPSORT is compatible with THE CREATOR,  REPORTOR,  PROGEN, REPGEN, and 
+other software sold or distributed by T.N.T. SOFTWARE, INC.
+     CHEAPSORT is totally compatible with Microsoft BASIC random-access files. 
+Other  sorts  may have some difficulties with  Microsoft  random  files,  even 
+appending unwanted control characters to the file output. CHEAPSORT will not.
+     You  may sort unpacked numbers in numeric (rather than alphabetic)  order 
+by  choosing to sort that field as NUMERIC,  rather than CHARACTER.  CHEAPSORT 
+will   convert  any  such  numbers  into  a  packed  double-precision   format 
+internally; the sort will be accurate to 16 significant digits.
+     CHEAPSORT  will  only output an INDEX to the file in sorted  order.  This 
+index will consist of a list of record numbers.  By reading the sorted file in 
+the order specified by the index,  you will be reading the file in the  sorted 
+order you specified. If you need a whole file output, you may use the index to 
+create  one.  See  the end of these notes for a sample program which  you  may 
+modify for your use.  The sample program,  incidentally, also shows how to use 
+the index to read a data file.
+     For  your added convenience,  the sort index file can be read as a random 
+file  of  record length 8.  This will allow you to use the index  file  to  do 
+binary searches of the data,  if you wish. To help you further, CHEAPSORT will 
+always  tell  you exactly how many records were sorted when the sort has  been 
+completed. A null record is always appended to the end of the file to help you 
+locate  the end,  if you want to do binary searches.  Each record in the  data 
+file  to  be sorted can not contain more than 256 characters;  if you  have  a 
+requirement which exceeds that,  consider buying CHEAPSORT, level II. The cost 
+is $25.00,  postpaid,  from TNT SOFTWARE INC.,  34069 Hainesville Road,  Round 
+Lake  IL 60073.  Level II CHEAPSORT will sort input files with lengths  up  to 
+32767 bytes and combined key lengths of up to 32765 bytes (limited by memory).
+     If  you  have  more  complex sort  requirements,  or  need  to  customize 
+CHEAPSORT (any level), the source code is separately available. Level I source 
+code costs an additional $11.00;  level II,  an additional $25.00. Examples of 
+customizing  CHEAPSORT to do select/exclude on fields or  field  relationships 
+are included with the source code.
+
+
+
+
+
+
+
+
+
+
+
+                                     1
+
+
+                             HOW TO RUN CHEAPSORT
+     Simple:  while at the DOS prompt (A>,  B>,  etc.) just type in CSORT.  If 
+CHEAPSORT  is not on your current default drive,  preface CSORT with the drive 
+letter and a colon. For example:
+A>B:CSORT
+B>A:CSORT
+     CHEAPSORT will ask you for the name of the file to be sorted,  the record 
+length,  the name of the output index file,  and the beginning position, type, 
+and length of each of the sort keys.
+     The  beginning  position of each key must  be  carefully  specified.  The 
+easiest  way to understand how this should be done is by means of an  example. 
+Suppose you want to sort a data file whose record length is 85;  the fields in 
+each record are of lengths 15,20,5,20,10,10,  and 5.  Suppose you want to sort 
+each record by field 4, then 3, then 6, then 1.
+     In  that case,  the starting position of the first key (field 4) would be 
+15+20+5+20=60,  plus  1 (skip the first 60 characters,  start the sort at  the 
+61st character). The key length would be 20, if you want to sort by all of the 
+fourth field.  Likewise,  the second key begins at 15+20+1=36,  the third  key 
+begins at 15+20+5+20+10+1=71, and the last key begins at position 1.
+     You need not use all of a key field as a sort key.  If your key field  is 
+very  long (a name field,  with 80 characters allowed,  for example),  you may 
+wish to use only the first few characters of the field as the key.  Just enter 
+whatever length you decide to use.
+     CHEAPSORT will remind you of the permissible data types;  please read the 
+possibilities  carefully.  Many of the possible data types (the packed numeric 
+ones, especially) are called "Other".
+     You  may use up to 50 keys,  but the total length of all of the keys  may 
+not exceed 253 bytes. CHEAPSORT will inform you of the remaining key space and 
+the number of remaining keys after each key is entered.
+     When you are done entering the keys,  you may go on to the next step  (as 
+CHEAPSORT  will inform you) by entering the number 0 for the starting position 
+for the next key.
+     CHEAPSORT will then ask for the drive letter of the drive to use for work 
+files.  Many  times,  a  work file will not be  necessary;  if  one  is,  this 
+temporary file will be placed on the drive you specify.
+     You  may  use any drive for your work files.  If you're sorting a  small-
+enough data file (under 1000 records) and you have a small enough  total   key 
+length (depends on memory available), you may not actually need any work file. 
+     In  any event,  the work file space necessary will not exceed your  total 
+key lengths plus two bytes,  times the number of records in the data file. For 
+example,  if  your  total of key lengths is 50 bytes and you are sorting  2000 
+records,  the space required for your work file will be 52*2000=104000  bytes. 
+Be  sure  you have enough space available on the drive you designate for  your 
+work files. It is disheartening to run the sort almost to completion and get a 
+'disk full' error message.
+     It  is  interesting to note,  in this  connection,  that  CHEAPSORT  uses 
+generally  less work file space than other sorts.  You will probably find that 
+CHEAPSORT will be capable of sorting data files other sorts cannot touch.
+     CHEAPSORT is quite quick,  but is probably not the fastest possible  sort 
+for the IBM PC. It is, however, probably the least expensive good sort package 
+you will ever buy.  Here are some comparative sort times for the IBM PC, where 
+the  sort file and work files were on separate (floppy) disks.  The file being 
+sorted consisted of 3000 records, each of 25 bytes in length. There were three 
+fields:  a  15-character alphabetic name,  an 8-byte  packed  double-precision 
+amount, and a two-byte packed integer field. Print level 4 was used. The times 
+quoted  are  from  the last operator entry to CHEAPSORT until the  DOS  prompt 
+reappeared.  All data was generated by using BASICs RND function, so no fields 
+were in any particular sorted order.
+     The  times quoted are from the time of the last operator input until  the 
+system prompt returns, and include all disk read and write times.
+
+
+
+                                     2
+
+
+               SORT TIMES, 3000 RANDOM RECORDS (25 BYTES EACH)
+                   ALL TIMES QUOTED ARE MINUTES AND SECONDS
+ASCENDING      DESCENDING     KEY(S)
+2:47           2:51           Packed integer.
+3:10           3:56           15 character alphabetic.
+3:20           3:45           Packed double precision.
+3:26                          15 character alphabetic + packed integer.
+3:37                          Packed double precision + packed integer.
+4:04                          15 character alphabetic + packed double prec.
+4:22           5:39           15 char. alpha + packed double + packed int.
+
+     Each  run  required  a merge of 3000 records;  this merge  took  about  a 
+minute.  If you were to sort fewer than a thousand records, a merge may not be 
+required; generally, sort times for such small data files will be well under a 
+minute.  The merge function has been highly optimized, and will take advantage 
+of  memory buffering as much as possible.  Disk reads of the merge  work  file 
+have been reduced to the minimum.
+     Sorts in descending order generally take about 2-3% longer than ascending 
+sorts for each byte in the descending key field. Merge times are not affected. 
+Sorts  of packed single or double precision data take about 10% longer than  a 
+sort  on  an  alphabetic key of the same size.  Again,  merge  times  are  not 
+affected. Merges will take somewhat longer if the key lengths are longer.
+     CHEAPSORT  will  run  more slowly if the disk data is  in  reverse  order 
+compared  to  the sort order requested.  I have done no checking on times  for 
+this,  but it should be possible to double the sort times if the data were  in 
+exactly reverse order.  On the other hand, if the data were in close to sorted 
+order  to  begin with,  CHEAPSORT could run appreciably faster than  indicated 
+here. Sort times in that instance would probably be primarily limited by disk 
+transfer times.
+     On  some machines,  it is possible to appreciably speed up  CHEAPSORT  by 
+specifying print level 1.  On the IBM PC, it makes a difference of only two or 
+three  seconds on the above sort.  Therefore,  there is no real penalty if you 
+like to watch how the sort is progressing.
+     You  may find it hard to believe (especially considering the  speed  with 
+which  CHEAPSORT  operates),  but CHEAPSORT was written entirely in  Microsoft 
+BASIC.   This  was  done  quite  deliberately,  so  that  CHEAPSORT  would  be 
+transportable to as many new machines as possible,  and would be adaptable  to 
+any  new operating system releases from either Microsoft or IBM.  If there  is 
+sufficient demand,  I may produce a version of CHEAPSORT for CP/M-86. However, 
+I consider this rather unlikely; most CP/M-86 software tends to get written in 
+and for the Digital Research languages, for which I have no love whatsoever. 
+     System  builders and developers might want to incorporate CHEAPSORT  into 
+their software; or, a user may obtain a copy of either version of CHEAPSORT in 
+order to 'test' its capabilities.  In any case,  if you wish to sell CHEAPSORT 
+or  'buy' a copy in order to make your sale or possession legal,  you need  do 
+the following:
+     (1) Remit $5 for CHEAPSORT level I, or $10 for CHEAPSORT level II;
+     (2)  Send the name and full address of the ultimate user of the  software 
+to T.N.T. SOFTWARE, INC. at 34069 Hainesville Road, Round Lake IL 60073.
+     Others  using  or  selling CHEAPSORT do so  without  any  possibility  of 
+support and with the possibility of legal action against them for such illegal 
+use or sale.
+     T.N.T.  SOFTWARE  has a very easy distribution policy,  and very low cost 
+software. It is our belief that software prices are entirely too high; but, if 
+our software is pirated and we obtain little gain from our policies,  we  will 
+have  only  two choices:  increase prices or leave the  market.  Neither  will 
+result  in any long-term advantage to the software buyer.  Please help us keep 
+prices low, and obey our requests for sale and distribution of our software.
+
+
+
+
+
+                                     3
+
+
+               SAMPLE PROGRAM TO READ A DATA FILE VIA AN INDEX
+                        AND CREATE A WHOLE FILE OUTPUT
+
+10 LINE INPUT"FILE TO READ:";F$
+20 LINE INPUT"FILE TO WRITE:";W$
+30 LINE INPUT"INDEX FILE NAME:";I$
+40 INPUT"RECORD LENGTH:";R:'IF RECORD LENGTH >255 YOU WILL NEED TO ALTER
+50 OPEN"R",1,F$,R:'      LINES 60 AND 80 FOR A MORE COMPLICATED
+60 FIELD #1,R AS A$:'    FIELD STATEMENT. USE AS MANY VARIABLES AS NEEDED
+70 OPEN"R",2,W$,R:'      TO USE UP ALL THE CHARACTERS IN EACH RECORD.
+80 FIELD #2,R AS B$:'    FOR EXAMPLE:
+90 OPEN"I",3,I$:'        FIELD #1, 255 AS A1$,255 AS A2$,255 AS A3$
+91 '                     WILL HANDLE A RECORD OF 765 BYTES. YOU WILL
+92 '                     NEED TO FIELD #2 SIMILARLY, AND DO THE LSETS IN LINE
+93 '                     110 AS WELL. THE LSETS CAN BE DONE LIKE THIS:
+94 '                     LSET B1$=A1$:LSET B2$=A2$:LSET B3$=A3$
+95 '                     FURTHER NOTE: IF YOUR RECORD LENGTH EXCEEDS 128, YOU
+96 '                     SHOULD BE SURE TO ENTER BASIC WITH THE /S: SWITCH
+97 '                     SET APPROPRIATELY. SEE YOUR BASIC MANUAL.
+100 PRINT"TRANSFERRING":ON ERROR GOTO 500
+110 INPUT #3,A:GET 1,A:LSET B$=A$:COUNT=COUNT+1:PUT 2,COUNT
+120 GOTO 110
+500 PRINT"DONE.";COUNT;"RECORDS TRANSFERRED."
+510 CLOSE:END
+
+
+THANKS FOR PURCHASING CHEAPSORT!
+FOR A CATALOG OF OUR OTHER INEXPENSIVE,  HIGH-QUALITY SOFTWARE FOR THE IBM PC, 
+CP/M, AND RADIO SHACK MACHINES, WRITE TO:
+
+                            T.N.T. SOFTWARE, INC.
+                            34069 HAINESVILLE ROAD
+                             ROUND LAKE, IL 60073
+                                (312) 223-0832
+
+
+IBM PC is a registered trademark of The IBM Corporation;  CP/M and CP/M-86 are 
+trademarks  of  Digital  Research;   Radio  Shack  is  a  trademark  of  Tandy 
+Corporation;   THE  CREATOR,  REPORTOR,  PROGEN,  REPGEN,  and  CHEAPSORT  are 
+trademarks of T.N.T. SOFTWARE, INC.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     4
+
+
+
+        This disk copy was originally provided by "The Public Library",
+        the software library of the Houston Area League of PC Users.
+ 
+        Programs are available from the Public Library at $2 per disk
+        on user-provided disks.  To get a listing of the disks in the
+        Public Library, send a self-addressed, stamped envelope to
+
+             Nelson Ford,  P.O.Box 61565,  Houston, TX 77208.
+
+```
+{% endraw %}
+
+## CSORT3.DOC
+
+{% raw %}
+```
+             EXPLANATION OF CHANGES FOR CSORT3 OVER CSORT2
+
+    The big difference is that CSORT3 reads all the requested inputs 
+from the file called CSORT.DAT, which is assumed to be on the current 
+drive and in the current directory.
+    All inputs should be on their own lines, since most of the input is 
+handled as LINE INPUT statements.  Multiple inputs on the same line 
+should not generally be attempted, and will usually cause errors of 
+various types.
+    If an error is encountered while reading the CSORT.DAT file, 
+CHEAPSORT LEVEL III will print a short descriptive error message 'BAD 
+PRINT LEVEL'; 'BAD INPUT FILE', 'BAD OUTPUT FILE', etc.  Those error 
+messages should enable you to find and fix the error fairly easily.
+    All questions have been removed from the sort, and the only things 
+the user will generally see on the screen are the sort copyright 
+message, whatever messages are appropriate for the print level chosen, 
+and the sort termination message.
+    To make it easier, the questions are asked in the following order:
+    1. Name of the file to sort;
+    2. Record length for sort file;
+    3. Name of index file;
+    4. Starting position for key (if zero go to step 9);
+    5. Length of key;
+    6. Data type for key (C=character or packed half-precision, 
+N=numeric, I=packed integer, O=other packed field type);
+    7. Ascending or descending order (A/D);
+    8. Go back and repeat steps 4-7 until starting position is 0;
+    9. Work drive (A-Z is allowed, rather than just A-D);
+    10. Print level to use (1-4).
+
+    Probably the best way to integrate CSORT3 into your applications 
+program is via a batch file which will copy the appropriate parameter 
+file from some other file to the file CSORT.DAT.  For example:
+COPY BYNAME.PAR CSORT.DAT
+will copy the parameter file BYNAME.PAR to the CSORT.DAT file used by 
+CSORT level 3.  In this way, CSORT3 can be repeatedly invoked by a batch 
+file, doing different sorts one after the other, producing any number of 
+index files, and ending in any application desired.
+    If you have any questions or problems with CSORT3, please call or 
+write.
+
+Sincerely,
+
+Bruce W. Tonkin
+34069 Hainesville Road
+Round Lake, IL 60073
+(312) 223-0832 (office)
+(312) 223-8595 (home)
+
+Si
+```
+{% endraw %}
+
+## FILES339.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 339  Creator                                            v1
+------------------------------------------------------------------------
+ 
+Creator, Reporter and Cheapsort comprise a database management system.
+Creator provides the principle database functions (record, add, delete
+etc.); Reporter writes report programs; and Cheapsort sorts Creator
+files as well as files created under other database systems.
+ 
+C451     LIB  Main record management program
+C451MIN  LIB  Alternate record management program
+CREATOR  BAS  Program that introduces the Creator system
+CSORT    DOC  Documentation for Cheapsort
+CSORT    EXE  The Cheapsort program
+CSORT2   EXE  Cheapsort, version 2
+CSORT3   DOC  Documentation for Cheapsort, version 3
+CSORT3   EXE  Cheapsort, version 3
+MENU     BAS  Menu program for Creator system
+R451     LIB  BASIC program shell for custom report programs
+REKEY    BAS  Utility program for maintaining Creator key
+```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 10 KEY ON:KEY OFF:CLS
 20 PRINT TAB(35);"THE CREATOR":PRINT:PRINT:PRINT
@@ -319,9 +689,11 @@ machines:
 160 IF A$<>"E" THEN BEEP:I=CSRLIN:IF I<20 THEN 100:ELSE CLS:RUN
 170 LINE INPUT"NAME OF PROGRAM TO RUN: ";P$:PRINT"LOADING ";P$:RUN P$
 ```
+{% endraw %}
 
 ## REKEY.BAS
 
+{% raw %}
 ```bas
 10 RESET
 20 KEY ON:KEY OFF:CLS:PRINT"This is the RE-KEY utility program for CREATOR data files.":PRINT:PRINT
@@ -374,9 +746,11 @@ machines:
 500 SP=ASC(ZZ$)+ASC(RIGHT$(ZZ$,1)):SP=SP MOD 10:SP=SP+4:X$=STR$(X#):RP=VAL(MID$(X$,SP,4)):X#=0
 510 RP=MR%*RP/9999:RP=FIX(RP):RETURN
 ```
+{% endraw %}
 
 ## REPORTOR.BAS
 
+{% raw %}
 ```bas
 50 RESET:GOTO 110
 60 FX=0:IF LEN(CV$)<1 THEN RETURN
@@ -587,6 +961,7 @@ machines:
 5000 IF F1%=1 THEN SX$=F1$+MID$(SX$,LEN(C$(J))+1):RETURN
 5010 SX$=LEFT$(SX$,F1%-1)+F1$+MID$(SX$,F1%+LEN(C$(J))):RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

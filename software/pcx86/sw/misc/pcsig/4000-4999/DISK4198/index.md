@@ -14,6 +14,57 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## README.DOC
+
+{% raw %}
+```
+07/19/93
+
+Bible Scholar's Companion v1.00
+Copyright 1993
+
+
+Program must be installed prior to running.
+
+Installation will un-archive program files from *.ARC file.
+
+To install, type:
+
+  INSTALL DIRECTORY  -- To install program to directory named DIRECTORY
+  or
+  INSTALL            -- To install program to current directory
+
+  Example:
+    INSTALL TEXTDIR  -- Will install to directory TEXTDIR
+
+
+To run program AFTER installation, type:
+
+  GO.BAT
+  or
+  BSC.EXE STEPS -- Will run the program reading STEPS book
+
+
+File Descriptions:
+
+  STEPS.*            -- Files composing book to be read
+  BSC.EXE            -- The main program
+  BSC.HLP            -- Help file
+  BSC.COL            -- Color file (created once colors saved)
+  INSTALL.BAT        -- Installation batch file
+  CHECKDIR.EXE       -- Used in installation process
+  ARC.EXE            -- Archive utility created by independant developer
+                        ** Please type ARC.EXE to view copyrite info. **
+  README.DOC         -- This file
+
+End.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #4198
 

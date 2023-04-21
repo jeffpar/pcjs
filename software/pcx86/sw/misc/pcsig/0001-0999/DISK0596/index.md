@@ -40,6 +40,68 @@ machines:
     PROJECT  WRK  Project oriented company planner macro
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES596.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  596  Symphony Worksheets #3                               v1 DS2
+---------------------------------------------------------------------------
+This disk contains two macros for business planners using Symphony.
+One produces an integrated five year business plan complete with balance
+sheets and income statements while the other is more suited for project
+oriented companies.
+ 
+0_DESCR  WRK  Description of macros on this disk
+0_HIGHLT WRK  Expalanation on where to locate files
+0_README WRK  Library disk highlights
+5YEAR    WRK  Five year business plan macro
+PROJECT  WRK  Project oriented company planner macro
+ 
+PC-SIG (SOFTWARE INTEREST GROUP)
+1030 D DUANE AVE.
+SUNNYVALE CA. 94086
+PH# 408-730-9291
+ 
+ 
+ 
+```
+{% endraw %}
+
+## NOTES596.TXT
+
+{% raw %}
+```
+Program name:        New York Lotus 231
+
+Author name:         N.Y. Lotus Disks
+Address:             Suite 1102, 163 Joralemon St., Brooklyn 11201
+
+Suggested Donation:  ?
+
+Program Description: This disk contains two LOTUS macros ranging from
+                     a five year business planning package complete
+                     with balance sheets and another for project plans.
+
+
+                     The macros are :
+
+                     1. 5YEAR.WRK
+                        This is an integrated 5 year business planner
+                        which can handle balance sheets, income statements,
+                        cashflows, cost of goods sold and financial ratios.
+
+                     2. PROJECT.WRK
+                        This macro is designed for more project oriented
+                        companies and handles long term planning.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0596
 

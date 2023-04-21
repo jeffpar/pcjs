@@ -58,6 +58,7 @@ machines:
 
 ## ADDMAIL.BAS
 
+{% raw %}
 ```bas
 5 KEY OFF
 10 SCREEN 0,1
@@ -108,9 +109,11 @@ machines:
 505 CLS
 510 CHAIN "b:mailmenu
 ```
+{% endraw %}
 
 ## ADDMEMB.BAS
 
+{% raw %}
 ```bas
 10 COMMON DRIVEID$,FILEID$,RECNUM2,DRIVEID2$,FILEID2$
 20 OPEN DRIVEID$+FILEID$ AS #1 LEN=4
@@ -132,9 +135,11 @@ machines:
 175 CLOSE #1
 180 CHAIN DRIVEID$+"mailmemb"
 ```
+{% endraw %}
 
 ## BROWMAIL.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0,1
 20 COLOR 15,9,4
@@ -180,9 +185,11 @@ machines:
 390 CLOSE #1
 400 CHAIN "B:dispmail"
 ```
+{% endraw %}
 
 ## BUILDML.BAS
 
+{% raw %}
 ```bas
 40  PRINT "  "
 50 PRINT "    Warning, the mailing list file"
@@ -254,9 +261,11 @@ machines:
 610 CHAIN "B:MAILMENU"
 620 PUT #1: RESUME
 ```
+{% endraw %}
 
 ## BUILMEMB.BAS
 
+{% raw %}
 ```bas
 10 COMMON DRIVEID$,FILEID$,DRIVEID2$,FILEID2$,RECNUM2
 30 CLS
@@ -296,9 +305,11 @@ machines:
 610 CHAIN DRIVEID$+"members"
 620 PUT #1: RESUME
 ```
+{% endraw %}
 
 ## CHGMAIL.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0,1
 20 COLOR 15,9,4
@@ -394,9 +405,102 @@ machines:
 820 PRINT DISP$
 830 RETURN
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #169, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  ADDMAIL .BAS         CRC = F2 34
+
+--> FILE:  ADDMEMB .BAS         CRC = C9 8A
+
+--> FILE:  BROWMAIL.BAS         CRC = 9F E6
+
+--> FILE:  BUILDML .BAS         CRC = 50 12
+
+--> FILE:  BUILMEMB.BAS         CRC = CB BE
+
+--> FILE:  CHGMAIL .BAS         CRC = 48 D7
+
+--> FILE:  DELMAIL .BAS         CRC = 79 10
+
+--> FILE:  DISPMAIL.BAS         CRC = 01 79
+
+--> FILE:  DISPMEMB.BAS         CRC = FA 7B
+
+--> FILE:  EASYMAIL.ASC         CRC = 44 02
+
+--> FILE:  EASYMAIL.BAS         CRC = 63 9C
+
+--> FILE:  LABMAIL .BAS         CRC = 6F 80
+
+--> FILE:  LABPRINT.BAS         CRC = D5 42
+
+--> FILE:  LABSELEC.BAS         CRC = ED F9
+
+--> FILE:  LISTMAIL.BAS         CRC = D5 CC
+
+--> FILE:  LOCMAIL .BAS         CRC = E2 7D
+
+--> FILE:  MAILIST1.BAS         CRC = 46 D2
+
+--> FILE:  MAILIST1.DOC         CRC = BC 3D
+
+--> FILE:  MAILLIST.BAS         CRC = 9A DC
+
+--> FILE:  MAILMEMB.BAS         CRC = 30 78
+
+--> FILE:  MAILMENU.BAS         CRC = 63 9C
+
+--> FILE:  MAILSORT.BAS         CRC = E3 B0
+
+--> FILE:  MEMBER  .ASC         CRC = 81 16
+
+--> FILE:  MEMBERS .BAS         CRC = 95 18
+
+--> FILE:  RENUMEMB.BAS         CRC = 19 C2
+
+--> FILE:  REORMAIL.BAS         CRC = A3 8B
+
+--> FILE:  REVUMEMB.BAS         CRC = FB D8
+
+--> FILE:  STATMAIL.BAS         CRC = 44 8A
+
+--> FILE:  STATMEMB.BAS         CRC = 80 C2
+
+--> FILE:  UPDMEMB .BAS         CRC = C2 8E
+
+--> FILE:  XXX     .            CRC = AC 95
+
+ ---------------------> SUM OF CRCS = E1 62
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## DELMAIL.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0,1
 20 COLOR 15,9,4
@@ -455,9 +559,11 @@ machines:
 560 PRINT "     RECORD DELETED "
 570 GOTO 350
 ```
+{% endraw %}
 
 ## DISPMAIL.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0,1
 20 COLOR 15,9,4
@@ -483,9 +589,11 @@ machines:
 300 CHAIN "b:locmail"
 400 CHAIN "b:mailmenu
 ```
+{% endraw %}
 
 ## DISPMEMB.BAS
 
+{% raw %}
 ```bas
 10 COMMON DRIVEID$, FILEID$, RECNUM2, DRIVEID2$, FILEID2$
 20 OPEN DRIVEID$+FILEID$ AS #1 LEN=4
@@ -555,9 +663,11 @@ machines:
 1445 CLOSE #2
 1450 CHAIN DRIVEID$+"members"
 ```
+{% endraw %}
 
 ## EASYMAIL.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0,1
 20 KEY OFF
@@ -623,9 +733,11 @@ machines:
 553 CLS
 554 CHAIN "IBMPMENU"
 ```
+{% endraw %}
 
 ## LABMAIL.BAS
 
+{% raw %}
 ```bas
 5 COMMON UP,ENVEL
 10 SCREEN 0,1
@@ -671,9 +783,11 @@ machines:
 553 CLS
 554 CHAIN "IBMPMENU"
 ```
+{% endraw %}
 
 ## LABPRINT.BAS
 
+{% raw %}
 ```bas
 10 COMMON LINPTR%(),NLINES%,MAXLEN,LINBUF$(),TOPROG$,TOFILE$,PGRDATA()
 15 DIM LIN$(2,5)
@@ -834,9 +948,11 @@ machines:
 9045 LPRINT CHR$(12);
 9050 RETURN
 ```
+{% endraw %}
 
 ## LABSELEC.BAS
 
+{% raw %}
 ```bas
 10 COMMON PGRDATA(),LINPTR%(),NLINES%,MAXLEN,LINBUF$(),TOPROG$,TOFILE$
 20 MAXLEN=11
@@ -941,9 +1057,11 @@ machines:
 910 LINBUF$(LPTRSUB%)="         "+MKI$(RECNUM%)
 920 RETURN
 ```
+{% endraw %}
 
 ## LISTMAIL.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0,1
 20 COLOR 15,9,4
@@ -1039,9 +1157,11 @@ machines:
 3000 IF ERR = 24 THEN RESUME
 3010 RESUME
 ```
+{% endraw %}
 
 ## LOCMAIL.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0,1
 20 COLOR 15,9,4
@@ -1090,9 +1210,11 @@ machines:
 450 CLOSE #1
 460 CHAIN "B:dispmail"
 ```
+{% endraw %}
 
 ## MAILIST1.BAS
 
+{% raw %}
 ```bas
 10 '(C) Copyright M. Berry and W. Dwinell 1982, 1983
 99 '------------------------------INITILIZE------------------------------------
@@ -1837,9 +1959,11 @@ machines:
 24999 I$=INKEY$:IF I$="" GOTO 24999 ELSE RETURN
 25000 '(C) Copyright William Dwinell and Mike Berry 1983
 ```
+{% endraw %}
 
 ## MAILLIST.BAS
 
+{% raw %}
 ```bas
 100 '   MAILLIST        by Bob Noble
 110 '                   IBM Personal Computer BASIC
@@ -2013,9 +2137,11 @@ machines:
 1790 INPUT #1, L$, F$, A$, B$, D$, E$, G$, C$, S$, Z$
 1800 WRITE #2, L$, F$, A$, B$, D$, E$, G$, C$, S$, Z$: GOTO 1780
 ```
+{% endraw %}
 
 ## MAILMEMB.BAS
 
+{% raw %}
 ```bas
 5 COMMON DRIVEID$,FILEID$,RECNUM2,DRIVEID2$,A$,B$,C$,D$,E#
 10 SCREEN 0,1
@@ -2059,9 +2185,11 @@ machines:
 500 CLOSE #1
 510 CHAIN DRIVEID$+"updmemb"
 ```
+{% endraw %}
 
 ## MAILMENU.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0,1
 20 KEY OFF
@@ -2127,9 +2255,11 @@ machines:
 553 CLS
 554 CHAIN "IBMPMENU"
 ```
+{% endraw %}
 
 ## MAILSORT.BAS
 
+{% raw %}
 ```bas
 2000 ' ----------------------- SORT ROUTINE ---------------------------------
 2010 DEFINT A-Z:COMMON N,RAN$,IN$,NBR$,SRT$,S,CR$,ESC$:SRT$=RAN$+".SRT":DIM I1$(1000):DIM I1(1000):ON ERROR GOTO 10000
@@ -2186,9 +2316,11 @@ machines:
 11120 I$=INKEY$:IF I$="" THEN 11120
 11140 IF VAL(I$)=0 THEN RETURN ELSE I=VAL(I$):RETURN
 ```
+{% endraw %}
 
 ## MEMBERS.BAS
 
+{% raw %}
 ```bas
 1 KEY OFF
 5 DRIVEID2$="B:"
@@ -2222,9 +2354,11 @@ machines:
 450 KEY ON
 460 END
 ```
+{% endraw %}
 
 ## RENUMEMB.BAS
 
+{% raw %}
 ```bas
 10 COMMON DRIVEID$, FILEID$, RECNUM2, DRIVEID2$, FILEID2$
 20 OPEN DRIVEID$+FILEID$ AS #1 LEN=4
@@ -2307,9 +2441,11 @@ machines:
 1550 PRINT "      Subscription Renewed"
 1560 GOTO 1348
 ```
+{% endraw %}
 
 ## REORMAIL.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0,1
 20 COLOR 15,9,4
@@ -2383,9 +2519,11 @@ machines:
 630 PRINT " "
 640 CHAIN "B:MAILMENU"
 ```
+{% endraw %}
 
 ## REVUMEMB.BAS
 
+{% raw %}
 ```bas
 10 COMMON DRIVEID$, FILEID$, RECNUM2, DRIVEID2$, FILEID2$
 20 OPEN DRIVEID$+FILEID$ AS #1 LEN=4
@@ -2441,9 +2579,11 @@ machines:
 520 CLOSE #2
 530 CHAIN DRIVEID$+"members"
 ```
+{% endraw %}
 
 ## STATMAIL.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0,1
 20 COLOR 15,9,4
@@ -2483,9 +2623,11 @@ machines:
 360 CLOSE #1
 370 CHAIN "B:MAILMENU"
 ```
+{% endraw %}
 
 ## STATMEMB.BAS
 
+{% raw %}
 ```bas
 10 COMMON DRIVEID$, FILEID$, RECNUM2, DRIVEID2$, FILEID2$
 20 OPEN DRIVEID$+FILEID$ AS #1 LEN=4
@@ -2503,9 +2645,11 @@ machines:
 510 CLOSE #1
 530 CHAIN DRIVEID$+"members"
 ```
+{% endraw %}
 
 ## UPDMEMB.BAS
 
+{% raw %}
 ```bas
 10 COMMON DRIVEID$,FILEID$,RECNUM2,DRIVEID2$,FILEID2$
 20 OPEN DRIVEID$+FILEID$ AS #1  LEN=4
@@ -2542,6 +2686,7 @@ machines:
 410 CHAIN DRIVEID$+"members"
 900 RESUME
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

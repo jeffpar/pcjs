@@ -32,6 +32,7 @@ machines:
 
 ## BIO.BAS
 
+{% raw %}
 ```bas
 1 M=VAL(LEFT$(DATE$,2))
 2 D=VAL(MID$(DATE$,4,2))
@@ -202,9 +203,11 @@ machines:
 1530 IF L$<>"P" AND  L$<>"S" AND  L$<>"C" AND  L$<>"A" GOTO 1520
 1540 CLS:GOTO 480
 ```
+{% endraw %}
 
 ## CRAZY8.BAS
 
+{% raw %}
 ```bas
 10 REM Author Les Davids
 20    DIM SUIT$(4),CARD$(52),DECK$(52)
@@ -502,9 +505,11 @@ machines:
 2940 END
 65399 '** DONE - PRESS ENTER TO RETURN TO MENU **
 ```
+{% endraw %}
 
 ## DESERT.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -766,9 +771,63 @@ machines:
 2670 P=0
 2680 RETURN
 ```
+{% endraw %}
+
+## FILES55.TXT
+
+{% raw %}
+```
+Disk No:   55
+Program Title:  GAMES SERIES #9
+PC-SIG version: 1.2
+
+Your Basic Games Package: Games for all ages, IQ's, biorhythms and
+genders.  Games of chance, games of skill, games for just about
+everyone.  Do for yourself and your friends, play poker against your
+computer, race across a desert, or race around the horse track.  And
+when you're finished, let your computer serenade you with one of several
+tunes.
+
+Usage:  Entertainment/Games.
+
+Special Requirements:  A version of the BASIC language.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $10.00 for SMSPOKER.
+
+File Descriptions:
+
+BIO      BAS  Biorythms - from today's date.
+CRAZY8   BAS  Game - uses character graphics for cards.
+DESERT   BAS  Game.
+HRSERACE BAS  Game - horse race.
+IPCOGOLF BAS  Game - golf.
+JETPILOT BAS  Fly from pilots control panel.
+JETPILOT DOC  Documentation for JETPILOT.BAS.
+LANDER   BAS+ Game - land space vehicle - graphics and sound.
+LANDER   BIN  Used by LANDER.BAS.
+LANDER   SCR  Used by LANDER.BAS.
+NADIA    BAS  Song.
+PHOENIX  BAS  Song.
+ROULETTE BAS  Game - roulette.
+SESAME   BAS  Song.
+SMSPOKER EXE+ Game - Buck Mann's poker for one - uses graphics.
+SMSPOKER DOC  Manual for SMSPOKER.EXE.
+STARWARS BAS  Song.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
 
 ## HRSERACE.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -906,9 +965,11 @@ machines:
 2080 FOR IW=1 TO 1000:NEXT
 2090 RETURN
 ```
+{% endraw %}
 
 ## IPCOGOLF.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -1175,9 +1236,11 @@ machines:
 2720 DATA 510,5,434,4,210,3,312,4,428,4,440,4,205,3,515,5,318,4
 2730 END
 ```
+{% endraw %}
 
 ## JETPILOT.BAS
 
+{% raw %}
 ```bas
 1 ' JET PILOT -- Flight Simulation Program
 2 '
@@ -1400,9 +1463,110 @@ machines:
 45020 POSX=POSX+1:POSY=POSY+1:RETURN
 45030 '
 ```
+{% endraw %}
+
+## JETPILOT.DOC
+
+{% raw %}
+```
+
+                        J E T   P I L O T
+
+              Program Documentation & Instructions
+
+JET PILOT simulates the flying characteristics of a modern, high performance
+jet aircraft.  Your aircraft can take off and land from either an aircraft
+carrier or runway, and comes complete with computerized navigation and
+instrument landing.
+
+The program first asks you to select carrier or runway takeoff.  You then
+have a choice of airports to fly to.  After a suitable one is selected,
+the aircraft's navigational computer can constantly display it's heading and
+distance.
+
+Note:  In this documentation, the key necessary to activate a function will
+be surrounded by brackets [ ].  This means that the indicated character 
+must be momentarily pressed.  (for example, [S] means momentarily press S key.
+
+
+AIRCRAFT ACCESSORIES:
+
+Drag Chute & Reverse Engine Thrust -- The drag chute [C] is available on land-
+based aircraft, and is deployed by the pilot immediately after landing, to
+decelerate the aircraft's speed.  It is used in conjunction with Reverse
+Engine Thrust (-10%), and the Wheel Brakes to avoid rolling off the end of
+the runway.
+
+Tail Hook -- Available for carrier-based aircraft.  This device is lowered
+just before landing and, within a predetermined area on the runway, will
+bring the aircraft to a stop.  Press [J].
+
+Landing Gear -- Cannot be lowered at airspeeds greater than 230 knots.  
+Raised and lowered by pressing [L].
+
+Nosewheel -- Allows steering while on the runway. Pressing [N], followed by
+a number from -30 to +30, does the steering.  Note that the aircraft must be
+lined up within 2 degrees of centerline to avoid running off the runway.
+
+Speed Brakes -- Slow the aircraft in flight.  Activate by pressing [S], 
+followed by a percent between 0 & 100.
+
+Spoilers -- Used to increase descent rate, usually during approach.  Press
+[Z], followed by a number from 0 to 100.  The rate of descent at touchdown
+must not exceed 1500 ft/min.
+
+Flaps -- Activated with [F], followed by a number from 0 to 100.  They must
+not be used at airspeeds above 270 knots.
+
+Navigation Computer -- Activated by pressing [P].  Gives the heading and
+distance to the selected airport.  For carrier-based aircraft, only Air-
+port 0 is enabled.  For runway aircraft, Airports 0 through 7 are available.
+When prompted, enter [D] to see all the airports.  Glide-slope/localizer
+information is available within 18 miles of the airport.
+
+
+ENGINE START PROCEDURE:
+
+1.  Press [E] to select engine turbine.
+2.  ENTER [T] to enter turbine start mode.
+3.  Press [S] to spin turbine. (Also for shutdown)
+4.  When turbine reaches 4500 RPM, press [F] to start fuel flow.
+
+NORMAL LAND-BASED TAKEOFF PROCEDURE:
+
+1.  Start Engine		[E]
+2.  Set Brakes			[B]
+3.  Set Flaps			[F]
+4.  Apply 120% Throttle		[T]
+5.  Release Brakes		[B]
+6.  Steer Aircraft		[N]
+7.  Rotate 10 deg. @ 150 knots	[A]
+8.  Gear Up			[L]
+9.  Retract Flaps		[F]
+
+NORMAL LANDING PROCEDURE:
+
+1.  Enable Navigation System	[P]
+2.  Intercept Localizer/GS	[H] [A]
+3.  Slow Airspeed		[S]
+4.  Extend Flaps		[F]
+5.  Extend Gear			[L]
+6.  Set up Approach		[A] [Z] [T]
+7.  After Touchdown
+	Deploy Chute		[C]
+	Reverse Thrust (-10)	[T]
+	Wheel Brakes		[B]
+8.  Shut down Engine		[E]
+
+Enjoy your flight!
+
+
+```
+{% endraw %}
 
 ## LANDER.BAS
 
+{% raw %}
 ```bas
 10 CLEAR,,2000:A$="VERSION   1.0"  ' Program : LANDER.BAS
 20 DEF SEG=&H40: EQUIP=PEEK(&H10)
@@ -1804,9 +1968,11 @@ machines:
 3980 LOCATE ,,1,12,13 'turn on monochrome cursor position
 3990 RETURN
 ```
+{% endraw %}
 
 ## NADIA.BAS
 
+{% raw %}
 ```bas
 10 REM  `Nadia's Theme'
 11 '
@@ -1817,9 +1983,11 @@ machines:
 20 A$="O3D1DO2DGO3DC1.O2CFO3CO2B-2.O3CD2.O2B-A..O3D1.O2DGO3DC1.O2CFO3CO2B-2.O3CD2.O2B-A1.AO3CO2FG1.GO3CO2GA1.O3CFCD8C8C8O2B-8B-O3E8D8D8C8C2D8C8C8O2B-8B-8A8A8F8D1O3D1.O2DGO3DC1.O2CFO3CO2B-2.O3CD2.O2B-A1"
 30 PLAY "T140 L4;XA$;"
 ```
+{% endraw %}
 
 ## PHOENIX.BAS
 
+{% raw %}
 ```bas
 10 REM  `By The Time I Get To Phoenix"
 11 '
@@ -1832,9 +2000,11 @@ machines:
 50 BB$="O2B-B-B-3..B-B-8A8B-8O3C8O2A1P4FFG8A8G....G8F8E8B-8A1.."
 60 PLAY "T140 L4;XA$;XB$;XBA$;XB$;XBB$;"
 ```
+{% endraw %}
 
 ## ROULETTE.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF
 20 CLS
@@ -1929,9 +2099,11 @@ machines:
 900 RETURN
 999 END
 ```
+{% endraw %}
 
 ## SESAME.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -2109,9 +2281,64 @@ machines:
 2480 PLAY "c1"
 2490 CLS
 ```
+{% endraw %}
+
+## SMSPOKER.DOC
+
+{% raw %}
+```
+Submission/Update Information Form
+Program Title: SMSPOKER, aka The Original Buck Mann's Poker-for-One
+Detailed Program Description: This program allows the user to play
+5 card draw poker against the computer.  The user plays to make the
+highest ranking hand possible with higher payouts for better hands.
+There is also a double-or-nothing option on drawing the next card.
+Note: The attraction in the game is the interaction with the user in
+the form of comments, etc. made by the computer dealer as the game
+goes on.  It is also possible to break the bank.  In the full version
+a player may save an account balance as well as borrow money from the
+house as required.  The house tracks repayments and charges interest
+on the loan.  A feature not seen until the game is played many times
+is it's response to holidays, etc.
+Who is the intended user? Adults
+If this is an update, improvements over old version:  Bugs have been
+removed that were reported since 1982.  The game handles a higher
+betting limit now and makes a much wider range of comments as the game
+progresses.  The ability to speed the game up as you learn to play has
+been added as well as the ability to turn off the sound.
+
+Unique features of the program (why is your program better?): see the
+detailed program description.
+
+Program's capacity or limitations (i.e. how many records it will hold or
+conditions where the program won't work, features described or implied
+above that only come with registration): The version as provided above
+will not allow the user to borrow money or to save an account.  It is
+otherwise a full version except for the story of Buck Mann.  Users who
+register and who break the bank will receive acknowledgement of having
+broken the bank in the form of a T-shirt or autographed photo of Buck
+Mann, etc. (no great value just an acknowledgement).
+
+Does your program require any special systems requirements other than
+256K memory, one floppy disk drive, and a monochrome monitor.  If yes,
+please list them: None
+
+How to start the program: Type SMSPOKER at the DOS prompt
+
+What is the registration fee for your program? $10.00 for 5.25 disk or
+$15.00 for 3.50 disk.
+
+List of program files and one-line description of each file:
+ SMSPOKER.EXE     The game program itself
+
+MEL 02/21/89
+
+```
+{% endraw %}
 
 ## STARWARS.BAS
 
+{% raw %}
 ```bas
 3 'Theme from `Starwars'
 4 '
@@ -2126,6 +2353,7 @@ machines:
 60 F$="O3F8E8F8D2GO4C..C8C8C8C8P4P4"
 70 PLAY "T140 L4;XA$;XB$;XB$;XC$;XD$;XE$;XB$;XC$;XD$;XF$;XB$;"
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

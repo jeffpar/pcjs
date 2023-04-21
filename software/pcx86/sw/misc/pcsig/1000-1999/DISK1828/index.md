@@ -34,6 +34,44 @@ machines:
     first step to making your PC easier to use.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1828.TXT
+
+{% raw %}
+```
+Disk No: 1828                                                           
+Disk Title: Software Manager                                            
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Software Manager                                         
+Author Version: 1.0                                                     
+Author Registration: $20.00                                             
+Special Requirements: None.                                             
+                                                                        
+Here is a menu program that gives you real freedom over what your menu  
+can look like.  Its unique ``paint'' feature lets you determine how     
+large different menu choices will be, which choices will blink, and what
+color each part of your menu will be.  Besides a flexible appearance,   
+you'll find the features you would want in any good menu program        
+including password protection, multiple menu access, and an easy menu   
+building facility.                                                      
+                                                                        
+Another advantage to SOFTWARE MANAGER is that it doesn't require you to 
+create elaborate batch files to get your programs to run.  It simply    
+asks you where your program files are and what command needs to be      
+issued to start the program.  It does the rest automatically.  Take the 
+first step to making your PC easier to use.                             
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1828
 

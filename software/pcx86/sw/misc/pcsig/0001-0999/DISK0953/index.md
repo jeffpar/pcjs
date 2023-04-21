@@ -66,6 +66,74 @@ machines:
     forecasting, taste  testing, new product evaluations, and many more.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0953.TXT
+
+{% raw %}
+```
+Disk No:  953                                                           
+Disk Title: Decision Analysis System                                    
+PC-SIG Version: S2.1                                                    
+                                                                        
+Program Title: Decision Analysis System                                 
+Author Version: 2.40                                                    
+Author Registration: $100.00 per program, 150 for both.                 
+Special Requirements: None.                                             
+                                                                        
+DECISION ANALYSIS SYSTEM, (DAS), is probably the best decision analysis 
+package on the market. It utilizes a number of well established Multiple
+Criteria Decision Making algorithms in its analysis. This is not a "blac
+box" program, numerical results are provided for each stage in the analy
+so that the user can see what is happening and have confidence in the   
+results.                                                                
+                                                                        
+DAS presents a scientific approach to decision making. It will replace  
+intuition and speculation, while preserving such qualitative factors as 
+experience and judgment. This innovative, yet remarkably easy to use pac
+consists of two separate decision analysis programs: the Decision Matrix
+Method (DMM), and the Pairwise Comparison Method (PCM).                 
+                                                                        
+DMM is designed to be used primarily with tangible and easily quantifiab
+data. Employing a matrix of criteria and alternatives, DMM is extremely 
+to use, providing you with an unbiased ranking of alternatives. The prog
+begins its analysis by highlighting dominated or substandard alternative
+Remaining alternatives are then ranked in order of preference by using a
+number of popular and well respected decision analysis techniques. Some 
+these techniques include: LAM (Linear Assignment Method), NAW (Normalize
+Additive Weighting), ELECTRE (Elimination et Choice Translating Reality)
+and TOPSIS (Technique for Order Preference by Similarity to Ideal Soluti
+An aggregation and synthesis procedure follows which produces the final 
+preference rankings of alternatives. Numerical results are provided for 
+step in the analysis. The users manual includes text book references whe
+these techniques and algorithms are explained in full detail.           
+                                                                        
+PCM, is designed to deal specifically with subjective assessments and   
+evaluations of alternatives and criteria. It is based on the well known 
+Analytic Hierarchy Process (AHP), developed by Thomas L. Saaty at the   
+Wharton School, University of Pennsylvania. Here, problems are modeled u
+a hierarchial structure with elements in this hierarchy compared in pair
+The advantage of this is that it helps you to focus your attention on ea
+part of the problem separately. Based on your inputs, PCM will calculate
+your judgment consistency, and it will quantify the impact of each eleme
+in the hierarchy on the overall goal. For example it may quantify your  
+preference of a set of alternatives based on some subjective criteria. P
+is not only useful in decision making problems, but also in any other ar
+where you find it difficult to quantify subjective factors.             
+                                                                        
+Applications include: location planning, cost/benefit analysis, strategi
+planning, employee selection, resource allocation, sales forecasting, ta
+testing, new product evaluations, and many more.                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989, 1990 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0953
 

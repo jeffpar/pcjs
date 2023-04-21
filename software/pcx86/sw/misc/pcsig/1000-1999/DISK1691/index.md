@@ -35,6 +35,63 @@ machines:
     silly.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1691.TXT
+
+{% raw %}
+```
+Disk No: 1691                                                           
+Disk Title: Creative Chaos                                              
+PC-SIG Version: S2.1                                                    
+                                                                        
+Program Title: Creative Chaos                                           
+Author Version: 2.1                                                     
+Author Registration: $22.00                                             
+Special Requirements: None.                                             
+                                                                        
+THINKLE is made for those whose ideas are too predictable and whose     
+minds are too logical.  To enhance creativity, THINKLE uses random      
+selection to help you create short stories, juggle menus, tell          
+fortunes, generate silly phrases and funny nonsense sentences.  But     
+most of all, THINKLE can stimulate your imagination, help you create    
+inventions, artwork, games, or engage in incredibly obtuse mental       
+gymnastics.                                                             
+                                                                        
+Instead of deductive thinking, THINKLE stimulates intuitive thinking.   
+The fundamental idea behind THINKLE is to use random selection in a     
+very structured way to juggle lists of ideas, chores, and anything you  
+can list.  Sometimes the results are hilarious, other times they        
+contain a real germ for change.  And, other times still, they are plain 
+old silly.                                                              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+ 
+    ╔═══════════════════════════════════════════════════════════════╗
+    ║                 << DISK #1691 CREATIVE CHAOS >>               ║
+    ╠═══════════════════════════════════════════════════════════════╣
+    ║                                                               ║
+    ║    To start the program, type: CHAOS (press enter)            ║
+    ║                                                               ║
+    ║    To print the documentation, type:                          ║
+    ║                                    COPY READ.ME PRN           ║
+    ║                                                  (press enter)║
+    ╚═══════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1691
 

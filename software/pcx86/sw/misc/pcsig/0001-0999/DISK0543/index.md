@@ -101,6 +101,7 @@ machines:
 
 ## ADDRBOOK.BAS
 
+{% raw %}
 ```bas
 10 REM --------------------------------------------------------
 20 REM -- If you find this program of some value, a donation --
@@ -294,9 +295,11 @@ machines:
 1900 IF INKEY$<>" " THEN 1800
 1910 GOTO 270
 ```
+{% endraw %}
 
 ## ARCTRIG.BAS
 
+{% raw %}
 ```bas
 10   CLS
 20   KEY OFF
@@ -361,9 +364,11 @@ machines:
 610  PRINT TAB(10)" THE ARCTANGENT FUNCTION IS NOT GIVEN AS BASIC SUPPORTS THIS."
 620  RETURN
 ```
+{% endraw %}
 
 ## CLOCK.BAS
 
+{% raw %}
 ```bas
 100    OPEN "CLOCK.COM"AS #1 LEN = 1    'OPEN CLOCK.COM
 110    PRINT "CREATING CLOCK.COM"
@@ -411,9 +416,11 @@ machines:
 530    DATA  1,218,3,232,109,255,186,189
 540    DATA  1,205,39
 ```
+{% endraw %}
 
 ## DAYNUM.BAS
 
+{% raw %}
 ```bas
 10  REM DAYNUMBER
 20  CLS
@@ -461,9 +468,11 @@ machines:
 440  PRINT TAB(13)  " ====" DAYS.TOT " DAYS HAVE ELAPSED SINCE JAN. 1ST ===="
 450  END
 ```
+{% endraw %}
 
 ## DOORS.BAS
 
+{% raw %}
 ```bas
 100   GRAND.TOTAL.#=0
 110   OPEN "DOORS.COM"AS #1 LEN = 1
@@ -498,9 +507,51 @@ machines:
 400   DATA  5,1,199,6,36,0,7,1,140,14
 410   DATA  38,0,251,186,141,1,205,39,16143
 ```
+{% endraw %}
+
+## DOORS.DOC
+
+{% raw %}
+```
+
+
+
+                           DOORS
+        
+        
+        
+        This program provides an additional window,whereby you can 
+    display data on two screens at a time.
+        The IBM PC supports both a monochrome and a color graphics 
+    monitor.  You need both to run DOORS.  IT WILL NOT RUN ON A 
+    COMPAQ, I don't know about other compatibles though.
+        To switch screens press the Alt key and the Right Shift key at 
+    the same time.  As an added bonus,according to the article, DOORS 
+    begins by copying the screen your leaving to the new monitor. You 
+    can start from either screen, the program doesn't care.  You can 
+    flip back and forth just by hitting the Alt-Right Shift key 
+    combination.
+        You must also be careful when using programs that have their 
+    own screen drivers.
+        These notes and the program DOORS.BAS  (which created 
+    DOORS.COM when I ran it) were taken from a PC MAGAZINE (February 5, 
+    1985) article by  John Dickinson.  Consult the article for 
+    additional information. 
+               
+
+                             Chris Spratt
+                             Victoria, B. C.
+                             June 1985
+
+         
+    
+
+```
+{% endraw %}
 
 ## EASTER.BAS
 
+{% raw %}
 ```bas
 10        CLS
 20        REM
@@ -555,9 +606,135 @@ machines:
 500       IF A$ = "N" THEN GOTO 510
 510       END
 ```
+{% endraw %}
+
+## FILES543.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No. 543  UTILITIES ECETERA                                     v1 DS2
+---------------------------------------------------------------------------
+This assortment of programs includes some to print the time on the screen,
+convert polar to rectangular coordinates and vice versa, a system to help
+document files on a disk, another to help hide and protect files, a sample
+general ledger and another for a simple addressbook and lots, lots more !
+ 
+ADDRBOOK BAS  Simple address program
+ADDRBOOK DOC  Addressbook documentation
+ARCTRIG  BAS  Inverse trig functions
+AUTOMENU BAT  Batch file to run MENU.BAS
+BLATHER  DOC  Documents BLATHER
+BLATHER  EXE  Communications program
+CDEL     BAT  Batch file to run YN.COM erase files
+CLOCK    BAS  Creates CLOCK.COM
+CLOCK    COM  Digital clock in DOS upper right screen
+COVER    COM  Print diskette directory for jacket
+COVER    DOC  Documents COVER
+DAYNUM   BAS  Calculates days since Jan 1
+DOORS    BAS  Source for DOORS.COM in BASIC
+DOORS    COM  Gives a window (new screen) for input
+DOORS    DOC  Documentation for DOORS.COM
+EASTER   BAS  Finds day of easter sunday
+F        EXE  Program to hide/protect/backup files on a disk
+FINDFILE BAT  Find any file current drive
+FINDFILE DOC  Documentation for FINDFILE.BAT
+GLV12    DOC  Documents GVL12
+GLV12    EXE  General ledger program
+HALLEY   BAS  Commet calculations for Halley's
+KEPLER   BAS  Kepler's equation for astronomy
+LOCSTIME BAS  Local sidereal time calculation
+LOTTO    BAS  Generates winning(?) LOTTO 649 numbers
+MENU     BAS  Generates BASIC menu
+MENU     DOC  Documentation for MENU.BAS
+MOVDIR   EXE  Move directory around
+NPAD     BAS  Source in BASIC for NPAD.COM
+NPAD     COM  Displays a small window in upper right
+NPAD     DOC  Documentation for NPAD.COM
+PMOR     BAT  Batch file to run PORE.COM
+POLRECT  BAS  Polar to rectangular coordinates
+PORE     COM  Modified MORE to allow 55 line listings
+PORE     DOC  Documentation for PORE.COM and PMOR.BAT
+PRECESS  BAS  Astonomical precession calculation
+PRTSCOFF COM  COMPAQ ONLY - disables Shift-Prtsc key
+RANDOM   BAS  Random number generating program
+README   GL   Readme for GVL12
+RECTPOL  BAS  Rectangular to polar coordinates
+SAMPLEGL GL1  Sample ledger for GVL12
+SAMPLEGL GL2  Sample ledger for GVL12
+SEARCH   COM  Set path search
+SEARCH   DOC  Documents SEARCH
+SF       BAT  Starts SFX with passable parameter
+SFX      EXE  Simplifile - document files on a disk
+SUNNY    BAS  Sunrise...sunset... calculations
+TIMEAL   BAS  Time, altitude and azimuth, julian date
+TOUT     BAS  Pick the winners at the track!
+WEEKDAYS BAS  Days of the week astronmy program
+WHERE    BAS  Source for WHERE.COM  in BASIC
+WHERE    COM  Finds files dir. & subdir. any  drive
+WHERE    DOC  Documentation for WHERE.COM
+WHEREIS  COM  Find file anywhere in tree
+XYZ      BAS  Astonomical coordinates of the sun
+YN       COM  Protective batch for ERASE.COM(DOS)
+YN       DOC  Documentation for YN.COM
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+## FINDFILE.DOC
+
+{% raw %}
+```
+
+
+
+                       FINDFILE.BAT
+        
+        
+        This is a short batch file that will find a file buried deep 
+    within a subdirectory. 
+        FINDFILE relies on the CHKDSK.COM /V option.  This /V option 
+    lists all the files in all subdirectories.  You must have 
+    CHKDSK.COM, FIND.EXE and MORE.COM on your disk.
+        
+        If you want to search for BASICA.COM type:
+        
+                       FINDFILE BASICA  
+        
+        If you typed: 
+        
+                       FINDFILE BASIC
+        
+    the batch file would locate  BASIC.COM, BASICA.COM and BASICA.EXE 
+    along with any other filename with the capital letters BASIC in 
+    it.  You can if you desire use part names  FINDFILE ASICA would 
+    find BASICA.COM as well as BASICA.EXE.
+        
+        Typing:  
+        
+                       FINDFILE.COM
+        
+    will list all your COM files.
+        
+        You must use capital letters only and don't put any quotation 
+    marks either as the batch file already does this.
+        
+        FINDFILE.BAT will not display a special message telling you 
+    there were no matches found.  But this will be obvious when no matches 
+    are displayed on the screen.
+
+              
+
+```
+{% endraw %}
 
 ## HALLEY.BAS
 
+{% raw %}
 ```bas
 10   REM -----------COMET EPHEMERIS -----------
 20   PI = 3.14159
@@ -775,9 +952,11 @@ machines:
 2130  RETURN
 2140  END
 ```
+{% endraw %}
 
 ## KEPLER.BAS
 
+{% raw %}
 ```bas
 10     CLS
 20     KEY OFF
@@ -877,9 +1056,11 @@ machines:
 960   PRINT "NOTE:  PROGRAM FAILS WHEN ECCENTRICITY OF OBJECT IS CLOSE TO 1"
 970   RETURN
 ```
+{% endraw %}
 
 ## LOCSTIME.BAS
 
+{% raw %}
 ```bas
 10   CLS
 20   KEY OFF
@@ -933,9 +1114,11 @@ machines:
 500  RETURN
 510   END
 ```
+{% endraw %}
 
 ## LOTTO.BAS
 
+{% raw %}
 ```bas
 10   CLS
 20   KEY OFF
@@ -1040,9 +1223,11 @@ machines:
 15000 CLS : PRINT : PRINT : PRINT : PRINT
 16000 RETURN
 ```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 100   REM  MENU.BAS -- AUTOMATIC MENU GENERATOR  --  BY ROBERT YANKOWITZ
 105   REM  THIS ADDITION TYPED BY CHRIS SPRATT FROM AN ARTICLE IN PC
@@ -1081,9 +1266,77 @@ machines:
 410   NAM$=LEFT$(NAM$,SIZ):EXT$=MID$(A$,10,3):FIL$(PROG)=NAM$+ "." +EXT$
 420   RETURN
 ```
+{% endraw %}
+
+## MENU.DOC
+
+{% raw %}
+```
+
+
+                          MENU.BAS
+        
+        
+        This is a small program that when run from DOS 2.0 or above, by
+    running AUTOMENU.BAT, will redirect your directory to MENU.DIR, 
+    first piping it through the DOS SORT filter to place the files in 
+    alphabetical order.  NOTE -- SORT.EXE  must be on the same disk 
+    that holds AUTOMENU.BAT.
+        
+        The batch file also loads BASICA (must also be on disk) and 
+    generates a menu which allows you to select which file you wish to 
+    run (or create).  Only BAS or REM extensions are accepted, but 
+    others may be added, by amending the program.      
+
+
+```
+{% endraw %}
+
+## NOTES543.TXT
+
+{% raw %}
+```
+Program name:          UTILITIES ECTERA
+ 
+Author name:           Several authors
+Address:               Given Below
+ 
+Program Description:
+ 
+  This disk is a wide assortment of miscellaneous programs capable of
+  converting polar to rectangular coordinates, displaying time on the
+  screen, displaying how many days since January 1st for the year and
+  more. Some of these programs include :
+ 
+  1. SIMPLIFILE - for documenting files on a disk with options to sort
+                  the files by size, name and several other choices
+ 
+  2. F          - program to hide/unhide, protect/unprotect, copy and
+                  backup files as well
+                  Author : Bill Neidert            Donation: $ 30
+                  Address: 1225 Via Balboa, Mesquite, TX 75150
+ 
+  3. SEARCH     - a general purpose utility to replace the DOS PATH
+     Version 1    command and capable of handling all types of files
+                  Author : Arborsoft Systems       Donation: $ 15
+                  Address: Ann Arbor, Michigan 48106
+ 
+  4. COVER      - prints sorted directory for a discette
+ 
+  5. GLV12      - Simple double-entry general ledger system
+     Vers 1.2     Author : Datawest Systems Inc.   Donation: $ 50 Can.
+                  Address: 307 Goldstream Ave., Victoria, BC V9B 2W4
+ 
+  6. BLATHER    - program to send and receive data files from a remote
+                  service with option to echo data to the printer
+                  Author : Mike Baker              Donation: ?
+                  Address: 4030 Borden St., Victoria, BC V8X 2E9
+```
+{% endraw %}
 
 ## NPAD.BAS
 
+{% raw %}
 ```bas
 100  ' NPAD.BAS -- BY STEVEN HOLZER --  CREATED NPAD.COM notepad
 110  '
@@ -1173,9 +1426,60 @@ machines:
 960  DATA  46,    199,   6,   4,   3,   218,   3,    186
 970  DATA  213,   4,     205, 39
 ```
+{% endraw %}
+
+## NPAD.DOC
+
+{% raw %}
+```
+
+
+                             NPAD.COM
+        
+        
+        This is a small program that once invoked by typing NPAD.COM 
+    at the DOS A> prompt, and then hitting Ctrl-N, causes a small
+    note-pad window in reverse video to appear in the upper right-hand
+    corner of the screen.  Whatever you type next goes onto the pad.  
+    Typing Ctrl-N again will turn the window off.  The best part of 
+    NPAD.COM is that you can type Ctrl-N at any time - during an 
+    editor session or while filling in your spreadsheet.
+        
+        This process removes the Ctrl-N key from general use which 
+    could prove to be unpopular with certain users but it shouldn't 
+    hurt most users.
+        
+        The general key definitions are:
+        
+                 CTRL-N  turns notepad window on or off
+
+                 DEL erases entire window contents
+        
+        
+        This program was featured in PC  MAGAZINE  December 25, 1984, 
+    pages 273 - 282 and was created by  STEVE HOLZNER.  For 
+    additional information,  please consult magazine. 
+        
+        This version adapted by CHRIS SPRATT, Victoria, B. C.  June 
+    7th, 1985.
+         
+        The three programs included are:
+        
+        
+      NPAD.BAS  the  BASIC source  program that created  NPAD.COM.
+      NPAD.COM  the actual notepad program invoked in DOS.
+      NPAD.DOC  this short description of the program.
+
+
+                             END
+        
+
+```
+{% endraw %}
 
 ## POLRECT.BAS
 
+{% raw %}
 ```bas
 10   CLS
 15   KEY OFF
@@ -1210,9 +1514,52 @@ machines:
 220  IF A$ = "Y" THEN GOTO 95 ELSE 230
 230  END
 ```
+{% endraw %}
+
+## PORE.DOC
+
+{% raw %}
+```
+
+
+                           PORE.COM
+        
+        This short modification of MORE.COM allows a printout of a 
+    listing to pause every 55 lines.  the phrase ---more --- also is 
+    eliminated on the printout.  Will work for DOS 2.0 and 2.1.
+                
+        When you need a listing of a BASIC program (must be saved in 
+    ASCII) or any ASCII file from DOS,you run the batch file PMOR.BAT.
+        
+                    A> PMOR [filename.ext] <CR>
+    
+        After listing 54 lines of the file, the printer pauses.  A
+    quick Off-Line/Form-Feed/On-Line sequence and a press of any key, 
+    will start the next page.
+
+        If you don't wish to run the batch file you enter the 
+    following:
+
+                    A> TYPE [FILENAME.EXT] | PORE>LPT1:<CR>
+
+        Use the correct device name (if different) in place of LPT1:.
+ 
+        
+        These programs PORE.COM and PMOR.BAT were culled from PC 
+    MAGAZINE January 22, 1985 pages 318 - 319, from an idea submitted 
+    by John Slocum, Brentwood, Missouri, with amendments by Paul 
+    Somerson, editor of the USER-USER column.  This short 
+    documentation is submitted by:
+                
+                     Chris Spratt
+                     June, 1985
+                     Victoria, B. C.
+```
+{% endraw %}
 
 ## PRECESS.BAS
 
+{% raw %}
 ```bas
 10    CLS
 20    REM
@@ -1333,9 +1680,11 @@ machines:
 1170       IF INKEY$ = "" THEN 1170
 1180       RETURN
 ```
+{% endraw %}
 
 ## RANDOM.BAS
 
+{% raw %}
 ```bas
 10   INPUT "NUMBER OF BITS";BITS
 20   INPUT "SEEDS";A,B
@@ -1349,9 +1698,11 @@ machines:
 100  A=B:B=C
 110  GOTO 70
 ```
+{% endraw %}
 
 ## RECTPOL.BAS
 
+{% raw %}
 ```bas
 10   CLS
 15   KEY OFF
@@ -1388,9 +1739,150 @@ machines:
 240  IF A$ = "Y" THEN GOTO 95 ELSE 250
 250  END
 ```
+{% endraw %}
+
+## SEARCH.DOC
+
+{% raw %}
+```
+
+
+ 
+ 
+                                   SEARCH
+ 
+                                 Version 1.0
+                                December 1984
+ 
+ 
+                Copyright (C) 1984 by Arborsoft Systems, Inc.
+                  P.O. Box 4599, Ann Arbor, Michigan 48106
+
+ 
+ 
+ 
+                            * General Description *
+ 
+ 
+      SEARCH is an extremely valuable utility program for anyone who uses
+      DOS 2.0 through 3.0 with subdirectories on a fixed disk.
+ 
+      SEARCH is a general purpose replacement for the DOS PATH command but
+      it is much more powerful and useful than PATH.  Unlike PATH, which is
+      limited to batch and executable files, SEARCH allows a user to access
+      files of all types.  SEARCH works with arbitrary programs on arbitrary
+      files.  Data files, overlay files, help files, batch files, executable
+      files, text files, program files, object files and library files all
+      become accessible with SEARCH.
+ 
+      Once SEARCH is loaded, it remains resident and occupies approximately
+      1K of memory.  SEARCH is compatible with versions 2.0 through 3.0 of
+      both PC-DOS and MS-DOS.
+ 
+      SEARCH's command syntax is similar to PATH's.  The SEARCH list is set
+      with a command of the form SEARCH=[d:]path[[;[d:]...].  SEARCH with no
+      arguments displays the current SEARCH list.  SEARCH followed by a
+      semicolon clears the current SEARCH list.  In addition, SEARCH will be
+      deactivated (but will retain its current SEARCH list) if SEARCH /D is
+      issued.  SEARCH /A will activate a previously deactivated SEARCH.
+      Simple DOS-style command line editing of the current SEARCH list is
+      available via SEARCH /E.  Finally, SEARCH /H produces the following
+      list of available SEARCH functions:
+ 
+ 
+            Set.......................  SEARCH [d:]path[[;[d:]path]...]
+            Clear.....................  SEARCH;
+            Display...................  SEARCH
+            Activate..................  SEARCH /A
+            Deactivate................  SEARCH /D
+            Edit (with function keys).  SEARCH /E
+            Help......................  SEARCH /H
+            License Information.......  SEARCH /L
+
+
+
+
+
+
+
+
+
+
+ 
+                                * Usage Notes *
+ 
+ 
+       (1)  It is advisable for users to make a PATH assignment to the
+            directory containing SEARCH.COM in their AUTOEXEC.BAT files,
+            for example, PATH=\ with SEARCH.COM on the root directory,
+            or PATH=\BIN with SEARCH.COM on \BIN.  Thus, SEARCH can always
+            be found even if disabled or undefined.
+ 
+       (2)  With the single exception noted in (1), users of SEARCH can
+            ignore the DOS PATH command and rely strictly on SEARCH.
+ 
+       (3)  If both a SEARCH list and a PATH are specified, the SEARCH list
+            specification will always be attempted first.  The PATH will not
+            be invoked unless the SEARCH is unsuccessful and then just for
+            batch or executable files.
+ 
+       (4)  The SEARCH /E facility will not behave properly if another
+            program has changed the normal DOS interpretation of the function
+            keys.
+ 
+ 
+ 
+               * Incompatibilities with SEARCH Version 1.0 *
+ 
+ 
+       (1)  SEARCH is not fully compatible with with IBM's APL.  Users may
+            have to disable SEARCH to use some of the APL features.
+ 
+       (2)  In general, if a program appears to be incompatible with SEARCH,
+            a user can 1) issue SEARCH /D (to deactivate SEARCH); 2) run the
+            program; 3) issue SEARCH /A (to reactivate SEARCH).
+ 
+       (3)  Please report any incompatibilities or other problems with
+            SEARCH to Arborsoft Systems, Inc.  SEARCH has been tested with
+            many different programs running with DOS 2.0 through DOS 3.0
+            on a variety of machines.  The only known incompatibility is
+            with IBM's APL.
+ 
+ 
+ 
+                 * Distribution and Licensing Information *
+ 
+ 
+      SEARCH is a proprietary product of Arborsoft Systems, Inc.  It is
+      distributed on a user-supported basis.  Copying and redistribution
+      of SEARCH and its documentation are encouraged.  A license to copy
+      and use SEARCH for a two-week trial period is automatically granted.
+      Satisfied users of SEARCH are requested to pay a $15 license fee.
+      Corporations and other organizations may pay a $100 license fee for
+      unlimited business or personal use of SEARCH.
+ 
+      SEARCH will be updated to incorporate suggested enhancements and
+      improvements and to maintain compatibility with future DOS versions.
+      A licensed user of SEARCH will receive a receipt, a registration
+      number, and a copy of the next release of SEARCH, which is due to be
+      distributed in mid-1985.
+ 
+      Payment should made to:
+ 
+ 
+                           Arborsoft Systems, Inc.
+                           P.O. Box 4599
+                           Ann Arbor, Michigan 48106
+ 
+
+
+
+```
+{% endraw %}
 
 ## SUNNY.BAS
 
+{% raw %}
 ```bas
 10     CLS
 20     PRINT :  PRINT : PRINT
@@ -1702,9 +2194,11 @@ machines:
 3070    RETURN
 3080    END
 ```
+{% endraw %}
 
 ## TIMEAL.BAS
 
+{% raw %}
 ```bas
 10    CLS
 20    REM
@@ -1812,9 +2306,11 @@ machines:
 850  PRINT : PRINT TAB(20) "JULIAN DAY : ";J;F
 860  RETURN
 ```
+{% endraw %}
 
 ## TOUT.BAS
 
+{% raw %}
 ```bas
 10   CLS
 20   KEY OFF
@@ -1952,9 +2448,11 @@ machines:
 15000 CLS : PRINT : PRINT : PRINT : PRINT
 16000 RETURN
 ```
+{% endraw %}
 
 ## WEEKDAYS.BAS
 
+{% raw %}
 ```bas
 10   CLS
 15   KEY OFF
@@ -1983,9 +2481,11 @@ machines:
 170  X = X+Y - 1978 + OFFSET(M) + D-1:Z = INT(X/7) : Z = X-Z*7 + 1
 180  PRINT TAB(20) "TODAY IS  ";WKDAY$(Z);",  ";DATE$
 ```
+{% endraw %}
 
 ## WHERE.BAS
 
+{% raw %}
 ```bas
 100   ' WHERE.BAS -- BY CHRIS SPRATT -- FROM KIYOSKI AKIMA ARTICLE IN "USER-TO-       USER", PC MAGAZINE VOLUME 4 NUMBER 9, PAGES 200 -202.
 105   'TO RUN WHERE.COM  -- TYPE AT DOS PROMPT - A> WHERE [drive:][filename.ext]
@@ -2061,9 +2561,37 @@ machines:
 770  DATA  20,66,6F,75,6E,64,2E,0D
 780  DATA  0A,24
 ```
+{% endraw %}
+
+## WHERE.DOC
+
+{% raw %}
+```
+   
+        
+                         WHERE.COM
+
+    
+        The WHERE.COM program developed from WHERE.BAS will find any 
+    file on any directory.
+        
+        To find a file type:
+        
+                     WHERE [drive:] [filename.ext]
+        
+        WHERE.COM will find all the filenames on the specified drive 
+    regardless of the subdirectory.  If a drive name isn't specified 
+    the default drive is used.  If no name is specified "*.*" is 
+    assumed.
+        
+
+
+```
+{% endraw %}
 
 ## XYZ.BAS
 
+{% raw %}
 ```bas
 10     CLS
 20  REM
@@ -2194,6 +2722,40 @@ machines:
 1270    RETURN
 1280    END
 ```
+{% endraw %}
+
+## YN.DOC
+
+{% raw %}
+```
+
+                            YN.COM
+        
+        This is a short program that requires DOS 2.0 or later.  It 
+    will, when CDEL [filename.ext] is invoked, prompt the user, if the 
+    file requested, is to be erased. 
+
+        So, if you wish to erase a file the following should be done:
+        
+        A> CDEL [FILENAME.EXT] <CR>
+
+           The program will then invoke YN.COM and respond:
+        
+        A> YOU HAVE ASKED ME TO ERASE: [FILENAME.EXT]
+           SHOULD I?
+        
+           If you respond with a Y then the file is gone.  If you 
+    respond with N then the file is not erased.  This should save 
+    erasing the wrong file.
+        
+    Chris. Spratt
+    Victoria, B.C.
+        
+
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -30,6 +30,52 @@ machines:
     Use TIME AND MONEY to help take control of your financial life!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES251.TXT
+
+{% raw %}
+```
+Disk No  251
+Program Title: TIME AND MONEY version 2.1
+PC-SIG version 1.5
+
+TIME AND MONEY is a simple financial record-keeping system that also
+keeps a budget, calculates interest, compares rent/buy options, and more.
+You can call up any of the programs on this disk from the menus
+displayed. This version of the program has been translated into Turbo
+BASIC and upgraded. It now sorts 10 times faster, handles three times as
+many transactions, and has graphics.
+
+Usage:  Business / Personal Record Keeping System.
+
+System Requirements:  None.
+
+How to Start:  Type TAMSTART (press enter).
+
+Suggested Registration:  $25.00
+
+File Descriptions:
+
+README        How to get started.
+TAMSTART EXE  Brings up the main menu.
+TAMCHN?? TBC  Loadable Modules (overlays) of the program.
+BUDCODES      User changeable budget categories.
+TRANS         Example financial records (transactions) for a typical
+              family.
+BUDGET1       Example budget for a typical family.
+PLAN1         Example financial plan for a typical family.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0251
 

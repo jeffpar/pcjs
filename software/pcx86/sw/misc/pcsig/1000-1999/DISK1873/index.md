@@ -38,6 +38,48 @@ machines:
     cash flow, and build your own financial portfolio.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1873.TXT
+
+{% raw %}
+```
+Disk No: 1873                                                           
+Disk Title: Finance & Plus                                              
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: Finance + plus                                           
+Author Version: 7.52                                                    
+Author Registration: $24.95                                             
+Special Requirements: 512K, 2 Floppy's or Hard Drive.                   
+                                                                        
+Want to plan your financial future?  FINANCE + PLUS can provide you with
+a complete financial planning system.                                   
+                                                                        
+FINANCE + PLUS is everything you need to plan and track your personal   
+finances, both present and future.  An extensive Budgeting system is    
+available that can handle many types of income, earnings, IRA/Keogh,    
+savings, etc.  You can track charge and savings accounts and plan       
+savings goals.                                                          
+                                                                        
+FINANCE + PLUS lets you list registers for several checking accounts and
+print individual checks or batchs of checks.  Detailed transactions for 
+taxes are maintained along with line entries for IRS schedules.  You can
+keep a detailed list of your assests, track capital gains and losses,   
+record your investments, and evalulate investment performance.          
+                                                                        
+With FINANCE + PLUS you can keep your personal balance sheet, project   
+cash flow, and build your own financial portfolio.                      
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1873
 

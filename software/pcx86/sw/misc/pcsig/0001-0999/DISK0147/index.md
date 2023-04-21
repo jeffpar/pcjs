@@ -31,6 +31,118 @@ machines:
     been constructed.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #147, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  README  .            CRC = EA 56
+
+--> FILE:  SDBGEN  .ARF         CRC = 00 00
+
+--> FILE:  SDBGEN  .BAT         CRC = 00 00
+
+--> FILE:  SDBGREP .BAT         CRC = 00 00
+
+--> FILE:  SDBLUMP .BAT         CRC = 6F 7A
+
+--> FILE:  SDBXC   .BAT         CRC = 00 00
+
+--> FILE:  SDB     .EXE         CRC = 2D BE
+
+--> FILE:  SDB     .HLP         CRC = C4 41
+
+--> FILE:  SDB     .MEM         CRC = 2D 4A
+
+--> FILE:  SDB     .C           CRC = E8 74
+
+--> FILE:  CMD     .C           CRC = DD 3E
+
+--> FILE:  COM     .C           CRC = 2D 32
+
+--> FILE:  ERR     .C           CRC = FA E1
+
+--> FILE:  CRE     .C           CRC = 66 21
+
+--> FILE:  IEX     .C           CRC = A0 87
+
+--> FILE:  INT     .C           CRC = 22 6F
+
+--> FILE:  IO      .C           CRC = 2A F7
+
+--> FILE:  MTH     .C           CRC = DA C8
+
+--> FILE:  SCN     .C           CRC = 1A B8
+
+--> FILE:  SEL     .C           CRC = 79 BC
+
+--> FILE:  TBL     .C           CRC = 6D 61
+
+--> FILE:  PCJUNK  .C           CRC = 6D 92
+
+--> FILE:  SRT     .C           CRC = B0 E3
+
+--> FILE:  JUNK    .OBJ         CRC = 5F B7
+
+--> FILE:  SDB     .OBJ         CRC = 87 06
+
+--> FILE:  CRE     .OBJ         CRC = F2 6A
+
+--> FILE:  ERR     .OBJ         CRC = 26 27
+
+--> FILE:  IEX     .OBJ         CRC = 18 FA
+
+--> FILE:  INT     .OBJ         CRC = 9B C5
+
+--> FILE:  CMD     .OBJ         CRC = F1 C5
+
+--> FILE:  COM     .OBJ         CRC = 30 CE
+
+--> FILE:  MTH     .OBJ         CRC = 00 F8
+
+--> FILE:  SCN     .OBJ         CRC = 97 C3
+
+--> FILE:  SEL     .OBJ         CRC = 60 CA
+
+--> FILE:  SRT     .OBJ         CRC = DE 50
+
+--> FILE:  TBL     .OBJ         CRC = 64 95
+
+--> FILE:  IO      .OBJ         CRC = 95 E7
+
+--> FILE:  C       .OBJ         CRC = 8B 0F
+
+--> FILE:  PCJUNK  .OBJ         CRC = 25 0F
+
+--> FILE:  SDBIO   .H           CRC = B8 5C
+
+ ---------------------> SUM OF CRCS = C7 69
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0147
 

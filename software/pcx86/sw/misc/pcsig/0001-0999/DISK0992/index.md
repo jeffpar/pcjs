@@ -34,6 +34,44 @@ machines:
     assumed.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0992.TXT
+
+{% raw %}
+```
+Disk No:  992                                                           
+Disk Title: |STAT 3 of 4 (also 990, 991, 2292)            
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: |Stat                                                    
+Author Version: 5.4                                                     
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+STAT is a set of data-manipulation and analysis programs developed at   
+the University of California, San Diego, and at the Wang Institute of   
+Graduate Studies.  They were designed under the UNIX philosophy that    
+says individual programs should be designed as tools to do one task well
+and produce output suitable for input to other programs.                
+                                                                        
+There are two sets of STAT programs: data manipulation and data         
+analysis.  The data manipulation programs are general utilities that    
+cooperate with other programs.  The data analysis programs compute the  
+most widely-used descriptive and inferential statistics.  Although these
+are independent programs, the output from one program can be used as    
+input to another.  A solid knowledge of statistics and computers is     
+assumed.                                                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0992
 

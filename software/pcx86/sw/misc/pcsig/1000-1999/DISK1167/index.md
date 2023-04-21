@@ -36,6 +36,47 @@ machines:
     the program and the transaction data are on the same disk.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1167.TXT
+
+{% raw %}
+```
+Disk No: 1167                                                           
+Disk Title: Charge Account Manager                                      
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: Charge Account Manager                                   
+Author Version: 1.11                                                    
+Author Registration: $25.00                                             
+Special Requirements: None.                                             
+                                                                        
+CHARGE ACCOUNT MANAGEMENT provides an easy and enjoyable way to manage  
+all of your charge account records.  This program allows you to         
+determine your charged expenses by category and provides valuable       
+accounting reports.  Menus guide you through entering and maintaining   
+charge account transactions.  Each transaction can consist of charges,  
+payments, or interest.                                                  
+                                                                        
+CHARGE ACCOUNT MANAGEMENT provides many valuable reports.  Reports can  
+be generated for one category, charges, payments, interest, or all      
+categories for a particular date or a range of dates.  Full editing     
+functions for all transaction fields is supported.  The program is menu-
+driven, fully documented, and provides an on-line help facility.        
+                                                                        
+CHARGE ACCOUNT MANAGEMENT can support a maximum of 3000 transactions if 
+the transaction data is kept on a separate disk, 2000 transactions if   
+the program and the transaction data are on the same disk.              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1167
 

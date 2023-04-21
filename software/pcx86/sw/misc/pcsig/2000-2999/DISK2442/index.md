@@ -27,6 +27,28 @@ machines:
     pictures that express your personality.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## README.TXT
+
+{% raw %}
+```
+[76067,2070]
+ICONLI.ZIP/binary         07-Jul-90 39390              Accesses: 190
+
+    Title   : Windows 3.0 Icon Library for Program Manager
+    Keywords: WINDOWS WIN3 ICON PROGMAN LIBRARY
+    
+    This is a Windows 3 sample application that has many of the icons that have
+    appeared on CIS compiled into a single library. After un-zipping the file,
+    point the Program Manager Properties to this file and View Next.  Contains
+    over 200 icons.  (Up-loaded by author)
+    
+    
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2442
 

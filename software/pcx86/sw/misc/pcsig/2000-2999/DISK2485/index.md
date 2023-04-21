@@ -33,6 +33,43 @@ machines:
     the Online Bible.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2485.TXT
+
+{% raw %}
+```
+Disk No: 2485                                                           
+Disk Title: Lexicon 4 of 4 (2204,2205,2206 also)                        
+PC-SIG Version: S2                                                      
+                                                                        
+Program Title: Lexicon (Interfaces with Online Bible)                   
+Author Version: 5.0                                                     
+Author Registration: None.                                              
+Special Requirements: Hard drive, and The ONLINE BIBLE (version 5).     
+                                                                        
+The world's first computer-based public domain Greek and Hebrew LEXICON 
+is now available. This program is an add-on to the Online Bible         
+(#2191-#2197). The menu-driven program includes Strong's numbers and    
+complete Greek and Hebrew Lexicons keyed to Strong's numbers. The       
+LEXICON is based on Thayer's Greek Lexicon and the Brown et al. Hebrew  
+Aramaic English Lexicon.  You can search for any words, phrases, or     
+Strong's numbers and access the definitions, as well as print a passage 
+with all the numbers plus the definitions of words used in that passage.
+This saves hours of time during detailed Bible studies.                 
+                                                                        
+LEXICON is in text format and may be readily altered using facilities in
+the Online Bible.                                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2485
 

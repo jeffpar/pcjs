@@ -14,6 +14,50 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2489.TXT
+
+{% raw %}
+```
+Disk No: 2489                                                           
+Disk Title: Jorj 1 of 2 (2490 also)                                     
+PC-SIG Version: S4.3                                                    
+                                                                        
+Program Title: JORJ                                                     
+Author Version: 4.3                                                     
+Author Registration: $30.00                                             
+Special Requirements: Hard drive.                                       
+                                                                        
+Spelling checkers are great to check spelling, but what do you do when  
+you need to know the meaning of a word?  Pick up a book?  You won't have
+to with JORJ, a computerized dictionary.                                
+                                                                        
+JORJ is a 58,000 word dictionary that you can run as a stand-alone      
+program or as a memory-resident utility inside your favorite word       
+processor (or other program).  If you don't know the spelling of a word 
+or are unsure about its exact meaning just pop-up JORJ.  Type in the    
+word and JORJ will display its spelling, the spelling of popular forms  
+of the word (-ance, -ous, -ly, etc.), and its meaning.  You don't even  
+have to know the correct spelling because JORJ will take your phonetic  
+spelling and find the correct word!  For instance, if you type in       
+"dayrigur" JORJ correctly answers with "de rigueur."                    
+                                                                        
+A helpful feature is JORJ's ability to find related words.  Scan for the
+word "president" and you'll get a list of presidents.  Look up "planet" 
+and get a list of the planets!                                          
+                                                                        
+Next time you're at a loss for words, let JORJ come to the rescue.      
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2489
 

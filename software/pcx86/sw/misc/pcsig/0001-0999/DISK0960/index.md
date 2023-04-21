@@ -56,8 +56,145 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CONVERT.TXT
+
+{% raw %}
+```
+The program CONVERT is an all-purpose Metric - English 
+conversion utility.  This file contains some general 
+information on its use.
+
+The program is written in Borland Turbo-C.  It is slightly
+smaller than 40-K bytes in size and should require only 
+128-K bytes of RAM.  
+
+Normally, the program writes its display information directly
+to the video memory of the PC.  This of course provides the
+fastest display performance possible at the expense of broad
+compatability with those PC's which are not fully compatible
+with the IBM PC.  For this reason, the program is capable of 
+using BIOS calls to write to the screen instead.
+
+The program does this by checking the DOS environment for a
+variable named UPDATEMODE.  If it finds this variable set to
+BIOS, it uses the bios mode.  If it is set to DIRECT, or not 
+set at all, the direct mode is used.  If UPDATEMODE is set 
+equal to anything other than bios or direct, an error message
+is shown and program execution terminates.
+
+To make the program use the BIOS mode, the user need only 
+type "set updatemode=bios" at the DOS prompt, or add this
+line to the AUTOEXEC.BAT file.
+
+There are thirty six conversions available.  To select a
+specific conversion automatically, enter its number on the
+command line when starting the program.  For example, enter
+"CONVERT 27" to put you directly into the cubic centimetres
+to cubic inches conversion.
+```
+{% endraw %}
+
+## FILES960.TXT
+
+{% raw %}
+```
+Disk No  960
+Program Title: FINANCIAL COLLECTION
+PC-SIG version 1.2
+
+    THE MENU is a program organizer that lets you access your programs with
+a single keystroke from a system of menus. The menus can be easily updated
+and revised with the program editor provided on the program. With the
+editor, the main menu, submenus, and keystrokes can be tailored to fit your
+needs. The editor can also edit batch files used for calling software
+programs while viewing the menu that uses them. THE MENU is memory-resident
+and can be unloaded before executing a program. Otherwise you are
+automatically returned to the menu after exiting a program. Also included
+is an audible and visual appointment reminder, which can be set for daily,
+weekly, monthly, and yearly reminders. A step-by-step introduction and
+on-line help is included.
+
+    MONTHLY LOAN AMORTIZATION calculates and prints a monthly loan
+schedule. After prompting you for essential information, such as loan
+amount, percentage rate, and length of loan, the program prints a report of
+monthly loan payments. This is a very simple program which lacks any
+sophisticated financial features or applications.
+
+    CONVERT is a metric-English conversion utility. Conversions can be from
+metric to English or vice versa. 36 conversions are available relating to
+length, weight, area, volume, and pressure. The type of conversion can be
+selected from the menu in the program or from the command-line.
+
+    LOANCALC is a user-oriented loan and mortgage calculator. The program
+has a variety of options: it can compute interest paid for any given year,
+and output a complete or partial amortization table on a screen or printer.
+It also computes the balance payment at any given date.
+
+Usage: Financial
+
+System Requirements: 128K memory and one disk drive.
+
+How to Start: Type: THE_MENU (press enter) for the menu, or MONAMORT
+(press enter) to start MONTHLY LOAN AMORTIZATION, CONVERT (press enter) to
+start METRIC CONVERSION, LOANCALC (press enter) to start LOAN CALCULATION.
+
+Suggested Registration: $9.95 for THE_MENU, $3.50 for MONAMORT, and
+$1.00 to $10.00 for LOANCALC.
+
+File Descriptions:
+
+THE_MENU EXE  Program containing all files in compressed format.
+MONAMORT BAS  Basic souce code for MONAMORT.
+MONAMORT DOC  Documentation for MONAMORT.
+MONAMORT EXE  Main executable program.
+CONVERT  EXE  Main program.
+CONVERT  TXT  Documentation.
+LOANCALC DOC  Information file.
+LOANCALC COM  The main program.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## LOANCALC.DOC
+
+{% raw %}
+```
+LOANCALC   --- A loan and mortgage calculator - user supported software
+
+     If you find this program useful, please send a contribution of
+     $1.00 to $10.00  depending on how you rate this program
+     on a TEN scale. $10.00 of course being very good to $1.00 being bad.
+        To:
+            James A. Ray
+            508 N. Martha St.
+            Angola, IN.   46703
+
+   ( As always you are encouraged to copy and share provided both files,
+     LOANCALC.DOC and LOANCALC.COM are passed on.   THANK YOU )
+
+INSTRUCTIONS:
+  Type LOANCALC <RETURN> to invoke program. You will then be prompted to
+  enter specific data about the loan, simply type in amounts and hit <RETURN>,
+  or just hit return if the amount already in that field is OK.
+  After displaying information about the loan you will have a series of
+  options, listed at the bottom of the screen, such as TAX-REPORT,
+  BALLOON PAYMENT, AMORTIZATION, etc. which you may choose. To choose one
+  of the options hit the key that is the same as the first letter in that
+  option. From this point on the program will inform you of the next
+  step(s) to be taken.
+{No warrantee, express or implied, is created by such contribution}
+```
+{% endraw %}
+
 ## MONAMORT.BAS
 
+{% raw %}
 ```bas
 1 DATA MONAMORT   -  COPYRIGHT 1986 - ENTREPRENEURS SOFTWARE
 10 REM	TITLE : MONTHLY LOAN AMORTIZATION
@@ -193,6 +330,53 @@ machines:
 1180 IF LEN(ZIN$) > ZL THEN 1170
 1320 RETURN
 ```
+{% endraw %}
+
+## MONAMORT.DOC
+
+{% raw %}
+```
+MONAMORT: Monthly Loan Amortization
+
+HARDWARE REQUIREMENTS:	IBM Compatable Personal Computer with a printer
+
+PURPOSE: Calculate a monthly loan amortization and print a payment schedule
+
+INSTRUCTIONS:  Enter  MONAMORT <enter>	to execute
+
+	       (the program can be run through the basic interpeter if desired)
+
+		Enter fields as prompted below:
+
+      Prompt - Description			   Valid Entry
+    ------------------------------------------	 ------------------------
+    Enter loan amount:				  amount borrowed
+    Enter the yearly interest percent (99.99)	  annual interest rate
+    Enter months of loan			  number of month
+    Enter date of first payment (MMDDYY)	  numeric date
+    Description 				  description to print at
+						  the top of the page
+    Ready to print loan schedule (Y/N) ?	  Y - to print the schedule
+						  N - to re-enter fields
+						  P - to revise the payment
+						  amount
+
+    Enter revised payment amount  ?		  Payment amount to override
+						  the calculated payment amount
+
+TO ORDER COPIES OR FOR USAGE RIGHTS:
+		 send $3.50 to Richard Sullins
+			       Entepreneurs Software
+			       1610 Mosswood Court
+			       Garland, Texas, 75042
+
+RIGHTS: MOMAMORT - Copyright Entepreneurs Software - 1986
+	AUTHOR: RICHARD SULLINS      November 6, 1986
+	ALL RIGHTS RESERVED AND PROTECTED UNDER U.S. COPYRIGHT LAWS
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -39,6 +39,69 @@ machines:
     entertainment.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1467.TXT
+
+{% raw %}
+```
+Disk No: 1467
+Program Title:  FRIGATE version 1.1
+PC-SIG version: 1
+
+FRIGATE is a strategy game which pits you and your ship against the
+Soviet fleet.  The object is to destroy as many of the opposing ships
+as possible while avoiding destruction of your own.
+
+Points are awarded for destroying your enemy while avoiding their
+missiles.  Your ship, a nuclear-powered frigate, besides being armed
+with guided missiles has many advantages over its Soviet counterparts
+but you are outnumbered by a large margin.  Operating in an area of
+1,000,000 square miles, you have radar, sonar, jamming equipment,
+anti-missile capabilities and three types of ordinance at your
+disposal.
+
+FRIGATE is played from two on-screen windows, a Main window which gives
+you an overview of your ship's status, and an Options window whose content
+changes in accordance with the commands you select.  Your ship's informa-
+tion and position are updated constantly while you give commands.  FRIGATE
+is operated using a "turn" system.  This means that you can enter in as
+many commands as the time in your "turn", referred to as the "Turn Time",
+permits.  After this time expires the enemy and all weapon systems are
+updated.  This allows for much faster playing time and more realistic
+action.  FRIGATE is a challenging and stimulating game that will provide
+many, many hours of entertainment.   Fun for ages 11 to adult.
+
+Synopsis: It's you and your one ship against an entire Soviet fleet.
+Can your wit and superior technology make the difference?  An
+entertaining exercise in strategy.
+
+Usage:  Game/Board/Strategy/Simulation
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  None.
+
+Author:  Matt Kaufman
+
+File Descriptions:
+
+FRIGATE   EXE Main program.
+FRIGATE   DOC Documentation.
+READ      ME  Small text file.
+
+The PC-SIG Library
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291 (c)
+Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1467
 

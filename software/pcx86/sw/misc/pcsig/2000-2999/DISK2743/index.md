@@ -14,6 +14,42 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2743.TXT
+
+{% raw %}
+```
+Disk No: 2743                                                           
+Disk Title: MultiWord                                                   
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: MultiWord                                                
+Author Version: 1.2                                                     
+Author Registration: $24.95                                             
+Special Requirements: None.                                             
+                                                                        
+There you are, speeding along on your favorite word processor when you  
+suddenly realize that your latest sentence just doesn't sound 'right.'  
+You can either pull out your trusty thesaurus and flip the pages to find
+the 'right' word or you can call MULTIWORD.                             
+                                                                        
+MULTIWORD is a electronic thesaurus with over 9000 main entries and more
+than 70,000 synonyms.  Operate as a standalone or as a TSR.             
+                                                                        
+MULTIWORD can be popped-up over your favorite word processors (Word     
+Star, Galaxy Lite, or PC-Write) and allows you to find alternative words
+quickly.                                                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2743
 

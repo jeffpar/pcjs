@@ -30,6 +30,55 @@ machines:
     solve
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2266.TXT
+
+{% raw %}
+```
+Disk No: 2266                                                           
+Disk Title: CIPHER                                                      
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Cipher                                                   
+Author Version: 1.2                                                     
+Author Registration: $15.00                                             
+Special Requirements: None.  Color monitor recommended.                 
+                                                                        
+If you are tired of word games which look dull, and boring here is a    
+colorful, and challenging program that uses high resolution graphics.   
+                                                                        
+CIPHER is a "crypto-quotes" type of game.  That is, a quotation is      
+enciphered and displayed on the screen in its scrambled form.  Your     
+challenge is to figure out the cipher by replacing the scrambled letters
+with the actual letters.  As you go along more and more of the puzzle   
+will start to look like real words and eventually you should solve the  
+whole puzzle and be able to read the quotation.                         
+                                                                        
+Features:                                                               
+                                                                        
+~ Mouse or keyboard control                                             
+                                                                        
+~ Drop down menus with dialog boxes                                     
+                                                                        
+~ Editor so you can create your own puzzles                             
+                                                                        
+~ Online help                                                           
+                                                                        
+~ Text mode (though it's best on a color monitor)                       
+                                                                        
+~ And more.                                                             
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2266
 

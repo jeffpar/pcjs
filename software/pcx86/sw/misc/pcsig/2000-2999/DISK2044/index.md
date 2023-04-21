@@ -44,6 +44,318 @@ machines:
     learning the "markets game."
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## APEX2-1.DOC
+
+{% raw %}
+```
+	Select "A" for Access if you want to download data from Warner
+Computer or if you want to edit data that you have previously
+downloaded.  If you are just starting and have not created any data
+files you will need to also select "A" to create your database of
+tickers for downloading.  Once "A" is selected you will be taken to
+another menu where additional selections can be made.
+
+	Select "P" for Plot if you want to display or analyze trading 
+strategies on your database.  The first screen you will see will ask
+you for the drive letter and path name (hard disk) for your database,
+then you will need to select a ticker file for analysis, and finally,
+you will be asked to select the number of periods to plot along with
+the starting record for the data.  You will now be shown the Plot Menu
+from which you have many options.
+
+	Select "E" or "X" for exporting any of your data files to one or
+more of the data formats shown.  You will be taken to the EXporting
+Menu from which you can choose the option(s) you desire.
+
+	Select "C" if you wish to change the background and foreground
+colors of the program menus or select "D" or "T" if you wish to change
+the date or time.
+
+```
+{% endraw %}
+
+## APEX2-2.DOC
+
+{% raw %}
+```
+<1> Access/Download Data - connects you to Warner Computer for
+automatic downloading/updating of data files.
+ 
+<2> Edit/Update Files (more help available at that menu).
+
+<3> Create New Files is where you create your database of tickers. 
+
+<4> Delete Data Files will remove unwanted files from your database.
+
+<5> Change File Name lets you change a file name.
+
+<6> Transfer Files will allow you to move a data file from one disk
+(subdirectory) to another.
+
+<7> Truncate Files will allow you to remove old data from a file.
+
+<8> Sort Data Files will arrange them in alpabetical order.
+
+<9> Create a Database will create a subdirectory and/or a database.
+
+```
+{% endraw %}
+
+## APEX2-3.DOC
+
+{% raw %}
+```
+	The Edit/Update Menu allows you to do a variety of record
+maintenance, that is, work on individual entries in your data file(s).
+
+	List, Change, Delete, and Print Records, once selected, will
+allow to you input your choice by record number or by date (YYMMDD).
+
+	Enter Records will let you update your files manually.
+
+	Adjust Records enables you to adjust any or all records for
+splits, dividends, etc.
+
+	Sort Records will ensure that they are in chronological order. 
+This will allow you to enter old data at the end of a file and then
+sort it to rearrange it in the proper order.
+
+	Search Records will display minimums and maximums and let you
+enter values to search for within that file.
+
+	Write to Disk will save permanently any changes that you have
+made to the data file.  Any changes will be so noted with a flashing
+asterisk and the Write to Disk selection will be flashing.  If you exit
+this menu without saving your changes to disk, all changes will be lost.
+
+```
+{% endraw %}
+
+## APEX2-4.DOC
+
+{% raw %}
+```
+   <A> The local Telenet Number can be obtained from Warner Computer at
+(800) 626-4634 or you can call Telenet at (800) 336-0437.  The number is
+normally entered as a seven digit number.
+
+   <B> The direct Warner number will let you call Warner directly,
+bypassing the Telenet network.
+
+   Your account number MUST be entered in selection <C> and your
+password MUST be entered in selection <D>.  These entries are obtained
+from Warner Computer when you open an account.
+
+   <E> Printer Port and <F> Comm Port refer to the location of your
+printer and modem, respectively.
+
+   <G> Baud Rate refers to the speed at which your modem is set.
+
+   <H> Use TELENET (Y/N) allows you to switch between <A> and <B> above.
+
+   <I> Wait Limit in seconds tells the computer how long to wait before
+hanging up if no transmissions are occuring.
+
+```
+{% endraw %}
+
+## APEX2-5.DOC
+
+{% raw %}
+```
+<1> On-Screen Graphic Analysis -  will first take you to the Program
+Settings Menu where you can change the plotting parameters, then plot.
+
+<2> Analyze trading strategies - will take you to a new menu system.
+
+<3> List / Print Data -  will display or print the actual numbers,
+along with dates, for the tickers you have loaded.
+
+<4> List / Print Statistics - will display or print statistics on
+every ticker in the file(s) that you have loaded.
+
+<5> Change Graphics Mode - is where you can change the display mode for
+the type of video equipment you are using.  Normally this is done when
+first using the program and not changed.
+
+<6> Change Graphics Colors - is where you can choose different colors
+for your plotting display, if you have color equipment.
+
+<7> Select New File - will give you the database prompt asking for the
+drive letter and pathname to your database for more data to plot.
+
+```
+{% endraw %}
+
+## APEX2-6.DOC
+
+{% raw %}
+```
+
+The "Change Settings" Menu will allow you change the way the data
+is displayed on your screen.
+
+<A> Screen: Full (1) or Split (2) allows you to display only the
+Price data by itself of the Price data with the Volume.
+
+<B> Plot 1: (25-100)% Full Screen will automatically be 100% if A       
+(above) equals 1.  If using a split screen, this percentage is the    
+size of Plot 1 relative to the full screen.                        
+
+<C> Plot 1: Line (1) or Bar (2) will let you display the Price as a  
+single line or in the more common High-Low-Close barchart format.                                               
+
+<D> Plot 2: Line (1) or Bar (2) will let you display the Volume as
+a single line or in a histogram format.
+
+<E> Scale 1: Linear (0) or Log (1) will determine whether the price
+is plotted on a linear or semi-log scale.
+
+<f> Open Interest Plot: Off (0), On (1) will plot Open Interest (if
+available) over the Volume Plot.
+```
+{% endraw %}
+
+## APEX2-7.DOC
+
+{% raw %}
+```
+   The APEX EXport Menu is where you can convert any or all of your
+data files into one or more of the file formats listed on the screen.
+The following shows the differences in the two ASCII formats:
+
+   ASCII Comma Delimited-    DATE,HIGH,LOW,CLOSE,VOLUME
+                             880802,12.88,12.25,12.5,4400
+
+   ASCII Space Delimited-    DATE   HIGH   LOW    CLOSE  VOLUME
+                             880802 12.88  12.25  12.5   4400
+
+   The 'DIF' (Data Interchange Format) format is a special type of
+ASCII file that is standard for translating data between programs.  
+
+   The 123 'WKS' format is the format used by the '123' program.  It
+can be read by most other spreadsheet programs.
+
+   You must have a formatted diskette available or you must have
+already setup a subdirectory for the converted file to be saved to.
+
+   If you are going to convert a file to the CompuTrac format,
+the destination disk (or subdirectory) must be a CompuTrac database.
+
+```
+{% endraw %}
+
+## APEX2-8.DOC
+
+{% raw %}
+```
+<1> This will take you to a parameter selection menu which has its own
+help screen available.
+
+<2> This will show you a trade-by-trade analysis of the ticker value and a
+single moving average.  After scrolling or printing, you will get the op-
+portunity to plot the ticker with the selected average showing each trade.
+
+<3> Same as <2> above except two moving averages are used instead of the
+ticker value and one moving average.
+
+<4> This will display all possibilities with the parameters you have
+selected in <1> above and then the range of values for the moving average,
+including a step increment.
+
+<5> Same as <4> above except that ranges for both a short and a long
+moving average can be selected along with their increments.
+
+<6> After <4> or <5> above have been calculated, this selection will let
+you sort the results on numerous parameters.
+
+```
+{% endraw %}
+
+## APEX2-9.DOC
+
+{% raw %}
+```
+<A> Selecting "(1) Yes" will set up the trading analysis to trade the
+long side (buy side) of the market being evaluated.  In other words, if
+you buy and the value goes up, you have made a profit.
+
+<B> This is the opposite of the long trade; it is where you make a profit
+if you sell short (or buy puts, etc.) and the value goes down, you have
+made a profit.
+
+<C> Crossover duration will allow a delay in the execution of a signal by
+the number of periods (days, weeks, etc.) that you select here.
+
+<D> Start Record defaults to the data that was initially loaded when you
+selected the P>lot option from the main menu.  Here you can test any
+portion of the data that was loaded by changing the start record number.
+
+<E> End Record is the same as <D> except the end record can be changed.
+
+<F> This will let you determine the value used for the trading signals,
+either today's close or tomorrow's close.
+
+<G> Ignoring the first trade is a good idea because an actual crossover
+has not occured yet and may distort the optimization results.
+
+```
+{% endraw %}
+
+## FILE2044.TXT
+
+{% raw %}
+```
+Disk No: 2044                                                           
+Disk Title: APEX Stocks & Options disk 1 of 2 (2045)                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: APEX Stock Options                                       
+Author Version: 9/89                                                    
+Author Registration: None.                                              
+Special Requirements: 512K RAM, DOS 3.0 or higher, and a modem.         
+                                                                        
+If you own any stocks and want to stay up with the daily or weekly      
+information then APEX may be what you are looking for.  This program    
+will assist any investor in examining, analyzing, comparing, plotting or
+charting their stocks, bonds, funds, and more.  The program is called   
+APEX STOCKS & OPTIONS. Those who invest in the stock or options market  
+will find it useful.                                                    
+                                                                        
+Consequently, if you do not know anything about stocks and options, or  
+are not an investor, then you will not benefit from this program. Why?  
+APEX STOCKS & OPTIONS is designed for the investor.  To use the program 
+you must have a modem and a credit card.  The modem provides you with   
+access to Warner Communications where you can download market           
+information.  The credit card is how you pay for the service, since you 
+are charged for each quotation downloaded.                              
+                                                                        
+There is no registration fee, and no start-up fee, but there is a per   
+quote fee.  And, when you realize that you cannot enter your own data   
+but must download it, then you may realize that you do not need this    
+program.  For those active in the market, this program provides a quick 
+means of data access with the added feature of plotting out the         
+information easily.  For such investors, APEX STOCKS & OPTIONS is a     
+valuable program.                                                       
+                                                                        
+The program is easy to use, easy to set up, and useful.  The manual     
+explains how to use the program but does not train the novice in        
+learning the "markets game".  But, the price is nominal, as you are not 
+billed for anything until you download a market quote.  Try it out and  
+see what you think.                                                     
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2044
 

@@ -14,6 +14,21 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## INFO.TXT
+
+{% raw %}
+```
+<R>MOVIE is a Shareware product and is not free.
+<B>You can register MOVIE after the installation
+<B>by clicking on the "REGISTER" icon in MOVIE's
+<B>Program Group.  The License Agreement and a
+<B>registration form are also in MOVIE's help file.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3865
 

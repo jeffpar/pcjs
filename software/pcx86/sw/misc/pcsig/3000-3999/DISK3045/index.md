@@ -14,6 +14,47 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE3045.TXT
+
+{% raw %}
+```
+Disk No: 3045                                                           
+Disk Title: Magic Screen Saver                                          
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: Magic Screen Saver                                       
+Author Version: 1.4                                                     
+Author Registration: $25.00                                             
+Special Requirements: Windows 3.0.                                      
+                                                                        
+MAGIC SCREEN SAVER is a screen saver for Window-based computers. Screen 
+savers lengthen the life of your monitor by taking control of your      
+computer when you're not using it and randomly displaying images. This  
+prevents any one image from being permanently burned into your screen.  
+MAGIC doesn't use flying toasters like a more famous screen saver, but  
+it does use nifty, high-tech graphics.                                  
+                                                                        
+It displays a colored bar flying across your screen continuously        
+turning, bouncing, and changing colors. It also displays the bar's      
+trail as it ricochets inside your monitor in a three dimensional motion;
+kind of a continuous, time-lapsed display that's stunning. MAGIC        
+lets you control the size of the bar, the speed, the reflection pattern,
+and how fast the color changes. These simple controls result in a       
+stunning array of randomly generated graphics. MAGIC SCREEN SAVER       
+also includes a password feature that lets you restrict access to       
+your computer.                                                          
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3045
 

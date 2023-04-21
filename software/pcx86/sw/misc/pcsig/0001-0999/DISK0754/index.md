@@ -54,6 +54,62 @@ machines:
     tracker and counselor.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0754.TXT
+
+{% raw %}
+```
+Disk No:  754                                                           
+Disk Title: PORTRAC (Formerly Uvestor)                                  
+PC-SIG Version: S4.3                                                    
+                                                                        
+Program Title: PORTRAC                                                 
+Author Version: 2.2                                                     
+Author Registration: $30.00                                             
+Special Requirements: None.                                             
+                                                                        
+PORTRAC is perfect for any investor who needs a versatile               
+and flexible investments tracking program.  PORTRAC keeps track of      
+investments and evaluates their true return on a time-related basis.  It
+can handle nine individual investor accounts with up to 396 investments 
+for each account.                                                       
+                                                                        
+PORTRAC tracks all transactions of any investment, whether a stock, a   
+bond, fixed dollar-denominated investment, or an appreciable dollar-    
+denominated investment such as real estate.  It reads an individual     
+investment report and quickly computes the internal rate of return.  It 
+produces a portfolio showing the investment name, file name, cost,      
+present value, and gain or loss of the portfolio.  You can get the      
+total portfolio or selected portfolios by investment type.  PORTRAC     
+also produces net worth statements and amortized loan tables.           
+                                                                        
+A major feature of the program is it can read an investment file and    
+quickly compute the internal rate of return of the investment.  With    
+complete and accurate records of investments, along with a measure of   
+the true time-related return of an investment, you can determine your   
+future investment policy.  The multiple account capability lets you set 
+up an account for investment studies.  With hypothetical investments,   
+you can measure the internal rate of return on the forecasted           
+investment.  It is very difficult to manually evaluate the true return  
+of an investment that had investments at different times, cash flow at  
+variable intervals and in varying amounts, and sale of the investment at
+various time intervals and prices.  PORTRAC will do this for you.       
+                                                                        
+PORTRAC is menu-driven and easy to use.  It has a demonstration account 
+with files for quick familiarization.  You can view reports and print   
+them.  These features and others make PORTRAC the perfect investment    
+tracker and counselor.                                                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0754
 

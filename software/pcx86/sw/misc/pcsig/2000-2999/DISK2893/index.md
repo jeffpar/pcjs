@@ -14,6 +14,44 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2893.TXT
+
+{% raw %}
+```
+Disk No: 2893                                                           
+Disk Title: Fast Invoice Writer 2of2 (also #1147)                       
+PC-SIG Version: S4.92                                                   
+                                                                        
+Program Title: Fast Invoice Writer                                      
+Author Version: 4.91                                                    
+Author Registration: $39.95                                             
+Special Requirements: 512K RAM and a printer.                           
+                                                                        
+FAST INVOICE WRITER is just what the small businessman ordered.  A      
+winner for everyone from landlords to health professionals!             
+                                                                        
+This program provides invoices, purchase orders, requisitions, or any   
+document similar in format to an invoice.  Compute taxes or bill by the 
+hour -- the program does all the calculations.                          
+                                                                        
+Produce a numbered, professional-looking document in about 60 seconds   
+and print as many copies as you want.  Then print your mailing labels   
+and inserts for 10-inch window envelopes.  Your firm's name, address,   
+and phone number are printed on the invoice in large letters.  Taxes and
+shipping charges are handled.  The program contains a customer database 
+routine and cashbook file for printing periodic summaries.              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2893
 

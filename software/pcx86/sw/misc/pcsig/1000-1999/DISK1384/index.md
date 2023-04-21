@@ -46,6 +46,56 @@ machines:
     several major U.S. cities and can easily be customized to fit your area.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1384.TXT
+
+{% raw %}
+```
+Disk No: 1384                                                           
+Disk Title: PC-Estimator 2 of 2 (also 1383)  (Disk 2 of 2)              
+PC-SIG Version: S2.95                                                   
+                                                                        
+Program Title: PC-Estimator                                             
+Author Version: 2.95                                                    
+Author Registration: $89.00.                                            
+Special Requirements: 384K RAM, two floppy drive.                       
+                                                                        
+PC-ESTIMATOR helps you estimate building costs for projects of all sizes
+and kinds, from skyscrapers to kitchen remodeling.  Developed by        
+construction professionals, the program can be changed to be as large or
+small, as complex or simple as you want.  The bottom line is custom cost
+estimates with your markup and choice of detail included.               
+                                                                        
+You begin with pull-down menus, lots of help, documentation and sample  
+files.  You will build material price lists and cost data that keeps    
+accumulating.  The databases are unlimited, growing as your application 
+grows.  They include markups, labor and equipment rates, standard cost  
+codes and vendor tracking.  You can have different markups for          
+individual estimates or multiple estimates carried out simultaneously.  
+                                                                        
+The program produces reports for several levels of detail in estimates  
+including itemized and built-in markup applications, and allows for     
+``what if'' type analyses.  An on-screen takeoff calculator with memory 
+is available at the touch of a function key.  The data files are 100%   
+compatible with dBase III+ application programs and are                 
+translatable by Lotus and Symphony.  Lookup windows allow you to view   
+any file at any time.                                                   
+                                                                        
+Wage rates for a number of construction trades are included with the    
+program.  They are tied to four-digit codes commonly used by the        
+construction industry.  Based on union rates, they are the average of   
+several major U.S. cities and can easily be customized to fit your area.
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1384
 

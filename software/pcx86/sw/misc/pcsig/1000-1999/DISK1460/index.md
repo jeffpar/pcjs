@@ -28,6 +28,48 @@ machines:
     paper a lot of desk space (and paper) can be saved.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1460.TXT
+
+{% raw %}
+```
+Disk No: 1460
+Program Title: P4UP version 2.0
+PC-SIG version: 1
+
+P4UP compresses 4 normal page images onto one page (four quadrants) of
+output, using its own fonts, with a HP LaserJet II printer.  P4UP is
+very easy to use in command line form (just like DOS print) and has
+several options to change the order of the quadrants, no soft font
+expertise is required.  It is ideal for printing large documents or
+program source files.  Since four pages are shrunk on to one piece of
+paper a lot of desk space (and paper) can be saved.
+
+Usage:  Laser Printer Utility.
+
+Special Requirements:  HP LaserJet II.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $29.95
+
+File Descriptions:
+
+P4UP     EXE   Main Program.
+P4UP     DOC   Documentation.
+INFO     DOC   Short documentation introduction.
+
+PC-SIG
+1030D E. Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1460
 

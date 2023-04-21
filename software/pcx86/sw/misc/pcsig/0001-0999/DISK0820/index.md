@@ -36,6 +36,51 @@ machines:
     PC-SIG   DAT  PC-SIG library of shareware.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES820.TXT
+
+{% raw %}
+```
+Disk No  820
+Program Title: SEEKEASY version 5
+PC-SIG version 2
+ 
+    SEEKEASY is a VERY easy-to-use, "flexible match" information-retrieval
+program. It lets you search a file for a character string, and returns the
+"best matches" it finds to your request, listed in the order of match
+quality. It does this even if the item found is not exactly what you
+requested, has words in it that were not in your request, or doesn't use
+words spelled exactly the same way.
+ 
+Usage: Information Retrieval
+ 
+System Requirements: 75K memory and one disk drive.
+ 
+How to Start: Type SEEKEASY then the data file you wish to search. For
+example: SEEKEASY PC-SIG.DAT (press enter).
+ 
+Suggested Registration: $30.00
+ 
+File Descriptions:
+ 
+SEEKREAD  ME  This document.
+SEEKEASY  EXE This is the SEEKEASY program.
+SEEKEASY  DAT This is a demonstration SEEKEASY data file.
+PC-SIG    DAT PC-SIG Library of SHAREWARE and public-domain software.
+SEEK2ASC  COM Converts SEEKEASY data files into standard ASCII format.
+ASC2SEEK  COM Converts standard ASCII data files into SEEKEASY format.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0820
 

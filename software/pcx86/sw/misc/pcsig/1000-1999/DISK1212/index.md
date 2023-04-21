@@ -46,6 +46,68 @@ machines:
     ~ "What Child Is This?"
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1212.TXT
+
+{% raw %}
+```
+Disk No: 1212
+Program Title:  CHRISTMAS CONCERT volume II
+PC-SIG version: 1.1
+
+This is the second of Nancy Moran's outstanding 20 minute, self-running
+Christmas concerts.  In Volume 2, Ms. Moran explores Handel's Hallelujah
+Chorus and shares little known carols such as Buxtehude's "A Christmas
+Canon" and the French "Pat-A-Pan."  The carols can be played one at a
+time or as a concert.
+
+Other selections are: "We Wish You A Merry Christmas," "It Came Upon a
+Midnight Clear," "We Three Kings of Orient Are," "Here We Come
+A-Caroling," "Bring A Torch, Jeanette Isabella," "Rudolph the Red Nosed
+Reindeer," "I Saw Three Ships," "La March des Rois," "What Child Is
+This?"
+
+Volume I of this collection is located on Disk #1211.
+
+Usage:  Christmas Carols.
+
+Special Requirements:  None.
+
+Suggested Registration:  None.
+
+File Descriptions:
+
+BLITZEN  COM  Program used by XMAS.BAT.
+CMENU2   BAT  Starts concert.
+DASHER   COM  Program used by XMAS.BAT.
+DONNER   COM  Program used by XMAS.BAT.
+PARALEER ME   Text file.
+X-3SHIPS EXE  Christmas carol.
+X-CANON  EXE  Christmas carol.
+X-CHILD  EXE  Christmas carol.
+X-CLEAR  EXE  Christmas carol.
+X-HANDEL EXE  Christmas carol.
+X-HEREWE EXE  Christmas carol.
+X-NANITA EXE  Christmas carol.
+X-ORIENT EXE  Christmas carol.
+X-PATPAN EXE  Christmas carol.
+X-ROIS   EXE  Christmas carol.
+X-RUDOLF EXE  Christmas carol.
+X-TORCH  EXE  Christmas carol.
+X-WISH   EXE  Christmas carol.
+XMASREAD ME   Program description.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1212
 

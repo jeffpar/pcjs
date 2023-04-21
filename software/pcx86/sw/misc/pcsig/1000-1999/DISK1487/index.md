@@ -34,6 +34,44 @@ machines:
     count of pages reported as they print.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1487.TXT
+
+{% raw %}
+```
+Disk No: 1487                                                           
+Disk Title: 2Faced                                                      
+PC-SIG Version: S2                                                      
+                                                                        
+Program Title: 2Faced                                                   
+Author Version: 3.0                                                     
+Author Registration: $35.00                                             
+Special Requirements: HP LaserJet II+ or compatible printer.            
+                                                                        
+Who wants a two-faced software program?  You do, if you want to save    
+money or precious elbow room when printing files you plan to keep.      
+                                                                        
+2FACED allows the HP LaserJet II+ and compatibles to scrunch two pages  
+of text on each side of a single 8-1/2x11 sheet of paper -- making it   
+ideal for saving paper, storage space, and toner when printing hard     
+copies of documentation or source code.                                 
+                                                                        
+Options let you print the filename of the text file as a header, along  
+with the file's creation time and date and the time and date of the     
+printing.  It also can draw a box around each page or add grey halftone 
+bars which resemble the bars on fanfold computer paper.  You also get a 
+count of pages reported as they print.                                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1487
 

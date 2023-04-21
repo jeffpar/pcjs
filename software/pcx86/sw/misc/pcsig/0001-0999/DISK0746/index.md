@@ -33,6 +33,43 @@ machines:
     multi-line/LAN release.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0746.TXT
+
+{% raw %}
+```
+Disk No:  746                                                           
+Disk Title: WildCat BBS 2 of 2 (also 745)               
+PC-SIG Version: S2.1                                                    
+                                                                        
+Program Title: Wildcat BBS                                              
+Author Version: 07/90                                                   
+Author Registration: $129.00                                            
+Special Requirements: 512K RAM and a hard drive.                        
+                                                                        
+A full featured BBS with the easiest setup operation in the industry.   
+In his review of the installation procedure Dvorak says "...this is the 
+way it's supposed to be done".  A complete indexed documentation file is
+included which covers all program features.  The message system includes
+private mail, forwarding, carbon copies, and return receipts.  File     
+transfers make use of Xmodem, Ymodem (batch), Zmodem (batch, Kermit, and
+any others as external protocols.  A branching questionnaire allows     
+formatted answers for order-taking or polling callers.  WildCat!        
+features specific internal support for multi-tasking operation.  Baud   
+rates up to 19,200 are supported.  WildCat! lets you install an         
+operational BBS and get a real feel for the power of the commercial     
+multi-line/LAN release.                                                 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0746
 

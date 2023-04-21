@@ -49,6 +49,67 @@ machines:
     ~ "Jingle Bells"
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1211.TXT
+
+{% raw %}
+```
+Disk No: 1211
+Program Title:  CHRISTMAS CONCERT volume 1
+PC-SIG version: 1.1
+
+Using Shareware's PIANOMAN, Nancy Moran produced two self-running,
+outstanding 20 minute Christmas concerts.  In Volume 1, Ms. Moran took
+the basic, bread and butter Christmas carols and brought a multiphonic
+majesty to them not often heard in computer generated music.  The carols
+can be played one at a time or as a concert.
+
+In the first volume are "We Wish You A Merry Christmas," "O Come All Ye
+Faithful," "Angels We Have Heard," "Away In A Manger," "The First Noel,"
+"God Rest Ye, Merry Gentlemen," "Hark the Herald Angels Sing," "Joy to
+the World," "Deck the "Halls," "O Holy Night," "Jingle Bells,"
+
+Volume II of this collection is located on disk #1212.
+
+Usage:  Christmas Carols.
+
+Special Requirements:  None.
+
+Suggested Registration:  None.
+
+File Descriptions:
+
+BLITZEN  COM  Program used by XMAS.BAT
+CMENU1   BAT  Starts concert.
+DASHER   COM  Program used by XMAS.BAT
+DONNER   COM  Program used by XMAS.BAT
+PARALEER ME   Text file.
+X-ADESTE EXE  Christmas carol.
+X-ANGELS EXE  Christmas carol.
+X-DECK   EXE  Christmas carol.
+X-HARK   EXE  Christmas carol.
+X-JINGLE EXE  Christmas carol.
+X-JOY    EXE  Christmas carol.
+X-MANGER EXE  Christmas carol.
+X-NANITA EXE  Christmas carol.
+X-NIGHT  EXE  Christmas carol.
+X-NOEL   EXE  Christmas carol.
+X-REST   EXE  Christmas carol.
+X-SILENT EXE  Christmas carol.
+X-WISH   EXE  Christmas carol.
+XMASREAD ME   Program description.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1211
 

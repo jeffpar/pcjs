@@ -30,6 +30,40 @@ machines:
     be up to 75 characters long.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0524.TXT
+
+{% raw %}
+```
+Disk No:  524                                                           
+Disk Title: ExpressCalc 1 of 2 (also 525)     
+PC-SIG Version: S2.4                                                    
+                                                                        
+Program Title: ExpressCalc                                              
+Author Version: 4.10                                                    
+Author Registration: $59.95                                             
+Special Requirements: 512K RAM.                                         
+                                                                        
+EXPRESSCALC is a spreadsheet with a wide variety of applications ranging
+from business forecasts to mortgage calculations.                       
+                                                                        
+It does not require programming background to be able to use it, and    
+will interface with other files and databases -- allowing an exchange   
+of information.  Included is a tutorial, good documentation and the     
+option to configure the package to specific systems.  EXPRESSCALC       
+supports spreadsheets up to 64 columns by 256 lines.  Each column can   
+be up to 75 characters long.                                            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0524
 

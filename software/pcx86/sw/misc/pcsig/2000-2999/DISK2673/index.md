@@ -14,6 +14,49 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2673.TXT
+
+{% raw %}
+```
+Disk No: 2673
+Disk Title: EGL_RISE
+PC-SIG Version: S1.1
+
+Program Title: EGL_RISE
+Author Version: 6/91
+Author Registration: $25.00 for game, and $39.00 for game creator.
+Special Requirements: None.
+
+EGL_RISE comes is made up of two large games. Twenty game levels are
+similar to other arcade games such as Pac-Man, Donkey Kong, and Space
+Invaders. Each level is different enough to be a game in itself.  The
+25-level adventure series is called the ``Rise & Fall of the Human
+Race''. Both games offer excellent graphics
+
+On each level you have a different objective to accomplish -- collect
+all the treasures or objects, find your way to a certain destination,
+destroy all the monsters, defuse a bomb, etc.  The level ends when you
+are hit by a monster or trapped so that you cannot escape.  Some levels
+have a timer and you must complete the level before the time runs out.
+Some games are played like an arcade game, but in others you must take
+your time in order to plan your strategy.
+
+EGL_RISE is compatible with all graphic cards, including CGA, EGA, VGA,
+Hercules and monochrome text adapters.  Modify the graphics of the game
+characters with a draw function, creating your own style for each game.
+You can even create your own games when you register.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2673
 

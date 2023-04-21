@@ -24,6 +24,35 @@ machines:
     Cross References (#2483-2484).
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2482.TXT
+
+{% raw %}
+```
+Disk No: 2482                                                           
+Disk Title: On-Line Bible Installation Disk                             
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: On-Line Bible Installation Disk                          
+Author Version: 5.0                                                     
+Author Registration: None.                                              
+Special Requirements: ON-LINE BIBLE, LEXICON, and ON-LINE BIBLE CROSS RE
+                                                                        
+The ON-LINE BIBLE INSTALLATION DISK is required to install ON-LINE      
+BIBLE (#2191-#2197), LEXICON (#2204-#2206, #2485), and ON-LINE BIBLE    
+CROSS REFERENCES (#2483-2484).                                          
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2482
 

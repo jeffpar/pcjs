@@ -43,6 +43,7 @@ machines:
 
 ## ABC.BAS
 
+{% raw %}
 ```bas
 10 REM ***********************************************************************
 20 REM ***********************************************************************
@@ -1320,9 +1321,11 @@ machines:
 12740 REM *******************************************************************
 12750 REM ********************************************************************
 ```
+{% endraw %}
 
 ## EMPIRE.BAS
 
+{% raw %}
 ```bas
 1 ' EMPIRE
 2 COLOR 15,1:ELAPS$=TIME$
@@ -1598,9 +1601,61 @@ machines:
 601 FOR ML=1 TO 800:NEXT:RETURN
 605 LOCATE 25,2:PRINT NA$:LOCATE 25,72:PRINT"YEAR ";NY:LOCATE 1,1:RETURN
 ```
+{% endraw %}
+
+## FILES390.TXT
+
+{% raw %}
+```
+Disk No  #390
+Program Title: Game Series No 18
+PC-SIG version 1
+ 
+     This disk contains one of the finest collections of color graphic
+games in the library.  They cover a wide range of interests.  ABC is a fun
+way to teach your children the alphabet. ACQB is armchair fun for you
+football fans.  BRICK and BABY are fast-paced challengers.  FLIGHTMARE is
+by far one of the best graphics game ever made for the SHARWARE market.
+For a good time, try this disk.
+ 
+Usage: Entertainment
+ 
+System Requirements: 128K, one disk drive, monochome monitor, golor
+                     graphics needed if file marked by a plus symbol (+).
+ 
+How to Start: Some games require BASIC, after loading BASIC from your DOS
+              disk, load the name of the BASIC program you would like to
+              run.  If it is not a BASIC program simply type the name of
+              the program you would like to load and (press enter)
+              For example type QUIMBEE (press enter).
+ 
+File Descriptions:
+ 
+ABC      BAS  Learn the alphabet Requires BASICA.
+ABC      DOC  Documentation for ABC.DOC.
+ACQB     EXE  Armchair quarterback strategy football game.
+BABY     EXE+ Try to catch the bouncing babies in time.
+BRICK    EXE+ Knock down the brick wall game.
+FLIGHTM  EXE+ Protect the Omegan's from the Desert Warriors.
+QUIMBEE  EXE+ Dice game requires BASICA and color monitor.
+QUIMBEE  DOC  Documentation for Quimbee.
+SOVIET   BAS  Escape From Soviet Science And Detention Base.
+SOVIET   DOC  Documentation for SOVIET.DOC.
+EMPIRE   BAS  Build your own empire and defend your castles.
+ABC      BAS  Learn the alphabet Requires BASICA.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
 
 ## SOVIET.BAS
 
+{% raw %}
 ```bas
 10 '╔══════════════════════════════════════════════════════════════════════════╗
 20 '║   ESCAPE FROM SSADB, BY MENCO INC. (C) COPYRIGHT 1986 BY DAVID MENY      ║
@@ -2107,6 +2162,81 @@ machines:
 5030 '
 5040 END 'ESCAPE FROM SSADB BY MENCO, INC.
 ```
+{% endraw %}
+
+## SOVIET.DOC
+
+{% raw %}
+```
+          Escape From Soviet Science And Detention Base.
+                           (SSADB)
+
+                              by
+
+                           David Meny
+
+
+    INTRODUCTION
+
+    Hello, this is my first adventure game written in BASIC. I hope you enjoy
+this game and find it as challenging to play as it was to write. I am
+encouraging you to study the structure of the program and write your own. I am
+now working on my second adventure, PIRATE TREASURE, taking place on a pirate
+ship and a desserted island. It should be available soon. Now, on with the
+description:
+
+
+    DESCRIPTION
+
+    Escape From SSADB is a text adventure in the tradition of great adventures
+like Zork by Infocom and Adventure by Scott Adams. This program isn't as
+complicated as Infocom's, which uses full sentences, and only uses two word
+commands like GET KEY or HIT COMPUTER.
+    In Escape From SSADB, you are a government agent captured by the Russians
+and taken to a secret base hidden somewhere in the United States. While you are
+there you learn of the Soviet's plans to fire nuclear missles from inside the
+US and make it look like an inside job, thus making the Soviets safe from
+counter attack. You must save the US from nuclear attack by getting out of your
+cell, finding proof about the missles and escape the Top-Secret base. If you
+succeed you will be a national hero; if you fail the US is doomed.
+    Now take your trustee brick and newspaper (you'll see in the game) in hand
+and venture forth in to the realm of spies and agents.
+
+
+    COMMANDS
+
+    Listed below are a few simple commands used by the program. Remember, if
+you use a command like THROW ROCK the program will follow by asking you what
+you want to throw it at.
+
+
+
+            GET (object)   -    to take an object
+           DROP (object)   -    to put down an object
+          THROW (object)   -    to throw an object at something
+                   SCORE   -    to show your current score
+             QUIT (or Q)   -    to leave the game
+        INVENTORY (or I)   -    to show what you are carrying
+         GO NORTH (or N)   -    to go to the north
+ (The same for all other compass directions  (N,S,E,W,U and D))
+
+
+
+    COMMENTS
+
+    If you find a bug in the program, or would like to tell me about game hints
+or comments, then write me at the following address:
+
+
+                                        David Meny
+                                        2923 Carmel Way
+                                        Fairfield, CA 94533
+
+
+Thanks!
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

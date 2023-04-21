@@ -60,6 +60,49 @@ machines:
     VCHEM    DOC  Text file of instructions
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES407.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 407   VideoChem EDUCATIONAL GAME                        v1 DS
+------------------------------------------------------------------------
+VideoChem is an educational game designed to teach secondary school
+students about chemical valences.  The game needs no special
+instructions to be played.
+ 
+B1       DAT  Data file used by program
+B2       DAT  Data file used by program
+B3       DAT  Data file used by program
+B4       DAT  Data file used by program
+B5       DAT  Data file used by program
+B6       DAT  Data file used by program
+B7       DAT  Data file used by program
+B8       DAT  Data file used by program
+CART     DAT  Data file used by program
+CEREAL   B    Picture file used by program
+DATA          Data file used by program
+DATA2         Data file used by program
+DRUGS    B    Picture file used by program
+LAB      EXE  A program file
+LF-100%  DAT  Data file used by program
+LOGO     EXE  Start with this program
+RT-100%  DAT  Data file used by program
+SLAB     EXE  A program file
+SPACE    DAT  Data file used by program
+TABLE    B    Picture file used by program
+THIM2    B    Picture file used by program
+VCHEM    DOC  Text file of instructions
+VCHEM    EXE  A program file
+VIDEO1   DAT  Data file used by program
+WIZ      B    Picture file used by program
+ 
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0407
 

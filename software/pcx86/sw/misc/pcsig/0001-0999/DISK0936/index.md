@@ -46,8 +46,622 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## DCOPY.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+                                   DCOPY
+
+
+
+
+
+                                   V2.1
+
+
+
+
+
+
+              (C) Copyright 1986 by Elfring Consulting, Inc.
+
+
+
+
+
+
+                               Gary Elfring
+                           4N899 West Mary Drive
+                       St. Charles, Illinois  60174
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     1
+
+
+
+
+
+
+
+
+
+                            DCOPY INTRODUCTION
+
+     Have you ever wanted to backup only the work you did  today?   Or 
+     how  about copying only those files created last week?   Wouldn't 
+     it  be  great to be able to manipulate your disk files  based  on 
+     their name and date?  Well now you can.
+
+     DCOPY works in much the same way that as the MS-DOS COPY command.  
+     However,  DCOPY  has many extra options and lets you control  the 
+     copying process based on a date.   It lets you copy files created 
+     before,  on,  or  after a specified date (or any  combination  of 
+     those  options).   The date may be entered as part of the command 
+     or it may reside in a disk file. 
+
+     The  command "dcopy *.* b:  1/1/87 10:00 -l" tells DCOPY to  copy 
+     all files from the default drive and subdirectory to the B: drive 
+     provided they were created LATER than 10:00 AM on 1/1/87.
+
+     DCOPY also offers several other useful copying features.   First, 
+     DCOPY  will  pause  when a floppy disk becomes full and  let  you 
+     change  media.   If the new floppy must be formatted,  DCOPY  can 
+     invoke  your FORMAT program automatically.   You can use the  ar-
+     chive bit to further control copying.   You can also force  DCOPY 
+     to prompt you before each file is copied.  Finally, DCOPY can use 
+     an indirect date,  (resides in a disk file),  to control the copy 
+     and update that disk file date when it is through copying.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     2
+
+
+
+
+
+
+
+
+
+                                 SHAREWARE
+
+     This  program is provided on a "shareware" basis  ONLY!  Try  the 
+     program  out.  If you don't like it- erase it.  If you do like it 
+     we would appreciate it if you would pay for it.   This product is 
+     only available on a shareware basis.
+
+     DCOPY is the core program in a group of utilities called THE DATE 
+     UTILITIES.   These  utilities let you manipulate your disk  files 
+     based on name and date.   The utilities include routines to copy, 
+     (DCOPY),  erase (DERASE),  display (DDIR),  and change file dates 
+     (CDATE).    In  addition,  two other utilities:  SDIR  (a  sorted 
+     directory  program),  and FCOPY (copy files to multiple floppies) 
+     are included.
+
+     If you register your copy of DCOPY you will automatically receive 
+     this entire set of date based utilities.   (This is the incentive 
+     to send in your registration fee.)  To register send $35.00 to:
+
+     Gary Elfring
+     4N899 West Mary Drive
+     St. Charles, Illinois, 60174
+
+     PLEASE mention the product name,  (DATE UTILITIES), and where you 
+     got it from.  You will then receive: the latest versions of these 
+     programs including:  CDATE,  DCOPY,  DERASE, DDIR, FCOPY, & SDIR, 
+     improved typeset documentation,  telephone support,  and one free 
+     update to the product.
+
+
+                                 WARRANTY 
+
+     NONE!!  No warranty is provided to anyone who has not contributed 
+     for  this program.  Gary Elfring specifically disclaims all other 
+     warranties,  expressed or implied,  including but not limited to, 
+     implied warranties of merchantability and fitness for a  particu-
+     lar purpose with respect to defects in the disk or documentation, 
+     and  the program license granted herein.  In no event shall  Gary 
+     Elfring  be liable for any loss of profit or any other commercial 
+     damage,  including but not limited to special, incidental, conse-
+     quential, or other damages.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     3
+
+
+
+
+
+
+
+
+
+     DCOPY
+     Command
+     ________________________________________________________________
+
+     Purpose:  Copy one or more files to the specified disk drive and 
+               path based on a comparison of the file date with a 
+               passed date.
+
+     Format:   DCOPY filename destination [date] [time] [-options]
+
+               Where: everything between the two braces "[" and "]"
+                      is optional and,
+
+               filename    - is any valid file name with optional 
+                             drive and path.  The wildcards "*" and 
+                             "?" may be used in the filename.
+               destination - is any valid drive and path
+               date        - is a valid date of the form MM/DD/YY
+               time        - is a valid time of the form HH:MM:SS
+               options     - always start with the "-" character and 
+                             include: a = archive, b = before, l = 
+                             later, o = on, p = prompt, u = update.
+
+     Remarks:  This command functions in basically the same manner as 
+               the MS-DOS COPY command.  However, DCOPY lets you copy 
+               files based on the file's creation date / update time 
+               stamp.  There are three major differences between DCOPY 
+               and the MS-DOS command COPY.  First, files are copied 
+               to the specified drive and path ONLY if each file date 
+               and time matches the optional condition(s) specified. 
+               Second, files can NOT be renamed as they are copied.  
+               Third, DCOPY will pause when your destination floppy, 
+               (A: or B:), becomes full.  You can then change 
+               floppies, format a new floppy, or quit.
+
+               DCOPY copies a file or group of files based on the file 
+               dates.  Full wild card support is included for the file 
+               name.  The global characters "?" and "*" can be used in 
+               in the file name and extension parameters.  These 
+               global characters work in exactly the same way as they 
+               do with a COPY command.
+
+               If you don't remember how to use DCOPY you can always 
+               type DCOPY{cr}, where {cr} signifies the return key.  
+               DCOPY will then print a help screen that tells you how 
+               to run the program.
+
+
+               DCOPY offers six different options. Options may be 
+               grouped together in any combination. An option or group 
+               of options must always be preceded by the "-" 
+               character. Three of these options, (b, l, o), modify 
+               the way the specified date effects a copy. The -b 
+               option tells DCOPY to copy files created before the 
+
+
+                                     4
+
+
+
+
+
+
+
+
+
+               specified date. The -o option copies files created on 
+               the specified date. The -l option copies files created 
+               later than, (after), the specified date. The remaining 
+               three options control special features. The -u option 
+               tells DCOPY to update the date file, (only if used), to 
+               the current system time and date when done with a copy. 
+               The -a option tells DCOPY to copy only those files that 
+               have not previously been archived. If you use this 
+               option DCOPY will only copy files that have not 
+               previously been backed up. The last option is -p. This 
+               option causes DCOPY to pause and prompt you with the 
+               name of the file being copied. You decide whether or 
+               not to copy the file by responding with Y or N.
+
+
+               To use DCOPY you MUST specify a file name or pattern, 
+               and a destination drive at a minimum.  If no date and 
+               time is included in the command, DCOPY assumes you want 
+               to copy files created or updated on the current day.  
+               Thus:
+
+               dcopy *.* a:
+
+               copies all files created or updated after 12:00 AM on 
+               the current day.  This assumes the time and date set in 
+               your IBM PC, XT, or AT is correct.
+
+               Making a copy of files based on a different time and 
+               date is just as easy.  To do this DCOPY needs to know 
+               the date, (and optionally a time), and whether to copy 
+               files created: before, on, or after this date.  Copy 
+               control is based on options.  Note that if no TIME is 
+               specified the time is assumed to be 0:00, the previous 
+               day's midnight.
+
+               dcopy *.obj b: 12/12/84 -ol
+
+               copies all files from the default drive with the 
+               extension ".obj" that were created or last updated ON 
+               or LATER than 12 AM on 12/12/84 to the B: drive.  The 
+               files copied to drive B: will have the same name and 
+               time stamp as they had on the default drive.
+
+               dcopy b:work.* a: 1/2/85 15:00:00 -b
+
+               copies all files from the B: drive that have the file 
+               name "work" and any extension, to the A: drive PROVIDED 
+               that the file was last created or updated before 3:00 
+               PM on 1/2/85.
+
+               dcopy c:\work\*.c d:\help 2/20/86 -o
+
+               copies all files with the extension ".c" from the path 
+               c:\work to the path d:\help provided each file was last 
+
+
+                                     5
+
+
+
+
+
+
+
+
+
+               updated only on the day of 2/20/86.
+
+               copies all files from the default drive with the 
+               extension ".obj" that were created or last updated on 
+               or later than 12 AM on 12/12/84 to the B: drive. The 
+               files copied to drive B: will have the same name and 
+               time stamp as they had on the default drive.
+
+               dcopy c:*.* a: @datefile.cur -lu
+
+               copies all files from the C: drive that were created 
+               later than the date found in the file "datefile.cur" to 
+               the floppy disk A:. When the copy is done the date and 
+               time in file "datefile.cur" will be changed to the 
+               current system time and date. The date file must 
+               contain an ASCII date string of the form MM/DD/YY. It 
+               may optionally contain a time of the form HH:MM:SS. 
+               Files changed by the -u, update, option will always 
+               contain both a time and date. The file "datefile.cur" 
+               will typically look as follows:
+
+               MM/DD/YY HH:MM:SS
+
+               The prompting option can be quite useful. It makes 
+               DCOPY prompt you before each individual copy takes 
+               place. For example:
+
+               We've run out of disk space on drive B: Put a new 
+               formatted disk in that drive and hit "C" to continue, 
+               OR hit "F" to format a new disk, OR hit "Q" to quit 
+               DCOPY now.
+
+               dcopy *.* b: 1/1/86 -olp
+
+               copies all files to drive B: provided they were created 
+               on or later than 1/1/86.  The user will be prompted 
+               before each file is copied with:
+
+               Copy filename to b:filename (Y/N)?
+
+               You must enter either a "Y" or "N" followed by a 
+               carriage return.  Entering a "Y" tells DCOPY to proceed 
+               with the transfer of the file.  Entering anything else 
+               will cause DCOPY to skip that one file.
+
+               DCOPY also provides full archive file control with the 
+               "-a" option.  Each file has a status bit that can be 
+               used to indicate whether it has been backed up.  If you 
+               use the "-a" option DCOPY will only copy those files 
+               not marked as having been previously backed up.  DCOPY 
+               will also mark the original file to indicate it has 
+               been backed up.
+
+
+
+
+                                     6
+
+
+
+
+
+
+
+
+
+                            DISTRIBUTION NOTICE 
+
+     This  program  is  protected by United States Copyright  law  and         
+     by International Treaty provisions.  You may distribute, or share 
+     this  version of this program with anyone provided the  following 
+     conditions are met:
+
+     This  version of DCOPY is being distributed at no charge  to  all 
+     who  are interested in it.   To those of you unfamiliar with this 
+     approach,  it works like this.   DCOPY is distributed to  various 
+     BBS systems and user groups.  You may copy the program and use it 
+     for no charge.   Gary Elfring does not handle the actual freeware 
+     distribution of this program.
+
+     Try  the  BBS  version out.   If the product does not  meet  your 
+     needs, you pay nothing.  If the product does meet your needs, and 
+     you can use it, then send us the price of $35.00 U.S.
+
+     We  will  then supply you with a new version of DCOPY along  with 
+     all  the other date based utilities,  (none are limited  or  copy 
+     protected),  along  with typeset documentation for that  version.  
+     We accept check, money order, These utilities include:
+
+          DCOPY     - Copy files based on wildcard and date
+          DERASE    - Erase files based on wildcard and date
+          DDIR      - Display files based on wildcard and date
+          CDATE     - Change a files time and date stamp
+
+     This offer may be withdrawn at an time without notice.
+
+     Send check or money order to:      Gary Elfring 
+                                        4N899 West Mary Drive
+                                        St. Charles, Illinois
+                                        60174
+                                        312-377-3520
+
+     Even  if  you do not contribute,  you are encouraged to copy  and 
+     distribute  the BBS version of the product freely subject to  the 
+     following restrictions: 
+
+     1. Do not distribute altered copies.   If you have suggestions or 
+        fixes  you  would like to see,  send us a  written  note.   We 
+        welcome all responses.
+
+     2. This product must be distributed complete including the files: 
+        DCOPY.EXE, and DCOPY.DOC. 
+
+     3. No  fee is to be charged for copying or distributing the  pro-
+        gram without  an  express  WRITTEN agreement with Gary Elfring  
+        The  ONLY exception to this rule is:  a small charge,  ($5  to 
+        $10),  may  be leveled if this program is included on a set of 
+        public domain disks. This charge must be reasonable and repre-
+        sent only copying and disk fees. 
+
+
+
+                                     7
+
+
+
+
+
+
+
+
+
+     4. Commercial  sale of this product in any manner  is  prohibited 
+        without Gary Elfring's written permission. 
+
+     User Groups/Clubs:   Gary Elfring's freeware products may be dis-
+     tributed  by Clubs and User Groups subject to the  same  restric-
+     tions.  We  would  ask only that contributions to our  continuing 
+     efforts be encouraged by those performing such distribution. 
+
+     Computer Bulletin Boards:   Gary Elfring's freeware products  may  
+     be  distributed  by BBS's subject to  the same  restrictions  and 
+     contribution encouragement. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                     8
+
+
+
+
+```
+{% endraw %}
+
+## FILES936.TXT
+
+{% raw %}
+```
+Disk No  936
+Program Title: DCOPY v. 2.1, MYMENU, MENUEZ v. 2.0
+PC-SIG version 1.2
+ 
+DCOPY is a file-copying program that works much like the MS-DOS COPY
+command, except it lets you control the copying process based on the file's
+creation/revision date.  The program also pauses when the target disk becomes
+full and lets you put in a new disk (it even formats the new disk if it needs
+it).  If you want, you can ask DCOPY to prompt you before each file is
+copied.  Wildcard filenames are supported, but you can't rename files during
+the copy process.
+ 
+DCOPY is just one of a group of date-sensitive utilities.  When you register
+your copy of DCOPY you also receive DERASE (erase), DDIR (directory display),
+CDATE (to change file dates), SDIR (sorted directory), and FCOPY (to copy files
+to multiple floppies).
+ 
+MYMENU is a program that generates a start-up menu for your hard disk.  A
+basic program is created by the program, and you must provide a directory
+and the program name for each option in the menu.  The menu can have up to
+eighteen options.  Each line number contains a short description of the program.
+ 
+After the basic program is created, a few lines are entered into your
+AUTOEXEC.BAT file and the program is ready to run.
+ 
+And finally, MENU-EZE produces menus for automatic loading of
+programs on your various disk drives.  The program prompts you for the names
+of the programs you want included in a particular menu, then asks for
+the commands needed to run them.  MENU-EZE also lets you choose the colors for
+your menu screen and produces a special .BAT (batch) file and a data file which
+you can copy onto the disk you want a menu for.  You can make a different menu
+for each of the disks in your library (including your hard disk).
+ 
+PLEASE NOTE: Menu-Matic has been updated, and because of the size of the
+update, it would not fit on this disk.  It has been put on disk #1141.
+We're sorry for any inconvenience this may have caused you.
+ 
+Usage:  DOS Utilities/Menuing Systems
+ 
+System Requirements:  A hard disk, and BASICA or GWBASIC.
+ 
+How to Start:  Type DCOPY (press enter) to start DCOPY, MYMENU (press
+enter) to start MYMENU, and MEZ (press enter) to start MENU-EZE.
+ 
+Suggested Registration:  $35.00 for DCOPY, $10.00 for MYMENU, and $10.00
+for MENU-EZE.
+ 
+File Descriptions:
+ 
+-------- ---  DCOPY
+DCOPY    EXE  One of the main programs.
+DCOPY    DOC  On-disk documentation.
+-------- ---  MYMENU
+MYMENU   EXE  Main program.
+???????  BAT  Batch files used by MYMENU (2 files).
+SIGN     BAS  BASIC file used by MYMENU.
+-------- ---  MENU-EZE
+MZ       COM  Used by finished menu files.
+MEZ      BAS  Main program.
+MEZDEM   BAT  Demonstration batch file.
+MEZ      BAT  Batch file produced by MENU-EZE.
+MEZ           Filenames for the sample menu.
+MEZ      DOC  Documentation file.
+ 
+PC-SIG
+1030D E. Duane Avenue
+Sunnyvale, CA. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
 ## MEZ.BAS
 
+{% raw %}
 ```bas
 1000 'MEZ.BAS  (C)1987  Edwin K. Spain
 1100 IL=1:N=26:KEY OFF:DIM M$(N),C$(N),C2$(N),PROG$(99)
@@ -194,6 +808,872 @@ machines:
 14480 END
 14500 'MEZ.BAS    (C)1987  Edwin K. Spain
 ```
+{% endraw %}
+
+## MEZ.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+          
+          
+          
+          
+                             M E N U - E Z E   (tm)
+          
+          
+          
+                                  Version  2.0
+          
+          
+          
+          
+          
+          
+                             Program  Documentation
+          
+          
+          
+          
+          
+                                January 20, 1987
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+                                   SpainWare
+                              c/o Edwin K. Spain
+                               603 Lucien Drive
+                          Goodlettsville,  Tn  37072
+          
+                        Compuserve User ID: 73027,1161
+          
+          
+          
+          
+          
+          
+                Copyright (C) 1987  SpainWare, Edwin K. Spain.
+                             All Rights Reserved.
+          
+
+
+
+
+
+
+
+
+
+
+
+
+         MENU-EZE 2.0                                        Copyright
+          
+          
+                                  COPYRIGHT
+                                  ---------
+          
+         Copyright (c) 1987 by SpainWare and Edwin K. Spain.  All
+         rights reserved.  Non-registered users are granted a limited
+         license to use this product on a trial basis, and to copy the
+         program for trial use by others subject to the following
+         limitations:
+          
+              1.  The program package is distributed in unmodified
+                  form with complete documentation.
+          
+              2.  No fee, charge or other consideration is requested
+                  nor accepted.
+          
+              3.  The program package is not distributed in
+                  conjunction with any other product.
+          
+         If you plan to use MENU-EZE on a regular basis, please show
+         your support for the author by registering your package.
+         Business, Commercial or Governmental use by non-registered
+         users is prohibited!
+          
+         If interested in multiple copies for work locations, Site and
+         Corporate licenses are available.  See Appendix B for an
+         information request form.
+          
+          
+                                  Trademarks
+          
+         MENU-EZE is a trademark of SpainWare.  Other software and
+         hardware mentioned in this documentation are trademarks of
+         their respective companies.
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+         Copyright (c) 1987   SpainWare                            ii
+
+
+
+
+
+
+
+
+
+
+
+
+                            M E N U - E Z E    2.0
+          
+          
+          
+          
+          
+                               Table of contents
+          
+          
+          
+          
+          
+         Preface .................................................  1
+          
+         Registration ............................................  2
+          
+         User-supported Software .................................  3
+          
+         Product Support .........................................  4
+          
+          
+         Introduction ............................................  5
+          
+         File Descriptions .......................................  6
+          
+         Running the Package .....................................  7
+          
+          
+         Appendix A  (Order Form) ................................  9
+          
+         Appendix B  (Information request form) .................. 10
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+         Copyright (c) 1987   SpainWare                            iii
+
+
+
+
+
+
+
+
+
+
+
+
+         MENU-EZE  2.0                                         Preface
+          
+          
+                            PREFACE TO VERSION  2.0
+                            -----------------------
+          
+         Version 2.0 is actually the first public release of this
+         package.  We had been using the original package for about
+         six months before deciding to share it.  In this revision
+         we have incorporated user-choice of colors for the Dos
+         Prompt, the Menu Text, and the Background.
+          
+         We hope this version will be as useful to you as it has been
+         to us.  Future updates will allow more personalized graphics
+         capabilities.  We believe this package to be of a quality
+         consistent with such user-supported software packages as
+         Procomm (communications) and Thedraw (ansi drawing program).
+         Our package consists of much less complexity than those
+         mentioned above, but we feel it is concise and can be easily
+         modified using 'BASIC' programming techniques to fit users'
+         needs.
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+         Copyright (c) 1987   SpainWare                              1
+
+
+
+
+
+
+
+
+
+
+
+
+         MENU-EZE  2.0                                   Registration
+          
+          
+                                 REGISTRATION
+                                 ------------
+          
+         User feedback is important in determining the success of a
+         software package.  Please share your impression of MENU-EZE
+         by leaving a message on Compuserve's EasyPlex (E. K. Spain's
+         User ID: 73027,1161).  Please include your name, address,
+         occupation and any comments you wish to share.  We would
+         also be interested to know from whom you received the package
+         and for what purposes you intend to use it.  If you do not
+         have a modem, you can send your comments by regular mail to
+         the address shown below.  We will try to incorporate changes
+         and improvements offered by the registered users into the
+         next version of this program.
+          
+         MENU-EZE is distributed as User-Supported Software.  Please
+         share it with your friends as long as your sharing conforms
+         to the limitations mentioned on page ii.
+          
+         If you plan to use MENU-EZE on a regular basis, please show
+         your support by registering.  You may register by sending a
+         check or money order for $10.00 (payable to E. K. Spain) to:
+          
+                             SpainWare
+                             c/o Edwin K. Spain
+                             603 Lucien Drive
+                             Goodlettsville,  Tn  37072
+          
+         As a registered user you will receive notification of all
+         new releases and a discount on all future versions of this
+         package.  Also, any other user-supported software created by
+         SpainWare will be made available to you for evaluation at a
+         minimal charge.
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+         Copyright (c) 1987   SpainWare                              2
+
+
+
+
+
+
+
+
+
+
+
+
+         MENU-EZE  2.0                         User-supported Software
+          
+          
+                            USER-SUPPORTED SOFTWARE
+                            -----------------------
+          
+          
+         User-supported software allows computer users to receive
+         quality software packages for a fraction of the cost of
+         similar commercial packages while supporting the software
+         authors.
+          
+         The concept of user-supported software stems from the idea
+         that users should be allowed to review and evaluate software
+         packages on their own computer systems in their own homes or
+         offices without having made a purchase.  When the user is
+         satisfied that the package serves his or her own personal
+         applications or needs, then registration of the software
+         package would be in order.
+          
+         Under the user-supported concept, anyone may request a copy
+         of a user-supported program by sending a blank, formatted
+         diskette to the program author together with an addressed,
+         postage-paid return mailer.  A copy of the program with full
+         documentation will be sent by return mail on the user's disk.
+         The program documentation carries a notice suggesting that
+         users register the program.  However; (The real plus for
+         user-supported software) registration is strictly voluntary!
+         If you do not need nor use the program -- why register?
+          
+         Copying user-supported software is encouraged, not restricted
+         as is most commercial software.  Regardless of whether you
+         register your copy, you are encouraged to copy and distribute
+         the programs for the private use of others.
+          
+         NOTICE:  Business, Commercial, and Governmental organizations
+                  must be registered!  If not registered, these
+                  organizations must cease using this software after
+                  a reasonable evaluation period.
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+         Copyright (c) 1987   SpainWare                              3
+
+
+
+
+
+
+
+
+
+
+
+
+         MENU-EZE  2.0                                 Product Support
+          
+          
+                                PRODUCT SUPPORT
+                                ---------------
+          
+          
+         If you have questions, ideas or comments concerning this
+         package, please contact E. K. Spain through Compuserve's
+         EasyPlex ( 73027,1161 ) or by writing to the following
+         address:
+          
+                             SpainWare
+                             c/o Edwin K. Spain
+                             603 Lucien Drive
+                             Goodlettsville,  Tn  37072
+          
+         Although we have made every effort to try to insure this
+         package is error-free, some problems may arise.  If you
+         are using the software and encounter any problem, please
+         note what actions led to the problem.  When you contact
+         us be sure to describe what took place, your machine
+         configuration and any other information you think might
+         help us get this 'BUG' out of the program.
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+         Copyright (c) 1987   SpainWare                              4
+
+
+
+
+
+
+
+
+
+
+
+
+         MENU-EZE  2.0                                    Introduction
+          
+          
+                                 INTRODUCTION
+                                 ------------
+          
+         Description:
+          
+         MENU-EZE is a general purpose menu generation package.  It
+         was written in 'BASICA' using GWBASIC'S Interpreter, Ver 2.
+         It evolved from the need to provide a menu for novice users
+         - programs needed to be executed by pressing a single key.
+          
+         This package not only creates the menu displays, but also
+         generates the batch files (based on user input) required to
+         process the specific files on your disks.
+          
+          
+         Files:
+          
+         MENU-EZE consists of the following files:
+          
+              1.  MEZ        'Default filename for the menu display.
+          
+              2.  MEZ.BAS    'Heart of MENU-EZE.  This file produces
+                              menu displays and batch files to execute
+                              files from the displays.
+          
+              3.  MEZ.BAT    'Batch file produced by MEZ.BAS.
+          
+              4.  MEZ.DOC    'This file documentation.
+          
+              5.  MZDEM.BAT  'Batch file demonstrating the operation
+                              of this software package.
+          
+              6.  MZ.COM     'Allows choice of program for execution.
+          
+          
+         Compatibility and
+         Machine Requirements:
+          
+         MENU-EZE was created using a 640K Zenith ZS-151 computer.
+         Do not be intimidated by such RAM! You will not need nearly
+         that much.  You need to be using a computer capable of
+         running MSDOS or PCDOS.  Any version of 'BASIC' or 'BASICA'
+         that runs on your IBM, or compatible, or clone is sufficient
+         to run this software.  The memory requirement for this soft-
+         ware is not a factor of concern since the whole package
+         constitutes less than 64K of memory.  The package also
+         operates well on the IBM PCjr.  NOTE: You must have the line
+         DEVICE=ANSI.SYS in your CONFIG.SYS file before booting DOS!
+          
+          
+         Copyright (c) 1987   SpainWare                              5
+
+
+
+
+
+
+
+
+
+
+
+
+         MENU-EZE  2.0                               File Descriptions
+          
+          
+                                FILE DESCRIPTIONS
+                                -----------------
+          
+         MZ.COM:
+          
+              MZ.COM is the smallest file on this diskette, but packs
+              quite a punch.  It is 16 bytes of information which set
+              errorlevel status based on user input.
+          
+         MEZ:
+          
+              MEZ is the default name for the menu display.  When
+              running the MEZ.BAS program, the user is given the
+              opportunity to choose a different name for the display
+              file.  The name chosen for the 'BASE' file is used
+              within the batchfile - IE: If the user chose to name
+              his display file as 'MYFILE', then the batchfile will
+              automatically be created as  MYFILE.BAT!  See 'RUNNING
+              THE PACKAGE' for more detail.
+          
+         MEZ.BAS:
+          
+              This is the basic program which designs a customized
+              menu and batchfile for processing user-specific files.
+              It generates an attractive menu display that can be
+              filled with up to 26 items, enabling execution from a
+              single keystroke.  It also provides an 'ESC to DOS'
+              option on the completed menu - you may decide not to
+              execute any program on the menu!
+          
+         MEZ.BAT:
+          
+              This is the executive file produced by the MEZ.BAS
+              program.  MEZ.BAT is the default filename, but the
+              file could be created with any valid filename.
+              (filename chosen from within MEZ.BAS and is equal to
+              the display filename up to the (.))
+          
+         MEZDEM.BAT:
+          
+              This file is an executable demonstration describing
+              the use of MENU-EZE 2.0.  The program as with any other
+              '.BAT' file can be executed by typing the filename
+              without the extension and pressing RETURN. The demo
+              itself is self-explanatory!
+          
+          
+          
+          
+          
+         Copyright (c) 1987   SpainWare                              6
+
+
+
+
+
+
+
+
+
+
+
+
+         MENU-EZE  2.0                             Running the Package
+          
+          
+                             RUNNING THE PACKAGE
+                             -------------------
+          
+         General:
+          
+         MENU-EZE runs from your hard disk, virtual, or floppy drives.
+         It is recommended that you use a virtual (RAM DISK) drive if
+         your system is not equipped with a hard disk.  Using a floppy
+         for this package works fine, but when approaching the limit
+         of 26 items, the processing time required to execute the
+         batchfile (MEZ.BAT) becomes quite noticeable.  You must have
+         the line DEVICE=ANSI.SYS in your CONFIG.SYS file.  Regardless
+         of the drive type, you must have these files available on the
+         default device after running MEZ.BAS:
+          
+              MEZ.BAT         and         MZ.COM
+          
+          
+         Starting the Package:
+          
+              1.  Copy the following files to your default drive:
+          
+                   MEZ.BAS    and     MZ.COM
+          
+              2.  At the DOS Prompt enter:
+          
+                   x:BASICA MEZ         ; x = drive name on which
+                                              BASICA is located.
+          
+              3.  The MEZ.BAS program should be self-explanatory,
+                  but briefly:
+          
+                  a.  You are first given an option to change the
+                      BASE name of the menu files. (The default
+                      name is MEZ -- use your initials if you want
+                      or any valid filename.  This is only the BASE
+                      of the filename you are changing; therefore,
+                      the change does not alter the file extension.)
+          
+                  b.  Next you are prompted to indicate pathing for
+                      your menu (PATH\ is the default).  Please refer
+                      to your DOS manual to determine an appropriate
+                      PATH for your needs.
+          
+                  c.  Then a menu color choice appears.  Using the
+                      available selections, you can customize the
+                      colors of the DOS PROMPT, the MENU TEXT DISPLAY,
+                      and the BACKGROUND.  The default colors respect-
+                      ively are cyan, yellow, and black.
+          
+         (c) Copyright 1987   SpainWare                              7
+
+
+
+
+
+
+
+
+
+
+
+
+         MENU-EZE  2.0                             Running the Package
+          
+          
+                              RUNNING THE PACKAGE
+                              -------------------
+          
+         Starting the Package (cont)
+          
+              3.  d.  After color selection, the program asks from
+                      which drive you wish to read files - some of
+                      which will be used for menu generation.
+                      Pressing RETURN without entering a drive will
+                      create a menu from your input without listing
+                      the files (you select the files to be entered
+                      into the menu).  If you should choose a drive,
+                      select the number to the left of each file you
+                      wish to incorporate into your menu.  Press
+                      RETURN after each selection.  Remember, only 26
+                      files are available per menu.  If you require
+                      more than 26, you can create more than one menu.
+          
+                  e.  After all file choices have been made, the
+                      program displays the chosen files and requests
+                      the first, second, and third commands to execute
+                      the files. (IE:  to type a file named MF located
+                      in the subdirectory A:\MFL would require the
+                      following:
+          
+                      First command:   CD\MFL    ; get to subdirectory
+                      Second command:  TYPE MF   ; execute program
+                      Third command:   PAUSE     ; pause display
+          
+                      If your programs do not require the second and
+                      third commands, then simply pressing RETURN
+                      without text input will create the executive
+                      batchfile with the first command only.
+                      When all files chosen have been processed,you
+                      may add other files (not to exceed the 26 item
+                      limit).  Press the RETURN key when your last
+                      file is processed.  The program then creates and
+                      saves your batchfile (MEZ.BAT) and your menu
+                      display file (MEZ).
+          
+                   f. Type SYSTEM and press RETURN.  This returns
+                      control to DOS.
+          
+                   g. At the DOS Prompt type MEZ and press RETURN.
+                      The screen colors will be those you chose while
+                      running MEZ.BAS.
+          
+                   h. Make your selections from the menu you have just
+                     created!
+          
+         (c) Copyright 1987   SpainWare                              8
+
+
+
+
+
+
+
+
+
+
+
+
+         Appendix  A             MENU-EZE  2.0              Order Form
+          
+          
+          
+         Make checks
+         payable to:            E.K. Spain / SpainWare
+                                603 Lucien Drive
+                                Goodlettsville, Tn  37072
+          
+          
+          
+         Sold to: ___________________     Ship to: ___________________
+          
+                  ___________________              ___________________
+          
+                  ___________________              ___________________
+          
+         _____________________________________________________________
+         -------------------------------------------------------------
+           Date:               Purchase Ord. #:
+         -------------------------------------------------------------
+           Qty                  Description            Unit     Total
+         -------------------------------------------------------------
+          
+          _____       MENU-EZE  REGISTRATION          $ 10.00   ___.__
+          
+          _____       MENU-EZE  Evaluation diskette      5.00   ___.__
+          
+          _____       MENU-EZE  Updates diskette         5.00   ___.__
+                            (I have version _____,
+                             please send version ____)
+          
+          _____       MENU-EZE Package  **              12.50   ___.__
+         _____________________________________________________________
+          
+                                            Subtotal:      $   ____.__
+          
+               (Tn residents please add 5.5% tax)     Tax: $   ____.__
+          
+                                            Total:         $   ____.__
+         -------------------------------------------------------------
+          
+         **  The package includes registration, present version of
+             MENU-EZE, and next revision of MENU-EZE.
+          
+          
+         Payment made by:   ( ) Check       ( ) Money order
+          
+         Orders outside the U.S. : Please send a check drawn on a
+                                   U.S. Bank in U.S. dollars or send
+                                   an International Money order in
+                                   U.S. dollars.
+          
+         (c) Copyright 1987   SpainWare                              9
+
+
+
+
+
+
+
+
+
+
+
+
+         Appendix  B          MENU-EZE  2.0                Information
+                                                               Request
+          
+          
+         Mail to:               E.K. Spain / SpainWare
+                                603 Lucien Drive
+                                Goodlettsville, Tn  37072
+          
+          
+          
+         Please send information regarding corporate and site
+         licenses.
+          
+         Name: ______________________________________________________
+          
+         Title: _____________________________________________________
+          
+         Company: ___________________________________________________
+          
+         Address: ___________________________________________________
+          
+                  ___________________________________________________
+          
+                  ___________________________________________________
+          
+         Phone:   ___________________________________________________
+          
+         Estimated copies needed: ___________________________________
+          
+         Intended uses: _____________________________________________
+          
+                        _____________________________________________
+          
+                        _____________________________________________
+          
+         Questions: _________________________________________________
+          
+                    _________________________________________________
+          
+                    _________________________________________________
+          
+                    _________________________________________________
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+         (c) Copyright 1987   SpainWare                             10
+
+
+
+
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

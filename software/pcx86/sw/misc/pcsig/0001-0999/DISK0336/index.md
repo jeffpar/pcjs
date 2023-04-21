@@ -84,6 +84,7 @@ machines:
 
 ## EDDIE.BAS
 
+{% raw %}
 ```bas
 1 REM ****************************************
 2 REM **                                    **
@@ -517,9 +518,32 @@ machines:
 42010 MODE%=0:GOTO 24
 63999 GOTO 40000
 ```
+{% endraw %}
+
+## FEED.TXT
+
+{% raw %}
+```
+
+```
+{% endraw %}
+
+## FILES.TXT
+
+{% raw %}
+```
+San Francisco PC Users Group:     S O F T W A R E   L I B R A R Y
+=================================================================
+Volume 171: ABC DESIGN  (Character graphics editor)  1 of 2
+
+See Volume 172 for README.171
+
+```
+{% endraw %}
 
 ## FIXPIC.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 PRINT "THIS PROGRAM BLANKS THE 25TH LINE OF AN EDDIE IMAGE"
@@ -533,9 +557,183 @@ machines:
 100 DEF SEG
 110 CLS:SYSTEM
 ```
+{% endraw %}
+
+## INSERT.TXT
+
+{% raw %}
+```
+1.  BOOT D.O.S. [Version 2.0 or later]
+
+2.  PUT DISK #1 IN DRIVE A
+
+3.  If the default drive is NOT drive A  [as A>]
+
+    then enter  A:             [and press Enter]
+
+4.  then enter  READ ME  [if printer on & ready]
+
+     or  enter  SEE ME   [if printer not avail.]
+
+              [press Enter after either choice]
+
+Use the original disks when making copies for
+other users.  You can get another hard-copy of
+these instructions by entering READ INSERT 
+
+You can get a copy of the warranty by entering
+READ WARRANTY or SEE WARRANTY
+You can get a copy of the license by entering
+READ LICENSE or SEE LICENSE
+```
+{% endraw %}
+
+## LICENSE.TXT
+
+{% raw %}
+```
+ABC Design Software License
+
+You have a license to use this software on any number of machines
+and to make any number of copies of the original disks for as
+many other users as you want.
+
+The only things you can't do is sell the package for more than
+$5.00 over your cost of disks for the copies or remove any part
+of the disk contents before making copies for others.
+
+
+
+
+
+```
+{% endraw %}
+
+## ME.TXT
+
+{% raw %}
+```
+Welcome to a not so integrated or easy to use ABC Design.  Those who
+manage to learn how to use all the features will really appreciate the
+improvements yet to come in future releases of various parts of this
+system.  You have the first two of three disks of programs and files.
+You can get the third disk without being registered if you return 1 of
+your disks to us within 30 days.  After that, only registered users get
+free updates.
+
+Pre-registration support:  For the next month, without being a registered
+user, you can call us on the phone with questions [(612) 379-1354], after
+that you must be registered or send your questions or comments by mail.
+
+Registered user support:  Upon submission of a completed registration form
+along with the $5.00 per year subscription fee, you can call us on the
+phone with questions, you will be notified of updates and related software
+releases, and you can get free updates by sending a disk to us with a
+request for specific updates.
+
+We hope that the whole package will continue to evolve into a conherent and
+integrated product.
+
+To print a copy of the registration form enter READ REGFORM or to display
+a copy enter SEE REGFORM and press enter.
+To proceed enter READ PART B or SEE PART B and press enter.
+```
+{% endraw %}
+
+## PARTB.TXT
+
+{% raw %}
+```
+PART B.  The program documentation can be obtained in one of 3 ways:
+
+1.  Before making work disks. If you don't want to use up two blank disks
+    yet, go to PART D.  After each step, you may need to put a system
+    disk back in drive A to reload COMMAND.COM.
+
+2.  After making work disks. First go to PART C and make 2 work disks,
+    then go to PART D and print the documentation.
+
+3.  By mail.  If you can't print EPSON compatible graphics on your system
+    but still may want to use the screen image editing features, you can
+    request one (of a limited number) of pre-printed copies of the manual.
+
+To go to PART C or PART D:
+
+Enter   READ PART C      [print work disk copy instructions]
+  or    SEE PART C     [display work disk copy instructions]
+  or    READ PART D       [print documentation instructions]
+  or    SEE PART D      [display documentation instructions]
+
+        [and press Enter]
+
+
+```
+{% endraw %}
+
+## PARTC.TXT
+
+{% raw %}
+```
+PART C.  Create EDDIE and PETE work disks.
+
+1.  You first need to format two blank disks with the system and Basic on
+    them OR make a subdirectory [MD ABC] on a hard disk and copy BASIC.COM
+    and COMMAND.COM into it, change to the ABC directory, enter A:GET EDDIE
+    and A:GET PETE [and press enter after each].
+
+    To prepare two floppy disks, put your DOS System disk in drive A,
+    the first blank disk in drive B, then enter FORMAT B:/S [and press
+    enter].  Press a key when prompted and wait.  When complete respond
+    to `format another?' with Y and put the second blank disk in B and wait.
+    When complete type N.
+    Then enter B: [and press enter] and COPY A:BASIC.COM [and press enter].
+    Repeat the copy to put Basic on the first disk as well.
+
+2.  Label one disk EDDIE WORK DISK and the other disk PETE WORK DISK.
+
+3.  Put EDDIE WORK DISK in drive B and DISK 1 in drive A and enter:
+                        A:GET EDDIE [and press enter]
+    Put PETE WORK DISK in drive B and leave DISK 1 in A and enter:
+                        A:GET PETE [and press enter]
+    Enter A: [and press enter].
+If you have not yet printed the documentation go to PART D.
+                        [READ PART D or SEE PART D]
+```
+{% endraw %}
+
+## PARTD.TXT
+
+{% raw %}
+```
+PART D.  Printing documentation.
+
+There are three sets of documents that you have to print.  The first one
+only requires that you have in your printer enough paper to print 3 pages
+so we will use it for a test of your printer compatibility.  If one of 
+these steps doesn't work on your printer then there is no need to proceed
+to the larger blocks of documentation.
+
+1.  Put your PETE WORK DISK or DISK 1 master in drive A.  If you have an
+    EPSON FX 80 or FX 100 or a printer with FX compatible graphics codes,
+    enter PETE FXREF [and press enter and another keypress when prompted].
+
+    Or, if you have an IBM Graphics printer or MX 80 or MX 100 with graftrax
+    or a printer with MX compatible graphics codes,
+    enter PETE MXREF [and press enter and another keypress when prompted].
+
+2.  If either of the above steps worked, then enter PETE ABCREF [and press
+    enter and another keypress when prompted].  This one takes 7 pages.
+
+3.  Now put DISK 2 in drive A, make absolutely sure that you have at least
+    50 sheets of printer paper and about an hour to kill, then
+    enter MANUAL [and press return].
+
+```
+{% endraw %}
 
 ## PUSH.BAS
 
+{% raw %}
 ```bas
 10 REM Sideawys character generator table is located at &HF000
 20 REM     and is &H800 bytes long (2K)
@@ -562,6 +760,65 @@ machines:
 230 CLS
 240 SYSTEM
 ```
+{% endraw %}
+
+## REGFORM.TXT
+
+{% raw %}
+```
+Mailing Address                                 Hardware Configuration
+
+Name    __________________________________      Computer_________________
+
+Address __________________________________      Display Bd.______________
+
+Address __________________________________      Monitor__________________
+
+City    _________________ St ___ Zip _____      Printer(s)_______________
+
+                                                Kbytes RAM_______________
+The fee for registration is $5.00 per year
+(Jan. 1 to Dec. 31) and provides telephone      Disk Drives______________
+support, update announcements and free
+program updates upon receipt of a blank disk.
+                                                Optional Information
+If you have a receipt for prepayment of the
+$5.00 be sure to include it.  Otherwise we      Home phone_______________
+can dig up the record of your order. 
+                                                Office phone_____________
+Mail to:
+
+Automatic Micro Systems, Inc.  1089 25th Ave. SE.  Minneapolis, MN 55414
+```
+{% endraw %}
+
+## WARRANTY.TXT
+
+{% raw %}
+```
+ABC Design Software Warranty
+
+This software package is warranted only against defects in the media
+or recording integrity for a period of three months from your receipt.
+
+The programs are provided `as is' without warranty of any kind, either
+expressed or implied, but not limited to the implied warranties of
+merchantability and fitness for a particular purpose.  The entire risk
+as to the quality and performance of the programs is with you.
+
+Some states do not allow the exclusion of implied warranties, so the 
+above exclusion may not apply to you.
+
+Some states do not allow the limitation or exclusion of liability for
+incidental or consequential damages, so the above limitation may not
+apply to you.
+
+This warranty gives you specific legal rights and you may also have other
+rights which vary from state to state.
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

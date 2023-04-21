@@ -40,6 +40,61 @@ machines:
     DWS2SHRT MNU  Short menu for Microsoft mouse & compatibles.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1416.TXT
+
+{% raw %}
+```
+Disk No: 1416
+Program Title:  MOUSEMENUS version 1.0 for WordStar 2000
+PC-SIG version 1
+
+Finally...inexpensive rodent support for WordStar 2000!  MOUSEMENUS
+allows a user to add Logitech, Microsoft, or compatible mouse
+capabilities to WordStar 2000.  Several demo files are contained in this
+shareware package, including two for use with three-button Logitech or
+Logitech compatible mice, and two for use with Microsoft two-button mice
+or compatibles.
+
+Two menu versions are provided for each type of mouse.  The long version
+contains an opening menu and supports all the word processing functions
+as well as menus.  Although it requires an additional 4K of RAM, it is
+recommended as the more useful and versatile menu version.  The
+abbreviated version is for editing use only.  On disk instructions are
+ample and well written.
+
+Synopsis:  Utility to allow you to use a mouse with WordStar 2000.
+
+Usage:  Word Processing/Mouse Control
+
+Special Requirements:  WordStar 2000, version 2 or higher, 384K of RAM,
+and DOS 3.2 or higher.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $15.00
+
+File Descriptions:
+
+DMSMNU   COM  Main program file.
+DWS2READ ME   Initial information.
+DPRNREAD BAT  Batch file for printing documentation.
+DLWS2LNG MNU  Long menu for Logitech mouse & compatibles.
+DLWS2SHT MNU  Short menu for Logitech mouse & compatibles.
+DWS2LNG  MNU  Long menu for Microsoft mouse & compatibles.
+DWS2SHRT MNU  Short menu for Microsoft mouse & compatibles.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1416
 

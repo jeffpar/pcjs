@@ -52,8 +52,41 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILES446.TXT
+
+{% raw %}
+```
+--------------------------------------------------------------------------
+Disk No 446   Zork Utilities                                         v1.1
+--------------------------------------------------------------------------
+PIRATE   BAS  Adventure game. Find island, explore, get treasure and
+              return to ship.
+PIRATE   DOC  Documentation for PIRATE.BAS.
+ASTRO    COM+ Asteroids game.
+Q-BERT   EXE+ Like arcade game. Turn squares to different colors but
+              watch out for balls and other obstacles.
+TEMPLE   BAS  Temple of Loth! Like Dungeons and Dragons.
+XWING    BAS+ Relive Star Wars.
+ZORK1    DOC  Solution for Zork I.
+ZORK2    DOC  Solution for Zork II.
+ZORK3    DOC  Solution for Zork III.
+ZT16     EXE  Zork Tools!! Great utility for any Infocom game. Change a
+              game to a DOS file, find vocab. for any game and more!!!
+ZT16     DOC  Documentation for ZT16.EXE. (11K)
+CRISIS  .EXE+ Space Game (c/g required)
+GODCREAT.BAS  Advanced Dungeons & Dragons God Creation Program
+ 
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale, CA 94086
+(408) 730-9291
+(c) copyright 1987 PC-SIG
+```
+{% endraw %}
+
 ## GODCREAT.BAS
 
+{% raw %}
 ```bas
 10 COLOR 7,0:KEY OFF:CLS
 20 COLOR 0,7:LOCATE 12,31:PRINT " The  God Creator ":COLOR 7,0
@@ -398,9 +431,11 @@ machines:
 6950 IF I$="Y" OR I$="y" THEN 6200
 6960 GOTO 60
 ```
+{% endraw %}
 
 ## PIRATE.BAS
 
+{% raw %}
 ```bas
 100 REM *******************
 110 REM *  PIRATE ISALND  *
@@ -971,9 +1006,97 @@ machines:
 25590 DATA Mess Hall,Hallway,Starboard Deck,Starboard Deck,Galley,Hallway
 25600 DATA Ship's Library,Under Water,Top of the Bay,Bottom of the Bay
 ```
+{% endraw %}
+
+## PIRATE.DOC
+
+{% raw %}
+```
+                                 PIRATE ISLAND
+
+
+                                      by
+
+
+                                  David Meny
+
+
+
+                              ** DOCUMENTATION **
+
+
+        Well, young pirate! Thar she blows! Thars the old Mobby 'Ick. Your    
+        great  - oh so great -  grandfather named 'er. Well, back to buisness. 
+        You  'ust find thee  location by  longitude and latitude of the SPOOKY
+        Pirate  Island,  explore it  and  bring back  the famed Spanish coin
+        supposdely to be thar.
+
+        Don't try to cross any of me' crew or else.   Especiall' don't try     
+        to to cross me'. You bett'r find the coin before you come back to  me' 
+        ship or else this' cutlass will be you' last wish!
+
+        Now yous begin on me' ship 'The Eagle's Nest' and you must  locate     
+        the islands' longitude and latitude from yous'  sources and  those  on 
+        me' ship.
+
+        When yous' reach the island - if yous' do -explore it for the coin     
+        and then return its' back to me' ship.
+
+        Have thar good time!
+
+
+                        ** IMPORTANT COMMANDS **
+
+
+                 Har are of few commands Is' know:
+
+
+                    I or INVENTORY   -   Shows what ye are carryin'
+                          GO NORTH   -   To move north
+                          GO SOUTH   -   To move south
+                           GO EAST   -   To move east
+                           GO WEST   -   To move west
+                             GO UP   -   To move up
+                           GO DOWN   -   To move down
+           (NOTE - GO NORTH can be abbrivated N, GO SOUTH to S, etc.)
+                      GET (object)   -   To get a certain object
+                     DROP (object)   -   To drop a certain object
+                    CLIMB (object)   -   To climb a certain object
+                             SWIM    -   To swim
+                   UNLOCK (object)   -   To unlock and object
+                     OPEN (object)   -   To open an object
+                               plus many more...
+
+
+                              ** AUTHOR'S NOTES**
+
+
+        I hope you enjoy this program and if you do you might want to try
+        my first adventure, Escape from Soviet Science and Detention Base
+        available from PC-SIG.
+
+
+                                                David Meny
+                                                2923 Carmel Way
+                                                Fairfield, CA 94533
+
+
+        P.S.  -   If you like this adventure and would like to encourage me
+                  to write more, send any amount of money (U.S. currency
+                  please  -  I am only an honest programmer and don't travel
+                  alot!) to me.
+
+
+        Thanks!
+
+
+
+```
+{% endraw %}
 
 ## TEMPLE.BAS
 
+{% raw %}
 ```bas
 10 N=VAL(MID$(TIME$,7,2))
 20 RANDOMIZE N
@@ -2550,9 +2673,11 @@ machines:
 15500 GOTO 1400
 15925 IF A$="I" GOTO 14910
 ```
+{% endraw %}
 
 ## XWING.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -3287,6 +3412,488 @@ machines:
 8020  PLAY "L1 N0":PLAY "L1 N0"
 8030   GOTO   1300
 ```
+{% endraw %}
+
+## ZORK1.DOC
+
+{% raw %}
+```
+
+            Zork 1 tutorial, compliments of the Mystic Caverns
+                ****  Can be downloaded as BULLET4   ****
+                            Apples can to!!
+
+      So,  you're all set for The Great Underground Empire,  eh?  Okay, but 
+   before we begin,  a few words about this walkthru.  First,  this is  not 
+   the  only  way  to  solve  the  game.  It's just one of the faster ones.  
+   Second,  because there is no "wasted motion" in this game,  you will not 
+   be  visiting all the loc
+
+            Zork 1 tutorial, compliments of the Mystic Caverns
+                ****  Can be downloaded as BULLET4   ****
+                            Apples can to!!
+
+      So,  you're all set for The Great Underground Empire,  eh?  Okay, but 
+   before we begin,  a few words about this walkthru.  First,  this is  not 
+   the  only  way  to  solve  the  game.  It's just one of the faster ones.  
+   Second,  because there is no "wasted motion" in this game,  you will not 
+   be  visiting all the locations.  So,  you might want to play around with 
+   the game on your own for a while,  mapping  out  as  much  as  you  can, 
+   without much regard for gathering treasures. 
+      Actually,  mapping  is  a  good  idea,  since,  if you make a misstep 
+   somewhere, you might find yourself in trouble!  Be especially careful to 
+   follow the directions when in the mazes;  a wrong move  there,  and  you 
+   could be lost for quite some time! 
+       Finally, you may not go through this in exactly the way it's written 
+   because of the thief.  He is a variable item in the game; you never know 
+   where  he  will show up.  Try to move out of the room he's in as soon as 
+   he shows up.  But keep in mind that even if he does steal anything  from 
+   you,  you  will get it all back from him in the end.  Okay?  Let's start 
+   the adventure! 
+       You begin West of the house,  and your first chore is to get inside.  
+   So,  go  South and East.  Open the window and enter the house (you're in 
+   the kitchen) ,  then go West into the living room.  Get the  lamp,  then 
+   move the rug,  revealing the trap door.  Open the trap door, turn on the 
+   lamp, and go down.  At this point,  some mysterious person will shut the 
+   door on you; don't worry about that for now. 
+        Okay,  so  here  you  are in the cellar.  It's time to pick up your 
+   first treasure,  so  go  South,  then  East  to  the  Gallery.  Get  the 
+   painting, then continue North to the Studio.  Go up the chimney (you can 
+   only fit with the lamp and the painting), and you will be in the kitchen 
+   again.  Now, go upstairs to the attic, and get the knife and rope.  Come 
+   back down and go into the living room. 
+        Open  the  case and put the painting inside.  Then,  drop the knife 
+   and get the sword.  Open the trap door again,  and return to the cellar.  
+   Again,  the door is shut by someone (you never will find out who's doing 
+   this, but it doesn't matter).  Now you're back in the cellar,  and since 
+   we're  coming to one of the more dangerous parts of the game,  you might 
+   want to do a save here. 
+        Gripping your  trusty  sword,  head  North  into  the  Troll  room.  
+   There's  a nasty troll here with a bloody axe,  and the only way past is 
+   to kill him.  So,  do just that:  "Kill Troll With Sword." It will  most 
+   likely take more than one attempt, so keep at it, and eventually he will 
+   disappear in a cloud of black smoke.  Now,  drop the sword,  because you 
+   really don't need it any more, and it will hinder you in carrying other, 
+   more important items. 
+        Having dispatched the troll,  you move along East,  East (into  the 
+   Round  room),  then  SE and East.  You are now in the Dome room.  It's a 
+   long way down,  and too far to jump,  so here's where the rope comes  in 
+   handy.  Tie the rope to the railing, then climb down the rope.  You will 
+   be  in  the Torch room.  Leave the torch for now;  you'll be coming back 
+   this way again later. 
+        From the Torch room,  go South,  then  East  and  get  the  coffin.  
+   Return  West,  then  continue South to the Altar.  There's no way you're 
+   going to get down that hole with the coffin,  and even the program  will 
+   tell  you  that  you haven't got a prayer.  That's a hint,  folks:  Just 
+   "Pray," and you will find yourself  in  the  forest  again.  Since  it's 
+   daylight out, save energy and turn off the lamp. 
+        Now,  head along South,  then North (I know,  but it works!) to the 
+   clearing,  then East to the Canyon View.  Climb al l the way down to the 
+   bottom,  then  go  North to Rainbow's End.  Drop the coffin and open it.  
+   Inside is a jeweled sceptre.  Get that,  and wave it.  The rainbow  will 
+   become  solid  (you'll  need  to  cross over from the other side later).  
+   Now, "Look." You should see a pot of gold.  Get that, and the coffin. 
+        After that,  go SW,  then all the way back up to Canyon View.  From 
+   there,  it's  NW to the clearing,  and then West to the window.  Once in 
+   the kitchen,  open the bag and get the garlic (nothing  else,  just  the 
+   garlic). Go on into the living room, and put your treasures in the case.  
+   Now,  sit  down  and take a breather because you're about to do a lot of 
+   traveling! 
+       Once again,  open the trap door,  turn on the  lamp,  and  go  down.  
+   Watch  carefully,  and you will notice that this time,  the door doesn't 
+   close!  Whoever was doing it before  must  have  gotten  tired.  Anyway, 
+   you're on your way to the dam, so move along North, East, North, NE, and 
+   East.  You are now on top of the dam. 
+       From  there,  go  North to the Lobby.  Pick up the matches,  then go 
+   either North or East (doesn't matter) into  the  Maintenance  room.  Get 
+   the  wrench  and  the  screwdriver,  then  push the yellow button.  Now, 
+   return to the dam, and yo u will see that the green bubble is lit.  Turn 
+   the bolt with the wrench, then drop the wrench. You have opened the dam, 
+   and  you  will  be coming back this way again to reap the fruits of your 
+   labors.  However, right now,  you're on your way to Hades,  so let's get 
+   going! 
+       Go South,  then down into the Loud room.  Leave the platinum bar for 
+   now;  you'll get it later.  Head West into the Round room,  then SE  and 
+   East (hmmmm, haven't you been here before?). Again, climb down the rope.  
+   This  time,  get the torch.  At this point,  you can turn off your lamp; 
+   the torch will provide light so long as you have it. 
+       Now,  continue straight South,  getting the bell,  then the book and 
+   candles  from the altar.  Go down the hole to the cave,  then down again 
+   to the entrance to Hades.  Your candles will  have  blown  out  by  this 
+   time,  but  don't  worry  about  it.  Okay,  here's where you have to be 
+   careful.  First,  ring the bell.  It will become red hot  and  you  will 
+   drop  it.  You  will  also  drop  the  candles.  Stay  calm,  and do the 
+   following,  all in one command:  Get the  candles,  light  match,  light 
+   candles with match (necessary, because of the torch, and *DON'T* use the 
+   torch,  or you'll vaporize the candles!).  Okay, strange things happened 
+   when you lit the candles, now read the book. Whew!  The demons have been 
+   exorcised! 
+       Drop the book,  then go South and get the crystal skull.  Now,  back 
+   North,  then up to the cave, then North to the Mirror room.  By the way, 
+   better put out the candles.  Rub the mirror,  and you  will  now  be  in 
+   another  Mirror room (this one is North of the dam,  as the other one is 
+   South). 
+       Now,  go North,  then West,  then North,  then West into the Squeaky 
+   room  (well,  I  told you you'd be doing a lot of traveling this time!).  
+   Make sure you have the garlic with you, then go North into the Bat room.  
+   So long as you have the garlic,  he won't bother you.  There is  a  jade 
+   figurine here, but leave it for now.  You'll pick it up on your way out. 
+       Go East to the Shaft room.  Put the torch into the basket, then turn 
+   on  your  lamp  and head North to the Smelly room,  then down to the Gas 
+   Room (best not to carry any open flames here!).  Now,  you are about  to 
+   enter a small maze, so follow these directions *CAREFULLY*! 
+        East,  Northeast,  Southeast, Southwest, down, and you should be at 
+   the top of the ladder (if you aren't, may God have mercy on your soul!).  
+   From there, go down to the Ladder Bottom, and then South to the Dead End 
+   for the coal.  Get that, then return to the ladder top.  From there,  go 
+   up, North, East, South, North, and you will be back in the Gas room.  Go 
+   up, then South to the Shaft room again. 
+        Put the coal in the basket, and lower the basket.  Now, guess what?  
+   You  have to go back through the coal mine again!  So,  make your way to 
+   the Ladder Bottom,  but this time,  go West to the Timber  room.  Ignore 
+   the  broken  timber  (not  useful  for  anything),  and drop all but the 
+   screwdriver.  Now, you can squeeze through the crack to the West. 
+        And here you are in the Drafty Room, which is also at the bottom of 
+   the shaft.  There's the basket, so get the coal and the torch,  and move 
+   South into the Machine room.  Open the lid, put the coal in the machine, 
+   close  the  lid,  and  turn  the  switch with the screwdriver.  Drop the 
+   screwdriver, open the lid,  and get the diamond (well,  no one ever said 
+   Zork was an *EASY* game!). 
+        Now,  go  back  North,  and  put  the  torch and the diamond in the 
+   basket.  Squeeze back East into the Timber room.  Get the  skull,  lamp, 
+   and  garlic.  You won't be needing the matches and the candles any more, 
+   so you can leave them. (They were insurance in case the thief came along 
+   and stole the torch before you could get the diamond).  Now,  head  East 
+   again to the Ladder Bottom,  and from there up and through the coal mine 
+   (you know the way now!),  to the Gas room.  Pick up the  bracelet,  then 
+   continue  on  up  and  South  to  the Shaft room.  Get the torch and the 
+   diamond from the basket,  turn off the lamp,  then go West into the  Bat 
+   room.  Get the jade, then go South, East, South to the Slide room. 
+       Now,  here's a fast way back to the cellar:  Just go down the slide! 
+   Wheeeee!  Then it's up to the living room (remember,  the trap  door  is 
+   open now), and all the treasures go into the case. Huff!  Puff!  Bet you 
+   didn't  know you'd be doing *THIS* much running around!  But,  don't get 
+   too relaxed, there's still plenty more to come (urk!). 
+       Turn on the lamp, and return to the cellar.  From there,  it's North 
+   (ah,  deja vu!),  then East, North, NE to Reservoir South.  Now that the 
+   sluice gates are open,  you can head North,  picking  up  the  trunk  of 
+   jewels,  North again to Reservoir North, getting the air pump, and North 
+   one more time, getting the crystal trident.  After that,  go all the way 
+   back South again to Reservoir South, then East to the dam, and then East 
+   once more to the Dam Base. 
+       Here  you  find  a little pile of folded plastic;  guess what it is?  
+   Right, it's an inflatable boat!  So, inflate it with the pump, then drop 
+   the pump,  then get inside the boat,  say "Launch," and you're  floating 
+   off along the Frigid River. 
+       Now,  just  keep  waiting  until  you see the buoy.  Get that,  then 
+   "East" to the beach.  Get out of the boat,  then get the shovel and move 
+   on to the Sandy Cave to the NE.  You might want to save the game at this 
+   point,  since  you  have to dig here until the scarab turns up,  and I'm 
+   sure you don't want to get buried alive (it's been  known  to  happen!).  
+   Okay,  drop  the  shovel and get the scarab,  then go back SW.  Drop the 
+   buoy and open it;  inside is an emerald.  Get that,  then continue South 
+   to the Aragain Falls. 
+       Here  you  can cross the rainbow (so do that!),  which brings you to 
+   the End of The Rainbow.  Turn off the lamp,  then go SW  to  the  Canyon 
+   Bottom.  From there,  make your way back to the living room, and put all 
+   the treasures in the case.  Your collection is quite impressive by  now, 
+   but you aren't finished yet.  Go East twice, then North twice.  Climb up 
+   the tree and get the egg. Climb down again, and go South, East, and back 
+   to the living room.  However,  this time,  you don't put the treasure in 
+   the case. 
+       Turn on the lamp,  and go down (once again!) into  the  cellar,  and 
+   North to the Troll room.  Now,  you are about to enter a maze, so follow 
+   the directions very carefully! 
+       West (this brings you into the maze), South, East, up,  and you find 
+   several items here.  Take only the coins and the key, and be careful not 
+   to touch the skeleton!  From here,  go SW, East, South, SE, and you will 
+   be in the Cyclops room.  The Cyclops is not friendly,  but you can  deal 
+   with  him  effortlessly:  Just  type in "Ulysses" (or "Odysseus," if you 
+   prefer).  Old One-Eye will tear out of there right through the wall!  In 
+   fact,  he will create a passage eastward from that room right  into  the 
+   living room! 
+       However,  you don't want to go that way yet!  Instead,  go upstairs, 
+   and you will be in the Treasure Room,  the  thief's  secret  lair.  Now, 
+   give him the egg,  and go back downstairs, then East to the living room.  
+   Deposit the coins in the case,  then get the knife (the  thief  needs  a 
+   little  time to open the egg).  Okay,  go back West to the Cyclops room.  
+   Again, at this point, saving is recommended;  the thief will not be easy 
+   to kill! 
+       So,  head  upstairs and use the nasty knife to kill the thief.  Once 
+   he's dead, all treasures in the room will be visible.  This includes the 
+   egg, a silver chalice,  and anything he may have stolen from you before.  
+   Get everything, then follow these directions: Down, NW, South, West, up, 
+   down,  NE,  and  you  will  be in the Grating Room.  Unlock and open the 
+   grate (watch out for falling leaves!),  then go up.  You will  be  in  a 
+   clearing. 
+       From  there,  go South and climb the tree again.  Wind up the canary 
+   that's inside the egg.  A songbird will come by and drop  a  bauble  for 
+   you.  Climb  down  again  and get the bauble,  then return to the living 
+   room.  Put all the treasures in the case,  making sure you  *REMOVE  THE 
+   CANARY*  from  the egg and put it in the case separately!  You're almost 
+   finished!  Just one more trip to make! 
+       Now,  for the last time,  enter the cellar and go  North.  From  the 
+   Troll  Room,  go  East  until you come again to the Loud Room.  Type in: 
+   "Echo," and you will now be able to get the bar.  So, grab it and return 
+   to the living room.  Once you place it in  the  case,  you  will  get  a 
+   message.  Follow  the  advice  of that message,  and you will get a map.  
+   Take that,  and return to the place where this all started,  the mailbox 
+   West  of  the  house.  You  should have no trouble getting to the barrow 
+   from there.  Of course, once you enter the barrow.... 
+       You didn't really think it  would  end  there,  did  you?  Not  when 
+   there's  still  Zork II and Zork III waiting for you up ahead!  Ah,  but 
+   it's too late;  you can't turn back now!  You'll just have to grit  your 
+   teeth  and  follow  through to the end (with a little help,  of course).  
+   See you in Zork II! 
+
+
+
+
+<*>End of file<*>
+
+
+Time remaining =  63 min.
+==========================        FILE MENU       ==========================
+
+  D)ownload a file    H)elp              L)ist files         N)ew files
+  U)pload a file      ?) Xfer info
+
+==========================        ELSEWHERE       ==========================
+
+  G)oodbye            Q)uit to main menu
+
+File Function <D,G,H,L,N,Q,U,?>? , N
+Enter DIR to be scanned or ALL? ALL
+Scanning DIR1        
+Scanning DIR2        
+Scanning DIR3        
+Scanning DIR4        
+Scanning DIR5        
+Scanning DIR6        
+Scanning DIRG        
+
+Time remaining =  63 min.
+==========================        FILE MENU       ==========================
+
+  D)ownload a file    H)elp              L)ist files         N)ew files
+  U)pload a file      ?) Xfer info
+
+==========================        ELSEWHERE       ==========================
+
+  G)oodbye            Q)uit to main menu
+
+File Function <D,G,H,L,N,Q,U,?>? H
+
+* <Ctrl K> to abort. <Ctrl S> to suspend *
+
+================ Files Menu HELP File =====================
+
+D)ownload a file (XMODEM or ASCII text)
+H)elp -- this file
+L)ist files available for download
+N)ew files available since last directory review
+U)pload file to this system (XMODEM or ASCII text)
+?)download/upload help (detailed instructions)
+G)oodbye -- exit this system
+Q)uit -- Return to main menu -- message and comment menu
+
+Time remaining =  63 min.
+==========================        FILE MENU       ==========================
+
+  D)ownload a file    H)elp              L)ist files         N)ew files
+  U)pload a file      ?) Xfer info
+
+==========================        ELSEWHERE       ==========================
+
+  G)oodbye            Q)uit to main menu
+
+File Function <D,G,H,L,N,Q,U,?>? L
+
+* <Ctrl K> to abort. <Ctrl S> to suspend *
+
+   ====================RBBS-PC File Directory====================
+
+    DIR 1 Utility Programs           DIR 2 Games
+    DIR 3 Word Processing Programs   DIR 4 Communications
+    DIR 5 File Transfer Utilities    DIR 6 Miscellaneous Uploads
+
+    All .BAS, .COM & .EXE programs must be downloaded using XMODEM
+    The .BAS programs have all been saved in compressed format to save
+    disk storage space.
+
+To List the Directories, At the Function Prompt, Type L;Directory #
+   E.G.   L;1
+You can also stack the command, for example: L;1;2;3;4
+
+Time remaining =  63 min.
+==========================        FILE MENU       ==========================
+
+  D)ownload a file    H)elp              L)ist files         N)ew files
+  U)pload a file      ?) Xfer info
+
+==========================        ELSEWHERE       ==========================
+
+  G)oodbye            Q)uit to main menu
+
+File Function <D,G,H,L,N,Q,U,?>? ; L;2
+
+* <Ctrl K> to abort. <Ctrl S> to suspend *
+
+----------------------RBBS Games Directory----------------------
+
+FILENAME EXT   SIZE     DATE      DESCRIPTION
+======== === ======   ========   ===========================================
+CHESS    EXE   9,728   9-17-83 - Hi-Res Chess Game
+ADVCOMP .BAS  11,392  01-01-84 - Make your own adventure! ADVDRVR needed.
+ADVDRVR .BAS  14,976  01-01-84 - Driver program for ADVCOMP.BAS
+ADVCOMP .DOC  32,256  01-01-84 - Documentation for ADVCOMP.BAS 
+PAC-GAL .EXE  39,296  04-20-84 - GREATEST PAC TYPE GAME AVAILABLE
+TALKER  .BAS  10,752  08-02-84 - Makes your PC talk through the speaker
+TALKFUN .BAS  11,264  08-02-84 - Another talking program
+BRICK   .EXE  18,688  08-02-84 - Break-out. Requires CGA.....GOOD!
+BABY    .EXE  37,760  08-02-84 - Catch the bouncing babies. Req. CGA
+3-DEMON .EXE  59,520  08-26-84 - 3-D,9 LEVELS,AVOID THE DEMON(SEE .DOC)
+3-DEMON .DOC  10,880  08-26-84 - DOC FOR 3-DEMON.EXE
+ZORK1   .DOC  15,488  10-13-84 - Zork 1 solution 
+ZORK2   .DOC  12,672  10-13-84 - Zork 2 solution 
+ZORK3   .DOC  12,160  10-13-84 - Zork 3 solution 
+PITFALL .EXE  27,392  11-10-84 - Another game, not bad.
+YAHTZEE  BAS  19,584  12-08-84 - Good Game!
+WITNESS .SOL   1,280  01-02-85 - How to solve Infocom's "The Witness"
+PENGO   .EXE  29,696  01-02-85 - Maze type game ok!
+More (Y),N,NS?  Y
+FLIGHTM .EXE  42,752  01-02-85 - GREATEST action game yet!? C/G suggested
+1BLCKJK .BAS  12,288  01-02-85 - Rev. to rem. unrlstic rules, OK on B/W
+SWC     .EXE  22,258  02-07-85 - Neat Graphic game/Space Wars
+PC-SLOT .BAS   9,088  02-07-85 - Upgraded slot machine game
+ZT15    .COM  12,288  02-09-85 - Fantastic Utility for Infocom Games Ver1.5 New
+ZT15    .DOC   9,164  02-09-85 - Doc for ZORKTOOL.COM
+
+Time remaining =  62 min.
+==========================        FILE MENU       ==========================
+
+  D)ownload a file    H)elp              L)ist files         N)ew files
+  U)pload a file      ?) Xfer info
+
+==========================        ELSEWHERE       ==========================
+
+  G)oodbye            Q)uit to main menu
+
+File Function <D,G,H,L,N,Q,U,?>? L L
+
+* <Ctrl K> to abort. <Ctrl S> to suspend *
+
+   ====================RBBS-PC File Directory====================
+
+    DIR 1 Utility Programs           DIR 2 Games
+    DIR 3 Word Processing Programs   DIR 4 Communications
+    DIR 5 File Transfer Utilities    DIR 6 Miscellaneous Uploads
+
+    All .BAS, .COM & .EXE programs must be downloaded using XMODEM
+    The .BAS programs have all been saved in compressed format to save
+    disk storage space.
+
+To List the Directories, At the Function Prompt, Type L;Directory #
+   E.G.   L;1
+You can also stack the command, for example: L;1;2;3;4
+
+Time remaining =  61 min.
+==========================        FILE MENU       ==========================
+
+  D)ownload a file    H)elp              L)ist files         N)ew files
+  U)pload a file      ?) Xfer info
+
+==========================        ELSEWHERE       ==========================
+
+  G)oodbye            Q)uit to main menu
+
+File Function <D,G,H,L,N,Q,U,?>? L;4
+
+* <Ctrl K> to abort. <Ctrl S> to suspend *
+
+----------------------RBBS Communictaions Directory----------------------
+
+FILENAME EXT   SIZE    DATE      DESCRIPTION
+======== ===  ======  ========   ===========================================
+PCT3JR  .LBR   5,376  12-10-84 - Merge to PC-Talk for use on PCjr. Use LU &
+                                 USQ. Has mods for jr internal modem.
+BBS-TALK.LBR  32,256  12-10-84 - All known modifications to PC-TALK.III
+                                 You will need LU.EXE and USQ.EXE to
+                                 extract all the files. NEW version!
+PCT-MODM.FIX   3,584  01-02-85 - Fix to PCT for PCjr and Hayes operation
+CIS-JR  .COM   4,096  01-02-85 - CIS "A" protocol for the PCJr.
+PCTQMD  .COM   12,928 01-14-85 - Converts PC-TALK Dialing Dir to QMODEM fmt
+QMODUTIL.EXE   25,984 01-14-85 - Sort QMODEM dialing directory
+QMODEM  .COM   64,640 01-14-85 - Nice Comm Program in Turbo Pascal Ver 2.87-E
+QMODEM  .DQC   21,904 01-14-85 - Documentation for above
+QWINDOWS.COM   17,280 01-25-85 - Change Postion of QMODEM Windows
+GUIDE   .DOC   24,175 02-06-85 - Users Guide for RBBS-PC
+QMODEM  .LBR   84,480 02-16-85 - Overlay Version 1.03A. Supports Color+Music
+
+
+Time remaining =  61 min.
+==========================        FILE MENU       ==========================
+
+  D)ownload a file    H)elp              L)ist files         N)ew files
+  U)pload a file      ?) Xfer info
+
+==========================        ELSEWHERE       ==========================
+
+  G)oodbye            Q)uit to main menu
+
+File Function <D,G,H,L,N,Q,U,?>? L;4
+
+* <Ctrl K> to abort. <Ctrl S> to suspend *
+
+----------------------RBBS Communictaions Directory----------------------
+
+FILENAME EXT   SIZE    DATE      DESCRIPTION
+======== ===  ======  ========   ===========================================
+PCT3JR  .LBR   5,376  12-10-84 - Merge to PC-Talk for use on PCjr. Use LU &
+                                 USQ. Has mods for jr internal modem.
+BBS-TALK.LBR  32,256  12-10-84 - All known modifications to PC-TALK.III
+                                 You will need LU.EXE and USQ.EXE to
+                                 extract all the files. NEW version!
+PCT-MODM.FIX   3,584  01-02-85 - Fix to PCT for PCjr and Hayes operation
+CIS-JR  .COM   4,096  01-02-85 - CIS "A" protocol for the PCJr.
+PCTQMD  .COM   12,928 01-14-85 - Converts PC-TALK Dialing Dir to QMODEM fmt
+QMODUTIL.EXE   25,984 01-14-85 - Sort QMODEM dialing directory
+QMODEM  .COM   64,640 01-14-85 - Nice Comm Program in Turbo Pascal Ver 2.87-E
+QMODEM  .DQC   21,904 01-14-85 - Documentation for above
+QWINDOWS.COM   17,280 01-25-85 - Change Postion of QMODEM Windows
+GUIDE   .DOC   24,175 02-06-85 - Users Guide for RBBS-PC
+QMODEM  .LBR   84,480 02-16-85 - Overlay Version 1.03A. Supports Color+Music
+
+
+Time remaining =  60 min.
+==========================        FILE MENU       ==========================
+
+  D)ownload a file    H)elp              L)ist files         N)ew files
+  U)pload a file      ?) Xfer info
+
+==========================        ELSEWHERE       ==========================
+
+  G)oodbye            Q)uit to main menu
+
+File Function <D,G,H,L,N,Q,U,?>? D
+Enter full filename to download? ADVCOMP.BAS
+This is a binary file and requires XMODEM transfer
+Download type <X>modem, <A>scii, <Q>uit? X
+File size is 89 blocks.
+Transfer time: 2 min., 2 sec.
+Send ready. Press <Ctrl X> to abort transfer.
+
+, <A>scii, <Q>u
+```
+{% endraw %}
+
+## ZT16.DOC
+
+{% raw %}
+```
+.YT 0 0 2 4 32 32 1 10 10 0.Y 1 95 110 2 0 1 0 65 2 2 4 0 35 5(c)SOFTWARE PIRATES Inc.                                         2-19-85Sunnyvale, CA 94086                                ZorkTools 1.6        ZorkTools is a collection of utility programs which provide          capabilities not normally available for INFOCOM games.              These capabilities greatly enhance game play.System Requirements:        IBM PC, XT, Jr, AT, and some other PC Compatables.        Color, Monochrome, or Both Displays.        PC-DOS 1.0, 1.1, 2.0, 2.1, 3.0 or Compatable.        Minimum Memory (depending on menu option selected):                ICP     22k     free space above DOS                IGC     35k     free space above DOS                IGL     65-128k free space above DOS depending on extensions                                  loaded.                IIC     65-128k free space above DOS depending on extensions                                  loaded. (standard to converted)                        37k     free space above DOS depending on extensions                                  loaded. (converted > standard)                IPP     22k     free space above DOS                IUP     22k     free space above DOS                IVD     65k - 128k      free space above DOS depending on                                        extension loaded.        Drives (depending on menu option selected):                ICP     floppy drive A and drive B                IGC     floppy drive A and any other drive supported by DOS                IGL     floppy drive A (standard game)                        Any drive supported by DOS (converted game)                IIC     floppy drive A and any other drive supported by DOS                IPP     floppy drive A                IUP     floppy drive A and drive B                IVD     floppy drive A (standard game)                        Any drive supported by DOS (converted game)1.      ICP - Infocom Copy Program    ICP allows you to copy any INFOCOM game disk from drive A to drive B.  ICPno longer requires the target disk to be formatted before the copy is made.ICP will use all available memory for the copy.  A copy generaly takes about26 seconds on a system with 160k free memory.  The copy results in a Standardcopy of the game which IS NOT diskcopy-able.  Unlike the one-time backupfacility provided by INFOCOM in there games, ICP can make multiple backupcopies of any INFOCOM game disk.2.      IGC - Infocom Game Converter    IGC is a program designed to convert a Standard INFOCOM game to aConverted INFOCOM game.  The Converted INFOCOM game is stored in the form of aDOS file.  This DOS file can then be stored on ANY type of drive includingRam-drive & Hard-disk.  To execute a Converted INFOCOM game simply selectedIGL from ZorkTools Menu.3.      IGL - Infocom Game Loader    IGL will load any INFOCOM game (Standard, Unprotected, or Converted) fromdisk.  Once in memory, the game will be modified to allow it to run under DOS.When the modifications are complete, the game will be started.  Once the gamehas booted up it should work just as it does standalone (without DOS).  Toreturn to ZorkTools simply exit the game as always (use "quit" command) orpress Ctrl-Break.    A new feature has been added to IGL.  This feature is called ZORKEDIT.The editting capabilities provide by INFOCOM for their games leaves a lot tobe desired.  ZORKEDIT makes DOS' editting capabilities available to anyINFOCOM game.  Normally, DOS' editting capabilities are pretty limited, but ifyou use PC-DOS with DOSEDIT you will have DOSEDIT's extended edittingcapabilities.  These capabilities will be available to you while you play thegame.  (I highly suggest that you use DOSEDIT, if possible.  With it you canINSERT, DELETE, LEFT, RIGHT, HOME, END, BACKSPACING, COMMAND STACKING, ....and more thats just not available while playing any of the INFOCOM games.  Tryit...  you'll like it !!!!!)4.      IIC - Infocom Image Converter    IIC allows you to convert any INFOCOM game images produces by a Standardgame to a form (DOS file) usable by a Converted game.  IIC also supports thereverse operation, converting a Converted game image back to a Standard image.5.      IPP - Infocom Protection Program    IPP will modify the FAT tables of an INFOCOM game disk so that the sectorswhich are used by the game will be protected from DOS.  (This means that youwill not be able to "erase" the game or "copy" another program on top of it.WARNING!!  - This protection scheme does not prevent "diskcopy" or "format"from working.) Once the game has been protected from DOS you can store fileson portions of the disk not being used by the game.  (Most game disk leaveabout 40K bytes FREE.) If you use the CATDISK Catalog Program, you can now put.LBL files on your disk so they can be cataloged.  (Note:  once IPP has beenrun on an INFOCOM game disk IGC will not be able to convert this protecteddisk.)6.      IUP - Infocom Unprotection Program    IUP allows you to copy a "standard" INFOCOM game disk from drive A todrive B.  Every INFOCOM game disk has tracks 1 - 3 formatted to 4 sectors of1024 bytes instead of the normal 8 sectors of 512 bytes.  Diskcopy does nothave the ability to copy an INFOCOM game disk because of the way tracks 1 - 3have been formatted.  When IUP writes track 1 - 3 to the Target disk in driveB it does so at 8 sectors of 512 bytes.  IUP also modifies the boot sector ofthe Target disk so that the disk will boot up properly.  The result is anUnprotected working copy of an INFOCOM game which IS diskcopy-able.7.      IVD - Infocom Vocabulary Decoder    IVD is a program which locates, reads, decodes, and displays thevocabulary of any INFOCOM game disk.  This program will produce a numberedlisting of all the words that any game will allow the player to type in (plusa few you can't).  This routine will compensate for a 40 column display.  Youwill undoubtedly notice that some words in the vocabulary will start with aspace or have a space imbedded in them.  This is not an error in IVD.  Thedecoding technique used by INFOCOM leaves 6 "special" character codes whichhave no display-able character defined for them.  Some of the words containsome the "special" characters.  Too see where the "special" character are youmust invoke ZorkTools with the /S (Special character) option.  Since INFOCOMdid not define display-able character for the "special" character, the asciivalues of 0 - 5 have been chosen.  With the /S option the digits 0 - 5 will bedisplayed for the respective "special" character instead of a space.  In thevocabulary every word has a 3 byte suffix which, I believe, tells the game theattributes of the word (like adjective, verb, noun, etc.).  To list the 3 databyte suffix you must invoke ZorkTools with the /D (Data bytes) option.  (i.e."ZT16 /s" or "ZT16 /d" or "ZT16 /d/s").                        A LITTLE HISTORY    I have been, from the birth of PC to date, a brave and daring adventure inrealm of the Great Underground Empire, a space traveler who captures a giantalien space craft, a detective attempting to locate a murderer, a humancomputer backup who repaires an underground worldwide control complex, and aexperienced sorcerer who battles evil wizards to save the world.  Through allthese truly enjoyable escapades I could not help the feeling that somethingwas missing.  I couldn't get over the fact that a game like these require youto have a pencil and a piece of paper (for maps, secret words, notes).  Thinkabout it.  A game made for a computer, that forces the player to use somethingelse to accomplish what could and should be done on the computer !  That'scrazy !  I started thinking about this problem and ways to get around it.  Fora long time I couldn't think of a relatively easy way to accomplish this.Then multi-tasking programs hit the scene.  I found that the multi-taskingprograms allow the user to operate several DOS programs simultaneously.  Thecatch is that all of these programs must run under DOS in order to work.  Ithen had the task of making INFOCOM game run under DOS.  That is how IGL cameabout.  With a multi-tasking program, it is now possible to play an INFOCOMgame and have an editor online simultaneously.  That means (depending on themulti-tasking program) that the player can usually use one key as a toggle andswitch back and forth from the game to editor.  The player now has aconvienent place to store any game related data (maps, save imagedescriptions, secret words, etc.) all, and this is the key, WITHOUT havingtheir hands leave the keyboard.  I have tried this and it works great!                                                Happy Zorking,                                                Softbeard the PirateDevelopment History:V1.0    10-16-84        Initial releaseV1.1    10-17-84        Added ZORKEDIT feature.V1.2    10-22-84    1.) Fixed bug in V1.1 IPP (wasn't                        modifying the FAT tables correctly for                        Interpreter sectors).                    2.) Fixed bug in previous releases of IFP                        (wasn't able to format a disk that                        didn't have a FAT table).V1.3    10-24-84        Fixed bug in previous releases of IVD                        (wasn't displaying the correct data                        bytes when using the /d option).V1.4    10-25-84        Added Ctrl-Break trapping in all                        routines. Ctrl-Break will get you back                        Main Menu from anywhere. When at the                        Main Menu, Ctrl-Break return you to DOS.V1.5    12-11-84    1.) Added IGC program.                    2.) Modified IGL to execute Converted games.                    3.) Modified IVD to execute Converted games.                    4.) Added IIC program.                    5.) Added free memory check to make sure                        there is enough free memory to run the                        desired option.V1.6     2-19-85    1.) Changed ICG and IUP to automaticaly do                        a format of the target drive while                        copying.  This eliminates the need for                        the IFP (Infocom Format Program).                    2.) Added the ability to display current                        games or save images while using ZT16.                    3.) Fixed bug causing a DMA Across 64k                        boundary error on some systems.                    4.) Modified ZT to use all available memory.                    5.) Modified ZT to handle latest level of                        INFOCOM interpreter. (This allows                        recovery from the restart command in                        the new games).                    6.) Modified ZT to recover from all errors.    This program is for free distribution as is as long as there is noconsideration above the cost of a diskette (max $3.00), and the program anddocumentation are distributed together unchanged.  Any risk in using ZT islimited to the user.  The author implies no warranty as to the usability orlegality of ZT.  The user accepts ALL responsibility for using this program.SPI maintains the right to modify without notice any and all software in thispackage.        NOTE:  Unauthorized duplication of INFOCOM software is illegal.
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -50,6 +50,85 @@ machines:
     records per floppy disk.)
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1249.TXT
+
+{% raw %}
+```
+Disk No: 1249
+Program Title:  PHOTO PACK
+PC-SIG version: 1
+
+PHOTO PACK is a collection of programs for amateur and professional
+photographers guaranteed to improve your picture taking skills.
+
+With PHOTO PACK, your PC will help you pick the right filters (called
+diopter lenses) for closeup photography, calculate your camera's
+settings for shooting moving objects, determine film image size for
+printing pictures, figure enlarger head to paper distance for blowing up
+an image, and calculate proper flash settings and depth-of-field
+information.
+
+Impressed?  Well zoom in on this: PHOTO PACK also turns your PC into a
+darkroom processing timer, a label maker, and a negative/slide database.
+It will also print model releases!
+
+The TIMER can be programmed to handle up to 16 separate processing
+steps.  These steps may run in a darkroom or in a "lights-on" mode.  The
+darkroom mode uses a black screen background with red digits.  You can
+set tones or "beeps" to help you with developing and printing.
+
+The LABEL MAKER prints return address labels, equipment identification
+labels, slide labels, or whatever else labels you can think of.
+
+The DATABASE will help you keep track of all those shoeboxes full of
+slides and negatives.  Describe your transparencies with multiple
+keywords in different categories.  Later, retrieve photos by category
+and keyword.  Each database can hold 65,000 records.  If you use floppy
+disks for your database, you can use multiple disks for an unlimited
+number of records.  (NOTE: You can average from around 1400 to 1800
+records per floppy disk.)
+
+Usage:  Photography.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $10.00
+
+File Descriptions:
+
+MENU      EXE Main program for CGA.
+MMENU     EXE Main program for monochrome.
+BRUN30    EXE Run time module.
+CLOSE     EXE Close up program.
+DOF       EXE Depth of field program.
+ENLARGER  EXE Enlarger program.
+FLASH12   EXE Flash program.
+IMAGE     EXE Image size program.
+LABELS    EXE Label print program.
+MODEL     EXE Model form porgram.
+PHOTO     TXT Picture text file.
+PROCS         Data file.
+READ      ME  Documentation file.
+SLIDE11   COM Slide filing program.
+SPEED     EXE Shutter speed program.
+STEPS         Data file.
+TIMER2    EXE Darkroom program.
+USERLIB   EXE Data filing program.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1249
 

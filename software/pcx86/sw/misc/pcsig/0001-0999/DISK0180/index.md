@@ -82,8 +82,144 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #180, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  DATANET .            CRC = 56 19
+
+--> FILE:  M1      .BAS         CRC = 52 E4
+
+--> FILE:  M10     .BAS         CRC = 48 15
+
+--> FILE:  M11     .BAS         CRC = 4A FA
+
+--> FILE:  M12     .BAS         CRC = 93 36
+
+--> FILE:  M13     .BAS         CRC = 40 E9
+
+--> FILE:  M14     .BAS         CRC = 77 85
+
+--> FILE:  M15     .BAS         CRC = 3D 2D
+
+--> FILE:  M16     .BAS         CRC = 9E 3E
+
+--> FILE:  M17     .BAS         CRC = 7C B6
+
+--> FILE:  M18     .BAS         CRC = 9E A3
+
+--> FILE:  M19     .BAS         CRC = CD 53
+
+--> FILE:  M2      .BAS         CRC = CD 22
+
+--> FILE:  M20     .BAS         CRC = 57 0A
+
+--> FILE:  M21     .BAS         CRC = 0F 8D
+
+--> FILE:  M22     .BAS         CRC = EB B9
+
+--> FILE:  M23     .BAS         CRC = C0 9E
+
+--> FILE:  M24     .BAS         CRC = 3D B4
+
+--> FILE:  M25     .BAS         CRC = 0D A5
+
+--> FILE:  M26     .BAS         CRC = 05 8C
+
+--> FILE:  M3      .BAS         CRC = 1A 35
+
+--> FILE:  M4      .BAS         CRC = A6 F3
+
+--> FILE:  M5      .BAS         CRC = E5 B8
+
+--> FILE:  M6      .BAS         CRC = 3F 3A
+
+--> FILE:  M7      .BAS         CRC = AD F7
+
+--> FILE:  M8      .BAS         CRC = 5A 3D
+
+--> FILE:  M9      .BAS         CRC = 12 BF
+
+--> FILE:  MATH    .BAS         CRC = A0 C1
+
+--> FILE:  MATRIX  .BAS         CRC = B6 CC
+
+--> FILE:  NCCLSPRE.BAS         CRC = 48 BC
+
+--> FILE:  NORMAL-Z.BAS         CRC = 45 A8
+
+--> FILE:  REGRESS .BAS         CRC = 94 D5
+
+--> FILE:  S1      .BAS         CRC = 5B 79
+
+--> FILE:  S10     .BAS         CRC = 85 62
+
+--> FILE:  S11     .BAS         CRC = A1 EE
+
+--> FILE:  S12     .BAS         CRC = 9C BF
+
+--> FILE:  S13     .BAS         CRC = ED 30
+
+--> FILE:  S14     .BAS         CRC = 46 91
+
+--> FILE:  S15     .BAS         CRC = CC 61
+
+--> FILE:  S16     .BAS         CRC = 37 EC
+
+--> FILE:  S17     .BAS         CRC = 2D 6A
+
+--> FILE:  S18     .BAS         CRC = 03 73
+
+--> FILE:  S2      .BAS         CRC = C6 B5
+
+--> FILE:  S3      .BAS         CRC = 8C A7
+
+--> FILE:  S4      .BAS         CRC = 18 52
+
+--> FILE:  S5      .BAS         CRC = 98 5E
+
+--> FILE:  S6      .BAS         CRC = F7 2E
+
+--> FILE:  S7      .BAS         CRC = FC 87
+
+--> FILE:  S8      .BAS         CRC = F6 22
+
+--> FILE:  S9      .BAS         CRC = E2 95
+
+--> FILE:  STAT    .BAS         CRC = 4B 17
+
+--> FILE:  TRADENET.            CRC = C1 85
+
+--> FILE:  XXX     .            CRC = 5D C0
+
+ ---------------------> SUM OF CRCS = BB D6
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## M1.BAS
 
+{% raw %}
 ```bas
 10 PRINT "GREATEST COMMON DENOMINATOR"
 20 PRINT
@@ -105,9 +241,11 @@ machines:
 180 GOTO  40
 190 RUN "MATH"
 ```
+{% endraw %}
 
 ## M10.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "PLOT OF POLAR EQUATION"
@@ -200,9 +338,11 @@ machines:
 880  PRINT  TAB( 30);"Y"
 890  RUN "MATH"
 ```
+{% endraw %}
 
 ## M11.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "PLOT OF FUNCTIONS"
@@ -255,9 +395,11 @@ machines:
 470  DATA  "1","2","3","4","5","6","7","8","9","+","+"
 480  RUN "MATH"
 ```
+{% endraw %}
 
 ## M12.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "LINEAR INTERPOLATION"
@@ -280,9 +422,11 @@ machines:
 180  IF Z = 1 THEN 20
 190  RUN "MATH"
 ```
+{% endraw %}
 
 ## M13.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "CURVILINEAR INTERPOLATION"
@@ -316,9 +460,11 @@ machines:
 290  IF C = 1 THEN 20
 300  RUN "MATH"
 ```
+{% endraw %}
 
 ## M14.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "INTEGRATION: SIMPSON'S RULE"
@@ -356,9 +502,11 @@ machines:
 307 IF A$="Y" OR A$="y" THEN 10
 310  RUN "MATH"
 ```
+{% endraw %}
 
 ## M15.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  CLS:PRINT "INTEGRATION: GAUSSIAN QUADRATURE"
@@ -396,9 +544,11 @@ machines:
 317 IF A$="Y" OR A$="y" THEN 10
 320  RUN "MATH"
 ```
+{% endraw %}
 
 ## M16.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "INTEGRATION: TRAPEZOIDAL RULE"
@@ -421,9 +571,11 @@ machines:
 180  GOTO 50
 190  RUN "MATH"
 ```
+{% endraw %}
 
 ## M17.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "DERIVATIVE"
@@ -437,9 +589,11 @@ machines:
 150  GOTO 50
 160  RUN "MATH"
 ```
+{% endraw %}
 
 ## M18.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "ROOTS OF QUADRATIC EQUATIONS"
@@ -458,9 +612,11 @@ machines:
 140  IF X = 1 THEN 20
 150  RUN "MATH"
 ```
+{% endraw %}
 
 ## M19.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "REAL ROOTS OF POLYNOMIALS: NEWTON"
@@ -518,9 +674,11 @@ machines:
 530  IF A = 1 THEN 200
 550  RUN "MATH"
 ```
+{% endraw %}
 
 ## M2.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "PRIME FACTORS OF INTEGERS"
@@ -544,9 +702,11 @@ machines:
 190  GOTO 40
 200  RUN "MATH"
 ```
+{% endraw %}
 
 ## M20.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "ROOTS OF POLYNOMIALS: HALF-INTERVAL SEARCH"
@@ -593,9 +753,11 @@ machines:
 420  GOTO 60
 430  RUN "MATH"
 ```
+{% endraw %}
 
 ## M21.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "TRIG POLYNOMIAL"
@@ -618,9 +780,11 @@ machines:
 170  GOTO 50
 180  RUN "MATH"
 ```
+{% endraw %}
 
 ## M22.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  CLS:PRINT "SIMULTANEOUS EQUATIONS"
@@ -670,9 +834,11 @@ machines:
 436 IF A$="y" OR A$ = "Y" THEN 10
 440  RUN "MATH"
 ```
+{% endraw %}
 
 ## M23.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "LINEAR PROGRAMMING"
@@ -780,9 +946,11 @@ machines:
 1030  END 
 5530  IF M = 1 THEN 880
 ```
+{% endraw %}
 
 ## M24.BAS
 
+{% raw %}
 ```bas
 10 PRINT "MATRIX ADDITION, SUBTRACTION, SCALAR MULTIPLICATION"
 20 PRINT
@@ -831,9 +999,11 @@ machines:
 450 IF D=1  THEN 70
 460 RUN "MATH"
 ```
+{% endraw %}
 
 ## M25.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  CLS:PRINT "MATRIX MULTPLICATION"
@@ -878,9 +1048,11 @@ machines:
 387 IF A$="Y" OR A$="y" THEN 10
 390  RUN "MATH"
 ```
+{% endraw %}
 
 ## M26.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  CLS:PRINT "MATRIX INVERSION "
@@ -936,9 +1108,11 @@ machines:
 497 IF A$="Y" OR A$="y" THEN 10
 500  RUN "MATH"
 ```
+{% endraw %}
 
 ## M3.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "AREA OF A POLYGON"
@@ -965,9 +1139,11 @@ machines:
 220  GOTO 40
 230  RUN "MATH"
 ```
+{% endraw %}
 
 ## M4.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 5 DEF FNA (X) = 1.570796 - ATN (X/ SQR (X * X-1))
@@ -1007,9 +1183,11 @@ machines:
 350  IF Z = 1 THEN 20
 360  RUN "MATH"
 ```
+{% endraw %}
 
 ## M5.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 1  DEF  FNA(X) =  ATN (X /  SQR ( - X * X + 1))
@@ -1081,9 +1259,11 @@ machines:
 550  GOTO 60
 560 RUN "MATH"
 ```
+{% endraw %}
 
 ## M6.BAS
 
+{% raw %}
 ```bas
 10 PRINT "OPERATIONS ON TWO VECTORS"
 20 PRINT
@@ -1102,9 +1282,11 @@ machines:
 150 IF X = 1   THEN 20
 160 RUN "MATH"
 ```
+{% endraw %}
 
 ## M7.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "COORDINATE CONVERSION"
@@ -1146,9 +1328,11 @@ machines:
 370  GOTO 60
 380  RUN "MATH"
 ```
+{% endraw %}
 
 ## M8.BAS
 
+{% raw %}
 ```bas
 0 CLS:PRINT
 10  PRINT "COORDINATE PLOT"
@@ -1261,9 +1445,11 @@ machines:
 1069 A$=INKEY$: IF A$="" THEN 1069
 1070  RUN "MATH"
 ```
+{% endraw %}
 
 ## M9.BAS
 
+{% raw %}
 ```bas
 5  CLS
 10  PRINT "ANGLE CONVERSION:"
@@ -1289,9 +1475,11 @@ machines:
 230  GOTO 50
 240  RUN "MATH"
 ```
+{% endraw %}
 
 ## MATH.BAS
 
+{% raw %}
 ```bas
 10 CLS:' EDITED BY ats  11.26.81   MATH.BAS -------------------
 15 KEY OFF:WIDTH 80
@@ -1318,9 +1506,11 @@ machines:
 230  DATA  "QUADRATIC FORMULA","REAL ROOTS:NEWTON","REAL ROOTS:HALF-INTERVAL SEARCH","TRIG POLYNOMIAL","SIMULTANEOUS EQUATIONS"
 240  DATA "LINEAR PROGRAMMING","SIMPLE MATRIX OPERATIONS","MATRIX MULTIPLICATION","MATRIX INVERSION","RETURN TO MAIN MENU"
 ```
+{% endraw %}
 
 ## MATRIX.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF:WIDTH 80
 10 '====== SIMULTANEOUS EQUATIONS ====
@@ -1436,9 +1626,11 @@ machines:
 1620 LPRINT "   " CHR$(96+I)" =";D(I)
 1630 NEXT I
 ```
+{% endraw %}
 
 ## NCCLSPRE.BAS
 
+{% raw %}
 ```bas
 5 CLS:KEY OFF
 10 REM PRECISION PROGRAM v1.83 by N. ADAMS
@@ -1512,9 +1704,11 @@ machines:
 660 IF ZX$ ="e" OR ZX$ = "E" THEN 700 ELSE 640
 700 CLS: KEY ON
 ```
+{% endraw %}
 
 ## NORMAL-Z.BAS
 
+{% raw %}
 ```bas
 100  '**********************************************************************
 110  '********                                                   ***********
@@ -1648,9 +1842,11 @@ machines:
 4130            CALCULATED.AREA = CALCULATED.AREA - PRECISION.ERROR
 4140     RETURN
 ```
+{% endraw %}
 
 ## REGRESS.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:PRINT:CLS:N$="IBM PC User Group of Greater Kansas City":N2$="Keith D. Barber - Librarian":PRINT TAB(19) N$:PRINT :PRINT TAB(25) N2$:FOR T=1 TO 1000 :NEXT T:CLS:N4$="REGRESSION ANALYSES":PRINT TAB(30) N4$:PRINT
 20 PRINT "This program fits a straight line, a geometric curve, and an exponential curve  to a given set of coordinates using the method of least squares.":X$=CHR$(253)
@@ -1698,9 +1894,11 @@ machines:
 300 LPRINT TAB(47) N$:LPRINT TAB(52) N2$:LPRINT:LPRINT TAB(56) N4$:LPRINT :LPRINT TAB(13); N5$; TAB(105) "By ";KB$:LPRINT TAB(13) "Project No. "; N6$; TAB(105) "Date ";N3$:RETURN
 500 IF ERR=27 OR ERR=25 THEN PLAY"T110L8MSD4MNO3GABO4CD4O3MSG4MNG4O4MSE4MNCDEF#G4O3MSG4MNG4MSO4C4MNDCO3BAMSB4MN04CO3BAG":PRINT "TURN PRINTER ON":RESUME 250
 ```
+{% endraw %}
 
 ## S1.BAS
 
+{% raw %}
 ```bas
 10  PRINT "PERMUTATIONS AND COMBINATIONS"
 20  PRINT 
@@ -1732,9 +1930,11 @@ machines:
 270 GOTO 40
 280 RUN "STAT"
 ```
+{% endraw %}
 
 ## S10.BAS
 
+{% raw %}
 ```bas
 10  CLS:PRINT "STUDENT'S T-DISTRIBUTION TEST"
 20  PRINT 
@@ -1784,9 +1984,11 @@ machines:
 447 IF A$="Y" OR A$="y" THEN 10
 450 RUN "STAT"
 ```
+{% endraw %}
 
 ## S11.BAS
 
+{% raw %}
 ```bas
 10  PRINT "F-DISTRIBUTION"
 20  PRINT 
@@ -1823,9 +2025,11 @@ machines:
 330 GOTO  40
 340 RUN "STAT"
 ```
+{% endraw %}
 
 ## S12.BAS
 
+{% raw %}
 ```bas
 10 CLS:PRINT "LINEAR CORRELATION COEFFICIENT"
 20 PRINT
@@ -1852,9 +2056,11 @@ machines:
 217 IF A$="Y" OR A$="y" THEN 10
 220 RUN "STAT"
 ```
+{% endraw %}
 
 ## S13.BAS
 
+{% raw %}
 ```bas
 10  PRINT "MULTIPLE LINEAR REGRESSION"
 20  PRINT 
@@ -1939,9 +2145,11 @@ machines:
 800 GOTO 710
 810 RUN "STAT"
 ```
+{% endraw %}
 
 ## S14.BAS
 
+{% raw %}
 ```bas
 10 CLS:PRINT "LINEAR REGRESSION"
 20 PRINT
@@ -1985,9 +2193,11 @@ machines:
 387 IF A$="Y" OR A$="y" THEN 10
 390 RUN "STAT"
 ```
+{% endraw %}
 
 ## S15.BAS
 
+{% raw %}
 ```bas
 10 PRINT "NTH-ORDER REGRESSION"
 20 PRINT
@@ -2070,9 +2280,11 @@ machines:
 780 GOTO  690
 790 RUN "STAT"
 ```
+{% endraw %}
 
 ## S16.BAS
 
+{% raw %}
 ```bas
 10 PRINT "GEOMETRIC REGRESSION"
 20 PRINT
@@ -2116,9 +2328,11 @@ machines:
 400 GOTO  350
 410 RUN "STAT"
 ```
+{% endraw %}
 
 ## S17.BAS
 
+{% raw %}
 ```bas
 10 PRINT "EXPONENTIAL REGRESSION"
 20 PRINT
@@ -2162,9 +2376,11 @@ machines:
 400 GOTO 350
 410 RUN "STAT"
 ```
+{% endraw %}
 
 ## S18.BAS
 
+{% raw %}
 ```bas
 10 PRINT "MEAN, VARIANCE, STANDARD DEVIATION"
 20 PRINT
@@ -2205,9 +2421,11 @@ machines:
 370 IF S=1  THEN 20
 380 RUN "STAT"
 ```
+{% endraw %}
 
 ## S2.BAS
 
+{% raw %}
 ```bas
 10  CLS:PRINT "MANN-WHITNEY U-TEST"
 20  PRINT 
@@ -2287,9 +2505,11 @@ machines:
 706 IF A$="y" OR A$="Y" THEN 10
 710 RUN "STAT"
 ```
+{% endraw %}
 
 ## S3.BAS
 
+{% raw %}
 ```bas
 10 PRINT "GEOMETRIC MEAN AND DEVIATION"
 20 PRINT
@@ -2316,9 +2536,11 @@ machines:
 190 GOTO  40
 200 RUN "STAT"
 ```
+{% endraw %}
 
 ## S4.BAS
 
+{% raw %}
 ```bas
 10  PRINT "BINOMIAL DISTRIBUTION"
 20  PRINT 
@@ -2348,9 +2570,11 @@ machines:
 260 GOTO  50
 270 RUN "STAT"
 ```
+{% endraw %}
 
 ## S5.BAS
 
+{% raw %}
 ```bas
 10  PRINT "POISSON DISTRIBUTION"
 20  PRINT 
@@ -2371,9 +2595,11 @@ machines:
 170  GOTO 40
 180  RUN "STAT"
 ```
+{% endraw %}
 
 ## S6.BAS
 
+{% raw %}
 ```bas
 10  PRINT "NORMAL DISTRIBUTION"
 20  PRINT 
@@ -2405,9 +2631,11 @@ machines:
 280 GOTO  150
 290 RUN "STAT"
 ```
+{% endraw %}
 
 ## S7.BAS
 
+{% raw %}
 ```bas
 10  PRINT "CHI-SQUARE DISTRIBUTION"
 20  PRINT 
@@ -2438,9 +2666,11 @@ machines:
 270 GOTO  40
 280 RUN "STAT"
 ```
+{% endraw %}
 
 ## S8.BAS
 
+{% raw %}
 ```bas
 10 CLS:WIDTH 80:CLEAR:PRINT "Chi-Square Test":PRINT
 28 REM Limit size of contingency tables to V1(R*C),V2(C),A(R)
@@ -2501,9 +2731,11 @@ machines:
 480 IF A$="Y" OR A$="y" THEN 10
 500 RUN "stat"
 ```
+{% endraw %}
 
 ## S9.BAS
 
+{% raw %}
 ```bas
 10  PRINT "STUDENT'S T-DISTRIBUTION"
 20  PRINT 
@@ -2540,9 +2772,11 @@ machines:
 330 GOTO  40
 340 RUN "STAT"
 ```
+{% endraw %}
 
 ## STAT.BAS
 
+{% raw %}
 ```bas
 10 ' EDITED BY ats   11.26.81    STAT.BAS -----------------------
 20  CLS : PRINT "STATISTICS PROGRAMS:"
@@ -2563,6 +2797,7 @@ machines:
 160  DATA "MULTIPLE LINEAR REGRESSION","LINEAR REGRESSION","NTH ORDER REGRESSION","GEOMETRIC REGRESSION","EXPONENTIAL REGRESSION "
 170  DATA  "MEAN-VAR-ST DEVIATION (FINANCE 02)","RETURN TO MAIN MENU"
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

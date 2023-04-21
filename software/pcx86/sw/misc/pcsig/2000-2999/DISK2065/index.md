@@ -30,6 +30,113 @@ machines:
     great way to introduce small children to the computer.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## ORDER.DOC
+
+{% raw %}
+```
+
+                          INVOICE
+
+
+Remit to:                                      From:
+
+COMPASS SYSTEMS                         _____________________________
+
+P.O. Box 84                             _____________________________
+
+Hatboro, Pa  19040                      _____________________________
+
+
+                                              Mail To:
+
+                                        _____________________________
+
+                                        _____________________________
+
+                                        _____________________________
+
+
+Qty                             Unit Price                 Total
+
+n/a   KID PAINT version 3.004   $  4.50                  $ 4.50
+      registration fee          
+
+____  KID PAINT  5 1/4" disk    $ 17.50                  ________
+      version 4.0 six-pack
+
+____  KID PAINT  3 1/2" disk    $ 18.50                  ________
+      version 4.0 six-pack
+
+      Pennsylvannia residents add 6% sales tax ($1.05)   ________ 
+
+                                  TOTAL                  ________
+
+
+
+
+Note:  Registered users of KID PAINT will receive the Shareware version
+of "WHAT IS IT ???" when it becomes available (Expected release date:
+Nov 15, 1989).
+
+Note: Prices valid till 1/1/90
+```
+{% endraw %}
+
+## ORDER.DOC
+
+{% raw %}
+```
+
+                          INVOICE
+
+
+Remit to:                                      From:
+
+COMPASS SYSTEMS                         _____________________________
+
+P.O. Box 84                             _____________________________
+
+Hatboro, Pa  19040                      _____________________________
+
+
+                                              Mail To:
+
+                                        _____________________________
+
+                                        _____________________________
+
+                                        _____________________________
+
+
+Qty                             Unit Price                 Total
+
+n/a   KID PAINT version 3.004   $  4.50                  $ 4.50
+      registration fee          
+
+____  KID PAINT  5 1/4" disk    $ 17.50                  ________
+      version 4.0 six-pack
+
+____  KID PAINT  3 1/2" disk    $ 18.50                  ________
+      version 4.0 six-pack
+
+      Pennsylvannia residents add 6% sales tax ($1.05)   ________ 
+
+                                  TOTAL                  ________
+
+
+
+
+Note:  Registered users of KID PAINT will receive the Shareware version
+of "WHAT IS IT ???" when it becomes available (Expected release date:
+Nov 15, 1989).
+
+Note: Prices valid till 1/1/90
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2065
 

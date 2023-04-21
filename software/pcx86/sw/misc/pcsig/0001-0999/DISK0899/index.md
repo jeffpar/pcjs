@@ -63,6 +63,57 @@ machines:
     TOPIC     000  Overlay file.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES899.TXT
+
+{% raw %}
+```
+Disk No  899
+Program Title: ESL WRITER version 1 (Disk 1 of 2)
+PC-SIG version 1
+ 
+    This is the first disk of the program ESL WRITER, which contains the
+main word processing program and four help programs especially designed for
+the writing student. Help files are included for commands, punctuation,
+grammar, and revision. These programs can be accessed from within the
+program, or they can be viewed from the outside. ESL WRITER has a pulldown
+menu system for the most common editing commands, while other commands are
+described in detail in the command help file. You can use your own printer
+control characters for any printing formats (e.g., underlining, italics,
+bold print, etc.), thus ESL WRITER is compatible with any printer.
+ 
+Usage: Word Processing
+ 
+System Requirements: 128K memory, one disk drive and a printer.
+ 
+How to Start: Type: MENU (press enter).
+ 
+Suggested Registration: $15.00 to $50.00
+ 
+File Descriptions:
+ 
+MENU     COM  Menu file.
+MS       COM  Main program.
+PUNCT    COM  Punctuation help file.
+REVISION COM  Revision help file.
+POSTMENU COM  Menu file.
+GRAM     COM  Grammar help file.
+WCMDS    COM  Commands help file.
+MS       000  Overlay file.
+INFO     COM  Program information.
+READ     ME   Introduction.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0899
 

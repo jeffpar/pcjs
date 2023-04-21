@@ -88,6 +88,7 @@ machines:
 
 ## BASBUG.BAS
 
+{% raw %}
 ```bas
 10 '***********************************************************************
 20 '
@@ -212,9 +213,11 @@ machines:
 1210 COLOR 7,0
 1220 RETURN
 ```
+{% endraw %}
 
 ## BASCONV.BAS
 
+{% raw %}
 ```bas
 10 REM	IBM-PC BASIC-TO-FORTRAN CONVERTER V. 1.0
 20 REM	   COPYRIGHT (C) JIM GLASS, MAY 1983
@@ -660,9 +663,156 @@ machines:
 30001 LOCATE 4,50:COLOR 6,0:PRINT"OUTPUT LINES:";OLIN
 30002 RETURN
 ```
+{% endraw %}
+
+## BASCONV.DOC
+
+{% raw %}
+```
+	    BASCONV--A FORTRAN-TO-BASIC CONVERSION AID
+			   BY JIM GLASS
+
+
+BASCONV  is  a	program for converting IBM-PC Basic programs into
+Microsoft or IBM Fortran. It will not perform every detail of the
+conversion  for  you,  but will perform the bulk of the drudgery.
+Careful  inspection  and editing of the resulting output file are
+vital if you wish to obtain a working Fortran program.
+
+BASCONV  is  easy  to use. It asks you for the name of the source
+(Basic)  file, the target (Fortran) file, and if you wish to have
+the  source  displayed	as  it is being converted. All file names
+must be supplied complete with drive identifier and extension, if
+any.  In  addition  to these files, BASCONV also builds a working
+file,  called  WORK,  on  the  current default drive. It DOES NOT
+delete the WORK file when the conversion is complete.
+
+BASCONV is fairly smart.  Among the things it can do are:
+
+	 Change  FOR/NEXT  loops  into	DO  loops.
+	 BASCONV  supplies target line numbers for
+	 the terminating CONTINUE if necessary.
+
+	 Change WHILE/WEND loops into IF..CONTINUE
+	 loops.
+
+	 Change  ON  n	GOTO  statements into GOTO
+	 (...)	n  type statements. ON...GOSUB and
+	 GOSUBS in general are NOT converted.
+
+	 Fully parse IF..THEN..ELSE statements and
+	 convert  into	equivalent Fortran logical
+	 IF statements or IF blocks. An IF without
+	 an ELSE becomes a pure logical IF.
+
+	 Handle     OPEN..FOR..AS     and     OPEN
+	 mode,file,... statements, converting them
+	 into Fortran OPEN statements.
+
+	 Detect   ALL	implicit  declarations	of
+	 variables,	and    provide	  explicit
+	 declarations  at  the	beginning  of  the
+	 Fortran source.
+
+	 Convert  all  keywords,  such	as ATN, to
+	 equivalents,  such  as  ATAN.	Also parse
+	 statements  such  as  x MOD y and convert
+	 into statements such as AMOD(x,y).
+
+	 Remove  all  Basic  line  numbers, except
+	 where	lines  are  explicitly referenced.
+	 These	 line	numbers   become   Fortran
+	 statement labels.
+
+	 Break	all  mulit-statement  Basic  lines
+	 into	single	statements  and  move  all
+	 source code into column seven as required
+	 by Fortran.
+
+	 Convert all double-quotes (") into single
+	 quotes (').
+
+	 Convert  Basic  exponentiation  (^)  into
+	 Fortran exponentiation (**).
+
+	 Provide  Fortran  statement functions for
+	 the Basic logical functions IMP, XOR, and
+	 EQV.
+
+	 Converts  PRINT  and  LPRINT  as  well as
+	 PRINT# and WRITE# statements into Fortran
+	 equivalents.
+
+	 Inserts  appropriate  code to convert the
+	 Basic	  SWAP	  keyword   into   Fortran
+	 statements.
+
+	 Converts  all	Basic relational operators
+	 such  as <,>,=,NOT,AND,OR into equivalent
+	 Fortran	      such		as
+	 .LE.,.GT.,.EQ.,.NOT.,.AND.,.OR.
+
+Some things BASCONV (at least version 1.0) CANNOT do are:
+
+	 Convert  Basic  graphics commands such as
+	 LINE, PSET, PRESET.
+
+	 Convert GOSUBS into CALLS
+
+	 Convert   PRINT  USING  into  WRITE  with
+	 FORMAT.
+
+	 Handle DATA/RESTORE/READ statements.
+
+	 Handle    CHAIN,    LSET,    MKI$,   CVI,
+	 statements.
+
+	 Handle  sceen positioning statements like
+	 POS(0), CSRLIN.
+
+
+Here  is  a list of the Basic keywords which ARE NOT converted by
+BASCONV:
+
+AUTO	 BLOAD	 BSAVE	 CALL	  CHAIN   CIRCLE  CLEAR   CLS
+COLOR	 COM	 COMMON  CONT	  CSRLIN  CVD	  CVI	  DATA
+DATE$	 DELETE  DRAW	 EDIT	  ERASE   ERL	  ERR	  ERROR
+FIELD	 FILES	 FRE	 GET	  GOSUB   HEX$	  INKEY$  INP
+INPUT$	 INSTR	 KEY	 KEY$	  KILL	  LEFT$   LEN	  LINE
+LIST	 LLIST	 LOAD	 LOC	  LOCATE  LOF	  LPOS	  LSET
+MERGE	 MID$	 MKD$	 MKI$	  MKS$	  MOTOR   NAME	  NEW
+OCT$	 OFF	 OPTION  OUT	  PAINT   PEEK	  PEN	  PLAY
+POINT	 POS	 PRESET  PSET	  PUT	  RANDOMIZE	  RENUM
+RESTORE  RESUME  RIGHT$  RND	  RESET   RUN	  SAVE	  SCREEN
+SOUND	 SPACE$  SPC(	 STICK	  STRIG   STRING$ SYSTEM  TAB(
+TIME$	 TROFF	 TRON	 USING	  USR	  VAL	  VARPTR  VARPTR$
+WAIT	 WIDTH
+
+Finally,  here	is a list of the Basic keywords which ARE handled
+by BASCONV:
+
+ABS	 AND	 ASC	 ATN	  CDBL	  CHR$	  CINT	  CLOSE
+COS	 CSNG	 DEF	 DEFDBL   DEFINT  DEFSNG  DEFSTR  DIM
+ELSE	 END	 EQV	 EXP	  FIX	  FNxxxx  FOR	  GOTO
+IF	 IMP	 INPUT	 INPUT#   INT	  LET	  LOG	  LPRINT
+MOD	 NEXT	 NOT	 ON..GOTO OPEN	  OR	  PRINT   PRINT#
+REM	 RETURN  SGN	 SIN	  SQR	  STEP	  STOP	  STR$
+SWAP	 TAN	 THEN	 TO	  WEND	  WHILE   WRITE   WRITE#
+XOR
+
+Although  the  list  of keywords recognized by BASCONV is shorter
+than  those not recognized, the most important are there. Many of
+the  unrecognized  words  are  those with no Fortran equivalents,
+such  as  LINE	or  PAINT.  A  few  are  not  handled  due to the
+difficulty    of    programming    the	  conversion,	such   as
+DATA/READ/RESTORE. Perhaps in Version 1.1...
+
+```
+{% endraw %}
 
 ## BASICDOS.BAS
 
+{% raw %}
 ```bas
 1000 ON KEY (1) GOSUB 4140:KEY (1) ON
 1010 REM ***********************************************************************         *                      PROGRAM1                                       *
@@ -980,9 +1130,11 @@ machines:
 4130 GOTO 4110
 4140 END
 ```
+{% endraw %}
 
 ## BASICREF.BAS
 
+{% raw %}
 ```bas
 1  REM ***********************************************************************
 2  REM *                                                                     *
@@ -1130,9 +1282,134 @@ machines:
 7050 C = ASC(C$(POINTER))                     'get next character ASCII value
 7060 RETURN
 ```
+{% endraw %}
+
+## BASICREF.DOC
+
+{% raw %}
+```
+               CROSS-REFERENCE UTILITY FOR IBM PC BASIC PROGRAMS
+
+To produce a cross-reference listing for BASIC programs running on the IBM 
+Personal Computer, I wrote a program that scans a BASIC program file and 
+builds a list of variable names and the locations where they occur.  The 
+program then sorts that list and writes it to a file. 
+
+The program expects a standard BASIC program file, that is, one saved without 
+the special A (ASCII - American National Standard Code for Information 
+Interchange) or P (protect) options.  The standard save procedure stores the 
+program in a tokenized format in which all reserved BASIC words are 
+represented by tokens, 1 or 2-byte codes.  For instance, the RANDOMIZE 
+statement is represented by a single ASCII value of 185.  This tokenized 
+format saves space because multiple-character reserved words are represented 
+by only one or two characters.
+
+All tokenized characters have a value of 128 or greater, outside the range of 
+ASCII values legal in variable names.  Only capital letters, numerals, and the 
+period are legal in variable names, and these have values between 46 and 90.  
+(Variables can be entered in lowercase, but BASIC converts them to capitals.)  
+The restrictions on legal variable names simplify the work of the cross 
+reference program because it can usually just skip tokens in its search for 
+valid variable names.  Two exceptions are the tokens for a remark (ASCII 143) 
+or data statement (ASCII 132).  In both these cases the program skips to the 
+end of the line so as not to confuse words in remarks, or literals in data 
+statements, with valid variable names.
+
+All numbers used in a program - constants, initial values, line-number 
+references, and so on - are also encoded.  For instance, an ASCII 28 code 
+indicates that an integer value follows in the next 2 bytes in the file.  An 
+ASCII 29 indicates a single - precision number in the next 4 bytes.  Other 
+prefixes indicate various types of double - precision numbers, octal numbers, 
+or hexadecimal numbers.
+
+The program skips over all coded numbers except those prefixed by an ASCII 14.  
+This code signifies a 2-byte number that is a program line number reference, 
+following a GOTO or GOSUB, for instance.  The cross-reference listing program 
+treats line number references as labels and lists all lines referenced by 
+other lines.  This can help you find all the places in a program that call a 
+certain subroutine.
+
+                          H O W    I T    W O R K S
+
+The format of the lines in a tokenized program file is shown in figure 1.  The 
+first 2 bytes are the BASIC offset address to the next program line.  Our only 
+interest in it is when it is 0 because a 0 offset signifies the end of the 
+program.  The next 2 bytes contain the line number, with the least significant 
+byte first.  These are followed by a series of bytes, including tokens, coded 
+numbers, and variable names, up to the end of the line, indicated by an ASCII 
+value of 0.
+
+The approach of the cross reference utility, then, is very simple.  It makes a 
+note of the line number being scanned at the moment, then skips over tokens 
+and encoded numbers, looking for variable names and references to other 
+program lines.  When it finds the beginning of a variable name, it builds the 
+name, character by character, until it comes to an ASCII code that can't be 
+part of a variable name.  If the variable has been explicitly typed (marked by 
+a $, #, !, %), that character is added to the end of the name.  If the 
+variable is subscripted, then "(SUB)" is added.  Once complete, the variable 
+name is stored in an array; the line number where it appears is stored in a 
+parallel array of line numbers.
+
+Once the entire program file has been scanned, the label and line number 
+arrays are sorted using a Shell sort. Then they are written to a disk file.
+
+The only real problem is that all the scanning and sorting takes time.  The 
+program took nearly 7 minutes to process and sort labels for its own 145 lines 
+and 245 label references.  For a smaller program (123 references and 133 
+labels), it required 3 minutes 45 seconds.  You can get a modest increase in 
+speed of about 5 to 10 percent by eliminating comments and consolidating 
+statements in to one line where possible.  This will have the greatest effect 
+in the WHILE loop beginning at line 600 and the sort routine beginning at line 
+800.
+
+                                B E    W A R Y
+
+In order not to slow the program down further, I kept it as simple as 
+possible.  Because of this, a few bogus variables may creep into your listing.  
+These are words used as part of BASIC statements that are not tokenized.  They 
+include the following:  ALL in a CHAIN statement, BASE in an  OPTION BASE 
+statement, B or BF in a LINE statement, R in a LOAD statement, AS in APPEND, 
+or OUTPUT in an OPEN statement.  None of these is a reserved word, and they 
+are therefore not tokenized.  Thus, if you use them in a program, the cross 
+reference utility will treat them as variable names.  Note that both AS and 
+OUTPUT appear in listing 2.
+
+The cross reference listing is written to a sequential disk file, which may be 
+read later.  The file name for the listing is the file name of the program 
+file with an extension of CRF.  If the original program file were MYPROG.BAS, 
+the listing would appear on file MYPROG.CRF.  To display the listing on your 
+monitor, you first need access to the DOS (disk operating system) - execute 
+SYSTEM from BASIC.  When in DOS, execute TYPE MYPROG.CRF.  If you want a hard 
+copy, press the Ctrl and PrtSc keys simultaneously prior to execution the TYPE 
+command; the listing on the monitor will then be output to the printer.
+
+                          M O D I F I C A T I O N S
+
+The output is formatted for an 80 - column screen or printer as the program 
+appears in listing 1.  To format for a 40 - column screen, change N>8 in line 
+3070 to N>3.  To format for a 132 - column printer width, change it to N>16.  
+You may also want to redimension the arrays in statement 110.  They are large 
+enough for modest programs, but larger programs with more references will need 
+more space.
+
+ 
+
+
+        This disk copy was originally provided by "The Public Library",
+        the software library of the Houston Area League of PC Users.
+ 
+        Programs are available from the Public Library at $2 per disk
+        on user-provided disks.  To get a listing of the disks in the
+        Public Library, send a self-addressed, stamped envelope to
+
+             Nelson Ford,  P.O.Box 61565,  Houston, TX 77208.
+
+```
+{% endraw %}
 
 ## COMPRESS.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -1221,9 +1498,25 @@ machines:
 940            MID$(OUTLINE$, J%, 1) = MID$(INLINE$, I%, 1)                                            : J% = J% + 1 : I% = I% + 1
 950    RETURN
 ```
+{% endraw %}
+
+## COMPRESS.DOC
+
+{% raw %}
+```
+
+Compresses a BASIC program by taking out extra spaces and remarks.
+1. Save the BASIC program in ASCII.
+2. RUN "COMPRESS"
+(Works slowly.)
+
+
+```
+{% endraw %}
 
 ## COREFIX.BAS
 
+{% raw %}
 ```bas
 7999 GOSUB 8000: END
 8000 DEF SEG: BCOLS%=PEEK(&H29): D$="     ": F$="|"
@@ -1271,9 +1564,67 @@ machines:
 8360 NEXT II%
 8370 RETURN
 ```
+{% endraw %}
+
+## CR-LF.TXT
+
+{% raw %}
+```
+
+Sb: #38907-#Epson MX & FX Graphics
+    06-May-84  02:05:11
+Fm: Phil Bornemeier 72356,3033
+To: Jim Gainsley    70346,457 (X)
+
+My problem with CR/LF was that when I was using bit graphics and sent an ascii
+13, it was always followed by an ascii 10.  Also under DOS 2.0 ascii 26 would
+not be sent to the printer. * This program is an example of one way to bypass
+the DOS 1.1 and DOS 2.0 limitations in printing ASCII 26 and the ASCII 13,10
+pair. * 10 FOR VALUE = 0 TO 255 20 OUT &H3BC,VALUE 30 A=INP(&H3BD):B=A AND
+128:IF B THEN 40 ELSE 30 40 OUT &H3BE,237:OUT &H3BE,236 50 NEXT 60 END * Thanks
+for your help.
+```
+{% endraw %}
+
+## DITHRING.TXT
+
+{% raw %}
+```
+"dithering":  This is where instead of a solid color, you have an
+every-other-dot mix of two (or more) colors.
+  For example, with the "light blue" background, and red yellow green palette,
+you can get colors such as turquoise (half blue, half green), purple
+(red/blue), orange (red/yellow), etc.  Try this:
+ screen 1:color 17,0:paint(100,100),chr$(&hbb)+chr$(&hee)
+ You'll see the gol' dernest ORANGE you've ever seen.  How did I do it?  Well,
+each color is 2 bits.  00 = blue, 01 = green, 10 = red, 11 = yellow.  So,
+orange is RY in one row, YR in the next, or binary 1011 1011 in one, 1110 1110
+the other.  In hex, these are bb ee.  Voila.
+  If you want to have proportionally darker colors when dithering, i.e. a
+"little yellow on a lot of blue", just turn on one dot in 16. Two dots in 16 is
+a bit more, etc.  As to the "order" to turn on the dots, consider a 4 x 4 box,
+and turn on subsequent dots in the following order:
++----+----+----+----+
+|  1 | 13 |  3 | 15 |
++----+----+----+----+
+|  9 |  5 | 11 |  7 |
++----+----+----+----+
+|  4 | 16 |  2 | 14 |
++----+----+----+----+
+| 12 |  8 | 10 |  6 |
++----+----+----+----+
+  Note how if you turn on dots 1-2, it will be a uniform pattern across a large
+area.  Similarly 1-2-3-4 makes a slightly more dense pattern (25% foreground,
+75% background).
+  I have used this technique to get grey scale on a printer - and it works VERY
+well.  Bands going from 0 on to all 16 on, quite nicely moved from white to
+black.
+```
+{% endraw %}
 
 ## FC.BAS
 
+{% raw %}
 ```bas
 10 INPUT "Enter original file name-",IF1$:OPEN IF1$ FOR INPUT  AS 1
 20 INPUT "Enter modified file name-",IF2$:OPEN IF2$ FOR INPUT  AS 2
@@ -1299,9 +1650,583 @@ machines:
 900 CLOSE:PRINT "End of scan"
 910 END
 ```
+{% endraw %}
+
+## FILES371.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 371   BASIC Programming Aids                            V1.1
+------------------------------------------------------------------------
+Utilities to assist the programmer in writing and debugging BASIC
+programs.
+ 
+BASBUG   BAS  Information on BASIC screen bug.
+BASCONV  BAS  Fortran to BASIC conversion.
+BASCONV  DOC  Documentation for BASCONV.BAS.
+BASICDOS BAS  Information on different commands.
+BASICREF BAS  BASIC cross reference utility.
+BASICREF DOC  Documentation for BASICREF.BAS.
+COMPILER ERR  Info about "string space corrupt" error in a compiled program:
+COMPRESS BAS  Compresses a BASIC program by taking out extra spaces and
+               remarks.
+COMPRESS DOC  Documentation for COMPRESS.BAS.
+COREFIX  BAS  Display/change memory.
+CR-LF    TXT  Info on Epson printers in graphics mode.
+DITHRING TXT  Where instead of a solid color, you have an every-other-dot
+              mix of two (or more) colors.
+FC       BAS  File compare utility.
+GS-RENUM EXE  GS - BASIC utilities.
+GS-UNNUM EXE  GS - BASIC utilities.
+GS-UNUM6 DOC  Documentation for GS-?????? files
+GS-VAREN EXE  GS - BASIC utilities.
+READ     ME   Indicates changes made in GS files
+HIRESCOL BAS  640 X 200 B/W graphics demo program.
+KB_FLAG  BAS  Demo program shows BASIC access to DOS Keyboard flag.
+KEYIN    ASM  Source code for KEYIN.EXE.
+KEYIN    EXE  Places up to parameter characters into the keyboard buffer
+               for the program to read.
+LBAS     DOC  Documentation for LBAS.EXE.
+LBAS     EXE  Label BASIC translator program.
+LBL-BAS  BAS  BASIC source file label checker.
+LBL-SAMP BAS  Sample file for LBL-BAS.BAS.
+LINEBUG  BAS  Utility to check BASIC source files for errors.
+LINEBUG  DOC  Documentation for LINEBUG.BAS.
+MONITOR  BAS  Series of routines that provide a user interface for
+               application  development.
+MONITOR  DQC  Documentation for MONITOR.BAS.
+PAL80    BAS  80 column palette prompter.
+POKEPEEK TXT  Commonly used BASIC peeks, pokes and subroutines.
+PROFILE  BAS  Utility that logs how much time is spent executing each
+               part of a program.
+PROFILE  DOC  Documentation for PROFILE.BAS.
+PROFILE  MEM  Part of PROFILE.BAS.
+READBAS  BAS  Read BASIC files save in BINARY.
+SAVEBAS  COM  Creates a file from a BASIC program that was "lost"
+               through use of the SYSTEM command.
+SAVEBAS  DOC  Documentation for SAVEBAS.COM
+SCRN-MAP BAS  Print a form for graphic screen layout.
+SQUISHER BAS  Compresses BASIC programs.
+SQUISHER DOC  Documentation for SQUISHER.BAS.
+STARTBAS BAS  A BASIC file menu program.
+TRACE    BAS  Helps debug BASIC programs.
+TRACE    DOC  Documentation for TRACE.BAS.
+UN-COMPQ DOC  Documentation for UN-COMPQ.EXE.
+UN-COMPQ EXE  Unprotects a BASIC program on the COMPAQ computer.
+UN-NEW   DOC  How to recover a BASIC program after typing 'NEW'.
+UNP-IBM  DOC  Documentation for UNP-IBM.EXE.
+UNP-IBM  EXE  Unprotects a BASIC program on the IBM computer.
+ 
+ 
+PC-SIG
+1030D E Duane Ave
+Sunnyvale, CA 94086
+(408) 730-9291
+(c) copyright 1987 PC-SIG
+ 
+```
+{% endraw %}
+
+## GS-UNUM6.DOC
+
+{% raw %}
+```
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+                               Documentation for:
+ 
+               GS-UNNUM.EXE version 6.00  (formerly version 5.00)
+               GS-RENUM.EXE version 4.00  (formerly version 3.10)
+               GS-VAREN.EXE version 3.00  (formerly version 2.10)
+ 
+                   All programs written by Charles B. Gilmore
+ 
+         All programs - (C)Copyright GILMORE SYSTEMS, 1984, 1985, 1986
+                                      ____
+                                     |    |
+                                     | GS |
+                                     |____|
+ 
+                                GILMORE SYSTEMS
+                                 P.O. Box 3831
+                      Beverly Hills, CA 90212-0831  U.S.A.
+                                Ph 213/276-5997
+ 
+    You  are  hereby  granted  a license to use, share, copy, and distribute
+    these  three programs and this documentation, provided that this notice,
+    and  the Copyright information is not removed or altered in any way from
+    this  notice  or accompanying programs. No fee or consideration is to be
+    charged  for  the  distribution. These three programs are provided on an
+    AS-IS   basis  without  warranty  of  any  kind  expressed  or  implied.
+    The  entire  risk  as to quality and performance of these programs rests
+    solely  with the user. In no event will Gilmore Systems be liable to you
+    for  any  damages, consequential or inconsequential. By operating any of
+    the  above  programs,  you acknowledge you have read and understand this
+    agreement   and   agree  to  be  bound  by  its  terms  and  conditions.
+
+ 
+ 
+GS - BASIC Optimizing Utilities                                          Page  1
+Background Information
+ 
+ 
+    Being  a  software  developer,  I  wrote my first commercial program for
+    the  IBM  personal  computer  in  compiled BASIC. Little did I know that
+    it   would  be  a  nightmare.  Being  used  to  mainframe  systems  with
+    hardly  any  memory  limitations,  I  started  coding  away.  Everything
+    went  fine  until  the  program  was  in its final stages and just a few
+    more  modifications  and  enhancements  were added. All of a sudden, the
+    nightmare  begins  with  the  BASIC  compiler  -  Out of workspace, "Too
+    Complex",  and  other  error  messages  from  the compiler not only made
+    it  impossible  to  add  anymore code, but nearly impossible to fix what
+    was  already written! More time was spent getting the program to compile
+    than  it  was writing it (About 1000 lines of packed code)! As a spinoff
+    for  writing  the  programs,  I  had  to  write  new utility programs to
+    Un-number  the  program  from  any  non-referenced  lines  to  get it to
+    compile  with  the "/N" option. To make a long story short, I found many
+    tricks  to  cut  down  on  compiler  problems,  and  to  cut down on the
+    resultant '.EXE' size:
+ 
+         -  EVERY   byte   of  source  code  uses  compiler  workspace,
+            including   comments!   Although   comments   aren't   used
+            by  the  compiler  except  for  metacommands,  they  indeed
+            take  up  workspace.  The  more  bytes  of source code, the
+            more  workspace  used  up  -  this includes variable names.
+ 
+         -  Branching  to  a  comment  is  a  branch  to  an unecessary
+            line  number  -  more  space  used  not  only in bytes, but
+            in the compiler's table for line numbers.
+ 
+         -  The  code  generated  from  a  "RETURN"  from a gosub takes
+            more  bytes  in the resultant '.EXE' than a "GOTO", hence -
+            larger  executable  file  size,  and longer load time. This
+            was in bad need of optimization.
+ 
+    The  solution  was to switch to a different language from that point on.
+    Unfortunately,  I  had  invested  too  much  time  and  effort into that
+    particular  program  to  do  that,  so  I  wrote 3 utility programs that
+    would  produce  an  intermediate  BASIC  source file prior to compiling,
+    and  also  re-number  this  intermediate  file  so that it may be run in
+    the   interpreter   along   with   savings   in  interpreter  workspace.
+ 
+    The  use  of  the  device  driver ANSI.SYS is no longer required. All of
+    the  version  numbers  of  these  programs have been incremented by 1 to
+    reflect  this  change.  This  is  in  preparation  for running under the
+    Topview environment since Topview does not support ANSI.SYS. If you will
+    be  running  under  the  Topview  environment,  please  contact  us  for
+    information regarding this usage. Since Topview is not publicly released
+    at the time of this writing, we cannot publish information regarding it.
+ 
+    The  following  pages  contain  brief documentation on using each of the
+    three  programs.  You  may  obtain  a  brief program synopsis for any of
+    these  programs  by  typing  the  program  name  on the DOS command line
+    followed  by  a  question  mark. For instance, if you wanted information
+    on  GS-UNNUM  you  would simply type "GS-UNNUM ?" (without the quotation
+    marks).  Note  that  192K  RAM  should be available when using DOS 3.00.
+ 
+ 
+                                  (C)Copyright GILMORE Systems, 1984, 1985, 1986
+
+ 
+ 
+GS - BASIC Optimizing Utilities                                          Page  2
+Background Information
+ 
+ 
+                             GS-UNNUM version 5.00
+ 
+    This program will not only un-number your BASIC source program, but will
+    optionally  scan for lowercase BASIC verbs, Un-comment your BASIC source
+    program,  remove branches to commented lines wherever possible by moving
+    the line number to the next line if it has been un-numbered, and re-work
+    all of your RETURN statements in a more efficient manner. I was inspired
+    to  write  this  program  because  similar  un-numbering  programs  only
+    un-numbered  the  source  code,  and  not  only  missed things, but were
+    extremely  slow!  GS-UNNUM  is  very fast, however, the more options you
+    choose,  the  longer it will take to run. It still runs faster than most
+    programs   that   only   un-number   even   with   all  options  chosen.
+ 
+    One  note  about  continuation  of  lines  (Compiler  only)  - The BASIC
+    compiler  will  accept  continuation  of a line by placing an underscore
+    character  as  the  last character of the line to be continued. GS-UNNUM
+    will  support  this feature only if the first character of the continued
+    line starts with a blank as the first character.
+ 
+                           Changes since version 3.00
+ 
+    The '/R' option has been changed. A parameter must now accompany the use
+    of this option. '/R' optimizes the RETURN statements in your output file
+    so  that only one RETURN will be present in the file. Version 3.00 added
+    this  return  statement  as  line 2 which has caused problems when using
+    metacommands  such as COMMON. Version 4 corrects this by having you tell
+    it  which  line  number has the RETURN statement to be used. If you want
+    GS-UNNUM  to  pick  which RETURN statement is to be used, tell it to use
+    line  0.  Regardless of which method you use for '/R', it will no longer
+    interfere with the use of metacommands such as COMMON. RETURN statements
+    in  the  form of "RETURN nnnnn" will be left alone, and the program will
+    terminate  with  an  error  message  if  you  specify the line number of
+    a RETURN statement of the above form.
+ 
+                                 Clarifications
+ 
+    '/T'  was  not explained. What '/T' does is remove the actual "  REM   "
+    and  "  '  "  that  '/C'  couldn't.  '/C'  removes  the  actual  written
+    comment.   '/T'   also  removes  all  unnecessary  spaces,  and  puts  a
+    physical  end  of  line  mark  after  the last nonspace character in the
+    line  ('/C'  does  not).  '/T' further eliminates branches to a numbered
+    comment  when  possible  -  this  is done by checking to see if the next
+    line  has  a  line  number, if it doesn't, the comment is eliminated and
+    the line number is moved to the next line.
+ 
+                                    REMINDER
+ 
+    Remember  to  use  the  '/L' option if your input file has any lowercase
+    BASIC  verbs,  or  important  branching  information  will be missed and
+    you  will  end  up  with  undefined line numbers in the output file when
+    you try to compile.
+ 
+ 
+ 
+ 
+                                  (C)Copyright GILMORE Systems, 1984, 1985, 1986
+
+ 
+ 
+GS - BASIC Optimizing Utilities                                          Page  3
+Background Information
+ 
+ 
+                             GS-VAREN version 2.10
+ 
+    This  program  will  rename  the  variables in your BASIC source file to
+    shorter  names,  and  optionally produce a report of your variable names
+    and  what they have been renamed to. This program is the slowest running
+    of  all  three  programs,  but  is very efficient in its search. To save
+    time,  the  use  of  this  program is suggested on the intermediate file
+    produced by GS-UNNUM.
+ 
+                           Changes since version 1.00
+ 
+    This  program  now  looks  for a file called GS-VAREN.TBL on the default
+    drive.  If  it  finds  it,  it will use this file for the BASIC reserved
+    word  list  instead  of  the built-in default table. If it does not find
+    this  file,  it  will  create  it  with  all  the  reserved words in the
+    built-in  default  table. You may eliminate words that you are not using
+    or  modify the file in any other way. The fewer words in this table, the
+    faster  the  program  will  run.  Words  in  this file must meet certain
+    requirements:  1)  first  character  must be alphabetic, 2) total length
+    of  word  must  not  exceed  10  characters,  3)  no imbedded spaces are
+    allowed,  and 4) only one entry per line is allowed. Violation of any of
+    these  rules  will  result in program termination with an error message.
+    Upper/Lowercase  is  unimportant.  Note that reserved words requiring an
+    imbedded  space are considered to be 2 separate words. For example, LINE
+    INPUT  consists  of  2  words,  LINE and INPUT, which require 2 separate
+    entries. ON KEY would be another example.
+ 
+    If  you  start  this  program  with  an  input  filename only (no output
+    filename  and  no  report  filename),  GS-VAREN  will  scan through your
+    input  file  with  its  built-in  default  table,  and  produce the file
+    GS-VAREN.TBL  containing  a  list  of  all  the  BASIC reserved words it
+    found in your input file.
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+                                  (C)Copyright GILMORE Systems, 1984, 1985, 1986
+
+ 
+ 
+GS - BASIC Optimizing Utilities                                          Page  4
+Background Information
+ 
+ 
+                             GS-RENUM version 3.10
+ 
+    This  program  will re-number the intermediate file produced by GS-UNNUM
+    so that it may be loaded into the BASIC interpreter. This is the fastest
+    running  of  all  the  programs.  It does 1000 lines of code in about 60
+    seconds on an IBM with a hard disk.
+ 
+                        CLOSING REMARKS FROM THE AUTHOR
+ 
+    Ironically,  these  three  programs  were written in the "C" programming
+    language.  BASIC is an excellent language for small to intermediate size
+    programs,  but  when  it comes to writing something major, nothing in my
+    opinion  beats  the  "C" language short of assembler. After encountering
+    the  aforementioned  nightmare, I have permanently switched to "C". This
+    way  I  can  devote  my  time  to  writing software products, instead of
+    devising  ways  to  get  around  compiler  and language limitations. All
+    future  software  products  from GILMORE SYSTEMS will be written in "C",
+    assembler, or a combination of both.
+ 
+    Much  time  has  been  spent  developing  the  above three programs, and
+    GS-UNNUM  alone  does much more than commercially available un-numbering
+    software.  If you find this program of use, please send a small monetary
+    donation  to GILMORE SYSTEMS for time and effort involved. A donation of
+    $20  or more will get you a customer number that entitles you to updates
+    and telephone assistance from GILMORE SYSTEMS.
+ 
+    GILMORE  SYSTEMS  develops  commercial software (not public domain), and
+    is  offering  these 3 programs to the public domain as a test for market
+    response.  Should  this  test be successful, many sophisticated software
+    products  will  be  made  available  to  the  public  domain  by GILMORE
+    SYSTEMS.  The more people that donate, the more successful the test will
+    be!
+ 
+    GILMORE   SYSTEMS   specializes   in  custom  software  development  and
+    consulting.  Corporations  in need of these services should feel free to
+    contact us for your developmental needs.
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+                                  (C)Copyright GILMORE Systems, 1984, 1985, 1986
+
+ 
+ 
+GS-UNNUM                                                                 Page  5
+Background Information
+ 
+ 
+ 
+               GS-UNNUM version 6.00 - BASIC Un-numbering utility
+                 (C)Copyright GILMORE SYSTEMS, 1984, 1985, 1986
+                  P.O. Box 3831; Beverly Hills, CA 90212-0831
+                                 Ph 213/276-5997
+ 
+Usage: GS-UNNUM [d:][path]infile [d:][path]outfile [/c][/i][/l][/t][/r:nnnnn]
+where [d:][path]infile is the input file,
+      [d:][path]outfile is the output file,
+      [/c] will remove COMMENTS in the output file,
+      [/i] will INDENT lines having removed numbers in the output file,
+      [/l] will scan for LOWERCASE BASIC verbs (otherwise lowercase ignored),
+      [/t] will TRIM excess space and optimize what /C couldn't,
+      [/r:nnnnn] optimizes RETURNs to just one RETURN. 'nnnnn' is the line no
+          of the stmt containing the RETURN. If nnnnn=0, GS-UNNUM chooses line.
+ 
+NOTES: 1) DOS version 2.00 or higher and 128K RAM (Note: ANSI.SYS not required)
+       2) Input file MUST be an ASCII file!
+       3) Separate infile, outfile, and option fields with one or more spaces.
+       4) /T can only be used when /C specified but not with /I.
+       5) Error return codes are 0=No Errors, 1=Errors - Ideal for batch files.
+       6) Disk free space should be 1x input file size, and 2x when /T is used.
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+                                  (C)Copyright GILMORE Systems, 1984, 1985, 1986
+
+ 
+ 
+GS-VAREN                                                                 Page  6
+Background Information
+ 
+ 
+ 
+            GS-VAREN version 3.00 - BASIC Variable Renaming utility
+                 (C)Copyright GILMORE SYSTEMS, 1984, 1985, 1986
+                  P.O. Box 3831; Beverly Hills, CA 90212-0831
+                                 Ph 213/276-5997
+ 
+Usage is:   GS-VAREN  [d:][path]infile  [d:][path]outfile  [d:][path]report
+Where [d:][path]infile is the input file,
+      [d:][path]outfile is the output file,
+      [d:][path]report is the report file (optional).
+ 
+If program is started with input filename only, the file GS-VAREN.TBL will be
+created with a list of BASIC reserved words used in your input file.
+For normal usage, if GS-VAREN.TBL exists, the entries in this file will be used
+for the BASIC reserved word list instead of the built in default list - if it
+doesn't exist, it will be created from the built in default list.
+ 
+NOTES: 1) DOS version 2.00 or higher and 128K RAM (Note: ANSI.SYS not required)
+       2) Input file MUST be an ASCII file! Line numbers in file are optional.
+       3) If disk space is low and you want a report, use 'LPT1' for report.
+       4) Error return codes are 0=No Errors, 1=Errors - Ideal for batch files.
+       5) Disk free space should be 1x input file size (with no report).
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+                                  (C)Copyright GILMORE Systems, 1984, 1985, 1986
+
+ 
+ 
+GS-RENUM                                                                 Page  7
+Background Information
+ 
+ 
+ 
+            GS-RENUM version 4.00 - BASIC Re-numbering utility pgm.
+                 (C)Copyright GILMORE SYSTEMS, 1984, 1985, 1986
+                                 P.O. Box 3831
+                          Beverly Hills, CA 90212-0831
+                                 Ph 213/276-5997
+ 
+Usage is:   GS-RENUM  [d:][path]infile  [d:][path]outfile
+ 
+Where [d:][path]infile is the input file,
+      [d:][path]outfile is the output file,
+ 
+This program will re-number a BASIC program that was Un-Numbered by GS-UNNUM.
+ 
+NOTES: 1) DOS version 2.00 or higher and 128K RAM (Note: ANSI.SYS not required)
+       2) Input file MUST be an ASCII file!
+       3) Error return codes are 0=No Errors, 1=Errors - Ideal for batch files.
+       4) Disk free space should be at approximately 1x input file size + 10%
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+                                  (C)Copyright GILMORE Systems, 1984, 1985, 1986
+
+```
+{% endraw %}
 
 ## HIRESCOL.BAS
 
+{% raw %}
 ```bas
 1000 SCREEN 2 : KEY OFF : CLS
 1010 PRINT "             640 x 200  Black & White Graphics Mode Demonstration"
@@ -1438,9 +2363,11 @@ machines:
 2480 CLS: SCREEN 0,0,0 : WIDTH 80:COLOR 15,0,0:CLS
 2490 END 'SYSTEM
 ```
+{% endraw %}
 
 ## KB_FLAG.BAS
 
+{% raw %}
 ```bas
 0 ' program = ---- KB_FLAG -----
 1 'Author: Herb Shear, 1590 Vineyard Dr., Los Altos, CA 94022
@@ -1506,9 +2433,213 @@ machines:
 620 'restore former CtrlBrk pointer
 630 DEF SEG = 0: FOR I = 0  TO 3: POKE 108+I, POINTER%(I): NEXT: RETURN
 ```
+{% endraw %}
+
+## KEYIN.ASM
+
+{% raw %}
+```
+                page ,132
+;                       KEYIN.COM
+;                  Dan Rollins 2/11/83
+;     Personal Computer Age, Vol 2.8, August 1983, p. 16-21.
+;  This Program places up to 15 parameter characters into the
+;  IBM PC keyboard buffer for the program to read.
+;
+;     Note: does not enter the space before the characters and
+;  does not place the end of text delimiter.
+;  Use `~' (tilde) to enter a CR (0DH).
+;
+;     Example:
+;
+;       KEYIN 1~a:myfile.txt~
+;       BASIC menu
+;
+;     This will run the BASIC program `menu.bas', answer the
+;  first prompt with `1' [enter], and answer the next prompt
+;  with `a:myfile.txt' [enter]
+;
+;       define the labels for the assembler
+
+bios_data segment at 40h
+        org     1ah
+        buf_head label word
+
+        org     1ch
+        buf_tail label word
+
+        org     1eh
+        kb_buf  label word
+bios_data ends
+
+        page
+cseg    segment
+        assume cs:cseg, ds:nothing, es:bios_data
+
+keyin   proc    far
+
+        cli                             ;turn interrupts off
+        mov     cx,bios_data            ;
+        mov     es,cx                   ;use ES as dest. segment
+        mov     word ptr es:buf_head, offset kb_buf
+        mov     di,offset kb_buf        ;destination => buffer
+        mov     si,80h
+        mov     cl,[si]
+        xor     ch,ch                   ;cx = count of chars
+        cmp     cl,16
+        jbe     k1
+        mov     cl,16                   ;if length > 16 then = 16
+k1:
+        cmp     cl,1                    ;if length < 2
+        jbe     k_exit                  ;   then do nothing;
+        dec     cx                      ;adjust for the space
+        mov     bx,cx                   ;copy length in words
+        add     bx,bx                   ; bx = length in bytes
+        add     bx,offset kb_buf        ; bx = value for buf_tail
+        inc     si                      ;point past space
+        inc     si                      ;    to first character
+        mov     ah,0                    ;scan code = 0 (dummy)
+k2:
+        lodsb                           ;set al=[si++]
+        cmp     al,'~'                  ;do we have a tilde?
+        jne     k3                      ;use the char if not
+        mov     al,0dh                  ;use CR instead if tilde
+k3:
+        stosw                           ;[di++]=al, [di++]=0
+        loop    k2                      ;do for the entire string
+
+        mov     es:[buf_tail],bx        ;now indicate the length
+k_exit:
+        sti                             ;interrupts back on
+        int     20h                     ;exit to DOS
+
+keyin   endp
+cseg    ends
+```
+{% endraw %}
+
+## LBAS.DOC
+
+{% raw %}
+```
+
+	  LBAS	Label Basic Translator Program
+	  ====================================
+
+  Author:	Jack Botner
+  Date Written: November, 1982
+  Last Updated: April, 1983
+
+  This program was written at home on my own time and I am
+  making it available for IBM Internal Use.
+
+Changes incorporated in version 12/82:
+  - TAB character is now replaced with a blank so tabs may be
+    present in the input.
+  - "Between double quotes" flag turned off when a new line
+    is begun, to limit scope of impact if closing " is missing.
+  - Test inserted to make sure user has enough memory available.
+  - Warning issued when output file will be overwritten.
+  - Dependance on copy code control block storage definitions removed.
+
+Changes incorporated in version 04/83:
+  - Fixed bug which caused program to fail "insufficient memory"
+    when system has 512K or more storage.
+  - Changed diskette I/O to block read and write, for up to 5 times
+    improved run times.
+  - Now allows "comment" lines where the first line is the "sun"
+    symbol (also known as squashed bug symbol) (character 15 decimal).
+  - Now ignores blank lines.
+
+PCLIB contents:
+  LBAS EXEEXP is an EXPORTED version of LBAS.EXE.
+  LBAS EXETBH is a B3277 binary version of LBAS.EXE.
+  LBAS ASM    is the PC-assembler source code (no tabs).
+  LBAS DOC    is this document, in plain text.
+
+Description:
+  This program translates "label basic" programs into proper
+  basic format acceptible to the PC Basic interpreter. It is
+  written in assembly language for speedy execution.
+
+  "Label basic" programs can be thought of as Basic programs
+  with two differences:
+  1. There are no sequence numbers at the beginning of each
+     statement.
+  2. Statement locations required by GOTO, GOSUB, ON ERROR, etc.
+     are referenced by labels instead of statement numbers.
+
+  "Label basic" programs have the following advantages:
+  1. The program can be entered and maintained using a PC
+     full-screen editor.
+  2. The programmer need not concern himself with statement numbers
+     and renumbering the program. Statements and subroutines are
+     referenced symbolically.
+
+  The disadvantage of "label basic", of course, is that you have to
+  maintain the "label basic" source and run the program through the
+  translator before it is useable by Basic. However, this translator
+  runs quite fast, more than 10 times faster than the version
+  which runs under the Basic interpreter. (Credit must be given
+  to Dave Chess, who inspired the idea of label basic.)
+
+  A label is defined as any non-blank string of characters beginning
+  with an '!' symbol and containing at least one additional character.
+  The maximum label length supported by this program is 16 characters
+  (including the !). The program has room for 256 labelled state-
+  ments. These limitations are somewhat arbitrary and could be
+  changed if necessary. Labels found inside literals (i.e. between
+  double quotes) will be ignored. Each statement can be "labelled"
+  only once.
+
+  The maximum file size which can be processed by this program is
+  64K bytes. This is because the entire file is read into one data
+  segment of main storage for processing, thus avoiding having to
+  read the file from disk twice. Therefore, your PC must have
+  at least 96K of memory to run LBAS. If insufficient memory is
+  available, the program will terminate with an error message.
+
+  Files used as input to this program should have a file extension
+  of "LBA". (This can be overridden, but the program will be easier
+  to run with the default file extension.) The output file will
+  be created with the same filename, and given a file extension of
+  "BAS". This will be in a format compatible with Basic ASCII files.
+  The output file will always be created on the same disk as the
+  input file.
+
+  To run the program, enter (from DOS):
+
+	     LBAS <d:>filename<.filext>
+
+  where d: overrides the default disk drive if necessary, and
+  .filext overrides the default file extension (.LBA). If you
+  omit the filename on the command, you will be prompted for it.
+
+  Each TAB character is replaced with a blank, so tabs may be
+  present in the input file. No attempt is made to maintain
+  original spacing of the lines, however.
+
+  To report any problems or suggestions, please contact the
+  author at VM TOROLAB(BOTNER).
+
+
+
+
+        This disk copy was originally provided by "The Public Library",
+        the software library of the Houston Area League of PC Users.
+ 
+        Programs are available from the Public Library at $2 per disk
+        on user-provided disks.  To get a listing of the disks in the
+        Public Library, send a self-addressed, stamped envelope to
+
+             Nelson Ford,  P.O.Box 61565,  Houston, TX 77208.
+
+```
+{% endraw %}
 
 ## LBL-BAS.BAS
 
+{% raw %}
 ```bas
 1000 DEFINT A-Z:DIM PTAB$(1000),LTAB(1000):TRUE=(1=1):FALSE=NOT TRUE:PTMAX=-1:CLS:INPUT "Enter   input filename: ",INFILE$:INPUT "Enter  output filename: ",OUTFILE$:INPUT "Enter listing filename: ",LSTFILE$:FOR PASS=1 TO 2
 1001 PRINT "Beginning pass ";PASS;" ";TIME$:FILENO=2:OPEN INFILE$ FOR INPUT AS #FILENO:IF PASS=1 THEN OPEN LSTFILE$ FOR OUTPUT AS #1 ELSE OPEN OUTFILE$ FOR OUTPUT AS #1
@@ -1559,9 +2690,11 @@ machines:
 1046 IF PASS=2 AND OU$<>"" THEN PRINT #1,RIGHT$(STR$(LNBR),4);" ";OU$
 1047 LNBR=LNBR+LINC:FORCENEW=FALSE:RETURN
 ```
+{% endraw %}
 
 ## LBL-SAMP.BAS
 
+{% raw %}
 ```bas
 *--------------------------------------------------------------------*
 *          COPYRIGHT 1982 THE SOFTWARE LINK, INCORPORATED            *
@@ -1698,9 +2831,11 @@ machines:
      IF PASS=2 AND OU$<>"" THEN PRINT #1,RIGHT$(STR$(LNBR),4);" ";OU$
      LNBR=LNBR+LINC:FORCENEW=FALSE:RETURN
 ```
+{% endraw %}
 
 ## LINEBUG.BAS
 
+{% raw %}
 ```bas
 10  CLS
 13  LOCATE 3,29
@@ -1738,9 +2873,56 @@ machines:
 2300 CLOSE #1
 2400 SYSTEM
 ```
+{% endraw %}
+
+## LINEBUG.DOC
+
+{% raw %}
+```
+
+
+
+
+                                    LINEBUG
+
+                          Copyright (c) 1984 ComFax
+
+
+     This handy little utility lets you know whether or not you have
+accidentally fouled-up any line numbers in a 'BASIC' program when you are not
+using the BASIC Editor.  If any is a duplicate, out of sequence, contains an
+illegal character, or does not have the proper number of characters, this
+program will display the line number for you.
+
+     This program was written for use on the IBM-PC or any compatible
+computer.  The program to be checked must be in ASCII format. To run the
+program, simply type `BASICA'.  Then RUN "LINEBUG".  Enter the program name
+after the prompt.
+
+     LINEBUG is a "must" for anyone who programs in BASIC, and the price is the
+lowest we have ever seen on ANY program ANYWHERE!
+
+     You are permitted to reproduce and keep an unpaid-for copy of your user`s
+group library master of this program for up to two weeks  for the purpose of
+evaluating this software, provided the copyright notice at the top of this
+tutorial is included, without infringing our copyright.  If after two weeks you
+do not wish to keep it, simply destroy your copy of this program and owe us
+nothing.  However, if you like it well enough to keep it, please remit $10 (if
+10 or more of your group decides to keep it, take a 20% quantity discount and
+send only $8 per copy kept) to:
+
+                                    ComFax
+                                 P.O. Box 3523
+                               Wichita,KS 67201
+
+                  *TRUSTWARE...INNOVATION AT ECONOMY PRICES*
+
+```
+{% endraw %}
 
 ## MONITOR.BAS
 
+{% raw %}
 ```bas
 10 REM MONITOR
 15 ZTITLE$="Program Title Here"
@@ -1980,9 +3162,11 @@ machines:
 9100 CLS:LOCATE 10,1,0:PRINT TAB(32);"Memory Statistics":PRINT:PRINT TAB(27);"Remaining Memory:  ";FRE(0):PRINT:PRINT TAB(27);"Program Length:    ";61529.-FRE(0):RETURN
 10000 REM Begin Program Here
 ```
+{% endraw %}
 
 ## PAL80.BAS
 
+{% raw %}
 ```bas
 100 'ARTWARE by Roman Verostko
 110 'Mpls College of Art and Design
@@ -2016,9 +3200,227 @@ machines:
 390 NEXT V
 400 COLOR 15,0:LOCATE 1,1:END
 ```
+{% endraw %}
+
+## POKEPEEK.TXT
+
+{% raw %}
+```
+03/03/84
+		COMMONLY USED BASIC PEEKS, POKES AND SUBROUTINES
+
+    DUE TO THE LACK OF A COMPREHENSIVE, PUBLISHED DIRECTORY OF COMMONLY USED
+    POKES, PEEKS AND SUBROUTINES THIS LIST HAS BEEN COMPILED BY THE SMUG
+    PROSIG AS WELL AS A MANY OTHER HARDWORKING PD SOURCES. THANKS AND A TIP
+    OF THE HAT TO ALL CONTRIBUTORS! ADDITIONS TO THE LIST ARE ENCOURAGED AND
+    SHOULD BE ADDRESS TO:
+
+		 DON WATKINS, CIS IBMSIG 76003,252
+
+    THERE ARE, OF COURSE NO WARRENTIES OR GUARENTEES THAT ANY OF STUFF WORKS
+    AND FURTHERMORE, IF IT BLOWS UP YOUR MACHINE IT AIN'T MY FAULT.
+    ------------------------------------------------------------------------
+
+    BY SPECIFYING A DEF SEG=&H40 IN ANY BASIC PROGRAM, IT IS POSSIBLE TO
+    REFERENCE THE FOLLOWING VECTORS (FIELDS) IN THE ROM BIOS AREA BY USING A
+    PEEK FUNCTION AND THE FOLLOWING OFFSETS FROM THE CURRENT SEGMENT AS
+    DEFINED BY THE DEF SEG STATEMENT.
+
+
+     &H0       -  RS232 ADDRESSES ON YOUR IBM PC.
+		  THIS WILL ALLOW YOU TO TELL HOW MANY (UP TO
+		  FOUR) ASYNC CARDS ARE ATTACHED, IF ANY.
+     &H8       -  PRINTER ADDRESSES ON YOUR IBM PC.
+		  THIS WILL TELL YOU WHAT PRINTER ADDRESSES,
+		  AND HOW MANY (UP TO FOUR) EXIST. EACH IS
+		  ADDRESSED BY A TWO BYTE HEX VALUE.
+     &H10      -  EQUIPMENT FLAG.
+		  THIS FIELD DESCRIBES THE SETTING OF THE
+		  OPTIONS SWITCHES. IT DESCRIBES WHAT OPTIONAL
+		  DEVICES ARE ATTACHED TO THE SYSTEM. THE
+		  FOLLOWING LISTS THE BIT-SIGNIFICANCE OF THIS
+		  FIELD:
+		  BIT 0 - INDICATES THAT THERE ARE DISKETTE
+			  DRIVES ON THE SYSTEM.
+		  BIT 1 - NOT USED.
+		  BIT 2,3 - PLANAR RAM SIZE (00=16K 10=32K 01=48K
+			    11=64K)
+		  BIT 4,5 - INITIAL VIDEO MODE (00=UNUSED
+						10=40X25 COLOR
+						01=80X25 COLOR
+						11=80X25 MONO)
+		  BIT 6,7 - NUMBER OF DISKETTE DRIVES (00=1 10=2
+			    01=3 11=4) ONLY IF BIT 0 = 1.
+		  BIT 8   - UNUSED
+		  BIT 9,10,11 - NUMBER OF RS232 CARDS ATTACHED
+		  BIT 12  - GAME I/O ATTACHED
+		  BIT 13  - NOT USED
+		  BIT 14,15   - NUMBER OF PRINTERS ATTACHED
+     &H13      -  MEMORY SIZE IN K BYTES.
+     &H15      -  I/O RAM SIZE IN K BYTES.
+     &H17      -  KEYBOARD FLAG -- THE FOLLOWING LISTS THE MASKS
+		  SET TO DESCRIBE CURRENT KEYBOARD STATUS:
+		  BYTE 1;
+		  &H80 - INSERT STATE ACTIVE
+		  &H40 - CAPS LOCK STATE HAS BEEN TOGGLED
+		  &H20 - NUM LOCK STATE HAS BEEN TOGGLED
+		  &H10 - SCROLL LOCK STATE HAS BEEN TOGGLED
+		  &H08 - ALTERNATE SHIFT KEY DEPRESSED
+		  &H04 - CONTROL SHIFT KEY DEPRESSED
+		  &H02 - LEFT SHIFT KEY DEPRESSED
+		  &H01 - RIGHT SHIFT KEY DEPRESSED
+		  BYTE 2;
+		  &H80 - INSERT KEY IS DEPRESSED
+		  &H40 - CAPS LOCK KEY IS DEPRESSED
+		  &H20 - NUM LOCK KEY IS DEPRESSED
+		  &H10 - SCROLL LOCK KEY IS DEPRESSED
+		  &H08 - SUSPEND KEY HAS BEEN TOGGLED
+     &H49      -  CURRENT CRT MODE
+		  &H00 - 40X25 BW
+		  &H01 - 40X25 COLOR
+		  &H02 - 80X25 BW
+		  &H03 - 80X25 COLOR
+		  &H04 - 320X200 COLOR
+		  &H05 - 320X200 BW
+		  &H06 - 640X200 BW
+		  &H07 - 80X25 B&W CARD -- SPECIALIZED USE, USED
+			 INTERNAL TO THE VIDEO ROUTINES.
+     &H4A      -  NUMBER OF CRT COLUMNS
+     &H50      -  CURSOR POSITION (ONE OF EIGHT)
+     &H60      -  CURRENT CURSOR MODE
+     &H6C      -  LOW WORD OF TIMER COUNT
+     &H6E      -  HIGH WORD OF TIMER COUNT
+     &H71      -  &H07 - BREAK KEY DEPRESSED
+     &HFA6E    -  BEGINNING OF CHARACTER REGEN MEMORY
+     &HFF53    -  PRTSC ROUTINE ADDRESS
+
+    ------------------------------------------------------------------
+    REAL STUFF--
+
+    TOGGLE NUM LOCK
+     DEG SEG = &H40 : POKE &H17, PEEK(&H17) OR 32   'TO TURN ON
+     DEG SEG = &H40 : POKE &H17, PEEK(&H17) AND 223 'TO TURN OFF
+
+    TOGGLE CAPS LOCK
+     DEG SEG = &H40 : POKE &H17, PEEK(&H17) OR 64   'TO TURN ON
+     DEG SEG = &H40 : POKE &H17, PEEK(&H17) AND 171 'TO TURN OFF
+
+    SET SCROLL WINDOW
+     10 DEF SEG : POKE 91,20 : POKE 92,25	     'SETS UP WINDOW ON LINE
+     20 LOCATE X,20				     'FORCE CURSOR TO WINDOW
+
+    SET WINDOW WIDTH
+     DEF SEG : POKE 41,30			    'SETS WINDOW WIDTH TO 30
+
+    RESTORE FUNCTION KEYS TO DEFAULT
+     10 DEF SEG = &HFACE
+     20 K = 1
+     30 I = 13
+     40 T$ = STRING$(13,32): J = 1
+     50 T1 = PEEK(I):IF T1 < 0 THEN MID$(T$,J,1) = CHR$(T1):J = J + 1:
+	I = I + 1 : GOTO 50
+     60 KEY K,LEFT$(T$,J-1):IF K <10 THEN K = K + 1: I = I + 1: GOTO 40 :
+	ELSE KEY ON
+
+     DETERMINE MONITOR TYPE
+      10 DEF SEG = 0
+      20 MONITOR.TYPE = PEEK(&H410) AND &H40
+      30 IF MONITOR.TYPE = 1 PRINT "40 X 25 COLOR"
+      40 IF MONITOR.TYPE = 32 PRINT "80 X 25 COLOR"
+      50 IF MONITOR.TYPE = 48 PRINT "MONOCHROME"
+
+     DETERMINE AMOUNT OF MEMORY INSTALLED (ONLY WORKS FOR GREATER THAN 48K)
+      DEF SEG = 0: MEMORY% = PEEK(&H413)+(256*PEEK(&H414))
+
+     OR, PUT ANOTHER WAY:
+
+		 MEMORY INFO:	      DEF SEG=0
+
+	  ((PEEK(1040) AND 12) + 4 ) * 4     -	MEMORY ON MOTHER-BOARD
+	  PEEK(1045) + 256 * PEEK(1046)      -	EXPANSION MEMORY (ADD ON)
+	  PEEK(1043) + 256 * PEEK(1044)      -	TOTAL MEMORY
+
+     READ DRIVE SWITCHES
+      DEF SEG = 0: NUMBER.OF.DRIVES% = PEEK(&H410) AND &HC0
+
+
+      CURRENT DISK INFO:  DEF SEG=64
+	     DEF SEG=64
+	     PEEK(69)	-  TRACK
+	     PEEK(70)	-  HEAD
+	     PEEK(71)	-  SECTOR
+	 256^PEEK(72)	-  BYTES PER SECTOR
+
+     DETERMINE IF GAME ADAPTER EXISTS
+      10 DEF SEG = 0: GAME.ADAPTER% = PEEK(&H411) AND &H10
+      20 IF GAME.ADAPTER% = 0 THEN GAME.ADAPTER$ = "NO" ELSE GAME.ADAPTER$
+	 = "YES --INSTALLED"
+
+     KEYBOARD STUFF
+	 TO DISABLE ENTIRE KEYBOARD:  DEF SEG=64: OUT 97,204
+	 TO RE-ENABLE KEYBOARD:       DEF SEG=64: OUT 97,76
+
+	 PRINTER STATUS--- AT LEAST ON EPSON ---
+	    DEF SEG=64
+	    A=PEEK(8)+256*PEEK(9)
+	    B=(INP(A+1) AND 248) XOR 72
+	    IF (B AND 128)<>128 THEN PRINTER OFF LINE ELSE ON LINE
+
+	 INITIALIZE PRINTER:	       DEF SEG: OUT A+2,8
+				       OUT A+2,12
+	 NOTE:	THE A TO INITIALIZE IS FROM PRINTER STATUS ROUTINE
+
+	 A SHORT PROGRAM TO DISABLE AND RE-ENABLE CTRL BREAK FOLLOWS.
+
+	 100 DIM OLD%(4)
+	 110 DEF SEG=0
+	 120 ' SAVE THE OLD CONTROL BREAK ADDRESS
+	 130 FOR I=&H6C TO &H6F
+	 140   OLD%(I-&H6C)=PEEK(I)
+	 150 NEXT
+	 160 ' ESTABLISH NEW CONTROL BREAK ADDRESS  (POINT TO IRET)
+	 170 POKE &H6C,&H53
+	 180 POKE &H6D,&HFF
+	 190 POKE &H6E,&H0
+	 200 POKE &H6F,&HF0
+	 210 DEF SEG
+	 220 ' RESET OLD CONTROL BREAK ADDRESS
+	 230 DEF SEG=0
+	 240 FOR I=&H6C TO &H6F
+	 250   POKE I,OLD%(I-&H6C)
+	 260 NEXT
+
+
+		  SAVE AND RESTORE A SCREEN IMAGE
+
+     1 DEF SEG = &HB800 		     'SAVE SCREEN IMAGE...CHANGE FOR
+     2 INPUT FILENAME$			     'MONOCHROME.
+     3 BSAVE FILENAME$,0,&H4000
+     1000 INPUT "FILENAME";FILENAME$         'RESTORE IMAGE
+     1010 CLS
+     1020 DEF SEG = &HB800		     'CHANGE TO &HB000 TO MONO
+     1030 BLOAD FILENAME$
+
+			 NICE TO KNOW
+			BASIC UNPROTECT
+    ENTER BASICA
+    TYPE BSAVE "UN.P",1124,1
+    LOAD "MYPROG
+    BLOAD "UN.P",1124
+    THE PROGRAM CAN NOW BE LISTED, EDITED AND SAVED AS A NORMAL FILE.
+
+    THE LIST IS GROWING BUT COULD BE LONGER!  ANY AND ALL ADDITIONS OF
+    COMMONLY USED SUBROUTINES AND PEEK/POKE LOCATIONS WILL BE GLADLY ADDED.
+    ADDRESS ALL ADDITIONS TO:  DON WATKINS CIS 76003,252 (IBMSIG).  WITH A
+    BIT OF YOUR ASSISTANCE THIS DOCUMENT CAN BECOME AN EFFECTIVE TOOL FOR THE
+    BASIC PROGRAMMER....  SO CHIP IN.
+
+```
+{% endraw %}
 
 ## PROFILE.BAS
 
+{% raw %}
 ```bas
 10 REM prog = profile
 20 REM PC Magazine [Oct 1982 pg 102]
@@ -2048,9 +3450,23 @@ machines:
 260 NEXT
 270 END
 ```
+{% endraw %}
+
+## PROFILE.DOC
+
+{% raw %}
+```
+See PC Magazine #6, Oct. 82, pg.102-106
+
+This is a utility that resides in memory and logs how much time is spent
+executing each part of a program.
+
+```
+{% endraw %}
 
 ## READBAS.BAS
 
+{% raw %}
 ```bas
 1 ''            READBAS 1.4 -  READS BASIC PROGRAMS SAVED IN BINARY
 2 ''        NELSON FORD (713) 960-1300   (713) 721-6104    MAY 10, 1984
@@ -2172,9 +3588,11 @@ machines:
 1220 IF X=34 THEN PRINT #2, CHR$(34);:  GOTO 200
 1230 PRINT X$;:  GOTO 1210
 ```
+{% endraw %}
 
 ## SCRN-MAP.BAS
 
+{% raw %}
 ```bas
 1 ' (PC)^3 Software Submission SCNMAP authored on February 4, 1983 by
 2 '
@@ -2265,9 +3683,11 @@ machines:
 17100 LPRINT CHR$(12);:ON ERROR GOTO 0:RUN
 17200 '         SAVE"scnmap.bas",a
 ```
+{% endraw %}
 
 ## SQUISHER.BAS
 
+{% raw %}
 ```bas
 10 DEF FNI$(A$)=CHR$(ASC(LEFT$(A$,1))+32*(LEFT$(A$,1)>"Z")):DEFINT B-K,S-Z:A=0:AZ=0:A$="":C$="":D=0:DS=100:DT=0:G1=0:G2=0:G3=0:G4=0:G5=0:G6=0:HH=0:I$="":IP$="":J$="":LN=0:L$="":L1$="":N$="":P=0:PJ=0:PP=0:PV=0:Q$="":R=0:RD=0:RE=0:S=0:S1=0
 20 SD=0:SQ$="":SV$="":T=0:T1=0:T2=0:V$="":X=0:XC$="":XS$="":XP$="":ZC=0:DIM REF(DS*2),PRO(DS):SCREEN 0,0,0:WIDTH 80:COLOR 11,0:KEY OFF:CLS:LINE INPUT"ENTER THE NAME OF THE PROGRAM TO BE SQUISHED: ";SQ$
@@ -2326,9 +3746,25 @@ machines:
 550 PRINT #2,A$:GOTO 270
 560 IF ERR=53 THEN RUN ELSE ON ERROR GOTO 0
 ```
+{% endraw %}
+
+## SQUISHER.DOC
+
+{% raw %}
+```
+
+COMPRESSES BASIC PROGRAMS BY REMOVING UNNECESSARY SPACES, REMARKS AND COMBINING
+LINES.
+
+PROGRAM MUST BE STORED IN ASCII FIRST.
+
+
+```
+{% endraw %}
 
 ## STARTBAS.BAS
 
+{% raw %}
 ```bas
 10 REM Listing from PC World, vol 1, #6, p 254 (*.*)
 20 REM Easily modified to skip the instructions at the begining
@@ -2367,9 +3803,11 @@ machines:
 390 NEXT: F$=LEFT$(F$,0)
 400 RETURN
 ```
+{% endraw %}
 
 ## TRACE.BAS
 
+{% raw %}
 ```bas
 105 ' ********* BASIC version of RatBas program *********
 110 DEFINT I-N
@@ -2841,6 +4279,289 @@ machines:
 26700 IF ANS$="Y" OR ANS$="y" THEN RUN DRV$+":"+FILENAME$+"."+"dbg"
 26705 END
 ```
+{% endraw %}
+
+## TRACE.DOC
+
+{% raw %}
+```
+
+                                                              August 6, 1984
+
+
+
+                          SINGLE-STEPPING AND TRACING
+
+
+         A simple program called TRACE that helps debug BASIC programs.
+
+
+    D. Z. KORKUT
+
+
+         Programmers often  want to  trace Basic programs without losing the
+    result of  the trace,  which they  can't necessarily  do with  the  TRON
+    command.   They also  often  want  to  single-step  through  a  program,
+    observing the  value of variables.  There are currently no commands that
+    allow single-stepping.  What's a programer to do?  Try TRACE.
+
+         TRACE is  a simple  BASIC program  that reads an ASCII version of a
+    program.   It  then  produces  a  version  of  the  program  with  trace
+    statements inserted  between lines.    This  trace  version  allows  the
+    programer to:
+
+              1. Single-step using the space bar.
+
+              2. Print the trace using a line printer.
+
+              3. Print the trace on a disk to be viewed with an editor.
+
+              4. Spcify where the trace is to start and end.
+
+              5. Specify variable names to be traced.
+
+         When TRACE  reads a  line of  the input  program, it determines the
+    line number and then writes that line, plus an extra line, to the output
+    file.   The extra  line contains  a trace statement, which consists of a
+    variable-assignment statement that stores the line number in a variable,
+    and a GOSUB statement, which jumps to a subroutine that TRACE appends to
+    the end  of the  output program file.  The subroutine contains code that
+    interprets commands  issued while  running  the  trace  version  of  the
+    program.  The program file is not modified.
+
+
+    RUNNING TRACE
+
+         TRACE produces  an executable  BASIC program,  so  there  are  some
+    limitations involved.   The  first thing  TRACE will do is to remind the
+    user of these limitations:
+
+    1.    Since TRACE will insert lines between the lines of the program, it
+         is important  that the  program be renumbered such that there is at
+         least one vacant line number between each line.  TRACE also appends
+         a small  module to the beginning and end of the program, so no line
+         numbers less  than 10  or greater  than  59999  can  be  used.    I
+         recommend that command RENUM 10,5 be used.
+
+    2.   Remember to save the program in ASCII format.  This is important.
+
+    3.   The trace version of the program will use two disk files.  Remember
+         to initialize  BASIC with  enough file  buffer memory to handle the
+         program's files plus two extra files.
+
+    4.   The modules that TRACE appends use variable names with two trailing
+         periods (i.e., <name>..).
+
+    5.    Do not use the CLOSE statement in the program without specifying a
+         file number;  doing so  will cause  the files required by the trace
+         modules to be closed.
+
+         After confirming  that these requirements have been met, TRACE will
+    ask some  questions.   The user  must enter the last file number used by
+    his program, so TRACE will know which file numbers to use.  A null entry
+    will be  assumed to mean that the program does not use files.  Next, the
+    drive where the program file resides must be entered.  The trace version
+    of the  program will  be written  on this  drive.   A null entry will be
+    assumed to mean drive B.
+
+         Enter the  file name of the program next, including an extension if
+    desired.   If no  extension is  provided, one of .BAS is asssumed.  Then
+    enter the  line where  trace statements  should start.   Since for large
+    programs the  overhead created  by  TRACE  will  be  large,  it  may  be
+    desirable  to   insert  trace  statements  only  on  a  fixed  range  of
+    statements.   A null  entry will  be taken to mean that trace statements
+    should start  at the  first line  of the program.  After this, enter the
+    line where  trace statements  should stop.  A null entry will be assumed
+    to mean that trace statements should stop at the end of the program.
+
+         Next, TRACE  will list  each line of the program file.  An "*" will
+    appear after  each line  number where  a trace statement has been added.
+    When the  list is finished, TRACE will ask if the user wishes to run the
+    trace version  of the  program.  If the user says yes, the trace version
+    will automatically  be loaded  and executed.   If the user elects to run
+    the trace  version later,  it is  stored with  the same file name of the
+    input program, but with an extension of ".DBG".
+
+
+    COMMANDS AVAILABLE WHILE RUNNING A TRACED PROGRAM
+
+         When the  trace version  of the  program is executed, the user must
+    first enter  where tracing  should begin  and end.   If trace statements
+    have been  added to  every line of the program, every line may be traced
+    selectively, one  block at a time.  If, because of lack of memory, trace
+    statements were  inserted on  only part  of the  program, any  block  of
+    statements in  that part  may be traced.  For example, if a user decided
+    to insert trace statements beginning with line 1000 and ending with line
+    5000, when  he ran the trace version of the program he could selectively
+    trace any  block of statements between lines 1000 and 5000 inclusive.  A
+    null entry  to these  first two prompts will be assumed to mean that all
+    lines should be traced with trace statements.
+
+         After the  first two prompts are answered, the trace version of the
+    program will  execute normally  until a  trace statement is encountered.
+    It will  then display, in brackets, the number of the line that was just
+    executed, after which it will pause, waiting for one of these commands:
+
+         <space bar> - single-step to the next statement.
+
+         D -  single-step to  the next statement and start dumping the trace
+    toa file  named TRACE.DBG.   The  line numbers displayed on the CRT will
+    now be  dumped to  the disk  file beginning with the current line.  Line
+    numbers on  the CRT  will be  displayed with  a "D*" prefix.  This is to
+    remind the user that the trace is dumping to disk.
+
+         P -  single-step to  the next statement and start dumping the trace
+    to the  line printer.  The line numbers displayed on the CRT will now be
+    printed on  the line printer.  Line numbers on the CRT will be displayed
+    with a  "P*" prefix  as a reminder that the trace is dumping to the line
+    printer.   If TRACE  is currently dumping to the disk the disk file will
+    be closed.
+
+    (NOTE: It is impossible to dump to the disk and to the printer at once.)
+
+         V -  display values  of those  variables chosen with the C command.
+    If the trace is dumping to the disk or line printer, the variable values
+    will also be included.
+
+         N -  do not single-step; instead, execute (N)onstop.  While running
+    nonstop, the user can press the <space bar> to stop and start execution.
+    If the trace is dumping to the disk or line printer, the dump will still
+    continue.  Use the R command to resume single-stepping.
+
+         R - (R)esets the D, P, V, and N commands.  All dumping of the trace
+    to disk  and line  printer will halt.  Variable values will no longer be
+    shown on  the CRT.   If the program is running nonstop, single-step will
+    resume.
+
+         T -  allows the  user to  change the  block of statements currently
+    being traced.  This does not affect any other command.
+
+         C -  allow the  user to (C)hange the variables that will be traced.
+    Variable names should be entered one at a time.  If a null variable name
+    is entered,  tracing will  continue.   The V command can then be used to
+    begin tracing the new variables.
+
+         One word  of caution:  the C command creates an overlay module that
+    is CHAIN  MERGEd into  the traced  program.   All  variable  values  are
+    preserved.   However, BASIC  does not  remember if  the program was in a
+    WHILE/WEND or  FOR/NEXT loop when the overlay was merged.  Thus if the C
+    command is  used while  the program  is in  a loop, an error may result.
+    Simply type  RUN and  continue.   Although it  may be necessary to start
+    tracing from  the beginning,  the new  trace variables  are present.   A
+    simpler solution  is to  make sure the current line number is not within
+    any loops before using the C command.
+
+         Remember that  the trace version of the program is a standard BASIC
+    program; CTRL-BREAK can be used to halt execution at any time.
+
+
+    RECOMMENDED PROCEDURE FOR DEBUGGING.
+
+         To use  TRACE as  a debugging aid, begin by RENUMbering the program
+    with line  10 and  using an  increment of  at least  two.  Then SAVE the
+    program using the A option, LList the program so that it is always clear
+    where execution  is taking  place, and  decide (based  on the  program's
+    length) which parts of the program need to be traced.
+
+         It is  helpful in  judging how  many lines  to trace  to  know  the
+    approximate overhead required by a traced program.  It is as follows:
+
+                      OVERHEAD = 2080 + 1*19 + V*50 BYTES
+
+    where 1  equals the  number of lines to which trace statements should be
+    added, and  V equals  the number of variables to be traced.  Thus a 100-
+    line program  with all  lines and  10 variables  traced needs about 4480
+    extra bytes in the trace version.
+
+         After deciding  how much  of  the  program  to  trace,  run  TRACE,
+    answering the questions according to the guidelines above.  Then execute
+    the trace  version, being  careful to  change the  traced variables only
+    while outside  any loops.    Use  the  trace  commands  to  perform  any
+    debugging and  CTRL-BREAK and  EDIT to  make any  changes; note any such
+    changes on the program listing.
+
+         Next, reload  the original  program and post all changes made while
+    debugging.  If the trace requires much output, use the D command to dump
+    it to  a disk  file.   Then use  EDLIN in  conjunction with  the program
+    listing to review the result of the trace.
+
+         TRACE was  written using  the RATBAS  translator (see  PC Magazine,
+    vol. 1,  no. 6, p. 121).  The listing given is in standard IBM PC BASIC,
+    generated by  the translator,  which is  , by  the way, a great piece of
+    software.
+
+         Using TRACE,  programmers  will  find  it  easier  to  trace  BASIC
+    programs and  to single-step through programs while observing the values
+    of the  variables.  This should result in better programs, achieved less
+    painfully.
+
+         
+
+         
+         The TRACE.BAS  program was  resurrected from  the from  the  static
+    pages of the May 1984 issue of the PC TECH JOURNAL.  With only a limited
+    experience using  this program  it appears to interrupt the GOSUB-RETURN
+    function if  the "C"  command is  invoked after a GOSUB command has been
+    issued.   I hope  this program  proves useful  to others  and any  bugs,
+    improvements, modifications, or comments will be passed back to me via:
+
+
+         
+                                       HAL-PC
+
+                                       Roy G. Browning
+
+
+
+        This disk copy was originally provided by "The Public Library",
+        the software library of the Houston Area League of PC Users.
+ 
+        Programs are available from the Public Library at $2 per disk
+        on user-provided disks.  To get a listing of the disks in the
+        Public Library, send a self-addressed, stamped envelope to
+
+             Nelson Ford,  P.O.Box 61565,  Houston, TX 77208.
+
+```
+{% endraw %}
+
+## UN-COMPQ.DOC
+
+{% raw %}
+```
+TO UNPROTECT A BASIC PROGRAM SAVED WITH THE ,P OPTION ON THE COMPAQ COMPUTER
+ENTER  UN-COMPQ  BEFORE ENTERING BASIC.
+```
+{% endraw %}
+
+## UN-NEW.DOC
+
+{% raw %}
+```
+
+TO GET BACK A BASIC PROGRAM AFTER ENTERING "NEW":
+
+enter DEF SEG=&HB000 if using a mono display or DEF SEG=&HB800 for color graphic
+enter Ctrl-L  Ctrl-M
+enter POKE 0,12:  POKE 1,255
+enter Ctrl-K  Ctrl-R
+enter 0?"+CHR$(34);
+
+NOTE:  PRINT THESE INSTRUCTIONS.  YOU CAN'T READ THIS FILE WHEN YOU WILL
+       NEED IT THE MOST.
+
+
+```
+{% endraw %}
+
+## UNP-IBM.DOC
+
+{% raw %}
+```
+TO UNPROTECT A BASIC PROGRAM SAVED WITH THE ,P OPTION ON THE IBM PC
+ENTER  UNP-IBM  BEFORE ENTERING BASIC.
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

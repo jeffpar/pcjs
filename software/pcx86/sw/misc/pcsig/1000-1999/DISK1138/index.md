@@ -38,6 +38,77 @@ machines:
     driven and extensively documented.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1138.TXT
+
+{% raw %}
+```
+Disk No  1138
+Program Title: CLASSIC SOLUTION version 2.0CG (Disk 1 of 2)
+PC-SIG version 1
+
+CLASSIC SOLUTION is both a language and a database manager -- a system
+that creates the fastest, most powerful business programs on the market
+today.
+
+CLASSIC SOLUTION provides a quick and easy way to create screens and
+reports as they will appear on a terminal or printed page. It is also a
+data control system that keeps track of all the items of information --
+what they are, what they contain, what is valid data and how each item
+relates to all the others; a data dictionary. A set of standardized
+tools is included so you don't have to rebuild the same logic over and
+over and also to let use the same data entry techniques for each and
+every application.
+
+CLASSIC SOLUTION supports an unlimited number of data files; limited
+only by the amount of available storage. Each data file can have more
+than 16,000 records and each record can have 1,000 fields.
+
+CLASSIC SOLUTION comes with an on-line tutorial to help you get started.
+It is fully menu-driven and extensively documented.
+
+This version of the program is locked at 250 records, but by calling the
+author, you can unlock the program to a fully functional program.
+
+Usage:  Business.
+
+System Requirements:  A hard disk.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $65.00
+
+File Descriptions:
+
+ASK      COM  Subprogram used by batch files.
+CONTRACT BAT  Batch file to copy README.DOC to your printer.
+ENTRE    PRE  Press release.
+INSTALCS      Instructions on how to install to your hard disk.
+INSTALL  BAT  Batch file to install program to your hard disk.
+INSTRUC  PRT  Printer configuration file.
+LANGUAGE ARC  Archived file containing main program.
+O'HANLON SCR  Data screen file.
+PKARC    COM  Archiving program.
+PKXARC   COM  Unarchiving program.
+PRINT    SUB  Instructions on for pinting various files.
+PRINTLTR BAT  Batch file to print various ASCII files.
+README   BAT  Types README.DOC to your screen.
+README   DOC  Brief instrctions on how to install the program.
+README1  SCR  Data screen file.
+README2  SCR  Data screen file.
+SHARECOV LTR  A press release about the program.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1138
 

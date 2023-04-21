@@ -57,6 +57,68 @@ machines:
     MCARI    WRK  Documentation for MCA.APP
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES306.TXT
+
+{% raw %}
+```
+Disk No  306
+Program Title: SYMPHONY WORKSHEETS No 2
+PC-SIG version 1
+ 
+    SYMPHONY WORKSHEETS No 2 is a mixed-bag selection of small business
+oriented worksheets and modem utilities. The macro-driven Checkbook program
+is quite sophisticated and can be used for any home or small business.
+Additional macro aids help manage disk contents, addresses and phone
+numbers (using find functions), 1-2-3 macro conversion, and more.
+DIRECTORY.WRK is an excellent program for creating a library for file names
+and descriptions, printing labels, letters, etc.
+ 
+Usage:  Home & small business accounting, file management, misc.
+utilities.
+ 
+System Requirements:  512K, two disk drives, monochrome display and
+Lotus SYMPHONY
+ 
+How to Start:  Access through Lotus SYMPHONY
+ 
+User Comments:  "Good checkbook program, utilities may be useful."
+ 
+File Descriptions:
+ 
+1LETTER    WRK   Used with DIRECTRY.WRK
+10_KEY     WRK   A 10-key calculator
+1MACROS    WRK   Used with DIRECTRY.WRK
+1SHEET     WRK   Used with DIRECTRY.WRK
+ADDR       WRK   Address Book
+CHKBK      WRK   Macro-driven Checkbook
+CHKBOO     DOC   Documentation file for CHKBOO.WRK
+CHKBOO     WRK   Checkbook manager for home or small business
+CTLBRK     APP   Break menu handling add-in
+DIRECTRY   WRK   Create a library for file names and descriptions
+DISKLABL   WRK   Prints out list of disk contents
+INPUT      APP   1-2-3 'Range Input' feature add-in
+LABELS     WRK   Name and address labels for printer
+MCA        APP   1-2-3 Macro conversion aid add-in from Lotus
+MCA        HLP   On disk help for MCA.APP
+MCARI      WRK   Documentation for MCA.APP
+PHNBRS     WRK   Database using find functions
+PHONE      WRK   Phone dialer sample
+SYSERR     APP   DOS error retry disable
+UN1        CCF   Unattended operation .CCF file
+UN1        WRK   Unattended operation see UN1.CCF
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0306
 

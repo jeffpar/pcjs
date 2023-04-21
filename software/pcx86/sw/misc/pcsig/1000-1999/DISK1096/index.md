@@ -41,6 +41,52 @@ machines:
     after the contest and at your leisure.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1096.TXT
+
+{% raw %}
+```
+Disk No: 1096                                                           
+Disk Title: KB0ZP Super Contest Log                                     
+PC-SIG Version: S2.1                                                    
+                                                                        
+Program Title: KB0ZP Super Contest Log                                  
+Author Version: 05/90                                                   
+Author Registration: $25.00                                             
+Special Requirements: 640K RAM, a hard disk, and a printer.             
+                                                                        
+KB0ZP CONTEST LOG is an amateur radio contest logging program to help   
+the radio operator in of logging contest information in a suitable form 
+for submission for awards.  After entering the other station's call     
+sign, you have the option of entering two more pieces of information    
+(RST, Section, Grid Square, etc.).  The CONTEST LOG takes over from     
+there.                                                                  
+                                                                        
+It dupes, calculates your score, and saves to disk or printer or both.  
+The main screen shows date and time, name of contest, your station call 
+sign, grand total number of contacts made by mode and band, elapsed time
+from last contact, total accumulated score, and the amount of free space
+available in RAM.  Up to 4000 contacts can be made.  Help screens show  
+useable frequencies by band, class of license, and section              
+abbreviations.  All contacts can be listed on the screen during the     
+contest for viewing and correcting.  A ``hurry up timer'' can be set to 
+time your contacts.  The arithmetic for automatic scoring can be changed
+to suit the contest.                                                    
+                                                                        
+KB0ZP CONTEST LOG print program prints a list of the contacts made in   
+almost any form you want, for submission for awards.  It is to be used  
+after the contest and at your leisure.                                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1096
 

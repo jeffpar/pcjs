@@ -43,6 +43,53 @@ machines:
     Spend your time teaching and let GRADEASE do the bookkeeping for you.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1862.TXT
+
+{% raw %}
+```
+Disk No: 1862                                                           
+Disk Title: Gradease                                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Gradease                                                 
+Author Version: 1.0                                                     
+Author Registration: $39.95                                             
+Special Requirements: None.                                             
+                                                                        
+Let GRADEASE do a teacher's dirty work.  This software will calculate   
+grades, print out class lists, print seating charts and gradebook pages,
+and print a summary of grades and progress reports for each student.    
+The program can handle as many separate classes as your disk can hold.  
+                                                                        
+For each class, you may have up to seven separate grading categories.   
+These categories can be divided between quizzes, tests, homework, etc., 
+and you may define categories that will not count in the final grade.   
+                                                                        
+GRADEASE has several grading options.  The program can calculate the    
+overall grade for each grading category with the final grade based      
+either on the averages of these grades or on the weights of those       
+averages.  Each category of grades can be weighted by percentage or     
+multiples.  Missing grades may or may not be included in the final      
+grade.  You may drop the lowest grade or change all grades below a      
+certain score.                                                          
+                                                                        
+GRADEASE can print out an immediate seating chart with the students     
+arranged alphabetically or randomly.  The student list may be updated   
+and can be sorted alphabetically or by an assigned group number.        
+                                                                        
+Spend your time teaching and let GRADEEASE do the bookkeeping for you.  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1862
 

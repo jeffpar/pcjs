@@ -14,6 +14,38 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2751.TXT
+
+{% raw %}
+```
+Disk No: 2751
+Disk Title: DAYO Installation & Configuration
+PC-SIG Version: S1
+
+Program Title: DAYO Installation & Configuration
+Author Version: 07/91
+Author Registration: None.
+Special Requirements: DAYO modules, 530K RAM, hard drive, and DOS 3.3.
+
+DAYO INSTALLATION was created to ease the process of installing the many
+DAYO programs.  DAYO INSTALLATION `drives' the process of copying all of
+the files onto the hard disk and then checks the configuration of each
+DAYO module to insure integration.  Put your company name and address
+into each module and create all required databases and indexes.
+
+Note: DAYO INSTALLATION is useful only for first-time installation.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2751
 

@@ -68,6 +68,78 @@ machines:
     try MED#1, and launch your small medical practice into the next century.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2480.TXT
+
+{% raw %}
+```
+Disk No: 2480                                                           
+Disk Title: MED#1 3 of 3 (#2478, #2479 also)                            
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Med#1                                                    
+Author Version: 1.06                                                    
+Author Registration: $395.00                                            
+Special Requirements: 640K, hard drive, and a dot matrix printer.       
+                                                                        
+MED#1 is a new medical office management system that will increase      
+efficiency in the daily administration of the business side of your     
+medical practice.  It is designed with special features unavailable in  
+other medical systems and is very 'user friendly'.  MED#1 is one of the 
+easiest systems to use, especially if you are already acquainted with   
+computer operations.  But even if you aren't, MED#1 will take you       
+through operations with simple one-key functions that follow the logical
+progression of your normal routine.                                     
+                                                                        
+No special forms are required for printing.  All reports will be printed
+on 8 1/2" by 11" standard stock paper.  Custom statement forms, and the 
+standard insurance HCFA-1500, are available through MEDshare, but the   
+system will print without them.                                         
+                                                                        
+FEATURES OF MED#1:                                                      
+                                                                        
+~ Statements can be printed for all accounts with a balance due on your 
+schedule.                                                               
+                                                                        
+~ Patient ledgers are automatically updated at time of transaction      
+posting - no need to maintain a manual ledgers.                         
+                                                                        
+~ Superbill and/or Insurance claim form can be printed as patient checks
+out or any time needed.                                                 
+                                                                        
+~ Standard Insurance form HCFA-1500 can be printed automatically for    
+insurance assignment with less mistakes, less manual re-input, saving   
+time.                                                                   
+                                                                        
+~ Instant access to account/patient ledger information to help collect  
+at time of office visit.                                                
+                                                                        
+~ Reporting to help you run your practice:                              
+                                                                        
+A) Daily charges and receipts recap.                                    
+B) Month-to-date summary recap.                                         
+C) Aged accounts receivables.                                           
+D) Statements.                                                          
+E) Recall letters.                                                      
+F) Special Recall selection that will help you keep in touch with your  
+patients.                                                               
+G) Insurance claim forms.                                               
+                                                                        
+Now, more than ever, computerization is a part of every medical         
+practice.  It's faster, more accurate and opens you up to the           
+opportunities of future technical advances. So what are you waiting for,
+try MED#1, and launch your small medical practice into the next century.
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2480
 

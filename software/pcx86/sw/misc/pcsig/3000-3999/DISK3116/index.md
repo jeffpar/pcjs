@@ -14,6 +14,65 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE3116.TXT
+
+{% raw %}
+```
+Disk No: 3116                                                           
+Disk Title: *Stellar Explorer 2 of 2 (also 3115)                        
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: Stellar Explorer                                         
+Author Version: 1.10                                                    
+Author Registration: $15.00                                             
+Special Requirements: 640K, EGA or VGA, and DOS 3.2 or later.           
+                                                                        
+In STELLAR EXPLORER is a science fantasy adventure game, with a twisting
+plot and detailed graphical screens displaying the lay out of the area  
+that is being explored.  In this adventure you are the captain of a star
+ship that has just approached an alien space craft in a decaying orbit  
+around a planet.  The engines have malfunctioned and you are sent over  
+to help in its repairs.  As you move across the screen a portion of the 
+star ship is displayed, showing the surrounding area, crew members, and 
+alien creatures.  In STELLAR EXPLORER you will encounter everything that
+you would expect in a science fiction mystery novel - control centers,  
+air locks, cargo bays, locked and unlocked sliding doors, engine rooms, 
+science labs, and other mysterious areas that can be found on levels    
+that are "off-limits."  If you do not know what a certain object is you 
+can point to it with the cursor to obtain a description.  Certain areas 
+can not be found without having a map and a durable space suit.  Health 
+and oxygen level will be your vital statistics.  Different types of     
+scanners are available for detecting nearby objects and life forms - one
+can never know what's hiding behind a corner.  And you will find that   
+STELLAR EXPLORER has an extensive array of armour and weaponry, which   
+will be needed when the situation becomes desperate.                    
+                                                                        
+This adventure of STELLAR EXPLORER is actually a mystery that needs to  
+be solved, with underlying hidden plots that will unfold as you play the
+game.  Throughout the game you can have interactive conversations with  
+other aliens and your own crew members.  With aliens you will have to   
+deal with their primitive English, or use a universal translater in     
+order to communicate at all.  You can ask different questions, but watch
+out!  The wrong question could put you in an embarrassing and even      
+dangerous situation.  Some aliens will be friendly, others hostile, and 
+others will behave friendly but secretly plot against you.  Most will be
+indifferent and will regard your behaviour as quite strange.  But you   
+will need to form your own judgement to determine who to trust, for what
+you thought was an ordinary mundane mission will turn out to be quite a 
+surprise -- who knows?  Perhaps an alien will hatch out of your stomach.
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3116
 

@@ -73,6 +73,54 @@ machines:
     OPTIONS  EXE  Control program.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES739.TXT
+
+{% raw %}
+```
+--------------------------------------------------------------------------
+Disk No 739   EasyMenu Version 1.01    (disk 2 of 3)                 v1
+--------------------------------------------------------------------------
+EasyMenu is a nice, simple menu system, with a few extra features. It makes
+your PC more convenient to use. You record the start- start-up command
+sequence for all programs - such as CD\directory, PROGRAM-NAME/Option
+Switch, or BATCH file, then let EasyMenu remember for you. You can run any
+program at a keystroke or by clicking a mouse button. It saves you time and
+keystrokes when you run your other computer programs and lets you view
+useful notes and comments prior to running a program. If you are new to
+computers, Easymenu tells you about your computer hardware, the amount of
+memory, number of access ports for printers and modems, the version of DOS
+you are using and other useful information. If you are a more experienced
+computer user, you might like to know that EasyMenu can run up to 9
+programs per menu and that you can use batch files.
+ 
+The programs and menus provided on this disk are provided as an example of
+how to create a common Menu Structure using EasyMenu (tm).
+ 
+*        M    Menu data file (9 files)
+*        MH   Menu data file (9 files)
+ARC      EXE  File Archive/Backup program
+ARCE     COM  Archive Extraction-Only
+ASK      COM  Part of Installation
+FFM      EXE  File Manager
+FILEPATH BAT  Part of Installation
+INSTALL  BAT  Installation Start
+PASSWORD COM  Simple "padlock"
+READ     ME?  Information text file (4 files)
+READ     ME   Information text file
+SETUP    BAT  Part of Installation
+SILENCE  COM  Speaker Silencer
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0739
 

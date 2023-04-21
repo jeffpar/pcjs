@@ -45,6 +45,56 @@ machines:
     different formats.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2157.TXT
+
+{% raw %}
+```
+Disk No: 2157                                                           
+Disk Title: Open Door                                                   
+PC-SIG Version: 1.1                                                     
+                                                                        
+Program Title: OPEN DOOR                                                
+Author Version: 5.0                                                     
+Author Registration: $49.95                                             
+Special Requirements: None.                                             
+                                                                        
+A sophisticated database program specifically for Real Estate Agents    
+and property consultants, HOME FINDER keeps puts your listings at your  
+fingertips and comes with full instructions on the disk.                
+                                                                        
+It sets up three databases: properties for sale, properties for rent,   
+and properties currently rented.  Each database can have up to 250      
+records (the registered version holds 20,000 records).  Search quickly  
+for properties that match a customers requirements in size, number of   
+bedrooms, location, type of dwelling, swimming pool, parking, and many  
+other criteria.  Add and change criteria to meet your needs.            
+                                                                        
+The program is sophisticated enough to search for properties that       
+almost match a customer's requirements as well.  Searches can also be   
+done by address or any keyed word or phrase.  Results are displayed on  
+the screen or you can print them in five different formats. Impress your
+clients with personal reports of the properties they are interested in. 
+HOME FINDER's                                                           
+client report format never prints vital property information that would 
+let a customer simply go to the property owner.                         
+                                                                        
+HOME FINDER is an easy-to-use program that lets you move easily         
+through its series of menus using your cursor keys.  Help screens       
+either automatically appear as you move through the operations or can   
+be called up whenever you need them.  You can print reports in          
+five different formats.                                                 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2157
 

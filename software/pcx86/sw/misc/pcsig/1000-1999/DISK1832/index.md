@@ -32,6 +32,42 @@ machines:
     used in analyzing your heating and cooling needs.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1832.TXT
+
+{% raw %}
+```
+Disk No: 1832                                                           
+Disk Title: BTU Analysis                                                
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: BTU Analysis                                             
+Author Version: 2.0.0                                                   
+Author Registration: $104.95.                                           
+Special Requirements: 512K RAM.                                         
+                                                                        
+Even if you're a Do-It-Yourself handyman, you can still figure out which
+heating or cooling system is best for your home.  A properly sized      
+furnace or air conditioner is essential for efficient temperature       
+control.  BTU ANALYSIS puts the brain power of heating and cooling      
+professionals to work for you.                                          
+                                                                        
+This program, while useful for professionals, is especially helpful to  
+those who know very little about BTU analysis.  Self prompting pop-up   
+help screens, on-line instructions, and complete explanations help you  
+build an accurate picture of your home.  Then a ``worse case''          
+methodology is used in analyzing your heating and cooling needs.        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1832
 

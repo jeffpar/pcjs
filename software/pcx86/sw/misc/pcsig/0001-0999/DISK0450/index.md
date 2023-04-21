@@ -47,6 +47,7 @@ machines:
 
 ## DICE.BAS
 
+{% raw %}
 ```bas
 1 CLS:PRINT TAB(30);"DICE GAME"
 2 PRINT TAB(25);"BY MARY RININSLAND"
@@ -159,9 +160,11 @@ machines:
 8018 IF YN$="Y" THEN COMP=0:HUMAN=0:GOTO 20
 8019 CLS:CLEAR:CHAIN "A:DIRECTO.BAS"
 ```
+{% endraw %}
 
 ## ELECTION.BAS
 
+{% raw %}
 ```bas
 5 SCREEN 0,1:WIDTH 40:COLOR 15,1,1
 10 REM * * * * * * * * * * * * * * *
@@ -518,9 +521,39 @@ machines:
 3370 PRINT :INPUT "Press >ENTER< to begin the campaign",Z$:CLS
 3380 RETURN
 ```
+{% endraw %}
+
+## FILES450.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 450  Assorted BASIC Games                               v1 DS2
+-----------------------------------------------------------------------
+Another bunch of BASIC games for the collector or weekend game lover.
+All are interpreted so they can be modified to suit your own tastes.
+ 
+DICE     BAS  A simple dice game
+ELECTION BAS  You get to run for President
+FUN      BAS  A fun with numbers game
+MONEYMKT BAS  Can you succeed in the stock market?
+PRESCH   BAS  A word game for pre-schoolers
+RIEMAN   BAS  Can you survive in the intergalactic trading circle
+ROBOTNKA BAS  Shoot the tank before it gets to you
+STAR2001 BAS  Another space game
+WALLST   BAS  Another Stock Market simulation
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## FUN.BAS
 
+{% raw %}
 ```bas
 1 CLS:COLOR 0,7:IF BDR=0 THEN GOTO 15000
 2 PRINT"H-HEIGHT-WEIGHT        P-PROPORTIONS            M-MONEY PROBLEMS     "
@@ -999,9 +1032,11 @@ machines:
 15007 FOR K=1 TO 1500:NEXT K:CLS
 15008 COLOR 0,7:LET BDR=1:GOTO 2
 ```
+{% endraw %}
 
 ## MONEYMKT.BAS
 
+{% raw %}
 ```bas
 10 REM FOREIGN EXCHANGE
 20 GOSUB 1190:REM INITIALISE
@@ -1192,9 +1227,11 @@ machines:
 1870 PLAY "T32 O3C. P64 C O2B A G A F# E D E C# D...."
 1880 RETURN
 ```
+{% endraw %}
 
 ## PRESCH.BAS
 
+{% raw %}
 ```bas
 1 COLOR 7,0:CLS:PRINT TAB(20);"WORD PROGRAM FOR SMALL CHILDREN"
 2 PRINT TAB(30);"BY MARY RININSLAND"
@@ -1787,9 +1824,11 @@ machines:
 54008 LOCATE 21,20:PRINT"        |__|"
 54009 GOTO 900
 ```
+{% endraw %}
 
 ## RIEMAN.BAS
 
+{% raw %}
 ```bas
 10 REM QUEST FOR RIEMANNIAN
 20 GOSUB 5460:REM INITIALISE
@@ -2402,9 +2441,11 @@ machines:
 6090 CLS
 6100 RETURN
 ```
+{% endraw %}
 
 ## ROBOTNKA.BAS
 
+{% raw %}
 ```bas
 10 PRINT "> > >  HIT THE TANK  < < <":PRINT:CLEAR
 11 '
@@ -2476,9 +2517,11 @@ machines:
 30020 IF N>4200 THEN 30000
 30050 RETURN
 ```
+{% endraw %}
 
 ## STAR2001.BAS
 
+{% raw %}
 ```bas
 10 REM STAR BASE 2000
 20 REM NEEDS BASICA
@@ -2858,9 +2901,11 @@ machines:
 3740 REM PLAY "MB164T255N=J":PLAY "FC#DD#EGF#GG#BA#BAACCC#AAAA#A#A#C"
 3750 RETURN
 ```
+{% endraw %}
 
 ## WALLST.BAS
 
+{% raw %}
 ```bas
 10 REM WALL STREET TRADER
 20 GOSUB 1570:REM INITIALISE
@@ -3124,6 +3169,7 @@ machines:
 2600 DATA 0,0,0,0,0,0,0,0,0,0
 2610 REM * * * * * * * * *
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

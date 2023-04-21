@@ -33,6 +33,43 @@ machines:
     FLIES.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2427.TXT
+
+{% raw %}
+```
+Disk No: 2427                                                           
+Disk Title: Lord of the Flies 2 of 2 (#2426 also)                       
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Lord of the Flies                                        
+Author Version: 1.0                                                     
+Author Registration: $15.00; Site licence $60.00                        
+Special Requirements: 512K RAM, CGA, and GWBASIC or BASICA.             
+                                                                        
+You're studying LORD OF THE FLIES by William Golding.  They say         
+it's a classic, that it's a statement about society.  You find it to be 
+an interesting, sometimes boring, sometimes fascinating, sometimes you- 
+can-see-yourself-in-the-character sort of book.  What is Golding really 
+saying?                                                                 
+                                                                        
+The author of the shareware programs MACBETH and ROMEO AND JULIET sheds 
+some more light for the high school English literature student.  In a   
+captivating way and from many angles, he draws the student into the     
+story, familiarizes the reader with the characters, plot, and themes,   
+and leaves the student with a new comprehension of THE LORD OF THE      
+FLIES.                                                                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2427
 

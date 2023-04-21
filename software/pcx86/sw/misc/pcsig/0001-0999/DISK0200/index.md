@@ -53,6 +53,61 @@ machines:
     PCUGNEWS TOC  Information file.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES200.TXT
+
+{% raw %}
+```
+Disk No:  200
+Program Title: IBM Users Group #4
+PC-SIG version: 1.1
+
+June 1984 issue of the electronic newsletter published by IBM Boca
+Raton. To read it, type NEWS.  You will be presented with a menu of
+topics and stories, including new product announcements, tips,
+techniques and other material.
+
+Articles include:
+
+BASIC and machine code interfacing.
+Running DOS commands from BASIC.
+Using numbers in random files.
+Installing half-height drives.
+Comparing microprocessors.
+Using macros.
+Recovering data from bad directories.
+Speeding up memory check
+Poking around on the fixed disk.
+
+Usage:  Reference.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  None.
+
+File Descriptions:
+
+???????? NL   Data file (24 files).
+AUTOEXEC BAT  Automatically starts the program.
+???????? PIC  Picture data file (10 files).
+DESCRIBE      Text file which describes the program.
+MASTHEAD      Information file.
+NEWS     EXE  Main program.
+PCUGNEWS TOC  Information file.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1985,86,87,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0200
 

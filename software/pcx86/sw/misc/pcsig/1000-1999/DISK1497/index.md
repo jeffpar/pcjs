@@ -38,6 +38,48 @@ machines:
     disks or two directories on the same disk at the same time.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1497.TXT
+
+{% raw %}
+```
+Disk No: 1497                                                           
+Disk Title: DirectMaint                                                 
+PC-SIG Version: S2.0                                                    
+                                                                        
+Program Title: DirectMaint                                              
+Author Version: 2.0                                                     
+Author Registration: $29.95                                             
+Special Requirements: None.                                             
+                                                                        
+A pox on DOS!  If you believe that DOS file and directory commands were 
+designed by demented hackers, you'll appreciate the simple, sane        
+approach of DIRECT MAINT.  Now you need not remember those obscure DOS  
+commands.  You can ignore paths and leave the DOS manual under one leg  
+of your printer table.  Instead, use a friendly highlighted bounce bar  
+to decide what you want to do.  If the program needs to know something, 
+it will ask you.  Works great both on hard and floppy disks.            
+                                                                        
+Load and run programs and batch files using the point-and-shoot menu.   
+Easily find, copy, compare, erase, display, print, and change names,    
+dates, times, and attributes of files.  DIRECT MAINT copies all or      
+selected files wherever you desire.  You are prompted when target disks 
+are full, so you'll never split files between disks.  Physically move   
+files wherever you want.  Comparing old and new files is a snap.  Erase 
+multiple tagged files or whole directories, and print subdirectory names
+in a single directory or tree structure.  You can view two disks or two 
+directories on the same disk at the same time.                          
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989, 1990 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1497
 

@@ -42,6 +42,52 @@ machines:
     This is a MUST HAVE for all AS-EASY-AS users.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1763.TXT
+
+{% raw %}
+```
+Disk No: 1763                                                           
+Disk Title: Pivot!                                                      
+PC-SIG Version: S2                                                      
+                                                                        
+Program Title: Pivot!                                                   
+Author Version: 2.0                                                     
+Author Registration: $15.00                                             
+Special Requirements: EPSON compatible dot matrix printer.              
+                                                                        
+AS-EASY-AS users take note!  If you've experienced the frustration of   
+trying to print a worksheet that has become too wide -- even with your  
+printer set to compressed mode -- you need PIVOT!                       
+                                                                        
+This unique printing program from the people who brought you AS-EASY-AS 
+allows you great flexibility in printing your finished worksheet.       
+Choose the font of your choice, portrait or landscape orientation,      
+characters per inch, lines per page, and many other options from the    
+simple menu system and then relax as PIVOT! takes charge of putting your
+work on paper.                                                          
+                                                                        
+PIVOT! also comes with a graphics character editor which allows you to  
+customize/create a character, or a whole character set, to be used with 
+PIVOT!                                                                  
+                                                                        
+Ease of use is just the first benefit of using this program -- the real 
+payoff comes when you see the finished product.  PIVOT! produces        
+high-quality printing on the lowliest of dot-matrix printers and gives  
+you a document worthy of the time you spent creating it.                
+                                                                        
+This is a MUST HAVE for all AS-EASY-AS users.                           
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1763
 

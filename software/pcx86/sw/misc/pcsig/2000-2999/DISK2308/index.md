@@ -37,6 +37,44 @@ machines:
     requiring constant user intervention.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2308.TXT
+
+{% raw %}
+```
+Disk No: 2308                                                           
+Disk Title: Laser Graph  2 of 2 (also 2027)                             
+PC-SIG Version: S2                                                      
+                                                                        
+Program Title: Laser Graph                                              
+Author Version: 3.4                                                     
+Author Registration: $49.00                                             
+Special Requirements: 512K RAM, CGA, EGA, or VGA, hard drive, and DOS 3.
+                                                                        
+LASER GRAPH is a group of programs, useful to engineers, for producing  
+high resolution data plots using an HP LaserJet II printer.  The types  
+of plots LASER GRAPH is capable of producing are: single line, multiple 
+line, three dimensional perspective, X-Y plots, and scatter diagrams.  I
+can print with a resolution of up to 2000 X 3000 dots (pixels),         
+depending on your printers memory.                                      
+                                                                        
+All of the elements of a really good data plotting system are here.  It 
+does require patience and diligence to become familiar with how it works
+but LASER GRAPH does produce stunning results on your laser printer.    
+All plot commands may be entered on the DOS command line.  This allows a
+string of plot commands to be put in a batch file for execution without 
+requiring constant user intervention.                                   
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2308
 

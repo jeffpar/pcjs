@@ -51,6 +51,7 @@ machines:
 
 ## BOOGERS!.BAS
 
+{% raw %}
 ```bas
 1 REM NOTHING
 2 REM
@@ -320,9 +321,41 @@ machines:
 9300 CLS:IF LEV$="1"THEN SK=INT(SK-(SK/2)):IF SK<1 THEN SK=1
 9310 GOTO 470
 ```
+{% endraw %}
+
+## FILES448.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 448   Assorted games                                    v1 DS2
+-----------------------------------------------------------------------
+A collection of games. Most are in color and require the color graphics
+monitor to run. Most of the games are medium to high quality, BABY is
+a little disgusting.
+ 
+KANGAROO BAS+ Donkey Kong-like game
+AF       DOC  Documentation file for AF.EXE
+AF       EXE+ War game based in Afghanistan
+BABY     EXE+ Catch the falling babies as they jump from a building
+PINBALL  EXE+ Pinball game made using Electronic Arts pinball program
+RIBIT    EXE+ Frogger clone
+MAZE1-2A EXE+ Hi-Res maze game (tough!)
+BOOGERS! BAS  Shoot your way out of a maze
+ZYLGIS   BAS  Another PAC-MAN clone
+ZYLGIS   SCR  High scores for ZYLGIS.BAS
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## KANGAROO.BAS
 
+{% raw %}
 ```bas
 100 KEY OFF:SCREEN 1,0:CLS
 110 DIM BALL%(5),KANG1%(11),KANG2%(12),KANG3%(11),KANG4%(12),SHAPE$(4): DEF FNR(X)=INT(RND(1)*X): DEF FNUP$(X$)=CHR$(ASC(X$)+32*(ASC(X$)>96))
@@ -424,9 +457,11 @@ machines:
 1070 PUT (XX,Y),KANG3%: RETURN
 1080 PUT (XX,Y),KANG4%: RETURN
 ```
+{% endraw %}
 
 ## ZYLGIS.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS:PRINT:PRINT:COLOR 8,7:LOCATE 3,28:PRINT" * ZYLGIS * ":COLOR 0,2:PRINT:PRINT TAB(40);"By: Jeff Askew":PRINT TAB(40);"12/12/82"
 20 PLAY"t100o3c16e16g16o4c16o3p16g16o4c3p8t200L32o4cco3ba#ag#gf#fed#dc#c16
@@ -541,6 +576,7 @@ machines:
 1110 CLOSE #1
 1120 CLS:KEY ON:PRINT:PRINT:PRINT TAB(30);"Have  A  Nice  Day !!":PRINT:PRINT:PRINT:PRINT:PRINT:PRINT:PRINT:END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

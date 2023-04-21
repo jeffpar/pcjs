@@ -80,6 +80,7 @@ machines:
 
 ## AD.BAS
 
+{% raw %}
 ```bas
 5 KEY OFF:FOR I= 1 TO 10:KEY I,"":NEXT
 10 CLS:LOCATE  5,27:COLOR 0,7:PRINT SPACE$(26):LOCATE  6,27:PRINT SPACE$(26)
@@ -91,9 +92,11 @@ machines:
 70 LOCATE 25,10:COLOR 1,7,0:PRINT "INTEGRATED SOFTWARE SYSTEMS";SPACE$(15);"SERIAL NUMBER: ";SNN$:COLOR 7,0
 80 RUN"ADMAIN.BAS"
 ```
+{% endraw %}
 
 ## ADDELETE.BAS
 
+{% raw %}
 ```bas
 1 DEF SEG = &H40:POKE &H17, PEEK(&H17) AND 223:POKE &H17,0
 5 ARR$=CHR$(17)+CHR$(196)+CHR$(217)
@@ -332,9 +335,11 @@ machines:
 35030 IF SND$="N" THEN RETURN ELSE SOUND 523.25,2:SOUND 30000,2:SOUND 523.25,2:RETURN
 35040 IF SND$="N" THEN RETURN ELSE BEEP:RETURN
 ```
+{% endraw %}
 
 ## ADEDIT.BAS
 
+{% raw %}
 ```bas
 10 DEF SEG = &H40:POKE &H17, PEEK(&H17) AND 223
 100 ARR$=CHR$(17)+CHR$(196)+CHR$(217)
@@ -680,9 +685,11 @@ machines:
 35030 IF SND$ = "N" THEN RETURN ELSE SOUND 523.25,2:SOUND 30000,2:SOUND 523.25,2:RETURN
 35040 IF SND$ = "N" THEN RETURN ELSE BEEP:RETURN
 ```
+{% endraw %}
 
 ## ADFILES.BAS
 
+{% raw %}
 ```bas
 10 DIM U$(16):ON KEY(10) GOSUB 190:KEY(10) ON:ON ERROR GOTO 2000:GOTO 20
 15 Y1=VAL(Y1$):ON KEY(10) GOSUB 190:KEY(10) ON:ON ERROR GOTO 2000
@@ -731,9 +738,11 @@ machines:
 2030 RESUME 190
 35020 IF SND$="N" THEN RETURN ELSE BEEP:RETURN
 ```
+{% endraw %}
 
 ## ADLIST.BAS
 
+{% raw %}
 ```bas
 2 RUN "ADMAIN.BAS"
 1300 COLOR 14,0:LOCATE 22,50:PRINT "KEY  F1";:COLOR 3,0:PRINT " = MAIN MENU":LOCATE 1,1:RETURN
@@ -847,9 +856,11 @@ machines:
 10010 IF SND$="N" THEN RETURN ELSE FOR A%=1 TO 4:SOUND  500*A%,2:NEXT:RETURN
 10020 IF SND$="N" THEN RETURN ELSE BEEP:RETURN
 ```
+{% endraw %}
 
 ## ADMAIL.BAS
 
+{% raw %}
 ```bas
 100 CLEAR:ON ERROR GOTO 9000
 126 GOSUB 3000:GOTO 200
@@ -1150,9 +1161,11 @@ machines:
 35030 IF SND$="N" THEN RETURN ELSE SOUND 750,2:SOUND 30000,2:SOUND 750,2:RETURN
 40000 A$="ADMAIL.BAS":CHAIN "ADREAD.BAS",40000.,ALL
 ```
+{% endraw %}
 
 ## ADMAIN.BAS
 
+{% raw %}
 ```bas
 1 '     ******************************************************************              *                                                                *
 2 '     *                         ADDRESS BOOK                           *              *                                                                *
@@ -1439,9 +1452,11 @@ machines:
 40070 NEXT
 40080 RETURN
 ```
+{% endraw %}
 
 ## ADNAME.BAS
 
+{% raw %}
 ```bas
 20 COLOR 7,0:RUN A$
 30 COLOR 3,0:RUN "admain.bas"
@@ -1478,9 +1493,11 @@ machines:
 20220 IF Y$=CHR$(27) THEN 20 ELSE GOSUB 5000:RETURN
 35030 IF SND$="N" THEN RETURN ELSE SOUND 750,2:SOUND 30000,2:SOUND 750,2:RETURN
 ```
+{% endraw %}
 
 ## ADNOTE.BAS
 
+{% raw %}
 ```bas
 40 ARR$=CHR$(17)+CHR$(196)+CHR$(217)
 50 ON ERROR GOTO 1940
@@ -1562,9 +1579,11 @@ machines:
 35030 IF SND$ = "N" THEN RETURN ELSE SOUND 523.25,2:SOUND 30000,2:SOUND 523.25,2:RETURN
 35040 IF SND$ = "N" THEN RETURN ELSE BEEP:RETURN
 ```
+{% endraw %}
 
 ## ADPRINT.BAS
 
+{% raw %}
 ```bas
 1 DIM ZK(40),D$(16),V$(16),V(16),V1$(16)
 2 ARR$=CHR$(17)+CHR$(196)+CHR$(217)
@@ -1668,9 +1687,11 @@ machines:
 10010 IF SND$="N" THEN RETURN ELSE FOR A%=1 TO 4:SOUND  520*A%,2:NEXT:RETURN
 10020 IF SND$="N" THEN RETURN ELSE BEEP:RETURN
 ```
+{% endraw %}
 
 ## ADPRT.BAS
 
+{% raw %}
 ```bas
 10 CLEAR:ON ERROR GOTO 3940
 30 GOSUB 3500:GOTO 130
@@ -1910,9 +1931,11 @@ machines:
 35020 IF SND$="N" THEN RETURN ELSE BEEP:RETURN
 35030 IF SND$="N" THEN RETURN ELSE SOUND 750,2:SOUND 30000,2:SOUND 750,2:RETURN
 ```
+{% endraw %}
 
 ## ADPRTA.BAS
 
+{% raw %}
 ```bas
 10 ON ERROR GOTO 3940
 30 GOTO 1380
@@ -2043,9 +2066,11 @@ machines:
 35010 IF SND$="N" THEN RETURN ELSE FOR SS%=1 TO 3:SOUND 1000*SS%,1:NEXT:FOR SS%= 3 TO 1:SOUND 1000*SS%,1:NEXT:RETURN
 35030 IF SND$="N" THEN RETURN ELSE SOUND 750,2:SOUND 30000,2:SOUND 750,2:RETURN
 ```
+{% endraw %}
 
 ## ADPRTC.BAS
 
+{% raw %}
 ```bas
 10 ON ERROR GOTO 3940
 30 GOTO 480
@@ -2183,9 +2208,11 @@ machines:
 35010 IF SND$="N" THEN RETURN ELSE FOR SS%=1 TO 3:SOUND 1000*SS%,1:NEXT:FOR SS%= 3 TO 1:SOUND 1000*SS%,1:NEXT:RETURN
 35030 IF SND$="N" THEN RETURN ELSE SOUND 750,2:SOUND 30000,2:SOUND 750,2:RETURN
 ```
+{% endraw %}
 
 ## ADREAD.BAS
 
+{% raw %}
 ```bas
 1000 RUN A$
 5000 CLS:LOCATE 25,1:COLOR 0,7,1:PRINT C$;:COLOR 3,0:LOCATE 1,1:RETURN
@@ -2310,9 +2337,11 @@ machines:
 41270 LOCATE JK,15:PRINT MID$(V$(K),5,VAL(V$(K)));SPACE$(30):NEXT
 41280 LOCATE 14,15:PRINT SPACE$(64):PRINT SPACE$(80):LOCATE 14,15:PRINT MID$(V$(9),5,VAL(V$(9))):RETURN
 ```
+{% endraw %}
 
 ## ADRODX.BAS
 
+{% raw %}
 ```bas
 100 CLEAR:ON ERROR GOTO 9000
 126 GOSUB 3000:GOTO 200
@@ -2554,9 +2583,11 @@ machines:
 35030 IF SND$="N" THEN RETURN ELSE SOUND 750,2:SOUND 30000,2:SOUND 750,2:RETURN
 40000 A$="ADRODX.BAS":CHAIN "ADREAD.BAS",40000.,ALL
 ```
+{% endraw %}
 
 ## ADSEARCH.BAS
 
+{% raw %}
 ```bas
 5 ARR$=CHR$(17)+CHR$(196)+CHR$(217):C1$=CHR$(34)
 20 DIM DQ$(12):FOR I= 1 TO 12:READ DQ$(I):NEXT
@@ -2813,9 +2844,11 @@ machines:
 35030 IF SND$="N" THEN RETURN ELSE SOUND 523,2:SOUND 20000,3:SOUND 523,2:RETURN
 35040 IF SND$="N" THEN RETURN ELSE BEEP:RETURN
 ```
+{% endraw %}
 
 ## ADSORT.BAS
 
+{% raw %}
 ```bas
 10 DEFINT A-Z
 20 ON ERROR GOTO 170
@@ -3083,9 +3116,11 @@ machines:
 35030 IF SND$="N" THEN RETURN ELSE SOUND 523.25,2:SOUND 30000,3:SOUND 523.25,2:RETURN
 35040 IF SND$="N" THEN RETURN ELSE BEEP:RETURN
 ```
+{% endraw %}
 
 ## ADSTART.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF:FOR I= 1 TO 10:KEY I,"":NEXT:GOSUB 110
 20 IF CO=999 THEN 25 ELSE FOR I= 1 TO 500:NEXT
@@ -3188,9 +3223,11 @@ machines:
 1340 LOCATE 24,27:COLOR O,7:PRINT "HIT ANY KEY TO CONTINUE";:COLOR 0,11:LOCATE 1,1
 1350 A$=INKEY$:IF A$="" THEN 1350 ELSE RETURN
 ```
+{% endraw %}
 
 ## ADTRANS.BAS
 
+{% raw %}
 ```bas
 10 DEF SEG = &H40:POKE &H17, PEEK(&H17) AND 223
 100 ARR$=CHR$(17)+CHR$(196)+CHR$(217)
@@ -3492,9 +3529,11 @@ machines:
 35030 IF SND$ = "N" THEN RETURN ELSE SOUND 523.25,2:SOUND 30000,2:SOUND 523.25,2:RETURN
 35040 IF SND$ = "N" THEN RETURN ELSE BEEP:RETURN
 ```
+{% endraw %}
 
 ## ADWP.BAS
 
+{% raw %}
 ```bas
 20 CLEAR:ON ERROR GOTO 9000:ARR$=CHR$(17)+CHR$(196)+CHR$(217)
 50 DIM F(15),FA$(15),W$(15),F$(15)
@@ -3692,9 +3731,11 @@ machines:
 35020 IF SND$="N" THEN RETURN ELSE BEEP:RETURN
 35030 IF SND$="N" THEN RETURN ELSE SOUND 750,2:SOUND 30000,2:SOUND 750,2:RETURN
 ```
+{% endraw %}
 
 ## ADWS.BAS
 
+{% raw %}
 ```bas
 20 ON ERROR GOTO 9000:ARR$=CHR$(17)+CHR$(196)+CHR$(217)
 50 DIM F(20),FA$(20),W$(20),F$(20)
@@ -3888,9 +3929,11 @@ machines:
 35020 IF SND$="N" THEN RETURN ELSE BEEP:RETURN
 35030 IF SND$="N" THEN RETURN ELSE SOUND 750,2:SOUND 30000,2:SOUND 750,2:RETURN
 ```
+{% endraw %}
 
 ## ADZIP.BAS
 
+{% raw %}
 ```bas
 100 CLEAR:ON ERROR GOTO 9000
 126 GOSUB 5010:GOSUB 3000:GOTO 1660
@@ -4034,6 +4077,64 @@ machines:
 35020 IF SND$="N" THEN RETURN ELSE BEEP:RETURN
 35030 IF SND$="N" THEN RETURN ELSE SOUND 750,2:SOUND 30000,2:SOUND 750,2:RETURN
 ```
+{% endraw %}
+
+## FILES401.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 401   THE ADDRESS BOOK                                       v1.1
+------------------------------------------------------------------------
+The Address Book is a user-friendly personal and/or business address
+book program.  You can create your own address book file for up to 300
+entries, which can be edited, printed, searched, and sorted.  Birthdays
+and other user-defined notes may be kept.  WordStar and WordPerfect
+mail-merge files can also be created.  Sub-directories of the main
+directory can also be routinely created.  Function keys are used ex-
+tensively and RAM-disk may be used for more speed.
+ 
+AD       BAS  Abreviated ADSTART.BAS without starting graphics
+AD       BAT  Batch file for starting ADSTART.BAS
+AD       HLP  Text file used by program to provide online help
+ADDELETE BAS  Program to delete entries
+ADDIR    BAS  ?? << doesn't load properly >>
+ADEDIT   BAS  Program to edit entries
+ADFILES  BAS  Creates all necessary data files
+ADLIST   BAS  Prints address book
+ADMAIL   BAS  Prints address labels
+ADMAIL   HLP  Help file used by ADMAIL.BAS
+ADMAIN   BAS  Main address book program
+ADNAME   BAS  Determines name of sub-program to run
+ADNOTE   BAS  Program to create notes to records
+ADPRINT  BAS  Program to set printer parameters
+ADPRT    BAS  Master printing program
+ADPRTA   BAS  Supplemental printing program
+ADPRTC   BAS  Supplemental printing program
+ADREAD   BAS  Program to scan entries
+ADRODX   BAS  Program to print Rolodex-type labels
+ADSEARCH BAS  Program to search by criteria
+ADSORT   BAS  Program to sort base by criteria
+ADSTART  BAS  Set-up and start program - chains to ADMAIN.BAS
+ADTRANS  BAS  Program to transfer records
+ADWP     BAS  Converts data files for WordPerfect mail-merge
+ADWS     BAS  Converts data files for WordStar mail-merge
+ADZIP    BAS  Prints labels by ZIP code
+AUTOEXEC BAT  Auto-start batch file to run ADSTART.BAS
+MANUAL   DOC  Text file containing instructions and user manual
+SAMPLES  DAT  Sample data file
+SAMPLES  ISS  Sample configuration file
+SAMPLES  NTE  Data file - note codes
+TEMPOR   TEM  Temporary data file (used internally)
+ 
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -38,6 +38,48 @@ machines:
     mortgage.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1580.TXT
+
+{% raw %}
+```
+Disk No: 1580                                                           
+Disk Title: Loanstar                                                    
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: LoanStar                                                 
+Author Version: 1.4                                                     
+Author Registration: Any amount.                                        
+Special Requirements: None.                                             
+                                                                        
+LOANSTAR is an easy to use loan calculator and amortization program for 
+fixed and variable rate loans.  LOANSTAR allows for advance payments to 
+be paid at any month and shows you any savings incurred as a result of  
+making advance payments.  Annual interest paid is also displayed to aid 
+in tax calculations.                                                    
+                                                                        
+LOANSTAR is an excellent menu driven program for calculating and        
+tracking any loan.  The program solves for payment, interest rate,      
+length of loan, or amount of loan.  The amortization schedule displays  
+on the screen or printer the monthly balance, equity, principle, and    
+interest.  Also shown on a monthly basis are advance payments, rate     
+changes, and payment changes, if any.  LOANSTAR displays on an annual   
+basis total interest paid for income tax purposes.  The amount of time  
+and money saved as a result of making advance payments is shown on the  
+last year of the schedule.  All of this can be saved to disk for later  
+recall and update.  LOANSTAR is great for keeping track of a long       
+mortgage.                                                               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1580
 

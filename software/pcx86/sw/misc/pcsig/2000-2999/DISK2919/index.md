@@ -14,6 +14,31 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2919.TXT
+
+{% raw %}
+```
+Disk No: 2919                                                           
+Disk Title: Morform  2 of 2 (#2918 also)                                
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: Morform                                                  
+Author Version: 1.0                                                     
+Author Registration: $39.95                                             
+Special Requirements: 470K RAM, a hard disk, and a printer.             
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2919
 

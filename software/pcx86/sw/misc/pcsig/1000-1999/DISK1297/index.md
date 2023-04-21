@@ -33,6 +33,55 @@ machines:
     is menu-driven with on-screen help.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1297.TXT
+
+{% raw %}
+```
+Disk No: 1297
+Program Title:  LABEL CMT version 1.0
+PC-SIG version 1
+
+This simple program prints labels in any size up to 5.2 x 2.3 inches
+including regular address labels (3.5" by 0.7"), or file folder work
+labels (3.2" by 2.3").
+
+Labels are shown on the screen letting you see what you are going to
+get.  Size of type is standard with no options.  You can save labels to
+a library, print one or more copies of the same label, and optionally
+pause the printer after each label is printed.  LABEL CMT is most useful
+for creating labels that do not need to be part of a database, such as
+return address, file folder, or inventory/bin type labels.  The program
+is menu-driven with on-screen help.
+
+Usage:  Labels.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $20.00
+
+File Descriptions:
+
+CMTDTA1  CMT  Data file.
+CMTWORK1 CMT  Data file.
+CMTDIR1  CMT  Data file.
+LABELCMT EXE  Main program.
+MANUAL1  CMT  Online help file.
+MANUAL1  NTX  Online help file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1297
 

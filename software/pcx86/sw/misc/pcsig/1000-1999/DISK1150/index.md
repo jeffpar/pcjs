@@ -48,6 +48,197 @@ machines:
     and organize your labels any way you like.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CHANGES.TXT
+
+{% raw %}
+```
+
+
+
+
+
+
+                         Simply Labels III
+
+
+          Simply  Labels  version  III  is  a  complete  rewrite  with many
+          improvements and new features.    The  first  difference  you may
+          notice is  that the  program is  now in an EXE format and is much
+          larger.  This is due to many new features and  partly due  to the
+          new compiler used.
+
+          Because of  the many changes in this version, the file format has
+          been changed.  To use data files created  with version  2.xx they
+          must first  be converted.  A utility has been included to do this
+          for you.  See appendix B in the  main manual  for instructions on
+          how to convert your files.
+
+
+
+          NEW FEATURES
+
+          - Total user control over all program colors.
+
+          - Allows full use of pathnames.
+
+          - Many more labels per file.  (Over 2100 mailing labels / 640k)
+            Able to use all available memory for label data.
+
+          - Provides a Shell to DOS from any menu.
+
+          - Allows Qwik keys for commonly used text.  Up to 20 characters
+            may be entered with one keypress.  Qwik keys may be used as
+            label text or any program input including menu commands.
+
+          - Allows custom  keyboard definitions for special characters.    
+            Good for other languages or printer codes.
+
+          - Much faster loading and saving of label files.
+
+          - Allows smaller labels.  Sizes down to 16 characters wide.
+
+          - Date and Time stamps.  A stamp (MM/DD/YYYY or HH:MM:SS)
+            included in background text will be filled in when label is
+            printed.  Pressing Alt-D or Alt-T while editing label text will
+            insert the system Date/Time at the cursor position.
+
+          - Improved Label Editing
+              - Insert and Delete line functions
+              - <Ctrl><Home> moves to start of label
+              - <Ctrl><End> moves to end of label
+              - <Home> moves to start of line 
+              - <End> moves to end of text/line
+
+          - All printing options now work when using the screen as the
+            output device.
+
+
+
+
+
+
+          - Allows non printing lines in your labels.  This allows  more
+            information to be included than needs to be printed.  For
+            example a phone number or employee number may be included for
+            searching or sorting but does not need to be printed.
+
+          - Allows printing to different printer ports. (1-3)
+
+          - New method of selecting labels to print
+              - All labels now have flags to tell if they are selected
+              - Labels may be selected for printing or deleting
+              - Labels may be selected individually, by whole file, ranges,
+                or by searching.  All selection functions may be used to
+                Set, Clear or Toggle print flags.
+
+          - New Printing Options
+              - Automatic centering of labels
+              - Removal of blank lines
+              - Double strike background text
+              - Print all copies together or as complete sets
+              - Multiple copies of a report
+              - Pause option for envelopes
+              - Twice as many typeface selections
+              - Up to 9999 copies of any label, envelope, or report
+              - New device for printing, called "Label File".  Allows
+                cloning current file with flagged labels only.
+
+          - Improved movement through your files
+              - <PgUp> moves to previous label
+              - <PgDn> moves to next label
+              - <Home> moves to first label in file
+              - <End> moves to last label in file
+              - <Alt><M> moves directly to any label
+              - <Ctrl><PgUp> moves to previous flagged label
+              - <Ctrl><PgDn> moves to next flagged label
+              - All movement keys work whenever a label is displayed
+
+          - Complete searches may use any number of wild (?) characters
+
+          - Conditional searches are now selected from a menu and may
+            specify any part of any line to search including first or last
+            words.
+
+          - Both searches and sorts now use pop up definition screens.
+
+          - Reports may have up to 9 columns and you may specify any part
+            of any line to include in report.
+
+          - New file type called link files
+              - Link files link to and directly read dBase III or PC-File
+                type database files.
+              - Allows printing labels directly from database files.
+              - Assigns a label format to the database file
+              - Allows placing data into label by field name
+              - Reads records directly from database. No need to Import
+
+
+
+
+
+              - Does not modify database file in any way
+              - Full network support
+              - All Simply Labels print formats and options may be used
+
+          - Utility for floppy disk labels (SF.EXE)
+              - Automatically makes label when floppy disk is read
+              - User defines format by using background text
+              - Adds file and dir names from the floppy as label text
+              - Format may include user input fields for disk titles
+              - Volume name may be added or changed when disk is read
+              - Bytes free, disk format, and file count may be added
+              - Files and dir names may be sorted
+              - File sizes and dates may optionally be included
+              - Labels are printed with Simply Labels
+
+
+```
+{% endraw %}
+
+## FILE1150.TXT
+
+{% raw %}
+```
+Disk No: 1150                                                           
+Disk Title: Simply Labels III                                           
+PC-SIG Version: S2                                                      
+                                                                        
+Program Title: Simply Labels                                            
+Author Version: 3.0                                                     
+Author Registration: $25.00                                             
+Special Requirements: Printer.                                          
+                                                                        
+SIMPLY LABELS is a unique label program that lets you design your own   
+labels, any size you want.                                              
+                                                                        
+Each label format you create can have its own standard background text, 
+which can include graphics characters.  In this way you can create      
+labels with blank lines or boxes for data entry.  You can also specify  
+the length of the label and the number of lines each label has.  Each   
+line of the label you create can have a different kind of type- face,   
+such as normal print, condensed, elite, etc.  You can create mailing    
+labels, tape labels, VCR labels, filing labels, or any kind of label for
+whatever you need.                                                      
+                                                                        
+Several predefined label formats are included in the program, and you   
+can design up to 25 different label formats.  SIMPLY LABELS sends the   
+labels to the printer, a disk file, or the screen.  You can print single
+or multiple copies of labels, and print multiple labels across the      
+printer.  Label entries can be searched, edited, deleted, and sorted.   
+Labels can be sorted alphabetically by any line in the label.  Labels   
+can also be imported into SIMPLY LABELS from a text file.               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1150
 

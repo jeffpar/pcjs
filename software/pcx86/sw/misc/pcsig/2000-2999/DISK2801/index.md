@@ -14,6 +14,35 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2801.TXT
+
+{% raw %}
+```
+Disk No: 2801
+Disk Title: DAYO Little POS
+PC-SIG Version: S1.0
+
+Program Title: DAYO Little POS
+Author Version: 3.0
+Author Registration: $25.00
+Special Requirements: 640K RAM, hard disk, DOS 3.3, and PC-SIG #2402, #2
+
+DAYO LITTLE POS is a modified version of DAYO POS created to reduce
+memory requirement, useful on LANs and/or networks where memory is
+usually at a premium. Requires DAYO POS as it uses the same
+configuration settings.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2801
 

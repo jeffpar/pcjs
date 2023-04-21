@@ -14,6 +14,104 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2587.TXT
+
+{% raw %}
+```
+Disk No: 2587                                                           
+Disk Title: Volunteer Network #1 (2588, 2589 also)                      
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: The Volunteer Network                                    
+Author Version: 5.0                                                     
+Author Registration: $99.00                                             
+Special Requirements: 512K RAM, and a hard drive.                       
+                                                                        
+THE VOLUNTEER NETWORK is an extensive database written in DBASE III,    
+designed to help organize putting volunteers together to perform        
+different tasks and assignments, and keeping track of special skills and
+experience of each volunteer to meet special needs.  Assignments can be 
+scheduled to meet the time availability of each volunteer, and you can  
+keep track of the hours that each volunteer has worked and what groups  
+or committees they belong too.  THE VOLUNTEER NETWORK is most useful to 
+any volunteer organization that has a large volunteer base or has many  
+assigments that need to be met, subject to time availability or special 
+skills that may be required.  Sign in sheets can be printed, as well as 
+mailing labels for the volunteers.                                      
+                                                                        
+For each volunteer you can keep track of specific information such as   
+their age, education, health condition, education, emergency phone      
+number and contact, membership dues, tests taken, whether or not they   
+can drive, if they have a car or truck, assignment interests, the times 
+that they are available, and the total number hours that they have      
+worked.  The number of hours that each volunteer puts in is             
+automatically updated as each work assignment is accomplished.  Awards  
+can be issued on the basis of the number of hours put in, and you can   
+keep track of the awards each volunteer has attained.                   
+                                                                        
+The skills and experience of each volunteer are entered in separate     
+records from the personal information.  For each person business and    
+volunteer skills can be entered, as well as all past experience and     
+training courses completed.  This will allow a volunteer organization to
+pool its resources more efficiently.  Assignments can be scheduled and  
+filled by individual volunteers or by a group of volunteers.  Volunteers
+can be given regular daily assignments or special tasks that need to be 
+performed.  THE VOLUNTEER NETWORK will allow you to keep track of       
+unfilled assignments and what hours are still open.                     
+                                                                        
+For reviewing and searching the volunteer information, THE VOLUNTEER    
+NETWORK will allow you to find an individual record from a key field or 
+find multiple records based upon criteria on several fields of          
+information.  Moreover, you can display or print information in a       
+customized format: you can select what fields are to printed, the order 
+in which they are to be printed, and the sorting order of the records.  
+                                                                        
+In addition to the search and review options, THE VOLUNTEER NETWORK can 
+print out many reports, among which are the following:                  
+                                                                        
+~ Address and phone listing.                                            
+~ Volunteer group listing.                                              
+~ Volunteer start date listing.                                         
+~ Membership roster.                                                    
+~ Membership dues listing for a range of dates.                         
+~ Assignment interest listing for each volunteer.                       
+~ Emergency information listing.                                        
+~ Training class reports by class, instructor, certification expiration 
+date, and other criteria.                                               
+~ Assignment listing for each volunteer, or group.                      
+~ A listing of all volunteers, or groups, with an assignment on a       
+particular day.                                                         
+~ A master schedule of assignments, sorted by date.                     
+~ A daily assignment listing.                                           
+~ Sign in sheets for recording work done.                               
+~ Work entry reports.                                                   
+~ Unscheduled assignment reports.                                       
+                                                                        
+THE VOLUNTEER NETWORK can produce mailing labels for the volunteers.    
+Mailing labels can be printed for all volunteers, for specific groups or
+committees, for volunteers on a particular assignment, for members only,
+for board members only, or for inactive volunteers.                     
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989-1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## ERROR.TXT
+
+{% raw %}
+```
+Unmatched number of parameters                                                  Has been defined private already                                                Cannot find procedure file                                                      Syntax error in filter expression                                               Cannot locate command file                                                      Not a Character expression                                                      File currently open                                                             No more variable space available                                                Maximum number of variables exceeded                                            File does not exist                                                             Data item not found                                                             Macro must be a character string                                                Either syntax error in expression, or data type mismatch,or variable undefined  Must operate on data type                                                       Invalid variable name                                                           Undefined variable encountered                                                  Invalid drive specifier                                                         Invalid report form file                                                        Report stack overflow                                                           You must use character string for file names, field names or variable names     Unrecognizable dCode, incompatible object file                                  Error creating file                                                             Error opening file                                                              Error closing file                                                              Error reading file                                                              Error writing file                                                              Error positioning in file                                                       BAD field name                                                                  BAD field type                                                                  Record out of range                                                             Not a dBASE III data base                                                       No such record in index                                                         Illegal key                                                                     No data base in use in area                                                     No INDEX file in use in area                                                    Creating from this file would end up with more than max. allowed # of fields!   Creating from this file would end up with more than max. allowed record size!   Index SYNC error                                                                Maximum allowed number of records reached                                       FIELD not found                                                                 Too many digits                                                                 Printer is either not connected or turned off                                   Not enough memory                                                               Mode error in forming file name                                                 Illegal work area number or alias                                               PARSER STACK OVERFLOW                                                           MACRO STACK OVERFLOW                                                            Not a LABEL file                                                                Illegal relation expression                                                     Editor stack overflow                                                           Filter expression not logical                                                   Cyclic relation not allowed                                                     No more file name space                                                         Too many relations in this chain                                                Bad path name                                                                   File server module error                                                        Binary file not found                                                           Memory allocation error                                                         Memory de-allocation error                                                      Maximum number of load modules exceeded                                         Feature not yet implemented                                                     Invalid function key or function number                                         Value out of range                                                              Stack underflow                                                                 Undefined function encountered                                                  Passing variable not defined                                                    Illegal function parameter(s)                                                   Expression stack overflow                                                       Maximum number of READs in a format file has been exceeded                      Structure invalid                                                               Syntax error in locate expression                                               Locate expression is not logical                                                Valid expression is either illegal or not of logical type                       Invalid order number                            
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2587
 

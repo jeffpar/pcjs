@@ -59,8 +59,104 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #179, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  SCR3    .DOC         CRC = 4D 3F
+
+--> FILE:  PIZZA   .EXE         CRC = 81 24
+
+--> FILE:  SCR2    .DOC         CRC = F8 A9
+
+--> FILE:  SCR4    .DOC         CRC = 18 12
+
+--> FILE:  SCR5    .DOC         CRC = 0C 1A
+
+--> FILE:  SCR6    .DOC         CRC = 52 79
+
+--> FILE:  SCR7    .DOC         CRC = 57 CB
+
+--> FILE:  SCR10   .DOC         CRC = 0D 44
+
+--> FILE:  SCR12   .DOC         CRC = 78 88
+
+--> FILE:  SCR8    .DOC         CRC = 03 C2
+
+--> FILE:  SCR9    .DOC         CRC = 13 B3
+
+--> FILE:  SCR11   .DOC         CRC = 7A A9
+
+--> FILE:  SCR13   .DOC         CRC = 79 F8
+
+--> FILE:  SCR14   .DOC         CRC = 62 DC
+
+--> FILE:  SCR15   .DOC         CRC = 94 E6
+
+--> FILE:  SCR16   .DOC         CRC = FF BE
+
+--> FILE:  SCR17   .DOC         CRC = 1C 6C
+
+--> FILE:  SCR18   .DOC         CRC = 12 5C
+
+--> FILE:  SCR19   .DOC         CRC = C0 AF
+
+--> FILE:  SCR20   .DOC         CRC = A8 8B
+
+--> FILE:  SCR21   .DOC         CRC = 78 CC
+
+--> FILE:  SCR22   .DOC         CRC = C8 74
+
+--> FILE:  SCR23   .DOC         CRC = 9A EB
+
+--> FILE:  SCR24   .DOC         CRC = BF 09
+
+--> FILE:  SCR25   .DOC         CRC = FD 3A
+
+--> FILE:  SCR26   .DOC         CRC = FD 8D
+
+--> FILE:  SCR27   .DOC         CRC = EF 44
+
+--> FILE:  MA      .BAS         CRC = 05 21
+
+--> FILE:  MA      .DOC         CRC = F7 B8
+
+--> FILE:  XXX     .            CRC = 9A C7
+
+--> FILE:  MACOPY  .BAT         CRC = E5 3F
+
+--> FILE:  MADOC   .BAT         CRC = 9A 6F
+
+--> FILE:  XXX     .BAK         CRC = 4D 7E
+
+ ---------------------> SUM OF CRCS = A0 EB
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## MA.BAS
 
+{% raw %}
 ```bas
 2 KEYOFF:FORX%=1TO10:KEYX%,"":NEXT:GOTO10
 10 GOSUB50020:CLS:COLOR7,0:DEFINTA-Z:DEFSTRF
@@ -946,6 +1042,783 @@ machines:
 60000 DATAJANUARY,FEBRUARY,MARCH,APRIL,MAY,JUNE,JULY,AUGUST,SEPTEMBER,OCTOBER,NOVEMBER,DECEMBER
 60010 DATATEN,,,ELEVEN,,ONE,TWELVE,TWENTY,TWO,THIRTEEN,THIRTY,THREE,FOURTEEN,FORTY,FOUR,FIFTEEN,FIFTY,FIVE,SIXTEEN,SIXTY,SIX,SEVENTEEN,SEVENTY,SEVEN,EIGHTEEN,EIGHTY,EIGHT,NINETEEN,NINETY,NINE
 ```
+{% endraw %}
+
+## MA.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                           MICRO ACCOUNTING SYSTEM
+
+
+                       A Multi-purpose Check Register 
+                             Accounting System
+
+
+
+                                Written by
+				
+                              Donald R. Ramsey
+                            727 Bunker Hill  #70
+                           Houston, Texas   77024
+        
+                                Version 1.0
+
+
+
+
+
+
+
+	                     TABLE OF CONTENTS
+
+
+	Program Overview                               1
+
+	System Requirements                            2
+
+	Limitations                                    2
+
+	Program Standards                              2
+
+	Installing System                              2
+	
+	Program Operation
+ 	  Main Menu                                    3
+	  Initializing System                          4
+	  
+	File Maintenance                               5
+	
+	Transaction Entry                              6
+	  Automatic Payments                           6
+	  Individual Entries                           7
+	  Handling Cash Entries                        8
+	  Print Checks                                 5, 8
+
+	Reports                                        9
+
+	Checkbook Reconciliation                       10
+
+	Begin New Year                                 10
+
+	When a Data Disk is Full                       11
+
+	The User-Supported Concept                     12
+
+	Modifying the program                          13
+
+	Copying Program for Other Users                13
+
+	Appendix
+
+
+	                                                     
+
+		                MICRO ACCOUNTING SYSTEM
+
+		            A Multi-Purpose Check Register
+		                   Accounting System
+
+
+	PROGRAM OVERVIEW
+
+
+		If you are like most people, you have only a vague idea
+	as to where your money is spent each year. Of course, keeping
+	better records is the solution, but this is usually a big 
+	job that never gets done. However, if only one entry was 
+	required for each transaction and this one entry would make
+	available a wide variety of reports, almost everyone would take
+	the time. That is what this program is all about.
+
+		This software was written for the small business that can 
+	use just a check-register for it's accounting as well as for all 
+	individuals. Imagine sitting down to write checks and entering
+	the information into the computer instead of your checkbook.
+	That's all there is to it. The program will even print checks
+	that have been addressed for use with window envelopes. But,
+	that's only the beginning! The standard check register can be
+	printed with a running balance, a memo report is available, and 
+	also an account distribution summary is yours for the asking.
+
+		Probably more significant, especially at tax time, is the 
+	Budget Analysis and Average Month report. This report shows
+	how much has been expended in each budget account for the current
+	month and for the year. It also shows the amount that was 
+	budgeted so you can compare it to the actual expenditure and it
+	computes an average monthly amount for each account.
+
+		Ever wonder how much you are spending on a particular item
+	or what the total cash value of all your bank accounts is?
+	Simply run the Selected Account Detail or the Bank Account Summary
+	and you will know in a minute. The Account Detail report searches
+	the months you specify for all transactions in any account you choose
+	and the Bank Account Summary lists all accounts and totals the
+	balances of all bank accounts.
+
+		The system is menu driven and well prompted for user ease.
+	All corrections are very easily accomplished and can be done
+	at any time (you never have to wait until all the data has been
+	entered to make corrections). Once you have used this program
+	for a while, you will wonder how you ever did without it.
+
+
+	                                                     Page 2
+
+	SYSTEM REQUIREMENTS:
+		IBM PC, IBM XT, or compatible
+		64K RAM
+		1 Disk Drive ( 2 preferred )
+		Printer
+		PC-DOS or MS-DOS with BASIC or BASICA
+
+	LIMITATIONS:
+		30  Bank Accounts
+		200 Budget Accounts
+
+	PROGRAM STANDARDS:
+
+		The software was designed to be very user friendly. It is
+	a single program file, so moving from section to section is very
+	fast since there are no modules to be chained. Data entry is fast
+	and there are numerous reports to make your end-of-year or tax
+	accounting almost painless. The software will even print checks
+	with addresses for use with window envelopes if you wish. And
+	you certainly can't beat the price.
+
+		This manual and the program uses, in it's documentation,
+	brackets ( < > ) to enclose any letter or KEY that should be
+	pressed for a given action. For instance, if the letter <P> is 
+	to be pressed, all you need do is press P. It is not necessary
+	to type the brackets.
+
+	***** IMPORTANT ***** 
+		The bottom two lines of the screen are reserved for user
+	prompts. If you have a question as to what to do next, consult
+	these lines. Also, the <F1> key will usually take you back one
+	step so you may correct any errors that have been made. This
+	<F1> key is VERY IMPORTANT. Using it allows immediate correction
+	of all errors, so remember it!
+
+		Number locks are automatically set when needed so the number
+	key pad can be used for quick entry of numbers. It is not even
+	necessary to type the decimal point in a dollar entry. Dates are
+	entered by typing only the numbers, the slashes ( / ) are not
+	required. To correct typing errors, use the backspace key ( large
+	arrow by the = sign ) because the arrow keys are inoperative.
+
+	INSTALLING SYSTEM:
+
+		Simply copy  MA.BAS to your system disk (a system disk is
+	a disk you have formatted using the FORMAT [d:]/S command; see
+	DOS manual. Hard disk users disregard this format procedure) that 
+	contains either BASIC or BASICA. For example, for a 2 disk system, 
+	put the MICRO ACCOUNTING Disk in Drive B and type COPY B:MA.BAS.
+
+		To run the program after it has been installed on your
+	system disk, you must enter BASIC and specify 4 files with a
+	buffer Size of 256, e.g., BASIC MA.BAS/F:4/S:256. This may,
+	of course, be put in a batch file for easy starting. This will
+	NOT work unless BASIC (BASICA if you wish) is on your disk.
+	
+
+
+                                                            Page 3
+
+
+	PROGRAM OPERATION:
+
+
+	Starting the program:
+		With the exception of the first time the program is run,
+	all that is necessary to begin operation, is the date entry.
+	If today's date is OK just press <ENTER> and the system will
+	default to today's date. After a short pause this menu will
+	be displayed.
+
+
+                             MAIN MENU
+
+			<T> Transaction Entry
+
+			<2> Reconcile Checkbook
+			<3> Run Alternate Accounts
+			<4> Begin New Year
+			<5> End Program
+
+			<R> Report Menu
+			<F> File Maintenance Menu
+	
+			<D> Print Program Documentation
+
+
+	<T> Transaction Entry: all transactions, both deposits and
+		checks are entered in this section. Check printing is
+		also done here.
+
+	<2> Reconcile Checkbook: checks are cleared and bank 
+		statement is reconciled.
+
+	<3> Run Alternate Accounts: starts the system again so that
+		another data disk with other bank accounts and budget
+		codes may be run. Hard disk users may specify a new
+		path for data here.
+
+	<4> Begin New Year: prepare a new data disk for the new year.
+
+	<5> End Program: exit to DOS
+
+	<R> Report Menu: go to the report section
+
+	<F> File Maintenance Menu: add, delete, and make changes to 
+		budget, bank, and auto-payment files
+
+	<D> Print Program Documentation: instructions for printing
+		document.
+
+
+                                                            Page 4
+
+
+	INITIALIZING THE SYSTEM:
+
+		Before the program can be run, your bank accounts and budget
+	accounts must be defined. This is done in the File Maintenance
+	section. Note: maximum number of characters in bank and budget codes
+	is 4. You should take some time to decide what budget accounts
+	you might need before making these entries because the budget
+	accounts are sorted alphabetically in the report section. As a 
+	suggestion, group all similar codes under the same first letter,
+	e.g. all household accounts might go under the letter H; HMOR for
+	household mortgage, HUT for household utilities, etc.(see Appendix)
+	After the accounts have been entered, you can go to the Report
+	section and run the Budget Analysis to get a sorted list of the
+	codes just to make sure you have what you want.
+		If you are beginning this system after the first of the year
+	you may enter an amount in the year-to-date column for the amount
+	already expended.
+		After both Budget Codes and Bank Codes have been entered, 
+	you can make entries in the Transaction section.
+
+
+
+	** Note to Hard Disk Users and anyone who will use the system with
+		one or more sets of alternate Bank and Budget Codes **
+
+		Hard disk users may specify a path for their data disk.
+	This is done at the DOS prompt with the MKDIR or MD Command
+	(see DOS Manual). Once the directory is created, you may 
+	set a path to your data when specifying your data disk. This
+	is useful if you need to use the system for other accounts and
+	this alternate data needs to be on a separate disk.
+
+	  Example: C:\CRPER\ for check register personal. 
+
+		Hard disk users will have to answer one additional question
+	on start-up. Each time the program is started, the current data
+	disk will be displayed. If this is the data disk and the path
+	you need, simply press <ENTER>. This protection is added for 
+	safety in assuring that the records you add in a session do go 
+	in the proper files. (To by-pass this feature, modify line
+	49035 of the program to be a remark line. Add a  '  to the
+	start of the line and save the modified program as MA.BAS).
+
+		Floppy disk users may also use the system for alternate
+	accounts by putting the different data on separate disks.
+ 
+
+
+	                                                      Page 5  
+
+	FILE MAINTENANCE:
+
+                           FILE MAINTENANCE MENU
+
+			<1> Bank Account Information
+			<2> Budget Information
+			<3> Automatic Payment Accounts
+
+			<4> Re-build Account Balances
+			<5> Change Password or Data Disk
+
+
+	<1> Bank Account Information: assign, delete, change 
+		bank account information.
+
+	<2> Budget Information: same as bank accounts. Do not leave
+		more than one space between words in account description
+		because part of the description will not be printed
+		in one of the reports if an extra space is added.
+
+	<3> Automatic Payment Accounts: This file is to allow 
+		you to make quick entry of data for any bills that
+		are paid on a regular basis. The amount and bank from
+		which the payment is made can be easily changed when
+		the bill is paid in the transaction section. There is 
+		also space for addresses that may be used to address 
+		checks for use with window envelopes.
+
+	<4> Re-build Account Balances: use this section if you
+		think that some of the accounts may have incorrect
+		balances. All balances for budget and bank accounts 
+		are re-constructed.
+
+	<5> Change Data Disk or Password: if you use a password
+		it can be changed or if you initially elect not to 
+		use this protection it can be added here.
+
+
+                                                            Page 6
+
+	TRANSACTION ENTRY:
+
+
+                         TRANSACTION MENU
+			
+			<1> Automatic Payments
+			<2> Individual Entries
+			<3> Print Checks
+
+		Upon entering this section you will be given an option
+	for entering transactions. If you have defined automatic
+	payment accounts in the File Maintenance section you can use
+	option <1> of this menu. Otherwise, only individual entries
+	may be made.
+
+
+
+
+	AUTOMATIC PAYMENTS:
+
+		This section allows quick and easy data entry for bills 
+	that are paid on a regular basis. To make payments, enter the
+	month and year of transactions as requested. The records that 
+	may be paid are then displayed. Press <P> to pay a bill, then 
+	select the record to pay. The selection is then displayed and 
+	you may pay it as is, change the bank or amount and then pay,
+	or you may skip the item entirely. 
+		If you elect to pay this selection, you then will be asked
+	for the date. Pressing <ENTER> will default this to the last
+	date entered or the system date if no date has been used. Next 
+	the check number will be required and again pressing <ENTER> 
+	will default this item to the last check # + 1 or you may enter
+	any check number.
+		The last item is a request to print a check. If you do NOT
+	wish to print a check, press <ENTER>, otherwise, if you do wish
+	to have the check printed, the printer must be turned on and
+	the forms properly positioned. Once this last item is complete
+	the check will be filed on disk and all accounts up-dated.
+
+		Check forms may be obtained from:
+			
+			NEBS COMPUTER FORMS
+			12 SOUTH STREET
+			TOWNSEND, MASS.  01469
+			1-800-325-1117
+			Product 9020 or 9024
+
+
+                                                            Page 7
+
+
+	INDIVIDUAL ENTRIES:
+
+		Checks or deposits in any bank account are made in this
+	section. You must select a Bank code and the month and year
+	for transactions before entering data. Once these items are
+	selected they remain in effect until you return to the 
+	Transaction Menu.  *** WARNING ***    Entries in this section are
+	NOT sorted by date. Also, if you have selected January as the
+	month for transactions and entered checks that are dated in 
+	February, these February checks will be filed in the January file.
+	
+		 Now, either checks or deposits may be selected. The date
+	may be entered from the key pad or you may press <ENTER> to 
+	default to the last date entered. Check number is then entered
+	or default to the last check #+1 by pressing <ENTER>. Another 
+	option for the check # is to enter the letter P. Entering a <P>
+	will flag this check for later printing in the Print Check Section.
+
+		Once the check portion of this entry has been made, budget
+	accounts are then assigned. You may assign as many as six budget
+	accounts or you can exit this portion of the transaction by pressing
+	the <F3> key when entering the Budget code. To assign a Budget code
+	enter any previously assigned code. If the code you chose has not 
+	been assigned, there will be a BEEP and you will be given the 
+	opportunity to either assign the code or change your entry.
+		
+		The tax code is then requested. This may be assigned or you
+	can press <ENTER> for no assignment. These codes are not error
+	checked and you have to keep up with your assignments personally
+	(this is for future expansion).
+
+		To assign the amount, you have two options. You may press
+	<ENTER> and the entire amount of the check will be assigned to
+	this budget code or you may enter a portion of the check amount.
+	If this second option is taken, the remaining amount will be 
+	displayed and you will be allowed to assign the remainder to 
+	other budget codes ( max 6 ).
+
+		After all entries for this transaction are made, there 
+	will be a last chance to make corrections ( did you remember 
+	that corrections could be made immediately during data entry 
+	by pressing the <F1> key ). Press <C> to make corrections and 
+	then use the <F1> and <F2> keys, as prompted on the bottom two 
+	lines,  to scroll through the entries. To change an entry that 
+	the => selects, press <C> then make the change. You can exit 
+	changes at any time by pressing the <E> key.
+
+	*** WARNING ***    Once this last chance to make a change
+	has passed, you will no longer be able to change this 
+	transaction. The reason for this is to give a good audit
+	trail. You may, however, correct the entry by making another
+	transaction to offset the error (Payee/Payor could be a note
+	to yourself stating the change).
+
+
+                                                            Page 8
+
+
+	HANDLING CASH ENTRIES:
+
+		Cash entries may be handled in one of two ways. You may
+	assign a bank account called CASH or you may make a memo
+	entry in any bank account.
+
+		If you assign the bank account `CASH', deposits and 
+	withdrawals (checks) are handled as any other bank account. 
+	However, this bank balance will show in the Bank Account 
+	Summary Report (see Report Section).
+
+		Maybe a better way would be to make a MEMO entry in any
+	bank account that is assigned. To do this, write a check as
+	usual but for the amount enter 0.00 or just press <ENTER>.
+	This 0.00 amount will not affect the bank balance and then the 
+	entry can be assigned to any budget account as a cash paid
+	item.
+
+
+
+	PRINT CHECKS:
+
+		This option of the Transaction Menu prints checks that
+	have been flagged in the Individual Transaction entry section 
+	by entering a  P  for the check number. Load the check forms
+	into the printer and the computer will then automatically 
+	print all checks that have been flagged and assign check 
+	numbers to the transaction.
+
+		Check forms may be obtained from:
+
+			NEBS COMPUTER FORMS
+			12 SOUTH STREET
+			TOWNSEND, MASS.  01469
+			1-800-325-1117
+			Product 9020 or 9024
+
+
+
+                                                            Page 9
+
+	REPORTS:
+
+		             REPORT MENU
+
+			<1> List Transaction Register
+			<2> Budget Analysis and Average Month
+			<3> Memo Report
+			<4> Bank Account Summary
+
+			<5> Account Distribution Report  (printer only)
+			<6> Selected Account Detail      (printer only)
+			<7> Selected Tax Code Detail     (printer only)
+
+
+	<1> List Transaction Register: list the register of the bank
+		of your choice with running balances and totals of all
+		deposits and checks. An  *  by the check number
+		indicates that this check has cleared the Bank and
+		has been reconciled in your check register.
+
+	<2> Budget Analysis and Average Month: A sorted list of all
+		your budget accounts with a description of each, the
+		amount that was budgeted in this category, what was spent
+		in the month of the report, the average amount spent in
+		a month, and the year-to-date amount.
+
+	<3> Memo Report: list of memos that were made in transaction
+		entry. An  *  by the amount in this report indicates
+		that this transaction was a deposit.
+
+	<4> Bank Account Summary: list all bank accounts and their
+		current balance and give a total of all the balances.
+
+		
+	<5> Account Distribution Report: report to show how each check
+		was distributed among the different budget codes.
+
+	<6> Selected Account Detail: list all entries for any budget
+		code you select over any period of time you choose.
+
+	<7> Selected Tax Code Detail: same as <6> except for tax codes.
+
+
+                                                            Page 10
+
+	CHECKBOOK RECONCILIATION:
+    
+		Checks can be reconciled by checking off items just as 
+	you might if you were using a checkbook. Just read the last two 
+	lines of the screen for help.
+
+		Once the checks are cleared, the checkbook may be 
+	reconciled. The report to the screen does not give the detail
+	that is available in the printed report. The printout contains
+	a listing of all items that have not been cleared that is not
+	available in the screen report.
+
+
+	BEGIN NEW YEAR:
+
+		This procedure is used to prepare a new data disk for the
+	new year. 
+	
+	** IMPORTANT ** USE ONLY A BACKUP DATA DISK FOR THIS PROCEDURE!
+
+		Once the backup data disk has been made, put it in the 
+	drive normally used for data and follow the screen instructions.
+
+		All transactions for last year are erased from the new 
+	data disk, all budget code year-to-date balances are set to 
+	zero, and all bank balances are set to last year's ending 
+	balance.
+
+
+
+
+                                                            Page 11
+
+
+	WHEN A DATA DISK IS FULL:
+
+		Most people should be able to keep an entire year of data
+	on a single disk. However, should you run out of space, follow
+	these steps:
+
+		1. Return to DOS by the End Program Option. 
+		2. Format a new data disk (see DOS manual)
+		3. COPY  mmmyy.TRX to the new data disk.
+		   mmm = the month in which you were entering data
+		         when the disk became full (e.g. JAN)
+		   yy  = the year in which you are working ( e.g. 84)
+		4. DEL   mmmyy.TRX on the FULL data disk.
+		5. Use the new data disk and re-run the program.
+		6. Re-enter the transaction on which the disk became full.
+
+	Example:
+		If you were entering data in November 1985 and you got a
+		`DISK FULL' error message, you would ( assuming a 2 drive 
+		system ) return to DOS by the End Program option of the
+		Main Menu, format a new data disk, and put the new data 
+		disk in Drive B and the full Data disk in Drive A. Then
+
+			type COPY NOV85.TRX B:. Once the copy was complete,
+			type DEL NOV85.TRX. 
+
+		Replace the full data disk with the MICRO ACCOUNTING Program 
+		Disk and type MA ( MA.BAT if you prefer ).
+
+
+
+	                                                       Page 12
+
+	                                    tm
+	====================== F R E E W A R E =========================
+
+	                   User-supported Software
+
+
+		If you have received this program from another
+		 user and find it of value, your contribution 
+		   will be appreciated ( $35.00 suggested ).
+
+
+	                  ______________________
+
+	                     Donald R. Ramsey    
+	                    727 Bunker Hill #70  
+	                   Houston, Texas  77024 
+	                                        
+	                  _______________________
+
+
+		Regardless of whether you make a contribution, you are
+	encouraged to copy and distribute this program.
+
+	===============================================================
+
+
+
+
+	The user-supported concept:
+
+		Anyone may request a copy of a user-supported program by
+	sending a blank, formatted disk to the program author together
+	with an addressed, postage-paid return mailer. A copy of the 
+	program, with documentation, will be sent by return mail on
+	user's disk.
+
+		The program carries a notice suggesting a contribution for
+	the software. Making a contribution is voluntary on the part of
+	the user.
+
+	Regardless of whether a contribution is made, the user is
+	is encouraged to copy the program for trial use by others
+	on a private, non-commercial basis. Payment for use is 
+	discretionary on the part or each subsequent user.
+
+
+
+	FREEWARE is a trademark of:
+		The Headland Press
+		P.O. Box 862
+		Tiburon, CA. 94920
+
+
+	                                                       Page 13
+
+
+	MODIFYING THE PROGRAM
+
+
+		I have made every effort to supply a program that is
+	free of bugs and will provide the user with an easy to use,
+	fast operating system. However, many people may feel that
+	this version of the program could be modified to better meet
+	their needs. I fully encourage you to make any modifications
+	that you feel necessary.
+
+		** Please do not distribute a modified program to 
+		** other users. The reason for this is if people
+		** have problems with the program, they contact me.
+		** If the program is modified, I do not know what
+		** they have and may not be able to help.
+
+		If you do come up with useful modifications, please
+	keep them in a merge file that can be incorporated into the
+	system at the user's option.
+		
+		I also encourage you to contact me regarding any problems,
+	suggestions, or modifications to the program. To facilitate
+	the modification process, on request, I will supply a commented
+	version of the program. Also included is a listing of all
+	major variables, file structures, and comments on the major 
+	routines. For this disk, I do request a $10.00 contribution.
+
+
+
+	COPYING THE PROGRAM FOR OTHER USERS:
+
+		The following files must be on the new user's disk:
+
+			MA.BAS
+			MA.DOC
+			MADOC.BAT
+			MACOPY.BAT
+
+		MACOPY.BAT is a batch file for copying the required
+	files to a user's disk. It assumes a 2 drive system with
+	Drive A as the source disk.
+
+	EXAMPLE USE OF MACOPY.BAT:
+
+		1. Put Original MICRO ACCOUNTING disk in Drive A
+		2. Put New user's Formatted System disk in drive B
+		   (User's disk should contain BASIC or BASICA)
+		3. Type MACOPY.BAT and press <ENTER>.
+		4. The required files will be copied to Drive B.
+
+
+
+                                                          
+
+                               APPENDIX
+
+
+	SAMPLE BUDGET CODE:
+
+		Code		Description
+		====		===========
+		AEX1		Auto- car 1 expense
+		AEX2		Auto- car 2 expense
+		AGAS		Auto- gas
+		APMT		Auto- payments
+		AZ  		
+		BCOM		Business- computer
+		BENT		Business- entertaining
+		BSUP		Business- supplies
+		BTEL		Business- telephone
+		BZ  		
+		CASH		Pocket cash
+		CLTH		Clothes
+		CONT		Contributions
+		DUMP		Catch all category
+		FUN 		Hobbies & entertainment
+		GIFT		Gifts
+		H   		
+		HADU		Home- association dues
+		HEL 		Home- electric bill
+		HFUR		Home- furnishings
+		HINS		Home- insurance
+		HMOR		Home- mortgage
+		HTEL		Home- telephone
+		HWAT		Home- water
+		HZ  		
+		IHUS		Income- husband
+		IWIF		Income- wife
+		IDIV		Income- dividends
+		IINT		Income- interest
+		IMIS		Income- miscellaneous
+		IZ  		
+		MAG 		Magazines
+		MAIL		Stamps & postage
+		MED 		Medical
+		TAX 		Taxes
+		UNDU		Union dues
+		XFER		Transfer $ acc to acc
+
+	SAMPLE BANK CODE:
+
+		CK__		Bank checking account
+		CKCU		Checking account credit union
+		S___		Saving account
+
+
+
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

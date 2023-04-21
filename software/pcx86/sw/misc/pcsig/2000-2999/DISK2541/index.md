@@ -14,6 +14,61 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2541.TXT
+
+{% raw %}
+```
+Disk No: 2541                                                           
+Disk Title: CMTS-Church Memb. Track Sys. #1                             
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: CMTS - Church Membership Tracking System                 
+Author Version: 2.0                                                     
+Author Registration: $129.00                                            
+Special Requirements: 640K RAM, and a hard drive.                       
+                                                                        
+Whether you're responsible for the entire administration of a large     
+church or just need to keep track of members for a small one, the CHURCH
+MEMBERSHIP TRACKING SYSTEM (CMTS) will make you job easier.             
+                                                                        
+Easy-to-use CMTS is completely menu-driven and lets you look up or enter
+data through friendly pop-up windows.  Help screens are available       
+everywhere in the system and extensive documentation is included.       
+                                                                        
+Features of the CHURCH MEMBERSHIP TRACKING SYSTEM include:              
+                                                                        
+~ Prints rosters and mailing labels for all special church organizations
+like choir                                                              
+                                                                        
+~ Prints mailing labels for all church members or just families         
+                                                                        
+~ Maintains inventory of church members' special skills (mechanic,      
+carpenter, etc.)                                                        
+                                                                        
+~ Records church members' special dates (birthdays, etc.)               
+                                                                        
+~ Records donations by member name or envelope number                   
+                                                                        
+~ Includes audit trail of all donations entered                         
+                                                                        
+~ Prints detailed donation reports                                      
+                                                                        
+~ Prints quarterly members' donation statements                         
+                                                                        
+~ Includes password protection on all information.                      
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989-1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2541
 

@@ -39,6 +39,49 @@ machines:
     spreads, projections, and statistical categories used.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1905.TXT
+
+{% raw %}
+```
+Disk No: 1905                                                           
+Disk Title: Pro Football Linemaker                                      
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: PRO FOOTBALL LINEMAKER                                   
+Author Version: 1.0                                                     
+Author Registration: $17.00                                             
+Special Requirements: 384K RAM.                                         
+                                                                        
+The PRO FOOTBALL LINEMAKER program uses the results of past football    
+games to project the results of future games.  You update the database  
+with stats from this week's games (available in most national and local 
+newspapers), then scores and expected statistical results for next      
+week's games can be projected.  The program will project the expected   
+results of a game between any two teams selected.                       
+                                                                        
+In addition to providing you with the expected point spread between the 
+two teams, you are provided with valuable information such as: projected
+passing, rushing, and total play yardages, projected first downs,       
+projected lost fumbles, projected time of possession, projected times   
+sacked, and much more.                                                  
+                                                                        
+You can generate a printout showing a detailed analysis of how the      
+projections were calculated, select a less detailed printout of the     
+projections, or to have the projections displayed only to your monitor. 
+The program also allows you to get involved in the development of the   
+spreads, projections, and statistical categories used.                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1905
 

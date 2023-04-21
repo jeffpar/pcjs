@@ -31,6 +31,58 @@ machines:
     is cataloged.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1049.TXT
+
+{% raw %}
+```
+Disk No  1049
+Program Title: DISK CATALOGING PROGRAM version 1.01
+PC-SIG version 1.1
+
+    After collecting numerous programs on your hard disk or several
+floppies, finding a particular program can be a tremendous and dreaded
+problem. DISK CATALOGING PROGRAM is a simple utility designed to handle
+just that. It creates a catalog of all your files, by simply reading the
+information from your disks as you insert them in your floppy drive. You
+can add or change the disk label as each disk is read by the program, and
+catalog over 500 diskettes in one catalog. A list of disks can then be
+viewed and modified. A filename can be searched for, and the program tells
+you all the locations for that file. Individual file descriptions can be
+added once the disk is cataloged. From the program you can shell to DOS,
+and help screens are available.
+
+Usage: Disk Cataloging/Database
+
+System Requirements: 128K memory and one floppy disk drive.
+
+How to Start: Type GO (press enter).
+
+Suggested Registration: $19.00
+
+File Descriptions:
+
+GO       BAT  Batch file to type README.
+README        How to get started.
+CAT      EXE  Main program.
+CAT      IND  Sample catalog index file.
+CAT      DTA  Sample catalog data file.
+CAT      DOC  Documentation.
+CAT      PIF  Program file.
+DELETEBU BAT  Batch file to delete backup files after data compression.
+RECOVER  BAT  Batch file to recover data files after compress failure.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1049
 

@@ -91,8 +91,153 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## BANNERIF.DOC
+
+{% raw %}
+```
+
+
+
+                         INSTRUCTIONS ON THE USE OF THE
+          
+                               BANNERIFIC PROGRAM
+                           (C) Alan C. Elliott 1984,85
+          
+          WHAT BANNERIFIC DOES
+          
+          BANNERIFIC is a program which lets you produce large
+          banners on your computer printer. All IBM PC keyboard
+          characters may be used. The size of the characters
+          produced on the printer is variable, and may be as large
+          as the width of your computer paper.
+          
+          HOW BANNERIFIC IS PROVIDED TO YOU
+          
+          The BANNERIFIC program is brought to you by AD-WARE(tm)
+          from Mission Technologies. Advertisers in this product
+          help to defray the initial costs of producing and
+          distributing the original program. You are free to make
+          copies of this program, and pass it on to a friend.
+          
+          HOW TO RUN BANNERIFIC
+          
+          The program BANNERIFIC is stored on disk as the file
+          BANNER.EXE. To begin the program, enter the command BANNER,
+          and press the Enter key. After the initial messages are
+          shown on the screen, you will be given the opportunity to
+          choose the size of your banner. Default values for the size
+          and placement of the letters may be chosen by pressing ENTER
+          at the prompts. Otherwise, enter an appropriate number for
+          the questions:
+          
+          1. The height of the letters.
+          
+          2. The width of the letters.
+          
+          3. The left margin on the printer.
+          
+          I would suggest that you first print an example banner with
+          the default values, and then experiment with what the
+          height, width, and margin options do.
+          
+          PRINTER OPTIONS
+          
+          BANNERIFIC will operate on any printer. However, most
+          printers have the ability to change from one style of
+          printing to another. To let you to choose these printer
+          options BANNERIFIC allows you to send the printer control
+          commands based on ASCII codes. For example, the control
+          command to change an EPSON printer into compressed mode is
+          ASCII number 15 (decimal). By using such codes, you can find
+          a printing style that fits your needs. To send the computer
+          a command which is more than one number, simply place a plus
+          "+" sign between numbers. For example, the control codes to
+          place an EPSON printer into 7/72 inch line spacing is 27+49.
+          This action makes the printed lines closer together and
+          makes a nicer looking banner.
+          
+          
+          
+
+                                        1
+
+
+
+
+          
+          BANNERIFIC PROGRAM
+          ___________________________________________________________
+          
+          
+          DECIPHERING ASCII CODES
+          
+          Many printer manuals give control codes in terms other than
+          decimal ASCII numbers. For instance, ESC 1 (escape one) is
+          translated into decimal ASCII codes by looking at the ASCII
+          chart in the BASIC manual (appendix G). The ASCII code for
+          ESC is 27, and for 1 (one), it is 49. Thus ESC 1 is 27+49
+          for the purposes of the BANNERIFIC program.
+          
+          SOME EPSON CODES (Also IBM dot matrix printer)
+          
+          Function               Decimal ASCII Codes
+          --------               -------------------
+          Wide Print             14
+          Compressed             15
+          1/8" line spacing      27+48
+          7/72" line spacing     27+49
+          Emphasized             27+69
+          
+          To clear a printer of commands, turn it off, and turn it
+          back on.
+          
+          During the printing of a banner, you may end printing by
+          pressing the ESC key.
+          
+          HAVE FUN WITH BANNERIFIC
+          
+          I hope you get plenty of good use out of BANNERIFIC. If you
+          feel that the AD-Ware method of providing good programs is
+          worthwhile, I would appreciate your support. Please write.
+          
+          Alan C. Elliott
+          Mission Technologies
+          PO BOX 1169
+          Cedar Hill, Texas 75104
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        2
+       Cedar Hill, Texas 75104
+          
+
+
+
+
+```
+{% endraw %}
+
 ## CITOHSET.BAS
 
+{% raw %}
 ```bas
 10 REM MONITOR
 15 ZTITLE$="Program Title Here"
@@ -332,9 +477,216 @@ machines:
 9100 CLS:LOCATE 10,1,0:PRINT TAB(32);"Memory Statistics":PRINT:PRINT TAB(27);"Remaining Memory:  ";FRE(0):PRINT:PRINT TAB(27);"Program Length:    ";61529!-FRE(0):RETURN
 10000 REM Begin Program Here
 ```
+{% endraw %}
+
+## DIABLO.DOC
+
+{% raw %}
+```
+
+
+
+***************************  DIABLO.DOC  *****************************
+
+
+
+Interface to support a serial printer with ETX/ACK handshaking at 1200
+Baud. Example: Diablo 1620 or 1640. To use this program, do a:
+
+	MODE COM1:1200,N,7,2 and the type DIABLO
+
+Subsequent output to printer #1 will be routed to the serial printer.
+
+
+
+
+```
+{% endraw %}
+
+## EPSN-OKI.DOC
+
+{% raw %}
+```
+
+E2O Command
+-----------
+
+Purpose:   Convert a "print" file from IBM/Epson format to Oki format.
+
+Syntax:	   E2O  [d:][filename[.ext]]   [d:][filename[.ext]]
+
+Remarks:   The first filename specifies the "print" file to be
+	   converted. The second defines the new file. If either
+	   filename is omitted, you will be prompted for it.
+
+	   Control characters encountered in the input "print" file
+	   are converted from IBM-Matrix-Printer codes to OkiData codes.
+
+	   The ESC-8, ESC-9, DC1, and DC3 control codes are ignored.
+
+Notes:	   Written for the IBM PC using DOS 2.0 or later,
+	   by Vernon D. Buerg. For public domain or other use.
+
+	   Version 1.1 - September 9, 1984
+
+
+```
+{% endraw %}
+
+## EW-PROWR.TXT
+
+{% raw %}
+```
+.MARGIN04
+.TITLEA,61,                                                      06-25-1983 KJL
+.PAGE60,75
+    !XEasy Writer 1.1 for NEC 8023 or PROWITER on IBM PCY"
+
+The following control codes allow you to use most of the features
+of you NEC 8023B or PROWRITER printer. These codes can be used with
+original Easy Writer 1.1 program without any patching.
+JA-7 printer mode is required for the special characters. The proper
+dip switch settings are: SW1,   6 & 7 closed, SW1, 1 thru 5 & 8 open.
+                         SW2, 1,6 & 7 closed, SW2, 2 thru 5 & 8 open.
+The unfortunate effect side effect of this mode is that the "back-
+slash" (#O$) will always print as a "Yen" (\) sign in ASCII mode.
+You can print backslash from Craphic Character Set. Sample text:
+
+$Pica       !Emphasized"  Wide !Emphasized Wide" 
+EElite        !Emphasized"    Wide  !Emphasized Wide" 
+P Proportional        !Emphasized"        Wide     !Emphasized Wide" 
+Q    Compressed         !Emphasized"        Wide     !Emphasized Wide"
+N
+ 
+XOne pass underliningY
+$!"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_  ASCII
+# !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_$ C. G.
+& !"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_$ Greek
+!"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_$  Katakana
+
+The following are the printer control code instructions:
+
+
+MODE                      COMMAND               SYMBOL
+
+Pica                     Ctrl O Esc N          &B$N
+Elite                    Ctrl O Esc E          &B$E
+Proportional             Ctrl O Esc P          &B$P
+Compressed               Ctrl O Esc Q          &B$Q
+
+Double width on          Ctrl O Ctrl R         
+Double width off         Ctrl O Ctrl T         
+
+Emphasized on            Ctrl O Esc !          &B$!
+Emphasized off           Ctrl O Esc "          &B$"
+
+ASCII character set      Ctrl O Esc $          &B$$
+Character Graphics       Ctrl O Esc #          &B$#
+Greek character set      Ctrl O Esc &          &B$&
+Katakana Chracter set    Ctrl O Ctrl N         
+
+Form feed                Ctrl O Ctrl L         
+Underlining, start       Ctrl O Esc X          &B$X
+Underlining, end         Ctrl O Esc Y          &B$Y
+
+8-lines/inch             Ctrl O Esc B          &B$B
+6-lines/inch (default)   Ctrl O Esc A          &B$A
+x0/144" line spacing     Ctrl O Esc Tx0        &B$Tx0
+
+.EJECT 
+                  !XCharacter Translation TableY"$
+
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3 3  HEX
+X0 1 2 3 4 5 6 7 8 9 A B C D E F 0 1 2 3 4 5 6 7 8 9 A B C D E FY  CODE
+$  ! " # $ % & ' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ?  ASCII
+# X!X"X#X$X%X&X'X(X)X*X+X,X-X.X/X0X1X2X3X4X5X6X7X8X9X:X;X<X=X>X?$  C. G
+&  ! " # $ % & ' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ?$  GREEK
+  ! " # $ % & ' ( ) * + , - . / 0 1 2 3 4 5 6 7 8 9 : ; < = > ?$  KATAKANA
+
+4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5  HEX
+X0 1 2 3 4 5 6 7 8 9 A B C D E F 0 1 2 3 4 5 6 7 8 9 A B C D E FY  CODE
+$@ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z [ \ ] ^ _  ASCII
+#@XAXBXCXDXEXFXGXHXIXJXKXLXMXNXOXPXQXRXSXTXUXVXWXXXXXXXXXXXXXXXX$  C. G
+&@ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z [ \ ] ^ _$  GREEK
+@ A B C D E F G H I J K L M N O P Q R S T U V W X Y Z [ \ ] ^ _$  KATAKANA
+
+6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 6 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7 7  HEX
+X0 1 2 3 4 5 6 7 8 9 A B C D E F 0 1 2 3 4 5 6 7 8 9 A B C D E FY  CODE
+$` a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~    ASCII
+                                                                 C. G
+ 
+&                                                             $    GREEK
+` a b c d e f g h i j k l m n o p q r s t u v w x y z { | } ~ $   KATAKANA
+ 
+
+```
+{% endraw %}
+
+## FILES377.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No  377  Misc. Printers                                         v1.1
+------------------------------------------------------------------------
+Collection of printer utilities for some of the more popular printers
+used on the IBM-PC.
+ 
+BANNERIF DOC  Documentation for BANNERIF.EXE
+BANNERIF EXE  Print any size characters on your printer
+CITOHSET BAS  Sample file.
+COVER_TB COM  Dosen't work.
+DIABLO   DOC  Documentation for DIABLO.EXE
+DIABLO   EXE  Support a serial printer with ETX/ACK handshaking
+               (Diablo 1620 or 1640).
+EPSN-OKI COM  Convert a "print" file from IBM/Epson format to Oki format.
+EPSN-OKI DOC  Documentation for EPSN-OKI.COM
+EW-PROWR EWF  Use Prowriter or NEC 8023 printer with Easy Writer 1.1.
+EW-PROWR TXT  Sample print file.
+GDUMP    BAS  Medium resolution graphic dump of C.ITOH 8510 and NEC 8023.
+GDUMP    EXE  Executable file of GDUMP.EXE
+GEMINI   EXE  Configuration program for Gemini printer.
+GEMSET   EXE  Set up program for Gemini printer.
+GRCITOH  COM  Graphics dump for C.ITOH printer.
+HP7470A  BAS  Example of function for generating HP7470A plots.
+IDSPRISM BAS  Initialize IDS Prism Color Printer.
+LASERJET EXE  Configuration for Laserjet printer.
+NECGRAF  COM  Graphic screen dump for NEC printer.
+NECPLOT7 BAS  Demo plot for NEC 8023 printer.
+NECPRINT BAS  Text editor for NEC PC-8023A.
+NECPRINT TXT  Sample file for NECPRINT.BAS.
+NECPRTSC COM  Driver for the NEC 8023 for the Shft-PrtSc screen print sequence.
+NECPRTSC DOC  Documentation for NECPRTSC.COM
+NECSCRN  COM  Graphics and text screen dump for NEC 8023A printer.
+NECSCRN  DOC  Documentation for NECSCRN.COM
+NECSET   COM  Set the C Itoh 8510A or NEC 8023A-C printer parameters.
+NECSET   DOC  Documentation for NECSET.COM
+OK84ASET BAS  Okidata 82A configuration program.
+OKIDATA  EXE  Executable version of OK84ASSET.BAS
+OKIDUMP  COM  Allow graphic screens to be printed on the line printer.
+OKIDUMP  DOC  Documentation for OKIDUMP.COM.
+OKIGRAF  COM  Graphic dump program for Okidata printers
+OKISET   COM  Sends control characters to OkiData Microline 92 connected
+               as LPT1.
+OKISET   DOC  Documentation for OKISET.COM
+PRINTER  COM  Allows use of special print functions on any make printer.
+PRINTER  DAT  Part of PRINTER.COM
+PRINTER  DOC  Documentation for PRINTER.COM
+PROWRITE EXE  Configuration set up for Prowriter printers
+PROWRTER DOC  Switch settings for Prowriter/NEC 8023 printer.
+SETOKI   COM  Set up program for Okidata printers.
+ 
+PC-SIG
+1030D E Duane
+Sunnyvale, CA 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 ## GDUMP.BAS
 
+{% raw %}
 ```bas
 0 REM prog = GDUMP
 1 VERSION$= "V1.2"  'COMPILE open-print time delay bug sidestepped.
@@ -423,9 +775,11 @@ machines:
 780 END
 790 PRINT #1,CHR$(27)+"\"+CHR$(0)+CHR$(0);:RETURN
 ```
+{% endraw %}
 
 ## HP7470A.BAS
 
+{% raw %}
 ```bas
 1 ' ********  Example of function use for generating HP7470A plots ********
 2 '                       Peter Wohlmut  Feb. 17, 1983
@@ -478,9 +832,11 @@ machines:
 1110 LABEL$="X-Axis":VER=0:HOR=1:SX=3:SY=3:DEL=-4:GOSUB 140:PRINT #2,FNPLOT$("a",XP,YP);FNLABEL$(LABEL$,SX,SY,HOR,VER)
 9000 CLOSE #2:END
 ```
+{% endraw %}
 
 ## IDSPRISM.BAS
 
+{% raw %}
 ```bas
 500 'PRISM.BAS Vers 1.1. This program is the property of J.A. McKee, 1300 W
 510 'Rahn Road, Dayton, Ohio 45459, 513-434-3893.  Permission to copy is granted
@@ -713,9 +1069,11 @@ machines:
 16410 T%=0:DEF SEG=0:IF (PEEK(&H410) AND &H30)<>&H30 THEN T%=1
 16420 DEF SEG:DEV0$="L
 ```
+{% endraw %}
 
 ## NECPLOT7.BAS
 
+{% raw %}
 ```bas
 100 'PC demo program to plot squiggle-var on NEC 8023 printer.
 120 DEFINT I-N:DIM IT(1200),M(7):TUPI=6.283186:E$=CHR$(27)'(escape)
@@ -734,9 +1092,11 @@ machines:
 400 'List the program in proportional mode, then reset printer back to normal.
 420 LPRINT E$;"A":LLIST:LPRINT E$;"N":END
 ```
+{% endraw %}
 
 ## NECPRINT.BAS
 
+{% raw %}
 ```bas
 
 10 REM NECPRINT - - A texteditor for the NEC PC-8023A printer
@@ -1144,9 +1504,284 @@ machines:
 4060 REM end of program
 65399 '** DONE - PRESS ENTER TO RETURN TO MENU **
 ```
+{% endraw %}
+
+## NECPRINT.TXT
+
+{% raw %}
+```
+
+!
+NECPRINT v. 2.0                                            June 20, 1982
+
+
+
+                        NECPRINT USER'S GUIDE
+
+                                 by
+
+                            Hal R. Varian
+
+
+      This is a short guide to NECPRINT, a small texteditor for the 
+NEC PC-8023A printer.   NECPRINT supports several unique features of 
+the NEC printer such as Greek letters, mathematical symbols, 
+superscripts and subscripts.  NECPRINT is written in IBM BASIC. 
+
+      NECPRINT allows easy interface to the special features of the 
+NEC 8023 Printer via simple the simple printer control features 
+described below.
+
+
+ 1.  Greek letters.  To print a Greek letter, type an ampersand (!&) 
+followed by the English equivalent.  Examples: beta = !&b = &b, 
+alpha = !&a = &a, and so on.  If an exclamation point immediately 
+precedes the ampersand, the ampersand is treated as a literal 
+character and printed as such.  In other words, the exclaimation 
+point cancels the Greek letter.
+
+ 2.  Superscripts and subscripts.  To make a superscript use a 
+dollar sign (!$) followed by the character you wish to superscript. 
+For subscripts use the "at" sign (!@). If you want to superscript or 
+subscript more than one character, enclose the characters in 
+parentheses.  Parentheses can be nested. 
+
+Examples:  x!$(a+b) = x$(a+b), x!$(b/(a+b)) = x$(b/(a+b)).
+
+           x!@a = x@a,  x!@(a+b) = x@(a+b) 
+
+Again, preceding the !$ or !@ sign by the the exclaimation point 
+will cancel this feature.
+
+ 3.  Page Controls.  A pound sign (#) in the left column will invoke 
+certain page controls.  NECPRINT currently recognizes the following 
+page control characters: 
+
+          a)#=   Center the text on this line
+          b)#*   Use this line as a header.  (This should be the 
+                 first line in the file to be printed.)
+          c)#F   Form feed to next page
+
+When centering lines, NECPRINT will recognize the vertical bar (|) 
+as a carriage return, centering the subsequent lines.
+
+ 4.  Page numbering.  NECPRINT automatically numbers pages starting 
+with 1 unless the Start option described below is in effect.
+
+ 5.  Underlining.  Use an underline bar (!_) at the beginning and 
+end of the section you want underlined.  This can extend over 
+several lines, and indeed over several paragraphs.  Example: 
+!_underline!_ = _underline_. 
+
+
+ 6.  NECPRINT offers several choices of print face including 
+proportional print, pica, and elite.  Note that the sub and 
+superscript facility will not work well in the proportional print 
+mode. 
+
+ 7.  Headers.  NECPRINT will print out a header on each page if this 
+is requested in the "Set up printer" mode. 
+
+ 8.  Literals.  If the symbols "!$", "!@", and "!&" are preceded by 
+an exclaimation point (!) then they will be printed.  The special 
+nature of these characters will then not be invoked. 
+
+ 9.  Starting.  If "S" is input during the "Set up printer" mode, 
+NECPRINT will prompt you for a new page number and a starting 
+string. NECPRINT will then start to print at the first line that 
+contains that string. 
+
+
+#F
+
+
+
+
+               Table of Greek and Math Symbols
+
+
+
+
+
+        a    &a                o   &o                  -   &-
+        b    &b                p   &p                  S   &S
+        c    &c                q   &q                  D   &D     
+        d    &d                r   &r                  L   &L
+        e    &e                s   &s                  /   &/
+        f    &f                t   &t                  W   &W
+        g    &g                u   &u                  J   &J
+        h    &h                v   &v                  G   &G
+        i    &i                w   &w
+        j    &j                x   &x
+        k    &k                y   &y
+        l    &l                z   &z
+        m    &m                `   &`
+        n    &n                ~   &~
+
+
+
+
+    An ampersand (!&) preceding an English character on the left will 
+           produce the Greek or math character on the right.
+
+
+#F
+
+
+
+
+                  EXAMPLES OF MATH CAPABILITIES
+ 
+
+     Here are some examples of the capabilities of the NEC Printer 
+for displaying mathematical notation:
+
+     
+    &b = (X'X)$(-1)X'y                  S$(k-1) = {x _>_ 0: &Sx@i = 1}
+
+
+    U$i _<_ U$j + &l$jp$j(x$i - x$j) for i,j = 1,...,n
+
+    
+    lim@(x &/ 0) f(x) = &-            f(x@1,...,x@n) = x@1$2 - 2 x@2 
+
+
+    &`u(_x_)/&`x@i = &l p@i            &a + &b + &d   =  1
+
+    
+    &S x@i = 1                    &a$2 + &b&d[_x_ - _z_]
+
+    
+    A$2 + 2 AB - C$2 = 0           &d&m(p;q,y)/&dp@i = x@i(q,&m(q,y))
+
+   
+    v$(ij) = x$i + y@(ij) + z@k          x$i + y$(jk) - &`f(x)/&`x
+
+    
+    v$i = x$i + y$i                 &l$(ij) - &b@(jk)
+
+    
+    v@i = x@i + y$i                   _D_f(_x_) = &l_p_         
+
+    
+    z@(ijkl) = x$(lmni) + z@3$i + x$i@3
+
+    
+    x$i=x$j - y$k                   x$(1/(1-&n))
+
+    
+    x@i=x@j - y@k                   x@(1/(1-&n))
+
+    
+    x$i = x$j - y@k                 &m(q;q,y) _=_ y
+
+    x@i = x$(ij) - y@(kl)               &b@(lk) = &d$(jk)
+
+65399 '** DONE - PRESS ENTER TO RETURN TO MENU **
+```
+{% endraw %}
+
+## NECPRTSC.DOC
+
+{% raw %}
+```
+		       NECPRTSC by Dan O'Brien
+			   (version 1.2)
+
+	 NECPRTSC.COM is a driver that allows the NEC 8023
+	 dot matrix printer to print the Shft-PrtSc screen
+	 print sequence. Without this driver the NEC prints
+	 the entire screen on a single line. (This, no doubt,
+	 saves paper, but is not very useful.)
+
+	 The default print mode for the NEC is called logic
+	 seeking mode where the data is queued in its
+	 internal 2k buffer. (This mode prints output very
+	 fast.) In this mode, the printer requires a carriage
+	 return followed by a line feed to signal that a new
+	 line is required in the output text. Unfortunetly,
+	 the IBM ROM BIOS for screen print sends a line feed
+	 followed by a carriage return sequence. Thus, the NEC
+	 fails to skip to a new line. Therefore, this driver was
+	 written.
+
+	 NECPRTSC is based on the IBM ROM BIOS for screen
+	 print (INT 5). (See Tech. Ref. A-79) It is nearly an
+	 exact copy, except for the CR-LF sequence instead of LF-CR.
+	 The ROM was disassembled using DEBUG with the output
+	 redirected to a file using this DOS 2.0 feature.
+	 To use the driver, issue NECPRTSC in your autoexec.bat
+	 file, once. NECPRTSC will set up the INT 5 vector and then
+	 attach itself as part of DOS. It produces no messages.
+	 The only way to detect its presents is to issue Shft-PrtSc
+	 and watch it work. Try it before you put it in your AUTOEXEC.BAT
+	 to make sure it works.
+
+	 A new feature of NECPRTSC (version 1.2) is that it translates
+	 the screen characters, where possible, into equivalent or
+	 nearly equivalent NEC 8023 characters. Thus, you will see on
+	 the printed page a close approximation of the screen.
+
+	 Comments and suggestions are welcome. They may be
+	 left on the PCmodem BBS (Gene Plantz') at  312 259-8086.
+	 Leave messages for DAN OBRIEN (no apostrophe). Have fun.
+
+
+```
+{% endraw %}
+
+## NECSCRN.DOC
+
+{% raw %}
+```
+NECSCRN.DOC
+
+
+Necscrn.com  is  a  graphics and text screen  dump  program  that
+should	be run ONCE after powering-up.	It will attach itself  to
+the  operating	system,  and  then will operate  by  intercepting
+Shift-PrtSc  keystrokes and invoking the appropriate  routine  to
+provide  either a graphics or a text screen dump,  depending upon
+the current mode of the system, on an
+
+************* NEC 8023A Dot Matrix Printer *********************
+
+The graphics dump comes in two flavors,  either a small (one  dot
+per  pixel)  or a large (4 dots per pixel,  with the dot  pattern
+roughly  corresponding	to the	color)	format,   depending  upon
+whether   the  left (large) or right (small) shift key is   used.
+For the small graphics dump,  the aspect ratio is fairly accurate
+when  the  printer is set for 10 characters per inch (the  normal
+power up default mode for the printer).  The large graphics  dump
+prints out rotated 90 degrees on the paper,  and the aspect ratio
+won't  be  right  (circles  will look  elliptical..)  unless  the
+printer  is  set for 8.5 characters per inch.  This  is  done  by
+selecting  the	17 character per inch character set and  enlarged
+characters. A one line basic program that will do this is:
+
+   LPRINT CHR$(14);CHR$(27);"Q";
+
+This  program	is  a  patched-up version of   the   GRAFTRAX.COM
+program  supplied  on  the Capital PC Users Group  Diskette   #5.
+It  will probably work with the C.Itoh ProWriter printers,  since
+they seem to  differ  from  the NEC only in their packaging  (and
+in  other minor  details such as 20% faster printing, an improved
+proportional  character  set,  and  a re-shuffling of  the  greek
+alphabet to put  it  into (greek) alphabetical	order).  I  would
+appreciate hearing  from anyone who knows how to modify the  ROMs
+on the	NEC to incorporate any or all of these features.....
+
+	  Rick Cunningham
+	  2806 Grovemore Lane
+	  Vienna, VA 22180
+
+
+```
+{% endraw %}
 
 ## OK84ASET.BAS
 
+{% raw %}
 ```bas
 1000 ' OKIDATA 82A PRINTER CONFIGURATION PROGRAM (FOR IBM PC)
 1010 ' (REQUIRES MS BASIC. )  05/26/83  T.E.M. TAILORED FOR PC.
@@ -1420,6 +2055,334 @@ machines:
 3690 S% = VAL(S$) : RETURN
 3700 END
 ```
+{% endraw %}
+
+## OKIDUMP.DOC
+
+{% raw %}
+```
+
+The two programs, epsdump.com and okidump.com, allow graphic screens to be
+printed on the line printer (LPT1:) when the PrtSc command is given. If the
+screen is in either graphics mode, the screen image will be printed. Colors
+are shown by shaded grey areas. Sorry, no different shades for the two
+colors, just black (for white) and grey (for the other two). To install,
+simply run them. They install themselves. By the way, I am not sure whether
+they will work with DOS 2.0.
+
+
+
+tall,
+simply
+```
+{% endraw %}
+
+## OKISET.DOC
+
+{% raw %}
+```
+
+OKISET Command
+--------------
+
+Purpose:  This program sends control characters	to an OkiData Microline	92
+	  printer connected as LPT1.
+
+Syntax:	  OKISET
+
+Remarks:  The user is presented	with a menu of 20 items. Any number of
+	  control functions may	be performed.
+
+	  Menu selections:
+
+		1 = Pica 10 cpi
+		2 = Elite 12 cpi
+		3 = Condensed 17 cpi
+		4 = Data processing quality
+		5 = Emphasized Print
+		6 = Enhanced print
+		7 = Underlined
+		8 = Form feed
+		9 = Line feed
+		A = Eight (8) lpi
+		B = Double Pica, 5 cpi
+		C = Double Elite, 6 cpi
+		D = Double Condensed, 8.5cpi
+		E = Correspondence quality
+		F = Stop Emphasized print
+		G = Stop Enhanced print
+		H = Stop Underlining
+		I = ITALIC characters
+		J = SCRIPT characters
+
+
+Notes:	  Written for the IBM PC using DOS 2.0 or later,
+	  by Vernon D. Buerg. For public domain use.
+
+	  DOS 2.00 with	ANSI.SYS is required.
+
+	  Version 1.0, April 12, 1984.
+
+--------------
+
+```
+{% endraw %}
+
+## PRINTER.DOC
+
+{% raw %}
+```
+
+
+
+                                 PRINTER.DOC                    Ver 1.1
+
+                                 John Petrey
+                                  (c) 1983                                  
+
+        This  is  the documentation file for the PRINTER.COM  program,  a 
+        program that allows one to easily use the special print functions 
+        for  their printer (any make).   PRINTER.COM is run by typing  in 
+        PRINTER at the DOS prompt or directly from Wordstar using the "R" 
+        (run a program) command.
+
+        PRINTER.COM  is  used to set up your printer to make use of  it's 
+        special print functions (compressed print,  double strike  print, 
+        italics print,  etc.)  For example,   you may have a printer that 
+        normally only prints 80 characters on a line,  which is fine most 
+        of  the  time.   However,  you may find times when you'd like  to 
+        print more than 80 characters on a line.  You can use PRINTER.COM 
+        to tell your printer to use compressed print.    Likewise, if you  
+        normally use continuous form paper,  then you want the printer to 
+        stop printing  when it runs out of paper.   But when you want  to 
+        use  single sheet paper,  the printer stops because it thinks  it 
+        doesn't have any paper in the printer.   PRINTER.COM can tell the 
+        printer to temporarily ignore the paper out sensor so you can use 
+        single sheet paper.   Whatever your printer has the capability to 
+        do, you can easily do it with PRINTER.COM.
+
+        To use PRINTER.COM you must set up a data file for PRINTER.COM to 
+        read  so it knows what special print functions you want  to  use. 
+        You  can enter up to ten different special print features in  the 
+        data  file.   The  data file must be named PRINTER.DAT  and  must 
+        conform  to  a specific format so PRINTER.COM can understand  it.  
+
+        When you run  PRINTER.COM,  it looks for the  PRINTER.DAT file on 
+        the default disk drive unless you tell  PRINTER.COM  that the DAT
+        file is located on some other disk drive.    You tell PRINTER.COM
+        the drive the  DAT file is located on by typing in the disk drive
+        letter after you type in PRINTER at the DOS prompt.  For example,
+        if the  default  drive is  A  and  PRINTER.COM  is on drive B and   
+        PRINTER.DAT is on drive C, you would type in  B:PRINTER C  at the
+        DOS A> prompt so DOS would know to look on drive B for PRINTER.COM
+        and so PRINTER.COM would know to look on drive C for PRINTER.DAT.
+
+        The  data file (PRINTER.DAT) must contain a description (literal) 
+        of  the special print features you want to be available  and  the 
+        printer  control  codes  for each  special  print  feature.   The 
+        control  codes  are listed in your printer's user manual and  are 
+        likely found in the back of the manual as an appendix.  A control 
+        code  is  nothing  more  than  a unique  code  that  the  printer 
+        recognizes as a command to change to a special print mode.
+         
+        Let's assume you have an Epson MX printer and want to be able  to 
+        set up the printer for compressed print.   According to the Epson 
+        manual  (appendix B in my Epson manual) the control code to  turn 
+        on  compressed print is 15 (the ASCII character 15).  To  set  up 
+        your  PRINTER.DAT  file for compressed print on an Epson  printer 
+        you would need an entry like the following:
+
+             Compressed Print$015000
+
+
+                                  Page 1
+
+
+
+
+
+
+        The  first  part  of the entry is what you want  printed  on  the 
+        screen,  Compressed Print in this case.  Following the literal is 
+        a  dollar sign ($) which tells PRINTER.COM where the end of  your 
+        literal is and where the beginning of the codes are that you want 
+        sent  to  the  printer to turn on  that  special  print  feature.  
+        Following the dollar sign are six digits which to PRINTER.COM are 
+        really  two three-digit numbers.   The first three digits in this 
+        case  are  015  which  will be sent to the  printer  to  turn  on 
+        compressed print.   The last three digits (000 in this case) will 
+        not  be  sent  to the printer because  it  is  000.   PRINTER.COM 
+        expects two three-digit numbers,  so in this case we had to enter 
+        000   as   one  of  the  two  three-digit  numbers   to   satisfy 
+        PRINTER.COM's  requirement  for two  three-digit  numbers.   Many 
+        special print functions require two control codes be sent to  the 
+        printer  in order to set up a special print function,  so that is 
+        why PRINTER.COM wants two-three digit numbers.   For example,  on 
+        the Epson Printer,  to set up Italics print you need to send  the 
+        printer  a  ESC (escape) and a 53 (according to my Epson  Printer 
+        manual,  Appendix  B).   You would enter  your  literal,  Italics 
+        Print,  followed by a dollar sign followed by 027053.  027 is the 
+        ASCII code for Escape  and  053 is the code  for  Italics.  Thus,  
+        the entry in the PRINTER.DAT file would look like:
+              
+              Italics Print$027053
+
+        Up  to  ten different special print functions can be  entered  in 
+        the PRINTER.DAT file and each should be on separate  lines.   The 
+        last  entry  should be followed by an ampersand  (&)  immediately 
+        after  the last digit of the last code.  The ampersand (&)  tells 
+        PRINTER.COM  when  it has  reached the end of your  special print
+        features.   For  example,  if you only  had two  entries  in your 
+        PRINTER.DAT file it might look like:
+
+              Compressed Print$015000
+              Italics Print$027053&
+
+        Remember,  1) you can have up to 10 entries in PRINTER.DAT
+         
+                   2) each entry is comprized of:
+
+                        a. literal followed by dollar sign
+                        b. followed  by two three-digit codes  (decimal
+                           ASCII value - not hex)  that  are to be sent   
+                           to the printer   (Refer  to  your  printer's
+                           manual for the  control codes  to set up the 
+                           special print features you want to use.)  If
+                           your  printer  manual says to  send a  alpha 
+                           character to the  printer,  you can find out
+                           what  ASCII  code should be sent by refering 
+                           to the IBM-PC BASIC manual appendix G.		         
+
+                   3) The last  digit  of last code is followed  by  an 
+                      ampersand  (&)  so  PRINTER.COM knows when it has 
+                      reached the last of your special print features.  
+                                                                        
+
+
+
+                                Page 2
+
+
+
+
+
+
+
+
+        The  PRINTER.DAT  file  can be created with  any  editor  (Edlin, 
+        Wordstar,  directly from the console, etc.).  Just be sure if you 
+        use  Wordstar  that you create/edit the PRINTER.DAT file  in  the 
+        non-document  mode.   A  sample PRINTER.DAT file  (for  an  Epson 
+        printer) is provided as an example.
+
+
+        PRINTER.COM  can  be  run  from Wordstar by using the  R  (run  a 
+        program) command from the Wordstar Menu.  For example, assume you 
+        just finished editing a document and have saved it.   You  should 
+        now  be at the Opening Menu where you normally would strike P  to 
+        begin printing the document.   Before printing the document,  you 
+        can  strike  R for run a program at which time Wordstar will  ask 
+        you for the name of the program you wish to run.  Type in PRINTER 
+        and  strike the enter key.   Note:  if PRINTER.COM is not on  the 
+        logged  (default) disk drive you'll need to prefix  PRINTER  with 
+        the  drive  specification  of the drive where Wordstar  can  find 
+        PRINTER.COM  (such as A:  for drive A).  If PRINTER.DAT is not on
+        the default disk drive, you'll need to specify the drive where it
+        can be found after entering PRINTER.  For example, if the default
+        drive is B: and both PRINTER.COM and PRINTER.DAT are on drive A:,
+        then you'll need to enter   A:PRINTER A   so  Wordstar  will know
+        where to look for PRINTER.COM  and PRINTER.COM will know where to
+        look for  PRINTER.DAT.   After you've entered this, Wordstar will
+        run the PRINTER.COM program which will prompt you for the special
+        print  functions  you  set  up in your  PRINTER.DAT  file.   Upon
+        exiting  PRINTER.COM,   you will automatically return to Wordstar
+        where  you  can now strike P to begin printing your document with
+        the special print function(s) you selected in effect.      
+
+
+        Listed below is a sample PRINTER.DAT file for an EPSON printer.
+
+        Set Printer to Power Up Mode$027064
+        Compressed Print$027015
+        Italics Print$027052
+        Emphasized Print$027069
+        Double Strike Print$027071 
+        1/8th Inch Spacing$027048
+        Turn on Paper Out Sensor$027057
+        Turn off Paper Out Sensor$027056
+        Double Width Print #1$027087
+        Double Width Print #2$001000&
+
+        Note: To use Double Width Print,  both Double Width options 
+              in the above sample must be entered.  This is because
+              the Epson printer needs three control codes to set up
+              Doulbe Width print.   Since PRINTER.COM can only have
+              two control codes per entry in the  PRINTER.DAT file,
+              two entries in  PRINTER.DAT  are required to send the 
+              three control codes the Epson printer wants.  
+
+
+
+
+
+                               Page 3
+
+
+
+
+
+
+
+
+        This disk copy was originally provided by "The Public Library",
+        the software library of the Houston Area League of PC Users.
+ 
+        Programs are available from the Public Library at $2 per disk
+        on user-provided disks.  To get a listing of the disks in the
+        Public Library, send a self-addressed, stamped envelope to
+
+             Nelson Ford,  P.O.Box 61565,  Houston, TX 77208.
+
+```
+{% endraw %}
+
+## PROWRTER.DOC
+
+{% raw %}
+```
+I have seen numerous suggestions how to set Prowiter/NEC 8023 printer
+switches and they have one thing common: Something is missing and you
+are not able to use all printer capabilities.
+
+From experience I can tell that it is waste of time to call Leading
+Edge or eg. try to correct the writer of the Creative Computing IBM
+Images column.
+
+To settle this for once and for all please make record of the following
+switch settings:
+
+SW 1 -->        1,2,3,4,5,8-Open  6,7-Closed
+
+SW 2 -->        2,3,4,5,8-Open  1,6,7-Closed
+
+This settup works also with 123 PrintGraph program. If you want the best
+quality of graphics print you need to close SW2-8 to disable bidirectional
+printing.
+
+When using Wordstar you will be able to print ASCII, CRAPHIC, GREEK and
+Japanese KATAKANA character sets. The only unfortunate side effect is
+that backslash (\) from ASCII prints like Yen sign but you still can print
+backslash from the graphics set. I have downloaded also WS printer patches
+for both version 3.2 and 3.3 . These files are named: WS320NEC.DOC  and
+WS330NEC.DOC .
+
+Kauko Laurinolli
+404-981-9550
+
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

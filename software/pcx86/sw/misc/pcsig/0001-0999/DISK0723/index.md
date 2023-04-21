@@ -27,6 +27,46 @@ machines:
     game.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES723.TXT
+
+{% raw %}
+```
+Disk No:  723                                                           
+Disk Title: Super Pinball  (requires color graphics)                    
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: Super Pinball                                            
+Author Version: 1                                                       
+Author Registration: $10.00                                             
+Special Requirements: CGA.                                              
+                                                                        
+SUPER PINBALL is a collection of five great pinball games, each with a  
+unique layout.  You control the flippers with your left- and right-     
+shift keys for realistic pinball action.  The disk is menu-driven,      
+letting you jump between games without exiting to DOS. No               
+documentation is provided with this disk and none is needed -- simply   
+type GO and choose your game.                                           
+File Descriptions:                                                      
+                                                                        
+BLACKBOX COM  Pinball game.                                             
+CHUTE    COM  Pinball game.                                             
+DOUBLE   COM  Pinball game.                                             
+GO       EXE  Main menu program.                                        
+READ     ME   Information about Super Pinball.                          
+STAR     COM  Pinball game.                                             
+ZIPPER   COM  Pinball game.                                             
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1988 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0723
 

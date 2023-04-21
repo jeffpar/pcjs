@@ -33,6 +33,42 @@ machines:
     your rentals and sales, check out CAPTAIN VIDEO.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2146.TXT
+
+{% raw %}
+```
+Disk No: 2146                                                           
+Disk Title: Captain Video                                               
+PC-SIG Version: 1.0                                                     
+                                                                        
+Program Title: Captain Video                                            
+Author Version: 1.0                                                     
+Author Registration: $50.00                                             
+Special Requirements: None.                                             
+                                                                        
+CAPTAIN VIDEO is a database management system designed specifically     
+for home videocassette/video game rental and sale outlets.  CAPTAIN     
+VIDEO eases the burden of movie and game rental paperwork through the   
+use of menus and forms for customers, rentals, inventory, maintenance,  
+and employees.  Printed reports include forms (rental invoice, video    
+in/out, games in/out, employee information, and service information),   
+reports, labels, lists (customers, employees inventory) and letters.    
+                                                                        
+If you are just starting a video rental business and you want to track  
+your rentals and sales, check out CAPTAIN VIDEO.                        
+                                                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2146
 

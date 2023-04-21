@@ -14,6 +14,69 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## ORDER.DOC
+
+{% raw %}
+```
+                        BSX International Order Form
+
+        I wish to register or purchase the following BSX products:
+
+                                                         Register  or  Disk
+                                                          Purchase ?   size
+                                                            Circle     for
+                                                             one:   Purchases:
+
+  ___ copies of ______________,  @ $______ each: $______  Reg / Pur 5.25 / 3.5
+
+  ___ copies of ______________,  @ $______ each: $______  Reg / Pur 5.25 / 3.5
+
+  ___ copies of ______________,  @ $______ each: $______  Reg / Pur 5.25 / 3.5
+
+  ___ copies of ______________,  @ $______ each: $______  Reg / Pur 5.25 / 3.5
+
+  ___ copies of ______________,  @ $______ each: $______  Reg / Pur 5.25 / 3.5
+
+  ___ copies of ______________,  @ $______ each: $______  Reg / Pur 5.25 / 3.5
+
+  ___ copies of ______________,  @ $______ each: $______  Reg / Pur 5.25 / 3.5
+
+                                 For a total of: $______
+
+  I've enclosed a check or money order payable to Robert Roberds.
+
+  Please ship purchased products to:
+                                                             (Please print)
+  Name:_____________________________________________________
+
+  Street Address:___________________________________________
+
+  City, State/Province:_____________________________________
+
+  Zip Code:_____________     Country:_______________________
+
+  Phone (Optional):_________________________
+
+
+  I understand that registered products are  not  to  be  delivered,  while
+  purchased products are.
+
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+             Send this form along with check or money order to:
+
+                            BSX International
+                            806 Park Ridge Rd. Apt. A8
+                            Durham, NC 27713
+
+            Please allow 1-2 weeks for delivery of purchases. Thanks!
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3530
 

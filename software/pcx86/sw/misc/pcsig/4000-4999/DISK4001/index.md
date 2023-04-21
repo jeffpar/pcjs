@@ -14,6 +14,73 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## ORDER.TXT
+
+{% raw %}
+```
+		     R E G I S T R A T I O N   F O R M       January 2, 1993
+                     =================================
+                              Kurt W. Dekker
+                              P.O. Box 10342
+                           Costa Mesa, CA  92627
+
+Ship To:  _______________________________ (Name)
+
+          _______________________________ (Address)
+
+          _______________________________ (Include Zip!)
+
+Phone:    (______)_______________________
+
++=========================================================================+
+| Product Name/Description                       |   Price     |  Total   |
++================================================+=============+==========+
+| ROX - Blast Rocks In Outer Space               |    $10      |          |
++------------------------------------------------+-------------+----------+
+| METC - Meteor Mission - Rescue Astronauts      |     $8      |          |
++------------------------------------------------+-------------+----------+
+| DEFEND - Defender - Save the planet!           |    $10      |          |
++------------------------------------------------+-------------+----------+
+| SCUD - The Missile Command Game                |    $10      |          |
++------------------------------------------------+-------------+----------+
+| KSI - Kurt's Spaced-Out Invaders               |     $5      |          |
++------------------------------------------------+-------------+----------+
+| VIPER - the Serpentine Game                    |     $8      |          |
++------------------------------------------------+-------------+----------+
+| ACK - Ack-Ack Attack; Parachutist's Nightmare! |     $8      |          |
++------------------------------------------------+-------------+----------+
+| GAL - Galaxy Invaders - coming soon!           |    $10      |          |
++------------------------------------------------+-------------+----------+
+| DSM - Deep Space Mission - coming soon!        |    $10      |          |
++------------------------------------------------+-------------+----------+
+|                                                |             |          |
++------------------------------------------------+-------------+----------+
+|                                                |   TOTAL:    |          |
++================================================+=============+==========+
+                                         (CA Residents Add 7.75% Sales Tax)
+
+I strive to make playable and enjoyable arcade games for the PC compatible
+line of computers.  If you would take just a moment to provide me some
+feedback on the game you play tested, I will send you a FREE UPGRADE if I
+make the suggested modifications/improvements!
+
+1.    What game(s) did you play?_____________________________________
+
+2.    Please rate the following areas from 1 (lowest) to 5 (highest):
+
+                                             Lowest                 Highest
+            Graphics                           1     2     3     4     5
+            Sound                              1     2     3     4     5
+            User Interface (scoring, etc.)     1     2     3     4     5
+            Documentation/Help                 1     2     3     4     5
+
+Thank you very much for your feedback!
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #4001
 

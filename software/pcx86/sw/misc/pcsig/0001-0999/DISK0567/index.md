@@ -36,6 +36,53 @@ machines:
     Master" for creating and editing both characters and dungeons.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES567.TXT
+
+{% raw %}
+```
+Disk No  567
+Program Title: DUNGEONS OF THE NECROMANCER'S DOMAIN (DND) version 2.0:0
+PC-SIG version 1.3
+
+DND is a computer fantasy roleplaying game inspired by Dungeons And
+Dragons, the "grandaddy" of all the computer games that was developed
+and played on mainframe computers back in the 60's.  Different then most
+games, it uses text characters in the upper right corner of the screen,
+instead of graphics.  Become a wizard and fight evil monsters and ghosts
+with your growing power, or a fighter and go head-to-head with mighty
+dragons, or a cleric and try to dispell the evil spirits of the the
+dungeons.  The object is to stay alive and venture deeper and deeper
+into the depths.  You have five different dungeons to choose from.  No
+matter which character you choose to be, this is a game that will test
+all of your game playing skills.
+
+Usage:  Entertainment.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $25.00
+
+File Descriptions:
+
+DND      EXE  Main Program.
+NOTICE   DAT  Data file.
+???????? DGN  Dungeon data file (5 files).
+???????? HLP  Help File (5 files).
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0567
 

@@ -26,6 +26,36 @@ machines:
     8K.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1968.TXT
+
+{% raw %}
+```
+Disk No: 1968                                                           
+Disk Title: CrossRef                                                    
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: CrossRef                                                 
+Author Version: 05/90                                                   
+Author Registration: $15.00                                             
+Special Requirements: CGA.                                              
+                                                                        
+CROSSREF is a variable listing program for Turbobasic files (only).  If 
+you try to list a standard BASIC program you will get a very long list  
+of line numbers (all of them).  This program is for Turbobasic programs 
+that use line numbers only as labels.  And the program only takes up    
+8K.                                                                     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1968
 

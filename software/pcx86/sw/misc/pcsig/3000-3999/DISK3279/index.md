@@ -14,6 +14,75 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## DEALER.DOC
+
+{% raw %}
+```
+
+      To:  Shareware Dealers
+
+ Program:  Q-INSTALL Version 1.01 (A Quick Installation Utility)
+    From:  Marietta Co-opware
+   FILES:  QINST101.EXE, README, README.EXE, INSTALL.COM, QINSTALL.EXE,
+           and DEALER.DOC
+
+    SIZE:  167663 Bytes
+  AUTHOR:  Marietta Co-opware
+   NEEDS:  CGA or better, IBM or compatible, suggest hard disk drive.
+
+    TYPE:  Shareware
+
+  Dear Shareware Dealer;
+
+  Q-INSTALL  is a fast and easy to use  installation  utility.  It allows
+  you to create Professional-Looking customized installs for your program
+  distribution.  Non-programmers can use it with ease.  It takes only
+  minutes to create a complete custom made installation.
+
+  Early feedback by Shareware Dealer evaluations gave Q-INSTALL their
+  highest rating.  Users are very satisfied with the ease of use and the
+  very small program size Q-Install uses for its Installation program.
+
+  Q-Install is just the ticket for Shareware authors who have limited
+  diskette space but still want a colorful customized Install Program.
+  Q-Install does not waste space on features that are costly and are
+  seldom used by those creating an Installation Program.
+
+  Features Include:
+
+       *  A high quality professional look.
+       *  Fast colorful text (colors are easy to change).
+       *  Very small distribution program size (below 24K).
+          This leaves more room for your program files.
+       *  Easy to define options and parameters via menu.
+          (No cryptic programming language to learn!)
+       *  Compiles an INSTALL.COM file for easy execution.
+       *  Automatic checking of disk space.
+       *  Automatic checking of directories and creation.
+       *  Automatic detection of source drive.
+       *  User override for target drive and directory destinations.
+       *  Ability to display a text README file from menu screen.
+       *  Ability to use self-extracting PKZIP or LHA files.
+       *  Allows multiple install-to directories per diskette (up to 4).
+           Most programs require only one directory per diskette.
+       *  Multiple diskette installations are made simple.
+       *  Royality-Free unlimited program runtime distribution for those
+           who order/register.  Plus a free update to the latest version.
+       *  BEST OF ALL - very low license/registration fee of only $20.
+
+
+                             Marietta Co-opware
+                              P. O. Box 864215
+                             Marietta, GA 30064
+
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3279
 

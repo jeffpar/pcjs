@@ -41,6 +41,55 @@ machines:
     supports a mouse.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2468.TXT
+
+{% raw %}
+```
+Disk No: 2468                                                           
+Disk Title: Cribbage by Crosby                                          
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Cribbage by Crosby                                       
+Author Version: 05/90                                                   
+Author Registration: $10.00                                             
+Special Requirements: CGA                                               
+                                                                        
+If you've beaten everyone you know at cribbage or are looking for       
+someone who doesn't make mistakes counting -- CRIBBAGE BY CROSBY is     
+here.  Just start up the program and CRIBBAGE does the rest.  With      
+attractive color graphics, CRIBBAGE does the shuffling and deals the    
+cards.  Just cut for deal and your playing cribbage.  Select cards for  
+the "crib," play for points, and then the official will count'em up,    
+keeping score on the on-screen cribbage board.  Even though CRIBBAGE BY 
+CROSBY doesn't teach you how to play, it can operate in either a fast or
+slow mode.  Card fun has never been this easy.                          
+Program Title: Mastermind                                               
+Author Version: 1.0                                                     
+Author Registration: $10.00                                             
+Special Requirements: CGA.                                              
+                                                                        
+How many guesses would it take you to figure out a secret six- or       
+seven-digit number?  How about if you got clues?  Have fun and test your
+logical thought process with MASTERMIND.  MASTERMIND determines the     
+secret number and you have to guess it.  Each time you guess, it tells  
+you how many digits were correct, but not which ones!  You take it from 
+there and try to solve the secret in the fewest guesses.                
+                                                                        
+Three different versions are included for all skill levels.  MASTERMIND 
+is easy to use, includes all the game instructions on help screens, and 
+supports a mouse.                                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2468
 

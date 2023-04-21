@@ -27,8 +27,74 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILES298.TXT
+
+{% raw %}
+```
+Disk No:  298
+Program Title:  PLANETS version 4.1 /WATOR/LEYGREF'S CASTLE
+PC-SIG version: 4.1
+
+PLANETS computes information on the position, distance, magnitude, etc.
+for the major planets on a specified date and time.  It also computes
+the position of four of the major asteroids and Halley's Comet, and lets
+you move the charts forward or backward in time to see the positions on
+certain dates.
+
+WATOR (WATERMON for monochrome and WATORCOL for color) is a
+battle-for-survival game where you are in charge of developing a
+harmonious ecology between them.  A real figure-juggling act and good
+fun to watch.  LEYGREF'S CASTLE is a fantasy adventure game.  The castle
+is randomly stocked for each game, so you have a different adventure
+each time.
+
+Usage:  Astronomical Charting/Entertainment
+
+Special Requirements:  Some programs require color graphics.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $10.00 for PLANETS.
+
+File Descriptions:
+
+-------- ---  PLANETS
+PLANETS  BAK  Backup of documentation file.
+PLANETS  DOC  Documentation.
+PLANETS  EXE  Main program.
+ATT      BGI  Data file.
+CGA      BGI  Data file.
+EGAVGA   BGI  Data file.
+HERC     BGI  Data file.
+IBM8514  BGI  Data file.
+PC3270   BGI  Data file.
+-------- ---  WATOR - Fish & sharks engage in battle for survival
+WATORMON PAS  Source code, Turbo Pascal, for monochrome card.
+WATORCOL PAS  Source for color card.
+WATORMON COM  Compiled code for mono card.
+WATORCOL COM  Compiled code for color card.
+WATOR    DOC  List of files.
+WATOR    BAK  Backup of documentation file.
+READ     ME   Notes from author.
+-------- ---  LEYGREF'S CASTLE
+LEYGREF1 BAS  Main program.
+LEYGREF  INS  Instructions (7K text file).
+LEYGREF  PIC  Part of LEYGREF.
+LEYGREF  DAT  Part of LEYGREF.
+LEYGREF  CMD  Part of LEYGREF.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
 ## LEYGREF1.BAS
 
+{% raw %}
 ```bas
 1000 COLOR 7,0
 1010 E$=CHR$(27):RV$=E$+"p":RW$=E$+"q":E$=E$+"E"
@@ -417,6 +483,369 @@ machines:
 5000 COLOR 0,1:RETURN
 5010 COLOR 7,0:RETURN
 ```
+{% endraw %}
+
+## PLANETS.DOC
+
+{% raw %}
+```
+
+                       Version 4.1   Oct 2, 1988
+
+     This Program computes information relating to the position, distance,
+  magnitude, orbit view, skyview, etc for the major planets, four minor
+  planets or halley's comet on a specified date and time. Also, orbital data
+  for any desired planet or comet can be entered and saved in a disk file.
+  Skyview and orbital views can show forward or backward motion. The moons
+  for each planet can be displayed.
+
+  The following programs files are available (the source code can be
+  obtained from the author if it is not included).
+
+  PLANETS.EXE    90K bytes   Execution Code
+  PLANETSA.EXE  100K bytes   Execution Code for use with 8087
+  PLANETS.DOC    20K bytes   This File
+  PLANETS.PAS    57K bytes   Source Code for Turbo 5.0
+  PLANETS1.PAS   42K bytes   Include file for Turbo 5.0
+  PLANETS.3TP    56K bytes   Source Code for Turbo 3.0
+  PLANETS.3TP    42K bytes   Include file for Turbo 3.0
+  PLANETS.SAV     1K bytes   Save file made with setup command
+
+  Refer to PRACTICAL ASTRONOMY WITH YOUR CALCULATOR by
+  Peter Duffett-Smith for the calculation methods.
+
+                            Command List
+
+1 - 9    Entering a single digit will display detailed information
+         relating to the selected planets. Use the "T" command
+         to set the time and date, and the "L" command to set the
+         longitude and latitude. Also the "S" command may be used to
+         select the format for representing angles.
+
+  A-     Entering A followed by a single digit will display detailed
+         information related the selected minor planet or comet. The
+         last selection in this column is user selectable, via the "R"
+         and the "W" commands.
+
+  B-     Entering B followed by a single digit will display the sky
+         view of the nine major planets and the selected minor planet.
+         Use the T and the L commands to select the time/date and
+         longitude/latitude.
+
+  C-     Entering C followed by a single digit will display the orbits
+         for the four inner planets and the selected minor planet. The
+         planets are each shown in its own orbital plane. The distance
+         between the earth and a comet with a large inclination will
+         be misleading in the orbital view. However, The distance
+         calculation using the "A" command does take into account the large
+         inclination of comets (update from previous versions).
+
+  D-     Entering D followed by a single digit will display the orbits
+         for the five inner planets and the selected minor planet. The
+         planets are each shown in its own orbital plane.
+
+  E-     Entering E followed by a single digit will display the orbits
+         for the earth and the five outer planets plus the selected
+         minor planet. The planets are each shown in its own orbital plane.
+
+  F      SideView shows the orbit of the selected planet. The scale is
+         the same as the last scale selected using the C, D or E command.
+
+  H      Displays this file.
+
+
+  I      Plots the orbits and locations of the four inner planets:
+         Mercury, Venus, Earth, and Mars. The "S" command may be used
+         to enable/disable the planet names. If the names are shown,
+         sometimes a name will overwrite a previously displayed planet.
+
+  K1,2,3 Gives Keplers three laws along with an example. Note
+         that Keplers laws refer to the Sun and Planets, but
+         the law applys to any small body orbiting a large body.
+
+  L      Allows entry of the longitude and latitude. The longitude is
+         then used to compute the time zone; which can be changed if
+         desired.
+
+  M      Displays the Menu. A second depression switches to the second
+         page of the menu.
+
+  O      Plots the orbits and locations of the five outer planets and the
+         Earth. The "S" command may be used to enable/disable the planet
+         names and to correct for the aspect ratio of the monitor.
+
+
+  Q      Goes Back to DOS
+
+  S      The Set-Up is command is used to select the form of numeric
+         printout for angles: hour/deg/min, decimal deg, decimal hours
+         etc. The screen aspect ratio may be set so that circles come
+         out correctly on the screen. Also, planet name may be
+         enable/disabled from orbital and sky plots. One the setting are
+         entered they can be save in file planets.sav. This file will
+         be read and the setting updated the next time planets is initialized.
+
+  R      The read command reads a file made by the (W)rite command and
+         loads the orbital data into the last minor planet position.
+         The A through E commands may then be used to make calculations
+         for the new planet selected.
+
+  T      The change time/date command allows entry of the time and the
+         date. Note that spaces (not commas) should be used between the
+         entries.
+
+  V      The View command shows how the planets would appear in the
+         sky on the date selected by the T command and from the location
+         selected by the L command. If the planet names are shown,
+         sometimes a name will overwrite a previously displayed planet.
+
+  U      The U commands shows the sun and the moon as they would appear
+         on the date selected by the T command and on from the location
+         selected by the L command.
+
+  W      The write command is used to enter orbital data for a planet
+         or comet that is not included in the main program. The data
+         is then stored in a disk file and read into the last position
+         in the minor planet column. If the epoch is entered as "0 0 0"
+         the orbit is assumed to be entered in standard form for a comet;
+         therefore no prompt is made for the longitude at epoch.
+
+  X      Two objects are selected from a list of moons and planets for
+         size comparison. A graphical view is then so that the sizes
+         can be easily compared.
+
+  Y      This command shows the sun and the moon against the a grid
+         showing declination and ascension.
+
+  Z      This command shows the planets against the stars. A grid
+         with declination and ascension is shown. The + and - commands
+         can be used in star view mode.
+
+  +      The Plus command is used after a view or orbit command to advance
+         planets forward in time. Successive depression causes faster motion
+         in the following order: one hour, one day, one week, one month,
+         and one year.
+
+  -      The Plus command is used after a view or orbit command to advance
+         planets backward in time. Successive depression causes faster motion
+         in the following order: one hour, one day, one week, one month,
+         and one year.
+
+space    The space key is used to stop advance or backward time travel.
+         The planets will continue to blink until any other key (except
+         =,-, or space) is depressed. An M command will then go back to
+         the main menu.
+
+
+F1 - F9  Function keys show the selected planet and its inner moons. IF
+         there are outer moons, they are selected by a shifted function
+         key. The earth date and time do not apply to moon positions. A
+         seperate earth day count is shown so that the speed of the moons
+         can be compared to an earth day.
+
+                      Glossary of Terms
+
+
+Azimuth              :  The angle from the North measured East to West. When
+                        applied to set and rise times for a planet this
+                        indicated where on the horizon, 180 deg. for South,
+                        270 deg. for West, etc.
+
+Daylight Savings     :  If Daylight savings time is enabled then the local time
+                        is advanced one hour on the last Sunday in March and
+                        set back on the last Sunday in October.
+
+Ecliptic Coordinates :  Are related to the earths orbit, Long is the
+                        angle around from the first point of Aries
+                        and Lat is angle Up or Down
+
+Equatorial Coord.    :  Are related to the earths equator, DEC is how
+                        far north or south of the equator and RA is
+                        angle around the equator from the first point
+                        of Aries
+
+First Point of Aries :  This direction remains fixed with respect to the
+                        stars (except for Precession) and is used as a
+                        reference for ecliptic and equatorial coordinates.
+
+GMT                  :  Greenwich Mean Time, time at longitude 0 deg.
+
+GST                  :  Greenwich mean sideral time, is related to the
+                        position of of the stars rather than the Sun.
+
+JD                   :  Julian Day Number is the number of days since
+                        January 1st 4713 B.C.
+
+HA                   :  Hour Angle is the time since the planet crossed
+                        the meridian
+
+helio ecliptic lat.  :  Angle north or south of the earths orbit
+
+heliocentric long    :  Angle from the first point of Aries that planet
+                        makes round the sun
+
+Horizontal Coord.    :  Are related to the observers horizon, Alt is
+                        angle above the horizon and Azim is angle from
+                        the north going east.
+
+Lat                  :  Latitude of observing site
+
+LCT                  :  Local Civil Time (time locally used)
+
+LST                  :  Local Sideral Time, is related to the
+                        position of of the stars rather than the Sun.
+
+Long                 :  Longitude of observing site
+
+long of ascend node  :  The point where a planet rises out of the plane of
+                        the ecliptic
+
+Mag                  :  Magnitude on a logrithmic scale which measures the
+                        brightness of the planet ( the calculation here is
+                        accurate to only 1 or 2
+
+mean anomaly         :  Angle a fictitious planet, moving in a circle,
+                        would make with a line from the sun to the
+                        planets perihelion
+
+
+Phase                :  Area of the disc which is illuminated
+
+true anomaly         :  Corrects the mean anomaly to account for 9the
+                        eccentricity of the orbit
+
+
+radius vector        :  Distance from the Sun to the planet
+
+
+Extended Notes:
+
+   **** How orbits are shown ****
+
+      The orbits for the planets and moon are each shown in its own
+   orbital plan. This means that the view is not the same as would be
+   seen from space. Projection of the orbits would have slowed the
+   motion commands considerably.
+
+   **** Entering planet date ****
+
+     The (W)rite command makes a file containing the orbital data for
+   additional planets (one file per planet). A good source for data is
+   the Astronomical Alamanac is for sale by The Superintendent of
+   Documents, U.S. Government Printing Office, Wahington, D.C. 20402.
+
+   When using data from the Alamanac the Period is calculated:
+
+         Per = (360 / 365.2422) / Daily Motion
+
+   The Longitude at Epoch is calculated:
+
+         Long at Epoch = Long of Asc Node + Long of Per(bar) +
+                         Mean Anomaly
+
+   The Longitude of Perihelion is calculated:
+
+         Long of Per = Long of Asc Node + Long of Per(bar)
+
+   **** Sun and Moon rise and set times ****
+
+   The calculation assume a fixed location for the sun and the moon
+   based on the date and time setting. More accurate times can be
+   obtained by setting the time to the first value given, then doing
+   a second iteration.
+
+   **** Moon orbital view ****
+
+   The orbital views of the moons do not correspond to the date. An
+   earth day counter is shown to give an idea of the speed of motion.
+
+
+
+   This program is placed in the public domain and may be freely
+   copied and distributed for a nominal distribution charge. The Turbo
+   Pascal source code and the latest version of the program can be
+   obtained from the author for $10.00.
+
+   The following is a list of other scientific programs available form
+   the author:
+
+
+CHEMICAL (Current Version 3.1)
+
+     CHEMICAL is a molecular modeling Program to aid in the formation
+     of three dimensional pictures of chemicals. Atoms are selected
+     from a Periodic Table (using the A command) and electron
+     orbital information retrieved. The Atoms are then bonded
+     (using the B command). The chemical is displayed as it is
+     being constructed. The chemical can be viewed from different
+     directions by using the up and down cursor keys and the V
+     command. If desired the Hybrid and Ionize commands can be used
+     to alter the orbitals before bonding. Atoms can be bonded
+     into groups, then the groups bonded to other groups to make
+     large chemicals.
+
+CHEMVIEW (Current Version 2.0)
+
+     CHEMVIEW is a companion program that shows 3-dimensional
+     animation of the models generated with CHEMICAL. CHEMVIEW
+     requires an EGA board and monitor. CHEMVIEW is written in
+     Turbo PROLOG with the graphics I/O done in Turbo C.
+     To use CHEMVIEW simply start the program and select the file
+     desired.
+
+CRYSTAL (Current Version 1.0)
+
+     CRYSTAL is a companion program that shows 3-dimensional
+     development of crystals. Atoms and multi-atom ions are
+     and placed on a lattice to form 3 dimensional models.
+
+
+These programs are are placed in the Public Domain and may be freely
+copied. However, the source code is only available from the author.
+The latest version, with source code is available according to the
+following price schedule:
+
+                    First Copy            Updates           Enclosed
+
+Planets             $10 (1 disk)            $5               _______
+
+CHEMICAL
+CHEMVIEW            $20 (3 disks)          $10               _______
+CRYSTAL
+
+OverSeas Shipping                           $5               _______
+
+3 1/2 in disks                              $2               _______
+
+                                         TOTAL Enclosed      _______
+          Send To:
+
+____________________________________
+
+____________________________________
+
+____________________________________           Larry Puhl
+                                               6 Plum Ct.
+____________________________________           Sleepy Hollow, Ill. 60118
+
+
+```
+{% endraw %}
+
+## WATOR.DOC
+
+{% raw %}
+```
+Files on the disk are as follows:
+WATORCOL.PAS:Fish & sharks engage in battle for survival. Source for color card.
+WATORMON.PAS: Source code, Turbo Pascal, for monochrome card.
+WATORCOL.COM: Object code for color card.
+WATORMON.COM: Object code for mono card.
+In the interest of speed, the program addresses screen memory 
+directly, so the appropriate version must be used.
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -36,6 +36,54 @@ machines:
     maintain an inventory of your valuable possessions.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1349.TXT
+
+{% raw %}
+```
+Disk No: 1349
+Program Title: HOME INVENTORY version 1.0
+PC-SIG version: 1
+
+The HOME INVENTORY program lets you keep a database of your important
+possessions.  The number of entries is limited only by disk space.  The
+HOME INVENTORY is completely menu-driven and very easy to operate.  You
+begin by creating a new inventory file or loading an existing one.  Then
+choose `Add a Record' to add records to the database.  It's just that
+simple to build your own home inventory database.  You can change or
+delete a record in the database with the `Find a Specific Record'
+option.  There are also three search options: search on item description
+field, search on a specific field, and search on all fields.  Print
+options are also provided for a listing of your entire database, or just
+a single record in the database.
+
+The HOME INVENTORY program has on-line help to assist you in using the
+various options.  This program provides an excellent way to gather and
+maintain an inventory of your valuable possessions.
+
+Usage:  Home/Database.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  None specified.
+
+File Descriptions:
+
+INVENTRY EXE  Main program.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1349
 

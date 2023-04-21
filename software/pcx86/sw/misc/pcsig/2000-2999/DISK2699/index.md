@@ -18,10 +18,12 @@ machines:
 
 ## V.BAS
 
+{% raw %}
 ```bas
 Version 24.02 Series:030791      (c)DATA-PLANE INC.   All rights reserved.
 Professional version. Airline quality w/weather interface. *Pre-Duat Prep.
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

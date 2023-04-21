@@ -14,6 +14,34 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## INSTALL.TXT
+
+{% raw %}
+```
+			  MAZE MASTER
+			 (Version 1.01) 
+
+		     Copyright (C) 1992 by 
+
+		      The Flatirons Group
+			1550 Kalmia Ave. 
+		    Boulder, CO  80304-1817
+
+      Member, Association of Shareware Professionals (ASP)
+
+---------------------------------------------------------------------
+
+INSTALLATION:
+
+1.  Copy WinMaz.exe to your hard disk (any directory)
+2.  Execute WinMaz.exe (it expands into more files)
+3.  Read the Readme.txt file for starting Maze Master.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3310
 

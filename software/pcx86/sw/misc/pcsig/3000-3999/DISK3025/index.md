@@ -14,6 +14,38 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE3025.TXT
+
+{% raw %}
+```
+Disk No: 3025                                                           
+Disk Title: English Recall                                              
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: English Recall                                           
+Author Version: 1.00                                                    
+Author Registration: $29.95                                             
+Special Requirements: Hard drive.                                       
+                                                                        
+English Recall is a well-designed English vocabulary program that       
+includes over 1,300 words (more available with registration) geared for 
+adults, college students, and high school students. It includes learn,  
+drill, review, and test routines; and keeps track of your weaknesses for
+additional practice in those areas. It's easy-to-use menus almost makes 
+learning new words fun!                                                 
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3025
 

@@ -37,6 +37,48 @@ machines:
     include the Bible, which is on PC-SIG disks #'s 766-772.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1655.TXT
+
+{% raw %}
+```
+Disk No: 1655                                                           
+Disk Title: King James Bible Search (1654-1657 also)                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: King James Bible Search Program                          
+Author Version: 1.0                                                     
+Author Registration: None.                                              
+Special Requirements: Hard drive recommended.                           
+                                                                        
+If your looking for a better way to find bible references, this program 
+can be your computer Bible concordance.  It will search for a single    
+word or a combination of words, then display a list of verses that      
+contain all of those words.  Best of all, you don't need the entire     
+Bible on-disk to work it.  However, if you have a copy of the King James
+Bible on disk, then this search program will also display the actual    
+verses and put them in a text file.                                     
+                                                                        
+You can do multiple word searches, search for specific verses, even copy
+the selected verses into your word processor for editing or inclusion   
+into a document you're preparing.  Utility programs are included to     
+allow you to build your own concordance from any English version Bible  
+you may have on disk.  This program will prove invaluable for anyone who
+does Bible studies-- preachers, teachers, Bible study leaders, and many 
+people who study for their own enrichment.  Note:  this product does not
+include the Bible.                                                      
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1655
 

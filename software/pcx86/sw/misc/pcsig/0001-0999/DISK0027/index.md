@@ -60,6 +60,7 @@ machines:
 
 ## AUTHOR.BAS
 
+{% raw %}
 ```bas
 10 '
 20 '     TO DISPLAY TEXT PART OF SCREEN
@@ -121,9 +122,11 @@ machines:
 520 X$=INKEY$ : IF X$="" THEN 520
 530 CLS : PRINT "HERE WOULD BE A GOTO STATEMENT TO CREATE PROGRAM";
 ```
+{% endraw %}
 
 ## AUTHOR2.BAS
 
+{% raw %}
 ```bas
 10 '
 20 '     TO DISPLAY TEXT PART OF SCREEN
@@ -180,17 +183,21 @@ machines:
 480 LOCATE 24,10 : PRINT "One moment please...";
 490 CHAIN "zoosort.bas"
 ```
+{% endraw %}
 
 ## COLTOMON.BAS
 
+{% raw %}
 ```bas
 55000 KEY OFF:CLS
 55001 WIDTH 40:DEF SEG=0:A=PEEK(&H410):POKE &H410, A OR &H30
 55002 WIDTH 80:LOCATE  ,,1,12,13:KEY ON:REM coltomon.bas pgm.
 ```
+{% endraw %}
 
 ## CRASHER.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 DIM G(5),D(5),B$(8),A$(9),T$(5)
@@ -324,9 +331,11 @@ machines:
 1300 CLS:KEY ON
 1310 PRINT"Just as well!"
 ```
+{% endraw %}
 
 ## DATETIME.BAS
 
+{% raw %}
 ```bas
 10 'Set Date and Time - Russ Williams, Feb 24, 1983
 20 'DATETIME is for people who are too lazy to type in the entire date
@@ -362,9 +371,11 @@ machines:
 320 PRINT #1,DATE$+" "+TIME$: CLOSE: SYSTEM
 330 DTTM$="01-01-1983 00:00:00": RESUME 150
 ```
+{% endraw %}
 
 ## DISKMOD.BAS
 
+{% raw %}
 ```bas
 10 REM ********************************************************************
 20 REM *       DiskMod              by            John Vandegrift         *
@@ -574,9 +585,52 @@ machines:
 2060 LOCATE 19,5:INPUT "Press return to continue....",IANS
 2070 RETURN
 ```
+{% endraw %}
+
+## FILES27.TXT
+
+{% raw %}
+```
+--------------------------------------------------------------------------
+Disk No 27    ZOOSORT                                                v1.1
+--------------------------------------------------------------------------
+NOISE    BAS  Demo - Produces different cycle sounds
+LANDER   BAS  Game - Fuel consumption
+CRASHER  BAS  Game - Planet landing
+TREK     BAS+ Game - Yet another Startrek game (color)
+FOILS    BAS  Utility - Produces foils from script-type file
+DATETIME BAS  Utility - Easier way to set DOS date & time
+DISKMOD  BAS  Utility - Examine & modify disk sectors
+MSPOOL   DOC  Documentation for use with print spooler programs
+MSPOOL   COM  Printer spooler for use with the monochrome/print adaptor
+CSPOOL   COM  Printer spooler for use with a separate printer adaptor
+SETCOLOR COM+ Utility. Sets background and border color to blue
+SETCOLOR ASM  Assembler source code for SETCOLOR
+------------  ZOOSORT
+STARTUP  BAS+ Initial program to run for ZOOSORT
+ZOOSORT  BAS+ Graphical demonstration of bubble sort - sort animals by weight
+ZOOTIME  BAS+ Part of ZOOSORT program
+FLAG     BAS+ "
+MONTOCOL BAS+ "
+COLTOMON BAS+ "
+AUTHOR   BAS+ "
+AUTHOR2  BAS+ "
+FLIP     MEM+ "
+FLIPD    MEM+ "
+GRAPHICS COM+ "
+??       BAS+ Binary files used in ZOOSORT program
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 ## FLAG.BAS
 
+{% raw %}
 ```bas
 10 CLS : SCREEN 1 : COLOR 0,0
 12 X=200 : Y=0
@@ -589,9 +643,11 @@ machines:
 80 CIRCLE (X+54,Y+99),4,3,,,5/18
 90 PAINT (X+54,Y+99),4,3
 ```
+{% endraw %}
 
 ## FOILS.BAS
 
+{% raw %}
 ```bas
 10 REM FOILS
 20 REM save "foils
@@ -691,9 +747,11 @@ machines:
 960 IF PRINTSW=1 THEN GOSUB 880 'set printing modes
 970 RETURN
 ```
+{% endraw %}
 
 ## LANDER.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 KEY OFF
@@ -809,17 +867,38 @@ machines:
 1120 RETURN
 1130 END
 ```
+{% endraw %}
 
 ## MONTOCOL.BAS
 
+{% raw %}
 ```bas
 2 KEY OFF:CLS:WIDTH 80:DEF SEG=0:A=PEEK(&H410):POKE &H410,(A AND &HCF) OR &H20
 3 WIDTH 40:SCREEN 1:SCREEN 0:LOCATE  ,,1,6,7
 4 KEY ON:KEY OFF:CLS:WIDTH 40
 ```
+{% endraw %}
+
+## MSPOOL.DOC
+
+{% raw %}
+```
+MSPOOL & CSPOOL -- Two versions of a print spooler for
+the PC.  MSPOOL is for those of you with the IBM monochrome
+monitor/parallel printer card. CSPOOL is for other printer cards.  To
+use, copy the appropriate program to SPOOL.COM on your System Disk.
+Then run ONLY ONCE!, when the system is booted (your best bet is to
+include this command in an AUTOEXEC.BAT file). Once enabled, it sets
+aside approx. 20 K of memory aside for spooling. To spool a text file,
+use this syntax in DOS: COPY <filename> LPT1: Then you can go to BASIC,
+or whatever.
+
+```
+{% endraw %}
 
 ## NOISE.BAS
 
+{% raw %}
 ```bas
 10 REM Program name: CLOCK
 20 REM This program presents the time as seen by the system.
@@ -842,9 +921,114 @@ machines:
 190 GOTO 110
 200 END
 ```
+{% endraw %}
+
+## SETCOLOR.ASM
+
+{% raw %}
+```
+	TITLE SETCOLOR PROGRAM
+	PAGE 65,132
+;**********************************************************************
+;
+;                               SETCOLOR
+;
+; THE SETCOLOR PROGRAM SWITCHES THE DISPLAY TO 80 COLUMN TEXT MODE ON
+; THE COLOR GRAPHICS CARD AND MONITOR WITH A BLUE BACKGROUND AND
+; INTENSE WHITE TEXT CHARACTERS.
+;
+; THE BORDER, COLUMN AND SETATTR CONSTANTS CAN BE SET TO ANY DESIRED
+; COMBINATION. REFER TO THE THE TECHNICAL REFERENCE MANUAL PAGE 2-51.
+; USE THE MACRO ASSEMBLER, LINK AND EXE2BIN PROGRAMS TO PRODUCE A NEW
+; COM FILE WITH THE NEW COMBINATIONS. NOTE: IGNORE THE WARNING MESSAGE
+; "NO STACK SEGMENT" PRODUCED BY THE LINK PROGRAM.
+;
+; PRINT INFORMATION:
+; THIS PROGRAM IS ENTERED USING DEFAULT TABS FOR OBVIOUS REASONS.
+; HOWEVER, CERTAIN PRINTERS DO NOT RECOGNIZE CONSECUTIVE TAB CHARACTERS.
+; THEREFORE TO PRINT THIS PROGRAM DURING ASSEMBLY AS ENTERED DIRECT
+; THE OUTPUT TO THE CONSOLE AND USE Ctrl PrtSc TO SENT THE OUTPUT TO
+; THE PRINTER. YOUR OUTPUT WILL NOW HAVE A NICE FORMATTED APPEARANCE.
+; TO OBTAIN A COMPRESSED OUTPUT ISSUE MODE LPT1:132 BEFORE ASSEMBLY.
+;
+;                                             		BOB STEPHENS
+;							SAN JOSE, CA.
+;							2/8/83
+;
+;**********************************************************************
+;
+; USE THE FOLLOWING NUBMERS FOR THE VARIOUS COLORS:
+;  0=BLACK   1=BLUE    2=GREEN   3=CYAN
+;  4=RED     5=MAGENTA 6=YELLOW  7=WHITE
+;
+BORDER		EQU	1		;BLUE BORDER COLOR (0-7 ADD
+					;  8 FOR INTENSE COLORS)
+COLUMN		EQU	80     		;COLUMN WIDTH (40 OR 80)
+SETATTR   	EQU 	1FH 		;INTENSE WHITE ON BLUE
+; FOR SETATTR USE:
+;  0BBBFFFF (8 BITS)
+;  WHERE BBB=BACKGROUND COLOR (0-7)
+;        FFFF=FOREGROUND COLOR (0-7 ADD 8 FOR INTENSE COLORS)
+;
+;**********************************************************************
+	SUBTTL MAIN PROGRAM
+	PAGE
+SETCOLOR SEGMENT PARA PUBLIC 'CODE'
+	ASSUME CS:SETCOLOR,DS:SETCOLOR,SS:SETCOLOR,ES:SETCOLOR
+;**********************************************************************
+;SETCOLOR CODE BEGINS
+;**********************************************************************
+SETCLR	PROC FAR
+START	EQU	$
+ 	MOV	AX,0040H		;SEE TECHNICAL REF. PAGE A-2
+ 					;  SEGMENT FOR EQUIPMENT FLAGS
+ 	MOV	DS,AX                   ;SET UP SEGMENT
+ 	MOV	AX,DS:[0010H]		;GET FLAGS
+  	AND 	AL,0CFH			;ZERO DISPLAYS
+     IF COLUMN EQ 80   			;TEST FOR WIDTH
+ 	OR	AL,020H			;SET COLOR MONITOR FLAG WIDTH 80
+ 	MOV	DS:[0010H],AX		;UPDATE FLAGS
+	MOV	AX,0003H		;WIDTH 80
+     ELSE
+ 	OR	AL,010H			;SET COLOR MONITOR FLAG WIDTH 40
+ 	MOV	DS:[0010H],AX		;UPDATE FLAGS
+ 	MOV	AX,0001H		;WIDTH 40
+     ENDIF
+	INT	10H			;SEE TECHNICAL REF. PAGE A-43
+					;  SET MODE
+;
+	MOV	AX,0920H		;WRITE BLANKS TO CLEAR SCREEN
+	MOV	BX,SETATTR  		;PAGE 0 AND ATTRIBUTE BYTE
+	MOV 	CX,COLUMN*25 		;CHARACTER COUNT
+	INT	10H			;SEE TECHNICAL REF. PAGE A-43
+	   				;  WRITE ATTRIBUTE/CHARACTER
+;
+	MOV	BH,0			;PALLETTE O FOR THE BORDER
+	MOV	BL,BORDER		;BORDER COLOR
+	MOV	AH,11			;SET BORDER
+	INT	10H			;SEE TECHNICAL REF. PAGE A-43
+					;  SET BORDER COLOR
+	INT   	20H			;RETURN TO DOS
+;
+;MACRO TO ALIGN ON PARAGRAPH BOUNDRY
+     IF ($-START) MOD 16
+ORG	($-START)+16-(($-START) MOD 16)
+     ENDIF
+;
+        DB	'SETCOLOR PROGRAM'
+        DB	'BOB STEPHENS    '
+        DB	'SAN JOSE, CA.   '
+        DB	'2/8/83          '
+;
+SETCLR 	ENDP
+SETCOLOR ENDS
+	END
+```
+{% endraw %}
 
 ## STARTUP.BAS
 
+{% raw %}
 ```bas
 2 KEY OFF:CLS:WIDTH 80:DEF SEG=0:A=PEEK(&H410):POKE &H410,(A AND &HCF) OR &H20
 3 WIDTH 40:SCREEN 1:SCREEN 0:LOCATE  ,,1,6,7
@@ -855,9 +1039,11 @@ machines:
 8 DEF SEG:POKE 106,0
 9 CHAIN "author2.bas"
 ```
+{% endraw %}
 
 ## TREK.BAS
 
+{% raw %}
 ```bas
 10 REM The IBM Personal Computer star trek
 15 REM Version 1.00 January 1982
@@ -1279,9 +1465,11 @@ machines:
 9600 FOR JP=1 TO 6:PLAY "mfl64t120o1;cc#dd#eff#gg#aa#b":NEXT JP:RETURN
 9650 FOR JP=40 TO 200 STEP 5:SOUND JP,2:NEXT JP:RETURN
 ```
+{% endraw %}
 
 ## ZOOSORT.BAS
 
+{% raw %}
 ```bas
 60 GOTO 75
 70 LOCATE RN%,CN%:PRINT "                                       ";:RETURN
@@ -2423,9 +2611,11 @@ machines:
 60001 WIDTH 40:SCREEN 1:SCREEN 0:LOCATE  ,,1,6,7
 60002 KEY ON:KEY OFF:CLS:WIDTH 40 'mon to col.bas pgm.
 ```
+{% endraw %}
 
 ## ZOOTIME.BAS
 
+{% raw %}
 ```bas
 20 PRINT "Please standby for a few seconds..."
 60 GOTO 75
@@ -3570,6 +3760,7 @@ machines:
 60001 WIDTH 40:SCREEN 1:SCREEN 0:LOCATE  ,,1,6,7
 60002 KEY ON:KEY OFF:CLS:WIDTH 40 'mon to col.bas pgm.
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

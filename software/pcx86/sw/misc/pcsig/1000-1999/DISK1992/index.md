@@ -49,6 +49,60 @@ machines:
     menu, and network support -- Novell or generic DOS 3.1 LAN.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1992.TXT
+
+{% raw %}
+```
+Disk No: 1992                                                           
+Disk Title: Giftbase  disk 2 of 2 (1991 also)                           
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: GIFTBASE                                                 
+Author Version: 1.1                                                     
+Author Registration: $20.00                                             
+Special Requirements: None.                                             
+                                                                        
+How do you efficiently manage the records of an organization, group, or 
+club in which members either pay dues or make occasional contributions? 
+GIFTBASE, an integrated database program that manages a list of givers, 
+tracks multiple gifts per giver, produces reports, statements, mailmerge
+files, and labels, and runs on a single user machine or a network.      
+                                                                        
+GIFTBASE has two main parts, a Master File for membership information   
+and a Gift File for contribution information which are linked through   
+this relational database.  All maintenance to the two files is done in  
+the same program by zooming between Master File and Gift File with two  
+keys.  Membership information and donation/payment information is       
+efficiently added to both files.  For example, the addition of a        
+donation in the Gift File automatically updates the YTD Total giving    
+balance in the giver's Master File.                                     
+                                                                        
+There are several reports and labels programs, such as a Master File    
+Gift Statement, a Gift Report, Phone Directories, or Master File Labels,
+with "Query-by Example" and user-defined titles for almost unlimited    
+flexibility in reporting.  Full sort capabilities by any field (such as 
+Gift Date) or within a range of records (such as within two $ amounts)  
+is supported.                                                           
+                                                                        
+Other features include record capacities of 999,999 or more in nine     
+different files, built-in security at the program level, storage of     
+unlimited notes for each giver, online help screens, a "mini-editor" for
+field editing, batch programs for global updates of all or groups of    
+records, importing and Exporting capabilities, Backup/Restore from main 
+menu, and network support--Novell or generic DOS 3.1 LAN.               
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1992
 

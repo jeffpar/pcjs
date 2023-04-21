@@ -35,6 +35,51 @@ machines:
     intense battle, save it and come back to it during your coffee break!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2430.TXT
+
+{% raw %}
+```
+Disk No: 2430                                                           
+Disk Title: Civil War Battle Set                                        
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Civil War Battle Set                                     
+Author Version: 1.1                                                     
+Author Registration: None                                               
+Special Requirements: CGA                                               
+                                                                        
+Remember when you were young and played "war" with your friends?  CIVIL 
+WAR BATTLE SET can help you relive those days, in the comfort of your   
+office, with no one else around!                                        
+                                                                        
+CIVILWAR is a one-player re-creation of various battles from the        
+American Civil War.  You may choose either side and command infantry,   
+cavalry, artillery, and general units.  Battles are affected by unit    
+type, terrain, leadership, morale, attack type, and other factors.  You 
+may modify the game difficulty and the aggressiveness of the enemy, as  
+well as visibility and artillery range.  You can "spy" on enemy troops, 
+override orders of subordinate commanders, and control intensity of     
+encounters.                                                             
+                                                                        
+CIVILSET allows you to create or modify battle scenarios, including     
+battle map, army type, strength, and other factors.  You may name units 
+according to historical battles or choose your own names.               
+                                                                        
+And, if you get interrupted during an intense battle, save it and come  
+back to it at coffee break!                                             
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2430
 

@@ -49,6 +49,63 @@ machines:
     CHAPTER  6    Text.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1160.TXT
+
+{% raw %}
+```
+Disk No  1160
+Program Title:  FUTURE SYSTEMS (Disk 1 of 2)
+PC-SIG version 1
+
+FUTURE SYSTEMS is a book about systems and the direction that the 
+author, Mark Nadir, believes they are headed.  Covering general computer 
+systems and the future design vision of author, FUTURE SYSTEMS describes 
+several types of large and small systems such as communication systems, 
+computational systems, control systems, broadcasting, business, etc. 
+
+Calling his basic methodology "Positional Transduction Methodology," Mr.
+Nadir admits that the "experts" disagree with his conclusions.  This is
+a controversial treatment of the subject for the serious reader.
+
+Usage:  Book/Reference.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $35.00
+
+File Descriptions:
+
+GO       BAT  Displays text files.
+ACK      013  Preface Text.
+ACK      014  Preface Text.
+ACK      015  Prefact Text.
+ACK      016  Preface Text.
+ACK      017  Preface Text.
+ACK      018  Preface Text.
+CONTENTS      Text of Table of contents.
+GLOSSARY      Glossary Text.
+SYNOPSIS      Synopsis Text.
+CHAPTER  1    Text.
+CHAPTER  2    Text.
+CHAPTER  3    Text.
+CHAPTER  4    Text.
+CHAPTER  5    Text.
+CHAPTER  6    Text.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1160
 

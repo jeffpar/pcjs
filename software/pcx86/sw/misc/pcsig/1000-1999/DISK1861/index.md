@@ -72,6 +72,58 @@ machines:
     these utilities.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1861.TXT
+
+{% raw %}
+```
+Disk No: 1861                                                           
+Disk Title: DStuff                                                      
+PC-SIG Version: S2.0                                                    
+                                                                        
+Program Title: DStuff                                                   
+Author Version: 5.0                                                     
+Author Registration: $25.00                                             
+Special Requirements: CGA and a hard drive is recommended.              
+                                                                        
+It's a safe bet that one or more of these DSTUFF utilities will prove   
+invaluable to programmers and other people who make their livings with  
+computers.  Serious home computer users also will benefit from these    
+speedy utilities.                                                       
+                                                                        
+D makes the DOS "DIR" command obsolete.  Using color highlights, D      
+displays directory information, sorted by file name in ascending or     
+descending order.  Switch from displaying the file size to displaying   
+the DOS file date.  Hidden files can no longer hide.  If they're on your
+hard disk, D will find them for you.                                    
+                                                                        
+DZIP displays the internal directory of members of PKWare "ZIP" files.  
+Information is displayed in groups of 58 entries.  DZIP will tell you   
+what the individual file size will be after it is uncompressed.  It can 
+display the total compressed size and the total extracted size of all   
+archived members of the file and the total disk space that will be used 
+if all members are compressed or uncompressed.                          
+                                                                        
+DARC displays the internal structure of SEA "ARC" files and provides the
+same type of functions as DZIP, except that it does not provide the     
+uncompressed individual file sizes.                                     
+                                                                        
+DDBASe displays the structure information of any valid DBASe III or     
+DBase III+ ".DBF" file.                                                 
+                                                                        
+Users of any of these programs will find their lives made just a little 
+easier with these utilities.                                            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1861
 

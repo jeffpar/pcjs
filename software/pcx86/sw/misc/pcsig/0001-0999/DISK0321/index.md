@@ -71,6 +71,7 @@ machines:
 
 ## BIORYTHM.BAS
 
+{% raw %}
 ```bas
 5      REM * BIORHYTHM PROGRAM *
 10 WIDTH "lpt1:",132
@@ -189,9 +190,11 @@ machines:
 960     INPUT "Do you want another Biorhythm";A$:IF LEFT$(A$,1)="Y" OR LEFT$(A$,1)="y" THEN CLEAR 2000:P=0:GOTO 60
 970     END
 ```
+{% endraw %}
 
 ## CALENDAR.BAS
 
+{% raw %}
 ```bas
 10 ' CALENDAR
 20 ' Program by Marty Smith, 310 Cinnamon Oak Lane, Houston, TX 77079
@@ -387,9 +390,11 @@ machines:
 4310 ' CLOSE #1
 4320 RETURN
 ```
+{% endraw %}
 
 ## CAS-REEL.BAS
 
+{% raw %}
 ```bas
 10000 DEFINT N,M:COLOR 7,0:KEY OFF:SCREEN O,O,O:WIDTH 80:WIDTH "LPT1:",255
 10100 CLS:PRINT "CAS-REEL.BAS  (C) 1983 by Michael Csontos, 3228 Livonia Ctr. Rd., Lima, NY 14485"
@@ -441,9 +446,75 @@ machines:
 14600 DATA "15/16",.9375,"1-7/8",1.875,"3-4/4",3.75,"7-1/2",7.5,"15",15
 14700 '   SAVE"CAS-REEL",A
 ```
+{% endraw %}
+
+## FILE0321.TXT
+
+{% raw %}
+```
+Disk No:  321
+Program Title: HOME APPLICATIONS
+PC-SIG version: 3
+
+HOME APPLICATIONS has such a wide range of programs that almost everyone
+will find something of interest.  You can track everything from your
+biorhythm to hurricanes.
+
+Of special interest is the HOME inventory program which lets you keep a
+record of all your possessions.  This can be very useful for insurance
+purposes.
+
+WEATHER displays records stored in a weather database and to calculate
+statistics from the database.  With this program you can make your own
+weather reports.
+
+Usage:  General Applications for the Home.
+
+Special Requirements:  A version of BASIC is needed to run most of these
+programs.
+
+How to Start:  Type GO (press enter).  To load BASIC programs, refer to
+your BASIC manual.
+
+Suggested Registration:  None specified.
+
+File Descriptions:
+
+AC       EXE  Area Code Finder Program.
+AC       C    Source code for Area Code finder program.
+BIORYTHM BAS  Program to determine Biorythms.
+CALENDAR BAS  Prints Monthly Calendars from 1583 to 4046.
+CAS-REEL BAS  Provides timing information for reel to cassette.
+GUITAR   BAS  Guitar Tuning Program.
+HAIKU    BAS  Generates Random Haiku's.
+HOME-INV BAS  Program for Home Inventory Tracking.
+HOME-INV DAT  Data for HOME-INV.
+HOME-INV DOC  Documentation for HOME-INV.
+INSAT    BAS  Calculates Aiming Angles for Satellites.
+SOUNDEFF BAS  Sound Effects Generation Program.
+WEA0000  DAT  A weather database template.
+WEA1984  DAT  A sample weather database.
+WEA1985  DAT  A sample weather database.
+WEA1986  DAT  A sample weather database.
+WEA1987  DAT  A sample weather database.
+WEA1988  DAT  A sample weather database.
+WEA1989  DAT  A sample weather database.
+WEATHER  ASC  A text file on weather measurement units.
+WEATHER  DOC  The user's manual.
+WEATHER  EXE  The weather records and statistics program.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
 
 ## GUITAR.BAS
 
+{% raw %}
 ```bas
 1 COLOR 7,0
 2 'Program by Ed Cummins  Atlanta  IBM PC Club
@@ -497,9 +568,11 @@ machines:
 14000 LOCATE 18,5:PRINT "5","A";:PRINT:RETURN
 15000 LOCATE 20,5:PRINT "6","E";:PRINT:RETURN
 ```
+{% endraw %}
 
 ## HAIKU.BAS
 
+{% raw %}
 ```bas
 10 ' Program by John Krutch
 20 ' copied from "Experiments in Srtificial Intelligence for Small Computers"
@@ -669,9 +742,11 @@ machines:
 1660 '    E. PREPOSITIONS
 1670 DATA ON,IN,OF,UNDER,OVER,NEAR
 ```
+{% endraw %}
 
 ## HOME-INV.BAS
 
+{% raw %}
 ```bas
 10 'CLS:INPUT "CHANGE LINE 1020 TO YOUR NAME AND ADDRESS. THEN DELETE LINE 10. PRESS ENTER TO    CONTINUE",DUMMY$
 20 '***********************************************************************
@@ -876,9 +951,42 @@ machines:
 2010 KILL "TEMP.DAT"
 2020 GOTO 1800
 ```
+{% endraw %}
+
+## HOME-INV.DOC
+
+{% raw %}
+```
+
+
+
+
+                HOME INVENTORY PROGRAM
+
+     This program allows you to keep a list of your possesions on your
+computer. It is completely menu driven and used easy screen input for
+data entry. It prints the inventory on an Epson MX-80 (or equivalent)
+printer.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
 
 ## INSAT.BAS
 
+{% raw %}
 ```bas
 11 '*    INTELSAT/BAS   Vers S1.0    8/27/84
 12 '*    Sanyo BASIC conversion by Wayne Day
@@ -987,9 +1095,11 @@ machines:
 960 DATA 999,END
 970 'ELSAT V-F6,14.5,GORIZONT
 ```
+{% endraw %}
 
 ## SOUNDEFF.BAS
 
+{% raw %}
 ```bas
 210 KEY OFF
 220 WIDTH 80
@@ -1186,6 +1296,265 @@ machines:
 1194 GOSUB 900:IF QUIT=1 THEN RETURN
 1196 GOTO 1192
 ```
+{% endraw %}
+
+## WEATHER.DOC
+
+{% raw %}
+```
+******************************************************************************
+*                                                                            *
+*                               USER'S MANUAL                                *
+*                                    FOR                                     *
+*                            THE WEATHER PROGRAM                             *
+*                                                                            *
+*                                Version 1.8                                 *
+*                                                                            *
+*                                                                            *
+*              To Display Records Stored in a Weather Database               *
+*            To Calculate Statistics Calculated from the Database            *
+*                                                                            *
+*                                                                            *
+*         Copyright 1985-89 Martin E. Morrison.  All rights reserved.        *
+*                 136 Loma Verde Drive, San Lorenzo, CA 94580                *
+*                         Telephone:  (415) 276-8652                         *
+*                          CompuServe ID:  70315,101                         *
+*                                                                            *
+*                           Public-Domain Software                           *
+*                                                                            *
+******************************************************************************
+
+
+                                   The Files
+                                   ---------
+
+WEATHER consists of the following files:
+
+     WEA0000.DAT   A weather database template
+     WEA1984.DAT   A sample weather database
+     WEA1985.DAT   A sample weather database
+     WEA1986.DAT   A sample weather database
+     WEA1987.DAT   A sample weather database
+     WEA1988.DAT   A sample weather database
+     WEA1989.DAT   A sample weather database
+     WEATHER.ASC   A text file on weather measurement units
+     WEATHER.DOC   This user's manual
+     WEATHER.EXE   The Weather Program                           
+
+
+
+                                 Using WEATHER
+                                 -------------
+
+WEATHER.EXE is the executable file that is run directly from the DOS prompt.
+You should make sure that any annual weather datafiles you intend to use
+(explained under "The Annual Weather Datafiles" below) are resident with 
+WEATHER.EXE on your current device and directory.
+
+WEATHER first displays the Options Menu as follows:
+
+     (1) Display or print weather records
+     (2) Display or print weather statistics
+     (3) Exit
+
+IF YOU SELECT OPTION 1 OR 2, WEATHER first asks you to input the name of the
+annual weather datafile to be used.  (As explained under "The Annual Weather
+Datafiles" below, the weather data for each calendar year should be stored in
+a separate file with a filename you designate.)  If you input a filename that
+does not exist, WEATHER warns you with a beep and a "***FILE NOT FOUND***"
+message and then return you to the Options Menu.  If you enter a carriage
+return without inputting a filename, WEATHER returns you to the Options
+Menu.
+
+WEATHER then displays the "Reading records in from file [filename]" message
+and displays the date of each record as it is read in, so that you can follow
+the progress of reading in the records.  If you see any errors (e.g., dates in
+the wrong format or extraneous characters) as the display increments or if you
+receive an "Input past end" error message, check at the date where the error 
+occurred for typographical errors, particularly punctuation errors, in the 
+annual weather datafile you used.  If you receive an "Input past end" error 
+message after the last date, check the end of your datafile for the presence
+of more than one carriage return (blank lines) after the last line of data.
+
+WEATHER then prompts you for the following information:
+
+     Input starting date (YY-MM-DD)
+     Input ending date (YY-MM-DD)
+     Input city location (10 letters maximum)
+     Input state location (2-letter state code)
+     Printout also (yes/NO)
+
+Since WEATHER searches for the dates in ASCII order, you need enter only YY or
+YY-MM, if you desire a year or year-month combination.  However, you must
+enter leading zeros (e.g., 86-03-04).  If you enter a carriage return at the
+"Input starting date" prompt, WEATHER returns to the Options Menu.  If you
+enter a carriage return at the "Input ending date" prompt, WEATHER reprompts
+for the starting date.  The printout default is "no" (display on monitor
+screen only).
+
+IF YOU SELECTED OPTION 1, WEATHER displays or prints the following fields
+from the database for each record between the starting and ending dates:
+
+     Date
+     Low Temperature
+     Time of Low Temperature
+     High Temperature       
+     Time of High Temperature  
+     Atmospheric Pressure
+     Rainfall
+
+IF YOU SELECTED OPTION 2, WEATHER calculates and displays or prints the
+following statistics from the database for the records between the starting
+and ending dates.  The accuracy of the statistics is, of course, dependent
+upon the completeness of the records entered into the database):
+
+     Extreme Low Temperature (with date and time of day)
+     Extreme High Temperature (with date and time of day)
+     Extreme Low Pressure (with date)
+     Extreme High Pressure (with date)
+     Extreme High Rainfall (with date)
+     Average Low Temperature (with average time of day)
+     Average High Temperature (with average time of day)
+     Average Atmospheric Pressure
+     Average Rainfall
+     Total Rainfall
+
+IF YOU SELECT OPTION 3, WEATHER exits to DOS.
+
+IF YOU SELECT ANY OTHER OPTION NUMBER, WEATHER warns you with a beep and an
+"*** OPTION NUMBER INVALID ***" message and allows you to input another
+option number.
+                                 
+
+
+                         The Annual Weather Datafiles
+                         ----------------------------
+
+The files named WEA19nn.DAT, consisting of the weather data for Hayward, 
+California, for each of the years indicated in the filename, are supplied as 
+samples to demonstrate the format for entering data into an annual weather 
+datafile to be used by WEATHER.  This file is a standard ASCII file that may
+be listed using the DOS TYPE command.
+
+Because of restrictions on string space imposed by the IBM BASIC Compiler, the
+weather data for each calendar year should be stored in a separate file under
+a name you designate for each (e.g., WEA1984.DAT).  It is possible to maintain 
+annual weather datafiles for more than one location; however, each location's
+annual datafile must be maintained separately under a different filename, and
+only one location's annual datafile may be used by WEATHER at a time.
+
+First, inspect the sample file, which is an ASCII file, by using the DOS
+TYPE command.  Then, observe WEATHER's operation by running it and inputting
+WEA1984.DAT when prompted to input the name of the annual weather datafile to
+be used.
+
+As your annual weather datafiles must be ASCII files, you may enter them by
+using EDLIN (the DOS line editor), WordStar's non-document mode, or any
+other editor that produces an ASCII file consisting only of letters, numbers, 
+and punctuation.  You should particularly note the following requirements for
+entering data:
+
+     * You must enter each day's record serially, earliest date first, in
+       exactly the same format as the sample file with respect to spacing,
+       punctuation, etc.
+
+     * You must enter the abbreviation "n/a" ("not available") when you are
+       missing any value.  (WEATHER interprets the special case of a "not-
+       available" Rainfall value as a "000.0" value.)
+
+     * You must not enter extra spaces at the end of a line before the
+       carriage return or enter extra carriage returns (blank lines) after the
+       last line of data.
+
+A template file (WEA0000.DAT) is provided for entering 366 days of weather 
+records into an annual weather datafile.  Use the DOS COPY command to create a
+new year's annual weather datafile, e.g., COPY WEA0000.DAT WEA1980.DAT.
+Values may then be entered into the pre-formatted fields.
+
+
+
+                                 The Units Used
+                                 --------------
+
+WEATHER is programmed so that all data need to be stored, displayed, and
+printed in SI (International System) Metric units, as recommended by the
+International Standards Organization (ISO) and the American National Standards
+Institute (ANSI) and as approved by U.S. National Weather Service.  Further
+information on SI Metric units is provided in the WEATHER.ASC file.
+
+The units are as follows:
+
+     Dates:  YY-MM-DD format
+     Times:  HH:MM format using a 24-hour clock
+     Temperatures:  degrees Celsius (to one decimal place)
+     Pressures:  kilopascals (to three decimal places)
+     Rainfall:  millimetres (to one decimal place)
+
+If your instruments do not give readings in SI Metric units, you must convert 
+your readings to SI Metric units before entering them into your annual weather
+datafile.  The conversion formulae are as follows:
+
+     Degrees Fahrenheit to Degrees Celsius:  (X-32)*5/9
+     Millibars to Kilopascals:  X/10
+     Inches of Mercury to Kilopascals:  X*3.386389
+     Inches to Millimetres:  X*25.4
+
+Two excellent instruments that do give readings in SI Metric units are
+available through the Edmund Scientific Catalog, 101 East Gloucester Pike,
+Barrington, NJ 08007.
+
+     COMPUTEMP.  Monitors indoor and outdoor temperature and time of day.
+     Records the day's high and low temperatures in degrees Celsius and the
+     time they occurred.  Catalog No. H61,236.  $79.95.
+
+     DESK BAROMETER.  Calibrated in millibars (hectopascals), which can easily
+     be converted to kilopascals by dividing by 10.  Gilded case has a 100-mm 
+     silver dial with black numerals and gold set-band.  Catalog No. H41,951.
+     $19.95.
+
+
+                                  Bibliography
+                                  ------------
+
+
+                                Limited License
+                                ---------------
+
+This Limited License is granted to users of WEATHER to use this software on a 
+private, non-commercial basis and to make copies of this software and 
+distribute them to other users, on the following conditions:
+
+(1) Copies are to comprise all files on the disk.  None of the individual
+    files is to be used, copied, or distributed apart from the whole software
+    package.
+
+(2) No "disk fee" or other consideration is to be charged for copying or
+distributing the software, except a small fee for shipping and materials.
+
+(3) The notices displayed at program start-up are not to be bypassed, altered,
+or removed.  
+
+(4) This software is not to be distributed in modified form or in connection
+with any other product.
+
+(5) Copies may be posted for access via telecommunications, but only on these
+same conditions.
+
+(6) The user accepts that this software package is furnished on an "as-is"
+basis with no warranty of merchantibility or fitness for a particular purpose.
+
+Any use, copying, or distribution of this software indicates the user's
+acceptance of these terms and conditions.  This software may not be used,
+copied, or distributed in any manner not provided for in this Limited License,
+except with prior written authorization of the copyright owner.  Any violation
+of one or more of these conditions is legally punishable as an infringement of
+copyright.
+
+PLEASE SHOW YOUR SUPPORT OF THE USER-SUPPORTED SOFTWARE CONCEPT BY ABIDING BY 
+THE TERMS OF THIS LIMITED LICENSE.
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -50,6 +50,70 @@ machines:
     playing game, but also can be an extension of your own imagination.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1131.TXT
+
+{% raw %}
+```
+Disk No: 1131
+Disk Title: DNDBBS 1 of 2 (1676 also)
+PC-SIG Version: S2
+
+Program Title: DNDBBS
+Author Version: 2.6B
+Author Registration: $15.00
+Special Requirements: 384K RAM and a modem.
+
+DUNGEONS AND DRAGONS BULLETIN BOARD SYSTEM creates an entire new world
+on your computer and lets people call in through a modem and play DNDBBS
+via the telephone lines.
+
+DNDBBS can operate by itself on the modem, as a part of another
+bulletin board system, or as a single-user game on the computer.
+Instructions are included for making this program an on-line game in a
+door of an RBBS.  DNDBBS already has a world created for people to
+play in, but the system is expandable.  You, as dungeon master, can edit
+and create more scenarios, rooms, treasures, and monsters, just like the
+game itself.
+
+Players who call in enter their name and password, and if calling for
+the first time they can create their own character.  Character classes
+include fighter, magic user, cleric, thief, ranger, paladin, druid, and
+dungeon master (you, of course).  Assistant dungeon masters are allowed
+to help you manage the system.  Before players begin the adventure, some
+welcome and notice files are displayed on the screen to introduce the
+game.  Players can then explore, kill monsters, cast spells, find
+treasure, etc.  When a player character dies, he is resurrected by the
+high priests in the clerical sanctuary, and can then enter the adventure
+again, but with decreased character abilities.  As dungeon master, you
+are given some additional powers, such as the ability to teleport any
+player to any room while the user is on-line, edit or delete users, make
+a player invisible (thus invulnerable to all monster attacks), and
+configure log-on and general system parameters for the game.
+
+DNDBBS not only makes it much easier to manage and play a fantasy role-
+playing game, but also can be an extension of your own imagination.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+```
+{% endraw %}
+
+## FILES.TXT
+
+{% raw %}
+```
+DNDBBS V2.6B DISKETTE NUMBER ONE CONTAINS THE FOLLOWING FILES:
+DNDEXE.ZIP   THE DNDBBS EXECUTABLE FILES
+INSTALL.BAT  BATCH PROGRAM TO INSTALL BOTH DISKS
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1131
 

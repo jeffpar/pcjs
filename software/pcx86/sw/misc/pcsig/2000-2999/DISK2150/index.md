@@ -42,6 +42,53 @@ machines:
     inhabitants.  A treat for all ages.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2150.TXT
+
+{% raw %}
+```
+Disk No: 2150                                                           
+Disk Title: Hugo's House of Horros                                      
+PC-SIG Version: 1.1                                                     
+                                                                        
+Program Title: HUGO'S HOUSE OF HORROR                                   
+Author Version: 1.3                                                     
+Author Registration: $20.00                                             
+Special Requirements: 360K, EGA or VGA, and Hard Drive.                 
+                                                                        
+If you are looking for an exciting, fun filled game, HUGO's HOUSE OF    
+HORRORS will fit the bill.  Take your hero through an animated          
+adventure, solving puzzles, finding hidden objects, and rescuing the    
+sweet Penelope from the hosts of the demonic mansion.  At the same      
+time stay alive and don't let yourself be turned into dog food!  The    
+graphics are fantastic!                                                 
+                                                                        
+David P. Gray creates a colorful and challenging world for the player.  
+Full moving character pix, furnished rooms, hidden doors, a mad         
+doctor, a vicious dog, and much more await any enthusiastic             
+adventurer.  Maneuver your character with the arrow keys while simple   
+written commands let you take and use items, search and talk.  As you   
+solve the puzzles your score increases and is compared to the total     
+score possible with the game.  For registered users a free hintbook is  
+available as well as the capability to playback games which you         
+accomplished.                                                           
+                                                                        
+Similar in concept to LucasFilm's Maniac Mansion, HUGO'S HOUSE OF       
+HORRORS, though less complex, is as easy to use and as much fun.  You   
+will be glued to the screen for hours as you track your way through     
+the haunted halls trying to save your sweetheart from the crazed        
+inhabitants.  A treat for all ages.                                     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989, 1990 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2150
 

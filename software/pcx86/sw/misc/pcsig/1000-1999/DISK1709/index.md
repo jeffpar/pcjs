@@ -39,6 +39,69 @@ machines:
     programs for the dead of night or other slow times.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1709.TXT
+
+{% raw %}
+```
+Disk No: 1709
+Disk Title: Nifty (formerly on 1225)
+PC-SIG Version: S1
+
+Program Title: Nifty
+Author Version: 2.1
+
+NIFTY helps new and casual PC users to create personalized menus to run
+programs, copy, or read files, and do other computer tasks at the touch
+of a key.  It even offers password protection to submenus.
+
+Memory-resident, NIFTY can be called up from DOS or popped-up by
+pressing a hotkey.  When called, a help lifejacket splashes onto the
+screen ready to save the new PC user faced with a formidable array of
+programs and a flat learning curve.
+
+You can make easy-to-use menus that allow novices to quickly perform
+complicated computing tasks with little or no training.  On-screen help
+files can be inserted to guide even the ``first day'' user through any
+computerized office operation.  Passwords and security levels are
+available to control access to submenus.
+
+Automatic program scheduling is another useful feature; you can set
+timers to cue and begin processing long or slow sorting and processing
+programs for the dead of night or other slow times, such as weekends.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+This disk holds:
+
+         Nifty, a combination DOS menu/pop-up help system
+
+IT IS IMPORTANT THAT YOU READ AND COMPLY WITH THESE SIMPLE INSTRUCTIONS.  DO
+NOT INSTALL EITHER PROGRAM IN ANY MANNER DIFFERENT FROM WHAT IS DESCRIBED
+BELOW.
+
+
+NIFTY is also contained in a self-extracting archive file: NFTY.EXE.  To load
+NIFTY onto your hard disk and print its instructions, place this disk into
+drive A and enter "A:INSTNFTY A: C:" (assuming that your hard disk is drive C).
+The program will be automatically placed into a NIFTY directory on your hard
+disk.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1709
 

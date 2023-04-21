@@ -48,6 +48,58 @@ machines:
     and again.  You can load them singly or in groups.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1457.TXT
+
+{% raw %}
+```
+Disk No: 1457                                                           
+Disk Title: PC-Write Macros                                             
+PC-SIG Version: S1.3                                                    
+                                                                        
+Program Title: PC-Write Macros                                          
+Author Version: 1.3B                                                    
+Author Registration: $10.00                                             
+Special Requirements: PC-WRITE 3.0 or later.                            
+                                                                        
+PC-WRITE devotees will enjoy a macro feast with this collection designed
+for shareware's most popular wordprocessor.  You also get a mass of     
+information and three tutorials to educate you on macros -- their care  
+and feeding.                                                            
+                                                                        
+PC-WRITE MACROS offers 100 special commands for PC-Write and helps you  
+place them on the keys of your choice.  You will gain greater power and 
+convenience with many commands not found in PC-Write or any other       
+wordprocessor.  With PC-WRITE MACROS you can:                           
+                                                                        
+~ "Grab" an address block from a letter and print it on an envelope.    
+                                                                        
+~ Reverse the video on your mono or single-color monitor so it shows    
+dark text on a light background.                                        
+                                                                        
+~ Set up margins, ruler, spacing, all in an instant.                    
+                                                                        
+~ Mark, delete, or transpose an entire sentence or paragraph witha      
+single keystroke.                                                       
+                                                                        
+~ Store deleted text in a special file, ready for retrieval at any time.
+                                                                        
+~ Begin continuous printing with one stroke.                            
+                                                                        
+A choice of four versions of keyboard and keypad options are provided.  
+You can load macros as you need them or keep them in memory to use again
+and again.  You can load them singly or in groups.                      
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1457
 

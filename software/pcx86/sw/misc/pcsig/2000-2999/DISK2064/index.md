@@ -25,6 +25,45 @@ machines:
     good considering it doesn't use anything other than ASCII characters.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2064.TXT
+
+{% raw %}
+```
+Disk No: 2064                                                           
+Disk Title: Liberty Bell Slot and Wheel                                 
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Liberty Bell Slot and Wheel                              
+Author Version: 08/89                                                   
+Author Registration: $7.95 for LBS.                                     
+Special Requirements: 448K RAM.                                         
+                                                                        
+Here are a couple of fun video games that don't require graphics of     
+any kind--they use all ASCII characters to create a slot machine and a  
+"Wheel-of-Fortune" type guessing game.                                  
+                                                                        
+LIBERTY BELL SLOT is very simple, you pull the handle and watch three   
+barrels roll.  Match numbers three across and score points.  The sound  
+and action is very much like an actual slot machine.  The graphics are  
+good considering it doesn't use anything other than ASCII characters.   
+                                                                        
+TECHSTAFF's WHEEL is an excellent version of the popular TV game show.  
+You spin the wheel (actually a bar in this game) and watch the dollar   
+values, ``free spin'', and ``lose a turn'' markers slide by. You choose 
+vowels and consonants until you can solve the puzzle being displayed at 
+the top of the screen.  Everything but Vanna White.                     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2064
 

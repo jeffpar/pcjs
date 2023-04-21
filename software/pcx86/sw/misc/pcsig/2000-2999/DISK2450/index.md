@@ -42,6 +42,56 @@ machines:
     both free.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2450.TXT
+
+{% raw %}
+```
+Disk No: 2450                                                           
+Disk Title: MBW, Horse, YingYang and others                             
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: MBW                                                      
+Author Version: 1.1                                                     
+Author Registration: None.                                              
+Special Requirements: Windows 3.0                                       
+                                                                        
+Fractals generators are among the most popular shareware programs, and  
+MBW is sure to become a hot item with Windows users.  MBW creates       
+fractals from a Mandelbrot set working out of its own window.           
+                                                                        
+You can zoom in on any part of the image, and watch it form a new       
+fractal, which you can save and use at a later time. Other options      
+include color settings, iteration limits, scaling, and drawing extents. 
+                                                                        
+If you have Windows and would like to see some neat fractal images, MBW 
+is a must.                                                              
+Program Title: Horse & YingYang                                         
+Author Version: 1.0                                                     
+Author Registration: None.                                              
+Special Requirements: Windows 3.0                                       
+                                                                        
+Here are more programs that look hip on your Windows display.  HORSE    
+places a galloping horse in a small window.  Unlike Horse.tbk which     
+appeared on a developers toolbox, HORSE does not even come close to     
+putting strain the system.  An interesting side note is that the        
+original drawings used to create the horse date back to the 1800's.     
+YINGYAN draws a symbol, part ying-yang part floppy disk, and prints a   
+koan from the book "The Zen of Programming".                            
+                                                                        
+And these two Windows programs won't set you back financially--they are 
+both free.                                                              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2450
 

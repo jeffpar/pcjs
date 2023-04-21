@@ -81,6 +81,69 @@ machines:
     SCANCHEK EXE  Keyboard testing program.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0042.TXT
+
+{% raw %}
+```
+Disk No:   42                                                           
+Disk Title: Kermit 
+PC-SIG Version: S3.3                                                    
+                                                                        
+Program Title: KERMIT                                                   
+Author Version: 3.0                                                     
+Author Registration: $29.95                                             
+Special Requirements: Modem.                                            
+                                                                        
+KERMIT implements a file transfer protocol for the MS/PC-DOS operating  
+system family.  The package has a complete program for IBM-specific     
+machines, as well as generic MS-DOS selections.  The Assembly language  
+source code comes with the package.                                     
+                                                                        
+KERMIT performs almost complete emulation of the DEC VT-102 terminal at 
+speeds up to 19,200 baud.  Full-speed 9600 baud operation is possible on
+4.77Mhz systems.  KERMIT is a popular file transfer protocol on many    
+mini and mainframe computers, used daily in schools, colleges and many  
+businesses.                                                             
+                                                                        
+Features:                                                               
+                                                                        
+~ Local operation                                                       
+                                                                        
+~ Remote operation                                                      
+                                                                        
+~ Binary file transfer                                                  
+                                                                        
+~ Filename collision avoidance                                          
+                                                                        
+~ Wildcard sending                                                      
+                                                                        
+~ Eigth-bit and repeat-count prefixing                                  
+                                                                        
+~ Time out                                                              
+                                                                        
+~ Alternate block checks                                                
+                                                                        
+~ Terminal emulation                                                    
+                                                                        
+~ Session logging                                                       
+                                                                        
+~ Local file management                                                 
+                                                                        
+~ Advanced commands for servers                                         
+                                                                        
+~ Command macros                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0042
 

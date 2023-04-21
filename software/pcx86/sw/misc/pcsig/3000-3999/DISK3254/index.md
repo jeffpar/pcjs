@@ -14,6 +14,51 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE3254.TXT
+
+{% raw %}
+```
+PROGRAM TITLE
+Icy Metal
+SHORT DESCRIPTION
+This game attempts with every screen to acclimate the user to cold
+metallic scenery.  The game places a premium on quick thinking and
+reflexes, but its real purpose is to provide players with sensory
+enjoyment.
+
+PROGRAM DESCRIPTION
+This game attempts with every screen to acclimate the user to cold
+metallic scenery.  The game places a premium on quick thinking and
+reflexes, but its real purpose is to provide players with sensory
+enjoyment.
+
+```
+{% endraw %}
+
+## ICYMETAL.DOC
+
+{% raw %}
+```
+
+
+      This shareware game requires 256-color VGA graphics (320 x 200 pixels),
+  a mouse, and a computer with CPU speed 10 megahertz or faster.  It attempts
+  with every screen to acclimate the user to cold metallic scenery.  The game
+  places a premium on quick thinking and reflexes, but its real purpose is to
+  provide players with sensory enjoyment.
+
+      Bob Mandel
+      Lewis and Clark College
+      Box 96
+      Portland, OR 97219 USA
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3254
 

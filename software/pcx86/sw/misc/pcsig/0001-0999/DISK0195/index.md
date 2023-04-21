@@ -73,6 +73,7 @@ machines:
 
 ## COLOR.BAS
 
+{% raw %}
 ```bas
 1000 '  COLOR           May 17,1984             Bob Shannon
 1010 '
@@ -135,9 +136,11 @@ machines:
 1580 '
 1590 SYSTEM
 ```
+{% endraw %}
 
 ## CONVERT.BAS
 
+{% raw %}
 ```bas
 1000 '
 1010 '  CONVERT         21 Feb 1985             Bob Shannon
@@ -196,9 +199,11 @@ machines:
 3000 CLOSE #1
 3010 '
 ```
+{% endraw %}
 
 ## DEMOSUB.BAS
 
+{% raw %}
 ```bas
 1000 '
 1010 '  DEMO            21 Feb 1985             Bob Shannon
@@ -259,9 +264,11 @@ machines:
 1560 A$=INKEY$:IF A$="" THEN 1560 ELSE STOP
 1570 '
 ```
+{% endraw %}
 
 ## KEYDEF.BAS
 
+{% raw %}
 ```bas
 1000 '   ***KEYDEF    - DOS key reassign program  by Michael L. O'Neill
 1010 '           PC Magazine May 29,1984  Page 387-388
@@ -416,9 +423,11 @@ machines:
 2510 CLOSE 2
 2520 RETURN
 ```
+{% endraw %}
 
 ## LOGOFF.BAS
 
+{% raw %}
 ```bas
 1000 '
 1010 '----------------------------------------------------------------
@@ -522,9 +531,11 @@ machines:
 1980 CLOSE #1
 1990 GOTO 1700
 ```
+{% endraw %}
 
 ## LOGON.BAS
 
+{% raw %}
 ```bas
 1000 '
 1010 '----------------------------------------------------------------
@@ -707,9 +718,11 @@ machines:
 2720 CLOSE #1
 2730 GOTO 1770
 ```
+{% endraw %}
 
 ## LOGPRINT.BAS
 
+{% raw %}
 ```bas
 1000 '
 1010 '----------------------------------------------------------------
@@ -793,9 +806,551 @@ machines:
 1675 SYSTEM
 1680 END
 ```
+{% endraw %}
+
+## PC-GRAF.DOC
+
+{% raw %}
+```
+___________________________________________________________________
+*
+*
+*           ****    ***         ***   ****       *    ******               
+*           *   *  *   *       *   *  *   *     * *   *                  
+*           ****   *      ***  *      ****     *   *  ****               
+*           *      *           * ***  *   *   ******* *                  
+*           *      *   *       *   *  *    *  *     * *                   
+*           *       ***         ***   *     * *     * *                     
+*                                                                
+*
+*
+*                ==================================
+*                !  PC - GRAF     DOCUMENTATION   !
+*                ==================================
+*
+*
+*       20 Feb  1985               Versions 2, 3, and 4
+*__________________________________________________________________
+
+          
+                   Bob Shannon
+                   228 Tulare St.
+                   Brisbane, California 94005
+              
+                    <INTRODUCTION>
+
+     PC - GRAF  is a BASIC 2.0 program to plot line drawing type
+figures on the graphics screen of the IBM-PC computer.  The 
+different versions of the program have more features, but trade
+features off at the expense of compatability and speed.  The
+program allows arbitrary specification of the X and Y axes on 
+the figure, linear or logarithmic axes, and labeling.  The
+specifications of the plot may be entered from the keyboard
+or from a disk file.  The data may also be entered from the
+keyboard or disk file.  Both data and specifications may be
+edited interactively from the two menu displays.
+The edited data or specs may be saved in
+the original or in a new disk file.  Up to five (5) sets of
+data can be plotted on the same figure.  Each set may have 
+its own symbol type, symbol size, and type of line connecting
+the points.
+
+A help screen can be switched on and off by hitting the
+combination ALT-H .  When toggled ON, the
+functions of the 10 function keys are displayed along
+the right side of the screen during the
+specifications menu and the data display menu.
+
+The three versions of the program - 2, 3, and 4 that are on this
+disk each have different characteristics, but all function in
+a similiar manner. 
+
+	1.  PC - GRAF2 is the fastest and most IBM bound
+	version.  This version was written using the BASIC 2.0 commands
+	VIEW and WINDOW.  These commands are not supported by the
+	MICROSOFT BASIC COMPILER or by other versions of BASIC.
+	Thus, this version will only run on fully IBM compatable
+	machines and cannot be compiled.  The plots are limited to
+	high resolution (640x200) in black and white.  The
+	subroutine SUBGRAF2 is the actual plotting code, written as a 
+	BASIC subroutine.  You may set up the plot parameters in 
+	your own applications program and merge with SUBGRAF2.
+	Then simply GOSUB 60000 when you want the plot.
+
+	2.  PC - GRAF3 adds the capability to plot in color to
+	PC-GRAF2.  The user has the option of selecting either a
+	hi resolution plot (640x200) in black and white, or a
+	medium resolution (320x200) in four colors.  The subroutine
+	SUBGRAF3 was written without the VIEW and WINDOW commands, so
+	that it will run on many not-so-compatable machines, and
+	can theoretically be compiled.
+
+	3.  PC - GRAF4 adds the ability to plot on the SWEET-P pen
+	plotter or EPSON(COMREX) COMSCRIBER I plotter.  Once the plot
+	is composed satisfactorilly on the screen, it can be output
+	on the pen plotter in higher resolution than is possible
+	on the screen.  The SWEET-P has a resolution of 250 points
+	per inch.
+
+Additional documentation can be found in the comments at the 
+beginning of each program and each subroutine.
+
+
+__________________________________________________________________
+
+
+			GETTING STARTED
+
+PC - GRAF is written in IBM PC BASIC 2.0 that comes with DOS 2.0.
+To run the program first copy DOS 2.0 or higher, and BASICA.COM
+onto a disk.  Then copy the version of PC - GRAF that you will use 
+onto the that same disk.  Then, with the disk containing DOS, BASICA,
+and PC-GRAF in the default drive, type BASICA PC-GRAF4 (or 2 or 3)
+in response to the DOS prompt.  The program is not copy protected
+and you are encouraged to distribute the original program to all
+your friends.  
+
+
+                    <Program Control>
+
+     The program PC - GRAF is controlled with the 10 function keys
+at the left side of the IBM keyboard.  These keys can be used to
+jump from any screen in the program to any other screen. The three
+main screens are obtained when the following function keys are used:
+
+     1. (F9) The Specifications Menu - sets up the plot parameters
+     2. (F10) The data display - displays the current data set
+     3. (F1) The plot
+
+These three screens can be reached at any time by hitting the 
+appropriate function key.  Other function keys are used to
+read and write the current data or specifications to a disk
+file, one exits the program to DOS, and two control which data
+set is selected.  Below is a schematic display of the 10 function 
+keys and their use in controlling PC - GRAF.  You may have to hit 
+the enter key after the function key to activate the desired
+function.  If the program is paused waiting for input that requires
+a return, then a return is necessary to activate the function also.
+If the program is paused waiting for any single keystroke, or if
+it is writing on the screen, then hitting a function key will
+immediately activate the function.
+
+
+               -------------------------------
+               |F1            |F2            |
+               |              |              |
+               |   PLOT the   |   EXIT to    |
+               |    figure    |     DOS      |
+               |              |              |
+               |              |              |
+               -------------------------------
+               |F3            |F4            |
+               |              |              |
+               |   Decrement  |  Increment   |
+               |   data set   |  data set    |
+               |   number     |  number      |
+               |              |              |
+               -------------------------------
+               |F5            |F6            |    
+               |     Read     |    Write     |
+               |Specifications|Specifications|
+               |   in from    |    out to    |
+               |   disk file  |  disk file   |
+               |              |              |
+               |              |              |
+               -------------------------------
+               |F7            |F8            |
+               |  Read data   |  Write data  |
+               |  in from     |   out to     |
+               |  disk file   |  disk file   |
+               |              |              |
+               |              |              |
+               |              |              |
+               -------------------------------
+               |F9            |F10           |
+               |              |              |
+               |    Go to     |    Go to     |
+               |Specifications|    Data      |         
+               |    menu      |    display   |
+               |              |              |
+               |              |              |
+               -------------------------------      
+		Alt-H  Help Toggle
+		Alt-P  Pallette color toggle
+		Alt-B  Background color increment
+
+__________________________________________________________________
+
+
+                    <ORGANIZATION>
+
+     The program is organized in two sections : PC - GRAF and
+SUBGRAF.  PC - GRAF controls the menu display and file management.
+PC - GRAF allows convenient interface to the display subroutine
+that provides menu displays of data and plot specifications.
+SUBGRAF is a subroutine that actually does the plot on the screen.
+It is written as a subroutine to take the data values
+and plot specifications passed to it and create the plot on
+the screen. 
+
+NOTE NOTE  : If you need this plotting capability in your own
+application you may simply merge SUBGRAF with your program,
+set up the parameters of SUBGRAF and call it as a subroutine.
+An example program to demonstrate how to do this is included on
+this disk - DEMOSUB.BAS.  Simply load DEMOSUB, merge with 
+SUBGRAF, and run.  By duplicating the DIM statement from the
+DEMOSUB program in your own program, and setting
+the parameters, you call the plotting routine as a subroutine.
+
+                     < PC - GRAF >
+
+     PC - GRAF  presents a menu display of the parameters that
+specify a graph.  The menu is divided into three categories of
+parameters: Plot specification, X- axis, and Y axis. Any of
+these parameter values can be changed by typing the number of 
+the value to change.  The user is then queried for the new
+value of the parameter.  Some parameters have only two states 
+or values.  Typing their numbers simply toggles the state of
+the variable - the user is not queried.
+                ___________________________
+
+Plot specification parameters
+
+     The plot specification parameters allow you to determine 
+the appearance of the figure.  You may set the size of the
+plot and you may include a three line label in any of the 
+four corners of the figure.
+     
+
+Label lines   These three string variables contain
+          three lines that can be used to give each figure
+          a unigue label. These label lines can be of any
+          length (that fits inside the figure) and are
+          automatically positioned in the corner specified
+          by the parameter CORNER.  
+
+Resolution     This parameter specifies the resolution of
+	the plot.  The options are:
+      - Hi Resolution (640x200) Black and white
+      - Medium Resolution (320x200) Four colors (not available
+		in PC-GRAF2.
+      - Pen Plotter - Sweet-P or Epson Comrex Comscriber I
+		250 points per inch (PC-GRAF4 only).
+
+Axis color	This parameter only appears when the medium
+	resolution color plot is selected.  You may select the 
+	color of the axis and tic marks.  
+
+Label Height and Number Height   These parameters only appear
+	when the pen plotter is selected.  You may specify
+	the absolute height of the Axis Labels and the Axis
+	Numbers (the inset graph label is plotted the same
+	height as the numbers).  A value of 1 is the smallest
+	size that the plotter can draw, and 2,3,and 4 specify
+	characters that are 2x 3x and 4x this size.
+ 		
+           _____________________________________
+          
+		X and Y Axis Parameters
+		
+Axis length    These parameters specify the lengths
+          of the X and Y axis in inches.  
+
+Minimum Value   These parameters specify the minimum
+          values plotted on the X and Y axes.  However,
+          these values will be overridden if not appropriate
+          to the scale (e.g. if XMIN=1 and XMAX=99 the X
+          axis will be plotted from 0 to 100).
+
+Maximum value   These parameters specify the maximum
+          values plotted on the X and Y axes.
+
+Linear or Logarithmic axes  These parameters are
+          toggles that determine whether each axis is scaled
+          and plotted in linear or logarithmic coordinates.
+
+Axis labels   These parameters are string variables
+          that contain the labels for the X and Y axes.  The
+          labels are centered on the figure even if the
+          length of the axis is changed.
+
+___________________________________________________________________
+    
+
+               <Specification and Data files>
+
+     You  may  read or write the current data  and  specification 
+     parameters to disk files. The function keys F5 and F6 read 
+     the specification parameters from a disk file (F5) or write
+     the current data out to a disk file.  In both cases you are
+     shown a display of the files of that type that are currently
+     on the default disk. Then you are prompted for the name of the 
+     file  that  you would like to read from or  write  to.   You
+     may specify another disk or pathname before the filename if
+     the file is not on the default disk.  All names are limited to 
+     8 characters and are automatically given the extension .SPC.
+
+	Examples :  test1
+	            b:\data\exp2\test1
+
+     The same is true for reading data from a disk file (F7) or
+     writing data out to a disk file (F8).  The data file includes
+    the plot specifications parameters that are in effect at the 
+    time that the data file was saved.  Data files are given the  
+    extension .DTA.
+
+	A file is provided with the file input-output routines, so
+that you may read the files created by PC-GRAF for your own purposes.
+The file I/O programs are written as BASIC subroutines, so that
+you should put the proper DIM statement in your program, merge the
+file FILEIO.BAS with your program, and GOSUB 5x000 for the 
+appropriate subroutine.  The files are written in sequential ASCII,
+so that you may edit the data files with any ASCII editor.
+
+CAUTION   CAUTION   CAUTION
+
+	Sometimes, if the program encounters an unexpected error
+it will "bomb".  When this happens you will probably lose the data
+and the current specification values.  Thus it is always sound practice 
+to SAVE the data file often if you are adding new data or modifying
+the plot.  Then, if the program bombs, you can restart the program
+and reload that data file to recover.  Save your data file as soon 
+as you are done entering each data set.
+ 
+Note: ALL parameters and data are stored in a data file so that a
+data file is all that is necessary to retrieve the complete figure.
+The specification file is intended to store plot templates - i.e
+specifications that you will want to use on many occasions.  Then,
+when you start constructing a new graph, you may read in the plot
+template from a specification file.  Then you can modify these
+parameters for that specific data set (by changing the label lines)
+and enter the data.  You will not need to specify the plot parameters
+from scratch.
+	
+______________________________________________________________________
+
+
+                    <DATA ENTRY>
+
+When you select the data display (F10), the data in the
+current data set are displayed.  If the selected data set has
+no data points in it, you will
+then be asked for the number of data points desired for this 
+graph.  If you respond with a number greater than 0 you will 
+be queried for the X and Y values for each data point.  When
+you have typed in all the values the data points values will
+be displayed for editing.  If you have made a mistake, or
+would like to change any value, type the number of the point
+you wish to change and you will be queried for new values. 
+At this time you should also specify the type of data point,
+the size, and the type of line desired for that set.
+You may also change the color of the point and the color of
+the line if you have selected the medium resolution mode.
+
+     Working on Data Set Number (F3 and F4)
+
+Up to 5 data sets are allowed on the same figure. This parameter 
+displays the number of the set that is currently selected. This 
+number can be changed using function keys F3 and F4. The dataset 
+that is selected is the one displayed. In the data menu the symbol 
+type, size and type  of  line are displayed and can be modified.
+ 
+   Adding more data
+
+If you would like to add a value to the list enter any number
+larger than the highest numbered data point. You will be
+queried for X and Y values and the point will be added at the 
+next data point (regardless of the number you enter).  
+The maximum number of data points is 100 in each data set.
+
+   Sorting the data
+
+You may sort the data points in ascending order on the x dimension.
+The message "Sorting..." will appear and the data points will be 
+reordered in ascending order on the X dimension.
+
+     Symbol type
+
+This parameter sets the type of symbol to be plotted at each
+data point. The current selections are 
+               =0 no symbol is plotted
+               =1 a square is plotted 
+               =2 same square as above but filled
+               =3 open triangle
+               =4 filled triangle
+               =5 open circle
+               =6 filled circle
+               =7 open diamond
+               =8 filled diamond
+               =9 "X"
+
+     Symbol size
+
+This parameter sets the size of the symbol to be plotted. The
+size is specified as a percentage (%) of the length of the x axis. 
+The value of this parameter should be between 0 and 10.
+Sizes between 0.5 % and 4 % are best.
+
+     Line type
+
+This parameter sets the type of line that is plotted to connect
+the data points.  Solid, dashed or dotted lines are allowed.    
+Regression line is also available. In this case the points are
+plotted with no connecting line and then a regression line is drawn.
+(NOTE : only solid lines are supported for the pen plotter at
+this time. Dashed, dotted and others will be added later.)
+
+___________________________________________________________________
+
+
+                    <MODIFYING THE PLOT>
+
+     Once the plot is displayed on the screen you may still
+change any of the parameters and any of the data until the
+plot is to your satisfaction. 
+     
+     The color of the plot may be changed by hitting Alt-P.
+The selected color will be active until changed by another
+Alt-P.
+
+The background color may be changed at any time by hitting
+Alt-B.  Each time this combination is hit the background color
+number is incremented by one.  
+
+To fully appreciate these color changes you should hit Alt-P
+and Alt-B while a medium resolution plot is displayed.  To see
+the effect start the program and read in the sample data file
+TEST2 on the program disk.  Then hit F1 to display the plot.
+Now, while the plot is displayed, hold down the Alt key and
+hit keys B and P in and combination.
+	
+   Changing Specifications
+
+Hit F9  while the plot is displayed and the specifications menu
+will be redisplayed. You may change any parameter (or more than 
+one) and return immediately to the graph display by hitting F1 - the
+program goes back to the graphics display, but now incorporating
+the new specifications.
+
+    Changing Data
+
+Hit F10  while the plot is displayed and the data will be redisplayed 
+for you to make any additional changes.  You may make changes in the data
+values or in the lines and symbols of that data set.  To change other 
+data sets, increment or decrement the data set number using the function
+keys F3 and F4.  When you enter F1 the program returns to the graphics 
+display.
+
+   Printing the figure
+
+DOS 2.0 includes a GRAPHICS utility that allows you to copy the 
+contents of the screen to an IBM or EPSON or compatible dot matrix 
+printer.  If you have DOS 2.0 you should invoke the utility (by 
+typing GRAPHICS) before you enter BASIC to run the PC - GRAF
+program.  Then, when you have the figure displayed to your 
+satisfaction, simply type shift-Prtsc keys and the screen image
+will be dumped to the printer pixel for pixel.
+
+Pen and Ink Plots
+
+The Resolution parameter controls the resolution of the plot.  If 
+selected, the plot is output on a pen plotter.  A series of LPRINT
+statements are sent to the Parallel Printer Output port of the IBM
+PC.  This is the normal printer connection, which prints when you 
+issue an LPRINT statement from BASIC.  Connect a Sweet-P plotter or
+an Epson-Comrex Comscriber I to that port and set the RESOLUTion
+parameter.  The specified plot will now be drawn by the plotter in
+resolution of 250 points/inch.
+
+__________________________________________________________________
+
+
+                    <REQUIREMENTS>
+
+     Equipment:     IBM PC
+	    DOS 2.0 or higher
+            IBM Color graphics card or equivalent
+            Color TV or monitor display
+                  (Monochrome version available
+                   for Hercules Graphics Card)
+            One disk drive (single or double sided)
+            64k Memory
+            IBM printer or compatible for printout
+            SWEET-P pen plotter recommended (ENTER COMPUTER CO.)
+
+
+               <User comments and update information>
+
+          This program is still evolving and several
+improvements are expected.  The subroutine SUBGRAF4 will compile
+using the MS BASIC Compiler, but a single mysterious error keeps
+me from compiling the entire program.  I suspect that I'll solve
+that problem and will distribute a compiled version soon.  
+
+Several people have written that they would like to see
+better data entering and data editing ease and flexibility.  Some
+data is easier to enter all x points first, and then all y points.
+   
+Several people have requested error bars on each data point.
+This is quite easy to do and I will probably have a version soon
+that allows data standard deviation bars on each data point.
+
+A major modification for the future is the inclusion of fitting
+arbitrary functions to the data points.  Then, instead of a solid
+line or a regression line connecting the data points, you would
+be able to fit any function optimally through the points.  I 
+currently use the SIMPLEX method for this (program included on
+the program disk), but will switch to the 
+newly discovered method of Karmarkar at Bell Labs.  This will add
+a considerable amount of code, but should be useful for many
+applications.  You would then be able to type any function
+for each data set, and the program will calculate, and plot
+the best-fit of that equation to that data set.
+
+All user suggestions are welcome and will be incorporated 
+in future revisions where possible.
+ 
+If you find PC - GRAF useful your contribution of any
+amount is appreciated ($20 suggested).  All contributors
+will receive notices of updates as they are available.
+                  
+
+           Bob Shannon
+           228 Tulare St.
+           Brisbane, California 94005
+
+____________________________________________________________________
+
+
+--------------------------------------------------------------
+                    INVOICE
+--------------------------------------------------------------
+Name:_____________________________________________
+Address:__________________________________________
+City,zip:_________________________________________
+
+Date :     /   /
+
+Purchased from : Bob Shannon
+                 228 Tulare St.
+                 Brisbane, CA 94005
+
+   Description                                    Price
+--------------------------------------------------------------
+                                             
+Product : PC - GRAF : A graph plotting program 
+                      for the IBM PC Computer                 
+
+--------------------------------------------------------------
+                                   TOTAL      $
+--------------------------------------------------------------
+
+```
+{% endraw %}
 
 ## PC-GRAF2.BAS
 
+{% raw %}
 ```bas
 1000 '
 1010 '  PC-GRAF  Version 2.2      10 Nov 1984     Bob Shannon
@@ -1421,9 +1976,11 @@ machines:
 62180 OUT 985,KLR.P
 62190 RETURN
 ```
+{% endraw %}
 
 ## PC-GRAF3.BAS
 
+{% raw %}
 ```bas
 1000 '
 1010 '  PC - GRAF    Version 3.0      12 Dec 1984     Bob Shannon
@@ -2136,9 +2693,11 @@ machines:
 62760 IF BOX<>1 THEN LINE (XX1,YY1)-(XX2,YY2),KLR
 62770 RETURN
 ```
+{% endraw %}
 
 ## PC-GRAF4.BAS
 
+{% raw %}
 ```bas
 1000 '
 1010 '  PC-GRAF   Version 4.0      20 Feb 1985     Bob Shannon
@@ -3011,9 +3570,11 @@ machines:
 64290 RETURN
 64300 '
 ```
+{% endraw %}
 
 ## PRINTQUE.BAS
 
+{% raw %}
 ```bas
 10 'PRINTQUE by Harold Brown 1983
 20 '
@@ -3376,9 +3937,304 @@ machines:
 4260 DEF SEG=0:POKE 1047,0:DEF SEG  'see 1600
 4270 CLS:END
 ```
+{% endraw %}
+
+## PRINTQUE.DOC
+
+{% raw %}
+```
+                            Users Guide for PRINTQUE
+
+                                 by Harold Brown
+
+
+                                  Introduction 
+
+             Printque permits the establishment of a printing queue for 
+        ASCII files.  The file names and the number of copies needed are 
+        entered in response to prompts, and the program prints the files 
+        without the need of further attention from the user.  As will be 
+        explained below, there are four different printing options.  In 
+        addition, the program formats the output and controls for a 
+        number of errors.
+
+             Although Printque is intended primarily for listing 
+        Basic programs, it will work for any ASCII file.  There is no 
+        practial limit on the number of files that can be requested.  
+	Given sufficient memory to hold the names of the files, Printque
+        can print all files on the disks in the disk drives.  There is no
+	limit on the length of a file other than what can be held on a 
+	single disk.  The only restriction on the use of Printque is 
+	that programs to be printed must be save in ASCII format,
+	i.e., with Basic's "a" option.
+
+	Printque must be run under BasicA.
+
+
+                                   Formatting
+
+             Printque prints the name of the file being listed at the top 
+        center of the first page of the listing, and then prints the name 
+        and page number at the top right of each successive page.  
+        Printque also skips over the perforation, leaving a 4 line margin 
+        at the bottom of each page, and does not permit a Basic program 
+        line to be split over two pages.
+
+             As currently written, Printque uses the Epson MX-80 double 
+        width capability for printing the title on the first page.  
+        Double width printing is set up in lines 2320-2390, and may be 
+        changed to suit your printer or your tastes.  For example, if you 
+        prefer single width printing change "20" in line 2360 to "40," 
+        and delete "chr$(14)" from line 2370.  The top and bottom margins 
+        may also be changed by making minor alterations in the program.  
+        All lines relevant for such changes are marked by comments 
+        beginning with ***.
+
+
+                                  Error Control
+
+             Printque controls for the following errors.
+
+             1. Invalid file name.  File names are checked for validity 
+        immediately upon being entered by the user.  If an invalid file 
+        name is found Printque beeps and displays the name with an 
+        "invalid file name" message, and waits for a valid file name.  No 
+        checking is done at this time to determine if the file is 
+        printable.
+
+             2. Printer not ready.  Printque will not check the printer 
+        until it is ready to begin printing a file.  If the printer is 
+        off or is otherwise not ready, Printque will beep, and display 
+        the message, "Check printer then press any key to continue."  
+        Printing of files will now proceed normally.
+
+             3.  File missing or not in appropriate format.  If 
+        Printque cannot find a file, or if a file is not in ASCII format 
+        or is in protected format (Basic's "p" option), Printque will 
+        record the name of the file and go on the next file.  When all 
+        files have been handled, Printque will provide a listing of the 
+        name of any file that was not printed and the reason why the file 
+        was not printed.  This procedure can be changed for collated 
+        printing, as is explained below.
+
+
+
+                                Printing Options
+
+             Printque is menu driven, and its options can best be 
+        explained by proceeding through the screens and prompts that you 
+        will encounter. In answering questions that end with a question 
+        mark you must press ENTER.  If a question does not end with a 
+        question mark, pressing ENTER is not required.  The numeric 
+        keypad may be used whenever a number must be entered.
+
+
+                                    Screen I
+
+             This screen asks for the maximum number of files to be 
+        printed.  Your response determines how much storage space is set 
+        aside for the file names.  Once a response has been entered you 
+        cannot ask for a larger number of files without starting over, 
+        but you can change your mind and ask for a smaller number.  The 
+        way this is done will be explained below.
+           
+
+
+                                    Screen II
+
+             This screen asks if you want more than one copy of any of 
+        the files to be printed.  If you only need one copy of each file, 
+        proceed to Screen III, if you will need more than one copy of any 
+        of the files, go to Screen IV.
+
+
+                                   Screen III
+
+             You have indicated that you want one copy of each file, and 
+        are ready to begin entering file names.  If you change your mind 
+        at this point, just press ENTER (you will probably have to press 
+        ENTER twice).  This will take you to screen VI, where you can 
+        press ESC and start over.  
+
+             If this is where you want to be, type in the name of the 
+        first file that you want to print.  If the file is on the disk in 
+        the logged drive, it is not necessary to type in the drive 
+        designator, but the drive designator is always permitted.  It 
+        will be removed from the file name before that name is printed on 
+        your output.  The extension BAS may be omitted, but any other 
+        extension must be included.  If the file name includes the 
+        extension BAS and you omit it, it will be added to the name on 
+        the output.
+
+             After you enter each name, Printque will ask for the next 
+        file name, giving the location of that file in the queue.  When the 
+        number of files requested has been entered, Printque will beep 
+        and go to Screen VI.  If you decide to enter fewer file names 
+        than you had requested, respond to the prompt with ENTER and 
+        Printque will go to Screen VI.  (Again, you will probably have to 
+        press enter twice.)
+
+
+                                    Screen IV
+
+             You have indicated that you want more than one copy of some 
+        of the files and a menu giving four options is displayed.  The 
+        first option, pressing 0, cancels the multiple copy option and 
+        transfers you to Screen III.  If you do not press 0, you have 
+        three multiple copy options to choose from.
+
+        1.  Same number of copies for each file--files not collated.
+
+        If you choose this option Printque will ask for the number of 
+        copies you want, and will then print that number of copies for 
+        each file before going on to print the same number of copies for 
+        the next file.  When you press 1 a prompt will appear at the 
+        bottom of the screen asking for the number of copies you want and 
+        providing the opportunity to cancel this option by just pressing 
+        ENTER.  This will return you to Screen IV and let you choose a 
+        different option or cancel the multiple copy option.
+
+        2.  Same number of copies for each file--files collated.
+
+        When you choose this option, Printque asks for the number of 
+        copies you want and then prints one copy of each file, and 
+        repeats the procedure until the number of sets requested has been 
+        produced.  When you press 2 you will get the same prompt as in 
+        option 1, asking for the number of copies and providing an 
+        opportunity to cancel this option.  After you enter the number of 
+        copies, you will be asked if you wish to turn off normal error 
+        trapping.  If you respond "yes," then on Printque's first pass 
+        through your list of files it will stop each time a file cannot 
+        be found or cannot be printed.  You will then be transferred to 
+        Screen VIII.  Whether you retain normal error trapping, or turn 
+        it off, Printque will transfer to Screen VI after you respond.
+
+        3.  Different number of copies for different files.
+
+        If you press 3 you will be given an opportunity to change the 
+        option or to confirm that you want to print different numbers of 
+        copies for different files.  Confirming this option will take you 
+        to Screen V, rejecting it takes you back to screen IV.
+
+
+                                    Screen V
+
+             Here you will receive a set of prompts that is similar to 
+        those in Screen III, except that you will have to enter a file 
+        name, a comma, and then the number of copies you want for that 
+        file.  File names will be checked for validity here, as in Screen 
+        III, and the same rules apply for entering names:  complete names 
+        including drive designator and extension should be entered, but 
+        you may omit the drive designator if the file is on the logged 
+        disk drive, and you may omit the extension BAS.  If you wish to 
+        enter a smaller number of files than was requested back in Screen 
+        I, enter *,* instead of a name and number, and you will be 
+        transferred to Screen VI.  Otherwise, you will be transferred to 
+        Screen VI when you have entered the number of files originally 
+        requested.
+
+                                    Screen VI
+
+             You will always be transferred to this screen before 
+        printing begins.  It shows the number of file names you actually 
+        entered and gives you the options of pressing ENTER to begin 
+        printing, or pressing ESC to return Screen I and start over, or
+        pressing "A" to abort Printque.
+
+
+                                   Screen VII
+
+             This is the screen that appears while Printque is working.  
+        It will either give the full name of the file that is currently 
+        being printed, or it will be blank if Printque is searching for a 
+        file.
+
+
+
+                                   Screen VIII
+
+             This screen will appear only if you are printing multiple 
+        copy collated files, have turned off normal error trapping, and 
+        Printque cannot find or cannot print a file you have requested.  
+        Each time Printque encounters such a file, on its first pass 
+        through your list of files, you will be given the options of 
+        ignoring that file and continuing, returning to Screen I and 
+        reentering the file names, or aborting Printque.  You might want 
+        to return to Screen I if you have miss typed a file name.  You 
+        might want to abort if the file is not in ASCII format, or is not 
+        on any of the disks now in the disk drives. 
+
+             Printque only provides these options on its first pass 
+        through the list of files.  If you instruct Printque to ignore 
+        the file and continue each time, it will print the requested 
+        number of collated sets of the remaining files.   
+
+
+                                    Screen IX
+
+             If Printque finds and prints all files asked for, the 
+        program will end with the message "All files printed" on the 
+        screen.
+
+
+
+                                    Screen X
+
+             If Printque does not print one or more of the files 
+        requested, Screen X will appear.  It will display the number of 
+        files requested, the number printed, and the number not printed, 
+        and it will offer you a listing of the names of the files not 
+        printed and the reasons why they were not printed.  You may 
+        request a listing on the screen, to the printer, or both, and if 
+        you opt for a screen listing, you will be given a second chance 
+        for a printer listing.  After it provides the listing Printque 
+        ends.
+
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+ Volume in drive B is PC-GRAF    
+CONVERT  BAS   2065  2-21-85 Converts Graph2 files to PC-GRAF files
+DEMOSUB  BAS   1365  2-21-85 Demo of how to call SUBGRAF as subroutine
+PC-GRAF  DOC  21888  2-21-85 Documentation file
+PC-GRAF2 BAS  25461  2-21-85 Fast version - similiar to GRAPH2
+PC-GRAF3 BAS  30146  2-21-85 allows color and B&W plots - compilable
+PC-GRAF4 BAS  36637  2-20-85 same as PC-GRAF3 plus pen plots on Sweet-P
+README   DOC    714  2-21-85 this file
+SIMPLEX  BAS   7251 12-18-84 Simplex function fitting algotithm
+SUBGRAF2 BAS  11054  2-20-85 plotting subroutine from PC-GRAF2
+SUBGRAF3 BAS  14269  2-20-85 Plotting subroutine from PC-GRAF3
+SUBGRAF4 BAS  21130  2-21-85 Plotting subroutine from PC-GRAF4
+TESTPLOT DTA    378  2-21-85 sample data file for test plot
+LOGON    BAT	             Batch file to log on-needs BASICA on disk
+LOGON    BAS		     Program to manage log on files and memos
+LOGOFF   BAT		     Batch file to log off
+LOGOFF   BAS		     Program to log off- asks label for time
+LOGPRINT BAT		     Batch file to print the log file
+LOGPRINT BAS		     Program to print out the Log file
+COLOR    BAS   Program to change screen text color & Background color
+INSTALL  BAT	Batch program to put DOS, BASICA,ANSI.SYS on disk
+COLOR    BAT	Batch file to invoke COLOR.BAS - Assumes BASICA on disk
+COLOR    SCR	File that contains screen commands to change color
+		Assumes ANSI.SYS is loaded in your CONFIG.SYS file
+KEYDEF   BAS	Program to allow redefinition of keyboard keys in DOS
+KEYDEF          File generated by KEYDEF.BAS. Type this file to screen
+		to activate key definition.  See AUTOEXEC.BAT file.
+Note: additional documentation can be found in the comments of
+each program.  Simply list the BASIC source code.
+All programs are written for IBM-PC with color graphics.
+To make a monochrome version delete all COLOR stmts in sources.
+
+```
+{% endraw %}
 
 ## SIMPLEX.BAS
 
+{% raw %}
 ```bas
 1000 '===================================================================
 1010 '
@@ -3607,9 +4463,11 @@ machines:
 3200 RETURN
 3210 '==============================================================
 ```
+{% endraw %}
 
 ## SUBGRAF2.BAS
 
+{% raw %}
 ```bas
 60000 '________________________________________________________________
 60010 ' SUBGRAF2       May 10,1984             Bob Shannon
@@ -3832,9 +4690,11 @@ machines:
 62180 OUT 985,KLR.P
 62190 RETURN
 ```
+{% endraw %}
 
 ## SUBGRAF3.BAS
 
+{% raw %}
 ```bas
 60000 '________________________________________________________________
 60010 ' SUBGRAF3        May 10,1984             Bob Shannon
@@ -4117,9 +4977,11 @@ machines:
 62760 IF BOX<>1 THEN LINE (XX1,YY1)-(XX2,YY2),KLR
 62770 RETURN
 ```
+{% endraw %}
 
 ## SUBGRAF4.BAS
 
+{% raw %}
 ```bas
 60000 '________________________________________________________________
 60010 ' PC-GRAF 4.0    Feb 20,1985             Bob Shannon
@@ -4555,6 +5417,7 @@ machines:
 64290 RETURN
 64300 '
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

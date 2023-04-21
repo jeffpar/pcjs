@@ -46,6 +46,50 @@ machines:
     ~ Votrax, Inc. - Votalker ib., Votrax pss., Votrax pss/b.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES674.TXT
+
+{% raw %}
+```
+-------------------------------------------------------------------------------
+DISK NO  674  Enable Reader Speech System  V3.0  (1 of 4)          V1.0 DS2
+-------------------------------------------------------------------------------
+The Enable Reader 3.0 Speech System is actually two programs in one. The
+FULL SCREEN SPEECH REVIEW SYSTEM is designed for visually impaired and
+blind people. With Full Screen Speech Review, a visually impaired person
+has access to the wide selection of commercial software available for MSDOS
+compatible machines, such as the IBM PC and dozens of other machines.
+Whether it is Wordstar, dBase, or Lotus 1-2-3 , a visually impaired person
+can now use these programs efficiently.
+ 
+The second program built into the Enable Reader 3.0 Speech System is the
+TALKING TUTORIAL PROGRAMMER'S AID. Professional programmers now have access
+to many of the speech functions of the Enable Reader 3.0 Speech System for
+writing talking tutorials for their software. This gives blind and visually
+impaired people the best of both worlds. One, they have access to the
+Review Mode of the Enable Reader 3.0 Speech System for running commercial
+software. And two, any program that is written with the Talking Tutorial
+Programmer's Aid will run for them.
+ 
+This system consists of 4 disks.  They are as follows:
+ 
+Disk No. 674 is the main program disk.
+Disk No. 675 contains the manual.
+Disk No. 676 contains the Votrax word processing programs.
+Disk No. 677 contains the Dectalk word processing programs.
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1986
+ 
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0674
 

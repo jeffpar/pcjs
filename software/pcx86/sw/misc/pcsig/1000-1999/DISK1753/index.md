@@ -56,6 +56,66 @@ machines:
     will prove to be a valuable tool to church officials who wish to
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1753.TXT
+
+{% raw %}
+```
+Disk No: 1753                                                           
+Disk Title: Church Shareware Software                                   
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: Church Shareware Software                                
+Author Version: 3.0                                                     
+Author Registration: $1.00 donation per congregation member.            
+Special Requirements: 640K RAM, and a hard drive.                       
+                                                                        
+CHURCH SOFTWARE is an excellent database management program that        
+organizes and maintains data about the church members.                  
+                                                                        
+FEATURES:                                                               
+                                                                        
+~  Maintain a database of current church members                        
+                                                                        
+~  Maintain a database of previous members and current prospects        
+                                                                        
+~  Easy system for tracking and maintaining prospect data               
+                                                                        
+~  Provides a fast and easy method of recording tithes                  
+                                                                        
+~  Password protection for tithes data                                  
+                                                                        
+~  Maintain a complete log of video and audio tapes                     
+                                                                        
+~  Print member lists, Deacon's list, mailing labels, and phone         
+directory                                                               
+                                                                        
+~  Select the mailing list for newsletters and notices                  
+                                                                        
+~  Generates excellent screen or print reports                          
+                                                                        
+~  Uses indexing techniques for quick data retrieval                    
+                                                                        
+~  Customize the program to your church                                 
+                                                                        
+~  Thorough documentation.                                              
+                                                                        
+Generate reports by categories.  Specify a selected group (for example, 
+all members between the age of 25 and 32, or all active Sunday School   
+members) and CHURCH SOFTWARE will produce the desired report.  This will
+prove to be a valuable tool to church officials who wish to automate and
+organize all member-related data.                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1753
 

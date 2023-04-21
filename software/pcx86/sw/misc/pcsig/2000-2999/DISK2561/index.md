@@ -14,6 +14,115 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2561.TXT
+
+{% raw %}
+```
+Disk No: 2561                                                           
+Disk Title: PC-Postcard Plus (#1361 also)                               
+PC-SIG Version: S3.41                                                   
+                                                                        
+Program Title: PC-Postcard Plus                                         
+Author Version: 3.41S                                                   
+Author Registration: $25.00                                             
+Special Requirements: Pin-feed index card stock and a dot matrix printer
+                                                                        
+PC-POSTCARD PLUS uses your standard dot matrix printer to produce and   
+address postcards with your custom message, such as business            
+announcements, reminders and social invitations.  Even does double      
+postcards!                                                              
+                                                                        
+With first-class mail costing 25 cents and bulk mail now almost         
+17 cents a piece, postcard mailings have suddenly become the darling of 
+thrift-minded businesses and organizations.  You get first-class        
+delivery and immediate attention for just 15 cents.  Here's a program   
+that lets you produce customized postcards -- both singles and doubles, 
+with or without a mailing permit -- and even individually addresses     
+them!                                                                   
+                                                                        
+Using standard-sized (4x6) pin-fed postcards, PC-POSTCARD PLUS prints a 
+message 22 lines by 55 characters, an address, and an optional header   
+for the return address, postal mailing permit stamp, etc.  It has       
+formats for your messages for both sides of a single or double          
+postcard.                                                               
+Double postcards are great as they allow for a tear-off response card   
+for orders, RSVPs, and such. membership events, etc.                    
+                                                                        
+Addresses are automatically inserted as each card prints.  Mailing lists
+can be built, added to and sorted by up to 10 different fields.  Since  
+PC-POSTCARD PLUS was written by Carl Mieske, author of PC-MAIL          
+(PC-SIG disks #868, #869), PC-MAIL mailing lists are compatible for use 
+with this program, but not required.                                    
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## REGFORM.DOC
+
+{% raw %}
+```
+
+                                 FOTO 64 , INC
+
+                        REGISTRATION FORM - PC-POSTCARD   (C)
+
+      P C-POSTCARD 3.41S(C) Copyright 1/1989..Foto 64, Inc..All Rights Reserved..
+
+
+      NAME___________________________________________  DATE_________________
+
+      ADDRESS_______________________________________________________________
+
+      CITY_________________________________ STATE ____ ZIP__________________
+
+      TELEPHONE_______________________________  
+      
+      REGISTRATION NUMBER SHOWN ON THE INTRODUCTORY PCM SCREEN _____________
+
+                    PC-POSTCARD IS BEING USED ON THE FOLLOWING SYSTEM
+     
+      COMPUTER _______________________________________ RAM _________________
+
+      SYSTEM USED: (MONOGRAPHIC)  (CGA)  (HERCULES)  (OTHER ________________
+
+      DISK DRIVES (1)  (2)  (3)     HARD DISK ____________________ CAPACITY
+
+      MONITORS;  NUMBER ___ : TYPE  (COLOR)   (MONO)   (BOTH)
+
+      TYPE OF APPLICATION OF PC-POSTCAR  D__________________________________
+
+      PRINTER: MAKE_________________________________ MODEL _________________
+
+      FROM WHOM DID YOU AQUIRE PC-POSTCARD?_________________________________
+
+      COMMENTS WELCOMED:
+
+
+
+
+      Please complete this form and mail with your check for $25.00 to the 
+      following address:   
+                      
+      FOTO 64, INC.  SOFTWARE REGISTRATON   PO BOX 2130  SARATOGA, CA  95070
+          
+      THANK YOU FOR YOUR SUPPORT OF PC-POSTCARD.   Your support will further 
+      
+      the development of user supported software....    
+
+                                
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2561
 

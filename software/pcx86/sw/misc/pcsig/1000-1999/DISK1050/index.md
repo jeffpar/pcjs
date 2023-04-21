@@ -93,6 +93,127 @@ machines:
     command files.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1050.TXT
+
+{% raw %}
+```
+Disk No: 1050
+Disk Title: Magic, Handwriting & Menu
+PC-SIG Version: 2.1
+
+Program Title: Magic Fingers
+Author Version: 1.35L
+Author Registration: $39.95
+Special Requirements: Hard disk recommended.
+
+If you are a single-finger hunt-and-peck typist, or even a fast touch-
+typist, MAGIC FINGERS will help you run most programs for the IBM-PC and
+compatible computers.
+
+A RAM-resident macro program, it has several features that improve the
+rate and accuracy of your typing by reducing the amount of repetitive
+typing you do in your favorite programs -- such as wordprocessors,
+database programs, accounting packages, and programming languages.
+Substitute single keystrokes for long and repetitive text strings or
+commands.  Get done faster with greater accuracy.
+
+File Descriptions:
+
+------------  MAGIC FINGERS.
+MFABBR   DAT  Data file.
+MFL      COM  Main Program.
+MFMAIN   HLP  Help file.
+MFSETUP  DAT  Data file.
+README        Documentation file.
+------------------------------------------------------------------------
+Program Title: Handwriting Analyst
+Author Version: 2.1
+Author Registration: $49.95
+Special Requirements: Hard disk recommended.
+
+HANDWRITING ANALYST asks you several questions about a person's
+signature, and then produces a summary or detailed report on that
+person based on your responses.
+
+Each report includes information on physical and material drives,
+intellectual style, personality traits, social behavior, and vocational
+implications.  You can display on- screen, print, or write the report
+to a disk file.  Save the answers to the questions for up to 20
+signatures on the disk.  The signature report of this program can be
+either a direct description of the person, or it can describe how that
+person wants others to see him.
+
+File Descriptions:
+
+------------  HANDWRITING ANALYST.
+AUTOEXEC BAT  Batch file to start program.
+BRUN20   EXE  Program file.
+COMDEF   EXE  Subprogram.
+DETAIL?       Report data file (5 files).
+ENTER    EXE  Main program.
+HELP?         Help file (4 files).
+INSTALL  BAT  Batch file to copy system files.
+KEY           Program file.
+MONITOR  EXE  Monitor set-up file.
+QUEST         Data file.
+QUICK?        Report data file (5 files).
+START    EXE  Starts program.
+WRITERS  WRT  Data file.
+------------------------------------------------------------------------
+Program Title: Advanced Menu
+Author Version: 1.35L
+Author Registration: $39.95
+Special Requirements: Hard disk recommended.
+
+Do you have problems in properly executing a DOS command, or getting
+immediate access to various programs and utilities on your computer?
+Are you tired of staring at a screen with no instructions to guide you?
+If this is so, you should take a look at ADVANCED MENU.
+
+Most menu control programs use regular batch files to execute programs
+and DOS commands, but ADVANCED MENU also uses special command files that
+have more options.
+
+Among these options are:
+
+~ Password protection for any menu selection, including DOS access
+
+~ Complete DOS commands entered
+
+~ Uncompleted commands finished
+
+~ Conditional command execution
+
+A command file is created with the menu selections for the
+program.  Each command file can have up to 32 menu selections with
+custom titles, and a menu command can load another command file.
+Command files can execute most DOS commands and work faster than
+regular batch files.  ADVANCED MENU can handle an unlimited number of
+command files.
+
+File Descriptions:
+
+------------  ADVANCED MENU.
+MEMTEST  <DIR>Subdirectory containing memory test program.
+AM       COM  Main program.
+AMDOC    PRN  Instructions.
+AMNOTICE      Registration notice.
+DEMO     BAT  Batch file to start demo.
+DEMO1    AMC  Sample command file.
+DEMO2    AMC  Sample command file.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1050
 

@@ -47,6 +47,7 @@ machines:
 
 ## CHARS.BAS
 
+{% raw %}
 ```bas
 1000 REM Listing 1.1 -- A program to display all the screen characters.
 1030 GOSUB 2000
@@ -88,9 +89,64 @@ machines:
 6020 IF LEN(INKEY$) = 0 THEN 6020
 6030 CHAIN "menu"
 ```
+{% endraw %}
+
+## CHECK.TXT
+
+{% raw %}
+```
+         
+         You can test your copy of the distribution diskette, to make 
+         sure the copy is accurate, by entering the command CHECK *.* 
+         at the DOS prompt.  The output should look like this: 
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  READ    .ME          CRC = 62 31
+
+--> FILE:  WHERE   .COM         CRC = 61 77
+
+--> FILE:  LS      .EXE         CRC = 62 A9
+
+--> FILE:  DR      .COM         CRC = DF 69
+
+--> FILE:  CHARS   .BAS         CRC = C6 3D
+
+--> FILE:  MEMORY  .BAS         CRC = 80 52
+
+--> FILE:  ROMBIOS .BAS         CRC = 32 93
+
+--> FILE:  ROMBASIC.BAS         CRC = 14 F0
+
+--> FILE:  MENU    .BAS         CRC = 99 A2
+
+--> FILE:  SCREEN  .BAS         CRC = 56 C4
+
+--> FILE:  KEYSTAT .BAS         CRC = 8F A6
+
+--> FILE:  PERCENT .BAS         CRC = A6 04
+
+--> FILE:  SUPPORT .            CRC = 67 15
+
+--> FILE:  CHECK   .COM         CRC = BD 22
+
+--> FILE:  CHECK   .TXT         CRC = 00 00
+
+ ---------------------> SUM OF CRCS = DE 13
+
+DONE
+         
+
+         Note: the CRC for CHECK.TXT will be incorrect as will be the 
+         total, because you cannot write a file's CRC to the file 
+         without altering the CRC of the file.
+```
+{% endraw %}
 
 ## KEYSTAT.BAS
 
+{% raw %}
 ```bas
 900 KEY OFF : CLS : WIDTH 80 : LOCATE ,,0
 1005 PRINT "                This program displays the keyboard status bits."
@@ -151,9 +207,11 @@ machines:
 5040 CLS : LOCATE ,,1
 5999 CHAIN "menu"
 ```
+{% endraw %}
 
 ## MEMORY.BAS
 
+{% raw %}
 ```bas
 1000 REM -- A program to scan for and report active memory.
 1010 GOSUB 2000
@@ -220,9 +278,11 @@ machines:
 7090 PRINT
 7999 RETURN
 ```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0,1,0
 20 WIDTH 80
@@ -260,9 +320,11 @@ machines:
 340 CLS
 350 SYSTEM
 ```
+{% endraw %}
 
 ## PERCENT.BAS
 
+{% raw %}
 ```bas
 10 COLOR 7,1,8
 20 CLS
@@ -291,9 +353,11 @@ machines:
 240 CLS
 250 CHAIN "MENU"
 ```
+{% endraw %}
 
 ## ROMBASIC.BAS
 
+{% raw %}
 ```bas
 3 CLS
 5 PRINT
@@ -311,9 +375,11 @@ machines:
 110 IF LEN(ANSWER$) < 1 THEN 100
 120 CHAIN "menu"
 ```
+{% endraw %}
 
 ## ROMBIOS.BAS
 
+{% raw %}
 ```bas
 3 CLS
 5 PRINT
@@ -331,9 +397,11 @@ machines:
 110 IF LEN(ANSWER$) < 1 THEN 100
 120 CHAIN "menu"
 ```
+{% endraw %}
 
 ## SCREEN.BAS
 
+{% raw %}
 ```bas
 10 GOSUB 70
 20 GOSUB 100
@@ -391,6 +459,7 @@ machines:
 540 IF LEN(INKEY$) = 0 THEN 540
 550 CHAIN "menu"
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -14,6 +14,61 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2796.TXT
+
+{% raw %}
+```
+Disk No: 2796
+Disk Title: Skyland' Star
+PC-SIG Version: S1.0
+
+Program Title: Skyland's Star
+Author Version: 3.2
+Author Registration: $15.00
+Special Requirements: 640K RAM. A hard drive recommended.
+
+Skyland's Star is a science fictional text adventure game which draws
+its inspiration from classic prose adventures. The storyline is a
+follows: the Earth is in desperate peril. The rapid growth in
+population and need for energy has all but depleted the world's fossil
+fuels.  Science has been unable to replace them with a safe and reliable
+alternative.  The player, a member of a small group of scientists, is
+recruited to travel into the future to witness how the problem was
+solved - in the past.  The bulk of the game takes place here, in a major
+metropolis of the future.  The player must discover how the future
+solved the problem and retrieve the necessary information and items for
+the present to survive the crisis, so that the future he witnessed can
+exist.
+
+The game is intended for anyone who wants a challenging, intelligent
+diversion from reality.  The program would be particularly welcomed by
+people who long for classic text adventures in these days of graphic
+intensive programs.
+
+There are several aspects of this game which make it superior to even
+some of the best known professional text adventures.  First, Skyland's
+Star has an excellent vocabulary, recognizing nearly 1500 words, and a
+parser which can comprehend commands ranging from a single letter to
+complex English sentences.  It contains a save and restore feature
+which can save up to 26 games to a single directory.  Another feature of
+the game is its sheer size.  There are nearly 150 separate locations for
+the player to explore, including the City of Skyland itself, the Moon, a
+lake, an underground sewer system, and the three story government
+complex. The game was the Grand Prize winner at the 1989 Rockwell
+International/LAUSD Computer Science Competition.
+
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2796
 

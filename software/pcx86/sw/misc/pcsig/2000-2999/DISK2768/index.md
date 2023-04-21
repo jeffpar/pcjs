@@ -14,6 +14,37 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2768.TXT
+
+{% raw %}
+```
+Disk No: 2768
+Disk Title: Labels Plus!
+PC-SIG Version: S1
+
+Program Title: Labels Plus!
+Author Version: 2.2
+Author Registration: $15.00
+Special Requirements: Printer.
+
+Hate writing mailing addresses by hand?  This program will do so much
+for you that you'll wonder how you ever survived without it.  Lablels
+Plus! will prints and addresses envelopes, shipping labels, address
+labels and post card.  You can design, save and print you own labels
+post card section.  There is a 1000 names and addresses database.
+Labels Plus! is a very easy to use program.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2768
 

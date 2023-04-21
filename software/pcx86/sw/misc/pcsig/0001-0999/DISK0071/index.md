@@ -46,8 +46,56 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #71, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  ZAP'EM  .BAS         CRC = D4 7A
+
+--> FILE:  MEMORY  .BAS         CRC = ED 48
+
+--> FILE:  STARTREK.BAS         CRC = FA CD
+
+--> FILE:  STARTREK.DOC         CRC = 3B B2
+
+--> FILE:  CYCLE   .BAS         CRC = D7 05
+
+--> FILE:  DROIDS  .BAS         CRC = 51 F3
+
+--> FILE:  LOSTGOLD.BAS         CRC = 14 79
+
+--> FILE:  WIZARD  .BAS         CRC = 87 92
+
+--> FILE:  SPELLER .BAS         CRC = 1A A3
+
+ ---------------------> SUM OF CRCS = D7 E7
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## CYCLE.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20  DIM I2(14),I$(84)
@@ -167,9 +215,11 @@ machines:
 1160  GOTO 140
 1170 PRINT " ADIOS ":END
 ```
+{% endraw %}
 
 ## DROIDS.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -341,9 +391,11 @@ machines:
 2420 IF SAMPLE$="YES" THEN CHAIN "SAMPLES",1000 ELSE END
 2430 GOTO 1030
 ```
+{% endraw %}
 
 ## LOSTGOLD.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -701,9 +753,11 @@ machines:
 4280 GOTO 1590
 4290 END
 ```
+{% endraw %}
 
 ## MEMORY.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -1075,9 +1129,11 @@ machines:
 4390 PRINT CHR$(21); CHR$(15); CHR$(15) CHR$(21)
 4400 RETURN
 ```
+{% endraw %}
 
 ## SPELLER.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 A$=STRING$(80,205)
@@ -1179,9 +1235,11 @@ machines:
 1830 PRINT "THAT'S ALL FOR NOW!"
 1840 KEY ON
 ```
+{% endraw %}
 
 ## STARTREK.BAS
 
+{% raw %}
 ```bas
 500 CLS
 510 PLAY "mb"
@@ -1692,9 +1750,11 @@ machines:
 5560 NEXT SI
 5570 RETURN
 ```
+{% endraw %}
 
 ## WIZARD.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -2641,9 +2701,11 @@ machines:
 10170 RETURN
 10180 IF SAMP$="YES" THEN CHAIN "SAMPLES",1000 ELSE  END
 ```
+{% endraw %}
 
 ## ZAP'EM.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -2796,6 +2858,7 @@ machines:
 1580 IF PLY$="Y" THEN 420
 1590 RUN "MENU
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

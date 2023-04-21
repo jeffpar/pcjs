@@ -48,6 +48,56 @@ machines:
     FoxBase, PCTools, FormWorx, Quattro, or PC-File.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1521.TXT
+
+{% raw %}
+```
+Disk No: 1521
+Disk Title: Teacher Works
+PC-SIG Version: S2.3
+
+Program Title: Teacher Works
+Author Version: 3.70A
+Author Registration: $25.00
+Special Requirements: 450K RAM, two disk drive or a hard disk.
+
+TEACHER WORKS GRADEBOOK is for teachers and school administrators who
+want to do it their way.  TEACHER WORKS lets people use their favorite
+type of grading system, not conform to a grading method understood by a
+programmer.  Requiring a minimum of keystrokes, the program tackles
+classes of up to sixty students.
+
+TEACHER WORKS lets teachers grade by points or grade averages, using
+either letter or numeric grades.  With a maximum of 240 grades per
+semester per student, teachers can weight grades within six categories
+and give extra credit.  Calculated grades can be adjusted for the
+student who really worked but barely missed achieving a certain grade.
+
+The teacher can edit one grade or the whole class on a single screen,
+adding grades in any order.  Complete student records can be displayed
+and edited.  Student records can be formatted and printed to meet
+the requirements of most districts.  Students, and their records,
+can be transferred between classes.
+
+You can use quarterly, trimester, or year round grading.  Grades can be
+calculated by what the student has been assigned, so new check-ins are
+not penalized for grades they missed -- unless you choose to do so.
+Class, student, and individual grades can be searched.  Class grade
+averages are generated.  Students are automatically assigned ID numbers
+which can be changed later.  Grade printouts can be done by ID numbers
+to protect student anonymity.  Files are dBase III compatible.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989, 1990 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1521
 

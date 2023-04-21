@@ -63,8 +63,921 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## DC1.DOC
+
+{% raw %}
+```
+Documentation for DC1.COM  DOS color program
+
+*******************************************************************************
+Special note: Users of enhanced keyboards please remember that keyboard
+              commands to DC1 must be issued with Number Lock off (otherwise
+              the program will just ignore).  This is to avoid problems with
+              BIOS routine's accomodation for entering ASCII codes directly
+              from the keyboard via the ALT NumLock nnn combination.  This
+              means that you will need to issue keyboard commands to DC1 from
+              your NUMERIC keypad with NUMBER LOCK OFF.
+
+              DON'T USE DC1 WITH A COMMAND.COM THAT'S BEEN PATCHED WITH MY
+              CP21 patch.  The patch causes DOS colors to be redefined and
+              my DC1 program won't work properly with it.
+
+*******************************************************************************
+
+KEYBOARD COMMANDS:
+
+   After installing DC1 (by entering DC1 at the A> prompt: A>DC1) you can
+easily flip through foreground, background, and border colors by ALT
+arrow key combinations. These combinations are as follows:
+
+              (WITH NUMBER LOCK OFF)
+
+   ALT LEFT ARROW     Flips through 16 BORDER colors
+   ALT UP ARROW       Flips through 16 FOREGROUND colors
+   ALT RIGHT ARROW    Flips through 7 BACKGROUND colors
+
+   ALT DOWN ARROW     Toggles program ON/OFF
+
+Once you select the colors you want via the ALT ARROW KEY combinations----
+you're set........Your selected colors will survive mode changes and
+DOS CLS's (If you enter a graphics mode the program will deactivate itself
+but your colors will once again return as soon as you enter back into a text
+mode).
+
+
+COMMAND LINE COMMANDS:
+
+   After you've installed DC1 you can turn the program on and off, or cause
+it to uninstall itself and return your memory via command line parameters.
+These parameters are as follows:
+
+   S  will suspend DC1  Example: A>DC1 S
+   R  will resume DC1   Example: A>DC1 R
+
+   V  will vacate DC1 and return memory to system pool Example: A>DC1 V
+
+
+A WARNING ABOUT THE V PARAMETER:
+
+   DON'T USE IT EXCEPT FROM THE DOS LEVEL (i.e. don't try to use it from a
+                                           DOS shell).
+   DON'T USE IF YOU'VE LOADED OTHER TSR (terminate stay resident) TYPE
+   PROGRAMS AFTER YOU LOADED DC1. (as this could create "holes" in your memory
+                                   --- and maybe cause a system crash).
+
+*******************************************************************************
+
+TRYING IT OUT:
+
+   With the DC1.COM program on a disk in your A drive type  DC1
+
+Example:  A>DC1
+
+   A message telling you DC1 has installed itself and containing instructions
+similiar to the above should appear on your screen.
+
+   Now, make sure you're not in Number Lock mode (if you've got a standard PCjr
+keyboard this is probably already the case).
+
+   Press down on the ALT key (in lower left corner of your keyboard)
+
+   While holding down on ALT press and release the LEFT ARROW key.
+
+   Your border color should change. WOW!
+
+   Hold down the ALT key and press LEFT ARROW repeatedly (this will have the
+   effect of "flipping" through the border colors) until you find one you like.
+
+   Now hold down ALT, press and release UP and RIGHT ARROW until you get
+   foreground and background colors you find pleasing. It's that simple.
+
+   OH MY GOSH! ALL MY TEXT HAS DISSAPPEARED!!!!!!!!!
+
+   No, not really, your text is still there.  What's happened is that you've
+   defined background and foreground to the same color.
+
+   Just press ALT UP ARROW or ALT RIGHT ARROW and YOUR TEXT WILL REAPPEAR.
+
+*******************************************************************************
+
+TECHIE NOTES:
+   DC1 works by redefining some values in the VGA registers.  It's a PCjr
+specific, PCjr only program.
+
+******************************************************************************
+
+COPYRIGHT:
+
+DC1.COM is Copyright 1987 by Mark Boatright
+
+THIS PROGRAM IS NOT TO BY DISTRIBUTED FOR PROFIT OR "DISK FEES" WITHOUT THE
+AUTHOR'S EXPRESS, WRITTEN PERMISSION.
+
+PROBLEMS:
+  You can get ahold of me via Compuserve 74206,1751
+
+
+OH, YEAH.
+
+   Now that you got a DOS border you may notice that your screen isn't
+   properly centered.  TO CENTER YOUR SCREEN:
+
+      ALT + CTRL + RIGHT ARROW shifts screen right
+      ALT + CTRL + LEFT ARROW shifts screen left
+
+
+
+```
+{% endraw %}
+
+## FILES906.TXT
+
+{% raw %}
+```
+Disk No  906
+Program Title: MISCELLANEOUS UTILITIES
+PC-SIG version 1
+ 
+    This disk contains about 20 different utilities for your PC. For
+example, the selective print screen utility will select the number of rows
+on the screen that you want to printout using the "PtrSc" option on your
+keyboard. An "unprotect" guide helps you run "Managing Your Money" from a
+hard disk without inserting the original disk in drive A:. Also included
+are some communication utilities for QMODEM and other utilities for
+Microsoft Word, DOS command utilities within windows, some C language
+utilities, how to unprotect CHESSMASTER 2000, a multi-level windows in
+TURBO BASIC, and more.
+ 
+Usage: Miscellaneous Utilities
+ 
+System Requirements: 128K memory, two disk drives, and color graphics.
+ 
+How to start: Most of the programs on this disk are archived and must
+be un-archived, with PKXARC, to be used. Place PKXARC and the file you
+wish to un-archive on a blank formatted disk and type: PKXARC [filename]
+(press enter).
+ 
+Suggested Registration: $5.00 to $50.00, depending on the program.
+ 
+File Descriptions:
+ 
+99       DIR   Telecommunication service library directory.
+CM2PTCH  ARC   Patch for CHESMASTER 2000.
+CORDFORM ARC   AIA change order for Microsoft Word with style sheet.
+DBRELATE ARC   Extensions of DBASE, CLIPPER relations.
+DC1      ARC   PC Junior DOS color program from CIS.
+DR       ARC   Better than DIR from PC Magazine.
+FACE     COM   Lots of faces on your screen.
+LINE26   COM   Memory resident program that displays status info.
+LINE26   DOC   Documentation for LINE26.COM.
+LOCKIT   COM   Lock/Unlock keyboard - Turn screen on/off.
+LOCKIT   DOC   Documentation for LOCKIT.COM.
+MIRRORDD ARC   Dialing directory from Mirror.
+MYMENU   ARC   Menu maker for hard disk.
+MYMUNP   ARC   Managing Your Money patches with version 3.0.
+NEWDEX   ARC   Great floppy disk cataloguer.
+PCKWKPAT ARC   Patch for shareware PC-KWIK.
+PKFIND11 EXE   Locate files on hard disk.
+PRNTSCR- ARC   Print any part of screen with 'PrtSc' key.
+QUICKCHA ARC   Change color on any programs.
+SLEEVE1  ARC   Make disk sleeve with DIR on it.
+SLEEVE2  ARC   Print DIR on disk sleeve.
+TBWINDOW ARC   Turbo BASIC window routines with source code.
+TC-EQUIP ARC   Display PC equipment - Turbo C with source code.
+TCSEARCH ARC   Search for files - Turbo C source code.
+TYPEHEAD ARC   Clipper/dBase3-type ahead quash and why. With demo program.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+## LINE26.DOC
+
+{% raw %}
+```
+                          LINE26  Ver 2.00
+                         (C) Copyright 1986
+                      NetWork Business Systems
+                         ALL RIGHTS RESERVED
+
+                           Tue 11-Nov-86
+
+
+LINE26 is an MS-DOS(TM) compatible memory-resident utility that displays
+system status information on line 26, a portion of the monitor screen
+not used by application programs. The status line consists of day of
+week, date, caps, num & scroll indicators, and time of day.
+
+LINE26 is a productivity enhancement tool that provides the computer
+operator with access to important system variables within a
+consistent format among various application programs.  This is accom-
+plished by increasing the display area of the screen to include an
+additional line of text located in the previously unused border area.
+This "user friendly" utility reduces frustrating keyboard errors for
+both "power users" and occasional or new computer users alike.
+
+LINE26 is compatible with the color graphics adaptor and is active in 
+screen modes 2 & 3 (80 column text) only with composite, color, and
+Compaq(TM) monochrome-graphics monitors.
+
+LINE26 is inactive when used with the monochrome, EGA, and Hercules(TM)
+Graphics Card video adaptors.  (EGA compatibility is currenty under
+development.)
+
+To invoke LINE26, enter "LINE26 n" 
+             
+          where n is 0 = white on black  (default)
+                     1 = white on blue
+                     2 = black on green
+                     3 = black on turquoise
+                     4 = black on red
+                     5 = black on purple
+                     6 = black on yellow
+                     7 = black on white
+                     8 = inactivate LINE26
+
+Color combinations may be changed, and LINE26 may be inactivated or re-
+activated in 80 column text mode by entering "LINE26 n" with a new "n" 
+parameter.  When an application program changes screen mode to graphics
+or 40 column text, LINE26 remains resident but becomes inactive (no dis-
+play).  As soon as screen mode returns to 80 column text, LINE26 re-
+appears on the screen.  Compaq(TM) users may have LINE26 active in either
+internal (Ctrl-Alt->) or external (Ctrl-Alt-<) screen modes.  When 
+LINE26 is active, it always uses the currently displayed video page.
+LINE26 will not "reload" to an additional memory location after it
+is already resident.  LINE26 may be included in "autoexec.bat" as well
+as other batch files providing a transparent means (through switching
+the "n" parameter) of changing colors and active status of LINE26 with
+various application programs.  LINE26 will not scroll on the screen,
+and is not included in the printer output of "PrtSc" (Print Screen).
+
+MS-DOS is a trademark of Microsoft Corporation.
+Compaq is a trademark of Compaq Computer Corporation.
+Hercules is a trademark of Hercules Computer Technology, Inc. 
+
+
+
+
+
+                             LICENSE
+
+
+LINE26 is the copyrighted property of NetWork Business Systems.  You are
+granted a limited license to use LINE26 on a single computer.  If you
+received your copy of LINE26 from an unauthorized source, a voluntary 
+contribution (suggested amount $10) for the use of the program would be
+appreciated and would make your copy legal.  You may not use this program
+in a commercial environment or a govenmental organization without obtain-
+ing a commercial license or a site license.  Commercial licenses, site
+licenses, source code, and distribution licenses are available.  Contri-
+butions and inquiries should be sent to:
+
+                   LINE26
+                   NetWork Business Systems
+                   10070 Westpark, Suite 703
+                   Houston, Texas  77042
+                   Telephone (713) 781-9268
+
+LINE26 is designed as a "well behaved" memory-resident program, comp-
+atible with many of the other memory-resident and applications programs.
+Some applications and memory-resident utilities assign processor
+interrupts to their exclusive use ("not well behaved"). LINE26 is design-
+ed to remain resident but inactive (no display) during the execution of
+these types of programs, and resume active status (display) upon the
+termination of the "not well behaved" program.
+
+NetWork Business Systems specifically disclaims any warranty as to the 
+operational suitability of LINE26 in your particular computer operating
+environment.  Should operational problems with LINE26 occur, discontinue
+use of LINE26 and contact NetWork Business Systems.  If NetWork Business
+Systems is unable to correct the problem, you may request a full refund 
+of the origional purchase price of LINE26, if request is made within 10
+days of the origional purchase date.  NetWork Business Systems will not 
+be liable for any loss or damages in excess of the origional purchase
+price of LINE26.
+
+```
+{% endraw %}
+
+## LOCKIT.DOC
+
+{% raw %}
+```
+                        LOCKIT  Version 1.00
+                         (C) Copyright 1986
+                      NetWork Business Systems
+                         ALL RIGHTS RESERVED
+
+LOCKIT is an MS-DOS(TM) compatible memory-resident utility that locks/
+unlocks the keyboard and turns the screen off/on at user command.
+
+When LOCKIT is loaded, the user is prompted to enter a return code.
+The return code may be any four of the normal keyboard characters.
+Ctl-Alt-L invokes LOCKIT, clearing the screen and locking the keyboard.
+If a program is running, it continues to execute in the background.
+The screen is restored and the keyboard is unlocked by typing the
+return code on the keyboard.  The return code may be changed at any time
+by entering LOCKIT at the DOS prompt and typing a new return code.
+
+LOCKIT is compatible with the color graphics adapter and composite,
+color, and Compaq(TM) monitors.  Monochrome and EGA compatibility are
+under development.
+
+MS-DOS is a trademark of Microsoft Corporation.
+Compaq is a trademark of Compaq Computer Corporation.
+
+
+
+
+
+                         LICENSE & WARRANTY
+
+LOCKIT is the copyrighted property of NetWork Business Systems.  You are
+granted a limited license to use LOCKIT on a single computer.  If you
+received you copy of LOCKIT without paying the license fee, a voluntary
+contribution of $10 for the use of the program would be appreciated and
+would make your copy legal.  You may not use this program in a commercial
+environment or a governmental organization without obtaining a commercial,
+site, or corporate license.  These are available as follows:
+
+              Commercial License (1)                  $ 50.00
+              (Up to 10 users at one site)
+              Site License (1)(2)                     $200.00
+              (Unlimited users at one site)
+              Corporate License (1)(2)                $500.00
+              (Unlimited users at multiple
+              sites for one corporation)
+
+              (1) includes one year free updates
+              (2) includes source code
+
+Fees and inquiries should be sent to
+
+              NetWork Business Systems-LOCKIT
+              P. O. Box 671
+              Sugar Land, Texas  77487-0671
+
+Your license agreement and the current version of LOCKIT will be sent to
+you by return mail.
+
+LOCKIT is designed as a "well-behaved" memory-resident program, compatible
+with many of the other memory-resident and application programs.  Some
+applications and memory-resident utilities assign processor interrupts to
+their exclusive use (not "well-behaved").  LOCKIT is designed to remain
+resident but inactive (no display) during the execution of these types of
+programs, and resume active status (display) upon the termination of the
+not "well-behaved" program.
+
+NetWork Business Systems specifically disclaims any warranty as to the
+operation or suitability of LOCKIT in your particular computer operating
+environment.  Should operational problems with LOCKIT occur, discontinue
+use of LOCKIT and contact NetWork Business Systems.  If NetWork Business
+Systems is unable to correct the problem, you may request a full refund of
+the original license fee of LOCKIT if such request is made within ten (10)
+days of the original license date.  NetWork Business Systems will not be
+liable for any loss or damages in excess of the original license fee for
+LOCKIT.
+
+```
+{% endraw %}
+
+## MIRRORDD.DOC
+
+{% raw %}
+```
+OLD USERS: see section entitled XTRA...XTRA for new features!!!
+
+
+
+If you like my script, you can always send me a five or ten spot:
+
+				Paul Doland
+				10910 Gulf Frwy  #519
+				Houston, TX  77034
+				(713) 944-5253  wk.
+				(713) 946-8679  hm.
+
+
+
+On with the documentation:
+
+QUICKSTART:
+As with much software, somethings are just easier to see for
+yourself than they are to explain.  I suggest running it just to
+see what it does before reading all of the documentation.  It is
+really easy, I just don't know it the instructions are clear
+enough or not.  I understand them, but I wrote it.  Load
+Fkeys.xtk.  Then DO MIRRORDD.  If your in Houston, then many of the
+boards are probably familier to you.  If not, just unplug the
+phone and pretend.  Type A B C <ENTER> (no spaces) to the
+prompts.  It should dial directory entries A, B and C in circular
+fashion.  After it has dialed a few times, hit escape three times
+quickly.  Hit F8.  It will delete from the queue the number it
+was on and now only dial the other two numbers.  Hit escape 3
+times quickly.  Now hit F9.  This time, it will not delete, it
+will restart where it left off, dialing the two numbers.  Try
+again and use F8 again.  There will only be one number left to
+dial.  If it does not go smoothly, the rest of the documentation
+should be of help.
+
+
+INTRODUCTION:
+
+MIRRORDD.XTS gives Mirror a dialing directory with simaler to Qmodem.
+MIRRORDD.XTS is a scipt file that will allow you to dial in a
+circular fashion up to ten numbers chosen from a menu.  As it is
+a script file, it can run in the background while you are
+working with other software in the foreground.  When it reaches
+a connection, it will beep you, even if Mirror is in the
+background.  When you finish that call, you have the option to
+continue dialing the same list of numbers minus the one that you
+reached.  In case you got disconnected,  you can have it
+continue dialing the list including and starting with the one
+you reached.  You can of course choose to use different function
+keys than I use, but in expaining what to do, I will say "hit
+F9" so you are stuck with learning my keys.  This is for my ease
+of making this documentation.  You might also try a DO XFER right
+away.  I think my documentation on it makes it sound like you
+need a college degree in Mirror to use it, but its simple.
+
+OPERATION:
+
+Enter the command:  DO MIRRORDD <return.>  (Note: it will run a
+little faster if you keep MIRRORDD.XTS on a RAM disk)   You will
+be given a menu of 46 names.  Setting the directory entries up
+will be covered in the section SET UP.  Beside each number is a
+letter, digit, or special character such as ].  The command line
+will prompt you for the first number for the queue.  Type the
+letter of character to the left of the desired entry.  It will
+prompt you for the second number.  Continue this process until
+you have given it the entire list you wish to dial.  If you have
+entered less than ten numbers, hit the return key to terminate the
+list and start dialing.
+
+When it gets a connection, you will be beeped.  Even if you were
+processing in the foreground.  When you complete that call, you
+can type the command JUmp Continue.  You will be prompted as to
+whether you wish to delete from the queue.  Typing Y will delete
+the number that you were connected to from the list.  Typing N
+will not delete from the queue and will start dialing starting
+with the number you were just connected to.  This is in case you
+were inadvertantly disconnected.
+
+Another way to accomplish restarting the list is to assign
+function keys.  There are several labels in the program to
+assist you.  If you set a function key to @JUMP DELETE|  hitting
+that function will delete from the queue and start dialing.
+@JUMP RECALL|  will start dialing from the last number.
+@JUMP CONTINUE|  will prompt you if you wish to delete or not.
+
+When dialing, you may wish to abort a dial and have it continue
+with the list.  Hit the ESC key once.  You might wish to
+delete from the queue.  For example, if you see that one number
+is just ringing.  Hit the ESC key three times quickly.
+Then do whichever method of deletion described above.  You might
+wish to immediatly redial a number.  Hit the ESC key three times
+quickly and do whichever method of recall as described above.
+Note, the above suggestions only work if you hit the ESC key
+before the dial in question is aborted by Mirror.  (before
+timeout, busy, etc.)  If you wait to hit the ESC key after a
+BUSY or NO CONNECTION message appears, it is to late to do as
+described above.  (If you are to late you will delete the next call
+from the queue; or you will restart from the next call in the
+queue.)
+
+SET UP:
+
+Use your favorite editor to edit MIRRORDD.XTS.  Using Mirror's
+built in editor is recomended because you will then be able to
+edit MIRRORDD.XTS even if you have a program suspended in the
+background.
+
+The first section is a the menu section.  You will see two
+columns of letters and other characters.  Beside each letter,
+put in the name of a computer system you wish to have in your
+directory.  Leave insert off to avoid moving of the columns
+around.  But this section does nothing but give you the menu, so
+its appearance is up to you.
+
+Farther down in the program is a label, LABEL START-DIAL.  You
+may wish to use your editor's search capability to find it.  Its
+purpose is to initial all of your stardard parameters before it
+starts to dial.  If you're like most people, you probably don't
+change vary many parameters from one system to another,
+especially if your modem supports automatic speed setting.  But
+you may find one system requires 7 data bits and others require
+8.  Later, I will tell you where to put the DAta 7 statement for that
+one number.  But rather than now having to put a DAta 8 under all
+other numbers, instead, put DATA 8 on a line under
+START-DIAL.  Alternatively, you may wish to reload your entire STD
+file.  You will need to convert your STD.XTK to a nested script
+file.  To do this, copy STD.XTK to STD.XTS.  Change the last
+statement which should be a GO statement to a RTurn statement.
+Then put a DO STD statement under START-DIAL.  NOTE:  The
+statements after START-DIAL are executed before it starts to
+dial the chain, not between each dial.  Therefore, it will not
+slow down redials if you put nested script files under
+START-DIAL.
+
+Farther down is where you place the names and phone numbers.
+There is a section that that looks like the following:
+
+LABEL CALL-A
+NAME
+NUMBER
+GO R1/45
+IF -$ JUMP @C10
+JUMP ONLINE
+
+LABEL CALL-A is for menu choice A, CALL-B is for menu choice B,
+and so on.  Put each name and number into this section.  Make
+sure they corrospond to what you put into the menu section.  If
+this particular system is one that requires 7 data bits, put a
+DATA 7 statemtent between the IF -$ and the the JUMP ONLINE
+statements.  You can put as much as you want here.
+Alternatively, you may wish to call a nested script file.
+Perhaps even one that was created with the LRn command.  Be sure
+it ends with a RTurn statement.  You will note you won't have to
+stick in DATA 8 statements anywhere else because you already put
+it under START-DIAL.  (This has been an example of course)
+
+
+NOTE:  MIRRORDD.XTS uses the alternate function key assignments to
+store what numbers to dial.  It also uses FK C7,C8,C9 and C10 as
+internal variables.
+
+Another hint:  It is suggested you set the first two characters
+of the Call Progress string to hyphens.  (ie. disable NO
+CONNECTION)  First of all, this message means your modem timed
+out and it should not be set to time out before Mirror does.  If
+your modem times out first, lengthen its timeout.  This is
+stored in register 7 of Hayes compatable modems.  Second of all,
+a NO CONNECTION message from you modem can get stored into
+Mirror's buffer and foul the next redial.  If everytime you
+start to redial, the first redial gets aborted, then this is
+what is happening!!!  I was told this bug with Mirror had been
+corrected, but I find it not works fine with my old setup, so I
+haven't messed with it.
+
+
+
+XTRA...XTRA...XTRA:  NEW FEATURES:
+
+Once Mirror detects that a call has been successful, it will put
+itself into a WAit Manual mode.  This means that the script file
+has been suspended so that you can continue it.  The JUmp
+statements unsuspend the script file.  But if you decide to run
+another script file while MIRRORDD is suspended, MIRRORDD will
+get aborted.  I wish Mirror would treat such a condition as a
+nested script file, but it doesn't.  There is a get around.
+But before I descibe it, I will tell you that I
+made some mods to help keep MIRRORDD from getting aborted by getting
+it to run nested script files.  But then I figured I might as well
+set it up so that it can easily be restarted.  To restart Mirrordd, just hit
+F10 (rerun MIRRORDD), then a return to the first prompt.  You will be asked
+whether or not you wish to delete (from the previous queue) and
+you will continue as though nothing has happened.  This assumes you
+don't mess with the function keys I have reserved for MIRRORDD.
+
+The next couple of paragraphs show how to get Mirrordd to run nested
+script files.  This will keep it from getting aborted.  But you can
+really just ingore this feature as you might as well just restart.  A DO
+by itself will unsuspend MIRRORDD.  MIRRORDD will now ask you what
+script file you wish to run.  If you hit return, it will give you
+a menu of the script files from the current drive and directory.
+If you hit return again, MIRRORDD will return to suspended mode.
+If you tell it to run a script file that ends in a RTurn, it will
+return to suspended mode, retaining the ability to Delete or
+Recall.  I set up F5 to @DO| to do this.  As I said, you if you
+do as I say, you will still be able to hit F8 or F9 to restart
+the queue.  From now on, all my script files end with these two lines:
+
+Label RTurn
+RTurn
+
+If the script in question wasn't really nested, this satement
+will have no effect.  I set up F7 to @JUmp RTurn|.  This is in
+case I abort a script file run as a nested script via the method
+described above.  I hit F7, this will get me out of the
+nested script, back to MIRRORDD, suspended.  F8 and F9 work.
+
+In case you didn't understand what I've said in the last couple of
+paragraphs, let me restate it a bit.  I first tried to find a work-
+around to keep MIRRORDD from getting aborted when running other
+script files.  I set MIRRORDD to up to run nested script files.
+A DO command will get MIRRORDD to run a nested script file.  Then
+I decided that I would like to make MIRRORDD restartable even if
+it does get aborted.  This is the F10 <return> (rerun MIRRORDD)
+method.  Below, when
+I describe XFER.XTS, I say to type DO <return> XFER <return>  rather
+than just DO XFER <return>  This is because the later method will
+get MIRRORDD aborted.  But if you want, you can really ignore all
+the garbage about RTurns and keeping MIRRORDD active and just use
+the F10 <return> method.
+
+As of now, I'm including two script files set up like this.
+The first, NS.XTS is very simple, but it may make you realize a
+little script file might make your life easier.  When I ask a
+BBS for a list of all files in all directories, it will keep
+asking me Y,N,NS?  Even if I type NS (non stop) when it gets to
+the next directory, it will ask again.  NS.XTS makes an infinite
+loop to watch for [NS]?  or NS?  And will reply NS|
+
+XFER.XTS is a file transfer menu.  Believe me, I'm not a menu
+finatic and I would just as soon type RX xxxx.xxx than put up a
+menu asking me what protocol, etc.  But since Mirror won't beep
+at you when it completes a transfer, I needed at least a small
+script file to ALarm after the transfer.  Second of all, since a
+lot of Sysops don't like you to set up a download and leave the
+BBS to timeout afterwords, it is set up that if you don't do
+respond within 5 seconds after the end-of-transfer alarm, it will
+log off.  XFER isn't too smart at logging off, but it works for
+the BBS's I've so far tried it with.  It sends a G| for goodbye.
+Then it sends N| for those boards that ask if you want to leave a
+comment.  For those boards that ask if your sure you want to log
+off, it then sends G| then Y| then N| then BYe.  You may need to make
+this smarter if it won't always log you off.  Enter DO <return>
+XFER <return>.  I use F5 for DO| and F6 for XFER|
+It will give you a menu of protocols, ask you if you are
+receiving or xmitting, and the file name.  While some protocols
+do not allow specifying the file name on the receiver, they all
+allow at least a path name.  Some protocols even allow a second
+parameter.  If necessary, just type this in too.  Just remember
+that when it asks for filename, just type whatever you would
+type if you were entering the command yourself.  The command
+structure to my menu is set up so that you type the same thing
+you would ordinarily type, but give you the added features as
+described above.  For instance XX is the Mirror command to xmit with
+xmodem and the XFER command to do likewise.  The menu is
+put on the status screen, then you are put back on the terminal screen.
+My menu also adds RS which means receive single file ymodem protocol.
+And RN for no error checking version of ymodem.  According to SoftKlone,
+these options are not needed for the transmit ymodem, but I do have
+XN and XS on my menu.  These menu choices just append a /s or /n to
+the command for you.  You can do this yourself by using the normal
+RY command and appending a /s or /n to the filename.  This is what you
+have to do if you want both (according to SoftKlone, use /sn)  And you
+can also do this with the /t option.  I've never messed with these, so
+I don't really know if my menu options work, but they should.
+
+PERSONAL NOTES:
+An off line utility maintanance utility would ease set up of the
+dialing directory.  I have thought about writing such a utility.
+Features that it would have would include easy entry of names
+and phone numbers, set up of length of time allowed per dial,
+whether it would be silent or alarm, etc.  I also thought about
+having it set up nested scripts so that a person could have it
+call up to 10 BBS's and automatically get all of his messages
+off of each board.  The nested scripts would most likely be
+created by the LRn command.  Presently, the dialing directory is
+limited to one screen of 46 numbers.  I have also planned to add
+additional screens.  Adding multiple pages would start to make
+the script file rather large.  Of course that really doesn't hurt
+anything.  But one small enhancement to the script language would
+eliminate one large section of code.  There is a section of code
+that follows the following pattern:
+
+LABEL SET-A
+@C9 CALL-A
+JUMP @C10
+
+This entire section would not be needed if I could simply have
+a statement:  @C9 CALL-@   where the present value of @ would be
+processed.
+
+```
+{% endraw %}
+
+## MYMFIX.DOC
+
+{% raw %}
+```
+
+
+               HOW TO RUN "MANAGING YOUR MONEY(tm)" FROM A
+                  HARD DISK WITHOUT THE "KEY" DISK AND 
+                      WITHOUT PROGRAM MODIFICATIONS 
+
+         If you wish to run "Managing Your Money" (including version 
+     2.0) from a hard disk, but are annoyed by the requirement for 
+     having the original disk 1 in drive A, then read on....  
+
+         Part of this ARC file is the program "MYMFIX.COM".  All you have to
+     do is to include this program in your "autoexec" file when running
+     Managing Your Money.  For instance, your "autoexec.bat" might look like
+     this:
+
+         DATE
+         TIME
+         MYMFIX  (to install "MYMFIX")
+         MYM
+         MYMFIX  (to uninstall "MYMFIX")
+
+         That's all there is to it.  MYM will no longer look for the key 
+     disk in drive A.  If you are using version 2.0 of MYM, when the 
+     request is made to put the key disk in drive A, simply proceed as 
+     though you had actually inserted the disk.  
+
+     A request:
+
+         If you find this program of value and wish to encourage the
+     availability of similar programs in the future, then you may wish 
+     to contribute $10 to the author at the address below: 
+
+                 Herbert Sorock
+                 2241 Thornwood Avenue
+                 Wilmette, IL  60091
+
+     ------------------------------------------------------------------------
+     "Managing Your Money" is a registered trademarks of Micro Education 
+     Corporation of America.  
+
+```
+{% endraw %}
+
+## PCKWKPAT.DOC
+
+{% raw %}
+```
+Did you see the writeup in the August issue of PC Tech Journal about disk
+cacheing?  They have good things to say about Super PC-Kwik.  Have you seen
+the shareware version of PC-Kwik, usually found in the arc file
+
+    SHAREPCK.ARC
+
+If you have tried it, you probably got disgusted looking at all 6 (count
+em, 6) of the opening screens.  The following is a simple patch to stop the
+screen display of the 6 opening screens, and also the necessity of hitting
+return 6 times.  The first patch gets rid of the call to the subroutine
+which displays the screens and waits for the ENTER keys.  The second part of
+the patch is necessary because the writers were sneaky.  They incremented a
+counter each time you pressed enter, and later they check this counter and
+reboot your system if the counter is not equal to 6.  What is this?  Reminds
+me of copy protection in a so-called "shareware" program.
+
+I created this patch mainly because I enjoy tinkering with the innards of such
+programs.  It is not my intention to deprive MultiSoft Corporation of their
+right to registration fees if you use their program.  As a matter of fact, I
+encourage you to register your copy if you use it regularly.  Shareware will
+only work if we support it.  However, I resent anyone who releases a program
+as "shareware" and then makes you look at six screens of advertising every
+time you use the program.
+
+On to the actual operation.  Extract the files from the Sharepck.arc file,
+and copy three files onto a blank, formatted floppy disk.  The three files
+are:
+      1.  SHAREPCK.COM      The "shareware" version of PC-KWIK
+      2.  DEBUG.COM         from your DOS disk.  Any version >= 2.00
+      3.  PCKWKPAT.SCR      The other file that come along with this doc file
+
+Make the disk drive containing the new floppy the default drive, and then
+type in:
+         DEBUG   <PCKWIKPAT.SCR
+
+This will alter the SHAREPCK.COM file.
+
+
+```
+{% endraw %}
+
+## SPS.DOC
+
+{% raw %}
+```
+          SPS.COM ver 2.0 by Bob Montgomery, 4-23-87
+
+This is a Terminate and Stay Resident (TSR) program which does  a
+Selective  Print Screen (hence the name SPS). Once installed,  it
+vectors  interrupt 5 (the print screen interrupt) to itself,  and
+sits waiting for a print screen request. When you request a print
+screen,  the  cursor is moved to the top of the screen,  and  the
+prompt  'Set  start  position' appears in the  lower  right  hand
+corner.  The  cursor  can be moved around  the  screen  with  the
+following keys:
+
+     Right arrow - move cursor right; stops at right edge
+     Left arrow -  move cursor left; stops at left edge
+     Up arrow -    move cursor up one line; stops at top line
+     Down arrow    move cursor down one line; stops at bottom line
+     Page Up       move cursor to top line
+     Page Down     move cursor to bottom line
+     ^Right arrow  move cursor to right edge of screen
+     ^Left arrow   move cursor to left edge of screen
+     Home          move cursor to upper left corner of screen
+     End           move cursor to lower right corner of screen
+     P             Print whole screen
+     Escape        Cancel print screen
+
+When the cursor is at the desired start position, press Enter and
+the prompt 'Set end position' will appear in the lower right hand
+corner.  Move the cursor to the desired end position,  and  press
+Enter  again. The text within the rectangle defined by the  start
+and end positions will then be printed.
+
+If  you don't want to do a print screen, press Escape  to  cancel
+the operation and return to the interrupted program. If you  want
+to print the whole screen, press the P (upper or lower case) key.
+
+Before the printer starts printing, the prompt in the lower right
+corner  is  removed  and the original text is  restored.  If  the
+printer  is  not  ready (or deselected), a  prompt  'Printer  not
+ready'  will  appear  in the lower right  corner  after  about  2
+seconds. Then after about 10 seconds, if the printer is still not
+ready,  the  print  screen operation aborts and  returns  to  the
+interrupted  program.  If during the print screen  operation  the
+printer  becomes  'not ready', a prompt will tell you  this,  and
+give you about 10 seconds to fix the problem before aborting.
+
+The  program only traps interrupt 5 (print screen) until  invoked
+by  pressing Shift PrtSc. Then, it vector the timer and  keyboard
+interrupts  (8 and 9) to itself, and saves the old vectors.  When
+it is done, it puts the old vectors back, and quits. In this way,
+it is essentialy 'not there' until called, and 'not there'  after
+it  is  done. This means that it will not  interfere  with  other
+programs,  and  not  cause  additional  processing  delays.  Once
+invoked, it traps all keyboard input and does not pass it on,  so
+the  interrupted  program, other TSRs, and BIOS never  know  that
+keys have been pressed. Since the last thing BIOS knew before the
+program  was invoked was that the Shift and PrtSc keys  had  been
+pressed, the releasing of the Shift key is passed on so that BIOS
+can do its housekeeping; releasing the PrtSc key does not  affect
+the  BIOS housekeeping, so it is not passed on. This  means  that
+the  program must service the keyboard each time it generates  an
+interrupt 9, a job which is normally done by BIOS.
+
+This program  solves  a number of problems, some  of  which  were
+present with the previous version of SPS by Paul Trioano.
+
+     1. Passing  keys  on is sometimes a problem,  because  other
+        programs (like CED) will save the keypresses, and act  on
+        them  after the interrupting program quits.
+     2. Sending  the  screen characters directly is  sometimes  a
+        problem,  since  some screens contain  control  character
+        (below  20h) and make them appear as blanks  by  changing
+        the attribute to black on black; HDIR is an example. This
+        will  cause  the printer output to not  match  the  video
+        screen.
+     3. Routing  interrupts  thru  a program  when  not  required
+        takes  extra processing time, and can cause  interference
+        with other programs.
+
+The source code is included, and is liberally commented to  allow
+those  interested to understand how it works. It uses  only  BIOS
+calls  and no DOS calls; DOS calls will not work in TSR  programs
+because DOS is not re-entrant. It has been tried on the XT and AT
+with no problems, so will probably work on all machines with  IBM
+compatible  BIOS. If you have any problems or comments,  leave  a
+message  with the Black Hole BBS in Orlando, Florida, (305)  260-
+6397. Enjoy.
+
+Bob Montgomery
+
+
+
+         ----------------end-of-author's-documentation---------------
+
+                        Software Library Information:
+
+                   This disk copy provided as a service of
+
+                        The Public (Software) Library
+
+           If you have received this disk from another source, you
+         should be aware that disks in the P(s)L are updated monthly
+            so this copy may not be the latest version available.
+         For a copy of the latest monthly software library newsletter
+          and a list of the 800+ disks in the library, call or write
+
+                        The Public (Software) Library
+                              P.O.Box 35705 - F
+                           Houston, TX 77235-5705
+                               (713) 721-6104
+
+         We are not the authors of this program, nor are we associated
+         with the author in any way other than as a distributor of the
+         program in accordance with the author's terms of distribution.
+
+         Please direct shareware payments and specific questions about
+         this program to the author of the program, whose name appears
+         elsewhere in  this documentation. If you have trouble getting
+         in touch with the author,  we will do whatever we can to help
+         you with your questions. All programs have been tested and do
+         run.  To report problems,  please use the form that is in the
+         file PROBLEM.DOC on many of our disks or in other written for-
+         mat with screen printouts, if possible.
+
+
+```
+{% endraw %}
+
 ## QUICKCHA.BAS
 
+{% raw %}
 ```bas
 1 ' Program to create SETCOLOR.COM
 2 'COPYRIGHT 1987 COMPUTE! PUBLICATIONS, INC.
@@ -177,9 +1090,11 @@ machines:
 1030 DATA B0,09,8D,16,2C,02,CD,21,BA,36
 1040 DATA 05,CD,27
 ```
+{% endraw %}
 
 ## SLEEVE.BAS
 
+{% raw %}
 ```bas
 10  '***********************************
 20  '**                               **
@@ -389,9 +1304,11 @@ machines:
 2060 IF CLR THEN COLOR 15
 2070 RETURN
 ```
+{% endraw %}
 
 ## SLEEVE.BAS
 
+{% raw %}
 ```bas
 10  '***********************************
 20  '**                               **
@@ -633,9 +1550,52 @@ machines:
 2380 IF CLR THEN COLOR 15
 2390 RETURN
 ```
+{% endraw %}
+
+## CALCATTR.ASM
+
+{% raw %}
+```
+              title          CALCATTR
+              page           60,132
+
+attr          equ            [bp + 06h]          ; ATTR%
+back          equ            [bp + 0Ah]          ; BACK%
+fore          equ            [bp + 0Eh]          ; FORE%
+
+program       segment                            ; begin program segment
+              assume         cs:program          ; parameters on stack
+              push           bp                  ; save for basic
+              mov            bp,sp               ; establish stack
+              push           es                  ; save for basic
+              les            di,fore             ; point to foreground color
+              mov            dx,es:[di]          ; get the color
+              les            di,back             ; point to background color
+              mov            ax,es:[di]          ; get the color
+              and            ax,0007h            ; and 7
+              mov            cl,04h              ; move shift count to CL
+              shl            ax,cl               ; shift AL to AH (back and 7)*16
+              mov            si,dx               ; move foreground to si
+              and            si,0010h            ;
+              mov            cl,03h              ; move shift count to CL
+              shl            si,cl               ; shift left 3
+              or             ax,si               ;
+              and            dx,000fh            ;
+              or             ax,dx               ;
+              les            di,attr             ; point to ATTR%
+              mov            es:[di],ax          ; send back to basic
+              pop            es                  ; restore ES
+              pop            bp                  ; back to basic
+program       ends
+              end
+
+
+```
+{% endraw %}
 
 ## DEMO20.BAS
 
+{% raw %}
 ```bas
 'Demonstration of TBWINDO
 $INCLUDE "TBWINDO.INC"
@@ -955,6 +1915,1007 @@ locate 15,18:          print "anying demo program DEMO.EXE ...           "
 delay 5
 end
 ```
+{% endraw %}
+
+## QATTR.ASM
+
+{% raw %}
+```
+              title          QATTR
+              page           60,132
+
+attr          equ            [bp + 06h]
+snochk        equ            [bp + 0Ah]
+cols          equ            [bp + 0Eh]
+rows          equ            [bp + 12h]
+col           equ            [bp + 16h]
+row           equ            [bp + 1Ah]
+
+program       segment
+              assume         cs:program
+              push           bp
+              mov            bp,sp
+              push           ds
+              push           es
+              mov            ah,15
+              int            10h
+              mov            dx,0B000h
+              push           dx
+              pop            es
+              mov            dx,03BAh
+              cmp            al,7
+              jz             ok
+              mov            dx,0B800h
+              push           dx
+              pop            es
+              mov            dx,03DAh
+ok:           lds            si,rows
+              mov            cx,ds:[si]
+              push           cx
+              lds            si,attr
+              mov            ax,ds:[si]
+              push           ax
+              lds            si,row
+              mov            ax,ds:[si]
+              dec            ax
+              lds            si,col
+              mov            bx,ds:[si]
+              dec            bx
+              shl            bx,1
+              mov            cl,05
+              shl            ax,cl
+              mov            cx,ax
+              shl            ax,1
+              shl            ax,1
+              add            cx,ax
+              add            bx,cx
+              pop            ax
+              push           bx
+              lds            di,snochk
+              mov            cx,ds:[di]
+              jcxz           snow
+              pop            bx
+nxtrow:       lds            di,cols
+              mov            cx,ds:[di]
+              cld
+nosnow:       mov            di,bx
+doagain:      inc            di
+              stosb
+              loop           doagain
+              pop            cx
+              dec            cx
+              push           cx
+              add            bx,160
+              jcxz           endit
+              jmp            nxtrow
+snow:         pop            bx
+nxtrow1:      lds            di,cols
+              mov            cx,ds:[di]
+              cld
+              mov            di,bx
+              cli
+doagain1:     inc            di
+              push           ax
+waitlo1:      in             al,dx
+              shr            al,1
+              jc             waitlo1
+waithi1:      in             al,dx
+              shr            al,1
+              jnc            waithi1
+              pop            ax
+              stosb
+              loop           doagain1
+              pop            cx
+              dec            cx
+              push           cx
+              add            bx,160
+              jcxz           endit
+              jmp            nxtrow1
+endit:        pop            cx
+              pop            es
+              pop            ds
+              pop            bp
+program       ends
+              end
+```
+{% endraw %}
+
+## QFILL.ASM
+
+{% raw %}
+```
+              title          QFILL
+              page           60,132
+
+attr          equ            [bp + 06h]
+snochk        equ            [bp + 0Ah]
+char          equ            [bp + 0Eh]
+cols          equ            [bp + 12h]
+rows          equ            [bp + 16h]
+col           equ            [bp + 1Ah]
+row           equ            [bp + 1Eh]
+
+program       segment
+              assume         cs:program
+              push           bp
+              mov            bp,sp
+              push           ds
+              push           es
+              mov            ah,15
+              int            10h
+              mov            dx,0B000h
+              push           dx
+              pop            es
+              mov            dx,03BAh
+              cmp            al,7
+              jz             ok
+              mov            dx,0B800h
+              push           dx
+              pop            es
+              mov            dx,03DAh
+ok:           lds            si,rows
+              mov            cx,ds:[si]
+              push           cx
+              lds            si,char
+              mov            ax,ds:[si]
+              mov            bl,al
+              lds            si,attr
+              mov            ax,ds:[si]
+              mov            bh,al
+              push           bx
+              lds            si,row
+              mov            ax,ds:[si]
+              dec            ax
+              lds            si,col
+              mov            bx,ds:[si]
+              dec            bx
+              shl            bx,1
+              mov            cl,05
+              shl            ax,cl
+              mov            cx,ax
+              shl            ax,1
+              shl            ax,1
+              add            cx,ax
+              add            bx,cx
+              pop            ax
+              push           bx
+              lds            di,snochk
+              mov            cx,ds:[di]
+              jcxz           snow
+              pop            bx
+nxtrow:       lds            di,cols
+              mov            cx,ds:[di]
+              cld
+nosnow:       mov            di,bx
+doagain:      stosw
+              loop           doagain
+              pop            cx
+              dec            cx
+              push           cx
+              add            bx,160
+              jcxz           endit
+              jmp            nxtrow
+snow:         pop            bx
+nxtrow1:      lds            di,cols
+              mov            cx,ds:[di]
+              cld
+              mov            di,bx
+              cli
+doagain1:     push           ax
+waitlo1:      in             al,dx
+              shr            al,1
+              jc             waitlo1
+waithi1:      in             al,dx
+              shr            al,1
+              jnc            waithi1
+              pop            ax
+              stosw
+              loop           doagain1
+              pop            cx
+              dec            cx
+              push           cx
+              add            bx,160
+              jcxz           endit
+              jmp            nxtrow1
+endit:        pop            cx
+              pop            es
+              pop            ds
+              pop            bp
+program       ends
+              end
+```
+{% endraw %}
+
+## QPRINT.ASM
+
+{% raw %}
+```
+                title   QPRINT
+                page    60,132
+
+Attr            equ     [bp + 06h]      ; ATTR%
+SnoChk          equ     [bp + 0Ah]      ; SNOCHK%
+StrDat          equ     [bp + 0Eh]      ; STRDAT$
+Column          equ     [bp + 12h]      ; COL%
+Row             equ     [bp + 16h]      ; ROW%
+
+program         segment                 ; begin program segment
+                assume  cs:program      ; parameters on stack
+                push    bp              ; save registers for return
+                mov     bp,sp           ; establish addressibility of stack
+                push    ds              ; save cause we will manipulate
+                push    es              ; ditto
+                les     di, StrDat      ; load length address
+                mov     cx, es:[di]     ; load length into cx
+                and     cx, 7FFFh       ; and off high byte
+                jcxz    GetOut          ; quit if empty string
+                push    cx
+                mov     dx, ds:[0]      ; get the beginning of the string segment from ds:[0]
+                push    dx              ; push data segment onto stack
+                pop     ds              ; make ds point to string segment
+                mov     si, es:[di + 2] ; get offset into string segment from es:[di + 2]
+                push    ds              ; save address of string to write to screen
+                push    si              ;
+Scr_Check:      mov     ah, 15          ; function to get current video state
+                int     10h             ; video bios call
+                mov     dx, 0B000h      ; assume mono
+                push    dx
+                pop     es
+                mov     dx, 03BAh       ; address of 6845 chip for mono
+                cmp     al, 7           ; is it mono?
+                jz      Store_Screen    ; it sure is!
+                mov     dx, 0B800h      ; no - it must be color
+                push    dx
+                pop     es
+                mov     dx, 03DAh       ; address of 6845 chip for CGA
+Store_Screen:   push    es              ; push es onto stack - screen segment
+                lds     di, Column      ; get the address of the column
+                mov     bx, ds:[di]     ; BX has the column
+                dec     bx              ; convert into 0-79
+                shl     bx, 1           ; multiply by 2 to accomodate attributes
+                lds     si, Row         ; get the address of the line
+                mov     ax, ds:[si]     ; get line (1-25)
+                dec     ax              ; convert to 0-24
+CalcScrnOff:    mov     cl, 05          ; Times 160 bytes per line
+                shl     ax, cl          ; First x 32
+                mov     cx, ax          ; Temp Hold
+                shl     ax, 1
+                shl     ax, 1           ; x 128
+                add     cx, ax          ; X128 + X32 = X160
+                add     bx, cx          ; Add column
+                lds     si, Attr        ; get the address of the attribute
+                mov     ax, ds:[si]     ; load attribute into ax
+                pop     es              ; ditto
+                lds     si, SnoChk      ; Snow Check if not 0
+                mov     cx, ds:[si]     ; to CX
+                jcxz    Snow
+                pop     si              ; ditto
+                pop     ds              ; ditto
+                pop     cx              ; get length back
+                mov     di, bx          ; move over to line/column
+                cld                     ; Clear direction flags
+NoSnow1:        movsb                   ; AX has attribute to spread
+                mov     es:[di], al     ; Put attribute
+                inc     di
+                loop    NoSnow1
+GetOut:         jmp     endit
+Snow:           pop     si              ; get length back
+                pop     ds              ; ditto
+                pop     cx              ; ditto
+                mov     di, bx          ; move over to line/column
+                cld                     ; Clear direction flags
+                cli
+Snow1:          push    ax
+WaitLo1:        in      al, dx          ; get status
+                shr     al, 1           ; is it low?
+                jc      WaitLo1         ; wait until it is
+WaitHi1:        in      al, dx          ; get status
+                shr     al, 1           ; is it high?
+                jnc     WaitHi1         ; wait until it is
+                movsb
+WaitLo2:        in      al, dx          ; get status
+                shr     al, 1           ; is it low?
+                jc      WaitLo2         ; wait until it is
+WaitHi2:        in      al, dx          ; get status
+                shr     al, 1           ; is it high?
+                jnc     WaitHi2         ; wait until it is
+                pop     ax
+                mov     es:[di], al     ; move attribute byte
+                inc     di
+                loop    Snow1           ; go until all bytes moved
+                sti
+Endit:          pop     es              ; pop and restore all the registers
+                pop     ds
+                pop     bp
+program         ends                    ; end program segment
+                end
+
+```
+{% endraw %}
+
+## QPRINTC.ASM
+
+{% raw %}
+```
+                title   QPRINTC
+                page    60,132
+
+Attr            equ     [bp + 06h]      ; ATTR%
+SnoChk          equ     [bp + 0Ah]      ; SNOCHK%
+StrDat          equ     [bp + 0Eh]      ; STRDAT$
+ColL            equ     [bp + 12h]      ; COLL%
+ColR            equ     [bp + 16h]      ; COLR%
+Row             equ     [bp + 1Ah]      ; ROW%
+
+program         segment                 ; begin program segment
+                assume  cs:program      ; parameters on stack
+                push    bp              ; save registers for return
+                mov     bp,sp           ; establish addressibility of stack
+                push    ds              ; save cause we will manipulate
+                push    es              ; ditto
+                les     di, StrDat      ; load length address
+                mov     cx, es:[di]     ; load length into cx
+                and     cx, 7FFFh       ; and off high byte
+                jcxz    GetOut          ; quit if empty string
+                push    cx
+                mov     dx, ds:[0]      ; get the beginning of the string segment from ds:[0]
+                push    dx              ; push data segment onto stack
+                pop     ds              ; make ds point to string segment
+                mov     si, es:[di + 2] ; get offset into string segment from es:[di + 2]
+                push    ds              ; save address of string to write to screen
+                push    si              ;
+Scr_Check:      mov     ah, 15          ; function to get current video state
+                int     10h             ; video bios call
+                mov     dx, 0B000h      ; assume mono
+                push    dx
+                pop     es
+                mov     dx, 03BAh       ; address of 6845 chip for mono
+                cmp     al, 7           ; is it mono?
+                jz      Store_Screen    ; it sure is!
+                mov     dx, 0B800h      ; no - it must be color
+                push    dx
+                pop     es
+                mov     dx, 03DAh       ; address of 6845 chip for CGA
+Store_Screen:   push    es              ; push es onto stack - screen segment
+                lds     di, ColL        ; get the address of the left column
+                mov     bx, ds:[di]     ; BX has the left column
+                lds     di, ColR        ; get the address of the right column
+                mov     cx, ds:[di]     ; CX has the left column
+                add     bx,cx           ; total them
+                lds     di, StrDat      ; point to string data
+                mov     cx, ds:[di]     ; get length again
+                and     cx, 7FFFh       ; and off high bit
+                shr     bx, 1           ; divide by 2
+                shr     cx, 1           ;    "   "  "
+                sub     bx,cx           ; subtract length of string
+                dec     bx              ; convert into 0-79
+                shl     bx, 1           ; multiply by 2 to accomodate attributes
+                lds     si, Row         ; get the address of the line
+                mov     ax, ds:[si]     ; get line (1-25)
+                dec     ax              ; convert to 0-24
+CalcScrnOff:    mov     cl, 05          ; Times 160 bytes per line
+                shl     ax, cl          ; First x 32
+                mov     cx, ax          ; Temp Hold
+                shl     ax, 1
+                shl     ax, 1           ; x 128
+                add     cx, ax          ; X128 + X32 = X160
+                add     bx, cx          ; Add column
+                lds     si, Attr        ; get the address of the attribute
+                mov     ax, ds:[si]     ; load attribute into ax
+                pop     es              ; ditto
+                lds     si, SnoChk      ; Snow Check if not 0
+                mov     cx, ds:[si]     ; to CX
+                jcxz    Snow
+                pop     si              ; ditto
+                pop     ds              ; ditto
+                pop     cx              ; get length back
+                mov     di, bx          ; move over to line/column
+                cld                     ; Clear direction flags
+NoSnow1:        movsb                   ; AX has attribute to spread
+                mov     es:[di], al     ; Put attribute
+                inc     di
+                loop    NoSnow1
+GetOut:         jmp     endit
+Snow:           pop     si              ; get length back
+                pop     ds              ; ditto
+                pop     cx              ; ditto
+                mov     di, bx          ; move over to line/column
+                cld                     ; Clear direction flags
+                cli
+Snow1:          push    ax
+WaitLo1:        in      al, dx          ; get status
+                shr     al, 1           ; is it low?
+                jc      WaitLo1         ; wait until it is
+WaitHi1:        in      al, dx          ; get status
+                shr     al, 1           ; is it high?
+                jnc     WaitHi1         ; wait until it is
+                movsb
+WaitLo2:        in      al, dx          ; get status
+                shr     al, 1           ; is it low?
+                jc      WaitLo2         ; wait until it is
+WaitHi2:        in      al, dx          ; get status
+                shr     al, 1           ; is it high?
+                jnc     WaitHi2         ; wait until it is
+                pop     ax
+                mov     es:[di], al     ; move attribute byte
+                inc     di
+                loop    Snow1           ; go until all bytes moved
+                sti
+Endit:          pop     es              ; pop and restore all the registers
+                pop     ds
+                pop     bp
+program         ends                    ; end program segment
+                end
+
+```
+{% endraw %}
+
+## RECOLOR.ASM
+
+{% raw %}
+```
+              title          RECOLOR
+              page           60,132
+
+oldattr       equ            [bp + 0Eh]          ; OLDATTR%
+newattr       equ            [bp + 0Ah]          ; NEWATTR%
+snochk        equ            [bp + 06h]          ; SNOCHK%
+
+program       segment
+              assume         cs:program          ; begin program segment
+              push           bp                  ; save for basic
+              mov            bp,sp               ; establish stack
+              push           es                  ; save for return
+              push           ds                  ; save for return
+              mov            ax,0040h            ; dos segment
+              mov            es,ax               ; to es
+              mov            si,0001             ; start on odd for attr
+              mov            dx,es:[0063h]       ; point to status reg
+              add            dx,06h              ;   "    "    "    "
+              mov            ax,0b800h           ; assume color
+              mov            bx,es:[0010h]       ; get the byte
+              and            bx,30h              ; get ready
+              cmp            bx,30h              ; compare it
+              jnz            SetScrn             ; yup, it's color
+              mov            ah,0b0h             ; nope, change it
+SetScrn:      lds            di,oldattr          ; get old attribute
+              mov            cx,ds:[di]          ; to CX
+              lds            di,newattr          ; get new attribute
+              mov            bx,ds:[di]          ; to BX
+              mov            bh,cl               ; put old in BH,new in BL
+              lds            di,SnoChk           ; point to SNOCHK%
+              mov            cx,ds:[di]          ; get it
+              jcxz           Snow                ; do Snow checking
+              mov            ds,ax               ; point to screen
+              mov            cx,07d0h            ; do whole screen
+              mov            di,0002             ; use for increment
+              cld                                ; clear direction flags
+ChngColor:    mov            al,[si]             ; get screen attribute
+              cmp            al,bh               ; compare it
+              jnz            ColorOK             ; don't bother changing
+              mov            [si],bl             ; put the new attribute
+ColorOK:      add            si,di               ; increment screen pointer
+              loop           ChngColor           ; do until CX=0
+              jmp            endit               ; done
+Snow:         mov            ds,ax               ; point to screen
+              mov            cx,07d0h            ; do whole screen
+              mov            di,0002             ; use for increment
+              cld                                ; clear direction flags
+ChngColor1:   cli                                ; disable interrupts
+WaitLo1:      in             al,dx               ; get status
+              shr            al,1                ; is it low?
+              jc             WaitLo1             ; wait until it is
+WaitHi1:      in             al,dx               ; get status
+              shr            al,1                ; is it high?
+              jnc            WaitHi1             ; wait until it is
+              mov            al,[si]             ; get screen attribute
+              cmp            al,bh               ; compare it
+              jnz            ColorOK1            ; don't bother changing
+WaitLo2:      in             al,dx               ; get status
+              shr            al,1                ; is it low?
+              jc             WaitLo2             ; wait until it is
+WaitHi2:      in             al,dx               ; get status
+              shr            al,1                ; is it high?
+              jnc            WaitHi2             ; wait until it is
+              mov            [si],bl             ; put the new attribute
+ColorOK1:     sti                                ; enable interrupts
+              add            si,di               ; increment screen pointer
+              loop           ChngColor1          ; do it until CX=0
+endit:        pop            ds                  ; restore DS
+              pop            es                  ; restore ES
+              pop            bp                  ; back to basic
+program       ends
+              end
+
+
+```
+{% endraw %}
+
+## RESTSCRN.ASM
+
+{% raw %}
+```
+          title     RESTSCRN
+          page      60,132
+
+varray    equ       [bp + 06h]          ; VARPTR(ARRAY)
+snochk    equ       [bp + 0Ah]          ; SNOCHK%
+
+program   segment
+          assume    cs:program
+          push      bp
+          mov       bp,sp
+          push      es
+          push      ds                  ;save for basic
+          xor       ax,ax
+          mov       es,ax               ;segment 0000h
+          mov       dx,es:0463h         ;point to 6845
+          add       dx,6                ;point to status reg
+          mov       di,0410h            ;equipment flag
+          mov       ax,0b800h           ;assume color monitor
+          mov       bx,es:[di]          ;get the byte
+          and       bx,30h              ;
+          cmp       bx,30h              ;is it color
+          jne       ok                  ;yup
+          mov       ax,0b000h           ;nope - so change it
+
+ok:       mov       ds,ax               ;point to screen
+          les       di,snochk           ;pointer to test byte
+          mov       ax,es:[di]
+          push      ax                  ;save it for later
+          les       di,varray           ;point to array
+          mov       cx,2000             ;no. of times
+          push      es                  ;
+          push      ds                  ;swap since we are moving
+          pop       es                  ;data from array to screen
+          pop       ds                  ;
+          xor       si,si               ;zero out si
+          xchg      si,di               ;exchange them too
+          pop       ax                  ;get test byte
+          cmp       ax,1                ;is it a one
+          jz        go                  ;yes - don't test for snow
+          mov       bx,es
+          cmp       bx,0b000h           ;check dest. if mono
+          jz        go                  ;if it is don't test
+snow:     cli                           ;disable interrupts
+WaitLo:   in        al,dx               ;test retrace
+          shr       al,1                ;wait for low
+          jc        WaitLo
+WaitHi:   in        al,dx               ;wait for high
+          shr       al,1
+          jnc       WaitHi
+          movsw                         ;ok to move now
+          loop      WaitLo              ;do it 2000 times
+          sti                           ;enable interrupts
+          jmp       short done
+go:       movsw
+          loop      go
+done:     pop       ds
+          pop       es
+          pop       bp                  ;back to basic
+program   ends
+          end
+```
+{% endraw %}
+
+## SAVESCRN.ASM
+
+{% raw %}
+```
+          title     SAVESCRN
+          page      60,132
+
+varray    equ       [bp + 06h]          ; VARPTR(ARRAY)
+snochk    equ       [bp + 0Ah]          ; SNOCHK%
+
+program   segment
+          assume    cs:program
+          push      bp
+          mov       bp,sp
+          push      ds                  ;save for basic
+          xor       ax,ax
+          mov       es,ax               ;segment 0000h
+          mov       dx,es:0463h         ;point to 6845
+          add       dx,6                ;point to status reg
+          mov       di,0410h            ;equipment flag
+          mov       ax,0b800h           ;assume color monitor
+          mov       bx,es:[di]          ;get the byte
+          and       bx,30h
+          cmp       bx,30h              ;is it color
+          jne       ok                  ;yup
+          mov       ax,0b000h           ;nope - so change it
+ok:       mov       ds,ax               ;
+          xor       si,si               ;point to screen with ds:si
+          les       di,snochk           ;pointer to test byte
+          mov       ax,es:[di]
+          les       di,varray           ;point to array with es:di
+          mov       cx,2000
+          cmp       ax,1                ;is it a one
+          jz        go                  ;yes - don't test for snow
+          mov       bx,ds
+          cmp       bx,0b000h           ;check source if mono
+          jz        go                  ;if it is don't test
+snow:     cli                           ;disable interrupts
+WaitLo:   in        al,dx               ;test retrace
+          shr       al,1                ;wait for low
+          jc        WaitLo
+WaitHi:   in        al,dx               ;wait for high
+          shr       al,1
+          jnc       WaitHi
+          movsw                         ;ok to move now
+          loop      WaitLo              ;do it 2000 times
+          sti                           ;enable interrupts
+          jmp       short done
+go:       movsw
+          loop      go
+done:     pop       ds
+          pop       bp                  ;back to basic
+program   ends
+          end
+```
+{% endraw %}
+
+## SCROLL.ASM
+
+{% raw %}
+```
+              title     SCROLL
+              page      60,132
+
+dir           equ       [bp + 06h]          ; DIR%
+lines         equ       [bp + 0Ah]          ; LINES%
+rtcol         equ       [bp + 0Eh]          ; RTCOL%
+botrow        equ       [bp + 12h]          ; BOTROW%
+leftcol       equ       [bp + 16h]          ; LEFTCOL%
+toprow        equ       [bp + 1Ah]          ; TOPROW%
+
+program       segment                       ; begin program segment
+              assume    cs:program          ; parameters on stack
+              push      bp                  ; save for basic
+              mov       bp,sp               ; establish stack
+              push      es                  ; save for return
+              push      bp                  ; save for later
+              mov       ah,0Fh              ; dos function
+              int       10h                 ; get current video mode
+              pop       bp                  ; restore bp
+              les       di,leftcol          ; get pointer to left column
+              mov       dl,es:[di]          ; get lsb only to dl
+              dec       dx                  ; dec for 0-79 format
+              les       di,toprow           ; get pointer to top row
+              mov       dh,es:[di]          ; get lsb only to dh
+              dec       dh                  ; dec for 0-24 format
+              push      bp                  ; save for later
+              push      dx                  ; save for later
+              push      bx                  ; save for later
+              mov       ah,02h              ; dos function
+              int       10h                 ; set cursor to inside area
+              pop       bx                  ; restore bx
+              mov       ah,08h              ; dos function
+              int       10h                 ; get attribute
+              pop       cx                  ; ch=toprow cl=leftcol was dx
+              pop       bp                  ; restore bp
+              les       di,rtcol            ; get pointer to right column
+              mov       dl,es:[di]          ; get lsb only to dl
+              dec       dx                  ; dec for 0-79 format
+              les       di,botrow           ; get pointer to botrow
+              mov       dh,es:[di]          ; get lsb only to dh
+              dec       dh                  ; dec for 0-24 format
+              les       di,lines            ; get pointer to lines
+              mov       al,es:[di]          ; get lsb only to al
+              mov       bh,ah               ; mov attribute to bh
+              les       di,dir              ; get pointer to direction
+              mov       ah,es:[di]          ; put in ah
+              int       10h                 ; finally scroll
+              pop       es                  ; restore es
+              pop       bp                  ; back to basic
+program       ends
+              end
+
+```
+{% endraw %}
+
+## TBWIND20.DOC
+
+{% raw %}
+```
+
+
+
+
+                                                         June 6, 1987
+
+
+
+                                     TBWINDO
+                               MULTI-LEVEL WINDOWS
+                             FOR BORLANDS TURBO BASIC
+                                   Version 2.0
+
+        PURPOSE:
+
+        This utility creates incredibly quick multi-level windows
+        in Turbo Basic programs for IBM PC/XT/AT compatibles.
+
+
+        TEST DRIVE:
+
+        Compile and run the tutoring program DEMO20.BAS to get a feeling
+        for features and speed.
+
+
+        FILES:
+
+        In this version, TBWINDO.ARC contains:
+            TBWINDO.INC  - Turbo Basic include file
+            QPRINT.BIN   - Quick print inline subroutine
+            QPRINTC.BIN  - Quick print between columns
+            QATTR.BIN    - Re-attribute an area of the screen
+            QFILL.BIN    - Fill an area of the screen with a
+                           specified character and attribute
+            SAVESCRN.BIN - Save screen inline subroutine
+            RESTSCRN.BIN - Restore screen inline subroutine
+            SCROLL.BIN   - Scroll inline subroutine
+            CALCATTR.BIN - Calculate Attribute inline subroutine
+            RECOLOR.BIN  - Screen area recoloring inline subroutine
+            DEMO20.BAS   - Demonstration program source code
+            TBWIND20.DOC - This document file.
+
+            Assembly language source code for all BIN files is included
+            for all those interested.  Any suggestion for improvements to
+            the code would be appreciated, as I do not profess to be good
+            at Assembly Language.
+
+        USING TBWINDO
+
+        Include the TBWINDO.INC program in your program with
+        the following statement:
+
+        $INCLUDE "TBWINDO.INC"
+
+        Dimension the array for screen saves(see below).
+
+        Set the SNOCHK% variable (see below).
+
+        You invoke the routines by means of a CALL with a list of
+        parameters, rather than a GOSUB.
+
+
+
+
+
+
+
+
+        Using the MAKEWINDOW procedure:
+
+        CALL MAKEWINDOW(ROW%,COL%,ROWS%,COLS%,ATTR%,BRDRSEL%,SHADOW%,ZOOM%)
+
+        Where: ROW - the screen row of the upper left hand corner of your
+                     desired window.  Value should be between 2 and 23
+                     (for reasons explained below).  WARNING - the subroutines
+                     doe not check for proper values. You must check these
+                     yourself or accept the consequences.
+
+               COL - the screen column of the upper left hand corner. Value
+                     should be between 2 and 79.
+
+              ROWS - the number of rows long the window should be.
+
+              COLS - the number of columns wide the window should be.
+
+              ATTR - the attribute of the window colors.
+
+           BRDRSEL - the border you desire around the window.  Valid
+                     selections in this release are:
+
+                        0 - No Frame (just a border of BACKground
+                            color.
+                        1 - Single Line Frame
+                        2 - Double Line Frame
+                        3 - Single Horizontal Line, Double Vertical
+                            Line Frame
+                        4 - Single Vertical Line, Double Horizontal
+                            Line Frame
+
+            SHADOW - Another "switch" to indicate if the window should
+                     have a black "shadow" under it offset down and to
+                     the left. This gives a three-dimensional effect
+                     that seems to "raise" the window away from the
+                     screen. A value of 1 indicates a shadow is desired
+                     while a value of 0 means no shadow.
+
+              ZOOM - A "switch" used to indicate to the subroutine if
+                     the window should "grow" from a small box at the
+                     midpoints of the coordinates to full size. A value
+                     of 1 indicates the window should grow. A value of
+                     0 indicates it should not.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        using the TITLEWINDOW procedure:
+
+        CALL TITLEWINDOW(LOC%,TITLE$)
+
+        Where: LOC - Indicates where the title should be placed.  Valid
+                     selections are:
+
+                        1 - Top left hand corner
+                        2 - Top center
+                        3 - Top right hand corner
+                        4 - Lower left hand corner
+                        5 - Lower center
+                        6 - Lower right hand corner
+
+             TITLE - The string data you would like printed.
+
+                     NOTE:  The TITLEWINDOW procedure uses the coordinates
+                            from the most recent use of MAKEWINDOW.  Use this
+                            procedure only after a call has been made to
+                            MAKEWINDOW.
+
+        Using the FNATTR% function:
+
+        FNATTR%(FORE%,BACK%)
+
+        Where: FORE - is the foreground color.  Any Turbo Basic color
+                      number is valid.
+
+               BACK - is the backgound color.  Any Turbo Basic background
+                      color number is valid.
+
+               FNATTR% returns the attribute of the colors specified.
+
+
+        Using the SAVESCRN procedure:
+
+        First you must  define  an  integer array  with  a  dimension
+        of 2000 (allowing for 4000 bytes)  for each screen you store, early
+        in the program.  If you plan on saving screens three deep then the
+        array must be 6000.
+
+        When making the call to SAVESCRN, you  must  pass the location of
+        this array as follows:
+                   10 DIM SCRDATA%(2000)
+                   .
+                   80 SNOCHK%=0:'Test retrace (1 will not test retrace)
+                   90 FIRST%=VARPTR(SCRDATA%(0))
+                  100 CALL SAVESCRN(SNOCHK%,FIRST%)
+        Also,  since  the  SAVESCRN operation 'loses' the position of the
+        cursor, you should preserve it prior to making the  call  if  you
+        need it as follows:
+                   90 OLDX=CSRLIN:OLDY=POS(0)
+        The RESTSCRN procedure is used in exactly the same way:
+                  200 CALL RESTSCRN(SNOCHK%,FIRST%)
+        and  if  necessary,  the cursor position can be restored by using
+        the following statement:
+                  210 LOCATE OLDX,OLDY
+
+
+
+
+
+
+
+
+
+        Using the CALCATTR procedure:
+
+        CALL CALCATTR(FORE%,BACK%,ATTR%)
+
+        Where: FORE - Is the foreground color. Valid numbers are 0-31.
+
+               BACK - Is the background color. Valid numbers are 0-7.
+
+               ATTR - The attribute is returned in this variable.
+
+                   CALL CALCATTR(15,1,ATTR%)
+                   Y% = ATTR%
+
+        Using the RECOLOR procedure:
+
+        CALL RECOLOR(OLDATTR%,NEWATTR%,SNOCHK%)
+
+        Where: OLDATTR - Is the attribute of the areas on the screen
+                         you wish to change.
+
+               NEWATTR - Is the attribute of the color you want.
+
+               SNOCHK  - Snow checking switch.
+
+                    X% = SCREEN(1,1,1)  ' RETURNS CURRENT SCREEN ATTRIBUTE
+                    CALL CALCATTR(14,4,ATTR%) ' CALCULATE NEW ATTRIBUTE
+                    CALL RECOLOR(X%,ATTR%,SNOCHK%)
+
+                    This will recolor everything on the screen that has
+                    the same attribute a the upper left corner of the screen
+                    to a foreground of 14 and a background of 4.
+
+
+        All of the above variables (with the exception  of  TITLE$)  must
+        either  be  declared  globally  as  integers by means of a DEFINT
+        statement early  in  the  program;  or  must  have  the  specific
+        integer  identifier  (%)  attached  wherever  they  appear in the
+        program. The BASIC compiler is picky about this; so  be  sure  to
+        verify that the type assignment is correct.
+
+        TBWINDO  requires  no special handling when it comes to compiling
+        your program. Just  make  certain  that  all  of  your  variables
+        passing  parameters  to  the TBWINDO subroutine are identified as
+        integers, and you will  be  able  to  proceed  with  the  compile
+        operation as with any other program.
+
+
+        ACKNOWLEDGEMENTS
+
+        I would like to express my thanks to Dave Evers (BASWIN22),
+        Tom Hanlin (ADVBAS33) and Jim LeMay (WINDOW33).  The routines
+        presented are patterned after routines that were written by
+        them for MicroSoft Quick Basic and Borland Turbo Pascal.
+
+        Rick Fothergill
+        141 Oak Hill Road
+        Pittsfield, MA 01201
+        (413) 442-2456
+
+        GEnie Address: R.FOTHERGILL
+           Compuserve: 76210,443
+
+
+
+
+
+
+
+                             TBWINDO QUICK REFERENCE
+
+
+        MakeWindow(Row%,Col%,Rows%,Cols%,Attr%,BrdrSel%,Shadow%,Zoom%)
+
+        TitleWindow(Loc%,Title$)
+
+        FNAttr%(Fore%,Back%)
+
+        SaveScrn(SnoChk%,VarPtr(Scrn%(??)))
+
+        RestScrn(SnoChk%,VarPtr(Scrn%(??)))
+
+        ReColor(OldAttr%,NewAttr%,SnoChk%)
+
+        CalcAttr(Fore%,Back%,Attr%)
+
+        Scroll(ULRow%,ULCol%,LRRow%,LRCol%,Rows%,Dir%)
+
+        Qprint(Row%,Col%,StrDat$,SnoChk%,Attr%)
+
+        QprintC(Row%,ColLeft%,ColRight%,StrDat$,SnoChk%,Attr%)
+
+        QFill(Row%,Col%,Rows%,Cols%,Char%,SnoChk%,Attr%)
+
+        QAttr(Row%,Col%,Rows%,Cols%,SnoChk%,Attr%)
+
+        QBox(Row%,Col%,Rows%,Cols%,Attr%,BrdrSel%)
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

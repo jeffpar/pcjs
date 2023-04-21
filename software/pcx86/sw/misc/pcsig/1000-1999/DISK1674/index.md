@@ -35,6 +35,46 @@ machines:
     place in the program, using a single keystroke. In addition, ADDTEL
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1674.TXT
+
+{% raw %}
+```
+Disk No: 1674                                                           
+Disk Title: ADDTEL                                                      
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: ADDTEL                                                   
+Author Version: 89                                                      
+Author Registration: $10.00                                             
+Special Requirements: None.                                             
+                                                                        
+If you need an easy to use name and address database, but don't want to 
+spend any time learning a database program, ADDTEL is your answer.      
+ADDTEL allows you to easily enter names, addresses, and phone numbers,  
+specifying how you know each person with a ``category'' listing.  You   
+can optionally insert foreign countries where necessary and record the  
+date each record was last updated; both features are extra's not found  
+in most address book packages.  The main screen displays 14 records from
+a selected database.  You can page or scroll forwards and backwards     
+through the database as desired, selecting any record to view or change.
+                                                                        
+ADDTEL has a fully functioning, on-line help facility that explains     
+program operation, field definitions, etc. and is selectable from any   
+place in the program using a single key stroke.  In addition, ADDTEL    
+will print a four line mailing label from any record in the database.   
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1674
 

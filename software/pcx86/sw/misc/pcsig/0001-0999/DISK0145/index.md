@@ -77,8 +77,800 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## ASMGEN.DOC
+
+{% raw %}
+```
+
+
+
+************************************************************************
+*                                                                      *
+*   ASMGEN.COM - by J. Gersbach   and  J. Damke    (Ver. 2.01)         *
+*                                                                      *
+*   A program to generate cross-referenced assembly language code      *
+*   from any executable file.                                          *
+*                                                                      *
+*                                                                      *
+*                                                                      *
+*   Uploaded to PCanada by Mark Magner   November 23, 1983             *
+*                                                                      *
+************************************************************************
+
+
+
+*  PREFACE  *
+
+
+This program will generate 8086/87/88 assembly code text
+that is compatible with the IBM Personal Computer Macro
+Assembler from any executable diskette file up to 65,535
+bytes.  The output can be routed to the console or a disk-
+ette file.  A reference list may be generated separately or
+embedded at the appropiate instruction counter address in
+the assembly code.
+
+Some manual touch up will be required before reassembly, but
+nearly all the typing is done for you by ASMGEN and anything
+questionable is marked with "??".
+
+A file of sequential instructions may be resident on the
+same diskette to indicat to ASMGEN which addresses contain
+code, byted, words, or strings.  This file may also include
+instructions to assume segment register values or toggle the
+output of assembley code text, generation of the reference
+table, 8087 mnemonics, of the inclusion of embedded reference
+information in the assembly file.
+
+DEBUG may be used to browse through the executable file to
+determine the starting locations of code and data to develop
+the sequential instruction file.  It is important to accu-
+rately specify these locations for an accurate reference
+tabel and minimum touching up of the ASM output text.
+
+The number of references within the file determines the amount
+of memory required since a reference tabel is built in
+memory during the first pass.  Disassembly is done from disk
+and only one file sector is in memory at any given time.
+Therefore memory size does not limit the size of the file
+to be disassembled.  48K bytes of memory will be enough for
+most programs but a few will need 64K or 128K.  One diskette
+drive is sufficient but two is more convenient.
+
+
+*  STARTING ASMGEN  *
+
+There are two ways to work with ASMGEN:  either by using the
+command menu or by calling ASMGEN with parameters.
+Following are the descriptions of both options.
+
+*  USING THE ASMGEN MENU  *
+
+The program is invoked by typing:  ASMGEN
+
+You are then prompted for a file specification.  Respond with
+the name of the executable file from which you wish to
+generate the assembly code.  The executable file will normally
+have an extension of .EXE or .COM.  ASMGEN will check this
+file spec for validity and then respond with a prompt that
+includes a summary of the command letters indicating that
+you may give it a command.  The executable file contents
+are not checked for valid code and ASMGEN will try to dis-
+assemble text or compressed BASIC files and produce unintell-
+igible assembly code.
+
+The commands are:
+
+X filespec      This file spec replaces any previous executable
+                file spec.  The usual file extension is .COM
+                or .EXE
+
+                EXAMPLE:  X DATE.COM
+
+
+A <filespec>    The executable file is disassembled and the assem-
+                bly code is routed to the specified file.  The
+                usual file extension is .ASM.  If the filespec is
+                omitted, the output will default to the console.
+
+                EXAMPLE:  A DATE.ASM
+
+R <filespec>    The reference table is sent to the file specified.
+                The usual file extension is .TBL.  If the filespec
+                is omitted, the output will default to the console.
+
+                EXAMPLE:  R DATE.TBL
+
+Q               The program is terminated and control returned to
+                DOS.
+
+
+Each time a command has been executed, ASMGEN waits with a one line
+prompt for the next command.
+
+X <filespec>, A <CON>, R <CON> or Q ?
+
+The default filespec for each command is shown in brackets.  Enter
+the next command of your choice as described above.
+
+
+*  USING ASMGEN WITH PARAMETER CALLS  *
+
+Up to three file specifications may be included when ASMGEN is
+first called from DOS.  The executable file's name is given first,
+followed by specifications for the assembly and reference table
+files.
+
+EXAMPLE:  ASMGEN DATE.COM, DATE.ASM, DATE.TBL
+
+If a semicolon follows the last filespec, ASMGEN will exit to DOS
+when the command has been executed.  If no semicolon is entered,
+ASMGEN will display the menu options described above and wait for
+further input after executing the command.
+
+EXAMPLE:  ASMGEN DATE.COM, DATE.ASM;
+
+If the filespec for the .ASM file and/or .TBL file is omitted,
+ASMGEN will generate first the .ASM file, then a .TBL file using
+the filename of the first filespec.
+
+EXAMPLE:  ASMGEN DATE.COM,,; creates DATE.ASM and DATE.TBL and exits
+                             to DOS.
+
+If only the reference table is desired, the dummy name NUL should be
+entered in place of an .ASM filespec
+
+EXAMPLE:  ASMGEN DATE.COM, NUL, DATE.TBL
+
+If only one filespec is given when the program is called, the reference
+table is built in memory and then the menu options are displayed for
+further commands.
+
+EXAMPLE:  ASMGEN DATE.COM
+
+
+*  PROGRAM EXECUTION  *
+
+The disassembly is done in two passes through the scource file.  On pass
+#1, the reference table is built in memory and the actual output is gen-
+erated during pass #2.  Once the reference table is established, it remains
+in memory until an X or Q command is issued, and subsequent A and R com-
+mand executions skip pass #1.  This saves a lot of time when the executable
+file is large.
+
+Three contiguous data areas are built dynamically in memory during pass #1.
+First is the compressed sequential instruction list.  Second is a list of
+pointers for .EXE files that point to the locations of all relocatable
+variables in the program, also arranged in numerical order.  These are
+established before reading any code.  Third, the reference table is then
+built in a higher area of memory as pass #1 progresses.
+
+If all available memory in the program segment is filled before the first
+two data areas are completed, ASMGEN will abort to the command prompt.
+After the reference table is started, a shortage of memory will produce
+the message "Reference Table Incomplete Due to Insufficient Memory" and
+continue.
+
+Ctrl-Break may be used at any time to interrupt a command in progress.
+
+
+*  READING THE ASSEMBLY CODE FILE (.ASM)  *
+
+This file begins with a title taken from the executable file's name and
+date followed by the current date (in brackets).
+
+If not inhibited by the  M  switch in a SEQ file (explained later), the macro
+library will appear next in the file.
+
+Next will be a .RADIX 16 pseudo-op which tells the macro assembler that all
+numbers are in hexadecimal form.
+
+Then comes a header that indicates a starting value for the code segment,
+stack segment, instruction pointer and the stack pointer.  The stack pointer
+is usually set to FFFF for .COM files but may be somewhat less depending on
+available memory.  These values are passed by the linker for .EXE files.
+
+The first ASSUME statement might come next.  There is one generated for each
+segment that begins with code.  All segment registers are designated according
+to the current set of ASSUMEs.  They will sometimes be incorrect, so all
+ASSUME statements should be checked prior to re-assembly.
+
+The disassembled output follows, terminated by an END statement and the
+execution address.  An ORG psuedo-op is included if required.
+
+The text is compatible with the IBM Macro Assembler and the format is the same
+except for RETurns.  To avoid the need for PROCedure titles, special mnemonics
+are provided for all RET instructions.  These are defined in the macro library
+at the beginning of the file.  Only macros that are needed for the current file
+are produced.  The optional embedded commands that make up the reference table
+enhance the readability of the file.  For very large files, this is sometimes
+undesirable and a separate reference table is best.
+
+When invalid instructions are encountered in code areas, they are reproduced
+as byte values followed by "??".  If a near jump is defined previously in the
+code, and it is within range of a short jump, a NOP instruction is inserted
+after the jump.  The executable file created with this .ASM file and the
+Macro Assembler and Linker will then be the same length as the original file.
+This makes it less important to differentiate between labels and numeric
+constants since the label values and their offsets within the file will be
+the same.  The fundamental problem of disassembly is in knowing if the
+original assembly code defined a number as a label which changes as a function
+of it's position or as a number that always remains the same.  If you make
+changes in the assembly code however, you must properly specify all values.
+You might as well remove all NOPs at the same time.
+
+Labels are five characters long and begin with "L".  Segment labels begin with
+"S".  The remaining characters are the current instruction counter in hex
+form, thus making each label unique and showing it's location in the original
+file.  The instruction counter is continuous throughout the assembly code
+without resetting at segment boundaries.  The segment labels are then in byte
+as opposed to paragraph form.  In those cases where a label value is modified
+by an ASSUME statement, the original value is included as a comment in the
+referencing instruction so that it may be easily changed back if it was not
+intended as a location.
+
+The word "Relocatable" is printed at the end of any line that contains an
+ablolute paragraph value.  These are values that DOS modifies after loading but
+befor executing a program.  They are used for loading segment registers that
+are sensitive to the program location in menory.  Relocatable values are not
+modified by ASSUMEs.  ASMGEN converts these numbers from paragraph to byte
+values by multiplying them by sixteen so that they will fit within the 16-bit
+instruction counter field.  When the paragraph value is negative or exceeds
+0FFFH, it is left unchanged and a warning (??) is issued on that line.  When
+a program larger than 64K bytes is being disassembled, it should be divided
+into smaller files.
+
+All words are produced as labels, except when the "L" switch has been enacted
+in the .SEQ file (explained later).  The label name indicates it's numeric
+value and, if it does not occur on an instruction boundary, the name indicates
+it's position relative to the current instruction pointer is given by an EQU
+statement.  Therefore the Macro Assember will assume that it is a location,
+but it is easily changed to a constant since the value is given in the label
+name.  The word OFFSET precedes a label whenever it is questionable whether
+it is a label or an immediate value.  You must decide which of the labels
+should be constants and which of the constants should be labels, and change
+them accordingly.  When changing labels to numbers, be sure to append an
+"H" if the number ends with a "D" or a "B" since the Macro Assembler will
+otherwise assume that it is decimal or binary.
+
+Bytes are always treated as constants.  An optional switch may be included in
+the .SEQ file (explained later) which enables numbers instead of labels if all
+references to the value are data segment and immediate operation types.
+
+An effective procedure to follow in attempting to understand the assembly code
+file is to look first for the message text area, the input commands, and the
+simpler subroutines.  Then add label names to addresses in the .SEQ file
+(explained later) that remind the you of their purpose.  Add comments to the
+labels.  If these names are well chosen, the larger routines eventually will
+become clear.  The embedded references are produced as labels so they will
+retain their meanings as they are changed.
+
+It is also helpful to spend some time studying the structure of data areas.
+Vector tables, which are frequently used to control the program's flow, reveal
+the program's structure very quickly.  If some routines do not have labels at
+the beginning, it is usually because the code or tables that reference them
+(or the segment register assumptions) are not properly defined in the .SEQ
+file.
+
+
+*  READING THE REFERENCE TABLE (.TBL)  *
+
+A referencee is defined as a number that is referenced somewhere in the
+program.  It may be a program loaction or a numeric constant.
+
+A referencor is is defined as the address in the program from which a refer-
+ence is made to the referencee.
+
+Each entry is composed of a referencEE  followed by a list of referencors.  If
+more than one line is needed, additional lines are indented to the first
+referencor position.  The referencEE is followed by an "S" if it includes
+references to the beginning of segment.  The referencor is followed by two
+letters, the first of which represents the segment register that is implied
+or prefixed in the referencing instruction.  The second letter indicates the
+type of operation on the referencEE.  When the reference entries are embedded
+in the assembly code, all values are preceded with the letter "L".
+
+----------------------------------------------------------------------------
+1st letter      |  2nd letter
+SEG REGISTER    |  TYPE OF OPERATION
+----------------------------------------------------------------------------
+C  code         |  J  jump         M  modify - INC, ADD, etc.
+S  stack        |  C  call         I  immediate - value or offset
+D  data         |  R  read         T  test or compare
+E  extra        |  W  write        ?  unknown or ESC instruction
+                |  P  port
+----------------|-----------------------------------------------------------
+
+
+
+*  WRITING/READING THE SEQUENTIAL INSTRUCTION FILE (.SEQ)  *
+
+The sequential instruction file is a list of special instructions to ASMGEN
+which the user creates.  The file takes the form of a list of hexadecimal
+addresses and single-letter instructions or generation switches.  If used,
+the .SEQ file must be on the same diskette as the source file and have the
+same name as the source file with an extension of .SEQ.  Each instruction in
+the file must be in one of the following formats:
+
+addr    command
+or
+addr    command         ;comment
+or
+addr    command         label   comment
+or
+addr    command         label   comment ;comment
+
+"addr" represents the instruction pointer value.  All addr values must be in
+numerical sequence in the file.
+
+"command" may be either a toggle switch or a generation instruction.
+
+"label" is optional and replaces the label generated for this address with
+this non-blank string.
+
+"comment" is optional and must be preceded by "label" unless the dummy label
+"." is used.  Everything following "label" is treated as an address comment
+and will be printed in the ASM file behind the generated instruction.  The
+address comment may be up to 255 characters in length and should not contain
+a semi-colon.
+
+";comment" is optional.  Anything following a semi-colon in the .SEQ file
+instructions is considered as a comment in the .SEQ file only and is not added
+to the generated .ASM file.
+
+"label" and "comment" are not allowed when a generation switch is coded, but
+a ";comment" may be used to help clarify the .SEQ file.
+
+The .SEQ file is read into memory before the first pass starts.  The addresses
+and commands will be compressed, but "label" and "comment" will be held in
+memory one to one.  An effect of this is that memory space required for dis-
+assembly increases with each "label" and "comment" added to the .SEQ file.
+
+
+*  DESCRIPTION OF GENERATION SWITCHES  *
+
+THE VARIOUS TOGGLE SWITCHES ARE SET TO ON BY DEFAULT.  Switches may be toggled
+on and off at any point in the .SEQ file/disassembly.
+
+All options switches except /M and /H can be either toggled or directly set by
+the user.  A suffix of "+" turns the switch ON, and a suffix of "-" turns the
+switch OFF.  Switches encountered in the file that have neither of these
+suffixes are toggled to the opposite of their state at the time; ON switches
+are turned OFF and OFF switches are turned ON.
+
+/B - generate byte references
+
+When ON, byte and word references are included in the reference table.  When
+OFF, only word references are generated.
+
+/E - embedded references in ASM file
+
+When ON, reference table entries are inserted in the text just before the
+referencee's definition statement.  When OFF, these entries are not included
+with the disassembled text.  The entire reference table can be printed with
+the "R" command.
+
+/F - 8087 mnemonics
+
+When ON, ESC instructions are produced.  When OFF, ESC instructions are assumed
+to be 8087 instructions and 8087 mnemonics are produced.
+
+/H - append hex "H"
+
+When this switch appears at any point in the .SEQ file, an "H" is appended to
+all hex numbers.  This does not, of course, apply to the labels which are
+hex values preceded by the letter "L".  The .RADIX 16 pseudo-op is omitted
+which allows the assembler's radix to default to decimal.  This switch defaults
+to NO H APPEND.  Note that it will be set only once.  It retains it's value
+until the next .SEQ file is read.
+
+/L - generate label or number
+
+When ON, all word references are treated as labels.  When OFF, a word reference
+is treated as a constant if all referencors are data immediate types.
+
+/M - suppress macro library
+
+When this switch appears at any point in the .SEQ file, no macro library is
+included in the text output.  The DEFAULT IS THAT THE MACRO LIBRARY WILL BE
+INCLUDED.  Note that this switch will be set only once.  It retains it's
+value until the next .SEQ file is read.
+
+/O - control ASM output
+
+When ON, ASMGEN will output the generated text.  When OFF, output will be
+suppressed.
+
+/R - control TBL output
+
+When ON, ASMGEN will output the generated reference data.  When OFF, the
+reference table is not printed.
+
+/T - control trace output
+
+When ON, up to 16 bytes of object code are included as comments in each line
+of the assembly code file.  When OFF, object code is not included.
+
+
+*  DESCRIPTION OF .SEQ FILE COMMANDS  *
+
+A - assume
+
+The following lines contain ASSUMptions for segment register values.  They
+become effective at the address specified by this instruction and may be
+modified anywhere in the disassembly.  The required format for assumptions is:
+
+& 0400  DS
+
+The ampersand indicates a continuation of the A instruction.
+
+In this example, a data segment beginning at a instruction pointer value of
+400 will be assumed until another  A  instruction changes it.  CS, ES, and
+SS are also supported.  The segment assumptions are used for effective address
+calculations only.  The code segment assumption does not affect the instruction
+pointer value.
+
+B - bytes
+
+The bytes encountered in the source file are assumed to have meaning as single
+byte values.
+
+C - code
+
+The bytes encountered in the source file are assumed to be valid 8088 machine
+language instructions.
+
+D - generate data operand
+
+The operand of the instructions is changed to immediate data.  Subsequent bytes
+are interpreted as "C" (code follows).
+
+I - initial value for IP
+
+The hexadecimal value on this line overrides the instruction pointer value at
+the beginning of the file - not to be confused with the address at which
+execution begins.  The default values are 0000 for EXE files and 0100H for COM
+and other files.  The execution address following the END statement is omitted
+if this option is invoked.
+
+S - strings
+
+The bytes encountered in the source file are assumed to form text.  Quoted text
+is produced for valid ASCII characters and byte values for others.
+
+# - defined length strings
+
+The first byte encountered in the source file contains the length of the
+character string which begins with the next encountered character.  This length
+value may be overridden by a subsequent SEQ file instruction.
+
+$ - defined length strings
+
+The first byte encountered in the source file contains the length of the
+character string which begins with the next encountered character plus the
+length byte itself.  This length value may be overridden by a subsequent SEQ
+file instruction.
+
+W - words
+
+Pairs of bytes encountered in the source file are assumed to have meaning
+as word values.
+
+X - repeating data structure
+
+A cyclic data structure is assumed to begin at the specified instruction
+pointer value.  The structure definition may follow and is prefixed by
+an ampersand (&) to indicate the continuation of this instruction.  If the
+definition does not follow, then the most recent definition is used.  If no
+structure is yet defined, then an error message is displayed.
+
+The following elements may be used to define the structure:
+
+& NNNN S  -  The next NNNN bytes are defined as string characters
+& NNNN B  -  The next NNNN bytes are defined as byte values
+& NNNN W  -  The next NNNN bytes are defined as word values
+& XXNN $  -  The next sequence of bytes is defined as NN fields.  Each field
+             consists of a length byte and a string of characters.  The length
+             of each field is contained in the first encountered byte.  The
+             high nibble (XX), if non-zero, is a bit mask of the length field
+             within the byte.  The length field is right-justified within the
+             byte after the byte value is sent to the output file.
+
+
+
+*  EXAMPLES OF .SEQ COMMANDS  *
+
+This example .SEQ file shows all the possible instructions in the appropriate
+format.
+
+;All switches are on at the beginning.
+0       /T      ;no object code as comments in output
+0       /M      ;no macro library in output
+0       /H      ;append "H" to all numbers
+00H     /A      ;assume the following segment values
+;Note that the ampersand (&) indicates the extended ASSUME
+& 380   DS      ;the data segment starts at 380 hex
+& 380   ES      ;the extra segment starts at 380 hex
+0200     I      ;initialize the instruction pointer to 200
+0200    /F      ;introduce 8087 mnemonics (not ESC)
+0200    /E      ;no embedded references
+0200     C      ;code begins at 200
+0203H    W      ;words are at 203
+0207     C      ;more code starting here
+220      X      ;complex data structure begins here
+& 3      W      ;words
+& 1      B      ;byte
+& 0E02   $      ;2 strings starting with the 2nd byte follow
+                ;bits 3,2,1 of the first byte contain the length of the
+                ;string including the length byte.
+                ;the high nibble (0E) is the mask.
+                ;see also # in summary below
+& 1      B      ;byte
+                ;the structure repeats until 351
+351      B      ;bytes
+358      C      ;more code
+380      S      ;strings - list of messages
+421      W      ;words
+4FD     /B      ;no further byte references
+502     /R      ;garbage here - turn off reference generation
+502     /O      ;and output
+600H    /O+     ;valid code - turn output back on
+600     /R
+600      C
+1A60    /O-     ;output file about to fill diskette - turn output off but keep
+                ;scanning for references.
+                ;another run will be needed to get the remaining code.
+1B00    /D      ;treat operand as immediate data
+1DFD    /B+     ;continue with byte references
+1F45     W      user_prt        ;user provided labels will translate
+2256     S      $MSG            ;to upper case
+
+
+Comments may be included if preceded by a semicolon.
+
+Alphabetic characters may be either upper or lower case.
+
+An "H" may follow the hex address.
+
+
+
+*  SAMPLE SESSION  *
+
+The external command CHKDSK.COM will serve as an example for this sample
+session because it is short.  The .SEQ file is also short and easy to generate.
+Only these few instructions are needed.
+
+
+0100  /T  ;include object code as comments in .ASM file
+0100  /E  ;simpler output without references
+04F7H  S  ;messages
+04F7H /H  ;append "H" to numeric values
+
+Using DEBUG, browse through CHKDSK.COM to see how this was arrived at.
+Usually, but not always, the best procedure is to assume code.  If the code
+appears unintelligible, display it in hex/ASCII.  If it is not text, assume
+bytes.  Label positions in the first disassembly may indicate that some
+locations should be words.  Next, generate the .ASM file by typing
+
+ASMGEN CHKDSK.COM <enter>
+A                 <enter>
+
+The assembly code can be viewed on the screen.  Then type
+
+A CHKDSK.ASM      <enter>
+
+to save the assembly source code to a file.  Then,
+
+R CHKDSK.TBL      <enter>
+
+to save the cross-reference table to disk.
+
+The Macro Assembler, Link.exe and Exe2bin could now be used to assemble
+CHKDSK.ASM, link it to .EXE and convert it to a .COM file.  No modification
+should be necessary in this case.
+
+If working with code that is to be modified, the symbol types must be correctly
+specified as locations or as constants.  If they are constants, place them
+outside of any segment.  The label names may then be changed to make the code
+more readable.
+
+
+ENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDENDEND
+END OF TRANSFER - PRESS ENTER TO RETURN TO MENU
+
+
+<*>End of file<*>
+
+Time remaining =  39 min.
+      ===================== RBBS-PC FILE MENU ====================
+ 
+      G)oodbye      H)elp        D)ownload a file - D;filespec.ext
+      L)ist files   M)ain menu   U)pload a file   - U;filespec.ext
+      N) List New files added since last log-on   - N;directory # 
+      ?) Xfer Info
+
+File Function <G,H,L,N,D,U,M,?>? l
+
+* Use <Ctrl K> to abort, <Ctrl S> to suspend *
+
++-----------------------------------------------------+
+|                       Utilitys                      |
+|                                                     |
+|    Here are some of the utilitys that I have        |
+|    and hope that you enjoy them. some of the        |
+|    files might be in tokenized format so you        |
+|    might have to use xmodem to transfer.            |
++-----------------------------------------------------+
+
+
+ASMGEN.COM     11264  02-24-1984 - Converts .EXE and .COM to .ASM files.
+ASMGEN.DOC     26112  02-25-1984 - Doc. for above.
+BASICAID.BAS   31104  03-04-1984 - Squeezes and unsqueezes files.
+BASICAID.DOC   12393  03-15-1984 - Doc. for above.
+BINSIX.DOC      4608  04-21-1984 - Doc. for BINSIX.EXE.
+BINSIX.EXE     15744  04-22-1984 - New squeeze program, 20% less then HEX.
+COMP.BAS        3456  04-21-1984 - Compare two tokenized basic files.
+CROSSOPT         128  01-22-1984 - Data file for CROSSREF.EXE.
+CROSSREF.DOC   15232  01-22-1984 - Doc. for CROSSREF.EXE.
+CROSSREF.EXE   43392  01-22-1984 - Excellent cross reference utility.
+CROSSWDS.DAT    1024  01-22-1984 - Data file for CROSSREF.EXE.
+DIP-MEM.COM     1536  02-26-1984 - Speed up power on,bypass memory test.
+More (Y),N,NS? 2-1984 - Data file for CROSSREF.EXE.
+DIP-MEM.COM     1536  02-26-1984 - Speed up power on,bypass memory test.
+More (Y),N,NS? 
+```
+{% endraw %}
+
+## BINSIX.DOC
+
+{% raw %}
+```
+
+
+                           BinSix
+         (A program for converting binary to text)
+                      (and back again)
+
+
+     ---------
+     Operation
+     ---------
+
+     The BINSIX program is used to convert both to and  from
+.SIX format.  To convert, say, foobar.com to foobar.six, one
+would issue the command:
+
+     binsix -s foobar.com foobar.six
+
+
+     Likewise, to convert foobar.six back  into  foobar.com,
+one would type:
+
+     binsix -b foobar.six foobar.com
+
+
+     The  "-b"  indicates  to  the  program  that  you   are
+converting from .SIX format to a binary file, while the "-s"
+indicates just the opposite.
+
+     The program is silent in its operation.  The only  time
+it outputs any messages are when an error occurs.  If  there
+are no messages from the program, you may assume it finished
+successfully.
+
+
+     ----------------------
+     Background information
+     ----------------------
+
+     In situations where  people  need  to  transfer  binary
+files (for example, .COM files) but cannot send  8  bits  of
+raw data (for lack of  an  appropriate  protocol,  perhaps),
+there is the need to convert the binary file(s) into a  form
+more acceptable to the communications  link.   The  standard
+approach has  been  to  create  .HEX  files.  This  approach
+entails the splitting of every byte of binary data into  two
+text characters; these two text  characters  are  the  "hex"
+representation of the byte.  By doing this, all  256  binary
+codes are reduced down to a pair of printing characters, and
+there is no problems sending the file.
+     This approach, however, is wasteful.  .HEX  files  will
+be slightly larger than  twice  the  size  of  the  original
+.COM/.EXE file.  A 30k .EXE program will suddenly  swell  to
+over 60k, making the download time at  300  baud  grow  from
+about 15 minutes to over half an hour (making that file cost
+$3 to download instead of $1.50).
+     To overcome some of these shortfalls, the  .SIX  format
+was invented.  .SIX files, like  .HEX  files,  contain  only
+printing  characters,  so  there  are  no  embedded  control
+characters  in  the  text  file  (aside  from  returns   and
+linefeeds which have been placed in the file for  formatting
+purposes).  Unlike .HEX files, .SIX files do not  cause  the
+file to balloon in size when converted from .COM.   The  30k
+file mentioned above would grow to just  40k  when  convered
+into a .SIX file instead of a 60k file when converted into a
+.HEX file.
+
+     -----------------
+     Technical details
+     -----------------
+
+     The format of the .SIX file is described below:
+
+
+
+
+        Normally, 3 bytes of binary data are formated into 4
+bytes of text.  The expansion takes place like this:
+
+
+        Step 1:
+
+Byte                    Contents
+----                    --------
+
+        +----+----+----+----+----+----+----+----+ }
+1       | 07 | 06 | 05 | 04 | 03 | 02 | 01 | 00 |  }
+        +----+----+----+----+----+----+----+----+  }
+2       | 17 | 16 | 15 | 14 | 13 | 12 | 11 | 10 |   } Input
+        +----+----+----+----+----+----+----+----+  }
+3       | 27 | 26 | 25 | 24 | 23 | 22 | 21 | 20 |  }
+        +----+----+----+----+----+----+----+----+ }
+
+                            |
+                            |
+                            V
+
+        +----+----+----+----+----+----+----+----+
+1       | xx | xx | 05 | 04 | 03 | 02 | 01 | 00 |
+        +----+----+----+----+----+----+----+----+
+2       | xx | xx | 15 | 14 | 13 | 12 | 11 | 10 |
+        +----+----+----+----+----+----+----+----+
+3       | xx | xx | 25 | 24 | 23 | 22 | 21 | 20 |
+        +----+----+----+----+----+----+----+----+
+4       | xx | xx | 27 | 26 | 17 | 16 | 07 | 06 |
+        +----+----+----+----+----+----+----+----+
+
+The three bytes of data are expanded out to be four bytes of
+data.
+
+
+        Step 2:
+
+-- The value 0x20 is added to each of the three bytes.
+-- This results in characters in the range 0x20 .. 0x5F
+
+
+        End of file funnies:
+
+Since most files will not be an even multiple  of  three  in
+length, the last  packet  will  not  contain  a  full  three
+characters of data. Thus, in the last packet, the value 0x60
+contained in either  the  second  and/or  third  byte  means
+"place holder".
+
+        Checksum:
+
+        The checksum of the *binary* data will be kept.  The
+next to the last line  of  the  text  file  will  be  blank,
+signaling EOF, and the last line of the file will  be  a  24
+bit checksum, packed, of  course,  in  the  4  bit  expanded
+format.
+
+
+
+d the last line of the file will  be  a  24
+bit checksum, packed, of  course,  in  the  4  bit  expanded
+format.
+
+
+
+```
+{% endraw %}
+
 ## COMP.BAS
 
+{% raw %}
 ```bas
 10 '**************************************************************************
 20 '*                                                                        *
@@ -168,9 +960,172 @@ machines:
 860 WEND
 870 RETURN
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #145, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  UPNUM   .DOC         CRC = C9 56
+
+--> FILE:  SQIBM   .COM         CRC = 44 B6
+
+--> FILE:  XREF    .BAS         CRC = 1E 97
+
+--> FILE:  SQIBM   .DOC         CRC = EB 0D
+
+--> FILE:  BINSIX  .EXE         CRC = 6C DE
+
+--> FILE:  USQIBM  .COM         CRC = 92 7B
+
+--> FILE:  USQIBM  .DOC         CRC = 9E 22
+
+--> FILE:  BINSIX  .DOC         CRC = E0 9A
+
+--> FILE:  ASMGEN  .COM         CRC = BF 88
+
+--> FILE:  ASMGEN  .DOC         CRC = 8E CC
+
+--> FILE:  DIP-MEM .COM         CRC = 37 05
+
+--> FILE:  DIP-MEM .DOC         CRC = 2C 03
+
+--> FILE:  WRITECOM.BAS         CRC = 70 FF
+
+--> FILE:  WRT     .DOC         CRC = D4 8A
+
+--> FILE:  WRTP    .COM         CRC = 64 F0
+
+--> FILE:  WRTE    .COM         CRC = 2C 53
+
+--> FILE:  VDISK   .COM         CRC = 92 D7
+
+--> FILE:  RSVD    .COM         CRC = 60 AF
+
+--> FILE:  MAKEDATA.BAS         CRC = CF E9
+
+--> FILE:  TABS    .BAS         CRC = C2 83
+
+--> FILE:  CROSSOPT.            CRC = 80 E0
+
+--> FILE:  COMP    .BAS         CRC = DA 1C
+
+--> FILE:  UPNUM   .COM         CRC = 3C 60
+
+ ---------------------> SUM OF CRCS = 3B 3B
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## DIP-MEM.DOC
+
+{% raw %}
+```
+
+le then enter <C/R> to start? 
+			MEMORY DOCUMENTATION
+			====================
+
+VERSION 1.01   8 NOV 1982    (C)  MICROLIFE, INC.  (301) 799-5509
+
+
+Memory is a utility to allow dynamic setting/resetting of the amount
+
+of memory used by DOS.  The major advantage is that the system switches
+
+can be set to anything your heart desires, with the knowledge that you 
+
+should not have to open up the PC to set switches while using MEMORY.    
+
+For example, some games (like ZORK and Adventure) seem to require a 
+
+maximum of 320K, the switches can be set for the 128K and then MEMORY 
+
+can be run to set DOS for larger amounts or smaller amounts of memory 
+
+as required.  MEMORY can be used in batch files or simply run from the 
+
+system prompt to set DOS memory size from 64K (lowest switch setting) 
+
+up to 640K.  More specific parameter information is as follows:
+
+MEMORY		Restores DOS memory size to what it was prior to
+		running MEMORY.  Follow the example below:
+           
+		Step 1 	MEMORY 3	Sets DOS to 192K
+		Step 2  MEMORY 5	Sets DOS to 320K
+		Step 3  MEMORY		Restores DOS to 192K
+
+MEMORY 0	Forces DOS read the value of the switches on the
+		motherboard.
+
+MEMORY N	(Where N can be a decimal number from 1 to 10).  Installs 
+		N times	64K of memory to DOS.  That is, assuming N was 7, 
+		7 * 64K = 448K.  A very important note here is that the 
+		DOS can now be set to beyond the value of the switches 
+		(544K Maximum) to 640K !! 
+
+
+An example of MEMORY used in an Autoexec file:
+
+Commands		Description of each command
+.............................................................................
+
+PWRUPCLK		Sets the System time equal to the Quadboard time
+MEMORY 9		Sets DOS memory size to 9 * 64K =  576K !!!
+RAMDISK 10/A		Creates a Ramdisk of size 10 * 32K = 320K
+COPY *.* D:		Copies all of Drive A: to Drive B:
+D:			Logs onto Drive D:
+CHKDSK			Checks the Disk Parameters
+
+............................................................................
+
+   
+
+
+
+
+Special Notes:
+
+1. MEMORY resets the system when run, except in the cases of bad para-
+   meters entered or when the same command is run more than once.
+2. MEMORY will only install up to the available RAM present in the system.
+   For example, you have 320K in the system, a command like MEMORY 6 would
+   result in an error and no change from the present memory size.
+3. The QD Ramdisk software provided with the Quadboard reads the memory
+   size from the switches on the motherboard, not what DOS thinks it has.
+   By doing so, the maximum size of memory under the Ramdisk (reading
+   the switches) is 544K bytes.
+
+
+inks it has.
+  
+```
+{% endraw %}
 
 ## MAKEDATA.BAS
 
+{% raw %}
 ```bas
 100 GOSUB 1000                            'Intialize variables,etc.
 110 GOSUB 2000                          'Get name of input and output file
@@ -281,9 +1236,37 @@ machines:
 6210 NUM.DATA.%=NUM.DATA.% + 1
 6220 RETURN
 ```
+{% endraw %}
+
+## SQIBM.DOC
+
+{% raw %}
+```
+
+SQ.COM - 
+
+The purpose of this program is to squeeze all types of files. It is 
+most effective on text files and least effective on binary files such
+as .EXE and .COM.
+
+The output file name is changed so that the middle letter in the 
+filetype is changed to a "Q". For example, a file called  ABC.TXT
+would be called  ABC.TQT. The input file is not changed.
+
+To run the squeezer:
+
+SQ filename.filetype               (i.e.  SQ  ABC.TXT)
+
+There are no messages displayed while the program is running. Make sure
+you have enough disk space to handle the output file (which can be 5% to
+50% smaller than the original depending on the type of file).
+
+```
+{% endraw %}
 
 ## TABS.BAS
 
+{% raw %}
 ```bas
 10 '  "TABS"
 20 '
@@ -403,9 +1386,39 @@ machines:
 1160 NEXT I
 1170 RETURN
 ```
+{% endraw %}
+
+## USQIBM.DOC
+
+{% raw %}
+```
+
+
+USQ.COM - 
+
+The purpose of this program is to un-squeeze processed by  the SQ.COM
+program. This program will recontruct the files to their original state
+before compression.
+
+You must specify the input and output files names (if missing, you
+will be prompted for them).
+
+To run the un-squeezer:
+
+USQ d:filename.filetype d:newfilename.filetype   (i.e.  SQ  ABC.TQT ABC.TXT)
+
+After specifying the file names, you will be asked if this is a text file.
+Reply as appropriate. The replies are Y or N.
+
+Make sure you have enough disk space to handle the output file which could
+be up to twice the size of the input file.
+
+```
+{% endraw %}
 
 ## WRITECOM.BAS
 
+{% raw %}
 ```bas
 100 READ LENGTH.%,CHECK.SUM.%,FILE.NAME.$
 110 NUM.LINES.%=LENGTH.% + 7)\8
@@ -447,9 +1460,49 @@ machines:
 470 PRINT:PRINT FILE.NAME.$;" created"
 480 END
 ```
+{% endraw %}
+
+## WRT.DOC
+
+{% raw %}
+```
+
+
+-----------------------------------------------------------------------
+WRTP.COM and WRTE.COM are two files (designed for DOS 2.00) which
+set and reset, respectively, the read-only bit on a file.  Doing
+this to a file allows it to be read (as in DIR, or trying to TYPE
+or execute it) but won't allow it to be written (as when trying to
+delete or update it).  This includes trying to delete it using *.* --
+no error is generated, but the file is not deleted, either.
+
+  They are quite useful for keeping files from going away inadvertently.
+
+To use, say:
+
+WRTP <filename>        to write-protect (make it read-only)
+ or
+WRTE <filename>        to make it writeable.
+
+Path names are legal; ambiguous file names are not (like *.com). 
+Maybe in a future revision.
+
+These will NOT work under DOS 1.1.  Sorry.  You should be using 2.00 
+anyway -- it's well worth the $60.
+
+If you have questions, contact Kent Quirk, (617) 438-2569.
+---------------------------------------------------------------------
+
+
+uestions, contact Kent Quirk, (617) 438-2569.
+---------------------------------------------------------------------
+
+```
+{% endraw %}
 
 ## XREF.BAS
 
+{% raw %}
 ```bas
 100 REM***************** INITIALIAZATION AND DEINITIONS *********************
 110 DIM LABEL$(500),LINE.REF%(500),C$(128)
@@ -581,6 +1634,7 @@ machines:
 7050 C = ASC(C$(POINTER))       'get next character ASCII value
 7060 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

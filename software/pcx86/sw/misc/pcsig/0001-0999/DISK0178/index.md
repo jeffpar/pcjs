@@ -50,6 +50,7 @@ machines:
 
 ## AWARI.BAS
 
+{% raw %}
 ```bas
 1 '**********************************
 2 ' Adapted from the Microcomputer
@@ -185,9 +186,11 @@ machines:
 860 END
 870 IF B(M) =1 AND M<>6 AND M<>13 AND B(12-M)<>0 THEN 660
 ```
+{% endraw %}
 
 ## COLLIDE.BAS
 
+{% raw %}
 ```bas
 1 '*************************************************************************
 2 '                 From Personal Computing Age
@@ -235,9 +238,60 @@ machines:
 447 IF Z$<>"n" AND Z$<>"N" THEN 180
 450 RUN "MASTERP"
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #178, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  AWARI   .BAS         CRC = 0E 96
+
+--> FILE:  CHESS   .EXE         CRC = 2C 13
+
+--> FILE:  CHESS88 .EXE         CRC = E1 E6
+
+--> FILE:  COLLIDE .BAS         CRC = A7 7D
+
+--> FILE:  HAMURABI.BAS         CRC = 51 FC
+
+--> FILE:  XXX     .            CRC = 6F 36
+
+--> FILE:  STAR3D  .DOC         CRC = 5E B9
+
+--> FILE:  STAR3D  .EXE         CRC = A1 15
+
+--> FILE:  STARTREK.BAS         CRC = AB A4
+
+--> FILE:  STARTREK.EXE         CRC = B9 AC
+
+ ---------------------> SUM OF CRCS = EA 5C
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## HAMURABI.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF
 20 CLS
@@ -392,9 +446,56 @@ machines:
 1540 FOR T=1 TO 2500 :NEXT T
 1600 LOAD"masterp",R
 ```
+{% endraw %}
+
+## STAR3D.DOC
+
+{% raw %}
+```
+.mt 0
+.po 8
+.op
+
+
+
+
+
+
+
+
+
+
+
+
+				STAR3D
+			By: Andrew Tuline
+	This program is a semi realistic 3 dimensional star routine (a la
+Star Trek). The .exe file has been converted to hexadecimal format by
+the HEXCONV.BAS program from USERVIEW donated to Rich Schinell's bulletin
+board in Washington D.C. (A long, expensive route to Vancouver). Anyways, once
+you have converted the hex file back to .exe format, you type in star3d
+followed by a carriage return and a star pattern in 640 X 200 graphics should
+appear on the T.V. screen. The speed can be changed by typing a number from
+0-9, or you can return to DOS by pressing almost any other key. After a couple
+of minutes, the pattern may stop, or stars come out from one side. Well, so
+much for my random number generation. Requirements are PC DOS, and a colour
+graphics adaptor. As a final note, I also have another star routine which uses
+the Radio Shack joystick and the 320 X 200 mode.
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
 
 ## STARTREK.BAS
 
+{% raw %}
 ```bas
 1 KEY 1,"NAV"+CHR$(13)
 2 KEY 2,"SRS"+CHR$(13):KEY 3,"LRS"+CHR$(13):KEY 4,"PHA"+CHR$(13)
@@ -983,6 +1084,7 @@ machines:
 5930 G2$=G2$+" IV":RETURN
 10500 IN$=INKEY$:IF IN$="" THEN 10500 ELSE CLS:RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

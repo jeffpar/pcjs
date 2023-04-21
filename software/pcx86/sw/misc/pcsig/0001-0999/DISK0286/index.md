@@ -64,6 +64,34 @@ machines:
     PC-VT    EXE  Main PC-VT program
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES286.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 286   PC-VT  Version 8.4                                v3.2
+------------------------------------------------------------------------
+PC-VT is a software emulator which makes the IBM PC function as a DEC
+VT102 or a VT100 Video Terminal. PC-VT emulates the majority of
+functions of the VT100/102.
+ 
+???????? DAT  Data file for PC-VT.EXE (4 files)
+KERMIT   COM  Kermit module for PC-VT.EXE
+PC-VT    DOC  Documentation for PC-VT.EXE (100 pages)
+PC-VT    EXE  Main terminal emulator program
+READ     ME   A note from the author
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0286
 

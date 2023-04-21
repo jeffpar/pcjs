@@ -44,6 +44,109 @@ machines:
     FILES    TXT  File descriptions.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## COPYRITE.TXT
+
+{% raw %}
+```
+  LICENSE & COPYRIGHT STATEMENT
+  The Navigator is distributed as Shareware. This means  that you may use this
+  Program on any number of computers  you or your organization own(s) and/or
+  operate(s). Further you may copy this program on any number of disks or other
+  media  and distribute it to any person(s) and/or organization(s) you may wish
+  to.
+  Shareware software is an alternative way to provide computer users with
+  quality software while avoiding the payment of the marketing and sales
+  overheads of commercial software publishers.
+  The Navigator is not available for sale and your using the program does not
+  require compensation in any way. However, if you like the way the Navigator
+  works and use  it on a regular basis, you may wish to reward the author with
+  a gift of money. For US$ 40 you will receive a printed manual, a disk,
+  technical support, and notification of future upgrades. Again, this is not a
+  compensation, but only a way to cover the authors cost associated with these
+  services.
+  You are encouraged to register with the author of this software. Please
+  contact:
+  Carnaques & Shalimar Software * Erik Paiste * P.O. Box * Palmyra, Wisconsin
+  53156 * USA.
+  Registration form prints out of the Help Screen within the program.
+```
+{% endraw %}
+
+## FILE1042.TXT
+
+{% raw %}
+```
+Disk No  1042
+Program Title: NAVIGATER version 1.30E
+PC-SIG version 1
+
+    NAVIGATER is a hard disk menu program that lets you easily execute any
+program having the extension EXE, COM, or BAT from the program menu. The
+menu has 34 choices to put your program and path information, and each menu
+choice can have up to five subdirectories. A summary of all menu items and
+parameters can be printed. NAVIGATER can keep a log of your work and lets
+you password protect your programs on the menu. After five minutes of
+disuse the screen automatically blanks out to prevent screen burn-in. From
+the menu you can temporarily exit to DOS to perform other operations. The
+menu is easy to use and has on-line help, and an automatic installation
+program is provided to quickly set up the program.
+
+Usage: Menuing System
+
+System Requirements: 256K memory and one disk drive (a hard disk, mouse,
+and printer are optional, but recommended).
+
+How to Start: Type NVGINST (press enter).
+
+Suggested Registration: $40.00
+
+File Descriptions:
+
+NVG      EXE  Main program.
+NVGINST  EXE  Installation program.
+NVG      DOC  Documentation.
+REGISTER TXT  Registration form.
+COPYRITE TXT  Copywrite notice.
+FILES    TXT  File descriptions.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## FILES.TXT
+
+{% raw %}
+```
+          NVG.EXE      - NAVIGATOR PROGRAM FILE
+          NVGINST.EXE  - INSTALLATION PROGRAM (RUN FIRST)
+          NVG.DOC      - MANUAL IN ASCII FORMAT (PAGELENGTH=66 LINES)
+          COPYRITE.TXT - LICENSE STATEMENT / REGISTRATION INSTRUCTIONS
+          REGISTER.TXT - INSTRUCTIONS TO REGISTER
+          FILES.TXT    - WHAT YOU ARE READING
+```
+{% endraw %}
+
+## REGISTER.TXT
+
+{% raw %}
+```
+To register, enter the Help Screen in the Navigator Program, and press P to
+print a registration form.
+
+I hope to hear from you, even if you wish not to send money.
+
+Erik
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1042
 

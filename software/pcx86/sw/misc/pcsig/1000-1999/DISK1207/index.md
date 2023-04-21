@@ -45,6 +45,79 @@ machines:
     computer against itself.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1207.TXT
+
+{% raw %}
+```
+Disk No: 1207
+Program Title:  PROCHALLENGE BASEBALL
+PC-SIG version 1
+
+PROCHALLENGE BASEBALL is a one or two player strategy game of computer
+baseball that has a variety of player options for every pitch of the
+game.
+
+In this version the game simulates the 1987 World Series game between
+St.  Louis and Minnesota, but in the registered version of the program
+you may choose between 26 Major League baseball teams.  PROCHALLENGE
+BASEBALL is set up where you are the manager giving signals to the
+players.  The pitching team has the options to change its defensive
+formation, pick off a runner, and decide what pitches to throw.  When a
+pitch is thrown, you can specify where the ball should be placed over
+the home plate.  The options for the team at bat include the choice to
+swing at the ball, bunt, steal a base, lead off a runner, hit and run,
+run and hit, and call the pitch.
+
+PROCHALLENGE BASEBALL does everything to simulate the actual game, even
+to the point of using the statistics for each player of the team.
+Baseball fans will be pleased that the program allows them to play based
+upon the skill and strategy of the real game of baseball.  PROCHALLENGE
+BASEBALL has graphic screens for the entire field with its players and
+the view from the pitcher's mound, not to mention the many colorful game
+menus to aid in game play.  At any time you may let the computer make
+the signal, so that one player may play against the computer or even the
+computer against itself.
+
+Usage:  Baseball Game/Entertainment.
+
+System Requirements:  CGA grapics.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $24.95
+
+File Descriptions:
+
+MINNESOT TM   Team data file.
+BBHELP   PIC  Graphic picture files.
+BBLOGO   PIC  Graphic picture files.
+DEFENSE  PIC  Graphic picture files.
+FIELD    PIC  Graphic picture files.
+OFFENSE  PIC  Graphic picture files.
+SCOREBD  PIC  Graphic picture files.
+???????? TAB  Program files (16 files).
+STLOUIS  TM   Team data file.
+GUIDE         Documentation.
+PC104E2  EXE  Main program.
+GO       BAT  Batch file to print documentation.
+READ     ME   Ordering information.
+BASEBALL BAT  Batch file for starting game.
+BBPLAYER DTA  Data file.
+SLOWDOWN COM  Program for a 286 computer.
+SLOWDOWN DOC  Documentation for SLOWDOWN.COM.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1207
 

@@ -33,6 +33,43 @@ machines:
     screens at every turn.  You'll never be at a loss as to what to do next.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2202.TXT
+
+{% raw %}
+```
+Disk No: 2202                                                           
+Disk Title: Questor 1 of 2 (2203 also)                                  
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: Questor                                                  
+Author Version: 1.5                                                     
+Author Registration: $29.95                                             
+Special Requirements: Two floppy drives or a hard drive.                
+                                                                        
+With QUESTOR, you can enter, edit, and catalog up to 2 billion videos --
+you're only limited by the space available on your hard or floppy disk. 
+For each video entry, there is a field for title, actor(s), rating (G,  
+PG, R), category, year, location, and five star rating. There's even a  
+notepad field that gives you plenty of room to give a Siskel & Ebert    
+type overview of the video.                                             
+                                                                        
+Once you've entered the info for each video, you can use the Artificial 
+Intelligence Language Interpreter to find a specific video!  Talk to    
+QUESTOR using ordinary English to tell it what videos to search for and 
+display. QUESTOR is an easy-to-use, menu-driven program that has help   
+screens at every turn.  You'll never be at a loss as to what to do next.
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2202
 

@@ -49,6 +49,72 @@ machines:
     LOAD-US  DOC  Documentation (listable) LOAD-US  ABS  Abstract
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## LOAD-US.DOC
+
+{% raw %}
+```
+
+
+
+		   Load-US Abstract and Instructions
+
+
+    Load-US (tm) is a utility developed by SWFTE, Inc.	which allows you to
+    run Lotus 123 (tm) and Symphony (tm) directly from a hard disk without
+    the system disk in Drive A.  This utility is NOT a copy program; it is
+    a technological breakthrough that allows authorized users to use 123
+    and Symphony on a hard disk system.  Load-US saves you the aggravation
+    of locating your System disk each time you need to run 123 or Symphony.
+    Load-US protects you from being "locked out" of your own data and
+    software if your System disk is lost, stolen or destroyed.	Use Load-US
+    and use hard disk storage technology with confidence!
+
+    The Load-US System includes:
+
+	LOAD-US  COM		 Load-US execution file.  Not listable.
+	LOAD-US  ABS		 Load-US abstract file.  Listable.
+
+    To start Load-US:  load DOS, copy Load-US onto your hard disk (into
+    your Lotus subdirectory, if you have made one), type 'Load-US' and
+    press Return to start Load-US.  Follow the instructions on the Load-US
+    system screens to install the system.  Once installed, Load-US permits
+    you to run Lotus 123 or Symphony normally without your Sytem disk.
+
+    Load-US should be run only at reboot time or start up time.  It is
+    necessary to install the program once per session; however, installing
+    the program more than once will not cause any change to the system.
+    Multiple installations will be flagged by:
+
+	"Load-US needs to be installed only once!"
+
+    Perhaps most importantly, this product is being distributed on a
+    FairWare (tm) basis.  The product can be copied and circulated freely
+    by anyone.	If a user derives benefit from the product, we expect that
+    they will send us the suggested contribution of $10 as outlined on the
+    Load-US cover screen.  Diskettes may also be purchased directly from
+    SWFTE, Inc.  for $10, plus $5 for postage and handling.  Please feel
+    free to contact us directly if you have any questions concerning the
+    distribution or function of this FairWare product.
+
+    Load-US does not violate ANY copyright laws or licensing agreements.
+    Use Load-US and use your hard drive with confidence and peace of mind.
+
+
+	SWFTE, Inc.
+	P.O. Box 219
+	Rockland, DE  19732
+
+
+
+    123, and Symphony are trademarks of Lotus Development Corporation.
+    Load-US and Fairware are trademarks of SWFTE, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0252
 

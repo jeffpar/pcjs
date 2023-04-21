@@ -39,6 +39,140 @@ machines:
     it all from PERSONAL SECRETARY.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2198.TXT
+
+{% raw %}
+```
+Disk No: 2198                                                           
+Disk Title: Personal Secretary                                          
+PC-SIG Version: 1                                                       
+                                                                        
+Program Title: Personal Secretary                                       
+Author Version: 2.00                                                    
+Author Registration: $25.00                                             
+Special Requirements: 640K Ram.                                         
+                                                                        
+This program could become the best secretary ever had!  You'll never    
+lose a number again because you'll have a place to store your           
+contacts.  And you'll be able to keep track of all those customer and   
+personal contacts with this easy-to-use database.                       
+                                                                        
+Log necessary information about a customer contact in a database that   
+is foolproof and user-definable.  Hold as many names and addresses as   
+you want, PERSONAL SECRETARY has no size limitation.  For each          
+customer record there is room to enter name, address, company name,     
+telephone, and a note about the customer.  And if that's not enough,    
+you can add your own fields to the record.                              
+                                                                        
+Once you've added your records, take advantage of the mini              
+wordprocessor to write letters and memos up to four pages long.         
+The labeling and mail merge capability in PERSONAL SECRETARY can make   
+mass mailings a snap.  Don't waste any more time by exiting your        
+current database and then entering your wordprocessor because you need  
+to write a letter; do it all from PERSONAL SECRETARY.                   
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## PS.DOC
+
+{% raw %}
+```
+
+
+
+         Personal Secretary file structure & indexes:
+
+
+         Database:   PS.DBF
+         Index file: PS1.NTX  Key: UPPER(SUBSTR(LNAME,1,10)) (last name)
+                     PS2.NTX  Key: UPPER(SUBSTR(NAME,1,10))  (company)
+                     PS3.NTX  Key: UPPER(SUBSTR(ZIP)         (zip)
+         Memo file:  PS.DBT   Contains: personal notes
+
+         Field Name  Type  Width  Dec   Description
+         ----------  ----  -----  ----  ---------------------------------------
+         TITLE       Char     5         Title such as Mr., Mrs., Dr., Ms.
+         FNAME       Char    15         First name (and middle initial)
+         LNAME       Char    15         Last name
+         JOB_TITLE   Char    35         Job position (President, VP, Marketing)
+         NAME        Char    35         Company name
+         ADDR1       Char    35         Line 1 address
+         ADDR2       Char    35         Line 2 address
+         CITY        Char    20         City name
+         STATE       Char     2         State code
+         ZIP         Char    10         Zip code
+         COUNTRY     Char    15         Country name
+         PHONE       Char    13         Home phone
+         PHONE1      Char    13         Work phone
+         FAX         Char    13         FAX phone
+         SELECTED    Char     1         Is this record selected for something
+         CONTACTED   Date     8         Date they last contacted us
+         REPLIED     Date     8         Date we responded to them
+         BIRTHDAY    Date     8         Their birthday
+         NOTES       Memo    10         32K note field
+         FIELD1      Char    40         User defined field #1 - character
+         FIELD2      Char    40         User defined field #2 - character
+         FIELD3      Date     8         User defined field #3 - date
+         FIELD4      Date     8         User defined field #4 - date
+         FIELD5      Nume    11    2    User defined field #5 - numeric
+
+
+         Database:   PS-DOCS.DBF
+         Memo file:  PS-DOCS.DBT  (contains document text and merge fields)
+
+         Field Name  Type  Width  Dec   Description
+         ----------  ----  -----  ----  ---------------------------------------
+         DOC_TITLE   Char    50         Full descriptive document title
+         CREATED   * Date     8         Original creation date
+         EDITED    * Date     8         Last date of editing
+         LEFT_MAR  * Nume     2         Left margin indent (in columns/chars)
+         LINE_LEN  * Nume     3         Full line length (in columns/chars)
+         TRIM_FLDS * Logi     1         Shall I trim spaces from fields as merged
+         DOC_TEXT    Memo    10         32K document text
+
+         * new field for version 2.0
+         
+
+
+
+         Personal Secretary file structure & indexes (cont):
+
+
+         Database:   PS-FLDS.DBF
+
+         Field Name  Type  Width  Dec   Description
+         ----------  ----  -----  ----  ---------------------------------------
+         PROMPT      Char    14         Merge window prompt for user
+         FIELDNAME   Char    12         Related field name in PS.DBF to merge
+         ACTIVE      Logi     1         Available for mail-merge?
+
+
+         Database:   HELPFILE.DBF
+         Memo file:  HELPFILE.DBT (contains help screen text)
+
+         Field Name  Type  Width  Dec   Description
+         ----------  ----  -----  ----  ---------------------------------------
+         HELPID      Char    20         Unique identifying title of help window
+         TOP         Nume     2         Top row of help window
+         LEFT        Nume     2         Left column of help window
+         BOTT        Nume     2         Bottom row of help window
+         RIGHT       Nume     2         Right column of help window
+         CURSORON    Logi     1         Is the cursor on after window?
+         TEXT        Memo    10         Actual help window text
+         
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2198
 

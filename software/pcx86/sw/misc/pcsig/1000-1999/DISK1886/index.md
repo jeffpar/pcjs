@@ -37,6 +37,47 @@ machines:
     configuration areas give further help.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1886.TXT
+
+{% raw %}
+```
+Disk No: 1886                                                           
+Disk Title: SamfB-The Morse Code Program                                
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: SamfB - The Morse Code Program                           
+Author Version: 09                                                      
+Author Registration: $20.00.                                            
+Special Requirements: None.                                             
+                                                                        
+As one must learn hand signals before one operates a vehicle, so must   
+one learn Morse Code before one fires up an amateur radio. Now you      
+could begin with a healty diet of How-To books, cassette tapes and      
+LP records, followed by several weekends of personal instruction at     
+a local Ham radio club. But that might get costly. What you need is     
+a Morse Code instructor you can call on anytime to teach you at your    
+own pace.                                                               
+                                                                        
+SAMFB, The Morse Code Program, is such an instructor. SAMFB takes you   
+through the basics of Coding with hands-on keying right at your PC      
+keyboard. SAMFB listens to your dits and dahs, types out what you keyed,
+and quizzes you with random words, all at a speed you set yourself.     
+                                                                        
+If you get stuck, or bogged down, don't fret. SAMFB has a on-line,      
+context sensitive help system. Several pull-down menus and config-      
+uration areas help you further.                                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1886
 

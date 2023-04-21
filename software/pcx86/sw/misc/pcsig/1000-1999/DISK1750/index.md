@@ -41,6 +41,51 @@ machines:
     chosen.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1750.TXT
+
+{% raw %}
+```
+Disk No: 1750                                                           
+Disk Title: Lottery Analyzer and Picker                                 
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Lottery Analyzer                                         
+Author Version:  1.0                                                    
+Author Registration: None.                                              
+Special Requirements: None.                                             
+                                                                        
+LOTTERY ANALYZER AND PICKER is a program that analyzes statistics on    
+previous winning lottery numbers and randomly chooses lottery numbers   
+for you.  The winning lottery numbers can be updated and changed at any 
+time.                                                                   
+                                                                        
+Display a listing of the last 48 winning numbers, showing the number of 
+repeats from the previous drawing, the total odd and even numbers, the  
+sum of all six numbers, and the difference and average between the      
+numbers drawn.  Find out how many times each number was picked in       
+previous drawings.  Display a graph of the previous winning numbers and 
+a graph of the frequency of each winning number.                        
+                                                                        
+Besides giving statistics on previous winning lottery numbers, LOTTERY  
+ANALYZER AND PICKER can randomly select lottery numbers for you.  Set   
+limitations on the random selection to include or exclude certain       
+numbers, set the average frequency, set the total sum of all six        
+numbers, have consecutive or double numbers, include previous winning   
+numbers and more.  After you pick numbers from the random selection,    
+LOTTERY ANALYZER can display a graph of all the numbers that were       
+chosen.                                                                 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1750
 

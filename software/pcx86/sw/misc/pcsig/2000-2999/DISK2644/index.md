@@ -14,6 +14,41 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2644.TXT
+
+{% raw %}
+```
+Disk No: 2644                                                           
+Disk Title: Animated Math                                               
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: Animated Math                                            
+Author Version: 1.0                                                     
+Author Registration: $10.00                                             
+Special Requirements: 640K RAM, EGA or VGA, and hard drive. A mouse is o
+                                                                        
+ANIMATED MATH teaches counting, addition, and subtraction to children   
+from pre-school through the first grade. Right answers are rewarded with
+colorful animation sequences that bring math to life. Not just a drill, 
+this fun tutorial provides a highly interactive and friendly environment
+for sharpening math skills.                                             
+                                                                        
+Several different learning aids include dinosaur connect-the-dot games, 
+color games, a build-your-own-rocket game, an animated piano game, and a
+mouse game. ANIMATED MATH uses over 100 animated sequences. Both        
+keyboard and mouse support are provided.                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2644
 

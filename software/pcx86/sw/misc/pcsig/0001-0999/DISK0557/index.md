@@ -33,6 +33,59 @@ machines:
     TWILZON2 COM  TWILIGHT ZONE pinball, a must for the pinball player
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES557.TXT
+
+{% raw %}
+```
+----------------------------------------------------------------------------
+DISK NO  557  PINBALL RALLY                                        V1  DS2
+----------------------------------------------------------------------------
+Here  is a disk for the pinball addict. It has three games which have
+been created using the program "Pinball Construction Set" by Bill Budge.
+The games vary in the level of difficulty but they are all interesting.
+ 
+The three games include PINBALL which is the standard pinball game; RAIN is
+more complicated as it uses 5 pinballs at the same time and TWILZON2 is
+perhaps the most difficult, something for the Rod Sterling fans.
+ 
+PINBALL  EXE+ Program to execute a standard pinball game
+RAIN     EXE+ Pinball program with 5 balls!
+TWILZON2 COM+ Twilight Zone pinball, a must for the pinball player
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+## NOTES557.TXT
+
+{% raw %}
+```
+Program name:        Pinball
+
+Author name:         Bill Budge
+Address:             ?
+
+Suggested Donation:  ?
+
+Program Description: This is an assortment of three different pinball
+                     games of definite interest to the pinball addict.
+
+                     The three games include PINBALL which is the standard
+                     pinball game; RAIN is more complicated as it uses
+                     5 pinballs at the same time and TWILZON2 is perhaps
+                     the most difficult.
+
+                     These games have been written using the Pinball
+                     Construction Set by Bill Budge.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0557
 

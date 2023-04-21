@@ -14,6 +14,40 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## NEU.TXT
+
+{% raw %}
+```
+Dies ist die allerneueste Version vom ultimativen Breakout-Clone:
+
+    AQUANOID v1.1 !!!
+
+Erscheinungsdatum:  17. Juli 1992
+                    ~~~~~~~~~~~~~
+Einige kleine Fehler wurden behoben, die Geschwindigkeit optimiert und es
+gibt jetzt die Möglichkeit, den (natürlich verbesserten) SOUND
+auszuschalten.....sehr praktisch in vollen Büros und Seminarräumen !
+=> Einfach beim Start den Parameter "/S" übergeben.
+
+Wenn eine Tonne runterfällt, wird rechts durch rot,gelb oder grün angezeigt,
+ob die Tonne mies, mittel oder günstig ist. 
+Wen das stört, der kann es mit Druck auf die "T"-Taste ausschalten.
+
+AB DEM 25.JULI 1992 GIBT ES EINEN AQUANOID-WETTBEWERB !!!
+Wer uns als erster den CHEAT-MODE für unendlich viele Leben schreibt, erhält
+eine Vollversion von AQUANOID GRATIS !
+
+Viel Spaß weiterhin wünschen euch:
+
+  Stefan Heineke & Karsten Finger
+
+P.S.  Die Vollversion ist auch weiterhin zu haben !
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #4086
 

@@ -30,6 +30,70 @@ machines:
     source code.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## VENDOR.DOC
+
+{% raw %}
+```
+Dear Shareware Vendor:
+
+The software distributed on this disk is copyrighted material and is subject
+to certain restrictions on copying and distribution.
+
+You may copy and distribute the UNREGISTERED version of this software,
+provided: (a) You do not rename, change or omit any of the files unless you
+receive express permission to do so in writing from the author, (b) You
+understand that you may not "sell" this software, but you may charge a
+reasonable copying fee for providing copies on disk, (c) You do not "rent" or
+"loan" copies of this software, (d) You do not advertise this software as
+"free", "cheap" or "public domain". Vendors must comply with the standards
+set by the Association of Shareware Professionals (ASP).
+
+The following files MUST be included on all distribution copies of this
+program:
+
+    MAILLIST.EXE
+    MAILDOC.COM
+    MAILLIST.DBF
+    MAILLIST.DBT
+    MAILNEED.DBF
+    NOTES.DBF
+    NOTES.DBT
+    FORM1.LBL
+    FORM2.LBL
+    THREE10.LBL
+    THREE12.LBL
+    THREE17.LBL
+    VENDOR.DOC
+
+You may use "file compression" techniques in order to fit more programs on a
+single disk.
+
+This program may NOT be distributed on the same disk with other mailing list
+programs or with any so-called "adult" or "X-rated" materials.
+
+If you indicate ASP membership in your catalog, please do so for your
+listing of this program.
+
+If you are an ASP-approved vendor who received this material prior to December
+31, 1990, you may distribute this software, provided you comply with the above
+conditions. If you are not an ASP-approved vendor, or if you received this
+material after December 31, 1990, you must obtain the author's written
+permission to distribute. The author reserves the right to deny or withdraw
+permission to distribute at any time, for any (or no) reason.
+
+For further information:
+
+Rosemary West
+R.K. West Consulting
+P.O. Box 8059
+Mission Hills, CA 91346
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1506
 

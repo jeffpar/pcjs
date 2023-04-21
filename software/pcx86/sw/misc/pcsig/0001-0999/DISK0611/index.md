@@ -58,6 +58,208 @@ machines:
     M_BB     COM  Mouse systems compiled menu file.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES611.TXT
+
+{% raw %}
+```
+Disk No  611
+Program Title: BLACKBEARD version 7.37
+PC-SIG version 7.37
+ 
+    BLACKBEARD is a programmer's editor that performs just about every task
+a programmer needs. This is probably due to its windowing capacity
+(13!), excellent text formatter, macro capabilites, and integral mouse
+driver, to name a few features. Also, it works well for source code
+editing in structured languages such as Pascal, C, Fortran, etc.
+ 
+    While its primary use is for source code editing, it also has some
+wordprocessing features (reformats, centers, cut & paste, etc.) to ease up
+on your housekeeping/documentation chores.
+ 
+Usage: Programmer's Editor
+ 
+System Requirements: 128K memory and one disk drive.
+ 
+How to Start: Consult the various .DOC and .TXT files for instructions.
+Each part of BB can be started from DOS.
+ 
+Suggested Donation: $20.00 covers: a distinctive "BLACKBEARD"
+collectable, a registration sticker, and a copy of the latest version of
+BLACKBEARD.
+ 
+File Descriptions:
+ 
+READ     ME   Look here first (this file).
+README   TOO  Version specific information.
+PRESS    TXT  Press release info (good overall feature summary).
+FORM     TXT  Order form (edit and mail, we thank you).
+BB       EXE  The main program..
+BB       HLP  On-line help file accessed by BB (not for humans).
+BB       CFG  Data configuration file..
+BB       LOG  Log of previous versions, including change info.
+BBADA    LNG  Language Sensitive Editing templates for Ada.
+BBC      EXE  Key Binding Compiler (creates BB.KEY).
+BBC      DOC  Key Binding Compiler documentation.
+BBKEYS   TXT  Source for default BB Key Bindings.
+BB       KEY  Compiled key bindings (used by BB).
+BBMAN    EXE  Blackbeard Manual Generator.
+BB       MAN  Defines the Blackbeard manual. Customizable.
+BBMAN    DOC  Describes how to use BBMAN.
+BBF      DOC  Blackbeard Text Formatter Manual.
+BBF      EXE  Blackbeard Text Formatter.
+BB       FNT  Standard TTY type font (used by BBF formatter).
+HPLASER  FNT  HP Laser Jet fonts (bold, underline, etc.).
+TP351    FNT  Toshiba P351.
+EMX80    FNT  Epson MX-80.
+M_BB     MSC  Mouse systems movement definition file..
+M_BB     COM  Mouse systems compiled menu file.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## FORM.TXT
+
+{% raw %}
+```
+
+
+
+
+				 O R D E R   F O R M
+								  Gen-7.37
+
+
+           TO:  BLACKBEARD                              Date____/____/____
+		PO Box 638
+		San Bernardino, CA 92402
+
+
+
+
+         From:  Name _______________________________________________________
+
+                Address ____________________________________________________
+
+                City __________________________ State ________ Zip _________
+
+                Area Code (______)  Phone __________________________________
+
+
+
+		     REGISTRATION FEE------   EACH-------   EXTENDED-
+
+		     "BLACKBEARD"   editor      $   20.00       _______
+		      includes free gift and
+		      latest version
+
+		     Foreign Postage                 5.00       _______                                          --------
+
+		     Site License (right to copy only)
+		       10 Copies                $  100.00
+		       100 Copies               $  500.00
+		       Unlimited Copies         $  900.00
+
+                                                Total          $_______
+
+		     ALLOW SIX TO EIGHT WEEKS FOR SHIPPING (worst case)
+
+
+                --------------------- User comments ----------------------
+
+                I learned about BLACKBEARD from
+                   [ ] - Friend                    [ ] - Software product
+                   [ ] - Computer Club             [ ] - Computer Store
+		   [ ] - Data Base Service         [ ] - PC-SIG
+		   [ ] - Source                    [ ] - IBM/NET
+		   [ ] - Site license              [ ] - Other
+
+                Comments or suggestions: ___________________________________
+                ____________________________________________________________
+                ____________________________________________________________
+                ____________________________________________________________
+
+                problems:___________________________________________________
+                ____________________________________________________________
+                ____________________________________________________________
+                ____________________________________________________________
+
+```
+{% endraw %}
+
+## PRESS.TXT
+
+{% raw %}
+```
+
+		     BLACKBEARD -- THE PROGRAMMER'S EDITOR
+
+    User supported software, free to use and distribute, $20.00 donation
+
+    DOS, IBM-PC/clone, monochrome or color video adapter( user colors).
+
+    Performs ALL the normal editing operations you would expect including
+    cut/paste, block operations, etc.
+
+    Designed for professional programmers to edit programs and documentation
+
+    User configurable; re-define key bindings, set various editing options
+
+    "On the fly" keystroke macros, can be saved and recalled
+
+    Automatic indenting for block structured languages like C and Pascal
+
+    Versatile cut and paste facility including column cut and paste
+
+    Context sensitive help
+
+    Windows
+      windows can be individualy sized.
+      can have up to ten windows , each can support the same or different file
+      single keystroke moves you from window to window
+
+    Window to DOS that can be edited
+
+    Designed to be easy to use without the assistance of a manual
+
+    High performance
+      intelligent screen paging. ( i.e. pressing page down 3 times displays the
+      third page without displaying the intervening pages.)
+
+    Ability to edit large files
+
+    Pop-up menus activate functions ( or direct execution )
+    Menu selections can be activated by cursor movement, mouse, or first letter
+    All menu entries have on-line help ( ALT-H )
+
+    Supports mice using standard mouse menu drivers ( cursor control )
+
+    Simple word processing features like word wrap, paragraph reformat, etc.
+
+    Includes a text formating program simular to RUNOFF or SCRIPT/VS
+
+    Line drawing using the IBM extended graphics character.
+
+    Can be installed as a resident program, allowing you to pop in
+    and out with the editor remembering where you were.
+
+    BB can "remember" last files edited, and cursor location
+    ( context SAVE/RESTORE )
+
+    Address for ordering Blackbeard is:         Blackbeard
+						PO Box 638
+						San Bernardino, CA, 92402
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0611
 

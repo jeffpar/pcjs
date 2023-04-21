@@ -31,6 +31,7 @@ machines:
 
 ## DLTAPLOT.BAS
 
+{% raw %}
 ```bas
 10 ' PROGRAM NAME: DLTAPLOT.BAS       WRITTEN 7-16-83       REV 31 MAR 1984
 40 '
@@ -357,9 +358,11 @@ machines:
 4290 '
 4295 '***********************************************************
 ```
+{% endraw %}
 
 ## DLTAPRNT.BAS
 
+{% raw %}
 ```bas
 10  ' PGM NAME: DLTAPRNT.BAS      WRITTEN 9-4-1983     REV 1 JUNE 1984
 15 ' ******************************************************************
@@ -665,9 +668,800 @@ machines:
 4390 '
 4398 '*****************************************************************
 ```
+{% endraw %}
+
+## FILES101.TXT
+
+{% raw %}
+```
+Disk No:  101
+Program Title:  PORTWORT PACKAGE
+PC-SIG version: 2.1
+
+The Portworth Package is a user-supported set of applications programs
+that you can use for monitoring and evaluating your stock portfolios.
+Portfolios of up to 25 stocks can be processed.  It has graphing
+capabilities, and includes documentation and sample files to illustrate
+usage.
+
+Usage:  Stock Portfolio Tracking and Evaluation.
+
+Special Requirements:  A version of BASIC.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $15.00
+
+File Descriptions:
+
+DLTAFILE DTA  Sample input file
+DLTAPLOT BAS  Portfolio valuation change line graph program
+DLTAPRNT BAS  Portfolio valuation change bar chart program
+DRIVE    DTA  System configuration parameter file
+HOLDLIST DTA  Sample input file
+PORTCHG2 DOC  Documentation file.
+PORTCHNG DOC  Documents changes to this version of package
+PORTCOST BAS  Portfolio cost valuation program
+PORTMRKT BAS  Portfolio current valuation program
+PORTPACK BAT  Prints PORTPACK.DOC
+PORTPACK DOC  32-page user guide
+README   TXT  Description of files on disk
+SETDRIVE BAS  System configuration program
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1985,86,87,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## PORTCHG2.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                              THE PORTWORTH PACKAGE
+
+                      A Simple Portfolio Monitoring Package
+
+                          for the IBM Personal Computer
+
+
+
+
+
+
+                                   VERSION 1.2
+
+                                1 SEPTEMBER 1985
+
+          PLEASE REPLACE ORIGINAL USER'S GUIDE PAGES WITH THESE PAGES.
+                         DISCARD ORIGINAL PAGES REMOVED.
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  George Wall
+
+                              5833 Brookview Drive
+
+                              Alexandria, VA 22310
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page iii
+
+
+
+
+                                ADDITIONS/CHANGES
+
+                                   VERSION 1.2
+
+                                1 SEPTEMBER 1985
+
+         1. DOS command statement corrected on page 1.
+
+
+
+
+
+
+
+
+
+
+
+
+
+          PLEASE REPLACE ORIGINAL USER'S GUIDE PAGES WITH THESE PAGES.
+          DISCARD ORIGINAL PAGES REMOVED.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         1 SEPTEMBER 1985                                      Page iii
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE             Page 1
+
+
+
+         1    INTRODUCTION
+
+         1.1  OVERVIEW
+
+              The PORTWORTH package is a set of applications programs
+         that you can use for monitoring and evaluating your stock
+         portfolios.  Portfolios of up to 25 stocks can be processed.
+
+         The package consists of four main programs (PORTCOST, PORTMRKT,
+         DLTAPRNT, and DLTAPLOT).  Each have an input file that is read
+         from a diskette.  You use one input file for both the PORTCOST and
+         the PORTMRKT programs, and another input file for the DLTAPRNT and
+         DLTAPLOT programs.
+
+              You may create the two input files (HOLDLIST.DTA and
+         DLTAFILE.DTA) with the PC DOS EDLIN utility or with a suitable
+         word processing program that produces comma-delimited files.
+         Sample HOLDLIST and DLTAFILE files are included on this diskette.
+         To print them for study, make sure that DOS is ready, that A> is
+         displayed, and that the printer is at the start of a new page.
+         Then type COPY A:HOLDLIST.DTA LPT1: <enter>. The HOLDLIST.DTA
+         sample file will be printed.  After printing of that file is
+         completed, repeat the procedure for DLTAFILE.DTA. 
+
+              You may use the PORTCOST.BAS program to produce an item
+         listing for a stock portfolio of up to 25 stocks. 
+
+              Similarly, you may use the PORTMRKT.BAS program to produce a
+         current value item listing for a portfolio of up to 25 stocks.
+         During use, the program solicits data from you on current stock
+         prices and on the price changes since the previous valuation. You
+         are able to correct mistakes you make during input.  Online
+         corrections of keyboard input are processed.
+
+              You will be using the DLTAPRNT.BAS program to produce a bar
+         chart of dollar changes for each cycle of portfolio valuation
+         input data.  The program also produces a chart depicting the
+         percent change in value for each cycle.  Since the program
+         operates in text mode, data that cannot be effectively displayed
+         in one screen can be produced as one continuous chart.
+
+              The DLTAPLOT.BAS program is provided to enable you to produce
+         a line chart for display on the monitor.  The chart shows the
+         cumulative changes in value of the portfolio over the number of
+         cycles processed.  This program operates in high resolution
+         graphics mode. 
+
+
+
+
+
+
+
+
+
+                                                                     1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+              THIS IS THE END OF THE CHANGED PAGES FOR VERSION 1.2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+..
+
+```
+{% endraw %}
+
+## PORTCHNG.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                              THE PORTWORTH PACKAGE
+
+                      A Simple Portfolio Monitoring Package
+
+                          for the IBM Personal Computer
+
+
+
+
+
+
+                                   VERSION 1.1
+
+                                   1 JUNE 1984
+
+          PLEASE REPLACE ORIGINAL USER'S GUIDE PAGES WITH THESE PAGES.
+                         DISCARD ORIGINAL PAGES REMOVED.
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  George Wall
+
+                              5833 Brookview Drive
+
+                              Alexandria, VA 22310
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE             Page ii
+
+
+
+
+                                ADDITIONS/CHANGES
+
+                                   VERSION 1.1
+
+                                   1 JUNE 1984
+
+         1. SETDRIVE.BAS modified to allow for selection of color for
+         systems equipped with color monitors.
+
+         2. DLTAPLOT.BAS modified to provide ending vertical offset for
+         continuation plot with same input data.
+
+         3. PORTMRKT.BAS modified to display TOTAL VALUATION CHANGE
+         and TOTAL NEW VALUATION on screen to facilitate report
+         checking
+
+
+
+
+
+          PLEASE REPLACE ORIGINAL USER'S GUIDE PAGES WITH THESE PAGES.
+          DISCARD ORIGINAL PAGES REMOVED.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         1 JUNE 1984                                            Page ii
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE             Page 8
+
+
+
+
+
+              8. After you have entered and confirmed the drive
+         definition entry, you will be asked to specify the printer to
+         be used.  Respond by entering I <enter> if your printer is an
+         IBM dot matrix printer or E <enter> if your printer is an
+         Epson MX-80 or MX-100 dot matrix printer.  For any other
+         printer, you may try each selection and use the one that best
+         suits your system.  This selection primarily affects the steps
+         used by the programs to set up the default conditions for the
+         printer.  (The special characters used by the DLTAPRNT program
+         may be altered through use of a printer other than the three
+         specified above.)
+
+              9. After you have selected a printer configuration and
+         confirmed your selection, all that remains is to select the
+         display color if your system configuration allows color. (Your
+         system must be equipped with a color/graphics board and a
+         color monitor.)  If you will not be using color, simply
+         respond N and <enter> to the prompt
+                               SELECT COLOR (Y/N)
+              Otherwise, respond Y and select the color parameters you
+         prefer.  (Refer to the COLOR statement in Section 4 of the
+         Basic manual for details on color.)  Do not select the same
+         value for both the foreground and the background colors - this
+         would result in invisible characters!
+
+              10. Once you have finished with the color options, you
+         are done.  The PORTWORTH package is configured to match your
+         system.  The entries you made in this program will be recorded
+         in the DRIVE.DTA file, which will be checked each time a
+         program begins.  You can now cover the write protect notch on
+         the program diskette to protect its contents.  Whenever you
+         need to change the drive selection or use, the printer
+         configuration, or the color selection, just remove the notch
+         cover from the program diskette and repeat this procedure from
+         step 1.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+         1 JUNE 1984                                               8
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 20
+
+
+
+              10. After the report is printed, the program again pauses
+         and allows you to check the report and to input corrections,
+         if required.  It displays:
+
+                        TOTAL VALUATION CHANGE X
+
+                        TOTAL NEW VALUATION Y
+
+                        CHECK PRINTED REPORT
+                        DO YOU WISH TO CORRECT AND REPRINT (Y/N)?
+
+              Where X represents the total change in value for the
+         portfolio and Y represents the new total portfolio value.
+
+              One quick method of testing the accuracy of your inputs
+         for the stocks is to add the total portfolio change from the
+         current report to the current total value from the previous
+         report.  The algebraic sum should equal the current total
+         value for the current report.  (If you have odd lots in your
+         portfolio, the decimal amounts may differ due to rounding.)
+
+              If you respond Y to the above query, then you will be
+         allowed to correct per steps 9 and 10.  
+
+              11. If you respond N, then you are done!  The program
+         responds:
+
+                        PROGRAM PROCESSING COMPLETED - PROGRAM ENDS
+
+                   And it does.
+
+
+
+         6.2  STOPPING PORTMRKT
+
+              DURING EXECUTION - You can interrupt program processing
+         at any time by pressing the BREAK key while simultaneously
+         holding the CTRL key depressed.  However, you should not have
+         to do this.
+
+              WHEN FINISHED - The PORTMRKT program will stop on its own
+         when processing is completed.  It signifies this with the
+         screen message "PROGRAM PROCESSING COMPLETED - PROGRAM ENDS".
+
+              When you are through with the PORTMRKT program, you can
+         simply type SYSTEM <enter> to return the system to DOS.  You
+         may also load in a different basic program over the PORTMRKT
+         program that resides in memory.  If you want to clear the
+         PORTMRKT program from memory, simply type NEW <enter>.
+
+
+
+
+
+
+         1 JUNE 1984                                                20
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 27
+
+
+
+              8. The program will display the following on the screen
+         after the appropriate graph scale is chosen:
+
+              INPUT LIMIT ON NUMBER OF RECORDS TO BE PROCESSED
+
+              If you want to have all input lines of the DLTAFILE.DTA
+         file processed, simply enter some numeric value greater than
+         the total number of lines on the file.
+
+              However, if you want the program to stop after processing
+         a specified number of lines, type in a numeric value
+         corresponding to the number of lines to be processed.
+
+              Respond with a numeric value and <enter>.
+
+              If you stop the plot before running out of input lines to
+         be processed (by specifying a limit on the number of records
+         to be processed), the program will display an offset value at
+         the completion of its operation.  This offset value can be
+         jotted down and input during a subsequent running with the
+         same file. The offset enables you to continue the plot where
+         you left off.
+
+              If, however, the program runs out of input records to be
+         plotted, then no offset value is furnished.
+
+              9. The program then displays the following message on the
+         screen:
+
+              SOME INITIAL RECORDS TO BE SKIPPED (Y/N)?
+
+              In some cases, you may not be interested in processing
+         the first lines of the file.  (You may have a chart on these
+         already.)  To skip the lines, respond with Y and <enter>.
+
+              The program then displays the following on the screen:
+
+              INPUT COUNT OF INITIAL RECORDS TO BE SKIPPED
+
+              Respond by entering the number of records to be skipped
+         and follow this with <enter>.
+
+              Use care, however, not to enter a limit in this step that
+         is higher than the count entered in step 7.  Otherwise the
+         program will end without producing a chart at all!
+
+              If you do not wish to skip some records, simply type N
+         and <enter>.
+
+
+
+
+
+
+
+         1 JUNE 1984                                                27
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 28
+
+
+              10. The program then displays the following:
+
+                         OFFSET FIRST FIRST RECORD (Y/N)
+
+              If you have an offset value from a previous plot of the
+         input file (see 8 above), then you may wish to start the plot
+         some distance from the X-axis base line.  If so, simply
+         respond Y and <enter>.  Then input the vertical offset you
+         wish to use for the first record.
+
+              If you want the plot to begin at the intersection of the
+         X and Y axes, then respond N and <enter>.
+
+              11. After the above selections have been made, the
+         program plots the input points on the screen and creates a
+         line chart of the points plotted.  The program sounds a series
+         of notes to signal completion and then pauses.
+
+              If you are running in DOS version 2.0, you can use the
+         GRAPHICS screen print command to cause the line chart to be
+         printed.  
+
+              When you are finished with the display, simply press any
+         key to cause the program to end.
+
+              After you press a key to end the program, the program will
+         issue the following message:
+
+                       VERTICAL OFFSET FOR NEXT PLOT IS XXX
+
+              Where XXX represents a number that can be used when
+         continuing the plot in the next running of the program.
+
+         8.2  STOPPING DLTAPLOT
+
+              DURING EXECUTION - You can interrupt program processing
+         at any time by pressing the BREAK key while simultaneously
+         holding the CTRL key depressed.  However, you should not have
+         to do this.
+
+              WHEN FINISHED - The DLTAPLOT program will signal
+         completion to the screen display by an audible series of
+         tones.  After these tones have stopped, you may use the
+         Graphics command to print the screen display (Version
+         2.0 DOS only).  When you are done with the screen display,
+         simply press any key to cause the program to end. 
+
+              When you are through with the DLTAPLOT program, you can
+         simply type SYSTEM <enter> to return the system to DOS.  You
+         may also load in a different basic program over the DLTAPLOT
+         program that resides in memory.  If you want to clear the
+         DLTAPLOT program from memory, simply type NEW <enter>.
+
+
+
+
+         1 JUNE 1984                                                28
+
+
+
+
+
+
+
+
+
+
+
+
+
+              THIS IS THE END OF THE CHANGED PAGES FOR VERSION 1.1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                   .
+                                                                   .
+
+```
+{% endraw %}
 
 ## PORTCOST.BAS
 
+{% raw %}
 ```bas
 10 ' PROGRAM NAME: PORTCOST.BAS   WRITTEN 17 AUG 1983   REV 1 JUNE 1984
 20 '
@@ -877,9 +1671,11 @@ machines:
 2190 '
 2195 '***********************************************************
 ```
+{% endraw %}
 
 ## PORTMRKT.BAS
 
+{% raw %}
 ```bas
 10 ' PROGRAM NAME: PORTMRKT.BAS   WRITTEN 27 AUG 1983   REV 1 JUNE 1984
 20 '
@@ -1151,9 +1947,2150 @@ machines:
 2990 '
 2995 '***********************************************************
 ```
+{% endraw %}
+
+## PORTPACK.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                              THE PORTWORTH PACKAGE
+
+                      A Simple Portfolio Monitoring Package
+
+                          for the IBM Personal Computer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                  George Wall
+
+                              5833 Brookview Drive
+
+                              Alexandria, VA 22310
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE             Page i
+
+
+
+              TABLE OF CONTENTS
+
+         1    INTRODUCTION.................................... 1
+         1.1       OVERVIEW................................... 1
+         1.2       CAPABILITIES............................... 2
+         1.3       BENEFITS................................... 3
+         1.4       HARDWARE REQUIREMENTS...................... 4
+         1.5       SOFTWARE REQUIREMENTS...................... 4
+
+         2    PROGRAM OPERATION - GENERAL..................... 5
+         2.1       USE OF DRIVES.............................. 5
+         2.2       ERROR HANDLING............................. 5
+
+         3    PACKAGE USE - FIRST TIME........................ 5
+         3.1       PREPARING DISKETTES FOR USE................ 6
+         3.2       ONE-TIME PACKAGE SETUP..................... 7
+
+         4    ESTABLISHING PROGRAM INPUT FILES................ 9
+         4.1       CREATING THE HOLDLIST.DTA FILE............. 9
+         4.2       SPECIFICATIONS FOR HOLDLIST.DTA FILE....... 10
+         4.3       CREATING THE DLTAFILE.DTA FILE............. 12
+         4.4       SPECIFICATIONS FOR DLTAFILE.DTA FILE....... 13
+
+         5    PORTCOST PROGRAM OPERATION...................... 15
+         5.1       STARTING AND RUNNING PORTCOST.............. 15
+         5.2       STOPPING PORTCOST.......................... 16
+
+         6    PORTMRKT PROGRAM OPERATION...................... 17
+         6.1       STARTING AND RUNNING PORTMRKT.............. 17
+         6.2       STOPPING PORTMRKT.......................... 20
+
+         7    DLTAPRNT PROGRAM OPERATION...................... 21
+         7.1       STARTING AND RUNNING DLTAPRNT.............. 21
+         7.2       STOPPING DLTAPRNT.......................... 24
+
+         8    DLTAPLOT PROGRAM OPERATION...................... 25
+         8.1       STARTING AND RUNNING DLTAPLOT.............. 25
+         8.2       STOPPING DLTAPLOT.......................... 28
+
+         9    NOTES ON THE PORTWORTH PACKAGE.................. 29
+
+         10   DISCLAIMER...................................... 29
+
+         11 PERMISSION TO COPY................................ 30
+
+         12 SUPPORT BY USER................................... 30
+
+         13 AUTHOR IDENTIFICATION............................. 30
+
+
+
+
+
+
+
+                                                                     i
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE             Page 1
+
+
+
+         1    INTRODUCTION
+
+         1.1  OVERVIEW
+
+              The PORTWORTH package is a set of applications programs
+         that you can use for monitoring and evaluating your stock
+         portfolios.  Portfolios of up to 25 stocks can be processed.
+
+         The package consists of four main programs (PORTCOST, PORTMRKT,
+         DLTAPRNT, and DLTAPLOT).  Each have an input file that is read
+         from a diskette.  You use one input file for both the PORTCOST and
+         the PORTMRKT programs, and another input file for the DLTAPRNT and
+         DLTAPLOT programs.
+
+              You may create the two input files (HOLDLIST.DTA and
+         DLTAFILE.DTA) with the PC DOS EDLIN utility or with a suitable
+         word processing program that produces comma-delimited files.
+         Sample HOLDLIST and DLTAFILE files are included on this diskette.
+         To print them for study, make sure that DOS is ready, that A> is
+         displayed, and that the printer is at the start of a new page.
+         Then type COPY A:HOLDLIST.DTA <enter>.  The HOLDLIST.DTA sample
+         file will be printed.  After printing of that file is completed,
+         repeat the procedure for DLTAFILE.DTA. 
+
+              You may use the PORTCOST.BAS program to produce an item
+         listing for a stock portfolio of up to 25 stocks. 
+
+              Similarly, you may use the PORTMRKT.BAS program to produce a
+         current value item listing for a portfolio of up to 25 stocks.
+         During use, the program solicits data from you on current stock
+         prices and on the price changes since the previous valuation. You
+         are able to correct mistakes you make during input.  Online
+         corrections of keyboard input are processed.
+
+              You will be using the DLTAPRNT.BAS program to produce a bar
+         chart of dollar changes for each cycle of portfolio valuation
+         input data.  The program also produces a chart depicting the
+         percent change in value for each cycle.  Since the program
+         operates in text mode, data that cannot be effectively displayed
+         in one screen can be produced as one continuous chart.
+
+              The DLTAPLOT.BAS program is provided to enable you to produce
+         a line chart for display on the monitor.  The chart shows the
+         cumulative changes in value of the portfolio over the number of
+         cycles processed.  This program operates in high resolution
+         graphics mode. 
+
+
+
+
+
+
+
+
+
+                                                                     1
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE             Page 2
+
+
+
+         1.2  CAPABILITIES
+
+              You can use the PORTCOST and PORTMRKT programs to process
+         data for portfolios containing up to 25 different stock
+         components. For portfolios consisting of more than 25 stocks, you
+         can split the portfolio into two or more separate portfolio files,
+         with each file on a separate diskette.  You must name each file
+         HOLDLIST.DTA.  You can then use the PORTCOST and PORTMRKT programs
+         on each of the separate files to produce individual listings for
+         each file.
+
+              You can use the DLTAPLOT program to create a line chart
+         that is displayed on the monitor.  If you are operating your
+         system under PC DOS Version 2.0, you can then utilize the
+         GRAPHICS screen print command to cause the graphics display to
+         be printed.  If you are operating under PC DOS Version 1.1,
+         you must have a suitable screen dump utility that operates in
+         the graphics mode to cause the screen output to be printed.
+         In any case however, your system must be equipped for
+         graphics.  To facilitate printing of the screen display, the
+         DLTAPLOT program suspends processing after the screen display
+         of the line chart is completed to allow printing of the screen
+         contents.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                     2
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE             Page 3
+
+
+
+         1.3  BENEFITS
+
+              We have designed the programs within the PORTWORTH
+         package to be simple, straightforward, and easy to use.  You
+         are provided with prompts throughout the programs to assure
+         accurate operation.  If you respond incorrectly, the program
+         "beeps" at you and gives you the opportunity to input a
+         corrected response. Any errors you make during data key-in can
+         be corrected without re-running and without re-input of the
+         entire response string.  The scope of these programs have been
+         intentionally kept narrow to assure you of simple operation
+         and uncomplicated execution. 
+
+              Through the use of the PORTCOST program, you can list
+         your current portfolio and generate the following for each
+         stock that you have listed:
+
+              Number of shares owned
+
+              Cost per share
+
+              Total cost for shares held
+
+              Percent of total portfolio cost
+
+              In addition, you can use the output to identify the
+         average cost per share held and the average cost for each
+         security held.
+
+              You need run this program only when your portfolio
+         changes (usually through purchase or sale of stock).
+
+              Through the use of the PORTMRKT program, you can
+         establish the net change in portfolio valuation (exclusive of
+         brokerage costs and other costs of sale) since the last
+         valuation.  In addition, you can determine a precise
+         evaluation of your portfolio based on the current price of
+         each of the securities held (again subject to the
+         same exclusion).  As a check on your input into the program,
+         you can prove the computed change in valuation by comparing
+         the last portfolio valuation to the current one.  The
+         difference in portfolio valuations should match the change in
+         valuation.
+
+              You can repeat this process as often as you want.  The
+         interval between valuations can be daily, weekly, biweekly, or
+         monthly.  Once you establish a suitable interval, you can
+         accumulate the portfolio valuation results (current portfolio
+         valuation and change in valuation) in a file that can be
+         processed by the DLTAPRNT and the DLTAPLOT programs.
+
+              Though the use of the DLTAPRNT and DLTAPLOT programs, you
+         can evaluate the current results of your investment program
+         against the near-term and long-term past results.  With the
+         outputs of these programs, the performance of your portfolio
+         can be put into perspective and judged fairly.
+                                                                     3
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE             Page 4
+
+
+
+         1.4  HARDWARE REQUIREMENTS
+
+              To successfully operate the PORTWORTH programs, you need
+         the following hardware configuration:
+
+              Display - Any
+
+              Disk drives required - Minimum of one drive
+                                     Up to two drives supported
+
+              Minimum memory size - 64 K
+
+              Printer type required - Dot matrix printer with graphics
+                                      (Graphics required to support
+                                      DLTAPLOT screen prints only)
+
+              Printer types supported - IBM dot matrix printer with
+                                        Graftrax
+                                        Epson MX-80 printer with
+                                        Graftrax
+                                        Epson MX-100 printer
+
+
+
+         1.5  SOFTWARE REQUIREMENTS
+
+              Operating system required - PC DOS Version 1.1 or 2.0
+
+              Other programs required - None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                     4
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE             Page 5
+
+
+
+
+         2    PROGRAM OPERATION - GENERAL
+
+         2.1  USE OF DRIVES
+
+              The programs in this package are designed to be loaded
+         from drive A of your system unit.  Although they can be loaded
+         from drive B, each program at execution will search the drive
+         A diskette for DRIVE.DTA file to extract processing
+         information.  If the program is not found, the system will
+         terminate program operation.
+
+              If you have a two-drive system, we recommend that drive A
+         be reserved for the program diskette and drive B be used for
+         the data diskette.  If you have a single drive system, then
+         both the program diskette and the data diskette will be
+         located, in turn, in drive A.
+
+
+         2.2  ERROR HANDLING
+
+         The PORTWORTH programs generate no program peculiar error
+         messages or notices.  All error messages and notices are those
+         generated by either the DOS Operating System or the BASIC
+         Interpreter.  For specific information on DOS originated
+         messages, refer to Appendix A of the DOS manual.  For specific
+         information on BASIC originated messages, refer to Appendix A
+         of the BASIC manual.
+
+         3    PACKAGE USE - FIRST TIME
+
+              Supplied with this publication is a diskette containing
+         the PORTWORTH programs and 2 sample input files.  We urgently
+         recommend that you copy the program information onto an empty
+         formatted diskette and the sample input files onto another
+         separate formatted diskette.  You can then use the newly
+         created program diskettes and retain the one originally
+         supplied for backup purposes.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                     5
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE             Page 6
+
+
+
+
+         3.1  PREPARING DISKETTES FOR USE
+
+              The new diskette to be used to hold the program files
+         must be first formatted.  Obtain a diskette that has no
+         information you want to retain.  Then follow the instructions
+         given in Chapter 3 of your Disk Operating System (DOS) manual
+         to format that disk and to copy DOS system files onto it. (You
+         would use the command FORMAT d:/S to both format and copy
+         system files.)
+
+              You also need to format the diskette for the sample data
+         files.  Again, you can follow the instructions given in
+         Chapter 3 of your DOS manual.  However, for the data diskette,
+         you would not need to copy the DOS system files onto that
+         diskette.  (You may use the command FORMAT d: to perform that
+         format.)
+
+              After formatting, you should copy the program file onto
+         the program diskette and the data files onto the data
+         diskette.  Again, you can refer to Chapter 3 of the DOS manual
+         for specific instructions.  The following files must be
+         copied:
+
+                   FOR PROGRAM DISKETTE
+
+                          DRIVE.DTA
+                          SETDRIVE.BAS
+                          PORTCOST.BAS
+                          PORTMRKT.BAS
+                          DLTAPRNT.BAS
+                          DLTAPLOT.BAS
+
+                   FOR DATA DISKETTE
+
+                          HOLDLIST.DTA
+                          DLTAFILE.DTA
+
+              Notice that although DRIVE.DTA is a data file, it must be
+         copied onto the program diskette.  This is true because this
+         file must be present when each of the four main programs begin
+         to run.  This file specifies to the programs the drive on
+         which to search for the data files.  It also identifies the
+         type of printer specified for use.  More on that later.
+
+              Note that since the sample data diskette contains one
+         file named HOLDLIST.DTA and another named DLTAFILE.DTA, that
+         diskette cannot any other input files for the PORTWORTH
+         programs.  If a file with some other name were placed onto the
+         diskette, it would not be processed.  (The programs specify
+         files by names only.)  If a file with either the name
+         HOLDLIST.DTA or DLTAFILE.DTA were copied onto the diskette,
+         that file would overlay the existing file with the same name,
+         thus destroying some of your data.
+
+                                                                     6
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE             Page 7
+
+
+
+              The preceding verbiage means that if you have more than
+         one portfolio to process, you must maintain separate data
+         diskettes for each and every portfolio.
+
+              Of course, you will need to label each diskette as you
+         format it and copy items onto it.  After the data diskette
+         contains the desired data files, you may protect the files
+         from being overwritten by covering the write protect notch.
+         Leave the write protect notch on the program diskette open at
+         this time, so that we can configure DRIVE.DTA as we wish.
+
+         3.2  ONE-TIME RUNNING AND PACKAGE SETUP
+
+              To set the PORTWORTH programs to suite your system, turn
+         on your system and make sure that DOS is ready and A> is
+         displayed.  Then perform the following steps:
+
+              1. Type BASICA and <enter>.  Allow the system to enter
+         advanced BASIC mode.
+
+              2. Insure that the write protect notch on the program
+         diskette is open, then insert the diskette into drive A.
+
+              3. Type LOAD"SETDRIVE <enter>
+
+              4. The system should respond with Ok after the program
+         has been loaded.  Then type RUN <enter>.  The SETDRIVE program
+         will begin running and the monitor will display
+
+                   IDENTIFY DRIVE FOR DATA INPUT
+                   SELECT A/B
+
+              5. In response type the letter corresponding to the drive
+         you will be using.  The system will accept only the letters A
+         or a (for drive A) and B or b (for drive B).  We recommend
+         that you specify drive B if you have a two-drive system.
+
+              6. The system will respond
+
+                   DRIVE SELECTED IS x (where x = drive to be used)
+                   SELECTION OK (Y/N)
+
+              7. Verify the selection by typing Y <enter>.  If the
+         original selection was not correct, type N <enter> to allow
+         entry of a corrected choice.
+
+
+
+
+
+
+
+
+
+
+                                                                     7
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE             Page 8
+
+
+
+              8. After you have entered and confirmed the drive
+         definition entry, you will be asked to specify the printer to
+         be used.  Respond by entering I <enter> if your printer is an
+         IBM dot matrix printer or E <enter> if your printer is an
+         Epson MX-80 or MX-100 dot matrix printer.  For any other
+         printer, you may try each selection and use the one that best
+         suits your system.  This selection primarily affects the steps
+         used by the programs to set up the default conditions for the
+         printer.  (The special characters used by the DLTAPRNT program
+         may be altered through use of a printer other than the three
+         specified above.)
+
+              9. After you have selected a printer configuration and
+         confirmed your selection, you are done.  The PORTWORTH package
+         is configured to match your system.  The entries you made in
+         this program will be recorded in the DRIVE.DTA file, which
+         will be checked each time a program begins.  You can now cover
+         the write protect notch on the program diskette to protect its
+         contents.  Whenever you need to change the drive selection or
+         use, or the printer configuration, just remove the notch cover
+         from the program diskette and repeat this procedure from step
+         1.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                     8
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE             Page 9
+
+
+
+         4    ESTABLISHING PROGRAM INPUT FILES
+
+              The PORTWORTH programs are ready to run without any setup
+         or modification once the SETDRIVE program has been run.
+         However, the HOLDLIST.DTA file must be generated and ready for
+         use with the PORTCOST and the PORTMRKT programs.  Also, the
+         DLTAPRNT.DTA file must be prepared in order to run the
+         DLTAPRNT and DLTAPLOT PROGRAMS.  The two files may reside on
+         the same data diskette. 
+
+              To set up a data diskette for these files, format a
+         diskette as specified in Chapter 3 of the DOS manual.  You
+         will not need to copy the DOS system files onto the diskette,
+         so the command FORMAT d: is sufficient.
+
+
+         4.1  CREATING THE HOLDLIST.DTA FILE
+
+              After the diskette has been formatted, a file of
+         portfolio data must be created named HOLDLIST.DTA for input to
+         the PORTCOST and PORTMRKT programs.  The file name of
+         HOLDLIST.DTA must be used or the programs won't be able to
+         read the file.  The PC DOS line editor EDLIN can be used to
+         create the file.  Refer to the appropriate Chapter of the PC
+         DOS manual (Chapter 4 if you are using Version 1.1 of DOS or
+         Chapter 7 if you are using Version 2.0 of DOS).
+
+         As an alternative, you may use any suitable word processing
+         system that produces files containing lines of data with
+         comma-delimited fields within the lines.
+
+              Once the HOLDLIST.DTA file has been created, you need
+         modify it only when your portfolio changes.  When a change is
+         required, you can again use the PC DOS line editor EDLIN to
+         change lines, to delete lines, and to add lines.
+
+              Each time the HOLDLIST.DTA file is modified, you will
+         want to run the PORTCOST program to produce a current
+         portfolio report.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                     9
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 10
+
+
+
+         4.2  SPECIFICATIONS FOR HOLDLIST.DTA FILE
+
+              The specifications for the HOLDLIST.DTA file are provided
+         below.  (Use the sample file provided on the diskette for
+         reference.)
+
+
+              THE FIRST LINE
+
+                   The first line of this file must contain the
+                   following items, each separated from the next by a
+                   comma:
+
+                   Title Field - Up to 20 characters in length
+                                 Any printable characters except commas
+                                 (Blanks may be included)
+                                 This field is used in the PORTCOST
+                                 output report as part of the
+                                 report title
+
+                   Owner Field - Up to 20 characters in length
+                                 Any printable characters except commas
+                                 (Blanks may be included)
+                                 This field is used in the PORTCOST
+                                 and PORTMRKT output reports as part
+                                 of the owner line.
+
+                   Portfolio Count - Up to 2 characters in length
+                                 Characters must be numeric (0-9)
+                                 This field id used to identify the
+                                 total number of stocks in the
+                                 portfolio.
+
+                                 If this field contains a numeric
+                                 count greater than 25, the count
+                                 is ignored by the programs and
+                                 the count 25 is used in its place.
+
+                   Report Date - Up to 20 characters in length
+                                 Any printable characters except commas
+                                 (Blanks may be included)
+                                 This field is used in the PORTCOST
+                                 program to identify the initial
+                                 date for the portfolio configuration.
+                                 (This is the second part of the
+                                 report title.)
+
+                   File Revision Date - Up to 10 characters in length
+                                 Any printable characters except commas
+                                 This is a documentary item only -
+                                 it identifies the most recent date
+                                 that the HOLDLIST.DTA file was
+                                 updated.
+
+
+                                                                    10
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 11
+
+
+
+              ALL OTHER LINES
+
+                   All the remaining lines of the HOLDLIST.DTA file are
+                   data lines that are identical in format.  Each will
+                   contain the following items separated by commas:
+
+                   Stock Name Field - Up to 20 characters in length
+                                 Any printable characters except commas
+                                 (Blanks may be included)
+                                 This field supplies the stock name to
+                                 be used in the PORTCOST and PORTMRKT
+                                 output report.
+
+                   Stock Quantity Field - Up to 5 characters in length
+                                 Must be numeric (0-9) only
+                                 This field supplies the stock count
+                                 for the stock identified by the
+                                 stock name field.
+
+                   Total Cost Field - Up to 9 characters in length
+                                 Must be numeric with an imbedded
+                                 decimal point for decimals
+                                 (0-9 and . allowed)
+
+                                 This field supplies the total cost
+                                 for the stock identified in the
+                                 stock name field.
+
+                   Stock Target Field - Up to 6 characters in length
+                                 Must be numeric with an imbedded
+                                 decimal point for decimals
+                                 (0-9 and . allowed)
+
+                                 This field supplies user selected
+                                 stock target prices that are
+                                 associated with the stock identified
+                                 in the stock name field.
+
+                                 This field is used by the PORTMRKT
+                                 program only.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                    11
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 12
+
+
+
+         4.3  CREATING THE DLTAFILE.DTA FILE
+
+              After you have used the PORTMRKT program a number of
+         times, you will have accumulated a number of reports that
+         specify the current total value for your portfolio and the
+         change in total value since the last valuation.  
+
+              These two items form the basis for establishing the
+         DLTAFILE.DTA file, which can be input into the DLTAPRNT and
+         DLTAPLOT programs.  
+
+              Just as for the HOLDLIST.DTA file, the generation of the
+         DLTAFILE.DTA file can be accomplished using the PC DOS line
+         editor EDLIN.  Refer to the appropriate chapter of the PC DOS
+         manual (Chapter 4 if you are using Version 1.1 of DOS or
+         Chapter 7 if you are using Version 2.0 of DOS).  Again, as an
+         alternative, you may use any suitable word processing system
+         that produces files containing lines of data with
+         comma-delimited fields
+
+              As time progresses, you will be running the PORTMRKT
+         program again and again.  Each running will produce an
+         additional set of data to be added to the DLTAFILE.DTA file.
+         In time you will have a meaningful historical file that can be
+         processed by the DLTAPRNT and DLTAPLOT programs to aid you in
+         making sound portfolio judgments.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                    12
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 13
+
+
+
+         4.4  SPECIFICATIONS FOR DLTAFILE.DTA FILE
+
+              The specifications for the DLTAFILE.DTA file are provided
+         below.  (Use the sample DLTAFILE.DTA file for reference.)
+
+              THE FIRST LINE
+
+                   The first line of this file must contain the
+                   following items, each separated from the next by a
+                   comma:
+
+                   Title Field - Up to 20 characters in length
+                                 Any printable characters except commas
+                                 (Blanks may be included)
+                                 This field is used in the DLTAPRNT
+                                 output report as part of the
+                                 report title
+
+                   Owner Field - Up to 20 characters in length
+                                 Any printable characters except commas
+                                 (Blanks may be included)
+                                 This field is used in the DLTAPRNT
+                                 and DLTAPLOT output reports as part
+                                 of the owner line.
+
+                   File Revision Date - Up to 10 characters in length
+                                 Any printable characters except commas
+                                 This is a documentary item only -
+                                 it identifies the most recent date
+                                 that the DLTAFILE.DTA file was
+                                 updated.
+
+              ALL OTHER LINES
+
+                   All the remaining lines of the DLTAFILE.DTA file are
+                   data lines that are identical in format.  Each will
+                   contain the following items separated by commas:
+
+                   Date Field -  Up to 6 characters in length
+                                 Any printable characters except commas
+                                 (Blanks may be included)
+
+                                 This field establishes the date
+                                 associated with the DLTAFILE line
+                                 input
+
+                                 This field is used by the DLTAPRNT
+                                 program only
+
+
+
+
+
+
+
+                                                                    13
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 14
+
+
+
+                   Current Total Value Field -
+                                 Up to 12 characters in length
+                                 Must be numeric with an imbedded
+                                 decimal point for decimals
+                                 (0-9 and . allowed)
+
+                                 This field contains the current total
+                                 value for the entire portfolio as
+                                 determined with the PORTMRKT program.
+
+                                 It is used by the DLTAPRNT program to
+                                 establish percentages.
+
+                   Change in Portfolio Value Since Last Valuation -
+                                 Up to 10 characters in length
+                                 Must be numeric with an imbedded
+                                 decimal point for decimals.
+                                 Leading minus if value is negative
+                                 (0-9 and . and - allowed)
+
+                                 This field contains the change in
+                                 portfolio value as determined with
+                                 the PORTMRKT program.
+
+                                 It is used by both the DLTAPRNT and
+                                 DLTAPLOT programs.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                    14
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 15
+
+
+
+         5    PORTCOST PROGRAM OPERATION
+
+         5.1  STARTING AND RUNNING PORTCOST
+
+              After the HOLDLIST.DTA input file is created, you may
+         load and run the PORTCOST program at any time.
+
+              To run the program, turn on your system and make sure
+         that DOS is ready and A> is displayed.  Then perform the
+         following steps:
+
+              1. Type BASICA <enter>.  Allow the system to enter
+         advanced BASIC mode.
+
+              2. Insure that the write protect notch of the program
+         diskette is covered and insert the diskette into drive A.
+
+              3. Type LOAD"PORTCOST <enter>
+
+              4. The system will respond Ok after the program has been
+         loaded.  Then type RUN <enter>.
+
+              5. When the program starts, it will display the following
+         on the screen:
+
+                        PROGRAM PORTCOST.BAS EXECUTING
+                        INSERT DATA DISKETTE IN DRIVE B (or DRIVE A)
+                        SET PRINTER TO TOP OF PAGE
+                        VERIFY THAT PRINTER IS ON
+                        STRIKE ANY KEY WHEN READY
+
+              Then it will pause to allow you to complete any steps
+         required to establish the starting conditions.
+
+              The drive designation identified in the above output is
+         established when the program reads a file on drive A.
+         (Remember the DRIVE.DTA file you set up with the SETDRIVE
+         program?)  To respond, insert the diskette containing the
+         HOLDLIST.DTA file in the drive specified.  (You may use the
+         sample HOLDLIST.DTA file as an input file.)  If drive A is
+         specified, you will have to remove the program diskette from
+         the drive.  Otherwise you can leave the program diskette in
+         place.
+
+              Set up the printer as specified.  After all the specified
+         conditions have been met, simply press any key on the keyboard
+         to cause the program to continue.
+
+              5. The program will do the rest.
+
+
+
+
+
+
+                                                                    15
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 16
+
+
+
+         5.2  STOPPING PORTCOST
+
+              DURING EXECUTION - You can interrupt program processing
+         at any time by pressing the BREAK key while simultaneously
+         holding the CTRL key depressed.  However, you should not have
+         to do this.
+
+              WHEN FINISHED - The PORTCOST program will stop on its own
+         when processing is completed.  It signifies this with the
+         screen message "PROGRAM PROCESSING COMPLETED - PROGRAM ENDS".
+
+              When you are through with the PORTCOST program, you can
+         simply type SYSTEM <enter> to return the system to DOS.  You
+         may also load in a different basic program over the PORTCOST
+         program that resides in memory.  If you want to clear the
+         PORTCOST program from memory, simply type NEW <enter>.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                    16
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 17
+
+
+
+         6    PORTMRKT PROGRAM OPERATION
+
+         6.1  STARTING AND RUNNING PORTMRKT
+
+
+              After the HOLDLIST.DTA input file is created, you may
+         load and run the PORTMRKT program at any time.
+
+              To run the program, turn on your system and make sure
+        that DOS is ready and A> is displayed.  Then perform the
+        following steps:
+
+              1. Type BASICA <enter>.  Allow the system to enter
+         advanced BASIC mode.
+
+              2. Insure that the write protect notch of the program
+         diskette is covered and insert the diskette into drive A.
+
+              3. Type LOAD"PORTMRKT <enter>
+
+              4. The system will respond Ok after the program has been
+         loaded.  Then type RUN <enter>.
+
+              5. When the program starts, it will display the following
+         on the screen:
+
+                        PROGRAM PORTMRKT.BAS EXECUTING
+                        INSERT DATA DISKETTE IN DRIVE B (or DRIVE A)
+                        SET PRINTER TO TOP OF PAGE
+                        VERIFY THAT PRINTER IS ON
+                        STRIKE ANY KEY WHEN READY
+
+              Then it will pause to allow you to complete any steps
+         required to establish the starting conditions.
+
+              The drive designation identified in the above output is
+        established when the program reads a file on drive A. (Remember
+        the DRIVE.DTA file you set up with the SETDRIVE program?)  To
+        respond, insert the diskette containing the HOLDLIST.DTA file
+        in the drive specified.  (You may use the sample HOLDLIST.DTA
+        file as an input file.)  If drive A is specified, you will have
+        to remove the program diskette from the drive.  Otherwise you
+        can leave the program diskette in place.
+
+              Set up the printer as specified.  After all the specified
+         conditions have been met, simply press any key on the keyboard
+         to cause the program to continue.
+
+
+
+
+
+
+
+
+                                                                    17
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 18
+
+
+
+              6. The program then displays the following on the
+         screen:
+
+                        INPUT DATE FOR REPORT (DD MONTH YYYY)
+
+              The entry in response will then be used as part of the
+        first heading of the report.  The entry may actually consist of
+        whatever you wish (including blanks).  To get blanks, simply
+        respond <enter>.  However, if you attempt to imbed a comma in
+        the response, the system will reject the response with the
+        BASIC message "REDO FROM START".  (See INPUT statement in
+        Chapter 4 of the BASIC manual.)
+
+              7. After the program digests the date you furnished in
+         step 6, it displays the following:
+
+                        INPUT CURRENT PRICE PER SHARE (A)
+                              AND
+                              PER SHARE PRICE CHANGE (B)
+                              FOR FOLLOWING:
+                        ACF
+                        A = 
+
+              Notice that the stock name (ACF) is established from the
+        HOLDLIST.DTA file.  In response, enter the price per share
+        opposite A and then type <enter>.  If the price includes a
+        fraction, such as 12 7/8, enter the decimal equivalent, as
+        12.875.  For greater accuracy, do not round the prices off.
+        Enter up to 3 decimal digits if required.  Do not use commas in
+        the entry!  (See step 6.)
+
+              Until you have typed <enter>, you can correct any of the
+         characters you have type in.  However, once you type <enter>,
+         do not attempt a correction until corrections are solicited by
+         the program (steps 9 and 10).
+
+              8. When the program accepts your price input for a stock,
+         it will respond:
+
+                        B =
+
+              Simply enter the change in price (since the last
+         valuation) for the stock specified.  To assure ready
+         reconciliation of the output results, do not adjust the change
+         in value for dividends received.  (Price changes that are "ex
+         dividend" are normally reduced by an amount corresponding to
+         the cash dividend.  This adjustment should be eliminated so
+         the price change is not affected by the dividend.)  Again,
+         enter up to 3 decimal digits for fractions, such as .625 for
+         5/8.  As a short cut, if the change in value is 0, you may
+         simply type <enter> in place of 0 and <enter>.  For negative
+         values, enter a minus sign (or hyphen) ahead of the number, as
+         -1.125.
+
+              Repeat steps 7 and 8 for each of the stocks identified by
+         the program.  
+                                                                    18
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 19
+
+
+
+              9. When all required information on the stocks has been
+         input, the screen will display:
+
+                        DO YOU WISH TO CORRECT AN INPUT (Y/N)?
+
+              If you have a correction to any of the stock prices or
+         price changes, respond Y and <enter>.  Otherwise, respond N
+         and <enter>.  
+
+              If you respond Y, the program responds with the following
+         display:
+
+                        INPUT NUMBER OF STOCK TO BE CORRECTED
+                            OR
+                           0 TO END CORRECTIONS
+
+              Count off the number for the stock with incorrect data
+         (first stock is 1, second stock is 2, etc.).  Enter that
+         number.  You can then interact as follows to correct the
+         data:
+
+                   (You type) 6 <enter>
+                   (Display) Disney
+                   (Display) ORIGINAL PRICE ENTERED WAS 55.5
+                   (Display) NEW PRICE TO BE ENTERED
+                   (You type)                        55.5 <enter>
+                   (Display) ORIGINAL PRICE CHANGE ENTERED WAS .375
+                   (Display) NEW PRICE CHANGE TO BE ENTERED IS ?
+                   (You type)                       .125 <enter>
+
+              At this point the sequence repeats from 
+                        INPUT NUMBER OF STOCK TO BE CORRECTED
+                              OR
+                              0 TO END CORRECTIONS
+
+              If you have no correction or have completed all
+         corrections, type 0 (the digit zero) and <enter>.
+
+              The program will respond:
+
+                        VERIFY THAT PRINTER IS ON
+
+              The program will then print the report.
+
+              If you responded N to the original correction query, the
+         program will simply print the report.
+
+
+
+
+
+
+
+
+
+                                                                    19
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 20
+
+
+
+              10. After the report is printed, the program again pauses
+         and allows you to check the report and to input corrections,
+         if required.  It displays:
+
+                        CHECK PRINTED REPORT
+                        DO YOU WISH TO CORRECT AND REPRINT (Y/N)?
+
+              One quick method of testing the accuracy of your inputs
+         for the stocks is to add the total portfolio change from the
+         current report to the current total value from the previous
+         report.  The algebraic sum should equal the current total
+         value for the current report.  (If you have odd lots in your
+         portfolio, the decimal amounts may differ due to rounding.)
+
+              If you respond Y to the above query, then you will be
+         allowed to correct per steps 9 and 10.  
+
+              11. If you respond N, then you are done!  The program
+         responds:
+
+                        PROGRAM PROCESSING COMPLETED - PROGRAM ENDS
+
+                   And it does.
+
+
+
+         6.2  STOPPING PORTMRKT
+
+              DURING EXECUTION - You can interrupt program processing
+         at any time by pressing the BREAK key while simultaneously
+         holding the CTRL key depressed.  However, you should not have
+         to do this.
+
+              WHEN FINISHED - The PORTMRKT program will stop on its own
+         when processing is completed.  It signifies this with the
+         screen message "PROGRAM PROCESSING COMPLETED - PROGRAM ENDS".
+
+              When you are through with the PORTMRKT program, you can
+         simply type SYSTEM <enter> to return the system to DOS.  You
+         may also load in a different basic program over the PORTMRKT
+         program that resides in memory.  If you want to clear the
+         PORTMRKT program from memory, simply type NEW <enter>.
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                    20
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 21
+
+
+
+         7    DLTAPRNT PROGRAM OPERATION
+
+         7.1  STARTING AND RUNNING DLTAPRNT
+
+              After the DLTAFILE.DTA input file is created, you may
+         load and run the DLTAPRNT program at any time.
+
+              To run the program, turn on your system and make sure
+        that DOS is ready and A> is displayed.  Then perform the
+        following steps: 
+
+              1. Type BASICA <enter>.  Allow the system to enter
+         advanced BASIC mode.
+
+              2. Insure that the write protect notch of the program
+         diskette is covered and insert the diskette into drive A.
+
+              3. Type LOAD"DLTAPRNT <enter>
+
+              4. The system will respond Ok after the program has been
+         loaded.  Then type RUN <enter>.
+
+              5. When the program starts, it will display the following
+         on the screen:
+
+                        PROGRAM DLTAPRNT.BAS EXECUTING
+                        INSERT DATA DISKETTE IN DRIVE B (or DRIVE A)
+                        SET PRINTER TO TOP OF PAGE
+                        VERIFY THAT PRINTER IS ON
+                        STRIKE ANY KEY WHEN READY
+
+              Then it will pause to allow you to complete any steps
+         required to establish the starting conditions.
+
+              The drive designation identified in the above output is
+        established when the program reads the DRIVE.DTA file on drive
+        A. To respond, insert the diskette containing the DLTAFILE.DTA
+        file in the drive specified.  (You may use the sample
+        DLTAFILE.DTA file as an input file.)  If drive A is specified,
+        you will have to remove the program diskette from the drive.
+        Otherwise you can leave the program diskette in place.
+
+              Set up the printer as specified.  After all the specified
+         conditions have been met, simply press any key on the keyboard
+         to cause the program to continue.
+
+
+
+
+
+
+
+
+
+
+                                                                    21
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 22
+
+
+
+              6. After resuming, the program displays the following on
+         the screen:
+
+                   SELECT GRAPH SCALE FROM FOLLOWING:
+                        1 - $0 TO $1000 RANGE
+                        2 - $0 TO $2000 RANGE
+                        3 - $0 TO $4000 RANGE
+                        4 - $0 TO $5000 RANGE
+                   GRAPH SCALE SELECTED IS 
+
+              The graph scale is selected according to the maximum
+         Portfolio Current Total Value change from the previous
+         Portfolio Current Total Value. HOW TO STOP THE DLTAPRNT
+         PROGRAM  For example, for the DLTAFILE.DTA file shown in
+         figures 4-3A, the maximum value of the portfolio change field
+         (the last of the three fields for each line following line 1)
+         is 300.00 for the 071-83 line.  We can therefore select the
+         lowest range offered, the $0 to $1000 range.  (See figure
+         4-9A.)  However, for the data in figure 4-3B, we see that the
+         maximum value of the portfolio change field is 2351.88 for the
+         052483 line.  This would normally dictate that we select the
+         $0 to $4000 range.  However for this case we can use the $0 to
+         $2000 range.  (See figure 4-9B.)   If this value had been
+         negative, the fellow producing this chart would have been
+         forced to use the $0 to $4000 range or else overlay the date
+         field.  (He would also have been biting his nails a bit.)
+
+              Enter the numeric value (1, 2, 3, or 4) corresponding to
+         the range desired and then type <enter>.
+
+              If you select a range that is too narrow for the input,
+         you will get the error message:
+
+                   Subscript out of range in 3051
+
+              and the program will stop.  To correct, run the program
+         again and use a range that can accommodate the input.
+
+              One other word of caution.  This program is designed to
+         process data for portfolios that have changes in value up to
+         10 percent for each measurement cycle.  If your portfolio
+         should change by more than 10 percent, you can use this
+         program only if you shorten the measurement cycle to bring the
+         change to 10 percent or less.  If the program is run for some
+         percentage change of greater than 10 percent, the following
+         error message will be generated and the program will stop:
+
+              Illegal function call in 3044
+
+
+
+
+
+
+
+                                                                    22
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 23
+
+
+
+              7. The program will display the following on the screen
+         after the appropriate graph scale is chosen:
+
+              INPUT LIMIT ON NUMBER OF RECORDS TO BE PROCESSED
+
+              If you want to have all input lines of the DLTAFILE.DTA
+         file processed, simply enter some numeric value greater than
+         the total number of lines on the file.
+
+              However, if you want the program to stop after processing
+         a specified number of lines, type in a numeric value
+         corresponding to the number of lines to be processed.
+
+              Respond with a numeric value and <enter>.
+
+              8. The program then displays the following message on the
+         screen:
+
+              SOME INITIAL RECORDS TO BE SKIPPED (Y/N)?
+
+              In some cases, you may not be interested in processing
+         the first lines of the file.  (You may have a chart on these
+         already.)  To skip the lines, respond with Y and <enter>.
+
+              The program then displays the following on the screen:
+
+              INPUT COUNT OF INITIAL RECORDS TO BE SKIPPED
+
+              Respond by entering the number of records to be skipped
+         and follow this with <enter>.
+
+              Use care, however, not to enter a limit in this step that
+         is higher than the count entered in step 7.  Otherwise the
+         program will end without producing a chart at all!
+
+              If you do not wish to skip some records, simply type N
+         and <enter>.
+
+
+              9. After the above selections have been made, the program
+         will produce the charts as directed without any further action
+         by you.
+
+              After all records have been processed and the charts are
+         completed, the program displays the following advisory message
+         and ends:
+
+              ALL DATA PROCESSED - PROGRAM ENDS
+
+
+
+
+
+
+
+                                                                    23
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 24
+
+
+
+         7.2  STOPPING DLTAPRNT
+
+              DURING EXECUTION - You can interrupt program processing
+         at any time by pressing the BREAK key while simultaneously
+         holding the CTRL key depressed.  However, you should not have
+         to do this.
+
+              WHEN FINISHED - The DLTAPRNT program will stop on its own
+         when processing is completed.  It signifies this with the
+         screen message "ALL DATA PROCESSED - PROGRAM ENDS".
+
+              When you are through with the DLTAPRNT program, you can
+         simply type SYSTEM <enter> to return the system to DOS.  You
+         may also load in a different basic program over the DLTAPRNT
+         program that resides in memory.  If you want to clear the
+         DLTAPRNT program from memory, simply type NEW <enter>.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                    24
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 25
+
+
+
+         8    DLTAPLOT PROGRAM OPERATION
+
+         8.1  STARTING AND STOPPING DLTAPRNT
+
+              After the DLTAFILE.DTA input file is created, you may
+         load and run the DLTAPLOT program at any time.
+
+              To run the program, turn on your system and make sure
+        that DOS is ready and A> is displayed.  Then perform the
+        following steps:
+
+              1. Type BASICA <enter>.  Allow the system to enter
+         advanced BASIC mode.
+
+              2. Insure that the write protect notch of the program
+         diskette is covered and insert the diskette into drive A.
+
+              3. Type LOAD"DLTAPLOT <enter>
+
+              4. The system will respond Ok after the program has been
+         loaded.  Then type RUN <enter>.
+
+              5. When the program starts, it will display the following
+         on the screen:
+
+                        PROGRAM DLTAPLOT.BAS EXECUTING
+                        INSERT DATA DISKETTE IN DRIVE B (or DRIVE A)
+                        SET PRINTER TO TOP OF PAGE
+                        VERIFY THAT PRINTER IS ON
+                        STRIKE ANY KEY WHEN READY
+
+              Then it will pause to allow you to complete any steps
+         required to establish the starting conditions.
+
+              The drive designation identified in the above output is
+        established when the program reads a file on drive A. (Remember
+        the DRIVE.DTA file you set up with the SETDRIVE program?)  To
+        respond, insert the diskette containing the DLTAFILE.DTA file
+        in the drive specified.  (You may use the sample DLTAFILE.DTA
+        file as an input file.) If drive A is specified, you will have
+        to remove the program diskette from the drive.  Otherwise you
+        can leave the program diskette in place.
+
+              Set up the printer as specified.  After all the specified
+         conditions have been met, simply press any key on the keyboard
+         to cause the program to continue.
+
+
+
+
+
+
+
+
+
+                                                                    25
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 26
+
+
+
+              5. The program then displays the following:
+
+                   SELECT VERTICAL SCALE FROM FOLLOWING:
+                        1 - $0 TO $800 RANGE
+                        2 - $0 TO $1600 RANGE
+                        3 - $0 TO $4000 RANGE
+                        4 - $0 TO $8000 RANGE
+                        5 - $0 TO $16000 RANGE
+                        6 - $0 TO $32000 RANGE
+                        7 - $0 TO $64000 RANGE
+                        8 - $0 TO 128000 RANGE
+                   VERTICAL SCALE SELECTED IS 
+
+              Select the appropriate scale and enter the number
+        corresponding to the range of scale selected.  If the scale
+        selected is too large, the chart line will have limited travel
+        along the vertical axis and its utility will be curtailed.  If
+        too small a range is selected, the chart line will hit the
+        vertical boundaries of the screen, causing the graph to be
+        truncated at top and bottom.  
+
+              In any case, the program will not error terminate if an
+        inappropriate scale is selected.  You may, however, wish to
+        redo the graph using a different vertical scale.  (For the
+        sample DLTAFILE.DTA file, we suggest you use scale 2.)
+
+              7. The program then displays the following:
+
+                   SET HORIZONTAL SCALE -
+                       SELECT FROM 3 TO 10
+                       SCALE SELECTED IS 
+
+              Select the appropriate scale and enter the scale number
+         (any number from 3 through 10).  The number corresponds to the
+         number of graphics columns between plots.  The larger the
+         number selected, the wider the spread between plots.  As
+         constructed by the program, the graph spans approximately 600
+         columns.  Thus the maximum number of points plotted is nearly
+         200 if the horizontal scale is 3 and 60 if the horizontal
+         scale is 10.  (For the sample DLTAFILE.DTA file, a scale of 10
+         is recommended.)  
+
+              If the scale selected is too low, the chart line may hit
+         the rightmost boundary of the screen causing the graph to be
+         truncated at the right.  If too high a scale is used, the
+         chart line will be unnecessarily compressed, obscuring
+         details.
+
+              In any case, the program will not error terminate if an
+         inappropriate scale is selected.  You may, however, wish to
+         redo the graph using a different horizontal scale.
+
+
+
+
+                                                                    26
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 27
+
+
+
+              8. The program will display the following on the screen
+         after the appropriate graph scale is chosen:
+
+              INPUT LIMIT ON NUMBER OF RECORDS TO BE PROCESSED
+
+              If you want to have all input lines of the DLTAFILE.DTA
+         file processed, simply enter some numeric value greater than
+         the total number of lines on the file.
+
+              However, if you want the program to stop after processing
+         a specified number of lines, type in a numeric value
+         corresponding to the number of lines to be processed.
+
+              Respond with a numeric value and <enter>.
+
+              9. The program then displays the following message on the
+         screen:
+
+              SOME INITIAL RECORDS TO BE SKIPPED (Y/N)?
+
+              In some cases, you may not be interested in processing
+         the first lines of the file.  (You may have a chart on these
+         already.)  To skip the lines, respond with Y and <enter>.
+
+              The program then displays the following on the screen:
+
+              INPUT COUNT OF INITIAL RECORDS TO BE SKIPPED
+
+              Respond by entering the number of records to be skipped
+         and follow this with <enter>.
+
+              Use care, however, not to enter a limit in this step that
+         is higher than the count entered in step 7.  Otherwise the
+         program will end without producing a chart at all!
+
+              If you do not wish to skip some records, simply type N
+         and <enter>.
+
+              10. After the above selections have been made, the
+         program plots the input points on the screen and creates a
+         line chart of the points plotted.  The program sounds a series
+         of notes to signal completion and then pauses.
+
+              If you are running in DOS version 2.0, you can use the
+         GRAPHICS screen print command to cause the line chart to be
+         printed.  
+
+              When you are finished with the display, simply press any
+         key to cause the program to end.
+
+
+
+
+
+
+                                                                    27
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 28
+
+
+
+         8.2  STOPPING DLTAPLOT
+
+              DURING EXECUTION - You can interrupt program processing
+         at any time by pressing the BREAK key while simultaneously
+         holding the CTRL key depressed.  However, you should not have
+         to do this.
+
+              WHEN FINISHED - The DLTAPLOT program will signal
+         completion to the screen display by an audible series of
+         tones.  After these tones have stopped, you may use the
+         Graphics command to print the screen display (Version
+         2.0 DOS only).  When you are done with the screen display,
+         simply press any key to cause the program to end. 
+
+              When you are through with the DLTAPLOT program, you can
+         simply type SYSTEM <enter> to return the system to DOS.  You
+         may also load in a different basic program over the DLTAPLOT
+         program that resides in memory.  If you want to clear the
+         DLTAPLOT program from memory, simply type NEW <enter>.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                    28
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 29
+
+
+
+         9    NOTES ON THE PORTWORTH PACKAGE
+
+              The programs that make up the PORTWORTH PACKAGE are all
+         written using Interpreter (Advanced) BASIC. 
+
+              They are all heavily commented and structured.  No
+         attempt was made to compress the programs, remove the
+         comments, or otherwise streamline the code for faster
+         execution.
+
+              The programs are stored in ASCII format and may take
+         appreciably longer than normal to load because of this.  
+
+              You may want to modify the programs, compress them,
+         remove remarks, and otherwise enhance the execution
+         characteristics of the programs.  The author did not feel the
+         results obtained would justify the expenditures made.  
+
+              You may also develop program modifications/improvements
+         that should be considered for distribution to all other users.
+         The author would be grateful to receive such for the
+         preparation of subsequent releases, if any.
+
+         10   DISCLAIMER
+
+              We have attempted to make the programs and documentation
+         as accurate as possible.  However, we provide the package "AS
+         IS" without warranty of any kind.  We will not be liable for
+         any damages arising out of the use of this package or for any
+         damages out of the inability to use this package.  We make no
+         claims as to the suitability for use of this package and
+         cannot warrant it for any purpose.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                    29
+
+
+
+
+
+
+                             PORTWORTH USER'S GUIDE            Page 30
+
+
+
+         11   PERMISSION TO COPY
+
+              Users are permitted to copy the programs and
+         documentation in this package for distribution to others under
+         the following conditions:
+
+              a. Neither the programs nor the documentation is to be
+         altered in any manner prior to copying for distribution.  
+
+              b. No fee or other consideration is to be charged for
+         distributed copies of this package except those incidental
+         amounts necessary to defray expenses.
+
+              Interested parties may order a copy of this package by
+         sending a blank, formatted diskette to the author of the
+         package.  An addressed, postage-paid mailer must accompany the
+         diskette (no exceptions, please).  The author will copy the
+         package onto the diskette and mail the diskette back as soon
+         as possible.  
+
+              This documentation carries a notice suggesting a
+         contribution to the author.  Any such contribution is purely
+         voluntary.  Whether such contribution is made or not, the user
+         may freely copy this package for others under the terms
+         specified above. 
+
+
+         12   SUPPORT BY USER
+
+              To make the user supported concept work, support of the
+         software author is necessary.  
+
+              If you find the PORTWORTH PACKAGE to be useful to you, a
+         contribution ($15.00) from you to the author would be
+         appreciated.  
+
+              In any case we thank you for trying the software and
+         encourage you to copy and share the package.  
+
+
+         13   AUTHOR IDENTIFICATION
+
+              George Wall
+              5833 Brookview Drive
+              Alexandria, VA 22310
+
+
+
+
+
+
+
+
+
+
+                                                                    30
+
+```
+{% endraw %}
+
+## README.TXT
+
+{% raw %}
+```
+THE PORTWORTH PACKAGE CONSISTS OF THE FOLLOWNG FILES:
+    README.TXT      (THIS FILE)
+    PORTPACK.BAT    PRINTS PORTPACK.DOC: INSERT DISK IN DRIVE A,
+                                         TYPE PORTPACK
+    PORTPACK.DOC    32-PAGE USER GUIDE
+    PORTCHNG.DOC    DOCUMENTATION CHANGES FOR VERSION 1.1
+    PORTCHG2.DOC    DOCUMENTATION CHANGES FOR VERSION 1.2
+    DRIVE.DTA       SYSTEM CONFIGURATION PARAMETER FILE
+    HOLDLIST.DTA    SAMPLE INPUT FILE
+    DLTAFILE.DTA    SAMPLE INPUT FILE
+    SETDRIVE.BAS    SYSTEM CONFIGURATION PROGRAM
+    PORTCOST.BAS    PORTFOLIO COST VALUATION PROGRAM
+    PORTMRKT.BAS    PORTFOLIO CURRENT VALUATION PROGRAM
+    DLTAPRNT.BAS    PORTFOLIO VALUATION CHANGE BAR CHART PROGRAM
+    DLTAPLOT.BAS    PORTFOLIO VALUATION CHANGE LINE GRAPH PROGRAM
+```
+{% endraw %}
 
 ## SETDRIVE.BAS
 
+{% raw %}
 ```bas
 10 ' ********************************************************************
 20 ' *  PROGRAM SETDRIVE.BAS                                            *
@@ -1208,6 +4145,7 @@ machines:
 1510 CLOR$ = "N"
 1520 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -79,8 +79,81 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILELIST.TXT
+
+{% raw %}
+```
+
+
+
+
+
+
+The following is a list of the files on the PC GRADEBOOK diskette :
+
+
+
+
+        README  .TXT    Introductory message and notes on operation
+        FILELIST.TXT    What you see is what you get
+        GRADES  .BAS    ASCII BASICA program for main routine
+        REPORTS .BAS    ASCII BASICA routine to produce printed reports
+        NOTICE  .BAS    ASCII BASICA plea for money
+
+
+```
+{% endraw %}
+
+## FILES443.TXT
+
+{% raw %}
+```
+--------------------------------------------------------------------------
+Disk No 443   T-Score/Education                                      v1.2
+--------------------------------------------------------------------------
+------------  T-Scores Grading System (REQUIRES AN 8087 MATH CO-PROCESSOR!!)
+READ     ME   Brief description file for T-Score (4K)
+TSCORE   EXE  Calculate T-scores, to assign equitable grades.
+TSCORE   S3I  SFtran source text for TSCORE.
+TSCORE   S3L  Pretty 4 page listing, from SFtran processor.
+TSCORE   FOR  Fortran source text, output from SFtran processor.
+TSCORE   DAT  Sample data for input to TSCORE.
+TSCORE   LIS  Output corresponding to TSCORE.DAT.
+------------  PC Gradebook
+GRADES   BAS  ASCII BASICA program for main routine
+NOTICE   BAS  ASCII BASICA plea for money
+REPORTS  BAS  ASCII BASICA routine to produce printed reports
+README   TXT  Introductory message and notes on operation (3K)
+------------  Flashcards
+FLASH    BAS  A spelling program
+FLASH    BAT  Batch file to load FLASH.BAS in DOS
+FLASH    DOC  Documentation for FLASH.BAS (short)
+------------  SCR - High Score Organizer
+SCR-MENU BAS  Main program - run first from BASICA
+SCR-EXEC BAT  Batch file to start program from DOS
+*        BAS  Programs called from SCR-MENU (5 files)
+*        DOC  Documentation files (12 files)
+------------ More Education Programs
+MATH     BAS  A math program that will help you learn your math facts
+MATH     DOC  Documentation for math.bas
+MENU     BAS  Menu for this set of programs
+TYPE     BAS  Program to improve your typing skills
+TYPE     DOC  Documentation for TYPE.BAS
+KILL     BAS  Utility to save you time in BASIC
+KILL2    BAS  Updated version of KILL.BAS
+KILL     DOC  Documentation for KILL.BAS and KILL2.BAS
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
 ## FLASH.BAS
 
+{% raw %}
 ```bas
 10 REM
 20 REM ************************
@@ -125,9 +198,32 @@ machines:
 410 DATA OBEDIENCE,GALLERY,REFRACTION,BLOSSOM,AGRICULTURE,GYMNASIUM,PREPOSITION,DISMISSAL,DESTINATION,DESTRUCTION,NEIGHBORHOOD,CAUTIOUS,PROFICIENT,CHIMPANZEE,STRAIGHTEN,CHARACTER,COMPUTERS,SAXOPHONE,PRINCIPAL
 420 DATA ACHIEVE,VILLAIN,WEIRD,QUOTIENT,EXPONENT,END
 ```
+{% endraw %}
+
+## FLASH.DOC
+
+{% raw %}
+```
+THE WORDS WRITTEN IN FLASH.DOC ARE FOR 6TH, 7TH, AND 8TH GRADERS.
+IF YOU NEED ANOTHER LEVEL OR JUST NEED DIFFERENT WORDS, THEN JUST
+CHANGE THE WORDS. YOU CAN SEE THEM BY PRESSING F1 WHEN YOU HAVE
+FLASH.BAS LOADED IN THE MEMORY. DON'T FORGET TO SAVE IT WHEN YOU
+FINISH. SEE THE BASIC MANUAL FOR MORE INSTRUCTIONS.
+
+ 
+
+ 
+
+ 
+ 
+ 
+
+```
+{% endraw %}
 
 ## GRADES.BAS
 
+{% raw %}
 ```bas
 10 'PC GRADEBOOK                   Copyright (c) 1985 by G.D. Fleming & Co. Inc.
 20 '
@@ -751,9 +847,11 @@ machines:
 6200 LOCATE 12,1:PRINT TAB(79):LOCATE 20,1:PRINT TAB(79):LOCATE 21,1:PRINT CHR$(201);STRING$(77,205);CHR$(187);:FOR CT%=22 TO 23:LOCATE CT%,1:PRINT CHR$(186);:LOCATE CT%,79:PRINT CHR$(186);:NEXT:LOCATE 24,1:PRINT CHR$(200);STRING$(77,205);CHR$(188);
 6210 FOR CT%=22 TO 23:LOCATE CT%,2:PRINT STRING$(77,32);:NEXT:RETURN
 ```
+{% endraw %}
 
 ## KILL.BAS
 
+{% raw %}
 ```bas
 10 REM *******************
 20 REM **     KILL      **
@@ -794,9 +892,26 @@ machines:
 370 RUN R$
 380 END
 ```
+{% endraw %}
+
+## KILL.DOC
+
+{% raw %}
+```
+KILL.BAS can do several tasks to save you time. You can  1. Erase
+a file  2. Load a BASIC file  3. Run a BASIC file  4. Look at the
+directory  5. Exit to BASIC  and  6. Exit to DOS.
+
+KILL2.BAS is a updated version of KILL.BAS. It has color, displays
+messages, prints the date on the screen, and prints the time on
+the screen. Other than that, KILL2.BAS is the same as KILL.BAS.
+
+```
+{% endraw %}
 
 ## KILL2.BAS
 
+{% raw %}
 ```bas
 10 REM *******************
 20 REM **     KILL      **
@@ -841,9 +956,11 @@ machines:
 410 RUN R$
 420 END
 ```
+{% endraw %}
 
 ## MATH.BAS
 
+{% raw %}
 ```bas
 100 SCREEN 1:COLOR 1,2:KEY OFF:CLS
 110 X=RND(1):PRINT
@@ -944,9 +1061,32 @@ machines:
 1060 PRINT"PERCENTAGE CORRECT       ";D;"%"
 1070 END
 ```
+{% endraw %}
+
+## MATH.DOC
+
+{% raw %}
+```
+MATH.BAS IS A PROGRAM THAT WILL HELP YOU PRACTICE YOUR ADDITION,
+SUBTRACTION, MULTIPLICATION, AND DIVISION SKILLS. YOU COULD EITHER
+WORK WITH ONLY ONE MATH SIGN OR YOU COULD WORK WITH ALL FOUR.
+  
+ 
+
+ 
+
+ 
+
+ 
+ 
+ 
+
+```
+{% endraw %}
 
 ## MENU.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS:SCREEN 1:COLOR 2,1
 20 PRINT:PRINT "MENU FOR EDUCATIONAL PROGRAMS"
@@ -964,9 +1104,11 @@ machines:
 140 IF MENU$="5" THEN RUN "KILL2"
 150 IF MENU$="0" THEN END
 ```
+{% endraw %}
 
 ## NOTICE.BAS
 
+{% raw %}
 ```bas
 10 'PC GRADEBOOK                   Copyright (c) 1985 by G.D. Fleming & Co. Inc.
 20 ' License agreement
@@ -979,9 +1121,79 @@ machines:
 90 PRINT:PRINT "In return, you will receive our undying gratitude, as well as regular notifi-   cation of the updates and new products that you have helped make it possible forus to continue to produce.":PRINT:PRINT"THANKS."
 100 LOCATE 25,1:PRINT TAB(27)"PRESS SPACE BAR TO CONTINUE";:A$=INKEY$:              IF A$=CHR$(32) THEN CHAIN "grades",240 ELSE 100
 ```
+{% endraw %}
+
+## README.TXT
+
+{% raw %}
+```
+                                  PC GRADEBOOK
+
+PC  GRADEBOOK  is a BASIC language program to maintain and display sorted lists 
+of up to 12 classes with 35 students per class and 45 grades  per  student.  It 
+will  also  produce printed reports with an IBM-compatible printer.  Grades may 
+be displayed by student or by assignment.  Printouts may be made for the  class 
+as  a whole,  students selected by grade to date or incomplete assignments,  or 
+individual reports may be printed for selected students.  
+
+PC  Gradebook  runs under the MicroSoft@ BASIC interpreter;  the source code is 
+here to be modified to suit your  convenience.  We  suggest  that  you  make  a 
+working diskette by carrying out the following steps : 
+
+       1) format a blank diskette with the /s option (see your DOS  manual) 
+       2) copy BASIC to the formatted diskette using >>        copy basic?.* b:
+       3) copy the files on this diskette to the new one using >>   copy *.* b:
+
+If you're confused by any of the above, consult your DOS manual; you'll be glad 
+you did.
+
+Now  put  the  new diskette in your default drive,  bring up the DOS A> prompt, 
+type BASICA GRADES,  and press <ENTER> to view the first screen.  Select "Add a 
+Class" using the <TAB> key, press <ENTER>, and you're up and running.  
+
+This software is designed to be used with a minimum amount of study and without 
+reference to lengthy documentation;  in fact, this screen (well,  screen-and-a-
+half, then) is intended to be all the reference manual that you will ever need.  
+Just  make  sure  that  you  have a backup disk in case of accident -- while PC 
+Gradebook is designed to be accident-proof, we all know better than that -- and 
+follow the on-screen prompts.  
+
+Note that averages are determined by a simple division of total  points  scored 
+by  total  possible  points;  assignments  are  weighted more heavily by simply 
+giving them a higher possible score.  Note also the  memory-imposed  limitation 
+of 35 students and 45 grades per class; your implementation may do better.  For 
+example, a 256k COMPAQ allows an array of 40 students and 90 grades.  You might 
+like  to  experiment  with  the  dimension  statements  in  lines  50  - 100 of 
+GRADES.BAS to see what your own hardware will allow.  
+
+Finally,  note that the BASIC program files on this disk  have  been  saved  as 
+actual  text rather than in the compressed MicroSoft@ BASIC format.  While this 
+has the advantage of making them accessible to most text editors and to the DOS 
+"type" and "print" commands, it also significantly increases load and execution 
+times.  To use them in the more efficient compressed  format,  just  load  them 
+into  the  BASIC editor,  then re-save them in the usual way (being sure to use 
+the same filenames,  of course).
+
+That  should  be all the instruction you need until your disk is full.  At that 
+time,  just make a new copy of the distribution diskette,  copy whatever  files 
+you need onto it, and carry on.  
+
+We  hope  that  you will find this software useful enough that you will be com-
+pelled to register it for the suggested $25 fee.  If you do so,  and  encounter 
+any difficulties, you are encouraged to contact the author.  
+
+
+
+
+
+
+
+```
+{% endraw %}
 
 ## REPORTS.BAS
 
+{% raw %}
 ```bas
 10 'PC GRADEBOOK                   Copyright (c) 1985 by G.D. Fleming & Co. Inc.
 20 ' Reports
@@ -1287,9 +1499,41 @@ machines:
 3020 LOCATE 24,1:PRINT "Press space bar when ready...";
 3030 A$=INKEY$:IF A$=CHR$(32) THEN RESUME 40 ELSE 3030
 ```
+{% endraw %}
+
+## SCR-AUTO.DOC
+
+{% raw %}
+```
+              This  is   your   HIGH   SCORE   ORGANIZER   disk.   For 
+         instructions,  type  "SCR-READ"  or "SCR-INST".  They are two 
+         different files,  so it is wise to read them  both  and  also 
+         refer back to them after using the program.  
+
+              Files with the prefix "SCR-" are part of the HIGH  SCORE 
+         ORGANIZER  PROGRAM.  Files with the extension "BAT" are batch 
+         files that run by themselves by typing their  name  while  in 
+         systems  mode.  Files with the extension "BAS" are files used 
+         while in basic.  Files with  the  extension  "DOC"  are  text 
+         files.  And  files  with  extensions "COM" are taken from the 
+         DOS 2.1 disk.  
+
+              If you would rather have the program  automatically  run 
+         every time you boot up this disk, type: 
+
+                        RENAME SCR-EXEC.BAT AUTOEXEC.BAT
+
+
+              To start HIGH SCORE ORGANIZER program, type:
+
+                                    SCR-EXEC
+
+```
+{% endraw %}
 
 ## SCR-COLN.BAS
 
+{% raw %}
 ```bas
 1000 REM╔═════════════════════════════════════════════════════════════════════╗
 1010 REM║                                                                     ║
@@ -1679,9 +1923,11 @@ machines:
 22110 IF K$=CHR$(0)+CHR$(75) AND LEN(IN$)>1 THEN PT=PT-1:IF PT<1 THEN PT=1 :GOTO 22040
 22120 GOTO 22040
 ```
+{% endraw %}
 
 ## SCR-COLY.BAS
 
+{% raw %}
 ```bas
 1000 REM╔═════════════════════════════════════════════════════════════════════╗
 1010 REM║                                                                     ║
@@ -2152,9 +2398,11 @@ machines:
 22110 IF K$=CHR$(0)+CHR$(75) AND LEN(IN$)>1 THEN PT=PT-1:IF PT<1 THEN PT=1 :GOTO 22040
 22120 GOTO 22040
 ```
+{% endraw %}
 
 ## SCR-DATA.BAS
 
+{% raw %}
 ```bas
 "Buck Rogers Planet of Zoom","119719","Dave","06/25/84"
 "Burgertime","602700","Eric","05/02/84"
@@ -2170,9 +2418,11 @@ machines:
 "Space Panic","177480","Eric","08/14/83"
 "Turbo","136762","Eric","07/08/84"
 ```
+{% endraw %}
 
 ## SCR-MENU.BAS
 
+{% raw %}
 ```bas
 10 CLS:CLEAR:WIDTH 80:COLOR 20,1,1:KEY OFF:CLS:FOR X=1 TO 5:KEY (X) ON:NEXT:ON KEY (1) GOSUB 320:ON KEY (2) GOSUB 330:ON KEY (3) GOSUB 340:ON KEY (4) GOSUB 350:ON KEY (5) GOSUB 360
 20 HSO$="MENU FOR HIGH SCORE ORGANIZER":LOCATE 1,25:PRINT HSO$:PRINT
@@ -2211,9 +2461,11 @@ machines:
 350 A$="4":GOTO 90
 360 A$="5":GOTO 90
 ```
+{% endraw %}
 
 ## SCR-MONN.BAS
 
+{% raw %}
 ```bas
 1000 REM╔═════════════════════════════════════════════════════════════════════╗
 1010 REM║                                                                     ║
@@ -2602,9 +2854,11 @@ machines:
 22110 IF K$=CHR$(0)+CHR$(75) AND LEN(IN$)>1 THEN PT=PT-1:IF PT<1 THEN PT=1 :GOTO 22040
 22120 GOTO 22040
 ```
+{% endraw %}
 
 ## SCR-MONY.BAS
 
+{% raw %}
 ```bas
 1000 REM╔═════════════════════════════════════════════════════════════════════╗
 1010 REM║                                                                     ║
@@ -3073,9 +3327,251 @@ machines:
 22110 IF K$=CHR$(0)+CHR$(75) AND LEN(IN$)>1 THEN PT=PT-1:IF PT<1 THEN PT=1 :GOTO 22040
 22120 GOTO 22040
 ```
+{% endraw %}
+
+## SCR-PG1I.DOC
+
+{% raw %}
+```
+              To begin this whole escapade,  type,  while  in  systems 
+         mode, "SCR-EXEC".  This is a batch file which starts up basic 
+         and runs a program called "SCR-MENU.BAS". "SCR-MENU.BAS" is a 
+         menu program which asks you which type of computer system you 
+         have   -   either   a  color  or  monochrome  monitor  and  a 
+         color/graphics board.  It then runs the correct  program  for 
+         your  system.  This  program  has  been tested only on a PCjr 
+         with a color monitor width graphics card and a monochrome  PC 
+         without  a  graphics  card.  It's  probable that there may be 
+         problems (most likely in appearance) if you  are  using  this 
+         program with different types of hardware.  I would appreciate 
+         it  if  you  would  notify  me  in  the  event  of even minor 
+         complications.  
+
+              Your first interaction with the program will involve the 
+         date.  If the date it shows you is correct, you will type "N" 
+         for "NO CHANGES" and continue.  If the date is incorrect, you 
+         will type a "Y" for "YES, I WOULD LIKE TO CHANGE IT" and then 
+         it will ask you for the correct  date.  Don't  worry  if  you 
+         make  a  mistake,  because you'll have as many chances as you 
+         need to get it right.  NOTE:  The date is only  important  if 
+         you would like to print your scores.  
+
+```
+{% endraw %}
+
+## SCR-PG1R.DOC
+
+{% raw %}
+```
+              The programs on this disk with  the  prefix  "SCR-"  are 
+         part  of  a  database program made specifically for recording 
+         the high scores of your home video games.  This program saves 
+         your scores to a file called "SCR-DATA.BAS" and print them to 
+         either your screen,  printer,  or to your disk under the name 
+         "SCR-TEXT.DOC".  
+
+              There  is  one  main difference between these two files.  
+         "SCR-DATA.BAS" is a concise file which either "SCR-COL?.BAS", 
+         the color version, or "SCR-MON?.BAS", the monochrome version, 
+         reads (depending what type of monitor you have) to input your 
+         data when you use the program or output your data when you've 
+         finished editing it.  The file,  "SCR-TEXT.DOC" is only  used 
+         when  you  opt to have your output sent to your disk.  If you 
+         take this option,  the contents of this file will look as  if 
+         they  were printed to your printer (you may view this file by 
+         typing  "TYPE SCR-TEXT.DOC"  without  the  quotes,  while  in 
+         systems  mode  -- the mode your in right after you turn on or 
+         reboot your computer - you may get there from basic by typing 
+         "SYSTEM", again without the quotes).  
+
+
+
+```
+{% endraw %}
+
+## SCR-PG2I.DOC
+
+{% raw %}
+```
+              Next the program asks for the total  number  of  records 
+         (the  number  of games you have).  If you already have a data 
+         file for this program and you plan on deleting a record, type 
+         the number that you currently have in the data file.  If  you 
+         type  a  number  less  than  the current number you will lose 
+         whatever records are stored past the number you enter.  
+
+              If you plan on adding records,  you may enter  a  number 
+         greater than the number on your data file.  If you do so, you 
+         will  be  asked  to  input however many more records you said 
+         than were on the data file.  
+
+              If you are just beginning or have more records to input, 
+         your next step is to input them.  Don't worry if you  make  a 
+         mistake, you'll be allowed to edit them later.  
+
+              Now it's time to view your records.  Your choices are to 
+         GO TO THE NEXT RECORD,  SKIP TO THE LAST RECORD,  CORRECT THE 
+         ABOVE RECORD, DELETE THE ABOVE RECORD, ADD A RECORD, OR ABORT 
+         THE PROGRAM.  
+
+
+
+```
+{% endraw %}
+
+## SCR-PG2R.DOC
+
+{% raw %}
+```
+              I included this feature so you would  be  able  to,  for 
+         whatever  reason  you  might  have,  access  it  with a word- 
+         processor,  or IBM's  own  EDLIN.  If  you  have  PC-FONT,  a 
+         utility for EPSON or IBM printers, you may prefer to print to 
+         disk  and  then  use PC-FONT to get a better quality hardcopy 
+         (printout).  This option will use less  paper  then  printing 
+         directly to the printer.  
+
+         NOTE:  If  you "TYPE" this file,  it will look double-spaced, 
+              but it isn't treated that way by  either  of  the  above 
+              options.  
+
+         NOTE TO IMPATIENT USERS:  The only time you have to wait  for 
+              the program is when it says, "ONE MOMENT PLEASE...".  If 
+              at ANY other time there seems to be an endless loop, you 
+              may press any key to break out of it.  
+
+         NOTE TO USERS WITHOUT A GRAPHICS BOARD:  The only feature you 
+              miss is an "exciting" introduction much like the one  on 
+              the option you're forced to take.  
+
+
+
+```
+{% endraw %}
+
+## SCR-PG3I.DOC
+
+{% raw %}
+```
+              If you choose to GO TO THE NEXT RECORD, it will keep the 
+         data  you  were  just  viewing  and  show you the next record 
+         (according to alphabetical order).  NOTE:  If you are viewing 
+         the  last  record (upper-right hand corner),  and select this 
+         option it will save all of your records and continue  to  the 
+         printing portion.  
+
+              If you choose to  SKIP  TO  THE  LAST  RECORD,  it  will 
+         advance as if you had chosen the preceeding option,  only you 
+         will see the last record in your  datafile.  To  continue  to 
+         the printing phase, take GO TO THE NEXT RECORD a final time.  
+
+              The  next  option  is  CORRECT THE ABOVE RECORD.  If you 
+         have changed part of a line,  but there is leftover text from 
+         the  old  record,  press the space bar until you have reached 
+         the end of the data.  If you change the  title  of  the  game 
+         your list will be realphabetized.  
+               
+              If  you've  sold  a game or just want to DELETE A RECORD 
+         take the appropriate option when your record is being  shown.  
+         It  WILL  NOT  be  removed  until  you  save  the datafile by 
+         proceeding past ALL of your records.  
+
+```
+{% endraw %}
+
+## SCR-PG3R.DOC
+
+{% raw %}
+```
+         NOTE TO USERS WITH A GRAPHICS BOARD:  You may take the option 
+              for  users without a graphics board if you don't like to 
+              wait for the admittedly "long" introduction.  
+
+         NOTE TO PCjr USERS: 1) You must have cartridge basic in order 
+              to  run this program;  2) Instructions which differ from 
+              PC instruction are in parenthesis - ().  
+
+         NOTE  TO  EVERY  USER:  F3  is  changed  by  the  program  to 
+              automatically run the menu program.  This may  save  you 
+              some typing.  
+
+         NOTE TO PROGRAMMERS:  As I was so graciously given  the  poke 
+              address  for  scrolling  under the top lines (as seen on 
+              the  print  to  screen  option),   I  shall  pass   that 
+              information on to you. "POKE 91,???", where "???" is the 
+              number of lines counting down from the top that you want 
+              to scroll under.  Although this program doesn't use this 
+              next  feature,  "POKE  92,???" will change the line that 
+              text scrolls under at the bottom of the screen. "???" is 
+              also the number of lines down from the  top.  These  are 
+              the only pokes that I'm aware of, If you know of others, 
+              I  would  be forever-grateful if you sent them to me.
+```
+{% endraw %}
+
+## SCR-PG4I.DOC
+
+{% raw %}
+```
+              If after you've typed in all of your records,  you buy a 
+         new game the ADD A RECORD option will let you easily merge it 
+         with your current datafile.  If at anytime during the viewing 
+         portion you want to ADD A RECORD just take  that  option  and 
+         type in your record.  It will then realphabetize and show you 
+         your  records.  NOTE:  It  is more reliable to enter a number 
+         greater than the records in your data file (explained above).  
+
+         NOTE: If you make any mistakes during this process, just take 
+              option  six  to  ABORT  THE  PROGRAM and nothing will be 
+              changed on your disk.  
+
+              After  you've  checked  everything  to  make  sure  it's 
+         correct, you may print all of your information out or end the 
+         program.  
+
+              You may first want to PRINT TO SCREEN so you can quickly 
+         make  sure  it  looks  correct  before  sending the OUTPUT TO 
+         PRINTER or DISK.
+
+
+ 
+
+```
+{% endraw %}
+
+## SCR-PG5I.DOC
+
+{% raw %}
+```
+         NOTE:  When saving your records or printing to disk,  all new 
+              information will overwrite your old information.  If you 
+              want to have more than one data file,  you may do so  by 
+              making  different  data  files.  When you are working on 
+              one,  rename it to "SCR-DATA.BAS" (this is the name  the 
+              program  looks  for)  and  when you are finished you may 
+              choose another name to  use  while  "storing"  it.  Make 
+              sure to rename them back to "SCR-DATA.BAS" each time you 
+              use  them.  Be  careful  not  to overwrite a datafile by 
+              doing this.  NOTE: It is a good idea to make a backup of 
+              your datafile.  
+
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
 
 ## TYPE.BAS
 
+{% raw %}
 ```bas
 10 ' **********************
 20 ' ** PRACTICE TYPING  **
@@ -3137,6 +3633,37 @@ machines:
 580 DATA one,two,three,four,five,six,seven,eight,nine,ten
 590 FOR I=1 TO 1000:NEXT I:GOTO 160
 ```
+{% endraw %}
+
+## TYPE.DOC
+
+{% raw %}
+```
+TYPE.BAS IS A PROGRAM THAT GIVES YOU WORDS THAT YOU COULD USE TO PRACTICE
+TYPING. THE MORE YOU USE THIS PROGRAM, THE BETTER OF A TYPER YOU WILL BE.
+IF YOU MASTER ALL THE WORDS, THEN LOAD "MATH.BAS" AND CHANGE THE WORDS IN
+THE DATA STATEMENTS. SEE YOUR BASIC MANUAL FOR MORE INSTRUCTIONS ON HOW
+TO CHANGE THE DATA.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

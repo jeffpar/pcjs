@@ -32,8 +32,39 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILES368.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 368    Flash Cards:  Vocabulary and Spelling            v1    DS
+-------------------------------------------------------------------------
+ 
+This is the second of the 4-disk set of the Educational Package: Flash
+Cards with 7,500-Word Vocabulary Builder and Spelling Teacher.  This
+disk contains the vocabulary file for the second part of the alphabet
+(de-in), the source code, in BASIC, for the main Flash Card program, the
+same source code as documentation giving excellent overall and
+line-by-line comments, and the two files of flags to indicate words
+missed.
+ 
+CARDS          Vocabulary words and definitions (de-in)
+FLASH     BAS  Main Flash Cards program, in BASIC
+REMARKS   BAS  FLASH.BAS comments for documentation
+SFLAG          Flags for missed spelling words
+FLAG           Flags for missed vocabulary words
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## FLASH.BAS
 
+{% raw %}
 ```bas
 4 DEFINT A-W,Y-Z
 35 DIM K$(80)
@@ -764,9 +795,11 @@ machines:
 62990 PRINT CHR$(CH);
 63000 GOTO 62190
 ```
+{% endraw %}
 
 ## REMARKS.BAS
 
+{% raw %}
 ```bas
 4 DEFINT A-W,Y-Z /DEFINE ALL VARIABLES AS INTEGERS
 35 DIM K$(80) / COUNT FOR INPUT SUBROUTINE
@@ -1491,6 +1524,7 @@ machines:
 62990 PRINT CHR$(CH);
 63000 GOTO 62190
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

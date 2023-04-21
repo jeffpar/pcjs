@@ -69,6 +69,68 @@ machines:
     HELP     <DIR>Subdirectory containing help files (81 files).
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES690.TXT
+
+{% raw %}
+```
+Disk No  690
+Program Title: BEST-PLAN PLANNING SYSTEM (Disk 1 of 3)
+PC-SIG version 2
+
+    BEST-PLAN is a mathematical modeling package which simplifys analysis
+with a build-in modeling language, a report writer and multiple
+analyses "what-if" capability thru a build-in database management system.
+
+    The general goal of designing a linear programming planning system like
+BEST-PLAN was to put maximum analytical power into the hands
+of the people directly concerned with the problem, with only a
+minimum of specialized knowledge or experience on the part of the user, and
+at the same time give him the advantages of mathematical modeling for
+planning.
+
+    LIMITATIONs in the DEMO PACKAGE: Systems operations are intended for
+demonstrations ONLY! Limitations are incorporated. The user is allowed only
+to execute the supplied samples. In summary:
+
+   o  The user CANNOT create a NEW problem/model.
+   o  The user CANNOT Optimize a master PLAN.
+   o  The user CANNOT modify the  BEST-PLAN  environment
+      file  (BP-ENV.CON) other than change screen  color
+      and disk assignments.
+   o  The problem size has been limited to 6,000 elements
+      elements=(no. of rows) * (2 * no. of rows + no. of columns)
+
+Usage: Business planning
+
+System Requirements: 512K memory and a hard drive.
+
+How to Start: type DOC (press enter)
+
+Suggested Donation: $199.00
+
+File Descriptions:
+
+BP-COM   EXE  Main program
+BP-ENV   COM  Sub program
+BP-ENV   CON  Data file
+??????   EXE  Sub program (3 files)
+CONFIG   SYS  Configuration file
+DOC      EXE  Prints documentation and installs program
+LISTME        Informational file
+README        Introduction file
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987, 1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0690
 

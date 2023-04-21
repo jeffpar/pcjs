@@ -41,6 +41,33 @@ machines:
     SPACEVAD EXE  Save the world from the extra-terrestrial invaders.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES210.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  210  Castle & Others Games                               v1.1 DS2
+---------------------------------------------------------------------------
+This disk contains an excellent adventure game called CASTLE and two other
+arcade games.  PACKGAL is a game much like the female version of a popular maze
+game.
+ 
+CASTLE   DOC  Documentation for CASTLE.EXE adventure game
+CASTLE   EXE  Main program
+CASTLE   RAN  Last save game data file for CASTLE.EXE
+PACKGAL  COM  Travel trough a maze eating dots and avoiding ghosts
+SPACEVAD EXE+ Save the world from the extra-terrestrial invaders.
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0210
 

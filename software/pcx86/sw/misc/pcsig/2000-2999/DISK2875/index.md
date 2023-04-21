@@ -18,6 +18,7 @@ machines:
 
 ## EXAMPLE.BAS
 
+{% raw %}
 ```bas
 10 REM     This is a simple example on how to access speech from basic.
 20 PRINT " GOOD AFTERNOON - WELCOME TO OUR DEMOSTRATION
@@ -33,6 +34,92 @@ machines:
 120 SHELL "SW-TALK CONCEPT
 130 SHELL "SW-TALK  PAUSE GOODBYE
 ```
+{% endraw %}
+
+## FILE2875.TXT
+
+{% raw %}
+```
+Disk No: 2875                                                           
+Disk Title: SW-Talk, The Voice Library                                  
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: SW-Talk, The Voice Library                               
+Author Version: 2.1                                                     
+Author Registration: $25.00                                             
+Special Requirements: 512K RAM. EGA/VGA and hard drive recommended.     
+                                                                        
+SW-TALK, THE VOICE LIBRARY is a new product for shareware authors and   
+programmers. The library consists of over 100 words that can be used to 
+spice up your programs and increase your registrations. Excellent voice 
+quality that works through the PC speaker. The voice commands can be    
+added to any batch file (*.bat) and/or added to your programs. This     
+package is very easy to use; you simply need to type SW-TALK at the DOS 
+prompt, followed by the words you would like to say (example: to say    
+"Please register your shareware," type in "SW-talk register"). Also     
+included in this package is a PCX display program that can be used to   
+display pcx pictures. This will allow you to design a fancy introductory
+screen for your program or give you a talking slide show capability.    
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+
+                	 SW-TALK (THE VOICE LIBRARY)                 Vers 2.1
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+   The VOICE LIBRARY is a NEW product for SHAREWARE AUTHORS/PROGRAMMERS.
+   The library consist of over 100 words that can be used to give your
+   programs a more professional touch and help increase your registrations.
+   Excellent voice quality That works thru the PC speaker.  The voice 
+   commands can be added to any batch file (*.bat) and/or added to your 
+   programs (shell command). This package is very easy to use, you simply 
+   need to type SW-TALK at the dos prompt, followed by the words you would 
+   like to say (example: to say PLEASE REGISTER YOUR SHAREWARE, type in 
+   "SW-TALK REGISTER").  Also included in this package is a PCX display 
+   program that can be used to display pcx pictures. This will allow you
+   to design a fancy intro. screen for your programs or create a TALKING
+   SLIDE SHOW.
+
+
+        * A VOICE LIBRARY with real HUMAN SPEECH.
+
+        * Over 100 word/phrases on this disk.
+
+        * PCX display capability (EGA/VGA, 640x350, 16 colors).
+
+	* INCREASE YOU REGISTRATIONS WITH THIS PACKAGE.
+
+        * SYSTEM REQUIREMENTS:  512K memory, one floppy
+          disk and any  monitor. (harddrive recommended)
+
+        * Designed to work on any IBM-PC Compatible.
+
+	* Type "RUNME" to start the TUTORIAL program.
+
+        * NOW THE PC CAN TALK.
+
+	* Please register your shareware by sending $ 25.00 to:
+
+
+			      C.S.S. Inc.
+                             ORLANDO DARE
+                           3005 Glenmore Ave.
+			  Baltimore, MD 21214
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

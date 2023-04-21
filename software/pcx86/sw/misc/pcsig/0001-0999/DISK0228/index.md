@@ -51,6 +51,7 @@ machines:
 
 ## COLSLOT.BAS
 
+{% raw %}
 ```bas
 5 CLS
 7 REM  MODIFIED FOR THPCUG BY David L. South (317-294-4060)
@@ -265,9 +266,64 @@ machines:
 5120 PLAY "O3 B8 B2 O4 DC O3 A A8 G8 G2"
 5130 RETURN
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #228, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  CRIBBAGE.BLD         CRC = 11 23
+
+--> FILE:  CRIBBAGE.BAS         CRC = 45 5C
+
+--> FILE:  PAC-GAL .EXE         CRC = D0 69
+
+--> FILE:  COLSLOT .BAS         CRC = 2B 4B
+
+--> FILE:  MAZE    .BAS         CRC = 5D 5C
+
+--> FILE:  FIREFIRE.BAS         CRC = 35 41
+
+--> FILE:  README  .DOC         CRC = 99 7C
+
+--> FILE:  T-ROAD  .BAS         CRC = 5B 92
+
+--> FILE:  SLOT    .BAS         CRC = 6F F4
+
+--> FILE:  VAMPIRE .BAS         CRC = C6 19
+
+--> FILE:  NEWFONT .BAS         CRC = D4 39
+
+--> FILE:  NUKE-SF .BAS         CRC = 50 41
+
+ ---------------------> SUM OF CRCS = 34 65
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## CRIBBAGE.BAS
 
+{% raw %}
 ```bas
 1 REM  20 SEPT 79  W/ SOUND/SCROLL/STROBE KEYBOARD
 150 CLEAR ,&H8000:WIDTH 80
@@ -1213,9 +1269,11 @@ machines:
 64020 REM 
 64030 POS1%=256*(Y1-1)+X1-1:POS2%=256*(Y1+H1-1)+X1+W1:RETURN
 ```
+{% endraw %}
 
 ## FIREFIRE.BAS
 
+{% raw %}
 ```bas
 10 REM *****************************************************
 20 REM ********************** FIREFIRE *********************
@@ -1308,9 +1366,11 @@ machines:
 880 LOCATE 1,1,0 : FOR I = 1 TO 79 : PRINT " "; : NEXT I
 890 RETURN
 ```
+{% endraw %}
 
 ## MAZE.BAS
 
+{% raw %}
 ```bas
 1 ' MAZE - Taken from the DG version of the same name
 2 ' Will Fastie - 16 Jan 82
@@ -1514,9 +1574,11 @@ machines:
 2000 CLOSE
 2010 KEY ON:END
 ```
+{% endraw %}
 
 ## NEWFONT.BAS
 
+{% raw %}
 ```bas
 100 ' PROGRAM NEWFONT.BAS TO CREATE NEW CHARACTER SETS FOR THE IBM PC
 105 ' HUGH S. JACKSON, 1984. ALL COMMERCIAL RIGHT RESERVED BY AUTHOR.
@@ -1735,9 +1797,11 @@ machines:
 1170 DATA 35,35,35,91,16
 1175 FONT(0)=&HF800: FONT(1)=&HFC00: RETURN
 ```
+{% endraw %}
 
 ## NUKE-SF.BAS
 
+{% raw %}
 ```bas
 10 REM-Nuclear attack simulator
 20 REM-by K.L. AND R.M. FREEZE
@@ -2100,9 +2164,34 @@ machines:
 3820 DATA 999,999
 3830 CHAIN"MENU2"
 ```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+
+------------------------------------------------------------------------
+Disk No 228   GAMES					       v1
+------------------------------------------------------------------------
+CRIBBAGE BAS  Game..Same rules as board game one player vs PC
+CRIBBAGE BLD  Subroutines for CRIBBAGE.BAS
+PAC-GAL  EXE  Game..Eatem up dots
+COLSLOT  BAS  One arm bandit in color  Its a winner (req color)
+FIREFIRE BAS  Game..Reflexes on keyboard
+MAZE	 BAS  Produces mazes of any size for screen or printer
+T-ROAD	 BAS  A neat and interesting adventure game
+SLOT	 BAS  Same as you have but graphics are much better and in color
+VAMPIRE  BAS  Adventure game.
+NEWFONT  BAS  The program in pc. not sure if you want it but it saves time typing it out.
+NUKE-SF  BAS  A well done nuclear war demo.
+
+```
+{% endraw %}
 
 ## SLOT.BAS
 
+{% raw %}
 ```bas
 5 M=25
 10 RANDOMIZE INT(VAL(MID$(TIME$,7,2)))
@@ -2254,9 +2343,11 @@ machines:
 1190 LOCATE 20,4:PRINT "BY THE WAY WHAT IS YOUR NAME";:INPUT N$
 1200 RETURN
 ```
+{% endraw %}
 
 ## T-ROAD.BAS
 
+{% raw %}
 ```bas
 10 CLS : KEY OFF : A$ = "Thunder Road Adventure"
 15 T$ = TIME$
@@ -2581,9 +2672,11 @@ machines:
 3140 GOSUB 3090 : GOTO 1860
 3150 GOSUB 3090 : PRINT : COLOR 16,7 : PRINT "        ****   Y O U   M A D E   I T  !  ****       " : COLOR 7,0: GOTO 1860
 ```
+{% endraw %}
 
 ## VAMPIRE.BAS
 
+{% raw %}
 ```bas
 100 KEY OFF:CLS:COLOR 10,0
 110 PRINT,"Welcome to the VAMPIRE'S CASTLE Adventure":PRINT:PRINT
@@ -2767,6 +2860,7 @@ machines:
 2120 PRINT "only looks at the first 3 letters of each word.":PRINT
 2130 COLOR 10:PRINT TAB(25)"--- GOOD LUCK! ---":PRINT:RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

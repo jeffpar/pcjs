@@ -45,6 +45,52 @@ machines:
     LM       EXE   Main program.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0750.TXT
+
+{% raw %}
+```
+Disk No:  750
+Program Title:  Label Master version 4.0
+PC-SIG version:  4
+
+Label Master is a program for maintaining, sorting, and printing lists
+of names and addresses (mailing lists).  The program is menu-driven and
+very easy to set up and use.  It has fields for "Title" and "Company" as
+well as the standard (name, street, etc.) fields.  The program will
+automatically date stamp each new record in a "Notes" field for future
+reference.
+
+Label Master will print multiple labels across the page, and will pause
+after each page if requested (great for single sheet labels).  The
+documentation consists of a brief description of each of the menu
+selections and a couple of paragraphs on installing the program on your
+system.  This program is well suited for any level user (novice to
+expert).
+
+Usage:  Address manager/labeler.
+
+Special Requirements:  None
+
+Suggested Registration:  $35.00
+
+File Descriptions:
+
+README        Documentation file.
+LMASTER  EXE  Main program.
+INSTALL  BAT  Installation batch file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0750
 

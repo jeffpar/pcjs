@@ -14,6 +14,59 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## README.DOC
+
+{% raw %}
+```
+                           * UNREGISTERED COPY *                    $25.00
+
+                         123-TALK FOR SOUND BOARDS                 Vers 1.2SW
+                         ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+      123-TALK is a fabulous TALKING TEACHER with real human speech that
+   helps children (age 1-7) learn how to SAY NUMBERS, COUNTING, REMEMBER 
+   PHONE NUMBERS, ADDITION, SUBTRACTION, and much more. 123-TALK Also 
+   included the 123 SONG, ALLURING  COLORFUL GRAPHICS and EASY DRAW II,
+   to help bring out your child's creativity. Excellent female speech
+   quality that works thru your SOUND BOARD speakers.
+ 
+      This program will give your children a great deal of ENCOURAGEMENT
+   TO LEARN, when a question is answered correctly, 123-TALK will say 
+   supportive comments (way to go, great, excellent, super duper, very 
+   good, and more). Your child's IMAGINATION WILL GROW, when they watch 
+   the colorful kaleidoscopes and collages in action - and they are fun 
+   to watch !!!!
+
+        * A TALKING TEACHER with real HUMAN SPEECH.
+
+        * Run  MANUAL.EXE  for a detailed description of this NEW 
+          EDUCATIONAL PROGRAM. 
+
+	* SYSTEM REQUIREMENTS:  512K memory, hard drive and EGA/VGA
+          graphics. Optional MOUSE for EASY DRAW II.
+
+        * Type "INSTALL" to start the program.
+
+        * The best way to teach a child, IS TO TALK TO THEM.
+
+	* PC SPEAKER version also available.
+
+
+                             DAREWARE INC.
+                           3005 Glenmore Ave.
+                          Baltimore, MD 21214
+		            (410) 665-0193   
+                              ASP MEMBER
+
+         CALL toll free  1-800-847-0309  for CREDIT CARD ORDERS.
+         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3642
 

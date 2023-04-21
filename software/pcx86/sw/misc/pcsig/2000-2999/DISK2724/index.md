@@ -14,6 +14,110 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2724.TXT
+
+{% raw %}
+```
+Disk No: 2724                                                           
+Disk Title: Computer Gardening Data Disk                                
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Computer Gardening Data Disk                             
+Author Version: 1.0                                                     
+Author Registration: $4.00                                              
+Special Requirements: A database with DIF import capabilities.          
+                                                                        
+Throw those gardening books away!  Now you can add information on over  
+400 flowers to your favorite database.  The information included        
+covers:  botanical name, best use, light needs, height and colors, soil,
+season, cultural information, and more.  The COMPUTER GARDENING DATA    
+DISK isn't a database -- it is data on flowering bulbs in standard comma
+delimited format.  This format, also called Data Interchange Format     
+(DIF), can be imported to almost all popular databases.                 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║       <<<<  PC-SIG DISK #2724 COMPUTER GARDENING DATA DISK  >>>>        ║
+  ╠═════════════════════════════════════════════════════════════════════════╣
+  ║                                                                         ║
+  ║   To print the documentation, type:  PRINTDOC  (press Enter)            ║
+  ║                                                                         ║
+  ║   To print the survey form, type:  COPY SURVEY.TXT PRN  (press Enter)   ║
+  ║                                                                         ║
+  ║                                                                         ║
+  ║                                           Copyright 1991, PC-SIG, Inc.  ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+## SURVEY.TXT
+
+{% raw %}
+```
+
+
+
+                          2COMPU-GRO
+              COMPUTER GARDENING DATA DISK SURVEY
+------------------------------------------------------------------------------------
+                (Please circle the appropriate answer)
+
+1.  Are you a    (select as many as needed)
+
+    ▄  Flower  gardener     ▄  Vegetable gardener
+
+    ▄  Indoor gardener      ▄  All of the mentioned
+
+2.  How much time do you spend in your garden?
+
+    ▄  1/2 day weekly       ▄  only on weekends
+
+    ▄ 1 day weekly          ▄  some every day
+
+3.  What is your age?
+                      -------------------
+4.  Are you
+
+    ▄  Male                 ▄  Female
+
+5.  Would you like to see a data diskette on selected areas of
+    interest?
+
+    ▄  Houseplants              ▄  Cactus          ▄  Vegetables
+
+    ▄  Herbs                    ▄  Bulbs           ▄  Other
+                                                           ---------------------
+
+
+6.  If you have viewed the    COMPUTER GARDENING DATA DISK,
+or the Demo Disk, please use the section below to comment.  If you can think of any
+fields of data that are not in the disk, please list them below.
+
+------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------------
+   Thank you for your time in answering the above questions.  Your needs are
+important to us in our product development.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2724
 

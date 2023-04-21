@@ -48,6 +48,60 @@ machines:
     many different types of headaches.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2374.TXT
+
+{% raw %}
+```
+Disk No: 2374                                                           
+Disk Title: Headache Free 1 of 2 (2374 also)                            
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Headache Free                                            
+Author Version: 1.0                                                     
+Author Registration: $39.95                                             
+Special Requirements: 512K RAM, and a printer. A hard drive is recommend
+                                                                        
+HEADACHE-FREE is a tutorial program that presents information about the 
+different types of headaches and offers a comparison between migraine   
+and cluster headaches.  The tutorial is divided into five chapters and  
+each chapter has a quiz at the end so you can check your knowledge      
+absorption.  Seven different types of headaches and related illnesses   
+along with 14 different methods of possible cure are presented.         
+                                                                        
+HEADACHE-FREE gives you detailed information on the following types of  
+headaches; Migraine, Cluster Headache, Tension Headache, Pre-Period     
+Headach, Hangover, Low Blood Sugar, and Pseudo-Migraine.  After reading 
+about the selected headaches you can then take a quiz to verify what you
+have learned.                                                           
+                                                                        
+HEADACHE-FREE offers you the following possible cures, 14 in all, for   
+your headaches; Acupunture, Alexander Technigue, Astrology, Homeopathy, 
+Chiropractic, Electroconvulsive Therapy, Faith Healing, Health Tonics,  
+Herbal Medicines, Hypnosis, Indirect Hypnotic, K'ai Men, Standard       
+Medical, and Vitamins.  The section on Standard Medical is much more    
+comprehensive than the other possible cures.  It includes foods to watch
+out for, relaxation techniques, and appropriate drugs.                  
+                                                                        
+HEADACHE-FREE also includes a Headache Diary for you to use to keep a   
+60-day record of your moods and activities because everything you do can
+affect the way you fee.  Along with the Headache Diary is a Diet Diary  
+to help you keep track of your meals and note down any foods that may   
+cause headaches.                                                        
+                                                                        
+HEADACHE-FREE is a comprehensive guide to the cause and possible cure of
+many different types of headaches.                                      
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2374
 

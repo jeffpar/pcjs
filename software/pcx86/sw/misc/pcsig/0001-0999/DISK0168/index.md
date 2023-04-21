@@ -62,6 +62,7 @@ machines:
 
 ## ALGEBRA.BAS
 
+{% raw %}
 ```bas
 
 1 '****  ALGEBRA AND GEOMETRY PROGRAM
@@ -202,9 +203,11 @@ machines:
 1210 CLS : PRINT "ALGEBRA Graphics Program"
 65399 '** DONE - PRESS ENTER TO RETURN TO MENU **
 ```
+{% endraw %}
 
 ## BACH.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -336,9 +339,11 @@ machines:
 1990 IF ERR=73 THEN CLS:                                                          PRINT "THIS PROGRAM USES THE 'PLAY' STATEMENT WHICH REQUIRES ADVANCED BASIC.":  PRINT "LOAD 'BASICA' AND RE-RUN.":END
 2000 ON ERROR GOTO 0
 ```
+{% endraw %}
 
 ## BACH2.BAS
 
+{% raw %}
 ```bas
 10 REM *******************************************
 15 REM *  BASIC COMPOSER (BACH TO BASIC)  1.2    *
@@ -509,9 +514,11 @@ machines:
 765 REM '
 770 REM ' MAY THE SCORES BE WITH YOU...
 ```
+{% endraw %}
 
 ## BIBLE.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0,1
 20 COLOR 15,1,1
@@ -568,9 +575,11 @@ machines:
 530 PRINT " "
 540 PRINT " "
 ```
+{% endraw %}
 
 ## CHEMQUES.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -734,9 +743,11 @@ machines:
 2310 NEXT Y
 2320 END
 ```
+{% endraw %}
 
 ## CHEMTEST.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -933,9 +944,11 @@ machines:
 2640 FOR X=1 TO 80:LPRINT "-";:NEXT X:LPRINT :LPRINT
 2650 RETURN
 ```
+{% endraw %}
 
 ## CLASROLL.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 PRINT"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░"
@@ -1220,9 +1233,33 @@ machines:
 3550 GOTO 1870
 3560 CLOSE:STOP
 ```
+{% endraw %}
+
+## CLASROLL.DOC
+
+{% raw %}
+```
+This program will aide the Sunday School teacher by creating a file of
+students.  The program will allow you to update records, print a monthly
+class roll/attendance sheet, and print labels for mailings to the students.
+
+The initiate the program, you must have the enclosed file CLASS.ROL on your
+A-disk.  Thereafter, this file will contain your student records.
+
+Prior to your use of this program, you should customize it with your
+particular needs.  In lines 1960, 1970, 1980, 2950, 2960, and 2970,
+replace the value of "67" with the first two digits of the zip code of
+your locality.  In line 2920, replace "Kansas" with your state.  In
+line 3150, replace "2 Year Olds" with the name of your class.
+
+Okay, you're set.
+20, replace "Kansas" with your s
+```
+{% endraw %}
 
 ## COFFEE.BAS
 
+{% raw %}
 ```bas
 10 '     save"coffee.bas
 20 '
@@ -1597,9 +1634,92 @@ machines:
 3710  PLAY "P8xi$;xi$;xj$;xk$;xl$;xm$;xn$;xo$;xp$;xq$;xr$;xs$;
 3720 CHAIN"games.bas
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #168, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  ALGEBRA .BAS         CRC = 5F 26
+
+--> FILE:  BABYMATH.EXE         CRC = A9 22
+
+--> FILE:  BACH    .BAS         CRC = 5C BF
+
+--> FILE:  BACH2   .BAS         CRC = B0 62
+
+--> FILE:  BIBLE   .BAS         CRC = 56 EE
+
+--> FILE:  CHEMQUES.BAS         CRC = 9F 70
+
+--> FILE:  CHEMTEST.BAS         CRC = 23 57
+
+--> FILE:  CLASROLL.BAS         CRC = AA 0B
+
+--> FILE:  CLASROLL.DOC         CRC = CC 0C
+
+--> FILE:  COFFEE  .BAS         CRC = E5 65
+
+--> FILE:  GODFATHR.BAS         CRC = B1 95
+
+--> FILE:  JESUSLOV.BAS         CRC = 97 C6
+
+--> FILE:  MINUET  .BAS         CRC = 5B 7B
+
+--> FILE:  MINUET2 .BAS         CRC = BB AD
+
+--> FILE:  PIANO1  .BAS         CRC = 96 4F
+
+--> FILE:  PIANO2  .BAS         CRC = 84 86
+
+--> FILE:  SPELL   .BAS         CRC = 6E 3D
+
+--> FILE:  SPELL1  .DAT         CRC = 93 7C
+
+--> FILE:  SPELL2  .DAT         CRC = CB 5E
+
+--> FILE:  SPELL3  .DAT         CRC = B5 A1
+
+--> FILE:  SPELL4  .DAT         CRC = AD AC
+
+--> FILE:  SPELLBEE.BAS         CRC = 39 2A
+
+--> FILE:  SPELLDAT.BAS         CRC = 94 54
+
+--> FILE:  STORY   .BAS         CRC = D9 94
+
+--> FILE:  TELLTIME.BAS         CRC = 90 8E
+
+--> FILE:  XXX     .            CRC = 49 FD
+
+ ---------------------> SUM OF CRCS = B7 F3
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## GODFATHR.BAS
 
+{% raw %}
 ```bas
 10 REM  AUTHOR ? GUESS.
 20 KEY OFF
@@ -1622,9 +1742,11 @@ machines:
 190 PLAY"L4MLO4CO4E-O4B-O4A-O4GO4B-O4A-P64O4A-O4GP64O4GO4BL1O5C"
 200 CLS
 ```
+{% endraw %}
 
 ## JESUSLOV.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0,1
 20 COLOR 15,1,1
@@ -1653,9 +1775,11 @@ machines:
 250 PRINT " "
 260 PRINT " "
 ```
+{% endraw %}
 
 ## MINUET.BAS
 
+{% raw %}
 ```bas
 10 DIM TUNE$(4)
 20 CLS:KEY OFF
@@ -1699,9 +1823,11 @@ machines:
 400 DATA f16 e16 d e4 c#4
 410 DATA d2.
 ```
+{% endraw %}
 
 ## MINUET2.BAS
 
+{% raw %}
 ```bas
 10 DIM TUNE$(4)
 20 CLS:KEY OFF
@@ -1745,9 +1871,11 @@ machines:
 400 DATA B O4 D O3 G4 F#4
 410 DATA G2
 ```
+{% endraw %}
 
 ## PIANO1.BAS
 
+{% raw %}
 ```bas
 10 DEF SEG: POKE 106,0
 20 KEY OFF:SCREEN 0,1:COLOR 15,0,0:WIDTH 40:CLS:LOCATE 5,19,0:PRINT "The"
@@ -1974,9 +2102,11 @@ machines:
 2230 DATA "Q","W","E","R","T","Y","U","I","O","P","[","]"
 2240 DATA "2","3","5","6","7","9","0","="
 ```
+{% endraw %}
 
 ## PIANO2.BAS
 
+{% raw %}
 ```bas
 10 DEF SEG: POKE 106,0
 20 KEY OFF:SCREEN 0,1:COLOR 15,0,0:WIDTH 40:CLS:LOCATE 5,19,0:PRINT "The"
@@ -2213,9 +2343,11 @@ machines:
 2320 DATA "Q","W","E","R","T","Y","U","I","O","P","[","]"
 2330 DATA "2","3","5","6","7","9","0","="
 ```
+{% endraw %}
 
 ## SPELL.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -2480,9 +2612,11 @@ machines:
 3860 DATA window,corn,head,robin,wood,cow,hill,Santa Claus,squirrel,school
 3870 DATA little,down,go,here,it
 ```
+{% endraw %}
 
 ## SPELLBEE.BAS
 
+{% raw %}
 ```bas
 10 REM        SPELLING BEE
 20 REM
@@ -2650,9 +2784,11 @@ machines:
 1600 NEXT TD
 1610 RETURN
 ```
+{% endraw %}
 
 ## SPELLDAT.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY OFF
 12 ' replace data files for spellbee.bas
@@ -2672,9 +2808,11 @@ machines:
 150 '
 1000 DATA zodiac
 ```
+{% endraw %}
 
 ## STORY.BAS
 
+{% raw %}
 ```bas
 10       REM---------------------------------------------------
 20       REM             s  t  o  r  y
@@ -2821,9 +2959,11 @@ machines:
 1420 PRINT
 1430     RETURN
 ```
+{% endraw %}
 
 ## TELLTIME.BAS
 
+{% raw %}
 ```bas
 100 ' TELLTIME written by Lloyd Onyett
 110 ' of Chehalis, Washington
@@ -2917,6 +3057,7 @@ machines:
 1430 LOCATE 1,1
 1440 END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

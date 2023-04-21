@@ -52,14 +52,578 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## COGO.DOC
+
+{% raw %}
+```
+       version 5.3b                                             page 1.
+                                    C O G O
+
+                              CoOrdinate GeOmetry
+                               Surveying Program
+                                      for
+                                 Plat Designers
+
+              This  program,  which  I  call `COGO', is the product of my
+       spare time over the span of some years. I began some time in 1971,
+       when I first became familiar with  a  desk-top  programmable  cal-
+       culator.  I  had  long  been  fascinated  with adding machines and
+       mechanical calculators,  but  the  first  time  I  came  across  a
+       programmable  electronic  calculator  that  calculated the natural
+       functions without resort to tables, I was hooked.
+            For  the  plat  designer,  I  have  endeavored  to  make COGO
+       operate just the way he thinks, just the way the survey crew works
+       in the field and just the way the draftsman works on  the  drawing
+       board, with his straight edge, protractor and compass.
+            COGO is a relatively compact program that  will  run  in  any
+       PC/XT  compatible  computer,  running on MS-DOS and having 128K or
+       more of  RAM  memory.   I  have  endeavored  to  make  COGO  self-
+       ocumenting  in  so  far  as  possible,  and in this COGO.DOC file
+       herewith I will explain its many features as  far  as  space  will
+       allow.
+            I am a Florida registered professional engineer, PE 7180, now
+       retired.  The development of COGO has been a process of revise and
+       edit, revise and edit; each time  adding  some  new  and  improved
+       procedure,  until  now I can think of no new improvements to make.
+       It is now my decision to entrust COGO to  a  wider  clientele,  as
+       USER SUPPORTED software.
+            You  may  freely  copy  COGO.EXE,  COGO.DOC  & README.1ST and
+       distribute them to your friends, with the understanding that  each
+       user, including yourself, is honor bound to register his copy with
+       me, the author.  I reserve the right  to  know  who  is  using  my
+       software.   NO  ONE  IS  AUTHORIZED TO SELL MY SOFTWARE, except to
+       recover the cost of materials and handling.
+            If you find COGO to  be  useful  to  you,  I  expect  you  to
+       register  your copy with me by writing to the address shown below,
+       and please remit your check or money order in the amount of $10.00
+       as reimbursement to me for expenses that I have incurred,  and  to
+       make  possible  my  continued  support  of  this  software.   As a
+       registered user you will receive notification of all  up-dates  or
+       improvements that may be made in the future.
+ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+                                                                       cut
+         to:                      Carl M. King
+                               2206  Siesta Drive
+                            Sarasota, Florida  34239
+
+         I have received a copy of COGO version No.____________________
+         Enclosed please find my $10.00 registration fee.
+
+         Name & Address: ______________________________________________
+
+                         ______________________________________________
+
+                         ______________________________________________
+
+                         ______________________________________________
+
+                                    C O G O                     page 2.
+
+         INTRODUCTION:
+         Anyone interested in this program needs to  be  familiar  with
+         surveying  terminology.  If I use any words or terms which are
+         not clear to you, I respectfully direct your  attention  to  a
+         standard text book, such as :
+
+                         SURVEYING THEORY AND PRACTICE
+                                      by
+                      Raymond E  Davis, M.S., C.E., D.Eng.
+                              Fancis S. Foot, E.M.
+                               Joe W. Kelly, B.S.
+
+                            McGraw-Hill Book Company
+
+              BALANCING THE SURVEY: Is a  special  topic,  and  is
+              treated  in  a separate text file (BALANCE.DOC) that
+              should be found on this same disk.
+
+         PROGRAM  DESIGN:  The  calculations in this (COGO) program are
+         carried out in double precision (16  digits).   However,  when
+         coordinates  are  listed  with  the  LIST  command,  they  are
+         displayed only to the nearest 1/1000 th unit.
+
+         COORDINATES:  A  principal  product  of  the  program  is  the
+         calculation of coordinates, NORTHINGS and  EASTINGS,  of  each
+         point  in the plane of the survey that you calculate.  To each
+         pair  of  coordinates  YOU  assign  a  point  number,  as  the
+         calculations  progress.  These designated pairs of coordinates
+         are saved in memory in batches of 100 points,  and  each  such
+         batch becomes a FILE when saved to the disk.
+
+         CURVE  PARTS:   In  addition  to  coordinates  (northings  and
+         eastings) COGO computes `curve parts'  (radius,  delta  angle,
+         tangent,  arc  and  chord)  of  each curve encountered.  Curve
+         parts are displayed and may be printed  at  your  option,  but
+         curve  parts  do  not  become  a permanent part of the record.
+         Only coordinates are saved to the disk.  Curve  parts  may  be
+         recalculated at any time with the INVERSE CURVE routine.
+
+         FILES:  Points  0 to 99 are saved as file COGO.000; points 100
+         to 199 are saved as file COGO.001; points 200 to 299 are saved
+         as file COGO.002; and so on. The number of points in each file
+         constitutes a century,  and  the  file  number  in  each  case
+         corresponds  to  the  century.  In  this  fashion thousands of
+         points may be saved on a single disk. Any designated point may
+         be recalled, and the survey extended therefrom as  the  design
+         progresses.  The  files are automatically created and recalled
+         by the program each time a new century is  created,  e.g.,  if
+         you pass from file COGO.000 to COGO.001.
+
+         Each  full  data  file  requires 4096 bytes of disk space, and
+         COGO.EXE itself requires about 77K, so one diskette can  hold,
+         in  addition to the program, about 69 files, or the equivalent
+         of 7000 pairs of coordinates.
+
+         Any time you wish to abandon a batch of points you may  do  so
+         by  erasing  the  said  file from the disk directory, but this
+         isn't necessary, because every time you assign a point  number
+         the old coordinates are overwritten.
+
+                                    C O G O                     page 3.
+
+         GETTING STARTED:
+
+         COGO.EXE  is  an executable program.  You should copy COGO.EXE
+         onto a disk that you will use in the "current drive", that  is
+         the  drive  in  which  you will load COGO.EXE, and this is the
+         disk on which COGO will save all the data that  is  generated.
+         If  you  wish  to  change  the current drive, you should do so
+         before you load COGO.EXE.  When you call it from DOS, it  will
+         start running immediately.  At first there will probably be no
+         data  files  on  the disk, but COGO will create and manage the
+         files automatically.   COGO  recognizes  an  empty  file,  and
+         advises you that you ought to enter a pair of coordinates as a
+         `local  origin'.   This  is  a  precaution to maintain greater
+         precision in the area calculations that will be carried  along
+         with  every  traverse.   (COGO calculates the area under every
+         line and curve that is calculated.)  If  you  format  a  fresh
+         disk, and copy COGO.EXE onto it alone, there will remain space
+         on  the disk for at least 68 data files, each accomodating 100
+         coordinate pairs. You can have a permanent record of points #0
+         to #6799 on a single diskette.  You should never lack for data
+         storage space, since you will soon grow tired  of  using  four
+         digit point numbers.
+
+         Your best bet is to gain some `hands on' experience with COGO.
+         Practice  with  a  subdivision  record  plat  with examples of
+         curvilinear  streets  and  cul-de-sacs.   COGO  will  ask  the
+         questions, and you will supply the responses.
+
+         TRAVERSE: The calculations proceed in much the same fashion as
+         the measurements are made in the field.  At each point we  can
+         imagine  a transit to be set up, and from thence a SIGHTING is
+         made for a measured distance to the next  point.   A  SIGHTING
+         then  consists  of  a  direction  and  a  distance,  and  COGO
+         calculates the `latitude' and  `departure',  and  derives  the
+         coordinates of the next point.
+
+         INVERSE: Normal surveying procedure moves from point to  point
+         using input data consisting of heading angle and measured for-
+         ward  distance.   However,  using  the computer, we frequently
+         want to make calculations in reverse order.  I.e., we wish  to
+         reconstruct  or calculate the heading and distance between two
+         points which have been established by other means,  and  whose
+         coordinates  are already on file in the computer memory.  Such
+         a calculation we call an `inverse'.  You do this with COGO  by
+         merely  entering the desired point number at the (SIGHTING: ?)
+         prompt.
+
+         AZIMUTH: The operative angle is Azimuth (A), which is measured
+         clockwise from the North, from 0 to 360 degrees positive angle
+         or counter clockwise from 0 to 360 degrees negative angle.
+
+
+
+
+
+                                    C O G O                     page 4.
+
+         The fundamental relationships are as follows:
+
+                               latitude = D cos A
+                              departure = D sin A
+
+                       where:         A = Azimuth angle
+                                      D = Distance of traverse
+
+
+         NORTHINGS  and  EASTINGS  are respectively the accumulation of
+         latitudes and departures  from  a  chosen  (P.O.B.)  point  of
+         beginning.
+
+         A  NE  quadrant  "Bearing" is an angle measured clockwise from
+         the North, hence it is the only Bearing that is identical with
+         Azimuth, and may be used interchangeably with Azimuth.
+
+
+         MENUS:  There are three menus, which may be called up whenever
+         you see the prompt: * SIGHTING: ? This is  the  point  in  the
+         program  where  you  enter commands. (You press the <ENTER> or
+         <RETURN> key for whatever commands you  choose.)  <I>  is  the
+         command for the first menu. <II> is the command for the second
+         menu, and <III> is the command for the third menu.
+
+         COMMANDS:   From  the  menus you will learn the following com-
+         mands:
+
+         I - 1st MENU (Introduction)     CL - CLEAR AREA
+        II - 2nd MENU (Commands)          C - ENTER COORDINATES
+       III - 3rd MENU (Curves, etc.)      L - LIST  COORDINATES
+      SAVE - SAVE DATA FILE              EX - EXIT or use <SHELL>
+                      <Ctrl+PrtSc> = Printer Toggle
+
+         NE,  NW,  SW,  and  SE  are  the  compass quadrants, and their
+         meanings should be obvious.
+
+         N, S, E and W are the cardinal points of the compass and these
+         represent absolute Bearings. They assume azimuths of exactly 0
+         or 90 degrees.
+
+         DF - deflection angle           BK - backsight
+         GO - zero deflection            BT - backtrack
+         SA - slope angle                ZD - zenith `distance'
+         SS - side-shot                  XS - cancel side-shot
+         AZ - Azimuth Heading            RV - revise a call
+
+         TR - traverse curve             BB - bearing/bearing inters'n
+         SC - inscribe curve             BD - bearing/distance   "
+         IN - inverse  curve             DD - distance/distance  "
+         CU - cul-de-sac  "
+
+         The above list of alphabetical commands comprises  the  entire
+         list  of  such  commands  employed  by  COGO,  except  for  an
+         occasional (R)ight, (L)eft, (Y)es or (N)o choice that you  may
+         be called upon to make.
+
+                                    C O G O                     page 5.
+
+   <ENTER> Incidently, at boot-up,  when you tap a key to continue, and
+         later in the program, when you may make a  (R)ight  or  (L)eft
+         choice,  the program is designed to branch immediately, and it
+         doesn't wait for you to press <ENTER>. In these cases don't be
+         too quick to  press  <ENTER>;  if  you  do,  you  are  apt  to
+         inadvertently  skip  a  step in the program, and inadvertently
+         enter a zero (0). JUST BE SURE EACH TIME  YOU  PRESS  <ENTER>,
+         THAT IS WHAT YOU WANT TO DO.
+
+         LOCAL ORIGIN:  You should plan ahead, and consider how wide an
+         area you anticipate that you will cover with your surveys. You
+         should select a pair of coordinates, NORTHINGS  and  EASTINGS,
+         for  point  No.  0,  such  that any future point falling south
+         westerly of that point will still have  positive  coordinates.
+         (Although  it is mathematically permissible to work with nega-
+         tive coordinates, it is not convenient to do so.)
+
+
+   <C>   ENTER COORDINATES: To enter  the  coordinates  for  the  LOCAL
+         ORIGIN  or  any  other P.O.B., you start this routine with the
+         command  <C>.  Then  COGO tells you what to do next. To escape
+         from this routine, press <I><ENTER>.
+
+   <L>   LIST COORDINATES: you start this routine with the command <L>.
+         Then  COGO tells you what to do next. You can make a hard copy
+         if you enable your printer with the keys <Ctrl>+<PrtSc>.
+
+         PROMPTS:  COGO is largely self documenting. When it stops  and
+         gives  you  an  opportunity  to  enter a command, you will see
+         something like this:
+
+                         * SIGHTING: ?
+
+         The asterisk, * , is to identify this as the  primary  command
+         entry  point  in  the program. When you see this star, you can
+         branch with any of the commands listed above.  You  will  also
+         see  this  star  when entering P.O.B. coordinates, so that you
+         can branch from that routine too.
+
+
+         TRAVERSE: In the simplest traverse, you are given the  Azimuth
+         or  Quadrant  and  Bearing (angle) and the distance.  Go ahead
+         and run it. The program will stop and request  the  data,  and
+         finally the point number.
+
+         ANGLE  DATA:  Surveying instruments are calibrated in degrees,
+         minutes and seconds  (our  heritage  from  the  ancient  Baby-
+         lonians),  so  that  is  how  COGO is designed to receive this
+         information. If you enter degrees or minutes as integers, COGO
+         then requests the next smaller units, but if you enter numbers
+         with decimal fractions, COGO  accepts  that  in  lieu  of  any
+         further fractions.
+
+
+                                    C O G O                     page 6.
+
+         Enter angle data thus:
+
+         ENTER ANGLE: deg ?       { NOTE: If you need a negative angle,
+                      min ?       { place a negative (-) sign before
+                      sec ?       { any of these quantities.  The whole
+                                  { angle will be negative.
+
+         NOTE:  COGO  subsequently  reports Azimuth as well as Bearings
+         with   quadrants.   The  computed  results  are  displayed  as
+         follows:
+
+    THENCE CW      314.4911111111111 deg
+       "           314 deg  29 min  28.00 sec  { AZIMUTH
+       or    NORTH  45 deg  30 min  32.00 sec  WEST,        1000.000 units
+
+    POINT NO. 0      TO      POINT NO. 1        NORTH'GS:  700.7986019211062
+                                                EASTINGS: -713.3591798984737
+
+         NOTE: In the above typical display, the heading is first given
+         in decimal degrees Azimuth, then deg/min/sec Azimuth, and then
+         as  a  Bearing  angle in deg/min/sec.  The linear dimension is
+         shown in unspecified "units".
+
+
+
+         POINT  NUMBERS:   Initially  you will  be  starting  with  low
+         point  numbers,  from  1  to  99.  This  will  constitute file
+         `COGO.000', when you SAVE it onto the disk. (You must remember
+         to SAVE your current file whenever you are about to  turn  off
+         the  computer. In fact it would be wise to SAVE your data from
+         time to time. A power interuption could lose a portion of your
+         work, but once it is on the disk, you are safe.)
+
+         INVERSE TRAVERSE: Each time COGO stops for a new * SIGHTING: ?
+         you will see that you are set up over a point. (The point num-
+         ber  `where  you are' will be seen on the line above.) Now, if
+         you want to move to another established and numbered point  in
+         the survey, you merely enter that point number as the SIGHTING
+         and  COGO  will calculate and report the traverse data to that
+         further point. NOTE: You may INVERSE between any two  numbered
+         points; they do not have to be members of the same file.
+
+         AREA  ACCUMULATION:   For  every  line  and curve routine that
+         carries  you  from point to point, COGO calculates and accumu-
+         lates the area under the line or curve. When you  arrive  back
+         at  the  P.O.B.,  COGO  prints  out the enclosed area and per-
+         imeter. (Initially, at the P.O.B., you must first have cleared
+         the accumulator registers with  the  <CL>  command.)  You  may
+         `inverse'  around  the area, from point to point, and when you
+         inverse to the P.O.B., the area display will be produced.
+
+         NOTE: The enclosed area is  displayed  as  "square  units"  of
+         whatever  system of linear units you are using in your survey.
+         If you are using feet, the quantity labeled  "acres"  will  be
+         correct, otherwise it should be ignored.
+
+
+                                    C O G O                     page 7.
+
+   <DF>  DEFLECTION  ANGLE  TRAVERSE:  This together with the backsight
+         are probably the two most useful  routines  to  the  surveyor,
+         since  they  more  nearly  simulate  the  sort  of  operations
+         regularly performed by surveyors in the field. Enter  <DF>  to
+         initiate  this  routine. At the point `where you are' you have
+         arrived with a certain known heading. Thence you want to  pro-
+         ceed  on  a new heading. You want to turn through a deflection
+         angle. This `deflection angle' is the datum that you enter, as
+         requested by the program. A clockwise angle  is  positive.   A
+         counter-clockwise  angle  must  be given a negative sign. (You
+         only need to attach the negative sign to one  entry,  and  the
+         whole angle will be negative.)
+
+   <GO>  ZERO DEFLECTION:  This is a traverse similar to the <DF>,  ex-
+         cept you are going to continue on the same heading, (zero  de-
+         flection  angle).   This  saves  you several key strokes, and
+         you only have to key in the distance.
+
+   <BK>  BACKSIGHT:  This is a traverse similar  to  the  <DF>,  except
+         this time the telescope is sighted on the previous point, i.e.
+         the point from which you arrived at the point `where you are'.
+         Enter <BK> to initiate this routine. This means that  you  are
+         starting from  a heading exactly 180 degrees from your current
+         heading. As in <DF>, you turn whatever angle you wish for  the
+         new  heading. Again the same convention applies as regards the
+         sign of the angle.
+
+   <BT>  BACKTRACK: This is a "backsight" with  zero  deflection,  and,
+         like <GO>, requires only a distance datum.
+
+   <TR>  TRAVERSE OF CURVE:  A routine initiated with the command <TR>.
+         This  curve  begins  at  a  `PC' and terminates at a `PT', and
+         finds a `PI' on the way. You have arrived at the `PC' with  an
+         established  HEADING.  You  will arrive at the `PT' with a new
+         HEADING. The program will ask you for the BEARING at  the  PT.
+         The  answer  to  this  will  depend upon what is known. If the
+         delta angle of the curve is given, you may enter it as  a  de-
+         flection  angle.  One more piece of data is needed; COGO gives
+         you the option of providing RADIUS, TAN  or  CHD.  It  depends
+         on your design objectives as to which one you want to specify.
+         COGO will then carry you through the calculations,  requesting
+         the  assignment  of  point  numbers for the PI and the PT, and
+         calculating and displaying the CURVE PARTS.
+
+   <SC>  INSCRIBE CURVE:     A routine initiated with the command <SC>.
+         This is similar to the preceding routine, except this time the
+         point `where you are' is at the PI. This routine  is  probably
+         more useful to the subdivision designer, since  he  will  most
+         likely lay out  the  street  centerlines  first,  finding  the
+         intersection  points,  and  then  fit in the curves later. The
+         steps are much the same as before, but this  time  the  PC  is
+         calculated for you.
+
+
+                                      COGO                      page 8.
+
+   <IN>  INVERSE CURVE:      A routine initiated with the command <IN>.
+         This  computes  a curve between two points, the PC and the PT,
+         both  of which are known. The PC is `where you are'; The PT is
+         where you are going. If the curve is to be tangent to the line
+         of  the  previous  heading,  no  further data is required; you
+         merely answer `No' for RADIUS or TAN input.  The  calculations
+         proceed the same as for the other curve routines.
+
+   <CU>  CUL-DE-SAC:         A routine initiated with the command <CU>.
+         This is essentially an INVERSE CURVE routine, except  that  it
+         is  the  long curve through the two chosen points. You proceed
+         the same as for <IN>.
+
+         CONTROL POINT: Intersections involve two  lines:  one  through
+         the  point `where you are' and one through another point. This
+         OTHER point, in each case, I call the CONTROL POINT.
+
+   <BB>  BEARING-BEARING INTERSECTION: initiated with the command <BB>.
+         Here you enter BEARING #1, then you are going to  continue  on
+         the  same  heading  an unknown distance. Then you are going to
+         turn onto BEARING #2, passing through the CONTROL  POINT.  The
+         CONTROL  POINT  must  be  a known point with a known Point No.
+         Optionally, the BEARINGS  can  be  supplied  either  as  given
+         BEARINGS, DEFLECTION ANGLES or BACKSIGHTS.
+
+   <BD>  BEARING-DISTANCE INTERSECTION:   start using the command <BD>.
+         This  routine proceeds pretty much like <BB>, except this time
+         there exists the possibility of  two  different  answers.  The
+         distance  in  this  case is the distance from the intersection
+         point to the CONTROL POINT which is on  a  radius  that  could
+         swing  around  and intersect our bearing in two places. There-
+         fore you must be prepared to decide on the longer distance  or
+         the  shorter one. You also have the DEFLECTION ANGLE and BACK-
+         SIGHT options as before.
+
+   <DD>  DISTANCE-DISTANCE INTERSECTION:  start using the command <DD>.
+         This time all the BEARINGS  are  unknown.  You  are  asked  to
+         supply  DISTANCE  #1, DISTANCE #2 and the CONTROL POINT.  Here
+         again there is  the  possibility  of  two  different  answers,
+         depending  upon  whether  the desired intersection lies to the
+         RIGHT or LEFT of your line of sight toward the CONTROL  POINT.
+         Caution!  Don't  press  <ENTER> until after you have selected
+         the PI point number.
+
+   <SS>  SIDE-SHOT: initiate this series with the  command  <SS>.  This
+         permits  you to make a series of shots from the same point and
+         the same current heading, without losing  your  place  in  the
+         main  traverse.  The side-shot condition will remain in effect
+         until you cancel it.
+
+   <XS>  CANCELS the side-shot condition.
+
+
+
+
+   <SA>  SLOPE ANGLE:      initiate this routine with the command <SA>.
+         This is an infrequently used  routine.  All  maps  and  survey
+         plats  are  drawn depicting the land reduced to a single level
+         plane. When steep grades are encountered, then  the  distances
+         can  be  measured  on  the  slope, and the slope angle also is
+         measured. When the plat is drawn, however, the horizontal dis-
+         tance must be calculated. This is what  is  accomplished  with
+         the  <SA>  routine, to be completed when HORIZONTAL bearing is
+         requested.
+
+   <ZD>  ZENITH DISTANCE:  initiate this routine with the command <ZD>.
+         This  is  just  another  form  of  the slope angle. In certain
+         theodolites the vertical circles are calibrated to measure the
+         angle  from  the  zenith  rather than from the horizontal, and
+         then  they call it ZENITH DISTANCE rather than SLOPE ANGLE. If
+         you are using such an instrument, then use the <ZD> command.
+
+   <RV>  REVISE A CALL:    initiate this routine with the command <RV>.
+         If you discover that you mistakenly entered  the  wrong  datum
+         at some point in a long series of traverses, and if the effect
+         has  been  to  translate  a  series of later points, then this
+         routine may help you to correct for the  error  without  going
+         back and repeating the later points. However the error must be
+         one  of only translation. We cannot correct for rotation. COGO
+         tells you how to do it.
+
+
+                                    C O G O                    page 10.
+
+                   * * * * NOTES & TIME SAVING TIPS: * * * *
+
+     1.- The text file  BALANCE.DOC  on  this  same  disk  describes  a
+         convenient  method for using the power of COGO to balance your
+         survey.
+
+     2.- FUNCTION  KEYS:  The  `key bar' displayed at the bottom of the
+         screen shows 10 command codes:
+
+     F1=NW  F2=AZ  F3=SW  F4=SE  F5=BK  F6=DF  F7=BT  F8=GO  F9=CL  F10=SAVE
+
+         which it will be convenient to use as single stroke  commands.
+         There  are only 10 spaces available; the ones selected are the
+         ones you will probably use most frequently.  However, you have
+         the  option  of entering any of them from the keyboard just as
+         well.  (AZ is equivalent to NE.)
+
+     3.- ESC  KEY:   The `ESC' key is handy for canceling mistaken data
+         entries. Try it!
+
+     4.- In  the <BB>, <BD>, <SC>, <SA> and <ZD> command routines, when
+         COGO asks for a 1st BEARING ANGLE, and if  there  is  a  known
+         established point in the right direction from the point `where
+         you  are',  you may enter the known point number, instead of a
+         bearing. COGO then makes the calculation as it  would  for  an
+         inverse  traverse, and uses the calculated bearing to complete
+         the commanded traverse. This utilizes a portion of the INVERSE
+         TRAVERSE routine; it turns to  the  indicated  heading,  while
+         remaining at the starting point.
+
+     5.- You may occasionally see a flashing warning: [ INDETERMINATE ]
+         when  running an intersection calculation or an inverse curve.
+         This means that the data you have entered will not produce  an
+         intersection,  or will not connect up with the points that you
+         have specified.
+
+     6.- Should  you wish to temporarily revert to  the  DOS  operating
+         system without losing COGO, use the <SHELL> command.  Try  it;
+         COGO will make it plain.  (COMMAND.COM must be available.)
+
+     7.- With  your  printer  turned  on and loaded with paper, you can
+         make a hard copy of your work by toggling the printer on  with
+         the <Ctrl+PrtSc> key command.  This same command turns it off.
+
+                                   DISCLAIMER
+
+         I'm  sure  you  understand; COGO.EXE is provided on an "as is"
+         basis. Any damages arising from the use of  this  program  are
+         entirely the responsibility of the user; i.e. the author, Carl
+         M. King, cannot be held responsible for any damages.
+
+         THIS HAS BEEN A LABOR OF LOVE. I HOPE YOU WILL RECIPROCATE AND
+         LET ME HAVE SOME INDICATION OF YOUR APPROVAL.
+
+                                       Sincerely,
+
+                                                   Carl M. King
+
+```
+{% endraw %}
+
 ## EQUAT.BAS
 
+{% raw %}
 ```bas
 110 Y=X
 ```
+{% endraw %}
 
 ## ESOLVE.BAS
 
+{% raw %}
 ```bas
 100 GOTO 130
 110 Y=X
@@ -196,33 +760,112 @@ machines:
 1420 GOSUB 360:LOCATE 12,26:COLOR 3,0:PRINT "PLEASE CORRECT SYNTAX ERROR":LOCATE 15,3:PRINT "YOUR EQUATION WAS:":LOCATE 16,3:PRINT U$+EQ$:COLOR 6,0:LOCATE 6,18:PRINT STRING$(57,32):LOCATE 7,3:PRINT STRING$(75,32):EQ$="":RETURN
 1430 LOCATE I,24:COLOR 3,0:PRINT "division by 0 occured at X = ";X:COLOR 6,0:FLG=1:RETURN
 ```
+{% endraw %}
 
 ## FCT1.BAS
 
+{% raw %}
 ```bas
 2390  Y = SIN(X)
 ```
+{% endraw %}
 
 ## FCT2.BAS
 
+{% raw %}
 ```bas
 2410 A = 3*COS(B)
 ```
+{% endraw %}
 
 ## FCT3.BAS
 
+{% raw %}
 ```bas
 2450 X = A*COS(6*A)
 ```
+{% endraw %}
+
+## FILE1013.TXT
+
+{% raw %}
+```
+Disk No: 1013
+Program Title:  COGOWARE version 5.3b and PLOT version 3.0
+PC-SIG version:  1.6
+
+Here are two hot programs for engineers, drafters, or anyone who is
+interested in technical drawing on their computer.
+
+COGOWARE is a coordinate geometry surveying program for plat designers.
+The main use of the program is to calculate coordinates of each point in
+the plane of the survey and of each point calculated by the plat
+designer.  Each pair of coordinates is assigned a point number by the
+designer as the calculations progress.  These designated coordinates are
+saved in batches of 100 points to a disk file.  Any designated point may
+be recalled, and the survey extended as the design progresses.  All
+calculations are carried out in double precision.
+
+PLOT is a set of quick, easy-to-use tools for technical plotting.  It
+can handle rectilinear, polar, and vector plotting.  After plotting, you
+can review a tabulation of all plotted points (except for the vector
+program).
+
+Usage:  Surveying and Math.
+
+Special Requirements:  CGA card, and a version of BASIC for PLOT.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $10.00 for COGO, $25.00 for PLOT.
+
+File Descriptions:
+
+-------- ---  COGO
+COGO     EXE  Main program.
+COGO     DOC  Documentation.
+README   1ST  Program introduction.
+README   BAT  Batch file to view README.1ST.
+WHATS    NEW  Outlines the updated material.
+XPLAINS  TXT  Introductory text file.
+BALANCE  DOC  Text file.
+-------- ---  PLOT
+README   DOC  Documentation for PLOT.
+HLP3     BAS  Help file accessed from PLOTM.BAS.
+IPLOT    BAS  Program for plotting Y=f(X) type equations.
+SPLOT    BAS  Program for plotting two simultaneous equations.
+PPLOT    BAS  Program for polar plotting.
+VPLOT    BAS  Program for vector plotting.
+PLOTM    BAS  Contains the plot menu.
+PLOG     BAS  Opening screen file.
+FUNCT    BAS  Data files containing user defined.
+FCT1     BAS  DATA FILE.
+FCT2     BAS  DATA FILE.
+FCT3     BAS  DATA FILE.
+PLIC     BAS  License statement.
+EQUAT    BAS  Small basic program.
+ESOLVE   BAS  Equation solver.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
 
 ## FUNCT.BAS
 
+{% raw %}
 ```bas
 2060 Y=SIN(X)
 ```
+{% endraw %}
 
 ## HLP3.BAS
 
+{% raw %}
 ```bas
 100 'HLP3 - PLOT HELP PGM. - V 1.0 - Copyright 1985 Prowess, Inc.
 110 SCREEN 0,0:CLS:KEY OFF:COLOR 6,0
@@ -439,9 +1082,11 @@ machines:
 2240 LOCATE 22,54:P$=INKEY$:IF P$="" THEN 2240
 2250 GOTO 340
 ```
+{% endraw %}
 
 ## IPLOT.BAS
 
+{% raw %}
 ```bas
 100 'IPLOT - RECTLINEAR F(X) PLOT WITH INTEGRATION  -- revision date 07/05/88
 110 'COPYRIGHT 1985,1986,1987,1988 Prowess, Inc.
@@ -715,9 +1360,11 @@ machines:
 2790 LOCATE 21,25:K$=INKEY$:IF K$="" THEN 2790
 2800 GOSUB 530:GOTO 330
 ```
+{% endraw %}
 
 ## PLIC.BAS
 
+{% raw %}
 ```bas
 100 'PLIC  -- Prowess, Inc. license agreement 12/17/87
 110 CLS:CLEAR:SCREEN 0,0
@@ -741,9 +1388,11 @@ machines:
 290 LOCATE 23,52:F$=INKEY$:IF F$="" THEN 290
 300 COLOR 7,0:SYSTEM
 ```
+{% endraw %}
 
 ## PLOG.BAS
 
+{% raw %}
 ```bas
 100 'PLOG - LOGO, LICENSE (COLOR SYS)  -  VERSION 3.0 -- 8/02/88
 110 ' COPYRIGHT 1985,1986,1987,1988 Prowess  inc.
@@ -806,9 +1455,11 @@ machines:
 680 CHAIN "PLOTM
 690 END
 ```
+{% endraw %}
 
 ## PLOTM.BAS
 
+{% raw %}
 ```bas
 100 'PLOTM PROGRAM MENU -- VERSION - 3.0 -- 08/02/88
 110 'Copyright 1986,1987,1988  PROWESS, Inc.
@@ -847,9 +1498,11 @@ machines:
 440 BEEP:GOTO 100
 450 GOTO 100
 ```
+{% endraw %}
 
 ## PPLOT.BAS
 
+{% raw %}
 ```bas
 100 'PPLOT - POLAR PLOTTING PROGRAM  - 08/02/88 update
 110 'Copyright 1985,1986,1987,1988 Prowess, Inc.
@@ -1150,9 +1803,348 @@ machines:
 3060 LOCATE 21,30:K$=INKEY$:IF K$="" THEN 3060
 3070 GOSUB 350:GOSUB 370:GOTO 390
 ```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+
+Readme.doc
+
+
+                             PLOT -- DOCUMENTATION
+
+
+                            PLOT-- LICENSE AGREEMENT
+		  Copyright 1985,1986,1987,1988 Prowess, Inc.
+
+
+     This is a user supported software product.  It is not public domain
+     software, nor is it free software. You are granted a limited license
+     to use this product on a trial basis.   If you continue to use this
+     product after a trial period, you are expected to register by sending:
+
+	   $25 (Minimum reg.)	       or	 $39 (+ $4 S/H) (Full reg.)
+
+           * Technical support                   *  Technical support
+           * Update notification                 *  Latest diskette
+						 *  Shareware plea removed
+
+		 Texas residents, please add 8% sales tax
+
+         Contact us for information concerning low cost site licenses.
+
+     If you like the shareware concept - try before you buy - please support the
+     companies that provide useful, professional quality products.
+
+       Prowess,Inc. -  203 Lakeridge Village - Suite 102 - Dallas  75238
+
+                               (214) 349-4718
+
+
+     You are encouraged to distribute copies of this software providing
+     that you make no modifications to any of the files and that the copy
+     that you distribute, regardless of the means of distribution, contains
+     all files that came on your product diskette.
+
+                                   DISCLAIMER
+                                   ----------
+
+     This software product and associated instructional material are sold
+     "as is" without warranty as to their performance, accuracy, freedom
+     from error, merchantability or fitness for any particular purpose.
+     The entire risk as to the performance of the software is assumed by
+     the user.
+
+     Under no circumstances, whether in contract or tort, shall Prowess,
+     Inc. be liable for indirect, consequential, special, or exemplary
+     damages such as, but not limited to, loss of revenue or anticipated
+     profits, lost business or other economic loss, arising out of, or
+     in connection with this agreement, or your use, or inability to use
+     any program or sub-program associated with this software product.
+
+          ------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+                                    CONTENTS
+
+                        * File descriptions
+
+                        * Minimum system requirements
+
+                        * Introduction
+
+                        * Working diskette preparation
+
+                        * Loading/running the plot programs
+
+                        * General information about these programs
+
+                        * Other Prowess, Inc. shareware products
+
+          ----------------------------------------------------------------
+
+                               FILE DESCRIPTIONS
+
+          The following files are contained on your product diskette:
+
+ README.DOC                     This file. Documentation for PLOT
+
+ HLP3.BAS                       Help file accessed from PLOTM.BAS. Provides
+                                the most detailed information on all plot
+                                programs.
+
+ IPLOT.BAS                      Program for plotting Y=f(X) type equations.
+                                It also provide integration capability to
+                                find the area under a curve.
+
+ SPLOT.BAS                      Program for plotting two simultaneous
+                                equations.
+
+ PPLOT.BAS                      Program for polar plotting.
+
+ VPLOT.BAS                      Program for vector plotting.
+
+ PLOTM.BAS                      Contains the plot menu. Calls the available
+                                plotting programs and help file.
+
+ PLOG.BAS                       Opening screen files - logo, etc. Calls
+                                PLOTM.BAS.
+
+ FUNCT.BAS                      Data files containing user defined
+ FCT1.BAS                       equations. These files are automatically
+ FCT2.BAS                       generated when you use the plotting
+ FCT3.BAS                       programs. These file are generated as a
+                                result of running the plotting programs.
+                                They may or may not be present on your
+                                product diskette.
+
+ PLIC.BAS                       License statement.
+
+             --------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+                          MINIMUM SYSTEM REQUIREMENTS
+
+      * IBM-PC or 100% compatible                    * CGA graphics
+
+      * BASICA (or equivalent, GW-BASIC, etc.)       * 64K RAM
+
+      * DOS 2.1 or above                             * 1 Floppy drive
+
+                   -------------------------------------------
+
+                                  INTRODUCTION
+
+ This program set is designed to provide a quick, easy to use, set of tools
+ for technical plotting. It will handle rectilinear, polar and vector
+ plotting. After plotting, you may review a tabulation of all plotted points
+ (except for the vector program).
+
+ These programs were written in BASICA to take advantage of a unique BASICA
+ capability - the CHAIN MERGE feature. When you enter an equation to be
+ plotted, you may enter it just as you would write it on paper. The
+ program accepts your equation as a string variable, appends your equation
+ to a string that defines a line number then writes the whole string to a
+ file (FCT1.BAS for example). This file is then CHAIN MERGED with the
+ program itself and your equation becomes an executable line of code,
+ complete with a line number in the program. Unfortunately, existing
+ compilers can not compile the CHAIN MERGE statement.
+
+ We felt that being able to enter the equation in standard equation format was
+ so important that we have released these programs in BASICA.  No other
+ language that we know of allows a chain-merge-like function and writing the
+ function in another language would be a formidable task. Chalk one up for
+ BASIC! Although not extremely fast, we think that you will find the plotting
+ speed of these programs satisfactory.
+
+ SPECIAL NOTE: Because of the technique mentioned above, you will render
+               these programs INOPERATIVE IF YOU RENUMBER THE LINES !!!
+
+ There is a master help file accessable from the main menu (HLP3.BAS). It is
+ a separate program that describes each program in detail. It is your best
+ source of information about program specifics.
+
+ In addition to HLP3.BAS, each program contains a brief help (or
+ instruction) section for quick reference.
+
+                  -----------------------------------------------
+
+                            MAKE A WORKING DISKETTE
+
+ Protect your investment; make a working copy of your PLOT product diskette
+ now!
+
+		1. Format a new diskette
+
+		   Example:  FORMAT B:
+
+                   (Assumes system diskette in drive A and new diskette in
+                   drive B.)
+
+
+
+
+
+
+
+
+		2. Copy your BASICA.COM to the working diskette.
+
+			       COPY BASICA.COM B:
+
+                   If your system uses a different advanced BASIC,  you will
+		   need to copy it to the working disk.
+
+		   Example:    COPY GW-BASIC.EXE B:
+
+                3. Copy all files from your product diskette to the newly
+                   formatted diskette.
+
+		   Example:    COPY *.*  B:
+
+                   (Assumes product diskette in drive A and formatted diskette
+                   in drive B.)
+
+
+                4. Label your working diskette PLOT.
+
+                5. Put your PLOT product diskette in a safe place.
+
+
+          NOTE: If you are using a hard disk, set up a separate directory
+                for PLOT and start with step #2 above, substituting C: for
+                B:.
+
+            ------------------------------------------------------------
+
+                     LOADING AND RUNNING THE PLOT PROGRAMS
+
+ Put your working diskette in drive A (or get into the PLOT directory if
+ you are using a hard disk). Enter:
+
+			   BASICA PLOG	<return>
+
+		   or	   GW-BASIC PLOG <return> (if your system uses
+						   GW-BASIC)
+
+
+
+ Pressing any key from the logo screen will display the Prowess, Inc.
+ license statement. Pressing any key at this point will call the main menu.
+
+ From the main menu, you may select any of the plotting programs. We strongly
+ suggest that you review the main help file (accessable from the main menu)
+ before operating the programs.
+
+ NOTE: If your DOS operating system contains a utility called GRAPHICS.COM
+ (DOS 2.1 and greater), you may want to load it prior to running the PLOT
+ programs. With GRAPHICS.COM memory resident, you can print the graphs
+ produced by the PLOT package on most wire dot printers by simply pressing
+ <shift-prtSc>. You can load GRAPHICS.COM by entering: GRAPHICS <return> from
+ your system disk.
+
+                 -------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+                              GENERAL INFORMATION
+
+ BASIC is rather unforgiving about comma errors; if you enter a period
+ instead of a comma or fail to put a comma where the program is expecting
+ one, you will see a 'REDO FROM START' error message. If this occurs, you
+ can usually recover by re-entering the data correctly AT THE CURRENT
+ CURSOR POSITION. If you try to move the cursor before correcting your
+ entry, you'll make things worse! In most cases the messy screen will be
+ redrawn when the function is plotted. Specifying the range of X over
+ which to plot, the range of X over which to integrate, and inputting
+ vectors (in both rectangular and polar formats) require entries in the
+ form of M,N. The comma is a requirement!!
+
+ BASICA does not allow error trapping 'division by zero' and 'overflow'
+ (a floating point overflow). Some BASICA equivalents do allow trapping
+ these errors. Error trapping statements exist in the programs to detect
+ these errors; however, they won't operate on the IBM-PC. They will work
+ properly on some clones that use a different advanced BASIC. If you get
+ either of these error messages, from the system, you will have to restart
+ the program. Most syntax errors are trapped and the error traps should
+ work.
+
+ Entering a single 'Q' (for 'quit') and pressing return, at most user inputs,
+ will halt the current operation and display the exit screen.
+
+                ------------------------------------------------------
+
+
+      If you like this program set, try our other Prowess , Inc. shareware
+      tools:
+                                                                     
+                                                                     
+	    * $PRO - financial programs (ammortization, etc.)
+	    * AUTOMATED PLANNING FORM - excellent planning tool!!!!
+	    * UNITS - units conversions (incl. systems of units)
+	    * PROMENU - elegant, small, FULL-FEATURED menu system
+	    * DOSPRO - access to DOS commands from plain-English
+                                                                     
+      Prowess, Inc. shareware program sets are carried by PC-SIG and other
+      major shareware distributors and many bulletin boards.
+                                                                     
+      Our non-shareware products include FRONT LINE MANAGER, a complete
+      cost forecasting system that includes material tracking. $245
+                                                                     
+      DESIGNER SERIES -A large (1.2BM) technical resource that includes:
+                                                                     
+               * Project planning                                    
+	       * Circuit design (both DC and AC) - extensive!
+               * Magnetics design                                    
+               * Complete function plotting (polar, rect., vectors)  
+	       * Math utilities (complex numbers, line equations, etc.)
+               * Units conversions                                   
+               * Geometry calculations                               
+	       ..over 65 menu selectable programs - on-screen help files
+                                                                     
+	       A productivity tool for senior engineers, yet simple enough
+	       for technicians and technical students.
+
+               CGA graphics required for many programs               
+			   ......  Call for price  ......
+
+
+
+```
+{% endraw %}
 
 ## SPLOT.BAS
 
+{% raw %}
 ```bas
 100 'SPLOT - SHAREWARE SIM. EQ. PLOTTING PROGRAM  - revision date: 08/02/88
 110 'Copyright 1985,1986,1987,1988 Prowess, Inc.
@@ -1441,9 +2433,11 @@ machines:
 2940 IF K$="Q" OR K$="q" THEN 2520
 2950 GOSUB 350:GOTO 430
 ```
+{% endraw %}
 
 ## VPLOT.BAS
 
+{% raw %}
 ```bas
 100 'VPLOT - VECTOR PROGRAM - Revision date: 08/02/88
 110 'COPYRIGHT 1986,1987,1988, Prowess, Inc.
@@ -1663,6 +2657,36 @@ machines:
 2250 IF QT=3 THEN CLS:COLOR 7,0:CHAIN "PLIC
 2260 BEEP:GOTO 2200
 ```
+{% endraw %}
+
+## XPLAINS.TXT
+
+{% raw %}
+```
+                                                                 01/20/89
+                          EXPLANATION OF FILES ON DISK
+
+       The  family  of  files to be distributed as SHAREWARE on this disk
+       should be distributed as a package.  A good name for  the  package
+       would  be:   COGOWARE,  and  I would be pleased if this convention
+       were followed.  The files that should go together are as follows:
+
+       COGO.EXE (version 5.3) is the  executable  program  that  performs
+       surveying  calculations.   The  name COGO is taken from CoOrdinate
+       GeOmetry.   This latest version is dated 12/24/88 in the disk dir-
+       ectory, hence there should be no reason to  confuse  it  with  any
+       earlier version.
+
+       COGO.DOC  and  BALANCE.DOC  are ASCII files comprising the user's
+       manual documentation (version 5.3b), and  instructions  for  `bal-
+       ancing the survey', of interest to land surveyors.
+
+       README.1ST is an ASCII file being a short starting instruction.
+
+       WHATS.NEW  is  an  ASCII file telling what is new in this up-date.
+       This is an optional file, and you may include it at your option.
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

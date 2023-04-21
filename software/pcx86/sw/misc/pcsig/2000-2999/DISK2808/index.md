@@ -14,6 +14,36 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2808.TXT
+
+{% raw %}
+```
+Disk No: 2808                                                           
+Disk Title: *DAYO Order Entry                                           
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: DAYO Order Entry                                         
+Author Version: 3.0                                                     
+Author Registration: $45.00                                             
+Special Requirements: 530K RAM, hard drive, DOS 3.3, & PC-SIG #2402-2403.
+                                                                        
+DAYO ORDER ENTRY creates sales orders based on the DAYO Inventory,      
+Customer, and other DAYO databases. Orders can be printed on a standard 
+printer or a Hewlett Packard (tm) Laserjet compatible printer. The order
+can be printed on a pre-printed form, on the Laser printer in a special 
+laser format, or as a standard/default form.                            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2808
 

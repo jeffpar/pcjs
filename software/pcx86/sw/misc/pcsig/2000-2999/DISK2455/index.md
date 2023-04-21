@@ -41,6 +41,59 @@ machines:
     game so you can play at a later time.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2455.TXT
+
+{% raw %}
+```
+Disk No: 2455                                                           
+Disk Title: Windows Board Games                                         
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Puzzle                                                   
+Author Version: 1.0                                                     
+Author Registration: $5.00                                              
+Special Requirements: Windows 3.0                                       
+                                                                        
+This program is a sliding tile PUZZLE game that you can play with the   
+mouse or keyboard.  In order to complete a scrambled image, the player  
+slides tiles up and down or sideways.  The first tiles are easy to      
+place, but as you get to the last tiles, it becomes harder.  There are  
+three levels of play to keep you interested, and new images can be      
+imported to make new puzzles.                                           
+Program Title: Checkers                                                 
+Author Version: 1.1                                                     
+Author Registration: None.                                              
+Special Requirements: Windows 3.0                                       
+                                                                        
+Nothing fancy about this one, it's just good old fashioned CHECKERS.    
+But now you have a computer partner to help you pass an idle afternoon. 
+The game can be played with either one player or two, and it has five   
+levels of difficulty.                                                   
+Program Title: Taipei                                                   
+Author Version: 3.10                                                    
+Author Registration: $10.00                                             
+Special Requirements: Windows 3.0                                       
+                                                                        
+TAIPEI is an ancient oriental game of skill and chance.  The game is    
+played on a board and the object is to remove matching tiles.  It is    
+much harder than it sounds as the board can be up to five tiles deep,   
+and you will not always have a matching tile easily available.  The game
+has two modes, easy and expert.  Beginners will appreciate the hint     
+function to get them going, and experts can play the more than 60,000   
+different game boards for a real challenge.  You can also save your     
+game so you can play at a later time.                                   
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2455
 

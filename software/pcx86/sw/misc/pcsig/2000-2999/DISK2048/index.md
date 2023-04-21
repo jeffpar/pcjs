@@ -53,6 +53,96 @@ machines:
     codes, each up to 25 characters long.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## EXAMPLE.DOC
+
+{% raw %}
+```
+This document will give you an idea as to how PMACRO works and how it will
+make your printer be more productive.  It is being written with an editor
+that has no printer control commands.  All control codes that eventually
+reach the printer will be as a result of PMACRO.  The control codes
+that I will use are in the file "FX80MAC.PRN", which was created with PMACRO.
+Since that file is for an Epson FX80 printer, you will have to load it into
+PMACRO and redo the control codes if you have a different printer.  You would
+then execute RPMACRO, passing either FX80MAC.PRN or the file you created as
+a command line argument.  Once RPMACRO is resident in RAM, simply enter at the
+DOS prompt "type example.doc > prn" and press the return key.  Compare the
+output from the printer with this file and you will understand what PMACRO can
+do for you.  Now let's show you what PMACRO can do.
+
+It is impossible for some word processors (Wordstar, for instance) to switch
+to Italics inside a document.  With PMACRO, it's as easy as this:
+~italic on~This text is now being printed in italics.  Let's change back to regular
+print now.~italic off~  How about some underlining??  Simply surround the descriptive
+phrase that you set up in PMACRO with the trigger key, and you have
+underlining! ~ul on~ And this is what you get.~ul off~  Have you ever wanted to switch to
+compressed mode from within a document?  That's easy too!
+
+~comp on~Here is an example of what that would look like.  Any mode that is supported
+by your printer can be accessed.  You are no longer at the mercy of your word
+processor.  Now, back to standard print.~comp off~
+
+Printers are getting more sophisticated all the time.  New laser printers
+with many different fonts are hitting the market.  However, these new features
+can not be used until the word processor manufacturers support the new control
+codes - until now.  PMACRO will allow you to send any control code (25 
+characters in length or less) to any printer.
+
+Note that if you put a phrase that is not in the file in your document, it
+will print out normally.  Like this - ~elite on~
+Also note that if you forget to include the ending trigger character, no
+control codes will be sent to the printer.  Instead the text will appear
+as is.  ~elite offThis should make it simple for you to debug any problems you might
+encounter.  In short, if the sequence prints out, something is wrong and
+your phrase is not getting translated.
+
+```
+{% endraw %}
+
+## FILE2048.TXT
+
+{% raw %}
+```
+Disk No: 2048                                                           
+Disk Title: WARP-TEN and PRINT-matic                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: WARP-TEN and PRINT-matic                                 
+Author Version: 2.00/                                                   
+Author Registration: $20.00 each.                                       
+Special Requirements: Hard drive for WARP-TEN.                          
+                                                                        
+Cache in on better speed and flexibility with WARP-TEN.  WARP-TEN is a  
+programmable disk cache for speeding up the relatively slow I/O that    
+most applications perform with disk drives.  Borrowing a technique      
+from the world of mainframes and minicomputers, the basic idea is to use
+part of the PC's memory as buffers to store the more frequently used    
+disk data.  Thus, when your application calls for this data, the cache  
+program speedily retrieves it, increasing the speed of your programs by 
+an average of 25 percent.                                               
+                                                                        
+A separate statistics program called WARPSTAT is also included that     
+gives you feedback on WARP-TEN's performance                            
+                                                                        
+PRINT-MATIC alleviates the hassle of sending setup control codes to your
+printer.  With PRINT-MATIC, you can press a pre-defined hot key inside  
+any application, and a window pops onto the screen from which one of the
+16 user-defined control codes may be sent to the printer.  This same    
+program also includes 100 macros that will access printer features you  
+couldn't use before.  PRINT-MATIC will work inside most application     
+programs.                                                               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2048
 

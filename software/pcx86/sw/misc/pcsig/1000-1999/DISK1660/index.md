@@ -51,6 +51,47 @@ machines:
     accuracy and decreased data entry time.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1660.TXT
+
+{% raw %}
+```
+Disk No: 1660                                                           
+Disk Title: Track Man Thoroughbred Challenge                            
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: Track Man Thoroughbred Challenge                         
+Author Version: 6.0                                                     
+Author Registration: $25.00                                             
+Special Requirements: 310K RAM, and hard drive.                         
+                                                                        
+TRACK MAN HANDICAPPING and DATABASE MANAGEMENT SYSTEM (THDBMS) is an    
+integrated computer program for handicapping and building a database for
+thoroughbred or standardbred (harness) races. THDBMS consists of a two  
+modules; a HANDICAPPER module and a DATABASE module (TDBMS). The        
+HANDICAPPER module not included in this shareware version, is designed  
+to aid the handicapper, novice to expert, in selecting horses having the
+best chance of finishing in the "money."                                
+                                                                        
+The DATABASE module included in the shareware version, provides a       
+variety of statistical data elements to be tracked including race date, 
+track name/race number, post position, jockey or driver name, finishing 
+time, distance, weight, finish last race, if claiming race, jockey or   
+driver rating, times in the money, speed factor, names of winning, place
+and show horse, prices paid, and finishing position.  You can add,      
+delete, modify, edit and search records in the database and track your  
+own predictions for  win, place, show and speed horses.                 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1660
 

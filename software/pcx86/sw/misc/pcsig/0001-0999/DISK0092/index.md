@@ -55,8 +55,74 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #92, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  PATTERNS.BAS         CRC = E7 06
+
+--> FILE:  SOUNDEMO.BAS         CRC = 9E 1A
+
+--> FILE:  TWINKLE .BAS         CRC = 05 B8
+
+--> FILE:  MUSIC   .BAS         CRC = 12 4E
+
+--> FILE:  MUSIC   .DAT         CRC = 77 84
+
+--> FILE:  NAMCNV  .TXT         CRC = ED AD
+
+--> FILE:  QDCOPY  .DOC         CRC = EA 3D
+
+--> FILE:  RACE    .BAS         CRC = D9 F9
+
+--> FILE:  RUBIC3  .BAS         CRC = 94 0A
+
+--> FILE:  SCHROE  .DER         CRC = 4F 02
+
+--> FILE:  SQUARE  .BAS         CRC = DC F9
+
+--> FILE:  SQUARE  .DOC         CRC = A5 87
+
+--> FILE:  SQUARE  .SUM         CRC = E0 CE
+
+--> FILE:  STLOUIS .BBS         CRC = 3F 84
+
+--> FILE:  SW-PEG  .BAS         CRC = A1 4F
+
+--> FILE:  UPVC    .DOC         CRC = 7D A4
+
+--> FILE:  VCCOM   .DOC         CRC = CC 2B
+
+--> FILE:  GLOBE   .REF         CRC = 00 00
+
+ ---------------------> SUM OF CRCS = 37 89
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## MUSIC.BAS
 
+{% raw %}
 ```bas
 10 REM DSNAME = MUSIC.BAS
 20 REM This version completed on 6/20/82.  For comments and suggestions,
@@ -277,9 +343,95 @@ machines:
 2160 FOR I=50+I1 TO 110+I1 STEP 60:PUT(WHERE+4,I),FOUR%,OR:NEXT I:RETURN
 2170 FOR I=50+I1 TO 110+I1 STEP 60:PUT(WHERE+4,I),EIGHT%,OR:NEXT I:RETURN
 ```
+{% endraw %}
+
+## NAMCNV.TXT
+
+{% raw %}
+```
+
+Naming Conventions for Software Exchanges
+Anyone submitting software to user group software exchanges should follow a few
+standard conventions. Some of these conventions involve user documentation,
+program documentation, file names, and keyboard usage.  The following
+paragraphs describe these conventions:
+
+1. User Documentation:  Every program should have built-in documentation
+that tells the user the purpose of the program and the procedures to follow to
+use  the program. This documentation could be in the form of Help screens or
+detailed comments imbedded into the display formats. Help screens should
+be optional so the experienced user is not  hindered by the documentation
+display.  If user documentation cannot be imbedded into the program, then a
+documentation file should be included with the program.  This file should be a
+standard DOS file, which can  be viewed with the DOS TYPE command,  and  have
+the  same filename as the program and a filename extension of DOC.
+
+2. Program Documentation: One of the purposes of the software library is
+to provide programs that the novice programmer can use as an educational tool.
+This use of the library  can be enhanced if source code for those
+programs submitted is well documented.   A remarks section should be included
+at the begining of the program,  which contains the name of the program,  the
+author's name,  and a general description  of the program.   Documentation
+should also be included throughout the program so that the logic of the program
+may be more  easily followed.  Source code for BASIC programs should not be
+protected and  source code for compiled programs should be included with
+a filename extension indicating the language used.
+
+3. File Names: The use of file naming conventions can make manipulation
+of files on disks much simpler and  can  help inform the  user of the purpose
+or content of  the  file. The filename should reflect the purpose of the file
+and  be easily identified with related files.   For example, let's  assume
+that we have developed a database  system containing a BASIC  program for
+updating,  a  BASIC  program  for printing, a data file, a documentation file,
+and a batch file for invoking BASIC with the proper parameters.   These files
+could be named  DBASUPDT.BAS, DBASPRNT.BAS, DBASE.DAT, DBASE.DOC  and
+DBASE.BAT.   Using these names, we can easily identify all of  the files used
+by the database system, and the purpose of the  file.   Since the first
+4 characters of each of these  file names are the same, they can all be copied
+to another disk  by using  filename wildcard characters  (DBAS*.*)  in the copy
+statement.
+
+The recommended file name extensions are as follows:
+        - .DOC = Documentation or Instructions
+        - .TXT = General ASCII text file
+        - .BIN = Binary memory image such as created by BSAVE
+        - .DAT = Data file
+        - .ASM = Assembly language source
+        - .BAS = BASIC program
+        - .PAS = PASCAL source
+        - .FOR = FORTRAN source
+        - .COB = COBOL source
+        - .BAT = Batch file
+        - .HEX = Files in Hexadecimal
+        - .COM = Command files executable in DOS
+        - .EXE = Compiled programs executable in DOS
+     Some of the above filename extensions such as .BAT  are forced upon  us
+and are included here for informational purposes.  I am sure some extensions
+have been left out,  but this is at least a common starting point.
+
+4. Keyboard Usage: The user friendliness of all programs can be improved
+by using certain keys on the  keyboard consistently.  For example, the Escape
+key (Esc) should always be  used  to back out of or escape from  the function
+currently being  performed.  Since  there  are  far too many  keys  on  the
+keyboard  to discuss here,  I will refer you to section 3 of  the IBM
+Personal Computer Guide to Operations and Appendix C in  the Technical
+Reference manual.  These manuals provide keyboard usage conventions generally
+used by commercial software developers as  well.
+
+Following these 4 sets of conventions  whenever possible keeps practices
+uniform from one software developer to another and improves the quality and
+legibility of the software library.   Following conventions like these may take
+a little  extra time, but the long range benefits to the user and programmer
+are worth it.
+     In addition, you should avoid using  KILL or SAVE statements in your file
+unless they are required for execution of the programs. Many people get quite
+nervous with KILL statements in a file.
+```
+{% endraw %}
 
 ## PATTERNS.BAS
 
+{% raw %}
 ```bas
 10 ' Program: PATTERNS.BAS (Keyboard Kaleidoscope)
 20 ' Contributed to PC-SIG on 5 November, 1983
@@ -352,9 +504,46 @@ machines:
 690 IF CCC=32 THEN PRINT"b";:LOCATE R,C:RETURN
 700 PRINT CHR$(CCC);:LOCATE R,C:RETURN
 ```
+{% endraw %}
+
+## QDCOPY.DOC
+
+{% raw %}
+```
+The following was obtained from the Assembly Language HostComm run by 
+Bob Blackwell at (703) 425-7229, password = ibmpc. The system contains 
+lots of Assembly Language programs, hints, tips, and fixes. 
+. 
+.                              DOS   2.0 
+.                       DISKCOPY MODIFICATION 
+. 
+.     THIS DEBUG DESCRIPTION IS FOR THE EXPERIENCED PROGRAMMER. 
+.THIS WILL ELIMINATE THE QUESTIONS AT THE START AND END OF DISKCOPY.COM 
+.TO ALLOW THE PROGRAM TO RUN WITHOUT OPERATOR INTERVENTION. 
+. 
+.USING DOS DEBUG: 
+. 
+.A>DEBUG DISKCOPY.COM 
+.-E 214 
+.38E3:0214 E8.CD 1A.20 04.90<ENTER> 
+.-E 5C0 
+.38E3:05C0 E8.90 ED.90 FF.90 <ENTER> 
+.-E 5C7 
+.38E3:05C7 E8.90 
+.38E3:05C8 E6.90 FF.90<ENTER> 
+.-E 5CE 
+.38E3:05CE E8.90 DF.90 
+.38E3:05D0 FF.90 E8.90 E3.90 FF.90<ENTER> 
+.-W 
+.WRITING 098C BYTES
+.-Q
+
+```
+{% endraw %}
 
 ## RACE.BAS
 
+{% raw %}
 ```bas
 0 ''LIST 0,65000
 1 GOTO 60000
@@ -454,9 +643,11 @@ machines:
 60460 LOCATE 4,1
 60470 END
 ```
+{% endraw %}
 
 ## RUBIC3.BAS
 
+{% raw %}
 ```bas
 1 CLS
 10 PRINT "INSTRUCTIONS"
@@ -741,9 +932,11 @@ machines:
 2780 PRINT "THANK YOU FOR PLAYING. "
 2790 END
 ```
+{% endraw %}
 
 ## SOUNDEMO.BAS
 
+{% raw %}
 ```bas
 10 ' Program: SOUNDEMO.BAS (Sound Demonstration Program)
 20 ' Contributed to PC-SIG on 5 November, 1983
@@ -917,9 +1110,11 @@ machines:
 1700 LOCATE 25,1:PRINT"                           ";:RETURN
 1710 LOCATE 25,1:COLOR 0,7:PRINT"<Press a function key...>";:COLOR 7,0:RETURN
 ```
+{% endraw %}
 
 ## SQUARE.BAS
 
+{% raw %}
 ```bas
 1 '                        T h e   S q u a r e  (tm)
 2 '                        -------------------
@@ -1374,9 +1569,234 @@ machines:
 10240 SCREEN 0: WIDTH 40: MONO=0
 10260 RETURN
 ```
+{% endraw %}
+
+## SQUARE.DOC
+
+{% raw %}
+```
+           T H E
+       S Q U A R E
+               Copyright (c) 1983 by:   David N. Smith,
+                              44 Ole Musket Lane,
+                              Danbury, Ct. 06810
+                              CompuServe: 73145,153
+       The Square                                                      Page 1
+       TABLE OF CONTENTS
+       1. DISTRIBUTION OF THE SQUARE..................................  2
+      2. THE CHALLENGE OF THE SQUARE.................................  3
+      3. YOUR GOAL...................................................  4
+      4. PRELIMINARIES...............................................  5
+      5. GETTING STARTED.............................................  6
+      6. PATTERNS....................................................  8
+      7. HINTS.......................................................  9
+      8. REFERENCES..................................................  10
+        The Square                                                      Page 2
+       1. DISTRIBUTION OF THE SQUARE
+        The Square is distributed following the "freeware" concept:
+      1) you may copy it freely for personal use but not for profit, nor as
+     a part of a package which is sold.  Give it away and encourage
+     others to do so also.
+      2) contributions of $20 can be made if you find the program
+     entertaining.
+      If you send a postage paid, self addressed, diskette and mailer to the
+     address above, the author will send a diskette with the program and
+     documentation.
+      If you send a postage paid, self addressed, diskette mailer with your
+     contribution of $20, the author will send a COMPILED version of The
+     Square.  The compiled version is significantly faster.
+        1.1. FILES WITH THE SQUARE
+       SQUARE.SUM        A summary of The Square.
+      SQUARE.BAS        The Square program itself.  It requires BASICA.
+      SQUARE.DOC        A longer document on The Square.  It contains
+                       more information including some hints.
+                       (This is what you are reading now.)
+      SQUARE.EXE        A compiled version of The Square which is available
+                       to those who contribute $20.  See above.
+        The Square                                                      Page 3
+       2. THE CHALLENGE OF THE SQUARE
+       The Square is a computer based puzzle similar in style to the magic
+     cube invented by Erno Rubic<1,3> and puzzles related to it<2>.  The
+     cube is a three dimensional object which can be turned in various
+     ways.  The Square is a two dimensional object which can be 'turned' in
+     a similar manner; with The Square, rows or columns of smaller squares
+     are 'slid' up, down, left, or right.  Small squares 'fall off' of one
+     end of the row or column and 'reappear' at the other end.
+      In 'solution' The Square has four sections of identical smaller
+     squares; each has nine small squares in a 3x3 configuration.  When
+     scrambled by the program The Square may have any color in any
+     position.  The goal is to return The Square to a solution, where each
+     set of nine identical colored blocks is together.
+      The program is self documenting; you can read how to load it in this
+     manual, load it, and start trying to solve it.  However, a review of
+     the contents of this manual may give a better starting point for
+     solving The Square and will increase the kinds of enjoyment you can
+     experience.
+        The Square                                                      Page 4
+       3. YOUR GOAL
+       The Square has 36 smaller squares, in four colors.  In solution, each
+     group of four colored squares occupies one corner of the bigger
+     square, taking a 3x3 portion of the 6x6 Square.  The Square is
+     initially scrambled by the program and your goal is to unscramble, or
+     solve, it; to return the little squares to corners of The Square.
+      There are two levels of difficulty: Hard and Harder.  In the Hard
+     level, each row or column of the square can be moved either direction
+     individually.  That is, a command may be given which moves a row right
+     or left one position with 'wrap around' of the square which gets
+     'pushed off' of the row.
+      In the Harder level, only pairs of adjacent rows or columns may be
+     moved.
+      The Hard level requires patience and time but should be solvable by
+     most adults and older children within an hour (more or less) of
+     starting, especially if they have some experience with a cube.
+      The Harder level requires patience and time but also requires some
+     techniques of manipulation similar to those needed to solve a cube.  A
+     section later in this manual gives some hints about how to approach
+     solving the Harder level.
+        The Square                                                      Page 5
+       4. PRELIMINARIES
+       The Square requires an IBM Personal Computer with at least 48K of
+     user's memory, a video monitor and a single diskette drive.  It uses
+     the IBM Disk Operation System (DOS).
+      Although it will operate satisfactorially on a Monochrome display, The
+     Square is displayed in full color on a color monitor or color TV set.
+        4.1. HOW TO LOAD THE SQUARE
+      To load The Square into your computer, proceed as follows:
+      1.  Load DOS according to instructions.
+      2.  If you have one diskette drive, remove the DOS diskette from the
+         drive and insert the diskette for The Square.  Type the command:
+         SQUARE
+          If you have two diskette drives, insert the diskette for The
+         Square into the second drive (the right one) and type the command:
+         B:SQUARE
+      3.  In a moment the square program will start.  Have fun!
+        The Square                                                      Page 6
+       5. GETTING STARTED
+       Once the program is loaded, the computer will display:
+          HIT ANY KEY TO CONTINUE
+         Hit '?' for instructions at ANY time
+      The computer will then display:
+          Type a space for a hard puzzle
+         Type any other key for a harder puzzle
+         Hit ? for instructions at ANY time
+      For your first few times, it is best to press the space bar to get the
+     simpler puzzle.
+      The computer will then display:
+          Square being scrambled ...
+      and will pause a few seconds.  The scrambled square will then be
+     displayed.  It will be scrambled differently EVERY time.  No two
+     puzzles are ever the same.
+      In addition to displaying the square, the computer labels the columns
+     with the letters A through F and the rows with the numbers 1 through
+     6.  The following instructions will also be displayed:
+          Enter command (or ?)     (0 moves)
+      The '(0 moves)' shows the number of move you have made so far.  At
+     this point, you may enter numbers to slide rows and letters to slide
+     columns.
+        5.1. COMMANDS
+      The Square program is controlled by single letter (or number) commands
+     typed on the keyboard.  They may be typed at anytime; it is not
+     necessary to wait for the program to ask for a command.  As you gain
+     experience with The Square, you will find it natural to type several
+     commands at a time before waiting for the screen to be rewritten with
+     the new configuration of The Square.
+      The commands are:
+      a to f   Slide the column(s) marked with these letters
+              down one square.
+       The Square                                                      Page 7
+       1 to 6   Slide the row(s) marked with these numbers
+              right one square.
+      -        (A dash or minus sign)
+              Reverse the direction of the NEXT 'a' to 'f'
+              or 1 to 6 command.  For example, typing a
+              dash and then an 'e' causes the column(s)
+              marked with 'e' to move UP.
+      u        "undo" the previous command which moved a row
+              or column.  Up to 100 previous commands
+              may be undone at any one time.
+      / or ?   Display a command summary.
+      The following commands control which puzzle you
+     solve or stop The Square.
+      l        Change the level of the puzzle to Hard or
+              Harder.  This is done by abandoning the
+              current puzzle (if not solved) and
+              starting from the first display described
+              above.
+      q        Quit. Stop. End.  When you are finished with
+              trying to solve The Square, type this.
+      r        Reset The Square to solution.  There are
+              good reasons for doing this; however, it
+              doesn't count as a real solution!  (At
+              least WE won't believe you!)
+      s        Scramble the square again (differently).
+              After solving The Square you can try again
+              by simply typing 's'.
+      Each of the above will destroy the current puzzle.  Thus, you will be
+     asked, by a question like this:
+          Command 'x' resets the game; type 'y' or 'n'
+      if you really want to do it.  If you do, simply type 'y'; else type 'n'.
+        The Square                                                      Page 8
+       6. PATTERNS
+       Rows and columns of The Square may be moved about to make patterns;
+     stripes or dots or x's or other things.  Some patterns are very
+     difficult, and some easy.  It is particularily interesting to work in
+     Harder mode where only pairs of rows can be moved at once.
+      To try patterns, solve The Square (or use the 'r' command to get a
+     solved square) and then issue number or letter commands to move rows
+     and columns.
+      For example, typing (in Harder mode):
+          1 1 1  4 4 4
+      makes stripes.   So does:
+          2 2 2   3 3 3   5 5 5   6 6 6
+      This may be written without so many spaces as:
+          222 333 555 666
+      Three plusses are produced by these commands:
+          23 23 23 ef ef ef     23 23 23 ef ef ef
+      which leave one quadrant unchanged.  All four quadrants will have
+     plusses if you do this:
+         23 23 23  ef ef ef  56 56 56  bc bc bc    ef ef ef  23 23 23  bc bc
+     bc  56 56 56
+      Many more are possible.  (The cube has dozens of interesting patterns.
+     So does The Square.)
+        The Square                                                      Page 9
+       7. HINTS
+       We have no hints for the Hard puzzle except that it IS possible to
+     solve it.
+      The Harder puzzle can be solved in part without any hints.  You should
+     be able to get two quadrants in solution in a manner similar to
+     solving the Hard square.  However, you will find that the last two are
+     devilishly difficult.  If you move these squares, then those get
+     messed up again.  Frustration!  Anger!  A cube you can simply smash
+     (or peel off the stickers!)  But how do you peel the stickers off of a
+     display screen?
+      The answer is to find sequences of commands which do simple things.
+     For example,
+          2 3 2 3 2 3
+      exchanges the left and right halves of the second row from the top.
+     (Try it on a square in solution.)  This is called an 'operator' or a
+     'sequence'.  Solving the Harder puzzle requires finding operators
+     which do the moves you need.
+      If you are interested in such puzzle as The Square, the cube, and
+     other related puzzles, the book by Singmaster (reference <3>) is
+     recommended.  It discusses the subject in some generality with the
+     cube as a specific example.  The ideas apply to all similar puzzles.
+        The Square                                                     Page 10
+       8. REFERENCES
+           <1>  James G. Nourse, The Simple Solution to Rubik's Cube,    *
+             Bantam Books Inc., NY, 1981.
+         <2>  James G. Nourse, The Simple Solutions to Cubic Puzzles,
+             Bantam Books Inc., NY, 1981.
+         <3>  David Singmaster, Notes on Rubic's Magic Cube,     *
+             Enslow Publishers, Hillside, NJ, 1981.
+           * Rubic's Cube is a registered Trademark of the
+          Ideal Toy Company, Hollis, New York.
+
+```
+{% endraw %}
 
 ## SW-PEG.BAS
 
+{% raw %}
 ```bas
 1 '           *** SWITCH *** 
 2 '     by Wes Meier (70215,1017) 
@@ -1644,9 +2064,11 @@ machines:
 264 CLS
 265 END ' of program.
 ```
+{% endraw %}
 
 ## TWINKLE.BAS
 
+{% raw %}
 ```bas
 10 ' Program: TWINKLE.BAS (an IBM program (Interesting, But Meaningless))
 20 ' Contributed to PC-SIG on 5 November, 1983
@@ -1697,6 +2119,146 @@ machines:
 470 IF SND= 0 THEN SND=0.52:RETURN
 480 SND=0:RETURN
 ```
+{% endraw %}
+
+## UPVC.DOC
+
+{% raw %}
+```
+     [[This patch was extracted from the PHOENIX IBM-PC Software  
+Library newsletter. They received it from the HAL-PC users group of 
+Houston, TX.   Many thanks to them.]] 
+      ****      HOW TO BACK-UP YOUR PC VISICALC DISK   **** 
+      The following technique will convet your VISICALC disk to a disk 
+that may be copied by "diskcopy". Diskcopy must be used because there 
+are four programs on the disk which do not appear in the directory. 
+DO NOT TRY TO ADD OTHER FILES TO THE NEW DISK.  Use of this procedure 
+does not relieve you of your responsibilities under copyright laws or 
+licensing agreements.  
+      Boot your DOS disk up on drive A: format drive b without copying 
+the dos system. (FORMAT B: (ENTER)). Then enter the following DEBUG 
+Commands: 
+ [FOR SYSTEMS 96K OR OVER] 
+ -L 100 0 0 80           (READS FIRST 16 TRACKS FROM A:) 
+-W 100 1 0 80           (WRITES 16 TRACKS TO B:) 
+-L 100 0 80 80          (READS NEXT 16 TRACKS FROM A:) 
+-W 100 1 80 80          (WRITES SAME ON B:) 
+-L 100 0 100 3E         (COPIES THE LAST 8 TRACKS EXCEPT 
+-W 100 1 100 3E          FOR THE UNCOPYABLE SECTOR 13F) 
+ [FOR SYSTEMS WITH LESS THAN 96K] 
+ -L 100 0 0 40 
+-W 100 1 0 40 
+-L 100 0 40 40 
+-W 100 1 40 40 
+-L 100 0 80 40 
+-W 100 1 80 40 
+-L 100 0 C0 40 
+-W 100 1 C0 40 
+-L 100 0 100 3E 
+-W 100 1 100 3E 
+ NOW YOU HAVE COPIED THE DISK: NOW PATCH THE 80-COLUMN PROGRAM LOADER/ 
+DECRYPTER SO THAT IT WILL RUN CORRECTLY WITH SECTOR 13F FORMATTED 
+NORMALLY. 
+ -L 100 1 138 3            (LOAD THE INVISIBLE LOADER-DECRYPTER) 
+-E 150 90 90 
+-E 156 B0 
+-E 158 90 90 
+-E 168 90 04 40 90 90 
+-E 16E C6 06 
+-E 173 90 90 
+-E 179 90 04 20 90 90 
+-E 17F C6 06 
+-E 184 90 90 
+-E 18A 90 04 00 90 90 
+-E 190 C6 06 
+-E 195 EB 
+-E 1B0 90 05 00 00 90     (LAST PATCH DISABLES TIMER CHECK) 
+-W 100 1 138 3            (SAVE IT BACK ON NEW DISK) 
+ LASTLY, YOU MUST PATCH 'VCONFIG' IS YOU NEED THE 40 COLUMN DISPLAY. 
+(WITH THE NEW VISICALC DISK IN DRIVE B:) 
+ -L 100 1 13B 3             (LOAD 40-COL LOADER-DECRYPTER) 
+-E 14D 90 90 B4 10 90 90 90 
+-E 169 C6 06 
+-E 16E 90 90 
+-E 174 90 2C 20 90 90 
+-E 17A C6 06 
+-E 17F 90 90 
+-E 185 90 2C 00 90 90 
+-E 18B C6 06 
+-E 190 EB 
+-E 1AB 90 04 00 90 90       (DISABLE TIMER CHECK HERE TOO) 
+-W 100 1 13B 3              (SAVE ON BACK ON NEW DISK) 
+-Q                          (QUIT DEBUG) 
+      All copies of the new disk should function exactly as the original 
+"copy-protected" disk. The serial number is unchanged. You may not legally
+sell; give or load either the original disks, copies or documentation
+
+
+```
+{% endraw %}
+
+## VCCOM.DOC
+
+{% raw %}
+```
+     [[This patch was extracted from the PHOENIX IBM-PC Software 
+Library newsletter. They received it from the HAL-PC users group of 
+Houston, TX.  Corrected by Jack Wright.  Many thanks to them.]] 
+ ****   CONVERT VISICALC TO A .COM FILE   **** 
+ USE THE FOLLOWING PROCEDURE TO TRANSFER THE 80-COLUMN VISICALC PROGRAM 
+FROM THE VISICALC DISK AND WRITE A STANDARD .COM FILE WHICH MAY BE 
+LOADED ON A NON-STANDARD DISK DRIVE (WINCHESTER, 8", ETC). 
+ FORMAT A DISK AS FOLLOWS: (FORMAT B:/S(ENTER)). 
+START THE DEBUG SYSTEM. 
+INSERT THE VISICALC DISK IN DRIVE A: 
+THEN TYPE: 
+ -L 100 0 138 2         (LOAD THE VC80 LOAD/DECRYPTER) 
+-M 0 3FF 7000          (DUPLICATE IT IN HIGHER MEMORY) 
+-R CS                  (INSPECT COMMAND SEGMENT REGISTER) 
+ DEBUG WILL RESPOND WITH THE CONTENTS OF THE CS REGISTER (eg. 04B5) AND 
+PROMPT WITH A COLON (:). TYPE THE OLD CONTENTS + 700 (HEX). (eg. 04B5 
+BECOMES 0BB5). DO THE SAME WITH THE 'DS' REGISTER. 
+DEBUG response to R CS might be: 
+ CS 04B5    <-Save the value you get, we'll need it later. 
+:0BB5      <-Type in your CS value + 700hex here 
+-R DS      <-Type 
+DS 04B5 
+:0BB5      <-Type in your DS value + 700hex here 
+ NEXT: 
+Take the low order byte of the CS you saved above and substitute it 
+for LL in the next line.  Substitute the high order byte for HH: 
+ -E 107 LL HH           (ENTER BYTE-FLIPPED CS) Ex: -E 107 B5 04 
+-E 24D BB A8 00 90     (HARD-WIRE THE DECRYPTION KEY) 
+ NOW, WE MUST RUN THE LOADER/DECRYPTER, TYPE: 
+ -G =1B8 26B            (EXECUTE FROM 1B8 TO 26B) 
+ THE ENTIRE PROGRAM WILL NOW BE LOADED AND DECRYPTED AND A REGISTER DUMP 
+SHOULD APPEAR ON THE SCREEN. NOW RESTORE CS AND DS TO THEIR PREVIOUS 
+VALUES AND SET THE FILE LENGTH IN CX. Set BX=0: 
+ -R CS 
+CS 0BB5     <-Yours might be different 
+:04B5       <-Type in the value of CS you saved above 
+-R DS 
+DS 0BB5 
+:04B5       <-Type in the value of DS you saved above 
+-R BX 
+BX F3FD 
+:0 
+-R CX 
+CX 0000 
+:6B64       (LENGTH = 6B64 FOR VERSION 1.1, 6802 FOR VERSION 1.0) 
+ NOW WE MUST NAME THE FILE, WRITE IT AND EXIT. 
+REMOVE THE VISICALC DISK FROM A: 
+INSERT THE NEW, FORMATTED, EMPTY DISK IN A: 
+TYPE: 
+ -N VC.COM               (OR WHATEVER YOU WISH TO NAME IT) 
+-W                      (WRITE THE .COM FILE)
+-Q                      (EXIT FROM DEBUG)
+***YOU ARE DONE*****
+Back in DOS, type VC to try it.
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

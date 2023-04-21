@@ -39,6 +39,48 @@ machines:
     entertained and may even learn something.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1909.TXT
+
+{% raw %}
+```
+Disk No: 1909                                                           
+Disk Title: Graph                                                       
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: GRAPH                                                    
+Author Version: 3.1                                                     
+Author Registration: $25.00                                             
+Special Requirements: 512K RAM, EGA, VGA, or Hercules Graphics, (math co
+                                                                        
+"GRAPH" allows you to generate a myriad of strange two-dimensional      
+shapes by plotting two individual waveforms on a cartesian, (or two     
+dimensional) plane--even if you don't understand the math behind how it 
+works!                                                                  
+                                                                        
+Most of the shapes that this program can produce are by nature abstract.
+However, with some practice it is possible to gain a talent for creating
+shapes that are easily recognizable to us as familiar objects.          
+                                                                        
+From the main screen you will fill four boxes with basic trigonometric  
+waveforms, their durations and amplitudes.  Each one of these boxes     
+makes up one user controlled "oscillator."  Despite the technical terms,
+GRAPH looks (and acts) a lot like a video game, because the "controls"  
+are easy to operate and the program in itself is extremely interactive. 
+                                                                        
+The program is then ready to plot.  Relax and enjoy the show, you'll be 
+entertained and may even learn something.                               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1909
 

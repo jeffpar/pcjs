@@ -46,6 +46,7 @@ machines:
 
 ## BLASTER.BAS
 
+{% raw %}
 ```bas
 '****************
 '* ------------ *
@@ -395,9 +396,70 @@ IF IK$="N" OR IK$="n" THEN END
 IF IK$="Y" OR IK$="y" THEN CLEAR:GOTO START
 GOTO KYBD
 ```
+{% endraw %}
+
+## DSCRPTN.DOC
+
+{% raw %}
+```
+TANKS.EXE : FAST-PACED TANK BATTLE WITH OPTION TO PLAY ON USER-CREATED MAZE
+TANKS.BAS : SOURCE CODE FOR TANKS.EXE (BASICA)
+TANKS.OBJ : DATA FILE FOR TANKS.EXE
+MAZE.OBJ : DATA FILE FOR TANKS.EXE
+BLASTER.EXE : FIGHT ALIEN SHIPS IN A 3-D SPACE ENVIRONMENT
+BLASTER.BAS : SOURCE CODE FOR BLASTER.EXE (QUICK BASIC)
+MEMORY.EXE : UPDATED VERSION OF OLD CARD MATCHING GAME
+MEMORY.BAS : SOURCE CODE FOR MEMORY.EXE (BASICA)
+CARDS.OBJ : DATA FILE FOR MEMORY.EXE
+```
+{% endraw %}
+
+## FILE1814.TXT
+
+{% raw %}
+```
+Disk No: 1814                                                           
+Disk Title: Paul's Games                                                
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Paul's Games                                             
+Author Version: 8/22/                                                   
+Author Registration: None.                                              
+Special Requirements: CGA.                                              
+                                                                        
+PAUL'S GAMES is a collection of three games: TANKS, BLASTER, and the    
+card game MEMORY.                                                       
+                                                                        
+TANKS is a real-time, two-player game where you must manuever your tank 
+through a maze to hit your opponent.  The option to design your own maze
+adds unpredictability to the action.  (The BASIC source code is included
+for your modification.)  The secret to winning?  Don't hit your own     
+tank.  Score is automatically kept by the computer.                     
+                                                                        
+BLASTER is a game that puts you in the cockpit of a spaceship.  Your    
+mission is to destroy as many enemy ships as possible within a certain  
+time limit.  With a front viewing screen and radar to track enemy       
+spaceships and their missles, you must defend your ship while attacking 
+theirs.  Look out behind you!                                           
+                                                                        
+MEMORY is that childhood favorite, matching pairs of cards, brought up  
+to date in this computer version.  A multiple-player game with 32 pairs 
+of cards, pick two cards that might match.  If you're right, you score  
+the points that are displayed on the card.  Otherwise the cards are     
+turned over for the next player's turn.  At the end of the game the     
+computer will anounce the winner.  How's your short-term memory?        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
 
 ## MEMORY.BAS
 
+{% raw %}
 ```bas
 10 CLS:DEF SEG=&HB800:SCREEN 1:COLOR 0,1:KEY OFF
 20 LOCATE 10,18:PRINT"MEMORY":LOCATE 14,14:PRINT"BY PAUL HILTS":LOCATE 23,11:PRINT"INSTRUCTIONS? (Y/N)"
@@ -484,9 +546,11 @@ GOTO KYBD
 830 IF INKEY$="" THEN 830
 840 CLS:SCREEN 1:RETURN
 ```
+{% endraw %}
 
 ## TANKS.BAS
 
+{% raw %}
 ```bas
 100 REM TANK GAME
 110 CLS:SCREEN 1:COLOR 0,0:KEY OFF
@@ -734,6 +798,7 @@ GOTO KYBD
 2130 LOCATE 23,13:PRINT"PRESS ANY KEY"
 2140 IF INKEY$="" THEN 2140 ELSE RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

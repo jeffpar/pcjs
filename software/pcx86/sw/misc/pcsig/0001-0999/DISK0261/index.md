@@ -79,6 +79,7 @@ machines:
 
 ## CASH.BAS
 
+{% raw %}
 ```bas
 1000 REM  *****************************************************************
 1010 REM  *****************************************************************
@@ -354,9 +355,812 @@ machines:
 3700 RETURN 1250
 3710 SYSTEM 
 ```
+{% endraw %}
+
+## CASH.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+				CASH - HARDCASH
+
+		    Programs to Track Cashflow Transactions
+			 For the IBM Personal Computer
+
+
+
+
+
+
+
+
+
+
+				       By
+
+			       Gregory N. Doudna
+
+				     Member
+			Silicon Valley Computer Society
+
+
+
+
+
+
+
+
+
+
+				  Version 1.0
+
+				  August, 1984
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			       TABLE OF CONTENTS
+
+
+
+
+	  TOPIC 					 PAGE #
+	  --------------------------------------------	 ------
+
+	  INTRODUCTION ...............................	    1
+	  Program and File Structures ................	    1
+	  File Sizes .................................	    1
+
+	  GETTING STARTED ............................	    2
+	  Creating Files .............................	    2
+	  Defining Expense Codes .....................	    3
+	  Entering Expense Item Descriptions .........	    3
+	  Monthly Data Entry .........................	    4
+	  Maximum Value Restrictions .................	    5
+	  Correcting Input Errors ....................	    5
+
+	  OBTAINING HARDCOPY .........................	    6
+	  Listing the Expense Item Descriptions ......	    6
+	  Producing Formatted Output of Database Files	    6
+	  Listing the Entrylogs ......................	    7
+
+	  PROGRAM MODIFICATIONS ......................	    8
+	  Changing Printer Control Codes .............	    9
+	  Changing Output Routines to Use 14" Paper ..      9
+	  Using a Separate Data Disk .................	    9
+
+	  PROGRAM SUPPORT AND BUG REPORTING ..........	   10
+
+	  --------------------------------------------	 ------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				       i
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				  INTRODUCTION
+
+	       These  programs were developed out of a desire to track
+	  my personal expenditures,  identify exactly where I spent my
+	  money,  and  provide	a convenient method of	recording  and
+	  reporting those transactions.  The resulting set of programs
+	  is a simple general ledger that provides a convenient method
+	  for a small business to record their cash transactions.  The
+	  program  structure is very straight forward and is therefore
+	  easy to customize to individual needs.
+
+
+			  PROGRAM and FILE STRUCTURES
+
+	       This initial offering consists of 2 programs,  Cash and
+	  Hardcash.   In addition to program files,  when executed the
+	  Cash program will create the following files;
+
+	       ACCTCODE       a SAF of 100  character strings that are
+			      user defined expense items.
+			      Maximum of 100 expense items.
+
+	       DATABASE.yy    where "yy" is the year as in '84.  There
+			      will   be  one  file  for  every	 year.
+			      Again a SAF,  this file should be viewed
+			      as  a matrix of 12 columns  representing
+			      each month,  and 100 rows,  one for each
+			      expense item.  The contents of each cell
+			      is  the sum of all amount  entries  made
+			      for that cell.   Each file contains 1200
+			      records.
+
+	       mmmyy.LOG      another SAF containing all entries for a
+			      specific	 month	in  a  specific  year.
+			      Each  entry  is made up of 4 items; code
+			      number,  amount, paid to whom, for what.
+			      Number  of records limited to  available
+			      disk.
+
+	       File  sizes  will vary widely due to the type  of  file
+	  structures  chosen  and the fact that all data is stored  in
+	  string format.  The ACCTCODE file could grow to a maximum of
+	  4K  bytes,  that's 100 entries of 40 characters  each.   The
+	  Database  files contain a maximum of 1200 entries  that  can
+	  vary	from  1  to 10 bytes for a grand total of  12K	bytes.
+	  Each	month's Entrylogs are unpredictable.   Their  size  is
+	  dependent  upon the number of entries for each month and the
+	  amount  of data in each entry.   Each  entry	consists of  2
+	  bytes of code,  upto	10  bytes  of  dollar  amount,	and  a
+	  variable  number of  bytes for  descriptions of who was paid
+
+				       1
+
+
+
+
+
+
+
+
+
+
+
+	  and  for what.   These files will grow to whatever  size  is
+	  necessary.   No  error  checking  is	done  to  verify  that
+	  sufficient room is on the data disk.
+
+	       The  CASH  program  provides the  following  utilities;
+
+	       *  Operator Friendly, Screen Controlled Data Entry  *
+	       *  Creates Additional Years' Data Files on Request  *
+	       *  Automatically Creates Monthly Data Entry Logs    *
+	       *  Creation and Modification of Expense Codes	   *
+	       *  Links to Hardcopy Output Routines		   *
+
+	       The   HARDCASH  program	provides these utilities;
+
+	       *  Formatted Output of Expense Account Codes	   *
+	       *  User Specified Formatted Output of Data Files    *
+
+	       These  programs should work with either the  Monochrome
+	  or  Color  monitors.	 DOS 2.0 has been  tested,  but  other
+	  DOSes  and less than 128K bytes have not.   They should work
+	  with only 64K bytes as the program sizes are not that large.
+	  They do require the use of ADVANCED BASIC due to the use  of
+	  Return Line# statements.  The printer routines expect to see
+	  either an IBM Epson printer or an Okidata 9x series with the
+	  Plug&Play prom set.
+
+
+
+				GETTING STARTED
+
+	       The  distribution  copy	expects the program  and  data
+	  files  to co-exist on the same disk.	 If a user finds  this
+	  objectionable,  the  programs can be moved to another  disk,
+	  but  you must change all file linkage statements to  reflect
+	  which   drive   the  data  disk   is	 on.	(See   Program
+	  Modifications)
+	       On a single drive system, start Advanced Basic, insert
+	  the program disk,  Load and Run the Cash program.  On a dual
+	  drive  system place the program disk into the logged	drive,
+	  call Advanced Basic from whichever drive it resides upon and
+	  execute the Cash program; ie., BasicA Cash.
+
+	  CREATING FILES
+
+	       The user must first create the ACCTCODE file before any
+	  other  program functions will perform.   You do not have  to
+	  define any expense item descriptions,  but the ACCTCODE file
+	  must	exist.	 On your first attempt to run this program you
+	  will	be automatically forced into this routine.   Later  to
+	  modify  existing or add new descriptions,  select main  menu
+	  option #4.
+
+
+
+				       2
+
+
+
+
+
+
+
+
+
+
+
+	       Once  the  ACCTCODE  file has been  created,  you  must
+	  create  a DATABASE file for each year's data.   Don't  worry
+	  about  creating redundant files or erasing current files  as
+	  this	option will not allow that action.   Select main  menu
+	  option #1 to create new files.   Any attempt to perform data
+	  entry  prior to creating the requested year's DATABASE  file
+	  will result in the correct error response.
+	       At  this time you are now ready to input data into  any
+	  existing  DATABASE file,  but prior to doing so you may want
+	  to  spend  some  time creating a complete  list  of  expense
+	  codes.
+
+
+
+	  DEFINING EXPENSE CODES
+
+	       Prior to assigning descriptions to expense code numbers
+	  a discussion of how hardcopy routines work is in order.  The
+	  first rule is; all sums are algebraically performed from the
+	  requested  starting code number to the final	number.   This
+	  means  that  if you want a report that shows only  how  much
+	  money  you  spent on insurance from month A to B,  then  you
+	  must cluster all insurance items together in sequential code
+	  numbers.
+	       If  you	intend	to use this program  to  balance  your
+	  monthly  accounts,  that means tracking cash in as  well  as
+	  out.	The user must make the decision whether cash in or out
+	  will	be entered as a negative number.   Remember that  this
+	  program  only algebraically sums;  therefore,  the user must
+	  supply the sign of the number themselves.   As a suggestion,
+	  most	of you will have more expense items as	cash-out  than
+	  cash-in  and	it  is	therefore easier to  enter  income  as
+	  negative numbers.
+
+
+	  Entering Expense Item Descriptions
+
+	       Select main menu option #4.   The screen will be  drawn
+	  and  the prompt will stop to the right of the CODE  request.
+	  The  initial display will indicate no current code number or
+	  associated  description.   Enter the number of the code  you
+	  wish	to  describe,  that  code  number  and	its  currently
+	  assigned  description  will be displayed on the  screen  and
+	  the cursor will move to the description request.   To change
+	  the current description enter the new data prior to carriage
+	  return.  To completely delete the current description, input
+	  a  Zero  (0) followed by carriage return.   To maintain  the
+	  existing description without change, simply carriage return.
+	  Descriptions are limited to forty (40) characters;  you  may
+	  enter  more,	but  they  will be  truncated.	 All  standard
+	  characters are acceptable.
+
+
+
+				       3
+
+
+
+
+
+
+
+
+
+
+
+		Repeat	the procedure until you are finished  entering
+	  new or modifying existing descriptions.   To exit, enter 999
+	  at the request for code number.   The Expense Codes will  be
+	  saved to disk and the program will return to the main menu.
+	       At  this  time and prior to the start of  monthly  data
+	  entry,  it  would  be  very helpful to  the  operator  if  a
+	  hardcopy  list of the existing Expense Codes were available.
+	  At  the main menu select the HARDCOPY ROUTINES,  option  #3.
+	  This	command  will chain to the HARDCASH program  and  it's
+	  menu will be presented.   Select option #2 to have a copy of
+	  the currently defined Expense Codes listed to your  printer.
+
+	  MONTHLY DATA ENTRY
+
+	       Having defined the Expense Codes you may start to build
+	  your	database.   If	this is your first pass  through  this
+	  routine or you wish to start a new  database file,  then you
+	  must select main menu option #1 to Create a New Year's  Data
+	  File.   Follow  the  screen prompts and input the  last  two
+	  digits of the desired year.	Your input will be checked for
+	  validity  and  whether or not a file for the requested  year
+	  already  exists.   Once the new file is created you will  be
+	  returned to the main menu.
+	       When  the  desired data	file  already  exists,	select
+	  option #2 to input data.   You will be prompted to input the
+	  requested  year  and	month.	 A valid entry is  a  2  digit
+	  numeric for the year and at least the first 3 characters  of
+	  the month in upper or lower case.  The next question will be
+	  whether  or  not you wish to work a new  month's  file.   An
+	  answer  of  Yes  to this question  will  erase  the  current
+	  database  file contents for the specified year and month  as
+	  well as all entries in the associated month's entrylog.
+	       At  this point the screen will be updated for the input
+	  routine  and the cursor will be placed to the right  of  the
+	  expense  CODE request.   No current  code,  description,  or
+	  current  amount  will be indicated.	Input any  valid  code
+	  number,  0 - 99, and the display will be updated to indicate
+	  the selected code number, its currently defined description,
+	  and  the  algebraic sum of all entries made for  this  item.
+	  The cursor will be moved to the AMOUNT request.  You may now
+	  enter a value,  or if no input is desired a carriage	return
+	  without  other  entries will return the prompt to  the  CODE
+	  request.
+	       If  no  AMOUNT  was  input then	no  additions  to  the
+	  database file or the month's entrylog will be made.  When an
+	  amount  is indicated,  that value is immediately summed into
+	  the  current database selected cell and the display  updated
+	  to indicate the resulting change.   The prompt is then moved
+	  to the PAYED WHOM request followed by the FOR WHAT  request.
+	  No  entry  is  required for either of these last  two  input
+	  requests,  but  all entries for each selected  code  number,
+	  when the amount has been changed,  results in a record being
+	  written to the entrylog that records all 4 input items.
+
+				       4
+
+
+
+
+
+
+
+
+
+
+
+	       After  the writing of the transaction record the prompt
+	  is  returned	to  the code number request  and  the  program
+	  continues.   For convenience, the last requested code number
+	  is  remembered  and  a carriage return at this  prompt  will
+	  recall that code number.  To terminate data input enter 999.
+	  The updated database file will be copied from memory to disk
+	  and  any  data  in output buffers not  yet  written  to  the
+	  entrylog  file  will	be saved.   This is a  very  important
+	  point;  when	posting  data  to the database	file  or  when
+	  changing expense code descriptions,  never exit the  program
+	  by using the BREAK key.  Doing so will result in the loss of
+	  all data entered.  When the program is in any input routine,
+	  all  data  is kept in memory until the programatic  exit  of
+	  that routine.   In the event of a powerfailure,  during  the
+	  posting of expenses, all entries except those waiting in the
+	  output  buffers  can be recovered from the entrylog and  re-
+	  entered.
+
+	  Maximum Value Restrictions
+
+	       All  mathematics  with respect to entered  amounts  are
+	  performed  in double precision.   The largest number that  a
+	  cell may have in this program is limited by that factor, but
+	  more	so by the print using statements which are 6 positions
+	  to the left of the decimal for a maximum range of $999999.99
+	  to -$99999.99.  The total limit for any summed column or row
+	  is  7  digits  to  the  left	of  decimal or $9999999.99  to
+	  -$999999.99.	This range  should  exceed  almost  everyone's
+	  requirement,	but  these  values  may be  exceeded  and  the
+	  program  will still record the true  values,	but  formatted
+	  output will not be correct.	The program does not check for
+	  value out of range, it was felt that the operator should see
+	  the error value rather than some cryptic message.
+
+	  Correcting Input Errors
+
+	       Operators  are always subject to data entry errors  and
+	  there is more than one way to correct them.	It is strongly
+	  advised that	all  corrections are made using  the  program.
+	  Because the files are stored as SAFs and are edittable using
+	  a  text editor,  some may be tempted to do so,  but this  is
+	  definitely  the wrong choice and may result in  invalidating
+	  your data.
+	       Remember  that  all entries are	algebraically  summed;
+	  therefore when an erroneous entry is to be corrected,  first
+	  make	an  entry that is the inverse of the erroneous	entry.
+	  This will remove the amount from the memory cell.   Then re-
+	  enter  the  proper amount.  Later when all  corrections  are
+	  finalized,  the  month's entrylog can be cleaned up  with  a
+	  text	 editor   to  remove  the  error  entries  and	 their
+	  corrections  without	the possibility of  invalidating  your
+	  data.
+
+
+				       5
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			       OBTAINING HARDCOPY
+
+	       Once  you  have defined expense codes and entered  some
+	  monthly data it would be nice to produce hardcopy output  of
+	  that data.   There are three basic listings most users would
+	  want	 to  produce;	a  formatted  copy  of	Expense  Code
+	  descriptions,  formatted  summary  reports on specific  data
+	  files,  and a listing of all the entries that were made  for
+	  each	months	data.	The  later is especially  useful  when
+	  trying  to isolate data entry errors.   Output routines  for
+	  the  first two reports are provided by the HARDCASH  program
+	  and  the other is conveniently available through simple  DOS
+	  commands.
+
+	  LISTING the ACCOUNT CODE DESCRIPTIONS
+
+	       From  the  HardCopy menu select option #2 to produce  a
+	  listing of the Expense Codes.  The printer must be at top of
+	  form	at the time you select this option.   A  single  sheet
+	  will	be printed of all expense code numbers and  associated
+	  descriptions in compressed type.   There are no other inputs
+	  required.   Upon completion of the listing, you are returned
+	  to the Hardcopy menu.
+
+
+	  PRODUCING FORMATTED OUTPUT of DATABASE FILES
+
+	       There  is considerable flexibility in how much of  each
+	  DATABASE  file  will be presented.   To request output of  a
+	  specific  DATABASE file,  request option #1.	 You  will  be
+	  asked which year's data to work with.  This input is again 2
+	  numeric  digits.   The  existance of the requested  file  is
+	  verified  and  if the file currently exists in memory it  is
+	  not  reloaded,  otherwise you must wait while the  requested
+	  years data is loaded into memory.
+	       The  next  input request is for the months you wish  to
+	  start  and  end the report with.   As with all  other  month
+	  input  requests,  you  must  enter  at  least  the  first  3
+	  characters  of  the  month in  upper	or  lower  case.   The
+	  requested  starting  month  may be the same  as  the	ending
+	  month, but the ending month may not be prior to the starting
+	  month and you may only work with a single year's data.
+	       The  final  input request is for the range  of  Expense
+	  Codes  to  list.   If you desire a complete range, 0	-  99,
+	  enter a carriage return,  otherwise provide the starting and
+	  ending code numbers as requested.   Here again,  the	ending
+	  code	number	must be equal to or greater than the  starting
+	  number.
+
+
+
+				       6
+
+
+
+
+
+
+
+
+
+
+
+	       After  all  inputs are provided, a formatted output  of
+	  the data is produced.   The listing header defines the  year
+	  of  the data,  the date and time of the listing  production,
+	  and  the  range of requested months.	 The number  of  pages
+	  produced  depends upon the amount of data requested,	it may
+	  be 1 to 6 pages.
+	       Months are presented as columns across the top of  each
+	  page.   Expense  Codes are listed in rows from top to bottom
+	  of  the  page.   The range of requested months  produces  at
+	  least  one page per each 6 month period.   Additionally  for
+	  each	range  of  50  codes, a new  sheet  is	produced.  For
+	  example,  if	you  requested	a listing of  all  codes  from
+	  January  to June,  3 sheets are produced.   The first  sheet
+	  will cover codes 0 - 49,  the second codes 50 - 99,  and the
+	  final  sheet	will  contain the column  summaries  for  each
+	  month.   If  you requested a seven month period and  a  full
+	  code	range  then 6 sheets would have  been  produced.   The
+	  first  3  sheets would represent the first 6 months  in  the
+	  requested  range  and  the last 3 would list	the  remaining
+	  months' data and report Expense Code totals.
+	       All  rows are summed across for each requested month in
+	  the  range.	The final column on each page is the  sum  for
+	  that	row on that page,  except when the month range exceeds
+	  6,  then  the row total column after the last month  is  the
+	  total  for both pages.   Column,  or month,  totals are only
+	  shown on the bottom of the final page.
+
+	  LISTING the ENTRYLOGS
+
+	       There  is  currently  no provision  provided  by  these
+	  programs  for  listing the  monthly  Entrylogs.   Convenient
+	  methods were already provided by DOS.   With DOS 1.1 use the
+	  Copy	utility to list these files to the system  printer  or
+	  video display.   Type may also be used for video display and
+	  under  DOS  2.0 or higher,  Type listings can be "piped"  or
+	  redirected to the system printer.
+
+			   COPY drive:filename LPT1:
+
+				       or
+
+			   TYPE drive:filename>LPT1  (DOS 2.0 only)
+
+	       Another useful DOS utility that processes the entrylogs
+	  is  the SORT utility.   When reviewing these logs to isolate
+	  entry errors or see exactly how many items, and the specific
+	  information on each item that cummulatively resulted in  the
+	  expense  item  total,  it  is very convenient  to  have  all
+	  entries  listed in expense code sequence.   The SORT utility
+	  provides  this  function  and  can  sort  in	descending  or
+	  ascending order.
+
+
+
+				       7
+
+
+
+
+
+
+
+
+
+
+
+	      SORT < drive:input filename > drive:output filename
+
+				       or
+
+	     SORT/R < drive:input filename > drive:output filename
+		     ( for a reverse sort, codes 99 --> 0 )
+
+	       For example, to sort June 1984's entrylogs and have the
+	  resulting  sorted  data remain in the entrylog of  the  same
+	  name;  when the SORT utility is on the A drive and the  data
+	  files are on the B drive,  the following command sequence is
+	  called for.
+
+		    SORT < B:JUN84.LOG > B:JUN84.LOG
+
+
+	       A  word	or  two  about how data  is  recorded  in  the
+	  Entrylogs  may  be  of some help.   All  entrys  are	string
+	  variables.   This  facilitates the use of the SORT  utility,
+	  which will only sort text.   Examination of the program will
+	  reveal  that	the data is right column adjusted within  each
+	  field  for Code number and Amount entries.   No checking  is
+	  done of amount entries to determine the number of  positions
+	  right  of  the  decimal,  if any.   This means that  if  the
+	  operator enters amounts with varying decimal positions  that
+	  the resulting entrylog listing may resemble the below.
+
+		    01	123456.78  payed to whom   for what
+		    02	       10  "           "   "      "
+		    03	  -1.0125  "           "   "      "
+
+	       If   it	is  desired  to  have  decimal	point	column
+	  adjustment,  then operator intervention is required.	 Right
+	  column  field adjustment was considered desireable,  but may
+	  be defeated by the user with program modifications.
+
+
+			     PROGRAM MODIFICATIONS
+
+	       This  pair of programs is distributed as a set  instead
+	  of  a  single program to provide for ease  of  modification.
+	  Many	of you will have specific subroutines you may wish  to
+	  add  and  short,  simple  code  will	help  facilitate  this
+	  operation.   As  an  example,  the author's version  of  the
+	  Hardcash  program  is  considerably  larger.	  It  includes
+	  specialized  reports that present information on changes  in
+	  cash values of liquid investments,  a monthly flash estimate
+	  of  net  worth,  and percentage changes  in  cash  equities.
+	  These  routines were not distributed,  because they are only
+	  valid  with the authors specific expense code  descriptions.
+	  Such reports are simple to write and incorporate into  these
+	  routines.
+
+
+				       8
+
+
+
+
+
+
+
+
+
+
+
+	  CHANGING PRINTER CONTROL CODES
+
+	       For  users  with  printers that do  not	recognize  the
+	  standard  IBM Epson control codes,  changing this  program's
+	  control  codes  to properly control your printer  should  be
+	  easy.   Line	1190  of  the Hardcash program	defines  three
+	  variables   that   are   used   to   change	the    printer
+	  characteristics.  The three variables are:
+
+	       Condensed = 15:	print at 17 characters per inch.
+		Expanded = 14:	print at  5 characters per inch.
+		  Normal = 18:	print at 10 characters per inch.
+
+	       To  change  these  values  to meet  the	needs  of  the
+	  specific printer in use,  the user only needs to  substitute
+	  the  appropriate  decimal  value  of	the  ASCII  code  that
+	  commands  that printer  to print in  these  modes.   If  the
+	  printer  in use cannot print in condensed or expanded  modes
+	  then	delete	line 1190 and all references to the  variables
+	  defined in that line.   You will be required to use 14  inch
+	  wide paper or modify this program more severely yourself.
+
+	  CHANGING OUTPUT ROUTINES TO USE 14 INCH PAPER
+
+	       For  those  users  who have a wide printer  capable  of
+	  condensed printing, a full year's data report can be printed
+	  across  a single sheet and therefore reduce a total  listing
+	  from six sheets to three.   The author does not have	access
+	  to a wide carriage,  but believes that the following program
+	  changes  will  adjust  output routines to make use  of  this
+	  feature.  Modify the following lines of program Hardcash.
+
+	  Hardcash	     1880  delete this line
+			     1920  change D% to B%
+			     2050  change D% to B%
+			     2100  delete this line
+			     2110  delete this line
+			     2190  change any D% to B%
+			     2210  change any D% to B%
+
+
+	  USING a SEPARATE DATA DISK
+
+	       When  it is desired to have the data disk separate from
+	  the  program	disk  the  following  program  lines  must  be
+	  changed.  The user in doing so designates that the data disk
+	  will	forever  thereafter be located on  only  that  logical
+	  disk.
+
+
+
+
+
+
+				       9
+
+
+
+
+
+
+
+
+
+
+
+	  Program:  Cash Line #'s
+	  -----------------------
+	  1480	change to ENTRYLOG$ = "driveletter:"+MONTH$+YR$+".LOG"
+
+	  2410	change "ACCTCODE" to read "driveletter:ACCTCODE"
+
+	  2670	change to SYM$ = "driveletter:DATABASE." + YR$
+
+
+	  Program:  Hardcash Line #'s
+	  ---------------------------
+	  2460	change "ACCTCODE" to "driveletter:ACCTCODE"
+
+	  2680	change to SYM$ = "driveletter:DATABASE." + YR$
+
+
+		       PROGRAM SUPPORT and BUG REPORTING
+
+	       This program was extensively tested and debugged by the
+	  author,  but	a deliberate attempt by an operator may  still
+	  identify  certain weaknesses.   A major weakness is the fact
+	  that	all database file contents are loaded into memory  and
+	  then	rewritten  to disk with each entry  into  the  monthly
+	  data	entry routine.	 A power failure or deliberate exit of
+	  the  program by other than programmatic means may result  in
+	  the loss of all data.  As is always a good rule, backup your
+	  data disk often.
+	       If serious bugs or problems are encountered, the author
+	  can be contacted on the SVCS bulliten board, user id GND, or
+	  at most SVCS meetings.   I will try an resolve any  problems
+	  as I can.   I will not make program modifications based upon
+	  someone else's disagreement with my programming style.
+	       For  those  with a real desire to use this program  and
+	  lacking sufficient programming knowledge,  I may be able  to
+	  make	 additions  or	modifications  to  suit  their	needs.
+	  Depending  upon  the	magnitude  of  the  request  and  time
+	  requirements this service may or may not be free.  Something
+	  mutually satifactory will have to be agreed upon.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				       10
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
 
 ## CONVERT.BAS
 
+{% raw %}
 ```bas
 1 SAVE"CONVERT
 10 SCREEN 0,0,0:WIDTH 80
@@ -476,9 +1280,11 @@ machines:
 62940 '
 64000 END
 ```
+{% endraw %}
 
 ## EIGHTCRV.BAS
 
+{% raw %}
 ```bas
 10 REM   E I G H T  C U R V E S
 11 REM
@@ -1139,9 +1945,189 @@ machines:
 9060 CLOSE #2
 9070 RETURN
 ```
+{% endraw %}
+
+## EIGHTCRV.TXT
+
+{% raw %}
+```
+
+Eight Curves
+
+        EIGHTCRV.BAS is a program that fits 8 different curves to a set
+of data. The program is written in GWBasic. The program uses a printer
+for most output. The printer control codes written into the program are
+Star Delta 10 codes, which should be compatible with Star Gemini and
+Epson codes. Most output is in condensed type. This allows the scatter
+diagram, drawn in character graphics, to be as large as possible.
+        To use the program, the data set containing the dependent, Y, and
+predictor, X, variables must be saved in SDA (space delimited ASCII) format
+on disk. SDA format is simple and easy to use. Variables are in columns
+and cases are in rows. In each row of the data file, numbers are separated
+by spaces in free format. EIGHTCRV assumes all variables it reads are
+numeric, so any character data in the file should appear after all numeric
+variables. SDA format was chosen because it is easy to create with any
+text editor, like DVED, FULLEDIT, or RV-EDIT and is readable by GWBasic,
+Turbo Pascal, Minitab and SPSS, among others. It is also very compact,
+taking only about 25% of the disk space that .DIF files take. The file
+EIGHTCRV.SDA is an example of an SDA file.
+        When the program is run, it will first read data from an SDA
+file. The prompts ask for the number of rows and columns in the file.
+Give the number of columns of numeric data. The next prompt asks if there
+is anything in the file after column --. "Anything" refers to either
+other columns of numbers or character data.
+        Try running EIGHTCRV.BAS using EIGHTCRV.SDA specifing X in
+column 1 and Y in column 2. There are 15 rows of data in the SDA file,
+nothing in the file after column 2.
+        This version of the EIGHTCRV program is adapted from the program
+8CURVS in the book Basic Programs for Production and Operations Manage-
+ment by Pantumsinchai, Hassan and Gupta, Prentice - Hall, 1983. Some
+users may find the original version more to their liking. The entire
+package of programs in this book has been modified has been extensively
+modified and converted to run on the IBM PC. More information about this
+package may be obtained from MicroPack, Inc., 223 W. Jackson Blvd, Suite
+1110, Chicago, Illinois, 60606.
+        EIGHTCRV.BAS was adapted by Joseph C. Hudson, 4198 Warbler Dr.,
+Flint, MI 48504. Other than receiving the generous permission of the
+authors to submit this program to PC-SIG, the adaptor has no connection
+with any of the firms mentioned above.
+```
+{% endraw %}
+
+## FILES261.TXT
+
+{% raw %}
+```
+----------------------------------------------------------------------------
+Disk No 261   PC-SIG Business Sampler No 1                           v1.1
+----------------------------------------------------------------------------
+This disk contains several user-supported programs.
+ 
+------------  Cashflow Program by Gregory N. Doudna
+CASH     BAS  Data entry, file maintenance, etc.
+HARDCASH BAS  Provides printed records
+CASH     DOC  Documentation for CASH.BAS
+------------  Personal Datebook by Lateral Programming, Inc.
+MEMO     BAS  Personal Datebook: Appointments, Addresses, Memos etc.
+MEMO     BAT  Runs MEMO.BAS with proper parameters
+MANUAL   TXT  Reference Manual for Personal Datebook
+MANUAL   EXE  Display or print the reference manual
+CONVERT  BAS  Converts address list for use with wordprocessors
+CONVERT  BAT  Runs CONVERT.BAS with proper parameters
+------------  Mailing Label Package   (BASRUN.EXE required)
+LABELS   EXE  Menu shell for Mailing Label Package
+NEWLAB   EXE  Generates new mailing label file
+LABELINP EXE  Data entry program for Mailing Label Package
+SRTLAB   EXE  Sorts labels by zip code
+LABRPT   EXE  File listing and summary reports
+LABPRT02 EXE  Label Printing program for Mailing Label Package
+LABELS   DOC  Documentation for LABEL.EXE
+------------  File Managenment System
+FILEMAN  COM  File Managenment System
+MAKEMEMO BAS  Write reminders to tickler file
+SHOWMEMO BAS  Brings up reminder notes on proper dates
+------------  FLITEPLN 3.2
+FLITPLN3 2VV  Aids in preparing flight plan (BASIC program)
+FLITPLN3 DOC  Documentation for FLITEPLN.BAS
+------------  EIGHTCRV Package
+EIGHTCRV XXX  Description of the EIGHTCRV programs
+EIGHTCRV SDA  Sample data file
+EIGHTCRV BAS  First eight curves to data
+EIGHTCRV TXT  Documentation for EIGHTCRV.BAS
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+## FLITPLN3.DOC
+
+{% raw %}
+```
+                     Copyright (c)-1984,85,86-by D.A.Gullickson
+
+
+                              PC-FLY ``FLITEPLN''
+                           Version 3.2 (c) Dec. 1986
+                 User-supported software.  $20 Contribution gives  
+                 user enhanced, completed version & notification of
+                 future updates & programs.  Copyright forbids 
+                 distribution in an altered form.  Otherwise share.
+                              D.A. Gullickson
+                              219 Custer Street
+                              Lander, Wyoming  82520
+ 
+ 
+                     PC-FLY ``FLITEPLN '' DOCUMENTATION
+ 
+PC-Fly ``FLITEPLN '' is written to be practical & useful for the busy pilot and
+only requires essential information all pilots use when planning a flight.   
+ 
+AIRCRAFT FLIGHT DATA -- permits saving pertinent information on 15 various  
+airplanes!  Information readily available for flight. Hard copy printed also.
+ 
+FLIGHT LOG -- User enters:
+              1)  estimated groundspeed
+              2)  fuel/hour
+              3)  departure airport, checkpoints, and leg distances are ONLY
+                  entered INITIALLY, then saved for future use
+ 
+``FLITEPLN '' ---   then  calculates DISTANCE:   total & to-go, TIME:  leg,    
+cumulative & total in hr. & min., FUEL:  per leg, cumulative, & total for  
+flight.  It also prints hard copy as needed.  PC-FLY ``FLITEPLN''saves flight
+routes in files for future use AND can be re-used with different groundspeed
+and fuel rates added as needed. (OR with different airplanes without change)
+ 
+FAA FLIGHT PLAN -- dept., route, time, dest. fuel, name, address, etc. are    
+printed without re-entering.  Permanent data is stored for future use.
+ 
+1. DISCLAIMER:  !!!!!  USE THIS PROGRAM AT YOUR OWN RISK !!!!!  There is no  
+                guarantee as to the accuracy of data or calculations.  User's 
+                usual method of calculating flight plan data must be done to 
+                check accuracy.!!!!!!
+ 
+2. SYSTEM USE: Program was written on an IBM-PC, MS-DOS 2.1 interpreted Basic
+               and can run with 1 disc drive with 64 K RAM.  It is written  
+               to run in color when available and on a standard monitor.
+
+3. STARTUP:    Begin BASIC then type ``RUN FLITPLN3.2VV ''
+                                           
+
+4. CREATE SELF      DIRECTIONS FOR SELF BOOTING DISK ARE AS FOLLOWS:       
+    BOOTING          1.  Format disk with /s  (FORMAT B:/s)                    
+     DISK:           2.  Copy BASIC to your disk  (COPY BASIC.COM B:)         
+                     3.  Under DOS prompt B> type :                       
+                                (assuming disk in drive B:)                
+                               B>COPY CON:AUTOEXEC.BAT      <CR>
+                                 BASIC FLITPLN3.2VV         <CR>
+                                                            <F6> <CR>
+
+5. REGISTERED USERS:  (contributors)
+               They will be sent copy of program that permits adding and
+               changing aircraft data.  Space is available for 15 airplanes  
+               and data.  Registered users will also be able to change FAA  
+               Flight Plan data.  Others will only be able to use the Flight 
+               Log portion of the program.  If one wishes to write one's own
+               program to permit these changes, it obviously can be done since
+               this is an unprotected program.  I can assure you that it is  
+               less expensive to become a registered user if ones time is   
+               worth anything.
+ 
+6. NON-REGISTERED USERS:  (non-contributors)
+           a.  AIRCRAFT FLIGHT DATA - will not work properly
+           b.  FAA FLIGHT PLAN - will not permit changes
+           c.  FLIGHT LOG - and remainder of the program will function
+ End notes
+
+```
+{% endraw %}
 
 ## HARDCASH.BAS
 
+{% raw %}
 ```bas
 1000 REM  *****************************************************************
 1010 REM  *****************************************************************
@@ -1323,9 +2309,202 @@ machines:
 2760 CLOSE #1:RETURN
 2770 CHAIN "CASH",1200
 ```
+{% endraw %}
+
+## LABELS.DOC
+
+{% raw %}
+```
+                              COPYRIGHT (c), 1984
+                         TARGET DATA COMPUTER SERVICES
+                               8 BROWNFIELD LANE
+                                 PHILLIPS RANCH
+                            POMONA, CALIFORNIA 91766
+                                 (714) 622-7182
+
+  THIS DOCUMENTATION MAY BE REPRODUCED ONLY IF THE ABOVE COPYRIGHT IS INCLUDED
+
+                              ADDRESS LABEL SYSTEM
+
+DESCRIPTION:
+
+High speed name/address data entry system for producing and maintaining
+customer files, address labels, and mailing lists.  Especially useful for
+capturing large volumes of names and addresses for direct mail advertising.
+
+The system contains 6 programs:
+
+                      1. LABELS.EXE     - MENU
+                      2. SRTLAB.EXE     - ZIP CODE SORT
+                      3. LABRPT.EXE     - FILE LISTING / SUMMARY REPORTS
+                      4. NEWLAB.EXE     - CREATES LABEL FILES
+                      5. LABELINP.EXE   - DATA ENTRY PROGRAM
+                      6. LABPRT02.EXE   - ADDRESS LABEL PRINTING
+
+HARDWARE/SOFTWARE REQUIREMENTS:
+
+          1.  IBM PC
+          2.  COLOR MONITOR/ADAPTER
+          3.  EPSON FX-100 PRINTER OR EQUIVALENT
+          4.  AVERY (R) #4143 ADDRESS LABELS - OR EQUIVALENT
+              (4" X 15/16" - 2 ACROSS - 9 1/2" FORM WIDTH)
+          5.  TWO DISK DRIVES
+          6.  BASRUN.EXE (MICROSOFT BASIC COMPILER RUN-TIME MODULE)
+
+DOWNLOADING:
+
+The programs are in HEX format and must be converted to BINARY with file name
+changes.
+
+      1.  Download the following programs:
+
+          LABELS.HEX - CONVERT TO BINARY - RENAME LABELS.EXE
+          SRTLAB.HEX - CONVERT TO BINARY - RENAME SRTLAB.EXE
+          LABRPT.HEX - CONVERT TO BINARY - RENAME LABRPT.EXE
+          NEWLAB.HEX - CONVERT TO BINARY - RENAME NEWLAB.EXE
+          LABELI.HEX - CONVERT TO BINARY - RENAME LABELINP.EXE
+          LABP02.HEX - CONVERT TO BINARY - RENAME LABPRT02.EXE
+
+      2.  Copy the .EXE programs to a new diskette
+      3.  Copy COMMAND.COM from your DOS diskette to the new diskette
+      4.  Copy BASRUN.EXE from your Basic Compiler to the new diskette.
+
+The new diskette will always go into your default drive - the data diskette
+into your B drive.  All the programs are "hard-coded" to look for data in the
+B drive. Whenever a program prompts you for a file-name - DO NOT INCLUDE THE
+DRIVE. For example: Program prompts you for file-name:
+
+                                DO ENTER     - LAB.001
+                                DO NOT ENTER - B:LAB.001
+
+
+
+
+                                                                      Page 2
+STARTING THE SYSTEM:
+
+       1.  Boot your computer
+       2.  Insert the label programs diskette into drive A or copy them to your
+           default drive
+       3.  Insert a formatted blank diskette into your B drive
+       4.  Type in LABELS (return)
+
+     You should now be looking at the labels menu screen
+
+CREATING A LABEL FILE:
+
+     The system prompts you for everything.
+     However, before you can enter data, you must create a label file, so select
+     the Create new Label File option by entering 111.
+
+       1.  When you are prompted for the file name - you can use one of 12
+           names:  LAB.000 thru LAB.011...The system will ask you if you want
+           to create another...and although you can have more than one label
+           file per diskette, I suggest you use only one diskette per file.
+           That way you can get more addresses per diskette and be better
+           organized.  Once you've finished creating your file, remove the data
+           diskette, and put the file-name on the exterior label (eg. LAB.008)
+           and a description (eg. Los Angeles County Residents).
+
+       2.  Re-insert the data diskette into B drive and select the appropriate
+           200 option corresponding to your file-name.
+
+       YOU'RE NOW READY FOR HIGH-SPEED INPUT
+
+
+ENTERING DATA:
+
+       Although the screen is self-explanatory..there are a few things to
+       keep in mind:
+
+            1.  Not all the keys are functional. You can enter INS all day long
+                and the program will keep snoring.  This was intentional...so if
+                you hit the wrong key you don't have to spend all afternoon
+                putting things right..or wonder where your screen went...hit
+                scroll by mistake..etc.  Also, if you enter an invalid function
+                the program will wait until you put a correct one in.
+
+            2.  The keys that do work are as follows:
+
+                Functions 1-3  - Will turn on/off capturing the same address,
+                                 city, state, zip, FROM THE PREVIOUS entry
+                                 AUTOMATICALLY.
+                                 Sure saves time when you're going through a
+                                 reverse directory or entering Apartment numbers
+                                 where only the name and apt number change.
+
+                Function 4     - Will turn on/off phone number capture.
+
+                TAB (right)    - Will capture the same information from the
+                                 previous entry MANUALLY.
+
+                ARROW UP,DOWN  - Up a line, Down a line
+                                 (left a field, right a field)
+
+                ARROW LEFT, RIGHT - Go Left a character, Right a character
+
+
+
+
+                                                                      Page 3
+
+                RETURN         - Next line...marks the end of line text with an
+                                 asterisk (*). Note: the asterisk is used
+                                 internally for aligning the address labels.
+
+                A-Z, a-z,
+                0-9, etc.      - All the normal characters.
+
+                AND THATS IT!!!!!!!!!!!!!
+
+     EXAMPLE:  Assuming you are in the Labels Input program....
+
+               1.  Enter function "A"
+               2.  Enter your name, address, city and zip (return at the end
+                   of each field)
+               3.  Enter function "F" record 1, return then Enter function "C"
+               4.  Enter your last name incorrectly (return) then enter TAB
+                   until you see the Status "Changed"
+               5.  Now turn on functions F1, F2, F3 then repeat steps 3 and 4
+                   after correcting your last name..Surprized??
+               6.  Now turn off function F1 then enter function "A"
+               7.  Enter a new name and Address 1..How fast can you go???
+
+PRINTING:
+
+                Again...you're prompted for everything.  Just make your choice
+                from the labels menu.  I suggest you use 14 1/2" X 11" stock
+                paper to run through it a few times before you actually use
+                labels.
+
+                If you want the labels to print sorted by zip code, then select
+                the "create sorted zip file" option before printing your labels.
+
+-------------------------------------------------------------------------------
+
+             This system is free of charge...and may be distributed
+          only when accompanied with this documentation.  If you find
+       the system useful, a contribution of $30.00 would be appreciated.
+                   In any case, your comments or suggestions
+                           would be greatly welcomed.
+
+       BASRUN.EXE cannot be redistributed without written permission from
+                                      IBM.
+
+If you desire, the programs can be mailed to you on a diskette, with BASRUN.EXE.
+Please write to us and we will gladly mail you information regarding the
+redistribution of BASRUN.EXE, explaining certain disclaimers and charges IBM
+requires us to make.
+
+
+  YOU ARE ENCOURAGED TO WRITE TO US REGARDING OTHER SOFTWARE WE HAVE AVAILABLE
+
+```
+{% endraw %}
 
 ## MAKEMEMO.BAS
 
+{% raw %}
 ```bas
 10  '   ------------------------------------------------------------
 20  '   |                          MAKEMEMO                        |
@@ -1484,9 +2663,809 @@ machines:
 1550 RETURN
 1560 '
 ```
+{% endraw %}
+
+## MANUAL.TXT
+
+{% raw %}
+```
+
+
+                 PERSONAL DATEBOOK REFERENCE MANUAL
+
+           (c) 1984  by LATERAL PROGRAMMING, INCORPORATED
+                            P.O. Box 337
+                Altamonte Springs, Forida 32715-0337
+
+
+
+
+
+
+
+NOTE:
+
+PERSONAL DATEBOOK is a "FREEWARE" software product.  It is fully copy-
+righted and it is NOT in the public domain.  However,  you  may freely
+copy  and  distribute  PERSONAL DATEBOOK  and  its utility programs to
+anyone without restriction.
+
+If  you  find PERSONAL DATEBOOK useful, you are urged to register your
+copy by sending $12.95 to  LATERAL PROGRAMMING, INC.  at  the  address
+above.  Registered owners will receive a printed copy of this documen-
+tation and notification  of  all  program updates and improvements. In
+addition,  if  you  send  a blank disk with your registration fee, you
+will receive the latest version of PERSONAL DATEBOOK.
+
+
+By  registering  your  copy, you enable us to continue publishing high
+quality software on  a  "FREEWARE"  basis.  Your  support  is  greatly
+appreciated!!
+
+
+
+I. INTRODUCTION
+
+
+PERSONAL DATEBOOK  is  a  program  that  maintains a daily calendar of
+appointments, birthdays, memos, events and whatever  else  you  choose
+to record.  It  also  generates  a  monthly calendar and allows you to
+create and maintain a personal address list.
+
+PERSONAL DATEBOOK is equally useful in both the home and the office.
+
+The program will work with any IBM  Personal  Computer:  (XT,  PC,  PC
+Portable or PC Jr.) with either a color or monochrome display.  It may
+also be used with most IBM "compatible" computers running IBM PC DOS.
+
+You  must  have  at  least  one  disk  drive (floppy or hard) and your
+display must be 80 columns wide.
+
+If you have a printer connected to your computer,  you  will  be  able
+to print a day's memos along with the current month's calendar.
+
+
+
+II. SET UP PROCEDURE:
+
+
+Your  PERSONAL  DATEBOOK  disk  is  not copy protected because we feel
+that such systems should not be used on any program that will be  used
+every  day  and on which you will come to depend.  Consequently,  your
+first step should be to  make  a  copy  of  your  original  disk.  The
+original  should  then  be  placed in a safe place and you should work
+ONLY with the copy.
+
+Your  original  distribution  disk is not "bootable" and will not work
+directly on your computer because it does not contain the  DOS COMMAND
+file  or the BASIC language file needed to run the program.  We cannot
+include  these  files  on  your  disk because of copyright and royalty
+restrictions that would greatly increase the cost of the software.
+
+Also,  we have no way of knowing which operating system version  (1.1,
+2.0, 2.1 etc.) or what type of computer  (XT, PC, PC Portable, PC Jr.,
+Compaq, etc.) or disk drive (floppy or fixed) you will be using.
+
+Therefore,  you  will have to create a "working" disk tailored to your
+system.  This  is  not difficult to do and you will only have to do it
+one time.  However,  you must be familiar with the operation  of  your
+computer and you  must  know  how  to  use  the  "FORMAT"  and  "COPY"
+utilities included with your Disk Operating System.
+
+Note  that  you  must  use  your  DOS "FORMAT" and "COPY" utilities to
+create a working copy for your operating system version.  This  cannot
+be done with the  "DISKCOPY"  utility because DISKCOPY would create an
+exact copy of  the  distribution  disk  that  would  not  contain  the
+operating  system  COMMAND  files  and  that also might not be in your
+particular version  of  DOS.  However,  once  you  have  created  your
+"working" copy, DISKCOPY may be used to create additional copies.
+
+If  all  this  sounds confusing to you, please read your DOS manual or
+get help from your computer store or a knowledgeable friend.
+
+
+
+A. EQUIPMENT AND MATERIALS
+
+
+Before you begin, you must have:
+
+        1. An  IBM  (XT, PC, PC Portable, PC Jr.)  or IBM "compatible"
+           computer with an 80 column  display  monitor.  The  monitor
+           may be either color or monochrome.
+
+        2. A copy of the IBM DOS  (Disk Operating System)  and the IBM
+           BASIC language.  PC Jr.  users  will  need  the  IBM  BASIC
+           CARTRIDGE instead of disk BASIC.
+
+        3. The original PERSONAL DATEBOOK disk.
+
+        4. One or more blank disks.
+
+
+
+B. FIXED DISK INSTALLATION
+
+
+If you will be using a "fixed" or "hard" disk:
+
+        1. Use the DOS COPY  utility  to  copy  the  files  from  your
+           PERSONAL  DATEBOOK   distribution   disk  to  the  selected
+           directory on your drive.
+
+        2. Use  the  DOS  COPY  utility to copy  BASIC.COM to the same
+           directory on your drive.
+
+        NOTE:  Your  directory  should  contain the files:  BASIC.COM,
+        MEMO.BAS,  MEMO.BAT,  MANUAL.EXE,  MANUAL.TXT, CONVERT.BAS and
+        CONVERT.BAT  If you create another batch file the main program
+        "MEMO.BAS"  must  be  called  with  the parameters "BASIC MEMO
+        /S:255 /F:4" to work properly.
+
+
+C. FLOPPY DISK INSTALLATION
+
+
+If you will be using a floppy disk drive:
+
+        1. FORMAT a blank disk using the "/S" option as  explained  in
+           your  DOS  manual.  This will create a "bootable" disk that
+           contains the DOS COMMAND file.  If you have a double  sided
+           drive,  be  sure to create a double sided disk as this will
+           greatly increase the amount of datebook memos and addresses
+           that you can create.
+
+        2. Use  the  DOS  COPY  command  to  copy  the files from your
+           PERSONAL DATEBOOK  distribution  disk  to  your  formatted,
+           blank disk.
+
+        3. Use the DOS COPY command to  copy  the  BASIC.COM  file  to
+           file to your formatted disk.  PC Jr.  users with  CARTRIDGE
+           BASIC may omit this step as the BASIC language is contained
+           in the cartridge.
+
+        4. Label your completed disk  "PERSONAL DATEBOOK WORKING DISK"
+           along  with  the date and any other information you wish to
+           include.
+
+        NOTE:  You  will  end  up with a  disk  containing  the  files
+        COMMAND.COM,  BASIC.COM,   MEMO.BAS,   MEMO.BAT,   MANUAL.EXE,
+        MANUAL.TXT, CONVERT.BAS and  CONVERT.BAT.  This is the working
+        PERSONAL DATEBOOK disk that you will be using every day.
+
+        It is suggested that you make an additional copy of this disk,
+        label  it  "PERSONAL DATEBOOK MASTER",  and keep it in a  safe
+        place.  Then,  when  you  wish  to create additional "working"
+        disks, you can simply use your DISKCOPY utility and  you  will
+        not have to go through the separate format and copy operations
+        described above.
+
+
+
+III. USING PERSONAL DATEBOOK
+
+
+PERSONAL DATEBOOK  is very easy to use. All operations are prompted on
+two command lines at the bottom of the screen.
+
+Although the use of PERSONAL DATEBOOK is  fairly  straightforward  and
+logical,  there  are  certain conventions that must be observed. It is
+suggested  that  you  read through the following description of all of
+the commands and functions of PERSONAL DATEBOOK.
+
+
+
+A. START-UP:
+
+
+To start the PERSONAL DATEBOOK program you must be at the  DOS COMMAND
+level where you will see the  "A>" prompt.  You  can  get to  the  DOS
+command level in several ways:
+
+         1. If your computer  is  off,  place  your  PERSONAL DATEBOOK
+            (working copy)  in  the  "default" drive (usually drive A)
+            and turn the computer on.
+
+         2. If the computer is on and you are not at the command level
+            you can perform a  "warm boot"  by simultaneously pressing
+            the <Ctrl>,  <Alt>  and  <Del>  keys  after  placing  your
+            PERSONAL DATEBOOK disk in the default drive.
+
+Once  you  are  at  the  DOS command level, simply type MEMO and press
+<Ret> for the PERSONAL DATEBOOK program or type MANUAL and press <Ret>
+for this program.
+
+NOTE:    When you first turn on your computer or perform a  warm  boot
+         you will be asked to supply the date and time.  The  PERSONAL
+         DATEBOOK program uses this information.  It will simplify the
+         operation of the program if it is supplied at start-up.
+
+
+
+B. PROGRAM INITIALIZATION
+
+
+When  you  call  up the PERSONAL DATEBOOK program, several things will
+happen. First, the program will check to see if you are using a  color
+or  monochrome  monitor and will automatically adjust the display.  If
+you  happen  to have both a color and monochrome driver installed, you
+will be asked which you prefer to use.
+
+NOTE:    The program has no way of knowing if a  monitor  is  actually
+         attached  to  the  display  driver  or  if  it  is turned on.
+         Be careful not to switch to a nonexistant display.  Also,  if
+         you  have  two  monitors , the  program will come up first on
+         the monochrome display and it will return  to  the monochrome
+         display when you exit the program.
+
+Next,  the  program  will automatically test your disk to see how much
+space is left. If the amount of free space is below about 20 kilobytes
+a  message  will  be displayed suggesting that you start a new disk or
+that you delete any unnecessary files.
+
+NOTE:    In addition to the COMMAND.COM, BASIC.COM, MEMO.BAT, MEMO.BAS
+         MANUAL.EXE,  MANUAL.TXT,  CONVERT.BAT  and  CONVERT.BAS files
+         that will be on disk when you initially begin to use PERSONAL
+         DATEBOOK, the program will create the following files:
+
+         1. A  file  will  be  created  for  each month that you enter
+            memos. An example is MAY1984.CAL.  These files will always
+            contain  the  first  three  letters of the month name, the
+            year and the suffix "CAL".
+
+         2. Two files will also be created for your address list.  The
+            first,  ADDRESS.DAT,  contains  all  of  the data for your
+            address list. The second, ADDRESS.ISI, contains  an  index
+            of all of the last names in the address list.
+
+         It is suggested that you periodically delete  any  old  month
+         files that you will no longer be using.  If space gets tight,
+         you  can also delete the files MANUAL.BAS which contains this
+         text; MANUAL.EXE which is the program to read and print  this
+         manual; as well as CONVERT.BAT and CONVERT.BAS which are used
+         to  convert PERSONAL DATEBOOK address lists for use with word
+         processors and other programs.  If you delete the  MANUAL  or
+         CONVERT programs from your working disk, be sure you retain a
+         copy on another disk.
+
+         DO NOT DELETE  any of the other files as the program will not
+         work without them.
+
+To  delete  files,  first end the program. This will return you to the
+DOS command level. When you see the "A>" prompt:
+
+         1. Type  DIR  (or DIR/W if you have a lot of files) to obtain
+            a directory of all the files on the disk.
+
+         2. Choose  the file to be deleted and type ERASE FILENAME.EXT
+            where FILENAME is the name of the file and EXT is the  DOS
+            file type identification. Example: ERASE MAY1984.CAL
+
+         3. Repeat  step  two  for  each  file that you wish to erase.
+            Then use the DIR command to obtain a  new  directory.  You
+            will  notice  that  the erased files are gone.  There will
+            also be a message at the bottom telling you how much  disk
+            space is now available.
+
+         NOTE: Your DOS manual contains complete  information  on  the
+         use of the  ERASE  and DIR (Directory) functions. Please read
+         it if you are unsure of any of the instructions above.
+
+
+
+C. CHOOSE MONTH AND YEAR
+
+
+Next,  the  program will draw the initial PERSONAL DATEBOOK screen and
+display the following prompt at the bottom:
+
+THE SYSTEM DATE IS (MONTH, YEAR)    DO YOU WANT THE SYSTEM DATE? (Y/N)
+
+The  system  date  is  the  date  you  entered  when you turned on the
+computer.  If the system date is the month  and  year  that  you  want
+simply type a "Y" and the file for that month and year will be opened.
+
+If  you  type a "N" you will be asked to enter another month and year.
+You must type the month name and the year.  Almost any format will  do
+such as: "AUGUST, 1985" or "JUNE 1983".
+
+NOTE:   The computer is really only  interested  in  the  first  three
+        letters of the month name and the last two digits of the  year
+        so an entry of "AUG85" is also acceptable.
+
+        The acceptable years are 1900 to 1999.  If you type  "1885" or
+        "2085"  the  computer  will  assume you mean 1985. (Few people
+        other than Time Lords will want to  schedule  appointments  in
+        the  past.  However,  the  ability to list previous months and
+        years might be useful if you want to determine the day of  the
+        week you were born or married, etc.)
+
+
+
+D. MAIN MENU SELECTIONS
+
+
+Once  you  have  entered the desired month and year, the computer will
+generate a calendar and display it in the upper left  hand  corner  of
+the  screen  followed  by  a list of the month's major holidays in the
+box immediately below. Then, in the two line area at the bottom of the
+screen, you will see the following choices:
+
+MAIN MENU:    <F1> PICK DAY   <F2> PICK MONTH/YEAR   <F3> ADDRESS LIST
+and <F10> END PROGRAM
+
+You must now select one of these functions.
+
+NOTE:    <F1>, <F2>, <F3>, etc. refers to the  FUNCTION KEYS  on  your
+         computer.  XT, PC, and PC Portable  users need only press one
+         of the ten function keys on the  extreme  left  side  of  the
+         keyboard.  PC Jr.  users must press the "Fn" key at the upper
+         right  on  their  keyboard  followed  by   the   number   key
+         corresponding to their choice. Also, <F10> on the  PC Jr.  is
+         the "Fn" key followed by the "0" key. 
+
+<F1> PICK DAY:  If you are in the desired month  and  year,  use  this
+function  key  to choose the day of the month. You will be prompted to
+enter the desired day. Enter it and press <Ret>.  If  a  memo for that
+day  already  exists,  it will be displayed in the column on the right
+hand side of the screen reserved for memos. If no memo exists you will
+be  prompted  to  enter  one  and the cursor will be positioned at the
+beginning of the first memo line.
+
+NOTE:    To enter a memo, simply begin typing.  If you make a mistake,
+         use  the  backspace   key  to  back  up  and  erase  unwanted
+         characters.  Then continue typing. The limit for each line is
+         40 characters.  When  you  finish a line, press the <Ret> key
+         and the cursor will be placed at the beginning  of  the  next
+         line.  When  you  are  finished typing memo lines,  press the
+         <Ret> again.  The memo will be  recorded  and  the  MEMO MENU
+         will appear at the bottom of the screen.
+
+         If you make an error, use the  backspace  key  to  erase  the
+         unwanted characters.  You can only correct  mistakes  on  the
+         current  line  and  you  cannot  return to a previous line at
+         this point.  However, if you do want to change something on a
+         previous line or notice a mistake, do not worry. You may call
+         up  a  full  range of editing functions from the EDIT MENU as
+         explained later.
+
+         The program will not allow a blank line between  memo  lines.
+         If you try to enter a blank line,  the program will think you
+         have finished the memo and act accordingly.  The  reason  for
+         this is that blank lines use up valuable disk space.
+
+<F2> PICK MONTH/YEAR:  Use  this  function key if you want to choose a
+different month and year.  You will again be asked  if  you  want  the
+system month and,  if not,  given the opportunity to enter a new month
+and year.
+
+<F3> ADDRESS LIST:  Use this function key to use the ADDRESS LIST part
+of the program.  A  blank address list form will be drawn in the lower
+left box on your screen and  the  "ADDRESS MENU",  as explained later,
+will appear to prompt further choices.
+
+<F10> END PROGRAM:  Use this function key to end PERSONAL DATEBOOK and
+return to the DOS operating system.
+
+NOTE:    Always  use  this  function to end the program. DO NOT simply
+         turn off the computer. If you do, some of the work  you  have
+         done  during  the  current  session  could be lost.  The "END
+         PROGRAM" function organizes your data files  and  allows  the
+         most efficient use of disk space.
+
+
+
+E. MEMO MENU SELECTIONS
+
+
+If you choose <F1> in the MAIN MENU, and either retrieve  an  existing
+memo  or  create  a new memo, you will be presented with the following
+choices:
+
+MEMO MENU:    <F1> PRINT MEMO     <F2> EDIT MEMO     <F3> ADDRESS LIST
+<F4> CLEAR ADDRESS BOX and <F9> MAIN MENU
+
+<F1> PRINT MEMO:  If  you  choose  this function, you will be asked to
+ready your printer and to "type any key"  to  continue.  Your  printer
+will then print a duplicate of the screen.  Use  this function to take
+a copy of your day's appointments with you.
+
+NOTE:    If your printer is not on or if it is out of paper,  etc.  an
+         error  will  result.  No  harm  will  be done and you will be
+         returned to the MEMO MENU after a "timeout"  delay  of  about
+         45 seconds or less.
+
+<F2> EDIT MEMO:  If  you  choose this function,  you will be presented
+with a list of functions  that  will  allow  you  to  make  additions,
+changes,  deletions, etc. to the current day's memo. These choices are
+explained later in the "EDIT MENU" section.
+
+<F3> ADDRESS LIST:  This  function  is  identical  to the ADDRESS LIST
+selection in the MAIN MENU.
+
+<F4> CLEAR ADDRESS BOX: This function erases any data in  the  address
+and holiday data box in the lower left corner when desired.
+
+<F9> MAIN MENU: This selection returns you to the MAIN MENU choices.
+
+
+
+F. EDIT MENU SELECTIONS
+
+
+There are a complete range of memo editing functions:
+
+EDIT MENU:     <F1> DELETE MEMO     <F2> RETYPE MEMO     <F3> ADD LINE
+<F4> RETYPE LINE  <F5> DELETE LINE   <F6> INSERT LINE   <F7> MOVE LINE
+and <F9> MEMO MENU
+
+<F1> DELETE MEMO:  This selection deletes the entire memo and  removes
+it from the calendar.
+
+<F2> RETYPE MEMO:   This  selection  also  deletes  the  entire  memo.
+However, it does not remove the memo notation from the calendar and it
+positions the cursor for you to type in new memo lines.
+
+NOTE:     If you chose this function and decide not  to  enter  a  new
+          memo, simply press <Ret> and both the calendar and memo will
+          be entirely deleted exactly as if you had  chosen  the  <F1>
+          DELETE MEMO function.
+
+<F3> ADD LINE:  This selection allows you to add a line or lines to an
+existing memo.  Remember,  you  cannot  have  blank lines between memo
+lines as this would waste valuable disk space.  When you are finished,
+simply type an extra <Ret> and the additions will be recorded.
+
+<F4> RETYPE LINE:  This  function  will allow you to retype a selected
+line.  Notice  the numbers in the vertical column in the middle of the
+screen. You will be prompted to enter the line number of the line  you
+wish to retype. Enter the line number and press <Ret>. The  line  will
+be erased and you may type a new line. When you finish the line, press
+the <Ret> key.  You will then be  prompted  to  enter  the  number  of
+another line to be retyped.  Press <F9>  when done and you will return
+to the EDIT MENU.
+
+NOTE:    You  will  receive an error message if you type a line number
+         that does not contain a memo line.  Also, remember  that  you
+         cannot type past the 40 character line limit.
+
+<F5> DELETE LINE:  This selection allows you to delete a selected memo
+line.  You  will  be  prompted  to  enter the number of the line to be
+deleted. Then, when you press <Ret> the line will  disappear  and  the
+following  lines  will  move  up.  You  will then be prompted to enter
+another line number or press <F9> to QUIT and return to the EDIT MENU.
+Once  again,  if  you try to type a non-valid line number you will get
+an error message.
+
+<F6> INSERT LINE:  This  function allows you to insert a new memo line
+between existing memo lines.  You will be prompted for the  number  of
+the  line  where  the  insertion is to be made.  When you enter a line
+number and press <Ret>, the following lines will  move  down  and  the
+cursor  will  be positioned for you to type the new line. Type the new
+line and press <Ret>. The program will prompt for a new insertion line
+number or allow you to press <F9> to quit and return to the EDIT MENU.
+
+<F7> MOVE LINE:  This  function  allows you to move memo lines around.
+First you will be prompted for the number of the  line  to  be  moved.
+When you type this number and press <Ret> you will be  asked  for  the
+destination line number. Enter this number,  press  <Ret> and the line
+will be moved to the desired location.
+
+NOTE:    Once  again,  because  blank lines between memo lines are not
+         allowed,  the  program  won't  let  you specify a line number
+         greater than the number of lines in the memo.
+
+<F9> MEMO MENU: This selection returns you to the MEMO MENU.
+
+
+
+G. ADDRESS MENU SELECTIONS
+
+
+You can enter the ADDRESS LIST from the MAIN MENU  or  the  MEMO MENU.
+In  either  case when you choose this function a blank address form is
+printed in the lower left box on the screen and the following  appears
+in the prompt area:
+
+ADDRESS MENU: <F1> ADD RECORD  <F2> GET RECORD  <F3> SEARCH  <F8> MEMO
+MENU and <F9> MAIN MENU
+
+<F1> ADD RECORD:  This  function  lets you add a new name and address.
+The cursor will be positioned at the first character on the  Last Name
+line.  Simply  begin  typing  the information.  Press <Ret> after each
+entry. Press <Ret> at the beginning of each data field if you wish  to
+leave it blank.
+
+NOTE:    Once you begin entering information, you  must  fill  in  the
+         entire form before quitting.  There are 19 separate fields on
+         the  form,  so  you will have to press <Ret> 19 times whether
+         you enter information in a particular field or not.
+
+         If you make a mistake while typing the current field,  simply
+         use  the  backspace  key  to  remove  unwanted characters and
+         retype the correct information.
+
+         If you want to change something in a previous field, type the
+         "<" character at the BEGINNING of the current field and press
+         <Ret>.  This  will  place  the cursor at the beginning of the
+         previous  field.  You  can back up through the entire form in
+         this manner if you wish.  However,  major editing can be done
+         more easily with the CHANGE function explained later.
+
+<F2> GET RECORD:  Use  this  function to retrieve a previously entered
+record from your Address file if you know the  LAST NAME.  The  cursor
+will  be  positioned at the beginning of the LAST NAME field. You must
+type the last name, or a portion of the  last  name,   EXACTLY  as  it
+appeared in the original record.
+
+NOTE:    You  may  type the entire last name or a portion of it as the
+         search argument. For example, entering "Smith" would find all
+         address records with a last name of Smith. It would not  find
+         smith,  SMITH  or  SmItH.  Entering "S" would find all of the
+         address records beginning with the capital S.
+
+         There  are  several  conventions  that  must be observed when
+         using the GET RECORD and SEARCH functions.  Please  refer  to
+         the section  TIPS ON USING THE ADDRESS LIST.  Reading it will
+         save you a lot of frustration later on.
+
+If the requested address record is found, it will be displayed and the
+following choices will appear in the prompt area:
+
+GET RECORD:  <F1> CHANGE   <F2> NEXT   <F3> DELETE  <F4> PRINT ADDRESS
+<F7> ADDRESS MENU  <F8> MEMO MENU and <F9> MAIN MENU
+
+<F1> CHANGE:  Use this option if you wish to change any information in
+the  record.  The  cursor will be placed at the beginning of the first
+field. To make a change, simply retype with the  correct  information.
+If  you  do  not wish to make any change in a particular field, simply
+press <RET> and the cursor will move to the next field. Once you start
+changing, you must go through each field and press  the  <Ret>  key  a
+total  of  19 times.  When you finish you will be returned to the main
+ADDRESS MENU.
+
+<F2> NEXT:  This option will continue the search for another occurance
+of  the  search  argument.  If  another  record is found,  it  will be
+displayed. If no other record  is  found,  the  message  "END OF FILE"
+will be displayed at the bottom of the screen.
+
+<F3> DELETE:  Use  this  function if you wish to completely delete the
+address record from the file. As a safety measure,  the  program  will
+ask  "ARE YOU SURE YOU WANT TO DELETE? (Y/N)".  If  you type  "Y"  the
+record  will  be  deleted.  If  you  type  "N"  the record will not be
+deleted and you will be returned to the main ADDRESS MENU.
+
+<F4> PRINT ADDRESS: This function will prepare an address  label  that
+contains the FIRST NAME,  MIDDLE NAME,  LAST NAME,  COMPANY,  ADDRESS,
+CITY,  STATE  and  ZIP CODE.  The  address  label is then sent to your
+printer where labels, letterheads, envelopes, etc. can be printed.
+
+NOTE:    You will be asked to specify an OFFSET  IN  SPACES  FROM  THE
+         LEFT  MARGIN. You can enter a number from 0 to 50.  An offset
+         of 0 will print the address at the extreme left side  of  the
+         page  and  an  offset  of 50 will position the address at the
+         extreme right of a standard width letter. Intermediate values
+         will, of course, position the address between these extremes.
+
+         Next you will be asked to ENTER  NUMBER  OF BLANK LINES AFTER
+         ADDRESS.  This must be a number between 1 and 70.  If you are
+         printing the address on standard 1 inch labels,  for example,
+         you should specify 4 lines if your printer spaces 8 lines per
+         inch (the address is always 4 lines long)  or 2 lines if your
+         printer spaces 6 lines per inch.
+
+         Finally you will be asked to MAKE SURE PRINTER IS READY  THEN
+         PRESS ANY KEY TO PRINT ADDRESS.  Pressing  any  key will then
+         send the address to the printer. If you do not have a printer
+         attached to your computer, or if the printer is not turned on
+         or out of paper, etc. an error will result.  After  a timeout
+         delay  of  up to 45 seconds (during which you may correct the
+         fault) the program will return to the MAIN ADDRESS MENU.
+
+         After an address has been printed you will be returned to the
+         program at the point from which you entered the PRINT ADDRESS
+         function.
+
+<F7> ADDRESS MENU:  This option will return you to  the  main  ADDRESS
+MENU.
+
+<F8> MEMO MENU: This returns you to the MEMO MENU in the main program.
+
+<F9> MAIN MENU: This returns to the MAIN MENU.
+
+NOTE:    You can enter the address list from either the  MAIN MENU  or
+         the  MEMO MENU  and you can also return to either one.  It is
+         possible,  for example,  to  go  to  the  ADDRESS LIST in the
+         middle of entering a memo, look up an address and  return  to
+         continue editing the memo. If you exit directly from a search
+         operation  (with the address information still on the screen)
+         and choose the MEMO MENU function, the address will remain on
+         the  screen  for  reference.  However, if you choose the MAIN
+         MENU function, the address will be erased.
+
+<F3> SEARCH:  This  function  will  search  through the ENTIRE address
+file for information that you supply. You can use  it  to  search  for
+any  particular  piece  of  information in any field. For example, use
+it to search for addresses with a  particular  zip  code  or telephone
+area code.  Enter the "search string" in the prompt area at the bottom
+of the screen and press <Ret>.
+
+NOTE:   The search argument can be up to 30  characters  long.  Again,
+        the  program  will  only  find  a  record if there is an EXACT
+        match with the search argument.  Please read the section  TIPS
+        ON USING THE ADDRESS LIST  for  a  full explanation of the GET
+        RECORD and SEARCH functions.
+
+If the search is successful, the first occurance of the record will be
+displayed and you will be presented with the following choices:
+
+SEARCH RECORD:      <F2> NEXT   <F4> PRINT ADDRESS   <F7> ADDRESS MENU
+<F8> MEMO MENU  and  <F9> MAIN MENU
+
+These options are identical to the ones described in the GET  function
+above.
+
+NOTE:    The CHANGE and DELETE functions will  not  operate  from  the
+         SEARCH function. You must return to the ADDRESS MENU and then
+         call up the record with the GET RECORD option in order to use
+         the CHANGE and DELETE functions.
+
+
+
+H. TIPS ON USING THE ADDRESS LIST
+
+
+DATA ENTRY
+
+The first field is labeled LAST NAME.  The ADDRESS LIST  maintains  an
+index  file  called ADDRESS.ISI that contains an index of whatever you
+enter in this field.  As explained later, the <F2> GET RECORD function
+searches this index.
+
+The  remaining  fields are for FIRST NAME, MIDDLE NAME, NOTE, ADDRESS,
+and so on.  There are fields for two phone  numbers  (office and home)
+and a generous space for comments.
+
+NOTE:    The line immediately below the lines  for  last,  middle  and
+         first  names  is labeled COMPANY.  This line is printed under
+         the name when you use the PRINT ADDRESS function. You can use
+         this line for an individual's title,  company or other infor-
+         mation that you might want  printed  under  the  name  on  an
+         address label.  If you do not want a  company, title, etc. to
+         print just leave this line blank.
+
+The data fields should be set up in a  consistent  manner.  This  will
+greatly simplify retrieving information later on.
+
+
+SEARCHING
+
+There are two different ways to find an address record:
+
+<F2> GET RECORD  is the fastest method of searching your address list.
+It searches the last name index (ADDRESS.ISI) and  then  goes  to  the
+main file (ADDRESS.DAT) to get the appropriate record.
+
+NOTE:    In  order  to  find  an  address you must type the  LAST NAME
+         exactly as it was typed in the original record.  If you typed
+         "Smith"  and  original  was  typed  SMITH,  then  the address
+         would not be found.
+
+         As mentioned earlier, you can also search the  index  with  a
+         portion of the last name.
+
+         For example:
+
+         Entering "Smith" will find address records for everyone named
+         Smith.
+
+         Entering "Sm" will find address records for every  last  name
+         beginning with Sm.
+
+         Entering  "S"  will  find address records for every last name
+         beginning with a capital S.
+
+
+<F3> SEARCH is an alternate method of finding an address. It is slower
+than using the GET RECORD function, but it is much more versatile. The
+SEARCH function searches the entire address file, not  just  the  LAST
+NAME field. You can use it to find address records by entering what is
+called a "search argument" that can be up to 30 characters in length.
+
+An example would be looking up addresses by state  or  telephone  area
+code.  The possibilities are endless.  However, as with the GET RECORD
+function, there must be an exact match (including capitals, spaces and
+lower case) or the address record will not be found.
+
+Once again,  filling out the address forms in a consistent manner such
+as using all capitals, etc. will make things a lot easier later on!
+
+
+USING YOUR ADDRESS LIST WITH OTHER PROGRAMS
+
+For  those  who  have  word  processors  with "mail merge" and similar
+functions that can, for example, merge an address  list  into  a  form
+letter, etc., a simple conversion program is provided.
+
+This program, called CONVERT.BAS is present on your original  PERSONAL
+DATEBOOK disk.  CONVERT.BAS  will  extract  information  from the file
+ADDRESS.DAT and convert it to a standard ASCII text file that  can  be
+used with most word processors and other programs.
+
+CONVERT.BAS  extracts the FIRST NAME, MIDDLE NAME, LAST NAME, COMPANY,
+ADDRESS,  CITY,  STATE  and ZIP CODE  and organizes it in an  "address
+label" similar to the PRINT ADDRESS function. Then it creates an ASCII
+text file called ADDRESS.TXT.
+
+Addresses in the new ADDRESS.TXT file will have the following format:
+ 
+         @
+         First Middle Last
+         Company
+         Address
+         City, State  ZipCode
+         @
+
+Unfortunately, each word processor uses different symbols to  separate
+and delineate records in an address file.  WordStar, for example, uses
+"dot"  commands.  We  have  no way of knowing which word processor you
+will be using.  Consequently,  you will have to modify the ADDRESS.TXT
+file.   You  can  use  your  word  processor's  "search  and  replace"
+function  to  replace the "@" symbol that appears at the beginning and
+end of addresses in the ADDRESS.TXT file with the required notation.
+
+Each line in the ADDRESS.TXT file ends with  a  linefeed  (CHR$(10) or
+hex 0A) plus a carriage return (CHR$(13) or hex 0D).  This is standard
+with many word processors, but not with all.  If you require different
+symbols you must modify line 3310 in the CONVERT.BAS  program.  If you
+are not an experienced BASIC programmer or if you are unfamiliar  with
+the requirements of your word processor,  you should seek  assistance.
+At  any  rate,  make  a back-up copy of the CONVERT.BAS program before
+attempting any changes. It would also be very wise to work with a COPY
+of your ADDRESS.DAT file and to do the conversion on a separate disk.
+
+If your word processor does not use ASCII text files,  you will not be
+able  to  use  the  ADDRESS.TXT  file  unless you were supplied with a
+program to convert ASCII files to  the  proper  format.  Quality  word
+processors usually supply such a program.
+
+To use CONVERT.BAS you should copy the files CONVERT.BAS, CONVERT.BAT,
+ADDRESS.DAT and BASIC.COM to a separate disk that has  been  formatted
+with  the  /S (system) option.  Consult your DOS manual if you are not
+familiar with the COPY and FORMAT utilities.
+
+If your disk contains the CONVERT.BAT batch file as suggested,  simply
+"boot" the disk and type  "CONVERT"  when the DOS "A>" prompt appears.
+If  you  are  not  using  the CONVERT.BAT batch file, you can call the
+CONVERT.BAS program directly from BASIC.  Note,  however,  that  BASIC
+must be called with the option "BASIC /s:255" which allocates a larger
+than normal file size. Failure to specify this option will  result  in
+an error that will terminate the program when you attempt to run it.
+
+When  the  CONVERT.BAS  program is run, just follow the screen prompts
+and the new ADDRESS.TXT file will be created automatically.
+
+CONVERT.BAS  is supplied "as is" for the purpose of making the address
+files created by PERSONAL DATEBOOK more useful. Regrettably we can not
+be responsible for its use or the results you  may  obtain.  Also,  we
+cannot offer technical support beyond the information supplied for the
+conversion of ADDRESS.DAT files to any individual word processor.
+
+
+
+
+
+
+
+            (c) 1984 by  LATERAL PROGRAMMING, INCORPORATED
+                             P.O. Box 337
+                   Altamonte Springs, FL 32715-0337
+```
+{% endraw %}
 
 ## MEMO.BAS
 
+{% raw %}
 ```bas
 1 'PERSONAL DATEBOOK
 2 '(c) 1984 by LATERAL PROGRAMMING, INC. All rights reserved.
@@ -1952,9 +3931,11 @@ machines:
 510 RS$=INKEY$:IF RS$="" THEN GOTO 510
 511 RETURN
 ```
+{% endraw %}
 
 ## SHOWMEMO.BAS
 
+{% raw %}
 ```bas
 10  '   ------------------------------------------------------------
 20  '   |                       SHOWMEMO                           |
@@ -2056,6 +4037,7 @@ machines:
 980 SEQDATE = (INTVAL% * 365) + MDAY(MO) + DA
 990 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

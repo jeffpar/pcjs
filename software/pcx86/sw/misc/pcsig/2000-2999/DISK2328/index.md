@@ -28,6 +28,57 @@ machines:
     Epson, IBM or HP-type printer. The results are amazing!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## BBS-DESC.TXT
+
+{% raw %}
+```
+FormFill - Form Filling System
+==============================
+
+Category: Business / Desktop Publishing
+
+FormFill is a powerful, yet easy-to-use package for filling forms.  It is a
+companion system for FormGen that allows you to define data areas on a
+FormGen form.  Once done, the form may be filled and printed - picture
+perfect every time.  Features include muti-line fields, calculated fields,
+system date and time support and much more.  Context sensitive help makes
+it easy to learn and use.  Forms can be printed on your Epson, IBM or HP type
+printer.  The printed results are amazing! [ASP MEMBER]                              
+```
+{% endraw %}
+
+## FILE2328.TXT
+
+{% raw %}
+```
+Disk No: 2328                                                           
+Disk Title: FormFill                                                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: FormFill (companion to FormGen)                          
+Author Version: 1.3                                                     
+Author Registration: $35.00                                             
+Special Requirements: FormGen #1695.                                    
+                                                                        
+FormFill is a powerful, yet easy-to-use package for filling forms.  It  
+is a companion system for FormGen that allows you to define data areas  
+on a FormGen form.  Once done, the form may be filled and printed -     
+picture perfect every time.  Features include multi-line fields,        
+calculated fields, system date and time support and much more.  Context 
+sensitive help makes it easy to learn and use.  Forms can be printed on 
+your Epson, IBM or HP type printer.  The printed results are amazing!   
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2328
 

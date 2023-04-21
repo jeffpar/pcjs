@@ -40,6 +40,50 @@ machines:
     like to try cryptograms.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1964.TXT
+
+{% raw %}
+```
+Disk No: 1964                                                           
+Disk Title: PC Cryptogram                                               
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: PC CRYPTOGRAMS                                           
+Author Version: 1.0                                                     
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+NB BYDNSKMYFX AE E BIFTTLJMAJM NZPPTL MFXL!  Oh, excuse me - PC         
+CRYPTOGRAM is a challenging puzzle game!  Baffling riddles of           
+letters await the most ardent of cryptogram fans.  Not a game for       
+quick action or graphics players, but a test for anyone who is          
+interested in difficult word puzzles.                                   
+                                                                        
+Easy to use, PC CRYPTOGRAM can be used on an IBM or Compatible.         
+Just type in CRYPTO, select one of the 40 puzzles and begin.  Look      
+for those common words and letters - this is the key to solving         
+cryptograms.  PC CRYPTOGRAM provides you with a list of the             
+"letters" used and the frequency in which you find them in the          
+puzzle.  Once you think you have figured out a word or letter, just     
+type it in under its corresponding "letter" and the program             
+automatically fills it in to the puzzle.  A "Solve," "Clear," and       
+"Save" feature are also included in this game.                          
+                                                                        
+PC CRYPTOGRAM will provide hours of challenging puzzle fun for          
+young adults and older.  Improve word association and other skills.     
+A must for cryptogram lovers.                                           
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1964
 

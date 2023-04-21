@@ -33,6 +33,66 @@ machines:
     job descriptions.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1195.TXT
+
+{% raw %}
+```
+Disk No: 1195
+Program Title: PC Shift version 1.01
+PC-SIG version: 1.1
+
+PC-SHIFT is a program that will help organize your employee shift
+schedule.  PC-SHIFT allows you to divide the jobs by location or
+category and then lets you describe each job required for each area.
+The job descriptions consist of the beginning date, the location or
+department, the job title or description, the minimum and maximum
+qualification level, and the minimum and maximum security level.
+
+PC-SHIFT then lets you enter a schedule for each job, showing a chart of
+each hour of the day divided into 15-minute intervals.  Once all the
+data is entered, you may display or print a report on a 12-hour
+schedule, a 24-hour schedule, a 24-hour chart, or a report on all the
+job descriptions.
+
+Usage:  Employee Shift Scheduling.
+
+Special Requirements:  A printer for the reports.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $39.95
+
+File Descriptions:
+
+1        BAT  Installation file.
+2        BAT  Installation file.
+3        BAT  Installation file.
+4        BAT  Installation file.
+5        BAT  Installation file.
+EMPTY    DBF  Database file.
+ESJOBS   DBF  Database file.
+HELP     BAT  Types MENU.SCR.
+MENU     BAT  Types MENU.SCR.
+MENU     SCR  Menu screen.
+PCSHIFT  EXE  Main program.
+PCSHIFT  MAN  Documentation.
+PRINTMAN EXE  Print file.
+README        How to get started.
+WHATIS   IT   Text file.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1195
 

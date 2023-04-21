@@ -14,6 +14,31 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2906.TXT
+
+{% raw %}
+```
+Disk No: 2906                                                           
+Disk Title: EZ-Menu by PCS                                              
+PC-SIG Version: S3.7                                                    
+                                                                        
+Program Title: EZ-Menu by PCS                                           
+Author Version: 3.7B                                                    
+Author Registration: $35.00                                             
+Special Requirements: A hard drive.                                     
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2906
 

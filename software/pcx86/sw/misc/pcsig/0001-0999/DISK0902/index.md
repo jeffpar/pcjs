@@ -35,6 +35,55 @@ machines:
     options available.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES902.TXT
+
+{% raw %}
+```
+Disk No  902
+Program Title: HEBREW QUIZ
+PC-SIG version 1.3
+
+HEBREW QUIZ is a Biblical Hebrew language tutor that teaches the Hebrew
+language alphabet, vocabulary, verbs, and grammar.  You can learn the
+vocabulary by a certain word type, by the frequency of occurrence in the
+Hebrew Bible, and/or by cognate groups.  Verbs can be learned by verb
+type, conjugation, tense, person, gender, number, or suffix.  You can also
+choose the part of grammar to review.
+
+Besides the tutorial program, HEBREW QUIZ comes with a quiz for each section
+that keeps track of your scores.  Hebrew words are shown one at a time (with an
+English translation for the tutor).  A menu on the screen displays all the
+options available.
+
+Usage:  Educational/Tutorial.
+
+System Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $20.00
+
+File Descriptions:
+
+README        Documentation.
+HEBREW   EXE  Main program.
+???????  SCR  Screen file (8 files).
+???????  FIL  Data file (7 files).
+5        FL2  Data file.
+LETTERS       Graphics file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0902
 

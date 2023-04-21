@@ -14,6 +14,140 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## README.TXT
+
+{% raw %}
+```
+Readme file for Chemical for Windows Version 1.5
+ 
+Installation of Chemical for Windows
+
+  * Copy all disk files to a hard disk directory.
+
+  * Use the New command in Windows to install WCHEM.EXE
+
+  * Use the Change Icon option in the New command change
+    the icon to WCHEM.ICO.
+```
+{% endraw %}
+
+## REGISTER.TXT
+
+{% raw %}
+```
+     9/9/92  Registration for CHEMICAL for Windows Version 1.50
+
+     CHEMICAL for Windows is a Public Domain Program and should  
+     not be sold for more than the distribution cost. The latest 
+     version is available from the author. CHEMICAL for Windows 
+     is written in Borlandc C++.
+
+     The source code is available so users can modify the code.
+     However, the source code is not public domain and should not
+     be distributed.  
+     
+     This is a list of other programs that are available:
+
+     CHEMICAL for DOS is similiar to CHEMICAL for Windows, but does
+     not require a fast 386 or 486 computer. Atoms are selected
+     from a Periodic Table (using the A command) and electron
+     orbital information retrieved. The Atoms are then bonded
+     (using the B command). The chemical is displayed as it is
+     being constructed. The chemical can be viewed from different
+     directions by using the up and down cursor keys and the V
+     command. If desired the Hybrid and Ionize commands can be used
+     to alter the orbitals before bonding. This program is written
+     in Turbo PROLOG and requires a graphics monitor and 640 Kbytes 
+     of RAM.
+  
+     CHEMVIEW for DOS is a companion program that shows 3-dimensional
+     animation of the models generated with CHEMICAL. CHEMVIEW
+     requires an EGA/VGA board and monitor. CHEMVIEW is written in
+     Turbo PROLOG with the graphics routines written in Turbo C.
+    
+     CRYSTAL for DOS is companion program that places atoms on a
+     lattice framework to form crystal structures. The structure is
+     defined by a text file. A text editor is built into the
+     program. The text file is converted to a image that is shown
+     rotating in three dimensions. An EGA or VGA monitor is
+     required. This program is written in Turbo PROLOG and uses
+     the Turbo PROLOG Toolbox.
+     
+     BIOCHEM for DOS is a companion program that combines files made
+     with CHEMICAL for DOS into larger molecules.  Chemical groups can
+     be bonded together using Covalent, Ionic, Hydrogen, or Peptide
+     bonds. BIOCHEM works with a CGA, EGA, or VGA monitor. This 
+     program is written in Turbo PROLOG with subroutines in Turbo C.
+
+     PLANETS computes information relating to the position,
+     distance, magnitude, orbit view, skyview, etc. for the major
+     planets, four minor planets, and  halley's comet on a specified
+     date and time. Also, orbital data for any desired planet or
+     comet can be entered and saved in a disk file. Skyview and
+     orbital views can shown in  forward or backward motion. The moons
+     for each planet can be displayed. This program requires a
+     graphics display and 256K bytes of memory. The latest
+     version is 4.1. This program is written in Turbo PASCAL version 
+     5.0.
+
+
+
+
+
+
+
+
+
+
+
+
+
+     5/16/92  Registration for CHEMICAL for Windows Version 1.42
+
+     Larry Puhl
+     6 Plum Court
+     Sleepy Hollow, Ill. 60118
+
+     ORDER FORM:
+
+     CHEMICAL for WINDOWS                                $20    ____
+
+     CHEMICAL for WINDOWS with Source Code               $30    ____
+
+     CHEMICAL/CHEMVIEW/CRYSTAL/BIOCHEM with Source Code  $20    ____
+
+     PLANETS with Source Code                            $10    ____
+
+     Shipping outside of USA                              $5    ____
+     (please send check drawn on US bank or cash)
+
+                                                TOTAL           ____
+
+
+     3 1/2 720 Kbytes disks  ___      5 1/4 360 Kbyte disks  ___
+  
+
+     (Future updates are half price)
+
+
+ 
+
+     send to:   ______________________________________________
+
+                ______________________________________________
+
+                ______________________________________________
+
+                ______________________________________________
+
+     Comments:
+   
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3024
 

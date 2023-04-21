@@ -48,6 +48,66 @@ machines:
     BUILD    PAS  Pascal source code for Book Indexing Program
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #26, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  EMPTY   .            CRC = 00 00
+
+--> FILE:  INFO    .BAT         CRC = CC E1
+
+--> FILE:  START   .BAT         CRC = 90 5A
+
+--> FILE:  ENTER   .BAT         CRC = E1 98
+
+--> FILE:  COMBINE .BAT         CRC = 4D EC
+
+--> FILE:  INDEX   .BAT         CRC = FD 49
+
+--> FILE:  INPUT   .EXE         CRC = 24 9B
+
+--> FILE:  SORT    .EXE         CRC = BA DA
+
+--> FILE:  MERGE   .EXE         CRC = B7 5F
+
+--> FILE:  BUILD   .EXE         CRC = 9E 18
+
+--> FILE:  INPUT   .PAS         CRC = CB 38
+
+--> FILE:  SORT    .PAS         CRC = EC 88
+
+--> FILE:  MERGE   .PAS         CRC = 23 D7
+
+--> FILE:  BUILD   .PAS         CRC = 85 FB
+
+ ---------------------> SUM OF CRCS = 20 86
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0026
 

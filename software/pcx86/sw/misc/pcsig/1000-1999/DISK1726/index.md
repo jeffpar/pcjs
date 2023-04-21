@@ -32,6 +32,44 @@ machines:
     DOS without actually entering the program.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1726.TXT
+
+{% raw %}
+```
+Disk No: 1726                                                           
+Disk Title: Phone                                                       
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Phone                                                    
+Author Version: 1.0                                                     
+Author Registration: $10.00                                             
+Special Requirements: Hayes or compatible modem.                        
+                                                                        
+PHONE is a simple, easy-to-use telephone dialing program that delivers  
+as much, or more, than it promises.  The author says that he tried to   
+make his program fast, simple, versatile, easy-to-use, fun, useful,     
+and colorful.  And he did!  PHONE makes phone calling fun.  The         
+program is easy and straightforward to use, and the screen is well      
+organized and attractive.                                               
+                                                                        
+PHONE will hold 19 seperate databases with 21 phone numbers per         
+database.  It is usable from a floppy or hard disk.  It was intended    
+to avoid "ram wars" by being non-resident, but you can use the PHONE    
+from DOS without actually entering the program.                         
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1726
 

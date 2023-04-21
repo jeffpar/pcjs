@@ -29,8 +29,145 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## EDWILLY.DOC
+
+{% raw %}
+```
+
+
+                  Instructions for Willy the Worm Screen Editor
+                            by Alan Farmer, June 1985
+
+
+          -------------------------------------------------------------
+
+          Willy  the  Worm  is  a user-supported program.  Feel free to 
+          make copies and pass them out,  but please do not sell  them.  
+          Donations  of about $10 would be greatly appreciated.  Please 
+          send your questions,  comments,  high scores,  improved  game 
+          screens, and DONATIONS to: 
+
+                            Alan Farmer
+                            2743 McElroy Drive
+                            Charlottesville, Va  22903
+
+          -------------------------------------------------------------
+
+          
+          Uses of the editor:
+
+          The screen editor for Willy the Worm can be  used  to  modify 
+          the  eight  screens  used  in  the  game  and  to preview and 
+          practice on the higher ones.  If a screen is too hard or  you 
+          want to design your own screens entirely, read on.  
+
+
+          Getting Started:
+
+          To  enter  the  screen  editor,  enter  'EDWILLY'  at the DOS 
+          prompt.  Press Enter when asked to do so.  Next you are asked 
+          which screen you want to edit.  Answer wth a number from 1 to 
+          8.  The screen you choose will then be displayed.
+
+
+          Editing keys:
+
+          'A' is the help key.  Pressing this key will display a window 
+          with a summary of the following instructions.  
+
+          The  arrow  keys  move the cursor (the blinking pixel) around 
+          the screen.  Any changes you make will occur at the  location 
+          of this cursor.  
+
+          'K'  brings up the prompt for which screen to edit.  Use this 
+          to go to another screen.  
+
+          'L' saves all screens on disk for use with the main  program.  
+          DO NOT forget to save your work before you leave the program!  
+
+          ';'  copies any screen to any other.  WARNING:  this destroys 
+          the screen that is copied over.  
+
+          '.' plays the screen you are currently editing.  The score is 
+          included for reference and does not  go  on  the  high  score 
+          list.  
+
+          '/'  changes  the starting position to the cursor position on 
+          the current screen.  The starting position is represented  by 
+          Willy the Worm facing left.  
+
+          ',' enters the small square that produces or  removes  balls.  
+          The  topmost  small  square  on  the  screen is automatically 
+          chosen to produce balls and all other remove them.  
+
+          'U'  enters  a  vertical  spring at the cursor position.  'I' 
+          enters a tack.  'O' enters a section of ladder.  'P' enters a 
+          bell.  'J' enters a horizontal spring.  'M' enters a present. 
+          
+          Various other keys enter sections of wall and floor.  See the 
+          help window ('A') for a complete list.  You may want to do a 
+          screen dump of the help window if you have a dot matrix 
+          printer and the DOS program GRAPHICS. 
+
+          
+          Making DONATIONS:
+
+          You've heard it all before: "The development of this software 
+          has taken much time and effort.  If we are  to  continue  our 
+          production of user-supported software, your contributions are 
+          vital."  Well,  I can tell you first-hand that it's true.  If 
+          enough people send ten dollars,  maybe I'll  find  it  in  my 
+          heart to write "Willy The Worm II" or "Pete the Pigeon".  
+
+          Hint: If you like this game a LOT, you can send more than ten 
+          dollars!
+          
+          Have gobs of fun and don't forget to pass copies on to all of
+          your friends!          
+
+```
+{% endraw %}
+
+## FILES445.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 445   Willy the Worm & more                             v1.1 DS2
+------------------------------------------------------------------------
+Willy the Worm is a high quality game that allows you to build your
+own sceens for play.
+ 
+CHASE    PAS  Can you evade the robots chasing you? - in Pascal
+CHASE    COM  Can you evade the robots chasing you?
+GRIME    COM+ game similar to centipede but things come at you from 4
+              directions (needs color graphics card)
+KIRK     PIC  Printer art. Subject: James T. Kirk
+DSK      EXE  Disk Crash (yes, it is a game)
+SHUTTLE  BAS  will draw the space shuttle from any angle in 3D
+------------  Willy the Worm
+WILLY    COM  Willy the Worm -- executable main program
+WILLY    SCR  Data: Top ten high scores and names
+WILLY    DAT  Data: Eight game screens
+WILLY    CHR  Data: Modified character set for WILLY.COM
+WILLY    DOC  Complete documentation for WILLY.COM (5K)
+EDWILLY  COM  Allows user to edit game screens
+EDWILLY  DOC  Complete documentation for EDWILLY.COM (4K)
+VIS      COM  "Hides" files on directory
+INVIS    COM  "Un-hides" files on directory
+READ     ME   Brief description on Willy the Worm
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite D
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## SHUTTLE.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF
 20 X=0:Y=0:Z=0:X3=0:Y3=0:Z3=0:AM=0:BM=0:CM=0:DM=0:EM=0:FM=0:GM=0:HM=0:IM=0:D=0:P=0:B=0:H=0:U=0:V=0:U1=0:V1=0
@@ -145,6 +282,121 @@ machines:
 1070 DATA -87,121,122,-88,123,124
 1080 DATA -117,119,-121,123,-118,120,-122,124
 ```
+{% endraw %}
+
+## WILLY.DOC
+
+{% raw %}
+```
+
+
+                         Instructions for Willy the Worm
+                            by Alan Farmer, June 1985
+
+
+          -------------------------------------------------------------
+
+          Willy  the  Worm  is  a user-supported program.  Feel free to 
+          make copies and pass them out,  but please do not sell  them.  
+          Donations  of about $10 would be greatly appreciated.  Please 
+          send your questions,  comments,  high scores,  improved  game 
+          screens, and DONATIONS to: 
+
+                            Alan Farmer
+                            2743 McElroy Drive
+                            Charlottesville, Va  22903
+
+          -------------------------------------------------------------
+
+
+          Interesting features:
+
+          Willy the Worm is a fast,  challenging arcade style game with 
+          the following special features: 
+
+               *  Fully compatible with IBM PC and PCjr 
+               *  Color and sound effects are supported but optional
+               *  Not one or two but EIGHT game screens
+               *  Editor included for customizing the game screens 
+               *  Top ten high scores and names are saved on disk
+
+
+          Starting the game:
+
+          To start the game,  just enter 'WILLY'  at  the  DOS  prompt.  
+          Answer the two questions (color and sound used) with 'Y'  for 
+          'Yes' or 'N' for 'No'.  After that,  the title screen will be 
+          displayed with some basic instructions.
+
+
+          Playing the game:
+
+          The object of the game is to reach  the  bell  without  being 
+          squashed  by  a  cannonball  or  running  out of time.  Extra 
+          points may be earned by getting presents along the way and by 
+          jumping over the balls.  After you reach the bell you will be 
+          awarded points for the remaining time and you will advance to 
+          the next screen.
+
+          The game is played with the four arrow keys to make Willy the 
+          Worm run left and right and climb ladders up  and  down,  and 
+          the spacebar to make him jump. (Note that when jumping, Willy 
+          can change directions  in  mid-air.  This  can  be  extremely 
+          useful!)  Any  other  key  makes  him  stop.  On  the  PC,  a 
+          convenient stop key is the '5' on the numeric keypad  and  on 
+          the  PCjr  DEL  works  well.  To exit to DOS during the game, 
+          please use ESC rather than  CTRL-C  because  this  will  save 
+          changes to the high score list before leaving.  
+
+          If  you  find  this  game  too  hard (or too easy),  read the 
+          EDWILLY.DOC file and use the screen editor to  make  it  suit 
+          your fancy.  You can also use the editor to get a preview and 
+          practice on the higher levels.  
+
+
+          Scoring:
+
+          The  bonus  counter is displayed at the bottom of the screen.  
+          It starts at 1000 and counts down by tens.  When you finish a 
+          level,  the remaining bonus is added to your  score.  If  the 
+          bonus  gets  to 0,  you lose a worm and start the level over.  
+          Jumping over one or more balls earns  20  points.  Getting  a 
+          present  is 100 points.  After the game,  the high scores are 
+          displayed in two lists.  The  'Daily  Pinworms'  list  resets 
+          each  time  you  enter  the  program,   while  the  'All-Time 
+          Nightcrawlers' list is saved on disk.  
+
+
+          If you damage a file:
+
+          The batch file RESTORE.BAT will copy hidden backup copies  of 
+          all  the files required by WIlly the Worm and the game screen 
+          editor.   These   are:   WILLY.COM,   WILLY.SCR,   WILLY.DAT, 
+          WILLY.CHR,  and  EDWILLY.COM.  Be warned that this will over-
+          write  changes  to the screens and the high score list.  This 
+          batch file uses  the  two  utility  programs  on  this  disk, 
+          VIS.COM and INVIS.COM,  which make directory entries  visible 
+          and  invisible,  respectively.  The syntax for these commands 
+          is (IN)VIS filename.  Paths may be used but wild  card  char-
+          acters may not.  
+
+          
+          Making DONATIONS:
+
+          You've heard it all before: "The development of this software 
+          has taken much time and effort.  If we are  to  continue  our 
+          production of user-supported software, your contributions are 
+          vital."  Well,  I can tell you first-hand that it's true.  If 
+          enough people send ten dollars,  maybe I'll  find  it  in  my 
+          heart to write "Willy The Worm II" or "Pete the Pigeon".  
+
+          Hint: If you like this game a LOT, you can send more than ten 
+          dollars!
+          
+          Have gobs of fun and don't forget to pass copies on to all of
+          your friends!          
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -77,6 +77,7 @@ machines:
 
 ## BACKGAM.BAS
 
+{% raw %}
 ```bas
 2430 KEY OFF:CLS:COLOR 0,7:LOCATE 1,30:KEY(10) ON:ON KEY(10) GOSUB 5000:PRINT" B A C K G A M M O N ":COLOR 7,0
 2440 FOR X=1 TO 2:LOCATE 12,1:PRINT SPC(79):LOCATE 12,1:PRINT"Enter the name of player #" X;:PLAY "mbc":INPUT " - " ,A$(X):NEXT X
@@ -203,9 +204,11 @@ machines:
 59980 RNDTIME$=TIME$:RNDVAL=VAL(LEFT$(RNDTIME$,2))*120+VAL(MID$(RNDTIME$,4,2))*60+VAL(RIGHT$(RNDTIME$,2)):RANDOMIZE RNDVAL:RETURN
 59990 ON KEY(1) GOSUB 5000:IKEY$=INKEY$:IF IKEY$="" THEN 59990 ELSE RETURN
 ```
+{% endraw %}
 
 ## BLACK.BAS
 
+{% raw %}
 ```bas
 10 REM=======================================================================
 20 REM============================ BLACKJACK ================================
@@ -604,9 +607,61 @@ machines:
 59980 RNDTIME$=TIME$:RNDVAL=VAL(LEFT$(RNDTIME$,2))*120+VAL(MID$(RNDTIME$,4,2))*60+VAL(RIGHT$(RNDTIME$,2)):RANDOMIZE RNDVAL:RETURN
 59990 IKEY$=INKEY$:IF IKEY$="" THEN 59990 ELSE RETURN
 ```
+{% endraw %}
+
+## FILES740.TXT
+
+{% raw %}
+```
+--------------------------------------------------------------------------
+Disk No 740   EasyMenu Version 1.01    (disk 3 of 3)                 v1
+--------------------------------------------------------------------------
+EasyMenu is a nice, simple menu system, with a few extra features. It makes
+your PC more convenient to use. You record the start- start-up command
+sequence for all programs - such as CD\directory, PROGRAM-NAME/Option
+Switch, or BATCH file, then let EasyMenu remember for you. You can run any
+program at a keystroke or by clicking a mouse button. It saves you time and
+keystrokes when you run your other computer programs and lets you view
+useful notes and comments prior to running a program. If you are new to
+computers, Easymenu tells you about your computer hardware, the amount of
+memory, number of access ports for printers and modems, the version of DOS
+you are using and other useful information. If you are a more experienced
+computer user, you might like to know that EasyMenu can run up to 9
+programs per menu and that you can use batch files.
+ 
+This disk hold a sample menu to be used by EasyMenu and a number of games.
+ 
+3DTICTAC EXE  #-demensional Tic-Tac-Toe
+ASK      COM  Part of installation batch setup
+BACKGAM  BAS  Backgammon game
+BLACK    BAS  The game of "Black Box"
+BRICKS   EXE  Break your way through the wall with a paddle and ball
+CHESS    COM  The world's most famous game of skill and thought.
+FRANK    BAS  Simple hangman-like game
+GAMES    M    Menu data file
+GAMES    MH   menu data help file
+GO-MOKU  COM  Ancient oriental game of 5-in-a-row
+GO-MOKU  HLP  Documentation file for GO-MUKO.COM
+INSTALL  BAT  Installation batch file
+OPENING  LIB  Data file for CHESS.COM
+READ     ME1  Documentation file
+READ     ME   Documentation file
+RVERSI   COM  Board game of skill and luck.
+SETUP    BAT  Part of installation batch file
+STARTREK BAS  Be in charge of the U.S.S. Enterprise and save the universe
+WORDS    BAS  Word list for FRANK.BAS
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 ## FRANK.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:WIDTH 80:CLS:DEFINT A-Z:CU$="     "
 70 Z=0:GOSUB 3000:FOR X=13 TO 15:LOCATE X,1:PRINT STRING$(80,"█");:NEXT X
@@ -732,9 +787,11 @@ machines:
 59970 IF TIMEOUT > TIME3 - TIME2 THEN 59960 ELSE RETURN
 59990 IKEY$=INKEY$:IF IKEY$="" THEN 59990 ELSE RETURN
 ```
+{% endraw %}
 
 ## STARTREK.BAS
 
+{% raw %}
 ```bas
 1 KEY 1,"NAV"+CHR$(13)
 2 KEY 2,"SRS"+CHR$(13):KEY 3,"LRS"+CHR$(13):KEY 4,"PHA"+CHR$(13)
@@ -1323,9 +1380,11 @@ machines:
 5930 G2$=G2$+" IV":RETURN
 10500 IN$=INKEY$:IF IN$="" THEN 10500 ELSE CLS:RETURN
 ```
+{% endraw %}
 
 ## WORDS.BAS
 
+{% raw %}
 ```bas
 10000 DATA fat,cat,act,can,fast,hat,hand,last,man,ran,have
 10010 DATA red,hen,let,get,help,next,pet,men,went,bed,said
@@ -1364,6 +1423,7 @@ machines:
 10340 DATA write,knew,know,wrote,lamb,talk,walk,laugh,climb,eight
 10350 DATA one,two,three,four,five,six,seven,eight,nine,ten
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

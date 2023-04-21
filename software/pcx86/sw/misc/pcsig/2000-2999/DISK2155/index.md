@@ -24,6 +24,34 @@ machines:
     calendars six months at a time.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2155.TXT
+
+{% raw %}
+```
+Disk No: 2155                                                           
+Disk Title: The Gregorian Calendar                                      
+PC-SIG Version: 1                                                       
+                                                                        
+Program Title: The Gregorian Calendar                                   
+Author Version: 07/89                                                   
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+Enter any date between 1583 and 2100 and THE GREGORIAN CALENDAR will    
+tell you what day of the week that was or will be.  Display calendars   
+six months at a time.                                                   
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2155
 

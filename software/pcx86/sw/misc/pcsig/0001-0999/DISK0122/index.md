@@ -38,6 +38,68 @@ machines:
     PLOGO83  COM  Prints out LETUS A-B-C documentation
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #122, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  SOFT83  .DTA         CRC = 55 08
+
+--> FILE:  SOFT83  .INX         CRC = 0C 38
+
+--> FILE:  SOFT83  .HDR         CRC = 24 85
+
+--> FILE:  SOFT83  .KEY         CRC = FF 89
+
+--> FILE:  PCMAG83A.DTA         CRC = 70 E9
+
+--> FILE:  PCMAG83A.INX         CRC = 70 37
+
+--> FILE:  PCMAG83A.HDR         CRC = 24 85
+
+--> FILE:  PCMAG83A.KEY         CRC = A0 F7
+
+--> FILE:  PCAGE83 .DTA         CRC = 0B 4D
+
+--> FILE:  PCAGE83 .INX         CRC = 7E 60
+
+--> FILE:  PCAGE83 .HDR         CRC = 24 85
+
+--> FILE:  PCAGE83 .KEY         CRC = B1 D2
+
+--> FILE:  LETUS   .BAT         CRC = 00 00
+
+--> FILE:  LOGO83A .COM         CRC = B5 78
+
+--> FILE:  PLOGO83 .COM         CRC = 06 E2
+
+ ---------------------> SUM OF CRCS = 48 48
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0122
 

@@ -38,8 +38,223 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## COMMENTS.DOC
+
+{% raw %}
+```
+WHAT PEOPLE HAVE BEEN SAYING ABOUT BACKGAMMON
+
+"The backgammon game is the best one we've seen in years.  The playing
+style is straightforward..."
+   -- PC-SIG Magazine, Sunnyvale, California
+
+"Backgammon is currently leading our ongoing struggle 176 games to 138
+games.  His prowness seems largely due to his expert handling of the
+doubles cube."
+   -- Rancho La Costa, California
+
+"...The author warns you to expect to get crushed, but in a test game,
+we won by a roll or two and we are not experts by any means..."
+   -- Nelson Ford, The Public (Software) Library, Houston, Texas
+
+"All in all, the program makes a fierce competitor."
+   -- Glasgow, Kentucky
+
+```
+{% endraw %}
+
+## CONTRACT.DOC
+
+{% raw %}
+```
+About Backgammon
+
+Backgammon is user-supported.  
+
+Please copy this shareware starter disk and give it away to friends.  It
+is ok to copy this program, and and you are encouraged to make copies of
+this program for others on a private, non-commercial basis. 
+
+If you do make copies of this disk, thank you, and we ask that you
+distribute unmodified copies of the disk along with an unmodified copy of
+the documentation. 
+
+If you like Backgammon, in addition to distributing copies, we hope that
+you will acknowledge the authors of the program and support them with a
+financial contribution.  By supporting the authors through the completion
+of registrations, you are encouraging the development of future quality
+shareware programs such as Backgammon.  You may register your copy by
+filling out the registration form and mailing it to the address shown with
+a (suggested) contribution of $21.95.  (OEM's and institutions please
+contact Software Creations for very reasonable pricing information on
+usage on more than one computer). 
+
+PLEASE NOTE that if you have obtained Backgammon from a bulletin board or
+via a national distribution group, that no portion of any payment that you
+may have made to that group to obtain the shareware starter disk has been
+passed on to Software Creations.  Such distribution fees (which range from
+$3 to $8 ) do not constitute formal registrations, and Software Creations
+is not in a position to support users who have not formally registered. 
+
+
+User's agreement
+
+By accepting and using this software, you acknowledge that this software
+may not suit your particular requirements or be completely trouble-free. 
+The software will perform as described when the instructions are followed,
+and with proper application.  The authors, however, are not responsible
+for your specific application or hardware configuration or any problems
+resulting from use of this software. 
+
+If the software does not perform as described, liability is limited to
+replacement of the software or a refund of your contribution (if you have
+registered with Software Creations).  We have no liability to you or any
+other person or entity for any damage or loss, including special,
+incidental, or consequential damages, caused by this software, directly or
+indirectly.  Some states do not allow the limitation or exclusion of
+liability for incidental or consequential damages, so the above limitation
+or exclusion may not apply to you. 
+
+This agreement is governed by the laws of the State of Hawaii and the laws
+of the United States of America.  Should any part of this agreement be held
+invalid, the remainder of the agreement will still be in effect.  This
+agreement can only be modified by written statement signed by the authors. 
+
+Under this agreement, you may NOT:
+
+1)   Distribute the program in connection with any other product or
+     service, or as part of a corporate or institutionally-sponsored
+     distribution.
+
+2)   Charge a fee for this program, with the exception of registered
+     user groups who may charge cost-based fee (not to exceed $10) to 
+     cover their own costs.
+
+3)   Distribute the program in modified form or with another program on the
+     same disk.
+```
+{% endraw %}
+
+## DISKFILE.DOC
+
+{% raw %}
+```
+BACKGAMMON  Version 3.00
+Copyright (C) Software Creations 1986, 1987.
+User Interface Copyright (C) Software Creations 1986, 1987. 
+
+When you receive your distribution disk, it should contain the following
+files.  Please contact Software Creations if this is not true for your
+distribution. 
+
+  AUTOEXEC.BAT     Sample AUTOEXEC.BAT file for autostart
+  BG.EXE           Backgammon executable program
+  COMMENTS.DOC     What people have been saying about Backgammon
+  CONTRACT.DOC     User's agreements and guide to redistribution
+  DISKFILE.DOC     This file
+  GO.BAT           Batch file to call READ.ME
+  ISBN.DOC         International Standard Book Number
+  LETTER.DOC       An open letter to users
+  NEWS.DOC         New features of Backgammon V3.00
+  PROBLEM.FRM      Software Problem Report Form
+  README.1ST       Instructions for the first time user
+  REGISTER.FRM     Shareware Registration Form -- Please fill out
+  SC.CAT           Other products from your dedicated programmers
+```
+{% endraw %}
+
+## FILE0708.TXT
+
+{% raw %}
+```
+Disk No:  708                                                           
+Disk Title: Backgammon and More                                         
+PC-SIG Version: S3.3                                                    
+                                                                        
+Program Title: Foreign Language Hangman (Spanish)                       
+Author Version: 5.75                                                    
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+Norsoft FOREIGN LANGUAGE HANGMAN is an excellent educational program for
+learning Spanish, or for learning English for people who speak Spanish. 
+While being educational, this program is very entertaining.  It includes
+three variations on the basic Hangman game.  The first is guessing what 
+the secret word is, while in the second version you must guess an entire
+phrase.  The last is Personalized Hangman, which can be played by two to
+nine players who enter a word or phrase to try to stump the others.     
+This program is quite useful for building up your vocabulary or for     
+learning basic grammar.                                                 
+Program Title: Backgammon                                               
+Author Version: 1                                                       
+Author Registration: $21.95                                             
+Special Requirements: None.                                             
+                                                                        
+BACKGAMMON is finally here for your PC!  Now you can play against a     
+STRONG opponent on your own computer.  If you've never played before, or
+you're the champion of your local club, BACKGAMMON will fill the role of
+instant opponent.  For the true aficionado, the program keeps track of  
+points, games, gammons, and backgammons.                                
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## ISBN.DOC
+
+{% raw %}
+```
+International Standard Book Number
+ISBN 0-944068-01-4
+```
+{% endraw %}
+
+## NEWS.DOC
+
+{% raw %}
+```
+                     NEW FEATURES WITH BACKGAMMON V3.00
+                             Software Creations
+
+
+Software Creations would like to extend thanks again to all you users
+who have made financial contributions and have made Backgammon Version
+3.00 possible.  We would also like to thank all of you users who have
+sent in your suggestions for improvements to Backgammon.  Remember, if
+you write to us, include a stamped, self-addressed envelope as we'd like
+the opportunity to respond to your suggestions and questions. 
+
+With this release we want to show off our new Backgammon board, which is
+more colorful draws the pieces more neatly.
+
+This release also fixes a deeply hidden bug in our white move generator. 
+Believe us, we got lots of mail about our Backgammon cheating when
+moving 6's in the endgame!!  Thanks to those alert users who caught us
+sonambulating and completed those really clear Software Problem Reports. 
+
+Tenkey pad users, accountants especially, will be very pleased to know
+that when moving pieces the delimiter character for moves can now be a
+decimal point as well as a space.  This allows for faster input for
+those who are fast at tenkey pad entry.  The space also works as with
+previous versions. 
+
+This release also features a complete internal restructuring in the
+program itself.  Software Creations has thus laid the foundation for a
+Championship-strength Backgammon game in the future.  We'd like to know,
+however, is there any interest out there for an even stronger version of
+Backgammon?  We have the capabilities of doing so, but currently it
+keeps blowing us away!
+
+```
+{% endraw %}
+
 ## WHEEL.BAS
 
+{% raw %}
 ```bas
 1 SCREEN 0:WIDTH 40:KEY OFF
 2 PLAYER=1
@@ -320,6 +535,93 @@ machines:
 20000 DATA 400,550,300,200,900,200,400,500,600,250,200,1000,600,300,700,450,800,150,500,400,250
 20010 DATA 350,250,500,5000,300,800,1500,700,500,350,400,550,300,200,900,200,400,500,600,250,200
 ```
+{% endraw %}
+
+## WHEEL.TXT
+
+{% raw %}
+```
+                     
+
+
+
+
+     Wheel of Fortune is a simulation of the popular television game show of
+the same name.
+
+Getting Started:
+1. Load both DOS and Cartridge BASIC.
+2. Press ENTER twice for the date and time.
+3. Type BASIC and press ENTER.
+4. Type RUN "WHEEL" and press ENTER.
+
+Object:  To solve the puzzle and obtain the maximum amount of money while doing
+         so.
+
+There are 3 rounds in Wheel of Fortune (not including the Bonus Round).  Each
+player takes a turn in order from the smallest to largest number which they are
+assigned to by all the players.  In each turn a player may do one of the 
+following:
+    1. solve the puzzle
+    2. buy a vowel
+    3. spin the wheel and guess a letter
+You can always tell whose turn it is by looking at the top of the scoreboard
+which is just above the puzzle.
+
+The Puzzle:  is composed of a series of dashes which represent the unknown 
+             letters.  The players may guess what a letter in the puzzle may be
+             on their turn after they've spun the wheel.  They can do this by
+             simply pressing the letter they want on the keyboard (only after
+             they spin the wheel!).  The money value on the wheel is only
+             given to the player if the player guesses a letter correctly.  The
+             category of each puzzle is given underneath the puzzle.  If the 
+             letter is correct the letter appears in the puzzle, the money is
+             added to the player's score, and the player gets another turn.  If
+             the player is incorrect the player receives no money, loses his or
+             her turn, and the incorrect letter is displayed at the top of the 
+             screen.
+
+The Wheel:  is spun each turn unless the player buys a vowel or solves the 
+            puzzle.  This is done by pressing the number 2.  There are only 
+            three places on the wheel that do not contain money values.  These
+            three spaces could be any one of the following:
+                  1. Free Spin
+                  2. Loose A Turn
+                  3. Bankrupt
+            Free spin gives the player an extra spin in case the player guesses
+            a wrong letter, gets Bankrupt, or gets Loose A Turn.  A player may
+            see how many free spins each player has by pressing the number 3.
+            Loose a Turn ends the player's turn but does not effect the player's
+            money in any way.
+            Bankrupt ends the player's turn and also takes all the money the 
+            player has won that round.
+
+Buying A Vowel:  this is done by pressing the vowel on the keyboard before
+                 spinning the wheel.  You must have $250 to buy a vowel.
+
+Solving The Puzzle:  you must press the number 1 before spinning the wheel to do
+                     this.  Then you can enter the answer.  If it is correct,
+                     the player gets all the money he won that round added to
+                     his overall winnings.  If it is incorrect, the round 
+                     continues and the player looses his or her turn.
+
+The Bonus Round:  the winner of the three rounds goes on to this and a chance of
+                  winning $25,000.  He must choose five consonants and a vowel.
+                  These letters show up in the puzzle and the person must guess
+                  the puzzle immediatley.  If you get it right you win $25,000
+                  and are asked if you want to play again.  If not, better luck
+                  next time!
+
+
+
+********************************************************************************
+
+Send your donations and comments to:
+           Tom Reilly
+           100 Ramblewood Ave.
+           Staten Island, NY  10308
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

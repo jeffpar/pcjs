@@ -61,8 +61,76 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #70, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  PAGE    .BAT         CRC = 00 00
+
+--> FILE:  PAGES   .KIP         CRC = 00 00
+
+--> FILE:  PAGESKIP.DOC         CRC = 58 EA
+
+--> FILE:  SMALLPR .INT         CRC = 00 00
+
+--> FILE:  SMALLPRT.BAT         CRC = 00 00
+
+--> FILE:  SMALLPRT.DOC         CRC = 55 8F
+
+--> FILE:  UNSMALLP.BAT         CRC = 00 00
+
+--> FILE:  UNSMALLP.DOC         CRC = 4F 60
+
+--> FILE:  UNSMALLP.RNT         CRC = 00 00
+
+--> FILE:  DISKCAT .BAS         CRC = A9 34
+
+--> FILE:  DISKCAT .EXE         CRC = B8 98
+
+--> FILE:  DISKCAT .DOC         CRC = D7 5A
+
+--> FILE:  DC-SORT .BAS         CRC = 7A CC
+
+--> FILE:  DC-SORT .EXE         CRC = 99 EB
+
+--> FILE:  VPRINT  .COM         CRC = 38 D0
+
+--> FILE:  VPRINT  .ASM         CRC = 1F 22
+
+--> FILE:  VPRINT  .DOC         CRC = A9 62
+
+--> FILE:  DIRMANIP.EXE         CRC = 39 0B
+
+--> FILE:  VIRTUAL .PRN         CRC = 00 00
+
+ ---------------------> SUM OF CRCS = 86 15
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
 ## DC-SORT.BAS
 
+{% raw %}
 ```bas
 1 '                 DISKCAT SORT/PRINT PROGRAM
 2 '      (C) COPYRIGHT 1983 NELSON FORD  ALL RIGHTS RESERVED
@@ -222,9 +290,11 @@ machines:
 3060   NEXT
 3070 CLOSE:  CLOSE: RUN
 ```
+{% endraw %}
 
 ## DISKCAT.BAS
 
+{% raw %}
 ```bas
 1 ''DISKCAT.BAS     (C) COPYRIGHT  1983  NELSON FORD   ALL RIGHTS RESERVED
 2 ''To compile, the following lines must be changed:
@@ -746,6 +816,535 @@ machines:
 10360 FOR I!=1 TO 600: NEXT:  RETURN
 10370 FOR I!=1 TO 300: NEXT:  RETURN
 ```
+{% endraw %}
+
+## DISKCAT.DOC
+
+{% raw %}
+```
+
+
+
+			     DISKCAT
+		      Disk Catalog Program
+
+Programs-  DISKCAT.EXE	main program
+	   DC-SORT.EXE	sorting/printing program
+
+Hardware Requirements-
+     Minimum:  96K, one disk drive, 80-column monitor.
+     Recommended:  RAM disk-emulator to hold DISKCAT.DTA, printer.
+
+Data Files-
+
+1)  DISKCAT.DTA  random access file containing file names & info.
+    Record layout:
+	  file name	   12 spaces
+	  disk name	    8 spaces
+	  file type	   10 spaces
+	  file descrip.    25 spaces
+	  file date	   10 spaces
+	  file size	    7 spaces
+	  carriage rtn
+	    & line feed     2 spaces
+			   --
+	  record length    74
+
+
+2)  DISKCAT.NFO  sequential file containing # of disks, total # of files,
+    and the names of the disks.
+
+
+DISKCAT.EXE Program Functions-
+
+1)  Read a disk's files into the catalog.
+      -prompts for a name for the disk
+      -checks to see if name is already used and, if so, choices are to
+	 * delete the disk from the file
+	     Records to be deleted are changed to all z's.  Select "Purge"
+	     at main menu to remove these records.  After marking records
+	     for deletion, you are prompted again for a disk name.  If you
+	     just wanted to delete the disk without reading another one,
+	     press Enter and return to main menu.
+	 * read the disk and update the file
+	     This option allows you to update a disk's records without
+	     wiping out the file descriptions for files that are still on
+	     the disk.	See "2)  Add descriptions to file names".
+	 * enter another disk name
+      -file names, size & date are read from disk, sorted by name and
+	 added to DISKCAT.DTA file. The disk name is added to DISKCAT.NFO.
+
+
+				   page 1
+
+2)  Add descriptions to file names.
+      -displays disk name and file name and prompts for a 10-character
+	 file type and 25-character file description.  To select from the
+	 displayed file types, enter a number and press Enter.	The displayed
+	 file types can be changed in the uncompiled program in the data
+	 statements near the front of the program.
+      -the following functions are available in this routine:	[Alt] -
+	 [P] Prior entry:  displays previous entry.
+	 [F] Find file:  finds a file from all or part of the name
+			   and prompts for a description.
+	 [D] Find disk:  finds a disk from all or part of the name,
+			   displays the first file on the disk and
+			   prompts for a description.
+	 [K] Kill entry: marks the displayed entry for deletion by
+			   the "Purge" routine.
+
+3)  Give a disk its own catalog.
+      -creates a file on the target disk of its files with descriptions.
+	 The file can be TYPEd from DOS to review contents of disk.
+
+4)  Find all copies of one file.
+      -displays all disk names containing the desired file.
+
+5)  Display all files for a disk name.
+
+6)  Display all disk names.
+
+7)  Print a hardcopy catalog listing.
+      -goes to the DC-SORT program to print the DISKCAT.DTA FILE.
+
+8)  Purge deleted files from catalog.
+      -eliminates records marked for deletion with z's.
+
+
+			     page 2
+
+
+DC-SORT.EXE Program Functions-
+
+1)  Compare two DISKCAT.DTA files.
+      -compares two catalogs and prints a comparative list.  This function
+       is designed to facilitate comparing software libraries by different
+       user groups or individuals who collect public domain software.
+
+2)  Print DISKCAT.DTA sorted by file name.
+      -this option and the ones that follow will print to the screen,
+       the printer, or a disk file.
+
+3)  Print DISKCAT.DTA sorted by disk name.
+      -this option and the ones that follow first sort by file name,
+       then by the option selected; in this case, by disk name.
+
+4)  Print DISKCAT.DTA sorted by file type.
+
+5)  Print DISKCAT.DTA sorted by file extension.
+
+
+OTHER WAYS TO EDIT AND PRINT THE CATALOG-
+
+The DISKCAT.DTA file can be TYPEd from DOS.  It can also be edited by text
+processors, with the following warnings:
+  -IBM's Personal Editor should not be used. It replaces blanks with tabs,
+     which destroys the necessary uniform record length.
+  -WordStar can be used in the non-document mode, but be careful to enter
+     data exactly as in the other records. (eg: the dot [.] in the file
+     name must always be in column 9).
+  -NOTE: if records are added or deleted with text processors, the number
+     of files (the second number in the DISKCAT.NFO file) must be changed.
+  -You should use text processors only if the file has been messed up and
+     you are trying to save it.
+
+The data base program, PC-FILE, that is available from most user groups,
+  can be used for special printing or sorting requirements.  First, you
+  must set up the DISKCAT.HDR file using PC-FILE and the field lengths
+  shown at the start of this documentation. You must include the 2-character
+  field for the carriage return and line feed, even though you would not
+  want to print them.
+
+THERE'S ALWAYS ROOM FOR IMPROVEMENTS-
+
+  ...so if you come up with some, please report them to
+		      Nelson Ford
+		      P.O. Box 61565
+		      Houston, Tx. 77208
+		      Source: ST3564
+
+
+				page 3
+
+
+DISTRIBUTION OF DISKCAT-
+
+A limited license is hereby granted to copy and distribute this program
+as long as no fee is charged for doing so and the copyright notices are
+left intact.
+
+```
+{% endraw %}
+
+## PAGESKIP.DOC
+
+{% raw %}
+```
+This utility was written by Vince Heiker, 6027 Hageman Road, Mehlville
+Missouri, 63128, on 7-28-83.
+
+This utility requires DOS 2.0 & and EPSON MX or FX compatible printer
+connected to LPT1 port.  The utility can be easily changed to other
+port assignments by changing the redirect command in PAGE.BAT to
+LPTn, where n is the printer address.
+
+The utility simply skips to the top of form from DOS 2.0, so that you
+do not have to push buttons on your printer.  Just key "PAGE" and hit
+enter to run, if the utility is on a diskette in your default drive.
+
+```
+{% endraw %}
+
+## SMALLPRT.DOC
+
+{% raw %}
+```
+This utility was written by Vince Heiker, 6027 Hageman Road, Mehlville
+Missouri, 63128, on 7-28-83.
+
+This utility requires DOS 2.0 & an EPSON MX or FX compatible printer
+connected to LPT1 port.  The utility can be easily changed to other
+port assignments by changing the redirect command in SMALLPR.BAT to
+LPTn, where n is the printer address.
+
+The utility skips to top of form then sets the printer to compressed
+double-strike mode.  While slow, it saves paper and makes printouts
+more readable and xerox-able, when printing documentation like this.
+To run, just key "SMALLPRT" and hit enter, if this utility is on a
+diskette in your default drive.
+
+```
+{% endraw %}
+
+## UNSMALLP.DOC
+
+{% raw %}
+```
+This utility was written by Vince Heiker, 6027 Hageman Road, Mehlville
+Missoure, 63128, on 7-28-83.
+
+This utility requires DOS 2.0 & an EPSON MX or FX compatible printer
+connected to LPT1 port.  The utility can be easily changed to other
+port assignments by changing the redirect command in UNSMALLP.BAT to
+LPTn, where n is the printer address.
+
+The utility simply skips to the top of form from DOS 2.0 and resets
+your printer back to normal print mode, from double strike-compressed
+mode.  Just key "UNSMALLP" and hit enter, to run, if the utility is on
+a diskette in your default drive.
+
+```
+{% endraw %}
+
+## VPRINT.ASM
+
+{% raw %}
+```
+; PROGRAM VPRINT version 1.0
+;      by Dave Whitman
+;
+; Redirects printer output to a specified disk file,
+; providing a virtual printer.  Invoked from DOS by
+; the command: VPRINT filespec
+;
+; Changes vector to BIOS printer routine to point
+; to VPRINT code.  The VPRINT code is grafted onto
+; DOS, and will not be overwritten by other programs.
+;
+fcb            equ [5CH]   ;file control block
+name           equ [5DH]   ;name field of fcb
+name_length    equ 11      ;length of name field in fcb
+cur_block      equ [68H]   ;current block field
+current_rec    equ [7CH]   ;current record field
+record_size    equ [6AH]   ;record size field
+dta_length     equ 200H    ;length of internal disk buffer
+param_count    equ [80H]   ;contains # of chars in param area
+param_area     equ [81H]   ;PSP unformated param area
+dummy_dta      equ [80H]   ;leave dta set here on return
+cr             equ  0DH    ;ascii carriage return
+lf             equ  0AH    ;ascii line feed
+vector_offset  equ [005CH] ;offset part of interrupt vector 17H
+vector_segment equ [005EH] ;segment part of interrupt vector 17H
+printer_io     equ EFD2H   ;offset of BIOS routine
+;
+       jmp init          ;branch around redirection code
+;
+;------------------------------------------------------
+; This section of code will be grafted onto DOS.
+; Calls to PRINTER_IO are redirected here, where
+; they are converted to DOS sequential file writes.
+; 
+convert 
+         sti                    ;enable interupts
+         or ah,ah               ;request to print char?
+         jnz abort              ;abort if not
+;
+         push dx                ;save state
+         push ds 
+         push cs
+         pop  ds                ;and establish addr.
+         mov char,al            ;save the char
+;
+         cmp al,lf             ;is this a line feed?
+         je  exit              ;exit if so
+;
+         call printchar        ;print the charactor
+         cmp  al,cr            ;was that a carriage return?
+         jne  exit             ;exit if not
+         mov al,lf             ;otherwise generate a line feed
+         call printchar        ;and send it
+;
+exit     mov al,char           ;restore state
+         pop ds
+         pop dx
+;
+;=========================================================
+; We have to return a status byte in AH.  The way I read
+; Tech. Ref., to signal all ok we should send value 50H.
+; However, a long DEBUG session showed that Easywriter 1.1
+; expects to get 90H as the OK value.  I would interpret this
+; as "printer busy", but we'll humor Easywriter.  
+;=========================================================
+;
+abort    mov ah,90H            ;move status = ok to AH
+         iret                  ;and return
+;
+printchar proc near
+          push di
+          mov di,numchars      ;position in buffer for char
+
+          mov offset(dta)[di],al ;mov char into buffer
+;
+          inc di               ;update number of chars
+          mov numchars,di      ;and save it
+;
+          cmp di,dta_length    ;is the buffer full?
+          jne pc-exit          ;exit if not
+          call dumpdta         ;otherwise dump it
+;
+pc-exit   pop di
+          ret
+          endp
+;
+dumpdta  proc near
+         push ax                       ;save state
+         push dx
+;
+         mov ah,0FH                    ;open file
+         mov dx,offset(fcb)
+         int 21H
+;
+         movw record_size,dta_length   ;set record size
+ 
+         mov  ax,block_save            ;set fcb current block
+         mov  cur_block,ax
+;
+         mov dx,offset(dta)            ;set disk transfer addr.
+         mov ah,1AH
+         int 21H
+;
+         mov dx, offset(fcb)           ;write buffer to disk
+         mov ah,15H
+         int 21H
+;
+         mov  ax, cur_block            ;save current block
+         mov  block_save,ax
+;
+         mov  ax,1000H                 ;close file
+         mov  dx,offset(fcb)
+         int  21H
+;
+         movw numchars,0000H           ;buffer is now empty
+;
+;======================================================
+; Since we don't know where the DTA was set upon entry,
+; we can't really restore the state of the machine.
+; What we'll do is set up a dummy DTA for the caller to
+; use, so it doesn't clobber our buffered data between calls.
+; This is *NOT* foolproof, but seems to work OK with Easywriter.
+;======================================================
+;
+         mov dx,offset(dummy_dta)   ;set DTA to dummy block
+         mov ah,1AH
+         int 21H
+ 
+         pop dx                     ;restore state
+         pop ax
+         ret                        ;and return
+         endp
+;
+;====================================================
+; Data area for resident section
+;====================================================
+char       db 00H           ;to save the char. passed
+numchars   db 00H,00H       ;word: # of chars in buffer
+block_save db 00H,00H       ;to save current block between calls
+dta        ds dta_length    ;internal data buffer
+;
+;===================================================
+; Initialization section.  Does not become resident.
+;===================================================
+init   cmpb name,' '              ;was a file specified?
+       jnz  a1                    ;skip if so
+ 
+       cmpb param_count,00H       ;any param chars?
+       jz   default               ;skip if not
+       xor  ch,ch                 ;set up for scan
+       mov  cl,param_count
+       mov  di,offset(param_area)
+       mov  al,'/'                ;look for '/'
+       repnz                      ;scan to end or 1st match
+       scasb
+;
+       jnz default                ;skip if not found
+       xorb [di],20H              ;guarantees upper case
+;
+       cmpb [di],'N'              ;is it an N?
+       je   p_handler             ;if so, jump
+;
+;if no parameters decoded, just fall through
+;and set up print file with default name
+;
+default mov  si, offset(default_file_name)
+        mov  di, offset(name)
+        mov  cx, name_length
+        rep
+        movsb
+;
+a1     mov dx, offset(fcb)         ;check if file exists
+       mov ah,11H
+       int 21H
+;
+       test al,al                  ;file found?
+       jnz  a2                     ;skip if not
+;
+       mov  dx, offset(err_msg_1)  ;otherwise print
+       mov  ah,09H                 ;error message
+       int 21H
+       int 20H                     ;and return to DOS
+;
+a2     mov ah,16H                  ;create file
+       int 21H
+;
+       test al,al                  ;file created?
+       jz   a3                     ;skip if so
+       mov  dx, offset(err_msg_2)  ;otherwise error
+       mov  ah, 09H
+       int  21H
+       int  20H
+;
+a3     movw current_rec, 0         ;fill in fcb
+;
+       mov ah,10H                  ;close file
+       mov dx, offset(fcb)
+       int 21H
+;
+       mov ax,2517H                ;reset printer vector
+       mov dx, offset(convert)
+       int 21H
+;
+       mov dx,offset(init)         ;point dx past resident code
+       int 27H                     ;end but stay resident
+;===================================================================
+p_handler
+;
+       mov ax,0000H              ;ext. addr. for vector
+       mov ds,ax
+;
+       cmpw vector_offset,printer_io  ;already in BIOS?
+       je   p_exit                    ;exit if so
+;
+       mov  ds,vector_segment    ;est. addr. in original vprint seg
+       call dumpdta              ;operates on buffer in original vprint
+;
+       mov  ax,F000H             ;reset vector 17H to BIOS routine
+       mov  ds,ax                ;bios segment
+       mov  dx,printer_io        ;printer support routine
+       mov  ax,2517H
+       int 21H 
+;
+p_exit int  20H                  ;return to DOS
+;
+;===================================================================
+err_msg_1  db 'File already exists!$'
+err_msg_2  db 'No room for file in directory.$'
+default_file_name db 'VIRTUAL PRN'
+```
+{% endraw %}
+
+## VPRINT.DOC
+
+{% raw %}
+```
+
+
+
+     VPRINT
+     Command
+     
+     --------------------------------------------------
+     Purpose: Creates a "virtual printer" by redirecting
+              all printer output to a disk file.
+     
+     Format:  VPRINT [filespec] [/N]
+     
+     Type:    Internal  External
+                          ***
+     
+     Remarks: Printer output is redirected to the
+              specified file, or if none is given, to
+              VIRTUAL.PRN.  To avoid overwriting
+              existing data, no redirection occurs if
+              the file is already in the directory. 
+              Output is buffered up until a sector's
+              worth of data is available.  
+     
+              The command VPRINT /N cancels redirection
+              and flushes the buffer to disk.
+     
+              The primary intended use of VPRINT is
+              the simplified creation of formatted DOS  
+              files from Easywriter.  By printing to
+              disk, it is not necessary to manually add
+              end of paragraph markers at the end of     
+              each line, or to use the Easywriter    
+              utility TRANSFER.
+     
+     Note:    VPRINT is still in an experimental form.
+              Use of the PrtSc key while redirection
+              is in effect will cause a system crash.    
+              On the author's 64K system, a single 5
+              digit number overwrites five charactors    
+              near the beginning of any file loaded by
+              Easywriter.  This overwrite can be
+              corrected with the editor prior to
+              printing.
+     
+              Developed by David Whitman
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

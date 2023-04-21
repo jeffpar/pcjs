@@ -16,8 +16,359 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## EZWINDO.DOC
+
+{% raw %}
+```
+                  The EZ-WINDOWS PullDown Menu System
+
+      "Terrific, a beautiful piece of programming!" - Duiven, Holland
+
+
+           A Complete Menu System for the QuickBasic 4.x Compiler
+            and MS Professional Development System 7.0 and up.
+
+                                  by
+
+			StrongSoft Engineering
+                          3155 S.W. 178th Ave
+                            Aloha, OR 97006
+
+	   Documentation written & prepared by John C. Strong
+
+
+OVERVIEW
+
+     This routine is intended to allow a programmer to present the user
+with options in an organized and aesthetic way.  The PullDown Menu System was
+indeed modeled after the very pulldown menu used in the QuickBASIC 4.x
+environment.  
+
+     I wrote this routine out of frustration, actually.  I didn't want to
+take the time to write a pulldown menu routine, yet none of the commercially
+available libraries offered the options that I needed.  So I just sat down
+one day and wrote it, and here it is.
+
+     The PullDown Menu System is very easy to integrate in a QB program,
+yet offers all the options someone might expect in a commercial software
+package.  To use this routine in a program, all that is required is a few
+arrays containing formatting information for the pulldown menu and an array
+containing the actual text used.  Then a simple CALL statement will take care
+of the rest!  Don't worry -- loading the arrays required for the routine is
+very straightforward and uncomplicated, and the results are definitely worth
+it!
+
+     The advantages of using this routine are both numerous and obvious, but
+there is one disadvantage:  the code size is rather large.  But the programs
+that need such a pulldown menu routine are the ones that need to present a
+multitude of options to the user -- such a program will naturally be large
+anyway, so the relative code size of the PullDown Menu System shouldn't make
+a big difference.
+
+
+REQUIREMENTS
+
+     The PullDown Menu System requires QuickBASIC 4.0 Compiler or above.  I
+don't know if it will work with earlier versions.  I believe earlier versions
+of QuickBASIC modify the stack a bit differently when passing parameters to
+assembler routines, which would definitely cause problems.  So if you don't
+have version 4.0 or later, you would be doing yourself a great favor by
+upgrading if for no other reason than to enjoy the benefits of a superior
+programming environment provided by QB45 or PDS 7.0.
+
+     You can use this routine inside the QB environment or in a compiled
+.EXE file.  Two Quick Libraries are provided for program development inside
+QB and two libraries are provided for compiled programs.    
+
+
+USING THE PULLDOWN MENU SYSTEM
+
+	Using this routine requires the dimensioning and loading of several
+arrays and the actual call to the routine.  When calling the routine, several
+conventions must be observed:
+
+     1)    All non-string variable arguments must be the integer type,
+           denoted by the percent sign %, i.e., ITEMSLCT%.  Alternativ-
+           ely, the DEFINT statement can be used at the beginning of
+           your program which will take care of this automatically.  You
+           can also pass literals instead of integer variables, but only
+           for arguments that are not modified by the routine.  The best
+           thing to do is just pass variables, which requires less stack
+           space than literals.
+
+     2)    The arguments passed must be in proper order or the routine
+           will not work, possibly locking up your system.
+
+     3)    All arguments must be present or the routine will not work,
+           possibly locking up your system.
+
+
+
+CALLING THE ROUTINE
+
+     This is the required format for calling this routine:
+
+
+     CALL PULLDOWN(MENUBAR$,MenuRow%,MenuCol%,MenuFG%, MenuBG%,HiliteFG%,
+                   HiBarFG%,HiBarBG%,NonValidFG%,HiPos1%(),HiPos2%(),
+                   MaxSize%(),MaxItems%(),item$(),valid%(),toggle%(),ms%,
+                   ClearAfter%,Seed%,SoundOn%,Blink%,MenuSlct%,ItemSlct%)
+
+
+     Arguments:     MENUBAR$ - A string variable holding each pulldown menu
+                               name.  The number of menus is determined by
+                               the number of names is this string, which
+                               must be separated by at least one space on
+                               each side.  A space character must be the last
+                               character in the string.
+
+                    MenuRow% - The row on which the menu bar will be 
+                               displayed.
+
+                    MenuCol% - The column of the leftmost character in the
+                               menu bar.  For a full length menu bar, this
+                               would be set to one (1).
+
+                     MenuFG% - The foreground color of the menubar and menus.
+
+                     MenuBG% - The background color of the menubar and menus.
+
+                   HiLiteFG% - The foreground color of the 'hot' letter in
+                               each selection.  Bright white (15) or yellow
+                               (14) work the best.
+
+                    HiBarFG% - The foreground color of the text selected by
+                               the hilite bar.
+
+                    HiBarBG% - The background color of the hilite bar.
+
+                 NonValidFG% - The foreground color of the selections not 
+                               currently valid.  Gray (8) works the best here.
+
+                   HiPos1%() - The integer array, dimensioned to the number of
+                               menus, holding the position of the 'hot'
+                               letter in each menu name in the MENUBAR$
+                               variable.  These letters will be hilited with
+                               the color specified in the HiliteFG% variable.
+
+                   HiPos2%() - A 2-dimensional integer array holding the 
+                               position of the 'hot' letter in each menu item
+                               for each menu. It's first dimension is the
+                               number of the menu, the second is the 
+                               number of the selection in the menu.  
+                               Dimension it for the number of menus and the 
+                               number of items in the largest menu.  For
+                               example,
+                                    DIM HiPos2%(menu%,slct%)
+
+                  MaxSize%() - An integer array holding the length of the
+                               longest item in each menu.
+
+                 MaxItems%() - An integer array holding the number of items in
+                               each menu.
+
+                     Item$() - A 2-dimensional array holding the items for
+                               selection for each menu.  It is dimensioned
+                               like HiPos2%(),
+                                    DIM Item$(menu%,slct%)
+
+                    Valid%() - A 2-dimensional flag array that determines if
+                               an item is valid for selection or not.  A value
+                               of 1 is valid; 0 means not valid, and the item
+                               is grayed-out.  It is dimensioned like
+                               HiPos2%().
+
+                   Toggle%() - A 2-dimension flag array that determines the 
+                               toggling status of each item in each menu.  
+                               
+                                   2   -   exclusive toggle, on
+                                   1   -   inclusive toggle, on
+                                   0   -   no toggling
+                                  -1   -   inclusive toggle, off
+                                  -2   -   exclusive toggle, off
+
+                               If toggling is used in a menu, it must all be
+                               of one type, either all exclusive or all
+                               inclusive.  Otherwise, it won't work properly.
+                               Toggle%() is dimensioned like HiPos2%().
+
+                         ms% - Flag to indicate mouse support.  If ms%=0, the
+                               routine ignores the mouse if one is present.
+                               ms%=1 tells the routine to use the mouse.
+
+                 ClearAfter% - If ClearAfter%=1, the menu will be erased after
+                               a selection is made.  A value of zero will 
+                               inhibit the erasing of the menu.
+
+                       Seed% - When PULLDOWN is first called, the menu name
+                               corresponding to the number in this variable 
+                               is hilited for selection.
+
+                    SoundOn% - If set to zero (0), the routine will not make
+                               any sound.
+
+		      Blink% - If set to one (1), the selected item will blink
+			       2 times after selection.
+
+     Returned:     MenuSlct% - The number of the menu containing the item that
+                               was selected.
+
+                   ItemSlct% - The number of the item selected.
+                              
+                                                            
+	In addition, you can tell PULLDOWN to put in a dividing line with a 
+simple command.  All you do is insert a certain control code into your
+ITEM$() array.  For example, to put a dividing line 10 characters long in
+your first menu after the third item, your program should define ITEM$(1,4) as:
+
+			ITEM$(1,4) = "~10"
+
+The tilde "~" tells PULLDOWN to create a dividing line, its length determined
+by the two characters directly following the tilde.
+
+     The source code for PDDEMO is well documented and will provide a little
+more clarity on the function of each of these variable.  I encourage you to
+play around will PDDEMO a bit - get a feel for it by modifying it and seeing
+what it does.  Be sure to observe the calling conventions, though.
+
+
+COMPILING
+
+	To create an .EXE file, follow these steps:
+
+          1)   During development, use the EZQB.QLB (or EZPDS.QLB) Quick
+	       Library inside the QB environment.
+
+          2)   When you're ready to compile the finished program, first
+               decide if you want a stand-alone program or one that needs the
+               BRUNxx.exe file to run.  Then go to the DOS prompt in your QB
+               directory and use this syntax to compile your program:
+
+                    BC PROGRAMNAME [/O],,nul	   
+
+               where PROGRAMNAME is the name of your basic program (no
+               extension), and the [/O] option tells QB to compile a stand-
+               alone program.  You may leave this option off if you want,
+               which will result in an executable file that needs the
+               BRUNxx.EXE file.  For example, to compile PDDEMO.BAS for
+               stand-alone program, type
+
+                    BC PDDEMO /O
+
+          3)   Now is when you link in the EZQB.LIB (or EZPDS.LIB) library
+               to the object code produced by the compiler.  From the DOS
+               prompt use this syntax to link your program:
+
+                    LINK [/E] PROGRAMNAME,,,EZQB
+
+               The [/E] is the EXEPACK option which produces a
+               smaller executable file and should be used for most every 
+               program that you may write.
+
+          4)   You should now have an executable version of your QB program
+               in the QBxx directory.  Remember, if you didn't use the [/O]
+               option, the BRUNxx.EXE must be present.
+
+
+
+HELP A BUDDING ENGINEER!
+
+     If you think this pulldown menu routine will be useful to you, I would
+greatly appreciate a little donation to get me through the last year of 
+engineering school.  A $5.00 registration fee is all that's needed to get on 
+the mailing list and receive updates to PULLDOWN plus customer support.
+
+
+MORE ROUTINES!!
+
+     If you run the EZDEMO1.EXE program on your disk, you will see a collection
+of my favorite routines that I would like to make available to you.  This is
+Volume 1 of the EZ-WINDOWS library.  I use these routines extensively in my
+programs, which not only saves a lot of time but also results in a professional
+looking program.
+
+     Here is what you get:  1) the complete library of routines with full
+documentation;  2)  free updates when they become available;  3)  customer
+support.  Included in customer support is the "wish list".  If you have an
+idea for a routine, and I get enough suggestions from others for the same type
+of routine, I will write it up and send it out with the next update.  In 
+addition, I will be periodically updating my personal library with new
+routines which will be included in the next volume.  Each new volume can be
+obtained by registered users at a discount.
+
+     I know a lot of you will want my source code, and I can understand that.
+I'm a little reluctant to give it out, but I will release it with the library
+for an extra fee.
+
+     For ordering info, see the REGISTER.DOC file.
+
+
+AND LASTLY...
+
+     Have a ball! 
+
+
+```
+{% endraw %}
+
+## FILE2559.TXT
+
+{% raw %}
+```
+Disk No: 2559                                                           
+Disk Title: EZ-Windows Pull-Down Menu Library                           
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: EZ-Windows Pull-Down Menu Library                        
+Author Version: 01/91                                                   
+Author Registration: $5.00 and $30.00                                   
+Special Requirements: QuickBASIC 4.0+ Compiler                          
+                                                                        
+EZ-WINDOWS is a complete menu system for the QuickBASIC 4.x compiler    
+that saves you from having to write your own pull-down menus. EZ-WINDOWS
+is actually modeled after the very pull-down menu used in the QuickBASIC
+4.x environment and is very easy to integrate into your QuickBASIC      
+programs.  With EZ-WINDOWS, your programs will have the same appearance 
+as commercial programs.                                                 
+                                                                        
+All that is required to use EZ-WINDOWS are a few arrays containing      
+formatting information for the pull-down menu and an array containing   
+the actual text used.  A simple CALL statement will take care of the    
+rest. Loading of the arrays is uncomplicated and worth the effort.  One 
+reason for using EZ-WINDOWS is the ease with which you can add a        
+professional look to your programs.                                     
+                                                                        
+There is one disadvantage -- the code size is rather large.  However,   
+programs that need such a pull-down menu system are the ones that       
+present a multitude of options to the user, and will be naturally large 
+anyway, so the relative code size of the pull-down menu system shouldn't
+make a big difference.                                                  
+                                                                        
+StrongSoft Engineering's EZ-WINDOWS has demo programs to demonstrate the
+power and flexibility of the pull-down menu system.                     
+                                                                        
+~ Registered library also contains a routine to produce movable,        
+  resizable pop-up windows that can be manipulated with a mouse.        
+                                                                        
+~ All routines use a mouse.                                             
+                                                                        
+~ Also works with Professional Development System 7.x.                  
+                                                                        
+~ Source code is available.                                             
+                                                                        
+~ E-mail customer support available.                                    
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
 ## PDDEMO.BAS
 
+{% raw %}
 ```bas
 '=========================================================================
 
@@ -265,6 +616,7 @@ PullDownMenuData:
      DATA " Full Menus      ",2,1,1
 
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

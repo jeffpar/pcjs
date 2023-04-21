@@ -48,6 +48,58 @@ machines:
     BLACK MAGIC to be more than you ever imagined.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1120.TXT
+
+{% raw %}
+```
+Disk No: 1120
+Disk Title: Black Magic 1 of 3 (1121 - 1122 also)
+PC-SIG Version: S1.3
+
+Program Title: Black Magic
+Author Version: 1.5
+Author Registration: $89.95.
+Special Requirements: 384K RAM and CGA, HGA, EGA or VGA.
+
+Wordprocessors, databases and spreadsheets all manipulate and structure
+information in specific, but different ways.  Hypertext systems, such as
+BLACK MAGIC, enable you to expand information in another way -- by
+dynamically linking keywords, graphics and blocks of information to one
+another.
+
+For example, you are creating a document and need to define a concept or
+word but the detail of the definition would distract the reader from the
+main text.  You can tag a keyword that will indicate that the definition
+is available.  An area of the screen opens and you type the definition
+or explanation.  To explore the definition, the user triggers the tag
+and the reference is displayed.  This is a simple illustration of
+hypertext.
+
+BLACK MAGIC can shell to DOS, and link and transfer information between
+hypertext and other applications.  Build context-sensitive help systems,
+link specific items in text documents to technical drawings or
+illustrations and expand obscure references with detailed explanations.
+A screen grabber has been added to integrate graphics into BLACK MAGIC.
+The extended ASCII character set is supported for the use of
+international characters.
+
+If you are currently using a document generator for live electronic
+documents such as:  computer-based training guides, foreign language
+tutorials, interactive catalogs, or educational courseware, than you
+should be moving over to BLACK MAGIC hypertext writing.  You will find
+BLACK MAGIC to be more than you ever imagined.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1120
 

@@ -38,6 +38,46 @@ machines:
     fonts, or format is made easier.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1225.TXT
+
+{% raw %}
+```
+Disk No: 1225
+Disk Title: Moe (Nifty moved to #1709)
+PC-SIG Version: S2
+
+Program Title: Moe
+Author Version: 1.0
+
+A memory-resident datebook/desktop manager, MOE schedules events,
+reminds you of appointments, logs expenses and time, acts as a
+calculator, maintains and dials phone numbers, lets you establish lots
+of pop-up databases and lists, and offers an easy way to send printers
+new codes.
+
+MOE schedules upcoming events, allowing up to 20 daily memory prompts,
+with alarms.  It maintains up to 1,000 expense and time entries by
+project.  The pop-up calculator offers a 20-line tape and the ability to
+transfer results to your wordprocessor or text editor.  It does basic
+calculations, plus exponentials and inverse, and offers two memory keys.
+
+You get a pop-up phone directory that dials for you, helps you with
+communications, and even prints mailing labels.  You can establish
+numerous mini-databases, such as to-do lists and general ledger account
+numbers, and search them if needed.  Sending codes to change printers,
+fonts, or format is made easier.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1225
 

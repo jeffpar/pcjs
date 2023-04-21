@@ -14,6 +14,64 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1061.TXT
+
+{% raw %}
+```
+Disk No  1061
+Program Title: SPANISH FOR TRAVELERS version 1.0
+PC-SIG version 1
+
+    This software and audio cassette combination package may be just what
+you're looking for if you want to travel to a Spanish-speaking country and
+you don't know how to speak their language.
+
+    Eight formal lessons are built into this program and livened up when
+you least expect it by short blasts of Mexican music. Be prepared for an
+unexpected quiz or test every now and then, thrown in to help you evaluate
+your progress! An audio cassette tape and manual can be ordered from an
+800 phone number for $23.95 to assure your pronounciation is as sharp as
+your written knowledge.
+
+Usage: Language/Education
+
+System Requirements: 128K memory and one floppy disk drive.
+
+How to Start: Type SPANISH (press enter).
+
+Suggested Registration: $23.95
+
+File Descriptions:
+
+SPANISH  EXE  Main program file
+READ     ME   Introductory information
+LESSON   1A   Lesson file.
+LESSON   ???  Lessons (7 files).
+PH1      BAS  Musical selections
+PH2      BAS  Musical selections
+PH3      BAS  Musical selections
+PH4      BAS  Musical selections
+PH5      BAS  Musical selections
+PH6      BAS  Musical selections
+VERBAR   BAS  Data storage file
+ERRORS        Data storage file
+LESSONIN      Data storage file
+LESSONUM      Data storage file
+USERWRDS      Data storage file
+
+PC-SIG
+1030D E. Duane Avenue
+Sunnyvale, CA   94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1061
 

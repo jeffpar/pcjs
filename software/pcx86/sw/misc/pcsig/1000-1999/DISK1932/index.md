@@ -65,6 +65,74 @@ machines:
     ~ Real numbers.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1932.TXT
+
+{% raw %}
+```
+Disk No: 1932                                                           
+Disk Title: Turbo-Lessons 5.0                                           
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Turbo-Lessons 5.0                                        
+Author Version: 12/13                                                   
+Author Registration: $10.00                                             
+Special Requirements: Pascal.                                           
+                                                                        
+Here are 16 different lessons in Turbo Pascal that teach you more than  
+the elements of the language--you'll also learn programming technique   
+and gain experience through practice.  Each TURBO-LESSON is a bite-size 
+tutorial which introduces one or more new concepts.  Each of the lessons
+are presented in the same format, clear objectives followed by an       
+organized tutorial.  Most lessons direct you to work with a sample      
+program which is provided with these lessons.                           
+                                                                        
+Programmers who had difficulty learning Pascal from reference books will
+find they are able to make better progress.  The programming techniques 
+you learn will save you time and frustration in your future programming.
+The lessons are designed to encourage you to try things on your own.    
+Lesson titles include:                                                  
+                                                                        
+~ ESSENTIAL EDITING SKILLS                                              
+                                                                        
+~ PROGRAM STRUCTURE                                                     
+                                                                        
+~ DECLARATIONS, INPUT                                                   
+                                                                        
+~ INTEGER EXPRESSIONS                                                   
+                                                                        
+~ CONDITIONAL PROCESSING                                                
+                                                                        
+~ REPEAT STATEMENT                                                      
+                                                                        
+~ CASE STATEMENT                                                        
+                                                                        
+~ FOR STATEMENT                                                         
+                                                                        
+~ WHILE STATEMENT                                                       
+                                                                        
+~ INTRODUCTION TO FUNCTIONS                                             
+                                                                        
+~ A FUNCTION TO DETECT ERRORS                                           
+                                                                        
+~ STRINGS                                                               
+                                                                        
+~ INTRODUCTION TO PROCEDURES                                            
+                                                                        
+~ INTERACTIVE SCREEN HANDLING                                           
+                                                                        
+~ REAL NUMBERS                                                          
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1932
 

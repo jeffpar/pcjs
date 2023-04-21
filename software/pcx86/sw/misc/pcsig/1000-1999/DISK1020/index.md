@@ -39,6 +39,90 @@ machines:
     they are, freeing you to worry about other important tasks.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1020.TXT
+
+{% raw %}
+```
+Disk No: 1020
+Program Title:  IMX CO-PILOT
+PC-SIG version: 1.1
+
+IMX CO-PILOT is a desk organizer program that includes the following
+subsections:
+
+~ A calculator
+
+~ Appointment calendars with alarms
+
+~ Phone and address books with label printing capability
+
+~ A notepad for any type of messages
+
+~ And several other features including disk management utilities.
+
+IMX CO-PILOT is memory resident on boot-up and runs with most major
+software packages.  It is invoked only when the user calls it up with a
+special user-defined keystroke.  A must for the business person on the
+go.  Keeps track of several different appointments and reminds you what
+time they are, freeing your mind to worry about other important tasks.
+
+Usage:  Desktop Organizer.
+
+Special Requirements:  Hard disk is recommended.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $24.95
+
+File Descriptions:
+
+IMX      EXE  Main program.
+INSTALL  BAT  Installs IMX CO-PILOT for you.
+README   DOC  Instructions for installation.
+IMS      <DIR>Subdirectory containing following files.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+To do a quick installation of the IMX CO-PILOT do the following:
+    - Put IMX CO-PILOT disk in the A: drive.
+    - Type "A:"
+    - Type "A:INSTALL.BAT"
+    - Press F1 - To select Monitor Type. (Follow directions in
+      Monitor Select function.)
+    - Press F2 - To select Default Drive. (Follow directions in
+      Default Drive function.)
+    - Press F9 - To exit Setup.
+    - Type "Y" to allow data to be overwritten.
+    - The IMX CO-PILOT system is now installed on the default drive.
+      To load program in memory type "<default drive>:\IMS\IMX.EXE".
+      (It is recomended that "\IMS\IMX.EXE" be the last line of the
+      autoexec.bat file.)
+    - To invoke the system hold down the "Alt" key and press the "X"
+      key.
+To receive a copy of the IMX CO-PILOT instruction manual and be added
+to the IMX CO-PILOT information/mailing list, send a check for $24.95
+payable to:
+            MICRO COMPUTER TECHNOLOGY, INC
+            SUITE 203
+            2075 SILAS DEANE HWY
+            ROCKY HILL, CT 06067
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1020
 

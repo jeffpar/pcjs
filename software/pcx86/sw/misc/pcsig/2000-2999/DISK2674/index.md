@@ -14,6 +14,61 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2674.TXT
+
+{% raw %}
+```
+Disk No: 2674                                                           
+Disk Title: JOB COST  2 of 2  (also #1230)                              
+PC-SIG Version: S1.4                                                    
+                                                                        
+Program Title: Job Cost                                                 
+Author Version: 1.14                                                    
+Author Registration: $45.00                                             
+Special Requirements: 640K RAM, a hard disk, and a printer.             
+                                                                        
+JOB COST was made for the person who is responsible for monitoring and  
+keeping costs under control on complex, expensive projects.             
+                                                                        
+With this system you can:                                               
+                                                                        
+~ Set up multiple jobs each with its own unique set of cost centers     
+~ Establish budget controls for each cost center for labor, material,   
+and other expenses                                                      
+                                                                        
+~ Edit and post transaction cost items to each cost center              
+                                                                        
+~ Post estimates of percent completions for each budget item            
+                                                                        
+~ Set up budgets for up to 99 unique change orders per job              
+                                                                        
+JOB COST then provides you with cost variances, projected profit/loss at
+the detail budget level, cost center level, and total job. As expenses  
+are posted, the overall job status is updated keeping you informed of   
+balance of funds available and projected profit/loss for the job's      
+original estimate and change orders. You are provided concise reports   
+for distribution to your client, foreman, and sub-contractors.          
+                                                                        
+At the end of the job, after all reporting has been performed, you can  
+back up the completed job to a floppy disk for storage, delete the job  
+from your active job database, and if necessary restore the job from    
+backup for recording additional cost information after job was          
+completed. New jobs can be set up from existing job formats, requiring  
+only the entering of the new job's unique budget information.           
+                                                                        
+All functions are menu driven with on-screen help.                      
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2674
 

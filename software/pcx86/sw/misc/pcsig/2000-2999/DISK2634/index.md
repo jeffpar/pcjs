@@ -18,6 +18,7 @@ machines:
 
 ## APL-QREF.BAS
 
+{% raw %}
 ```bas
 
              QUICK REFERENCE FOR HB'S ALL-PURPOSE LIBRARY:
@@ -131,9 +132,11 @@ FUNCTION DecodeTime$ (TimeCode&) PUBLIC
 
 
 ```
+{% endraw %}
 
 ## BOXES-U.BAS
 
+{% raw %}
 ```bas
 
 
@@ -361,9 +364,11 @@ SUB QBOX (L, C, Lines%, Message$, AnsFldLength) PUBLIC
     '  with L & C set correctly for and ENTER call -- Wowee !!!
 
 ```
+{% endraw %}
 
 ## COLORSET.BAS
 
+{% raw %}
 ```bas
 
  DEFINT A-Z
@@ -683,9 +688,11 @@ Oops:
  RESUME Start
 
 ```
+{% endraw %}
 
 ## FENTRY-U.BAS
 
+{% raw %}
 ```bas
 
 
@@ -1469,9 +1476,11 @@ FUNCTION ROUNDOFF# (N#, Places%)
  END SELECT
 END FUNCTION
 ```
+{% endraw %}
 
 ## FIGDAT-U.BAS
 
+{% raw %}
 ```bas
 
 '==============================================================================
@@ -1684,9 +1693,11 @@ END FUNCTION
 
 
 ```
+{% endraw %}
 
 ## HBDEMO.BAS
 
+{% raw %}
 ```bas
 
 
@@ -3429,9 +3440,11 @@ Clunker:
  RESUME NEXT
 
 ```
+{% endraw %}
 
 ## INIT-U.BAS
 
+{% raw %}
 ```bas
 
 '                      ╔════════════════════════════╗
@@ -3618,9 +3631,11 @@ WriteAndPeek:
 
 
 ```
+{% endraw %}
 
 ## MENUS-U.BAS
 
+{% raw %}
 ```bas
 
 '==============================================================================
@@ -4199,9 +4214,11 @@ MClearLine:
 
  END SUB                                                         REM SUPERMENU
 ```
+{% endraw %}
 
 ## MISC-U.BAS
 
+{% raw %}
 ```bas
 
 '                      ╔════════════════════════════╗
@@ -4735,9 +4752,11 @@ END FUNCTION '                 =========                      FQFileSpec$
 
 
 ```
+{% endraw %}
 
 ## PUBVARS.BAS
 
+{% raw %}
 ```bas
 
 
@@ -4966,9 +4985,11 @@ FUNCTION EXIST (F$)
 
 
 ```
+{% endraw %}
 
 ## PWW.BAS
 
+{% raw %}
 ```bas
 
 
@@ -5196,9 +5217,11 @@ DispLns:
  RETURN
 
 ```
+{% endraw %}
 
 ## SETUP-H.BAS
 
+{% raw %}
 ```bas
 
 DEFINT A-Z
@@ -5245,9 +5268,11 @@ DEFINT A-Z
             %PgUp = &H400:              %PgDn = &H600
             %RArrow = &H800:            %LArrow = &HA00
 ```
+{% endraw %}
 
 ## SWW.BAS
 
+{% raw %}
 ```bas
 
 
@@ -5495,9 +5520,11 @@ DispLns:
  COLOR 10,0: LOCATE 4,1:PRINT Inpt$;: COLOR 14,0
  RETURN
 ```
+{% endraw %}
 
 ## PORT4.BAS
 
+{% raw %}
 ```bas
 'Program Name    : Port4.bas
 'Author          : Lloyd L. Smith for Spectra Technical Support
@@ -5654,9 +5681,11 @@ return
 
 
 ```
+{% endraw %}
 
 ## READ123.BAS
 
+{% raw %}
 ```bas
 'Read123.bas
 DEFINT A-Z
@@ -5761,9 +5790,55 @@ GET FileNum, , Row
 END SUB
 
 ```
+{% endraw %}
+
+## RESWORD.DOC
+
+{% raw %}
+```
+			      " RESWORD "
+			   SHADETREE SOFTWARE
+			  Bruce Nopper, Author
+			 Compuserve  73300,2444
+
+  This program is to search Basic ( Turbo 1.xx, Quick 3.xx & 4.xx, Power 2.00x,
+  and {Interpreted} GW 3.11 up ) source code for the use of reserved words for
+  PowerBasic 2.1 w/PowerPack as variables. This program is slow ( 1 second per
+  line ) but very smart, it will ignore Comments, Data and Data Strings. The
+  program will work on all variables, numerical and string, including unsigned
+  variables, no matter if they are written with Uppercase, Lowercase or mixed.
+  This program will detect only exact matches not imbedded matches, eg...
+
+  Sample line of code;
+
+  Maxamount% = Max% + Max2% : Array$ = "Data used =" + Oldstring$  ' Append it
+
+   "Resword" would report that it found the reserved words "Max" and "Array"
+   used in this line. It will ignore the word "Append" because it is a comment,
+   not code. It ignores Data in "Data used =" because it is used as a Data
+   String. The variables Maxamount%, Max2%, and Oldstring$ are ignored because
+   they are imbedded and are not true reserved words.
+
+   The output of the search can be directed to;  Printer, File (reserved.fnd),
+   or Screen. The screen output is paused when the screen is full until a key
+   is pressed to continue. The Source code type can be selected from a list,
+   each different type of Basic's contains different word lists. The program
+   when it finds a reserved word within the code; lists the line number ( this
+   is the line number for use with the PowerBasic editor line counter ), the
+   reserved word that it found, and displays the line of code in question.
+
+   There is no limit to the size of the source code, this program is free for
+   personal use only. Please report any bugs or comments to me on Compuserve
+   or write to:  Shadetree Software   PO Box 642   N. Amherst, Ma.  01059
+
+
+
+```
+{% endraw %}
 
 ## SCANP2.BAS
 
+{% raw %}
 ```bas
 'Program Name    : ScanP2.bas scans screen - builds pixel image for printer
 'Author          : Lloyd Smith for Spectra Tech Support
@@ -5832,9 +5907,11 @@ PrintInit:
 return
 
 ```
+{% endraw %}
 
 ## SPECTERN.BAS
 
+{% raw %}
 ```bas
 'Program Name    : Spectern.bas  Example of Specter Factory Terminal
 'Author          : Lloyd L. Smith for Spectra Technical Support
@@ -6131,9 +6208,11 @@ msg$(25) = FS$ + fh$ + fi$ + Ff$ + Ft$
 END SUB
 
 ```
+{% endraw %}
 
 ## SPKDEMO.BAS
 
+{% raw %}
 ```bas
 $COMPILE EXE
 $LIB ALL OFF
@@ -6315,9 +6394,11 @@ IF a$ = CHR$(27) THEN
 END IF
 END SUB
 ```
+{% endraw %}
 
 ## TTD100.BAS
 
+{% raw %}
 ```bas
 '
 '  Demo using PowerBasic 2.10 Directory command along with using the DTA
@@ -6341,9 +6422,11 @@ FOR J% = 0 TO N%
 NEXT J%
 
 ```
+{% endraw %}
 
 ## TTD101.BAS
 
+{% raw %}
 ```bas
 '
 '  Demo using PowerBasic 2.10 Directory command along with using the DTA
@@ -6369,9 +6452,11 @@ FOR J% = 1 TO N%
 NEXT J%
 
 ```
+{% endraw %}
 
 ## TTD105.BAS
 
+{% raw %}
 ```bas
 '
 '  Demo using PowerBasic 2.10 Directory command along with using the DTA
@@ -6414,9 +6499,11 @@ PRINT "Total Size.....: ";
 PRINT USING "###,###,###"; T&
 
 ```
+{% endraw %}
 
 ## TTDIR100.BAS
 
+{% raw %}
 ```bas
 $COMPILE UNIT
 $INCLUDE "REGNAMES.INC"
@@ -6565,9 +6652,11 @@ LOCAL X%
 
 END SUB
 ```
+{% endraw %}
 
 ## TTDIR101.BAS
 
+{% raw %}
 ```bas
 $COMPILE UNIT
 $INCLUDE "REGNAMES.INC"
@@ -6720,9 +6809,11 @@ LOCAL DTATime&
 
 END SUB
 ```
+{% endraw %}
 
 ## TTDIR105.BAS
 
+{% raw %}
 ```bas
 $COMPILE UNIT
 $INCLUDE "REGNAMES.INC"
@@ -6911,9 +7002,69 @@ LOCAL UpprB%
 
 END SUB
 ```
+{% endraw %}
+
+## TTDIR105.DOC
+
+{% raw %}
+```
+
+PowerBasic Directory Function:  Version 1.05   November 24, 1990
+
+
+What is the program:
+
+    The files in this archive use the Directory function of PowerBasic
+    2.10.  I have added a sub-routine to read a directory along with
+    additional information about each file in that directory.
+
+
+How it works:
+
+    The heart of the program is the 'DIR$' function included in the
+    PowerBasic 2.10 package.  I used this as the base for the GetDirectory
+    functions.  When I ran a test call to get the 'DTA' after doing a
+    'DIR$' I found that the DTA area had all of the additional information
+    about the file.  Using this fact I wrote a sub-routine to get a
+    complete directory.
+
+    The sub-routine in 'TTDIR100.BAS' is the first draft of this
+    sub-routine.  All of the information about the directory is stored in a
+    string array.
+
+    The sub-routine in 'TTDIR101.BAS' is the second draft.  I corrected a
+    problem in calculating the size of the file.  Also, I found out that I
+    could place the call to get the 'DTA' outside of the loop reading the
+    directory.
+
+    The sub-routine in 'TTDIR105.BAS' is the latest draft.  I placed all
+    text information into one string array.  Also, I moved the file date
+    and time into a separate integer array and the file size into a third
+    separate array.  I did this to see if using integer arrays were faster
+    than appending everything into a string array.  There should be a
+    program called 'TTEST5.BAS' that will call all of the sub-routines to
+    show the difference in speed.
+
+    If you don't have PowerBasic you still can use these program.  Just
+    replace the first call to 'DIR$' with the DOS 'FINDFIRST' function and
+    the second call to 'DIR$' with the DOS 'FINDNEXT' function.
+
+    The sub-routines themselves have comments on the parameters expected.
+    If you have any questions, comments, for suggestions on this subroutine
+    you can reach me on CompuServe.  My ID is 72540,2315.
+
+
+
+
+Thanks
+      Thomas Traynor
+      72540,2315
+```
+{% endraw %}
 
 ## TTEST5.BAS
 
+{% raw %}
 ```bas
 '
 '  Timing test using the two directory routines I wrote.
@@ -6986,6 +7137,7 @@ PRINT       "Version 1.05 took.................: ";
 PRINT USING "######.### Seconds"; UEnd2! - UStart2!
 
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

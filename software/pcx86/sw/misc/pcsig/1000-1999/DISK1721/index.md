@@ -46,6 +46,88 @@ machines:
     two away. Mouse support is also available.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## AGING.DOC
+
+{% raw %}
+```
+
+             QUICK CHECK BOOK version 4.0, released on 09-10-1989
+              (C) Copyright 1989 CanCom Computing Company, Inc.
+
+       This  evaluation  version  of  QUICK CHECK BOOK will quit writing
+       additional data on April 1 of 1991.  You can fool the program  by
+       using  transaction  dates  earlier than 04-01-1991.  Since we are
+       constantly adding features and improving its simplicity, we  want
+       you  to  have  the latest possible version.  If you received this
+       copy on or after 03-01-1991, then please obtain a later  version.
+       The  latest  version  is  available  from your favorite Shareware
+       source, or directly from:
+
+                           CanCom Computing Company
+                      P.O.Box 30, Green Valley, AZ 85622
+                                (602) 622-3719
+
+       An order form is part of this package.  It contains the price  of
+       a  new  evaluation copy and a registered package price.  To print
+       it type in "ORDER".
+
+
+```
+{% endraw %}
+
+## FILE1721.TXT
+
+{% raw %}
+```
+Disk No: 1721                                                           
+Disk Title: Quick Check Book disk 1 of 2 (1731 also)                    
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Quick Check Book                                         
+Author Version: 4.0                                                     
+Author Registration: $40.00                                             
+Special Requirements: 384K RAM.                                         
+                                                                        
+Balancing your checkbook and savings accounts can now be a breeze, with 
+QUICK CHECK BOOK.  QUICK CHECK BOOK is a menu driven program that       
+smooths the effort of maintaining a checkbook, paying bills, sticking to
+a budget, and writing checks.                                           
+                                                                        
+The absence of accounting terminology, account numbers, and confusing   
+methods make QUICK CHECK BOOK the perfect solution for those who like to
+keep things simple and smart.  Each menu selection has a pop-up help    
+window.                                                                 
+                                                                        
+QUICK CHECK BOOK has no limit to the number of checkbooks it can        
+maintain, or the number of transactions in a checkbook.  The amount of  
+storage space available determines your limitations on the number of    
+checkbooks and transactions.                                            
+                                                                        
+QUICK CHECK BOOK is usable in various ways.  If you want to write       
+checks, it does so on your checks and your printer.  If you only want to
+maintain a check data base or budget, QUICK CHECK BOOK does that too.   
+                                                                        
+Balancing with the bank will no longer be the source of anguish.  To    
+balance with the bank, you simply confirm a transaction amount against  
+your bank statement by pressing the return/enter key.  QUICK CHECK BOOK 
+does the rest.                                                          
+                                                                        
+A calculator, calendar, and other utilities are always a key stroke or  
+two away.  Mouse support is also available.                             
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1721
 

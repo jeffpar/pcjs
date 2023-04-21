@@ -35,6 +35,52 @@ machines:
     A sophisticated tool for anyone who needs a good planning utility.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES423.TXT
+
+{% raw %}
+```
+Disk No:  423
+Program Title:  PROJECT MANAGEMENT version 4.0
+PC-SIG version:  2
+
+This disk contains a complete PC Project Management system.  It is
+capable of handling 1000 tasks, subcontractors, variable start dates,
+and holidays.  It uses CPM (Critical Path Method); calculates the
+critical path, cash-flow, cost reports, Gantt charts, and Precedence
+networks.
+
+The system is designed to handle all necessary functions internally or
+allow sophisticated users to build and modify files making use of system
+editing software.  PCPM is almost completely menu-driven and is capable
+of handling up to 500 tasks, subcontractors, variable start dates, and
+holidays.  A surprisingly sophisticated tool for those in need of a good
+planning utility.
+
+Usage:  Project Management.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $50.00
+
+File Descriptions:
+
+CPCPM4   EXE  Self-extracting archived file of compiled version.
+PCPM4    EXE  Self-extracting archived file of source code.
+READPCPM ME   Installation instructions.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale, CA 94086
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0423
 

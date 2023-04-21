@@ -37,6 +37,47 @@ machines:
     effects, speed of play, and other options.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1490.TXT
+
+{% raw %}
+```
+Disk No: 1490                                                           
+Disk Title: Vegas Pro                                                   
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: Vegas Pro Video Poker                                    
+Author Version: 1                                                       
+Author Registration: $19.00                                             
+Special Requirements: None.                                             
+                                                                        
+Video poker machines are the most popular "slot" machines in Las Vegas  
+and account for almost forty percent of the billions of dollars that    
+tourists spend in Nevada casinos.                                       
+                                                                        
+VEGAS PRO takes you on a quick, happy trip to a casino to play the      
+popular machine "five card draw poker."  You bet and pull the handle and
+watch the cards line up.  You can hold or draw each of the cards.  Then 
+you tell the machine to deal and get the good or bad news.  Each game   
+can be played in seconds.                                               
+                                                                        
+Poker, to its aficionados, is not a card game, but a game of money      
+management.  VEGAS PRO lets you set the payoffs yourself to practice for
+different casinos.  A draw tester allows you to try out different       
+gambling strategies.  The game will play on almost any monitor and      
+provides superb graphics on EGA/VGA.  The user can also control sound   
+effects, speed of play, and other options.                              
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1490
 

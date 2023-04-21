@@ -39,6 +39,39 @@ machines:
     ~ PARK -- Parks disk head before power off.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES610.TXT
+
+{% raw %}
+```
+-----------------------------------------------------------------------------
+Disk No  610  PACKDISK  Version 1.3                                v1.1 DS2
+-----------------------------------------------------------------------------
+This disk has a useful array of disk utilities. Packdisk being the most
+useful file on the disk, eliminates file fragmentation which will in turn
+optimize the space on your disk.
+ 
+DELDIR   COM   Deletes the designated subdirectory with its files
+LISTFRAG COM   List all fragmented files
+NAMEDIR  COM   Renames subdirectory
+PACKDISK COM   Disk optimizer
+TRANSDIR COM   Transfers subdirectory and its files to another subdirectory
+PARK     COM   Parks hard drive head into safety zone before power down
+MANUAL         Documentation READ FIRST
+README         Tells you how to use checkbak program
+CHECKBAK.COM   Lists files that need to be backed up
+FILES610 TXT   This file
+GO       BAT   Start up batch file
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0610
 

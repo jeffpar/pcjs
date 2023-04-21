@@ -65,6 +65,67 @@ machines:
     READ     ME   General information about the disk.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES806.TXT
+
+{% raw %}
+```
+Disk No:  806
+Program Title: THE REMARKABLE GENERAL LEDGER version 1.0.0 (Disk 1 of 2)
+PC-SIG version: 1.1
+
+New Zealand has done it now.  Remarkable Enterprises Ltd, which is
+located in New Zealand, has created the REMARKABLE GENERAL LEDGER.  The
+system will work with just about any denomination of dollar currency,
+allowing you to use it in the USA as well as New Zealand, Australia,
+Canada and many others.  This system also allows modifications of the
+date structure to fit a particular countries customary standards.
+
+REMARKABLE GENERAL LEDGER will allow you to set up and operate a
+complete General Ledger, with a wide range of reports, and a Bank
+Information module including facilities for listing banks, reports on
+used and unused checks and Bank Statement Reconciliation.  You can print
+out reports on your transactions either in summary or in detail.
+Reports can be printed either on a leading or account level.  You can
+also print a trial balance and your chart of accounts.  A simple menu is
+offered that allows you to add, change, delete, or view your various
+entries made into your chart of accounts, journal, your record of bank
+deposits and your checking account.  The program has on-line help for
+every screen that requires input from the user.
+
+The full version of REMARKABLE GENERAL LEDGER includes all the features
+of the public domain version plus profit and loss reports, balance
+sheets, password protection, a complete manual and service and backup.
+
+Usage:  Financial.
+
+Special Requirements:  512K memory and at least two disk drives.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $69.95, includes full version of the program
+with a printed manual, and includes service and backup.
+
+File Descriptions:
+
+INSTALL  BAT  Installation batch file
+SUBINST  BAT  Installation batch file
+TGL      BAT  Start-up batch file
+TGL      EXE  Main program
+TGL      INT  Subfile for main program
+HELP    <DIR> Directory containing on-line help files
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0806
 

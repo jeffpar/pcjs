@@ -30,6 +30,40 @@ machines:
     difficult to alter and much, much more accessible to the user.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1948.TXT
+
+{% raw %}
+```
+Disk No: 1948                                                           
+Disk Title: Asc2com                                                     
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: Asc2com                                                  
+Author Version: 1.66                                                    
+Author Registration: $20.00                                             
+Special Requirements: None.                                             
+                                                                        
+ASC2COM will take an ASCII format file of under 64K and turn it into one
+of five self-listing COM format files, each offering the user different 
+features such as single line or page scrolling, printing, find, repeat  
+find, help, an internal write to file, and even a ``Wide Lister''       
+allowing a width of up to 255 characters.                               
+                                                                        
+With ASC2COM, you can guarantee that vital information is communicated  
+to your users.  Your message (or copyright declaration) is much more    
+difficult to alter and much, much more accessible to the user.          
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1948
 

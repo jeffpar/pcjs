@@ -33,6 +33,43 @@ machines:
     available from the U.S. Department of Energy.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0572.TXT
+
+{% raw %}
+```
+Disk No:  572                                                           
+Disk Title: FBLCC - Building Life Cycle Cost program                    
+PC-SIG Version: S1.3                                                    
+                                                                        
+Program Title: FBLCC - Building Life Cycle Cost program                 
+Author Version: SE2.3                                                   
+Author Registration: None.                                              
+Special Requirements: None.                                             
+                                                                        
+The Federal Bureau of Standards has produced ``The Federal Building     
+Life-Cycle Cost Computer Program''.  This program compares various      
+building systems and evaluates the cost of alternative designs relative 
+to energy costs.  Compare initial design and construction costs of      
+various designs with projected energy costs recouped through the life   
+expectancy of the building.                                             
+                                                                        
+The FBLCC programs and data files provided are referenced in            
+National Bureau of Standards Technical Note 1222, ``A User's Guide to   
+the Federal Building Life-Cycle Cost Computer Program.'' April, 1976.   
+This program should not be used without the referenced user's guide     
+available from the U.S. Department of Energy.                           
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0572
 

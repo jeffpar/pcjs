@@ -30,6 +30,79 @@ machines:
     solutions are covered.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1311.TXT
+
+{% raw %}
+```
+Disk No: 1311
+Program Title: INSULIN
+PC-SIG version 1
+
+INSULIN, BOTTLE, and NO6 are computer tutors that can teach student
+nurses to determine IV rates and measure insulin dosage correctly.
+Repetition of the task with simple on-screen instructions, explanations
+and user-response feedback makes it easy to learn with these programs.
+
+MAKEFILE is a compliment program to INSULIN that allows for entry of new
+insulin dose values or viewing of students names and scores.
+Determining IV rates for both plain solutions and medication additive
+solutions are covered.
+
+Usage:  Medication Math for Nurses.
+
+Special Requirements:  None.
+
+How to Start:  Type Go (press enter).
+
+Suggested Registration:  $5.00
+
+File Descriptions:
+
+CALC     COM  Calculates IV drops/min, gives the formula, ask questions.
+INSULIN  EXE  Instructs how to measure insulin dosage in a syringe.
+MAKEFILE EXE  Accepts data from user for the 2 data files.
+NO6      EXE  How to set IV rate for medication additives.
+NO7      EXE  How to set IV rate for medication additives.
+BOTTLE   EXE  Teaches how to set IV rate.
+DOSE     DAT  Data files for insulin doses, user names and scores.
+NAME     DAT  Data files for insulin doses, user names and scores.
+NOTES    EXE  A text file about author and use of the programs.
+NOTES    TXT  Types explanation of what the 4 program EXE files do.
+INSULIN  BAS  Unable to load file for list or run (see comments).
+GO       BAT  Types NOTES.TXT and starts programs.
+
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale  CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG Inc.
+
+```
+{% endraw %}
+
+## NOTES.TXT
+
+{% raw %}
+```
+INSULIN.EXE - May be used to see if insulin is properly measured.  User
+measures 10 doses of Insulin using U100 Insulin.
+
+MAKEFILE.EXE - Instructor can enter 10 doses which will be measured by INSULIN.EXE
+
+Also the instructor can see how well the student can measure Insulin.
+
+BOTTLE.EXE - User regulates IV rate.  This program may be used by IBM without
+color or graphics.
+
+NO6.EXE & NO7.EXE - User sets IV pump to proper rate to deliver calculated
+dose of medication.
+  
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1311
 

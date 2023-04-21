@@ -54,6 +54,64 @@ machines:
     ~ Extensive help screens.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1860.TXT
+
+{% raw %}
+```
+Disk No: 1860                                                           
+Disk Title: File Access                                                 
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: File Access                                              
+Author Version: 2.5                                                     
+Author Registration: $20.00                                             
+Special Requirements: Hard drive.                                       
+                                                                        
+FILE ACCESS is a powerful file and disk access utility that offers      
+a wide variety of access options.                                       
+                                                                        
+Major Capabilities:                                                     
+                                                                        
+~  Menu-driven access to directories and files                          
+                                                                        
+~  Tag/untag a single file or group of files for copying, erasing,      
+   moving, renaming or printing                                         
+                                                                        
+~  Create, remove and rename directories                                
+                                                                        
+~  Remove a specified file from all directories                         
+                                                                        
+~  Search for a misplaced file in all directories                       
+                                                                        
+~  Change or view current environment table settings                    
+                                                                        
+~  Sort the current directory                                           
+                                                                        
+~  Access DOS command line                                              
+                                                                        
+~  Count lines in text files                                            
+                                                                        
+~  Test system configurations                                           
+                                                                        
+~  Read or write to a specified disk sector                             
+                                                                        
+~  Execute or view files from within the environment                    
+                                                                        
+~  Extensive macro definition feature                                   
+                                                                        
+~  Extensive help screens                                               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1860
 

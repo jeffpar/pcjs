@@ -27,6 +27,41 @@ machines:
     to the picture you want to color, choose a color, and have fun!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2366.TXT
+
+{% raw %}
+```
+Disk No: 2366                                                           
+Disk Title: EGA Mouse Paint                                             
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: EGA Mouse Paint                                          
+Author Version: 3.0B                                                    
+Author Registration: $20.00                                             
+Special Requirements: EGA, and a mouse.                                 
+                                                                        
+If your child likes to color pictures this program will introduce them  
+to use the mouse to color 17 pre-made pictures, with 42 brillinat       
+colors. A nice feature of the program is the ability to save a picture, 
+then restore it, which comes in handy if it's bedtime for the artist.   
+The program is very easy to use, just point to the picture you want to  
+color, choose the color to paint with, and have fun!                    
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2366
 

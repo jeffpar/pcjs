@@ -31,6 +31,47 @@ machines:
     action on a self-help basis or with the assistance of legal counsel.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES886.TXT
+
+{% raw %}
+```
+Disk No  886
+Program Title:  CALIFORNIA DIVORCE for MEN
+PC-SIG version 1
+ 
+    CALIFORNIA DIVORCE is intended to educate men on their rights and
+procedures that should be taken (in California) in case of a divorce. This
+program contains a series of graphic screens along with text concerning the
+legal matters of divorce. The program runs automatically and can be stopped
+at any time by the user. Once viewed, the educated user can then choose a
+course of action on a self-help basis or with the assistance of legal
+counsel.
+ 
+Usage: Educational
+ 
+System Requirements: 360K memory, one disk drive and color graphics.
+ 
+How to Start: Type: SHOW DIVORCE (press enter).
+ 
+File Descriptions:
+ 
+README   BAT  Introduction.
+SHOW     EXE  Main program.
+DIVORCE  SPS  Secondary program.
+???????  GX1  Graphics files (58 files).
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0886
 

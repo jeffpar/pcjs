@@ -30,6 +30,7 @@ machines:
 
 ## BALLOON.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 1:COLOR 8,0:KEY OFF:CLS
 15 DEF FNCEN$(V$,X)=SPACE$((X-LEN(V$))/2)+V$
@@ -1110,9 +1111,11 @@ machines:
 30010 PRINT"                                                                                                                        "
 30020 LOCATE 1,1:RETURN
 ```
+{% endraw %}
 
 ## BOXES.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 1,0:COLOR 8,0: KEY OFF: CLS
 15 DEF FNCEN$(V$,X)=SPACE$((X-LEN(V$))/2)+V$
@@ -2222,9 +2225,11 @@ machines:
 30010 PRINT"                                                                                                                        "
 30020 LOCATE 1,1:RETURN
 ```
+{% endraw %}
 
 ## CANDY.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 1,0:COLOR 8,0: KEY OFF: CLS
 15 DEF FNCEN$(V$,X)=SPACE$((X-LEN(V$))/2)+V$
@@ -2839,9 +2844,11 @@ machines:
 30010 PRINT"                                                                                                                        "
 30020 LOCATE 1,1:RETURN
 ```
+{% endraw %}
 
 ## CHICK.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 1,0:COLOR 8,0: KEY OFF: CLS
 15 DEF FNCEN$(V$,X)=SPACE$((X-LEN(V$))/2)+V$
@@ -5256,9 +5263,11 @@ machines:
 30010 PRINT"                                                                                                                        "
 30020 LOCATE 1,1:RETURN
 ```
+{% endraw %}
 
 ## CICADA.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 1,0:COLOR 8,0: KEY OFF: CLS
 15 DEF FNCEN$(V$,X)=SPACE$((X-LEN(V$))/2)+V$
@@ -5880,9 +5889,11 @@ machines:
 30010 PRINT"                                                                                                                        "
 30020 LOCATE 1,1:RETURN
 ```
+{% endraw %}
 
 ## END.BAS
 
+{% raw %}
 ```bas
 10 DEF FNCEN$(V$,X)=SPACE$((X-LEN(V$))/2+V$
 20 CLS
@@ -5893,9 +5904,49 @@ machines:
 70 LOCATE 23,1
 80 END
 ```
+{% endraw %}
+
+## FILES408.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 408   ORIGAMI                                           v1 DS2
+-------------------------------------------------------------------------
+This disk will introduce you to Origami, the ancient art of paper folding.
+It will show you the basic beginings (the main starting folds), and show
+you how to create many paper scultures with step-by-step graphic instructions.
+ 
+CHICK    BAS  Basic program that shows you how to fold a paper chicken
+SHARE    BAS  Program and suggested donation info
+MAIN     BAS  Main menu Program
+INTRO    BAS  An introduction to origami
+RABBIT   BAS  How to fold yourself a rabbit
+JET      BAS   "  "   "      "     " jet plane
+WATERFOW BAS   "  "   "      "     " duck
+CANDY    BAS   "  "   "      "     " candy box
+PENGUIN  BAS   "  "   "      "     " penguin
+BOXES    BAS   "  "   "      "     two kind of boxes
+HELMET   BAS  A two part exercise (1st - a samurai helmut, 2nd - a grouper)
+BALLOON  BAS  How to fold yourself a balloon
+PIG      BAS   "  "    "     "     " pig
+CICADA   BAS   "  "    "     "     " cicada (?)
+END      BAS  End message to main program
+PUPPY    BAS  How to fold yourself a puppy
+TITLEPG  BAS  Run this to start the program (Main Program Starter)
+STATS    BAS  File that lists the stats for origami program files
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## HELMET.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 1,0:COLOR 8,0: KEY OFF: CLS
 15 DEF FNCEN$(V$,X)=SPACE$((X-LEN(V$))/2)+V$
@@ -6880,9 +6931,11 @@ machines:
 30040 PRINT FNCEN$("N",40)
 30050 FOR K=1 TO 1500:NEXT K
 ```
+{% endraw %}
 
 ## INTRO.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 1,0:COLOR 8,0:CLS:KEY OFF
 15 DEF FNCEN$(V$,X)=SPACE$((X-LEN(V$))/2)+V$
@@ -8390,9 +8443,11 @@ machines:
 10040 PRINT"                                        "
 10050 LOCATE 1,1:RETURN
 ```
+{% endraw %}
 
 ## JET.BAS
 
+{% raw %}
 ```bas
 10 REM *** JET PLANE ***
 15 SCREEN 1,0:CLS:KEY OFF: COLOR 8,0
@@ -9252,9 +9307,11 @@ machines:
 9010 PRINT"                                                                                                                        "
 9020 LOCATE 1,1:RETURN
 ```
+{% endraw %}
 
 ## MAIN.BAS
 
+{% raw %}
 ```bas
 10 DEF FNCEN$(V$,X)=SPACE$((X-LEN(V$))/2+V$
 20 CLS
@@ -9300,9 +9357,11 @@ machines:
 320 CHAIN "a:balloon
 330 CHAIN "a:chick
 ```
+{% endraw %}
 
 ## PENGUIN.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 1,0:COLOR 8,0: KEY OFF: CLS
 15 DEF FNCEN$(V$,X)=SPACE$((X-LEN(V$))/2)+V$
@@ -10470,9 +10529,11 @@ machines:
 30010 PRINT"                                                                                                                        "
 30020 LOCATE 1,1:RETURN
 ```
+{% endraw %}
 
 ## PIG.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 1,0:COLOR 8,0:KEY OFF:CLS
 15 DEF FNCEN$(V$,X)=SPACE$((X-LEN(V$))/2)+V$
@@ -12287,9 +12348,11 @@ machines:
 30040 PRINT FNCEN$("N",40)
 30050 FOR K=1 TO 1500:NEXT K
 ```
+{% endraw %}
 
 ## PUPPY.BAS
 
+{% raw %}
 ```bas
 5 SCREEN 1,0:COLOR 8,0: KEY OFF: CLS
 10 DEF FNCEN$(V$,X)=SPACE$((X-LEN(V$))/2)+V$
@@ -13760,9 +13823,11 @@ machines:
 30010 PRINT"                                                                                                                        "
 30020 LOCATE 1,1:RETURN
 ```
+{% endraw %}
 
 ## RABBIT.BAS
 
+{% raw %}
 ```bas
 10 REM ***Rabbit, Rabbit, Rabbit***
 15 SCREEN 1,0:CLS:KEY OFF: COLOR 8,0
@@ -14237,9 +14302,11 @@ machines:
 30010 PRINT "                                                                                                                        "
 30020 LOCATE 1,1:RETURN
 ```
+{% endraw %}
 
 ## SHARE.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 1,0:COLOR 8,0: KEY OFF: CLS
 20 DEF FNCEN$(V$,X)=SPACE$((X-LEN(V$))/2)+V$
@@ -14434,9 +14501,11 @@ machines:
 30010 PRINT"                                        "
 30020 LOCATE 1,1:RETURN
 ```
+{% endraw %}
 
 ## STATS.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 0,1:WIDTH 80:COLOR 0,6,4:KEY OFF: CLS
 20 DEF FNCEN$(V$,X)=SPACE$((X-LEN(V$))/2)+V$
@@ -14464,9 +14533,11 @@ machines:
 250 PRINT TAB(5);"     Totals";TAB(34);"14562";TAB(48);"334106";TAB(67);"128"
 9000 END
 ```
+{% endraw %}
 
 ## TITLEPG.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 1,0:COLOR 8,0:CLS:KEY OFF
 20 DEF FNCEN$(V$,X)=SPACE$((X-LEN(V$))/2)+V$
@@ -14506,9 +14577,11 @@ machines:
 340 CHAIN "a:share"
 350 CHAIN "a:stats"
 ```
+{% endraw %}
 
 ## WATERFOW.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 1,0:COLOR 8,0: KEY OFF: CLS
 15 DEF FNCEN$(V$,X)=SPACE$((X-LEN(V$))/2)+V$
@@ -15004,6 +15077,7 @@ machines:
 30010 PRINT"                                                                                                                        "
 30020 LOCATE 1,1:RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

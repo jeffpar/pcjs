@@ -14,6 +14,63 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2582.TXT
+
+{% raw %}
+```
+Disk No: 2582                                                           
+Disk Title: NOVA  (formerly Galaxy)                                     
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: NOVA  (formerly Galaxy)                                  
+Author Version: 1.0                                                     
+Author Registration: $79.95                                             
+Special Requirements: 400K RAM. Hard drive recommended.                 
+                                                                        
+GALAXY has gone NOVA!  Presenting a unique word processor that is easy  
+to learn and use, yet has all the powerful conveniences today's user    
+demands.                                                                
+                                                                        
+Features:                                                               
+                                                                        
+ ~ A modern interface similar to Microsoft Windows and OS/2 Presentation
+   Manager, using pull-down menus, dialog boxes, multiple windows, and  
+   supports a mouse and keyboard.                                       
+                                                                        
+ ~ Work in up to ten windows on-screen at once.                         
+                                                                        
+ ~ Size, overlap, zoom any window to full screen in a single keystroke. 
+                                                                        
+ ~ Logically structured keyboard commands that are color-highlighted to 
+   help you learn shortcuts.  Context-sensitive on-line Help.           
+                                                                        
+ ~ Powerful editing features such as cut and pasting between documents, 
+   style sheets for easy consistent formatting -- or create your own    
+   formats, and more!                                                   
+                                                                        
+ ~ Headers and footers, micro justification, and automatic reformatting.
+                                                                        
+ ~ Multiple fonts, proportional spacing, and laser printer support.     
+                                                                        
+ ~ Edit files as large as eight megabytes, using EMS expanded memory or 
+   hard disk.                                                           
+                                                                        
+Available to the registered user: 100,000 word Spell Checker and 220,000
+word Thesaurus by Microlytics.  This is an award-winning combination,   
+unsurpassed in any other processor.  Also available is support for 500+ 
+popular printers.                                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989-1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2582
 

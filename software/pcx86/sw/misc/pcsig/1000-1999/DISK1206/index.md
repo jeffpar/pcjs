@@ -59,6 +59,152 @@ machines:
     manual.  It's there, just in case!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## REGISTER.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+    =========== BOYAN Registration Form ============ Version 4.0 ===========
+
+    Remit to:
+                                  Justin Boyan
+                              BOYAN Communications
+                              9458 Two Hills Court
+                            Columbia, MD  21045-3228
+
+    ------------------------------------------------------------------------
+    Please send:
+
+    _____  BOYAN registration . . . . . . . . . . . . .ea $40.00 = $ _______
+
+    _____  BOYAN registration & 5.25" disks . . . . . .ea $55.00 = $ _______
+             (includes two floppy diskettes; program, manual on disk)
+
+    _____  BOYAN registration & 3.5" disk . . . . . . .ea $55.00 = $ _______
+             (includes one 720K disk; program, manual on disk)
+
+    _____  Printed copy of user's manual  . . . . . . .ea $10.00 = $ _______
+             (includes "Quick Reference Card"; available April 1989)
+
+                                                        Subtotal = $ _______
+
+                   Less _____% discount, if over 10 registrations  (_______)
+                   (For rates, see the users manual, section 1.3.1)         
+
+           Please add 10% if check is not U.S. currency . . . . .  $ _______
+
+           Shipping and handling  . . . . . . . . . . . included = $    0.00
+
+                                                           Total = $ _______
+
+    ------------------------------------------------------------------------
+
+
+    Name:    _______________________________________________________________
+
+    Company: _______________________________________________________________
+
+    Address: _______________________________________________________________
+
+             _______________________________________________________________
+
+
+    ========================================================================
+
+```
+{% endraw %}
+
+## FILE1206.TXT
+
+{% raw %}
+```
+Disk No: 1206
+Program Title:  BOYAN TELECOMMUNICATIONS version 4.0
+PC-SIG version: 2
+
+BOYAN is a powerful communications package which provides all the
+flexibility, speed, ease-of-use and features a person may desire for
+taking full advantage of the new world of electronic mail, computer
+bulletin boards, and telecommunication.
+
+Features include:
+
+  ~   Supports interrupt-driven communications with practically
+      all modems at 9600, 4800, 2400, 1200, and 300 baud.
+
+  ~   When stuck, you can get context-sensitive help screens any time
+      with the <Ctrl-Home> key combination.
+
+  ~   "Back up" or cancel the current action any time with the <Esc> key.
+
+  ~   Saves you time and money by allowing you to upload messages
+      you have prepared off-line.
+
+  ~   An extensive script language with well over 100 commands.
+
+  ~   A status line to keep you informed of the current activity.
+
+  ~   "Usage Log" that records the length of all modem connections
+      and the efficiency of all file transfers.
+
+  ~   DOS shell is available at all times.
+
+  ~   Full built-in file manager allows you to scan directories,
+      copy and view files at the touch of a key.
+
+  ~   Works equally well with floppy or hard disk based systems.
+
+  ~   Dialing Directory for automated calling.
+
+  ~   20-number redialing queue.
+
+  ~   "Scroll-back buffer" fills all available memory.
+
+  ~   Line Editor and BOYAN's exclusive backspace editor.
+
+  ~   Gossip mode for on-line conversation between two modem users.
+
+  ~   Built-in ANSI emulation.
+
+BOYAN is generally self-explanatory.  Experienced users and new users
+alike find they can use the program without ever reading the on-disk
+manual; but its there just in case!
+
+Note: This disk is the first of a two-disk set.  You need disk #1343 as
+well to run the program.
+
+Usage:  Telecommunications Program.
+
+Special Requirements:  A modem and a hard disk.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $35.00
+
+File Descriptions:
+
+BOYAN40A ARC  Archived file.
+PKXARC   EXE  Unarchiving utility.
+README   1    Introductory text file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1206
 

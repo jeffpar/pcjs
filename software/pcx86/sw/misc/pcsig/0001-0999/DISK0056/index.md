@@ -53,6 +53,7 @@ machines:
 
 ## ADDR-PH.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -158,9 +159,342 @@ machines:
 1110 DATA JOHNSON RUTH, 441 EAST 25nd ST NY NY, 212-455-0338
 1120 END
 ```
+{% endraw %}
+
+## BASIC-KB.ASM
+
+{% raw %}
+```
+PAGE 60,132
+TITLE BASIC_KB.ASM - KEYBOARD MONITOR ROUTINE
+;
+COMMENT  @  KEYBOARD.ASM,  Copyright (c) 1983 by Jeffrey W. Sutherland, for the
+            enjoyment  of  PC  lovers everywhere. Please feel free to pass this
+            program on to your friends and colleagues.
+
+       This  is  a  short  routine  intended  to reside above DOS in memory and
+remain  there  for all BASIC(A) applications. As part of the keyboard interrupt
+routine,  it monitors the state of the Caps Lock and Num Lock keys. Blinking up
+arrows  will be displayed to the left of the function key #8 area on line 25 of
+the  IBM  MONOCHROME screen, and blinking `##' will be displayed to the left of
+the  function  key  #10  area.  If the function keys are being displayed, their
+displayed  values  will  be  restored  when  the Caps Lock or Num Lock keys are
+toggled  OFF. If the function keys are NOT being displayed, then blanks will be
+inserted  in  line  25.  If  you  use  line  25  for  displaying  any  kinds of
+information,  you  may not want to use this program, or else stay away from the
+arrows  and  ##  display areas or you may get strange displays whenever you hit
+any key. (This program will NOT function using the Color Graphics adapter!) The
+values  of the function keys do not change when the arrows or ## are displayed.
+@
+;
+;        No Macros
+;
+NORM_ATTR  EQU  0700H        ;Equivalent to stating: `COLOR 7'.
+KEYON_ATTR EQU  70H          ;This is the reverse video attribute.
+                             ;Note that the KEYON_ATTR is one byte in length,
+                             ; while NORM_ATTR and ATTRIBUTE are WORD lengths.
+                             ; This is so the = arithmetic will work.  The
+                             ; attribute of a screen character is located at
+                             ; the odd addresses in the screen buffer,
+                             ; while the characters are all at even addresses.
+ARROW      EQU  24           ;ASCII 24, the up arrow character.
+NUMSYMB    EQU  '#'          ;Speaks for itself.
+SPACE      EQU  20H          ;ASCII for the space character.
+ATTRIBUTE  EQU  9800H        ;Screen attribute for blinking highlighted.
+CAPCHAR = ARROW+ATTRIBUTE    ;Combine the new characters with the proper
+NUMCHAR = NUMSYMB+ATTRIBUTE  ; screen attribute.
+NORM_CHAR = SPACE+NORM_ATTR  ;All this work just to put a blank spot in screen.
+KEY8_CHAR = '8'+NORM_ATTR    ;Character to use for key 8 when keys are on.
+KEY10_CHAR = '0'+NORM_ATTR   ;Key 10's character.
+DOSINT     EQU  27H          ;DOS `end but stay resident' return interrupt.
+INTADDR    EQU  9H*4         ;Address of KEYBOARD_INT service routine.
+KB_FLAG    EQU  417H         ;Offset into BIOS data area for the keyboard flag.
+CAPS_STATE EQU  40H          ;Bit masks
+NUM_STATE  EQU  20H          ;
+VIDSEGMENT EQU  0B000H       ;Monochrome screen buffer segment. (Color's=0B800H)
+CAP_OFFSET EQU  0F6EH        ;Offset to place for arrows characters.
+NUM_OFFSET EQU  0F8EH        ;Offset to place for `##' characters.
+;
+STACK     SEGMENT PARA STACK 'STACK' ;This stack segment used only
+         DB 64 DUP ('STACK   ')      ;while initializing program.
+STACK    ENDS
+;
+;
+CSEG     SEGMENT   PARA PUBLIC  'DATA'                   ;The main routines.
+         ASSUME CS:CSEG,DS:CSEG,SS:STACK,ES:NOTHING
+KBOARD   PROC   FAR
+         CALL  INIT_CODE     ;Set up the INT 9 vector to point to this routine.
+         RET                 ;Return to DOS, program fixed in memory and
+;                              initialized.
+DWORD_ADDR   DW  0,0         ;Data storage area for BIOS routine seg/offset.
+;
+START_UP:                    ;
+         PUSH DS             ;Prepare for the BIOS call. We must first see what
+         PUSH SI             ; the keyboard interrupt is all about.
+         PUSHF                     ;You see, BIOS keyboard svc expects INT call.
+         MOV SI,SEG DWORD_ADDR     ;
+         MOV DS,SI                 ;Set up pointer to seg/offset of
+         MOV SI,OFFSET DWORD_ADDR  ; subroutine call to the BIOS.
+         CALL DWORD PTR [SI]       ;Program goes to service keyboard.
+         PUSH AX             ;Now, check the keyboard status flags to see if
+         PUSH BX             ; this particular interrupt changed anything.
+         PUSH CX             ;
+         PUSH DX             ;
+         MOV AX,VIDSEGMENT   ;Establish addressing for the monochrome screen
+         MOV DS,AX           ;buffer, then save it for a moment.
+         MOV BX,CAP_OFFSET   ;Are the function keys turned on?
+         MOV AL,[BX+5]       ;Obtain attribute to see if set for function ky on
+         MOV CH,KEYON_ATTR   ;See if attribute is that of a key on.
+         AND AL,CH           ;
+         JNZ KEYS_ON         ;If not 0 then keys are turned on.
+         MOV CX,NORM_ATTR    ;
+KEYS_ON: PUSH DS             ;
+         MOV AX,0            ;Establish addressability for the status byte
+         MOV DS,AX           ; at 0000:0417 (KB_FLAG).
+         MOV BX,KB_FLAG      ;
+         MOV AL,[BX]         ;Put status byte in AL for toggle state tests.
+         POP DS              ;Get our buffer segment back now.
+         MOV DX,CAPCHAR      ;DX now has the character to be used if caps on.
+         MOV BX,CAP_OFFSET   ;BX now has position to place characters for caps.
+         TEST AL,CAPS_STATE  ;If caps toggled, turn on arrows, else put back the
+         JNZ CAPS_ON         ; function key char/attribute.
+         MOV DX,NORM_CHAR    ;
+         MOV [BX],DX         ;Always put a blank in first position, keys on/off.
+         TEST CH,KEYON_ATTR  ;Keys on?
+         JZ UH_UH            ;Guess not.
+         MOV DX,KEY8_CHAR    ;Keys are on; put character '8' in screen next to
+         MOV [BX+2],DX       ; function key 8 character string.
+         JMP SHORT NUMBS     ;Go see what the Num Lock key is doing.
+UH_UH:                       ;
+         MOV [BX+2],DX       ;Put a blank where '8' should be (keys are off).
+         JMP SHORT NUMBS     ;Go see what the Num Lock key is doing.
+CAPS_ON:                     ;
+         MOV [BX],DX         ;DX now has caps character, because of AL test.
+         MOV [BX+2],DX       ;Must fill two character positions with characters.
+NUMBS:   MOV DX,NUMCHAR      ;Ok.- ready for next test, might need nums on char.
+         MOV BX,NUM_OFFSET   ;Establish addressability for next set of chars.
+         TEST AL,NUM_STATE   ;NUM LOCK toggle bit set?
+         JNZ NUMS_ON         ;If so, display `##'.
+         MOV DX,NORM_CHAR    ;A space, recall.
+         MOV [BX],DX         ;Put it in the screen.
+         TEST CH,KEYON_ATTR  ;Function keys on?
+         JZ NOPE             ;If not,...
+         MOV DX,KEY10_CHAR   ;Put a '0' next to key 10's char string (keys on).
+         MOV [BX+2],DX       ;
+         JMP SHORT GOBACK    ;Almost done with interrupt service.
+NOPE:                        ;
+         MOV [BX],DX         ;Put blanks in the screen (keys are off).
+         MOV [BX+2],DX       ;
+         JMP SHORT GOBACK    ;Let's go home.
+NUMS_ON:                     ;
+         MOV [BX],DX         ;Num Lock key is toggled on; put `##' in the
+         MOV [BX+2],DX       ; screen at place pointed to by BX.
+;
+GOBACK:  POP DX              ;Ok. Let's clean up the stack and
+         POP CX              ; go back to the system.
+         POP BX              ;
+         POP AX              ;
+         POP SI              ;
+         POP DS              ;All Pau.
+LASTONE: IRET                ;Return from keyboard interrupt.
+KBOARD   ENDP                ;
+;
+;        This subroutine is used to initialize the preceeding program when
+;        it is loaded, then returns control to DOS.
+;
+INIT_CODE  PROC  NEAR
+         POP AX              ;Remove return address of call for a moment.
+         PUSH DS             ;Push segment base of DOS Program Segment Prefix
+         MOV DI,0            ; created for this entire program, and push offset
+         PUSH DI             ; to first instruction therein (will be an INT 27).
+         PUSH AX             ;All set to return to DOS when this is done.
+         MOV AL,DOSINT       ;Set up addr to INT 27 vector (end but
+         MOV [DI+1],AL       ; stay resident).
+         MOV AX,0            ;Establish addressability for vector table.
+         MOV DS,AX           ;
+         MOV BX,INTADDR         ;Offset to seg/offset storage area for BIOS
+                                ; interrupt vector in the system vector table.
+         LES DI,DWORD PTR [BX]  ;This step puts the code seg in the ES and the
+                                ; offset into DI, at the address pointed to by
+                                ; the DS/BX regs.
+         MOV AX,SEG DWORD_ADDR  ;Now set up addr to store BIOS routine vector
+         MOV DS,AX              ; in the main program so we can use this
+         MOV DWORD_ADDR,DI      ; routine.
+         MOV AX,ES              ;
+         MOV DWORD_ADDR+2,AX    ;Seg/offset now stored in DWORD_ADDR.
+         MOV AX,SEG START_UP    ;
+         MOV ES,AX              ;Restore ES segment to = main program CS.
+         MOV DI,OFFSET START_UP ;Prepare to store the address to the main
+         MOV AX,0               ; program in the system vector table.
+         MOV DS,AX              ;Establish addressability for the vector table.
+         MOV BX,INTADDR         ;
+         MOV [BX],DI            ;Store offset to main program entry point in
+         MOV DI,ES              ; vector table. ES has segment of main program,
+         MOV [BX+2],DI          ; so put it in the table above the offset.
+         MOV DX,OFFSET LASTONE  ;Save all code, except stack and initialization
+         ADD DX,0110H           ; routine, from being overlaid by dos.
+         RET                 ;Return to main program (which immediately returns
+INIT_CODE ENDP               ; to the DOS command processor.)
+CSEG     ENDS                ;That are it!
+         END       ;basic_kb.asm
+```
+{% endraw %}
+
+## BASIC-KB.DOC
+
+{% raw %}
+```
+             The  assembly  language program "BASIC_KB.EXE" is designed
+        to  supplement  the  BIOS INT 09 keyboard handling routine, and
+        this  program  is  adjusted  to work particularly with programs
+        running  in  BASIC  or  BASICA. One of the constant irritants I
+        found  using the PC's keyboard were the ambiguous states of the
+        CAPS  LOCK  and  NUM LOCK keys. The new alternate keyboards for
+        the  PC provided relief in the form of little LEDs on the keys.
+        Naturally my big hands cover up the CAPS LOCK key all the time,
+        and  any  typist will tell you that nothing slows one down like
+        looking at the keys!
+
+             What I wanted was some kind of on-screen indication of the
+        key  states.  That is what BASIC_KB.EXE provides. When the Caps
+        are ON, two blinking, highlighted up-arrows appear on the BASIC
+        function  key  line  of  the  MONOCHROME  display  next  to the
+        character  string  for  function key #8. If the NUM LOCK status
+        sets  the  numeric  keypad  to  Numbers function, two blinking,
+        highlighted  "##"  symbols  appear  next  to function key #10's
+        character  string. If the function key display is OFF (due to a
+        KEY  OFF  statement),  blanks  will  be  inserted in the proper
+        positions  on  line  25. Note that if you use the 25th line for
+        displaying  things  that  this  program  will  place  blanks or
+        symbols  in  the  same area it places symbols when the keys are
+        displayed.  If  you  write  in  the  area where the symbols are
+        displayed,  your  display  will be overwritten when you hit the
+        CAPS LOCK or NUM LOCK keys.
+
+             To use this program, simply type "BASIC_KB" while still at
+        the  DOS  command level before you load BASIC or BASICA. You'll
+        have  to  have  "BASIC_KB.EXE"  on  the  disk  in the drive you
+        specify,  of  course.  If  you  have  BASIC programs that start
+        automatically  when  you turn your computer on, you may want to
+        update  your  program  disk  so that BASIC_KB.EXE is loaded and
+        initialized  along with your program. To do this, simply load a
+        DOS  disk  in  drive  A and turn on your computer, or, if it is
+        already  on,  hit a CTRL-ALT-DELete sequence with a DOS disk in
+        drive  A.  When DOS prompts, use the appropriate steps for your
+        computer configuration to copy "BASIC_KB.EXE" onto your program
+        disk.  Your  program disk should also contain a copy of DOS and
+        the  files  COMMAND.COM,  BASIC.COM  (or  BASICA.COM), DATE.COM
+        (this is for 1.0 DOS versions), BASIC_KB.EXE, AUTOEXEC.BAT, and
+        "my_program.bas". You may have other files as well.
+
+             As  an  example, with your program disk in the DOS default
+        drive,  type:  "TYPE AUTOEXEC.BAT" and hit return. The contents
+        of  the  file  named  AUTOEXEC.BAT will now be displayed on the
+        screen. It may look something like this:
+
+        A> TYPE AUTOEXEC.BAT
+
+        DATE
+        BASIC MYPROG
+
+        A>
+
+             Somewhere  in this file before the line "BASIC MYPROG" you
+        will  need  to  insert this line: "BASIC_KB". This tells DOS to
+        load and initialize BASIC_KB.EXE before it loads BASIC and your
+        program.  You  can  create  an  updated  batch  file on the DOS
+        default drive simply by typing the following sequence:
+
+
+        COPY CON: AUTOEXEC.BAT
+        DATE
+        BASIC_KB
+        BASIC MYPROG
+
+        (now hit function key F6, and this file will be created on your
+        program disk.)
+
+             When  you  power  up  your computer, hit a CTRL-ALT-DELete
+        sequence,  or  type "autoexec.bat" from DOS command level, your
+        BASIC  program  will automatically be started, and BASIC_KB.EXE
+        will automatically be loaded and begin operation. 
+
+        NOTE: As BASIC_KB.EXE becomes fairly well entrenched in your PC
+              once  it  is  loaded,  if  you  exit your program to load
+              another  BASIC  program  you  will  NOT  need  to  reload
+              BASIC_KB.EXE.  If  you  exit  BASIC and return to DOS you
+              will  not  need  to  reload  BASIC_KB IF you plan to soon
+              return  to  operation using BASIC. If you exit to DOS and
+              plan  to  load  a  machine  language program other than a
+              compiled  BASIC  program  (an  application  with  a  file
+              extension  of  .EXE  or  .COM) I suggest you restart your
+              system  using  the  CTRL-ALT-DELete sequence. This is the
+              only  way  to  dump BASIC_KB.EXE and reconfigure the BIOS
+              interrupt  routine  short of turning off the computer and
+              doing  a  cold restart. Also note that this program works
+              ONLY with the MONOCHROME monitor adaptor!
+
+```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #56, version v2 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  BASIC-KB.ASM         CRC = BB 55
+
+--> FILE:  BASIC-KB.EXE         CRC = DE 62
+
+--> FILE:  BASIC-KB.DOC         CRC = A4 05
+
+--> FILE:  DISTAR  .BAS         CRC = BA 4A
+
+--> FILE:  DECIDE  .BAS         CRC = AF EA
+
+--> FILE:  XMASCARD.BAS         CRC = F2 98
+
+--> FILE:  KEYBOARD.ASM         CRC = 53 9D
+
+--> FILE:  KEYBOARD.EXE         CRC = 3D 8C
+
+--> FILE:  KEYBOARD.DOC         CRC = D2 5D
+
+--> FILE:  MINI-WP .BAS         CRC = D9 E1
+
+--> FILE:  SPEECH  .BAS         CRC = 01 E8
+
+--> FILE:  ADDR-PH .BAS         CRC = 82 BA
+
+--> FILE:  PROVERB1.BAS         CRC = 52 8D
+
+ ---------------------> SUM OF CRCS = AF 1E
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## DECIDE.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -293,9 +627,11 @@ machines:
 1540 CLS:PRINT TAB(26);"DECIDE":PRINT:RETURN
 1550 FOR J=1 TO 1500:NEXT:RETURN
 ```
+{% endraw %}
 
 ## DISTAR.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -410,9 +746,203 @@ machines:
 1200 AZ=180: RETURN
 1210 Z=(1.570796-ATN(X/SQR(1-X*X))): RETURN
 ```
+{% endraw %}
+
+## KEYBOARD.ASM
+
+{% raw %}
+```
+PAGE 60,132
+TITLE KEYBOARD.ASM - KEYBOARD MONITOR ROUTINE
+;
+COMMENT  @  KEYBOARD.ASM,  Copyright (c) 1983 by Jeffrey W. Sutherland, for the
+            enjoyment  of  Volkswriter*  lovers everywhere. Please feel free to
+            pass this program on to your friends and colleagues.
+
+       This  is  a  short  routine  intended  to reside above DOS in memory and
+remain  there  for all applications. As part of the keyboard interrupt routine,
+it  monitors  the  state of the Caps Lock and Num Lock keys. Blinking up arrows
+will  be  displayed  to  the  left of the line number and blinking `##' will be
+displayed  between  the column and `gas gauge' numbers (when using Volkswriter)
+on  the  25th  line  of  the MONOCHROME screen. (This program will NOT function
+using  the  Color Graphics adapter!) In BASIC this will affect the function key
+display, as when the Caps Lock and Num Lock keys are toggled off, the arrows or
+`##' are replaced by reverse video blanks, wiping out the function key letters.
+This does not affect the operation of the function keys, however.
+            (*Volkswriter is a trademark of Lifetree Software, Inc.)  @
+;
+;        No Macros
+;
+OLDCHAR    EQU  0F020H       ;For Volkswriter this is a reverse video blank.
+ARROW      EQU  24           ;Ascii 24, the up arrow character.
+NUMSYMB    EQU  '#'          ;Speaks for itself.
+ATTRIBUTE  EQU  9800H        ;Screen attribute for blinking highlighted.
+CAPCHAR = ARROW+ATTRIBUTE    ;Combine the new characters with the proper
+NUMCHAR = NUMSYMB+ATTRIBUTE  ;  screen attribute.
+DOSINT     EQU  27H          ;DOS `end but stay resident' return interrupt.
+INTADDR    EQU  9H*4         ;Address of KEYBOARD_INT service routine.
+KB_FLAG    EQU  417H         ;Offset into BIOS data area for the keyboard flag.
+CAPS_STATE EQU  40H          ;Bit masks
+NUM_STATE  EQU  20H          ;
+VIDSEGMENT EQU  0B000H       ;Monochrome screen buffer segment. (Color's=0B800H)
+CAP_OFFSET EQU  0F74H        ;Offset to place for arrows characters.
+NUM_OFFSET EQU  0F90H        ;Offset to place for `##' characters.
+;
+STACK     SEGMENT PARA STACK 'STACK' ;This stack segment used only
+         DB 64 DUP ('STACK   ')      ;while initializing program.
+STACK    ENDS
+;
+;
+CSEG     SEGMENT   PARA PUBLIC  'DATA'                   ;The main routines.
+         ASSUME CS:CSEG,DS:CSEG,SS:STACK,ES:NOTHING
+KBOARD   PROC   FAR
+         CALL  INIT_CODE     ;Set up the INT 9 vector to point to this routine.
+         RET                 ;Return to DOS, program fixed in memory and
+;                              initialized.
+DWORD_ADDR   DW  0,0         ;Data storage area for BIOS routine seg/offset.
+;
+START_UP:
+         PUSH DS             ;Prepare for the BIOS call. We must first see what
+         PUSH SI             ; the keyboard interrupt is all about.
+         PUSHF                     ;You see, BIOS keyboard svc expects INT call.
+         MOV SI,SEG DWORD_ADDR     ;
+         MOV DS,SI                 ;Set up pointer to seg/offset of
+         MOV SI,OFFSET DWORD_ADDR  ; subroutine call to the BIOS.
+         CALL DWORD PTR [SI]       ;Program goes to service keyboard.
+         PUSH AX             ;Now, check the keyboard status flags to see if
+         PUSH BX             ; this particular interrupt changed anything.
+         PUSH DX             ;
+         MOV AX,VIDSEGMENT   ;Establish addressing for the monochrome screen
+         MOV DS,AX           ;buffer, then save it for a moment.
+         PUSH DS             ;
+         MOV AX,0            ;Establish addressability for the status byte
+         MOV DS,AX           ; at 0000:0417 (KB_FLAG).
+         MOV BX,KB_FLAG      ;
+         MOV AL,[BX]         ;Put status byte in AL for toggle state tests.
+         POP DS              ;Get our buffer segment back now.
+         MOV DX,CAPCHAR      ;DX now has the character to be used if caps on.
+         TEST AL,CAPS_STATE  ;If caps toggled, turn on arrows, else put back the
+         JNZ CAPS_ON         ; normal screen char/attribute (a rev. video blank
+         MOV DX,OLDCHAR      ; when this program is used with Volkswriter.)
+CAPS_ON: MOV BX,CAP_OFFSET   ;Get offset to character position in the buffer.
+         MOV [BX],DX         ;DX now has old or caps character, depending on AL.
+         MOV [BX+2],DX       ;Must fill two character positions with characters.
+         MOV DX,NUMCHAR      ;Ok.- ready for next test, might need nums on char.
+         TEST AL,NUM_STATE   ;NUM LOCK toggle bit set?
+         JNZ NUMS_ON         ;
+         MOV DX,OLDCHAR      ;If not- put old character back in screen.
+NUMS_ON: MOV BX,NUM_OFFSET   ;Get the offset to proper character position,
+         MOV [BX],DX         ; and put two characters there next to
+         MOV [BX+2],DX       ; each other.
+         POP DX              ;Ok. Let's clean up the stack and
+         POP BX              ; go back to the system.
+         POP AX              ;
+         POP SI              ;
+         POP DS              ;All Pau.
+LASTONE: IRET                ;Return from keyboard interrupt.
+KBOARD   ENDP                ;
+;
+;        This subroutine is used to initialize the preceeding program when
+;        it is loaded, then returns control to DOS.
+;
+INIT_CODE  PROC  NEAR
+         POP AX              ;Remove return address of call for a moment.
+         PUSH DS             ;Push segment base of DOS Program Segment Prefix
+         MOV DI,0            ; created for this entire program, and push offset
+         PUSH DI             ; to first instruction therein (will be an INT 27).
+         PUSH AX             ;All set to return to DOS when this is done.
+         MOV AL,DOSINT       ;Set up addr to INT 27 vector (end but
+         MOV [DI+1],AL       ; stay resident).
+         MOV AX,0            ;Establish addressability for vector table.
+         MOV DS,AX           ;
+         MOV BX,INTADDR         ;Offset to seg/offset storage area for BIOS
+                                ; interrupt vector in the system vector table.
+         LES DI,DWORD PTR [BX]  ;This step puts the code seg in the ES and the
+                                ; offset into DI, at the address pointed to by
+                                ; the DS/BX regs.
+         MOV AX,SEG DWORD_ADDR  ;Now set up addr to store BIOS routine vector
+         MOV DS,AX              ; in the main program so we can use this
+         MOV DWORD_ADDR,DI      ; routine.
+         MOV AX,ES              ;
+         MOV DWORD_ADDR+2,AX    ;Seg/offset now stored in DWORD_ADDR.
+         MOV AX,SEG START_UP    ;
+         MOV ES,AX              ;Restore ES segment to = main program CS.
+         MOV DI,OFFSET START_UP ;Prepare to store the address to the main
+         MOV AX,0               ; program in the system vector table.
+         MOV DS,AX              ;Establish addressability for the vector table.
+         MOV BX,INTADDR         ;
+         MOV [BX],DI            ;Store offset to main program entry point in
+         MOV DI,ES              ; vector table. ES has segment of main program,
+         MOV [BX+2],DI          ; so put it in the table above the offset.
+         MOV DX,OFFSET LASTONE  ;Save all code, except stack and initialization
+         ADD DX,0110H           ; routine, from being overlaid by dos.
+         RET                 ;Return to main program (which immediately returns
+INIT_CODE ENDP               ; to the DOS command processor.)
+CSEG     ENDS                ;That are it!
+         END       ;keyboard.asm
+```
+{% endraw %}
+
+## KEYBOARD.DOC
+
+{% raw %}
+```
+             The  assembly language program "KEYBOARD.EXE" on this disk
+        is  designed  to  supplement  the BIOS INT 09 keyboard handling
+        routine, and this program is adjusted to work particularly with
+        the  popular  Volkswriter*  word processing program. One of the
+        constant  irritants  I  found  using the PC's keyboard were the
+        ambiguous  states  of  the CAPS LOCK and NUM LOCK keys. The new
+        alternate  keyboards  for the PC provided relief in the form of
+        little  LEDs  on  the keys. Naturally my big hands cover up the
+        CAPS  LOCK  key all the time, and any typist will tell you that
+        nothing  slows one down like looking at the keys!
+
+             What I wanted was some kind of on-screen indication of the
+        key  states.  That is what KEYBOARD.EXE provides. When the Caps
+        are  ON,  two  blinking,  highlighted  up-arrows  appear on the
+        Volkswriter  status line to the left of the line number. If the
+        NUM  LOCK  status  sets the numeric keypad to Numbers function,
+        two  blinking,  highlighted  "##"  symbols  appear  between the
+        column number and "gas gauge" number on the status line.
+
+             To use this program, copy it onto the working copy of your
+        Volkswriter  program  disk, and, while still at the DOS command
+        level,  with your VW program disk in the DOS default drive (the
+        one indicated by the command prompt) create the following batch
+        command file on your program disk by typing:
+
+        COPY CON: AUTOEXEC.BAT
+        KEYBOARD
+        VW
+
+        (now hit function key F6, and this file will be created on your
+        program disk.)
+
+             When  you  power  up  your computer, hit a CTRL-ALT-DELete
+        sequence,  or  type  "autoexec.bat"  from  DOS  command  level,
+        Volkswriter  will  automatically  be  started, and KEYBOARD.EXE
+        will automatically be loaded and begin operation. 
+
+        NOTE: As KEYBOARD.EXE becomes fairly well entrenched in your PC
+              once  it  is  loaded,  if  you  exit  Volkswriter to load
+              another  program  I suggest you restart your system using
+              the  CTRL-ALT-DELete  sequence.  This  is the only way to
+              dump  KEYBOARD.EXE  and  reconfigure  the  BIOS interrupt
+              routine  short  of  turning  off the computer and doing a
+              cold  restart.  Use the program "BASIC_KB.EXE" to get the
+              on-screen  displays described above when you use BASIC or
+              BASICA  programs.  Also note that this program works ONLY
+              with the MONOCHROME monitor adaptor!
+
+        (* Volkswriter is a trademark of Lifetree Software, Inc.)
+
+```
+{% endraw %}
 
 ## MINI-WP.BAS
 
+{% raw %}
 ```bas
 100 ' WORDMERG.BAS                                           VERSION 2.0
 110 '
@@ -911,9 +1441,11 @@ machines:
 49998 ' ****************************************************************
 49999 END
 ```
+{% endraw %}
 
 ## PROVERB1.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -1022,9 +1554,11 @@ machines:
 1140 DATA "They are madly in love - he with himself, she with herself * "
 1150 DATA "z"
 ```
+{% endraw %}
 
 ## SPEECH.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 A$=STRING$(80,205)
@@ -1109,9 +1643,11 @@ machines:
 1660 IF INKEY$ = "" THEN 1660
 1670 PRINT : RETURN
 ```
+{% endraw %}
 
 ## XMASCARD.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -1182,6 +1718,7 @@ machines:
 1380 DATA 65,78,68,00,65,00,72,65,80,80,89,00,78,69,87,00,89,69,65,82
 1390 DATA 70,82,79,77,00,66,79,66,00,65,78,69,83,00,65,78,68,00,70,65,77,73,76,89
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

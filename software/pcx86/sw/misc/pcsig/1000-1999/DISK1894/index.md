@@ -36,6 +36,46 @@ machines:
     information will help you choose the best crops for next year.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1894.TXT
+
+{% raw %}
+```
+Disk No: 1894                                                           
+Disk Title: Garden Productivity Calculator                              
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Garden Productivity Calculator                           
+Author Version: 02/18                                                   
+Author Registration: #19.00                                             
+Special Requirements: None.                                             
+                                                                        
+Grow-your-own, and be profitable.  GARDEN PRODUCTIVITY CALCULATOR helps 
+you track expenses and productivity of your home or small commercial    
+garden, and analyzes its financial profitability.                       
+                                                                        
+This program works on the assumption that the cash value of the crop you
+produce should equal the total expenses of your garden to bread even.   
+Expenses are labor, seed, water, mulching materials, etc.  GARDEN       
+PRODUCTIVITY CALCULATOR calculates relative to the break even point,    
+where your expenses match the value of your crops at the market.  The   
+statistics provided about your garden and needs for production are very 
+thorough and informative.                                               
+                                                                        
+Even if profit isn't the reason for your garden, you should still know  
+which crops save you money and which ones cost you.  Computing this     
+information will help you choose the best crops for next year.          
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1894
 

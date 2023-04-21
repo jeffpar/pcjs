@@ -64,6 +64,7 @@ machines:
 
 ## ACCTREC.BAS
 
+{% raw %}
 ```bas
 10 CLS:ON ERROR GOTO 7000
 20 KEY 8, "@":COLOR 0,7:PRINT TAB(10)"REMOVE PROGRAM DISK FROM DRIVE  A  AND INSERT  ACCOUNTS RECEIVABLE FILE DISK.":PRINT:PRINT TAB(10)"READY PRINTER.":PRINT:PRINT TAB(10) "PRESS  F8  WHEN READY.":COLOR 7,0
@@ -380,9 +381,11 @@ machines:
 60380 DEF SEG:TOP.STACK=PEEK(&H2C)+PEEK(&H2D)*256:CLR.ADDR=(TOP.STACK-SUBR.SIZE)-128:RETURN
 60430 DEF SEG=0:BASIC.DS=16*(PEEK(&H510)+PEEK(&H511)*256):DEF SEG:TOP.STACK=PEEK(&H2C)+PEEK(&H2D)*256:LD.ADDR=(BASIC.DS+TOP.STACK)/16:LD.ADDR=INT(LD.ADDR+0.5):RETURN
 ```
+{% endraw %}
 
 ## BKPG.BAS
 
+{% raw %}
 ```bas
 1 DEF SEG
 2 IF PEEK(0)=1 THEN 10
@@ -445,9 +448,1109 @@ machines:
 30150 NEXT:IF CHKDSC THEN PRINT #3, "CHKDSK A:":PRINT #3, "CHKDSK B:"
 30155 PRINT #3, "REM  REMOVE BOTH DISKS":PRINT #3, "REM  INSERT PROGRAM DISK IN DRIVE A":PRINT #3, "REM  ENTER  A  WHEN READY":CLOSE 3:CLOSE 4:KILL "B:BACKUP.FIL":RETURN
 ```
+{% endraw %}
+
+## BKPG.DOC
+
+{% raw %}
+```
+                SIMPLIFIED BUSINESS BOOKKEEPING
+
+                                    Copyright 1985 by Donald Paritz
+
+ GENERAL INFORMATION 
+
+SIMPLIFIED BUSINESS BOOKKEEPING is a collection of the following
+
+programs:
+               
+      EXPENSES - check register type, prints and files checks 
+                 and maintains totals for each category.
+     
+        INCOME - designed for a small retail business using a 
+                 cash register, but may be adapted to any 
+                 business.  Maintains totals by category and
+                 checks cash income against deposits.
+
+  BANK ACCOUNT - uses totals from expense and income files to 
+                 balance checking account against bank statement.
+
+       PAYROLL - full featured payroll allowing for deductions 
+                 consistent with most state and city regulations.
+                 Prints checks and stubs, maintains all records
+                 and gives monthly report with tax payments due.
+
+      ACCOUNTS - enter all charges, payments, and credits for 
+    RECEIVABLE   each day.  Maintains files and prints bills at
+                 end of month as well as aging statement.
+
+    SUMMARY OF - income from sales, other income, income after
+    OPERATIONS   expenses, cash flow.
+
+The minimum hardware configuration for using these programs is
+
+an IBM-PC or compatible computer with 128 K of memory, 2 DS DD
+
+disk drives, and an IBM, Epson or other compatible printer.
+
+
+All of these programs are menu driven so that there will rarely
+
+be an occasion to refer to this manual.  The manual should be
+
+read through one time, however, to obtain a general overview
+
+of the operation as well as pitfalls to avoid in data entry,   
+
+file handling, disk handling, etc..
+
+
+In any case IT IS ABSOLUTELY NECESSARY TO READ AND RUN THE START 
+
+UP PROCEDURE since the program disk provided is not an operating
+
+disk.
+All programs are set to convert answers to capital letters.  This
+
+is necessary since comparative evaluations are made by programs
+
+and these comparisons require capital letters.
+
+
+Number  input will request numbers as xx.xx,  i.e.  you  will  be 
+
+expected to use the decimal point.  This is not necessary in the
+
+case of numbers with trailing zeros, however if you take this 
+
+shortcut be sure that you know what you are doing.  Examples:
+
+Entering  77 is the same as 77.00; entering 77.5 is the  same  as 
+
+77.50,  but  if you wish to enter 50 cents you must enter .50  or 
+
+.5 since leaving out the decimal point will yield 50.00 or 5.00.
+
+
+In most cases when you are prompted for input, pressing the Esc
+
+key will return you to options for that program.  It may then
+
+be necessary to read the files to determine last information
+
+written to files.
+
+
+It is always necessary to backup file disks after each session
+
+by choosing "Close Files and End" from the bookkeeping menu.
+
+If this is not done the backup file will be destroyed and a new
+
+one created the next time you run the program.  This will lead
+
+to some files not being backed up until the next time they are
+
+used.
+
+
+If you try to backup the wrong disk e.g. entering P for backup
+
+payroll files and payroll disk is not in drive A, you will get
+
+a message "file not found".  Insert correct disk and proceed. 
+
+There is no protection for having the wrong backup disk in drive
+
+B so be very careful to insert the correct disk. 
+
+
+ 
+When ending the fiscal year it is always necessary to prepare new
+
+bookkeeping  and  backup  bookkeeping disks and when  ending  the 
+
+calendar year it is always necessary to prepare new payroll and
+
+accounts receivable file and backup disks.
+
+
+Insert paper in your printer with ribbon guide in the far left
+
+position (turn printer on and off) and paper guides positioned
+
+so that top of ribbon guide is centered on top of paper and left
+
+edge of  paper  (edge  that will remain  when  tractor  strip  is 
+
+removed).  Minor adjustments may later have to be made to adjust
+
+for your printer.
+
+
+After  closing  out  files at the end of each  month  the  backup 
+
+program will run check disk.  You will have to calculate for each
+
+disk the probability of the disk holding another month's data and
+
+in the case of the payroll disk, another quarter's data.
+
+
+  Number of bytes in user files / months to date=bytes per month
+
+The number of bytes remaining on disk must be greater than bytes
+
+per month and in the case of the payroll disk, it must be 3 times
+
+greater.  It is advisable to allow a 10% cushion to accommodate an
+
+increase  in  data for month or more if you expect a  great  deal 
+
+more data in the next month.
+
+
+It  is  probably a good idea to run all programs  for  one  month 
+
+while still maintaining your manual records.  If any serious 
+
+errors are made during this time or if you decide on changing
+
+category names, etc.. you can then prepare new file disks and 
+
+restart with next month.
+
+   
+START UP 
+
+
+Generally,  the  start  up procedure  involves  transferring  the 
+
+operating  system  to  the program disk and  then  preparing  two 
+
+copies of the program disk.  Two copies are necessary since some 
+
+files will be kept on the program disk and a backup copy will be 
+
+necessary.   The  original  program disk should be put away in  a 
+
+safe place when finished.
+
+
+A total of 8 blank disks will be needed for complete bookkeeping.
+
+If not using Accounts Receivable or Payroll programs, you will
+
+need 2 less disks per program not used.
+
+ 
+Boot  up  your  system using your DOS disk and  then  insert  the 
+
+program disk in drive  B.
+
+
+Type and enter the following exactly as written:
+
+                 B:STARTUP
+
+Follow instructions as given by start up program.
+
+
+Be sure to remove your DOS disk and insert a blank disk when 
+                              
+requested.  Failure to do so will erase your DOS disk. 
+
+
+When both new program disks have been prepared, place a write
+
+protect tab on your original program disk to avoid accidentally
+
+destroying it.
+
+
+Label one of your new disks Program Disk and the other one
+
+Backup Program Disk.  It is a good idea to boldly label all
+
+backup disks with larger letters or another color, etc..
+
+
+
+When  preparing  the  file and backup disks you do  not  have  to 
+
+prepare disks for Accounts Receivable or Payroll programs if you
+
+are not using them.  When instructed to insert these disks just 
+
+leave the previous disk in drive  B.
+
+
+FIRST  PROGRAM  TO  BE  RUN WHEN STARTING SYSTEM  MUST  BE  "BANK 
+
+ACCOUNT".
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+BANK ACCOUNT
+
+  THIS FILE MUST BE PREPARED FIRST BEFORE RUNNING ANY PROGRAM
+
+
+Both  the expense program and income program write information to 
+
+the  bank  account file,  therefore this file must  be  initiated 
+
+before running any other program.  
+
+
+This program will check the disk for an existing checking account
+
+file.  If there is none, you will be prompted for initialization
+
+information.  This will only happen when you first use the system
+
+since the checking account file will be transferred to each new
+
+fiscal year.  If it happens at any other time, you may have the
+
+wrong disk in drive  B  or the file may have been lost, etc..
+
+If the file has been lost, reboot system and copy it from the 
+
+backup disk.
+
+
+Generally this program will prompt you for the bank totals, any
+
+outstanding checks or deposits from month not recorded by bank
+
+and any bad checks.  Total expenses and income will be drawn from
+
+their respective files and the previous bank account totals will
+
+be obtained from then checking account file.
+
+
+If all figures balance a report will be printed indicating all
+
+balances and adjustments.  If they do not balance, corrective
+
+choices will be given. 
+  
+
+There maximum allowed for entries in this file are:
+
+              4  Bad checks
+             20  Checks outstanding
+             10  Deposits outstanding
+
+
+
+Should you have more of any of these items,  it will be necessary 
+
+to  enter  two  or more as  one  entry,  however,  this  is  very 
+
+unlikely.
+
+
+The book balance reported after reconciliation takes into account
+
+all adjustments and unrecorded charges and represents actual cash
+
+in  account  on  closing  date.    Be  sure  to  enter  these  in 
+
+appropriate files as directed by the bank account report.
+
+
+
+****************** VERY IMPORTANT *******************************
+
+If new bookkeeping file disks are prepared before Expense, Income
+
+and Bank Account files have been closed out for month, you will 
+
+have to copy the bank account file to the new disk after all of
+
+these files have been closed out.
+
+Return to DOS by using Close Files and End routine or by booting
+
+with  DOS  disk.   Insert old disk with all files closed  out  in  
+
+drive   A   and  new disk in drive  B  .  Type and enter the      
+
+following:
+
+              COPY CHECKING.ACC B:
+
+******************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EXPENSE PROGRAM 
+
+
+Two  files  must  be set up before entering  expenses  with  this 
+
+program.  
+
+
+CATEGORY OF EXPENSE FILE
+
+First choose the Category of Expense option and enter up to 28 
+
+categories that you would like to have your expenses grouped
+
+under.  Your monthly report will accumulate and give the total of 
+
+each expense for month and year-to-date.  Any expense that does
+
+not specify one of these categories (OR SPELLS IT WRONG!) will
+
+appear as a miscellaneous expense.
+
+
+****************** VERY IMPORTANT *****************************
+
+One of the categories must be called PURCHASES in order for
+
+the summary of operations program to be able to obtain a cost of
+
+goods sold.
+
+   NO TWO CATEGORIES MAY HAVE THE SAME FIRST 3 LETTERS
+
+*************************************************************** 
+
+
+PAYEE FILE
+
+The next file to be set up is the Payee File.  This file allows
+
+you to select 3 letter abbreviations for your regular payees
+
+and relieves you of the need to enter the category of expense 
+
+and the address of payee each time a check is written.  It also
+
+eliminates the possibility of misspelling a category of expense
+
+when entering a payment.
+
+
+Print out a copy of this list to be sure that you do not dup-
+
+licate an abbreviation when adding to list.
+
+If  you  wish to pay one of these payees,  but  the  category  of 
+
+expense  is  different from that on file,  simply enter the  full 
+
+name of payee instead of the abbreviation. 
+ 
+
+The expense program is very straight forward.  You will be asked
+
+to first open a file for the month by entering the month, year, 
+
+and first check number.
+
+
+All entries after  will be made by  choosing "Add to File"  and
+
+entering  the  information as required for either check  or  non-
+
+check expenses.
+
+
+There is a special procedure for entering type of expense when
+
+the check is for more than one type.  An * is entered and you
+
+will  then  be  prompted for up to 3 types of  expense  with  the 
+
+amount of each.  These amounts must total amount of check or an
+
+error message will be issued.  An example is your Federal Tax
+
+Deposit.   Part  of this will be for withheld federal income  tax 
+
+and   FICA  and  part  will  be  payroll  tax,   employers   FICA 
+
+contribution. 
+
+ 
+Checks may be printed at the time of entry or written at another
+
+time and only the information entered in the file.
+
+
+To void a check, use the read procedure and then choose revise.
+
+Enter 0 for the amount of the check.
+
+
+If you need to void a check from a previous month, enter as a 
+
+non-check expense with a minus value e.g. -50.00.
+
+
+
+
+CHECK PRINTING
+
+Checks  suitable  for  this  program may be  obtained  from  many 
+
+sources.  They must have a blank top stub and be compatible with
+
+BPI, Accounting Plus or IMS Software.  One source is:
+
+          NEBS Computer Forms
+          12 South St.                   Form #9024
+          Townsend, Ma. 01469
+
+          1-800=225-9550  To obtain samples.
+
+
+As with all programs in this system the checks should be inserted
+
+in printer so that top of ribbon guide is centered on left  edge 
+
+of  checks  (edge that will remain when tractor strips  are  torn 
+
+off).   There  are two horizontal lines near the top of the  left 
+
+tractor strip on the check stub.   The starting point is with the 
+
+top  of the ribbon guide on the topmost of  these  lines.   Minor 
+
+adjustments may be necessary if you are not using an Epson or IBM 
+
+printer. 
+
+
+There are two options for printing information on check stub as
+
+well as the option of not printing stub.  If you choose the 
+
+invoice type stub you will be prompted for the date invoice
+
+number and amount.  The blank stub option allows you to print
+
+anything you would like.  
+
+
+If you try to use the cursor keys to move around in the check
+
+stub box and they print numbers instead, just press the Num
+
+Lock key.
+
+
+
+
+
+
+
+END OF MONTH - EXPENSE PROGRAM
+
+When closing out the expense file at the end of the month you 
+
+will receive a detailed listing of each check printed as well
+
+as a summary report.  Be sure to switch disks carefully as 
+
+indicated to have the current files renamed on both the file
+
+disk and the backup disk.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+INCOME PROGRAM
+
+
+CATEGORY OF INCOME FILE
+
+      THIS FILE MUST BE CREATED BEFORE USING THIS PROGRAM
+
+Follow instructions carefully for creating this file.  You will
+
+be prompted for 3 categories of regular income, the second of
+
+which will be Taxable Sales unless you have no taxable sales and
+
+decide to change it.  These categories are usually cash register
+
+departments  for a retail business.   DO NOT ENTER   TAX,  CHARGE 
+
+SALES OR RECEIVED ON ACCOUNT  AS ONE OF THESE CATEGORIES.  If you 
+
+have taxable sales a fourth category of Tax will automatically be 
+
+created.  Charge Sales and Received on Account are two additional
+
+categories that are automatically programmed in.
+
+
+You  will  also  be prompted for  two  miscellaneous  categories.  
+
+These are usually chosen from regular but infrequent income like
+
+rents, interest, etc., but NOT SALES OF ANY TYPE.
+
+
+All of your income entries will be collated under the categories
+
+created in this file and any other income will be itemized and
+
+accumulated as miscellaneous income in the monthly report. 
+
+MISCELLANEOUS  INCOME  CANNOT BE INCOME  THAT  IS  CHARGED.   ALL 
+
+CHARGE SALES MUST BE UNDER REGULAR INCOME CATEGORIES.
+
+
+
+USING THE PROGRAM
+
+At the beginning of each month you will asked for month, year and
+
+sales tax rate.  (Sales tax rate may only be changed at beginning
+
+of month).  
+
+
+
+Once file has been opened for the month all entries will be made
+
+by choosing "Add to File".  You will be asked to choose regular
+
+or  miscellaneous  income  for  each  entry,  with  miscellaneous 
+
+referring  to either of the two misc.  categories you have chosen 
+
+or some other type of income.
+
+
+If  you  choose regular income you will be prompted for  deposit, 
+
+total cash,  total charge,  received on account and each  regular 
+
+income category.   You will not be prompted for a tax entry.  The 
+
+program will calculate the tax as:
+
+(Total Cash+Charge)-(Total of Income Categories+Rec'd on Acct.)
+  
+Program will allow for a 10% excess or a 5% deficiency in tax
+ 
+collected.  If tax figure is not in that range an error message
+   
+will be issued and you will have to reenter all amounts.
+
+
+When entering miscellaneous income you will be prompted for the
+
+deposit, amount of income, source and type of income.
+
+
+No verification is done to assure that deposits are equal to cash
+
+collected  so  file  should be read occasionally to  assure  that 
+
+there is only an acceptable difference between these figures.  
+
+Reading  file  will  give you a total cash  collected  and  total 
+
+deposit figure. 
+
+
+When closing out month you will receive an itemized daily income
+
+report  as well as a summary report containing monthly and  year-
+
+to-date total cash,  charge,  received on account, taxable sales, 
+
+tax  exempt  sales (does not include miscellaneous  income  since 
+
+this income is assumed not to be sales),  cash over or under  per 
+
+deposits as well as totals for each category of income. 
+PAYROLL PROGRAM
+
+
+**** THIS PROGRAM CAN ONLY BE RUN FROM THE EXPENSE PROGRAM ****
+
+
+Two files must be created before using the payroll program, an 
+
+Employee Data File and a Payroll Deductions File.
+
+
+Employee Data File
+
+For each employee you will be prompted for personal information
+
+like address, phone, licenses, etc.. as well as for payroll 
+
+deduction information like dependents, withholding options, 
+
+miscellaneous deductions.
+
+
+If you enter a fixed percentage for a state or city deduction
+
+this percentage will be fixed per state or city method, i.e. of
+
+gross, federal tax, etc..  The fixed percentage must be more 
+
+than 1.2 to assure accuracy.  Do not enter the % sign.
+
+
+If discontinuing a miscellaneous deduction for an employee, just
+
+enter 0 for the amount.  Do not remove name of deduction until
+
+starting new year, since you will still have year to date amounts
+
+that require name of deduction.
+
+
+PAYROLL DEDUCTIONS FILE
+
+Must be set up and must be revised each year for new tax rates.
+
+A variety of choices for basing state and city taxes are given
+
+and will meet most situations.  The tax table for Federal 
+
+Withholding must be set up using the PERCENTAGE METHOD in the
+
+employers tax guide.
+
+
+The maximum income for unemployment taxation assumes that the
+
+federal is the same as the state maximum.  If this is not true
+
+an adjustment will have to be made at the end of the year when
+
+filing the federal unemployment tax form.
+
+
+USING THE PROGRAM
+
+There are two methods of paying wages.  An individual may be
+
+paid and his deductions may be calculated automatically or 
+
+entered manually or you may choose automatic weekly payroll,
+
+in which case you will only be prompted for each employees
+
+regular and overtime hours.  When last employee has been paid
+
+a summary of tax information for month to date will be given.
+
+
+Checks may be printed at time of payroll entry or at some other
+   
+time, however, if checks are not printed at time of entry they
+
+will  not be entered in expense file until actually printed using 
+
+expense  program  or  entered (if issued  without  using  expense 
+
+program).
+
+
+REVISING FILE
+
+The only method of revising file is to use Pay Individual option
+
+with manual option.  Entries may then be entered to offset the 
+
+error, e.g. -10.00 for $10.00 overpayment, however all entries
+
+must be made so that gross equals total of deductions + net.  
+
+The adjustment to the employee may be made by voiding the check
+
+in the expense file and issuing a new check or by issuing an
+
+additional check for adjustment.  No entries may be made in a
+
+month already closed out.  Adjustment will have to be made in 
+
+the new month if not known before closing out month.
+
+
+When closing out month a report will be issued giving the totals
+
+for each month, quarter and year to date as well as monthly tax
+
+information and year to date tax information.  If the month
+
+closed out ends a quarter , a report for each employee will also
+
+be  issued for that quarter with monthly,  quarterly and  year  to 
+
+date totals.
+
+
+************************ VERY IMPORTANT *************************
+
+A new file disk must be created at the beginning of each calendar
+
+year regardless of room left on disk.
+
+*****************************************************************
+
+
+New file disks may not be started during the year unless they are
+
+at the beginning of a quarter.  Be sure to check disk after each
+
+quarter is closed out to determine if enough space remains for
+
+another  quarter.   If  you  are sure at the end  of  the  second 
+
+quarter that there will not be enough room for the remainder of 
+
+the year, that would be a good time to start a new disk. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ACCOUNTS RECEIVABLE PROGRAM
+
+
+A  list  of  accounts  must be prepared first using  the  add  an 
+
+account option.   Each account must have a unique account  number 
+
+of up to 7 letters and/or numbers.  If customer has only a two
+
+line address, enter at least a space for the street address.
+
+A message may be printed on the statement for each account.  This
+
+is useful if statement is addressed to a guardian or addressed
+
+to same person for more than one type of account.  The message
+
+could say for example: "For Ted Jones Policy 1024" or "Medication
+
+for Mary Smith" etc..  If there is an opening balance when 
+
+system is started, you will be able to enter the amount.
+
+
+USING THE PROGRAM
+
+Entries can be made daily, weekly, or monthly - just be sure that
+
+all entries have been made before doing the monthly billing.  It
+
+is not possible to revise any entries.  Corrections must be made
+
+with  a  new  entry  and minus values  will  be  accepted.   When 
+
+entering  payments  or  credits DO NOT  ENTER  AS  MINUS  VALUES, 
+
+program will automatically designate these as minus values.
+
+
+BILLING
+
+Statements must be of the type compatible with Apple, SBSG, or
+
+Star Software systems.  One source is NEBS Computer Forms (See
+
+address in expense program section).  Their catalog number is
+
+#9060.
+
+
+Insert  statements  in  printer  with ribbon  guide  in  leftmost 
+
+position.  Top of ribbon guide should be at top of statement and 
+
+centered on statement edge (edge with tractor strip removed).
+
+After first statement is printed you will be asked if printer is
+
+set correctly.  If it is not, adjust paper without shutting off
+
+printer or pressing off-line button.
+
+
+If you choose regular billing, statements will start at first
+
+entry after last billing and will go to end of file, even if 
+
+there are entries past billing date.  The total due for each
+
+account will be changed to amount due after last entry.
+
+
+If you choose to bill using a start and stop date, statement
+
+will only show entries between these dates and amount due will
+
+be amount due after last of these entries.  The total amount due
+
+for each account will not be changed in the file, however, unless
+
+the stop date includes an entry past the last entry previously
+
+billed, e.g. you did regular billing at the end of June, but
+
+customer needs a bill from May 15 to June 15 - statement will
+
+be issued, but total due in customers file will remain the same
+
+as it was at the end of June.
+
+
+If you choose the print bills with balances not equal to zero and
+
+you are billing with dates rather than regular billing, the zero
+
+bills may still be printed. 
+
+
+After all statements have been printed, you will be instructed to
+
+remove statements and insert regular paper.  When you continue, a
+
+summary of all accounts as well as their aging balances and total
+
+of new billings for month will be printed.
+
+
+If  you  are billing one account,  there will be  no  summary  of 
+
+accounts printed and this file will not be updated until billing
+
+of all accounts is done.
+
+
+************************ VERY IMPORTANT *************************
+ 
+Billing  must  be  done at end of calendar  year.   If  you  bill 
+
+earlier in December then enter remaining charges as January and
+
+enter actual date in "for" column.
+ 
+*****************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+SUMMARY OF OPERATIONS PROGRAM
+
+
+This program requires only entering the month recently closed out 
+
+and if files have not been closed out an error message will be
+
+issued and you will have to return to menu.
+
+
+If you forgot to run this program and have already run it for the
+
+next month, you can still run it for the missing month, however
+
+the year-to-date figures will be those including the last month
+
+closed out.
+
+
+In order for this report to correctly handle cost of goods sold,
+
+one of the categories of expense must have been designated as 
+
+"PURCHASES".  In the case of a business not dealing in a product
+
+this is unnecessary and the cost of goods sold will always be 0
+
+and the gross profit on sales will be 100%.
+
+
+If you find this software useful in your business, a contribution
+
+of $35.00 would be appreciated to enable continued developement
+
+of this and similar programs.
+
+Send to:
+        Donald Paritz
+
+        Box 602
+
+        Johnson, Vt. 05656
+
+                             Thank you
+```
+{% endraw %}
 
 ## CHECKING.BAS
 
+{% raw %}
 ```bas
 10 CLEAR,,5120:CLS:KEY 8, "@":ON ERROR GOTO 2310
 20 OPEN "B:CHECKING.ACC" AS 1:FIELD 1, 12 AS A$, 12 AS B$, 12 AS C$, 12 AS D$, 12 AS E$, 12 AS F$, 12 AS G$, 12 AS H$, 12 AS I$:DL$="$$######.##
@@ -558,9 +1661,11 @@ machines:
 30280 LSET A$=FL$:PUT 4, LOF(4)/128+1
 30300 RETURN
 ```
+{% endraw %}
 
 ## EXPENSE.BAS
 
+{% raw %}
 ```bas
 10 CLEAR,,1536:CLS:FOR N=1 TO 10:KEY N, "":NEXT:KEY 8, "@":ON KEY(7) GOSUB 9000:PRINT:PRINT:ON ERROR GOTO 10000
 40 OPEN "B:EXPENSE.CUR" AS #1:DIM N(30), YTD(30)
@@ -801,9 +1906,51 @@ machines:
 60380 DEF SEG:TOP.STACK=PEEK(&H2C)+PEEK(&H2D)*256:CLR.ADDR=(TOP.STACK-SUBR.SIZE)-128:RETURN
 60430 DEF SEG=0:BASIC.DS=16*(PEEK(&H510)+PEEK(&H511)*256):DEF SEG:TOP.STACK=PEEK(&H2C)+PEEK(&H2D)*256:LD.ADDR=(BASIC.DS+TOP.STACK)/16:LD.ADDR=INT(LD.ADDR+0.5):RETURN
 ```
+{% endraw %}
+
+## FILES472.TXT
+
+{% raw %}
+```
+-----------------------------------------------------------------------
+Disk No 472   Simplified Business Bookkeeping                        v1.1
+----------------------------------------------------------------------
+The minimum hardware configuration for using these programs is
+an IBM-PC or compatible computer with 128 K of memory, 2 DS DD
+disk drives, and an IBM, Epson or other compatible printer.
+ 
+A        EXE  Information on how to use to *.bat files to backup your data
+ACCTREC  BAS  Processes Accounts Receivables
+AUTOEXEC BAT  Request the DATE then loads BASICA BKPG /F:5
+BKPG     BAK  Backup file of bookkeeping
+BKPG     BAS  This is the bookkeeping program
+BKPG     DOC  Author supplied documentation file
+C        BAT  COPY PAYEE.FIL, CATEGORY.FIL, INCOME.FIL to B:, CHKDSK A: & B:
+CHECKING BAS  Maintains the checking account
+EXPENSE  BAS  Keeps track of expenses
+F        BAT  Creates and formats two new disks, for bookkeeping fiscal year
+G        BAT  Copies totals to new backup bookkeeping disk, runs bkpg.bas
+INCOME   BAS  Keeps track of income
+L        BAT  Copies checking.acc to new backup bookkeeping disk, runs bkpg.bas
+N        BAT  Creates two disks then loads basica and runs Payroll program
+PAYROLL  BAS  Processes the payroll
+R        BAT  Creates two disks then loads basica and runs A / R program
+S        BAT  Format 6 disks by responding  "Y" first 5 times, for startup
+SHELLSRT BAS  This is a shell sort program for sorting files
+STARTUP  BAT  Author supplied User startup procedure batch file
+X        BAT  Makes new backup copy of PAYROLL FILE DISK on drive B:
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
 
 ## INCOME.BAS
 
+{% raw %}
 ```bas
 10 CLEAR,,1536:CLS:FOR I=1 TO 6: PRINT:NEXT:KEY 7, "":KEY 8, "@":ON KEY(7) GOSUB 2900:ON ERROR GOTO 3000
 40 OPEN "B:INCOME.CUR" AS 1:OPEN "INCOME.FIL" AS 3:FIELD 3, 10 AS A$(1), 10 AS A$(2), 10 AS A$(3), 10 AS A$(4), 10 AS A$(5), 10 AS A$(6)
@@ -974,9 +2121,55 @@ machines:
 60000 XX$=INKEY$:IF XX$<>"C" THEN 60000
 60010 PRINT "OK"
 ```
+{% endraw %}
+
+## NOTES472.TXT
+
+{% raw %}
+```
+                SIMPLIFIED BUSINESS BOOKKEEPING
+ 
+                Copyright 1985 by Donald Paritz
+ 
+All of these programs are menu driven. The file BKPG.DOC should be read through
+one time, however, to obtain a general overview of the operation as well as
+pitfalls to avoid in data entry, file handling, disk handling, etc..
+ 
+In any case IT IS ABSOLUTELY NECESSARY TO READ AND RUN THE START UP PROCEDURE
+since the program disk provided is not an operating disk.
+ 
+CHECK PRINTING
+Checks  suitable  for  this  program may be  obtained  from  many sources.  They
+must have a blank top stub and be compatible with BPI, Accounting Plus or IMS
+Software.  One source is:
+ 
+          NEBS Computer Forms
+          12 South St.                   Form #9024
+          Townsend, Ma. 01469
+ 
+          1-800=225-9550  To obtain samples.
+ 
+BILLING
+Statements must be of the type compatible with Apple, SBSG, or Star Software
+systems.  One source is NEBS Computer Forms (See address in expense program
+section of BKPG.DOC).  Their catalog number is #9060.
+ 
+If you find this software useful in your business, a contribution of $35.00
+would be appreciated to enable continued developement of this and similar
+programs.
+ 
+Send to:
+        Donald Paritz
+        Box 602
+        Johnson, Vt. 05656
+ 
+                             Thank you
+```
+{% endraw %}
 
 ## PAYROLL.BAS
 
+{% raw %}
 ```bas
 10 CLS:KEY 8, "@"
 30 COLOR 0,7:PRINT TAB(10)"REMOVE PROGRAM DISK FROM DRIVE  A  AND INSERT  PAYROLL DISK.":PRINT:PRINT TAB(10)"CURRENT EXPENSE FILE DISK MUST BE IN DRIVE B.":PRINT:PRINT TAB(10)"READY PRINTER.":PRINT:PRINT TAB(10) "PRESS  F8  WHEN READY.":COLOR 7,0
@@ -1502,6 +2695,7 @@ machines:
 60380 DEF SEG:TOP.STACK=PEEK(&H2C)+PEEK(&H2D)*256:CLR.ADDR=(TOP.STACK-SUBR.SIZE)-128:RETURN
 60430 DEF SEG=0:BASIC.DS=16*(PEEK(&H510)+PEEK(&H511)*256):DEF SEG:TOP.STACK=PEEK(&H2C)+PEEK(&H2D)*256:LD.ADDR=(BASIC.DS+TOP.STACK)/16:LD.ADDR=INT(LD.ADDR+0.5):RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

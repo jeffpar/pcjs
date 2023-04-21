@@ -39,8 +39,666 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## FILES937.TXT
+
+{% raw %}
+```
+Disk No  937
+Program Title: PHOTO ONE
+PC-SIG version 1.3
+ 
+PHOTO ONE process portrait and wedding picture reorders for a photography
+business.  IT lets you store the number of each negative, a
+description, the location of the original picture, the size of the
+original, and the quantity of the original.  The originals should be
+numbered to match the negatives.  Afterward, you can call up a record by
+its number and enter a reorder by size and quantity.  A listing of all
+originals and the amount of reorders can be printed on the printer.
+WEDPRICE gives three different printouts of personal quotations for
+pictures, which can be customized by registered users.
+ 
+Usage:  Portrait Reorders
+ 
+System Requirements:  256K memory, one disk drive, a printer, and a
+version of BASIC.
+ 
+How to Start:  Consult your BASIC language manual for complete
+instructions on how to start the programs written in BASIC.
+ 
+Suggested Registration:  $25.00 for REORDERS and $25.00 for WEDPRICE ($35.00
+for both REORDERS & WEDPRICE).
+ 
+File Descriptions:
+ 
+README   1ST  How to view documentation.
+REGISTER DOC  Registration form.
+ST       COM  Program to view documentation.
+REORDERS BAS  REORDERS program.
+REORDER  SAM  Data file.
+WEDPRICE BAS  WEDPRICE program.
+??????   BAT  Batch file (3 files).
+AUTOEXEC BAT  Batch file to automatically start program on bootup
+CONFIG   SYS  System configuration file
+FORMAT   COM  Performs a data rediness procedure
+GO       BAT  Batch file to start program
+PHOTO1   DOC  Documentation
+SET-UP   BAT  Installation batch file
+WS-FORMS<DIR> Subdirectory containing Wordstar format files
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,1988 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## PHOTO1.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+                                   PHOTO ONE
+                                 DOCUMENTATION
+                                  Version 1.0
+
+
+This document is to familiarize you with the features of this program. This has 
+come about by combining previous programs and files into one larger program and 
+given the title of `PHOTO ONE'. In addition to combining separate programs, 
+screen prompts have been added to make the entire process more user-friendly. 
+PHOTO ONE should be able to be used by those new or experienced with computers. 
+But it is recommended that this document be reviewed before actually using. 
+
+There are presently three (3) major subdivisions which will be described in 
+greater detail in this document's subheadings. The information should appear in 
+approximatly the same sequence as the information will be used for a typical 
+wedding customer. Therefore, you may keep your present system (or lack of one) 
+and gradually convert to this system by simply starting with your next wedding 
+presentation and follow it through its entire cycle. As you gain confidence in 
+using PHOTO ONE (hopefully long before one wedding has been through it--that 
+could be over a year!), you may start adding exceptionally small ones. Or (if 
+you're desperate) exceptionally large ones! Procedures assume at least 256K RAM 
+and 360K dual-disk drives designated as `A' and `B' plus an Epson-compatible 
+for print-outs. It's further assumed that if your system does NOT meet the 
+above criteria (i.e. a hard disk), you'll be able to use the `Batch' files 
+after modifying them (i.e. change drive `B' calls to `C', etc.).
+
+
+                                Original Set-Up
+
+With the original disk in the `A' drive, type `SET-UP' and `<CR>' (the Enter 
+key). Leave the original in the `A' drive as the `source'. You'll be prompted 
+for a `Volume Label'; it will be displayed when various `DOS' commands (i.e. 
+`DIR', etc.) are invoked. Note that the first disk produced will be used in 
+`Step #3' as a data disk. Put it away until you get to that segment. The second 
+disk will normally have to be made only once. Use only the new copies so the 
+original remains unchanged. You'll be modifying many files so please do this!
+
+If you're already `up-and-running', after the DOS prompt type `GO' `<CR>' 
+(henceforth meaning press the `Enter' key) and your monitor will display how to 
+begin various segments. Even this is done automatically when starting (or you 
+may reboot w/`<Ctrl-Alt-Del>') w/PHOTO ONE in Drive `A'. The files with a 
+`.BAT' extension do this and set required parameters (including date and time). 
+These work best if they're all on each DATA disk (the `SET-UP' file does this 
+for you); they're the ones that prompt you to put in the correct PROGRAM disk 
+in the `A' drive, etc. Hard disk users will want to put the batch files on the 
+hard disk. Unless they're changed directly (such as `VERIFY OFF' after the 
+system prompt) they'll remain in effect until the system is rebooted. IF all of 
+the parameters are set when placing the disk in the drive (i.e. if another 
+application was run but `PATH', etc. weren't changed), you may simply start the 
+first segment by typing `1' <CR> after the DOS prompt without using `GO' first.
+
+
+
+                                -*- Page #1 -*-
+
+
+
+
+
+                                 Presentations
+                                    Step #1
+
+A `FORMS' subdirectory contains various files to help with getting all of the 
+necessary information TO prospects as well as FROM them to provide realistic 
+quotations for a wide array of coverage. Most are merely product descriptions 
+and may have to be changed accordingly. But the data sheet is a key element and 
+should be helpful in a wide range of styles. For example, flat-rate `creation 
+fees' could easily go in the `labor' blank. You may fill that information in at 
+the initial presentation or during confirmation--whichever works best for you.
+
+Provided that several assumptions are met, typing `1' provides easy access with 
+or without the start-up menu as previously explained. One assumption is that 
+they'll be used with a word processor that is WordStar (tm)-compatible. Not 
+only that, but also the installation must be done similarly to work the same. 
+
+The `WSU.COM' and/or `WS.COM' file was saved as `WSEPSON.COM'. If your version 
+doesn't have a file with that name you may now do so--or you'll have to change 
+the `1.BAT' file accordingly (with DOS's EDLIN, WordStar's non-document mode or 
+similar) or you'll have to start this segment by other means.
+
+To print as intended, your WordStar (tm) version needs the same `user patches'. 
+As usual, ^PA is elite (alternate 12 cpi), ^PN is pica (normal 10 cpi), ^PQ is 
+compressed, ^PE undoes compressed and ^PT/^PV is superscript/sub-script. But 
+the same code undoes both for my LX-80 Epson so I use ^PR and the `^R' appears 
+at the beginning of each document in order to cancel scripting the entire page. 
+The ^PW is the expanded (or `Wide') mode that uses a carriage return/line feed 
+combination to stop it. See your printer's manual for your specific codes to 
+enter or simply modify the files to accommodate your version(s).
+
+Once you're at WordStar's (tm) Main Menu, note the `INFORM.COM' command file. 
+Because of the `.COM' extention, it appears last in the displayed directory to 
+make it easy to find. Although it isn't necessary, I like the uncluttered look 
+made by the `F' command before anything else to remove the directory of files. 
+To start, press `M' (or `m') for MailMerge (tm), `INFORM.COM' for the file name 
+and the ESCape key for all of the program's defaults. After becoming familiar 
+with how it is set up you'll be able to print on letterheads (with simplified 
+layout similar to ours) and/or continuous forms on both sides with relative 
+ease. If you're familiar with WordStar (tm) you shouldn't have any trouble from 
+that point on as there are many prompts to guide you along the way. If you have 
+started wrong or don't wish to choose anything simply abort MailMerge.
+
+If you don't have a WordStar (tm)-compatible word processor available, `ST.COM' 
+has been supplied to display the information. After the DOS prompt, just type 
+`ST' and follow its instructions or try a shortcut--`ST REGISTER.DOC'. Note 
+the display is much more readable than the DOS `TYPE REGISTER.DOC' command. You 
+can even make a `screen dump' by pressing `<Shift-PrtSc>' which is holding the 
+`Shift' key down and simultaneously pressing the `Print Screen' key.
+
+Undoubtedly, there are many gross misassumptions in the above output but one 
+has to start somewhere. You may modify the files to better suit your way of 
+doing things. Or you just might consider trying my way--but DO TRY it! No 
+matter how well the print-outs describe your work you won't be able to simply 
+hand it to your prospects. Depending on how many questions, etc. it generally 
+takes from about 30 minutes to an hour and a half for an initial presentation 
+in our studio. All materials shown are given to her/them for reference. But 
+only the checklist has their data--unless they pay for a confirmed booking.
+
+
+
+                                -*- Page #2 -*-
+
+
+
+
+
+                                Wedding Prices
+                                    Step #2
+
+This number `2' portion is started similarly to the above except it (as well as 
+`3') is presently run with GWBASIC or BASICA (tm). To get a better `feel' of 
+how these programs work, I suggest initially using in their present state. 
+They're basically ready-to-go, but you may wish to modify the source code to 
+change `Broad Street Photo' to something more appropriate for you as well as 
+prices, etc. To assist you with that, a brief outline of line numbers has been 
+provided. While the program isn't running (press `<Ctrl-Break>' to stop execu-
+tion), restart with `RUN 3210' and the usual `<CR>'.
+
+If you don't presently use Leathermark, you may use something very similar. In 
+that case, changes may need to be nothing much more than the names--or you may 
+simply not use that subroutine. On the other hand, if you aren't currently 
+handling Art Leather's albums, may I suggest you give them a try? Registered 
+users may request information about cover sets we feature, which labs are used, 
+what film/equipment, and other such things--be specific! Future versions may 
+include frequently-requested information. You hopefully will get more out of 
+learning these programs than you bargained for!
+
+The source code of this program is mostly printer output with minimal screen 
+display. Note that multiple-quantity answers are entered together with COMMAS 
+to SEPARATE SIZES.  You may save paper when really not needed by running it 
+with the printer turned off--but wait for the output to `print through'. The 
+formulas (few as they are) basically allow larger quantities lower unit rates. 
+Minimal monitor display allows quick and easy quotes (right over the phone) and 
+is an excellent way to become accustomed to how the program works.
+
+Note the prompts for guidelines; a simple `enter' without information (hence-
+forth referred to as `<CR>') produces what for us is usually the most common 
+selections and is set up as a default intentionally. Therefore I often can 
+merely press `<CR>' five times in quick succession to quote wedding originals 
+in our `regular' 8x10 album series. I can mentally add the price of our lowest 
+price cover set if they want a starting point with one. But that's usually as 
+far as I go with phone inquiries--ONLY a beginning price. If they get too 
+insistant, rather than simply turn them away I ask if they agree that one of 
+our photos can be worth more than someone else's entire album. Custom quotes 
+require a session which uncovers more information than merely answering "How 
+much are your weddings?" produces. Getting prospects into your studio should 
+result in a high percentage booked. You might normally use the `Data Sheet' 
+from `Step #1' for a firm quote at a presentation. We have HALVED presentation 
+time AND improved performance by using this program for every prospect!
+
+If asked about reorders, they probably are aware that some photographers use 
+that as a `trap'. After all, if the wedding has already been shot, where else 
+can they get QUALITY prints if your contract requires that you're the only 
+professional photographer? My approach is usually running (if asked) a quote 
+with 10 of each of the three sizes--but I prefer to run that part LAST. Note 
+that it still retains the original name(s) (such as Smith/Jones) and prints it 
+on the `Reorder Form'. Why "10" of each? Because it makes it easy compute the 
+price-per-size and implies you don't expect a giant reorder--imagine how YOU 
+would feel in THEIR shoes if 100-8x10's was listed! If you choose the discount 
+option, they can note how much can be saved. I show them how the current dis-
+count applies--but I add that THEIR REORDER rates may be slightly different 
+because different rates may be in effect at that time. Most customers prefer 
+you be `up front' with them. It makes them feel there's no hidden surcharges. 
+
+
+
+                                -*- Page #3 -*-
+
+
+
+
+
+Italics was chosen for a more personal-looking touch--remember the motto that 
+you only get one chance to make a good first impression! This also allows 
+easily distinguishing this form from others. A quotation should fit on just a 
+sheet or two--two or three of one appropriate `Combination' would be a usual 
+minimum. Ask for a few guidelines before print-out, do it quickly while they're 
+reviewing another album and go over it with them. I like to be flexible but I 
+don't show everything to everyone--it's initially too confusing on their part. 
+You can always run another variation. You want to impress them that you can do 
+it THEIR way--they're already aware many different styles are available. They 
+know they want pictures taken but they usually don't know what they want: how 
+many, what kind of album, who should do them, etc.--show them WHY YOU!
+
+A perforation skip-over has been inserted to produce more-readable continuous 
+forms. This can be removed to allow easier copies on both sides of one sheet--
+great for complete file copies. I provide prospects a copy to take with them IF 
+they're undecided--AND with incentive to get back to us and book with us soon!
+
+Enough of the `helps' and `hints'...I don't wish to intimidate you! Give it a 
+whirl with your BASIC program. If there are specific items (such as the `Form 
+Feed' code so you can identify it and change it for your printer) you wish to 
+know, drop me a note and I'll try to explain what is used.
+
+
+                                    Reorders
+                                    Step #3
+
+This program was originally intended to be a fast, efficient means of handling 
+wedding photo orders. And I believe that goal can be reached with this version 
+if you follow the guidelines. PC-SIG's try-before-you-buy philosophy sounded 
+like an attractive, fair and innovative means to market this program; this is 
+how it was originally distributed in March '88. `On-the-job experience' has 
+shown where modifications can improve the original idea.
+
+Most photo studios would undoubtedly agree that a LOT of time is needed just to 
+process the paper work in wedding reorders. Everyone has their own way of doing 
+things but I believe they'll find the system suggested here (or variations of 
+it) is accurate AND efficient--and will go a long ways in solving the following 
+`sticklers' (conveniently forgotten until the next wedding--and you only need 
+to remember `SHE' will do the next one...): (1) WHICH cake-cutting pose, (2) 
+WRONG poses chosen (especially phone orders!), (3) call-backs to ask for more 
+information than `Our Family' provides, (4) remembering if the quantities of 
+the reorders INCLUDE originals or IN ADDITION to them, (5) how much of the bill 
+is OURS (or after everything is back: "Could we have the charges separate?").
+
+The first step is to have the processing lab number the originals to match the 
+negatives. Many mail-order labs offer this service for little or no charge. 
+There are several variations; the `trick' is to separate by subject (and keep 
+it so!) and use the negative/print number from them. You may use up to the last 
+THREE digits. This allows nearly 1000 poses per wedding but we usually don't 
+exceed 10 or 15% of that. However, some may produce `sub-series' of 122988-
+123050, 123519-123601 and a few `stragglers' like 49077, 50522 and 51220. It 
+seems that most labs have a few reprinted and use whatever series of numbers 
+come through. Other labs start over with every roll; in which case you should 
+renumber duplicates. Then the easiest way is to first sort the rolls in approx-
+imate order with the first roll remaining the same, the next roll is `101' to 
+`122' (if only 22 poses printed), etc. You may find it a helpful reference to 
+`code' the available light (ISO 400) roll starting with `401'.
+
+
+
+                                -*- Page #4 -*-
+
+
+
+
+
+We explain beforehand to the newly-weds that we normally have at least some of 
+the formals processed-and-printed to 8x10's. Then they can have the album com-
+pleted with THEIR choice of poses (even though we may `help' a little) within a 
+MONTH of the wedding. This greatly improves everyone's perception of their 
+efficiency, increases reorders AND they'll often put more poses in their album 
+than we would have. And THAT makes EVERYONE happy!
+
+The beginning of this document explained starting the `SET-UP' procedures. It 
+produces a data disk that was to be put aside until now. Put it in drive `B' 
+and start with `3'. This will run the `REORDERS.BAS' program. Use write-protec-
+tion tabs for inactive disks as well as your working original (disk #2). AND 
+keep back-up copies of active disks produced by the following directions.
+
+If you peek at the source code, you'll quickly see that most of the program 
+consists of product descriptions that are self-explainatory, codes for the 
+printer, etc. In brief, it's mostly screen output with a final print-out or two 
+and there are TWO general sections. Throughout the program many answers may be 
+simply and quickly answered with a default by pressing the `Enter' key (which 
+is indicated as <CR>) and the first question is no exception. Type `y' or `Y' 
+and add a <CR> or even just <CR> will put you in the first portion. Upper/lower 
+case makes nicer print-outs but isn't essential. The name should have no more 
+than eight (8) characters. Longer entries may print on your output but the 
+created random file will be within DOS guide-lines. You may add `.BG' (DOS 
+allows up to three characters after the optional dot) to designate the Bride 
+and Groom's reorder. You may have only one reorder initially but give an 
+incentive for early reorders and you'll have more to send with it in a month or 
+two. Encourage orders neatly turned in with 50% down, by pose numbers, with 
+chosen poses adequately described, for whom AND in a reasonable amount of time 
+just didn't fly until we did most of the `work' for them with this program.
+
+After entering the file name, the Main Menu is displayed. All records must 
+initially have a `Null Value' entered as prompted at the top of the Main Menu 
+or ALL numbers are VALID! Initialization `undoes' this after you press number 
+`1'; then `y' (or `Y') and `<CR>'. Do this ONLY ONCE for each file! If `1' is 
+accidentally entered, `n' or `N' and/or `<CR>' returns you to the Main Menu and 
+avoids resetting everything back to the default `Valid-but-Without-Data' mode.
+
+Main Menu selection `2' is for entry of the negative numbers and description. 
+Responding with a pose number and `<CR>' starts the process. Invalid numbers 
+aren't accepted. Answer the prompts for quantity and size of the ORIGINAL(S); 
+pressing only `<CR>' results in a 4x5 `Size' default. The `Description' and 
+`Original Situation' input must be no more than 20 characters each. A `guide-
+box' for maximum length is shown for most entries that are length-sensitive. A 
+`<CR>' creates defaults--they aren't especially descriptive but they're quick 
+and valid. Until `1000' is entered you'll loop back for another pose.
+
+Be sure to enter at least all poses that are likely to be ordered from--if not 
+100% of them. If time doesn't permit all entries at one session, simply enter 
+`1000'; `n' or `N' to NOT print and `7' to end the program. All information up 
+to that point is automatically saved on the disk. Re-start with choice `2'--do 
+NOT RE-INITIALIZE or your information will be DELETED! If you aren't working in 
+sequence or don't know where you're at, the program will warn you if a number 
+already has been entered. If your lab duplicates numbers, this is a good point 
+to reassign those you're aware of--be sure to change the print AND negative. 
+Using the last three digits in the example at the beginning of this document 
+would present a problem only with 50522 and 123522. When the program alerts you 
+to entering duplicates, simply indicate `n' or `N' if you don't wish to change 
+
+
+
+                                -*- Page #5 -*-
+
+
+
+
+
+it. Otherwise, you'll be prompted for all information as though that pose was 
+never entered before. If an original hasn't been used and is saleable, it makes 
+sense to use the original first; but DO NOT enter REORDERED quantities yet. 
+When you're finished entering all of the poses, you'll be prompted if a print-
+out is desired. The result is printed in space-saving format; further compact-
+ness is possible by turning it over. Your monitor displays what has been sent 
+to the printer. File it with the negatives and you'll be glad! Although the 
+program assumes the printer is turned on--you MAY have it off to save paper.
+
+After the poses are entered you'll have several options. But be sure to keep a 
+permanent record at this point (i.e. WITHOUT the reorders entered). NOW is the 
+time (while a reminder at the top of the main menu is active) to duplicate the 
+file if you anticipate others ordering. Put simply: duplicate the file (but 
+with different names) BEFORE entering any reorders; then place the reorders in 
+the duplicated file(s). If you're at the Main Menu press `7' to exit `SMITH.BG' 
+or whatever program is listed; the program will then exit to the familiar DOS 
+prompt. Following that, type `DIR' after the `B>' (or `DIR B:' if `A>') to 
+verify spelling, etc. Type after the prompt A>`COPY B:SMITH.BG B:SMITH.1' 
+(assuming `A>' is already there--don't type it) or B>`COPY SMITH.BG JONES' and 
+`<CR>' after THAT prompt. The whole thing takes hardly even a minute--and has 
+all the poses and descriptions! Create one entire file (presently about 65,000 
+bytes!) for EACH person reordering.
+
+Each floppy disk may contain only up to 5 files/weddings. Therefore, you may 
+have to put copies of files on separate disks. Additional disks can (and 
+should) be easily created with the proper formatting via `SET-UP'. `Volume 
+Labels' like `AUGUST1987', `WEEK#10' or `A-D' should help. Then place the 
+original disk in the `A' drive; the newly-nade disk in the `B' drive and type 
+A>`COPY SMITH.BG B:JONES.1'--and write the file names on a `stick-on' label.
+After copying all files wanted at that time, restart the program with the 
+newly-created variation--leave the original file in its original form.
+
+When all poses are entered the first time, I suggest printing a copy for future 
+reference. As poses are entered into the album, mark the location on that sheet 
+for your permanent file. This will come in handy for entering changes under the 
+Main Menu's `Item 6' (see below for full explaination). After they're updated I 
+suggest re-entering `Step 2' and enter `1000' immediately. You may foresee that 
+an offer to print another, updated summary could be useful. The resulting 
+print-out (along with their ALBUM print-out--see `STEP 4') is to provide the 
+new, proud owners of the album an `index' of the `extras' (which are in turn 
+given to them on a temporary, approval basis with the album). This could be 
+invaluable to help them determine whether or not a pose is in the album, keep 
+track of who has which original, payments, etc. And when they come in with 
+their reorders, you won't think, "Oh no, not another reorder!"
+
+The program will add the actual reorders together for you AND keep each order 
+separate. To start this phase (the files are initialized and the poses are 
+labeled) let's assume we'll continue with `SMITH.BG' where we left off. Step 
+`3' will ask for a pose number and verify if the number has been used. If the 
+chosen number wasn't entered in step 2, it will bring back the main menu from 
+where you may enter a valid number. Once into the subroutine, it alternately 
+asks for [A] the size and [B] the quantity of that size, etc. Note that not 
+only will it continue within that pose number but that it is NOT updated until 
+a `9' and/or `<CR>' is pressed. Therefore, if you enter 3-4x5's and 1-8x10 but 
+then `add' 2-4x5's it will put only the latter 2-4x5's and 1-8x10 into the 
+file. You should enter `5' instead of `2'! Or enter `<CR>'; THEN adding `2' 
+(with `Step 3') to the pose produces 5-4x5's. Try it and you'll understand.
+
+
+
+                                -*- Page #6 -*-
+
+
+
+
+
+Main Menu `Item 5' (`Subtract') works similarly to `Item 3' (`Add') except one 
+or two details. If you deduct an amount which would produce less than zero, it 
+will bring up the sub-menu as usual but add a comment that too large a figure 
+was entered. For your convenience it also displays what amount IS present and 
+you may try again or leave it as it stands since your quantity to be subtracted 
+has already automatically been changed to zero. The `Add Mode' (`3') amount is 
+similarly zeroed if you try to subtract a quantity by putting a minus amount. 
+Experiment a little with `3' and `5' and you'll better understand them.
+
+`Item 6' on the Main Menu will allow you to check the status of any pose 
+quickly and thoroughly. When you've seen what you need, you may simply press 
+the space bar (or `<CR>') to return to the Main Menu and select any choice from 
+that point. Instead of just viewing the information you may actually change the 
+original's situation, a description or delete the number by simply typing an 
+upper-or-lower case `X' following those choices. Taking advantage of this 
+doesn't necessarily result from mistakes. Review the previous description of 
+`Step 2' (above) for one explaination. In either case, be sure to use the `/' 
+abbreviation suggested for the Bride and Groom's album pages when you enter it. 
+Another good reason to enter every pose is if they move out of town before the 
+originals are back. If done before sending originals to the newly-weds, you'll 
+make identification of those not returned easier. After all, why have them 
+returned if non-album prints can be bought/sold? Furthermore, if they later 
+decide to add pose #409 to their album it's quick and easy to update. While 
+entering `new' data note that the `old' information is shown for reference.
+
+Choosing `Step 4' and its default will print out the reorder. Unless you bypass 
+the date while booting up, the program should include the print-out's date with 
+the file's name. But first the program reminds you to put forms in the printer, 
+etc. Although three-digit numbers are the MAXIMUM, one- and two-digits ARE 
+valid. But if you DON'T use them, your printer will `pause' until a `valid' 
+pose is reached. That's part of the reason that a display of how much of the 
+series has been scanned appears on the screen. Even though it slows output, the 
+entire file can be scanned in a minute or two. That's faster than many printers 
+can print all of the information. So that should be no major obstacle.
+
+The printed information is normally sorted by poses and shows how many of which 
+size has been ordered. The output will line up nicely with the assumption that 
+no more than 99 prints will be ordered from any one pose. Should that occur, 
+the program will print the correct amount and add it correctly, but it will 
+place a percent sign in front and not align the usual way.
+
+Extra "room" has been provided to allow printing on letterheads for a nicer-
+looking customer copy. If you use hand-fed cut sheets you may be able to take 
+the printer off line and insert additional sheets when required. A summary is 
+printed at the end of the print-out to make it easy to quote the entire reorder 
+(a part of the first segment). Accepting the option to easily and quickly print 
+another copy to keep on file will make it easier to sort the prints than `proof 
+book' or similar forms--and even more so if they just bring in their own notes!
+
+Instead of merely having REORDERED poses printed in NEGATIVE numerical order, 
+you may have poses in PAGE sequence. This is done by entering `n' to `Step 4'. 
+It uses the "Originals' Situation" entry of page listings; either `All Poses' 
+(which prompts for a longer title length because of wider print-out) or from 
+one of the albums. Either will allow entry of longer titles by simply typing 
+more. But remember the title is printed double width so the PRINTER might not 
+like it! And that's why using the abbreviations as suggested is so important. 
+They not only save time but also make it possible to print useful reports.
+
+
+
+                                -*- Page #7 -*-
+
+
+
+
+
+Now it's easy for everyone to envision the Bride & Grooms' album as it is laid 
+out--even pages facing each other are subgrouped. A better understanding of 
+this and other functions is more-easily understood initially by utilizing the 
+`REORDER.SAM' sample file. The sample file is easily opened by pressing the 
+often-mentioned `<CR>' without any additional input. And by the way, the pose 
+chosen for the cover was given a `#' after the `/' to have it sort FIRST in the 
+print-out with the heading somewhat centered above it.
+
+If you restart this program you'll recall it asks if you wish to create/update 
+one file (NOTE: The `RUN 100' option bypasses this question!). This time answer 
+`N' or `n' and you're well on your way. When it asks for the name simply enter 
+`SMITH.BG' (or enter the provided `Reorder.Sam' sample file) as before and then 
+press the `<CR>'. For now let's end the series with another `<CR>'. The result-
+ing information is somewhat similar to previous forms. But note it will fit on 
+standard 1"x4" labels with one pose per label and room to spare IF your printer 
+also prints compressed elite, etc. A summary should appear on the last label or 
+position. If you don't use the self-stick labels you can use regular paper (you 
+may even turn it over and use the other side!) and cut them up and insert them 
+with the negative in the glassine. You'll never go back to the `old' way.
+
+I hope you feel that up until now this program is definetly worth your while. 
+But here's the "REAL payoff"! If you copied the files as instructed it is just 
+as easy to send the lab a print-out for COMBINED totals by pose number. Simply 
+enter `SMITH.BG' for file #1, `SMITH1' or `SMITH.1' for file #2, `JONES.PAR' 
+(for parents) for file #3, etc. You are limited to FIVE (5) files because [A] 
+that's all that will fit on a 360K floppy, [B] DOS Version 2.xx will normally 
+handle all of them and [C] that's usually adequate for most weddings. The files 
+to be combined must have THE SAME POSES entered--even if there is no reorder 
+quantity for any particular pose. ENTRY OF POSES WITH `Step 2' IN MORE THAN ONE 
+FILE MAY CAUSE ERRATIC, UNRELIABLE BEHAVIOR IF ENTRIES ARE DIFFERENT! The only 
+realistic means I'm aware of is described in detail above. Go back to your 
+original file (from the newly-weds) if you need another file or you'll have to 
+adjust it pose by pose (a LOT longer AND more subject to errors!).
+
+Admitedly, much detail has been covered in this document. Much of it is aimed 
+towards those familiar with BASIC in general but not some of GWBASIC's short-
+cuts; some details that others (as thorough as they are) often ignore or leave 
+you wondering what was meant. I feel things in that regard are starting to look 
+up--but I'm not taking the credit for it! As usually the case, it's much easier 
+than it sounds. Just try it before you enter a "real" project. In fact, the 
+entire program should be easy to use. Once duplicate numbers are eliminated 
+(which is still faster and easier than trying to match prints to negatives from 
+scratch) most weddings can be entered in less than an hour--even when using the 
+nicer-looking `Sandra & Douglas CU' instead of the "generic" `B/G CU'. But I 
+still resort to squeezing more data in the small space I've allowed by using 
+abbreviations for `Close-Up', `Horizontal', `Half-Length', etc. as you have 
+undoubtedly already noted in the example file. If not, take a few minutes and 
+take a peek at it now!
+
+Use the following as a sample run if you just got the registered version and 
+want to have print-outs of files already-created with the earlier version. Yes, 
+the new version should work under those circumstances. In fact you should be 
+able to have print-outs of about 10 or 12 files (that were made before) in 
+album sequence in less than an hour--unless you have a lot of big weddings! 
+Have fun and enjoy the time these programs will save you!
+
+
+
+
+
+                                -*- Page #8 -*-
+
+
+
+
+
+         1. (From Start-Up Menu...)       `3' `<CR>'
+         2. (Open only one file?)         `Y' <CR>
+         3. (Name of file to open?)       `<CR>'
+         4. (For print-out options)       `4'
+         5. (In sequence of negatives?)   `N' `<CR>'
+         6. (To choose B&G's album)       `/' `<CR>'
+         7. (Title of Print-Out)          `Russ & Susan's Album'
+         8. (To end program)              `7'
+         9. (Follow directions to restart--which amounts to back to #1)
+
+                        Optional `Quick Restart' Method
+
+         8. (To abort program)            `<Ctrl-Break'>'
+         9. (To `quick-start' again)      `RUN 100'
+(This takes you to the third step--repeat until all desired files are printed.)
+
+
+                              Placement of Files
+
+The batch files that start with a number (and end with `.BAT') should be placed 
+on the `data' disk that is normally used in drive `B' (or in a subdirectory of 
+drive `C' if you have a hard disk). The portion called by `3'(.BAT) will be 
+able to hold them plus five random files. As mentioned before, this is done via 
+the `SET-UP'(.BAT) file. You may simply indicate them on the label initially 
+for easier recall of them. However, the `GO'(.BAT) file will print a mini-
+directory on your monitor if you put it on your program disk. Note that the 
+`(.BAT)' portion doesn't have to be typed--it's there for your reference. Use 
+the following as a guide to place and execute them and the remaining files.
+
+1.BAT--Place on data disk used in drive `B' to call up WordStar files
+2.BAT--Place on data disk used in drive `B' to start GWBASIC wedding pricing
+3.BAT--Place on data disk used in drive `B' for GWBASIC post-wedding data
+
+GO.BAT--Place on program disk used in drive `A' for directory of `.BAT' files
+SET-UP.BAT--Used to place program on floppies (especially helps newcomers)
+AUTOEXEC.BAT--Place on program disk; automatically calls `GO'(.BAT) @ boot up
+
+README.IST--Enter `TYPE README.1ST' to read initial instructions if same drive
+REORDER.SAM--A sample random file called (by default) within `REORDERS.BAS'
+REORDERS.BAS--Started with `3'(.BAT); the actual program with source code, etc.
+
+WEDPRICE.BAS--Started with `2'(.BAT); the actual program with source code, etc.
+PHOTO1.DOC--This documentation file; print by entering `COPY PHOTO1.DOC LPT1'
+REGISTER.DOC--Provisions for use of programs, registration form, etc.
+
+COMMAND.COM--Part of DOS; used with system disks for routines, etc.
+FORMAT.COM--Called by `SET-UP'(.BAT); a DOS file to format disks, etc.
+ST.COM--For displaying WordStar files on the monitor
+
+
+
+
+
+
+
+
+                            -*- End of Document -*-
+
+
+
+                                -*- Page #9 -*-
+
+
+
+
+
+```
+{% endraw %}
+
 ## REORDERS.BAS
 
+{% raw %}
 ```bas
 10 REM -*- A BASIC PROGRAM TO ASSIMULATE WEDDING REORDER INFORMATION
 20 KEY OFF:COLOR 31,0:CLS:ON PLAY(5) GOSUB 3190:REM -*- OPENING SEQUENCE w/MUSIC
@@ -365,9 +1023,11 @@ machines:
 3210 PLAY "C A G G B G D D G B G A F# G D B G C C E E D C <A <G"
 3220 RETURN
 ```
+{% endraw %}
 
 ## WEDPRICE.BAS
 
+{% raw %}
 ```bas
 10 REM -*-*- COPYRIGHT NOTICE AND VERSION ON OPENING MENU @ RON HERNER
 20 REM -*-*- 221 BROAD STREET, BELLEVUE, OH 44811 * DISTRIBUTION BY PC-SIG 1-88
@@ -746,6 +1406,7 @@ machines:
 3730 FOR P=1 TO 2000:IF INKEY$=""THEN NEXT P
 3740 GOTO 100
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

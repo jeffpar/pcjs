@@ -30,6 +30,40 @@ machines:
     If this sort pattern does not fit your needs, you can customize it.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0917.TXT
+
+{% raw %}
+```
+Disk No:  917                                                           
+Disk Title: ToDo                                                        
+PC-SIG Version: S2                                                      
+                                                                        
+Program Title: ToDo                                                     
+Author Version: 1.70                                                    
+Author Registration: $25.00                                             
+Special Requirements: Printer.                                          
+                                                                        
+Keep a ``things to do'' list in your computer AND in your pocket where  
+you need it.                                                            
+                                                                        
+Each item or activity is a maximum of 38 characters to insure that the  
+printout will fit into a daily diary or ``day-timer''-type format.  TODO
+automatically loads your list of up to 100 items when you run the       
+program and stores any changes you make on the list.  When you finish,  
+TODO sorts your items by due date first, then by priority, then by key. 
+If this sort pattern does not fit your needs, you can customize it.     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0917
 

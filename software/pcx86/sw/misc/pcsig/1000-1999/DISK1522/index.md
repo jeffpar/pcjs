@@ -43,6 +43,59 @@ machines:
     you ALL the possible characters it can print!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1522.TXT
+
+{% raw %}
+```
+Disk No: 1522                                                           
+Disk Title: Printer Control Program - Printer Test                      
+PC-SIG Version: S1.3                                                    
+                                                                        
+Program Title: Print Control Program                                    
+Author Version: 2.0                                                     
+Author Registration: $10.00                                             
+Special Requirements: Printer.                                          
+                                                                        
+PRINT CONTROL PROGRAM (PCP) is a time saver for busy computer users.    
+Memory resident, it gives your PrtScr command all the power of          
+your printer with a few key strokes.                                    
+                                                                        
+Choose to print the entire screen or any rectangular portion of it.  The
+screen segment you choose to print can be enhanced with whatever        
+printing options your hardware can support.  No more stopping to get out
+the printer manual to reprogram printers.  No more swapping print       
+definition files.                                                       
+                                                                        
+Hold down two keys and menus start popping up on screen.  Decision time.
+Will it be compressed, near letter quality, bold or extra bold print?   
+You can underline, change print size and line spacing, print in bold    
+letters, print reverse-screen, change margins and anything else your    
+printer can do.  You can even send control character sequences to the   
+printer from within other programs.                                     
+                                                                        
+PCP is a handy way to enhance reports, make documentation more readable,
+emphasize training material, or just send incredibly attractive memos.  
+Program Title: Prntest                                                  
+Author Version: 05/90                                                   
+Author Registration: $15.00                                             
+Special Requirements: Printer.                                          
+                                                                        
+PRN-TEST provides for testing the complete instruction sets of          
+Centronics 102A printers, standard Okidata printers, or any printer     
+compatible with the IBM graphics printer.  Also, makes your printer show
+you ALL the possible characters it can print!                           
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1522
 

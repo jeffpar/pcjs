@@ -31,6 +31,117 @@ machines:
     circled, and constellations are drawn in with dotted lines upon request.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1103.TXT
+
+{% raw %}
+```
+Disk No: 1103
+Program Title: SILICON SKY version 2.0
+PC-SIG version: 1.1
+
+SILICON SKY is a planisphere that lets you study the night sky as it
+appears in any region of the world, looking in any direction, and as it
+appeared on any date you select.  It offers two viewing options,
+Stars+Solar System Objects and Planetarium.  There's even an optional
+cricket sounds accompaniment!
+
+The program paints the stars on the screen for most horizons.  Then two
+menus are available that lets you request that solar system objects and
+constellations be highlighted.  Specific planets and the moon are
+circled, and constellations are drawn in with dotted lines upon request.
+
+Note: the documentation supplied by the author mentions a version of
+this program for the 8087 chip.  That version of the program is no
+longer distributed on this disk or by PC-SIG.  For more information
+about the 8087 version, contact the author.
+
+Usage:  Astrological.
+
+Special Requirements:  CGA card.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $10.00
+
+File Descriptions:
+
+ANDROMED      Data file.
+ANTLIA        Data file.
+AQUARIUS      Data file.
+AQUILA        Data file.
+ARIES         Data file.
+AURIGA        Data file.
+BOOTES        Data file.
+CAELUM        Data file.
+CANCER        Data file.
+CANES_VE      Data file.
+CANIS_MA      Data file.
+CANIS_MI      Data file.
+CAPRICOR      Data file.
+CARINA        Data file.
+CENTAURU      Data file.
+CGA      BGI  Data file.
+COLUMBA       Data file.
+COMA_BER      Data file.
+CORONA_B      Data file.
+CORVUS        Data file.
+CRATER        Data file.
+CRUX          Data file.
+CYGNUS        Data file.
+EGAVGA   BGI  Data file.
+ERIDANUS      Data file.
+GEMINI        Data file.
+GO       BAT  Batch file to start program.
+HERCULES      Data file.
+HYDRA         Data file.
+INIT     EXE  Initialization program.
+LEO           Data file.
+LEO_MINO      Data file.
+LEPUS         Data file.
+LIBRA         Data file.
+LITT     CHR  Data file.
+LYRA          Data file.
+MFACE    DAT  Data file.
+MONOCERO      Data file.
+MOON     DAT  Data file.
+OPHIUCHU      Data file.
+ORION         Data file.
+PERSEUS       Data file.
+PISCES        Data file.
+PUPPIS        Data file.
+PYXIS         Data file.
+READ     ME   Documentation.
+SAGITTA       Data file.
+SAGITTAR      Data file.
+SCORPIUS      Data file.
+SERPENS_      Data file.
+SEXTANS       Data file.
+SISKY86  CLR  Data file.
+SISKY    CNM  Data file.
+SISKY    DME  Data file.
+SISKY    EXE  Main program.
+SISKY    HRZ  Data file.
+SISKY    XYZ  Data file.
+TAURUS        Data file.
+TRIP     CHR  Data file.
+URSA_MAJ      Data file.
+URSA_MIN      Data file.
+VELA          Data file.
+VIRGO         Data file.
+VOLANS        Data file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1103
 

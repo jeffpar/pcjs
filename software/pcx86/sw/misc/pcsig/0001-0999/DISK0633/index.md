@@ -37,6 +37,7 @@ machines:
 
 ## DRAWPLUS.BAS
 
+{% raw %}
 ```bas
 0 OPO=1:PO=1:X=154:Y=94:CO=3:PCO=15:BS=1:STRIG ON:GOSUB 60000
 1 DIM TIL$(16)
@@ -358,9 +359,60 @@ machines:
 60040 IF STRIG(1)=-1 THEN RETURN
 60050 FOR I=1 TO 20:NEXT I:GOTO 60036
 ```
+{% endraw %}
+
+## FILES.TXT
+
+{% raw %}
+```
+1 REM     **** D R A W  P L U S  and  S E C R E T  Q U E S T  2 0 1 0 ****
+2 REM    *                                                                *
+3 REM   *    Both of these programs require a color/graphics card and      *
+4 REM   *    the draw program requires a joystick.  These programs were    *
+5 REM   *    created on an IBM PC and an IBM PCjr. to insure complete      *
+6 REM   *    compatibility.                                                *
+7 REM    *                                                                *
+8 REM     ****************************************************************
+9 REM
+10 REM  DRAWPLUS.BAS  Pull-down menu style draw program
+11 REM  DRAWPLUS.PIC  Demo picture file created on DrawPlus
+12 REM  HELPPLUS.BAS  Documentation for DrawPlus in BASIC
+13 REM  QUEST.BAS     Secret Quest 2010, text/graphic adventure game
+14 REM  TITLE.PIC     Title picture for Secret Quest displayable by DrawPlus
+15 REM  QUARTERS.PIC  Picture file for Secret Quest 2010
+16 REM  ENDHALL.PIC   Picture file for Secret Quest 2010
+17 REM  CENTER1.PIC   Picture file for Secret Quest 2010
+18 REM  CENTER2.PIC   Picture file for Secret Quest 2010
+19 REM  DININGRM.PIC  Picture file for Secret Quest 2010
+20 REM  BATHROOM.PIC  Picture file for Secret Quest 2010
+21 REM  CENTER3.PIC   Picture file for Secret Quest 2010
+22 REM  WEAPONRM.PIC  Picture file for Secret Quest 2010
+23 REM  ENGINERM.PIC  Picture file for Secret Quest 2010
+24 REM  REACTOR.PIC   Picture file for Secret Quest 2010
+25 REM  HALLWAY.PIC   Picture file for Secret Quest 2010
+26 REM  HALLWAY1.PIC  Picture file for Secret Quest 2010
+27 REM  DEAD1.PIC     Picture file for Secret Quest 2010
+28 REM  SUPPLYRM.PIC  Picture file for Secret Quest 2010
+29 REM  ENDHALL3.PIC  Picture file for Secret Quest 2010
+30 REM  FRONTEND.PIC  Picture file for Secret Quest 2010
+31 REM  DEAD2.PIC     Picture file for Secret Quest 2010
+32 REM  BRIDGE.PIC    Picture file for Secret Quest 2010
+33 REM  TRACTOR.PIC   Picture file for Secret Quest 2010
+34 REM  CARDLOCK.PIC  Picture file for Secret Quest 2010
+35 REM  CARDOPEN.PIC  Picture file for Secret Quest 2010
+36 REM  ALIENRM.PIC   Picture file for Secret Quest 2010
+37 REM  DEAD3.PIC     Picture file for Secret Quest 2010
+38 REM  FREEMATE.PIC  Picture file for Secret Quest 2010
+39 REM  SPACEWAY.PIC  Picture file for Secret Quest 2010
+40 REM  ENDHALL2.PIC  Picture file for Secret Quest 2010
+41 REM  TRANSPOR.PIC  Picture file for Secret Quest 2010
+42 REM  FILES.TXT     File descriptions
+```
+{% endraw %}
 
 ## HELPPLUS.BAS
 
+{% raw %}
 ```bas
 10 SCREEN 1
 11 CLS:KEY OFF
@@ -680,9 +732,11 @@ machines:
 12871 FOR I=1 TO 40:LPRINT:NEXT I
 12890 CLS:GOTO 20
 ```
+{% endraw %}
 
 ## QUEST.BAS
 
+{% raw %}
 ```bas
 0 CLS:LINE INPUT"Make sure CapsLock is active:";A$
 1 REM Secret Quest 2010
@@ -1262,6 +1316,7 @@ machines:
 63050 PRINT:PRINT" ***You have DIED!***"
 63060 GOTO 62000
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

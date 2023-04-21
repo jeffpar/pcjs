@@ -33,6 +33,43 @@ machines:
     to the fun.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2014.TXT
+
+{% raw %}
+```
+Disk No: 2014                                                           
+Disk Title: Crazy Shuffle                                               
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Crazy Shuffle                                            
+Author Version: 1.0                                                     
+Author Registration: $20.00                                             
+Special Requirements: None.                                             
+                                                                        
+Test your memory and concentration skills, no matter what age you are.  
+Match colorful cards with other cards or try to match a card with an    
+associated word.                                                        
+                                                                        
+CRAZY SHUFFLE can be a joyful learning experience for young children, an
+educational program for teens and pre-teens and yet provide a formidable
+challenge to adults.  Select three different games, with five levels of 
+difficulty and three collections of pictures.                           
+                                                                        
+The game is menu-driven, provides score-keeping, has on-line help and   
+optional mouse support.  Variable speed control and great graphics add  
+to the fun.                                                             
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2014
 

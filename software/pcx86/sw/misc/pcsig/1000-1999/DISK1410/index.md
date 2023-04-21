@@ -29,6 +29,135 @@ machines:
     quality output, it's worth the effort.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CONTENTS.TXT
+
+{% raw %}
+```
+menudemo.exe  -  program to demonstrate menushow
+menumake.exe  -  program to create an ASCII file for menushow.exe
+menushow.exe  -  program that generates MENU from ASCII file
+menusho1.exe  -  used by menushow to run user selected program
+menu          -  sample ASCII menu file
+check.bat     -  used by menudemo
+direct.bat    -  used by menudemo
+user.bat      -  used by menudemo
+menumod       -  sample ASCII menu file (menu modified)
+contents.txt  -  lists files on diskette
+menushow.man  -  manual explaining how to use menushow and
+                 and menumake
+brun30.exe    -  required to run all .exe files above
+```
+{% endraw %}
+
+## FILE1410.TXT
+
+{% raw %}
+```
+Disk No: 1410
+Program Title:  MENU SHOW
+PC-SIG version: 1
+
+The PC programmer who needs a way to create professional menus will
+enjoy the colorful presentation of MENU SHOW.  A viewer-paced demo shows
+how ASCII files are created and converted into a menu with the nice
+finishing touches you admire.  MENUMAKE will take you by the hand and
+show you how to create your own ASCII files.  MENUSHOW will then convert
+those files into a very attractive menu.  While not recommended for the
+novice, it is well within the capability of programmers with mid-range
+skills.  For those who want quality output, it's worth the effort.
+
+Synopsis: Colorful menumaker for the PC programmer of mid-range skill
+level.  An attractive demo walks through the creation of ASCII files for
+the final menu.
+
+Usage:  Menumaker.
+
+Special Requirements:  None.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $35.00
+
+File Descriptions:
+
+BRUN30   EXE  Enables .EXE Files to Run.
+README   DOC  Text of Initial Instruction.
+MENUMOD       Sample ASCII File for Demo (menu modified).
+MENUDEMO EXE  Demo Program.
+MENU          Sample ASCII File.
+CONTENTS TXT  Lists Disk Files for Demo.
+MENUMAKE EXE  Program Creates ASCII Files.
+CHECK    BAT  Batch Command for Demo.
+DIRECT   BAT  Batch Command for Demo.
+MENUSHOW EXE  Program Generates Menu from ASCII File.
+MENUSHOW MAN  Text of MENUSHOW Program Manual.
+MENUSHO1 EXE  Program Allows User to Run Programs Listed in Menus.
+USER     BAT  Batch Command for Demo.
+
+PC-SIG
+1030D E. Duane Avenue
+Sunnyvale, CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+WELCOME TO SUPERIOR SOFTWARE INC.'s  MENUSHOW  - a Menu Generator
+
+Instructions:
+1) log on to drive A:
+2) type MENUDEMO and ENTER
+3) watch the show!
+
+To register:
+send $25.00  to
+
+Superior Software, Inc.
+9685 Huntington Park Drive
+Strongsville, OH  44136
+
+
+
+
+For technical help call:    (216) 572-1045
+
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1410
 

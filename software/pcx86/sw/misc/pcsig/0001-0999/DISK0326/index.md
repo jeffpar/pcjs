@@ -72,6 +72,7 @@ machines:
 
 ## EMBEDDED.BAS
 
+{% raw %}
 ```bas
 10 '  SOURCE: CREATIVE COMPUTING [MAY 1982] page 198
 20 '  AUTHOR: Will Fastie
@@ -96,9 +97,684 @@ machines:
 270 LPRINT NORMAL$;DASHES$;CHR$(14);X$;CHR$(20);DASHES$;NORMAL$
 280 END
 ```
+{% endraw %}
+
+## FASTPRT.DOC
+
+{% raw %}
+```
+                                FASTPRT 2.0
+                     (c) Copyright J. Craig Hill, 1982,1983
+
+
+         INTRODUCTION
+
+         FASTPRT is a speed-up utility for the PrtSc function on the
+         IBM Personal Computer and IBM Personal Computer XT.
+
+         For all printers, it allows you to terminate an active PrtSc
+         operation early (if you've seen enough or changed your mind,
+         for instance).
+
+         For printers which don't have the foresight to ignore trailing
+         blanks and empty lines, FASTPRT provides this capability for
+         them. This look-ahead feature allows a screen with trailing
+         blanks and blank lines to print in a fraction of the time it
+         takes if all these extraneous blanks have to be "printed".
+
+         It has been tested under DOS 1.00 through 2.0.
+
+         COPYING AND SHARING
+
+         The FASTPRT diskette is not copy protected.  You may make as
+         many backup copies of it as you wish.
+
+         You are encouraged to copy and share this product with your
+         friends.  However, you may not charge a fee for copying or
+         distributing this product without an express written
+         aggreement with SUNBELT COMPUTING, 1274 N. Emory Place, NE,
+         Atlanta, Ga. 30306.
+
+         If you have received a copy of this product from a friend and
+         plan to use it, your contribution will be appreciated.  The
+         recommended contribution is $10 or 10 cents for every minute
+         it  will  save  you  for the next 5 years, whichever is lower.
+         Send your contribution to:
+
+                                SUNBELT COMPUTING
+                              1274 N. Emory Pl., NE
+                               Atlanta, Ga. 30306
+
+
+..page
+..head03cFASTPRT
+..formatvwform2.doc
+         INSTALLATION
+
+         To install FASTPRT manually, simply insert your FASTPRT
+         diskette in the default drive and type FASTPRT.  FASTPRT
+         becomes an extension to DOS and remains available until you
+         turn off your machine or press Ctrl-Alt-Del.
+
+         If you would like FASTPRT to be available whenever DOS is
+         loaded, use the following procedure with all your system
+         diskettes (i.e., any diskette(s) you might place in drive A
+         before you start or restart DOS):
+
+            1. Make sure you are in DOS command mode and the default
+               drive is drive A (The prompt A> should be displayed on
+               your screen).
+
+            2. Insert your system diskette in drive A. (Be sure to
+               remove the write protect tab before insertion.) If you
+               have a 2 drive system, insert the FASTPRT diskette in
+               drive B. If you have a single drive system, insert the
+               system diskette whenever you are prompted to "insert
+               diskette for drive A" and insert the FASTPRT diskette
+               whenever you are prompted to "insert diskette for drive
+               B".
+
+            3. If your system diskette contains DOS 1.0 or 1.1, type
+               in:
+
+                        DIR AUTOEXEC.BAT
+
+                  a. If the message "File not found" appears on the
+                     screen, type in:
+
+                        B:INSTALL AUTO A
+
+                  b. Otherwise (i.e., AUTOEXEC.BAT appears as a valid
+                     file), type in:
+
+                        B:INSTALL ADD A
+
+            4. If your system diskette contains DOS 2.0 or above, type
+               in:
+
+                        B:INSTALL TWO A
+
+
+            5. If you start DOS 2.0 or above from a fixed disk, type
+               in:
+
+                        B:INSTALL TWO d
+
+               where d is the correct drive designator for your system
+               disk.
+
+         FASTPRT will now be installed automagically whenever you start
+         or restart DOS.
+..page
+         OPERATION
+
+         Once FASTPRT is installed, you start copying your screen to
+         the printer the same way you did before.  Just press the PrtSc
+         key while holding down either the right or left shift key.
+
+         If you want to stop printing before the entire screen has been
+         printed, just press the same shift-PrtSc combination again.
+         Printing will stop at the end of the line currently being
+         printed.
+
+         DOCUMENTATION
+
+         A copy of the documentation for FASTPRT is located in the file
+         FASTPRT.DOC on the FASTPRT diskette.  To print a copy press
+         the PrtSc key while holding down the Ctrl key.  Then type in:
+
+                                TYPE FASTPRT.DOC
+
+         ORDERING
+
+         Additional copies of FASTPRT may be ordered from SUNBELT
+         COMPUTING for $10 plus $5 to cover the costs of the diskette
+         and shipping.  In addition, as our time and resources permit,
+         we will supply you with a copy of FASTPRT on a try-it-first,
+         buy-it-if-you-find-it-useful basis if you send us a
+         pre-formatted, single sided diskette and a self-addressed,
+         stamped mailer.  Address all orders and inquiries to SUNBELT
+         COMPUTING, 1274 N. Emory Place, NE, Atlanta, Ga. 30306.
+
+         NOTE TO USERS OF THE GRAPHICS COMMAND UNDER DOS 2.0
+
+         FASTPRT will work in conjunction with the GRAPHICS command
+         that is available to users of DOS 2.0 and above.  FASTPRT will
+         handle the Shift Prt-Sc function if your display is in text
+         mode, and GRAPHICS will handle it if your display is in
+         graphics mode.  Please note that the ability to terminate a
+         Prt-Sc function prior to completion is not available when
+         GRAPHICS is in control.
+
+```
+{% endraw %}
+
+## FILES326.TXT
+
+{% raw %}
+```
+Disk No  326
+Program Title: EPSON PRINTER UTILITIES
+PC-SIG version 2.1
+
+A super collection of printer utilities for the popular Epson series,
+this one especially good for the setup and applications of the Epson
+FX-80 printer.  You can get special, italics, doublestrike and
+compressed characters, print mailing labels and much more.
+
+Worthy of your attention: the DISKMASTER utility prints disk labels on
+5x1 7/16 inch label stock.  This size label just fits on the top of a
+standard 5 1/4 inch disk.  The program supports EPSON, IBM and OKIDATA
+printers with plug-n-play.  Many options are provided.  Also, for those
+of you into banners, SIDEWAYS and POSTER are certainly worth playing
+with.
+
+Usage:  Epson Printer Utilities.
+
+Special Requirements:  An Epson printer.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $10.00 for FASTPRT, $25.00 for JUSTIFY, $10.00
+for PRTPAGE.
+
+File Descriptions:
+
+BUZOFF   COM  Checks for printer
+COLRVIEW EXE  Print & display text file in color
+EMBEDDED BAS  Basic prog to demonstrate embedded print attributes
+FASTPRT  COM  Resident speed up for PrtSc utility
+FASTPRT  DOC  Documentation for FASTPRT.COM
+FORMFEED COM  Set prnter to top of form from DOS, batch file, Wordstar, etc.
+FORMFEED DOC  Documentation for FORMFEED.COM
+FSPOOL   COM  Resident prog to redirect parallel prntr output to disk
+FSPOOL   DOC  Documentation for FSPOOL.COM
+FXPR4    DOC  Epson FX-80 utility to change print font sizes & styles
+FXPR4    EXE  Documentation for FXPR4
+GRAF     COM  print IBMPC graphics on bit-plot printers
+GRAF     DOC  Documentation for GRAF.COM
+JUST-LQ  EXE  Micro-justification file printer for EPSON LQ-1500
+JUSTIFY  DOC  Documentation for JUSTIFY.EXE
+JUSTIFY  EXE  Print justified copy on low priced printers with graphics cap.
+LABEL    EXE  Prints  n 5 line labels
+P        COM  Powerful prntr utility - compress, double, italics, etc. etc.
+PERFSKIP COM  IBM or MX-80 printer utility to skip n lines over perforation
+PERFSKIP DOC  Documentation for PERFSKIP.COM
+PLOTTER  BAS  Basic prog to plot graphs - linear, parabolic, trig., comb.
+POSTER   BAS  Large poster maker. Puts your message on printer sideways.
+PRINTES1 BAS  Printer test returns printer speed char/sec lines/min
+PRINTFIX COM  Possible fix for bad print - character/lines dropped
+PRINTFIX DOC  Documentation for PRINTFIX.COM
+PRTPAGE  DOC  Documentation for PRTPAGE.EXE
+PRTPAGE  EXE  Print with pagination - spool to disk, line numbering, etc.
+SCNMAP   BAS  produces paper chart of 40 or 80 col screen Epson MX-80
+SCNMAP   DOC  Documentation for SCNMAP.BAS
+SETPRN   COM  Printer utility for IBMPC- set prn param from DOS or batch
+SETPRN   DOC  Documentation for SETPRN.COM
+SIDEWAYS EXE  Prints a disk file sideways on printer
+SWPTR    COM  Swaps printer LPT1: with printer LPT2:.
+SWPTR    DOC  Documentation for SWPTR.COM
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## FORMFEED.DOC
+
+{% raw %}
+```
+
+Use FORMFEED.COM to set printer to top of form from DOS, a batch file, WordStar,etc.
+
+```
+{% endraw %}
+
+## FSPOOL.DOC
+
+{% raw %}
+```
+                        SPOOL COMMAND DOCUMENTATION
+ 
+The SPOOL command allows you to redirect output which would normally be sent to
+a parallel printer and store it in a disk file. This might be useful if you
+plan to later send the file over a modem to another computer for printing.
+SPOOL is invoked as follows:
+ 
+        SPOOL <filename>
+ 
+Where <filename> is the file into which the print data is to be placed.  The
+file need not exist, but if it does, it will be deleted and recreated. Once
+SPOOL has been invoked for the first time the message:
+ 
+        SPOOL INSTALLED
+ 
+will appear and the command portion will exit, leaving behind a permanant
+printer interrupt handler built-in to DOS.  Output directed to the printer will
+be directed to the file until an error occurs or the disk containing the file
+becomes full (in this case an error message will be displayed and the file is
+closed).
+ 
+At any time the user may stop the spooling process and redirect printer output
+to the printer by typing:
+ 
+        SPOOL
+ 
+with no filename.  SPOOL may be restarted at any time again as described above
+(but the permanent part remains resident even when it has been disabled).
+ 
+SPOOL works with DOS 2.0 (other versions of DOS may work, but they have not
+been tested).  It uses about 4K of memory once installed.  Because of a DOS
+version dependent patch it is possible to use the PrtSc key with SPOOL but
+this is sometimes a risky business!  SPOOL should work with most word
+processors just fine, however.
+ 
+This program is provided as is and no warrantee, expressed or implied, is
+made as to its usefulness for any intended purpose or its reliability. The
+author and the University of California are not liable for any loss resulting
+from the use of this program.
+ 
+                Don D. Worth
+                UCLA/OAC
+                1/11/84
+ 
+
+```
+{% endraw %}
+
+## FXPR4.DOC
+
+{% raw %}
+```
+
+
+
+==================================================
+       FXPR4.DOC  08/22/83   T. E. McCormick
+==================================================
+
+
+   FXPR4 is a printer setup utility program for the
+Epson FX-80 (160 cps) printer.	It is useful for
+changing the character fonts, boldness, pitch,
+vertical lines per inch, etc. quickly with a single
+command line such as  FXPR4 RESET P12 LEFTM 5 SKIP.
+
+   Gary Novosielski wrote PRINTER.C (c) 1982 for the
+MX-80.	This program was derived from that one,  and
+Gary's approach was simple extended to other features,
+and some minor changes were made to convert it from
+CP/M BDS C to IBM PC DOS 2.0 Lattice C.  Both authors
+have copyrighted their versions, and sale or commercial
+use is forbidden without the authors' consent in writing.
+
+   The program is offered by the authors without charge
+to individuals for their personal use only.
+
+   If you have an MX with graftrax plus, you may
+be able to use this utility for most functions.
+
+   The purpose of this program is quickly set several
+options with a single command from the system prompt.
+
+
+
+
+
+
+	     PURPOSE OF THE PROGRAM:
+
+	From a single command, several printer
+option commands may be sent to the FX-80.
+
+	The Epson printers have an extremely wide
+range of software selectable print font sizes and
+styles (called modes).	Line width, characters per
+inch, lines per vertical inch, print intensity,
+tab stops, style (pica, elite, italics, etc.),
+left/right margin settings, and "global" commands
+to perform several commonly used settings such as
+for letter writing in pica, elite or proportional
+can readily be set with a quick keyboard entry.
+
+	It is clearly not convenient to go into
+BASIC or any other indirect means of sending those
+commands out the printer port.	This program gets
+the job done with a single command.
+
+   The Epxon FX-80 includes the "graftrak" option as
+standard, and implements some new features in
+addition to the 160 charater per second speed. Pin
+addressing commands, and many advanced features are
+not included in this program but you may be add them
+since the source file is available.
+
+   FXPR4 will compile under  Lattice C ver 1.03 and
+IBM PC DOS version 2.0.
+
+   Simply entering  FXPR4  will cause a menu
+of options to be displayed.  These can be used as
+parameters following  FXPR4  the next time it is
+entered.
+
+
+   That menu appears as:
+
+FXPR4 for Epson FX  (c) Tom McCormick  05/01/83
+      from PRINTER.C (c) 1982 G.P. Novosielski
+FXPR4 <opt> [<opt>.....]   where <opt> may be:
+					      
+RESET	   QUIET       PITCH 10    PITCH 17	DOC
+LPI3	   LPI4        LPI5	   LPI6 	DOC1
+LPI8	   LPI10       LPI12	   PLINCH 1-22	DOC1S
+WIDTH 80 [....or any value between 2 and 137 ]	DOC8
+SKIP	   NOSKIP      EJECT	   TABS n n n	DOC8S
+PROPOR	   DRAFT       TEXT		      
+PICA	   ELITE       ITALIC	   LEFTM  n   
+TINY	   TINYER      ROMAN	   RIGHTM n   
+LTRITA	   LTRITB      LTRELI		      
+EMPHAS	   CONDEN      ENLARG	   DOUBLE     
+XEMPHA	   XCONDE      XENLAR	   XDOUBL     
+Various pitches (CPI) and bold or very bold...
+ P5	P6	      P10     P12     P17     
+ P5B	P6B    P9B    P10B    P12B    P17B    
+ P5VB	P6VB   P9VB   P10VB		      
+					      
+\n  Example: FXPR4 RESET LPI6 PITCH 10 ELITE  
+
+
+There are more than 50 keyword options, and God knows how many combinations.
+They have NOT all been tested !!  Be aware that the FX-80 treats various
+combinations as toggles, or serially.  Some features have priorities
+with regard to others, and some negate others.	The 150+ page manual has
+several tables that will help, but you will have to experiment a little too.
+
+It is a good idea to use RESET as your first keyword to "baseline" the
+subsequent commands.  If you don't, you may simply be adding new parameters
+to the previous mix of them.
+
+The "RESET" command mentioned above will reset ALL modes to the power-on
+configuration you have chosen via the DIP switches at installation.
+
+
+	       FXPR4  PROGRAM OPTIONS:	ENTER ONE OR MORE
+
+	CONDEN	Condensed print mode
+	CONDEN ENLARG Condensed/enlarged mode at 6 characters per inch.
+	DOC	Global: RESET LPI6 ELITE LEFTM 8 RIGHTM 95 DOUBLE
+	DOC1	Global: RESET LPI6 ELITE LEFTM 8 RIGHTM 95 (single intensity)
+	DOC1S	Global: RESET LPI6 ELITE LEFTM 8 RIGHTM 95 skips over perf
+	DOC8	Global: RESET  LPI8 ELITE LEFTM 8 RIGHTM 95 eight lines per in
+	DOC8S	Global: RESET  LPI8 ELITE LEFTM 8 RIGHTM 95 skips over perf
+	DOUBLE	Double-strike mode: strikes each char twice to darken.
+	DRAFT	Cancels any double-strike mode, or super/sub scripting.
+	EJECT	Sends printer to top of next page.
+	ELITE	Elite type style
+	EMPHAS	Emphasized printing
+	ENLARG	Large lettering
+	ITALIC	Print in Italic style.
+	LEFTM	LEFTM n   sets left  margin to n column position
+	LPI	LPI n  (where n = 3 to 216) will cause the vertical
+		spacing to be n/216 inches per line......
+		    7 LPI = 31	  9 LPI = 24   11 LPI = 20.
+	LPI3	Three  lines per inch vertical spacing
+	LPI4	Four   lines per inch vertical spacing
+	LPI5	Five   lines per inch vertical spacing
+	LPI6	Six    lines per inch vertical spacing
+	LPI8	Eight  lines per inch vertical spacing
+	LPI10	Ten    lines per inch vertical spacing
+	LPI12	Twelve lines per inch vertical spacing
+	LTRELI	Global command for RESET ELITE	P12  WIDTH 132	Normal
+	LTRITA	Global command for RESET ITALIC P12  WIDTH 132	Normal
+	LTRITB	Global command for RESET ITALIC P12B WIDTH 132	Bold
+	NOSKIP	The perforation will not be skipped over with blank lines.
+	P5	Pitch 5  characters to an inch horizontally
+	P5B	Pitch 5  and bold
+	P5VB	Pitch 5  and very bold
+	P6	Pitch 6  characters to an inch horizontally
+	P6B	Pitch 6  and bold
+	P6VB	Pitch 6  and very bold
+	P9B	Pitch 9  and bold  (Note: there is no P9)
+	P9VB	Pitch 9  and very bold
+	P10	Pitch 10 and normal intensity
+	P10B	Pitch 10 and bold
+	P10VB	Pitch 10 and very bold
+	P12	Pitch 12 and normal intensity
+	P12B	Pitch 12 and bold
+	P17	Pitch 17 and normal intensity
+	P17B	Pitch 17 and bold
+	PICA	Pica type style
+	PITCH	Characters per inch:  PITCH 10	or  PITCH 17 are valid.
+	PLINCH	Set page length in inches ( 1 - 22 ); PLINCH 11
+	PROPOR	Proportional spacing of letters (horizontally).
+	QUIET	Slow to 80 char per second (half speed) to quiet operation.
+	RESET	Cause printer to return to power-on option settings.
+	RIGHTM	RIGHTM n  sets right margin to n column position
+	ROMAN	Print in Roman	style.
+	SKIP	Skip over perforation specifying 6 lines.
+	TABS	Sets horizontal tab positions:	TAB n n n
+	TEXT	From original program.
+	TINY	Subscript sized, 10 lines per inch,  93 lines per 11" page,
+		skips over perf leaving one inch bottom margin.
+		LEFTM / RIGHTM may be used after TINY.
+	TINYER	Subscript sized, 12 lines per inch, 108 lines per 11" page,
+		skips over perf leaving one inch bottom margin.
+		LEFTM / RIGHTM may be used after TINYER.
+	WIDTH	WIDTH 80  or  [..any value between 2 and 137 ].
+	XCONDE	Cancels condensed mode.
+	XDOUBL	Cancels double-strike mode.
+	XEMPHA	Cancels emphasized mode.
+	XENLAR	Cancels enlarged mode.
+
+
+	The following print lines are useful in various combinations
+	to test FXPR4x after your modifications.....................
+
+
+
+LINETEST
+	 1	   2	     3	       4	 5	   6	     7
+12345678901234567890123456789012345678901234567890123456789012345678901234567890
+
++++++++++1+++++++++2+++++++++3+++++++++4+++++++++5+++++++++6+++++++++7++++++++++++++++++++++++96+++++++++++++++++++++120+++++++++132  137
+
+
+ABCDE abcde @#$%&?
+
+
+
+
+ABC abc @#$
+
+
+
+
+
+
+XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+This is lllllower case. 1111111111
+THIS IS UUUUUPPER CASE. 2222222222
+IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww
+WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+
+All lines have same # characters..
+
+
+
+=-=-=-=-=-=-=-=-=-= end of FXPR4.DOC =-=-=-=-=-=-=-=-=-=-=
+
+
+
+
+        This disk copy was originally provided by "The Public Library",
+        the software library of the Houston Area League of PC Users.
+ 
+        Programs are available from the Public Library at $2 per disk
+        on user-provided disks.  To get a listing of the disks in the
+        Public Library, send a self-addressed, stamped envelope to
+
+             Nelson Ford,  P.O.Box 61565,  Houston, TX 77208.
+
+```
+{% endraw %}
+
+## GRAF.DOC
+
+{% raw %}
+```
+********************************************************************
+*                 NEW IMPROVED -- GRAFTRAX.COM v3.1                *
+********************************************************************
+
+GRAF.HEX, and GRAF.ASM are for printing IBMPC graphics on bit-plot
+printers.  The program as delivered works with EPSON GRAFTRAX (tm) and
+IBM GRAPHICS(tm) printers, but can be modified to work with others, such
+as the C.ITOH 8510a.
+
+GRAF640 represents the latest version of the program.  It does everthing
+the old one does and now does high-res. graphics much more clearly.
+This version has some small changes, including some to insure
+compatibility with future versions of DOS, but the main improvement is
+correct handling of the high-resolution 640x200 graphics mode.  GRAFTRAX
+originally was created to reproduce medium resolution color graphics.
+
+GRAFTRAX.COM is created by running GRAF.HEX through a hex-converter
+program and is run from DOS.  The program announces itself and will
+remain a part of your system until reset or power down.  Once run, the
+Shift+PrtSc keys will work as always with text on the screen, sending it
+to the printer.  If you have graphics running on the screen and GRAFTRAX
+in your printer, the screen can be sent to the printer in two ways.  A
+small (5 1/4 x 3 1/4) print with the RIGHT-Shift+PrtSc keys, and LARGE
+(almost a full 8 1/2 x 11 page) print with the LEFT- Shift+PrtSc keys.
+
+CGRAF.BAS is a demo program showing how to call GRAFTRAX.COM from a
+BASIC program.
+
+GRAF.ASM is the source code for GRAFTRAX.COM.  With the IBM MACRO-
+ASSEMBLER(tm) it will produce GRAFTRAX.EXE.  Conditional compilation
+allows easy assembly for the C.ITOH 8510a or other printers with bit-
+plot capabilties.  The first part of the listing explains the history of
+the program and explains how to assemble for other printers.
+
+Please remember that GRAF.HEX must be converted to .COM format by a
+program like HEXCONV.BAS, HC.COM, or another that works in a similar
+manner.  Don't try to run GRAF.HEX by itself as you will be
+disappointed.
+
+     GRAFTRAX.COM works just fine with DOS 2.0.
+
+     Program by:
+Marty Smith            COMPUSERVE 72155,1214
+310 Cinnamon Oak Lane  (713) 661-1241 (Office)
+Houston, Texas  77079  (713) 464-6737 (Home)
+4/21/84
+
+```
+{% endraw %}
+
+## JUSTIFY.DOC
+
+{% raw %}
+```
+
+                            COMFAX JUSTIFY PROGRAM 
+
+                          Copyright (c) 1984 ComFax 
+
+     This program gives many popular, low-priced printers the capability of
+producing justified copy (i.e., flush left AND RIGHT margins), a feature
+normally found only on expensive printers.  While many justification programs
+add space only between words -- and then only in increments of 1/10 inch --
+ours adds space evenly between words AND between LETTERS in increments of 1/120
+inch!  This maintains the normal word-space to letter-space ratio regardless of
+the total amount of space added in each line.  The result is a professional
+appearing document with no awkward gaps between words.
+
+     This program was written for use on the IBM-PC or any compatible unit.  It
+also requires a printer with graphics capability.  The following printers are
+supported:  IBM, EPSON FX80, EPSON RX80, EPSON MX80, STAR MICRONICS GEMINI 10X,
+STAR MICRONICS GEMINI 15X, STAR MICRONICS DELTA 10, AND STAR MICRONICS DELTA
+15.
+
+     When creating a file that you may want to print with this program, a line
+will not be justified if either of the following conditions is true:
+
+     1.  The first seven columns after the left margin are blank.
+
+     2.  The last eighteen columns before the right margin are blank.
+
+     Also, if you will want the printer to skip to a new page before the
+current one is full, simply key in a form-feed (ALT-1-2) in any position of a
+line.  This character position will not apprear in the printed line, and the
+next character will overlay this position. However, the printer will skip to a
+new page after this line, and the line counter will be reset to zero.
+
+To execute this program:
+
+     1.  Key 'JUSTIFY`
+     2.  Hit Enter
+     3.  Answer the prompts.  To use a default (enclosed in '<>'), simply hit
+Enter.  
+
+     The margins MUST be set the same as when you keyed the document.
+Otherwise, the program will not work correctly. If you want to change the
+margins within your document, key the instructions below into your file just
+BEFORE the location of each change.  You may change the margins as many times
+as you like within your document.  However, the instructions MUST start at the
+CURRENT LEFT MARGIN, and the RIGHT MARGIN INSTRUCTION MUST BE LISTED FIRST.
+Also, the text in your file MUST NOT extend beyond the margin positions you
+specify in the instructions.  The following instructions would set the margins
+at positions 75 (right) and 6 (left):
+
+..RMARG75
+..LMARG6
+
+     A path may be specified in the file name.  If it is, the program will
+restore the old path after it opens the file.
+
+ Examples of file names: 
+
+   B:\SUBDIR1\SUBDIR2\FILE1.EXT (WITH PATH)
+
+   \SUBDIR1\SUBDIR2\FILE1.EXT (WITH PATH)
+
+   B:FILE1.EXT (WITHOUT PATH) 
+
+   FILE1.EXT (WITHOUT PATH)
+
+     To print this tutorial with the COMFAX JUSTIFY PROGRAM, execute "JUSTIFY"
+and reply to the prompts.  Take the default (just hit Enter) on all except the
+file name.  For file name, key in "TUTORIAL".
+
+    You are permitted to reproduce and keep an unpaid-for copy of your user`s
+group library master of this program for up to two weeks  for the purpose of
+evaluating this software, provided the copyright notice at the top of this
+tutorial is included, without infringing our copyright.  If after two weeks you
+do not wish to keep it, simply destroy your copy of this program and owe us
+nothing.  However, if you like it well enough to keep it, please remit $25 (if
+10 or more of your group decides to keep it, take a 20% quantity discount and
+send only $20 per copy kept) to:
+
+                                    ComFax
+                                 P.O. Box 3523
+                               Wichita,KS 67201
+
+       (Now to read the tutorial for LINEBUG, the file name is TUTOR2.)
+
+                     *KEEP COSTS DOWN...SUPPORT TRUSTWARE*
+
+```
+{% endraw %}
 
 ## PLOTTER.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF
 20 W%=40
@@ -187,9 +863,11 @@ machines:
 7100 FOR I%=0 TO 30:X(I%)=I%:Y1(I%)=3*I%:Y2(I%)=((I%-15)/1.5)^2:Y3(I%)=50+50*SIN(I%/2):NEXT I%
 7101 LABL$="COMBINATION PLOT":K%=999:GOTO 5000
 ```
+{% endraw %}
 
 ## POSTER.BAS
 
+{% raw %}
 ```bas
 10 DEFINT A-Z
 20 KEY OFF
@@ -1604,9 +2282,11 @@ machines:
 4084 DATA 90,705,25
 4256 DATA 0,0,0
 ```
+{% endraw %}
 
 ## PRINTES1.BAS
 
+{% raw %}
 ```bas
 10 'PRINTER SPEED TEST
 20 'ADAPTED FROM PC MAGAZINE ISSUE OF 10/83
@@ -1668,9 +2348,50 @@ machines:
 580 PRINT
 590 RETURN
 ```
+{% endraw %}
+
+## PRINTFIX.DOC
+
+{% raw %}
+```
+
+MAY CURE PROBLEM OF CHARACTERS/LINES BEING DROPPED BY PRINTER
+OR DEVICE TIME OUT WHEN PRINTER BUFFER IS FULL.
+
+IF YOU ARE HAVING SUCH PROBLEMS, ENTER "PRINTFIX" FROM THE DOS PROMPT
+BEFORE RUNNING YOUR PROGRAM.
+
+```
+{% endraw %}
+
+## PRTPAGE.DOC
+
+{% raw %}
+```
+PRint with pagination (V 1.0) (C) Copyright (04 Nov 1983). Serial #000100.
+   by Daniel M. O'Brien, 1601 Burlington, Lisle, IL  60532
+
+ This is User-Supported Software. A contribution (10 dollars suggested) will be
+ appreciated if you find this software useful. In any case, you are encouraged
+ to copy this program and share it with others.
+
+Usage: pr file +s'sfile' -p +n -h +h'H' +oK +lK +wK
+       file  : print file as drive:name.ext
+       +s    : spool to sfile instead of to printer
+             : (sfile as drive:name.ext)
+       -p    : do not pause for top-of-form adjust
+       +n    : provide line numbering
+       -h    : suppress header of date, time, file
+       +h'H' : use H as part of header instead of file
+       +oK   : offset from left by K blanks (default K=0)
+       +lK   : page length is K lines (default K=66)
+       +wK   : width of line is K chars (default K=80)
+```
+{% endraw %}
 
 ## SCNMAP.BAS
 
+{% raw %}
 ```bas
 1 ' (PC)^3 Software Submission SCNMAP authored on February 4, 1983 by
 2 '
@@ -1761,6 +2482,132 @@ machines:
 17100 LPRINT CHR$(12);:ON ERROR GOTO 0:RUN
 17200 '         SAVE"scnmap.bas",a
 ```
+{% endraw %}
+
+## SETPRN.DOC
+
+{% raw %}
+```
+
+ ---------------------------------------------------------------------------- 
+| * SETPRN *  A printer utility for the IBM PC & PC-XT.  V. T. Bly  12/11/83 |
+ ----------------------------------------------------------------------------
+
+SUMMARY
+-------
+      SETPRN provides an easy method of setting printer parameters from the
+  DOS command level or a batch file.  SETPRN is similar to the BASIC LPRINT
+  command, except that control codes are enclosed in square brackets ("[]")
+  instead of the "CHR$()" used in BASIC.  Also, text strings should not be
+  enclosed in quotes.  Like LPRINT, the normal carriage return/line feed can
+  be suppressed by a trailing semicolon (";") or comma (",").  A trailing
+  semicolon will leave the print head at the end of the just printed text,
+  while a comma will advance the print head to the next tab stop.
+
+
+EXAMPLES
+--------
+      The following examples assume that the file SETPRN.COM is on the
+  default disk drive.  Note that "<enter>" means that you should press
+  the enter/return key after typing the command. 
+ 
+ SETPRN Testing 0123456789 <enter>
+	This command will simply print the string "Testing 0123456789" on
+	the printer and drop down to the next line.
+ 
+ SETPRN Merry Christmas; <enter>
+	This command will print the string "Merry Christmas" on the printer,
+	but NOT drop down to the next line.  Notice the trailing ";" which
+	suppresses the carriage return/line feed.  On some printers, "Merry
+	Christmas" may not actually be printed until an output is sent to
+	the printer which contains a carriage return.
+ 
+ SETPRN [27]E; <enter>
+	This command will send Escape E to the printer.  This sequence turns
+	on emphasized printing on the IBM and Epson dot matrix printers.
+ 
+ SETPRN [27]!Boldface Title[27]" <enter>
+	This command will print the string "Boldface Title" in boldface on
+	the C. Itoh and NEC dot matrix printers and drop down to the next
+	line.  With these printers, Escape ! starts boldface printing and
+	Escape " stops boldface printing.  Note that the quote symbol (") may
+	be included in the SETPRN command line, just like any other character.
+
+
+NOTES
+-----
+      Any printable character may be included in the SETPRN command line
+  except the left square bracket ("["), which is used as the prefix to a
+  control code.  This character may be included by enclosing its ASCII code
+  (91) between square brackets; that is "[91]".
+
+      SETPRN should work correctly on any IBM compatible computer operating
+  under MS-DOS.  It should work with any version of MS-DOS, including 1.0,
+  1.05, 1.1, 2.0, and 2.1.
+
+      Please send your comments to:  Vincent Bly
+				     Post Office Box 409
+				     Ft. Belvoir, VA  22060
+```
+{% endraw %}
+
+## SWPTR.DOC
+
+{% raw %}
+```
+			   SWAP PRINTERS COMMAND
+
+			Written by Thomas M. Rowlett
+
+
+
+     The Swap Printers (SWPTR) Command provides the capability to logically
+swap the printer defined as LPT1: with the printer defined as LPT2:.  This
+can be very useful to IBM PC owners who have printers connected to the two
+(2) parallel ports of their PCs.  I developed the assembly language program
+so that I could easily use either one of my two printers with many of my
+application programs that use LPT1: exclusively, without having to recable
+the printers or use an A-B Switch Box every time I wanted to swap them.
+
+     An example would be if one were using WordStar to print a draft of a
+document using a dot matrix printer, then a final copy is desired using a
+letter quality printer. Normally, one would have to disconnect the dot
+matrix printer and connect the letter quality printer to the LPT1: port.  By
+having a second printer port (LPT2:) and using the SWPTR command from
+WordStar (Run a Program option from the main menu of WordStar), one can
+logically swap LPT1: with LPT2: so that the output directed to LPT1: is
+printed on the printer attached to LPT2:.  No cables to disconnect and
+reconnect!  No pins bent or broken!  Just remain in the comfort of your
+chair and let the computer do the printer swapping.  When it is desired to
+swap the printers back to their original assignments, just run SWPTR again.
+
+     SWPTR initializes both printers when a swap takes place.  This was
+necessary because some printers would not operate after the swap.  An
+optional input of an "i" or "I" in the command line  (for example, "SWPTR
+I") specifies that only an "inspect" of the printer assignment is desired.
+Like all DOS Commands, upper or lower case letters may be used.  Executing
+the inspect option does not cause either printer to be initialized.
+
+     SWPTR, when linked, becomes a COMmand file of DOS so it can be executed
+like the DOS Commands MODE or DISKCOPY.  This usually requires executing
+SWPTR before the application program.  Some programs, like WordStar, provide
+a way to execute a DOS Command without exiting.  SWPTR works very well from
+those programs.
+
+     Since the time I first developed this command, I have seen several
+examples in other publications on how to make use of two printers connected
+to the same IBM PC.  All the articles proposed using a BASIC program to do
+the swapping.  I feel this assembly language program, SWPTR, offers much
+more flexibility than the BASIC programs because it operates as a DOS
+Command.
+
+     Please enjoy the flexibility offered by SWPTR.  You no longer have to
+swap printer cables or connectors to be able to direct your printer output
+to LPT2:  instead of LPT1:.
+
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

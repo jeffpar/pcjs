@@ -65,6 +65,7 @@ machines:
 
 ## 78INT.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 KEY OFF
@@ -99,9 +100,11 @@ machines:
 310 IF Z$<>"N" AND Z$<>"n" THEN 280
 320 END
 ```
+{% endraw %}
 
 ## DISBURSE.BAS
 
+{% raw %}
 ```bas
 5 GOTO 4000
 10 LPRINT CHR$(27)"N"CHR$(10)
@@ -538,9 +541,84 @@ machines:
 8750 '---------------------------------------------------------------------
 8770 EDIT 8760
 ```
+{% endraw %}
+
+## FILES201.TXT
+
+{% raw %}
+```
+--------------------------------------------------------------------------
+Disk No 201   Wordstar and Financial Items                           v1.1
+--------------------------------------------------------------------------
+78INT    BAS  Rule of 78's interest/principle calculating utility
+DISBURSE BAS  Disbursements register, single entry, with annual summaries
+DISBURSE TXT  Documentation
+FIXWS    COM  Converts Wordstar files to ASCII
+FIXWS    DOC  Documentation
+FORMGEN  BAS  Simple word processor
+FORMGEN  TXT  Documentation
+OUTPUTS  PRF  Part of DISBURSE.BAS
+POW      DOC  Documentation
+POW      COM  Simple word processor by Michael Maioli (V3.0)
+UNDOWS   DOC  Documentation for UNDOWS.EXE v2.1
+UNDOWS   EXE  V2.1 by Gary Elfring - converts Wordstar to standard ASCII
+WS-DOS   BAS  Converts Wordstar files to ASCII, and ASCII to Wordstar
+ 
+PC-SIG
+1030D E. Duane Ave.
+Sunnyvale, CA  94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+## FIXWS.DOC
+
+{% raw %}
+```
+
+                            F I X W S
+
+
+The  FIXWS  command  is used to copy a  WORDSTAR  document  file, 
+stripping out all of the WORDSTAR control sequences.  This allows 
+the  file to be processed by other applications or transferred to 
+a host system.
+
+The command format used is:
+
+     FIXWS   input-fileid   <output-fileid/CON/NUL>
+
+Where:
+
+     "Input-fileid"  is  the  DOS disk file  identifier  for  the 
+     WORDSTAR file to be used as input to the FIXWS command. This 
+     consists  of  a  drive identifier (optional),  a  file  name 
+     (required), and a filename extension (optional).
+
+     "Output-fileid"  is  the  DOS disk file identifier  for  the 
+     output  file  to  be created  by  the  FIXWS  command.  This 
+     consists of a drive identifier,  a filename,  and a filename 
+     extension.  If  only the drive identifier is  supplied,  the 
+     output  filename and extension will be the same as the input 
+     filename and extension, respectively.
+
+     The output file identifier is optional.  If it is completely 
+     omitted, the converted output will be written to a temporary 
+     file  which will replace the input file when all  processing 
+     is  complete.  A  value of CON may be supplied in  order  to 
+     write output to the display rather than disk. A value of NUL 
+     may be supplied in order to suppress output completely  (not 
+     very useful for this program).
+     
+65399 '** DONE - PRESS ENTER TO RETURN TO MENU **
+ess output completel
+```
+{% endraw %}
 
 ## FORMGEN.BAS
 
+{% raw %}
 ```bas
 3 LPVST=60*VAL(MID$(TIME$,4))+VAL(MID$(TIME$,7)):RPVST=LPVST:UPVST=LPVST:RPVST=LPVST
 4 A$="s=5:goto 1180"+CHR$(13)
@@ -957,9 +1035,985 @@ machines:
 3020 IF MID$(FORM$(XX(V+Z)),OH,1)=CHR$(1) THEN V=V+Z:FTF=2:GOSUB 2400:V=V-Z:OH=1
 3030 EN=INSTR(OH,FORM$(XX(V+Z))," "):CL=EN-OH+1:RETURN
 ```
+{% endraw %}
+
+## FORMGEN.TXT
+
+{% raw %}
+```
+ 44 
+
+This is a brief description of how to work this wordprocessor.                  
+
+On the line below 1 stands for function key 1. If you press that key you reset  
+the left margin.                                                                
+
+On the line below 3 stands for function key 3. If you press that key you reset  
+the right margin.                                                               
+
+Similarly LINEi means insert a line, LINEd means delete a line, SAVE means save 
+a what you have typed, QUIT means quit without saving, ALT gives you all the    
+characters you normally can not type form the keyboard, REFORM reforms small    
+paragraphs, and PRINT prints text.                                              
+
+The numbers in the middle stand for the cursor row and column position.         
+
+If this program bombs out on you try pushing F1 just after seeing the error     
+message, usually you will go right back into the letter you were working on.    
+
+All the keys on the keyboard such as Home, End, Pg UP, Pg DN, Ins, Del, Tab,    
+backspace delete, tab and shift backtab work as you would expect.               
+
+To move text eat the letters up with the backspace delete key, then move cursor 
+where you want the text to appear and press the tab key. You can repeat this    
+process.  To get the tab key acting normally, type in any usual character of    
+the alphabet.                                                                   
+
+To center text on a line type the 1 while holding down the ALT key.             
+
+To get the cursor moving slowly wait one second between times you touch the     
+arrow keys.  To get the cursor moving quickly, touch the arrow keys as quick as 
+you can.                                                                        
+
+For those of you with 48 K, change line 50 so that variable AMAP=66 instead of  
+AMAP=133. For some of you, calling FORMGEN with trash still in your memory,     
+will not work because it takes up every square bit, yet fits all                
+the way in there!                                                               
+
+
+
+This program creates a Backup file of the previous letter. You can activate it  
+through BASIC or DOS by renaming it with the extension TXT.                     
+
+
+ 1             80            5 
+```
+{% endraw %}
+
+## POW.DOC
+
+{% raw %}
+```
+:PN 1 :DM 5,75 :SP 1 :PT 5,3 :PB 5,3 :PL 56 :DB 1,10 :JT
+:TM 1,The IBM Personal Computer POW Manual			     Version 3
+:BM 37,Page :
+:JE
+GE	    THE POW WORD PROCESSOR	 
+	=== === ==== =========	     
+:LF 1
+    ON THE IBM PERSONAL COMPUTER    
+    == === === ======== ========    
+:JT :LF 3
+:CM GE(Version 3.0)
+:LF 39
+:JE
+					Michael V. Maieli
+					Raleigh, NC
+					January, 1983
+HF
+:JT :NP :JE
+GAbstract
+--------
+H :JT :BP
+This manual describes the POW (Processor Of Words) word processing program that
+is currently available for the IBM Personal Computer.
+Originally designed for the Intel 8080 CPU by Clyde Roby in a program called
+PRINTER, POW is a subsequent modification of PRINTER enabling similar usage
+with the Intel 8088, the central processing unit used in the IBM Personal
+Computer.
+:LF 3 :JE
+GIntroduction
+------------
+H :JT :BP
+POW is a word processing program capable of executing on the IBM Personal
+Computer.
+Like most other text formatters, POW accepts inputs in the form of files
+which have been created using a program editor.
+These files contain two types of data: {1} the reserved keywords (operators),
+including their parameters, which together obey the POW syntax rules, and {2}
+the actual word text (operands) in upper and lower case which is manipulated
+through the use of the reserved keywords in a predetermined way.
+Keywords are freely inserted into the source text when it is prepared.
+POW has the ability to set and dynamically alter margins, tabs, spacing,
+justification, and indentation, and can provide automatic centering.
+Automatic pagination including top and bottom titles and/or page numbering is
+also available.
+:BP
+Since POW executes under IBM PC-DOS (MS-DOS), filename conventions for DOS also
+apply to POW.
+Refer to page 2-8 in the "Disk Operating System" manual for a list of these
+conventions.
+Additionally, in order to distinguish POW files from all other types of files,
+the required file extension '.POW' is used.
+:LF 3 :JE
+GInvocation
+----------
+H :JT :BP
+To invoke POW, first ensure that the system file POW.COM is on a diskette
+which is accessible by the system.
+Next, while under the PC-DOS environment, type "POW".
+A startup message will be received and POW then waits for user response.
+Three options are available to the user at this point; loading, processing, or
+exiting.
+Normal operation is as follows: {1} Reply with the letter L (capital letter),
+{1} Reply with the letter L (capital letter), informing POW that you want to
+load a source file.
+{2} Input the entire file specification of that source file (i.e.,
+d:filename.ext using all capital letters) at which time POW processes the
+source file.
+{3} Reply with the letter P (capital letter) informing POW to print the output
+document.
+{4} Upon completion, reply with the letter Q (capital letter) informing POW to
+quit and return to PC-DOS (you may, of course, exit POW at any time by
+inputting a CTRL-C).
+:LF 3 :JE
+GPOW Syntax
+--- ------
+H :JT :BP
+Reserved keywords, or commands, are the operators POW uses to carry out tasks.
+Commands consist of the same basic format, which is a colon (:) immediately
+followed by a two letter command name (an abbreviation resembling the function
+to be performed) specified in capital letters.
+Some commands do not require any more clarification than this and so would end
+at this point with a terminator.
+Other commands do require additional clarification, but because of exisiting
+defaults, optional parameters need only be supplied if the defaults are to
+be overridden.
+Delimiters separate options from the command name and from each other, and are
+concluded with a terminator.
+Delimiters are either a comma (,) or a space ( ), and a terminator can be a
+comma (,), a space ( ), or null ().
+This allows maximum freedom from rigid command syntax.
+:BP
+There is no 'literal' command (as there is in SCRIPT/370), but it is still
+possible to print out the colon (:) if needed as text data.
+The CTRL-K key preceeding any character causes that character to be printed as
+it appears without decoding.
+Hence, CTRL-K: causes the colon to be printed without any associated POW
+meaning.
+:BP
+The POW commands are examined on the next few pages.
+They are presented in alphabetical order, and for each command there exist 5
+different sections to describe it.
+First, the full command name is given, with capital letters highlighting the
+2-character abbreviation.
+This 2-character abbreviation is again shown in the second section, syntax,
+preceeded by a colon and followed by command parameters, if applicable.
+Command semantics make up the third section.
+This is the largest section, and it is here that the command is described as
+to its function, its parameter requirements and the forms they must take,
+its usage in a text file, and any noteworthy points including some examples.
+The fourth section show parameter defaults, or the values the parameters will
+take if they are not explicitly overridden.
+Finally, references to other commands of the same general category or of mutual
+dependence are presented.
+:NP
+ECommand    - Bottom Message
+:LF 1
+FSyntax     - :BM a,b
+:LF 1
+Semantics  - The :BM command instructs POW to define a bottom title to be
+printed on every page.
+Parameter a is numeric; it is the horizontal character position at which the
+message will begin.
+Parameter b is alphanumeric; it is the actual text of the message.
+The colon character, when used in the bottom title, provides automatic page
+numbering.
+:LF 1
+Default    - None
+:LF 1
+References - See command(s) :TM, :PB
+:LF 3
+ECommand    - Begin Paragraph
+:LF 1
+FSyntax     - :BP
+:LF 1
+Semantics  - The :BP command instructs POW to start a new paragraph.
+Upon encountering this command, POW first closes the present line.
+It then performs a previously specified number of line feeds (vertical spacing)
+and indents to a previously specified character position (horizontal spacing).
+:LF 1
+Default    - None
+:LF 1
+References - See command(s) :DB
+:LF 3
+ECommand    - Close Centering
+:LF 1
+FSyntax     - :CC
+:LF 1
+Semantics  - The :CC command instructs POW to stop centering text which was
+started with the :CT command.
+This command must be paired with the :CT command.
+:LF 1
+Default    - None
+:LF 1
+References - See command(s) :CT, :CM
+:LF 3
+ECommand    - Center Message
+:LF 1
+FSyntax     - :CM a
+:LF 1
+Semantics  - The :CM command instructs POW to center a piece of text between
+the predefined left and right margins.
+The parameter a is alphanumeric; it is the text to be centered.
+This command need not be closed by the :CC command because only 1 line of
+text will be centered.
+:LF 1
+Default    - None
+:LF 1
+References - See command(s) :CC, :CT
+:LF 3
+ECommand    - Center Text
+:LF 1
+FSyntax     - :CT a,b
+:LF 1
+Semantics  - The :CT command instructs POW to center text around a
+specified position.
+Different from the :CM command, POW will continue to center source text
+until a :CC command is encountered.
+The parameter a is numeric; it is the position about which text is to be
+centered (counting from the left side of the page, NOT the left margin).
+The parameter b is alphanumeric; it is the actual text to be centered.
+The text will not be printed until the :CC command is encountered.
+:LF 1
+Default    - None
+:LF 1
+References - See command(s) :CC, :CM
+:LF 3
+ECommand    - Define Begin paragraph
+:LF 1
+FSyntax     - :DB a,b
+:LF 1
+Semantics  - The :DB command instructs POW to establish paragraph formatting
+characteristics.
+The parameter a is numeric; it is the number of line feeds (vertical spacing)
+to skip before beginning the next paragraph.
+The parameter b is numeric; it is the number of character positions
+(horizontal spacing) to indent the first line of every paragraph.
+The indentation can be set to any position right or left of the left margin.
+This can allow for versatile indention formatting.
+:LF 1
+Default    - a = 1, b = the left margin
+:LF 1
+References - See command(s) :BP, :DM
+:LF 3
+ECommand    - Define Margins
+:LF 1
+FSyntax     - :DM a,b
+:LF 1
+Semantics  - The :DM command instructs POW to establish left and right
+margins.
+The parameter a is numeric; it is the position of the left margin.
+The parameter b is numeric; it is the position of the right margin.
+:LF 1
+Default    - a = 10, b = 70
+:LF 1
+References - See command(s) :DB
+:LF 3
+ECommand    - Define Tabs
+:LF 1
+FSyntax     - :DT a,b,c,d...
+:LF 1
+Semantics  - The :DT command instructs POW to set up tabs.
+A maximum of 14 tabs can be set.
+The parameters a, b, c, d... are numeric; they are the positions of the tabs.
+Tabs must be in ascending order and no error checking is done on them.
+:LF 1
+Default    - a = 15, b = 22, c = 30, d = 45
+:LF 1
+References - None
+:LF 3
+ECommand    - Justification End
+:LF 1
+FSyntax     - :JE
+:LF 1
+Semantics  - The :JE command instructs POW to close the present line and end
+all justification (formatting).
+:LF 1
+Default    - None
+:LF 1
+References - See command(s) :JL, :JT
+:LF 3
+ECommand    - Justification Left
+:LF 1
+FSyntax     - :JL
+:LF 1
+Semantics  - The :JL command instructs POW to begin justification
+(formatting) with respect to the left margin only.
+It produces what is known as "ragged right" formatting.
+:LF 1
+Default    - None
+:LF 1
+References - See command(s) :JE, :JT
+:LF 3
+ECommand    - Justification Total
+:LF 1
+FSyntax     - :JT
+:LF 1
+Semantics  - The :JT command instructs POW to begin total justification
+(formatting) with respect to both the left and right margins.
+Automatic space filling is performed.
+:LF 1
+Default    - None
+:LF 1
+References - See command(s) :JE, :JL
+:LF 3
+ECommand    - Line Feed
+:LF 1
+FSyntax     - :LF a
+:LF 1
+Semantics  - The :LF command instructs POW to skip a specified number of
+vertical spaces.
+The parameter a is numeric; it is the the number of carriage return/line
+feed sequences desired.
+:LF 1
+Default    - a = 1
+:LF 1
+References - None
+:LF 3
+ECommand    - New Page
+:LF 1
+FSyntax     - :NP
+:LF 1
+Semantics  - The :NP command instructs POW to eject to a new page.
+It forces the close of the present page, feeds it out of the printer,
+and then begins a new page.
+:LF 1
+Default    - None
+:LF 1
+References - See command(s) :PN
+:LF 3
+ECommand    - OFf printer
+:LF 1
+FSyntax     - :OF
+:LF 1
+Semantics  - The :OF command instructs POW to turn off the printer.
+The program continues to process text as if the printer were on, but there
+is no output.
+By using the :OF and :ON commands, non-printable commentary can reside in
+the source text.
+:LF 1
+Default    - None
+:LF 1
+References - See command(s) :ON
+:LF 3
+ECommand    - ON printer
+:LF 1
+FSyntax     - :ON
+:LF 1
+Semantics  - The :ON command instructs POW to turn on the printer after it
+has been turned off by the :OF command.
+By using these two commands, a section of text input can be skipped over
+without printing.
+:LF 1
+Default    - None
+:LF 1
+References - See command(s) :OF
+:LF 3
+ECommand    - Page Bottom
+:LF 1
+FSyntax     - :PB a,b
+:LF 1
+Semantics  - The :PB command instructs POW to reserve a bottom-of-page
+section, acting as a page trailer.
+The parameter a is numeric; it specifies how many lines are to be dedicated
+to the trailer.
+If this parameter is zero, text printing continues to the absolute bottom of
+the page.
+The parameter b is numeric; it specifies which line into the trailer (counting
+sequentially from the bottom of this reserved section) will contain the bottom
+title if one was specified.
+A value of zero for this parameter cancels bottom title printing.
+:LF 1
+Default    - a = 10, b has no default
+:LF 1
+References - See command(s) :PT, :BM, :PL
+:LF 3
+ECommand    - PaGe
+:LF 1
+FSyntax     - :PG
+:LF 1
+Semantics  - The :PG command instructs POW to immediately force the beginning
+of a new page, regardless of whether the present page is finished or not.
+:LF 1
+Default    - None
+:LF 1
+References - See command(s) :NP
+:LF 3
+ECommand    - Page Length
+:LF 1
+FSyntax     - :PL a
+:LF 1
+Semantics  - The :PL command instructs POW as to how long the text portion of
+the page will be.
+The parameter a is numeric; it is the length of the text portion of the page.
+This parameter can be changed to allow the program to adapt to any physical
+size of paper, but should be chosen carefully to perfectly match the logical
+page size to the physical page size.
+For instance, if the paper being used is the standard 8.5 inch by 11 inch white
+bond paper and the character print is set at 6 lines per inch, then 66 lines can
+fit on a physical page.
+Therefore, the command parameters which affect logical page size (i.e., the
+"a" parameters on :PT, :PL, and :PB commands) should all be chosen such that
+their sum equals exactly 66.
+:LF 1
+Default    - a = 45
+:LF 1
+References - See command(s) :PB, :PT
+:LF 3
+ECommand    - Page Number
+:LF 1
+FSyntax     - :PN a
+:LF 1
+Semantics  - The :PN command instructs POW to set the page number to a
+specified value.
+The maximum value is 256.
+:LF 1
+Default    - a = 0
+:LF 1
+References - None
+:LF 3
+ECommand    - Page Top
+:LF 1
+FSyntax     - :PT a,b
+:LF 1
+Semantics  - The :PT command instructs POW to reserve a top-of-page section,
+acting as a page header.
+The parameter a is a numeric; it specifies how many lines are to be dedicated
+to the header.
+If this parameter is zero, text printing begins at the absolute top of the
+page.
+The parameter b is a numeric; it specifies which line into the header (counting
+sequentially from the bottom of this reserved section) will contain the top
+title if one was specified.
+A value of zero for this parameter cancels top title printing.
+:LF 1
+Default    - a = 10, b has no default
+:LF 1
+References - See command(s) :PB, :TM, :PL
+:LF 3
+ECommand    - SPacing
+:LF 1
+FSyntax     - :SP a
+:LF 1
+Semantics  - The :SP command instructs POW to set the line spacing for the
+output text.
+The parameter a is numeric; it specifies the line spacing.
+A value of 1 for this parameter indicates single spacing, 2 double spacing,
+3 triple spacing, etc.
+:LF 1
+Default    - a = 1
+:LF 1
+References - None
+:LF 3
+ECommand    - Top Message
+:LF 1
+FSyntax     - :TM a,b
+:LF 1
+Semantics  - The :TM command instructs POW to define a top title to be
+printed on every page.
+Parameter a is numeric; it is the horizontal character position at which the
+message will begin.
+Parameter b is alphanumeric; it is the actual text of the message.
+The colon character, when used in the top title, provides automatic page
+numbering.
+:LF 1
+Default    - None
+:LF 1
+References - See command(s) :BM, :PT
+:JT :NP :JE
+GFont Usage
+---- -----
+H :JT :BP
+POW is capable of using all of the 12 fonts available on the IBM 80-CPS
+Personal Computer printer (Epson MX-80) for text processing.
+Fonts are subject only to the normal constraints imposed by PC-DOS.
+:BP
+Here is an example:
+:JE :LF 1
+This is the standard font (80 cpl, 6 lpi) activated on startup.
+    CNT-O activates the compressed font (132 cpl), effective until a
+CNT-R is issued whereupon the standard font is reactivated.
+CNT-N starts expanded font (40 cpl) &
+CNT-T allows the standard font to be reactivated.
+  CNT-O/CNT-N foster the compressed/expanded font (66 cpl)
+with CNT-R/CNT-T reactivating the standard font.
+:LF 1
+This is the standard mode.
+GESC-G activates double strike mode, usable by the standard font,
+    or the compressed font,
+or the expanded font,
+  or the compressed/expanded font.
+HESC-H stops the double strike mode, and starts the standard mode.
+EESC-E activates emphasized mode, usable by the standard font,
+or the expanded font,
+but not with the compressed font or the compressed/expanded font.
+FESC-F deactivates the emphasized mode, and starts the standard mode.
+GEESC-G/ESC-E is the double strike/emphasized mode for standard font
+or the expanded font,
+but not with the compressed font or the compressed/expanded font.
+HFESC-H/ESC-F reactivates the standard mode.
+:LF 3 :JE
+GFunctional Limitations
+---------- -----------
+H :JT :BP
+POW is a simple word processor (it only possesses 22 commands).
+It has minor similarity to IBM's program product SCRIPT/370 in that commands are
+two character abbreviations preceeded by a special symbol (a colon in POW's
+syntax) which can appear freely throughout the user text.
+It can perform the most fundamental (and most frequently used) format
+techniques, but SCRIPT users may be frustrated at POW's lack of
+sophisticated function.
+POW doesn't have the capabilty to do some trivial tasks, such as underlining,
+character translation, imbed functions, or roman numerals, nor can it perform
+more difficult tasks like storing a table of contents or an index, keeping
+a section of text immune from page ejects, or having any run time processing
+logic.
+POW makes no distinction between line spaces and line skips; every :LF is a
+line space regardless of whether is just occurred on a new page.
+Additionally, no macro facility is provided to invent such routines.
+There is no way to store output from POW in a file or send it to the video
+monitor for a quick review before printing.
+Graphics are limited to character graphics (that which is available on the
+printer), and, without the use of a SPOOL program to keep the printer operating
+independent of the system unit, POW will only process and print text one page
+at a time.
+This means the user has to stay and hit the enter key after each page has
+finished printing.
+However, a SPOOL program will alleviate this problem, and when compared to
+some word processing programs currently marketed for the IBM PC, POW's
+simplicity makes it easy to use and remember.
+The adjustment from SCRIPT to POW is much easier than from SCRIPT to
+EasyWriter.
+(This document was composed using POW.
+For tips and techniques used, display the source of this manual.)
+:LF 3 :JE
+GPOW Idiosyncracies
+--- --------------
+H :JT :BP
+There do exist some bizarre idiosyncracies with this program.
+:BP
+When using POW, the user must insure that the logical page size, as determined
+by some of the commands, equal the physical page size, as determined by the
+number of lines printed per inch times the number of inches on the page.
+That is, the first parameter on the :PT (page top) and :PB (page bottom)
+commands (indicating reserved lines for every page) and the parameter on
+the :PL (page length) command (indicating how many lines on each page will be
+devoted to text) must sum to the total number of lines on the page.
+Normally, this number is 66 (11 inch paper with 6 lpi).
+This is not unusual.
+What is strange is that if the printer has the print head adjacent to the first
+line on the paper, the first page of the document is offset by the number of
+lines specified in the first parameter of the :PT command.
+All subsequent pages, although logically the right length, are physically
+in the wrong position on the paper.
+This can be compensated for by turning the printer offline and hitting the line
+feed button the number of times specified on the first parameter of the :PT
+command.
+POW will support other line-per-inch options (such as 8 lpi and 10 lpi), but
+the appropriate compensation must be made within the aforementioned
+commands.
+:BP
+Another problem with POW has to do with expanded fonts.
+In forming titles, for instance, POW will concatenate following lines of
+text to fill out the 40 characters per line allowed in this font.
+Even when an attempt is made to pad out the title with suceeding blanks,
+POW truncates all but one of the blanks.
+To compensate for this, use an unprintable character (such as a CTRL-G) as
+the last line of the title to hold the places of all the needed blanks.
+POW will "print" a CTRL-G as the last character of the title, but all this
+does is just send an audible beep to the printer.
+CTRL-K also works and without the alarm.
+In effect, we fake out POW.
+:BP
+The double strike mode is turned on with an ESC-G and turned off with an ESC-H.
+The emphasized mode is turned on with an ESC-E and turned off with an ESC-F.
+For highlighting purposes, both these modes are used either singly or in
+conjunction with one another.
+To highlight one line of text, the ESC-G and/or ESC-E starts the line in the
+source document.
+However, placing an ESC-H and/or ESC-F at the end of the line will not turn
+off the hightlight, and the rest of the document remains in the most recently
+set highlight mode.
+To correct this problem, the ESC-H and/or ESC-F must appear on the next line of
+source text.
+This turns off the highlight, but, in the case of double strike mode, an extra
+blank line will appear in the output text in some instances.
+:BP
+Actual page numbering only begins with the number "2".
+Logical page number integrity is maintained, however, based on the input POW
+received on the :PN command.
+:JT :NP :JE
+GCommand Summary
+------- -------
+H :JT :BP
+Below is a quick summary of all the POW commands, giving command names,
+command syntax, and parameter syntax.
+:LF 3 :JE
+----------------------------------------------------------------------
+:BM a,b     Bottom Message	 a = horizontal indentation, b = text
+----------------------------------------------------------------------
+:BP	     Begin Paragraph
+----------------------------------------------------------------------
+:CC	     Close Centering
+----------------------------------------------------------------------
+:CM a	     Center Message	 a = text (single line)
+----------------------------------------------------------------------
+:CT a,b     Center Text	 a = numeric centering pivot, b = text
+----------------------------------------------------------------------
+:DB a,b     Define Begin para.  a = # line feeds, b = # spaces
+----------------------------------------------------------------------
+:DM a,b     Define Margins	 a = left margin, b = right margin
+----------------------------------------------------------------------
+:DT a,b,... Define Tabs	 a, b,... = tabular column set(s)
+----------------------------------------------------------------------
+:JE	     Justification End
+----------------------------------------------------------------------
+:JL	     Justification Left
+----------------------------------------------------------------------
+:JT	     Justification Total
+----------------------------------------------------------------------
+:LF a	     Line Feed		 a = # carriage return/line feeds
+----------------------------------------------------------------------
+:NP	     New Page
+----------------------------------------------------------------------
+:OF	     OFf printer
+----------------------------------------------------------------------
+:ON	     ON printer
+----------------------------------------------------------------------
+:PB a,b     Page Bottom	 a = # trailer lines, b = title line
+----------------------------------------------------------------------
+:PG	     PaGe
+----------------------------------------------------------------------
+:PL a	     Page Length	 a = # text lines
+----------------------------------------------------------------------
+:PN a	     Page Number	 a
+----------------------------------------------------------------------
+:PT a,b     Page Top		 a = # header lines, b = title line
+----------------------------------------------------------------------
+:SP a	     SPacing		 a = # of blank spaces between lines
+----------------------------------------------------------------------
+:TM a,b     Top Message	 a = horizontal indentation, b = text
+----------------------------------------------------------------------
+:JT :NP :JE
+GReferences
+----------
+H :JE :LF 1
+1.) "POWTEXT.POW" document; public IBM PC software library.
+:LF 1
+2.) "POWCMDS.POW" document; public IBM PC software library.
+:LF 1
+3.) "SCRIPT/370:User's Guide"; IBM program product.
+:LF 3 :JE
+GAuthor's Note
+-------- ----
+H :JT :BP
+Legal information was not supplied with POW when it was obtained by the author
+of this manual.
+No copyright notices are apparent in the program, either on startup or when
+using the PC-DOS DEBUG facility.
+Additionally, no copyright notices appear with the supplied documentation.
+By virtue of these facts, and the fact that program distribution is free (as
+witnessed by public PC software library status), no infringement is
+committed by using POW.
+However, it is safe to assume that the original program from which POW evolved,
+PRINTER, was copyrighted by Clyde Roby, and due to similarities between the
+two programs, private marketing of POW is not advised.
+:BP
+The information contained in this manual has been obtained from a variety of
+sources and is believed to be correct and reliable, however the author makes
+no warranty of any kind, either expressed or implied, with regard to the
+program or the documentation contained in this manual.
+The author shall not be liable in any event for incidental or consequential
+damages in connection with, or arising out of, the furnishing, performance,
+or use of this program and its accompanying documentation.
+Any changes, errors, and ommissions called to my attention will be greatly
+appreciated and the corrections will be made in the next edition.
+:LF 5
+Michael V. Maieli
+:LF 1
+January, 1983
+:LF 1
+=================
+
+```
+{% endraw %}
+
+## UNDOWS.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+                                     UNDOWS
+
+                                 UN-DO WordStar
+
+                                      V 2.1
+
+
+
+
+
+
+
+
+
+
+
+
+                         Copyright 1986, by Gary Elfring
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                 UNDOWS  V 2.1
+
+
+           Need to change WordStar files to ASCII in a hurry?   Or do you 
+        need  to  remove  the embedded control characters  that  WordStar 
+        leaves  in a file?   How about those soft hyphens?   Do you  have 
+        WordStar  files with embedded dot commands?   Or do you just want 
+        to limit carriage returns to the end of a paragraph?
+
+           Version  2.1  of UNDOWS does all  that  for  you.   First,  it 
+        converts WordStar from 8 bit characters to 7 bit ASCII.   It then 
+        removes  all control characters,  with the exception of  carriage 
+        returns, line feeds, tabs, form feeds, and ^Zs (end of file).  In 
+        the  process  it removes those annoying soft hyphens that are  in 
+        the middle of a line.   Soft hyphens at the end of a line will be 
+        turned into true hyphens.
+
+           Two  new  options have been added for version 2.1  of  UNDOWS.  
+        You  can  now strip extra carriage return / line  feed  pairs  by 
+        using  the  "s" option.   The only carriage returns left will  be 
+        those found at the end of a paragraph.  This option makes it much 
+        easier to transfer WordStar files to other word processors.
+
+           The  second  option  forces  UNDOWS  to  remove  embedded  dot 
+        commands from your text.  Using this option does slow UNDOWS down 
+        since it has to make a second pass through your file.   To remove 
+        dot commands use the "d" option.
+
+           UNDOWS  has  been optimized for speed.   On an IBM PC  it  can 
+        convert a 40K file on floppy disk in under 15 seconds.  On a hard 
+        disk or an AT it is lightning fast.
+
+           To  run UNDOWS you need a source file in WordStar format and a 
+        destination file name.  Type:
+
+        UNDOWS source destination [s] [d]{cr}
+
+           Where {cr} stands for the enter/return key.   The "s" and  "d" 
+        options  do  not have to be used and can be input in  any  order.  
+        UNDOWS  checks for file errors and reports them to you.   DO  NOT 
+        use  the  same  file name for the source and  destination  files.  
+        Unpredictable things will happen!
+
+        UNDOWS infile outfile{cr}          (normal conversion)
+
+        UNDOWS infile outfile s{cr}        (strip excess CRs)
+
+        UNDOWS infile outfile d{cr}        (remove dot commands)
+
+        UNDOWS infile outfile s d{cr}      (both options)
+
+        UNDOWS infile outfile d s{cr}      (both options)
+
+
+
+
+
+
+
+                                        1
+
+
+
+
+
+
+                                 UNDOWS  V 2.1
+
+
+                               DISTRIBUTION NOTICE 
+
+        This  program  is  protected by United States Copyright  law  and         
+        by International Treaty provisions.  You may distribute, or share 
+        this  version of this program with anyone provided the  following 
+        conditions are met.   This version of UNDOWS is being distributed 
+        on a "shareware" basis to all who are interested in it.  To those 
+        of you unfamiliar with this approach, it works like this.  UNDOWS 
+        is  distributed to various BBS systems and user groups.   You may 
+        copy the program and try it for no charge.  Gary Elfring does not 
+        handle the actual distribution of this program.   Try the program 
+        out.   If the product does not meet your needs,  you pay nothing.  
+        If  the product does meet your needs,  and you can use  it,  then 
+        send me a fee of $12.50.   If you include a self addressed mailer 
+        with  a  blank formatted disk I will supply you with  the  source 
+        code for UNDOWS (Lattice C V3.00).  Send your contribution to:
+
+           Gary Elfring
+           4N899 West Mary Drive
+           St. Charles, Illinois  60174
+
+           Even if you do not contribute,  you are encouraged to copy and 
+        distribute  the BBS version of the product freely subject to  the 
+        following restrictions: 
+
+        1. Do not distribute altered copies.   If you have suggestions or 
+           fixes  you  would like to see,  send us a  written  note.   We 
+           welcome all responses.
+
+        2. This product must be distributed complete including the files: 
+           UNDOWS.EXE, and UNDOWS.DOC. 
+
+        3. No  fee is to be charged for copying or distributing the  pro-
+           gram  without   an   express   WRITTEN  agreement  with   Gary 
+           Elfring.  The ONLY exception to this rule is:  a small charge, 
+           ($5  to $10),  may be leveled if this program is included on a 
+           set of public domain disks. This charge must be reasonable and 
+           represent only copying and disk fees. 
+
+        4. Commercial  sale of this product in any manner  is  prohibited 
+           without Gary Elfring's written permission. 
+
+        User Groups/Clubs:  Gary Elfring's products may be distributed by 
+        Clubs and User Groups subject to the same restrictions.  We would 
+        ask  only  that  contributions  to  our  continuing  efforts   be 
+        encouraged by those performing such distribution. 
+
+        Computer  Bulletin  Boards:   Gary  Elfring's products   may   be 
+        distributed  by  BBS's  subject to   the  same  restrictions  and 
+        contribution encouragement. 
+
+
+
+
+
+
+                                        2
+
+
+
+
+
+
+                                 UNDOWS  V 2.1
+
+
+                                    WARRANTY
+
+        Gary Elfring specifically disclaims all warranties,  expressed or 
+        implied,  including  but  not limited to,  implied warranties  of 
+        merchantability and fitness for a particular purpose with respect 
+        to defects in the disk or documentation,  and the program license 
+        granted herein.  In no event shall Elfring be liable for any loss 
+        of  profit  or any other commercial  damage,  including  but  not 
+        limited to special, incidental, consequential, or other damages.
+
+
+                            English Language Warranty
+
+        You  get what you pay for.   If you did not pay for the product I 
+        don't care what your problems are.   If you pay for it and have a 
+        legitimate complaint,  as determined by me, I will attempt to fix 
+        it.   That's it.   What do you want for $12.50?   Send a disk and 
+        get the source.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        3
+
+
+
+
+```
+{% endraw %}
 
 ## WS-DOS.BAS
 
+{% raw %}
 ```bas
 2 ' WS-DOS.BAS
 4 ' BY ANDREW FLUEGELMAN
@@ -1073,6 +2127,7 @@ machines:
 10015 DATA 22,"<_","_>"
 10020 DATA 20,"<^","^>"
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

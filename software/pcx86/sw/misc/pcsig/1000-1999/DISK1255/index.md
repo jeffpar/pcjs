@@ -37,6 +37,47 @@ machines:
     added.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1255.TXT
+
+{% raw %}
+```
+Disk No: 1255
+Disk Title: Dental P.M.S. 5 of 5 (1251 thru 1255)
+PC-SIG Version: S1.1
+
+Program Title: Dental P.M.S
+Author Version: 3.2
+Author Registration: $125.00
+Special Requirements: 512K RAM and a hard drive.
+
+DENTAL PATIENT MANAGEMENT SYSTEM (DPMS) tracks treatments and manages
+accounts receivable, insurance, patient billing, and follow-up
+information.  Insurance company information, complete patient
+information, and procedure details are integrated.  Information need be
+entered only once; data from insurance forms is automatically posted to
+a patient's account receivable records.  DPMS uses common computer
+forms such as an attending dentists statement and the NEBS patient
+billing form. Entering a patient procedure automatically updates
+billing information  including charges.  Invoicing can be done in four
+keystrokes.
+
+DPMS's biggest strengths are patient tracking, and generating written
+and telephone follow-up reminders, as well as inactive patient lists.
+Patient files can be read by most wordprocessors to generate labels and
+form letters.  Most routine procedures are included, and more can be
+added.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989, 1990 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1255
 

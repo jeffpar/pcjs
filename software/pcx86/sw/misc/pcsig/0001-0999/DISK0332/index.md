@@ -60,6 +60,117 @@ machines:
     MUDATA   S-1  Sample data file
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES.TXT
+
+{% raw %}
+```
+KINETICS LINEAR PROGRAMMING SYSTEM     (version 1.9)
+ 
++---------------------------------------------------------------+
+|  This public domain media material is made available to club  |
+|  membership, for its use and distribution, by the following:  |
+|                       KINETICS SOFTWARE                       |
+|        (1390 Fell St., #103, San Francisco, CA  94117)        |
+|  If, after trial, one finds the software application useful,  |
+|  SFpcUG encourages your becoming a registered user (a fee of  |
+|  $45 entitles the registrant to updates and other versions).  |
++---------------------------------------------------------------+
+ 
+Name           Description
+ 
+KLP     .EXE   System can integrate Lotus, SuperCalc or VisiCalc
+FURNFAC .DMP   ^Matrix print file          +------------+
+FURNFAC .MAT   ^Furniture factory problem  |   SAMPLE   |
+FURNFAC .SSI   ^Spreadsheet output         | KLP WORKUP |
+FURNFAC .TXT   ^Results file               +------------+
+KLP     .DOC   ^Documentation (27pp) manual
+README  .KLP   ^Documentation (brief user-support introduction)
+ 
+ 
+DECISION TREE ANALYSIS & MULTIATTRIBUTE UTILITY ANALYSIS
+ 
+Index   Name           Description
+ 
+DT      .EXE   DECISION TREE ANALYSIS: A technique to analyze
+                decision tree problems
+DTDATA  .S-1   Sample data file
+MESSAGE .KEY   Message file
+MESSAGE .TXT   Message file
+COBRUN  .EXE   Microsoft COBOL Runtime Monitor (Both DT & MU need it)
+MU      .EXE   MULTIATTRIBUTE UTILITY ANALYSIS: A technique to
+                analyze procurement/selection/acquisition problems
+MUMSG   .TXT   Message file
+MUMSG   .KEY   Message file
+MUDATA  .S-1   Sample data file
+ 
+ 
+```
+{% endraw %}
+
+## FILES332.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 332  KLP Version 1.9                                    v1   DS
+------------------------------------------------------------------------
+ 
+------------  KINETICS LINEAR PROGRAMMING SYSTEM     (version 1.9)
+KLP      EXE  System can integrate Lotus, SuperCalc or VisiCalc
+FURNFAC  DMP  Matrix print file          +------------+
+FURNFAC  MAT  Furniture factory problem  |   SAMPLE   |
+FURNFAC  SSI  Spreadsheet output         | KLP WORKUP |
+FURNFAC  TXT  Results file               +------------+
+KLP      DOC  Documentation (27pp) manual
+README   KLP  Documentation (brief introduction)
+------------  DECISION TREE ANALYSIS & MULTIATTRIBUTE UTILITY ANALYSIS
+DT       EXE  DECISION TREE ANALYSIS: A technique to analyze
+               decision tree problems
+DTDATA   S-1  Sample data file
+MESSAGE  KEY  Message file
+MESSAGE  TXT  Message file
+COBRUN   EXE  Microsoft COBOL Runtime Monitor (Both DT & MU need it)
+MU       EXE  MULTIATTRIBUTE UTILITY ANALYSIS: A technique to
+               analyze procurement/selection/acquisition problems
+MUMSG    TXT  Message file
+MUMSG    KEY  Message file
+MUDATA   S-1  Sample data file
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## FURNFAC.TXT
+
+{% raw %}
+```
+KINETICS LINEAR PROGRAMMING SYSTEM     12-28-1983  01:01:33
+            SAMPLE PROBLEM                  
+ COLUMN VARIABLES 
+   NAME    ACTIVITY    MINUMUM     MAXIMUM     RED. COST
+STOOLS       0.000       0.000     500.000       0.000   
+CHAIRS       0.000       0.000     500.000       0.000   
+TABLES       0.000       0.000     500.000       0.000   
+B BLOCK      0.000       0.000     100.000       0.000   
+DOWELS       0.000       0.000     400.000       0.000   
+LABOR        0.000       0.000     320.000       0.000   
+ 
+ ROW CONSTRAINTS 
+   NAME    ACTIVITY    MINUMUM     MAXIMUM     DUAL ACT.
+B BLOCK      0.000       0.000       0.000       0.000   
+DOWELS       0.000       0.000       0.000       0.000   
+LABOR        0.000       0.000       0.000       0.000   
+PROFIT       0.000       0.000       0.000       0.000   
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0332
 

@@ -43,6 +43,74 @@ machines:
     designing printed circuit boards.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES904.TXT
+
+{% raw %}
+```
+Disk No  904
+Program Title: DROEGE version 1.86 (Disk 1 of 2)
+PC-SIG version 1.1
+ 
+DROEGE--Design Robot for Origination of Exacting Graphic
+Engineering--was created for designing printed circuit photomasters.  It
+is a manual CAD system, which means it does nothing automatically, such
+as schematic capture, wire listing, routing, parts lists, etc.  DROEGE
+does provide a computer-aided equivalent of a taped master or drawing
+board with the advantage that things are always in perfect registration
+and one can work on selected layers.
+ 
+General features are a 65" x 65" working area twelve layers deep.
+Resolution over this area is 0.001".  The output can be scaled to
+anything, however, so what is really provided is a 65,000 X 65,000 point
+working space.  The layers can be turned on and off and assigned to any
+available color.  Lines, Pads (something a photoplotter can do--a small
+object drawn all at once), Symbols (a named collection of other
+objects), Arcs, and Labels can be entered.  The Symbol feature is
+particularly powerful since Symbols can be nested within Symbols to as
+many as twenty levels, allowing construction of very complex objects
+with a few keystrokes.
+ 
+You will also need disk #905 to run this program.
+ 
+Usage:  Manual PC Board Layout
+ 
+System Requirements:  Operation requires CGA adapter and 320K memory.
+Optional Epson printer.
+ 
+How to Start:  Do not attempt to use this program without reading at least
+some of the documentation. To get started, print the file called FIRST.DOC
+as follows: type COPY FIRST.DOC PRN (press enter) follow the instructions
+given in this document to print the manual.
+ 
+Suggested Registration:  $25.00 initial fee then $25.00 per plot
+ 
+File Descriptions:
+ 
+READ1    ME   Brief program description and file list.
+DROEGE   EXE  The DROEGE program.
+SETUP    PCD  Data file containing setup conditions for DROEGE.
+SETUP    PCS  The initial condition symbol file for DROEGE.
+DEMO     PCD  The setup condition file for the DEMO job.
+DEMO     PCS  The symbol and job data for the DEMO job.
+TUTOR    PCD  The setup condition file for the TUTOR job.
+TUTOR    PCS  The symbol and job data for the TUTOR job.
+APERDEF  PCD  The setup condition file for the APERDEF job.
+APERDEF  PCS  The symbol and job data for the APERDEF job.
+KEYBOARD LIB  A library of symbols for the keyboard letters.
+ELEC     LIB  A few electronic symbols to get started.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0904
 

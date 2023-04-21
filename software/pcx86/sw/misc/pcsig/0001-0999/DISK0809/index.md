@@ -66,6 +66,121 @@ machines:
     READ     ME   General information about the disk.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES808.TXT
+
+{% raw %}
+```
+Disk No  808
+Program Title: THE REMARKABLE GENERAL LEDGER (UK version disk 1 of 2)
+PC-SIG version 1
+ 
+    New Zealand has done it now. Remarkable Enterprises Ltd, which is
+located in New Zealand, has created the REMARKABLE GENERAL LEDGER. This
+system is designed to work for the UK and countries using currencies other
+than the dollar.
+ 
+    REMARKABLE GENERAL LEDGER will allow you to set up and operate a
+complete General Ledger, with a wide range of reports, and a Bank
+Information module including facilities for listing banks, reports on used
+and unused checks and Bank Statement Reconciliation. You can print out
+reports on your transactions either in summary or in detail. Reports can be
+printed either on a leading or account level. You can also print a trial
+balance and your chart of accounts. A simple menu is offered that allows
+you to add, change, delete, or view your various entries made into your
+chart of accounts, journal, your record of bank deposits, and your checking
+account. The program has on-line help for every screen that requires input
+from the user.
+ 
+    The full version of REMARKABLE GENERAL LEDGER includes all the features
+of the public domain version plus profit and loss reports, balance sheets
+password protection, a complete manual and service and backup.
+ 
+Usage: Financial
+ 
+System Requirements: IBM PC or PC compatible, running MS/PC DOS 2.0 or
+greater, minimum of 512k bytes RAM and at least two disk drives.
+ 
+How to Start: Type GO (press enter)
+ 
+Suggested Registration: $69.95, includes full version of the program
+with a printed manual, and includes service and backup.
+ 
+File Descriptions:
+ 
+READ     ME   How to get started
+INSTALL  BAT  Installation batch file
+SUBINST  BAT  Installation batch file
+TGL      BAT  Start-up batch file
+TGL      EXE  Main program
+TGL      INT  Subfile for main program
+HELP    <DIR> Directory containing on-line help files
+ 
+PC-SIG, Inc.
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+## FILES809.TXT
+
+{% raw %}
+```
+Disk No  809
+Program Title: THE REMARKABLE GENERAL LEDGER (UK version disk 2 of 2)
+PC-SIG version 1
+ 
+    New Zealand has done it now. Remarkable Enterprises Ltd, which is
+located in New Zealand, has created the REMARKABLE GENERAL LEDGER. This
+system is designed to work for the UK and countries using currencies other
+than the dollar.
+ 
+    REMARKABLE GENERAL LEDGER will allow you to set up and operate a
+complete General Ledger, with a wide range of reports, and a Bank
+Information module including facilities for listing banks, reports on used
+and unused checks and Bank Statement Reconciliation. You can print out
+reports on your transactions either in summary or in detail. Reports can be
+printed either on a leading or account level. You can also print a trial
+balance and your chart of accounts. A simple menu is offered that allows
+you to add, change, delete, or view your various entries made into your
+chart of accounts, journal, your record of bank deposits, and your checking
+account. The program has on-line help for every screen that requires input
+from the user.
+ 
+    The full version of REMARKABLE GENERAL LEDGER includes all the features
+of the public domain version plus profit and loss reports, balance sheets
+password protection, a complete manual and service and backup.
+ 
+Usage: Financial
+ 
+System Requirements: IBM PC or PC compatible, running MS/PC DOS 2.0 or
+greater, minimum of 512k bytes RAM and at least two disk drives.
+ 
+How to Start: Type GO (press enter)
+ 
+Suggested Registration: $69.95, includes full version of the program
+with a printed manual, and includes service and backup.
+ 
+File Descriptions:
+ 
+DOC     <DIR> Directory containing the documentation
+???????? DBF  Data file (12 files)
+CONFIG   SYS  Sample configuration file
+ 
+PC-SIG, Inc.
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0809
 

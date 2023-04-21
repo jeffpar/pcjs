@@ -62,6 +62,7 @@ machines:
 
 ## 1004-B.BAS
 
+{% raw %}
 ```bas
 100 ' WORDMERG.BAS                                           VERSION 2.0
 110 '
@@ -560,9 +561,11 @@ machines:
 49998 ' ****************************************************************
 49999 END
 ```
+{% endraw %}
 
 ## 1005-A.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -636,9 +639,11 @@ machines:
 790 LPRINT CHR$(27)CHR$(64);:END
 800 ' SAVE"addrflcd
 ```
+{% endraw %}
 
 ## 1009-A.BAS
 
+{% raw %}
 ```bas
 1 '     IPCO Software Exchange
 2 '
@@ -922,9 +927,11 @@ machines:
 16090 PRINT "Program will continue when problem is corrected.":RESUME
 65000 ' SAVE"DAYLOG.bas",a
 ```
+{% endraw %}
 
 ## 3002-A.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 A$=STRING$(80,205)
@@ -1069,9 +1076,11 @@ machines:
 5000 REM ***   Y=F(X) GOES HERE   ***
 5010 RETURN
 ```
+{% endraw %}
 
 ## 3003-A.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -1199,9 +1208,11 @@ machines:
 1330 CALCULATED.AREA = CALCULATED.AREA -PRECISION.ERROR
 1340 RETURN
 ```
+{% endraw %}
 
 ## 3006-A.BAS
 
+{% raw %}
 ```bas
 100 CLS
 110 A$=STRING$(80,205)
@@ -1252,9 +1263,11 @@ machines:
 560 LPRINT "Coefficient Vector, B(N) :":FOR I=1 TO N:LPRINT "B(";I;") = ";B(I):NEXT
 570 PRINT "Coefficient Vector, B(N) :":FOR I=1 TO N:PRINT "B(";I;") = ";B(I):NEXT:END
 ```
+{% endraw %}
 
 ## 3012-A.BAS
 
+{% raw %}
 ```bas
 10 REM*************************************************************************
 20 REM******--  Multiple Linear Regression                             --******
@@ -1539,9 +1552,11 @@ machines:
 2810 ON ERROR GOTO 0
 2820 RESUME
 ```
+{% endraw %}
 
 ## 3014-A.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -1791,9 +1806,11 @@ machines:
 3170 NEXT I
 3180 RETURN
 ```
+{% endraw %}
 
 ## 4028-A.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -1925,9 +1942,11 @@ machines:
 1990 IF ERR=73 THEN CLS:                                                          PRINT "THIS PROGRAM USES THE 'PLAY' STATEMENT WHICH REQUIRES ADVANCED BASIC.":  PRINT "LOAD 'BASICA' AND RE-RUN.":END
 2000 ON ERROR GOTO 0
 ```
+{% endraw %}
 
 ## 5006-A.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 A$=STRING$(80,205)
@@ -2029,9 +2048,11 @@ machines:
 1830 PRINT "THAT'S ALL FOR NOW!"
 1840 KEY ON
 ```
+{% endraw %}
 
 ## 7013-A.BAS
 
+{% raw %}
 ```bas
 10 CLS
 20 A$=STRING$(80,205)
@@ -2140,9 +2161,11 @@ machines:
 1900 GOTO 1830
 1910 ' SAVE"prtital2",a
 ```
+{% endraw %}
 
 ## 7037-A.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -2205,9 +2228,11 @@ machines:
 1300 LPRINT CHR$(27);"8";:RETURN
 1310 END
 ```
+{% endraw %}
 
 ## 7042-A.BAS
 
+{% raw %}
 ```bas
 10 KEY OFF:CLS
 20 SCREEN 0
@@ -2569,9 +2594,80 @@ machines:
 3990 AR$=INKEY$:IF AR$="" THEN 3990
 4000 RETURN
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #239, version V1 
+ 
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on this disk.  If the CRC numbers do not match the following
+list you may have a bad file.  To use type:  CRCK4 <filespec>
+ 
+CRCK4 output for this disk:
+ 
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  1004-B  .BAS         CRC = D9 E1
+
+--> FILE:  1005-A  .BAS         CRC = 28 59
+
+--> FILE:  1009-A  .BAS         CRC = F9 3B
+
+--> FILE:  3002-A  .BAS         CRC = BD 64
+
+--> FILE:  3003-A  .BAS         CRC = CA 2B
+
+--> FILE:  3006-A  .BAS         CRC = A5 D4
+
+--> FILE:  3012-A  .BAS         CRC = 97 35
+
+--> FILE:  3014-A  .BAS         CRC = 0D 11
+
+--> FILE:  CURVE   .BAS         CRC = B8 41
+
+--> FILE:  CURVE   .ABS         CRC = 1C 04
+
+--> FILE:  CURVE   .NFO         CRC = CD 80
+
+--> FILE:  4028-A  .BAS         CRC = 5C BF
+
+--> FILE:  5006-A  .BAS         CRC = 1A A3
+
+--> FILE:  7013-A  .BAS         CRC = F9 58
+
+--> FILE:  LOGMENU .LOG         CRC = 97 EB
+
+--> FILE:  LOGON   .LOG         CRC = 33 76
+
+--> FILE:  LOGREV  .LOG         CRC = 92 64
+
+--> FILE:  LOGOFF  .LOG         CRC = 2D F2
+
+--> FILE:  7037-A  .BAS         CRC = EE 2F
+
+--> FILE:  7042-A  .BAS         CRC = 3C 52
+
+ ---------------------> SUM OF CRCS = 95 D5
+
+DONE 
+ 
+These and other Public Domain and user-supported programs from:
+ 
+PC Software Interest Group (PC-SIG)
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## CURVE.BAS
 
+{% raw %}
 ```bas
 1 'LEAST MEAN SQUARES CURVE FITTING by Don McDade
 10 KEY 1,"LIST"+CHR$(13)
@@ -2820,6 +2916,43 @@ machines:
 6480 IF ERR=53 THEN PRINT "Filespec not found."
 6490 RESUME 6465
 ```
+{% endraw %}
+
+## FILES239.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 239   IPCO Graph and Higher Math Mix                         v1.1
+------------------------------------------------------------------------
+This disk has an interesting mix of programs with the majority dealing
+with higher math functions and graph capabilities.  CURVE.BAS requires
+color graphics and the rest run well on momochrome.  4028-A.BAS is a
+musical program that allows an interlude in a hard day of pounding
+simultaneous equations.
+ 
+1004-B   BAS  Mini word processor/mail merge
+1005-A   BAS  Prints 3x5 recipe cards for address listing
+1009-A   BAS  Form generation, daily log sheet
+3002-A   BAS  A neat non-graphics mini graph plot
+3003-A   BAS  Plots probability curve
+3006-A   BAS  Matrix inversion & simultaneous equations
+3012-A   BAS  Multiple linear regression coefficients
+3014-A   BAS  Multiple regression analysis package
+CURVE    BAS  Linear exponential logorithmic & power equation
+CURVE    ABS  Introduction for CURVE.BAS
+CURVE    NFO  Documentation for CURVE.BAS  (12K)
+4028-A   BAS  Musical change of pace
+5006-A   BAS  Spelling bee exercisor
+7013-A   BAS  Prints in italics on Epson printer
+LOGMENU  LOG  A BASIC program that records entry and exit times
+LOGON    LOG  Used by LOGMENU.LOG to log on
+LOGREV   LOG  Used by LOGMENU.LOG to keep times
+LOGOFF   LOG  Used by LOGMENU.LOG to leave system
+7037-A   BAS  Changes printer mode
+7042-A   BAS  Mini data menu: directories, printer mode etc.
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

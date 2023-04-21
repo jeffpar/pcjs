@@ -39,6 +39,7 @@ machines:
 
 ## ARROW.BAS
 
+{% raw %}
 ```bas
 10 CLS
 17 '****************************
@@ -56,9 +57,11 @@ machines:
 1030 IF ASC(RIGHT$(KY$,1)) = 72 THEN PRINT "Up Arrow 72"
 1050 RETURN
 ```
+{% endraw %}
 
 ## BOX.BAS
 
+{% raw %}
 ```bas
 10 CLS
 12 '*****************************************
@@ -87,9 +90,11 @@ machines:
 1140 LOCATE Y2%,X2% : PRINT CHR$(CV6%);
 1150 RETURN
 ```
+{% endraw %}
 
 ## CKNUM.BAS
 
+{% raw %}
 ```bas
 10 CLS
 98 ' ****  Check for Numeric
@@ -105,9 +110,11 @@ machines:
 1050 NEXT IXI%
 1070 RETURN
 ```
+{% endraw %}
 
 ## ENTER.BAS
 
+{% raw %}
 ```bas
 8 '***********************************
 9 '*  Display Enter Key on the Screen
@@ -118,9 +125,54 @@ machines:
 140 PRINT "  ";CHR$(186);" Enter ";CHR$(186)
 150 PRINT "  ";CHR$(200);CHR$(205);CHR$(205);CHR$(205);CHR$(205);CHR$(205);CHR$(205);CHR$(205);CHR$(188)
 ```
+{% endraw %}
+
+## FILE1609.TXT
+
+{% raw %}
+```
+Disk No: 1609                                                           
+Disk Title: Creating User Friendly Software                             
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Creating User-Friendly Software                          
+Author Version: S1                                                      
+Author Registration: $5.00                                              
+Special Requirements: None.                                             
+                                                                        
+LONG DESCRIPTION                                                        
+This utility set should be in the haversack of everyone trying to write 
+attractive, user friendly BASIC or Turbo Pascal programs.               
+                                                                        
+Some utilities will make your programs more attractive, most will make  
+them quicker and more friendly.  Source code is available for most.     
+Users should understand ASCII.                                          
+                                                                        
+Included are a batch of ways to help you write easy-to-use programs to  
+get input from users, especially multiple data input.  One utility      
+helps set up one-sentence prompts for each input.  Another enhances the 
+use of default values.  A third makes BASIC and Pascal understand upper 
+and lowercase inputs identically.  Other utilities help you deal with   
+arrow key inputs, setting up data input screens, using lines and boxes  
+and displaying a message to buzz off when the computer is busy.         
+                                                                        
+File Descriptions:                                                      
+                                                                        
+???????? BAS  BASIC utilities.                                          
+???????? PAS  Turbo Pascal utilities.                                   
+FRIEND   COM  Main program.                                             
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1988 PC-SIG, Inc.                                         
+```
+{% endraw %}
 
 ## HRZMENU.BAS
 
+{% raw %}
 ```bas
 8 '*******************************
 9 '*  Horizontal Menu Selection
@@ -182,9 +234,11 @@ machines:
 8000 IF STARTFLAG$ = "t" THEN COLOR 7,0 : LOCATE 1,1 : PRINT "ADD RECORDS"
 8010 RETURN
 ```
+{% endraw %}
 
 ## UPPER.BAS
 
+{% raw %}
 ```bas
 10 CLS
 98 ' ****  Convert to Uppercase
@@ -201,6 +255,7 @@ machines:
 1060 IMPSTRING$ = HOLD$
 1070 RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

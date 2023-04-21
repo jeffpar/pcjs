@@ -34,6 +34,44 @@ machines:
     etc.) in place of the TYPE function to view the file.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1336.TXT
+
+{% raw %}
+```
+Disk No: 1336                                                           
+Disk Title: StupenDOS                                                   
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: StupenDOS                                                
+Author Version: 1.61                                                    
+Author Registration: $35.00                                             
+Special Requirements: None.                                             
+                                                                        
+STUPENDOS is a powerful disk management utility that goes beyond just   
+displaying and manipulating files in a user friendly manner.  In        
+addition to sorted file lists, tree directory display, file tagging,    
+disk and memory information, STUPENDOS has a mouse interface, a         
+file-find function, a file-display filter, and a file-move utility to   
+move files from one directory to another.                               
+                                                                        
+But the more subtle features are what sets STUPENDOS apart from other   
+disk managers.  When a batch copy of files stops because of lack of disk
+space, STUPENDOS can continue and copy smaller files in the batch list  
+that might fit.  STUPENDOS has a ``view contents'' function that can be 
+customized to call any program (DISP, SHOW, a favorite editor, etc.) in 
+place of the TYPE function to view the file.                            
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1336
 

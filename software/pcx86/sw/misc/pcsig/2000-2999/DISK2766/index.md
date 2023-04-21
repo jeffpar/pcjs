@@ -14,6 +14,53 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2766.TXT
+
+{% raw %}
+```
+Disk No: 2766                                                           
+Disk Title: Moraff's World                                              
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Moraff's World                                           
+Author Version: 6/91                                                    
+Author Registration: Call 800-VGA-GAME for pricing.                     
+Special Requirements: 640K RAM and a graphics card.  Hard drive recommen
+                                                                        
+MORAFF'S WORLD is an awesome fantasy role-playing game that may keep    
+many players hacking and slashing monsters, night after night.  It has  
+16-level dungeons with brick walls, wooden doors, ladders, and colorful 
+monsters that you can see coming down the 3-D corridors.                
+                                                                        
+Fight more than 20 classes of monsters, cast more than 100 spells,      
+travel five continents, and explore many dungeons.  Stores are located  
+on the top levels of each dungeon where you can equip your character    
+with weapons and armor.  In the temples, you can buy spells to heal your
+wounds, and you can store your loot in the bank so its weight won't slow
+you down.                                                               
+                                                                        
+The main screen features a 3-D view for short distances, and a          
+bird's-eye-view to show you where you are.  MORAFF's WORLD has          
+intelligent Help that realizes when you are confused, and makes         
+appropriate suggestions.  All commands are initiated with a single      
+keystroke.                                                              
+                                                                        
+This game is part of the MoraffWare Elite Game Series.  The games fully 
+support Hercules (720 x 348), CGA (320 x 200), EGA (640 x 350), VGA (640
+x 480, 16-colors), MCGA (320 x 200, 256-colors), VGA (360 x 480,        
+256-colors), 800 x 600, 16-colors, 1024 x 768, 16 and 256-colors!       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2766
 

@@ -14,6 +14,66 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## SFII.DOC
+
+{% raw %}
+```
+
+STICK FIGHTER II   programmed by Gary Shaw   Copyright (C) 1992
+
+        This program is in the PUBLIC DOMAIN.  Feel free to distribute it for
+NO PROFIT in its complete unaltered form.
+
+        You should have the following files:
+
+        sfii.exe     - the actual program
+        sfii.doc     - what you're reading
+        egavga.bgi   - the graphics driver
+        ct-voice.drv*- sound blaster driver file
+        RKick.voc    - voice data
+        UCut.voc
+        FBall.voc         thanx to Calvin, Henry, Matt, Frank, Alex
+        Grab.voc                for these sounds + beta testing!
+        SBoom.voc
+        CLGrab.voc
+        Whoosh.voc
+        Fly.voc
+        Hold.voc
+        LKick.voc
+
+* This file and all following files are for Sound Blaster support.  If you have
+a Sound Blaster Pro you may have to substitute your own ct-voice.drv file for
+the one here.  Naturally this program will still work without Sound Blaster.
+
+*****************************************************************************
+               STICK FIGHTER II  Second Release  May 1992
+
+                    Copyright (C) 1992 by Gary Shaw
+****************************************************************************
+
+- a martial arts type game featuring various kicks/punches, jumping, blocking,
+  crouching, throwing and special moves such as fireballs, blade kicks, etc.
+- SOUND BLASTER SUPPORT NOW HERE!
+- MULTIPLE CHARACTERS AND THE ABILITY TO CONSTRUCT NEW CHARACTERS NOW HERE!
+- make sure NUMLOCK is ON
+- press ESC during combat to get back to main menu
+- Just type
+  SFII
+  to run the game.  If you have a fast computer ( > 16 MHZ ) you may wish to
+use the Command line option to reduce game speed for faster computers:
+
+  sfii [speed] where [speed] is optional and should range from about 1 to 30.
+
+  The higher the number, the slower.  You shouldn't have to go above
+  20 unless you have an incredibly fast computer, and should not need this
+  option for computers running at 16MHz or less.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3506
 

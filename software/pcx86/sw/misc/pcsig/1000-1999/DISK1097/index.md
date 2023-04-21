@@ -36,6 +36,7 @@ machines:
 
 ## ADDINFO.BAS
 
+{% raw %}
 ```bas
 10 REM This is the addinfo section.
 20 PRINT "
@@ -262,9 +263,29 @@ machines:
 2120 PRINT "
 2130 PRINT "     (To return to your directory type SYSTEM after the OK.)
 ```
+{% endraw %}
+
+## BBS-DESC.TXT
+
+{% raw %}
+```
+FormGen - Form Generator                                                       
+========================                                                       
+                                                                               
+Category: Business / Desktop Publishing                                        
+                                                                               
+FormGen is a powerful, yet easy-to-use package for making forms.  It works     
+like a word processor, but has many features specially geared to designing     
+forms.  Using the full screen editor, you can quickly draw lines and boxes     
+and position text.  You then print the form on your Epson, IBM or HP type      
+printer.  The printed results are amazing!  Professional quality forms can     
+be designed and printed in minutes.  [ASP MEMBER]                              
+```
+{% endraw %}
 
 ## COVLTR.BAS
 
+{% raw %}
 ```bas
 10 REM This is the covltr section.
 20 PRINT "
@@ -366,9 +387,11 @@ machines:
 850 PRINT "
 960 PRINT "     (To return to your directory, type SYSTEM after the OK)
 ```
+{% endraw %}
 
 ## COVSHT.BAS
 
+{% raw %}
 ```bas
 10 REM This is the covsht section.
 20 PRINT "
@@ -470,9 +493,11 @@ machines:
 920 PRINT "
 930 PRINT "      (To return to your main directory type SYSTEM after the OK)
 ```
+{% endraw %}
 
 ## EDUC.BAS
 
+{% raw %}
 ```bas
 10 REM This is the EDUC section.
 20 PRINT "
@@ -586,9 +611,11 @@ machines:
 950 PRINT "
 960 PRINT "     (Type the word SYSTEM following the OK to return to directory)
 ```
+{% endraw %}
 
 ## EXPER.BAS
 
+{% raw %}
 ```bas
 10 REM This is the exper section.
 20 PRINT "
@@ -805,9 +832,119 @@ machines:
 1970 PRINT "     ***** ***** ***** ***** ********** ***** ***** ***** *****
 1990 PRINT "     (To return to your prompt, type the word SYSTEM after the OK)
 ```
+{% endraw %}
+
+## FILE1097.TXT
+
+{% raw %}
+```
+Disk No: 1097
+Program Title: RESUMEBEST & FORMGEN version 3.31
+PC-SIG version: 1.4
+
+Perhaps one of the most important factors in job interviews is not only
+a first impression, but also what you give your prospective employers -
+your resume.  It is a set of files that has valuable information on how
+you can create the best possible resume.  Not only can you achieve a
+better looking resume, but it is done at a much lower price than what
+other services offer.  RESUMEBEST does not recommend that you slavishly
+follow one particular format.  But it presents several different formats
+so that you can choose the one that best fits your past experience and
+the particular job you are looking for.  Not only does it show what you
+should do for each resume section, but it also gives information
+concerning the proper order of presentation, the correct wording, the
+amount you should write, the type of paper that should be used, how to
+make a cover sheet, and more.  The files on this disk include sample
+resumes in different formats so that you can learn the proper order for
+writing a resume.  Other files on this disk should be referred to as you
+prepare your resume.  Everyone eventually has to write a resume, and
+RESUMEBEST will help you review and prepare each of your resumes and
+will give some important tips and pointers.  RESUMEBEST is a program
+that has professional advice that you should not do without -- your
+improved resume will give you a better chance to obtaining your next, or
+even first job.
+
+FORMGEN works like a word processor with added graphics features useful
+for creating forms.  Horizontal and Vertical thin and thick lines are
+among the most frequently used functions and are activated by pressing
+Alt F1, F2 and Ctrl F1, F2.  Contents can be easily marked and copied,
+or moved to other destinations in the document.  You can print a form by
+pressing Alt F10, and options for Pica (10 cpi) or Elite (12 cpi) are
+available.  The word processor has most standard functions plus easy
+access to quick reference help (F10), quick display of files (Alt F),
+and calling the operating system to load a secondary copy of DOS (Alt
+O), allowing files to be copied, disks formatted, and other programs to
+be run from within FormGen.  The program is easy to use and an effective
+tool for making forms with graphics limited to the combinations of thin
+and thick lines and two type fonts and sizes.
+
+Usage:  Job Resumes/Forms Generation.
+
+Special Requirements:  RESUMEBEST requires BASIC or GWBASIC.
+
+How to Start:  Type GO (press enter).  For RESUMEBEST, you must first
+load BASIC then load README.BAS for further instructions about the
+program.
+
+Suggested Registration:  $29.95 for RESUMEBEST, $35.00 for FORMGEN.
+
+File Descriptions:
+
+------------  RESUMEBEST
+README   BAS  Program description
+INTRO    BAS  Introduction to resumes
+OUTLINE1 BAS  Sample one-page outline
+OUTLINE2 BAS  Sample two-page outline
+OBJGEN   BAS  How to properly word a general resume
+OBJSPEC  BAS  How to properly word a targeted resume
+SUMMARY  BAS  Discusses the summary of qualifications
+EDUC     BAS  Discusses your education and training background
+EXPER    BAS  How to properly present your background experience
+ADDINFO  BAS  How to add miscellaneous information to your resume
+REFER    BAS  Discusses personal and business references
+COVSHT   BAS  How to make a cover sheet
+COVLTR   BAS  How to make an introductory or cover letter
+REFSHT   BAS  How to prepare a separate reference sheet
+THANKS   BAS  How to prepare an interview thank you letter
+MAILTIPS BAS  How to properly mail your resume package
+------------  FORMGEN
+FORM     CFG  FormGen configuration file.
+FORM     COL  FormGen overlay file.
+FORM     DOC  Brief documentation for unregistered version.
+FORM     EXE  FormGen program.
+FORM     HLP  FormGen overlay file.
+FORM     OVL  FormGen overlay file.
+B&W      BAT  Black & White configuration setup.
+COLOR    BAT  Color configuration setup.
+COMPAQ   BAT  Compaq configuration setup.
+MANUAL   BAT  Prints brief documentation.
+MONO     BAT  TTL monochrome setup.
+B&W      CFG  Black & White configuration.
+COLOR    CFG  Color configuration.
+COMPAQ   CFG  Compaq configuration.
+MONO     CFG  TTL monochrome.
+BBS-DIST DOC  Distribution terms for BBS or Shareware distribution.
+UPGRADE  DOC  Upgrade notice.
+???????  FRM  Sample forms (9 files).
+REF      FRM  Use FormGen to print this reference card.
+REG      FRM  Use FormGen to print this registration form.
+UPGRADE  FRM  Use FormGen to print this upgrade notice.
+BBS-DESC TXT  Brief description for BBS or catalog listing.
+FILES    TXT  List of files.
+READ     ME   Brief instructions for getting started
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
 
 ## INTRO.BAS
 
+{% raw %}
 ```bas
 10 REM THIS IS THE INTRO TO THE RESUMEBEST PROGRAM.
 20 PRINT "
@@ -1025,9 +1162,11 @@ machines:
 1980 PRINT "     *                                                         *
 1990 PRINT "     ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **
 ```
+{% endraw %}
 
 ## MAILTIPS.BAS
 
+{% raw %}
 ```bas
 10 REM This is the mailtips section.
 20 PRINT "
@@ -1130,9 +1269,11 @@ machines:
 860 PRINT "     * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 870 PRINT "     (Type system after the OK to return to main directory.)
 ```
+{% endraw %}
 
 ## OBJGEN.BAS
 
+{% raw %}
 ```bas
 10 REM This is the OBJGEN section.
 20 PRINT "
@@ -1238,9 +1379,11 @@ machines:
 920 PRINT "
 930 PRINT "     (Type the word SYSTEM after the OK to return to the directory)
 ```
+{% endraw %}
 
 ## OBJSPEC.BAS
 
+{% raw %}
 ```bas
 10 REM This is the objspec section.
 20 PRINT "
@@ -1325,9 +1468,11 @@ machines:
 720 PRINT "
 730 PRINT "     (To return to directory type SYSTEM following OK)
 ```
+{% endraw %}
 
 ## OUTLINE1.BAS
 
+{% raw %}
 ```bas
 10 REM This is the Outline1 section.
 20 PRINT "
@@ -1460,9 +1605,11 @@ machines:
 1180 PRINT "     To return to the main directory, merely type system after OK.
 1190 PRINT "
 ```
+{% endraw %}
 
 ## OUTLINE2.BAS
 
+{% raw %}
 ```bas
 10 REM This is the Outline2 section.
 20 PRINT "
@@ -1594,9 +1741,11 @@ machines:
 1140 PRINT "
 1150 PRINT "     (To return to directory type SYSTEM after the OK)
 ```
+{% endraw %}
 
 ## README.BAS
 
+{% raw %}
 ```bas
 10 REM This is the 1Readme section of ResumeBest by Connie Poloskey.
 30 PRINT "     ***********************************************************
@@ -1741,9 +1890,11 @@ machines:
 1540 PRINT "     THANK YOU...AND HAPPY RESUME!
 1550 PRINT "     ( to return to directory, type SYSTEM> after the OK)
 ```
+{% endraw %}
 
 ## REFER.BAS
 
+{% raw %}
 ```bas
 10 REM This is the refer section.
 20 PRINT "     ☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺☺
@@ -1814,9 +1965,11 @@ machines:
 570 PRINT "     memory.  See REFSHT section of this disk for more information.
 600 PRINT "     (To return to directory type SYSTEM after the OK)
 ```
+{% endraw %}
 
 ## REFSHT.BAS
 
+{% raw %}
 ```bas
 10 REM This is the refsht section.
 20 PRINT "
@@ -1939,9 +2092,11 @@ machines:
 996 PRINT "
 997 PRINT "     (Type SYSTEM to return to prompt after the OK)
 ```
+{% endraw %}
 
 ## SUMMARY.BAS
 
+{% raw %}
 ```bas
 10 REM  This is the Summary Section of the Resume by C. Poloskey
 20 PRINT "
@@ -2084,9 +2239,11 @@ machines:
 1295 PRINT "
 1296 PRINT "     (To return to your main directory, type SYSTEM after the OK)
 ```
+{% endraw %}
 
 ## THANKS.BAS
 
+{% raw %}
 ```bas
 10 REM This is the thanks section.
 20 PRINT "
@@ -2179,6 +2336,7 @@ machines:
 650 PRINT "
 680 PRINT "     (To return to main directly, type SYSTEM after the OK)
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

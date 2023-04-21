@@ -84,6 +84,93 @@ machines:
     of HYPERDRAW to teach the basic drawing commands of PC-KEY DRAW.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1032.TXT
+
+{% raw %}
+```
+Disk No: 1032                                                           
+Disk Title: PC-Key-Draw 3 of 4 (also 344,345,1124)
+PC-SIG Version: S3.9                                                    
+                                                                        
+Program Title: PC-Key-Draw                                              
+Author Version: 3.76                                                    
+Author Registration: $100.00                                            
+Special Requirements: Two floppy drives and CGA.                        
+                                                                        
+PC-KEY DRAW combines the features of CAD, paint, slide show, and desktop
+publishing programs into one powerful and flexible drawing package.     
+                                                                        
+Create a wide variety of graphics such as:                              
+                                                                        
+~ Mechanical design                                                     
+                                                                        
+~ Country quilt design                                                  
+                                                                        
+~ Landscape architecture                                                
+                                                                        
+~ Graphics game development                                             
+                                                                        
+~ Business presentations                                                
+                                                                        
+~ Graphic art                                                           
+                                                                        
+Fast and easy to use, with or without a mouse.                          
+                                                                        
+Drawing features include:                                               
+                                                                        
+~ Lines -- parallel, spoke                                              
+                                                                        
+~ Circles -- arcs, pie slices, ellipse                                  
+                                                                        
+~ Curves -- sine, rose, spiral                                          
+                                                                        
+~ Others -- dots, vectors, polygon, fillets and arrows                  
+                                                                        
+Paint features include:                                                 
+                                                                        
+~ Spray paint                                                           
+                                                                        
+~ Shading                                                               
+                                                                        
+~ 29 colors                                                             
+                                                                        
+~ Modify color                                                          
+                                                                        
+~ 64 fill patterns                                                      
+                                                                        
+~ Fade/shift/strip colors                                               
+                                                                        
+~ Reverse video                                                         
+                                                                        
+Twenty-six text fonts are included in the registered version, four fonts
+the shareware copy with the ability to create your own.  Text can be    
+placed at the cursor location, justified, moved, rotated, and imported a
+an ASCII file.  Screen modification includes all standard options and a 
+few unusual ones.                                                       
+                                                                        
+Additional features include object area calculation, animation,         
+templates, banner/poster printing, macro language, and powerful         
+slide-show system.                                                      
+                                                                        
+The newest version of PC-KEY-DRAW also includes HYPERDRAW.  HYPERDRAW   
+provides a means to link related screens of information together in a   
+database structure that is ideal for a variety of tasks such as teaching
+aids, interactive slide shows, image organization, drawing detailing,   
+project scheduling, cataloging, process diagraming, and much more.      
+There is also a full interactive tutorial that uses the linked screens  
+of HYPERDRAW to teach the basic drawing commands of PC-KEY DRAW.        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1032
 

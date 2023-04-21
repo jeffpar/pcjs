@@ -30,6 +30,118 @@ machines:
     the local and international time appear on screen.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1669.TXT
+
+{% raw %}
+```
+Disk No: 1669                                                           
+Disk Title: World Time                                                  
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: World Time                                               
+Author Version: 1.22                                                    
+Author Registration: $10.00                                             
+Special Requirements: None.                                             
+                                                                        
+Need to know the time in London, Beijing or Bangkok?  WORLD             
+TIME can tell the time in 100 cities across the 24 world time           
+zones.                                                                  
+                                                                        
+WORLD TIME is fun for the curious and a must for international          
+businessmen who want to avoid miscalculations that might result in      
+embarassing overseas phone calls or faxes.  WORLD TIME is simple        
+to use:  just type "WT" and the city name at the DOS prompt, and        
+the local and international time appear on screen.                      
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## PC-SIG.DOC
+
+{% raw %}
+```
+
+Program Title: World Time 
+
+Detailed Program Description:
+
+	This program will tell you the the local time in 100 cities
+throughout the 24 world time zones.
+
+Who is the intended user:
+
+	Anyone who needs to make a phone call to a city in a different
+time zone, or arrange a meeting, or arrange travel arrangements.  In short,
+anyone who needs to know what time it is now in Abu Dhabi, for example.
+
+Improvements over old version:
+
+1.2	June 1989	Corrected spelling errors; corrected wording of daylight
+			savings time message; made options case insensitive;
+			updated author's address; adjusted screens for 
+			color; added daylight savings for Cairo
+
+1.21   September 1989	Beijing daylight savings not extended through 9/12
+
+1.22  Febuary 1990      Corrected daylight savings for Adelaide
+
+Unique features of program:
+
+	Easy to use; time reported is always in human form, e.g. 9:30p
+instead of 21:30 (although, military time is also supported.); No codes to
+remember, cities are refered to by name.  Automatic adjustment for
+daylight savings time.
+
+Program's limits:
+
+	Program is limited to 100 supported cities. There are no features
+that come only with registration.
+
+Special System Requirements: None
+How to start program: Type wt at command line
+Registration Fee: $10.00
+Materials or services that come with registration: Free updates
+
+List of program files:
+
+WT.EXE	executable (help screens are included within this file)
+WT.DAT	holds name of local city (ascii file) will be created if not
+	present by WT.EXE
+READ.ME comments about wt and DOS path command
+WTHIST.DOC version history
+```
+{% endraw %}
+
+## WTHIST.DOC
+
+{% raw %}
+```
+
+VER	DATE
+
+1.0	Mar 1989
+
+1.1	May 1989	Corrected Houston's time zone 
+
+1.2	June 1989	Corrected spelling errors; corrected wording of daylight
+			savings time message; made options case insensitive;
+			updated author's address; adjusted screens for 
+			color; added daylight savings for Cairo
+
+1.21   September 1989	Beijing daylight savings not extended through 9/12
+
+1.22  Febuary 1990      Corrected daylight savings for Adelaide
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1669
 

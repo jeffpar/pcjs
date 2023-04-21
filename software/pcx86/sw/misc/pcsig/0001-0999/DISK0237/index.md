@@ -31,6 +31,41 @@ machines:
     minutes.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0237.TXT
+
+{% raw %}
+```
+Disk No:  237                                                           
+Disk Title: PC-General Ledger                                           
+PC-SIG Version: S1.8                                                    
+                                                                        
+Program Title: PC-General Ledger                                        
+Author Version: 1.4A                                                    
+Author Registration: $50.00.                                            
+Special Requirements: None.                                             
+                                                                        
+PC-GENERAL LEDGER was written by a financial executive with over 25     
+years of experience in all areas of accounting, finance, and general    
+management.  The program makes it easy to add entries, maintaining      
+charts of accounts, print entries and general ledger updates, as well   
+as print general ledger and trial balances, financial statements, and   
+month- and year-end closings.  It handles up to five bank accounts and  
+eight departments, or cost centers, and also prints checks.             
+                                                                        
+The program is easy to use and can be set up and running in less than   
+15 minutes.                                                             
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0237
 

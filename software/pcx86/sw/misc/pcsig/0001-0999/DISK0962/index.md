@@ -63,6 +63,92 @@ machines:
     including terminate-and-stay-resident programs and device drivers.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES962.TXT
+
+{% raw %}
+```
+Disk No  962
+Program Title: INDENT, SELECT XTRAC UTILITY (SXU), PDVIM
+PC-SIG version 1
+ 
+    INDENT comes from the University of Illinois via some distribution
+tapes from the PDP-11 Unix. It is a C program formatter that reformats any
+C program in the input file according to the switches (or command options).
+INDENT helps your C source code to be more readable and in a format you
+want it to appear. The source code for the main program is included and is
+written in C.
+ 
+    SELECT XTRAC UTILITY (SXU) extracts selected sections of data files.
+SXU accepts any standard ASCII sequential file, composed of character or
+numerical data. The input file to SXU cannot contain imbedded control
+characters, except for normal print-control characters. SXU reads the input
+data file and creates an output extract file containing the data between
+user-specified start and end strings in the input data file. SXU can of
+extract data and append it to an already-existing extract file. On-line
+help and directions are contained within the program.
+ 
+    PDVIM is the public domain version of VIM (VIrtual Machine), an
+interpreter that can simulate and/or allow access to the hardware of an XT
+or AT in an addressing space independent of the normal hardware. This
+debugger can stop execution at any point, examine or alter memory or
+registers, examine the program, determine where the program has been, and
+much more. Unlike DOS DEBUG and other debuggers, these functions are
+accomplished by a program outside the addressing space of the program or
+system under test, so VIM can never be altered or destroyed by the errant
+program. VIM also can trace DOS itself, or the ROMs, and set breakpoints
+within ROM or on data. In fact, any location or I/O port may be used as a
+breakpoint. When a faulty interrupt code is reached, the breakpoint stops
+VIM, so the code can be traced and variables examined. VIM's virtual
+approach allows it to debug programs that others can't, including terminate
+and stay-resident programs and device drivers.
+ 
+Usage: C Program Formatter, Data Retrieval, Debugger
+ 
+System Requirements: 320K memory and one disk drive. (640K memory is
+recommended).
+ 
+How to start: Type: COPY INDENT.MAN LPT1: (press enter) to print INDENT
+manual, SXU (press enter) to start SELECT XTRAC, and PDVIM (press enter) to
+start PDVIM.
+ 
+Suggested Registration: $15.00 for SELECT XTRAC, and $49.00 for PDVIM.
+ 
+File Descriptions:
+ 
+ARGS     C    Argument scanning and profile reading code.
+DOINDENT C    Set up the indentation depending on the user codes.
+DOPREESC C    A C function.
+INDENT   C    The C source code of the main program.
+INDENT   EXE  The executable form of the main program.
+INDENT   MAN  Documentation for the INDENT main program.
+INDENT   PRO  A profile file for INDENT.
+INDENT_C H    Header file to be used by INDENT.
+INDENT_G H    Header file to be used by INDENT.
+IO       C    Contains routines to handle i/o related stuff for INDENT.
+LEXI     C    This is the token scanner for indent.
+MAKEFILE      This makefile runs using the utility `ndmake' by Don Kneller.
+PARSE    C    Contains the routines which keep track of the parse stack.
+PR_COMME C    This routine takes care of scanning and printing comments.
+README        History of the Indent program.
+SXU      COM  Main program.
+SXU      HLP  Help file.
+INVOICE  DAT  An invoice format.
+SXU      DAT  Test data.
+README   DOC  Introductory note.
+PDVIM    EXE  Main program.
+ 
+PC-SIG
+1030D E. Duane Avenue
+Sunnyvale, CA 94086
+(408) 730-9291
+(c) copyright 1987 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0962
 

@@ -50,6 +50,7 @@ machines:
 
 ## BBS-TALK.BAS
 
+{% raw %}
 ```bas
 1 '**** Will run under Multi-Link version 2.07 *************
 2 '
@@ -1184,6 +1185,316 @@ machines:
 65090 IN$=INKEY$: IF IN$="" THEN 65090 ELSE CLS
 65150 RETURN
 ```
+{% endraw %}
+
+## BBS-TALK.DOC
+
+{% raw %}
+```
+                      BBS-TALK.MRG Documentation
+
+                       
+     BBS-TALK.MRG represents a commendable effort by Dorn Stickle to bring
+together a large number of merge files into one giant merge for PC-TALK III.
+Dorn took several merges written by different authors, combined it with
+his own 450BAUD.MRG and his new file for finding the amount of unused
+space on a diskette, and then resolved all the line number conflicts 
+between the various merges and the original PC-TALK Version 3.0 Level 830424.
+BBS-TALK.MRG incorporates:
+
+    3101CMW.MRG (Windows, Music & color graphics)
+    ANSI.MRG    (redundant with 3101CMW.MRG)
+    PCFIXLC1.MRG (Appends account # for Long Distance Dialing service)
+    PCFIXLC2.MRG (ALT-H for hang-up modem after connection)
+    PCTSPLT.MRG (Split screen input option on line 25 of your screen:
+                 sends your input a line at a time with ENTER key)
+    TALK450.MRG (ALT P for 450 baud option)
+    PCT-365.MRG (PC-TALK version 3.65) Shift Tab to set/clear ALT 1 - 0
+                                       temporary input string storage.
+                                       ALT-I load ALT 1 to 0 from a file
+                                       ALT-U unload ALT 1 to 0 to a file
+                                       Improved ALT-H hang-up modem
+                                       REDIAL routine rewritten
+                                       ALT-G path and subdirectory support
+                                       Manual dialing allows new comm parameters
+
+     Please note: 3101CMW.MRG automatically provides the user with the
+ability to view RBBS-PC bulletin board color graphics and music.  Plus
+for those Bulletin Boards with WINDOW capability, the user selects the
+W)indow option on the Bulletin Board and then ALT A to switch to 3101
+mode for using Windows and then toggle ALT A after exiting from Windows.
+Do not toggle ALT A unless you are using the Bulletin Board Window feature.
+
+     After BBS-TALK has dialed a number, any key will disconnect the modem
+up to the time the carrier-detect signal is received and you are
+connected to the remote computer.  After connection, use ALT H to hang up
+the modem; the program will try 4 times to hang up, then recycle.
+
+     The split screen option <CONTROL-HOME> activates line 25 on your
+screen, and rather than sending data one char at a time, accumulates your
+input on line 25 and waits for the <ENTER> key before sending a stream
+of data to the remote computer. 
+
+     The ALT I option will allow you to upload a file from your disk to
+temporary string storage in one of the ALT 1 to ALT 0 keys (for later
+sending a long message to a remote computer).  The ALT U option then
+allows you to download a string you previously stored (with ALT I) to
+the remote computer.  You will need carriage returns in your file.
+The ALT U option is inconsistent with the split screen option, because
+the split screen option is looking for the ENTER key to begin sending
+date to the remote computer, while the ALT U option is typically used
+to send a series of data lines to be entered as a MESSAGE on the remote
+Bulletin Board.  <SHIFT-TAB> sets/clears temporary ALT key strings.
+
+     <ALT-G> allows you to change sub-directories on your hard disk
+for uploading or downloading data.  However, if you are running PC-TALK
+off of your hard disk, you will need to change back to the sub-directory
+containing the PC-TALK program after you are finished, or you could
+hang up your computer if PC-TALK attempts to cycle back to its own file.
+
+     To use the 450 baud option, you must first call the Bulletin Board
+at 300 baud, then after signing on, select the 450 baud option on the
+Bulletin Board menu, and when prompted, select ALT P to change to 450 baud.
+The Bulletin Boards cannot answer at 450 baud, only 300 and 1200 baud.
+
+     BBS-TALK.MRG already contains the above mentioned merges, and most
+importantly, Dorn Stickle has resolved all line number conflicts between
+the various merges and a virgin copy of PC-TALK.BAS from Andrew Flugleman
+(NOT the QUBIE-modified version for QUBIE modems).  BBS-TALK will only run
+in the compiled version because of the machine-language object modules
+required by the LINK command below.
+
+     Start with a virgin copy of PC-TALK.BAS (Line 9999 shows 830424)
+and BBS-TALK.MRG and make sure both are saved in ASCII:
+BASICA <ENTER> LOAD "BBS-TALK.MRG <ENTER> SAVE "BBS-TALK.MRG",A
+Then merge the two files together using the BASIC MERGE command, and
+compile and link in this manner:
+
+   BASCOM PC-TALK/e/w/s/c:4096/o;
+
+   LINK   PC-TALK+IBMCOM+DISKSPAC+GETDIR+CHDIR
+
+To do the linking you will need the following object modules:
+                   
+                   IBMCOM.OBJ    (comes with the BASIC compiler)
+                   DISKSPAC.OBJ  (New file by Dorn Stickle: ALT-R then
+                                 ? <ENTER> for space remaining on disk
+                                 or use ALT T or ALT V and ? <ENTER>)
+                   GETDIR.OBJ    (supports PATH commands DOS 2.x)
+                   CHDIR.OBJ     (change sub-directories on hard disk)
+
+Authorship and commendations:
+
+   PC-TALK.BAS  Version 3.0 Level 830424 Andrew Fleugelmen
+                                         The Highlands Press
+                                         PO Box 862
+                                         Triburon, CA  94920
+   
+   3101CMW.MRG   Kent Galbraith, Kingwood, TX
+
+   PCFIXLC1.MRG  Leroy Casterline, Fort Collins, CO
+   PCFIXLC2.MRG  Leroy Casterline (modified by Jim Gainsley)
+
+   PCTSPLT.MRG   (PCT3SC.MRG) Wes Meier, Walnut Creek, CA
+
+   TALK450.MRG   Dorn Stickle, Dallas, TX
+   DISKSPAC.OBJ  Dorn Stickle, Dallas, TX
+
+   PCT-365.MRG   Jim Gainsley, Minneapolis, MN
+
+   GETDIR.OBJ    John Chapman, CIS 70205;1217
+   CHDIR.OBJ     John Chapman
+
+   Plus countless hours spent by a large number of people devoted to
+the free exchange of public domain software, who are unknown to us
+or who have expended effort on earlier versions, revisions and merges,
+including Jack Wright, who did the original code for finding unused
+disk space remaining, and countless others who have contributed one
+way or another, like Charles Innusa.
+
+   Dorn Stickle made an attempt to incorporate the PCT3JR.MRG for
+IBM PCjr, but this program is too large to fit in the approximately
+70K partition left in the 128K-sized PCjr.  Dorn is working on down-
+sizing this program, with the PCT3JR.MRG sized for the PCjr, as a
+separate program.
+
+
+
+                                    Typed by Greg Rismoen
+
+
+
+July 17, 1984
+Houston, Texas
+
+After consultation with Kent Galbraith, I changed the compiler codes
+in the above documentation. Also, I made certain minor changes to clarify
+the documentation. 
+
+                                     Duane C. Hendricks
+```
+{% endraw %}
+
+## FILES335.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 335  Mods for PC-TALK                                   v1   DS
+------------------------------------------------------------------------
+ 
+This disk contains BBS-TALK.EXE [and various support programs]  BBS-TALK
+adds functions to PC-TALK v3.0 level 830424.  The functions are detailed
+in BBS-TALK.DOC
+ 
+BBS-TALK DOC  Details added functions to PC-TALK v3.0, level 83024 and
+              tells how to create BBS-TALK.EXE from scratch.
+BBS-TALK EXE  Executable PC-TALK including new functions
+BBS-TALK MRG  Basic [Ascii format] file when merged with PC-TALK v3.0
+              level 83024 creates BBS-TALK basic source file to compile.
+CHDIR    OBJ  Object file linked with BBS-TALK to change sub-directories
+              on hard disk.
+COMPILE  BAT  Batch file to automatically compile and link BBS-TALK.EXE
+DISKSPAC OBJ  Object file to link with BBS-TALK to give space remaining
+              space on disk
+GETDIR   OBJ  Object file linked witn BBS-TALK to support PATH commands
+              for DOS 2.x
+SPD      COM  Put in your autoexec.bat file and run with BBS-TALK.  Speeds
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## PCT-XMOD.DOC
+
+{% raw %}
+```
+PCTRLX.DOC               9/22/84          DOCUMENTATION FOR PCTRLX.MRG
+ 
+              MERGE FILE FOR PC-TALK III, LEVEL 830424.
+ 
+  May also be used with PC-TALK III which has been modified with any
+     of the following master Merge programs: PCT365, 366, 3661.
+ 
+ 
+PCTRLX.MRG when merged with PC-TALK 3, will provide significantly
+superior performance during XMODEM file transfers on networks such as
+CompuServe.
+ 
+This file is a pre-release module from a master Merge file PCT37.MRG,
+which contains many more enhancements for PC-TALK 3.
+ 
+This module is being released ahead of PCT37, because of the problems
+encountered in using the current PC-TALK 3 XMODEM implementation with
+CIS' newly supported XMODEM transfer protocol.
+ 
+The current implementation in the distribution version of PC-TALK was
+designed to support mainly single user communications, such as are
+encountered in PC to the typical BBS, which is usually a single PC with
+BBS, RBBS, IBBS, etc. software.
+ 
+A major difference in a large network environment is the delays in
+what would otherwise be a continuous data exchange. These delays are
+the result of packet or other switching techniques, by which the
+network can serve perhaps thousands of simultaneous users at the
+'same' time.
+ 
+The implementation provided by PCTRLX.MRG is designed to work around
+network switching. It also alters the original PC-TALK Xmodem protocol
+in 3 major ways:
+ 
+1)   The currently recommended XMODEM protocol is entirely RECEIVER
+     DRIVEN. This was not true of the original protocol, nor of the
+     PC-TALK implementation. This Merge file provides that feature.
+ 
+2)   The RECEIVER can now control the timing of block transmissions,
+     both at the beginning of the transfer and interactively during
+     the transfer. Additional and as an aid to the user in modifying
+     timing, screen printouts of the actual times is now given.
+ 
+3)   The original protocol provided that errors be tried 10 times.
+     This modification alters that to 20 times.
+ 
+ 
+OPERATION:
+ 
+Receive:
+ 
+     Open your file as previously. If you simply use '=x', the block
+     timing will be 4 seconds as before.  You may enter a number
+     between 2 & 70 in format: '=x10' or '=x4', which would then set
+     the block timing at 10 seconds or 4 seconds per block.
+ 
+     As the transfer proceeds, the screen will show the time per
+     block, the avg. time per block, and the max time for the longest
+     transfer of a block up to that point.
+ 
+     If the current time in effect is less than the max time shown,
+     then the user should change the current timing. This is done by
+     pressing the TAB key and entering 2 digits from 2-70, in the
+     manner 06, or 20 etc. It is also ok to enter one digit and a
+     space.  DO NOT press <cr>.
+ 
+     The new timing takes effect immediately after the keyboard
+     receives the second character.  When the TAB key is pressed the
+     screen will print out 'ct=xx 'Enter (02-70)'. When the new time
+     is entered, then 'nt=xx' is indicated.
+ 
+     NOTE: THE XFER WILL HALT UNTIL THE SECOND CHARACTER OF THE NEW
+     TIME STRING IS ENTERED. DON'T DALLY!!
+ 
+     The default is 4 seconds. The default will be put into effect if
+     an invalid time is entered. The screen will also indicate 'INVL:
+     No Chg'
+ 
+     Though experience with the new timing is limited, I have found
+     that the timing should best be set at about 4 seconds over the
+     max shown, when working with networks, and at about 1-2 seconds
+     over the max shown when working with BBS'.
+ 
+     The major problem with setting block timing too long is the
+     chance of getting line garbage, necessitating a retry for the
+     block.
+ 
+     WHILE THE OVER-TIMING IS NOT CRITICAL, ONE SHOULD MAKE AN ATTEMPT
+     TO KEEP REASONABLY WITHIN BOUNDS, BUT SHOULD NOT FEEL COMPELLED
+     TO CONTINUOUSLY CORRECT THE PROGRAM!!
+ 
+     Nothing is lost if you see a time that is greater than your
+     current setting, after all the block did make it. It is future
+     blocks where your concern lies, and to guard against problems
+     with them, you increase the timing a bit.
+ 
+     Nothing in these changes alters in any manner the error checking
+     features of the protocol.
+ 
+     Error blocks and situations will now be retried 20 times,
+     provided the sender allows it.
+ 
+ 
+Transmit:
+ 
+     There is no user interaction in the transmit mode and no changes
+     in procedure from previous. Note however, that now in the send
+     mode, this program will NOT send a block until the receiver
+     requests it.
+ 
+As stated above these changes are new, and even though a good deal of
+testing has been done, they are still of an experimental nature and
+other changes may follow. However, what is presented here is most
+definitely a considerable improvement over what is currently in place.
+ 
+ 
+ 
+yy: Jim Gainsley (SysOp)  [76703,1007]
+    CIS IBMPROSIG  PCS-131
+
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

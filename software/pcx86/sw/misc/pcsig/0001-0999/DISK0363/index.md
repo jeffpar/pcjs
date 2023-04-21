@@ -48,6 +48,7 @@ machines:
 
 ## DEMO.BAS
 
+{% raw %}
 ```bas
 10 REM ==>  PCINPUT DEMONSTRATION PROGRAM - CARL R. STATON
 20 CLS:CLEAR:GOSUB 10000
@@ -407,9 +408,64 @@ machines:
 10500 PRINT "                                                                               ";
 10510 RETURN
 ```
+{% endraw %}
+
+## FILES.TXT
+
+{% raw %}
+```
+LANGUAGES/     (PCINPUT:  DATA DISPLAY & INPUT)
+ 
+ame           Description
+ 
+DEMO    .BAS   PCINPUT Demonstration
+PCIGEN  .BAS   Screen generator for BASIC programs
+PCIGEN  .EXE   Compiled version of PCIGEN
+PCINPUT .BAS   Data entry generator for BASIC programs
+PCINPUT .DOC   File listing for PCINPUT
+SKELETON.BAS   Generated BASIC statements
+SKELETON.DAT   Screen Generator data files
+SKELETON.MNU   Screen Generator skeleton names
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+```
+{% endraw %}
+
+## FILES363.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 363  PC-INPUT                                           v1   DS
+------------------------------------------------------------------------
+ 
+PCINPUT Program for Basic Screen Generation
+ 
+DEMO     BAS  PCINPUT Demonstration
+PCIGEN   BAS  Screen generator for BASIC programs
+PCIGEN   EXE  Compiled version of PCIGEN
+PCINPUT  BAS  Data entry generator for BASIC programs
+PCINPUT  DOC  File listing for PCINPUT
+SKELETON BAS  Generated BASIC statements
+SKELETON DAT  Screen Generator data files
+SKELETON MNU  Screen Generator skeleton names
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## PCIGEN.BAS
 
+{% raw %}
 ```bas
 10 REM *******************************************************************
 20 REM ****                                                           ****
@@ -813,9 +869,11 @@ machines:
 3960 PRINT "                                                                               ";
 3970 RETURN
 ```
+{% endraw %}
 
 ## PCINPUT.BAS
 
+{% raw %}
 ```bas
 1 REM ==>  LINES 10 & 11 MUST BE ONE OF FIRST LINES EXECUTED
 10 II%=80:DIM IA$(30):IA$(1)="0123456789.- ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%&*()+=:;{}[]<>,/?'":IA$(2)="0123456789.-":IA$(3)="YN":I0$=STRING$(II%,255):I6$="  ":I7$="    ":I8$="        "
@@ -874,9 +932,41 @@ machines:
 11051 RETURN
 11999 REM   END OF PCINPUT 1.8 COPYRIGHT 1984 BY CARL R. STATON
 ```
+{% endraw %}
+
+## PCINPUT.DOC
+
+{% raw %}
+```
+REM ****  PCINPUT/PCIGEN File Names   ****
+REM ****                              ****
+REM ****    1. PCINPUT.BAS            ****
+REM ****    2. PCIGEN.BAS             ****
+REM ****    3. PCIGEN.EXE             ****
+REM ****    4. DEMO.BAS               ****
+REM ****    5. SKELETON.BAS           ****
+REM ****    6. SKELETON.MNU           ****
+REM ****    7. SKELETON.DAT           ****
+REM ****                              ****
+REM **** To run PCINPUT Demo, at the  ****
+REM **** A> prompt, type:             ****
+REM ****                              ****
+REM ****  BASIC DEMO and press ENTER  ****
+REM ****                              ****
+REM ****                              ****
+REM **** To run PCIGEN, at the A>     ****
+REM **** prompt, type:                ****
+REM ****                              ****
+REM ****  PCIGEN and press ENTER      ****
+REM ****                              ****
+
+
+```
+{% endraw %}
 
 ## SKELETON.BAS
 
+{% raw %}
 ```bas
 10000COLOR  7, 0, 0
 10001PRINT "«««««««««««««««««««««  ███████████████████████████████  ««««««««««««««««««««««««";
@@ -905,6 +995,7 @@ machines:
 10024PRINT "                                                                               ";
 10025RETURN
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

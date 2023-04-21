@@ -40,6 +40,52 @@ machines:
     file dump to aid in debugging.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1737.TXT
+
+{% raw %}
+```
+Disk No: 1737                                                           
+Disk Title: Steve's Library For Turbo-C                                 
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Steve's Library for Turbo-C                              
+Author Version: 1.51                                                    
+Author Registration: $25.00                                             
+Special Requirements: Hard drive.                                       
+                                                                        
+Do you want to speed up your C programs and reduce their size at the    
+same time?  STEVE'S TURBO C LIBRARY is a set of direct video functions  
+that can do the job.                                                    
+                                                                        
+STEVE'S TURBO C LIBRARY provides a complete facility for direct writes  
+and reads in video memory.  This allows you to produce extremely fast   
+screen displays, with full control over colors and attributes.  With    
+direct video access you can create the rapid, sparkling displays that   
+attract users.                                                          
+                                                                        
+A special feature of STEVE'S TURBO C LIBRARY is the "ticker" interrupt  
+handler function.  With this function, you have the ability to install a
+special routine of your own to intercept DOS interrupt 1CH.  This allows
+you to perform operations relative to the system's clock.               
+                                                                        
+Several utility functions are also included in the library; Search the  
+current path for an excutable program, Compare two ASCII files, Count   
+words, lines, characters, etc in a file, Time and Date formats, and a   
+File Dump to aid in debugging.                                          
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1737
 

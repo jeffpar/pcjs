@@ -14,6 +14,41 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE3027.TXT
+
+{% raw %}
+```
+Disk No: 3027                                                           
+Disk Title: Catalog Pro                                                 
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: Catalog Pro                                              
+Author Version: 3.03                                                    
+Author Registration: $45.00                                             
+Special Requirements: High density drive.                          
+                                                                        
+Make your own diskette sales catalog! Save money by producing a         
+personalized, full-featured diskette sales catalog! CATALOG PRO takes   
+care of invoicing, sales tax, and shipping calculation. Add product     
+categories, prices, newsletter about your business, and much more. This 
+is a simple yet effective catalog program for a variety of markets:     
+software vendors, home-based mail order firms, entrepreneurs, any mail  
+order catalog company, or software stores who want to keep their        
+customers updated.                                                      
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3027
 

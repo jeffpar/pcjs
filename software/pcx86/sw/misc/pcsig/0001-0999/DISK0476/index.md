@@ -46,6 +46,7 @@ machines:
 
 ## BOOGERS!.BAS
 
+{% raw %}
 ```bas
 1 REM NOTHING
 2 REM
@@ -315,6 +316,36 @@ machines:
 9300 CLS:IF LEV$="1"THEN SK=INT(SK-(SK/2)):IF SK<1 THEN SK=1
 9310 GOTO 470
 ```
+{% endraw %}
+
+## FILES476.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No 476 Patrick's Best Games                                 v1.1 DS2
+---------------------------------------------------------------------------
+These games were gathered from previous PC-SIG disks to provide a good
+representation of high quality games for the new user.  In answer to
+compalints that most of the best games require color screens, only 3-DEMON
+and SPACEVAD out of the seven included games need a color graphics card.
+ 
+3-DEMON  EXE+ Three-D view of PACMAN-like game from inside the maze.
+3-DEMON  HI1  Records the High score of 3-Demon Game for posterity.
+BOOGERS! BAS  A maze game that requires destruction of blockades.
+BUGS     EXE  A good version of the classic arcade game Centipede
+CASTLE   EXE  An adventure game with clever animation and graphics,
+CASTLE   RAN  it has elements of role-playing and strategy games.
+PACKGAL  COM  Multiscreen version of MS. PACMAN with a few twists.
+POKER    EXE  The school of implemented Casino probability theory.
+SPACEVAD EXE+ Excellent version of Space Invaders, great graphics
+ 
+PC-SIG (Software Interest Group)
+1030 East Duane Avenue, Suite D
+Sunnyvale, CA  94086
+(408) 730-9291
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

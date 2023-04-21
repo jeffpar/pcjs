@@ -49,6 +49,44 @@ machines:
     CONFIG   LY   Program configuration file
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES488.TXT
+
+{% raw %}
+```
+-----------------------------------------------------------------------
+Disk No  488  LIGHTYEAR                                         v1 DS2
+-----------------------------------------------------------------------
+LIGHTYEAR is a program designed to help the user to examine possibilities
+in different areas of businesses for better output in manufacturing,
+marketing, advertising, sales, finance, purchasing, labor relations,
+personnel, banking, and financial planning.  It also allows the user to
+look at alternatives, to create different criteria and rules and to
+evaluate results.  Program is well documented.
+ 
+VOC      LY   Sub-routine for main program
+LY       EXE  Main program.
+HELP     LY   Variable help screen
+INSTALL  BAT  Batch file to make the light year disk a start up disk
+CATALOG  LY   Business areas in which LIGHTYEAR explores
+1        LY   Sub-routine for manufacturing and plant sites
+2        LY   Sub-routine for manufacturing and plant sites
+3        LY   Sub-routine for marketing and production planning
+4        LY   Sub-routine for advertising and media plan
+5        LY   Sub-routine for sales and prospects
+6        LY   Sub-routine for finance and aquistions
+7        LY   Sub-routine for purchasing
+8        LY   Sub-routine for labor relations and management
+9        LY   Sub-routine for labor relations and labor
+10       LY   Sub-routine for personnel and hiring
+11       LY   Sub-routine for banking and loan evaluatoin
+12       LY   Sub-routine for financial planning investments
+13       LY   Sub-routine for main program
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0488
 

@@ -14,6 +14,117 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILES.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No: 567A&B          TITLE: SOFTWARE JUKEBOX
+---------------------------------------------------------------------------
+      The Software Jukebox is the latest innovation in Software
+      marketing.  It turns the PC into a Software vending machine that
+      holds up to 200 of the most popular software disks.  The PC
+      becomes a very colorful, attention getting, advertising tool
+      while just sitting on the dealer's counter.  Despensing of the
+      is easy and convenient.  The total involement by the dealer is
+      collecting the copying charges after the customer is finished
+      copying all the disks that they require.  The copying total is
+      automatically tabulated on a totalizer built into the machine.
+
+------------      SOFTWARE JUKEBOX    -----------------------------------
+
+FILES             DESCRIPTION
+
+DISK 567A
+=============================================================================
+BROWSE   COM    Utility program for reading text files
+FILES    TXT    The file your now reading
+INFO     BAT    Information BAT file for the Software Jukebox
+NOTES    TXT    Notes file for the Software Jukebox
+READ     ME     Additional documentation for the Software Jukebox
+README   SIF    Special Shareware Information File
+INSTALL  BAT    Installation batch file
+DISK     DAT    Disk spec datafile
+DISKDESC DAT    Disk description datafile
+
+JBOX     EXE    Archived file - Contains the following:
+=============================================================================
+JUKEBOX  EXE    Main Program
+EDITOR   EXE    Editing program
+SETUP    EXE    Setup program for the Jukebox
+JUKEBOX  DOC    Jukebox manual
+
+DISK 567B
+==============================================================================
+DISK191  EXE    Compressed Lotto Buster program.  This is
+                the sample library disk for the Jukebox.
+
+FreeBooter(tm) Software
+P.O. Box 19624
+Portland, OR  97219
+(503) 244-4800
+Copyright 1992 FreeBooter(tm) Software
+```
+{% endraw %}
+
+## NOTES.TXT
+
+{% raw %}
+```
+Program name: SOFTWARE JUKEBOX
+
+Author name: FreeBooter(tm) Software
+Address    : P.O. Box 19624
+             Portland, OR  97280
+
+Telephone Number: (503) 244-4800  Orders only (800) 366-4012
+                   Compuserve 70214,3352
+
+Registration Fee: $89.95 + $1.75 shipping - $5.00 foreign
+
+Program Description:
+
+The Software Jukebox is the latest innovation in Software
+marketing.  It turns the PC into a Shareware vending machine that
+holds up to 200 of the most popular shareware disks.  The PC
+becomes a very colorful, attention getting, advertising tool
+while just sitting on the dealer's counter.  Despensing of the
+is easy and convenient.  The total involement by the dealer is
+collecting the copying charges after the customer is finished
+copying all the disks that they require.  The copying total is
+automatically tabulated on a totalizer built into the machine.
+
+If you need a system to run the Software Jukebox contact:
+
+Tony Toscano
+Burgoyne Computers
+Salt Lake City, UT
+(801) 531-2100
+
+Talk to Tony personally for a special package price.
+
+Please don't forget the authors if you decide these programs are useful
+to you.  The small charge they ask for their work is only appropriate
+compensation.
+
+Review the README file for more in depth information.
+
+FreeBooter(tm) Software is a member of the Software Association of Oregon
+
+Software Jukebox is a pending trademark of FreeBooter(tm) Software.
+
+
+FreeBooter (tm) Software
+P.O. Box 19624
+Portland, OR  97219
+(503)244-4800
+Copyright 1992 FreeBooter(tm) Software
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3283
 

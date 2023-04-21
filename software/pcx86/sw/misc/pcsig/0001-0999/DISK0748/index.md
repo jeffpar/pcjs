@@ -40,6 +40,79 @@ machines:
     GO       BAT  Batch file with start-up message.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES748.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  748  The Directory Assistant                                v1
+---------------------------------------------------------------------------
+The DIRECTORY ASSISTANT is a system to assist you in organizing name and
+address information for use in personalized phone books, mailing labels,
+on- line phone number lookups, and organizing meetings and events. The
+program is completely menu-driven and has an option to display help
+messages at each prompt. There is also an on-line help menu within the
+program. The Documentation is very easy to read and understand, but there
+are a few places where it seems to skip a line (a sentance doesn't make
+sense, it seems to have some words missing). If you read the manual with
+the program running though it doesn't present too much of a problem. The
+manual is very well organized and give plenty of examples. The program will
+run on any IBM-PC or compatable with at least 128 K of memory and one disk
+drive. This is a good program for the 'Novice' computer user.
+ 
+DA       EXE   Main program (run this one)
+DIRECT   EXE   Part of main program
+DALOAD   EXE   Part of main program
+SYSTEM   DSD   Default telephone directory
+SYSTEM   DSC    "
+SYSTEM   DSI    "
+DA       FMT   Required system data file
+DA       HLP   Required system help file
+MANUAL   DOC   Documentation file
+READ     ME    Quick file descriptions
+GO       BAT   Batch file with start-up message
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+## NOTES748.TXT
+
+{% raw %}
+```
+Program name:  The DIRECTORY ASSISTANT
+ 
+Author name:  KIER Associates
+              25 Heather Way
+              Sharon, Mass  02067
+Telephone:   (not given)
+ 
+Suggested donation:  $15.00
+ 
+Program description:
+ 
+The DIRECTORY ASSISTANT is a system to assist you in organizing name and
+address information for use in personalized phone books, mailing labels,
+on- line phone number lookups, and organizing meetings and events. The
+program is completely menu-driven and has an option to display help
+messages at each prompt. There is also an on-line help menu within the
+program. The Documentation is very easy to read and understand, but there
+are a few places where it seems to skip a line (a sentence doesn't make
+sense, it seems to have some words missing). If you read the manual with
+the program running though it doesn't present too much of a problem. The
+manual is very well organized and give plenty of examples. The program will
+run on any IBM-PC or compatible with at least 128 K of memory and one disk
+drive. This is a good program for the "Novice" computer user.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0748
 

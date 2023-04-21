@@ -14,6 +14,66 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1272.TXT
+
+{% raw %}
+```
+Disk No: 1272
+Disk Title: ReSearch (formerly Litigex)
+PC-SIG Version: S3
+
+Program Title: ReSearch (formerly Litigex)
+Author Version: 1.01
+
+Designed for attorneys, LITIGEX packs the power to document and sort
+through caseloads full of research material to find vital evidence.
+
+A research, document, and evidence organizer, LITIGEX lets you enter
+notes on evidence or other research, and file up to an eleven line
+summary according to source, page, line number and subject.  Notes can
+be chained together if 11 lines are inadequate.  Using up to 32,000
+entries per hard disk, LITIGEX can file the data under 500 subjects or
+types.  Keep tabs on documents or other evidence including who sent it,
+where it is located, and where and when it was found.
+
+Scan and find tools are fast and accurate and enable you to sort through
+massive files for obscure bits of incriminating data.  The program uses
+ASCII, making it compatible with your wordprocessor.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+This disk holds:
+
+         ReSearch, a research- and evidence-tracking database.
+
+IT IS IMPORTANT THAT YOU READ AND COMPLY WITH THESE SIMPLE INSTRUCTIONS.  DO
+NOT INSTALL THIS PROGRAM IN ANY MANNER DIFFERENT FROM WHAT IS DESCRIBED
+BELOW.
+
+
+RESEARCH is also contained in a self-extracting archive file: RSCH.EXE.  To
+load RESEARCH onto your hard disk and print its instructions, place this disk
+into drive A and enter "A:INSTRSCH A: C:" (assuming that your hard disk is
+drive C). The program will be automatically placed into a MANAGEX directory on
+your hard disk.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1272
 

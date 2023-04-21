@@ -30,6 +30,39 @@ machines:
     definition of each word.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES367.TXT
+
+{% raw %}
+```
+------------------------------------------------------------------------
+Disk No 367    Flash Cards:  Vocabulary and Spelling            v1    DS
+-------------------------------------------------------------------------
+ 
+This is the first of the 4-disk set of the Educational Package:  Flash
+Cards with 7,500-Word Vocabulary Builder and Spelling Teacher.  This disk
+contains the compiled form of the main program, the vocabulary file for
+the first part of the alphabet (a-de), and two files of flags to indicate
+words missed.  An excellent tool to improve vocabulary and/or spelling at
+the high school, college, or higher level, it does not include the 4,000
+most basic words but, rather, the 7,500 next most commonly-used words.
+Requires 128K, 1 drive.
+ 
+CARDS          Vocabulary words and definitions (a-de)
+FLASH     EXE  Main Flash Cards program, compiled
+FLAG           Flags for missed vocabulary words
+SFLAG          Flags for missed spelling words
+ 
+ 
+PC Software Interest Group (PC-SIG)
+1030 E Duane, Suite J
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0367
 

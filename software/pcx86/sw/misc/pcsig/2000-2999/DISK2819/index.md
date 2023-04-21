@@ -14,6 +14,42 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2819.TXT
+
+{% raw %}
+```
+Disk No: 2819                                                           
+Disk Title: Pelton Computer Consultants 2/2 (#1944)                     
+PC-SIG Version: S1.6                                                    
+                                                                        
+Program Title: Pelton's Financial Utilities                             
+Author Version: 1.61                                                    
+Author Registration: $48.00                                             
+Special Requirements: 512KRAM , and a hard drive.                       
+                                                                        
+PELTON'S FINANCIAL UTILITIES is a collection of full-color, computer    
+programs driven by a fancy menu, part of which is the "Selection Guide."
+The utilities solve many time-value financial problems encountered in   
+business.  Typical problems are distribution of funds from a sum, money 
+growth with or without deposits, IRA's, and many types of simple and    
+complex loans.  The Selection Guide steers the Pelton user to the       
+appropriate financial utility to make it easy to get a quick and        
+accurate answer for almost any unknown quantity.  Full and abbreviated  
+professional-looking schedules may be displayed or printed.  The program
+is amazingly fast and truly easy to use.  A things-to-do list manager   
+which you'll find useful, helpful, convenient, and fun is also included.
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1991 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2819
 

@@ -36,6 +36,46 @@ machines:
     CHALLENGE is a winner.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1642.TXT
+
+{% raw %}
+```
+Disk No: 1642                                                           
+Disk Title: Poker Challenge                                             
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: Poker Challenge                                          
+Author Version: 1.0                                                     
+Author Registration: $19.00                                             
+Special Requirements: None.                                             
+                                                                        
+Poker players, here are two games that will hone your skill while giving
+you lots of enjoyable practice.  In Stud, you play against seven        
+computer opponents -- all smart and shrewd.  In Texas Hold 'Em, you play
+against nine computer opponents who have lots of savvy.  But Poker      
+CHALLENGE does give you a break; poke a hot key and your odds of winning
+are instantly displayed on the screen along, with an abundance of       
+information about the hand.                                             
+                                                                        
+Not only are these games for the thoughtful, serious player, they also  
+move fast enough to keep the beginner delighted.  In fact, you can take 
+advantage of the fast deal and then use the plus and minus keys to play 
+the game so fast you can barely keep up with the moves.  All face up    
+cards are drawn on the screen, showing their ranks and suits.  You      
+control the ante and betting limits.  For poker pros and amateurs, POKER
+CHALLENGE is a winner.                                                  
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1642
 

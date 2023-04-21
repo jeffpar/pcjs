@@ -36,6 +36,54 @@ machines:
     that an undesigned universe would be biologically favorable.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1772.TXT
+
+{% raw %}
+```
+Disk No: 1772                                                           
+Disk Title: Universe Analyzer                                           
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Universe Analyzer                                        
+Author Version: 1.01                                                    
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+What is the probability of an undesigned universe meeting all the       
+requirements for a biologically favorable universe?  UNIVERSE ANALYZER  
+is designed to provide a limited answer to this important question.  By 
+``a biologically favorable universe,'' this program means a universe    
+with plenty of heavy elements such as carbon, and a large number of     
+bright long-lived stars like the sun.                                   
+                                                                        
+After prompting the user for inputs, the program generates a list of    
+seven requirements for a biologically favorable universe.  Using a      
+random number generator, the program then generates many ``universe     
+models'' with various characteristics as a result of chance. the program
+does NOT involve any religious or philosophical presuppositions.        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## FILEDESC.DOC
+
+{% raw %}
+```
+UNIVERSE.EXE  Contains the program UNIVERSE ANALYZER
+UNIVERSE.HLP  The help file for UNIVERSE ANALYZER
+READ.ME       Read.me file for UNIVERSE ANALYZER
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1772
 

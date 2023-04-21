@@ -14,6 +14,107 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## EZILOGO.TXT
+
+{% raw %}
+```
+
+        S  U  P  E  R  T  R  A  Q  
+        ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀
+        ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀ 
+        █ █                                        █ █
+        █ █                                        █ █
+        ▀ ▀                                        █ █
+        ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀             █ █
+        ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀             █ █
+                                   █ █             █ █
+                                   █ █             █ █
+                                   ▀ ▀             █ █
+       ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀              █ █
+       ▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀              █ █
+
+                                        Expense Management System
+                                        COPYRIGHT (C) 1989-1991 HNH
+```
+{% endraw %}
+
+## FILE2755.TXT
+
+{% raw %}
+```
+Disk No: 2755                                                           
+Disk Title: SuperTraq 1 of 2 (#2756 also)                               
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: SuperTraq                                                
+Author Version: 2.1S                                                    
+Author Registration: $49.95                                             
+Special Requirements: 512K RAM, hard drive, and DOS 3.0+.               
+                                                                        
+SUPERTRAQ utilizes pull-down menus and pop-up windows to provide an     
+easy-to-operate user interface with no cryptic commands to remember.    
+                                                                        
+SUPERTRAQ implements expense management much differently from other     
+expense tracking products.  SUPERTRAQ recognizes that each individual's 
+daily routine, activities and habits are different and supports the     
+Franklin International Institute Day Planner system.  The Day Planner   
+system easily and quickly records expenses and files your receipts.  At 
+your leisure, enter the recorded expense information into your SUPERTRAQ
+software.                                                               
+                                                                        
+Many features help manage expenses simply and quickly.  Track expenses  
+by project, employee, client, or any number of defined expense files.   
+One of the more powerful features is its ability to track and manage    
+separate expense files.  Expenses are categorized by Credit Cards,      
+Checks, Cash and Mileage.  Each expense category includes the expense   
+date, description, type code, tax status, daily entry number, amount and
+daily total for each entry.                                             
+                                                                        
+Various reports can be generated for tax preparation, accounting,       
+project planning and tracking purposes, company and individual expense  
+management, etc.  Print to the screen, to a file name, or to the        
+printer.  Generate reports daily, weekly, monthly, and annually.        
+                                                                        
+Reports can be generated individually for each expense category.  Also  
+available is a Batch Printing mode to automate the printing of each     
+report file if and when it is necessary to print.                       
+                                                                        
+The SUPERTRAQ works with virtually any day organizer or daily/monthly   
+calendar system.                                                        
+                                                                        
+FEATURES:                                                               
+                                                                        
+~ Easy-to-use pull-down menus and pop-up windows                        
+                                                                        
+~ Manage separate expense files                                         
+                                                                        
+~Set up permanent credit and checking accounts                          
+                                                                        
+~ Allow for user-defined expense types                                  
+                                                                        
+~ Output reports to ASCII file, display screen or printer               
+                                                                        
+~ Designed to work with day organizers such as the Franklin Day Planner 
+System                                                                  
+                                                                        
+~ Generate reports daily, weekly, monthly and annual expenses reporting.
+                                                                        
+~ Generate reports for each expense category (i.e., CREDIT, CHECKING,   
+CASH and MILEAGE)                                                       
+                                                                        
+~ Virtually no limit on the number of transactions and entries          
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2755
 

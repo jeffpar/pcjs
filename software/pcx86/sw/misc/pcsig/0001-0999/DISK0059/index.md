@@ -78,8 +78,281 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #59, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  PRINT   .DOC         CRC = E5 4A
+
+--> FILE:  PEPCON  .DOC         CRC = A8 53
+
+--> FILE:  PEPSON  .BAS         CRC = EE E1
+
+--> FILE:  PEPSON  .EXE         CRC = 0C E3
+
+--> FILE:  PSCREEN .BAS         CRC = 22 A6
+
+--> FILE:  PSCREEN .EXE         CRC = 17 4C
+
+--> FILE:  ADD     .BAT         CRC = 00 00
+
+--> FILE:  AUTO    .BAT         CRC = 00 00
+
+--> FILE:  AUTOADD .BAT         CRC = 00 00
+
+--> FILE:  AUTOEXEC.BAT         CRC = 00 00
+
+--> FILE:  FASTPRT .COM         CRC = 69 77
+
+--> FILE:  FASTPRT .DOC         CRC = 21 F4
+
+--> FILE:  INSTALL .BAT         CRC = 63 84
+
+--> FILE:  TWO     .BAT         CRC = BC B0
+
+--> FILE:  AUTOEXEC.BAK         CRC = 00 00
+
+--> FILE:  GUIDE   .BAT         CRC = 00 00
+
+--> FILE:  QUICKREF.BAS         CRC = 84 56
+
+--> FILE:  QUICKREF.DOC         CRC = 31 CC
+
+--> FILE:  BASIC   .KEY         CRC = 43 12
+
+--> FILE:  EW      .KEY         CRC = 56 C0
+
+--> FILE:  TEMPLE  .KEY         CRC = 71 40
+
+--> FILE:  QR      .KEY         CRC = 24 6F
+
+--> FILE:  VOLKSWTR.KEY         CRC = 87 05
+
+ ---------------------> SUM OF CRCS = DB 9A
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
+
+## FASTPRT.DOC
+
+{% raw %}
+```
+                                FASTPRT 2.0
+                     (c) Copyright J. Craig Hill, 1982,1983
+
+
+         INTRODUCTION
+
+         FASTPRT is a speed-up utility for the PrtSc function on the
+         IBM Personal Computer and IBM Personal Computer XT.
+
+         For all printers, it allows you to terminate an active PrtSc
+         operation early (if you've seen enough or changed your mind,
+         for instance).
+
+         For printers which don't have the foresight to ignore trailing
+         blanks and empty lines, FASTPRT provides this capability for
+         them. This look-ahead feature allows a screen with trailing
+         blanks and blank lines to print in a fraction of the time it
+         takes if all these extraneous blanks have to be "printed".
+
+         It has been tested under DOS 1.00 through 2.0.
+
+         COPYING AND SHARING
+
+         The FASTPRT diskette is not copy protected.  You may make as
+         many backup copies of it as you wish.
+
+         You are encouraged to copy and share this product with your
+         friends.  However, you may not charge a fee for copying or
+         distributing this product without an express written
+         aggreement with SUNBELT COMPUTING, 1274 N. Emory Place, NE,
+         Atlanta, Ga. 30306.
+
+         If you have received a copy of this product from a friend and
+         plan to use it, your contribution will be appreciated.  The
+         recommended contribution is $10 or 10 cents for every minute
+         it  will  save  you  for the next 5 years, whichever is lower.
+         Send your contribution to:
+
+                                SUNBELT COMPUTING
+                              1274 N. Emory Pl., NE
+                               Atlanta, Ga. 30306
+
+
+..page
+..head03cFASTPRT
+..formatvwform2.doc
+         INSTALLATION
+
+         To install FASTPRT manually, simply insert your FASTPRT
+         diskette in the default drive and type FASTPRT.  FASTPRT
+         becomes an extension to DOS and remains available until you
+         turn off your machine or press Ctrl-Alt-Del.
+
+         If you would like FASTPRT to be available whenever DOS is
+         loaded, use the following procedure with all your system
+         diskettes (i.e., any diskette(s) you might place in drive A
+         before you start or restart DOS):
+
+            1. Make sure you are in DOS command mode and the default
+               drive is drive A (The prompt A> should be displayed on
+               your screen).
+
+            2. Insert your system diskette in drive A. (Be sure to
+               remove the write protect tab before insertion.) If you
+               have a 2 drive system, insert the FASTPRT diskette in
+               drive B. If you have a single drive system, insert the
+               system diskette whenever you are prompted to "insert
+               diskette for drive A" and insert the FASTPRT diskette
+               whenever you are prompted to "insert diskette for drive
+               B".
+
+            3. If your system diskette contains DOS 1.0 or 1.1, type
+               in:
+
+                        DIR AUTOEXEC.BAT
+
+                  a. If the message "File not found" appears on the
+                     screen, type in:
+
+                        B:INSTALL AUTO A
+
+                  b. Otherwise (i.e., AUTOEXEC.BAT appears as a valid
+                     file), type in:
+
+                        B:INSTALL ADD A
+
+            4. If your system diskette contains DOS 2.0 or above, type
+               in:
+
+                        B:INSTALL TWO A
+
+
+            5. If you start DOS 2.0 or above from a fixed disk, type
+               in:
+
+                        B:INSTALL TWO d
+
+               where d is the correct drive designator for your system
+               disk.
+
+         FASTPRT will now be installed automagically whenever you start
+         or restart DOS.
+..page
+         OPERATION
+
+         Once FASTPRT is installed, you start copying your screen to
+         the printer the same way you did before.  Just press the PrtSc
+         key while holding down either the right or left shift key.
+
+         If you want to stop printing before the entire screen has been
+         printed, just press the same shift-PrtSc combination again.
+         Printing will stop at the end of the line currently being
+         printed.
+
+         DOCUMENTATION
+
+         A copy of the documentation for FASTPRT is located in the file
+         FASTPRT.DOC on the FASTPRT diskette.  To print a copy press
+         the PrtSc key while holding down the Ctrl key.  Then type in:
+
+                                TYPE FASTPRT.DOC
+
+         ORDERING
+
+         Additional copies of FASTPRT may be ordered from SUNBELT
+         COMPUTING for $10 plus $5 to cover the costs of the diskette
+         and shipping.  In addition, as our time and resources permit,
+         we will supply you with a copy of FASTPRT on a try-it-first,
+         buy-it-if-you-find-it-useful basis if you send us a
+         pre-formatted, single sided diskette and a self-addressed,
+         stamped mailer.  Address all orders and inquiries to SUNBELT
+         COMPUTING, 1274 N. Emory Place, NE, Atlanta, Ga. 30306.
+
+         NOTE TO USERS OF THE GRAPHICS COMMAND UNDER DOS 2.0
+
+         FASTPRT will work in conjunction with the GRAPHICS command
+         that is available to users of DOS 2.0 and above.  FASTPRT will
+         handle the Shift Prt-Sc function if your display is in text
+         mode, and GRAPHICS will handle it if your display is in
+         graphics mode.  Please note that the ability to terminate a
+         Prt-Sc function prior to completion is not available when
+         GRAPHICS is in control.
+
+```
+{% endraw %}
+
+## PEPCON.DOC
+
+{% raw %}
+```
+`E`T`CCOMMAND SEQUENCES`t`L`L
+`E`CFONT CONTROL
+`*`L`L`E     ^E & ^e`e --- turns `Eemphasized`e mode of print on and off
+
+`L`E     ^D & ^d`e --- turns `Ddouble wide`d mode of print on and off
+
+`L`E     ^I & ^i`e --- turns `Iitalic mode`i of print on and off
+
+`L`E     ^T & ^t`e --- turns `Tdouble-strike`t mode of print on and off
+
+`L`E     ^S & ^s`e --- turns `Scompressed`s (squashed) mode on and off
+
+`L`E     ^U & ^u`e --- turns `Uunderlining`u on and off
+
+`L`E      ^@`e   --- turns all special fonts off
+`L`L`E`CCARRIAGE CONTROL
+`L`L`E      ^C`e  --- causes the rest of the line to be centered.
+
+`L`E      ^P`e  --- begins a new paragraph (indented 5 spaces)
+ 
+`L`E      ^L`e  --- begins a new line
+ 
+`L`E      ^*`e  --- turns alignment and indenting off (or on)
+
+`L`E      ^0`e  --- turns indenting off
+
+`L`E    ^1 - ^6`e --- sets indenting to 5 * N spaces
+
+`L`E      ^!`e  --- goes to new page unconditionally
+
+`L`E      ^?`e --- goes to new page if fewer than 10 lines are left
+`L`L`E`COTHER CONTROL SEQUENCES
+`L`L`E      ^$`e  --- changes the section letter to the next higher one
+             and sets the page counter to 1.  EX: if you are on page
+             A-9, the next page will be B-1.
+
+`L`E        ^Xnn`e --- used for sending other escape sequences to the
+             printer. "^X27" is like "PRINT CHR$(27)"
+`*`L`L`ENOTE: The character "^" should be replaced by whatever is used for
+the control character indicator.
+```
+{% endraw %}
+
 ## PEPSON.BAS
 
+{% raw %}
 ```bas
 5 WIDTH "LPT1:",180
 10 LPRINT CHR$(27)"@";
@@ -418,9 +691,162 @@ machines:
 3020 NEXT K
 3030 RETURN
 ```
+{% endraw %}
+
+## PRINT.DOC
+
+{% raw %}
+```
+`P`P`P`T`EPEPSON `t`eand`E`T PSCREEN
+`t`e
+`L`L`Sby Bill Richards, Dept. of Communication SFU 291-4119 or -3687
+`s`L`L`PThis is a
+text formatting program.  It allows you to enter
+text more or less free form, with formatting commands interspersed
+with the text.  It will adjust the lines of text (align) to any
+length you specify (under 71), it will center lines, it will
+accept pre-formatted text (i.e. text that is to be printed without aligning),
+and it allows you to change the fonts
+in the middle of a line.
+`L`E`L`PAll formatting commands`e are of the format "^?", 
+where the "^" is replaced by a character you use to tell the program
+that the next character is a control command, and where the "?"
+is replaced by one of the following control characters:
+`L`E`T`L`PD d  E e  I i  S s  T t  U u  C  L  P  *  !  ?  0 1 2 3 4 5 6
+`L`L`e`t`P`EThere are two general classes of commands.`e  The first controls
+the `Efonts.`e  These are the commands with "D, E, I, S, T, U, and @".
+These commands only change the font you are printing with, and do not
+alter the spacing or location of characters.  
+`L`L`PThe second class includes
+what might be called `Ecarriage control`e commands.  These are the
+"C, L, N, P, *, !, ?, and 0 - 6" commands.  
+`L`L`PFor font commands, the upper-case letters turn special fonts on,
+while the lower-case ones turn them off.   "^@" turns all special
+fonts off.  
+`L`L`P "^!" and "^?" go to the top of the next page unconditionally
+and conditionally.  The numbers (0, 1, 2, 3, 4, 5, or 6) tell the 
+program how far to indent all lines printed until the next indent 
+command is received.
+"^0" means no indentation, "^1" means indent 5 spaces, "^2" means indent
+10 spaces, etc. 
+`L`L`P"^*" turns alignment and indenting off until the next "^*".
+`L`L`P"^C" centers the line.
+`L`L`P "^N" turns on eight lines per inch spacing.
+`L`L`P"^P" starts a new paragraph, and "^L"
+starts a new line. Note that to skip a line, you must say "^L^L", rather
+than just "^L".
+
+`L`L`P Centered lines begin on a new line.  Control sequences cannot
+be used in the middle of lines that are centered with the "^C" command.
+That is because a control sequence ends the centered line and begins
+a new line, no matter what it is. (Sorry, I had a lot of trouble with
+this and finally accepted it as it is.)  A "^L" after some centered
+text causes a line to be skipped after the centered part is printed.
+If you do not want to skip any space after a centered line, don't 
+begin the next line with a "^L"; just start it on the next line of
+the input file.
+`L`L`PWhen you tell the program to indent text, it does it by putting 
+a number of blank spaces at the 
+beginning of each line as it is printed.  This cuts into the line 
+length, so your text takes more space on the page if it is indented.  
+New paragraphs that are also indented are "double indented" -- that 
+is, the paragraph indentation takes place after the other indentation.
+Centering and ^* take precedence over indenting.
+`L`L`PThere are two kinds of page numbers.  The first is plain, where
+the number looks like this:`L
+`E`T`L`C- 4-
+`t`e`L  The second is with section letters and numbers, like this:
+`L`L`E`T`CA-3   A-4   B-1   B-2   B-3   C-1   etc.
+`e`t`LTo chose the one you want, you just answer the question at the beginning
+of the program when you run it.  With letters, the program starts
+at the letter you specify.  To start at "A", you tell it "1".  To
+start at "B", you tell it "2", etc.
+`L`L`PIf you are using "^*" and you give it a line that is too long,
+the program pauses when it is printing and asks you to tell it whether or not
+to continue.  Actually, if you type anything other than CTL-BREAK
+the program wil continue.  Only part of the offending line is printed.
+`L`L`PIf you want to use the printer to make copies on bond paper, ditto
+stencils, or gestetner stencils, there is no problem, since the program
+pauses at the top of each new page and waits for you to tell it that you
+are ready.  It will ask "Ready?"  If you give it a carriage return, it
+won't ask anymore (on successive pages).  If you give it any character
+and then a carriage return, it will continue to pause for each new page.
+`L`L`L`PThere are two versions of the program: `EPEPSON`e and `EPSCREEN.`e  
+PEPSON is for printing on the Epson MX-80.  PSCREEN displays the
+formatted text on the screen.  The major difference between the two is
+that PSCREEN does not execute the font commands.  ALl the spacing is
+the same (except for Double and Squashed), but the font commands are
+ignored.  With PEPSON, escape sequences are sent for the font commands.
+`L`L`EMiscellaneous notes
+`L`L`P1. "^L" always begins a new line.  "^P" causes five spaces to be 
+printed.  If "^P" comes at the beginning of a line, that line is indented.
+If it comes in the middle of a line, that line is ended, a new line is
+started, and it is indented.  So, to start a new paragraph on the next
+line, you can use just "^P" or "^L^P".  They have the same effect.  To skip a
+line between paragraphs, you need "^L^L^P" ('end of the current line', 'end
+of the next line', and 'indent the new line').
+`L`L`P2. The "^S" and "^D" commands work, but there is a problem:
+PSCREEN, since it can't show different widths, can't show correct line
+lengths when you use squashed letters. Be careful here...
+`L`L`P3. PEPSON and PSCREEN have a default format option.  When you begin
+either program, the first thing it says is "set printer to top of page. Ready?"
+It pauses for a response from you.  Anything other than a lowercase "s" followed
+by a carriage return puts you into prompt mode.  A lowercase "s" and carriage
+return gives you the "Standard" form, which is 6 lines per inch, 11 inch
+page, 66 lines per page, start printing on line 6, stop on line 59, page
+number on line 63, one inch left margin, 68 character lines.  PEPSON allows
+you the option of choosing the number of lines per inch.  If you choose some
+number, say 4, remember that 11 inch paper will give you 44 line pages.  
+Adjust your margins (first line of printing and last line of printing)
+accordingly.
+`L`L`P4. When you are using "^*", two things cause a new line: 1) any
+use of the "^L" command; and 2) a new line in your input file.  Study the
+page with the control sequences (the one before this one) and the file
+that created this page (at the end of this section of notes) to see how
+"^*" works.
+`!`L`CDemo
+`L`LThis is a short `IDEMONSTRATION`i of the 
+formatting capabilities of this program. `L`PAs
+you can see, a number of options have been used, including:
+`Ccentering,`L`Eemphasized`e `Ssquashed`s `Ddouble wide`d
+`Uunderlining`u `D`I`T`Sdouble italic two-strike-squashed`@`1
+and indented text.  The next parts are indented further
+`2 than the preceeding parts, and the next parts`3 even further.
+`0but here is no indenting at all. Following is a little
+table to show the use of the * command:
+`*
+                    TABLE
+         |------------|-----------|
+         |  yes       |    no     |
+         |------------|-----------|
+         |   72%      |    28%    |
+         |------------|-----------|
+
+^*^!^LDemo"^L"
+^L^LThis is a short ^IDEMONSTRATION^i of the 
+formatting capabilities of this program. ^L^PAs
+you can see, a number of options have been used, including:
+^Ccentering,^L^Eemphasized^e ^Ssquashed^s ^Ddouble wide^d
+^Uunderlining^u ^D^I^T^Sdouble italic two-strike-squashed^@^1
+and indented text.  The next parts are indented further
+^2 than the preceeding parts, and the next parts^3 even further.
+^0but here is no indenting at all. Following is a little
+table to show the use of the * command:
+^*
+                    TABLE
+         |------------|-----------|
+         |  yes       |    no     |
+         |------------|-----------|
+         |   72%      |    28%    |
+         |------------|-----------|
+
+^*
+```
+{% endraw %}
 
 ## PSCREEN.BAS
 
+{% raw %}
 ```bas
 5 WIDTH "SCRN:",80
 10 'LPRINT CHR$(27)"@";
@@ -750,9 +1176,11 @@ machines:
 3020 NEXT K
 3030 RETURN
 ```
+{% endraw %}
 
 ## QUICKREF.BAS
 
+{% raw %}
 ```bas
 10 '
 20 '
@@ -1213,6 +1641,7 @@ machines:
 4570 PRINT K$;: ANS$=ANS$+K$
 4580 GOTO 4480
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

@@ -30,6 +30,40 @@ machines:
     feature that will blank the monitor after 10 minutes of inactivity.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1839.TXT
+
+{% raw %}
+```
+Disk No: 1839                                                           
+Disk Title: Sales-Biz                                                   
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: SALES-BIZ                                                
+Author Version: 1.2                                                     
+Author Registration: $35.00                                             
+Special Requirements: 512K RAM, and two high density floppy drives or a 
+                                                                        
+This program is for those who need a sales tracking program to maintain 
+customer and product sales information.  It also maintains a directory  
+of sales contacts and sales logs.  Various daily, period, and to date   
+sales reports are provided.                                             
+                                                                        
+The program uses table searches and scrolling windows to make it easy   
+for you to access your sales information.  Sales can be entered by      
+dates, customers or products.  The program even has a screen saving     
+feature that will blank the monitor after 10 minutes of inactivity.     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1839
 

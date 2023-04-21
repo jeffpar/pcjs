@@ -39,6 +39,53 @@ machines:
     are limited to 64 members and strings to 11 characters.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1321.TXT
+
+{% raw %}
+```
+Disk No: 1321                                                           
+Disk Title: Turbo Pascal Utilities, Student Pascal                      
+PC-SIG Version: S2.1                                                    
+                                                                        
+Program Title: P-Pascal Translator                                      
+Author Version: 3.8                                                     
+Author Registration: $50.00                                             
+Special Requirements: Turbo Pascal 4.0 or 5.0                           
+                                                                        
+The package consists of a Pascal to p-code translator and a p-code      
+interpreter.  The translator accepts standard Pascal programs with C    
+masking and shifting extensions and produces text assembly language     
+files that the interpreter program executes directly.                   
+                                                                        
+Programs can be compiled from a user's text file or directly one line at
+a time from the keyboard (keyboard input allows only the current line to
+be edited).  This introductory version allows seven files to be open at 
+a time, limits sets to 64 members, and allows string constants of up to 
+80 characters.                                                          
+Program Title: Student Pascal                                           
+Author Version: 2.3                                                     
+Author Registration: $25.00                                             
+Special Requirements: Turbo Pascal V4.0                                 
+                                                                        
+The PORTABLE PASCAL COMPILER offers students a limited compiler that is 
+an effective learning tool.                                             
+                                                                        
+The current package consists of a compiler and p-code interpreter.      
+Compile code from a file or directly from the keyboard.  However, when  
+compiling from the keyboard you can edit only the current line.  Sets   
+are limited to 64 members and strings to 11 characters.                 
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1321
 

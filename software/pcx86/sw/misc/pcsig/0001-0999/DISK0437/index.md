@@ -40,6 +40,7 @@ machines:
 
 ## COILINDU.BAS
 
+{% raw %}
 ```bas
 10 'THIS PROGRAM CALCULATES THE LENGTH AND TOTAL NUMBER OF TURNS
 20 'FOR A SINGLE LAYER AIR-CORE COIL. SEE RADIO HANDBOOK FOR TURNS-PER-INCH
@@ -64,9 +65,11 @@ machines:
 200 PRINT "TOTAL NUMBER OF TURNS IS: ";T1
 210 END
 ```
+{% endraw %}
 
 ## DIPOLE.BAS
 
+{% raw %}
 ```bas
 10 REM THIS PROGRAM CALCULATES THE LOADING COIL INDUCTANCE FOR AN OFF-CENTER
 20 REM LOADED DIPOLE ANTENNA. THE PROGRAM APPEARED IN THE DECEMBER, 1981
@@ -127,9 +130,107 @@ machines:
 640 GOTO 200
 650 END
 ```
+{% endraw %}
+
+## FILES437.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No 437   Ham Radio #2                                           v1.1
+---------------------------------------------------------------------------
+The USAT program provides real time tracking of the OSCAR 9, 10, & 11 and
+the RS 5, 7, & 8 satellites; the user specifies the date, time, length of
+time, and tracking interval. Several programs calculate coil inductance,
+coil properties, signals for varying frequencies, resistance and reactance.
+NETWORK provides analysis of user-specified circuits, to aid the amateur
+radio or electronic user. The great circle distance between any two points
+is computed by GRCIRDIS when the latitudes and longitudes are entered. An
+alphabetized list of all of the counties in each state can be found in the
+COUNTIES files.
+ 
+USAT     BAS  Real time tracking of OSCAR and RS satellites
+ELEMENTS DAT  Data for USAT.BAS
+GROUND   DAT  "
+MAP      DAT  "
+USAT     EXE  Real time tracking of OSCAR and RS satellites (XEQ form)
+COILINDU BAS  Coil length & no. of turns for user-specified inductance
+DIPOLE   BAS  Loading coil inductance for loaded dipole antenna
+INTERMOD BAS  Signal, 3rd and 5th order product for >= 3 frequencies
+SMITH    BAS  Resistance & reactance along transmission line,rho,vswr
+SMITH    DOC  Description of SMITH.BAS
+NETWORK1 LBR  NETWORK, below, in library form
+NETWORK  DOC  Description of NETWORK
+NETWORK  BAS  AC Electronic circuit analysis
+NETWORK  EXE  "  (XEQ form)
+SAMPLE1  NET  Sample data for NETWORK.BAS
+SAMPLE2  NET  "
+SAMPLE3  NET  "
+EDNTEST  NET  "
+GRTCRCL1 BAS  Great circle distance between any two locations
+COUNTIES AK   Alphabetical list of counties in Alaska
+COUNTIES AL   "                                Alabama
+COUNTIES AR   "                                Arkansas
+COUNTIES AZ   "                                Arizona
+COUNTIES CA   "                                California
+COUNTIES CO   "                                Colorado
+COUNTIES CT   "                                Connecticut
+COUNTIES DE   "                                Delaware
+COUNTIES FL   "                                Florida
+COUNTIES GA   "                                Georgia
+COUNTIES HI   "                                Hawaii
+COUNTIES IA   "                                Iowa
+COUNTIES ID   "                                Idaho
+COUNTIES IL   "                                Illinois
+COUNTIES IN   "                                Indiana
+COUNTIES KS   "                                Kansas
+COUNTIES KY   "                                Kentucky
+COUNTIES LA   "                                Louisiana
+COUNTIES MA   "                                Massachusetts
+COUNTIES MD   "                                Maryland
+COUNTIES ME   "                                Maine
+COUNTIES MI   "                                Michigan
+COUNTIES MN   "                                Minnesota
+COUNTIES MO   "                                Missouri
+COUNTIES MS   "                                Mississippi
+COUNTIES MT   "                                Montana
+COUNTIES NC   "                                North Carolina
+COUNTIES ND   "                                North Dakota
+COUNTIES NE   "                                Nebraska
+COUNTIES NH   "                                New Hampshire
+COUNTIES NJ   "                                New Jersey
+COUNTIES NM   "                                New Mexico
+COUNTIES NV   "                                Nevada
+COUNTIES NY   "                                New York
+COUNTIES OH   "                                Ohio
+COUNTIES OK   "                                Oklahoma
+COUNTIES OR   "                                Oregon
+COUNTIES PA   "                                Pennsylvania
+COUNTIES RI   "                                Rhode Island
+COUNTIES SC   "                                South Carolina
+COUNTIES SD   "                                South Dakota
+COUNTIES TN   "                                Tennessee
+COUNTIES TX   "                                Texas
+COUNTIES UT   "                                Utah
+COUNTIES VA   "                                Virginia
+COUNTIES VT   "                                Vermont
+COUNTIES WA   "                                Washington
+COUNTIES WI   "                                Wisconsin
+COUNTIES WV   "                                West Virginia
+COUNTIES WY   "                                Wyoming
+ 
+ 
+PC-SIG
+1030D Duane Avenue
+Sunnyvale, CA 94086
+(408) 730-9291
+(c) Copyright 1986,87 PC-SIG
+```
+{% endraw %}
 
 ## GRTCRCL1.BAS
 
+{% raw %}
 ```bas
 1000 REM Great Circle distance computations - GRTCRCL1.BAS
 1010 REM ITT/Microsoft Advanced BASIC 1.00
@@ -247,9 +348,11 @@ machines:
 4050 IF LEFT$(ANS$,1)="Y" OR LEFT$(ANS$,1)="y" THEN 2000
 9999 END
 ```
+{% endraw %}
 
 ## INTERMOD.BAS
 
+{% raw %}
 ```bas
 10 CLS 
 20 PRINT :PRINT :PRINT :PRINT :PRINT 
@@ -334,9 +437,11 @@ machines:
 810 M1=A(I+2)+(2*A(I+1))+(2*A(I))
 820 RETURN
 ```
+{% endraw %}
 
 ## NETWORK.BAS
 
+{% raw %}
 ```bas
 1000 ' NETWORK - An AC electronic circuit simulator program
 1001 '
@@ -610,9 +715,583 @@ machines:
 6540 PRINT
 6560 RETURN
 ```
+{% endraw %}
+
+## NETWORK.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            NETWORK.BAS V1.0
+
+                  AC ELECTRONIC CIRCUIT ANALYSIS PROGRAM
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  Configured for the IBM by:         Bruce A. Trolli
+                                                         
+                                                         2/24/85
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        1
+
+
+
+
+
+
+        1.0) GENERAL
+
+                NETWORK.BAS  outputs  the ac frequency reponse for a user 
+            described  electronic  circuit.  The circuit  description  is 
+            prepared  as  an  input  text  file  containing  a  two  line 
+            specification   for  each  element  in   the   circuit.   The 
+            specification  of  each element requires the user  to  assign 
+            node  numbers  to each node in the circuit.  This  method  is 
+            similar  to  many  commercially  available  circuit  analysis 
+            programs.
+
+                  When  NETWORK.BAS is run,  it builds a matrix from  the 
+            user's circuit description file and evaluates the output node 
+            voltage at each frequency under the assumption that the input 
+            node has a 1 volt signal with zero phase angle applied to it.
+
+                  At run time the user may specify the  frequencies to be 
+            calculated  as  either a linearly or  logarithmically  spaced 
+            interval.  Output  is  sent to the screen by default  but  an 
+            optional output datafile may be specified at runtime.
+
+                  Models   are   provided  for   Resistors,   Capacitors, 
+            Inductors,  Bipolar  transistors (current controlled  current 
+            sources),  Fets  (voltage  controlled  current  sources,  and 
+            Opamps (voltage controlled voltage sources).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        2
+
+
+
+
+
+            2.0) ACKNOWLEDGEMENTS
+
+                  Network.bas  is  an adaptation of an  existing  circuit 
+            analysis  program  to  run on  the  IBM  PC.   The  origional 
+            article:  "Verify Network Frequency Response With This Simple 
+            Basic Program",  Werner A. Schnider, EDN magazine, October 5, 
+            1977,   was  written  for  a Hewlett  Packard  9830A  desktop 
+            calculator. 
+
+                  The  program  was  modified to run on an Apple  II  and 
+            reappeared  in  the  magazine  as:  "Basic  Program  Performs 
+            Circuit   Analysis",   Richard  Steincross,   EDN   magazine, 
+            September 1,  1982. This version expanded the capabilities of 
+            the  program  by  adding inductors to  the  network  elements 
+            supported.  It  also  allowed the user to specify  input  and 
+            output nodes at run time.  After testing this program, I have 
+            removed  this  feature because it did  not  produce  reliable 
+            output for a number of simple circuits.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        3
+
+
+
+
+
+            3.0) REQUIREMENTS
+
+                  NETWORK.BAS  runs  under  IBM or Microsoft  BASIC  (not 
+            BASICA). It does  require a single disk drive. If your system 
+            has  enough  memory to let BASIC max out its 64k program  and 
+            data space limitation, then NETWORK will be able to handle 40 
+            nodes. If your system has less memory it will be necessary to 
+            adjust the number of nodes ( Y in line 1200 of the program).
+
+                  Because the program output has been limited to text, it 
+            can  run  with either the monochrome or  color  adapter.  The 
+            input  and output formats have purposely been kept simple  to 
+            allow  most  systems to run the  program.  (Besides,  I  have 
+            enough  problems making programs print the correct answer let 
+            alone print it on a jazzed up screen.) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        4
+
+
+
+
+
+
+            4.0) RUNNING THE PROGRAM
+
+
+            4.1) Number the nodes     
+
+                  To analyze your circuit, it will be necessary to number 
+            the nodes on your schematic diagram.  These node numbers will 
+            be  used to prepare a precise description of the  circuit  so 
+            that NETWORK can construct the circuits network equations.
+
+                  The  input  node must be node number 1 and  the  output 
+            node must be the highest node in the circuit.
+
+                  AC  ground is node 0.  The 1 volt input that is applied 
+            to node number 1 is referenced to node 0.
+
+
+            4.2) Prepare Input File
+
+                  Prepare   a  text  file  that  contains  a   two   line 
+            description   for  each  circuit  element  according  to  the 
+            definitions below. Note that comments may be added after the
+            element  type so that the origional reference designations of 
+            your circuit's schematic may be retained as part of the input 
+            file.  This should make it easy to go back and forth  between 
+            your schematic and the input file.
+
+                  Also  comments may be added anywhere in the input  file 
+            by placing a ";" at the beginning of the line.
+
+
+             Resistors:
+
+                  R              
+                  from node, to node, value (in ohms)
+
+                       Example:  A 1000 ohm resistor between nodes 1 and 2.
+
+
+                       R
+                       1,2,1000
+
+                                 
+             Capacitors:
+                  C
+                  from  node,  to node,value(in micro farads)
+
+                       Example: A 10 uf capacitor between nodes 3 and 6.
+
+                       C
+                       3,6,10
+
+
+
+                                        5
+
+
+
+
+
+             Inductors:
+
+                  L
+                  from node, to node, value (in henries)
+
+
+             Fets: 
+
+                  F
+                  gate node,  source node,  drain node,  transconductance
+                                                           (amps/volt)
+                                 
+                  Example: A common source fet with 10 mmhos transconductance.
+                            
+                       F           
+                       2,0,4,.01
+
+             Bipolar Transistors:
+
+                  B
+                  base node, emitter node, collector node, beta, b-e resistance 
+                                                                 (ohms)
+
+                  Example: Emitter follower with beta=100
+                  
+                       B
+                       3,4,0,100,.001
+
+             Op Amps:
+
+                  O
+                  + in, - in, + out, - out, gain, output resistance (ohms)
+
+                  Example: Voltage follower.
+
+                       O
+                       1,2,2,0,1000000,100
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        6
+
+
+
+
+
+        4.3) RUN THE NETWORK.BAS PROGRAM
+
+                      The  program will prompt for an input filename.  It 
+            assumes that your circuit desctription is contained in a file 
+            with a .NET extension.  If you can't remeber the name of  the 
+            circuit  desctription  file,   hit  the  ENTER  key  and  all 
+            filenames  with  extensions .NET on the default disk will  be 
+            listed on the screen.
+
+                      The  program  will  tell you the  number  of  nodes 
+            actually  found in the circuit description file and tell  you 
+            which nodes are being used as input and output nodes. At this 
+            time verify these with your origional schematic to catch  any 
+            errors   that  you  may  have  had  in  your  input   circuit 
+            description.
+
+                      The  program  will  now  ask for the  name  of  the 
+            optional output file that will be used to store the data from 
+            the program. You can avoid creating the output file by mearly 
+            hitting the ENTER key.
+
+
+                  When  the  program asks for the frequency range  to  be 
+            analyzed,  either a linear increment (a positive number) or a 
+            number  of logarithmically space points (a  negative  number) 
+            may be specified.  If the logarithmic spacing is chosen,  the 
+            number entered is the total number of points to be calculated 
+            over the entire frequency interval.
+
+                  At the end of the analysis, the program will prompt for 
+            a  new  frequency range.  If you decline the  opportunity  to 
+            recaclulate  over  a new range of  frequencies,  the  program 
+            terminates.
+
+         
+        4.4) Cautions
+
+                 Be  aware that there are some common pitfalls  that  can 
+            occurr  with  circuit simulation programs of this  type.  One 
+            that  frequently occurs is that where a dynamically  unstable 
+            circuit is modeled (your amplifier is really an  oscillator). 
+            Also  be  sure that there are some resistive elements  in  LC 
+            circuits   to  prevent  resonances  from  peaking  into   the 
+            ionosphere. These are only common sense.
+
+                 Always   specify   some   resistance  in   the   bipolar 
+            transisitor and opamp models to prevent them from blowing the 
+            program away.
+
+
+
+
+
+
+
+                                        7
+
+
+
+
+        5.0) SAMPLE CIRCUITS
+
+                 Sample  circuit description files have been included  to 
+            help you get the hang of setting up circuits. These are:
+
+             Sample1.net - A low pass RC filter circuit (1 hz cuttoff)
+
+             Sample1.net - A high pass RL filter circuit (1 hz cuttoff)
+
+             Sample3.net - A  bandpass LC filter circuit  (1 hz center)
+
+             Edntest.net - The test circuit from the origional EDN article
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        8
+
+
+
+
+        6.0) COMMENTS AND FEEDBACK
+
+                 I  would appreciate some feedback from anyone  who  uses 
+            the  program.  I  am planning to improve the program  in  the 
+            future in the following areas:
+
+             - Provide a more general purpose analysis that lets
+               you pick inputs (multiple) and outputs (multiple)
+               independant of node numbering.
+
+             - Allow the output of one analysis to be fed into the input
+               of the next to get around the memory limitations.
+
+             - Add a plot routine (lin, log and semi log) to the program.
+               If anyone has a general purpose routine like this, I'd
+               like to hear from you. Most of the public domain stuff is
+               junk unfortunately.
+
+             - Run  it  through a compiler.  Right now the  circuits  are 
+               solved using Cramer's rule which stinks when it comes to
+               circuits above about 6 or 7 nodes. In general try to get
+               it to run faster.
+
+                                                Bruce  Trolli
+
+                                                Cleveland RBBS
+                                                (216-3310510)
+
+               
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        9
+-3310510)
+
+               
+
+
+
+
+
+
+
+
+
+
+
+
+
+```
+{% endraw %}
 
 ## SMITH.BAS
 
+{% raw %}
 ```bas
 10 CLEAR:DEF SEG:KEY OFF:DEFINT I,J,K,M,N: FALSE = 0:TRUE = NOT FALSE:CLS:COLOR 7,0
 20 PRINT STRING$(40,"#");:LOCATE 2,1: PRINT"#"TAB(40)"#"
@@ -685,9 +1364,11 @@ machines:
 2000 LPRINT TAB(3) "Deg" TAB(10) "|      R" TAB(25) "|      X" TAB(40) "|      G" TAB(55) "|      B" TAB(69) "|   Length"
 2010 LPRINT STRING$ (80,"*");:GOTO 200
 ```
+{% endraw %}
 
 ## USAT.BAS
 
+{% raw %}
 ```bas
 1 ' REMOVE LINES 3790 AND 3810 FOR INTERPRETERRUN , THE DELAYS ARE IN THERE
 2 ' FOR TIMING IN THE COMPILED RUN ONLY
@@ -1430,6 +2111,7 @@ machines:
 7760 DN=DN-29: IF DN<=0 THEN 7640 ELSE 7510
 7770 GOTO 200 'END
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

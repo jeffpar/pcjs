@@ -41,6 +41,51 @@ machines:
     EZ-FORMS' DATABASE is the easiest inFORMation handler ever devised.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2440.TXT
+
+{% raw %}
+```
+Disk No: 2440                                                           
+Disk Title: EZ-Forms' Database 2 of 2                                   
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: EZ-Forms' Database                                       
+Author Version: 1.0                                                     
+Author Registration: $239.00                                            
+Special Requirements: 640K RAM and hard drive.                          
+                                                                        
+EZ-FORMS' DATABASE adds a new dimension to data management and forms    
+processing.  It is the perfect marriage of the ever popular "EZ-Forms   
+Executive" and "EZ-InFORMa dB"! (Both included.)                        
+                                                                        
+Imagine being able to enter information into a database as you fill out 
+a form!  Imagine searching for a particular form by typing keystrokes,  
+instead of laboriously searching through endless file folders!  Imagine 
+being able to generate various printed reports from a single forms'     
+data!  Imagine being able to fill in forms by retrieving information    
+that already exists in any database!  Imagine no longer...EZ-FORMS'     
+DATABASE is here!                                                       
+                                                                        
+Simply read in your form and create a database.  The data you enter will
+automatically be stored into your own database!  And guess what?        
+EZ-FORMS' DATABASE reads/writes files in the industry standard ".DBF"   
+file format.  So, you can easily use data that has been created by other
+dBase compatible programs.                                              
+                                                                        
+Whether or not you are currently using a forms processor or database,   
+EZ-FORMS' DATABASE is the easiest inFORMation handler ever devised.     
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2440
 

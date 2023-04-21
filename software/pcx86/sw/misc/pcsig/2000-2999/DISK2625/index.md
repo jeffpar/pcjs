@@ -14,6 +14,39 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+Installation:
+
+1) Insert the disk with DABUTIL on it into either drive A or B.
+
+2) "LOG IN" to that drive with either:
+           A:    or
+           B:
+    and press RETURN.
+
+3) Enter the command DABINST and press return.
+
+4) Follow the instructions given to install the DABUTIL package. DABINST will
+   install DABUTIL in a directory named DABUTIL, which it will create if
+   necessary. It will also add the new directory to your path command.
+
+5) Re-boot your computer to activate the new PATH command in AUTOEXEC.BAT
+
+6) Enter the command DOSMENU to see demonstrations of each program
+
+CAUTION:
+   While you can change the directory given, it is recommended that you use
+   DABUTIL, since any existing directory may have files with the same name as a
+   DABUTIL file, and they might be lost when the install is done.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2625
 

@@ -45,6 +45,71 @@ machines:
     easy-to-use environment, perfect for the first-time user.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## DESCRIP.DOC
+
+{% raw %}
+```
+TURBO Designer is a programmer's toolbox for the TURBO Pascal compiler.
+TURBO Designer helps you create pull-down menus, pop up menus, and
+sophisticated help screens in your applications. It is very easy to use. The
+program asks you to input your data (what you want to appear when the program
+runs), on a series of "what you see is what you get" full-screen editors.
+Once you have set up your menu work environment, which includes windows, icons,
+and even a trash can, TURBO Designer creates a Pascal source file according to
+your data. This new file can be compiled using TURBO Pascal. The result is a
+program with a complete environment, and a sophisticated user interface.
+```
+{% endraw %}
+
+## FILE1353.TXT
+
+{% raw %}
+```
+Disk No: 1353                                                           
+Disk Title: Turbo Designer                                              
+PC-SIG Version: S1.1                                                    
+                                                                        
+Program Title: Turbo Designer                                           
+Author Version: 2.39                                                    
+Author Registration: $25.00.                                            
+Special Requirements: 512K RAM, hard drive, and TURBO Pascal v4.0 or hig
+                                                                        
+TURBO DESIGNER is a programmer's toolbox for the Turbo Pascal           
+compiler.  TURBO DESIGNER helps you create pull-down menus, pop-up      
+menus, and sophisticated help screens in your applications.  It is      
+very easy to use.  The program asks you to input your data (what you    
+want to appear when the program runs), on a series of ``what you see    
+is what you get'' full-screen editors.  Once you have set up your menu  
+work environment, which includes windows, icons, and even a trash can,  
+TURBO DESIGNER creates a Pascal source file according to your data.     
+This new file can be compiled using Turbo Pascal.  The result is a      
+program with a complete environment, and a sophisticated user           
+interface.                                                              
+                                                                        
+Using a price/performance ratio, TURBO DESIGNER is one of the best      
+code generators of its type in the market today.  Its screen routines   
+are as fast as they possibly can be, and the algorithms used cannot be  
+surpassed on the IBM-PC.  TURBO DESIGNER is better than ``just a        
+library,'' since it creates actual code, and has routines for a pop-up  
+directory listing, trash can, sophisticated help screens, and much      
+more.  It maintains an easy-to-use environment, including icons,        
+pop-up windows, and pull-down menus.  TURBO DESIGNER detects a          
+monochrome monitor and corrects the display.  A new palette of black    
+and white colors are used, so all data is displayed correctly.  This    
+is a great utility for shareware developers, since it creates an        
+easy-to-use environment, perfect for the first-time user.               
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1353
 

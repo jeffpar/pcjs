@@ -36,6 +36,55 @@ machines:
     shopper.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1648.TXT
+
+{% raw %}
+```
+Disk No: 1648                                                           
+Disk Title: Shop                                                        
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Shop                                                     
+Author Version: 1                                                       
+Author Registration: $15.00                                             
+Special Requirements: None.                                             
+                                                                        
+Whether it's groceries, clothes, or supplies, SHOP can help make your   
+shopping a little easier by keeping track of the money you spend.       
+                                                                        
+SHOP will store lists of items, their prices, and the date last         
+purchased. It is organized by store and by item category.  After a few  
+diligent months using SHOP, you will have an accurate database of       
+everything you regularly purchase.  Using the selection feature, items  
+can be selected and then printed out to produce an ordered shopping list
+with an estimated total cost.                                           
+                                                                        
+SHOP tracks household spending and cost inflation while making sure you 
+always have the right amount of cash on hand, thereby saving you from   
+those potentially embarassing times at the checkout counter.  SHOP is   
+quick and painless to use.  A hard drive is suggested for the serious   
+shopper.                                                                
+                                                                        
+File Descriptions:                                                      
+                                                                        
+SETSHOP  EXE  Installation program.                                     
+SHOP     EXE  Main program.                                             
+SHOPDOC  EXE  Documentation printout program.                           
+???????  SHP  Data files.                                               
+README        Introductory notes.                                       
+SHOPDOC       Documentation text.                                       
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1988 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1648
 

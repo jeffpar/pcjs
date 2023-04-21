@@ -52,6 +52,82 @@ machines:
     READ     ME   Notes on program.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES530.TXT
+
+{% raw %}
+```
+---------------------------------------------------------------------------
+Disk No  530  FreeWord   Version 1                                   v1.1
+---------------------------------------------------------------------------
+FreeWord is a powerful and easy to use, menu-driven word processor.  It
+is capable of right and left justification of text; moving the cursor
+either by character, word, line, screen or page; searching a document for
+a word or phrase and also moving and copying blocks of text.  FreeWord
+permits printing in the background mode so that the user can proceed with
+other work.  All registered users receive SSP's SPELL a spelling checker
+program.
+ 
+FW       EXE  Actual FreeWord program
+FW       HLP  Help text file
+FW       DOC  Documentation on FreeWord
+DEMO2         Demonstration file
+COLOR    EXE  Configuration file for color monitors
+NO-COLOR FIL  Monochrome monitor configuration file
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG
+```
+{% endraw %}
+
+## NOTES530.TXT
+
+{% raw %}
+```
+Program name:         FreeWord    Version 1.0
+
+Author name:          Stilwell Software Products
+Address:              16403 North 43rd Drive, Glendale, AZ 85306
+
+Suggested Donation:   $ 49.00
+
+Program Description:  FreeWord is a powerful menu  driven word-processor
+                      of interest to students, writers, secretaries and
+                      others working with a great deal of text.
+
+                      There are several good features:
+
+                      1. Moving the cursor either by character, word,
+                         line, screen or page.
+
+                      2. Marking a block of text for deletion, moving or
+                         copying.
+
+                      3. Searching a document for a word or phrase
+
+                      4. Both right and left justification of text
+
+                      5. Printing upto 9 copies of a document
+
+                      6. Being able to print in the background mode so
+                         that the user can proceed on to doing other things
+
+                      A bonus for registered users is SPELL a spelling
+                      checker program.
+
+                      FreeWord needs 256 Kb of memory and DOS 2.0 or above
+                      to run. It can work with a monochrome or color display
+                      but needs a parallel PC printer.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0530
 

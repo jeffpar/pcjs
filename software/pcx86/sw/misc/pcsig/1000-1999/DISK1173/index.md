@@ -51,6 +51,75 @@ machines:
     areas.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1173.TXT
+
+{% raw %}
+```
+Disk No  1173
+Program Title:  RUNE-CASTER version 1.01
+PC-SIG version 1
+
+In RUNE-CASTER, the casting of runes, an ancient tool of divination, is
+used as a modern method to explore personal understanding and growth.
+Runes are ancient letterings, each of which stands for a concept or
+theme such as names, momentum, thorn, beach, path, torch, giving, joy,
+hail, need, ice, harvest, support, kind, star, sprouts, horse, people,
+water, awaken, and home.  Following a quick display of all 24 runes with
+these one-word definitions at the onset, the RUNE-CASTER Menu appears.
+
+Selection #1 lets you randomly select a rune by pressing a key while you
+concentrate on the thought you want some insight on.  You are then
+presented with an explanation of and thoughts about the rune on the left
+side of the screen, and its detailed graphic representation on the
+right.  Selection #2 approaches problems from the present situation, the
+challenge to the situation, and the consideration of future potential.
+Selection #3, the spiral five selection, uses five runes to explore a
+topic in terms of its initial seed or vision and processes its coming to
+fruition.  This method delves into the perspective of each rune fully
+before proceeding to the next rune and so on through the five runes.
+
+A brief history of rune usage is provided along with a bibliography
+covering the subject.  The method of rune selection chosen is not a true
+random selection, but depends merely on the timing of pressing a key.
+Whether or not such timing yields divination is a matter for subjective
+speculation.  However, the explanations and discussions of the runes are
+provocative and can lead to unique examinations of problems and
+decisions which could result in helpful insights.
+
+This program is easy to use and an effective means for distracting
+attention away from the workaday world to more fundamental and spiritual
+areas.
+
+Usage:  Fortune Telling/Meditation.
+
+Special Requirements:  Hercules monochrome graphics card or compatible.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $10.00
+
+File Descriptions:
+
+RUNES    EXE  Main program.
+RUNES    PAS  Source code for program.
+RUNES    F1   Small file for rune images.
+RUNES    F2   Small file for rune images.
+RUNES    EM   Small file for rune images.
+README        Information and registration.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1988 PC-SIG, Inc.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1173
 

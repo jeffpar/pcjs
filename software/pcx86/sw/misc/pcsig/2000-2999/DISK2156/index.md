@@ -38,6 +38,108 @@ machines:
     are four levels of programmed help to rescue you.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2156.TXT
+
+{% raw %}
+```
+Disk No: 2156                                                           
+Disk Title: Templates of Doom                                           
+PC-SIG Version: 1                                                       
+                                                                        
+Program Title: Templates of Doom                                        
+Author Version: 2.4                                                     
+Author Registration: 69.95                                              
+Special Requirements: LOTUS 1-2-3, or QUATRO, or VP-PLANNER             
+                                                                        
+TEMPLATES OF DOOM is a truly enjoyable, and fun self-paced guide to     
+learning Lotus 1-2-3. By making an adventure game of the program, the   
+beginning user learns how to select commands, erase cells, change       
+column widths, and even create a graph.                                 
+                                                                        
+Whether your're an experienced computer spreadsheet user or an eager    
+beginner, TEMPLATES OF DOOM is a whole new learning adventure.  A       
+clever alternative to a stuffy spreadsheet manual, this easy-to-use     
+program presents you with 25 related but increasingly complex and       
+challenging puzzles.                                                    
+                                                                        
+You solve the puzzle against a ticking clock and piece together a story 
+full of colorful characters, wild events and exotic places, using a     
+variety of spreadsheet commands and formulas.  If you get stuck, there  
+are four levels of programmed help to rescue you.                       
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## README.TXT
+
+{% raw %}
+```
+                         Templates of Doom tm
+
+Welcome to Templates of Doom, the program that teaches spreadsheets. 
+There are two separate demo versions of the program on this disk.  One
+is for Lotus and the Lotus functional work-a-likes such as VP-Planner
+and Quattro, and one is for PC Excel.  We also have a version for
+Macintosh Excel on a different disk.
+
+TO START:
+Place this disk in your A: Drive or copy it to any appropriate directory
+on you hard disk.
+  
+FOR LOTUS AND FUNCTIONAL WORK-A-LIKES:
+Start your spreadsheet program and make sure the spreadsheet program
+default drive and directory are set to the location of Templates of
+Doom.  The commands in Lotus to do this are / Worksheet, Global,
+Default, Directory, :Type in the name of the drive and directory that
+Templates of Doom is on and press return.  For example, if Templates of
+Doom is in the A: drive, type A: and press Return.  Retrieve the file
+DOOMDEMO.WKS (/ F R DOOMDEMO Return).  The program will take over from
+there.
+
+FOR PC EXCEL:
+Unless you have extended memory, we suggest that you temporarily remove
+any memory resident programs because PC Excel uses a lot of memory.
+Start PC Excel and close the blank spreadsheet that appears.  Pull down
+the File menu, select Open and navigate to the  disk drive and directory
+that Templates of Doom is on. When DOOMDEMO.XLM appears in the scrolling
+window, select it and the program will take over from there.
+
+TO ORDER TEMPLATES OF DOOM:
+The full program cost $69.95 plus $4.00 shipping.  We accept Visa and
+MasterCard orders over the phone and almost anything in the mail
+including company purchase orders.  Our address and phone are:
+
+Solar Systems Software
+8105 Shelter Creek
+San Bruno,CA 94066
+(415)  952-2375     (Weekdays between 9:00 and 4:00 PST)
+
+Thankyou and have fun,
+
+Pete Antoniak
+Program Author
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2156
 

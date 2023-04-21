@@ -71,6 +71,7 @@ machines:
 
 ## AUTOFILE.BAS
 
+{% raw %}
 ```bas
 1 '*************************************
 2 '*  A U T O F I L E  -  T D KOLOUCH  *
@@ -437,9 +438,100 @@ machines:
 8490 GOSUB 7160:RETURN
 9000 RESUME
 ```
+{% endraw %}
+
+## CRC.TXT
+
+{% raw %}
+```
+PC-SIG Disk No. #110, version v1 
+
+The following is a list of the file checksums which should be produced by
+the CRCK4 program on disk #9 (and others).  If the CRC numbers do not match
+you may have a bad file.  To use type:  CRCK4 <filespec>
+
+CRCK4 output for this disk:
+
+
+CRCK ver 4.2B (MS DOS VERSION )
+CTL-S pauses, CTL-C aborts
+
+--> FILE:  RAMDISK .SYS         CRC = AA 21
+
+--> FILE:  HC      .DOC         CRC = D1 9D
+
+--> FILE:  PRINTER .COM         CRC = 92 E5
+
+--> FILE:  PRINTER .DAT         CRC = CC C5
+
+--> FILE:  PRINTER .DOC         CRC = F8 73
+
+--> FILE:  DEFINE  .BAS         CRC = 81 20
+
+--> FILE:  DEFINE  .DOC         CRC = E0 6A
+
+--> FILE:  DOSCOLOR.BAS         CRC = F0 B3
+
+--> FILE:  UPPER   .COM         CRC = 4E E5
+
+--> FILE:  DOSCOLOR.BAT         CRC = D2 67
+
+--> FILE:  PRINTER .ASM         CRC = 2A 7E
+
+--> FILE:  RAMDISK .DOC         CRC = 4A C7
+
+--> FILE:  READ    .ME          CRC = D3 F4
+
+--> FILE:  ROMBIOS .ASM         CRC = 34 7C
+
+--> FILE:  SIZER   .ASM         CRC = 25 C8
+
+--> FILE:  STEEPDES.APL         CRC = 1F 66
+
+--> FILE:  SCRN    .ASM         CRC = 73 88
+
+--> FILE:  AUTOFILE.BAS         CRC = 1B 31
+
+--> FILE:  AUTOFILE.BAT         CRC = 05 0D
+
+--> FILE:  AUTOFILE.DOC         CRC = FE 18
+
+--> FILE:  SCRN    .DOC         CRC = 90 8D
+
+--> FILE:  TABLET  .BAS         CRC = CE 40
+
+--> FILE:  UPPER   .ASM         CRC = 6D 0F
+
+--> FILE:  SIZER   .COM         CRC = 65 9D
+
+--> FILE:  SIZER   .DOC         CRC = 6E 0C
+
+--> FILE:  UPPER   .DOC         CRC = BE 70
+
+--> FILE:  WHEREIS .COM         CRC = DD CA
+
+--> FILE:  WHEREIS .DOC         CRC = 0C 0E
+
+--> FILE:  XT370   .DOC         CRC = DE 74
+
+--> FILE:  HC      .COM         CRC = 21 3F
+
+ ---------------------> SUM OF CRCS = E3 A5
+
+DONE
+
+These and other Public Domain and user-supported programs from:
+
+PC Software Interest Group
+1125 Stewart Ct  Suite G
+Sunnyvale, CA 94086
+(408) 730-9291
+```
+{% endraw %}
 
 ## DEFINE.BAS
 
+{% raw %}
 ```bas
 10 REM DSNAME=DEFINE.BAS
 20 GOTO 40
@@ -536,9 +628,11 @@ machines:
 930 END
 65399 '** DONE - PRESS ENTER TO RETURN TO MENU **
 ```
+{% endraw %}
 
 ## DOSCOLOR.BAS
 
+{% raw %}
 ```bas
 10 REM
 20 REM  AUTHOR - JIM BRACKING
@@ -726,9 +820,1601 @@ machines:
 1840 NEXT II
 1850 RETURN
 ```
+{% endraw %}
+
+## HC.DOC
+
+{% raw %}
+```
+
+*************************************************************** 
+*                         [[hc.com]]                          * 
+*************************************************************** 
+ 
+                (C) 1983 Martin Smith 
+ 
+Hex File converter.  Converts to and from HEX format. Can 
+automatically provide a COM or EXE extension. 
+ 
+Format: 
+          >hc [d:][path]infile [[d:][path]outfile] 
+ 
+If TWO files are supplied, one of them MUST be HEX. 
+ 
+o       First file = HEX, program does HEX -> COM, EXE or BIN. 
+ 
+o       First file = COM, EXE or BIN, program does COM -> HEX. 
+ 
+If ONE file is supplied, the following takes place: 
+ 
+o       First file = no extension or anything other than HEX, 
+ 
+                Second file is created in HEX format. 
+ 
+o       First file = HEX extension, 
+ 
+                Second file is created with COM or EXE extension, 
+                        depending on file type. 
+ 
+If NO files are supplied, a short documentation is printed. 
+ 
+Ironically, you need a hexconverter to download HC.HEX. If you are 
+on a board with XMODEM protocol, you can download HC.COM directly, 
+but if not, use your present hexconverter to convert HC.HEX to HC.COM. 
+ 
+There are a lot of hexconverters out there in BBSland for IBM(tm) 
+and compatible computers, all following the same basic format. 
+Being written entirely in assembler, HC.COM is only 3434 bytes(com), 
+and 7104 bytes(hex). It is small, but it can convert files up to the 
+MS-DOS(tm) limit with no problem, and total conversion time for a 
+70K hex download on floppies is about 15 seconds. 
+ 
+HC.COM uses only regular MS-DOS 2.x function calls, so compatibility 
+should be no problem. PATH names are fully supported. Users of DOS 1.1 
+and earlier should not attempt to use this program. 
+ 
+A hexconverter is a tool for sending machine format files over the 
+telephone.  When a BBS system is operating at seven data bits per 
+byte, eight bit files cannot be sent. The hexconverter divides each 
+byte into two bytes, so that all information is preserved. When it 
+operates in reverse, the hex file is converted back to its original 
+form, and checked for accuracy with a number placed at the end of 
+the file called unsurprisingly a checksum. This is simply the number 
+values of the bytes in the file added together modulo 2048 in this 
+case. 
+ 
+Program by: 
+ 
+Marty Smith                  CompuServe   72155,1214 
+310 Cinnamon Oak Lane        (713) 661-1241 [Office]
+Houston, TX  77079           (713) 464-6737 [Home]
+12/10/83
+
+
+Press ENTER to continue: 
+
+[72155,1214]
+HC.DOC         12-Dec-83 2445         31
+
+Disposition:
+
+<R D T): 
+
+[72155,1214]
+HC.HEX         12-Dec-83 7210         30
+
+    Keywords: IBM PC UTILITY HEX COM ASSEMBLER
+    
+    Convert this into HC.COM for a fast hexconverter. Written in assembler,
+    this can convert an 80k hex download all on floppies in about 15 seconds. 
+    Automatically recognizes EXE or COM files.  See HC.DOC.
+    
+    
+
+Disposition:
+
+<R D T): res in about 15 seconds. 
+    Automatically recognizes EXE or COM files.  See HC.DOC.
+    
+    
+
+Disposition:
+```
+{% endraw %}
+
+## PRINTER.ASM
+
+{% raw %}
+```
+TITLE Printer
+PAGE 66,132
+;* * * * * * * * * * * * * *   P R I N T E R   * * * * * * * * * * * * * * *  
+;
+;                             John C. Petrey
+;                                (c) 1983
+;
+;
+;
+;
+CSEG    segment para public 'CODE'
+        org     100h    
+;
+;
+PRINTER proc    far
+        assume cs:cseg,ds:cseg,es:nothing
+;
+        jmp     set_up
+;
+;Data Area
+;
+        disk        db   00h                ;current default disk drive
+        bytes_left  db   00h                ;bytes of code left to read
+        sav_row     db   02h                ;start cursor at line 2 
+        kbd_input   db   ' '                ;save keyboard input
+        print_lit   db   'N'                ;flag to indicate if we were printing literal
+        option_nbr  db   '0'                ;option number printed on the screen
+        fcb         db   00h                ;1st byte of FCB (00h = default drive)
+        fcb2        db   'printer '         ;file name in FCB   
+        fcb3        db   'dat'              ;file extension in FCB
+        fcb4        db    25  dup(00h)      ;remainder of FCB 
+        dta         db   128  dup('d')      ;disk transfer area
+        eof         db   '$'                ;end of disk transfer area
+        codes       db   20  dup('c')       ;user codes
+        line1       db   'Printer (1.1) - Special Print Functions$' 
+        more        db   'Change another setting? $'      
+        nomatch     db   'Please choose an option listed above $'
+        quest       db   'Your Choice $'
+        option      db   'Option $'
+        done        db   ' done!$'
+        escape      db   'Esc -  Exit$'
+        dash        db   '   -  $'
+        no_file     db   'PRINTER.DAT file not found or error in file$'
+;
+;Setup stuff
+ set_up:
+        push    ds                      ;Set return segment address and ...
+        sub     ax,ax                   ;put zero on stack ...
+        push    ax                      ;so a RET returns us to starting address.   
+        push    cs                      ;Move work address into Data Segment ...
+        pop     ds                      ;because this is a COM file.
+                                        ;
+;Save registers                         ;By saving register contents at program 
+        push    ax                      ;entry we insure exit will correctly
+        push    bx                      ;return to DOS.
+        push    cx
+        push    dx
+        sti                             ;enable interrupts
+                                        ;
+;Set screen mode
+        mov     al,2                    ;80 x 25 B&W alpha
+        mov     ah,0                    ;BIOS interrupt 10 - set video mode
+        int     10h                     ;call BIOS to do it
+                                        ;
+;Clear screen
+        mov     ah,6                    ;clear screen with scroll active page up
+        mov     al,0                    ;entire window
+        mov     cx,0                    ;ch,cl = row,column of upper left corner
+        mov     dh,24                   ;dh = row to scroll to
+        mov     dl,79                   ;dl = column to scroll to
+        mov     bh,7                    ;attribute to be used on blank line
+        int     10h                     ;Call BIOS to scroll 
+                                        ;
+;Title
+        mov     dx,offset line1         ;get address of program title
+        call    print                   ;print it on the screen
+                                        ;
+;Save current default disk drive
+        mov     ah,19h                  ;DOS function to get default drive
+        int     21h                     ;Call DOS to do it - returned in AL
+        mov     disk,al                 ;Save default disk returned in AL
+                                        ;
+;Get drive on which PRINTER.DAT file is located
+        mov     si,80h                  ;point to command tail address
+        mov     dh,[si]                 ;get length of command tail
+        tail:
+        cmp     dh,00h                  ;Is their a command tail? or any bytes of tail left?
+        je      set_dta                 ;   no, go set DTA
+        dec     dh                      ;   yes, update bytes of tail left
+        inc     si                      ;        point to next byte in command tail
+        mov     dl,[si]                 ;        get contents of command tail       
+        cmp     dl,097                  ;Is drive spec upper case?
+        jb      upper                   ;   yes, now go fold to a value   
+        sub     dl,32                   ;   no, fold down to upper case
+        upper:
+        sub     dl,65                   ;fold to a value
+                                        ;
+;Select disk drive
+        cmp     dl,5                    ;if value not valid (a - f) ...
+        ja      tail                    ;   get next command tail byte
+        cmp     dl,0                    ;if value not valid ...
+        jb      tail                    ;   get next command tail byte
+        mov     ah,0Eh                  ;DOS function to select disk
+        int     21h                     ;call DOS to do it
+                                        ;           
+;Set Disk Transfer Address
+        set_dta:
+        mov     dx,offset dta           ;get address of Disk Transfer Area (DTA)
+        mov     ah,1Ah                  ;DOS function to set Disk Transfer Area (DTA)
+        int     21h                     ;call DOS to set DTA
+                                        
+;Open File Control Block  
+        mov     dx,offset fcb           ;point to address of File Control Block (FCB)
+        mov     ah,0fh                  ;DOS function to open file control block
+        int     21h                     ;call DOS to open file control block
+                                        
+        mov     bp,00h                  ;initialize base pointer - used later
+                                        ;as offset into user codes
+;
+;Sequential read
+ read:
+        mov     dx,offset fcb           ;get address of file control block
+        mov     ah,14h                  ;DOS function to read a record
+        int     21h                     ;call DOS to do it.  AL returns 00 if successful.
+        cmp     al,00h                  ;Was read successful?
+        je      success                 ;  Yes, continue with program
+        cmp     al,03                   ;Was partial record read?
+        je      success                 ;  Yes, continue with program
+        file_not_found:
+        mov     dx,offset no_file       ;  No, get address of error message
+        call    cursor                  ;      print error message
+        jmp     exit                    ;      exit
+        success:
+                                        ;
+        mov     SI,00h                  ;initialize SI to zero - will use SI as offset
+                                        ;within DTA (byte were currently working with)
+                                        ;
+        cmp     dta[si],'&'             ;Is this the end of the users file?
+        jne     not_end                 ;  No, still more to read
+        jmp     cont                    ;  Yes, we're done reading users file
+        not_end:                        ;
+                                        ;
+        cmp     bytes_left,0            ;Were we reading codes when we reached end of DTA?
+        je      not_reading             ;  No
+        jmp     read_code               ;  Yes, go finsih reading codes
+        not_reading:
+                                        ;                                           
+        cmp     dta[si],'$'             ;Did we just finish printing a literal when we
+                                        ;reached the end of the DTA?
+        je      end_of_literal          ;  Yes, now read codes
+                                        ;
+        cmp     print_lit,'Y'           ;Were we printing the literal when we reached the end of the DTA?
+        je      finish_print            ;  Yes, go finish printing the literal      
+;
+;Parse DTA -  Print user literals & save user codes in opt0 - opt9
+; 
+;               User's file must be in the following format:
+;                 1)  Literal of unspecified lengthed ending with "$"
+;                     followed by exactly 2 control codes of which
+;                     each must be 3 digits in decimal notation.
+;
+;                 2)  Last digit of last code in file should be followed
+;                     by an ampersand "&"           
+;
+;               Reister uses: 
+;                 SI = on entry is address of start of DTA, subsequently
+;                      it is the offset into the DTA (points to byte we
+;                      are currently looking at.
+;                 BP = offset within CODES
+;
+;
+print_literal:
+        inc     sav_row                 ;will print literal on next row down
+        mov     dh,sav_row              ;set new cursor position
+        call    loc                     ;call locate cursor procedure to do it
+        mov     dl,option_nbr           ;get number of option (0 to 9)
+        mov     ah,2                    ;DOS function to print character in DL
+        int     21h                     ;let DOS print option number
+        inc     option_nbr              ;increment option nbr for next time
+        ;
+        mov     dx,offset dash          ;get address of dash literal
+        call    print                   ;print dash literal
+        ;
+finish_print:
+        mov     dx,offset dta           ;get address of start of DTA
+        add     dx,si                   ;add SI to DX to get address of literal
+                                        ;
+        mov     di,dx                   ;set DI to address of literal
+        cmp     byte ptr [di],0Dh       ;Are we looking at a carriage return?
+        jne     not_CR                  ;  No, look at next byte
+        inc     dx                      ;  Yes, point to next byte
+        not_CR:
+        mov     di,dx
+        cmp     byte ptr [di],0Ah       ;Are we looking at a Line Feed?
+        jne     not_LF                  ;  No, we can now print the literal
+        inc     dx                      ;  Yes, point to next byte
+        not_LF:
+                                        ;
+        mov     print_lit,'Y'           ;Set flag to indicate we were printing literal
+        mov     ah,9                    ;DOS function to print literal pointed to in DX
+        int     21h                     ;call DOS to print literal
+        ;
+    next_byte:                          ;This loop updates DX to point
+                                        ;to the location in the DTA where
+                                        ;the codes begin.
+                                        ;
+        inc     si                      ;Point to next byte in DTA.
+                                        ;
+        cmp     si,128d                 ;If we are at the end of the DTA,
+        jae     read                    ;go get next sector of user's file.
+                                        ;
+        cmp     si,127d                 ;Are we at next to last byte in the DTA?
+        jne     not_127                 ;  No, continue
+        cmp     dta[si],'$'             ;  Yes, and is this a end of literal mark?
+        jne     not_127                 ;    No, continue
+        mov     bytes_left,6            ;    Yes, will read 6 bytes of code
+        mov     print_lit,'N'           ;         turn off printing literal flag
+        jmp     read                    ;         and get next sector
+        not_127:
+                                        ;
+        cmp     dta[si],'$'             ;If DX pointing to end of literal,
+        je      end_of_literal          ;go read the codes following the literal.
+                                        ;
+        jmp     next_byte               ;Otherwise, get next byte in DTA.
+                                        ;
+                                        ;
+    end_of_literal:                                                      
+        mov     print_lit,'N'           ;Set flag to indicate we are not printing the literal
+        mov     bytes_left,6            ;Will read 6 bytes of code.
+        inc     si                      ;Point to first byte of code.
+        cmp     si,128d                 ;Are we are pointing to end of the DTA?
+        jbe     first_byte              ;  No, read first byte of code.       
+        jmp     read                    ;  Yes, go read next sector of users code.
+                                        ;
+    read_code:
+        cmp     bytes_left,6            ;If we reached the end of the DTA 
+        je      first_byte              ;reading the codes this jump table
+        cmp     bytes_left,5            ;will return us to the place where
+        je      five_left               ;we left off.  The value in CL is
+        cmp     bytes_left,4            ;the number of bytes we have left 
+        je      four_left               ;to read.
+        cmp     bytes_left,3
+        je      three_left
+        cmp     bytes_left,2
+        je      two_left   
+        cmp     bytes_left,1
+        je      last_byte_jmp           ;This jump arround stuff is required only
+        jmp     exit                    ;becasue it's to far for a conditional jump
+        last_byte_jmp:  jmp last_byte
+                                        ;
+    first_byte:
+        call    byte1
+        mov     dl,100d                 ;1st byte of code is 100's place
+        mov     bl,0                    ;initialize sum to zero - will use BL to
+                                        ;accumulate hex value of users code
+        call    byte2   
+        cmp     si,128                  ;Are we at end of DTA?
+        jb      five_left               ;  No, continue.
+        jmp     read                    ;  Yes, get next sector
+                                        ;
+    five_left:
+        call    byte1
+        mov     dl,10d                  ;2nd byte of user's code is 10's place
+        call    byte2
+        cmp     si,128                  ;Are we at end of DTA?
+        jb      four_left               ;  No, continue.
+        jmp     read                    ;  Yes, get next sector.    
+                                        ;   
+    four_left:
+        call    byte1
+        add     bl,al                   ;add one's place to sum in BL
+        call    byte3
+        cmp     si,128                  ;Are we at end of DTA?
+        jb      three_left              ;No, continue.
+        jmp     read                    ;Yes, get next sector.
+                                        ;
+    three_left:
+        call    byte1
+        mov     dl,100d                 ;1st byte is 100's place
+        mov     bl,0                    ;initialize sum to zero - will use BL to 
+                                        ;accumulate hex value of users code
+        call    byte2
+        cmp     si,128                  ;Are we at end of DTA?
+        jb      two_left                ;  No, continue.
+        jmp     read                    ;  Yes, get next sector
+                                        ;
+    two_left:
+        call    byte1
+        mov     dl,10d                  ;2nd byte is 10's place
+        call    byte2
+        cmp     si,128                  ;Are we at end of DTA?
+        jb      last_byte               ;  No, continue.
+        jmp     read                    ;  Yes, get next sector.
+                                        ;
+    last_byte:
+        call    byte1
+        add     bl,al                   ;add one's place to sum in BL
+        call    byte3
+        cmp     si,128                  ;Are we at end of DTA?
+        jb      end_codes               ;  No, continue.
+        jmp     read                    ;  Yes, get next sector.
+                                        ;
+    end_codes:
+        cmp     dta[si],'&'             ;Is next byte and end of file marker?
+        je      cont                    ;  Yes, we're done.
+        cmp     bp,20d                  ;Have we written all 10 codes (20 bytes)
+        je      cont                    ;  Yes, we're done.
+        jmp     print_literal           ;  No, print the next literal
+;
+;
+cont:
+        inc     sav_row                 ;set cursor to next row
+        mov     dh,sav_row              ;set new cursor position
+        call    loc                     ;call locate procedure to set cursor at next row
+        mov     dx,offset escape        ;get address of "ESC - Exit" literal
+        call    print                   ;print escape literal 
+                                        ;
+        mov     sav_row,10h             ;set cursor to be at line 16 (message line) 
+        call    msgs                    ;locate cursor at messages line
+        mov     dx,offset quest         ;print question "your choise"
+        call    print  
+;
+;
+kboard: call    kbd
+        mov     [kbd_input],al          ;save user's input in kbd_input
+        cmp     al,1Bh                  ;Check to see if input was escape key
+        je      escp                    ;  Yes, go print message & exit
+                                        ;
+        cmp     al,'0'                  ;Check to see if input was less than zero
+        jl      none                    ;  Yes, print error message
+                                        ;
+        cmp     al,option_nbr           ;Check to see if input was greater than nbr options
+        jae     none                    ;  Yes, print error message
+                                        ;
+        sub     al,30h                  ;fold user's ASCII character to a quantity
+        mov     dl,2                    ;get offset into codes by multiplying users
+        mul     dl                      ;input in AL times 2 (2 bytes per option)
+        mov     di,ax                   ;move result to DI (offset into CODES pointing 
+                                        ;to option user wants to execute                                ;
+                                        ;
+;First byte of code
+        mov     dl,offset codes[di]     ;get users code into DL
+        cmp     dl,0                    ;Is code zero?
+        je      next_code               ;  Yes, get next code
+                                        ;
+        call    sendit                  ;send code in DL to printer
+                                        ;
+        inc     di                      ;point to next code
+                                        ;
+;Second byte of code
+next_code:
+        mov     dl,offset codes[di]     ;get users code into DL
+        cmp     dl,0                    ;Is code zero?
+        je      finished                ;  Yes, we're done - go print Done!
+                                        ;
+        call    sendit                  ;send code in DL to printer
+                                        ;
+finished:
+        mov     dx,offset option        ;get address of Option literal
+        call    cursor                  ;call procedure to print literal
+        mov     dl,[kbd_input]          ;move user's keyboard input to DL
+        mov     ah,2                    ;DOS function to print character in DL
+        int     21h                     ;call DOS to print users keyboard input
+        mov     dx,offset done          ;get address of done! literal
+        call    print                   ;call print procedure to print the literal
+        jmp     again                   ;go ask user if he wants to play again
+                                        ;
+none:
+        call    msgs                    ;clear the message line
+        mov     dx,offset nomatch       ;get address of nomatch literal
+        call    print                   ;call print procedure to print literal
+        jmp     kboard                  ;go wait for user input
+;
+escp:
+        call    msgs                    ;blank-out message line
+        mov     dh,23                   ;position cursor at ...
+        call    loc                     ;line 23        
+        jmp     exit                    ;We're DONE!!!!
+;
+again:  call    msgs                    ;blank-out message line line
+        mov     dx,offset more          ;print more literal
+        call    print                   ;call print procedure to print more literal
+        jmp     kboard                  ;go wait for user input
+;
+exit:
+        mov     dl,disk                 ;get original default disk drive
+        mov     ah,0Eh                  ;DOS function to set default disk drive
+        int     21h                     ;Call DOS to do it
+                                        ;
+        pop     dx                      ;restore registers so the
+        pop     cx                      ;exit to DOS works OK.
+        pop     bx
+        pop     ax
+        int 20h                         ;Program terminate & return to DOS
+;
+PRINTER endp
+;
+;
+;
+BYTE1   proc
+;   
+        mov     al,dta[si]              ;get 1st byte of user's code     
+        sub     al,30h                  ;convert to hex quantity (from ASCII)
+        ret
+BYTE1   endp
+;
+;
+BYTE2   proc
+;
+        mul     dl                      ;Multiply times value in AL - result in AX
+        add     bl,al                   ;Add low byte of result to BL
+        inc     si                      ;point to next code in DTA
+        dec     bytes_left              ;first byte is done
+        ret
+BYTE2   endp
+;
+;
+BYTE3   proc
+;
+        mov     codes[bp],bl            ;put user's code (converted to hex quantity) into CODE
+        inc     bp                      ;point to next byte in CODE
+        inc     si                      ;point to next byte in DTA
+        dec     bytes_left              ;now there are three bytes left
+        ret
+BYTE3   endp
+;
+;
+KBD     proc                            ;This proc reads input from the keyboard
+;                                   
+        mov     ah,1                    ;  DOS function to read char from keyboard
+        int     21h                     ;  call DOS to do it
+        ret
+KBD     endp
+;
+;
+;
+CURSOR  proc                            ;This proc restores the cursor to
+                                        ;the position last saved, moves the
+                                        ;cursor to down one line and lastly
+                                        ;saves the new cursor position
+                                        ;
+        push    dx                      ;save address of display message
+                                        ;
+        mov     dh,sav_row              ;get row last saved
+        inc     dh                      ;add one to row
+        cmp     dh,22                   ;test to see if row is at 22 yet
+        jb      no                      ;  no, continue
+        mov     dh,21                   ;  yes, set row to 21
+    no:
+        mov     sav_row,dh              ;save current row
+        call    loc                     ;set cursor at new location
+        pop     dx                      ;restore address of display message
+        call    print                   ;call print procedure to print message
+        ret                             ;return
+CURSOR  endp                        
+;
+;
+;
+PGE     proc                            ;This proc gets the active display
+        mov     ah,15                   ;page returning it in bh
+        int     10H
+        ret
+PGE     endp
+;
+;
+;
+LOC     proc                            ;This proc sets the cursor at the
+                                        ;row number set in dh
+;
+        call    pge                     ;get active page number
+        mov     dl,0                    ;column 0
+        mov     ah,2
+        int     10H
+        ret
+LOC     endp
+;
+;
+;
+PRINT   proc                            ;This proc sends the data pointed
+                                        ;to by register DX to the screen 
+                                        ;for display
+                                        ;
+        mov     ah,9
+        int     21h
+        ret
+PRINT   endp                                    
+;
+;   
+SENDIT  proc                            ;This proc sends the contents of
+                                        ;register DL to the printer
+                                        ;
+        mov     ah,5
+        int     21H
+        ret
+SENDIT  endp                    
+;
+;
+MSGS    proc                            ;This proc locates the cursor at
+                                        ;the message line (line 15)
+                                        ;
+        mov     dh,15                   ;locate cursor at line 15
+        call    loc                     ;call locate procedure
+        mov     cx,75                   ;75 times we will ...
+        mov     dl,' '                  ;print spaces
+        print_space:
+        mov     ah,2                    ;DOS function to print character in DL
+        int     21h                     ;call DOS to print the space
+        loop    print_space             ;If CX is not zero, jump to print_space         
+        mov     dh,15                   ;locate cursor at line 15
+        call    loc                     ;call locate procedure
+        ret
+MSGS    endp
+;
+CSEG    ends
+        end     PRINTER
+```
+{% endraw %}
+
+## PRINTER.DOC
+
+{% raw %}
+```
+
+
+                                 PRINTER.DOC                    Ver 1.1
+
+                                 John Petrey
+                                  (c) 1983                                  
+
+        This  is  the documentation file for the PRINTER.COM  program,  a 
+        program that allows one to easily use the special print functions 
+        for  their printer (any make).   PRINTER.COM is run by typing  in 
+        PRINTER at the DOS prompt or directly from Wordstar using the "R" 
+        (run a program) command.
+
+        PRINTER.COM  is  used to set up your printer to make use of  it's 
+        special print functions (compressed print,  double strike  print, 
+        italics print,  etc.)  For example,   you may have a printer that 
+        normally only prints 80 characters on a line,  which is fine most 
+        of  the  time.   However,  you may find times when you'd like  to 
+        print more than 80 characters on a line.  You can use PRINTER.COM 
+        to tell your printer to use compressed print.    Likewise, if you  
+        normally use continuous form paper,  then you want the printer to 
+        stop printing  when it runs out of paper.   But when you want  to 
+        use  single sheet paper,  the printer stops because it thinks  it 
+        doesn't have any paper in the printer.   PRINTER.COM can tell the 
+        printer to temporarily ignore the paper out sensor so you can use 
+        single sheet paper.   Whatever your printer has the capability to 
+        do, you can easily do it with PRINTER.COM.
+
+        To use PRINTER.COM you must set up a data file for PRINTER.COM to 
+        read  so it knows what special print functions you want  to  use. 
+        You  can enter up to ten different special print features in  the 
+        data  file.   The  data file must be named PRINTER.DAT  and  must 
+        conform  to  a specific format so PRINTER.COM can understand  it.  
+
+        When you run  PRINTER.COM,  it looks for the  PRINTER.DAT file on 
+        the default disk drive unless you tell  PRINTER.COM  that the DAT
+        file is located on some other disk drive.    You tell PRINTER.COM
+        the drive the  DAT file is located on by typing in the disk drive
+        letter after you type in PRINTER at the DOS prompt.  For example,
+        if the  default  drive is  A  and  PRINTER.COM  is on drive B and   
+        PRINTER.DAT is on drive C, you would type in  B:PRINTER C  at the
+        DOS A> prompt so DOS would know to look on drive B for PRINTER.COM
+        and so PRINTER.COM would know to look on drive C for PRINTER.DAT.
+
+        The  data file (PRINTER.DAT) must contain a description (literal) 
+        of  the special print features you want to be available  and  the 
+        printer  control  codes  for each  special  print  feature.   The 
+        control  codes  are listed in your printer's user manual and  are 
+        likely found in the back of the manual as an appendix.  A control 
+        code  is  nothing  more  than  a unique  code  that  the  printer 
+        recognizes as a command to change to a special print mode.
+         
+        Let's assume you have an Epson MX printer and want to be able  to 
+        set up the printer for compressed print.   According to the Epson 
+        manual  (appendix B in my Epson manual) the control code to  turn 
+        on  compressed print is 15 (the ASCII character 15).  To  set  up 
+        your  PRINTER.DAT  file for compressed print on an Epson  printer 
+        you would need an entry like the following:
+
+             Compressed Print$015000
+
+
+                                  Page 1
+
+
+
+
+
+
+        The  first  part  of the entry is what you want  printed  on  the 
+        screen,  Compressed Print in this case.  Following the literal is 
+        a  dollar sign ($) which tells PRINTER.COM where the end of  your 
+        literal is and where the beginning of the codes are that you want 
+        sent  to  the  printer to turn on  that  special  print  feature.  
+        Following the dollar sign are six digits which to PRINTER.COM are 
+        really  two three-digit numbers.   The first three digits in this 
+        case  are  015  which  will be sent to the  printer  to  turn  on 
+        compressed print.   The last three digits (000 in this case) will 
+        not  be  sent  to the printer because  it  is  000.   PRINTER.COM 
+        expects two three-digit numbers,  so in this case we had to enter 
+        000   as   one  of  the  two  three-digit  numbers   to   satisfy 
+        PRINTER.COM's  requirement  for two  three-digit  numbers.   Many 
+        special print functions require two control codes be sent to  the 
+        printer  in order to set up a special print function,  so that is 
+        why PRINTER.COM wants two-three digit numbers.   For example,  on 
+        the Epson Printer,  to set up Italics print you need to send  the 
+        printer  a  ESC (escape) and a 53 (according to my Epson  Printer 
+        manual,  Appendix  B).   You would enter  your  literal,  Italics 
+        Print,  followed by a dollar sign followed by 027053.  027 is the 
+        ASCII code for Escape  and  053 is the code  for  Italics.  Thus,  
+        the entry in the PRINTER.DAT file would look like:
+              
+              Italics Print$027053
+
+        Up  to  ten different special print functions can be  entered  in 
+        the PRINTER.DAT file and each should be on separate  lines.   The 
+        last  entry  should be followed by an ampersand  (&)  immediately 
+        after  the last digit of the last code.  The ampersand (&)  tells 
+        PRINTER.COM  when  it has  reached the end of your  special print
+        features.   For  example,  if you only  had two  entries  in your 
+        PRINTER.DAT file it might look like:
+
+              Compressed Print$015000
+              Italics Print$027053&
+
+        Remember,  1) you can have up to 10 entries in PRINTER.DAT
+         
+                   2) each entry is comprized of:
+
+                        a. literal followed by dollar sign
+                        b. followed  by two three-digit codes  (decimal
+                           ASCII value - not hex)  that  are to be sent   
+                           to the printer   (Refer  to  your  printer's
+                           manual for the  control codes  to set up the 
+                           special print features you want to use.)  If
+                           your  printer  manual says to  send a  alpha 
+                           character to the  printer,  you can find out
+                           what  ASCII  code should be sent by refering 
+                           to the IBM-PC BASIC manual appendix G.		         
+
+                   3) The last  digit  of last code is followed  by  an 
+                      ampersand  (&)  so  PRINTER.COM knows when it has 
+                      reached the last of your special print features.  
+                                                                        
+
+
+
+                                Page 2
+
+
+
+
+
+
+
+
+        The  PRINTER.DAT  file  can be created with  any  editor  (Edlin, 
+        Wordstar,  directly from the console, etc.).  Just be sure if you 
+        use  Wordstar  that you create/edit the PRINTER.DAT file  in  the 
+        non-document  mode.   A  sample PRINTER.DAT file  (for  an  Epson 
+        printer) is provided as an example.
+
+
+        PRINTER.COM  can  be  run  from Wordstar by using the  R  (run  a 
+        program) command from the Wordstar Menu.  For example, assume you 
+        just finished editing a document and have saved it.   You  should 
+        now  be at the Opening Menu where you normally would strike P  to 
+        begin printing the document.   Before printing the document,  you 
+        can  strike  R for run a program at which time Wordstar will  ask 
+        you for the name of the program you wish to run.  Type in PRINTER 
+        and  strike the enter key.   Note:  if PRINTER.COM is not on  the 
+        logged  (default) disk drive you'll need to prefix  PRINTER  with 
+        the  drive  specification  of the drive where Wordstar  can  find 
+        PRINTER.COM  (such as A:  for drive A).  If PRINTER.DAT is not on
+        the default disk drive, you'll need to specify the drive where it
+        can be found after entering PRINTER.  For example, if the default
+        drive is B: and both PRINTER.COM and PRINTER.DAT are on drive A:,
+        then you'll need to enter   A:PRINTER A   so  Wordstar  will know
+        where to look for PRINTER.COM  and PRINTER.COM will know where to
+        look for  PRINTER.DAT.   After you've entered this, Wordstar will
+        run the PRINTER.COM program which will prompt you for the special
+        print  functions  you  set  up in your  PRINTER.DAT  file.   Upon
+        exiting  PRINTER.COM,   you will automatically return to Wordstar
+        where  you  can now strike P to begin printing your document with
+        the special print function(s) you selected in effect.      
+
+
+        Listed below is a sample PRINTER.DAT file for an EPSON printer.
+
+        Set Printer to Power Up Mode$027064
+        Compressed Print$027015
+        Italics Print$027052
+        Emphasized Print$027069
+        Double Strike Print$027071 
+        1/8th Inch Spacing$027048
+        Turn on Paper Out Sensor$027057
+        Turn off Paper Out Sensor$027056
+        Double Width Print #1$027087
+        Double Width Print #2$001000&
+
+        Note: To use Double Width Print,  both Double Width options 
+              in the above sample must be entered.  This is because
+              the Epson printer needs three control codes to set up
+              Doulbe Width print.   Since PRINTER.COM can only have
+              two control codes per entry in the  PRINTER.DAT file,
+              two entries in  PRINTER.DAT  are required to send the 
+              three control codes the Epson printer wants.  
+
+
+
+
+
+                               Page 3
+
+
+
+
+
+
+```
+{% endraw %}
+
+## RAMDISK.DOC
+
+{% raw %}
+```
+
+This program is a device driver that creates a RAM disk under DOS 2.0.
+The size of the RAM disk is determined by a parameter in the CONFIG.SYS
+file.  To use this program, add the following line to your CONFIG.SYS file:
+
+DEVICE=[d:][path]RAMDISK.SYS n
+
+Where [d:][path] specify the drive and pathname where RAMDISK.SYS can be
+found when the system boots, and n is the size of the RAMDISK in kilobytes.
+The [d:][path] specification need not be supplied if RAMDISK.SYS is located
+in the root directory of your default (system) drive.
+
+For example, on a floppy based system with the file RAMDISK.SYS in the root
+directory of your DOS disk, you could create an 80K RAM disk with the following
+statement in CONFIG.SYS:
+
+DEVICE=RAMDISK.SYS 80
+
+
+
+```
+{% endraw %}
+
+## ROMBIOS.ASM
+
+{% raw %}
+```
+                SUBTTL ROM BIOS DATA AREAS AND EQUATES
+;--------------------------------
+;   EQUATES
+;--------------------------------
+PORT_A          EQU     60H              ; 8255 PORT A ADDR
+PORT_B          EQU     61H              ; 8255 PORT B ADDR
+PORT_C          EQU     62H              ; 8255 PORT C ADDR
+CMD_PORT        EQU     63H
+INTA00          EQU     20H              ; 8259 PORT
+INTA01          EQU     21H              ; 8259 PORT
+EOI             EQU     20H
+TIMER           EQU     40H
+TIM_CTL         EQU     43H              ; 8253 TIMER CONTROL PORT ADDR
+TIMER0          EQU     40H              ; 8253 TIMER/CNTER 0 PORT ADDR
+TMINT           EQU     01               ; TIMER 0 INTR RECVD MASK
+DMA08           EQU     08               ; DMA STATUS REG PORT ADDR
+DMA             EQU     00               ; DMA CHANNEL 0 ADDRESS REG PORT ADDR
+MAX_PERIOD      EQU     540H
+MIN_PERIOD      EQU     410H
+KBD_IN          EQU     60H              ; KEYBOARD DATA IN ADDR PORT
+KBDINT          EQU     02               ; KEYBOARD INTR MASK
+KB_DATA         EQU     60H              ; KEYBOARD SCAN CODE PORT
+KB_CTL          EQU     61H              ; CONTROL BITS FOR KEYBOARD SENSE DATA
+;--------------------------------
+;  8088 INTERRUPT LOCATIONS
+;--------------------------------
+ABS0            SEGMENT AT 0
+STG_LOC0        LABEL   BYTE
+                ORG     2*4
+NMI_PTR         LABEL   WORD
+                ORG     5*4
+INTS_PTR        LABEL   WORD
+                ORG     8*4
+INT_ADDR        LABEL   WORD
+INT_PTR         LABEL   DWORD
+                ORG     10H*4
+VIDEO_INT       LABEL   WORD
+                ORG     1DH*4
+PARM_PTR        LABEL   DWORD            ; POINTER TO VIDEO PARMS
+                ORG     01EH*4           ; INTERRUPT 1EH
+DISK_PTR        LABEL   DWORD
+                ORG     01FH*4           ; LOCATION OF POINTER
+EXT_PTR         LABEL   DWORD            ; POINTER TO EXTENSION
+                ORG     7C00H
+BOOT_LOCN       LABEL   FAR
+ABS0            ENDS
+		PAGE
+;--------------------------------
+;  STACK -- USED DURING INITIALIZATION ONLY
+;--------------------------------
+STACK           SEGMENT AT 30H
+                DW      128 DUP(?)
+TOS             LABEL   WORD
+STACK           ENDS
+;--------------------------------
+;  ROM BIOS DATA AREAS
+;--------------------------------
+DATA            SEGMENT AT 40H
+RS232_BASE      DW      4 DUP(?)         ; ADDRESSES OF RS232 ADAPTERS
+PRINTER_BASE    DW      4 DUP(?)         ; ADDRESSES OF PRINTERS
+EQUIP_FLAG      DW      ?                ; INSTALLED HARDWARE
+MFG_TST         DB      ?                ; INITIALIZATION FLAG
+MEMORY_SIZE     DW      ?                ; MEMORY SIZE IN K BYTES
+IO_RAM_SIZE     DW      ?                ; MEMORY IN I/O CHANNEL
+		PAGE
+;-------------------------------
+;  KEYBOARD DATA AREAS
+;-------------------------------
+KB_FLAG         DB      ?
+;------ SHIFT FLAG EQUATES WITHIN KB_FLAG
+INS_STATE       EQU     80H              ; INSERT STATE IS ACTIVE
+CAPS_STATE      EQU     40H              ; CAPS LOCK STATE HAS BEEN TOGGLED
+NUM_STATE       EQU     20H              ; NUM LOCK STATE HAS BEEN TOGGLED
+SCROLL_STATE    EQU     10H              ; SCROLL LOCK STATE HAS BEEN TOGGLED
+ALT_STATE       EQU     08H              ; ALTERNATE SHIFT KEY DEPRESSED
+CTL_SHIFT       EQU     04H              ; CONTROL SHIFT KEY DEPRESSED
+LEFT_SHIFT      EQU     02H              ; LEFT SHIFT KEY DEPRESSED
+RIGHT_SHIFT     EQU     01H              ; RIGHT SHIFT KEY DEPRESSED
+;-------------------------------
+KB_FLAG_1       DB      ?                ; SECOND BYTE OF KEYBOARD STATUS
+INS_SHIFT       EQU     80H              ; INSERT KEY IS DEPRESSED
+CAPS_SHIFT      EQU     40H              ; CAPS LOCK KEY IS DEPRESSED      
+NUM_SHIFT       EQU     20H              ; NUM LOCK KEY IS DEPRESSED      
+SCROLL_SHIFT    EQU     10H              ; SCROLL LOCK KEY IS DEPRESSED       
+HOLD_STATE      EQU     08H              ; SUSPEND KEY HAS BEEN TOGGLED
+;-------------------------------
+ALT_INPUT       DB      ?                ; STORAGE FOR ALTERNATE KEYPAD ENTRY
+BUFFER_HEAD     DW      ?                ; POINTER TO HEAD OF KEYBOARD BUFFER
+BUFFER_TAIL     DW      ?                ; POINTER TO TAIL OF KEYBOARD BUFFER
+KB_BUFFER       DW      16 DUP(?)        ; ROOM FOR 15 ENTRIES
+KB_BUFFER_END   LABEL   WORD        
+;------ HEAD = TAIL INDICATES THAT THE BUFFER IS EMPTY
+NUM_KEY         EQU     69               ; SCAN CODE FOR NUMBER LOCK
+SCROLL_KEY      EQU     70               ; SCROLL LOCK KEY
+ALT_KEY         EQU     56               ; ALTERNATE SHIFT KEY SCAN CODE
+CTL_KEY         EQU     29               ; SCAN CODE FOR CONTROL KEY
+CAPS_KEY        EQU     58               ; SCAN CODE FOR SHIFT LOCK
+LEFT_KEY        EQU     42               ; SCAN CODE FOR LEFT SHIFT 
+RIGHT_KEY       EQU     54               ; SCAN CODE FOR RIGHT SHIFT
+INS_KEY         EQU     82               ; SCAN CODE FOR INSERT KEY 
+DEL_KEY         EQU     83               ; SCAN CODE FOR DELETE KEY 
+		PAGE
+;-------------------------------
+;   DISKETTE DATA AREAS
+;-------------------------------
+SEEK_STATUS     DB      ?                ; DRIVE RECALIBRATION STATUS
+;                                        BIT 3-0 = DRIVE 3-0 NEEDS RECAL BEFORE
+;                                        NEXT SEEK IF BIT IS = 0
+INT_FLAG        EQU     080H             ; INTERRUPT OCCURRENCE FLAG
+MOTOR_STATUS    DB      ?                ; MOTOR STATUS
+;                        BIT 3-0 = DRIVE 3-0 IS CURRENTLY RUNNING
+;                        BIT 7   = CURRENT OPERATION IS A WRITE, REQUIRES DELAY
+MOTOR_COUNT     DB      ?                ; TIME OUT COUNTER FOR DRIVE TURN OFF
+MOTOR_WAIT      EQU     37         ; TWO SECONDS OF COUNTS FOR MOTOR TURN OFF
+;
+DISKETTE_STATUS DB      ?          ; SINGLE BYTE OF RETURN CODE INFO FOR STATUS
+TIME_OUT        EQU     80H        ; ATTACHMENT FAILED TO RESPOND
+BAD_SEEK        EQU     40H        ; SEEK OPERATION FAILED
+BAD_NEC         EQU     20H        ; NEC CONTROLLER HAS FAILED
+BAD_CRC         EQU     10H        ; BAD CRC ON DISKETTE READ
+DMA_BOUNDARY    EQU     09H        ; ATTEMPT TO DMA ACROSS 64K BOUNDARY
+BAD_DMA         EQU     08H        ; DMA OVERRUN ON OPERATION
+RECORD_NOT_FND  EQU     04H        ; REQUESTED SECTOR NOT FOUND
+WRITE_PROTECT   EQU     03H        ; WRITE ATTEMPTED ON WRITE PROT DISK
+BAD_ADDR_MARK   EQU     02H        ; ADDRESS MARK NOT FOUND
+BAD_CMD         EQU     01H        ; BAD COMMAND PASSED TO DISKETTE I/O
+;
+NEC_STATUS      DB      7 DUP(?)   ; STATUS BYTES FROM NEC
+;--------------------------------
+;   VIDEO DISPLAY DATA AREA
+;--------------------------------
+CRT_MODE        DB      ?          ; CURRENT CRT MODE
+CRT_COLS        DW      ?          ; NUMBER OF COLUMNS ON SCREEN
+CRT_LEN         DW      ?          ; LENGTH OF REGEN IN BYTES
+CRT_START       DW      ?          ; STARTING ADDRESS IN REGEN BUFFER
+CURSOR_POSN     DW      8 DUP(?)   ; CURSOR FOR EACH OF UP TO 8 PAGES
+CURSOR_MODE     DW      ?          ; CURRENT CURSOR MODE SETTING
+ACTIVE_PAGE     DB      ?          ; CURRENT PAGE BEING DISPLAYED
+ADDR_6845       DW      ?          ; BASE ADDRESS FOR ACTIVE DISPLAY CARD
+CRT_MODE_SET    DB      ?          ; CURRENT SETTING OF THE 3X8 REGISTER
+CRT_PALLETTE    DB      ?          ; CURRENT PALLETTE SETTING COLOR CARD
+		PAGE
+;--------------------------------
+;   CASSETTE DATA AREA
+;--------------------------------
+EDGE_CNT        DW      ?          ; TIME COUNT AT DATA EDGE
+CRC_REG         DW      ?          ; CRC REGISTER
+LAST_VAL        DB      ?          ; LAST INPUT VALUE
+;--------------------------------
+;   TIMER DATA AREA
+;--------------------------------
+TIMER_LOW       DW      ?          ; LOW WORD OF TIMER COUNT
+TIMER_HIGH      DW      ?          ; HIGH WORD OF TIMER COUNT
+TIMER_OFL       DB      ?          ; TIMER HAS ROLLED OVER SINCE LAST READ
+;COUNTS_SEC     EQU     18
+;COUNTS_MIN     EQU     1092
+;COUNTS_HOUR    EQU     65543
+;COUNTS_DAY     EQU     1573040 = 1800B0H
+;-------------------------------
+;   SYSTEM DATA AREA
+;-------------------------------
+BIOS_BREAK      DB      ?          ; BIT 7 = 1 IF BREAK KEY HAS BEEN DEPRESSED
+RESET_FLAG      DW      ?          ; WORD = 1234H IF KEYBOARD RESET UNDERWAY
+DATA            ENDS
+;
+;--------------------------------
+;   EXTRA DATA AREA
+;--------------------------------
+XXDATA          SEGMENT AT 50H
+STATUS_BYTE     DB      ?
+XXDATA          ENDS
+;
+;--------------------------------
+;   VIDEO DISPLAY BUFFER
+;--------------------------------
+VIDEO_RAM       SEGMENT AT 0B800H
+REGEN           LABEL   BYTE
+REGENW          LABEL   WORD
+                DB      16384 DUP(?)
+VIDEO_RAM       ENDS
+;
+;--------------------------------
+;   ROM RESIDENT CODE
+;--------------------------------
+ROMCODE         SEGMENT AT 0F000H
+                DB      57344 DUP(?)             ; FILL LOWEST 56K
+                DB      '5700051 CORP. IBM 1981' ; COPYRIGHT NOTICE
+ROMCODE         ENDS
+;
+;--------------------------------
+;   PROGRAM SEGMENT PREFIX 
+;--------------------------------
+;
+PROGRAM    	SEGMENT          
+INT20		DW                      ;INT 20 for DOS return
+MEMORYSIZE	DW			;TOTAL MEMORY SIZE
+CALLDOS_FAR	DB	5 DUP(?)	; LONG CALL DOS DISPATCHER
+TERMADDR	DB	4 DUP(?)	; TERMINATE ADDRESS (ip,cs)
+CTRLBREAK  	DB	4 DUP(?)	; ctrl_break EXIT ADDRESS
+RESERVED	DB	4ah DUP(?)	; RESERVED AREA
+FCB_ONE		DB	10H DUP(?)	; unopened fcb #1
+FCB_TWO		DB	10H DUP(?)	; unopened fcb #2
+PARM_LENGTH	DB			; LENGTH OF PARAMETERS
+PARM_FIELD	DB	19 DUP(?)	; PARAMETER STRING DATA
+;
+ 		SUBTTL
+                PAGE
+                ORG	100H		; DEFAULT ENTRY ADDRESS
+PROGRAM_ENTRY	EQU	$
+
+```
+{% endraw %}
+
+## SCRN.ASM
+
+{% raw %}
+```
+	PAGE	66,132		;Setup page as 66 lines, 132 columns
+TITLE	SCRN - Subroutines for BASIC to control text windowing
+;
+;
+SUBTTL	Code
+CSEG	SEGMENT PARA PUBLIC 'CODE'
+START	PROC	FAR	;Routine
+	ASSUME	CS:CSEG,DS:CSEG,SS:NOTHING,ES:NOTHING
+;
+;
+; The following define the bytes for each screen control entry at the
+; end of the code of this bank.  The order of these entries correspond
+; to that on the call to DEFW routine to define a window.
+;
+ULC	EQU	0	; Word entry containing next two bytes
+LCOL	EQU	0	; Left column for window (0 - 79)
+TROW	EQU	1	; Top row for window (0 - 24)
+LRC	EQU	2	; Word entry containing next two bytes
+RCOL	EQU	2	; Right column for window (0 - 79)
+BROW	EQU	3	; Bottom row for window (0-24)
+ATTR	EQU	4	; Window text attribute
+LENWIN	EQU	5	; Window length in bytes
+;
+;
+	RET	0		;Dummy return for zero callers
+	DB	?		;Fill in case we expand entry zero
+;
+WINUM	DB	1		;Window number (default window 1)
+LENT	DB	LENWIN		;Window size
+;
+	JMP	SHORT	SCU	;Scroll up
+	JMP	SHORT	SCD	;Scroll down
+	JMP	SHORT	CEOL	;Clear to end of line
+	JMP	SHORT	CEOS	;Clear to end of window
+	JMP	SHORT	ATRB	;Change window attribute
+	JMP	SHORT	DEFW	;Define a window
+;
+;
+SCU	LABEL	NEAR		;Scroll up window
+	MOV	DH,6		;Function scroll up
+	JMP	SHORT	SCROLL	;
+;
+SCD	LABEL	NEAR		;Scroll down window
+	MOV	DH,7		;Function scroll down
+SCROLL	LABEL	NEAR		;Entry for SCU
+	PUSH	BP		;Common code
+	MOV	BP,SP		;
+	MOV	SI,[BP+6]	;Get argument address
+	MOV	AX,[SI]		;Get value
+	MOV	AH,DH		;Function
+	CALL	BASE		;Get data area base
+	MOV	CX,ULC[DI]	;Upper left corner
+	MOV	DX,LRC[DI]	;Lower right corner
+	MOV	BH,ATTR[DI]	;Attribute
+	INT	10H		;Enter BIOS
+RET2:	POP	BP		;
+	RET	2		;Return
+;
+;
+CEOL	LABEL	NEAR		;Clear to end of line in window
+	PUSH	BP
+	CALL	GETP		;Get position
+	CALL	CLRLIN		;Clear to end
+	POP	BP		;
+	RET	0		;And go home
+;
+;
+CEOS	LABEL	NEAR		;Clear to end of screen window
+	PUSH	BP		;
+	CALL	GETP		;Get position
+	PUSH	DX		;Remember that
+	CALL	CLRLIN		;Clear rest of this line
+	POP	DX		;Recall what that was
+	CMP	DH,BROW[DI]	;Close to bottom?
+	JZ	CEOSX		;Yes, exactly
+	MOV	CH,DH		;No, scroll rest of lines
+	INC	CH		;
+	MOV	CL,LCOL[DI]	;Left column
+	MOV	DX,LRC[DI]	;Lower right corner
+	MOV	BH,ATTR[DI]	;Attribute to fill
+	MOV	AX,0700H	;Function 7 and 0 to clear
+	INT	10H		;Call BIOS
+CEOSX	LABEL	NEAR
+	POP	BP		;
+	RET	0		;And go home
+;
+;
+ATRB	LABEL	NEAR		;Change attribute for current window
+	PUSH	BP
+	MOV	BP,SP
+	CALL	BASE
+	MOV	SI,[BP+6]
+	MOV	AL,[SI]
+	MOV	ATTR[DI],AL	;New attribute for window
+	JMP	SHORT	RET2	;Return to caller offset 2
+;
+;
+DEFW	LABEL	NEAR		;Define a window
+	PUSH	BP
+	MOV	BP,SP
+	MOV	SI,[BP+16]	;1st agrgument is screen number
+	MOV	AX,[SI]		;Get value
+	CALL	SHORT	NEXT1	;
+NEXT1:	POP	DI		;Get Pregister
+	SUB	DI,OFFSET(NEXT1-START) ;Okay
+	MOV	WINUM[DI],AL	;And store it
+	CALL	BASE2		;Base window area
+	PUSH	ES
+	PUSH	DS
+	POP	ES
+	MOV	SI,[BP+12]	;Left column
+	MOVSB
+	DEC	BYTE PTR [DI-1]	;All coordinates need to be based (0,0)
+	MOV	SI,[BP+14]	;Top row
+	MOVSB
+	DEC	BYTE PTR [DI-1]
+	MOV	SI,[BP+8]	;Right column
+	MOVSB
+	DEC	BYTE PTR [DI-1]
+	MOV	SI,[BP+10]	;Bottom row
+	MOVSB
+	DEC	BYTE PTR [DI-1]
+	MOV	SI,[BP+6]	;Attribute
+	MOVSB
+	POP	ES
+	POP	BP
+	RET	12
+;
+;
+GETP	PROC	NEAR
+	MOV	BX,0		;
+	MOV	AH,3		;Read current position
+	INT	10H		;
+	RET			;
+GETP	ENDP
+;
+;
+CLRLIN	PROC	NEAR
+	CALL	BASE		;Get data area base
+	MOV	CL,RCOL[DI]	;Right window limit
+	MOV	CH,0		;Clear top end
+	SUB	CL,DL		;Subtract columns done
+	ADD	CL,1		;Add one till we figure out whats wrong
+	MOV	AX,0920H	;Write blanks
+	MOV	BL,ATTR[DI]	;Attribute
+	INT	10H		;
+	RET			;
+CLRLIN	ENDP
+;
+;
+BASE	PROC	NEAR
+	CALL	SHORT	NEXT	;To capture P address
+NEXT:	POP	DI		;Get that for index
+	SUB	DI,OFFSET (NEXT-START)	;For code relative offset
+BASE2	LABEL	NEAR		;Alternate entry
+	PUSH	AX
+	MOV	AL,WINUM[DI]	;Get window number
+	DEC	AL		;Make zero relative
+	MUL	LENT[DI]	;Multiply by lenth of window
+	ADD	AX,OFFSET DATA	;Move to data area
+	ADD	DI,AX		;Add into segment offset
+	POP	AX
+	RET
+BASE	ENDP			;That is all
+;
+;
+DATA	DB	0,0,79,23,7	; Window 1 default data
+;
+;
+START	ENDP
+CSEG	ENDS
+	END
+
+```
+{% endraw %}
+
+## SCRN.DOC
+
+{% raw %}
+```
+
+			   DESCRIPTION
+
+		Copyright (c) 1983 by Bradley H. Hanson.
+
+   Permission is granted for private, non-profit use.  This program
+   may NOT be used for trade or sale.  Comments or corrections should
+   be directed to:
+
+          Brad Hanson,  3685 Eastwood Court, Bettendorf, IA  52722
+                   319/332-4984, CompuServe 72115,22
+
+  This contains a series of screen service routines for access
+  from a BASIC program.  They can be loaded into a string array
+  or unused file buffer in the program and then directly CALLed
+  after defining entry variables to the routines.
+
+  The following is a summary of the routines defined.  An expanded
+  description can be found in the file SCRN.DOC.
+
+  First the routine must be loaded into memory and a variable defined to
+  point to the first byte of the code.  In this example the variable Z
+  will point to the first byte and then the following entry variables 
+  are then defined to enter the actual routines:
+
+  SCRN=Z+2:  SCU=Z+4:  SCD=Z+6:  CEOL=Z+8:  CEOS=Z+10
+  ATRB=Z+12: DEFW=Z+14
+
+  The actual variables used in the program can named different than those
+  listed above but the relative offset into the code must remain the same.
+
+  Routine and location definitions using the variables defined above:
+
+  SCRN  - POKE location to define the current window
+
+          POKE SCRN,value  ' value is a number from 1 to 6 initial value=1
+
+  SCU - Scroll the window up function
+
+         I%=value:  CALL SCU(I%) ' Scroll <value> lines up.  Clear window if
+                                    value=0.  Argument must be an integer.
+
+  SCD - Scroll the window down function
+
+          I%=value:  CALL SCD(I%) ' Scroll <value> lines down.  Clear window
+                                 if value=0.  Argument must be an integer.
+
+  CEOL - Clear from cursor to end of line with spaces
+
+          CALL CEOL  ' No arguments allowed.  Cursor must be positioned within
+                       the current window.
+
+  CEOS - Clear from cursor to end of window with spaces
+
+          CALL CEOS  ' No arguments allowed.  Cursor must be positioned within
+                       the current window.
+
+  ATRB - Change the default attribute in the window
+
+          I%=value:  CALL ATRB(I%) ' Change space fill attribute to <value>
+
+  DEFW - Define a window.  Up to six windows can be defined.  The current
+         window will be changed to the window number defined.  Six arguments
+         are required as follows:
+
+         A1% - Screen number to define.  Value from 1 to 6.
+         A2% - Upper left corner row position (1 to 24).
+         A3% - Upper left corner column position (1 to 80).
+         A4% - Lower right corner row position (1 to 24, >= A2).
+         A5% - Lower right corner column position (1 to 80, >= A4).
+         A6% - Attribute byte for space fill characters.
+    Call:
+         CALL DEFW(A1%,A2%,A3%,A4%,A5%,A6%)
+
+    When initially loaded window 1 is defined with the following values:
+
+         A1=1: A2=1: A3=1: A4=24: A5=80: A6=7
+
+
+```
+{% endraw %}
+
+## SIZER.ASM
+
+{% raw %}
+```
+
+       page    64,132
+       title   SIZER - test the size of a file for PASCAL batch files
+       subttl  by Tony Alan Rhea 11/14/83
+;
+;
+comment *
+
+This program tests the size of a file and sets an errorlevel
+based on it's findings.  Currently, it is set up for the file
+ERRLOG and expects it to be 115 bytes long.  If it does not find
+the file or it is not 115 bytes big, an errorlevel 1 is returned
+(the file is assumed to be in the current working directory).
+Otherwise, errorlevel 0 is returned.  This program requires DOS
+2.0.
+
+This program is currently set up for the PASCAL compiler.  If PAS1
+goes OK, the following output is generated:
+
+  IBM Personal Computer Pascal Compiler
+  Version 1.00 (C)Copyright IBM Corp 1981
+   Pass One    No Errors Detected.
+
+which is exactly 115 bytes big when redirected to a disk file.  To use
+this program with the other compilers/assemblers, follow these steps.
+   1. Run the compiler/assembler on a known good program and redirect
+      the output to the disk file ERRLOG.
+   2. Do a "DIR ERRLOG" and look at the size of the file.
+   3. Put the file size in the EQUATE section below in SIZELO (SIZEHI
+      should always be zero unless your compiler generates more than
+      64k of messages!).
+   4. If you like, change the FILENAME DB statement near the end of
+      this program to a filename of your liking.
+   5. Assemble and link as follows:
+         MASM SIZER,,;
+         LINK SIZER;                   (Ignore "NO STACK" message)
+         EXE2BIN SIZER.EXE SIZER.COM
+   6. Have fun!
+
+One note for you PASCAL fans: PAS2 does not like to have his output
+redirected -- it hangs the system.  I haven't investigated it so I
+don't know the reason why.  If someone figures out why, please pass
+it along.
+
+Usage:
+      echo off
+      cls
+      echo Compiling %1 .....
+      pas1 %1,,; > errlog
+      SIZER
+      if errorlevel 1 goto error
+      echo PAS1 ok.  Starting PAS2....
+      pas2
+      goto end
+      :error
+      edit %1.pas
+      :end
+      echo on
+
+Copyright (C) 1983  Tony Alan Rhea
+This program may be copied and distributed for personal use
+but not for profit provided this notice is included.  Author makes
+no warranty, expressed or implied, as to the correct nature and
+operation of this software.
+
+
+You may make and distribute as many copies of this program as you wish
+for your PERSONAL use only ( NOT for business purposes, please! ).
+Feel free to modify, mutilate, or adulterate this program.  If you come
+up with an bug or improvement, please let me know by writing me at this
+address:
+        Tony A. Rhea
+        1030 Ivy Lane
+        Cary, NC  27511
+If you do modify it, please give me credit in the program.  This helps
+to preserve my ego and increase my fame (but, unfortunately, NOT my
+financial status).  Also, I would appreciate a copy of the modified
+version, preferably on disk (I'll be happy to return your diskette).
+
+If you like this program ( or HATE it ), please let me know.  Drop me
+a line at the address given above.
+
+This program has been submitted for publication in PC-WORLD magazine.
+
+
+  Revision history:
+     rev 1.0  11/14/83                         { original release }
+
+
+       *
+;
+;
+; Equates
+;
+;
+one    equ     '1'
+zero   equ     '0'
+cr     equ     0dh
+lf     equ     0ah
+dollar equ     '$'
+sizelo equ    115d             ;expected file size in bytes -- low portion
+sizehi equ    0                ;expected file size in bytes -- hi  portion
+       page
+;
+;
+; Program entry point
+;
+;
+cseg   segment para 'code'
+       assume  cs:cseg, ds:cseg, ss:nothing, es:cseg
+       org     100h            ;for .COM file
+entry  proc    near
+       mov     ah,30h          ;set function code -- get DOS version number
+       int     21h             ;and request DOS service
+       cmp     al,0            ;is it pre-DOS 2.0?
+       jne     entry10         ;if not, continue
+       jmp     dosexit         ;else tell user & quit
+;
+;
+; At this point we have DOS 2.0 or better.  Try to open the file.
+;
+;
+entry10 label  near
+       push    cs              ;save CS and
+       pop     ds              ;get into DS for addressability
+       lea     dx,filename     ;point DS:DX to filename
+       mov     ax,3d00h        ;function = open file for read-only
+       int     21h             ;request DOS service
+       jnc     entry20         ;if no carry flag, continue
+       jmp     fileerror10     ;else cannot open file -- error ID in AX
+;
+;
+; At this point we have opened the file.  Now let's get it's size.
+; The file handle is in AX.
+;
+;
+entry20 label  near
+       mov     bx,ax           ;put file handle in BX
+       mov     ax,4202h        ;function code -- LSEEK to EOF
+       xor     cx,cx           ;set CX and
+       xor     dx,dx           ;DX to zero -- no offset desired
+       int     21h             ;request DOS service
+       jnc     entry30         ;if no carry flag then continue
+       jmp     fileerror10     ;else access error -- ID in AX, handle in BX
+;
+;
+; Now the read/write pointer is at the end-of-file.  DX:AX contains the
+; new location of the pointer (DX contains the most significant part).
+;
+;
+entry30 label  near
+       cmp     dx,sizehi       ;is high portion of file size same?
+       je      entry40         ;if so, continue
+       jmp     sizediff        ;else file is a different size
+entry40 label  near
+       cmp     ax,sizelo       ;is low portion of file size same?
+       je      entry50         ;if so, continue
+       jmp     sizediff        ;else file is a different size
+       page
+;
+;
+; At this point we have determined that the file exists and is the desired
+; size.  Set errorlevel 0 and exit, closing the file.
+;
+;
+entry50 label  near
+       mov     ah,3eh          ;set function code = close file -- handle in BX
+       int     21h             ;request DOS service
+       jnc     entry60         ;if no carry flag, continue
+       jmp     fileerror       ;else error closing file
+entry60 label  near
+       mov     ax,4c00h        ;set DOS function -- terminate with errorlevel 0
+       int     21h             ;and request DOS service -- end of program
+;
+;
+; If we get here we don't have DOS 2.0.  Tell user about it and terminate via
+; function 0 (which works for all DOS versions).
+;
+;
+dosexit label near
+       lea     dx,errmsg1      ;point DX to DOS error msg
+       mov     ah,9            ;set function code -- print string
+       int     21h             ;and request DOS service
+       xor     ax,ax           ;set function code to zero -- program terminate
+       int     21h             ;and request DOS service (no errorlevel returned)
+;
+;
+; If we get here we encountered a file error after we successfully opened the
+; file.  We must close it in order to release the handle for other programs to
+; use.
+;
+;
+fileerror label near
+       push    ax              ;save the error code for a moment
+       mov     ah,3eh          ;set function code = close file -- handle in BX
+       int     21h             ;request DOS service
+       pop     ax              ;get error code back -- ignore errors in closing file
+;
+;
+; If we get here we encountered a file error of some sort.  Display the error.
+; The error code is in AX.
+;
+;
+fileerror10 label near
+       push    ax              ;save error code for a moment
+       lea     dx,errmsg2      ;point DX to syntax error msg
+       mov     ah,9            ;set function code -- print string
+       int     21h             ;and request DOS service
+       pop     dx              ;get error code into DX
+       cmp     dl,9            ;is it greater than nine?
+       jle     fileerror20     ;if so, then only a one digit error code
+       push    dx              ;else save a copy of error code
+       mov     dl,one          ;and put a '1' in DL -- tens digit
+       mov     ah,02           ;set function code -- display char in DL
+       int     21h             ;and request DOS service
+       pop     dx              ;restore old error code and
+       sub     dl,10d          ;subtract ten -- tens digit now displayed
+fileerror20 label near
+       add     dl,zero         ;convert from binary to ASCII code
+       mov     ah,02           ;set function code -- display char in DL
+       int     21h             ;and request DOS service
+       mov     dl,cr           ;send
+       mov     ah,02           ;    a
+       int     21h             ;    carriage return
+       mov     dl,lf           ;and a
+       mov     ah,02           ;    line feed
+       int     21h             ;to the console to keep things pretty
+sizediff label near
+       mov     ax,4c01h        ;set DOS function -- terminate with errorlevel 1
+       int     21h             ;and request DOS service -- end of program
+entry  endp
+       page
+;
+;
+; Messages/other stuff
+;
+;
+filename db    'ERRLOG', 0                     ;filename to look for - ASCIIZ string
+errmsg1 db     'SIZER requires DOS 2.0 or greater.', cr, lf, dollar
+errmsg2 db     'File access error -- status: ', dollar
+copyright db   'SIZER -- Copyright (C) 1983 Tony Alan Rhea'
+;
+;
+cseg   ends
+       end     entry
+```
+{% endraw %}
 
 ## TABLET.BAS
 
+{% raw %}
 ```bas
 1 ' This program was uploaded to the Capital PC Users Group Software Exchange
 2 ' Host system by  Alex Hobbs of Raleigh NC on 11-12-82 at 17:20
@@ -921,6 +2607,383 @@ machines:
 8000 GET (0,0)-(319,199),HLPD
 8001 GOTO 7000
 ```
+{% endraw %}
+
+## UPPER.ASM
+
+{% raw %}
+```
+
+
+		title	upper - filter
+;
+;		author: Gary R. Cantrell
+;
+;		This filter reads data from the standard input
+;		device, converts to upper case and writes to the
+;		standard output device.
+;
+;		usage:	upper < [d:][path]filename[.ext]
+;				-or-
+;			[filter |] upper [| filter]
+;
+;		requires: DOS 2.0 & runs as COM module
+;
+cseg		segment para public 'code'
+		assume	cs:cseg,ds:cseg,es:cseg,ss:cseg
+		org	100h			;offset for com module
+upper		proc	far
+		mov	ah,30h			;get DOS version
+		int	21h
+		cmp	ax,0002h
+		jnb	version_ok
+		mov	dx,offset ver_err	;bomb out on lesser version
+		mov	ah,9
+		int	21h
+		int	20h
+version_ok:	xor	bx,bx			;zero is stdin
+		mov	ah,45h			;duplicate stdin handle
+		int	21h
+		mov	bp,ax			;save the handle returned
+		mov	ah,3eh			;close the old handle
+		int	21h
+		mov	bx,2			;two is stderr
+		mov	ah,45h			;duplicate stderr handle
+		int	21h
+read_block:	cld				;set scan direction
+		mov	dx,offset buffer	;set input buffer
+		mov	ax,length buffer	; and length
+		mov	cx,ax
+		mov	bx,bp			;point to stdin
+		mov	ah,3fh			;read stdin for CX length
+		int	21h			;read input
+		or	ax,ax			;test return code
+		jnz	$+4
+		int	20h			;return to DOS
+		mov	cx,ax			;number of bytes read
+		mov	si,dx			;start of buffer
+getc:		lodsb
+		cmp	al,97			;skip conversion
+		jb	putc			;  if not
+		cmp	al,122			;    lower case
+		ja	putc
+		and	al,11011111b		;convert to upper case
+putc:		mov	dl,al			;put character to stdout
+		mov	ah,2
+		int	21h
+		dec	cx			;decrement block count
+		jcxz	read_block		;at end, read next block
+		jmp	getc
+;
+ver_err 	db	'upper: incorrect dos version'
+buffer		db	512 dup(0)		;buffer area
+		db	0
+upper		endp
+cseg		ends
+		end	upper
+
+13 minutes remaining.
+Enter command (with leading period):
+
+>
+```
+{% endraw %}
+
+## XT370.DOC
+
+{% raw %}
+```
+From: JDS5.TYM@OFFICE-2
+
+                 The XT/370 Professional Workstation
+
+The XT/370 is a PC/XT to which a 370 processor on three boards has
+been added.  These boards provide an emulated 370 processor, 512k of
+RAM, an emulation of IBM's 3277 model 2 display, and a connection to
+an IBM S/370 mainframe.  To complement these hardware enhancements,
+IBM also announced VM/PC (Virtual Machine/Personal Computer), which in
+conjunction with PC-DOS 2.0, functions as the control program for the
+XT/370 when it is running in 370 mode.
+
+Under VM/PC, the XT/370 supports one  of three sessions selected by a
+"hot key":
+
+  - a local CMS session (i.e., a CMS session running on the XT/370),
+  - a remote 3277 model 2 emulation session (a session displayed on
+    the XT/370's display but run on a remote S/370), or
+  - a remote 3101 emulation session via an optional asynchronous
+    connection.
+
+When running in PC/XT mode, the  XT/370  is  compatible  with current
+PC/XT capabilities including use of "foreign" expansion boards. 
+
+The Hardware
+
+The XT/370 consists of a standard PC/XT chassis with eight expansion
+slots.  Three of these slots are populated with special S/370
+emulation cards.
+
+PC/370-P card    The P card implements an emulation of the 370
+                 instruction set.  The card contains three
+                 microprocessors.
+
+                   1.  One of the  processors  is  a heavily modified
+                       Motorola  68000  produced  by  Motorola  under
+                       license  to  IBM.  This  chip  implements  the
+                       general   purpose    registers,    the    PSW,
+                       instruction  fetch and decode  logic,  and  72
+                       commonly  used S/370 instructions.  Since  the
+                       chip is  manufactured under license to IBM, it
+                       is doubtful that it will appear as a  Motorola
+                       product. 
+
+                   2.   A  second  processor  is a slightly  modified
+                       Motorola  68000  which  will   be   listed  in
+                       Motorola's  catalog.  This chip  emulates  the
+                       remaining  non-floating   point  instructions,
+                       manipulates the page  table, handles exception
+                       conditions,     and     performs      hardware
+                       housekeeping. 
+
+                   3.  The third microprocessor  is  a modified Intel
+                       8087  which   executes  S/370  floating  point
+                       instructions.   This  chip is interfaced as  a
+                       peripheral rather  than  via  the  normal 8087
+                       co-processor linkage.
+
+PC370-M card     The M card contains  512KB  of  parity  checked RAM.
+                 This memory may be accessed from the P  card or from
+                 the XT's native 8088 processor.  Concurrent requests
+                 are arbitrated in favor of the  8088.  While  the  M
+                 card does live in an XT expansion slot,  it  is also
+                 connected  to  the  P  card  via   a   special  edge
+                 connector.   16-bit wide transfers  between  M  card
+                 memory  and  the  P  card are effected through  this
+                 connector  (normal  XT  memory transfers operate  in
+                 8-bit wide chunks). 
+
+                 When  operating  in  native  PC  mode, the M  card's
+                 memory  is addressed as contiguous memory  beginning
+                 at  the  end  of  the 256KB memory of  the  system's
+                 motherboard.  In  native  PC  mode,  the  XT/370 has
+                 640KB of usable RAM - some of the M card's memory is
+                 not used. 
+
+                 When  operating  in  370 mode, only the 512KB RAM of
+                 the  M  card  is  usable (i.e.,  the  256KB  on  the
+                 system's motherboard is not available for the VM/CMS
+                 system).  The first 480KB of  this memory implements
+                 480KB  of  real S/370 space.  The remaining 32KB  on
+                 the M card functions  as a microcode control storage
+                 area for the second P card microprocessor. 
+
+                 Of the 480KB of  S/370  memory,  the  first 64KB are
+                 consumed by VM/PC leaving  416KB  of real memory for
+                 user  programs.   User programs larger than this are
+                 handled via paging. 
+
+PC/3277-EM  card  This card attaches the XT/370 to a S/370  mainframe
+                 via a local or remote 3274 control unit  (connection
+                 via  coaxial cable).  When VM/PC is running, the  EM
+                 card enables the XT/370 to  emulate  a  3277 model 2
+                 using the IBM monochrome or color display (since the
+                 3277 does not  support  color, if a color display is
+                 used, then  default  colors  are  utilized).   Under
+                 VM/PC, the EM card is also  used  in  uploading  and
+                 downloading of data between a host VM system and the
+                 XT/370. A  3274 coaxial connection can transfer data
+                 about  as  fast  as  today's  small winchester disks
+                 (over 600,000 bytes/second).
+
+Software
+
+The XT/370 can run in native PC/XT mode or in S/370 mode under VM/PC.
+Under VM/PC, the user can alternate via a "hot key"  between  a local
+CMS  session  and  a  remote  3277  session (or  optionally,  a  3101
+emulation session).   VM/PC  on  the  XT/370  will support all VM/CMS
+software conforming to the following requirements. 
+
+  -  Uses no more than one virtual address space. 
+  -  Runs in a virtual machine of up to 4 MB.
+  -  Supports 3277 model 2.
+  -  Does not rely on protection exceptions. 
+  -  Does not depend on S/370 DOS emulation. 
+  -  Does not exceed fixed disk capacity. 
+  -  Does not require more than 416KB of real memory. 
+  -  Does not rely on internal VM/SP and/or HPQ structure and
+     formats. 
+  -  Does not rely on time dependent operations.
+
+In effect, this means that most S/370 CMS software will run on the
+XT/370.  Some notable exceptions:
+
+  -  PROFS does not run because it utilizes multiple virtual
+     machines,
+  -  ISPF does not run because it depends on CP internals,
+  -  any program using VSAM will not operate  properly  because  VSAM
+     uses non-standard disk formats (S/370 DOS emulation); this means
+     that PL/I software using  indexed  files  will  not  run  on the
+     XT/370.
+
+VM/PC does not offer a true VM-like environment.  Rather, it provides
+an environment in which CMS applications can run.  Non-CMS VM
+applications will not run on the XT/370.
+
+Within the supported CMS environment, each CMS minidisk (simulated
+disk-pack on which a CMS user stores many files) is implemented as a
+PC-DOS file.  This is very nice since it enables the use of PC-DOS
+commands to backup CMS data and to move this data between XT/370
+workstations.
+
+IBM will license IBM S/370 software for use on the XT/370.  Licensing
+agreements are made in conjunction with the original mainframe S/370
+license (i.e., for now, you must be a S/370 licensee to license IBM
+S/370 software for the XT/370) and the corresponding software must be
+downloaded from a S/370. License fees run a few dollars per month per
+XT/370 workstation for each licensed software unit.  IBM has announced
+the following software to be available for licensing.
+ 
+             Product                    Monthly Charge
+    ----------------------             ----------------
+    OS/VS COBOL Compiler and Library         $19
+    OS/VS COBOL Library                        6
+    COBOL Interactive Debug                   21
+    VS FORTRAN Compiler and Library           17
+    VS FORTRAN Library                         4
+    IBM BASIC Processor and Library           21
+    PL/I Optimizing Compiler and Library      21
+    PL/I Transient Library                     4
+    PL/I Resident Library                      4
+    Pascal/VS                                 11
+    Assembler H                                9
+    Document Composition Facility (SCRIPT/VS) 18
+
+License fees for IBM CMS software are charged to the mainframe
+licensee rather than to the XT/370 proprietor.  But how can IBM
+enforce these fees?  When this question was posed at a recent
+professional meeting, IBM representatives responded that IBM would
+continue to trust its customers.  In corporate environments, where the
+XT/370 will be sold, this is probably quite reasonable.
+
+The VM/PC system must also be licensed.  It is provided on six floppy
+diskettes and includes the VM/PC Control Program, CMS, XEDIT, EXEC2,
+local and remote file transfer utilities, and the 370 Processor
+Control package.
+
+370 Processor Control is a general purpose debug facility similar to
+the debug facilities found on the operator consoles of S/370
+processors.  It runs on the XT/370 under VM/PC as one of several
+concurrent sessions (including a local and a remote CMS session).  It
+can be entered from any other session and can exit to any session.
+370 Processor Control enables the user to:
+
+  -  stop and start the processor,
+  -  stop the processor by real instruction compare,
+  -  generate an external interrupt to the processor,
+  -  edit (full screen mode) the following:
+       *  370 general purpose registers,
+       *  370 floating point registers,
+       *  370 control registers,
+       *  370 PSW,
+       *  370 storage, both real and virtual,
+       *  370 page address table.
+
+The user interface to the 370 Processor Control session relies heavily
+on function keys whose usage is displayed on the screen.
+
+XT/370 VM/PC CMS and CP commands are similar to S/370 VM/SP release 2
+commands.  From the looks of the list given in the VM/PC announcement
+notice, most CMS and CP commands are supported.  VM/PC XEDIT and EXEC2
+are compatible with the corresponding software of VM/SP release 2.
+
+Included on the distribution diskettes with VM/PC is a remote server
+program which may be used on a S/370 host to support communications
+between the host and the XT/370. This program affords the following
+functions:
+
+  -  Spool, disk, and file services,
+  -  VM/PC service request processing,
+  -  Logical and physical communications management.
+
+We aren't quite sure how you would upload this program to a host
+without the services of the program itself.
+
+Performance
+
+The XT/370 has been in the field at a number of locations for several
+months.  First rumors on performance of the XT/370 CPU indicate that
+it is approximately half of a 4331 when running a commercial
+instruction mix.  When running scientific codes, twice the performance
+of the 4331 is expected.  In general, the CPU is categorized as a .1
+MIPS processor.  This may not sound terribly impressive in times when
+we are used to multi-MIPS single chip micros.  Remember however, that
+.1 million S/370 instructions are likely to produce substantially more
+computing than .1 million instructions of your standard micro chip.
+
+The XT/370 running in S/370 mode can access the 512KB on the M-card.
+Of this 512KB, 32KB are reserved for microcode control storage; 64KB
+is used up by the VM/PC Control Program. This leaves 416KB for user
+programs.  Should a user program require more memory than this, then
+VM/PC will use a paging area on the XT/370's hard disk swap pieces of
+the program in and out of memory according to usage.
+
+Swapping on the little 10MB hard disks is going to be considerably
+slower than on the large disks used with mainframes.  Thus, programs
+larger than 416KB will probably run very slowly.  Field test users
+report long delays in loading large programs into memory even when
+these programs are well under the maximum for non-paged operation
+(e.g. XEDIT). Again, this is directly attributable to the relatively
+slow operation of the XT/370 hard disks.
+
+While 10MB sounds like a great deal of disk space to those of us who
+have been using floppies, in the mainframe world 10MB is just a drop
+in the bucket.  In its XT/370 product announcement, IBM cites the
+following example of disk utilization.
+
+                                      bytes(MB)
+     System storage (VM/PC, DOS)         1.6
+     OS/VS COBOL Compiler and Libraries  1.0
+     Document Composition Facility       0.6
+     Page file (1 MB virtual)            1.0
+     User A disk for CMS data/programs   3.0
+     Spooling for printing               0.5
+     User area for PC data/programs      2.3
+                                       -------
+                             total      10.0
+
+Here we have but 1MB as a paging area (reduces the maximum VM/CP
+virtual job size from 4MB to 1MB) and .5MB for spooling.  The 20MB
+XT/370 option (see below) will undoubtedly be quite popular.
+
+Configurations and Prices
+
+XT/370 (IBM machine number 5160) is announced in two configurations:
+model 588 and model 568.
+
+[5160 is also the model number of regular XTs. -Ed.]
+
+The 5160 Model 588 is the XT-like system we have been describing.  It
+includes one floppy and one 10MB hard disk drive (or as IBM calls it,
+a "fixed" disk drive).  The price for this configuration is $8995.
+VM/PC is available for an additional one time license fee of $1000.
+
+Model 568 is the same as the 588 but without the hard disk and the
+hard disk controller board.  To augment this configuration, you may
+purchase a new IBM PC option, the 5161 expansion unit model 3. This
+unit comes with two 10MB hard disk units, a hard disk controller, and
+eight system expansion slots (six full-feature and two short slots).
+The XT/370 model 568 is priced at $6720 and the expansion unit price
+is $4970. Thus a 20MB XT/370 costs $11690.  Add $1000 for VM/PC and
+you're all set to go for about $13K (tax included).
+
+The three XT/370 boards are available as an upgrade for the IBM PC/XT.
+The upgrade kit contains the boards, installation instructions, and a
+logo kit to change the name plate to read "IBM XT/370".  Thank heaven
+for IBM!  The price of the XT upgrade is $3790.
+
+iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

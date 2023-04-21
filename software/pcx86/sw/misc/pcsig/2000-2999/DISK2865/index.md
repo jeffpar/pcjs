@@ -14,6 +14,53 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2865.TXT
+
+{% raw %}
+```
+Disk No: 2865
+Disk Title: Shareware Marketing $ystem 2/2 (#2315)
+PC-SIG Version: S2.01
+
+Program Title: Shareware Marketing $ystem
+Author Version: 92.01
+Author Registration: $49.95
+Special Requirements: No special requirements. A hard drive is
+                      recommended.
+
+The $HAREWARE MARKETING $YSTEM is a detailed two-part resource for
+shareware authors who need creative ideas and a RATED mailing list of
+over 800 major shareware distributors, large computer clubs and
+recommended BBS systems.  The first part of the package, the shareware
+distributor's database, contains mailing addresses, phone numbers, a
+Shareware Distributor Rating and other detailed data which can be used
+to prepare envelope mailing labels or BBS calling uploads.
+
+The database file is rated by shareware distributor so you can mail your
+shareware to vendors rated A, B or C.  The database file is supplied in
+standard file formats such as dBASE and 1-2-3 which can be directly
+imported into your database!  Sort lists of shareware distributors by
+zip, state or other criteria.  Foreign and U.S. distributors and
+computer clubs are included.
+
+The second part of the package is a detailed newsletter and marketing
+strategy guide, prepared by an established shareware author.  It
+contains dozens of creative tips, tricks and traps which every shareware
+author should know.  Written by the author of the PC-LEARN computer
+tutorial, the $HAREWARE MARKETING $YSTEM provides detailed and valuable
+information in a frank, candid and sensible style.
+
+PC-SIG
+1030D East Duane Avenue
+Sunnyvale  Ca. 94086
+(408) 730-9291
+(c) Copyright 1992 PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2865
 

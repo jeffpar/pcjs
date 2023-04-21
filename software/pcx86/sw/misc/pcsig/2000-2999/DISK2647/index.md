@@ -14,6 +14,43 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2647.TXT
+
+{% raw %}
+```
+Disk No: 2647                                                           
+Disk Title: MORAFF'S ENTRAP                                             
+PC-SIG Version: S1.0                                                    
+                                                                        
+Program Title: Moraff's Entrap                                          
+Author Version: 2.0                                                     
+Author Registration: Varies.                                            
+Special Requirements: Graphics card.                                    
+                                                                        
+Moraffware brings yet another high resolution computer game to the      
+shareware world, supporting everything from hercules monochrome to super
+VGA color monitors, including 1024x768 256 color graphics. Like Moraff's
+Pinball (the first high-res VGA game) and Morff's Blast (the first      
+800x600 16 color game), Moraff's ENTRAP reaches new video heights in    
+both the shareware and retail market.                                   
+                                                                        
+Moraff's ENTRAP is a three dimensional game with a spectacular view of a
+huge maze-like playing field littered with enemy robots programmed to   
+capture you. Your objective is to reach the far end of the pathway.     
+You'll have to use every ounce of your mental skill to entrap the enemy 
+robots as you progress toward your objective.                           
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2647
 

@@ -81,6 +81,7 @@ machines:
 
 ## 4BARLINK.BAS
 
+{% raw %}
 ```bas
 1 ON ERROR GOTO 2000:DEFINT H-J
 5 REM FOUR BAR LINKAGE ANIMATION BY DAVID W PESSEN, 1982
@@ -157,9 +158,11 @@ machines:
 1040 GOTO 1000
 2000 COLOR 10,0: INPUT "READY";R$:SCREEN 0:PRINT "ERR=";ERR;" ERL=";ERL:PRINT "LIST ";ERL;:ON ERROR GOTO 0:STOP
 ```
+{% endraw %}
 
 ## ANIMATE.BAS
 
+{% raw %}
 ```bas
 100 ' animate.bas
 130 SCREEN 0:WIDTH 40:DIM A$(40):CLS:KEY OFF:DEFINT A-Z:D=1
@@ -176,9 +179,11 @@ machines:
 290 SCREEN ,,PAGE MOD 8:FOR B=1 TO S:NEXT B:PAGE=PAGE+1
 300 IF INKEY$="" THEN 290 ELSE SCREEN ,,0:CLS:END
 ```
+{% endraw %}
 
 ## BARS.BAS
 
+{% raw %}
 ```bas
 100 ' bars.bas see dec 11, 1984 pc magazine, p 419
 130 KEY OFF: CLS:WIDTH 40:SCREEN 0,1
@@ -194,9 +199,11 @@ machines:
 230 FOR P=1 TO 5:PRINT CHR$(219);: NEXT P:RETURN
 240 FOR P=1 TO 10:PRINT CHR$(219);:NEXT P:RETURN
 ```
+{% endraw %}
 
 ## BIRD.BAS
 
+{% raw %}
 ```bas
 5 FOR J=1 TO 5: GOSUB 40: NEXT J
 10 END
@@ -206,9 +213,11 @@ machines:
 60 NEXT I
 65 RETURN
 ```
+{% endraw %}
 
 ## CHARDEFN.BAS
 
+{% raw %}
 ```bas
 100 ' CHARDEFN.BAS (SEE PAGE 423, DEC 11,1984 PC MAGAZINE)
 130 DEF SEG=0
@@ -222,9 +231,11 @@ machines:
 250 CLS:SCREEN 1
 260 FOR N=1 TO 18:PRINT CHR$(128);" ";:NEXT N
 ```
+{% endraw %}
 
 ## COMPACT.BAS
 
+{% raw %}
 ```bas
 10 CLEAR ,,1024:CLS:LOCATE 6,1:PRINT"COMPACTER PROGRAM FOR BASIC"
 20 PRINT"COPYRIGHT (C) 1984 BY AUTOMATION DESIGN SERVICES"
@@ -462,9 +473,229 @@ machines:
 14100 PROC$=PROC$+RIGHT$(VARNAM$(I,2),LEN(VARNAM$(I,2))-1)
 14110 RETURN
 ```
+{% endraw %}
+
+## CONTENTS.DOC
+
+{% raw %}
+```
+Crosswds.dat contains the BASICA keywords which are to be excluded 
+from crossreferencing.  This file is for use with the excellent cross 
+reference utility made available by Computerenergy Inc.  for IBM PC 
+BASIC programs.  
+
+Memset.bas, along with meminst.dat, permits use of 640k of memory 
+even in systems on which the maximum switch setting is 544k.  The 
+program also initializes the added portion, so that you won't get 
+shot down with a parity error if a location is erroneously read 
+before anything is written to it.  
+
+M.exe, along with meminst.dat, performs the same function as memset, 
+but much faster.  This is user-supported software; users wishing to 
+contribute to its further development and receive information on any 
+updates available may send $10 to ADS, P. O. Box 6246, Monona WI 
+53716.  
+
+Compact.bas approaches the problem of squeezing BASIC programs in a 
+completely different way than programs such as squish, which delete 
+remarks and some spaces.  Compact performs a sequential variable name 
+substitution, beginning with A, B, C,...,Z,A0,...  in the order in 
+which new variables are encountered.  It permits development of a 
+program with understandable names, and then when space gets tight, 
+compact can be run to shrink the program.  Compact produces a 
+translation table of old and new variable names.  For truly tight 
+space constraints, both compact and a squish-type approach can be 
+used.  Compact.bas has some restrictions; for example, two or more 
+programs which are to be chained together will receive different 
+translations and so will not work together; it also will not handle 
+programs in which there is a DEFtype statement affecting the type of 
+a variable after the first use of the variable or in which there is 
+more than one DEFtype statement affecting the type of a variable (use 
+of DEFtype statements in this way is to be discouraged as it makes 
+programs harder to understand and incompatible with the basic 
+compiler from IBM); and other restrictions may also apply.  A much 
+faster version of this program is available from ADS, P. O. Box 6246, 
+Monona WI 53716 for $30.  It also handles chained programs correctly.  
+As an example, compact has been run on itself, producing compact.asc 
+and compact.trn from compact.src.  The savings in size is about 8 
+percent in this case.  The program COMPACT.BAS may not be sold for 
+profit, incorporated in other programs to be sold for profit, or 
+distributed in altered form except with the express permission of 
+ADS.  It is provided as a working demo, and may be distributed to 
+other users as such.  
+
+4barlink.bas is a four-bar linkage animator published in Mechanical 
+Engineering magazine, October 1984, pages 33-35.  Run this on the 
+color graphics adapter.  
+
+Bars.bas, Converge.bas, Mltibrst.bas, twoline.bas, animate.bas, 
+intlcvid.bas, scrnmove.bas, and chardefn.bas are all from David 
+Powell's article in PC magazine, page 418-424.  Try them on the color 
+graphics adapter.  Some are better on a composite monitor than on an 
+RGB.  
+
+Pgbrk.bat is a batch file which produces listings with top and bottom 
+margins (user selectable).  To use this file you must first run 
+pgbrk.bas to create the files pgbrk.beg and pgbrk.end.  These files 
+will contain the control characters needed to set up the skip-over-
+perf on an Epson (MX80 family) printer, and to return it to the 
+default setting, respectively.  Pgbrk.bas may be modified to give any 
+number of lines skipped at the perf, so long as it is fewer than the 
+page length.  
+
+Doors.com is a program which gives the PC user greater control over 
+multiple display adapters.  If you have both the monochrome and color 
+graphics adapters, Doors permits you to switch back and forth when in 
+PC-DOS or in an application program, unlike the mode command, which 
+works only from PC-DOS prompts.  Doors.com is to be run once (as in 
+an autoexec.bat file).  It loads and stays resident.  Then when the 
+key combination Alt-right shift is pressed, the contents of the 
+active display will be copied to the other display and the active 
+display will be switched.  If the transfer would be from the 
+color/graphics adapter to the monochrome adapter and the 
+color/graphics adapter is in 40 column mode or a graphics mode, no 
+information transfer or display switch is performed.  The program 
+Doors was written by John Dickinson and was published in the February 
+5, 1985 issue of PC Magazine, pages 273 to 277.  
+
+Parint.asm contains the source assembler code for a program which 
+traps parity error interrupts on the IBM PC.  Instead of stopping 
+your computer dead in its tracks with a "parity error" message on 
+screen, it will print a notice of the parity error and the time at 
+which it occurred, on your printer if available, or on the console 
+screen otherwise.  This program was published in PC Magazine, January 
+22, 1985, pages 309-315.  To use the program, assemble and link it.  
+Then run exe2bin (supplied with DOS) to convert the executable to a 
+binary file.  Rename the binary output file to type ".com" 
+(Parint.com).  Copy it to your working DOS disk and add a line to 
+your autoexec.bat file: "Parint".  This will cause the parint program 
+to load and stay resident when you turn the power on, or reset your 
+system.  With parint in place, you need never lose a couple of hours 
+work to a parity error.  
+
+RED.com is a program to rename files across subdirectories without 
+requiring the files themselves to be copied.  This is done by 
+changing the directory entries through PC-DOS function calls, 
+providing a feature which should have been included in PC-DOS but 
+wasn't.  Syntax is very similar to that of the copy command, but 
+execution is far faster, since very few locations must be changed.  
+RED permits the use of wildcard characters, and performs error 
+checking on its parameters.  Its use is naturally restricted to the 
+target and source drives being identical.  RED does not permit 
+simultaneously renaming the files.  If you forget the syntax, type 
+RED with no parameters.  RED will show you the proper syntax in the 
+usual PC-DOS form and then terminate.  The program RED was developed 
+by John Dickinson and published in PC Magazine, February 19, 1985, 
+pages 245 to 255.  Corrections to the (erroneous) published version 
+were made by Ken Kriesel.  
+
+Nutrek is a Startrek program rewritten specifically for the IBM PC 
+which is completely screen oriented:  its user interface has designed 
+into it the heads-up display a starship commander would need in order 
+to make quick effective decisions.  The Nutrek program is based on 
+Megatrek on this disk, from PC-SIG DISK #?.  
+
+Epbenchi.bas is a benchmark program.  List it and see how your 
+favorite language compares with some of the others available.  
+
+Reform.bas is a utility program which puts into an ascii-saved basic 
+program the spaces that IBM basic requires but some other basics do 
+not.  Use this program to save some of the tedium of converting 
+programs from one basic dialect to another.  A much faster version of 
+this program is available for $30 from ADS, P. O. Box 6246, Monona WI 
+53716.  The program "REFORM.BAS" is not to be sold for profit or 
+incorporated into other programs sold for profit without the express 
+agreement of ADS.  It is provided as a demo, and may be distributed 
+to other users as such.  The program may not be distributed in 
+modified form without the express agreement of ADS.  
+
+Bird.bas is a short sound effect program.  
+
+Pertchrt.bas is an IBM-PC conversion of the pertchart program 
+published for the TRS-80 in the May 1982 Byte magazine, page 469.  
+
+Dither.bas demonstrates the production of 128 distinct colors using 
+the Tecmar Graphics Master board.  
+
+Diskmodp is a modification of the floppy disk modification program 
+diskmodf offered on PC-SIG disk 28.  To make finding the information 
+you are looking for easier, several new commands have been added in 
+the sector view/alter portion.  These are: move ahead one sector (a), 
+back one sector (b), ahead one track (t), back one track (y), and 
+toggle side for dual sided diskettes (s).  The track and sector 
+increment and decrement functions include fully automatic wraparound.  
+Other new features are the capability to handle 9 sector per track 
+diskettes (and to automatically detect whether a disk is 8 or 9 track 
+format), and a hex printer dump copy (c).  Finally, the code which 
+converts the sector buffer to a screen display has been rewritten in 
+assembler and the remaining print statements optimized.  Using this 
+program, it is now possible to page through the sectors at a rate of 
+over one sector per second.  Previously, the program execution 
+required about 9 seconds, and the drive, track, side and sector had 
+to be entered each time, limiting paging to about 3 per minute.  
+These modifications were written by Ken Kriesel, and incorporate the 
+FULSCRN subroutine by David McManigal published in the August 21, 
+1984 issue of PC.  If you ever have to look at many sectors on a 
+disk, as I did in recovering data for which no backup copy existed 
+when the FAT on an important disk was overwritten by some COMMERCIAL 
+software, you'll come to appreciate the speed and convenience of 
+paging from one sector to another.  
+
+Npad.com provides a small popup memo pad in the right hand corner of 
+your screen.  It is activated by typing npad ONCE or including npad 
+in your autoexec.bat file.  To make the memo pad appear, type CTRL-n.  
+Type your memo and when finished type CTRL-n again to make it 
+disappear.  Until reboot or powerdown, the memo may be recalled with 
+CTRL-n.  The "Del" key erases the entire memo; the delete key above 
+the carriage return deletes single characters including carriage 
+returns.  See the source article for npad, PC Magazine, December 25, 
+1984, page 269 by Steve Holzner to customize npad for other trigger 
+characters.  
+
+4MSSTEP.COM contains a very short program which reduces floppy disk
+track-to-track step times to 4 milliseconds.  This is best invoked 
+from the autoexec.bat file.  (Most 5.25" floppy drives are specified
+to operate as fast as 3 milliseconds.)  This will save you time doing
+backups or formatting.
+
+Diff.exe adds a bit of capability beyond DOS's comp command.  Diff
+performs a record by record compare, and is intended for text-like 
+files.  Just type "DIFF" to use it.  Comparison stops when one file's 
+set of records is exhausted.  Remaining records in the other file are
+then listed.  Dissimilar records are printed out to show the user how 
+the files differ.  The program is a demo; added features are 
+available for those who send in $10 to ADS, PO Box 6246, Monona WI 53716.  
+Among the features added are resynchronizing on matching records after
+a section of no matches, and entry of file names from the command line.
+
+
+Some of the memory-resident utilities on this disk can be combined in 
+ways that are more useful than individually.  For example, if you 
+activate npad in your autoexec.bat file when one display is active, 
+and then use doors to switch displays after creating a directory, 
+subsequent use of npad is still done on the display that was active 
+when npad was invoked.  This permits using one display as a sort of 
+clipboard and the other for most work.  
+
+There are some interactions: npad changes attributes such as color on 
+the characters it overlays; and as with most memory-resident 
+utilities, there are certain incompatibilities (keeper, doors and 
+npad interact unless activated in the proper order).  
+The command file 4msstep sets the time between track stepper steps
+on the floppy disk drives at 4 msec.  This produces less noise and
+quicker access to data, and probably less wear as well.
+
+
+
+
+
+
+```
+{% endraw %}
 
 ## CONVERGE.BAS
 
+{% raw %}
 ```bas
 100 'converge.bas see dec 11 1984 pc magazine p 419
 130 CLS:KEY OFF:SCREEN 2
@@ -477,9 +708,11 @@ machines:
 200 PSET (PH,PV):NEXT PH:NEXT PV
 210 IF INKEY$="" THEN 210 ELSE CLS:END
 ```
+{% endraw %}
 
 ## DISKMODP.BAS
 
+{% raw %}
 ```bas
 8 CLEAR ,&H8B00: KEY OFF
 9 DEFINT A-Z
@@ -665,9 +898,11 @@ machines:
 2430 TRACK=TRACK-1:IF TRACK>0 THEN RETURN
 2440 TRACK=39: RETURN
 ```
+{% endraw %}
 
 ## DITHER.BAS
 
+{% raw %}
 ```bas
 10 REM program to experiment with dithered colors
 20 DIM SHADE%(16,8)
@@ -725,9 +960,11 @@ machines:
 540 V$=INKEY$: IF V$="" THEN GOTO 540 ELSE GOTO 550
 550 RETURN
 ```
+{% endraw %}
 
 ## DOORS.BAS
 
+{% raw %}
 ```bas
 100 GRAND.TOTAL.#=0
 110 OPEN "doors.com" AS #1 LEN=1
@@ -762,9 +999,11 @@ machines:
 400 DATA 5, 1, 199, 6, 36, 0, 7, 1, 140, 14
 410 DATA 38, 0, 251, 186, 141, 1, 205, 39, 16143
 ```
+{% endraw %}
 
 ## EPBENCHI.BAS
 
+{% raw %}
 ```bas
 10 REM this program is equivalent to the c language benchmark published in
 20 REM Electronic Products magazine, September 7, 1983, page 53.
@@ -789,9 +1028,11 @@ machines:
 210 PRINT TIME$
 220 END
 ```
+{% endraw %}
 
 ## INTLCVID.BAS
 
+{% raw %}
 ```bas
 100 'intlcvid.bas see p 422 dec 11 1984 pc magazine
 130 DEF SEG=&HB800:WIDTH 80:SCREEN 0:OUT 980,8:OUT 981,3
@@ -802,9 +1043,11 @@ machines:
 180 POKE ADR,219:POKE ADR+1,RND*16:NEXT ADR
 190 IF INKEY$="" THEN 190 ELSE OUT 980,8:OUT 981,2:CLS
 ```
+{% endraw %}
 
 ## MEGATREK.BAS
 
+{% raw %}
 ```bas
 2 LQ=1000
 7 DIM C$(20),G(8,8),D$(12),Q$(10,10),D4(12),D9(106)
@@ -2177,9 +2420,11 @@ machines:
 37001 FOR I=1 TO 10: GOSUB 29010: NEXT I: RETURN
 40000 PRINT "---> COURSE(S) .01-12 ONLY !!!": RETURN
 ```
+{% endraw %}
 
 ## MEMSET.BAS
 
+{% raw %}
 ```bas
 10 REM this program resets the memory size indication at 40:13 prior to
 20 REM quadmaster2 software access, to enable use of memory above the
@@ -2204,9 +2449,11 @@ machines:
 143 POKE J%,0: NEXT J%: NEXT I%
 150 SYSTEM
 ```
+{% endraw %}
 
 ## MLTIBRST.BAS
 
+{% raw %}
 ```bas
 100 'mltibrst.bas see pc magazine, dec 11, 1984 p 420
 110 ' KEY 'b' switches burst on or off for composite monitor
@@ -2223,9 +2470,11 @@ machines:
 230 A$=INKEY$:IF A$="b" OR A$="B" THEN SWAP B1,B2:OUT &H3D8,B1
 240 IF A$<>"x" AND A$<>"B" THEN 230 ELSE CLS:END
 ```
+{% endraw %}
 
 ## NUTREK.BAS
 
+{% raw %}
 ```bas
 1 CLS: COLOR 10,0: KEY OFF: GOSUB 24330
 5 DEFINT I-N: KEY OFF
@@ -3773,9 +4022,191 @@ machines:
 42020 COLOR 10,0: PRINT I0;SPC(20)
 42030 NEXT I0: RETURN
 ```
+{% endraw %}
+
+## PARINT.ASM
+
+{% raw %}
+```
+comment *  parint.com (c) 1984 by David G. Hunter.
+	this program may be freely copied but not be sold for profit.
+	parint.com detects parity errors, logs them on the printer if
+	possible, beeps, and returns to program execution.  the system
+	does not halt when this program is resident.  parity error 
+	checking is terminated after the first error is detected.  The 
+	error message includes the time of the event.  If the printer 
+	is not available, the errors are logged to the screen.
+	(Published in PC Magazine, January 22, 1985 issue, pages309-315).
+	(Corrections by Ken Kriesel)
+*
+;****************addresses of interrupt handlers *******************
+book	segment at 0h	;this is where the interrupt address book is
+	org	2h*4
+int_2	label	dword	;address of nmi handler
+book	ends
+
+;***************beginning of parint instructions *******************
+cseg 	segment
+	assume cs:cseg
+	org 100h
+start:	jmp	newvec	;install new nmi handler in ram
+;***************nmi handler*****************************************
+newint	proc	near	;new interrupt handler
+	assume ds:cseg, es:cseg
+	sti	;this flag was cleared when interrupt was issued
+	jmp 	go	;jump over more data
+;**********************data****************************
+getout:	nop
+instruc	db	0EAh	;this is the jump-immediate instruction!
+			;it jumps to the address stored in oldint.
+oldint	dd		;address of old interrupt 2 routine
+device1	dw	0004	;printer
+device2	dw	0001	;standard output device
+par1	db	0Dh,0Ah,"Parity Error: Main Board     ",07h,0Dh,0Ah
+par2	db	0Dh,0Ah,"Parity Error: Expansion Board",07h,0Dh,0Ah
+time	db	"    TIME:  "
+hour	dw	"00"
+	db	":"
+min	dw	"00"
+	db	"                ",0Dh,0Ah
+paroff	db	"PARITY CHECKING NOW DISABLED   ",0Dh,0Ah,0Ah
+go:	push 	cx
+	push 	ds
+	pushf
+	push	dx
+	push	bx
+	push	ax
+	pushf
+	mov	al,00h
+	out	0A0h, al	;turn off parity checking for now
+	xor	cx,cx		;cx=error flag: cx=1 if parity ok
+	in	al, 62h		;get data in port c
+	;	find origin of nmi
+	test	al, 40h
+	jz 	mother
+	mov 	dx, offset par2	;if bit 6 set, error is on expansion bd
+	jmp	out		;print message and exit
+mother:	test 	al,80h
+	jz 	other
+	mov	dx, offset par1	;if bit 7 set, error is on main board
+	jmp	out		;print message and exit
+other:	or	cx, 1h		;if neither bit is set, no parity error occurred,
+	mov	al, 80h		;so set parity ok flag
+	out 	0A0h, al	;turn parity checking back on.
+	jmp	noprt	;don't print message if no parity error
+;	print error message and exit.  Type of exit depends on type of error--
+out:	mov	ax,cs		;extablish proper data segment to
+	mov	ds,ax		;allow access to messages
+	call	whatime		;get time of error
+	mov	bx, device1
+	cmp	bx,0004		;if output is to printer, make sure it's ready
+	jne	f1
+	call	testprt
+f1:	call	print
+	mov	dx, offset time ;"time of error" message
+	call	print
+	mov	dx, offset paroff
+	call	print
+noprt:	popf
+	pop	ax
+	pop	bx
+	pop	dx
+	popf
+	pop	ds
+	test	cx, 1h		;special exit if parity ok
+	jnz	oth
+	pop	cx
+	iret			;message printed; let execution continue
+;	if no parity error, give control to pre-existing nmi handler
+; this is done by restoring ds and jumping to the instruction that
+; specifies the address of the old interrupt routine.  This unusual 
+; exit is necessary because otherwise, once ds was restored, the
+; address of the old interrupt routine would not be accessible.
+oth:	cli
+	pop	cx
+	jmp	getout
+newint	endp
+;********************subroutines************************8
+testprt	proc	near
+	push	dx
+	push	ax
+	xor	dx,dx		;printer # 0
+	mov	ah,2
+	int	17h		;read printer status
+	test	ah,00101001b	;error bits
+	jz	aok
+	mov	bx, device2	;if not ok, try other device
+aok:	pop	ax
+	pop	dx
+	ret
+testprt endp
+print	proc	near	;output to file named in bx; if error try another file
+	push	cx
+	mov	cx,34	;34 characters to print
+	mov	ah,40h	;dos function call
+	int	21h
+	pop	cx
+	ret
+print	endp
+whatime	proc	near	;what time is it?  Put result in hour/min
+	push	cx
+	push	dx
+	mov	ah,2Ch	;dos time
+	int	21h
+	mov	al,ch	;hours (0-23)
+	call	convt	;put tens in ah, ones in al
+	mov	hour,"00"
+	add	hour,ax
+	mov	al,cl
+	call	convt	;do same for minutes (0-59)
+	mov	min,"00"
+	add	min,ax
+	pop	dx
+	pop	cx
+	ret
+whatime	endp
+convt	proc	near	;convert number (100) to ascii. number is in al
+			;result: tens in ah, ones in al.
+	xor	ah,ah	;input is less than 100 anyway, so clear it
+	push	cx
+	mov	cl,10
+	div	cl	;divide ax by 10
+	pop	cx
+little:	ret
+convt	endp
+;*******************install nmi handler*********************8
+newvec	proc	near
+	jmp	past
+loaded	db	0Dh,0Ah,"PARITY ERROR INTERCEPTOR V2.00 BY DAVID HUNTER IS NOW"
+	DB	" INSTALLED",0DH,0AH,"$"
+past:	mov	dx, offset loaded
+	mov	ah,0
+	int	21h
+	assume	ds:book	;interrupt address book area
+	push	ds	;save old ds for future use
+	mov	ax,book
+	mov	ds,ax
+	mov	al, 00h
+	out	0A0h, al	;turn off parity checking
+	mov	ax,int_2	;get the address
+	mov	oldint,ax	;save it for some future use
+	mov	ax,int_2[2]	;second part of double word
+	mov	oldint[2],ax
+	mov	int_2, offset newint	;now load the new address
+	mov	int_2[2],cs		;cs is ds in com program
+	mov	al, 80h
+	out	0A0h, al		;turn parity checking back on
+	mov	dx, offset newvec	;leave new interrupt routine resident
+	int 	27h			;don't need "newvec" or beyond
+newvec	endp
+cseg	ends
+	end	start
+```
+{% endraw %}
 
 ## PERTCHRT.BAS
 
+{% raw %}
 ```bas
 10 REM program:  Enhanced Pert/CPM     Source:  Byte May 1982 pp. 469ff.
 20 REM Function: Pertcharting          Date:    5/1/82
@@ -4045,9 +4476,11 @@ machines:
 30000 GOTO 20070
 30010 RETURN
 ```
+{% endraw %}
 
 ## PGBRK.BAS
 
+{% raw %}
 ```bas
 10 REM program to create pgbrk.beg and pgbrk.end
 20 SKIPLINES%=12: REM or however many you like so long as it's less than the length of the page
@@ -4057,9 +4490,271 @@ machines:
 60 PRINT #1,USING "\ \";CHR$(140)+CHR$(27)+"@";
 70 CLOSE 1:END
 ```
+{% endraw %}
+
+## RED.ASM
+
+{% raw %}
+```
+RED segment para public 'code'
+	assume cs:red, ds:red, es:red, ss:nothing
+	org 100h		;.com format
+begin:	
+	jmp	code_start	; jump around data declarations
+declare:	; messages, storage areas, equates
+	copyright	db	'REDirect (C) 1985, Dickinson Associates Inc.'
+			db	13,10,'$'
+	path_file_len	equ	77  ;length=1, path=63, filename=12, 0=1
+	source_file	db	path_file_len dup (0)
+	target_path	db	path_file_len dup (0)
+	source_end	dw	0
+	target_end	dw	0
+	pc_dos_ver	db	0
+	valid_in	db	'abcdefghijklmnopqrstuvwxyz,;=',9
+	valid_out	db	'ABCDEFGHIJKLMNOPQRSTUVWXYZ',4 DUP(32)
+	valid_num	equ	$ - valid_out + 1
+	err_flag	db	0
+	err_head	db	10,13,'REDirect Error - $'
+	bad_version	db	'Incorrect PC-DOS Version$'
+	no_parms	db	'Correct Syntax is:',13,10,10
+	db	'RED [d:][source_path]source_filename[.ext] [d:][target_path]$'
+	file_not_found	db	'File not Found$'
+	path_not_found	db	'Target Path not Found$'
+	pc_dos_2_patch	db	13,10,'or $'
+	drives_conflict	db	'Source and Target Disk Drives Conflict$'
+	undefined_err	db	'Undefined Error: PC-DOS Function 56H$'
+	err_tail	db	10,10,13,' . . . Aborting',10,13,13,'$'
+	good_msg	db	' . . REDirected to . . $'
+	bad_msg1	db	' . . Not REDirected . . $'
+	bad_msg2	db	' . . already exists$'
+	end_line	db	10,13,'$'
+code_start:	;parse command line into source and target parameters
+	mov	dx,offset copyright	;display copyright notice
+	mov	ah,9h
+	int	21h
+	mov	ah,30h			; get pc-dos version
+	int	21h
+	mov	pc_dos_ver,al
+	mov	si,80h			;psp parameter byte count pointer
+	mov	cl,[si]			;move byte count to cl
+	xor	ch,ch			;zero ch
+	jcxz	no_parms_passed		;if cx is zero, there are no parameters
+	mov	dx,cx			;save byte count in dx
+	inc	si			;point to parameter area
+	mov	di,si			;copy si to di for cleanup routine
+	cld				;set direction flag to forward
+clean_parms:	;change valid delimiters to blanks, lower to upper case
+	lodsb				;load each character to al
+	push	di			;save di on stack
+	mov	di,offset valid_in	;point to table of valid inputs
+	push	cx			;save cx on stack
+	mov	cx,valid_num		;set CX TO NUMBER OF INPUTS TO LOOK FOR
+repne	scasb				;see if any are in al
+	jcxz	clean_end		;if not, change nothing
+	mov	bx,valid_num		;set up bx to point to valid output
+	sub	bx,cx			;this will leave bx one off
+	mov	al,valid_out [bx-1]	;load the valid output to al
+clean_end:
+	pop	cx			;restore cx
+	pop	di			;restore di
+	stosb				;store modified al back to psp
+loop	clean_parms			;loop until cx is zero
+	mov	cx,dx			;restore number of bytes in psp to cx
+	mov	dx,2			;set dx to look for up to 2 parameters
+	mov	bx,offset source_file	;set bx to address of 1st parameter
+	mov	al,' '			;set up to scan for first non-blank
+	mov	di,81h			;set di to pc-dos parameter pointer
+find_parms:	;start looking for parameters, load to program storage
+repe	scasb				;scan while blanks
+	mov	si,di			;set si to second non-blank byte
+	dec	si			;adjust it to first non-blank byte
+	inc	cx			;adjust cx to compensate
+	jcxz	parms_loaded		;if cx is zero, no parameters left
+	mov	di,bx			;set di to parameter hold area
+	mov	ax,cx			;store cx to first byte of hold area
+	stosb				;di is adjusted to second byte here
+store:	lodsb				;load each byte to al
+	cmp	al,' '			;is it a blank?
+	jz	end_store		;yes, end of this parameter
+	stosb				;no, store the byte to hold area
+end_store:	
+	loopnz	store			;keep looking
+	sub	[bx],cx			;store number of bytes in each
+	jcxz	parms_loaded		;if cx is zero, no more parameters
+	dec	byte ptr	[bx]	;parameter to first byte of hold area
+	mov	di,si			;set up to scan for next non-blank
+	dec	di			;adjust di to point to the blank
+	inc	cx			;adjust cx to compensate
+	dec	dx			;decrement dx counter
+	cmp	dx,0			;is dx zero?
+	jz	parms_loaded		;yes all expected parameters loaded
+	add	bx,path_file_len	;no, point to next part of hold area
+	jmp	find_parms		;go back and look for more
+parms_loaded:				;all parameters are loaded
+	cmp	source_file[0],0	;if there are no bytes in the
+	ja	fix_up			;source_file, no paramters present
+no_parms_passed:			;exit with an error if there are
+	mov	dx,offset no_parms	;no parameters passed
+	jmp	error_exit
+fix_up:					;fix source_file and target_path
+	mov	si,offset source_file	;for search and rename calls
+	lodsb				;get number of bytes
+	xor	ah,ah			;zero	ah
+	mov	di,si			;mov si to di for scan
+	add	di,ax			;start scan at end of parameter
+	dec	di			;
+	mov	cx,ax			;set cx to number of bytes
+	mov	al,'\'			;scan for the last '\'
+	std				;set direction flag to reverse
+repnz	scasb				;scan while not '\'
+	jnz	no_source_dir		;if zero flag not set, '\' not found
+	add	di,2			;add 2 to di to point to file name
+	jmp	source_fixed		;position
+no_source_dir:				;no source directory was specified
+	add	di,1			;adjust di
+	cmp	source_file[2],':'	;check for specified disk drive
+	jne	source_fixed		;none present, we're done
+	mov	di,offset source_file[3];yes, set di to point of first byte
+source_fixed:				;after ':'
+	mov	source_end,di		;move di to source_end pointer
+	cld				;set direction flag to forward
+	mov	si,offset target_path	;set up to look for '\' present
+	lodsb				;get number of bytes
+	cmp	al,0			;if it's zero, no target specified
+	je	no_target
+	xor	ah,ah			;zero ah
+	add	si,ax			;add it to si to point to end
+	dec	si			;decrement si to adjust
+	lodsb				;look at last byte
+	mov	di,si			;copy si to di
+	cmp	al,'\'			;is last byte a '\'?
+	je	target_fixed		;yes, everything's fine
+	cmp	target_path[0],2	;if target_path is 2 bytes long and
+	jne	store_slash		;is a drive specification,
+	cmp	target_path[2],':'	;let it default to the current
+	je	target_fixed		;directory
+store_slash:				;place a '\' at the end of
+	mov	al,'\'			;target_path if user did not
+	stosb
+target_fixed:
+	mov	target_end,di		;move di to target_end pointer
+	jmp	find_file
+no_target:				;set up to allow target path default
+	mov	target_end,offset target_path + 1	;to current path
+find_file:
+	mov	dx,offset source_file + 1	;dx points to source file
+	mov	ah,4Eh			;request function 4Eh (find first file)
+	mov	cx,0			;set cx to zero for normal files only
+	int	21h			;call pc-dos
+	jnc	found_file		;if no error, first file found
+	mov	dx,offset file_not_found	;if no files found, exit
+	jmp	error_exit			;program with error message
+found_file:
+	mov	di,source_end		;di points to end of source path
+	mov	si,9Eh			;si points to default DTA in psp
+	mov	cx,13			;dta will have 13 bytes
+rep	movsb				;move bytes to source_file
+	mov	di,target_end		;di points to end of target path
+	mov	si,9Eh			;si points to default DTA in psp
+	mov	cx,13			;DTA will have 13 bytes
+rep	movsb				;move bytes to target_path
+	mov	dx,offset source_file + 1	;dx points to old file name
+	mov	di,offset target_path + 1	;di points to new file name
+	mov	ah,56h			;request function 56h (rename file)
+	int	21h			;call pc-dos
+	jnc	good_red		;if no error, call was successful
+	cmp	ax,3			;check for error 3 (path not found)
+	jne	err_5
+	mov	dx,offset path_not_found
+	jmp	error_exit		;exit program with error message
+err_5:	cmp	ax,5			;check	for error 5 (file inaccessible)
+	jne	err_17
+	mov	err_flag,1		;soft error -
+	call	red_msg			;issue message with subroutine
+	jmp	next_file		;and keep going
+err_17:	cmp	ax,17			;check for error 17 (drive conflict)
+	jne	undef
+	mov	dx,offset drives_conflict
+	jmp	error_exit		;exit program with error message
+undef:	mov	dx,offset undefined_err	;undefined error from function 56h
+	jmp	error_exit		;exit program with error message
+good_red:				
+	mov	err_flag,0		;set error flag off and
+	call	red_msg			;issure message with subroutine
+next_file:				;look for next file
+	mov	ah,4Fh			;request function 4fh (find next file)
+	mov	cx,0
+	int	21h
+	jnc	found_another		;no error, another file was found
+	jmp	end_ok			;error, we're done finding files
+found_another:
+	jmp	found_file		;go process next file
+end_ok:	int	20h			;exit to pc-dos
+
+error_exit:				;print error message and exit
+	push	dx			;save error message pointer on stack
+	mov	ah,9
+	mov	dx,offset err_head
+	int	21h
+	mov	ah,9
+	pop	dx
+	int	21h
+	mov	ah,9
+	mov	dx,offset err_tail
+	int	21h
+	int	20h			;exit to pc-dos
+
+red_msg	proc	near	;display message for each file
+	mov	cx,2			;2 fields - source & target file
+	mov	bx,offset source_file + 1	;point to source file
+start1:	mov	si,bx			;copy bx to si
+start2:	lodsb				;load each byte to al
+	cmp	al,0			;if ascii 0 end of field
+	je	between
+	mov	dl,al			;copy byte to dl for funtion 2h
+	mov	ah,2h			;request function 2h
+	int	21h			;call pc-dos
+	jmp	start2			;get next character
+between:cmp	cx,2			;is it first or second field
+	jne	cr_lf			;if second, display end of message
+	cmp	err_flag,0		;is this a success message?
+	jz	ok1			;yes, go to good_msg
+	mov	dx, offset bad_msg1	;no, display first part of bad_msg
+	mov	ah,9h			;request function 9h
+	int	21h			;call pc-dos
+	jmp	next			;go process next field
+ok1:	mov	dx, offset good_msg	;display good_msg
+	mov	ah,9h			;request function 9h
+	int	21h			;call pc-dos
+	jmp	next			;go process next field
+cr_lf:	cmp	err_flag,0		;is this a success message?
+	jz	ok2			;yes, go to terminate message
+	mov	dx,offset bad_msg2	;no, display second part of bad_msg
+	mov	ah,9h			;request function 9h
+	int	21h			;call pc-dos
+pc_dos_2:				;patch for incorrect error
+	cmp	pc_dos_ver,3		;return in pc_dos 2.0 and 2.1
+	jae	ok2
+	mov	dx,offset pc_dos_2_patch
+	mov	ah,9h
+	int	21h
+	mov	dx,offset path_not_found
+	int	21h
+ok2:	mov	dx,offset end_line	;terminate display line
+	mov	ah,9h			;request function 9h
+	int	21h
+next:	add	bx,path_file_len		;move bx to point to next field
+	loop	start1			;loop for second field
+	ret				;or end and return to calling point
+red_msg		endp
+red	ends
+	end	begin
+```
+{% endraw %}
 
 ## REFORM.BAS
 
+{% raw %}
 ```bas
 10 CLS:LOCATE 8,1:PRINT"REFORMATTER PROGRAM FOR BASIC"
 20 PRINT:PRINT"COPYRIGHT (C) 1984 BY AUTOMATION DESIGN SERVICES"
@@ -4182,9 +4877,11 @@ machines:
 6030 IF ECHO$="ON" THEN ECHO$="OFF" ELSE IF ECHO$="OFF" THEN ECHO$="ON"
 6040 GOTO 2000
 ```
+{% endraw %}
 
 ## SCRNMOVE.BAS
 
+{% raw %}
 ```bas
 100  ' scrnmove.bas -- demo using mc6845 port register access.
 110 ' hit any key to proceed to next step.  don't clear screen.
@@ -4207,14 +4904,17 @@ machines:
 290 SCREEN ,,PAGE MOD 8:FOR B=1 TO S:NEXT B:PAGE=PAGE+1
 300 IF INKEY$="" THEN 290 ELSE SCREEN ,,0:CLS:END
 ```
+{% endraw %}
 
 ## TWOLINE.BAS
 
+{% raw %}
 ```bas
 100 'twoline.bas
 110 CLS:SCREEN 2:OUT 984,26:FOR H=0 TO 635 STEP 4
 120 LINE (H,0)-(H+3,199):LINE (H+1,0)-(H+4,199):NEXT H
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

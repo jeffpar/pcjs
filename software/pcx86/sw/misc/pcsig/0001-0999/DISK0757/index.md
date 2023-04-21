@@ -14,6 +14,64 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILES757.TXT
+
+{% raw %}
+```
+Disk No   757
+Program name:  Spanish Verb Conjugator Version 2.02
+PC-SIG version 1.2
+ 
+The SPANISH VERB CONJUGATOR is an aid to help you understand the
+meanings of Spanish verbs.  The program is menu-driven and very user-
+friendly, displaying the past, present, future, and other tenses of each
+word.
+ 
+Whether you're eight or eighty years old, you know how difficult it is
+to learn a foreign language, especially if you don't have someone with
+whom to practice your language drills.  The SPANISH VERB CONJUGATOR is
+the perfect tutor for someone trying to understand, or even spell, some
+of the Spanish language.
+ 
+Usage: Educational.
+ 
+Special Requirements:  None.
+ 
+How to Start:  Type GO (press return).
+ 
+Suggested Registration:  $35.00
+ 
+File Descriptions:
+ 
+SPANISH  BAT  Batch file to start program.
+SPANVERB EXE  Main program.
+READ     ME   Documentation File.
+SPANISH  REF  Reference Data file.
+SPANISH  SUB  Reference Data file.
+SPANISH  CON  Data file.
+SPANISH  DAT  Data file.
+SPANISH  HLP  Help file.
+SPANISH  TNS  Data file.
+PROGRAM  HLP  Help file.
+READ     BAK  Text file backup.
+REGISTER HLP  Help file.
+SPANISH  INF  Data file.
+SPANISH  INN  Data file.
+SPANISH  LST  Data file.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA, 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0757
 

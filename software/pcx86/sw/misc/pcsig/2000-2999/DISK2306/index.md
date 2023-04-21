@@ -40,6 +40,50 @@ machines:
     BIOS print functions; and both DOS and BIOS keyboard functions.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2306.TXT
+
+{% raw %}
+```
+Disk No: 2306                                                           
+Disk Title: FlashPac C Library 2 of 2 (1872 also)                       
+PC-SIG Version: S1.2                                                    
+                                                                        
+Program Title: FlashPac C Library                                       
+Author Version: 3.25                                                    
+Author Registration: $50.00                                             
+Special Requirements: None.                                             
+                                                                        
+Add blinding speed and style to your C programs with the FLASHPAC C     
+LIBRARY.  Your programs will run faster and look better than anything   
+you can buy.                                                            
+                                                                        
+The FLASHPAC C LIBRARY provides C programmers with low level routines   
+that access the video display, keyboard, printer, disk, and mouse       
+devices.  These routines are not intended to replace the standard       
+features of C.  They were created to add to and extend the C programming
+environment for MS-DOS and PC-DOS operating systems.  In keeping with   
+good programming practice, global variables within the Library have been
+kept to a minimum.  All the functions in the Library are written in     
+assembly language, for speed, using the Pascal parameter passing        
+conventions.                                                            
+                                                                        
+The FLASHPAC C LIBRARY contains routines for DISK -- many DOS functions 
+that use byte streams when accessing the disk files; VIDEO -- direct    
+access for saving and restoring the screen, framing windows, cursor     
+control, etc.; MOUSE -- basic support plus an event handler; BIOS print 
+functions; and both DOS and BIOS keyboard functions.                    
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2306
 

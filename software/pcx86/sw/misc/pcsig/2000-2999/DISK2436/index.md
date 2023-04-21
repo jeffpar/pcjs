@@ -37,6 +37,47 @@ machines:
     shape to place.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2436.TXT
+
+{% raw %}
+```
+Disk No: 2436                                                           
+Disk Title: FRAC                                                        
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Frac                                                     
+Author Version: 01/90                                                   
+Author Registration: $10.00                                             
+Special Requirements: EGA.                                              
+                                                                        
+If you think twisting, moving, and dropping different shaped blocks to  
+form solid lines is fun, then FRAC, a new 3-D  TETRIS-like program, will
+drive you completely over the edge.                                     
+                                                                        
+The object of FRAC is deceptively simple.  Pack falling blocks into     
+solid layers as quickly and efficiently as possible.  However, in FRAC  
+you have to contend with not only moving and twisting the falling       
+blocks, but also shifting them in space in order to place them in empty 
+spaces on the 3-dimensional grid. If it sounds difficult, it is. The    
+first couple of layers are relatively easy to complete, but with more   
+than three layers, placing the many differently-shaped blocks can be a  
+nerve-wracking fun experience.                                          
+                                                                        
+If you've grown tired of 2-dimensional dropping-block games, enter the  
+3-D FRAC zone.  Watch out for the huge 3x3x3 cube.  It's the hardest    
+shape to place.                                                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2436
 

@@ -40,6 +40,43 @@ machines:
     this description by up to 99 lines of 60 characters and spaces.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE0910.TXT
+
+{% raw %}
+```
+Disk No:  910
+Program Title:  BILLING MANAGER (Disk 2 of 2)
+PC-SIG version:  3
+
+Please Note: This is the second disk of a two-disk set.  The first half
+of the program is on disk #909.  Refer to disk #909 for a full
+discription.
+
+Usage:  Time and Billing Manager.
+
+Special Requirements:  400K RAM, one disk drive, hard disk and a
+printer.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $29.00
+
+File Descriptions:
+
+BM1_DSK2 EXE  Self-unarchiving file containing program files.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0910
 

@@ -31,6 +31,53 @@ machines:
     wealth, third world issues and more.  An incredible resource!
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES506.TXT
+
+{% raw %}
+```
+Disk No   506
+Program Title: BUSINESS ETHICS AND MORAL VALUES (Disk 1 of 2)
+PC-SIG version 2.1
+ 
+BIBLIOGRAPHY OF BUSINESS ETHICS AND MORAL VALUES has a list of
+periodical references, texts, books, syllabi collections, and
+audiovisual materials compiled by Dr. Kenneth Bond of Creighton
+University. This is the third edition and it is updated about every year
+and a half.
+ 
+Some subjects included are: energy, environmental issues (strip mining,
+toxic chemicals and water pollution), worker issues (discrimination,
+sexual harassment, whistle blowing, etc.), privacy, distribution of
+wealth, third world issues and more. AN INCREDIBLE RESOURCE! This is the
+first disk of a two-disk set. The second disk is #1018.
+ 
+Usage:  Reference.
+ 
+Special Requirements:  None.
+ 
+How to Start:  Type GO (press enter).
+ 
+Suggested Registration:  None Specified.
+ 
+File Descriptions:
+ 
+BIB88ASC INT  Introduction to the Bibliography.
+88BIBASC A-J  Journal articles (A-J) since 1980.
+88BIBASC K-Z  Journal articles (K-Z) since 1980.
+README        Information on program.
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987,88 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0506
 

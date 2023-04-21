@@ -26,6 +26,56 @@ machines:
     with trivia questions about musical history.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILES475.TXT
+
+{% raw %}
+```
+Disk No  475
+Program Title: TUNE TRIVIA version 1.0
+PC-SIG version 2
+ 
+    TUNE TRIVIA is a well-developed and entertaining musical trivia
+software package for all age groups. The songs are fairly difficult for the
+very young to correctly guess, but most people will find it challenging.
+The program resembles the game show "Name that Tune" where contestants
+attempt to guess song titles by hearing notes played and must guess
+correctly within 20 seconds. Once a song has been correctly named, the
+player then can attempt a musical history trivia question. There are
+various player modes that allow for user strategy, flexibility and score-
+keeping. TUNE TRIVIA can be installed for monochrome or color systems and
+comes with a brief manual on a diskette file. The program can be run
+directly from DOS and requires 128K. The package is great for family
+gatherings. It lets everyone test their musical knowledge!
+ 
+Usage: Entertainment
+ 
+System Requirements: 128K and one disk drive.
+ 
+How to Start: Type: TUNETRIV (press enter).
+ 
+Suggested Registration: $20.00
+ 
+File Descriptions:
+ 
+README        Brief information about authors and program.
+MANUAL        Program instruction manual (22k) set for 8.5" x 11" paper.
+TUNETRIV EXE  Main Program for TUNE TRIVIA.
+SET0??        Data files holding musical notes for TUNETRIV.EXE    (22 FILES).
+TRIV0??       Data files holding trivia questions for TUNETRIV.EXE (21 FILES).
+SIGSOFT       Signature data file (Company name only).
+ 
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale Ca. 94086
+(408) 730-9291
+(c) Copyright 1987 PC-SIG Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0475
 

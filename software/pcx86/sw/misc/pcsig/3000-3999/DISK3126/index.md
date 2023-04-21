@@ -14,6 +14,24 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## DIRECTRI.TXT
+
+{% raw %}
+```
+BABY
+COMPUTER
+FRUITS
+MONSTERS
+OFFICE
+SPORTS
+SWEETS
+XMAS
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3126
 

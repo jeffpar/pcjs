@@ -40,6 +40,68 @@ machines:
     correctness.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1365.TXT
+
+{% raw %}
+```
+Disk No: 1365
+Program Title: FREEQUENT FLYER version 2.15 (Disk 1 of 3)
+PC-SIG version 1
+
+FREEQUENT FLYER is designed to help the airline frequent flyer club
+member to maximize travel bonuses available for his/her travel plans.
+
+A comprehensive data base is supplied with the program that contains
+airline, hotel, car rental, etc. information.  This data is all
+cross-referenced so that you can see, for example, which hotels
+participate with which airlines, giving mileage credit.  This
+information can save you money when making travel arrangements.
+
+The data base provides the following information to aid you with your
+travel plans; which airlines offer mileage bonuses, which hotels offer
+mileage bonuses in conjunction with particular airlines, current special
+airline travel bonuses, travel information such as airline or hotel
+specials for a given city, list of all specials for a given city and car
+rental specials associated with a particular airline.
+
+FREEQUENT FLYER also provides a Travel Log which you can use to enter
+and track your own individual frequent flyer accounts.  The system is
+completely menu-driven and all data entries are verified for
+correctness.
+
+Synopsis:  A menu-driven database of flight & travel info that helps you
+to maximize your frequent flyer bonuses.
+
+Usage:  Business/Airline Travel/Frequent Flyer Bonuses.
+
+Special Requirements:  Hard disk and a CGA card.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $19.95 for current update; $49.95 for quarterly
+updates (4); $79.95 for monthly updates (12).
+
+File Descriptions:
+
+GO       EXE  Main program.
+ACCTMILE DBF  Database file.
+ACCTPNTS DBF  Database file.
+AIRLINE6 NTX  Index file.
+CONVERT  DBF  Database file.
+HOTEL2   NTX  Index file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1989 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1365
 

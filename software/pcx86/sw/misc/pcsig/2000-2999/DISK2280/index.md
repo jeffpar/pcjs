@@ -37,6 +37,147 @@ machines:
     proportionally sized without losing resolution.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE2280.TXT
+
+{% raw %}
+```
+Disk No: 2280                                                           
+Disk Title: ArtPak                                                      
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: ArtPak                                                   
+Author Version: 03/90                                                   
+Author Registration: $19.95                                             
+Special Requirements: None.                                             
+                                                                        
+If you use PageMaker, Xerox's Ventura, or similar desktop publishing    
+software you know that being able to use electronic clip art can make it
+easier to generate professional looking bulletins, flyers, newsletters, 
+etc.                                                                    
+                                                                        
+This disk contains eight borders, ten headlines, ten pieces of          
+electronic clip art, five accents, seven symbols, and eight bonus files 
+with four major credit card symbols in PCX and TIF formats. The clip art
+can be used with Xerox's Ventura, PageMaker, WordPerfect 5.0+, Word For 
+Windows, AMI, CorelDRAW, Arts & Letters, and many other programs that   
+can inport graphics. WordPerfect macros are included to aid beginning   
+users in adding clip art to their documents.                            
+                                                                        
+The borders are in .WMF and .CGM formats.  These files take up very     
+little room and because they use vector graphics, they can be           
+proportionally sized without losing resolution.                         
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## WPUSER.DOC
+
+{% raw %}
+```
+COMPUTER COMPLETERS
+9322 Katella Avenue
+Anaheim, CA  92804
+(714) 527-0285
+
+Using our borders in WordPerfect 5.0 or 5.1.
+
+The following steps will walk you through using one of our borders
+(.cgm format) with some sample text in WordPerfect. As you become more
+familiar with the steps you can change the size and margins to your liking.
+(The 10" height that you will enter in for the border will show 9.83".  If
+you know WordPerfect well enough you can either increase the Margins - Top
+& Bottom or change the Outside Border Space of the box to get a full 10"
+height.)
+
+	I.		Start WordPerfect as you normally do.
+			(Make sure your printer is on and properly connected.)
+
+       II.		Insert the ArtPak diskette in drive A.
+
+      III.		Adjust Margins
+			1.	Press Format (Shift-F8)
+			2.	Select Line (1)
+			3.	Select Margins - Left & Right (7)
+			4.	Type .25  and press Enter
+			5.	Type .25  and press Enter twice
+			6.	Select Page (2)
+			7.	Select Margins - Top & Bottom (5)
+			8.	Type .5  and press Enter
+			9.	Type .5  and press Enter 3 times
+
+       IV.	 	Load the border
+			1.	Press Graphics (Alt-F9)
+			2.	Select User-defined Box (4)
+			3.	Select Create (1)
+			4.	Select Filename (1)
+			5.	Type a:bv4-03p.cgm  and press Enter
+			6.	Select Horizontal Position (5)
+			7.	Select Center (3)
+			8.	Select Size (6)
+			9.	Select Both Width and Height (3)
+			10.	Type 7.5  and press Enter
+			11.	Type 10  and press Enter
+			12.	Select Wrap Text Around Box (7)
+			13.	Type n  (for No) and press Enter 2 times
+
+	V.		Reset your margins for your text.
+			1.	Press Format (Shift-F8)
+			2.	Select Line (1)
+			3.	Select Margins - Left & Right (7)
+			4.	Type 2  and press Enter
+			5.	Type 2  and press Enter twice
+			6.	Select Page (2)
+			7.	Select Margins Top & Bottom (5)
+			8.	Type 2  and press Enter
+			9.	Type 2  and press Enter 3 times
+
+
+
+
+       VI.		Type sample text
+			1.	Type "This is a test using Computer Completer's
+ 				      ArtPak Borders in WordPerfect.  This text
+  				      is 2" from the top and 2" from the left."
+
+      VII.		View and print page
+			1.	Press Print (Shift-F7)
+			2.	Select View Document (6)
+			3.	Press Cancel (F1)
+			4.	Select Page (2)
+
+The page will be sent to your printer.
+
+
+
+NOTES: If you should experience any difficulty with our graphics in 5.0
+you can upgrade to 5.1 or higher and you should experience no problems.
+You can also try using grphcnv.exe from WordPerfect.
+The macros border.wpm and border50.wpm will essentially perform the
+steps above.  Border.wpm is to use with version 5.1 and border50.wpm has
+been edited to work properly with version 5.0.  After you enter in the
+filename of the border you want, the macro pauses at the graphic display
+of the page.  Press Cancel (F1) twice to continue from there.
+The macro ccsample.wpm (also found in batch file border.bat) will work
+with both versions but you will not be able to edit it in version 5.0.
+Copy the files border.bat and ccsample.wpm into the same directory as
+WordPerfect on your hard disk.  Then just type "border" at the dos 
+prompt from that directory.  The macro ccsample will automatically be
+run as WordPerfect starts up and will send a border and text to your 
+printer.  (Make sure your printer is on and properly connected first.)
+When you order products from us let us know if you are interested 
+in having Computer Completers develop additional WordPerfect macros.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2280
 

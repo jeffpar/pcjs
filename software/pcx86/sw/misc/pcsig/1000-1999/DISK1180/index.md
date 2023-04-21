@@ -37,6 +37,88 @@ machines:
     through its operation.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1180.TXT
+
+{% raw %}
+```
+Disk No: 1180
+Program Title:  PROPMAN version 2.6 (Disk 2 of 3)
+PC-SIG version: 1.2
+
+PROPMAN comes on a three disk set, #1179, #1180 and #1452.  All disks
+are needed to run the program.  Refer to disk #1179 for a full
+description.
+
+Usage:  Business.
+
+Special Requirements:  512K and a hard disk.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $135.00
+
+File Descriptions:
+
+ABA00FA       Data file.
+ABD00FA       Data file.
+ABF00FA       Data file.
+AC       CMP  Data file.
+ACDB0FA       Data file.
+ACE00FA  CMP  Data file.
+AD       CMP  Data file.
+PMINS3   BAT  Installation batch file.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+## FILE1452.TXT
+
+{% raw %}
+```
+Disk No: 1452
+Program Title:  PROPMAN version 2.6 (Disk 3 of 3)
+PC-SIG version: 1.2
+
+PROPMAN comes on a three disk set, #1179, #1180 and #1452.  All disks
+are needed to run the program.  Refer to disk #1179 for a full
+description.
+
+Usage:  Business.
+
+Special Requirements:  512K and a hard disk.
+
+How to Start:  Type GO (press enter).
+
+Suggested Registration:  $135.00
+
+File Descriptions:
+
+DEMO     DOC  Documentation for the demo.
+MANUAL   DOC  Program documentation
+PMDEMO  <DIR> Subdirectory containing demo of the program.
+PMDEMO   BAT  Runs a demonstration of the program.
+README   TWO  Information about program.
+REGISTER DOC  Registration information.
+USRGUIDE DOC  User guide information.
+
+PC-SIG
+1030D E Duane Avenue
+Sunnyvale CA 94086
+(408) 730-9291
+(c) Copyright 1988,89 PC-SIG, Inc.
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1180
 

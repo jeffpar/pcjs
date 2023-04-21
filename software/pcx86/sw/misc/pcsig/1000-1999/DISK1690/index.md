@@ -29,6 +29,49 @@ machines:
     and a special education administration guide is included on this disk.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1690.TXT
+
+{% raw %}
+```
+Disk No: 1690                                                           
+Disk Title: Education of Handicapped ACT                                
+PC-SIG Version: S1                                                      
+                                                                        
+Program Title: Education of Handicapped ACT                             
+Author Registration: $12.00                                             
+Special Requirements: A word processor or other program to view the ASCI
+                                                                        
+This disk contains the Education for all Handicapped Children Act       
+Regulations, which can be used to help ensure that handicapped children 
+receive free appropriate public education.  There is accompanying       
+documentation that explains how to use the Code of Federal Regulations, 
+and how to find later revisions and updates.  Official indexes are      
+included with the regulations.  Knowledge of these regulations will help
+states and localities provide proper education for handicapped children,
+and a special education administration guide is included on this disk.  
+                                                                        
+                                                                        
+                                                                        
+PC-SIG                                                                  
+1030D East Duane Avenue                                                 
+Sunnyvale  Ca. 94086                                                    
+(408) 730-9291                                                          
+(c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## README.TXT
+
+{% raw %}
+```
+with the disk in drive A,
+Enter the word "EAHCA" (without the quotation marks)
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1690
 

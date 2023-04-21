@@ -16,8 +16,23 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## COMDLINE.DOC
+
+{% raw %}
+```
+You must use this in the same directory as the READTEMP.EXE files. This
+program spawns (sort of like shell in basic) READTEMP.EXE.
+
+There unfortunately are two differnet programs named READTEMP.BAS. See
+doc files in sub directory for explanation. One will create perm font
+files and one creates temp font files. 
+
+```
+{% endraw %}
+
 ## READTEMP.BAS
 
+{% raw %}
 ```bas
 ' This is routine for generating *.444 permanent font files.............
 ' This is routine for generating *.444 permanent font files.............
@@ -265,9 +280,11 @@ CLOSE
 
 end
 ```
+{% endraw %}
 
 ## READTEMP.BAS
 
+{% raw %}
 ```bas
 ' This routine compresses a sequence of numbers like---
 ' -33
@@ -516,9 +533,11 @@ end
 
 
 ```
+{% endraw %}
 
 ## TEMPFDMO.BAS
 
+{% raw %}
 ```bas
 on error goto nexopen
 '******************************************************************
@@ -674,9 +693,11 @@ $link "TEMPFPBU.PBU"
 END
 
 ```
+{% endraw %}
 
 ## TEMPFPBU.BAS
 
+{% raw %}
 ```bas
 EXTERNAL scrn%, zz%, gg%
 SUB Pbfonts(xpos%, ypos%, font$, chrr$, colr%) PUBLIC
@@ -1649,9 +1670,11 @@ SUB Pbfonts(xpos%, ypos%, font$, chrr$, colr%) PUBLIC
 'Port Charlotte, Fla. 33952
 '(813) 625 1172
 ```
+{% endraw %}
 
 ## PERMEXM2.BAS
 
+{% raw %}
 ```bas
 
 
@@ -1805,9 +1828,11 @@ $LINK "PERMFPBU.PBU"
 
 
 ```
+{% endraw %}
 
 ## PERMEXMP.BAS
 
+{% raw %}
 ```bas
 $STACK 3072
 on error goto nexopen
@@ -1940,9 +1965,11 @@ $include "TEMPEXMP.INC"  ' Please note. TEMPFONT.INC was copied to new name
 
 $LINK "PERMFPBU.PBU"
 ```
+{% endraw %}
 
 ## PERMFONT.BAS
 
+{% raw %}
 ```bas
 cls
 '╔═════════════════════════════════════════════════════════════════════════╗
@@ -2432,9 +2459,11 @@ goto strtts
 
 
 ```
+{% endraw %}
 
 ## PERMFPBU.BAS
 
+{% raw %}
 ```bas
 EXTERNAL scrn%, zz%, gg%, hgoth1$(), vgoth1$(), hgoth3$(), vgoth3$()
 EXTERNAL hsans1$(), vsans1$(), hsans2$(), vsans2$(), hsmall3$(), vsmall3$()
@@ -2550,9 +2579,11 @@ next lj%
 end sub
 
 ```
+{% endraw %}
 
 ## HPII.BAS
 
+{% raw %}
 ```bas
 .po0
 'Program Name    : HPII.bas
@@ -2619,9 +2650,11 @@ lprint chr$(12)
 end
 
 ```
+{% endraw %}
 
 ## NISTSYNC.BAS
 
+{% raw %}
 ```bas
 '                      ────────────────                      NISTSYNC.BAS
 '                       NIST-SYNC v1.0                       Eric J. Pearson
@@ -3116,9 +3149,11 @@ END SUB
 
 '---------------------------------------------------------- end of NISTSYNC.BAS
 ```
+{% endraw %}
 
 ## EDIT.BAS
 
+{% raw %}
 ```bas
 'EDIT.BAS - for PB-Tools and PowerBASIC
 'CopyRight 1991 by Dave Navarro, Jr.
@@ -3306,9 +3341,11 @@ SUB InsertOff STATIC PUBLIC
    DEF SEG
 END SUB
 ```
+{% endraw %}
 
 ## PMPBWIND.BAS
 
+{% raw %}
 ```bas
 		 ' POOR MAN'S WINDOWS ROUTINE VERSION 3.00b
 		 '  WORKS WITH ALL VERSIONS OF POWERBASIC
@@ -3957,9 +3994,11 @@ SUB RESTORECURSOR
  END SUB
 
 ```
+{% endraw %}
 
 ## SCANP2.BAS
 
+{% raw %}
 ```bas
 'Program Name    : ScanP2.bas scans screen - builds pixel image for printer
 'Author          : Lloyd Smith for Spectra Tech Support
@@ -4028,9 +4067,258 @@ PrintInit:
 return
 
 ```
+{% endraw %}
+
+## TSSVCOPY.DOC
+
+{% raw %}
+```
+
+
+
+                           
+
+
+
+
+
+
+
+
+                              TSSVCOPY v3.0/1
+
+                         Tiara Software Systems /\/\/\
+                         Copyright (C) 1991 Timothy S. Hurita
+                         All Rights Reserved
+
+
+
+                                                        7/14/91
+
+LICENSE
+
+This version of TSSVCOPY is NOT public domain or free software but is
+being distributed as SHAREWARE.
+
+Non registered users of this software are granted a limited license to
+use this package for a period of 30-days for the sole purpose of determining
+suitabilty.  At the end of this trial period you are required to either pay
+the registration fee, or discontinue using the software.  You are
+authorized to make copies of TSSVCOPY for the purpose of backing up your
+investment.  This software may not be disassembled or altered in any way
+and you may not resell or collect any fee for the distribution of
+TSSVCOPY without the permission of Tiara Software Systems, this does not
+include the normal fees for using bulletin boards.  Free distribution is
+encouraged.
+
+WARRANTY
+
+THIS SOFTWARE WILL PERFORM AS DESCRIBED HEREIN ONLY IF PROPERLY APPLIED.
+
+THIS PROGRAM IS SUPPLIED AS IS.  NEITHER TIARA SOFTWARE SYSTEMS, THE
+AUTHOR OF THIS PROGRAM, NOR ANY DEALER OR DISTRIBUTOR OF THIS SOFTWARE
+MAKES ANY WARRANTIES, EXPRESSED OR IMPLIED, INCLUDING, WITHOUT
+LIMITATION, THE WARRANTIES OF MERCHANTIBILITY AND OF FITNESS OF THIS
+PROGRAM FOR ANY PURPOSE.  YOU AGREE TO THE TERMS OF THIS LICENSE BY YOUR
+DECISION TO USE THE SOFTWARE.
+
+TRADEMARKS
+
+PowerBasic-  is a registered trademark of Spectra Publishing
+A86-  is a registered trademark of Eric Isaacson Software
+MS-DOS, GWBASIC and QuickBasic-  are registered trademarks of
+                                 Microsoft Corporation
+PC-DOS and BASICA-  are registered trademarks of IBM Corporation
+
+
+
+
+
+REGISTRATION
+
+Registration is very inexpensive and does not justify the time involved
+in writing the program, manual and demonstration programs.  I have,
+however, found a great need for such a routine and have successfully
+implemented it in several programs that are soon to be released from Tiara
+Software Systems.  This includes a 3-dimensional CAD program that allows
+for realtime animation of 3-d entities. I cannot however, just give it
+away.  Registration for TSSVCOPY is only $ 5.00 US.  I do not accept
+VISA or MasterCard as these institutions charge an astronomical fee for
+the "Privilage".  Registered users will use their current and any
+updated versions of TSSVCOPY and state in any programs sold and/or distributed
+containing this program that it does in fact, contain TSSVCOPY so that I may
+quickly verify registration.  Once registered you can use this and all
+future versions executed as VCOPY  (is that a deal or what !).
+You will receive a registration verification notice.  This method saves you
+the cost of shipping and handling only just to receive the same copy embedded
+with a serial number.  PowerBasic users will find this program a powerful
+addition to the best Basic programming language on the market today.
+
+To register, please fill out REGISTER.ME
+
+
+
+WHAT IT IS
+
+You are probably wondering, "So what in the heck does it do ?".
+TSSVCOPY is a high speed video page copy routine for PowerBasic (tm)
+and other high level Languages designed for easy implementation
+into their programs.
+
+Now your probably thinking, "So What is it good for ?".  TSSVCOPY emulates
+the PCOPY routine found in GWBASIC, BASICA and QuickBasic.  Users of
+PowerBasic do not have this wonderful feature.  Copying the four 28k bit
+planes say in EGA mode 9 using standard methods of memory block copying
+takes an unacceptable amount of time that is less than suitable for page
+flipping animation, saving and restoring screens.  Page flipping animation
+involves drawing an image on a hidden memory page, copying this image to
+the visible page and drawing a similar image just slightly different on the
+hidden page of memory, this image is then copied to the visible image of
+video memory again replacing the old image, hence  creating  the illusion
+of movement.  This process is repeated as many times as necessary to achieve
+the desired results.  There are many methods of creating animation but this
+is the simplest and most common method used by novice and intermediate
+programmers.
+
+
+
+
+
+GENERAL NOTES.
+
+This program has been tested with PowerBasic.  This is the language of
+choice by the author.  However by following the examples and studying the
+demonstration programs provided in this package you should be able to
+implement this software in almost any high level language including C.
+If you have any questions or problems please contact me through the
+phone number or address provided.  If you already have a good working
+knowledge of the PCs video cards and can already write such a program
+then more power to you.  But if you're looking for a tried and tested
+'pull outta the box' ready to 'interface' program than this is for you.
+
+TSSVCOPY supports the following video modes:
+
+VIDEO MODE      RESOLUTION      COLORS          MAXIMUM PAGES  NUMBERED
+-----------------------------------------------------------------------
+    0           80x25 text        16                 4           0-3
+    1           CGA 320x200       4                  2           0-1
+    2           CGA 640x200       2                  2           0-1
+    7           EGA 320x200       16                 8           0-7
+    8           EGA 640x200       16                 4           0-3
+    9           EGA 640x350       16                 2           0-1
+
+You need at least 256k of video memory to take advantage of the maximum
+number of pages listed above.  The program will automatically detect the
+selected screen mode and adjust it perimeters accordingly.  If you select
+a page of video memory that is above the set maximum for that mode, it
+will just simply exit to the calling routine, the same will happen if you
+use a negative number.  If you try to copy video modes 1,2 & 9 with less
+than 256k of memory the results can be unpredictable and your system may crash.
+Very little error checking was implemented to provide the highest speed
+possible. if you follow the general rules involved, there should be no problem.
+By the way, TSSVCOPY does NOT use any system memory when copying pages and also
+supports CGA although you normally can not draw on hidden pages in this mode.
+If CGA proves to be popular with this program then I will write a patch for
+that, but I doubt it will be necessary.
+
+If you have studied the list of files included in this package, you may
+have noticed TSSVCOPY.OBJ.  This is the program.  It is not an executable
+program by itself but an object file, a program that contains no runtime code
+neither you nor your computer can understand it.  It must be LINKED into your
+programs by your main compiler.  Examples are provided in this documentation
+and on the demo files on how to implement TSSVCOPY.
+
+If your thinking that I will never know that this routine has
+been incorporated into a program, you are wrong.  I have taken several
+steps to insure a means of proof that it has been used and can therefore
+prove any violation of the Registration Agreement in a court of law.
+TSSVCOPY was written in assembly language using the A86 Macro Assembler
+by Eric Isaacson.
+
+
+
+
+
+INTERFACING TSSVCOPY
+
+To use this program with a high level language such as PowerBasic
+you must first declare it as a 'procedure'. You do so as follows.
+
+DECLARE SUB VCOPY(QUAD,QUAD)
+
+Vcopy is the name of the routine.  Nothing else may share this name
+including the end compiled program.  The second step is to link it into
+your program.
+
+$LINK "TSSVCOPY.OBJ"
+
+TSSVCOPY.OBJ is the filename and the copyrighted name of the program.
+If this file is not located in the same directory as your Basic source
+file then you must specify a drive and path.
+
+Whenever you want to perform a video page copy operation you simply
+call the routine as follows.
+
+CALL VCOPY(source page, destination page)
+
+As an example, CALL VCOPY(0,1) will copy page 0 of video memory to
+page 1, provided you are using a supported screen mode.
+CALL VCOPY(5,3) will copy page 5 to page 3 and so on.  This will happen
+faster than you can blink you eyes and you will not even see it happen.
+You can prove it by changing the active visual screen with the SCREEN
+statement. SCREEN ,,0,1.  The image that was on page 0 is now on page 1
+in video memory.  If this is unclear to you then please refer to the
+demo file.  You must have PowerBasic to execute this demonstration
+simply load it and press f9.  Thats all there is to interfacing with
+PowerBasic.  Please refer to GENERAL NOTES for the supported screen modes
+and pages.  Please note that all video pages start with a 0 and not
+number 1, in other words, the first page will always be 0.
+
+
+
+
+INTERFACING WITH OTHER LANGUAGES AND TECHNICAL NOTES
+
+VCOPY is a far procedure, that is, it will be located in a different
+segment of memory than the calling program.  To call up this program you
+must first (assuming it has already been linked) have the calling program
+push 4-bytes of return address onto the STACK in the following order;
+low byte of return address offset, high byte of return address
+offset, low byte of return address segment, high byte of return address
+segment.  The calling program must then place a 4-byte address (in the
+same order) that will contain the memory location of the source page
+to copy.  You must then place a 4-byte address of the memory address containing
+the destination page.  Source and destination memory locations are not actual
+video memory locations,  but page numbers.  VCOPY will determine which
+memory location it should use.  To sum it up, your compiler should first
+push a return (far) address on the stack, a source page, a destination
+page all in the same logical order and then finally call VCOPY into action.
+VCOPY is byte aligned.
+
+Since my two main programming tools are PowerBasic and assembly
+language I cannot say this program will work with any other language.
+If you find that it does work with another language, please let me know.
+
+You will alway find the latest version on :
+
+Spectra Tech Support BBS  813-625-1721
+
+You may also direct any questions or comments to me on this board as I
+call it often.
+
+enjoy,
+
+Tim Hurita
+Tiara Software Systems
+P.O. Box 68721
+Oak Grove, OR  97268
+(503) 775-7335
+```
+{% endraw %}
 
 ## VDEMO.BAS
 
+{% raw %}
 ```bas
 'VDEMO.BAS
 'Tiara Software Systems /\/\/\
@@ -4093,6 +4381,7 @@ next z
    locate 22, 15:color 12:print "End of demo"
 while not instat:wend
 ```
+{% endraw %}
 
 {% comment %}samples_end{% endcomment %}
 

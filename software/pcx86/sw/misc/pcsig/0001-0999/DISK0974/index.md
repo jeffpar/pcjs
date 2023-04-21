@@ -26,6 +26,74 @@ machines:
     King James version of the Bible.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## CABT.TXT
+
+{% raw %}
+```
+	DEVELOPERS REQUEST:
+
+	   Bible Quiz Plus has been distributed in this manner in order
+	not to hinder anyone that is zealous to learn more about our 
+	Lord and Savior Jesus Christ.  We do not wish to put a price on 
+        the Gospel.  We do ask, that if you like the program and it is
+        beneficial to you, that you would help us in our cause.  This
+	program has taken over 5 years to get to this point.  Any 
+	donation that you send will be gratefully appreciated. 
+	   We ask that if the program is being used by a Church, that
+        you would send a donation of at least $65 per computer in which
+        the program is being used on.
+	   Everyone who does respond will be put on a registered users 
+ 	list and will receive all updates to the program.  We also ask
+	that after you have created your own question sets, and you 
+	would like to share them with others, send them to us and we
+	will add them to our user database. 
+	    May God's grace abide with you forever!
+						 (501) 337-7709
+             					 C.A.B.T. Ministries
+                     Steve James, Author	 617 North Banks Street
+                      Bible Quiz Plus		 Malvern, AR 72104
+```
+{% endraw %}
+
+## LIST.DOC
+
+{% raw %}
+```
+Program disk files:	           Data disk files:
+			    
+BQUIZ.SCR	        	   BQPGEN.EXE (question generator file)
+HINSTALL.BAT (hard disk install)   SAMPLE.DAT
+BQ.BAT (startup file)              FAITH.DAT
+SP.LEO                         	   BQ.BAT (hidden)
+D1.LEO		        	   HINSTALL.BAT (hidden)
+D2.LEO		        	   ALL *.LEO (from program disk)[hidden]
+M2.LEO		        	   CABT.TXT (hidden)
+M1.LEO		        	   END.2 (hidden)
+B.LEO		        	   BQPMISS.EXE (hidden)
+SC.LEO			           BQPRIGHT.EXE (hidden)
+D3.LEO
+RS.LEO
+A1.LEO
+A2.LEO
+D.LEO
+BEGIN.DAT
+INTER.DAT
+KNOW.DAT
+END.2
+MONITOR
+CABT.TXT
+BQBINST.DOC
+LIST.DOC
+BQPMISS.EXE
+BQPRIGHT.EXE
+BQUIZ.EXE (main program file)
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0974
 
