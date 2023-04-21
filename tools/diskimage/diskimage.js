@@ -1357,12 +1357,12 @@ function processDisk(di, diskFile, argv, diskette)
         /*
          * We don't need/want any software pages checked/built for private diskette collections.
          *
-         * The PCSIG08 software pages were hand-built, so it would take some extra effort to automatically rebuild those;
-         * besides, when the pages were moved from /software/pcx86/shareware/pcsig08 to /software/pcx86/sw/misc/pcsig08,
-         * the diskettes on /pcsig8a-disks and /pcsig8b-disks remained at /pcx86/shareware/pcsig08, so those paths would
-         * have to be changed, too.  The diskettes.json on each of those servers are what control where the named diskettes
-         * are loaded from, so the difference in paths doesn't affect the current pages; it's just something to be aware of
-         * if we ever try to automatically rebuild the PCSIG software pages, too.
+         * The PCSIG08 software pages (originally at /software/pcx86/shareware/pcsig08/ and later moved
+         * to /software/pcx86/sw/misc/pcsig08/) were hand-generated, so it would take some extra effort
+         * to automatically rebuild those.  However, those pages no longer use their own set of diskette
+         * images at pcsig8a-disks.pcjs.org and pcsig8b-disks.pcjs.org, and the pages themselves are now
+         * deprecated in favor of the more complete set of pages at /software/pcx86/sw/misc/pcsig/, so the
+         * "pcsig8" exception below is a bit moot now.
          */
         if (diskFile.indexOf("/private") >= 0 || diskFile.indexOf("/pcsig8") >= 0) return;
 
@@ -1752,7 +1752,7 @@ function addMetaData(di, sDir, sPath)
 function readCollection(argv)
 {
     let family = "pcx86";
-    let asServers = ["diskettes", "gamedisks", "miscdisks", "pcsigdisks", "pcsig8a-disks", "pcsig8b-disks", "private"];
+    let asServers = ["diskettes", "gamedisks", "miscdisks", "pcsigdisks", "private"];
     let cCollections = 0, cDisks = 0;
     let asCollections = [];
     asServers.forEach((server) => {

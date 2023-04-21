@@ -65,10 +65,6 @@ software:
     server: https://miscdisks.pcjs.org
   pcsigdisks:
     server: https://pcsigdisks.pcjs.org
-  pcsig8a-disks:
-    server: https://pcsig8a-disks.pcjs.org
-  pcsig8b-disks:
-    server: https://pcsig8b-disks.pcjs.org
 
 archive:
   lcm:

@@ -43,10 +43,6 @@ software:
     server: /disks/miscdisks
   pcsigdisks:
     server: /disks/pcsigdisks
-  pcsig8a-disks:
-    server: /disks/pcsig8a-disks
-  pcsig8b-disks:
-    server: /disks/pcsig8b-disks
 
 archive:
   lcm:
