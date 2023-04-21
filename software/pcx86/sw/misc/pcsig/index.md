@@ -7,7 +7,7 @@ redirect_from:
   - /software/pcx86/sw/misc/pcsig08/
   - /disks/pcx86/shareware/pcsig08/
 machines:
-  - id: ibm5160
+  - id: pcsig
     type: pcx86
     config: /machines/pcx86/ibm/5160/ega/512kb/machine.xml
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
@@ -20,12 +20,11 @@ modules_init:
 ---
 
 The PC Software Interest Group, aka PC-SIG, began distributing public domain software and shareware on 5.25-inch diskettes
-in the early 1980s, and over the next 10 years or so, the collection grew to thousands of diskettes.
+in the early 1980s, and over the next 10 years or so, the [PC-SIG Library](/blog/2023/04/06/) grew to thousands of diskettes.
 
-To search the collection, try the new [Search](#search-the-pc-sig-collection) feature below.  For some background information
-on this collection, see the [blog post](/blog/2023/04/06/).
+To search the collection, try the new [Search](#search-the-pc-sig-collection) feature below.
 
-{% include machine.html id="ibm5160" %}
+{% include machine.html id="pcsig" %}
 
 ### Search the PC-SIG Collection
 
@@ -36,7 +35,7 @@ Our PC-SIG "database" doesn't include descriptions of all the disks yet, so resu
 
 ### Notes Regarding This Collection
 
-Disks 1-2485 were initially populated from the [PC-SIG Library 9th Edition CD-ROM (December 1990)](https://archive.org/details/the-pc-sig-library-on-cd-rom-ninth-edition).  Note that while the face of the CD-ROM says "April 1990", the contents are actually
+Disks 1-2485 were initially populated from the PC-SIG Library [9th Edition CD-ROM (December 1990)](https://archive.org/details/the-pc-sig-library-on-cd-rom-ninth-edition).  Note that while the face of the CD-ROM says "April 1990", the contents are actually
 circa December 1990.
 
 Some of the disks had issues:

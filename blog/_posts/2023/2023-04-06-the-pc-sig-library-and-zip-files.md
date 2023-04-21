@@ -71,7 +71,7 @@ As PC-SIG explained, ZIP files were initially used on a case-by-case basis to pr
 
 [More details about the PC-SIG CD-ROM can be found in the [CD-ROM Booklet](https://ia902602.us.archive.org/20/items/pc-sig-library-cd-rom-8th-edition-1990-04/PC-SIG%20Library%20CD-ROM%20%288th%20Edition%29%20%281990-04%29.pdf) that I included with my upload].
 
-It turns out there was another good for reason using for using ZIP files: on a CD-ROM, all files in a directory are stored in ascending (alphabetical) order, which would ruin the "DIR" listing order that some diskette authors depended on.  For example, [DISK0798](https://www.pcjs.org/software/pcx86/sw/misc/pcsig08/0501/#directory-of-pcsig08-disk0798) used filenames with line-drawing characters unique to the IBM PC:
+It turns out there was another good for reason using for using ZIP files: on a CD-ROM, all files in a directory are stored in ascending (alphabetical) order, which would ruin the "DIR" listing order that some diskette authors depended on.  For example, [Disk #798](/software/pcx86/sw/misc/pcsig/0001-0999/DISK0798/) used filenames with line-drawing characters unique to the IBM PC:
 
     A:\>DIR
     

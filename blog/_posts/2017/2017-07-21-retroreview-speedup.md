@@ -4,15 +4,15 @@ title: "RetroReview: SPEEDUP"
 date: 2017-07-21 10:00:00
 permalink: /blog/2017/07/21/
 machines:
-  - id: pcsig08
+  - id: pcsig
     type: pcx86
-    resume: 1
-    config: /machines/pcx86/ibm/5160/ega/512kb/pcsig08/debugger/machine.xml
+    config: /machines/pcx86/ibm/5160/ega/512kb/debugger/machine.xml
+    diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoMount:
-      A:
-        name: PC DOS 1.00
-      B:
-        name: "PCSIG08: DISK0011"
+      A: "PC DOS 1.00"
+      B: "PC-SIG Library Disk #0011"
+    autoStart: true
+    autoType: $date\r
 ---
 
 While browsing the June/July 1982 issue of PC Magazine (Vol. 1, No. 3), I found the following
@@ -65,16 +65,14 @@ IBM programmed the step rate for the machine's Tandon disk drives at eight milli
 six, still within the Tandon-rated minimum of five milliseconds.  The program also sets the head settle rate to
 zero milliseconds, which is the Tandon minimum rating (IBM's conservative default setting is 25).
 
-Fortunately, we don't have to type the program in.  If you skim our archived copy of the
-[PC-SIG Library 8th Edition CD-ROM (April 1990)](/software/pcx86/sw/misc/pcsig08/0001/), you'll see `SPEEDUP.BAS`
-in the [Directory of PCSIG08: DISK0011](/software/pcx86/sw/misc/pcsig08/0001/#directory-of-pcsig08-disk0011).
+Fortunately, we don't have to type the program in.  If you browse our
+[PC-SIG Diskette Library](/software/pcx86/sw/misc/pcsig/) and search for `SPEEDUP.BAS`,
+you'll find it on [Disk #11](/software/pcx86/sw/misc/pcsig/0001-0999/DISK0011/?autoMount=%7BA:%22PC%20DOS%201.00%22,B:%22PC-SIG%20Library%20Disk%20%230011%22%7D&autoStart=true&autoType=$date%5Cr&debugger=true).
 
-So, fire up the [PC-SIG Machine](/software/pcx86/sw/misc/pcsig08/0001/).  Or use the machine
-below, which has conveniently pre-loaded "PC DOS 1.00" in drive A and "PCSIG80: DISK0011" in drive B.
+Alternatively, the machine below has conveniently pre-loaded "PC DOS 1.00" in drive A and "PC-SIG Library Disk #0011"
+in drive B.  At the DOS prompt, run `BASIC` and type `LOAD "B:SPEEDUP.BAS"`.
 
-At the DOS prompt, run `BASIC` and type `LOAD "B:SPEEDUP.BAS"`.
-
-{% include machine.html id="pcsig08" %}
+{% include machine.html id="pcsig" %}
 
 When you `LIST` the program to the serial port:
 
