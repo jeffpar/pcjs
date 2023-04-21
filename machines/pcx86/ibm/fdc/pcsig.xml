@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<fdc id="fdcNEC" pos="left" padLeft="8px" padBottom="8px" diskettes="/machines/pcx86/diskettes.json,/disks/pcsig8a-disks/pcx86/diskettes.json,/disks/pcsig8b-disks/pcx86/diskettes.json,/disks/private/pcx86/diskettes.json">
+<fdc id="fdcNEC" pos="left" padLeft="8px" padBottom="8px" diskettes="/machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json,/disks/private/pcx86/diskettes.json">
 	<control type="list" binding="listDrives"/>
 	<control type="list" binding="listDisks">
 	</control>

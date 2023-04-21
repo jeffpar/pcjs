@@ -8,11 +8,10 @@ machines:
   - id: pcsig08
     type: pcx86
     resume: 1
-    config: /machines/pcx86/ibm/5160/ega/512kb/pcsig08/machine.xml
+    config: /machines/pcx86/ibm/5160/ega/512kb/pcsig/machine.xml
 ---
 
-NOTE: This collection has been replaced with the [PC-SIG Diskette Library: The (Almost) Complete Collection](../../pcsig/) and
-will probably be removed in the near future, since the new collection contains all these disks and more.
+NOTE: This collection has been replaced with the [PC-SIG Diskette Library: The (Almost) Complete Collection](../../pcsig/).
 
 ---
 
@@ -20,16 +19,16 @@ The machine below has access to all 2,121 diskette images from the PC-SIG Librar
 Preceding each directory listing is a **Load Disk** button that will automatically load the corresponding disk into
 the machine's drive A.  Make sure the machine has finished booting before loading any disks.
 
-- Disks [PCSIG08: DISK0001](../0001/) through [DISK0500](../0001/#directory-of-pcsig08-disk0500) 
-- Disks [PCSIG08: DISK0501](../0501/) through [DISK1000](../0501/#directory-of-pcsig08-disk1000) 
-- Disks [PCSIG08: DISK1001](../1001/) through [DISK1500](../1001/#directory-of-pcsig08-disk1500) 
-- Disks [PCSIG08: DISK1501](#directory-of-pcsig08-disk1501) through [DISK2121](#directory-of-pcsig08-disk2121) 
+- [PC-SIG Library Disk #0001](../0001/) through [#0500](../0001/#directory-of-pcsig08-disk0500) 
+- [PC-SIG Library Disk #0501](../0501/) through [#1000](../0501/#directory-of-pcsig08-disk1000) 
+- [PC-SIG Library Disk #1001](../1001/) through [#1500](../1001/#directory-of-pcsig08-disk1500) 
+- [PC-SIG Library Disk #1501](#directory-of-pcsig08-disk1501) through [#2121](#directory-of-pcsig08-disk2121) 
 
 {% include machine.html id="pcsig08" %}
 
-### Directory of PCSIG08: DISK1501
+### Directory of PC-SIG Library Disk #1501
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1501"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1501"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1501
      Directory of  A:\
@@ -37,9 +36,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     FILE1501 TXT      572   8-01-89   6:08a
     FLOPPY3  DAT   356422   2-03-88   4:32p
 
-### Directory of PCSIG08: DISK1502
+### Directory of PC-SIG Library Disk #1502
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1502"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1502"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1502
      Directory of  A:\
@@ -57,9 +56,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     X16SHARE DOC     5261   2-28-89   7:00p
     X16SHARE EXE    61579   2-28-89   7:00p
 
-### Directory of PCSIG08: DISK1503
+### Directory of PC-SIG Library Disk #1503
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1503"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1503"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1503
      Directory of  A:\
@@ -84,9 +83,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WISEDIR  DOC    11977   8-05-88   1:12p
     WISEDIR  EXE    19072   8-05-88   1:10p
 
-### Directory of PCSIG08: DISK1504
+### Directory of PC-SIG Library Disk #1504
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1504"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1504"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1504
      Directory of  A:\
@@ -96,9 +95,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   3-23-90   1:27p
     SIDEWAYS DTA     1628   1-01-90   2:47a
 
-### Directory of PCSIG08: DISK1505
+### Directory of PC-SIG Library Disk #1505
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1505"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1505"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1505
      Directory of  A:\
@@ -116,9 +115,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SORTIT   BAT      362   1-04-90   1:40p
     START    BAT     1254   3-06-90  10:39a
 
-### Directory of PCSIG08: DISK1506
+### Directory of PC-SIG Library Disk #1506
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1506"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1506"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1506
      Directory of  A:\
@@ -139,9 +138,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     THREE17  LBL     1034   7-30-89   8:09a
     VENDOR   DOC     1490   3-09-90  12:43a
 
-### Directory of PCSIG08: DISK1507
+### Directory of PC-SIG Library Disk #1507
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1507"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1507"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1507
      Directory of  A:\
@@ -168,9 +167,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     XYSEE    OVR   205660   2-18-89   9:58a
     XY_DEMO  MAM    17201   2-18-89   7:48a
 
-### Directory of PCSIG08: DISK1508
+### Directory of PC-SIG Library Disk #1508
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1508"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1508"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1508
      Directory of  A:\
@@ -229,9 +228,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     XYSEE    DOC   188288   2-18-89  11:49a
     XY_DEMO  MAM    17201   2-18-89   7:48a
 
-### Directory of PCSIG08: DISK1509
+### Directory of PC-SIG Library Disk #1509
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1509"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1509"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1509
      Directory of  A:\
@@ -249,9 +248,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     ZYACIBM  COM    44220   3-12-88   2:46p
     ZYACZ100 COM    43986   3-12-88   2:58p
 
-### Directory of PCSIG08: DISK1510
+### Directory of PC-SIG Library Disk #1510
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1510"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1510"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1510
      Directory of  A:\
@@ -279,9 +278,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SCRSHOW  EXE    14808   5-22-89   9:32a
     VIEW     BAT       42   8-04-89   1:29a
 
-### Directory of PCSIG08: DISK1511
+### Directory of PC-SIG Library Disk #1511
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1511"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1511"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1511
      Directory of  A:\
@@ -306,9 +305,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VERSE    OCT     7223   8-04-89   7:09a
     VERSE    SEP     9060   8-04-89   7:09a
 
-### Directory of PCSIG08: DISK1512
+### Directory of PC-SIG Library Disk #1512
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1512"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1512"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1512
      Directory of  A:\
@@ -329,9 +328,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README            487   6-04-88   3:42a
     VIEW     BAT       38   8-04-89   7:45a
 
-### Directory of PCSIG08: DISK1513
+### Directory of PC-SIG Library Disk #1513
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1513"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1513"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1513
      Directory of  A:\
@@ -367,9 +366,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PUMP     COM    26076  11-03-87   5:02p
     TRACINGS COM    29980   1-27-88   8:03p
 
-### Directory of PCSIG08: DISK1514
+### Directory of PC-SIG Library Disk #1514
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1514"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1514"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1514
      Directory of  A:\
@@ -379,9 +378,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     HORSES   EXE    79263   5-08-89   2:11a
     STARTUP  EXE    29968   5-08-89   2:40a
 
-### Directory of PCSIG08: DISK1515
+### Directory of PC-SIG Library Disk #1515
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1515"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1515"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1515
      Directory of  A:\
@@ -402,9 +401,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     Y4                160  12-18-88   2:07p
     Y5                170  12-18-88   2:08p
 
-### Directory of PCSIG08: DISK1516
+### Directory of PC-SIG Library Disk #1516
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1516"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1516"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1516
      Directory of  A:\
@@ -422,9 +421,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       33   8-07-89   3:04a
     README   EXE    25249   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1517
+### Directory of PC-SIG Library Disk #1517
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1517"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1517"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1517
      Directory of  A:\
@@ -443,9 +442,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     INDEX    DOC     8273   1-01-80  12:00a
     README   EXE    25217   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1518
+### Directory of PC-SIG Library Disk #1518
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1518"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1518"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1518
      Directory of  A:\
@@ -465,9 +464,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ-ME  DOC      243  12-08-85   8:00a
     VIEW     BAT       43   8-07-89  10:47a
 
-### Directory of PCSIG08: DISK1519
+### Directory of PC-SIG Library Disk #1519
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1519"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1519"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1519
      Directory of  A:\
@@ -491,9 +490,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     REGISTER FRM     2304  12-03-88   7:06p
     VIEW     BAT       44   8-07-89   8:16a
 
-### Directory of PCSIG08: DISK1520
+### Directory of PC-SIG Library Disk #1520
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1520"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1520"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1520
      Directory of  A:\
@@ -506,9 +505,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MAYAN    EXE   246319  11-10-89   7:05a
     MAYANDOC COM    49368  10-29-89   2:47p
 
-### Directory of PCSIG08: DISK1521
+### Directory of PC-SIG Library Disk #1521
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1521"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1521"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1521
      Directory of  A:\
@@ -522,9 +521,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ     ME      2418   2-07-90   1:58p
     STARTUP  EXE   174971   1-30-90   8:39a
 
-### Directory of PCSIG08: DISK1522
+### Directory of PC-SIG Library Disk #1522
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1522"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1522"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1522
      Directory of  A:\
@@ -546,9 +545,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   PCP     1339   9-19-88  10:50a
     REGISTER FRM     1408   9-17-88  11:19a
 
-### Directory of PCSIG08: DISK1523
+### Directory of PC-SIG Library Disk #1523
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1523"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1523"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1523
      Directory of  A:\
@@ -564,9 +563,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OTH      PAS    54947   1-01-80  12:00a
     OTH      TXT     1024   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1524
+### Directory of PC-SIG Library Disk #1524
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1524"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1524"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1524
      Directory of  A:\
@@ -589,9 +588,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SPROGH   EXE    80787   6-07-89   5:34p
     VIEW     BAT       42   8-09-89   5:49a
 
-### Directory of PCSIG08: DISK1525
+### Directory of PC-SIG Library Disk #1525
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1525"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1525"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1525
      Directory of  A:\
@@ -606,9 +605,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     HELP     DOC    11751   2-06-90   5:28a
     README   1ST     1432  10-29-89   2:37p
 
-### Directory of PCSIG08: DISK1526
+### Directory of PC-SIG Library Disk #1526
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1526"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1526"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1526
      Directory of  A:\
@@ -676,9 +675,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VENG             2560   6-22-88   3:10a
     WISD             6144   6-22-88   3:10a
 
-### Directory of PCSIG08: DISK1527
+### Directory of PC-SIG Library Disk #1527
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1527"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1527"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1527
      Directory of  A:\
@@ -694,9 +693,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ     ME      1179   2-15-89   1:54a
     SUM      EXE    11677  12-05-88   2:26a
 
-### Directory of PCSIG08: DISK1528
+### Directory of PC-SIG Library Disk #1528
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1528"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1528"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1528
      Directory of  A:\
@@ -713,9 +712,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     STOCK    LST        5   2-24-89   2:57a
     VIEW     BAT       42   8-09-89   9:47a
 
-### Directory of PCSIG08: DISK1529
+### Directory of PC-SIG Library Disk #1529
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1529"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1529"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1529
      Directory of  A:\
@@ -725,9 +724,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      925   8-10-89   1:57a
     INSTALL  EXE   289462   2-18-89  10:03a
 
-### Directory of PCSIG08: DISK1530
+### Directory of PC-SIG Library Disk #1530
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1530"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1530"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1530
      Directory of  A:\
@@ -757,9 +756,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PMGET    EXE     9358   3-19-88   8:05a
     READ     ME      7555   5-01-88   8:14a
 
-### Directory of PCSIG08: DISK1531
+### Directory of PC-SIG Library Disk #1531
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1531"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1531"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1531
      Directory of  A:\
@@ -775,9 +774,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README           1224  10-28-88   1:15p
     VIEW     BAT       44   8-10-89   3:30a
 
-### Directory of PCSIG08: DISK1532
+### Directory of PC-SIG Library Disk #1532
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1532"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1532"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1532
      Directory of  A:\
@@ -802,9 +801,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     USHIST   IX4     1926  11-05-88  10:11a
     VIEW     BAT       40   8-10-89   3:45a
 
-### Directory of PCSIG08: DISK1533
+### Directory of PC-SIG Library Disk #1533
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1533"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1533"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1533
      Directory of  A:\
@@ -850,9 +849,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TP       COM    10498   2-22-89   1:53p
     WILD     C       1745   2-22-89   1:14p
 
-### Directory of PCSIG08: DISK1534
+### Directory of PC-SIG Library Disk #1534
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1534"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1534"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1534
      Directory of  A:\
@@ -872,9 +871,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WP4      DAT    37007   1-29-89   6:35p
     WP_LINK  DAT    21633   1-29-89   6:45p
 
-### Directory of PCSIG08: DISK1535
+### Directory of PC-SIG Library Disk #1535
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1535"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1535"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1535
      Directory of  A:\
@@ -903,9 +902,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SAMPLE   NAM      244   2-22-90   8:20p
     SAMPLE   REF      102   2-22-90   8:20p
 
-### Directory of PCSIG08: DISK1536
+### Directory of PC-SIG Library Disk #1536
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1536"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1536"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1536
      Directory of  A:\
@@ -936,9 +935,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     ZMODEM-D BAT     1407  12-27-88  10:09a
     ZMODEM-U BAT     2425  12-26-88   8:48p
 
-### Directory of PCSIG08: DISK1537
+### Directory of PC-SIG Library Disk #1537
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1537"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1537"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1537
      Directory of  A:\
@@ -966,9 +965,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SETCLOCK BAT      128  12-31-87   4:01p
     SWAP     COM      190  11-27-88  12:39p
 
-### Directory of PCSIG08: DISK1538
+### Directory of PC-SIG Library Disk #1538
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1538"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1538"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1538
      Directory of  A:\
@@ -993,9 +992,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TUTOR    ARC    23990   2-27-90  11:18p
     TUTOR    BAT       21   8-01-87   2:50p
 
-### Directory of PCSIG08: DISK1539
+### Directory of PC-SIG Library Disk #1539
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1539"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1539"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1539
      Directory of  A:\
@@ -1017,9 +1016,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TP4UTIL  WRK     4008   4-19-88  10:55a
     UTIL     PRN    18948   4-19-88  10:18a
 
-### Directory of PCSIG08: DISK1540
+### Directory of PC-SIG Library Disk #1540
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1540"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1540"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1540
      Directory of  A:\
@@ -1047,9 +1046,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SERIF    CFG      655   8-31-89   2:35p
     SPG8010  CFG      401   9-06-89   5:53a
 
-### Directory of PCSIG08: DISK1541
+### Directory of PC-SIG Library Disk #1541
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1541"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1541"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1541
      Directory of  A:\
@@ -1074,9 +1073,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     LABEL    EXE    24646  10-30-86   6:00p
     REPORT   EXE    29958  10-30-86   6:00p
 
-### Directory of PCSIG08: DISK1542
+### Directory of PC-SIG Library Disk #1542
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1542"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1542"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1542
      Directory of  A:\
@@ -1098,9 +1097,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     ORDER    FRM     1653   5-10-89   8:15a
     READ     ME      2104   5-10-89   8:18a
 
-### Directory of PCSIG08: DISK1543
+### Directory of PC-SIG Library Disk #1543
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1543"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1543"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1543
      Directory of  A:\
@@ -1112,9 +1111,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   6-10-87   5:19a
     GO       TXT      540  12-14-89   6:21a
 
-### Directory of PCSIG08: DISK1544
+### Directory of PC-SIG Library Disk #1544
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1544"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1544"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1544
      Directory of  A:\
@@ -1128,9 +1127,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SLOT0    PBM    15960   7-21-89   7:30a
     SLOT1    PBM    40920   7-21-89   7:36a
 
-### Directory of PCSIG08: DISK1545
+### Directory of PC-SIG Library Disk #1545
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1545"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1545"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1545
      Directory of  A:\
@@ -1156,9 +1155,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   BAT     1917  12-30-88   4:00p
     RUN      BAT       21  12-30-88   4:00p
 
-### Directory of PCSIG08: DISK1546
+### Directory of PC-SIG Library Disk #1546
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1546"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1546"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1546
      Directory of  A:\
@@ -1180,9 +1179,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WORK     CNF      182  12-31-88  12:00a
     WORK     GLT     4042  12-31-88  12:00a
 
-### Directory of PCSIG08: DISK1547
+### Directory of PC-SIG Library Disk #1547
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1547"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1547"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1547
      Directory of  A:\
@@ -1206,9 +1205,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   BAT     1904  12-30-88   4:00p
     RUN      BAT       21  12-30-88   4:00p
 
-### Directory of PCSIG08: DISK1548
+### Directory of PC-SIG Library Disk #1548
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1548"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1548"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1548
      Directory of  A:\
@@ -1231,9 +1230,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WORK     PRT     3712  12-31-88  12:00a
     WORK     TAX    15558  12-31-88  12:00a
 
-### Directory of PCSIG08: DISK1549
+### Directory of PC-SIG Library Disk #1549
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1549"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1549"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1549
      Directory of  A:\
@@ -1244,9 +1243,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GT1500_5 LZH    45461   6-27-89   5:15a
     ST200B   LZH   129357   7-03-89  12:51a
 
-### Directory of PCSIG08: DISK1550
+### Directory of PC-SIG Library Disk #1550
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1550"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1550"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1550
      Directory of  A:\
@@ -1261,9 +1260,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MANUAL   BAT      164  10-20-89   2:30a
     NMAIL200 GGG   153075   6-26-89   5:10a
 
-### Directory of PCSIG08: DISK1551
+### Directory of PC-SIG Library Disk #1551
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1551"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1551"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1551
      Directory of  A:\
@@ -1283,9 +1282,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TRIVIA2  TST     8706   1-14-81   7:24p
     VERB     BAS       45   1-14-81  10:32p
 
-### Directory of PCSIG08: DISK1552
+### Directory of PC-SIG Library Disk #1552
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1552"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1552"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1552
      Directory of  A:\
@@ -1350,9 +1349,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WHEEL    DOC    40464   6-15-89   7:16a
     WHEEL    EXE    55073   6-15-89  10:20a
 
-### Directory of PCSIG08: DISK1553
+### Directory of PC-SIG Library Disk #1553
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1553"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1553"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1553
      Directory of  A:\
@@ -1383,9 +1382,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VIRUSES  HOP       74   4-23-89   2:01p
     WARBLE   HOP       44   4-16-89   6:42a
 
-### Directory of PCSIG08: DISK1554
+### Directory of PC-SIG Library Disk #1554
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1554"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1554"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1554
      Directory of  A:\
@@ -1412,9 +1411,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     REV      EXE    56096   6-12-89   8:54a
     REV      TUT      286   6-12-89   8:24a
 
-### Directory of PCSIG08: DISK1555
+### Directory of PC-SIG Library Disk #1555
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1555"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1555"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1555
      Directory of  A:\
@@ -1439,9 +1438,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MENU     EXE    55337   5-08-89   5:20a
     REV      EXE    56096   6-12-89   8:54a
 
-### Directory of PCSIG08: DISK1556
+### Directory of PC-SIG Library Disk #1556
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1556"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1556"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1556
      Directory of  A:\
@@ -1455,9 +1454,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TOTHELLO EXE    56773   8-03-88   1:18p
     TOTHELLO TXT     2845   8-03-88  12:34p
 
-### Directory of PCSIG08: DISK1557
+### Directory of PC-SIG Library Disk #1557
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1557"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1557"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1557
      Directory of  A:\
@@ -1488,9 +1487,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SHOWDOC  BAT       17   8-25-89   3:19a
     SPEEDSCR COM     5333  10-01-86   5:00a
 
-### Directory of PCSIG08: DISK1558
+### Directory of PC-SIG Library Disk #1558
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1558"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1558"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1558
      Directory of  A:\
@@ -1508,9 +1507,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   DOC     1909   2-06-90  10:23a
     REGISTER DOC     2680   2-06-90  10:23a
 
-### Directory of PCSIG08: DISK1559
+### Directory of PC-SIG Library Disk #1559
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1559"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1559"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1559
      Directory of  A:\
@@ -1526,9 +1525,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   BAT     1201   1-31-90   5:10p
     RUN      BAT       20   1-31-90   5:10p
 
-### Directory of PCSIG08: DISK1560
+### Directory of PC-SIG Library Disk #1560
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1560"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1560"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1560
      Directory of  A:\
@@ -1547,9 +1546,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SAMPLE   GLR       69   1-31-90   5:10p
     SAMPLE   GLT     8970   1-31-90   5:10p
 
-### Directory of PCSIG08: DISK1561
+### Directory of PC-SIG Library Disk #1561
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1561"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1561"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1561
      Directory of  A:\
@@ -1615,9 +1614,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WEEKLY   FRM     4977  12-02-89   2:00p
     WO       FRM     4661  12-02-89   2:00p
 
-### Directory of PCSIG08: DISK1562
+### Directory of PC-SIG Library Disk #1562
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1562"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1562"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1562
      Directory of  A:\
@@ -1632,9 +1631,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      542  10-19-89  11:47a
     PKXARC   COM    12242   4-26-87   5:00p
 
-### Directory of PCSIG08: DISK1563
+### Directory of PC-SIG Library Disk #1563
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1563"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1563"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1563
      Directory of  A:\
@@ -1656,9 +1655,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SPORTS   LST     7050   8-01-89   5:00p
     STATES   LST     5242   8-01-89   5:00p
 
-### Directory of PCSIG08: DISK1564
+### Directory of PC-SIG Library Disk #1564
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1564"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1564"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1564
      Directory of  A:\
@@ -1677,9 +1676,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PKXARC   COM    12242   4-26-87   5:00p
     READ     ME      6158   7-06-88   5:32p
 
-### Directory of PCSIG08: DISK1565
+### Directory of PC-SIG Library Disk #1565
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1565"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1565"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1565
      Directory of  A:\
@@ -1700,9 +1699,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     REGFORM  TXT      969   3-09-89   5:03a
     WAIT     EXE     7117   3-09-89   5:03a
 
-### Directory of PCSIG08: DISK1566
+### Directory of PC-SIG Library Disk #1566
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1566"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1566"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1566
      Directory of  A:\
@@ -1722,9 +1721,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ     ME      1370   1-14-90   3:03a
     UPGRADE  BAT     1708   2-06-90   9:58a
 
-### Directory of PCSIG08: DISK1567
+### Directory of PC-SIG Library Disk #1567
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1567"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1567"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1567
      Directory of  A:\
@@ -1732,9 +1731,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       40   8-11-87   7:52p
     NOTE     TXT      289  10-24-88   1:21a
 
-### Directory of PCSIG08: DISK1568
+### Directory of PC-SIG Library Disk #1568
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1568"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1568"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1568
      Directory of  A:\
@@ -1767,9 +1766,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TRAN     EXE    49098   2-26-89   3:46a
     UPGRADE  BAT     1708   2-06-90   9:58a
 
-### Directory of PCSIG08: DISK1569
+### Directory of PC-SIG Library Disk #1569
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1569"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1569"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1569
      Directory of  A:\
@@ -1803,9 +1802,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     STATES   DBF     1354  12-07-89  10:57a
     STATES   NTX     4096  12-07-89  10:57a
 
-### Directory of PCSIG08: DISK1570
+### Directory of PC-SIG Library Disk #1570
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1570"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1570"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1570
      Directory of  A:\
@@ -1817,9 +1816,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PENPAL   EXE   321456   3-19-89   3:45p
     README   1ST     6169   3-14-89   2:17p
 
-### Directory of PCSIG08: DISK1571
+### Directory of PC-SIG Library Disk #1571
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1571"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1571"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1571
      Directory of  A:\
@@ -1832,9 +1831,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TIKLER   DOC    25373   9-17-89   4:01p
     TIKLER   EXE    40576   9-17-89   4:10p
 
-### Directory of PCSIG08: DISK1572
+### Directory of PC-SIG Library Disk #1572
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1572"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1572"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1572
      Directory of  A:\
@@ -1847,9 +1846,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     ZIPTEST  EXE    44370   4-14-89  10:42a
     ZIPTEST  TXT     2050   1-01-10  11:34a
 
-### Directory of PCSIG08: DISK1573
+### Directory of PC-SIG Library Disk #1573
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1573"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1573"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1573
      Directory of  A:\
@@ -1862,9 +1861,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SLOT     EXE    39161   4-29-89  10:17p
     SLOT     TXT     2176   6-07-89   8:41p
 
-### Directory of PCSIG08: DISK1574
+### Directory of PC-SIG Library Disk #1574
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1574"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1574"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1574
      Directory of  A:\
@@ -1920,9 +1919,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     STAR     QQQ     8174   6-20-89  11:47a
     STARTUP  DOC     7160   6-13-89   1:57a
 
-### Directory of PCSIG08: DISK1575
+### Directory of PC-SIG Library Disk #1575
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1575"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1575"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1575
      Directory of  A:\
@@ -1936,9 +1935,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     QUOTARC  EXE   226289   1-26-90   3:22a
     README   DOC     4101   1-23-90   3:30a
 
-### Directory of PCSIG08: DISK1576
+### Directory of PC-SIG Library Disk #1576
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1576"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1576"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1576
      Directory of  A:\
@@ -1953,9 +1952,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WORD     DIC     4991   3-11-89   5:26p
     WORDSTAR DIC     5670   3-11-89   5:28p
 
-### Directory of PCSIG08: DISK1577
+### Directory of PC-SIG Library Disk #1577
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1577"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1577"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1577
      Directory of  A:\
@@ -1975,9 +1974,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   1ST     2311   7-17-89   5:00p
     TURBO    EXE    22480   7-17-89   5:00p
 
-### Directory of PCSIG08: DISK1578
+### Directory of PC-SIG Library Disk #1578
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1578"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1578"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1578
      Directory of  A:\
@@ -1991,9 +1990,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     ITEMS    ASC   306000   8-22-89   2:51a
     ITEMSPTR DAT    18000   1-09-90   4:28p
 
-### Directory of PCSIG08: DISK1579
+### Directory of PC-SIG Library Disk #1579
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1579"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1579"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1579
      Directory of  A:\
@@ -2009,9 +2008,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   EXE    15918   8-11-89   2:21a
     REMAKEPT EXE    16174   8-17-89   2:41a
 
-### Directory of PCSIG08: DISK1580
+### Directory of PC-SIG Library Disk #1580
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1580"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1580"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1580
      Directory of  A:\
@@ -2022,9 +2021,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     LOANSTAR DOC     2852  12-04-88   4:25a
     LOANSTAR EXE    61632  12-07-88   7:40p
 
-### Directory of PCSIG08: DISK1581
+### Directory of PC-SIG Library Disk #1581
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1581"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1581"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1581
      Directory of  A:\
@@ -2042,9 +2041,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TRANSFER OBJ     1413   2-18-90   2:15a
     WIPEOUT  BAT      389   2-18-90   5:39a
 
-### Directory of PCSIG08: DISK1582
+### Directory of PC-SIG Library Disk #1582
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1582"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1582"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1582
      Directory of  A:\
@@ -2067,9 +2066,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TO-USE   ME      1024  11-17-88  10:16p
     TOOLS    BAT       38  11-17-88  10:19p
 
-### Directory of PCSIG08: DISK1583
+### Directory of PC-SIG Library Disk #1583
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1583"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1583"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1583
      Directory of  A:\
@@ -2085,9 +2084,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ     ME3      647   3-10-89   1:58a
     RS       BAT       78   3-10-89   1:58a
 
-### Directory of PCSIG08: DISK1584
+### Directory of PC-SIG Library Disk #1584
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1584"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1584"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1584
      Directory of  A:\
@@ -2100,9 +2099,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      848  10-18-89  11:04a
 
-### Directory of PCSIG08: DISK1585
+### Directory of PC-SIG Library Disk #1585
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1585"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1585"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1585
      Directory of  A:\
@@ -2163,9 +2162,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VENDOR   LBL     1034   4-09-88   5:07p
     VIDPOP   COM    27917   2-08-88  11:08a
 
-### Directory of PCSIG08: DISK1586
+### Directory of PC-SIG Library Disk #1586
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1586"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1586"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1586
      Directory of  A:\
@@ -2176,9 +2175,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     LABEL    EXE    30024   1-29-86   5:25a
     START    EXE   320064   1-30-90   8:08p
 
-### Directory of PCSIG08: DISK1587
+### Directory of PC-SIG Library Disk #1587
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1587"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1587"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1587
      Directory of  A:\
@@ -2190,9 +2189,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SQZGIF   ARC    67579   9-14-88   7:10p
     VGACAD15 ARC   204321  10-30-88   2:36p
 
-### Directory of PCSIG08: DISK1588
+### Directory of PC-SIG Library Disk #1588
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1588"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1588"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1588
      Directory of  A:\
@@ -2203,9 +2202,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VGAFIX   ARC     5470   7-17-88   7:36a
     VGAPRN   ARC    65823   6-13-88  12:58p
 
-### Directory of PCSIG08: DISK1589
+### Directory of PC-SIG Library Disk #1589
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1589"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1589"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1589
      Directory of  A:\
@@ -2219,9 +2218,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PCPUNCH  HLP     8768   8-28-89   1:28a
     README   1ST     1536   8-28-89   1:28a
 
-### Directory of PCSIG08: DISK1590
+### Directory of PC-SIG Library Disk #1590
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1590"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1590"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1590
      Directory of  A:\
@@ -2234,9 +2233,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PC-SIG   QUE      487  11-29-89  10:00a
     README   1ST      472   6-27-89  10:07a
 
-### Directory of PCSIG08: DISK1591
+### Directory of PC-SIG Library Disk #1591
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1591"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1591"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1591
      Directory of  A:\
@@ -2249,9 +2248,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     KJV      1     180000  10-09-89   3:28p
     LHARC    EXE    27498   3-04-89  10:07a
 
-### Directory of PCSIG08: DISK1592
+### Directory of PC-SIG Library Disk #1592
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1592"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1592"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1592
      Directory of  A:\
@@ -2260,9 +2259,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT      870   1-01-80  12:00a
     KJV      2     360000  10-09-89   3:29p
 
-### Directory of PCSIG08: DISK1593
+### Directory of PC-SIG Library Disk #1593
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1593"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1593"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1593
      Directory of  A:\
@@ -2270,9 +2269,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT      870   1-01-80  12:00a
     KJV      3     360000  10-09-89   3:30p
 
-### Directory of PCSIG08: DISK1594
+### Directory of PC-SIG Library Disk #1594
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1594"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1594"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1594
      Directory of  A:\
@@ -2280,9 +2279,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT      870   1-01-80  12:00a
     KJV      4     360000  10-09-89   3:31p
 
-### Directory of PCSIG08: DISK1595
+### Directory of PC-SIG Library Disk #1595
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1595"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1595"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1595
      Directory of  A:\
@@ -2292,9 +2291,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     KJV      LZH    78850  10-09-89   3:31p
     VERSES   1     240000  10-09-89   3:31p
 
-### Directory of PCSIG08: DISK1596
+### Directory of PC-SIG Library Disk #1596
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1596"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1596"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1596
      Directory of  A:\
@@ -2302,9 +2301,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT      870   1-01-80  12:00a
     VERSES   2     360000  10-09-89   3:32p
 
-### Directory of PCSIG08: DISK1597
+### Directory of PC-SIG Library Disk #1597
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1597"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1597"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1597
      Directory of  A:\
@@ -2312,9 +2311,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT      870   1-01-80  12:00a
     VERSES   3     360000  10-09-89   3:33p
 
-### Directory of PCSIG08: DISK1598
+### Directory of PC-SIG Library Disk #1598
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1598"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1598"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1598
      Directory of  A:\
@@ -2323,9 +2322,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT      870   1-01-80  12:00a
     VERSES   KJV   273612  10-09-89   3:34p
 
-### Directory of PCSIG08: DISK1599
+### Directory of PC-SIG Library Disk #1599
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1599"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1599"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1599
      Directory of  A:\
@@ -2334,9 +2333,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT      870   1-01-80  12:00a
     MISC     LZH   238557  10-09-89   3:35p
 
-### Directory of PCSIG08: DISK1600
+### Directory of PC-SIG Library Disk #1600
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1600"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1600"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1600
      Directory of  A:\
@@ -2351,9 +2350,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     REG_FORM DOC     2011  10-17-88   4:46a
     SEEDMAST DBD   103322  10-17-88   5:48a
 
-### Directory of PCSIG08: DISK1601
+### Directory of PC-SIG Library Disk #1601
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1601"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1601"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1601
      Directory of  A:\
@@ -2361,9 +2360,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       40   8-11-87   7:52p
     NOTE     TXT      289  10-24-88   1:21a
 
-### Directory of PCSIG08: DISK1602
+### Directory of PC-SIG Library Disk #1602
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1602"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1602"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1602
      Directory of  A:\
@@ -2371,9 +2370,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       40   8-11-87   7:52p
     NOTE     TXT      289  10-24-88   1:21a
 
-### Directory of PCSIG08: DISK1603
+### Directory of PC-SIG Library Disk #1603
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1603"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1603"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1603
      Directory of  A:\
@@ -2381,9 +2380,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       40   8-11-87   7:52p
     NOTE     TXT      289  10-24-88   1:21a
 
-### Directory of PCSIG08: DISK1604
+### Directory of PC-SIG Library Disk #1604
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1604"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1604"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1604
      Directory of  A:\
@@ -2397,9 +2396,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     METEORS  EXE    75634   1-05-89  11:06p
     TOMMYS   DOC     6603  10-10-89  12:06a
 
-### Directory of PCSIG08: DISK1605
+### Directory of PC-SIG Library Disk #1605
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1605"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1605"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1605
      Directory of  A:\
@@ -2414,9 +2413,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      542  10-18-89  12:15p
     READ     ME      8895   1-31-89   6:09p
 
-### Directory of PCSIG08: DISK1606
+### Directory of PC-SIG Library Disk #1606
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1606"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1606"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1606
      Directory of  A:\
@@ -2429,9 +2428,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SPOOL    DOC    28071   3-24-89  10:44a
     SPOOL    EXE    21788   3-24-89  10:44a
 
-### Directory of PCSIG08: DISK1607
+### Directory of PC-SIG Library Disk #1607
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1607"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1607"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1607
      Directory of  A:\
@@ -2443,9 +2442,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     IFI      EXE   121799   3-15-89   7:24a
     README            812   3-14-89   5:03p
 
-### Directory of PCSIG08: DISK1608
+### Directory of PC-SIG Library Disk #1608
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1608"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1608"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1608
      Directory of  A:\
@@ -2486,9 +2485,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     YES      DOC     1495  11-21-89   3:22p
     YES      EXE     3856  11-21-89   3:06p
 
-### Directory of PCSIG08: DISK1609
+### Directory of PC-SIG Library Disk #1609
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1609"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1609"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1609
      Directory of  A:\
@@ -2511,9 +2510,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     UPPER    BAS      384  11-16-83   4:08p
     UPPER    PAS      679   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1610
+### Directory of PC-SIG Library Disk #1610
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1610"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1610"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1610
      Directory of  A:\
@@ -2527,9 +2526,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SCR      BAT       24   3-21-89  11:53a
     SCR      DOC    32277   3-22-89  11:20a
 
-### Directory of PCSIG08: DISK1611
+### Directory of PC-SIG Library Disk #1611
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1611"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1611"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1611
      Directory of  A:\
@@ -2540,9 +2539,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      694   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1612
+### Directory of PC-SIG Library Disk #1612
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1612"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1612"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1612
      Directory of  A:\
@@ -2557,9 +2556,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     METEORS  DOC     1130  11-17-88  11:06p
     METEORS  EXE    74622  11-17-88  11:06p
 
-### Directory of PCSIG08: DISK1613
+### Directory of PC-SIG Library Disk #1613
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1613"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1613"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1613
      Directory of  A:\
@@ -2567,9 +2566,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       40   8-11-87   7:52p
     NOTE     TXT      289  10-24-88   1:21a
 
-### Directory of PCSIG08: DISK1614
+### Directory of PC-SIG Library Disk #1614
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1614"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1614"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1614
      Directory of  A:\
@@ -2594,9 +2593,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     STARCAT  DAT   100940   8-10-88   5:32p
     USER     INI       23   8-11-88   5:49p
 
-### Directory of PCSIG08: DISK1615
+### Directory of PC-SIG Library Disk #1615
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1615"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1615"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1615
      Directory of  A:\
@@ -2611,9 +2610,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      386  10-13-89   3:25p
     READ     IT      9997   1-20-89  11:55p
 
-### Directory of PCSIG08: DISK1616
+### Directory of PC-SIG Library Disk #1616
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1616"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1616"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1616
      Directory of  A:\
@@ -2635,9 +2634,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     UPDATE   DOC     4781   2-18-90   4:47a
     WV636    DBF     3272   6-08-89   2:06a
 
-### Directory of PCSIG08: DISK1617
+### Directory of PC-SIG Library Disk #1617
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1617"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1617"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1617
      Directory of  A:\
@@ -2664,9 +2663,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TESTFILE DAT    88376  11-25-89   1:14a
     UPDATE   DOC      519  11-25-89  11:32a
 
-### Directory of PCSIG08: DISK1618
+### Directory of PC-SIG Library Disk #1618
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1618"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1618"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1618
      Directory of  A:\
@@ -2678,9 +2677,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     STAT     EXE   127816   1-01-80   6:52a
     TEST     DBF      815   9-20-88  12:51a
 
-### Directory of PCSIG08: DISK1619
+### Directory of PC-SIG Library Disk #1619
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1619"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1619"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1619
      Directory of  A:\
@@ -2713,9 +2712,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WAIT     EXE    28248   9-13-88   4:55a
     XBATCH   DOC    37908   4-07-89   9:35a
 
-### Directory of PCSIG08: DISK1620
+### Directory of PC-SIG Library Disk #1620
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1620"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1620"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1620
      Directory of  A:\
@@ -2727,9 +2726,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     REAL     MSK     1782  11-26-85  12:47p
     REALTY   EXE   122368  10-15-88   4:57a
 
-### Directory of PCSIG08: DISK1621
+### Directory of PC-SIG Library Disk #1621
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1621"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1621"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1621
      Directory of  A:\
@@ -2751,9 +2750,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     STARFILE        11200   6-01-88   5:54a
     TRIP     CHR     7213   6-01-88   5:53a
 
-### Directory of PCSIG08: DISK1622
+### Directory of PC-SIG Library Disk #1622
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1622"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1622"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1622
      Directory of  A:\
@@ -2765,9 +2764,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540  11-27-89   5:16a
     README   1ST     4943   3-14-89   1:32p
 
-### Directory of PCSIG08: DISK1623
+### Directory of PC-SIG Library Disk #1623
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1623"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1623"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1623
      Directory of  A:\
@@ -2784,9 +2783,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      540  11-27-89   5:19a
 
-### Directory of PCSIG08: DISK1624
+### Directory of PC-SIG Library Disk #1624
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1624"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1624"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1624
      Directory of  A:\
@@ -2798,9 +2797,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     CHAPTER  TBC    51392  10-22-88   9:49p
     MAIN     TBC    69808  10-22-88  10:22p
 
-### Directory of PCSIG08: DISK1625
+### Directory of PC-SIG Library Disk #1625
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1625"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1625"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1625
      Directory of  A:\
@@ -2827,9 +2826,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TEMPLATE MMM      199   6-30-88  10:43a
     TEMPLATE PPP      269   7-02-88  12:26p
 
-### Directory of PCSIG08: DISK1626
+### Directory of PC-SIG Library Disk #1626
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1626"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1626"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1626
      Directory of  A:\
@@ -2843,9 +2842,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SETUP    EXE    30817  12-03-89   6:49a
     UTILITY  EXE    50865  12-04-89   1:57a
 
-### Directory of PCSIG08: DISK1627
+### Directory of PC-SIG Library Disk #1627
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1627"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1627"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1627
      Directory of  A:\
@@ -2857,9 +2856,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      694  12-01-89   1:52p
     SYSOP!   TXT      615   7-26-89   3:02p
 
-### Directory of PCSIG08: DISK1628
+### Directory of PC-SIG Library Disk #1628
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1628"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1628"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1628
      Directory of  A:\
@@ -2867,9 +2866,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       40   8-11-87   7:52p
     NOTE     TXT      289  10-24-88   1:21a
 
-### Directory of PCSIG08: DISK1629
+### Directory of PC-SIG Library Disk #1629
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1629"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1629"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1629
      Directory of  A:\
@@ -2883,9 +2882,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     KINDER   SCR     4008   3-27-89  10:09a
     KINDER   TXT      855   5-21-89   1:55a
 
-### Directory of PCSIG08: DISK1630
+### Directory of PC-SIG Library Disk #1630
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1630"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1630"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1630
      Directory of  A:\
@@ -2913,9 +2912,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READTACH EXE    13648   5-23-89   4:52p
     REVIEW   TXT     1326  10-20-89   4:49a
 
-### Directory of PCSIG08: DISK1631
+### Directory of PC-SIG Library Disk #1631
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1631"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1631"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1631
      Directory of  A:\
@@ -2944,9 +2943,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     REGISTER BAT      139   3-01-90   6:00a
     WHATSNEW DOC     1778   3-01-90   6:00a
 
-### Directory of PCSIG08: DISK1632
+### Directory of PC-SIG Library Disk #1632
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1632"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1632"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1632
      Directory of  A:\
@@ -2983,9 +2982,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TGAPRINT EXE    15680  12-31-89   7:00p
     TGASETUP EXE    11568  12-31-89   7:00p
 
-### Directory of PCSIG08: DISK1633
+### Directory of PC-SIG Library Disk #1633
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1633"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1633"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1633
      Directory of  A:\
@@ -2997,9 +2996,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TPR1     DOC     5248   2-10-89   5:17p
     TPR1     EXE    57646   2-10-89   5:45p
 
-### Directory of PCSIG08: DISK1634
+### Directory of PC-SIG Library Disk #1634
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1634"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1634"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1634
      Directory of  A:\
@@ -3020,9 +3019,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SPOOL    DOC    10998   1-27-89   8:26p
     SPOOL    EXE    19264   2-18-89  10:50a
 
-### Directory of PCSIG08: DISK1635
+### Directory of PC-SIG Library Disk #1635
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1635"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1635"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1635
      Directory of  A:\
@@ -3036,9 +3035,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TM       DOC   115200   7-07-88   6:04a
     TM       EXE    67130   7-10-88   4:28a
 
-### Directory of PCSIG08: DISK1636
+### Directory of PC-SIG Library Disk #1636
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1636"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1636"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1636
      Directory of  A:\
@@ -3050,9 +3049,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TWODISKS DOC    39076   2-11-89   5:46a
     TWODISKS EXE    55056   2-11-89   5:41a
 
-### Directory of PCSIG08: DISK1637
+### Directory of PC-SIG Library Disk #1637
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1637"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1637"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1637
      Directory of  A:\
@@ -3073,9 +3072,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WMREGIST DOC     1806   4-07-89   1:00a
     WMSTART  WMN    22016   4-07-89   1:00a
 
-### Directory of PCSIG08: DISK1638
+### Directory of PC-SIG Library Disk #1638
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1638"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1638"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1638
      Directory of  A:\
@@ -3107,9 +3106,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     YOURMENU DOC    13696  12-26-88   9:29a
     YOURMENU EXE    68078  12-31-88  12:27a
 
-### Directory of PCSIG08: DISK1639
+### Directory of PC-SIG Library Disk #1639
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1639"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1639"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1639
      Directory of  A:\
@@ -3147,9 +3146,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     STKHIS   DAT     7566   1-04-89   2:12a
     STKINC   DAT      250   1-04-89   2:12a
 
-### Directory of PCSIG08: DISK1640
+### Directory of PC-SIG Library Disk #1640
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1640"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1640"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1640
      Directory of  A:\
@@ -3166,9 +3165,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TAX88    FIL      821   9-21-88   1:36p
     TCODE    FIL      140   2-10-89  10:48a
 
-### Directory of PCSIG08: DISK1641
+### Directory of PC-SIG Library Disk #1641
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1641"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1641"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1641
      Directory of  A:\
@@ -3219,9 +3218,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     REVIEW   5        649   1-31-89   4:00p
     REVIEW   6        804   3-30-89   2:52a
 
-### Directory of PCSIG08: DISK1642
+### Directory of PC-SIG Library Disk #1642
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1642"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1642"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1642
      Directory of  A:\
@@ -3241,9 +3240,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     7STUD    INF    11338   2-14-89   5:00a
     README   EXE    19776   2-14-89   5:00a
 
-### Directory of PCSIG08: DISK1643
+### Directory of PC-SIG Library Disk #1643
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1643"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1643"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1643
      Directory of  A:\
@@ -3254,9 +3253,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     KED      EXE    59916   3-29-89   4:31p
     README   1ST     3256   3-29-89   4:55p
 
-### Directory of PCSIG08: DISK1644
+### Directory of PC-SIG Library Disk #1644
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1644"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1644"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1644
      Directory of  A:\
@@ -3273,9 +3272,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PUZZLE   EXE    35365   5-10-89   4:22a
     UNO      EXE    52247   2-02-90   6:45p
 
-### Directory of PCSIG08: DISK1645
+### Directory of PC-SIG Library Disk #1645
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1645"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1645"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1645
      Directory of  A:\
@@ -3332,9 +3331,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SYSTEM9  FNT     1456   8-15-88  12:10p
     THINKJET PRI      216   8-05-88   7:06a
 
-### Directory of PCSIG08: DISK1646
+### Directory of PC-SIG Library Disk #1646
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1646"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1646"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1646
      Directory of  A:\
@@ -3347,9 +3346,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   3-13-90   9:34a
     README   1ST     2287   6-29-89   2:51p
 
-### Directory of PCSIG08: DISK1647
+### Directory of PC-SIG Library Disk #1647
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1647"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1647"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1647
      Directory of  A:\
@@ -3363,9 +3362,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     HTSCHOOL EXE    42050   7-23-89   6:23a
     IBR      BAT       21   7-23-89   7:43a
 
-### Directory of PCSIG08: DISK1648
+### Directory of PC-SIG Library Disk #1648
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1648"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1648"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1648
      Directory of  A:\
@@ -3384,9 +3383,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SHOPDOC         20608   9-23-88   2:17a
     SHOPDOC  EXE    43153   9-23-88   2:23a
 
-### Directory of PCSIG08: DISK1649
+### Directory of PC-SIG Library Disk #1649
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1649"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1649"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1649
      Directory of  A:\
@@ -3436,9 +3435,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     STRINGMA REF      644  10-26-87   8:07a
     STRINGMA SYM      226  10-26-87   3:51a
 
-### Directory of PCSIG08: DISK1650
+### Directory of PC-SIG Library Disk #1650
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1650"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1650"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1650
      Directory of  A:\
@@ -3452,9 +3451,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     HEXTODEC BAS     6528   1-01-80  12:00a
     HEXTODEC EXE    28416   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1651
+### Directory of PC-SIG Library Disk #1651
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1651"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1651"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1651
      Directory of  A:\
@@ -3470,9 +3469,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TTT      MAK     1568   1-30-89   4:00p
     WINTTT5  OBJ      257   1-30-89   4:00p
 
-### Directory of PCSIG08: DISK1652
+### Directory of PC-SIG Library Disk #1652
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1652"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1652"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1652
      Directory of  A:\
@@ -3489,9 +3488,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     UPGRADE  DOC     5151   1-30-89   4:00p
     WINTTT5  ASM     7421   1-30-89   4:00p
 
-### Directory of PCSIG08: DISK1653
+### Directory of PC-SIG Library Disk #1653
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1653"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1653"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1653
      Directory of  A:\
@@ -3504,9 +3503,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SCRDISK1 ARC   144125   6-13-89   4:06p
     SCRDISK2 ARC   171209   6-13-89   4:09p
 
-### Directory of PCSIG08: DISK1654
+### Directory of PC-SIG Library Disk #1654
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1654"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1654"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1654
      Directory of  A:\
@@ -3527,9 +3526,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     INSTALL  BAT     1280   7-03-89   2:25p
     UNLOAD   BAT      896   7-03-89   2:26p
 
-### Directory of PCSIG08: DISK1655
+### Directory of PC-SIG Library Disk #1655
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1655"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1655"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1655
      Directory of  A:\
@@ -3539,9 +3538,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      771  12-01-89   3:59a
 
-### Directory of PCSIG08: DISK1656
+### Directory of PC-SIG Library Disk #1656
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1656"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1656"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1656
      Directory of  A:\
@@ -3551,9 +3550,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      771  12-01-89   4:02a
 
-### Directory of PCSIG08: DISK1657
+### Directory of PC-SIG Library Disk #1657
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1657"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1657"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1657
      Directory of  A:\
@@ -3563,9 +3562,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      771  12-01-89   4:03a
 
-### Directory of PCSIG08: DISK1658
+### Directory of PC-SIG Library Disk #1658
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1658"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1658"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1658
      Directory of  A:\
@@ -3589,9 +3588,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     YEARBAK           128   7-18-88   4:24a
     YEARCUR           128   7-18-88   4:24a
 
-### Directory of PCSIG08: DISK1659
+### Directory of PC-SIG Library Disk #1659
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1659"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1659"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1659
      Directory of  A:\
@@ -3603,9 +3602,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PKUNPAK  EXE    15112   8-01-88   5:00p
     UNPAKFNL BAT      136   6-28-89  12:35a
 
-### Directory of PCSIG08: DISK1660
+### Directory of PC-SIG Library Disk #1660
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1660"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1660"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1660
      Directory of  A:\
@@ -3621,9 +3620,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TDBMS    EXE   221168  10-28-88  10:01a
     TRMAN    DBF     2579   1-18-88  11:42a
 
-### Directory of PCSIG08: DISK1661
+### Directory of PC-SIG Library Disk #1661
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1661"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1661"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1661
      Directory of  A:\
@@ -3644,9 +3643,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   FIX      663   2-06-89   7:15p
     STATMENT LIC     1722   1-17-89   3:02p
 
-### Directory of PCSIG08: DISK1662
+### Directory of PC-SIG Library Disk #1662
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1662"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1662"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1662
      Directory of  A:\
@@ -3660,9 +3659,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     RSTPRINT DOC     7936   8-03-89   5:48p
     RSTPRINT EXE    37734   8-14-88   6:28p
 
-### Directory of PCSIG08: DISK1663
+### Directory of PC-SIG Library Disk #1663
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1663"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1663"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1663
      Directory of  A:\
@@ -3681,9 +3680,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT     1002  11-28-89   4:20a
 
-### Directory of PCSIG08: DISK1664
+### Directory of PC-SIG Library Disk #1664
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1664"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1664"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1664
      Directory of  A:\
@@ -3704,9 +3703,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540  11-27-89  11:51a
     README-T COM     3200   4-04-89   6:56p
 
-### Directory of PCSIG08: DISK1665
+### Directory of PC-SIG Library Disk #1665
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1665"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1665"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1665
      Directory of  A:\
@@ -3726,9 +3725,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     LANGTC   KED    48328   1-01-80  12:00a
     LANGTPAS KED    32605   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1666
+### Directory of PC-SIG Library Disk #1666
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1666"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1666"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1666
      Directory of  A:\
@@ -3748,9 +3747,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     US       DB     83122  11-16-89   2:34a
     ________ ___        1   3-04-89  10:56a
 
-### Directory of PCSIG08: DISK1667
+### Directory of PC-SIG Library Disk #1667
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1667"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1667"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1667
      Directory of  A:\
@@ -3772,9 +3771,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     RESUME   WK2      285   8-25-88   2:30p
     RESUME   WK3      208   8-25-88   2:30p
 
-### Directory of PCSIG08: DISK1668
+### Directory of PC-SIG Library Disk #1668
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1668"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1668"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1668
      Directory of  A:\
@@ -3795,9 +3794,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SPEECH   DOC     8927  10-02-88   1:32p
     TALKDEMO BAS     4465   9-21-88   3:02p
 
-### Directory of PCSIG08: DISK1669
+### Directory of PC-SIG Library Disk #1669
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1669"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1669"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1669
      Directory of  A:\
@@ -3809,9 +3808,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WT       EXE    44302   9-23-89   8:04a
     WTHIST   DOC      378   9-23-89   8:06a
 
-### Directory of PCSIG08: DISK1670
+### Directory of PC-SIG Library Disk #1670
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1670"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1670"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1670
      Directory of  A:\
@@ -3845,9 +3844,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SAILBOAT        15024  10-10-89   6:00p
     SUPPLIER         5570  10-10-89   6:00p
 
-### Directory of PCSIG08: DISK1671
+### Directory of PC-SIG Library Disk #1671
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1671"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1671"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1671
      Directory of  A:\
@@ -3860,9 +3859,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       20   9-29-89  12:20p
     READ2    ME       603   9-29-89  12:29p
 
-### Directory of PCSIG08: DISK1672
+### Directory of PC-SIG Library Disk #1672
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1672"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1672"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1672
      Directory of  A:\
@@ -3872,9 +3871,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   3-02-90   1:29p
     TGA      DOC   155868  12-31-89   7:00p
 
-### Directory of PCSIG08: DISK1673
+### Directory of PC-SIG Library Disk #1673
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1673"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1673"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1673
      Directory of  A:\
@@ -3902,9 +3901,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     ROLODEX  LBL     1960   6-06-88   2:57p
     SLANTED  LBL     1960   6-04-88   4:31a
 
-### Directory of PCSIG08: DISK1674
+### Directory of PC-SIG Library Disk #1674
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1674"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1674"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1674
      Directory of  A:\
@@ -3916,9 +3915,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      540  12-08-89   4:57a
 
-### Directory of PCSIG08: DISK1675
+### Directory of PC-SIG Library Disk #1675
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1675"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1675"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1675
      Directory of  A:\
@@ -3940,9 +3939,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SIDEDISH        12300   9-29-88   1:03p
     SOUP            12300   9-27-88   8:42a
 
-### Directory of PCSIG08: DISK1676
+### Directory of PC-SIG Library Disk #1676
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1676"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1676"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1676
      Directory of  A:\
@@ -3954,9 +3953,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   9-01-88   8:28a
     GO       TXT      544   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1677
+### Directory of PC-SIG Library Disk #1677
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1677"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1677"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1677
      Directory of  A:\
@@ -3975,9 +3974,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     ORDERFM  CHK      815   2-08-89   9:41a
     README   CE     30436   3-11-89   5:07a
 
-### Directory of PCSIG08: DISK1678
+### Directory of PC-SIG Library Disk #1678
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1678"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1678"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1678
      Directory of  A:\
@@ -4000,9 +3999,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VGA      CFG      191   3-13-89   2:44a
     VISION   DOC    11668   4-07-89   6:12a
 
-### Directory of PCSIG08: DISK1679
+### Directory of PC-SIG Library Disk #1679
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1679"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1679"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1679
      Directory of  A:\
@@ -4016,9 +4015,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ     ME      4217  10-29-89  12:00p
     SL       DOC   190823  10-29-89  12:00p
 
-### Directory of PCSIG08: DISK1680
+### Directory of PC-SIG Library Disk #1680
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1680"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1680"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1680
      Directory of  A:\
@@ -4028,9 +4027,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   1-01-80  12:00a
     README   TXT     9370   4-21-89   3:31a
 
-### Directory of PCSIG08: DISK1681
+### Directory of PC-SIG Library Disk #1681
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1681"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1681"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1681
      Directory of  A:\
@@ -4044,9 +4043,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PP       IDX    37278   4-15-89   7:06a
     PP       QST   293816   4-11-89   6:02a
 
-### Directory of PCSIG08: DISK1682
+### Directory of PC-SIG Library Disk #1682
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1682"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1682"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1682
      Directory of  A:\
@@ -4064,9 +4063,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MAKE-CTL EXE    67001   7-01-89   7:54p
     SAMPLE   CTL     2566   7-01-89   7:54p
 
-### Directory of PCSIG08: DISK1683
+### Directory of PC-SIG Library Disk #1683
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1683"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1683"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1683
      Directory of  A:\
@@ -4085,9 +4084,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   DOC     4858   2-23-89  12:42p
     SPEEDSCR COM     5333  10-01-86   5:00a
 
-### Directory of PCSIG08: DISK1684
+### Directory of PC-SIG Library Disk #1684
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1684"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1684"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1684
      Directory of  A:\
@@ -4112,9 +4111,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SECURITY CHN    41213   9-21-88  11:10a
     UTIL     CHN    22904   5-19-88   7:15a
 
-### Directory of PCSIG08: DISK1685
+### Directory of PC-SIG Library Disk #1685
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1685"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1685"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1685
      Directory of  A:\
@@ -4127,9 +4126,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README            690  12-17-88   3:07a
     README   BAT       13   2-21-86   3:28p
 
-### Directory of PCSIG08: DISK1686
+### Directory of PC-SIG Library Disk #1686
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1686"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1686"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1686
      Directory of  A:\
@@ -4159,9 +4158,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WM       HLP    73499   9-27-89   5:00a
     WM       MAC      151   9-27-89   5:00a
 
-### Directory of PCSIG08: DISK1687
+### Directory of PC-SIG Library Disk #1687
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1687"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1687"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1687
      Directory of  A:\
@@ -4176,9 +4175,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READIT   EXE    55308  11-06-89   2:15a
     READTEST DOC     3511   8-24-88   7:56p
 
-### Directory of PCSIG08: DISK1688
+### Directory of PC-SIG Library Disk #1688
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1688"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1688"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1688
      Directory of  A:\
@@ -4190,9 +4189,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   BAT      896   4-29-89   6:32p
     README   DOC     8064   5-01-89   5:04p
 
-### Directory of PCSIG08: DISK1689
+### Directory of PC-SIG Library Disk #1689
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1689"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1689"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1689
      Directory of  A:\
@@ -4202,9 +4201,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540  12-12-89   5:13a
     STS26    EXE    88064   9-23-88   5:39a
 
-### Directory of PCSIG08: DISK1690
+### Directory of PC-SIG Library Disk #1690
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1690"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1690"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1690
      Directory of  A:\
@@ -4225,9 +4224,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     INVOICE  REG     1114   1-01-80  12:00a
     README   TXT       82   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1691
+### Directory of PC-SIG Library Disk #1691
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1691"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1691"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1691
      Directory of  A:\
@@ -4243,9 +4242,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     STORY             844   4-10-89  10:27p
     THINKLE  EXE    32016   4-10-89  10:58p
 
-### Directory of PCSIG08: DISK1692
+### Directory of PC-SIG Library Disk #1692
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1692"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1692"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1692
      Directory of  A:\
@@ -4260,9 +4259,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540  12-12-89   3:38a
     WHATS    NEW     1544   2-22-89   8:27a
 
-### Directory of PCSIG08: DISK1693
+### Directory of PC-SIG Library Disk #1693
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1693"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1693"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1693
      Directory of  A:\
@@ -4273,9 +4272,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      617  12-12-89   4:10a
     README   DOC     1263   5-06-89   2:08p
 
-### Directory of PCSIG08: DISK1694
+### Directory of PC-SIG Library Disk #1694
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1694"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1694"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1694
      Directory of  A:\
@@ -4298,9 +4297,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ     ME       568  11-09-89  12:52a
     VIEW     BAT       37   6-02-89  12:24p
 
-### Directory of PCSIG08: DISK1695
+### Directory of PC-SIG Library Disk #1695
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1695"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1695"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1695
      Directory of  A:\
@@ -4314,9 +4313,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     STAFF    DAT     8000   7-05-88  12:08p
     TEAM     DAT    17780   7-05-88  12:18p
 
-### Directory of PCSIG08: DISK1696
+### Directory of PC-SIG Library Disk #1696
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1696"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1696"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1696
      Directory of  A:\
@@ -4331,9 +4330,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     ROLODEX  FMT    10660   7-07-88   3:16a
     STATES   TXT     2487   7-20-88  11:37a
 
-### Directory of PCSIG08: DISK1697
+### Directory of PC-SIG Library Disk #1697
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1697"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1697"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1697
      Directory of  A:\
@@ -4345,9 +4344,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     INSTALLH BAT      364   3-07-89   4:30a
     PKXARC   COM    11482  12-14-86   4:00p
 
-### Directory of PCSIG08: DISK1698
+### Directory of PC-SIG Library Disk #1698
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1698"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1698"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1698
      Directory of  A:\
@@ -4374,9 +4373,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     UNLOCK   COM    12749   1-19-88   5:21a
     USEREDIT COM    14208   2-05-88   9:27a
 
-### Directory of PCSIG08: DISK1699
+### Directory of PC-SIG Library Disk #1699
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1699"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1699"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1699
      Directory of  A:\
@@ -4402,9 +4401,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VIEW9    FOR     4308   3-14-89   2:21a
     WORM     FOR     1519   3-14-89   2:23a
 
-### Directory of PCSIG08: DISK1700
+### Directory of PC-SIG Library Disk #1700
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1700"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1700"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1700
      Directory of  A:\
@@ -4423,9 +4422,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GREPLY   COM       14   7-08-89   1:54a
     GSTART   BAT      653   7-08-89   1:54a
 
-### Directory of PCSIG08: DISK1701
+### Directory of PC-SIG Library Disk #1701
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1701"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1701"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1701
      Directory of  A:\
@@ -4444,9 +4443,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PYREPLY  COM       14   7-06-89  11:57p
     PYSTART  BAT      682   7-06-89  11:57p
 
-### Directory of PCSIG08: DISK1702
+### Directory of PC-SIG Library Disk #1702
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1702"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1702"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1702
      Directory of  A:\
@@ -4457,9 +4456,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MAIL_LST EXE   222975   6-19-89  11:36a
     README   DOC     1262   5-06-89   1:40p
 
-### Directory of PCSIG08: DISK1703
+### Directory of PC-SIG Library Disk #1703
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1703"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1703"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1703
      Directory of  A:\
@@ -4470,9 +4469,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      771  12-12-89   4:53a
     README   DOC     1205   5-06-89   2:13p
 
-### Directory of PCSIG08: DISK1704
+### Directory of PC-SIG Library Disk #1704
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1704"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1704"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1704
      Directory of  A:\
@@ -4486,9 +4485,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     HD       BAT      226  11-28-89   4:28a
     PKUNZIP  EXE    21440   7-20-89   6:01p
 
-### Directory of PCSIG08: DISK1705
+### Directory of PC-SIG Library Disk #1705
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1705"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1705"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1705
      Directory of  A:\
@@ -4523,9 +4522,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WRITFILE C        879  11-26-89   2:23p
     WRITFILE MAK      640  11-26-89   9:40a
 
-### Directory of PCSIG08: DISK1706
+### Directory of PC-SIG Library Disk #1706
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1706"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1706"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1706
      Directory of  A:\
@@ -4535,9 +4534,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      730  12-12-89   6:07a
     SCTEM35  EXE   151125   6-13-89   9:41a
 
-### Directory of PCSIG08: DISK1707
+### Directory of PC-SIG Library Disk #1707
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1707"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1707"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1707
      Directory of  A:\
@@ -4550,9 +4549,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     POTPOURI EXE    70112  12-17-88  12:35a
     SUMSTAT  EXE    43392  12-17-88   3:07a
 
-### Directory of PCSIG08: DISK1708
+### Directory of PC-SIG Library Disk #1708
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1708"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1708"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1708
      Directory of  A:\
@@ -4598,9 +4597,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TWOWAYR  DAT     1088   7-12-87   9:33p
     TWOWAYS  DAT     2040   8-14-85   4:39p
 
-### Directory of PCSIG08: DISK1709
+### Directory of PC-SIG Library Disk #1709
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1709"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1709"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1709
      Directory of  A:\
@@ -4613,9 +4612,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     NFTY     EXE   178662   7-06-89   5:31a
     README   DOC      568  12-14-89   1:45a
 
-### Directory of PCSIG08: DISK1710
+### Directory of PC-SIG Library Disk #1710
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1710"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1710"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1710
      Directory of  A:\
@@ -4632,9 +4631,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PENNAME  EXE   188482  11-12-89  10:08a
     POSS     DBF       67  11-11-88   2:41p
 
-### Directory of PCSIG08: DISK1711
+### Directory of PC-SIG Library Disk #1711
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1711"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1711"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1711
      Directory of  A:\
@@ -4687,9 +4686,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     XWORDS   DOC     7341   2-06-89  11:06p
     XWORDS   EXE   105690   2-06-89  11:06p
 
-### Directory of PCSIG08: DISK1712
+### Directory of PC-SIG Library Disk #1712
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1712"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1712"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1712
      Directory of  A:\
@@ -4702,9 +4701,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     QBSCR    INC     1872   9-01-89   5:00a
     RUNME1ST BAT     4062   9-01-89   5:00a
 
-### Directory of PCSIG08: DISK1713
+### Directory of PC-SIG Library Disk #1713
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1713"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1713"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1713
      Directory of  A:\
@@ -4731,9 +4730,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TESTSCR  MON     4007   7-25-89   4:44a
     WHATS    NEW     7741   9-01-89   5:00a
 
-### Directory of PCSIG08: DISK1714
+### Directory of PC-SIG Library Disk #1714
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1714"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1714"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1714
      Directory of  A:\
@@ -4750,9 +4749,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SB_CAP   CLR     4007   7-16-89   8:41a
     SB_CAP   MON     4007   7-16-89   8:41a
 
-### Directory of PCSIG08: DISK1715
+### Directory of PC-SIG Library Disk #1715
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1715"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1715"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1715
      Directory of  A:\
@@ -4764,9 +4763,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SPC-AR   ARC   125056   4-04-89   6:33p
     TAKOFF   ARC    31238   4-09-89   1:48p
 
-### Directory of PCSIG08: DISK1716
+### Directory of PC-SIG Library Disk #1716
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1716"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1716"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1716
      Directory of  A:\
@@ -4785,9 +4784,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TEST     DAT    21908   1-16-90  10:50a
     TEST     IDX    15360   1-16-90  10:50a
 
-### Directory of PCSIG08: DISK1717
+### Directory of PC-SIG Library Disk #1717
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1717"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1717"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1717
      Directory of  A:\
@@ -4838,9 +4837,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SOUND    EXE    17603   2-21-90   2:05a
     SOUND    PAN      427  11-17-89   1:57a
 
-### Directory of PCSIG08: DISK1718
+### Directory of PC-SIG Library Disk #1718
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1718"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1718"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1718
      Directory of  A:\
@@ -4856,9 +4855,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TREK     DOC    14540   8-26-89  12:06a
     TREK     EXE   167034   8-26-89  12:06a
 
-### Directory of PCSIG08: DISK1719
+### Directory of PC-SIG Library Disk #1719
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1719"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1719"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1719
      Directory of  A:\
@@ -4874,9 +4873,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     UZIPFDXF BAT     1382  11-13-89  12:47a
     UZIPFDXH BAT      904  11-12-89  10:40p
 
-### Directory of PCSIG08: DISK1720
+### Directory of PC-SIG Library Disk #1720
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1720"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1720"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1720
      Directory of  A:\
@@ -4908,9 +4907,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VERSION3 TXT     3552   1-15-90   2:37a
     WORLD    PIC     5243   1-15-90   2:37a
 
-### Directory of PCSIG08: DISK1721
+### Directory of PC-SIG Library Disk #1721
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1721"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1721"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1721
      Directory of  A:\
@@ -4931,9 +4930,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     RESPONSE         2289   9-08-89   6:00p
     SETUP    DAT       21   9-08-89   6:00p
 
-### Directory of PCSIG08: DISK1722
+### Directory of PC-SIG Library Disk #1722
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1722"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1722"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1722
      Directory of  A:\
@@ -4955,9 +4954,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     REGISTER TXT     5555   1-03-90   4:00a
     SCHOOLS  TXT     2142   1-03-90   4:00a
 
-### Directory of PCSIG08: DISK1723
+### Directory of PC-SIG Library Disk #1723
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1723"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1723"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1723
      Directory of  A:\
@@ -4969,9 +4968,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PCDCFILE EXE   119901   2-26-90   2:22p
     READ     BAT      468   2-25-90  12:06p
 
-### Directory of PCSIG08: DISK1724
+### Directory of PC-SIG Library Disk #1724
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1724"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1724"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1724
      Directory of  A:\
@@ -4985,9 +4984,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      540   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1725
+### Directory of PC-SIG Library Disk #1725
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1725"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1725"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1725
      Directory of  A:\
@@ -5005,9 +5004,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VIEWDOC  EXE    10464   5-10-89   1:26a
     VPEBX    EXE    11888   5-11-89   5:44a
 
-### Directory of PCSIG08: DISK1726
+### Directory of PC-SIG Library Disk #1726
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1726"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1726"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1726
      Directory of  A:\
@@ -5018,9 +5017,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PHONE    DOC    25377   5-06-89   1:51p
     PHONE    EXE    91096   5-06-89   9:57a
 
-### Directory of PCSIG08: DISK1727
+### Directory of PC-SIG Library Disk #1727
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1727"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1727"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1727
      Directory of  A:\
@@ -5043,9 +5042,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VIEW     EXE    22509   8-20-89  10:19a
     WHERE-IS EXE    20767   7-24-89   7:26p
 
-### Directory of PCSIG08: DISK1728
+### Directory of PC-SIG Library Disk #1728
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1728"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1728"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1728
      Directory of  A:\
@@ -5065,9 +5064,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     INTLRTS  BIN    27650   2-26-90   9:22p
     YELLOWPG DAT     1127  10-23-89   1:17p
 
-### Directory of PCSIG08: DISK1729
+### Directory of PC-SIG Library Disk #1729
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1729"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1729"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1729
      Directory of  A:\
@@ -5091,9 +5090,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     RATES619 DAT     2256   9-28-88  12:31p
     YELLOWPG DAT     1127  10-23-89   1:17p
 
-### Directory of PCSIG08: DISK1730
+### Directory of PC-SIG Library Disk #1730
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1730"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1730"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1730
      Directory of  A:\
@@ -5116,9 +5115,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     RATES619 DAT     2256   9-28-88  12:31p
     YELLOWPG DAT     1127  10-23-89   1:17p
 
-### Directory of PCSIG08: DISK1731
+### Directory of PC-SIG Library Disk #1731
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1731"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1731"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1731
      Directory of  A:\
@@ -5149,9 +5148,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SAMPLE2  RFD      353   9-09-89   1:00a
     SETUP    DAT       20   9-09-89   1:00a
 
-### Directory of PCSIG08: DISK1732
+### Directory of PC-SIG Library Disk #1732
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1732"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1732"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1732
      Directory of  A:\
@@ -5159,9 +5158,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       40   8-11-87   7:52p
     NOTE     TXT      289  10-24-88   1:21a
 
-### Directory of PCSIG08: DISK1733
+### Directory of PC-SIG Library Disk #1733
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1733"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1733"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1733
      Directory of  A:\
@@ -5180,9 +5179,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PREPLY   COM       14   1-19-90   1:59p
     PSTART   BAT      656   1-19-90   1:59p
 
-### Directory of PCSIG08: DISK1734
+### Directory of PC-SIG Library Disk #1734
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1734"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1734"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1734
      Directory of  A:\
@@ -5212,9 +5211,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SAMPLE5  BIG     1250   8-17-87   1:41p
     SAMPLE6  ECS     1635  10-25-87  10:59p
 
-### Directory of PCSIG08: DISK1735
+### Directory of PC-SIG Library Disk #1735
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1735"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1735"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1735
      Directory of  A:\
@@ -5233,9 +5232,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     NOTES    TXT     1632   5-15-89   8:42a
     READ     ME      4729   5-15-89   8:39a
 
-### Directory of PCSIG08: DISK1736
+### Directory of PC-SIG Library Disk #1736
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1736"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1736"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1736
      Directory of  A:\
@@ -5248,9 +5247,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     INSULTS  EXE    78306   3-17-89  11:06p
     TOMMYS   DOC     6603  10-10-89  12:06a
 
-### Directory of PCSIG08: DISK1737
+### Directory of PC-SIG Library Disk #1737
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1737"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1737"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1737
      Directory of  A:\
@@ -5262,9 +5261,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SHARE    EXE   156318   5-09-89   2:55p
     TCSERIAL NUM       58   5-09-89   2:21p
 
-### Directory of PCSIG08: DISK1738
+### Directory of PC-SIG Library Disk #1738
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1738"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1738"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1738
      Directory of  A:\
@@ -5276,9 +5275,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   1-01-80  12:00a
     INSTALL  BAT      415   5-15-89   5:49a
 
-### Directory of PCSIG08: DISK1739
+### Directory of PC-SIG Library Disk #1739
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1739"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1739"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1739
      Directory of  A:\
@@ -5319,9 +5318,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     RUNBAT   DOC      991   5-20-89   4:28a
     RUNBAT   EXE     8646   5-19-89   7:34p
 
-### Directory of PCSIG08: DISK1740
+### Directory of PC-SIG Library Disk #1740
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1740"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1740"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1740
      Directory of  A:\
@@ -5351,9 +5350,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     LICENSE1 AGR     1262  12-31-88   4:00p
     LICENSES AGR     1715  12-31-88   4:00p
 
-### Directory of PCSIG08: DISK1741
+### Directory of PC-SIG Library Disk #1741
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1741"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1741"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1741
      Directory of  A:\
@@ -5423,9 +5422,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SPRDSHET DIC     3700  12-31-88   4:00p
     TIPS     DOC     1904  12-31-88   4:00p
 
-### Directory of PCSIG08: DISK1742
+### Directory of PC-SIG Library Disk #1742
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1742"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1742"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1742
      Directory of  A:\
@@ -5439,9 +5438,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     THS      EXE    17244   5-07-89  10:04a
     VERB     EXE   105488   5-08-89   2:28p
 
-### Directory of PCSIG08: DISK1743
+### Directory of PC-SIG Library Disk #1743
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1743"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1743"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1743
      Directory of  A:\
@@ -5454,9 +5453,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     INTERJEC EXE    78956   5-10-89   6:06a
     PREPOSIT EXE    68244   5-10-89   3:30a
 
-### Directory of PCSIG08: DISK1744
+### Directory of PC-SIG Library Disk #1744
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1744"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1744"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1744
      Directory of  A:\
@@ -5471,9 +5470,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     INSTMO   BAT       44   5-16-89   3:37a
     MT1      EXE    94514   9-14-89  12:01p
 
-### Directory of PCSIG08: DISK1745
+### Directory of PC-SIG Library Disk #1745
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1745"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1745"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1745
      Directory of  A:\
@@ -5483,9 +5482,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      848   1-01-80  12:00a
     MT2      EXE   342394   9-14-89  11:59a
 
-### Directory of PCSIG08: DISK1746
+### Directory of PC-SIG Library Disk #1746
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1746"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1746"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1746
      Directory of  A:\
@@ -5496,9 +5495,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PIRO     EXE   319440   8-27-89   2:42p
     READ     ME      3970   8-27-89   2:43p
 
-### Directory of PCSIG08: DISK1747
+### Directory of PC-SIG Library Disk #1747
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1747"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1747"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1747
      Directory of  A:\
@@ -5549,9 +5548,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TYPES    DBT      512   8-28-89   9:58a
     TYPES    WDW      996   8-28-89  10:17a
 
-### Directory of PCSIG08: DISK1748
+### Directory of PC-SIG Library Disk #1748
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1748"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1748"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1748
      Directory of  A:\
@@ -5572,9 +5571,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VEHMTC42 EXE   100219  10-11-88  11:37a
     VEHMTC42 TXT    20184  10-11-88  12:01p
 
-### Directory of PCSIG08: DISK1749
+### Directory of PC-SIG Library Disk #1749
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1749"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1749"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1749
      Directory of  A:\
@@ -5582,9 +5581,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       40   8-11-87   7:52p
     NOTE     TXT      289  10-24-88   1:21a
 
-### Directory of PCSIG08: DISK1750
+### Directory of PC-SIG Library Disk #1750
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1750"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1750"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1750
      Directory of  A:\
@@ -5602,9 +5601,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     LOTTO3   BAT      966   1-26-89  11:47a
     LOTTO4   EXE    42688   2-16-89  10:05p
 
-### Directory of PCSIG08: DISK1751
+### Directory of PC-SIG Library Disk #1751
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1751"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1751"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1751
      Directory of  A:\
@@ -5633,9 +5632,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SERIAL   COM     1450   8-16-88   6:28p
     SERIAL   CRC      205   8-16-88   6:28p
 
-### Directory of PCSIG08: DISK1752
+### Directory of PC-SIG Library Disk #1752
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1752"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1752"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1752
      Directory of  A:\
@@ -5649,9 +5648,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PHONE1   HLP     4080   8-10-89  12:00a
     REGISTER FRM     1219   8-10-89   3:57a
 
-### Directory of PCSIG08: DISK1753
+### Directory of PC-SIG Library Disk #1753
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1753"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1753"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1753
      Directory of  A:\
@@ -5663,9 +5662,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     INSTALL  BAT       76   5-03-89   1:14p
     README   NOW      460   5-06-89   2:11a
 
-### Directory of PCSIG08: DISK1754
+### Directory of PC-SIG Library Disk #1754
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1754"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1754"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1754
      Directory of  A:\
@@ -5673,9 +5672,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       40   8-11-87   7:52p
     NOTE     TXT      289  10-24-88   1:21a
 
-### Directory of PCSIG08: DISK1755
+### Directory of PC-SIG Library Disk #1755
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1755"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1755"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1755
      Directory of  A:\
@@ -5699,9 +5698,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     XQT      EXE     7520   7-30-88   2:10p
     YESNO    EXE      725   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1756
+### Directory of PC-SIG Library Disk #1756
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1756"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1756"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1756
      Directory of  A:\
@@ -5715,9 +5714,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     HERCON   COM       10   8-23-89   2:24a
     QBHERC   COM     6704   9-24-87   3:01a
 
-### Directory of PCSIG08: DISK1757
+### Directory of PC-SIG Library Disk #1757
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1757"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1757"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1757
      Directory of  A:\
@@ -5731,9 +5730,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PCD-CAD2 EXE   131624  10-29-89   9:48p
     READ     ME      2450  10-29-89   5:43p
 
-### Directory of PCSIG08: DISK1758
+### Directory of PC-SIG Library Disk #1758
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1758"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1758"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1758
      Directory of  A:\
@@ -5750,9 +5749,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     POSTNET  COM    15184   8-22-89   4:18a
     POSTNET  DOC    18941   8-22-89   4:16a
 
-### Directory of PCSIG08: DISK1759
+### Directory of PC-SIG Library Disk #1759
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1759"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1759"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1759
      Directory of  A:\
@@ -5772,9 +5771,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ-ME  1ST      740   5-15-89   2:47a
     REGISTER MM      2237   5-15-89   5:44a
 
-### Directory of PCSIG08: DISK1760
+### Directory of PC-SIG Library Disk #1760
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1760"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1760"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1760
      Directory of  A:\
@@ -5794,9 +5793,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SETUP    BAT     5077   1-21-89   3:04a
     YESNO    COM       97  10-02-86   2:47p
 
-### Directory of PCSIG08: DISK1761
+### Directory of PC-SIG Library Disk #1761
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1761"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1761"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1761
      Directory of  A:\
@@ -5835,9 +5834,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   1-01-80  12:00a
     README   TXT     1350   8-04-89  10:44a
 
-### Directory of PCSIG08: DISK1762
+### Directory of PC-SIG Library Disk #1762
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1762"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1762"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1762
      Directory of  A:\
@@ -5851,9 +5850,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     W2       BAT       14   8-20-89  10:26a
     W211     BAS    14611   9-03-89  12:49p
 
-### Directory of PCSIG08: DISK1763
+### Directory of PC-SIG Library Disk #1763
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1763"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1763"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1763
      Directory of  A:\
@@ -5876,9 +5875,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SETUP    BAT     4966   3-24-89   1:09a
     YESNO    COM       97  10-02-86   3:34p
 
-### Directory of PCSIG08: DISK1764
+### Directory of PC-SIG Library Disk #1764
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1764"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1764"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1764
      Directory of  A:\
@@ -5896,9 +5895,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     LISTER   EXE     6976   7-02-89   8:33a
     LWERSION DOC     4144   6-09-89   8:29a
 
-### Directory of PCSIG08: DISK1765
+### Directory of PC-SIG Library Disk #1765
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1765"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1765"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1765
      Directory of  A:\
@@ -5913,9 +5912,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ1ST  DOC      907   1-28-90   2:32a
     READ2ND  DOC      891   1-28-90   2:32a
 
-### Directory of PCSIG08: DISK1766
+### Directory of PC-SIG Library Disk #1766
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1766"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1766"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1766
      Directory of  A:\
@@ -5940,9 +5939,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PASCAL   MAC      532   3-01-89   2:52p
     READ     ME      4081   3-02-89   4:12a
 
-### Directory of PCSIG08: DISK1767
+### Directory of PC-SIG Library Disk #1767
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1767"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1767"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1767
      Directory of  A:\
@@ -5955,9 +5954,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     ZIPKEY   EXE    33100   1-19-90   1:39a
     ZIPKEY   OVL   122038   9-01-89   9:40a
 
-### Directory of PCSIG08: DISK1768
+### Directory of PC-SIG Library Disk #1768
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1768"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1768"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1768
      Directory of  A:\
@@ -5973,9 +5972,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VADERS   SCO       28   2-14-89   3:11a
     VADERS   TBC    72018   2-14-89   3:11a
 
-### Directory of PCSIG08: DISK1769
+### Directory of PC-SIG Library Disk #1769
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1769"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1769"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1769
      Directory of  A:\
@@ -5992,9 +5991,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     LL       EXE    88496   7-30-89   5:00p
     README   COM    10429   7-30-89   5:00p
 
-### Directory of PCSIG08: DISK1770
+### Directory of PC-SIG Library Disk #1770
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1770"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1770"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1770
      Directory of  A:\
@@ -6009,9 +6008,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PWINST   EXE    50259   3-26-89   4:01p
     README           6166   3-26-89   4:01p
 
-### Directory of PCSIG08: DISK1771
+### Directory of PC-SIG Library Disk #1771
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1771"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1771"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1771
      Directory of  A:\
@@ -6032,9 +6031,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README           5183   6-03-89   3:33a
     README   COM     8560   6-03-89   3:33a
 
-### Directory of PCSIG08: DISK1772
+### Directory of PC-SIG Library Disk #1772
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1772"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1772"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1772
      Directory of  A:\
@@ -6047,9 +6046,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     UNIVERSE EXE   185076   8-11-89  11:09a
     UNIVERSE HLP    25295   7-29-89  12:16p
 
-### Directory of PCSIG08: DISK1773
+### Directory of PC-SIG Library Disk #1773
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1773"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1773"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1773
      Directory of  A:\
@@ -6068,9 +6067,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SYSOP    DOC     4151   7-05-89   2:20a
     VENDOR   DOC     3607   7-05-89   2:20a
 
-### Directory of PCSIG08: DISK1774
+### Directory of PC-SIG Library Disk #1774
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1774"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1774"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1774
      Directory of  A:\
@@ -6087,9 +6086,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PCHELP40 EXE    87792   2-04-90  10:05a
     REGISTER FRM     1471   2-03-90   8:57a
 
-### Directory of PCSIG08: DISK1775
+### Directory of PC-SIG Library Disk #1775
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1775"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1775"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1775
      Directory of  A:\
@@ -6103,9 +6102,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     XPORT    DOC    32768   7-31-89   7:48a
     XPORT    EXE    14393   7-31-89   7:44a
 
-### Directory of PCSIG08: DISK1776
+### Directory of PC-SIG Library Disk #1776
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1776"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1776"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1776
      Directory of  A:\
@@ -6115,9 +6114,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      463  12-20-89   4:43a
     NW       EXE    76992   8-31-89   2:52p
 
-### Directory of PCSIG08: DISK1777
+### Directory of PC-SIG Library Disk #1777
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1777"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1777"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1777
      Directory of  A:\
@@ -6132,9 +6131,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SS       COM     1348   7-25-89   8:39a
     SSSET    EXE    12448   7-19-89   7:49a
 
-### Directory of PCSIG08: DISK1778
+### Directory of PC-SIG Library Disk #1778
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1778"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1778"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1778
      Directory of  A:\
@@ -6159,9 +6158,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     ~                  15  12-20-89   2:40p
     ~H                  7   8-15-89   1:24a
 
-### Directory of PCSIG08: DISK1779
+### Directory of PC-SIG Library Disk #1779
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1779"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1779"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1779
      Directory of  A:\
@@ -6189,9 +6188,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     ~                   3  10-20-89  12:04a
     ~H                  7   8-15-89   1:24a
 
-### Directory of PCSIG08: DISK1780
+### Directory of PC-SIG Library Disk #1780
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1780"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1780"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1780
      Directory of  A:\
@@ -6205,9 +6204,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PRODUCTS DOC     2860   1-19-89   6:36a
     REGISTER FRM     1293   1-19-89   6:30a
 
-### Directory of PCSIG08: DISK1781
+### Directory of PC-SIG Library Disk #1781
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1781"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1781"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1781
      Directory of  A:\
@@ -6219,9 +6218,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      617  12-20-89   5:13a
 
-### Directory of PCSIG08: DISK1782
+### Directory of PC-SIG Library Disk #1782
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1782"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1782"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1782
      Directory of  A:\
@@ -6235,9 +6234,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   TXT      333   8-10-89   4:49p
     SAMPLE1  TXT     4096   7-30-89   8:41a
 
-### Directory of PCSIG08: DISK1783
+### Directory of PC-SIG Library Disk #1783
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1783"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1783"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1783
      Directory of  A:\
@@ -6252,9 +6251,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     QHELP    TXT     1953   2-25-90   6:10p
     READ     ME     28904   2-25-90   6:10p
 
-### Directory of PCSIG08: DISK1784
+### Directory of PC-SIG Library Disk #1784
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1784"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1784"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1784
      Directory of  A:\
@@ -6268,9 +6267,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   DAT       11  10-17-89   1:02a
     README   EXE    48396  10-14-89   9:43a
 
-### Directory of PCSIG08: DISK1785
+### Directory of PC-SIG Library Disk #1785
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1785"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1785"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1785
      Directory of  A:\
@@ -6285,9 +6284,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540  12-20-89   6:54a
     SETUP    BAT      181   3-14-89   8:48a
 
-### Directory of PCSIG08: DISK1786
+### Directory of PC-SIG Library Disk #1786
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1786"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1786"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1786
      Directory of  A:\
@@ -6309,9 +6308,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     XC       DOC   180611   7-06-89   3:55a
     XC       EXE   120912   7-06-89   3:55a
 
-### Directory of PCSIG08: DISK1787
+### Directory of PC-SIG Library Disk #1787
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1787"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1787"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1787
      Directory of  A:\
@@ -6333,9 +6332,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     UPDATE   TXT      275   8-10-89   9:44a
     USERDOC  EXE    27224   8-16-89   1:09p
 
-### Directory of PCSIG08: DISK1788
+### Directory of PC-SIG Library Disk #1788
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1788"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1788"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1788
      Directory of  A:\
@@ -6351,9 +6350,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     ORDER    FRM      954   7-11-89   4:09a
     README           3183   7-11-89   4:36a
 
-### Directory of PCSIG08: DISK1789
+### Directory of PC-SIG Library Disk #1789
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1789"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1789"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1789
      Directory of  A:\
@@ -6363,9 +6362,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      540  12-21-89   3:33a
 
-### Directory of PCSIG08: DISK1790
+### Directory of PC-SIG Library Disk #1790
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1790"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1790"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1790
      Directory of  A:\
@@ -6375,9 +6374,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      617  12-21-89   3:00a
     PHOEBE5  EXE   218707   5-10-88   8:05a
 
-### Directory of PCSIG08: DISK1791
+### Directory of PC-SIG Library Disk #1791
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1791"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1791"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1791
      Directory of  A:\
@@ -6394,9 +6393,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MM       EXE    30448  11-27-88  10:44p
     READ-ME  DOR     6149   3-14-89   8:09a
 
-### Directory of PCSIG08: DISK1792
+### Directory of PC-SIG Library Disk #1792
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1792"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1792"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1792
      Directory of  A:\
@@ -6409,9 +6408,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540  12-21-89   4:45a
     TODO     TXT       38   7-09-89   7:05a
 
-### Directory of PCSIG08: DISK1793
+### Directory of PC-SIG Library Disk #1793
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1793"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1793"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1793
      Directory of  A:\
@@ -6431,9 +6430,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      540   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1794
+### Directory of PC-SIG Library Disk #1794
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1794"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1794"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1794
      Directory of  A:\
@@ -6463,9 +6462,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VARITALE HP2     2759  12-29-87   9:32a
     VARITALE LST     1305  12-29-87  10:04a
 
-### Directory of PCSIG08: DISK1795
+### Directory of PC-SIG Library Disk #1795
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1795"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1795"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1795
      Directory of  A:\
@@ -6508,9 +6507,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VENDZIP  NDX     1024   7-24-89  10:44a
     VNUMDEX  NDX     1024   7-24-89  10:44a
 
-### Directory of PCSIG08: DISK1796
+### Directory of PC-SIG Library Disk #1796
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1796"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1796"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1796
      Directory of  A:\
@@ -6527,9 +6526,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PROG8    TBC    14901   8-21-89   2:02p
     TITLE    DAT     8274   8-01-89  10:51a
 
-### Directory of PCSIG08: DISK1797
+### Directory of PC-SIG Library Disk #1797
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1797"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1797"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1797
      Directory of  A:\
@@ -6551,9 +6550,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     STARMAP  DAT    95760   2-07-89  12:14p
     STARNUM  DAT      160   2-07-89  12:14p
 
-### Directory of PCSIG08: DISK1798
+### Directory of PC-SIG Library Disk #1798
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1798"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1798"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1798
      Directory of  A:\
@@ -6569,9 +6568,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     INSTALL  EXE    37120   3-02-90  11:53p
     PKUNZIP  EXE    21440   7-20-89   6:01p
 
-### Directory of PCSIG08: DISK1799
+### Directory of PC-SIG Library Disk #1799
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1799"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1799"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1799
      Directory of  A:\
@@ -6582,9 +6581,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80   1:37a
     GO       TXT      540   1-01-80   7:36a
 
-### Directory of PCSIG08: DISK1800
+### Directory of PC-SIG Library Disk #1800
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1800"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1800"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1800
      Directory of  A:\
@@ -6598,9 +6597,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SMTCHANG EXE    49206   2-14-89  10:27p
     SMTMENU  EXE    36110   2-13-89   2:33a
 
-### Directory of PCSIG08: DISK1801
+### Directory of PC-SIG Library Disk #1801
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1801"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1801"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1801
      Directory of  A:\
@@ -6613,9 +6612,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SAILSCOR EXE    70448   3-13-89  12:48p
     SAMPLE   DAT      419   3-05-89   1:51a
 
-### Directory of PCSIG08: DISK1802
+### Directory of PC-SIG Library Disk #1802
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1802"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1802"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1802
      Directory of  A:\
@@ -6630,9 +6629,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80   1:37a
     GO       TXT      540   1-01-80   7:44a
 
-### Directory of PCSIG08: DISK1803
+### Directory of PC-SIG Library Disk #1803
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1803"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1803"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1803
      Directory of  A:\
@@ -6647,9 +6646,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MANUAL   DOC   130757   6-01-89   6:26a
     README   COM     3939   5-15-89   3:13a
 
-### Directory of PCSIG08: DISK1804
+### Directory of PC-SIG Library Disk #1804
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1804"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1804"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1804
      Directory of  A:\
@@ -6660,9 +6659,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80   1:37a
     GO       TXT      540   3-03-90   4:01p
 
-### Directory of PCSIG08: DISK1805
+### Directory of PC-SIG Library Disk #1805
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1805"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1805"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1805
      Directory of  A:\
@@ -6680,9 +6679,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     RUN      BAT      249   5-13-87   7:02a
     VIDPOP   COM    27328   6-18-87   7:58a
 
-### Directory of PCSIG08: DISK1806
+### Directory of PC-SIG Library Disk #1806
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1806"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1806"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1806
      Directory of  A:\
@@ -6714,9 +6713,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SETUP    COM    28160   1-31-89  10:58a
     TRANS    DTA      128   8-04-88   9:01a
 
-### Directory of PCSIG08: DISK1807
+### Directory of PC-SIG Library Disk #1807
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1807"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1807"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1807
      Directory of  A:\
@@ -6730,9 +6729,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PKXARC   COM    12242   4-26-87   5:00p
     UNARC    BAT      407   7-11-89  11:53p
 
-### Directory of PCSIG08: DISK1808
+### Directory of PC-SIG Library Disk #1808
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1808"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1808"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1808
      Directory of  A:\
@@ -6751,9 +6750,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     REGISTER         1263   7-26-89   2:11a
     REGISTER BAK     1263   7-25-89   1:56p
 
-### Directory of PCSIG08: DISK1809
+### Directory of PC-SIG Library Disk #1809
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1809"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1809"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1809
      Directory of  A:\
@@ -6769,9 +6768,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PCFOOD   EXE   216243   1-14-90   2:50a
     RECIPE2  DTA      760   1-13-90   1:11p
 
-### Directory of PCSIG08: DISK1810
+### Directory of PC-SIG Library Disk #1810
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1810"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1810"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1810
      Directory of  A:\
@@ -6794,9 +6793,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     UTILITY  MNU      139   5-28-89   5:00a
     WINCH    MNU      457   5-28-89   5:00a
 
-### Directory of PCSIG08: DISK1811
+### Directory of PC-SIG Library Disk #1811
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1811"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1811"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1811
      Directory of  A:\
@@ -6810,9 +6809,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   3        754   8-13-89   6:39a
     README   BAT       79   8-13-89   6:41a
 
-### Directory of PCSIG08: DISK1812
+### Directory of PC-SIG Library Disk #1812
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1812"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1812"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1812
      Directory of  A:\
@@ -6822,9 +6821,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      694   1-01-80  12:25a
 
-### Directory of PCSIG08: DISK1813
+### Directory of PC-SIG Library Disk #1813
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1813"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1813"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1813
      Directory of  A:\
@@ -6838,9 +6837,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PRODUCTS DOC     1917   9-18-89  11:08a
     REGISTER FRM     1284   8-18-89  10:56a
 
-### Directory of PCSIG08: DISK1814
+### Directory of PC-SIG Library Disk #1814
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1814"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1814"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1814
      Directory of  A:\
@@ -6859,9 +6858,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TANKS    EXE    57216   1-01-80  12:00a
     TANKS    OBJ     9020   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1815
+### Directory of PC-SIG Library Disk #1815
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1815"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1815"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1815
      Directory of  A:\
@@ -6876,9 +6875,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MDATA    EXE    46592   1-16-90   2:31p
     REGISTER DOC     1433   1-16-90   2:34p
 
-### Directory of PCSIG08: DISK1816
+### Directory of PC-SIG Library Disk #1816
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1816"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1816"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1816
      Directory of  A:\
@@ -6889,9 +6888,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SCRIPT1  EXE   291938   7-31-89   3:41a
     SCRIPTDC EXE    54811   7-31-89   3:46a
 
-### Directory of PCSIG08: DISK1817
+### Directory of PC-SIG Library Disk #1817
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1817"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1817"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1817
      Directory of  A:\
@@ -6902,9 +6901,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     QUICK    DOC    10374   7-31-89   4:00a
     SCRIPT2  EXE   288998   7-31-89   6:34a
 
-### Directory of PCSIG08: DISK1818
+### Directory of PC-SIG Library Disk #1818
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1818"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1818"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1818
      Directory of  A:\
@@ -6918,9 +6917,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     CLEANUP  EXE    71507   7-18-89   8:37a
     COPYRITE FIL     1250   8-04-89   2:41p
 
-### Directory of PCSIG08: DISK1819
+### Directory of PC-SIG Library Disk #1819
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1819"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1819"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1819
      Directory of  A:\
@@ -6932,9 +6931,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      540  12-21-89   5:35a
 
-### Directory of PCSIG08: DISK1820
+### Directory of PC-SIG Library Disk #1820
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1820"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1820"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1820
      Directory of  A:\
@@ -6948,9 +6947,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      540  12-21-89   5:16a
 
-### Directory of PCSIG08: DISK1821
+### Directory of PC-SIG Library Disk #1821
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1821"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1821"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1821
      Directory of  A:\
@@ -6983,9 +6982,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SUPREME          1273   6-18-89  11:28a
     USSEN             280   7-14-89   8:04a
 
-### Directory of PCSIG08: DISK1822
+### Directory of PC-SIG Library Disk #1822
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1822"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1822"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1822
      Directory of  A:\
@@ -7014,9 +7013,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     STSENPH          2486   6-27-89  10:48a
     SUPREME          1273   6-18-89  11:28a
 
-### Directory of PCSIG08: DISK1823
+### Directory of PC-SIG Library Disk #1823
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1823"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1823"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1823
      Directory of  A:\
@@ -7031,9 +7030,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ     ME      1080   1-09-89   6:11p
     WOODBOX           996   1-09-89   6:11p
 
-### Directory of PCSIG08: DISK1824
+### Directory of PC-SIG Library Disk #1824
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1824"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1824"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1824
      Directory of  A:\
@@ -7083,9 +7082,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TOSHIBA  COM     1522   9-26-89   7:12a
     TXTFNT   COM     1296   7-03-89  10:13a
 
-### Directory of PCSIG08: DISK1825
+### Directory of PC-SIG Library Disk #1825
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1825"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1825"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1825
      Directory of  A:\
@@ -7114,9 +7113,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     INFOFORM ASC     2772  10-23-89   2:20a
     TURNCARD TXT     1792   9-01-89   3:31p
 
-### Directory of PCSIG08: DISK1826
+### Directory of PC-SIG Library Disk #1826
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1826"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1826"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1826
      Directory of  A:\
@@ -7191,9 +7190,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     Y        TXT     1024   2-08-90  12:50a
     _C_1990  BY      1000   2-08-90  12:34a
 
-### Directory of PCSIG08: DISK1827
+### Directory of PC-SIG Library Disk #1827
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1827"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1827"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1827
      Directory of  A:\
@@ -7206,9 +7205,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GOLF     COM    30848   9-09-89   5:38a
     GOLF     TXT    11954   9-09-89   5:43a
 
-### Directory of PCSIG08: DISK1828
+### Directory of PC-SIG Library Disk #1828
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1828"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1828"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1828
      Directory of  A:\
@@ -7230,9 +7229,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MNUSUP   COM    57586  10-09-87   5:00p
     MNUU     MNU      356  10-09-87   5:00p
 
-### Directory of PCSIG08: DISK1829
+### Directory of PC-SIG Library Disk #1829
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1829"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1829"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1829
      Directory of  A:\
@@ -7249,9 +7248,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MM       HLP     1471   2-01-90   8:30a
     MMREAD   ME      3846   2-01-90   9:59a
 
-### Directory of PCSIG08: DISK1830
+### Directory of PC-SIG Library Disk #1830
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1830"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1830"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1830
      Directory of  A:\
@@ -7259,9 +7258,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       40   8-11-87   7:52p
     NOTE     TXT      289  10-24-88   1:21a
 
-### Directory of PCSIG08: DISK1831
+### Directory of PC-SIG Library Disk #1831
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1831"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1831"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1831
      Directory of  A:\
@@ -7273,9 +7272,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MORCALC  EXE    97661  11-18-89   9:11a
     README           1150  11-18-89   9:16a
 
-### Directory of PCSIG08: DISK1832
+### Directory of PC-SIG Library Disk #1832
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1832"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1832"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1832
      Directory of  A:\
@@ -7294,9 +7293,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   1-01-80  12:00a
     READ     ME      4811   2-28-90  12:05p
 
-### Directory of PCSIG08: DISK1833
+### Directory of PC-SIG Library Disk #1833
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1833"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1833"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1833
      Directory of  A:\
@@ -7310,9 +7309,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SAPPH111 ARC   230598   8-29-89   3:29a
     SAPPH112 ARC    93700   7-31-89   8:39a
 
-### Directory of PCSIG08: DISK1834
+### Directory of PC-SIG Library Disk #1834
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1834"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1834"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1834
      Directory of  A:\
@@ -7339,9 +7338,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   BAT       73  10-02-89   8:13a
     SEEMORE  COM    10738  10-01-89   9:47p
 
-### Directory of PCSIG08: DISK1835
+### Directory of PC-SIG Library Disk #1835
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1835"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1835"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1835
      Directory of  A:\
@@ -7377,9 +7376,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TEST2    QMN      882   6-04-89  10:14a
     USERS    ACT        7  11-21-88   2:56a
 
-### Directory of PCSIG08: DISK1836
+### Directory of PC-SIG Library Disk #1836
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1836"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1836"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1836
      Directory of  A:\
@@ -7396,9 +7395,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WTM      EXE    44416   8-06-89   6:14a
     WTSTART  DAT     2625   8-06-89   6:46a
 
-### Directory of PCSIG08: DISK1837
+### Directory of PC-SIG Library Disk #1837
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1837"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1837"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1837
      Directory of  A:\
@@ -7415,9 +7414,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   1-01-80  12:00a
     USERLIB  EXE     7570   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1838
+### Directory of PC-SIG Library Disk #1838
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1838"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1838"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1838
      Directory of  A:\
@@ -7452,9 +7451,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SALESORD FRM     5376   9-02-88   2:08p
     WEEKPLAN FRM     5248   9-02-88   2:08p
 
-### Directory of PCSIG08: DISK1839
+### Directory of PC-SIG Library Disk #1839
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1839"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1839"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1839
      Directory of  A:\
@@ -7464,9 +7463,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      694   1-01-80  12:00a
     SALBIZ   ARC   216954   7-13-89   8:18a
 
-### Directory of PCSIG08: DISK1840
+### Directory of PC-SIG Library Disk #1840
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1840"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1840"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1840
      Directory of  A:\
@@ -7480,9 +7479,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     XMAS     DOC    15872   3-12-89   4:21a
     XMAS     EXE    42240   3-12-89   3:15a
 
-### Directory of PCSIG08: DISK1841
+### Directory of PC-SIG Library Disk #1841
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1841"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1841"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1841
      Directory of  A:\
@@ -7499,9 +7498,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MODEMS   TXT    20048   3-05-89   3:54a
     READ     ME      6099   3-05-89   4:35a
 
-### Directory of PCSIG08: DISK1842
+### Directory of PC-SIG Library Disk #1842
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1842"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1842"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1842
      Directory of  A:\
@@ -7515,9 +7514,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     REFORMAT DOC     8192   8-05-89   8:20a
     REFORMAT EXE    72597  10-10-88   8:20p
 
-### Directory of PCSIG08: DISK1843
+### Directory of PC-SIG Library Disk #1843
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1843"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1843"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1843
      Directory of  A:\
@@ -7527,9 +7526,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      694   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1844
+### Directory of PC-SIG Library Disk #1844
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1844"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1844"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1844
      Directory of  A:\
@@ -7540,9 +7539,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT     1464   1-16-90   6:09a
     SPTSMGMT ZIP   136619   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1845
+### Directory of PC-SIG Library Disk #1845
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1845"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1845"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1845
      Directory of  A:\
@@ -7554,9 +7553,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT     1464   1-16-90   6:10a
     SCHEDULE ZIP    35414  12-10-92   5:05p
 
-### Directory of PCSIG08: DISK1846
+### Directory of PC-SIG Library Disk #1846
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1846"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1846"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1846
      Directory of  A:\
@@ -7564,9 +7563,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       40   8-11-87   7:52p
     NOTE     TXT      289  10-24-88   1:21a
 
-### Directory of PCSIG08: DISK1847
+### Directory of PC-SIG Library Disk #1847
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1847"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1847"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1847
      Directory of  A:\
@@ -7595,9 +7594,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TESTMOD  EXE     9506   5-01-89   7:06a
     TESTMOD  NAM       14   6-08-89   6:39a
 
-### Directory of PCSIG08: DISK1848
+### Directory of PC-SIG Library Disk #1848
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1848"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1848"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1848
      Directory of  A:\
@@ -7625,9 +7624,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PUN      SLB     7648   5-23-89   6:43a
     S        DAT     1792  11-25-89   1:53a
 
-### Directory of PCSIG08: DISK1849
+### Directory of PC-SIG Library Disk #1849
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1849"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1849"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1849
      Directory of  A:\
@@ -7655,9 +7654,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     S        DAT     1792   1-01-80  12:00a
     VOCAB    EXE    39198   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1850
+### Directory of PC-SIG Library Disk #1850
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1850"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1850"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1850
      Directory of  A:\
@@ -7687,9 +7686,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VOCAB    TST    16197   1-14-89  11:07p
     VOCFINAL EXE     9336   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1851
+### Directory of PC-SIG Library Disk #1851
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1851"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1851"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1851
      Directory of  A:\
@@ -7703,9 +7702,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     INSTALL  BAT       55   1-03-80   5:12p
     README   1ST      480   1-03-80   4:18p
 
-### Directory of PCSIG08: DISK1852
+### Directory of PC-SIG Library Disk #1852
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1852"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1852"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1852
      Directory of  A:\
@@ -7721,9 +7720,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     UTG      HLP    16671   9-01-89   5:00a
     UTG      HSR      896   9-01-89   5:00a
 
-### Directory of PCSIG08: DISK1853
+### Directory of PC-SIG Library Disk #1853
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1853"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1853"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1853
      Directory of  A:\
@@ -7758,9 +7757,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     QHREADME COM     1664   7-18-89   5:21p
     QTCLONE  EXE    16896   7-31-89  10:07p
 
-### Directory of PCSIG08: DISK1854
+### Directory of PC-SIG Library Disk #1854
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1854"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1854"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1854
      Directory of  A:\
@@ -7777,9 +7776,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   BAT       33   8-31-89   6:00p
     README   TXT     1383   8-31-89   6:00p
 
-### Directory of PCSIG08: DISK1855
+### Directory of PC-SIG Library Disk #1855
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1855"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1855"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1855
      Directory of  A:\
@@ -7790,9 +7789,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT     1002   1-01-80  12:00a
     SPCINV   ZIP   127360  11-24-89   4:13p
 
-### Directory of PCSIG08: DISK1856
+### Directory of PC-SIG Library Disk #1856
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1856"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1856"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1856
      Directory of  A:\
@@ -7802,9 +7801,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      694   1-01-80  12:54a
     WYS-AR   ARC   209754   7-16-89   8:10p
 
-### Directory of PCSIG08: DISK1857
+### Directory of PC-SIG Library Disk #1857
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1857"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1857"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1857
      Directory of  A:\
@@ -7822,9 +7821,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     USABOX   EXE    21008   1-01-80  12:00a
     USERLIB  EXE     7570   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1858
+### Directory of PC-SIG Library Disk #1858
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1858"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1858"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1858
      Directory of  A:\
@@ -7834,9 +7833,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      694   1-01-80  12:00a
     PS421    ARC   125527   4-29-89   8:03a
 
-### Directory of PCSIG08: DISK1859
+### Directory of PC-SIG Library Disk #1859
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1859"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1859"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1859
      Directory of  A:\
@@ -7865,9 +7864,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TUTORIAL DOC    13782   6-20-89   2:00a
     USE      DOC    12711   8-11-89   2:00a
 
-### Directory of PCSIG08: DISK1860
+### Directory of PC-SIG Library Disk #1860
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1860"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1860"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1860
      Directory of  A:\
@@ -7921,9 +7920,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     HELP9             297   1-01-80  12:00a
     UNH_DR   EXE     3217   7-10-89  10:49a
 
-### Directory of PCSIG08: DISK1861
+### Directory of PC-SIG Library Disk #1861
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1861"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1861"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1861
      Directory of  A:\
@@ -7938,9 +7937,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      386   1-01-80  12:00a
     README           1037   4-09-89   4:25a
 
-### Directory of PCSIG08: DISK1862
+### Directory of PC-SIG Library Disk #1862
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1862"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1862"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1862
      Directory of  A:\
@@ -7965,9 +7964,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SETS               62   6-16-88   8:06a
     SETUP    EXE    41153   4-11-88  11:29a
 
-### Directory of PCSIG08: DISK1863
+### Directory of PC-SIG Library Disk #1863
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1863"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1863"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1863
      Directory of  A:\
@@ -7991,9 +7990,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SIMEQ4   SIM      128   8-04-88  11:30p
     SIMEQ6   SIM      109   8-04-88  11:30p
 
-### Directory of PCSIG08: DISK1864
+### Directory of PC-SIG Library Disk #1864
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1864"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1864"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1864
      Directory of  A:\
@@ -8024,9 +8023,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   4        764   9-29-88   7:13p
     README   5        860   9-29-88   5:36p
 
-### Directory of PCSIG08: DISK1865
+### Directory of PC-SIG Library Disk #1865
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1865"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1865"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1865
      Directory of  A:\
@@ -8059,9 +8058,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TRND     OBJ    11264  10-26-88  12:09p
     WHEEL    OBJ     9472   9-16-88  10:26a
 
-### Directory of PCSIG08: DISK1866
+### Directory of PC-SIG Library Disk #1866
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1866"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1866"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1866
      Directory of  A:\
@@ -8074,9 +8073,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MANUAL   COM     2048  11-22-88   5:24p
     DISK1866 ZIP   139384   3-28-90   5:38a
 
-### Directory of PCSIG08: DISK1867
+### Directory of PC-SIG Library Disk #1867
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1867"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1867"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1867
      Directory of  A:\
@@ -8097,9 +8096,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     REMIND   BAT      872   2-28-90   4:00p
     REMIND_2 BAT     9062   2-28-90   4:00p
 
-### Directory of PCSIG08: DISK1868
+### Directory of PC-SIG Library Disk #1868
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1868"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1868"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1868
      Directory of  A:\
@@ -8114,9 +8113,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MMSORT3  EXE    16896   8-06-88   2:56a
     MMSORT4  OVR     4096   8-06-88   2:56a
 
-### Directory of PCSIG08: DISK1869
+### Directory of PC-SIG Library Disk #1869
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1869"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1869"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1869
      Directory of  A:\
@@ -8131,9 +8130,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   DOC      649   1-15-90  10:50a
     RES      EXE    22864   1-15-90  10:50a
 
-### Directory of PCSIG08: DISK1870
+### Directory of PC-SIG Library Disk #1870
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1870"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1870"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1870
      Directory of  A:\
@@ -8166,9 +8165,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ     ME2     5980  11-17-88   4:09a
     REPORTS  EXE    61184  12-13-88   6:46a
 
-### Directory of PCSIG08: DISK1871
+### Directory of PC-SIG Library Disk #1871
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1871"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1871"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1871
      Directory of  A:\
@@ -8179,9 +8178,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      540  12-27-89   7:27a
 
-### Directory of PCSIG08: DISK1872
+### Directory of PC-SIG Library Disk #1872
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1872"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1872"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1872
      Directory of  A:\
@@ -8226,9 +8225,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VIODEMO  C      34634   2-11-90   5:40a
     VIODEMO  PRJ       60   2-11-90   5:40a
 
-### Directory of PCSIG08: DISK1873
+### Directory of PC-SIG Library Disk #1873
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1873"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1873"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1873
      Directory of  A:\
@@ -8240,9 +8239,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      617   3-21-90  11:45a
     README   COM     6217   2-12-90   6:00a
 
-### Directory of PCSIG08: DISK1874
+### Directory of PC-SIG Library Disk #1874
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1874"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1874"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1874
      Directory of  A:\
@@ -8255,9 +8254,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540  12-27-89   7:22a
     RUNCOB   EXE    62318   6-11-87   2:17p
 
-### Directory of PCSIG08: DISK1875
+### Directory of PC-SIG Library Disk #1875
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1875"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1875"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1875
      Directory of  A:\
@@ -8275,9 +8274,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     RFP_TEXT        58709   5-07-89   8:14a
     RFP_TRAN         1161   5-03-89   2:27a
 
-### Directory of PCSIG08: DISK1876
+### Directory of PC-SIG Library Disk #1876
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1876"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1876"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1876
      Directory of  A:\
@@ -8320,9 +8319,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TUTOR    BAT      241   6-03-89   5:00p
     UTILITY  BAT     1740   6-04-89   3:11p
 
-### Directory of PCSIG08: DISK1877
+### Directory of PC-SIG Library Disk #1877
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1877"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1877"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1877
      Directory of  A:\
@@ -8333,9 +8332,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      694  12-27-89   7:58a
 
-### Directory of PCSIG08: DISK1878
+### Directory of PC-SIG Library Disk #1878
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1878"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1878"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1878
      Directory of  A:\
@@ -8349,9 +8348,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     INSTALL  EXE    58448   9-16-89   2:41a
     SHELLHLP EXE    98950   9-16-89   2:41a
 
-### Directory of PCSIG08: DISK1879
+### Directory of PC-SIG Library Disk #1879
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1879"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1879"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1879
      Directory of  A:\
@@ -8366,9 +8365,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TREE     EXE    40614   9-16-89   2:41a
     TREEBLD  EXE    34916   9-16-89   2:41a
 
-### Directory of PCSIG08: DISK1880
+### Directory of PC-SIG Library Disk #1880
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1880"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1880"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1880
      Directory of  A:\
@@ -8378,9 +8377,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      694  12-27-89   7:40a
     TRACKER  ARC   110344   5-16-89   9:16a
 
-### Directory of PCSIG08: DISK1881
+### Directory of PC-SIG Library Disk #1881
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1881"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1881"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1881
      Directory of  A:\
@@ -8401,9 +8400,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PROGRAM  HLP    17412   9-06-87   7:37p
     REMHELP  COM     4992  10-03-87   8:22p
 
-### Directory of PCSIG08: DISK1882
+### Directory of PC-SIG Library Disk #1882
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1882"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1882"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1882
      Directory of  A:\
@@ -8427,9 +8426,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     ORDRFORM DOC     1408  10-02-88   7:49a
     README   DOC     7936   3-24-89   4:10a
 
-### Directory of PCSIG08: DISK1883
+### Directory of PC-SIG Library Disk #1883
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1883"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1883"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1883
      Directory of  A:\
@@ -8447,9 +8446,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SWSP15   COM    23796   1-01-10  11:35a
     SWTN15   COM    20851   1-01-10  11:35a
 
-### Directory of PCSIG08: DISK1884
+### Directory of PC-SIG Library Disk #1884
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1884"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1884"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1884
      Directory of  A:\
@@ -8462,9 +8461,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     RESISPOP EXE    37936   5-29-89   1:39a
     RESISTOR EXE    35184   6-03-89  12:06a
 
-### Directory of PCSIG08: DISK1885
+### Directory of PC-SIG Library Disk #1885
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1885"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1885"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1885
      Directory of  A:\
@@ -8484,9 +8483,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README           4107   5-10-89   5:34a
     SYMBOL   EXE     4090   5-10-89  12:42p
 
-### Directory of PCSIG08: DISK1886
+### Directory of PC-SIG Library Disk #1886
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1886"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1886"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1886
      Directory of  A:\
@@ -8501,9 +8500,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SAMFB    HLP    43008   5-30-89   4:46p
     SAMFB03  ZIP    91204   5-30-89   5:11p
 
-### Directory of PCSIG08: DISK1887
+### Directory of PC-SIG Library Disk #1887
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1887"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1887"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1887
      Directory of  A:\
@@ -8517,9 +8516,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     KB0ZP-M  EXE   137120   5-03-89  12:17a
     KB0ZP    DOC    34560   5-02-89   1:15a
 
-### Directory of PCSIG08: DISK1888
+### Directory of PC-SIG Library Disk #1888
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1888"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1888"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1888
      Directory of  A:\
@@ -8545,9 +8544,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TUTORIAL BAT        6   9-22-88   1:27a
     TUTORIAL IT     24212   4-07-89   4:13a
 
-### Directory of PCSIG08: DISK1889
+### Directory of PC-SIG Library Disk #1889
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1889"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1889"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1889
      Directory of  A:\
@@ -8565,9 +8564,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SAMPLE   DAT      603   5-03-89   8:04a
     SAMSON   DAT      533   6-08-89   1:45a
 
-### Directory of PCSIG08: DISK1890
+### Directory of PC-SIG Library Disk #1890
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1890"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1890"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1890
      Directory of  A:\
@@ -8596,9 +8595,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TEST_SET DBF      643   2-10-90   4:00a
     TUTOR    TXT    14025   2-10-90   4:00a
 
-### Directory of PCSIG08: DISK1891
+### Directory of PC-SIG Library Disk #1891
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1891"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1891"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1891
      Directory of  A:\
@@ -8616,9 +8615,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     UNCLASS  NTX     2048   2-10-90   4:00a
     WARNING  TXT     1416   2-10-90   4:00a
 
-### Directory of PCSIG08: DISK1892
+### Directory of PC-SIG Library Disk #1892
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1892"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1892"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1892
      Directory of  A:\
@@ -8661,9 +8660,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     RACE     SIG     3712   5-05-89   8:20p
     SHOWDOC  BAT       40   5-05-89   8:33p
 
-### Directory of PCSIG08: DISK1893
+### Directory of PC-SIG Library Disk #1893
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1893"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1893"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1893
      Directory of  A:\
@@ -8673,9 +8672,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      540  12-27-89   8:55a
 
-### Directory of PCSIG08: DISK1894
+### Directory of PC-SIG Library Disk #1894
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1894"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1894"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1894
      Directory of  A:\
@@ -8686,9 +8685,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540  12-27-89   8:53a
     SAMPLE   GPC       99   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1895
+### Directory of PC-SIG Library Disk #1895
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1895"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1895"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1895
      Directory of  A:\
@@ -8702,9 +8701,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ_M2J ME      1382   2-08-90   2:22a
     UZIP_M2J BAT      888   2-08-90   2:20a
 
-### Directory of PCSIG08: DISK1896
+### Directory of PC-SIG Library Disk #1896
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1896"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1896"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1896
      Directory of  A:\
@@ -8717,9 +8716,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     QUICKS   TXT     1782  10-11-89   8:17p
     README   TXT      374  10-19-89   5:57p
 
-### Directory of PCSIG08: DISK1897
+### Directory of PC-SIG Library Disk #1897
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1897"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1897"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1897
      Directory of  A:\
@@ -8740,9 +8739,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WWDOC    BAK    15232   9-10-89   4:28a
     WWEXE    BAK    44572   9-10-89   4:32a
 
-### Directory of PCSIG08: DISK1898
+### Directory of PC-SIG Library Disk #1898
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1898"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1898"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1898
      Directory of  A:\
@@ -8752,9 +8751,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540  12-27-89   8:42a
     ROOM     EXE    43980  10-23-89   6:35a
 
-### Directory of PCSIG08: DISK1899
+### Directory of PC-SIG Library Disk #1899
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1899"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1899"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1899
      Directory of  A:\
@@ -8765,9 +8764,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      694  12-27-89  10:11a
     README            169  10-27-89   4:51a
 
-### Directory of PCSIG08: DISK1900
+### Directory of PC-SIG Library Disk #1900
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1900"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1900"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1900
      Directory of  A:\
@@ -8783,9 +8782,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MKDAT    EXE    15970   9-22-89   4:41p
     SAMPLE   DAT      380   7-03-87   6:02a
 
-### Directory of PCSIG08: DISK1901
+### Directory of PC-SIG Library Disk #1901
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1901"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1901"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1901
      Directory of  A:\
@@ -8797,9 +8796,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README           3065   1-29-90   1:57p
     README   SIG      540   3-20-90   3:13a
 
-### Directory of PCSIG08: DISK1902
+### Directory of PC-SIG Library Disk #1902
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1902"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1902"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1902
      Directory of  A:\
@@ -8814,9 +8813,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     HACKROUN BAT     4699   1-01-80   4:00p
     READ     ME      2291   1-01-80   4:00p
 
-### Directory of PCSIG08: DISK1903
+### Directory of PC-SIG Library Disk #1903
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1903"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1903"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1903
      Directory of  A:\
@@ -8835,9 +8834,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WEATHER  EXE    56678   8-01-89   5:00a
     WEATHER  TXT    59008   8-01-89   5:00a
 
-### Directory of PCSIG08: DISK1904
+### Directory of PC-SIG Library Disk #1904
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1904"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1904"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1904
      Directory of  A:\
@@ -8863,9 +8862,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     YCOPY    DOC     5689   6-03-89   6:00a
     YCOPY    EXE    16534   6-03-89   6:00a
 
-### Directory of PCSIG08: DISK1905
+### Directory of PC-SIG Library Disk #1905
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1905"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1905"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1905
      Directory of  A:\
@@ -8878,9 +8877,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PFL      PAR       95   5-12-89  11:55a
     STATS    PFL    53043   5-12-89  11:57a
 
-### Directory of PCSIG08: DISK1906
+### Directory of PC-SIG Library Disk #1906
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1906"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1906"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1906
      Directory of  A:\
@@ -8898,9 +8897,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WHEEL6   SYS    19060   1-29-90   5:44p
     WHEEL7   SYS    19060   7-25-89   9:20p
 
-### Directory of PCSIG08: DISK1907
+### Directory of PC-SIG Library Disk #1907
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1907"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1907"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1907
      Directory of  A:\
@@ -8923,9 +8922,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ     ME      7730   1-20-90   1:45a
     ROLAND   PRD      342   1-14-90   2:48p
 
-### Directory of PCSIG08: DISK1908
+### Directory of PC-SIG Library Disk #1908
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1908"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1908"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1908
      Directory of  A:\
@@ -8946,9 +8945,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SCORE    DAT     2600  11-14-89   4:09a
     USR      DAT     2600  11-14-89   4:09a
 
-### Directory of PCSIG08: DISK1909
+### Directory of PC-SIG Library Disk #1909
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1909"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1909"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1909
      Directory of  A:\
@@ -8968,9 +8967,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   BAT       16   9-17-89   3:37p
     START    BAT       32   3-18-89   6:36a
 
-### Directory of PCSIG08: DISK1910
+### Directory of PC-SIG Library Disk #1910
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1910"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1910"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1910
      Directory of  A:\
@@ -8986,9 +8985,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PCI      NDX      151  11-06-89  12:59p
     READ     ME      2234  11-08-89   7:21a
 
-### Directory of PCSIG08: DISK1911
+### Directory of PC-SIG Library Disk #1911
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1911"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1911"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1911
      Directory of  A:\
@@ -9004,9 +9003,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MAIL     CFG     3690  10-03-89   1:24p
     README           1943   9-24-89   8:37a
 
-### Directory of PCSIG08: DISK1912
+### Directory of PC-SIG Library Disk #1912
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1912"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1912"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1912
      Directory of  A:\
@@ -9027,9 +9026,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TV2      PIC    16391  11-18-89  11:06a
     VOLAPUK  COM    23305  11-18-89  11:06a
 
-### Directory of PCSIG08: DISK1913
+### Directory of PC-SIG Library Disk #1913
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1913"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1913"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1913
      Directory of  A:\
@@ -9051,9 +9050,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OSREPLY  COM       14  11-03-89   9:16a
     OSSTART  BAT      680  11-03-89   9:16a
 
-### Directory of PCSIG08: DISK1914
+### Directory of PC-SIG Library Disk #1914
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1914"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1914"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1914
      Directory of  A:\
@@ -9071,9 +9070,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VDOS     SCR     4000   9-15-89  12:57p
     VDOS     TXT     2317  10-09-89   5:29p
 
-### Directory of PCSIG08: DISK1915
+### Directory of PC-SIG Library Disk #1915
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1915"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1915"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1915
      Directory of  A:\
@@ -9088,9 +9087,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     INSTALL  BAT    10922   5-18-89   1:57p
     PRESRLSE TXT     2912   5-18-89  12:51p
 
-### Directory of PCSIG08: DISK1916
+### Directory of PC-SIG Library Disk #1916
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1916"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1916"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1916
      Directory of  A:\
@@ -9104,9 +9103,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PRODUCTS DOC     2422  11-09-89   8:18a
     REGISTER FRM     1285  11-09-89   8:00a
 
-### Directory of PCSIG08: DISK1917
+### Directory of PC-SIG Library Disk #1917
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1917"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1917"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1917
      Directory of  A:\
@@ -9116,9 +9115,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   1-01-80  12:00a
     ZRECALL  EXE   154450  10-24-89   5:00a
 
-### Directory of PCSIG08: DISK1918
+### Directory of PC-SIG Library Disk #1918
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1918"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1918"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1918
      Directory of  A:\
@@ -9135,9 +9134,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   DOC     3754  10-28-89   6:47a
     SUBMIT   TXT     3943  10-28-89   6:47a
 
-### Directory of PCSIG08: DISK1919
+### Directory of PC-SIG Library Disk #1919
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1919"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1919"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1919
      Directory of  A:\
@@ -9148,9 +9147,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   1-01-80  12:00a
     READ     ME      2960  11-22-89   1:09a
 
-### Directory of PCSIG08: DISK1920
+### Directory of PC-SIG Library Disk #1920
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1920"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1920"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1920
      Directory of  A:\
@@ -9167,9 +9166,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MA       LBL     1034   2-16-89  12:00a
     ROTARY   LBL     1034   2-16-89  12:00a
 
-### Directory of PCSIG08: DISK1921
+### Directory of PC-SIG Library Disk #1921
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1921"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1921"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1921
      Directory of  A:\
@@ -9193,9 +9192,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     ZIP-CODE GA     16951   2-16-89  12:00a
     ZIP-CODE HI      2894   2-16-89  12:00a
 
-### Directory of PCSIG08: DISK1922
+### Directory of PC-SIG Library Disk #1922
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1922"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1922"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1922
      Directory of  A:\
@@ -9225,9 +9224,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     ZIP-CODE NV      3582   2-16-89  12:00a
     ZIP-CODE OK     15025   2-16-89  12:00a
 
-### Directory of PCSIG08: DISK1923
+### Directory of PC-SIG Library Disk #1923
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1923"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1923"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1923
      Directory of  A:\
@@ -9252,9 +9251,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     ZIP-CODE WV     21482   2-16-89  12:00a
     ZIP-CODE WY      3778   2-16-89  12:00a
 
-### Directory of PCSIG08: DISK1924
+### Directory of PC-SIG Library Disk #1924
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1924"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1924"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1924
      Directory of  A:\
@@ -9268,9 +9267,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MCS_EDIT EXE   263846   2-25-90   1:13a
     README           2186   2-24-90   5:06a
 
-### Directory of PCSIG08: DISK1925
+### Directory of PC-SIG Library Disk #1925
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1925"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1925"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1925
      Directory of  A:\
@@ -9294,9 +9293,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     STARTWW2 EXE    24625  10-28-89   7:43a
     WWIIRUN2 EXE    32257  10-29-89   1:42a
 
-### Directory of PCSIG08: DISK1926
+### Directory of PC-SIG Library Disk #1926
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1926"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1926"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1926
      Directory of  A:\
@@ -9315,9 +9314,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GRF      BAT      384  11-23-88  12:52a
     README   DOC     2432   1-12-89  12:48a
 
-### Directory of PCSIG08: DISK1927
+### Directory of PC-SIG Library Disk #1927
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1927"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1927"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1927
      Directory of  A:\
@@ -9341,9 +9340,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     USERMSG  DIA       54   2-28-89   5:20p
     USERMSG  IX      2368   2-28-89   5:20p
 
-### Directory of PCSIG08: DISK1928
+### Directory of PC-SIG Library Disk #1928
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1928"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1928"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1928
      Directory of  A:\
@@ -9368,9 +9367,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   2ND     2048   3-19-89   8:21a
     SMP      EXE     9815   3-10-89  10:26a
 
-### Directory of PCSIG08: DISK1929
+### Directory of PC-SIG Library Disk #1929
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1929"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1929"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1929
      Directory of  A:\
@@ -9389,9 +9388,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GW       EXE    27968   3-19-89   3:31a
     READ     ME      2292   3-19-89   3:52a
 
-### Directory of PCSIG08: DISK1930
+### Directory of PC-SIG Library Disk #1930
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1930"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1930"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1930
      Directory of  A:\
@@ -9433,9 +9432,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VPP      EXE    50852  10-22-88   1:36a
     VPP      FOR     2145  10-22-88   1:35a
 
-### Directory of PCSIG08: DISK1931
+### Directory of PC-SIG Library Disk #1931
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1931"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1931"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1931
      Directory of  A:\
@@ -9464,9 +9463,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     RPCALC   BIN     4000   9-06-86   9:01a
     TWOWAY   DAT      128   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1932
+### Directory of PC-SIG Library Disk #1932
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1932"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1932"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1932
      Directory of  A:\
@@ -9505,9 +9504,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TP-50C          43011   5-08-89   7:59p
     TP-50D          37883   5-08-89   8:00p
 
-### Directory of PCSIG08: DISK1933
+### Directory of PC-SIG Library Disk #1933
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1933"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1933"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1933
      Directory of  A:\
@@ -9517,9 +9516,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   1-01-80  12:00a
     OVL312   ARC   127888   5-09-89   5:43p
 
-### Directory of PCSIG08: DISK1934
+### Directory of PC-SIG Library Disk #1934
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1934"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1934"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1934
      Directory of  A:\
@@ -9529,9 +9528,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      540   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1935
+### Directory of PC-SIG Library Disk #1935
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1935"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1935"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1935
      Directory of  A:\
@@ -9545,9 +9544,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     POPTXT22 ARC    72822   8-21-89   7:45a
     READ     ME      1888   8-21-89   7:44a
 
-### Directory of PCSIG08: DISK1936
+### Directory of PC-SIG Library Disk #1936
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1936"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1936"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1936
      Directory of  A:\
@@ -9559,9 +9558,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ     ME      1753   8-17-89   4:06p
     SAMPLE   EXE    48862   8-17-89   4:15p
 
-### Directory of PCSIG08: DISK1937
+### Directory of PC-SIG Library Disk #1937
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1937"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1937"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1937
      Directory of  A:\
@@ -9576,9 +9575,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     XTAB     EXE   265321  12-06-89   1:10p
     XTAB     PRX    15656   5-31-89  10:51a
 
-### Directory of PCSIG08: DISK1938
+### Directory of PC-SIG Library Disk #1938
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1938"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1938"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1938
      Directory of  A:\
@@ -9610,9 +9609,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SQUASHER EXE    41200   6-18-89  12:31p
     SQUASHER INI      717   5-31-89   8:57a
 
-### Directory of PCSIG08: DISK1939
+### Directory of PC-SIG Library Disk #1939
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1939"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1939"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1939
      Directory of  A:\
@@ -9623,9 +9622,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      694   1-01-80  12:00a
     SUBMIT   TXT     1624   8-01-89   4:50p
 
-### Directory of PCSIG08: DISK1940
+### Directory of PC-SIG Library Disk #1940
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1940"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1940"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1940
      Directory of  A:\
@@ -9646,9 +9645,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     UNITS1   BIN     2106   2-05-89   6:15a
     USERLIB  EXE   117972  10-28-89   7:26a
 
-### Directory of PCSIG08: DISK1941
+### Directory of PC-SIG Library Disk #1941
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1941"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1941"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1941
      Directory of  A:\
@@ -9663,9 +9662,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README           5765   5-19-89   2:52p
     TREES    ARC   225601   6-03-89   1:20a
 
-### Directory of PCSIG08: DISK1942
+### Directory of PC-SIG Library Disk #1942
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1942"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1942"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1942
      Directory of  A:\
@@ -9675,9 +9674,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      617   1-01-80  12:00a
     TREEPCX  ARC   347494   6-01-89   2:33p
 
-### Directory of PCSIG08: DISK1943
+### Directory of PC-SIG Library Disk #1943
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1943"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1943"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1943
      Directory of  A:\
@@ -9695,9 +9694,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TEST     DAT        3   5-19-89   2:12p
     TMANUAL  DOC    25915   5-24-89  10:30a
 
-### Directory of PCSIG08: DISK1944
+### Directory of PC-SIG Library Disk #1944
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1944"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1944"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1944
      Directory of  A:\
@@ -9718,9 +9717,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TIMER    COM    27264  11-22-89   7:23a
     TIMER    DOC    11940  12-04-89   9:52a
 
-### Directory of PCSIG08: DISK1945
+### Directory of PC-SIG Library Disk #1945
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1945"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1945"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1945
      Directory of  A:\
@@ -9732,9 +9731,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MANUAL   DOC    66475  11-18-89   8:22a
     README            624  11-18-89   7:46a
 
-### Directory of PCSIG08: DISK1946
+### Directory of PC-SIG Library Disk #1946
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1946"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1946"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1946
      Directory of  A:\
@@ -9753,9 +9752,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MM2DAT           1297  10-05-89  12:00a
     README           5984  10-05-89  12:00a
 
-### Directory of PCSIG08: DISK1947
+### Directory of PC-SIG Library Disk #1947
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1947"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1947"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1947
      Directory of  A:\
@@ -9773,9 +9772,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   1-01-80  12:00a
     READ     ME       251   8-16-89   1:27p
 
-### Directory of PCSIG08: DISK1948
+### Directory of PC-SIG Library Disk #1948
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1948"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1948"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1948
      Directory of  A:\
@@ -9790,9 +9789,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     UNPACK   BAT       22  11-26-89   1:59a
     USERGRP  COM     3506  11-26-89   7:47a
 
-### Directory of PCSIG08: DISK1949
+### Directory of PC-SIG Library Disk #1949
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1949"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1949"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1949
      Directory of  A:\
@@ -9816,9 +9815,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TRUST6   TXT     3635  10-29-89   3:33p
     WHYTRUST TXT    20891  11-03-89   8:12p
 
-### Directory of PCSIG08: DISK1950
+### Directory of PC-SIG Library Disk #1950
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1950"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1950"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1950
      Directory of  A:\
@@ -9830,9 +9829,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README           1726  11-06-89   2:23a
     UNZIPDP  EXE   240476  11-06-89   4:14a
 
-### Directory of PCSIG08: DISK1951
+### Directory of PC-SIG Library Disk #1951
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1951"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1951"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1951
      Directory of  A:\
@@ -9845,9 +9844,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   1-01-80  12:00a
     READ     ME      1271  11-02-89  12:50a
 
-### Directory of PCSIG08: DISK1952
+### Directory of PC-SIG Library Disk #1952
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1952"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1952"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1952
      Directory of  A:\
@@ -9864,9 +9863,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TEMESCAL MAN    29062   4-21-89   2:21a
     TEMESCAL REL     3272   4-21-89   2:27a
 
-### Directory of PCSIG08: DISK1953
+### Directory of PC-SIG Library Disk #1953
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1953"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1953"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1953
      Directory of  A:\
@@ -9881,9 +9880,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     NOTICE   EXE    17092  10-20-89  12:38p
     START    BAT      128   8-18-89  11:58a
 
-### Directory of PCSIG08: DISK1954
+### Directory of PC-SIG Library Disk #1954
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1954"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1954"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1954
      Directory of  A:\
@@ -9898,9 +9897,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README           4845  10-20-89   1:53p
     TED      COM    64853   2-17-87   2:10p
 
-### Directory of PCSIG08: DISK1955
+### Directory of PC-SIG Library Disk #1955
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1955"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1955"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1955
      Directory of  A:\
@@ -9920,9 +9919,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PCBIDP   DOC    26497  11-01-89   3:15a
     PCBIDP   LBR    25408  11-01-89   1:56a
 
-### Directory of PCSIG08: DISK1956
+### Directory of PC-SIG Library Disk #1956
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1956"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1956"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1956
      Directory of  A:\
@@ -9941,9 +9940,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     LOWBALL  DOC    38121  11-06-89   3:33a
     LOWBALL  EXE    91856  11-06-89   3:33a
 
-### Directory of PCSIG08: DISK1957
+### Directory of PC-SIG Library Disk #1957
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1957"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1957"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1957
      Directory of  A:\
@@ -9959,9 +9958,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VMS40    240     4679   9-10-89  10:10a
     VMS40    DOC     5332  10-30-89   1:57a
 
-### Directory of PCSIG08: DISK1958
+### Directory of PC-SIG Library Disk #1958
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1958"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1958"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1958
      Directory of  A:\
@@ -9973,9 +9972,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   1-17-90   4:40a
     README   LST     4001  11-27-89   6:21a
 
-### Directory of PCSIG08: DISK1959
+### Directory of PC-SIG Library Disk #1959
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1959"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1959"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1959
      Directory of  A:\
@@ -9990,9 +9989,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     QB4CREF  DOC     9761   7-23-89   8:26a
     QB4CREF  EXE    52917   5-27-89   2:03p
 
-### Directory of PCSIG08: DISK1960
+### Directory of PC-SIG Library Disk #1960
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1960"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1960"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1960
      Directory of  A:\
@@ -10011,9 +10010,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SPRLSTA  DAT        5   3-09-89  12:24p
     SPRLTRAN DAT     1536   2-26-89   8:41a
 
-### Directory of PCSIG08: DISK1961
+### Directory of PC-SIG Library Disk #1961
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1961"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1961"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1961
      Directory of  A:\
@@ -10034,9 +10033,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SPINVPUR DAT     2048   2-07-89  11:20a
     SPINVSAL DAT     2048   2-07-89  11:20a
 
-### Directory of PCSIG08: DISK1962
+### Directory of PC-SIG Library Disk #1962
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1962"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1962"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1962
      Directory of  A:\
@@ -10055,9 +10054,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      540   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1963
+### Directory of PC-SIG Library Disk #1963
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1963"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1963"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1963
      Directory of  A:\
@@ -10072,9 +10071,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TS       DOC    10456   9-30-89   5:00p
     TS       EXE    61056   9-30-89   5:00p
 
-### Directory of PCSIG08: DISK1964
+### Directory of PC-SIG Library Disk #1964
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1964"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1964"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1964
      Directory of  A:\
@@ -10087,9 +10086,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   1-01-80  12:00a
     README   CGM     1280   9-16-89   3:42a
 
-### Directory of PCSIG08: DISK1965
+### Directory of PC-SIG Library Disk #1965
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1965"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1965"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1965
      Directory of  A:\
@@ -10106,9 +10105,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MASTER   SCR      246   9-03-89   5:00p
     MASTER   WRD     6021   9-03-89   5:00p
 
-### Directory of PCSIG08: DISK1966
+### Directory of PC-SIG Library Disk #1966
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1966"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1966"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1966
      Directory of  A:\
@@ -10127,9 +10126,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SAMPLE   ATO     1590  11-01-89   4:00a
     SAMPLE89 ACC     9110  11-01-89   4:00a
 
-### Directory of PCSIG08: DISK1967
+### Directory of PC-SIG Library Disk #1967
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1967"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1967"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1967
      Directory of  A:\
@@ -10142,9 +10141,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     ZGRAF    DOC    18898   1-15-90  12:33a
     ZGRAF    EXE   105878   1-16-90   1:43a
 
-### Directory of PCSIG08: DISK1968
+### Directory of PC-SIG Library Disk #1968
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1968"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1968"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1968
      Directory of  A:\
@@ -10158,9 +10157,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     CROSSREF DOC     8320   8-03-89   8:10p
     CROSSREF EXE    96546   7-11-89   2:33p
 
-### Directory of PCSIG08: DISK1969
+### Directory of PC-SIG Library Disk #1969
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1969"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1969"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1969
      Directory of  A:\
@@ -10175,9 +10174,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PASMENU  PRO     2121   7-27-89   3:12a
     USAGE    EXE    26922   7-27-89   3:12a
 
-### Directory of PCSIG08: DISK1970
+### Directory of PC-SIG Library Disk #1970
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1970"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1970"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1970
      Directory of  A:\
@@ -10191,9 +10190,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WF       MAC      762   8-14-89   7:55a
     WF       OVR    90508   2-19-90  11:42p
 
-### Directory of PCSIG08: DISK1971
+### Directory of PC-SIG Library Disk #1971
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1971"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1971"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1971
      Directory of  A:\
@@ -10251,9 +10250,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WFINST   EXE    22528  10-27-89   9:13p
     WORDLIST EXE     5504   4-18-89  12:58p
 
-### Directory of PCSIG08: DISK1972
+### Directory of PC-SIG Library Disk #1972
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1972"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1972"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1972
      Directory of  A:\
@@ -10267,18 +10266,18 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SCAN     DOC     1549   6-30-89   6:00p
     VGA      MGL   226670   6-30-89   6:00p
 
-### Directory of PCSIG08: DISK1973
+### Directory of PC-SIG Library Disk #1973
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1973"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1973"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1973
      Directory of  A:\
     
     EGA      MGL   360534   6-30-89   6:00p
 
-### Directory of PCSIG08: DISK1974
+### Directory of PC-SIG Library Disk #1974
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1974"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1974"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1974
      Directory of  A:\
@@ -10353,9 +10352,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README            797   8-20-89   7:21a
     REGISTER TXT     1842   8-22-89   9:23p
 
-### Directory of PCSIG08: DISK1975
+### Directory of PC-SIG Library Disk #1975
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1975"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1975"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1975
      Directory of  A:\
@@ -10391,9 +10390,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SMENU    SCR     3968   8-31-89  12:59p
     SPEEDSCR COM     5333  10-01-86   5:00a
 
-### Directory of PCSIG08: DISK1976
+### Directory of PC-SIG Library Disk #1976
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1976"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1976"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1976
      Directory of  A:\
@@ -10410,9 +10409,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PROG8    TBC    14901   8-21-89   2:02p
     TITLE    DAT     8274   8-01-89  10:51a
 
-### Directory of PCSIG08: DISK1977
+### Directory of PC-SIG Library Disk #1977
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1977"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1977"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1977
      Directory of  A:\
@@ -10485,9 +10484,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WIRE2    K1       646   1-01-80  12:00a
     WIRE2    K2      1606   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1978
+### Directory of PC-SIG Library Disk #1978
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1978"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1978"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1978
      Directory of  A:\
@@ -10541,9 +10540,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WIRE1    DAT      940   1-01-80  12:00a
     WIRE2    DAT     1152   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1979
+### Directory of PC-SIG Library Disk #1979
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1979"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1979"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1979
      Directory of  A:\
@@ -10567,9 +10566,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     THREW    CHN    25239   1-01-80  12:00a
     WIRE     CHN    23417   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1980
+### Directory of PC-SIG Library Disk #1980
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1980"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1980"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1980
      Directory of  A:\
@@ -10594,9 +10593,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     THREXFIX CHN     9394   1-01-80  12:00a
     WIREFIX  CHN     9381   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1981
+### Directory of PC-SIG Library Disk #1981
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1981"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1981"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1981
      Directory of  A:\
@@ -10615,9 +10614,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     THREXFMR CHN    23128   1-01-80  12:00a
     YOURSYS  COM    26516   9-21-87   6:25p
 
-### Directory of PCSIG08: DISK1982
+### Directory of PC-SIG Library Disk #1982
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1982"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1982"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1982
      Directory of  A:\
@@ -10633,9 +10632,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      386   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1983
+### Directory of PC-SIG Library Disk #1983
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1983"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1983"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1983
      Directory of  A:\
@@ -10650,9 +10649,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MENUVER4 TPU    29888   7-06-89   4:15a
     MENUVER5 TPU    35600   7-06-89   4:18a
 
-### Directory of PCSIG08: DISK1984
+### Directory of PC-SIG Library Disk #1984
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1984"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1984"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1984
      Directory of  A:\
@@ -10671,9 +10670,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     JOBTRANS K01     1024  10-19-89   5:16p
     JOBTRANS K02     1024  10-19-89   5:16p
 
-### Directory of PCSIG08: DISK1985
+### Directory of PC-SIG Library Disk #1985
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1985"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1985"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1985
      Directory of  A:\
@@ -10683,9 +10682,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      694   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1986
+### Directory of PC-SIG Library Disk #1986
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1986"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1986"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1986
      Directory of  A:\
@@ -10696,9 +10695,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SPIRO    DOC     3558   4-16-89   2:47a
     SPIRO    EXE    55008   4-16-89   2:35a
 
-### Directory of PCSIG08: DISK1987
+### Directory of PC-SIG Library Disk #1987
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1987"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1987"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1987
      Directory of  A:\
@@ -10708,9 +10707,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      694   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1988
+### Directory of PC-SIG Library Disk #1988
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1988"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1988"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1988
      Directory of  A:\
@@ -10758,9 +10757,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     RRRAT1   PRN      370   4-27-88   8:47a
     SSSS     WK1     1433   6-19-88   5:48a
 
-### Directory of PCSIG08: DISK1989
+### Directory of PC-SIG Library Disk #1989
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1989"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1989"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1989
      Directory of  A:\
@@ -10773,9 +10772,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MENURNGL WK1    16134   3-17-89   9:31a
     MENURNGQ WKQ    16791   3-17-89   9:34a
 
-### Directory of PCSIG08: DISK1990
+### Directory of PC-SIG Library Disk #1990
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1990"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1990"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1990
      Directory of  A:\
@@ -10787,9 +10786,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      540   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1991
+### Directory of PC-SIG Library Disk #1991
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1991"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1991"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1991
      Directory of  A:\
@@ -10804,9 +10803,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     INSTALL  BAT     1024   6-01-89   1:10a
     README            273   6-01-89   1:10a
 
-### Directory of PCSIG08: DISK1992
+### Directory of PC-SIG Library Disk #1992
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1992"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1992"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1992
      Directory of  A:\
@@ -10818,9 +10817,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     INSTALL  BAT     1024   6-01-89   1:10a
     NEWLIFE  COM    17444   1-02-90   9:27p
 
-### Directory of PCSIG08: DISK1993
+### Directory of PC-SIG Library Disk #1993
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1993"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1993"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1993
      Directory of  A:\
@@ -10835,9 +10834,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   BAT      847   2-12-90   8:11a
     README2  BAT     1869   2-12-90   8:05a
 
-### Directory of PCSIG08: DISK1994
+### Directory of PC-SIG Library Disk #1994
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1994"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1994"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1994
      Directory of  A:\
@@ -10872,9 +10871,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     XDIR     EXE    11994   3-24-89  10:54a
     XFIND    EXE    10526   3-24-89  10:28a
 
-### Directory of PCSIG08: DISK1995
+### Directory of PC-SIG Library Disk #1995
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1995"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1995"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1995
      Directory of  A:\
@@ -10885,9 +10884,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      540   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1996
+### Directory of PC-SIG Library Disk #1996
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1996"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1996"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1996
      Directory of  A:\
@@ -10913,9 +10912,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      540   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK1997
+### Directory of PC-SIG Library Disk #1997
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1997"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1997"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1997
      Directory of  A:\
@@ -10935,9 +10934,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PMLIST   COM      958  10-12-89   5:53a
     README           3502  11-02-89   9:40a
 
-### Directory of PCSIG08: DISK1998
+### Directory of PC-SIG Library Disk #1998
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1998"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1998"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1998
      Directory of  A:\
@@ -10954,9 +10953,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WORDS    EXE   117784   9-05-89   3:36a
     WORDS    WRD     2200   3-19-89   8:55a
 
-### Directory of PCSIG08: DISK1999
+### Directory of PC-SIG Library Disk #1999
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK1999"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #1999"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK1999
      Directory of  A:\
@@ -10966,9 +10965,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      617   1-01-80  12:00a
     WORDS    DOC   155113   9-05-89   3:42a
 
-### Directory of PCSIG08: DISK2000
+### Directory of PC-SIG Library Disk #2000
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2000"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2000"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2000
      Directory of  A:\
@@ -10993,9 +10992,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TRIVIA1  COM    35712   7-27-89   3:12a
     WON      TRI    15760   7-27-89   3:13a
 
-### Directory of PCSIG08: DISK2001
+### Directory of PC-SIG Library Disk #2001
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2001"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2001"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2001
      Directory of  A:\
@@ -11009,9 +11008,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READALL  TXT    10178   8-29-89   3:38p
     RETURN   EXE   110560   1-01-90   1:00p
 
-### Directory of PCSIG08: DISK2002
+### Directory of PC-SIG Library Disk #2002
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2002"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2002"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2002
      Directory of  A:\
@@ -11025,9 +11024,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SAMPLE   DOC      347  10-21-89   2:38a
     SAMPLE   WK1     3067  10-21-89   2:37a
 
-### Directory of PCSIG08: DISK2003
+### Directory of PC-SIG Library Disk #2003
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2003"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2003"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2003
      Directory of  A:\
@@ -11042,9 +11041,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SFC      QRC     1691   2-25-90   1:21p
     SFCSW    EXE     9622   2-26-90  10:16a
 
-### Directory of PCSIG08: DISK2004
+### Directory of PC-SIG Library Disk #2004
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2004"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2004"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2004
      Directory of  A:\
@@ -11068,9 +11067,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ-ME  DOC     8448   8-11-89   8:52a
     REGISTER DOC     3456   8-11-89  12:03p
 
-### Directory of PCSIG08: DISK2005
+### Directory of PC-SIG Library Disk #2005
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2005"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2005"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2005
      Directory of  A:\
@@ -11083,9 +11082,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MP       EXE   263985  12-01-89   8:48p
     MPFILES1 LST       44  12-03-89   3:05p
 
-### Directory of PCSIG08: DISK2006
+### Directory of PC-SIG Library Disk #2006
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2006"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2006"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2006
      Directory of  A:\
@@ -11104,9 +11103,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   DOC     1183   2-09-89   1:34a
     RELEASE2 11       163   3-01-89  10:38a
 
-### Directory of PCSIG08: DISK2007
+### Directory of PC-SIG Library Disk #2007
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2007"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2007"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2007
      Directory of  A:\
@@ -11136,9 +11135,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   DOC     1183   2-09-89   1:34a
     RELEASE2 11       163   3-01-89  10:38a
 
-### Directory of PCSIG08: DISK2008
+### Directory of PC-SIG Library Disk #2008
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2008"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2008"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2008
      Directory of  A:\
@@ -11156,9 +11155,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OU       EXE    35456   9-10-89   2:01p
     PROGR    DSK       14   9-21-85   6:41p
 
-### Directory of PCSIG08: DISK2009
+### Directory of PC-SIG Library Disk #2009
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2009"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2009"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2009
      Directory of  A:\
@@ -11172,9 +11171,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OG       EXE    77124   9-10-89   2:00p
     OR       EXE    89698   9-10-89   1:56p
 
-### Directory of PCSIG08: DISK2010
+### Directory of PC-SIG Library Disk #2010
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2010"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2010"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2010
      Directory of  A:\
@@ -11186,9 +11185,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      771   1-01-80  12:00a
     OLORD    DOC    48128   9-29-89   1:18a
 
-### Directory of PCSIG08: DISK2011
+### Directory of PC-SIG Library Disk #2011
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2011"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2011"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2011
      Directory of  A:\
@@ -11206,9 +11205,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     RETROCON EXE    21173  10-01-89   5:00p
     RETROMAC COM    56888   9-30-89   5:00p
 
-### Directory of PCSIG08: DISK2012
+### Directory of PC-SIG Library Disk #2012
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2012"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2012"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2012
      Directory of  A:\
@@ -11220,9 +11219,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VBUG     DOC    29500  11-03-89   3:48p
     VBUG     TXT     1535  11-03-89   2:59p
 
-### Directory of PCSIG08: DISK2013
+### Directory of PC-SIG Library Disk #2013
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2013"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2013"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2013
      Directory of  A:\
@@ -11233,9 +11232,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     KAKA     EXE   120811  11-12-89   2:06p
     README           2023  11-24-89   3:18a
 
-### Directory of PCSIG08: DISK2014
+### Directory of PC-SIG Library Disk #2014
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2014"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2014"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2014
      Directory of  A:\
@@ -11255,9 +11254,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   CS      1962  11-09-89   7:24a
     REGISTER CS      2614  11-09-89   7:24a
 
-### Directory of PCSIG08: DISK2015
+### Directory of PC-SIG Library Disk #2015
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2015"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2015"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2015
      Directory of  A:\
@@ -11274,9 +11273,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   1-01-80  12:00a
     README            760  10-25-89   7:43p
 
-### Directory of PCSIG08: DISK2016
+### Directory of PC-SIG Library Disk #2016
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2016"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2016"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2016
      Directory of  A:\
@@ -11292,9 +11291,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   1-01-80  12:00a
     READ     ME       136   5-16-88  11:16a
 
-### Directory of PCSIG08: DISK2017
+### Directory of PC-SIG Library Disk #2017
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2017"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2017"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2017
      Directory of  A:\
@@ -11307,9 +11306,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      540   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK2018
+### Directory of PC-SIG Library Disk #2018
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2018"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2018"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2018
      Directory of  A:\
@@ -11333,9 +11332,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MAD      EXE    13229   5-27-89   5:00p
     README   MAD     4791   5-26-89   8:30p
 
-### Directory of PCSIG08: DISK2019
+### Directory of PC-SIG Library Disk #2019
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2019"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2019"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2019
      Directory of  A:\
@@ -11350,9 +11349,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ     ME      3057   6-16-89  11:17a
     SPEAKER  EXE   107857   7-29-89  12:06a
 
-### Directory of PCSIG08: DISK2020
+### Directory of PC-SIG Library Disk #2020
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2020"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2020"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2020
      Directory of  A:\
@@ -11365,9 +11364,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ_ME          1094  11-11-89   6:11a
     UPDATE   DOC    31458  11-11-89   6:11a
 
-### Directory of PCSIG08: DISK2021
+### Directory of PC-SIG Library Disk #2021
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2021"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2021"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2021
      Directory of  A:\
@@ -11378,9 +11377,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      386   1-10-90   3:55a
     INSTALL  EXE    27113  10-01-89   5:00a
 
-### Directory of PCSIG08: DISK2022
+### Directory of PC-SIG Library Disk #2022
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2022"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2022"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2022
      Directory of  A:\
@@ -11390,9 +11389,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-01-80  12:00a
     GO       TXT      463   1-10-90   3:58a
 
-### Directory of PCSIG08: DISK2023
+### Directory of PC-SIG Library Disk #2023
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2023"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2023"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2023
      Directory of  A:\
@@ -11405,9 +11404,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   DOC    13834  10-01-89   5:00a
     SAMPLE   PAK     2534   3-15-89   4:00a
 
-### Directory of PCSIG08: DISK2024
+### Directory of PC-SIG Library Disk #2024
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2024"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2024"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2024
      Directory of  A:\
@@ -11444,9 +11443,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SURFACE  PLT    37755   7-30-89   7:59a
     SURFGEN  BAS     4333   8-15-89   2:27p
 
-### Directory of PCSIG08: DISK2025
+### Directory of PC-SIG Library Disk #2025
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2025"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2025"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2025
      Directory of  A:\
@@ -11468,9 +11467,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SASK     EXE     7984   4-25-88   5:24a
     UPGRADE  DOC     1651   8-25-89   6:43a
 
-### Directory of PCSIG08: DISK2026
+### Directory of PC-SIG Library Disk #2026
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2026"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2026"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2026
      Directory of  A:\
@@ -11498,9 +11497,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TYPEA    COM      206   6-01-88   5:00a
     WHERE    COM      418   1-12-85   1:57p
 
-### Directory of PCSIG08: DISK2027
+### Directory of PC-SIG Library Disk #2027
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2027"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2027"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2027
      Directory of  A:\
@@ -11508,9 +11507,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     LASER    EXE   360522  10-17-88   2:17p
     READ     1ST      215  10-05-88   1:37p
 
-### Directory of PCSIG08: DISK2028
+### Directory of PC-SIG Library Disk #2028
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2028"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2028"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2028
      Directory of  A:\
@@ -11547,9 +11546,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TILES2C  EXE    10485   1-21-89   9:31a
     TILES2C  LNK       48   1-21-89   9:28a
 
-### Directory of PCSIG08: DISK2029
+### Directory of PC-SIG Library Disk #2029
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2029"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2029"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2029
      Directory of  A:\
@@ -11564,9 +11563,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     NC       INI      184   3-13-90   8:34a
     PKUNZIP  EXE    18208   3-05-89   4:00p
 
-### Directory of PCSIG08: DISK2030
+### Directory of PC-SIG Library Disk #2030
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2030"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2030"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2030
      Directory of  A:\
@@ -11581,9 +11580,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MAS      ZIP   180728   6-08-89  11:47a
     PKUNZIP  EXE    18208   3-05-89   4:00p
 
-### Directory of PCSIG08: DISK2031
+### Directory of PC-SIG Library Disk #2031
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2031"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2031"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2031
      Directory of  A:\
@@ -11614,9 +11613,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TR120RPN USP    13265   1-15-89   1:00a
     VENDOR   DOC     5302   1-05-90   1:00a
 
-### Directory of PCSIG08: DISK2032
+### Directory of PC-SIG Library Disk #2032
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2032"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2032"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2032
      Directory of  A:\
@@ -11633,9 +11632,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     MPLUS    DOC   112756  12-31-89   4:00p
     README   DOC     3184  12-31-89   4:00p
 
-### Directory of PCSIG08: DISK2033
+### Directory of PC-SIG Library Disk #2033
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2033"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2033"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2033
      Directory of  A:\
@@ -11668,9 +11667,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SUPPLIER KEY        4  10-22-89   1:32p
     SUPPLIER RBA      900  10-22-89   1:28p
 
-### Directory of PCSIG08: DISK2034
+### Directory of PC-SIG Library Disk #2034
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2034"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2034"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2034
      Directory of  A:\
@@ -11682,9 +11681,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      694   1-16-90   4:29a
     INSTALL  BAT     2048   5-11-89   4:16a
 
-### Directory of PCSIG08: DISK2035
+### Directory of PC-SIG Library Disk #2035
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2035"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2035"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2035
      Directory of  A:\
@@ -11707,9 +11706,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     START    BAT       18   7-20-89   5:59a
     TUTOR    DOC    62666   9-13-89  11:45a
 
-### Directory of PCSIG08: DISK2036
+### Directory of PC-SIG Library Disk #2036
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2036"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2036"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2036
      Directory of  A:\
@@ -11724,9 +11723,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ     ME       675   3-22-89  12:44p
     UPGRADES         6545   3-22-89  12:44p
 
-### Directory of PCSIG08: DISK2037
+### Directory of PC-SIG Library Disk #2037
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2037"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2037"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2037
      Directory of  A:\
@@ -11739,9 +11738,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     LHP      EXE   243642  12-12-89   8:58a
     README   DOC    17057  12-12-89   9:15a
 
-### Directory of PCSIG08: DISK2038
+### Directory of PC-SIG Library Disk #2038
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2038"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2038"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2038
      Directory of  A:\
@@ -11778,9 +11777,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TEMPWKS          1280   8-24-88   4:10p
     WCSETS            108   2-26-89   8:56a
 
-### Directory of PCSIG08: DISK2039
+### Directory of PC-SIG Library Disk #2039
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2039"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2039"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2039
      Directory of  A:\
@@ -11797,9 +11796,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TICKER1         19199   8-29-88   8:31a
     TICKER1  BIN      679  11-09-88   4:02a
 
-### Directory of PCSIG08: DISK2040
+### Directory of PC-SIG Library Disk #2040
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2040"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2040"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2040
      Directory of  A:\
@@ -11835,9 +11834,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TEMPWKS          1280   8-24-88   4:10p
     WCSETS            108   2-26-89   8:52a
 
-### Directory of PCSIG08: DISK2041
+### Directory of PC-SIG Library Disk #2041
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2041"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2041"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2041
      Directory of  A:\
@@ -11854,9 +11853,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TRNE21   HDR       48   4-07-89  12:26a
     TRNE21   NDX    11172   7-31-89   5:17a
 
-### Directory of PCSIG08: DISK2042
+### Directory of PC-SIG Library Disk #2042
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2042"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2042"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2042
      Directory of  A:\
@@ -11893,9 +11892,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TEMPWKS          1280   8-24-88   4:10p
     WCSETS            108   2-26-89   8:56a
 
-### Directory of PCSIG08: DISK2043
+### Directory of PC-SIG Library Disk #2043
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2043"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2043"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2043
      Directory of  A:\
@@ -11912,9 +11911,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TICKER4         90191   8-30-88  10:33a
     TICKER4  BIN     3127  11-09-88  12:10p
 
-### Directory of PCSIG08: DISK2044
+### Directory of PC-SIG Library Disk #2044
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2044"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2044"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2044
      Directory of  A:\
@@ -11950,9 +11949,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TEMPWKS          1280   8-24-88   4:10p
     WCSETS            108   2-26-89   8:52a
 
-### Directory of PCSIG08: DISK2045
+### Directory of PC-SIG Library Disk #2045
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2045"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2045"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2045
      Directory of  A:\
@@ -11971,9 +11970,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TICKER22        15049  10-27-88  12:51a
     TICKER22 BIN      929  11-09-88   4:11a
 
-### Directory of PCSIG08: DISK2046
+### Directory of PC-SIG Library Disk #2046
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2046"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2046"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2046
      Directory of  A:\
@@ -12006,9 +12005,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TEMPWKS          1280   8-24-88   4:10p
     WCSETS            108   2-26-89   8:57a
 
-### Directory of PCSIG08: DISK2047
+### Directory of PC-SIG Library Disk #2047
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2047"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2047"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2047
      Directory of  A:\
@@ -12025,9 +12024,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TICKER5        155002  10-19-88   5:47a
     TICKER5  BIN     9411  11-09-88   4:05a
 
-### Directory of PCSIG08: DISK2048
+### Directory of PC-SIG Library Disk #2048
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2048"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2048"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2048
      Directory of  A:\
@@ -12054,9 +12053,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WARPSTAT EXE    14884   4-16-88   7:00p
     WARPTEN  COM     1868   4-12-88   7:00p
 
-### Directory of PCSIG08: DISK2049
+### Directory of PC-SIG Library Disk #2049
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2049"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2049"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2049
      Directory of  A:\
@@ -12074,9 +12073,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   2        540  11-01-89   7:58a
     REGFORM          1624  11-09-89   7:42a
 
-### Directory of PCSIG08: DISK2050
+### Directory of PC-SIG Library Disk #2050
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2050"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2050"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2050
      Directory of  A:\
@@ -12090,9 +12089,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     ORDER    FRM     1976  12-27-89  12:29a
     README   DOC     5518  12-27-89   5:07a
 
-### Directory of PCSIG08: DISK2051
+### Directory of PC-SIG Library Disk #2051
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2051"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2051"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2051
      Directory of  A:\
@@ -12108,9 +12107,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     TOP20    COM    22017  12-11-89  10:05a
     TOP20    TXT    19440  10-29-89   1:34p
 
-### Directory of PCSIG08: DISK2052
+### Directory of PC-SIG Library Disk #2052
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2052"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2052"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2052
      Directory of  A:\
@@ -12133,9 +12132,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     REPORT   BAT       21   4-29-89   3:49a
     REPORT   TXT     2069   4-29-89   3:45a
 
-### Directory of PCSIG08: DISK2053
+### Directory of PC-SIG Library Disk #2053
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2053"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2053"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2053
      Directory of  A:\
@@ -12149,9 +12148,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SUPRMENU DOC    31850   2-07-90  11:56p
     WHATSNEW         4088   2-08-90  12:48a
 
-### Directory of PCSIG08: DISK2054
+### Directory of PC-SIG Library Disk #2054
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2054"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2054"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2054
      Directory of  A:\
@@ -12164,9 +12163,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     IM10SW   ARC   120408   6-02-89   8:55a
     READ     ME      1232   6-02-89   3:41a
 
-### Directory of PCSIG08: DISK2055
+### Directory of PC-SIG Library Disk #2055
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2055"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2055"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2055
      Directory of  A:\
@@ -12190,9 +12189,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SCR      NGL      199  10-28-89   4:44a
     TRANJRNL NGL    27936  10-28-89   4:49a
 
-### Directory of PCSIG08: DISK2056
+### Directory of PC-SIG Library Disk #2056
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2056"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2056"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2056
      Directory of  A:\
@@ -12214,9 +12213,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     UNIFORM  CFG       75   1-01-80  12:00a
     UNIFORM  EXE    64626   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK2057
+### Directory of PC-SIG Library Disk #2057
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2057"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2057"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2057
      Directory of  A:\
@@ -12252,9 +12251,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     _UFC02   H        211   1-01-80  12:00a
     _UFC03   H        212   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK2058
+### Directory of PC-SIG Library Disk #2058
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2058"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2058"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2058
      Directory of  A:\
@@ -12276,9 +12275,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WT       ERR      511   1-01-80  12:00a
     WT       HLP     1172   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK2059
+### Directory of PC-SIG Library Disk #2059
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2059"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2059"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2059
      Directory of  A:\
@@ -12310,9 +12309,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     STATEMN2 STA     3581  10-09-89   9:26a
     STATEMNT STA     3720  10-09-89   9:26a
 
-### Directory of PCSIG08: DISK2060
+### Directory of PC-SIG Library Disk #2060
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2060"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2060"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2060
      Directory of  A:\
@@ -12322,9 +12321,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      617   1-01-80   3:25a
     PA4OVL-D EXE    36864   2-14-90   9:52p
 
-### Directory of PCSIG08: DISK2061
+### Directory of PC-SIG Library Disk #2061
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2061"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2061"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2061
      Directory of  A:\
@@ -12334,9 +12333,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      617   1-01-80   3:28a
     PAC4-D   EXE   291696   2-14-90   9:52p
 
-### Directory of PCSIG08: DISK2062
+### Directory of PC-SIG Library Disk #2062
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2062"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2062"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2062
      Directory of  A:\
@@ -12360,9 +12359,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SAMPLE   DAT      603  11-30-89   4:00p
     UTILS    DOC    15770  11-30-89   4:00p
 
-### Directory of PCSIG08: DISK2063
+### Directory of PC-SIG Library Disk #2063
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2063"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2063"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2063
      Directory of  A:\
@@ -12376,9 +12375,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SST05           65400   6-09-88   9:35a
     SST06           65400   6-09-88   9:45a
 
-### Directory of PCSIG08: DISK2064
+### Directory of PC-SIG Library Disk #2064
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2064"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2064"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2064
      Directory of  A:\
@@ -12389,9 +12388,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     LBELL    EXE    69490   8-01-89  10:24p
     WHEEL    COM    49873   8-01-89  10:16p
 
-### Directory of PCSIG08: DISK2065
+### Directory of PC-SIG Library Disk #2065
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2065"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2065"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2065
      Directory of  A:\
@@ -12401,9 +12400,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PKUNZIP  EXE    18208   3-05-89   4:00p
     READ     ME      7936   8-01-89   5:00a
 
-### Directory of PCSIG08: DISK2066
+### Directory of PC-SIG Library Disk #2066
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2066"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2066"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2066
      Directory of  A:\
@@ -12432,9 +12431,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     UNSERIAL BAT       12   1-01-80   1:59a
     VAL      EXE     5456   9-10-87  12:35p
 
-### Directory of PCSIG08: DISK2067
+### Directory of PC-SIG Library Disk #2067
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2067"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2067"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2067
      Directory of  A:\
@@ -12462,9 +12461,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SLIDESHO EXE     9632  10-13-88   3:41p
     WX4671   DEV      322   6-03-88   4:04p
 
-### Directory of PCSIG08: DISK2068
+### Directory of PC-SIG Library Disk #2068
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2068"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2068"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2068
      Directory of  A:\
@@ -12494,9 +12493,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     UNSERIAL BAT       12   1-01-80   1:59a
     VAL      EXE     5456   9-30-87   9:18a
 
-### Directory of PCSIG08: DISK2069
+### Directory of PC-SIG Library Disk #2069
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2069"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2069"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2069
      Directory of  A:\
@@ -12526,9 +12525,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SLIDESHO EXE     6769  10-13-88   3:19p
     USERDEV  DOC      864   6-03-88   8:49p
 
-### Directory of PCSIG08: DISK2070
+### Directory of PC-SIG Library Disk #2070
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2070"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2070"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2070
      Directory of  A:\
@@ -12542,9 +12541,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PKXARC   COM     9984   9-12-86  12:00a
     READ-ME  DOC     4348  10-09-89  11:11a
 
-### Directory of PCSIG08: DISK2071
+### Directory of PC-SIG Library Disk #2071
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2071"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2071"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2071
      Directory of  A:\
@@ -12555,9 +12554,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     INSTALL  BAT      250   9-18-89   3:16p
     MDS2     ARC   291919  11-12-89   2:36p
 
-### Directory of PCSIG08: DISK2072
+### Directory of PC-SIG Library Disk #2072
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2072"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2072"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2072
      Directory of  A:\
@@ -12572,9 +12571,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     START    EXE   148080  11-21-89   2:12p
     START2   EXE   160650   7-28-89   1:35p
 
-### Directory of PCSIG08: DISK2073
+### Directory of PC-SIG Library Disk #2073
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2073"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2073"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2073
      Directory of  A:\
@@ -12629,9 +12628,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     UFF      PIC     3592   7-12-89   5:48p
     WLFAUCT  PIC     4647   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK2074
+### Directory of PC-SIG Library Disk #2074
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2074"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2074"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2074
      Directory of  A:\
@@ -12652,9 +12651,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     REDSOX50 DAT     2125   1-31-89   2:24p
     YANKS_36 DAT     2125   1-31-89   2:25p
 
-### Directory of PCSIG08: DISK2075
+### Directory of PC-SIG Library Disk #2075
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2075"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2075"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2075
      Directory of  A:\
@@ -12682,9 +12681,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     THINK9   COM    29449  10-12-89  12:14p
     THINTRO  COM     8368  10-12-89  12:28p
 
-### Directory of PCSIG08: DISK2076
+### Directory of PC-SIG Library Disk #2076
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2076"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2076"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2076
      Directory of  A:\
@@ -12703,9 +12702,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     THUNDER  EXE   234751   2-08-90   4:39a
     THUNDOC  COM    26121  10-23-89  10:36a
 
-### Directory of PCSIG08: DISK2077
+### Directory of PC-SIG Library Disk #2077
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2077"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2077"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2077
      Directory of  A:\
@@ -12719,9 +12718,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VERSEDOC COM    21330  10-23-89  10:17a
     WORDS    DBF    26451  10-23-89  10:22a
 
-### Directory of PCSIG08: DISK2078
+### Directory of PC-SIG Library Disk #2078
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2078"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2078"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2078
      Directory of  A:\
@@ -12733,9 +12732,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PKUNZIP  EXE    21440   7-20-89   6:01p
     README   DOC     1011   1-01-80   8:47p
 
-### Directory of PCSIG08: DISK2079
+### Directory of PC-SIG Library Disk #2079
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2079"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2079"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2079
      Directory of  A:\
@@ -12752,9 +12751,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PC-SPT   DOK   101061   9-25-89   3:00p
     READ     ME      6147   9-22-89   4:26p
 
-### Directory of PCSIG08: DISK2080
+### Directory of PC-SIG Library Disk #2080
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2080"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2080"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2080
      Directory of  A:\
@@ -12770,9 +12769,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WCTOTDAT DAT       15   9-26-87   1:40p
     WCVARIAB DAT       99   9-20-87   2:59a
 
-### Directory of PCSIG08: DISK2081
+### Directory of PC-SIG Library Disk #2081
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2081"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2081"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2081
      Directory of  A:\
@@ -12861,9 +12860,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     YRSINCE  COM      222   7-19-89   5:13a
     YRSTILL  COM      221   7-19-89   5:14a
 
-### Directory of PCSIG08: DISK2082
+### Directory of PC-SIG Library Disk #2082
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2082"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2082"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2082
      Directory of  A:\
@@ -12877,9 +12876,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ     ME     14726   2-01-90  10:09a
     VENDOR   DOC     1920   2-01-90  10:09a
 
-### Directory of PCSIG08: DISK2083
+### Directory of PC-SIG Library Disk #2083
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2083"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2083"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2083
      Directory of  A:\
@@ -12889,9 +12888,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   2-12-90   7:35a
     PCF2     ZIP   286079   2-01-90  10:16a
 
-### Directory of PCSIG08: DISK2084
+### Directory of PC-SIG Library Disk #2084
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2084"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2084"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2084
      Directory of  A:\
@@ -12905,9 +12904,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READ     ME     12416   1-28-90   9:00p
     VENDOR   DOC     1920   1-28-90   9:00p
 
-### Directory of PCSIG08: DISK2085
+### Directory of PC-SIG Library Disk #2085
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2085"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2085"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2085
      Directory of  A:\
@@ -12926,9 +12925,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     PRINTDOC EXE    41036   1-07-90   8:00p
     RESPONSE         3039   1-07-90   8:00p
 
-### Directory of PCSIG08: DISK2086
+### Directory of PC-SIG Library Disk #2086
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2086"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2086"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2086
      Directory of  A:\
@@ -12942,9 +12941,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README           3350  12-06-89   2:59a
     REGISTER FRM     2770  12-01-89  12:43p
 
-### Directory of PCSIG08: DISK2087
+### Directory of PC-SIG Library Disk #2087
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2087"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2087"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2087
      Directory of  A:\
@@ -12958,9 +12957,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   LST     2007  10-02-89   9:41a
     WORD1    DAT    16576  11-17-89  12:49p
 
-### Directory of PCSIG08: DISK2088
+### Directory of PC-SIG Library Disk #2088
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2088"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2088"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2088
      Directory of  A:\
@@ -12973,9 +12972,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       TXT      540   3-19-90  11:22a
     READ     EXE    21248  11-21-87   1:46a
 
-### Directory of PCSIG08: DISK2089
+### Directory of PC-SIG Library Disk #2089
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2089"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2089"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2089
      Directory of  A:\
@@ -12985,9 +12984,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38   1-18-88   5:38a
     GO       TXT      501   3-28-90   7:28a
 
-### Directory of PCSIG08: DISK2090
+### Directory of PC-SIG Library Disk #2090
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2090"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2090"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2090
      Directory of  A:\
@@ -13008,9 +13007,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READLITE ME      1024   2-13-90   8:31a
     WORDS    MAS   110428   9-19-89  11:41a
 
-### Directory of PCSIG08: DISK2091
+### Directory of PC-SIG Library Disk #2091
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2091"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2091"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2091
      Directory of  A:\
@@ -13032,9 +13031,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     READLITE ME      1024   2-13-90   8:31a
     WORDS    MAS   110428   9-19-89  11:41a
 
-### Directory of PCSIG08: DISK2092
+### Directory of PC-SIG Library Disk #2092
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2092"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2092"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2092
      Directory of  A:\
@@ -13043,9 +13042,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     RBBS-UTL ZIP   249891   2-13-90  11:30p
     RFIX0227 ZIP    35460   2-28-90   8:29p
 
-### Directory of PCSIG08: DISK2093
+### Directory of PC-SIG Library Disk #2093
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2093"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2093"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2093
      Directory of  A:\
@@ -13075,9 +13074,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   DOC      746   2-11-90   5:40a
     RENSUB   EXE     3024   2-11-90   5:40a
 
-### Directory of PCSIG08: DISK2094
+### Directory of PC-SIG Library Disk #2094
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2094"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2094"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2094
      Directory of  A:\
@@ -13097,9 +13096,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SAMPLE   NAM      244   2-22-90   8:20p
     SAMPLE   REF      102   2-22-90   8:20p
 
-### Directory of PCSIG08: DISK2095
+### Directory of PC-SIG Library Disk #2095
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2095"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2095"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2095
      Directory of  A:\
@@ -13125,9 +13124,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     VALIDATE DOC     1653  10-28-89   3:13p
     VIRLIST  TXT     8016   3-18-90   5:26a
 
-### Directory of PCSIG08: DISK2096
+### Directory of PC-SIG Library Disk #2096
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2096"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2096"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2096
      Directory of  A:\
@@ -13141,9 +13140,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     HD1      BAT      365   3-06-90   6:26p
     XARC     COM    12242   4-27-87   6:00a
 
-### Directory of PCSIG08: DISK2097
+### Directory of PC-SIG Library Disk #2097
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2097"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2097"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2097
      Directory of  A:\
@@ -13158,9 +13157,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     SCRFONTS ARC     4954   3-06-90   6:25a
     XARC     COM    12242   4-27-87   6:00a
 
-### Directory of PCSIG08: DISK2098
+### Directory of PC-SIG Library Disk #2098
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2098"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2098"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2098
      Directory of  A:\
@@ -13172,9 +13171,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     GO       BAT       38  10-19-87   8:56a
     GO       TXT      859   1-01-80  12:00a
 
-### Directory of PCSIG08: DISK2099
+### Directory of PC-SIG Library Disk #2099
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2099"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2099"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2099
      Directory of  A:\
@@ -13187,9 +13186,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     REGISTER TXT     1079   1-16-90   2:43p
     SANS     CHR    13638   5-30-89   6:00p
 
-### Directory of PCSIG08: DISK2100
+### Directory of PC-SIG Library Disk #2100
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2100"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2100"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2100
      Directory of  A:\
@@ -13214,9 +13213,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OLDPMAS  DOC      358   1-21-90   9:00a
     README   TXT      919  12-13-89   1:23p
 
-### Directory of PCSIG08: DISK2101
+### Directory of PC-SIG Library Disk #2101
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2101"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2101"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2101
      Directory of  A:\
@@ -13241,9 +13240,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OLDPMAS  DOC      358   1-21-90   9:00a
     README   TXT      919  12-13-89   1:23p
 
-### Directory of PCSIG08: DISK2102
+### Directory of PC-SIG Library Disk #2102
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2102"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2102"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2102
      Directory of  A:\
@@ -13268,9 +13267,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OLDPMAS  DOC      358   1-21-90   9:00a
     README   TXT      919  12-13-89   1:23p
 
-### Directory of PCSIG08: DISK2103
+### Directory of PC-SIG Library Disk #2103
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2103"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2103"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2103
      Directory of  A:\
@@ -13295,9 +13294,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OLDPMAS  DOC      358   1-21-90   9:00a
     README   TXT      919  12-13-89   1:23p
 
-### Directory of PCSIG08: DISK2104
+### Directory of PC-SIG Library Disk #2104
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2104"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2104"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2104
      Directory of  A:\
@@ -13322,9 +13321,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OLDPMAS  DOC      358   1-21-90   9:00a
     README   TXT      919  12-13-89   1:23p
 
-### Directory of PCSIG08: DISK2105
+### Directory of PC-SIG Library Disk #2105
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2105"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2105"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2105
      Directory of  A:\
@@ -13349,9 +13348,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OLDPMAS  DOC      358   1-21-90   9:00a
     README   TXT      919  12-13-89   1:23p
 
-### Directory of PCSIG08: DISK2106
+### Directory of PC-SIG Library Disk #2106
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2106"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2106"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2106
      Directory of  A:\
@@ -13376,9 +13375,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OLDPMAS  DOC      358   1-21-90   9:00a
     README   TXT      919  12-13-89   1:23p
 
-### Directory of PCSIG08: DISK2107
+### Directory of PC-SIG Library Disk #2107
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2107"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2107"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2107
      Directory of  A:\
@@ -13403,9 +13402,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OLDPMAS  DOC      358   1-21-90   9:00a
     README   TXT      919  12-13-89   1:23p
 
-### Directory of PCSIG08: DISK2108
+### Directory of PC-SIG Library Disk #2108
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2108"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2108"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2108
      Directory of  A:\
@@ -13430,9 +13429,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OLDPMAS  DOC      358   1-21-90   9:00a
     README   TXT      919  12-13-89   1:23p
 
-### Directory of PCSIG08: DISK2109
+### Directory of PC-SIG Library Disk #2109
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2109"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2109"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2109
      Directory of  A:\
@@ -13457,9 +13456,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OLDPMAS  DOC      358   1-21-90   9:00a
     README   TXT      919  12-13-89   1:23p
 
-### Directory of PCSIG08: DISK2110
+### Directory of PC-SIG Library Disk #2110
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2110"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2110"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2110
      Directory of  A:\
@@ -13484,9 +13483,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OLDPMAS  DOC      358   1-21-90   9:00a
     README   TXT      919  12-13-89   1:23p
 
-### Directory of PCSIG08: DISK2111
+### Directory of PC-SIG Library Disk #2111
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2111"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2111"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2111
      Directory of  A:\
@@ -13511,9 +13510,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OLDPMAS  DOC      358   1-21-90   9:00a
     README   TXT      919  12-13-89   1:23p
 
-### Directory of PCSIG08: DISK2112
+### Directory of PC-SIG Library Disk #2112
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2112"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2112"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2112
      Directory of  A:\
@@ -13538,9 +13537,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OLDPMAS  DOC      358   1-21-90   9:00a
     README   TXT      919  12-13-89   1:23p
 
-### Directory of PCSIG08: DISK2113
+### Directory of PC-SIG Library Disk #2113
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2113"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2113"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2113
      Directory of  A:\
@@ -13565,9 +13564,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OLDPMAS  DOC      358   1-21-90   9:00a
     README   TXT      919  12-13-89   1:23p
 
-### Directory of PCSIG08: DISK2114
+### Directory of PC-SIG Library Disk #2114
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2114"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2114"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2114
      Directory of  A:\
@@ -13593,9 +13592,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README   TXT      919  12-13-89   1:23p
     README2  TXT      392  12-15-89   1:38p
 
-### Directory of PCSIG08: DISK2115
+### Directory of PC-SIG Library Disk #2115
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2115"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2115"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2115
      Directory of  A:\
@@ -13620,9 +13619,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OLDPMAS  DOC      358   1-21-90   9:00a
     README   TXT      919  12-13-89   1:23p
 
-### Directory of PCSIG08: DISK2116
+### Directory of PC-SIG Library Disk #2116
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2116"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2116"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2116
      Directory of  A:\
@@ -13647,9 +13646,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OLDPMAS  DOC      358   1-21-90   9:00a
     README   TXT      919  12-13-89   1:23p
 
-### Directory of PCSIG08: DISK2117
+### Directory of PC-SIG Library Disk #2117
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2117"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2117"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2117
      Directory of  A:\
@@ -13674,9 +13673,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     OLDPMAS  DOC      358   1-21-90   9:00a
     README   TXT      919  12-13-89   1:23p
 
-### Directory of PCSIG08: DISK2118
+### Directory of PC-SIG Library Disk #2118
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2118"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2118"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2118
      Directory of  A:\
@@ -13687,9 +13686,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WFDICT   EXE    27104   8-04-89   3:29p
     WF_MAIN  DIC   251337   2-23-90  12:31a
 
-### Directory of PCSIG08: DISK2119
+### Directory of PC-SIG Library Disk #2119
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2119"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2119"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2119
      Directory of  A:\
@@ -13704,9 +13703,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     README           2186   2-24-90   5:06a
     RECONFIG DOC    13176   2-25-90   1:14a
 
-### Directory of PCSIG08: DISK2120
+### Directory of PC-SIG Library Disk #2120
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2120"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2120"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2120
      Directory of  A:\
@@ -13718,9 +13717,9 @@ the machine's drive A.  Make sure the machine has finished booting before loadin
     WF       DOC    59033   7-31-89   5:00p
     WYNDFLDS EXE   194339   7-31-89   5:00p
 
-### Directory of PCSIG08: DISK2121
+### Directory of PC-SIG Library Disk #2121
 
-{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PCSIG08: DISK2121"; loadDisk FDC scroll' %}
+{% include machine/command.html type='button' label='Load Disk' machine='pcsig08' command='script' value='select FDC listDrives "A:"; select FDC listDisks "PC-SIG Library Disk #2121"; loadDisk FDC scroll' %}
 
      Volume in drive A is DISK2121
      Directory of  A:\

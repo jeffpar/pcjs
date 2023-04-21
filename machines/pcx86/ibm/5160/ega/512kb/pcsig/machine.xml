@@ -8,7 +8,7 @@
 	<rom id="romBASIC" addr="0xf6000" size="0x8000" file="/machines/pcx86/ibm/5160/rom/basic/BASIC110.json5"/>
 	<rom id="romBIOS" addr="0xfe000" size="0x2000" file="/machines/pcx86/ibm/5160/rom/bios/1982-11-08/XTBIOS-REV1.json5"/>
 	<video ref="/machines/pcx86/ibm/video/ega/1984-09-13/ibm-ega-5154-128k-autolockfs.xml"/>
-	<fdc ref="/machines/pcx86/ibm/fdc/pcsig08.xml"/>
+	<fdc ref="/machines/pcx86/ibm/fdc/pcsig.xml"/>
 	<keyboard ref="/machines/pcx86/ibm/keyboard/us83-softkeys.xml"/>
 	<cpu id="cpu8088" model="8088" autoStart="true" pos="right" padRight="8px" padBottom="8px">
 		<control type="button" binding="run">Run</control>
