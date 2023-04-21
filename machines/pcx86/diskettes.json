@@ -10481,9 +10481,6 @@
 				"pcsig": {
 					"@title": "PC-SIG Diskette Library"
 				},
-				"pcsig08": {
-					"@title": "PC-SIG CD-ROM (8th Edition)"
-				},
 				"scbc": {
 					"@title": "Small Computer Book Club",
 					"@media": [

@@ -888,6 +888,7 @@
     "LOOPZ",
     "LPRINT",
     "LREAL",
+    "LSET",
     "lshift",
     "Lucida",
     "Luiz",
