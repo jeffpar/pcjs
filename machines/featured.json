@@ -96,6 +96,12 @@
     "@tags": "home,pcx86"
   },
   {
+    "@title": "PC Disk Magazine (1983)",
+    "@permalink": "/software/pcx86/sw/magazines/pcdm/",
+    "@preview": ".png",
+    "@tags": "shareware,pcx86"
+  },
+  {
     "@title": "Fantasy Land EGA Demo (1984)",
     "@permalink": "/software/pcx86/demo/ibm/ega/",
     "@preview": ".png",
@@ -166,6 +172,12 @@
     "@permalink": "/software/pcx86/lang/microsoft/pascal/quickpascal/1.00/",
     "@preview": ".png",
     "@tags": "home,pcx86,lang"
+  },
+  {
+    "@title": "PC-SIG Diskette Library (1990)",
+    "@permalink": "/software/pcx86/sw/misc/pcsig/",
+    "@preview": ".png",
+    "@tags": "shareware,pcx86"
   },
   {
     "@title": "Microsoft Windows 3.0 (1990)",
