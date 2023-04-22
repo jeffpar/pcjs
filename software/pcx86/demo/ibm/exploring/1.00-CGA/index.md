@@ -36,7 +36,7 @@ For more information about this software, see the [PCjs blog](/blog/2018/04/01/)
     DLSC08            5574   1-27-83  11:13a
     DLSS00             918   1-19-83  12:20a
     DLSS01            3764   1-17-83  12:58a
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            15 file(s)     136732 bytes
                            20480 bytes free
 

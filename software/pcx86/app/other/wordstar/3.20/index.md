@@ -2,6 +2,7 @@
 layout: page
 title: MicroPro WordStar 3.20 for the IBM PC
 permalink: /software/pcx86/app/other/wordstar/3.20/
+preview: https://miscdisks.pcjs.org/pcx86/app/other/wordstar/3.20/WS320-ORIG.png
 redirect_from: /disks/pcx86/apps/other/wordstar/3.20/
 machines:
   - id: ibm5150
@@ -38,12 +39,12 @@ You can browse all of the [Additional Materials](#additional-materials) below.
      Volume in drive A has no label
      Directory of A:\
 
-    WS       COM     20480   1-01-80  12:00a
-    WSMSGS   OVR     27264   1-01-80  12:00a
-    WSOVLY1  OVR     40960   1-01-80  12:00a
-    INSTALL  BAS     14848   1-01-80  12:00a
-    WSBAUD   BAS      1152   1-01-80  12:00a
-    EXAMPLE  TXT      9216   1-01-80  12:00a
+    WS       COM     20480   1-01-80
+    WSMSGS   OVR     27264   1-01-80
+    WSOVLY1  OVR     40960   1-01-80
+    INSTALL  BAS     14848   1-01-80
+    WSBAUD   BAS      1152   1-01-80
+    EXAMPLE  TXT      9216   1-01-80
             6 file(s)     113920 bytes
                            45568 bytes free
 
@@ -54,7 +55,7 @@ You can browse all of the [Additional Materials](#additional-materials) below.
      Volume in drive A has no label
      Directory of A:\
 
-    MAILMRGE OVR     11520   1-01-80  12:00a
+    MAILMRGE OVR     11520   1-01-80
             1 file(s)      11520 bytes
                           148480 bytes free
 
@@ -69,15 +70,15 @@ You can browse all of the [Additional Materials](#additional-materials) below.
     IBMDOS   COM*     6400   5-07-82  12:00p
     COMMAND  COM      4959   5-07-82  12:00p
     WS       COM     20480   1-01-80  12:02a
-    WSMSGS   OVR     27264   1-01-80  12:00a
-    WSOVLY1  OVR     40960   1-01-80  12:00a
-    EXAMPLE  TXT      9216   1-01-80  12:00a
-    INSTALL  BAS     14848   1-01-80  12:00a
-    WSBAUD   BAS      1152   1-01-80  12:00a
-    MAILMRGE OVR     11520   1-01-80  12:00a
-    SETCLOCK COM       853   9-19-82  12:00a
+    WSMSGS   OVR     27264   1-01-80
+    WSOVLY1  OVR     40960   1-01-80
+    EXAMPLE  TXT      9216   1-01-80
+    INSTALL  BAS     14848   1-01-80
+    WSBAUD   BAS      1152   1-01-80
+    MAILMRGE OVR     11520   1-01-80
+    SETCLOCK COM       853   9-19-82
     INSTALL              0   1-01-80  12:40a
-    ASTCLOCK COM       813   9-18-82  12:00a
+    ASTCLOCK COM       813   9-18-82
     AUTOEXEC BAT        10   5-24-84   1:57p
     PIFINTRO          5248  10-30-86  11:47a
     PRT               3221   1-01-80   2:07a
@@ -90,12 +91,12 @@ You can browse all of the [Additional Materials](#additional-materials) below.
      Volume in drive A has no label
      Directory of A:\
 
-    WSOVLY1  OVR     40960   1-01-80  12:00a
-    WSMSGS   OVR     27264   1-01-80  12:00a
-    INSTALL  BAS     17152  10-01-82  12:00a
-    PRINT    TST      3968   1-01-80  12:00a
-    WS       COM     20480   1-01-80  12:00a
-    MAILMRGE OVR     11520   1-01-80  12:00a
+    WSOVLY1  OVR     40960   1-01-80
+    WSMSGS   OVR     27264   1-01-80
+    INSTALL  BAS     17152  10-01-82
+    PRINT    TST      3968   1-01-80
+    WS       COM     20480   1-01-80
+    MAILMRGE OVR     11520   1-01-80
     WSBAUD   BAS      1152   2-23-13   8:45a
             7 file(s)     122496 bytes
                            36352 bytes free

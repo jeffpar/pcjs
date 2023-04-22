@@ -1600,20 +1600,24 @@ function processDisk(di, diskFile, argv, diskette)
         /*
          * Along with any diskette info, see if there are any files in the decompressed archive folder that we might want
          * to include in the index, too.
+         *
+         * For now, this inclusion is limited to the PC-SIG collection.
          */
         let samples = "";
-        let sampleSpec = path.join(path.dirname(getFullPath(diskette.path)), "archive", "**", "*.{ASM,BAS,DOC,TXT}");
-        let sampleFiles = glob.sync(sampleSpec);
-        for (let sampleFile of sampleFiles) {
-            let sample = readFile(sampleFile);
-            if (sample) {
-                if (isText(sample)) {
-                    let fileType = sampleFile.endsWith(".BAS")? "bas" : "";
-                    if (sample[sample.length-1] != '\n') sample += '\n';
-                    sample = "{% raw %}\n```" + fileType + "\n" + sample /* .replace(/([^\n]*\n)/g, '    $1\n') */ + "```\n{% endraw %}\n";
-                    samples += "\n## " + path.basename(sampleFile) + "\n\n" + sample;
-                } else {
-                    printf("warning: ignoring non-text file '%s'\n", sampleFile);
+        if (diskFile.indexOf("/pcsig/") >= 0) {
+            let sampleSpec = path.join(path.dirname(getFullPath(diskette.path)), "archive", "**", "*.{ASM,BAS,DOC,TXT}");
+            let sampleFiles = glob.sync(sampleSpec);
+            for (let sampleFile of sampleFiles) {
+                let sample = readFile(sampleFile);
+                if (sample) {
+                    if (isText(sample)) {
+                        let fileType = sampleFile.endsWith(".BAS")? "bas" : "";
+                        if (sample[sample.length-1] != '\n') sample += '\n';
+                        sample = "{% raw %}\n```" + fileType + "\n" + sample /* .replace(/([^\n]*\n)/g, '    $1\n') */ + "```\n{% endraw %}\n";
+                        samples += "\n## " + path.basename(sampleFile) + "\n\n" + sample;
+                    } else {
+                        printf("warning: ignoring non-text file '%s'\n", sampleFile);
+                    }
                 }
             }
         }

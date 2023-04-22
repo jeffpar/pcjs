@@ -2,6 +2,7 @@
 layout: page
 title: Microsoft Excel 2.0
 permalink: /software/pcx86/app/microsoft/excel/2.0/
+preview: https://miscdisks.pcjs.org/pcx86/app/microsoft/excel/2.0/EXCEL20-1200K-DISK1-SETUP.jpg
 machines:
   - id: ibm5170
     type: pcx86

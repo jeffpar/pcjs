@@ -2,6 +2,7 @@
 layout: page
 title: Microsoft QuickBASIC 1.00
 permalink: /software/pcx86/lang/microsoft/basic/quickbasic/1.00/
+preview: https://miscdisks.pcjs.org/pcx86/lang/microsoft/basic/quickbasic/1.00/MS-QUICKBASIC-100.jpg
 redirect_from: /disks/pcx86/tools/microsoft/basic/quickbasic/1.00/
 machines:
   - id: ibm5160-msdos320

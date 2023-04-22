@@ -823,7 +823,7 @@ machines:
     INMAIL   CHN      1544   3-28-87   4:28p
     INMAIL   TXT      2063   9-16-87   8:06p
     MAKER    BAT       315   9-29-87   2:24p
-    MAKER    EXE    105650   1-01-85  12:00a
+    MAKER    EXE    105650   1-01-85
     MAKER    TXT     19891   2-03-88   3:28p
     MAKER    WND     63260  10-08-87  12:51p
     MENU     CSC      4000  10-15-86   2:47p
@@ -849,7 +849,7 @@ machines:
     SCROLL   BAS       987  10-14-87   8:39a
     SCROLL   OBJ       127  10-12-87   3:02p
     SHOW     BAT       321  10-05-87   9:44a
-    SHOW     EXE     49490   1-01-85  12:00a
+    SHOW     EXE     49490   1-01-85
     SHOW     TXT      1526   2-03-88   3:29p
     SHOWMAKE BAT       329  10-05-87   9:45a
     SHOWMAKE EXE     54829   3-10-88   4:38p
@@ -1266,39 +1266,39 @@ machines:
     -------- 200         0   8-07-87   9:53a
     -------- 201         0   8-07-87   9:53a
     ABOUT    TXT      1511   3-17-88   1:27p
-    ASK      COM       986   2-02-88  12:00a
-    AUTOEXEC ADD        43   2-02-88  12:00a
-    AUTOEXEC NEW        78   2-02-88  12:00a
+    ASK      COM       986   2-02-88
+    AUTOEXEC ADD        43   2-02-88
+    AUTOEXEC NEW        78   2-02-88
     BLUEBOOT PAK      3012   1-08-88   4:08p
     BLUELINE CHN     14863   3-30-88   9:57a
     BLUELINE TXT      2011   2-16-88  10:07a
     BLUENOTE TXT     10152   3-28-88  11:16a
     CALC     PRO       109  10-19-87   1:51p
-    CAPSOFF  COM        15   2-02-88  12:00a
-    CAPSON   COM        15   2-02-88  12:00a
+    CAPSOFF  COM        15   2-02-88
+    CAPSON   COM        15   2-02-88
     CHISQUAR TXT      2048   3-24-88   9:08a
     CHISQX2           6784  10-20-87   8:53a
-    COMM     M        4590   2-02-88  12:00a
-    COMM     MH       1862   2-02-88  12:00a
-    CONFIG   NEW        40   2-02-88  12:00a
+    COMM     M        4590   2-02-88
+    COMM     MH       1862   2-02-88
+    CONFIG   NEW        40   2-02-88
     CONTENTS TXT      2253   3-28-88   9:20a
-    CONTROL  EXE     22432   2-02-88  12:00a
-    CONTROL  MHH      3121   2-02-88  12:00a
-    COPYFILE BAT      7189   2-02-88  12:00a
+    CONTROL  EXE     22432   2-02-88
+    CONTROL  MHH      3121   2-02-88
+    COPYFILE BAT      7189   2-02-88
     CREDITS  TXT      1924   3-28-88   9:35a
-    DATABASE M        4590   2-02-88  12:00a
-    DATABASE MH       1491   2-02-88  12:00a
-    DEFAULT  MHH      2128   2-02-88  12:00a
+    DATABASE M        4590   2-02-88
+    DATABASE MH       1491   2-02-88
+    DEFAULT  MHH      2128   2-02-88
     DESK     TXT     11095   3-28-88   9:33a
-    DISK     M        4590   2-02-88  12:00a
+    DISK     M        4590   2-02-88
     DISKOVER TXT      6563   3-28-88   9:19a
     EASY     TXT      3184   3-31-88   5:00p
-    EASYMENU BAT        58   2-02-88  12:00a
-    EASYMENU TXT     53149   2-02-88  12:00a
-    EDIT     MHH      2060   2-02-88  12:00a
-    EDITERR  MSG      1786   2-02-88  12:00a
-    EDITHELP 000     36352   2-02-88  12:00a
-    EDITHELP COM     49733   2-02-88  12:00a
+    EASYMENU BAT        58   2-02-88
+    EASYMENU TXT     53149   2-02-88
+    EDIT     MHH      2060   2-02-88
+    EDITERR  MSG      1786   2-02-88
+    EDITHELP 000     36352   2-02-88
+    EDITHELP COM     49733   2-02-88
     FORMKING 000     49408   4-06-88   1:11a
     FORMKING CFG       117   4-06-88   1:14a
     FORMKING CHN     11741   4-06-88   1:12a
@@ -1308,29 +1308,29 @@ machines:
     GOODBYE  TXT       677   2-16-88  10:16a
     GREP     EXE     10848   3-29-88  10:23a
     GREP     TXT      6998   3-29-88  10:27a
-    INFO     MHH      2198   2-02-88  12:00a
+    INFO     MHH      2198   2-02-88
     INMAIL   CHN      1684   3-28-88  11:19a
     INMAIL   TXT      3445   3-29-88   8:39a
-    INSTALL  BAT      9096   2-02-88  12:00a
-    INVOICE  TXT      1969   2-02-88  12:00a
+    INSTALL  BAT      9096   2-02-88
+    INVOICE  TXT      1969   2-02-88
     KINGDOM  000     26624  11-26-87   9:06p
     KINGDOM  COM     46134  11-26-87   9:07p
     KINGDOM  TXT      2046   3-17-88   2:14p
     KROZ3    HS        300   3-28-88  10:35a
-    MAIN     M        4590   2-02-88  12:00a
+    MAIN     M        4590   2-02-88
     MENU     CSC      4000   1-03-88  11:46a
     MENU     MSC      4000   1-03-88  11:49a
     MENU     TXT      1298   3-31-88   4:29p
-    NOBOOT   COM        48   2-02-88  12:00a
-    NUMOFF   COM        15   2-02-88  12:00a
-    NUMON    COM        15   2-02-88  12:00a
-    OPTIONS  EXE     73120   2-02-88  12:00a
+    NOBOOT   COM        48   2-02-88
+    NUMOFF   COM        15   2-02-88
+    NUMON    COM        15   2-02-88
+    OPTIONS  EXE     73120   2-02-88
     PASRUN   COM     12230   5-11-87  11:50a
-    PASSWORD EXE     17248   2-02-88  12:00a
+    PASSWORD EXE     17248   2-02-88
     PRESENT  CHN     32179   3-11-88  11:59a
-    PRINTER  MHH      1238   2-02-88  12:00a
-    PRTSCOFF COM        12   2-02-88  12:00a
-    PRTSCON  COM        12   2-02-88  12:00a
+    PRINTER  MHH      1238   2-02-88
+    PRTSCOFF COM        12   2-02-88
+    PRTSCON  COM        12   2-02-88
     QUIZ     DAT       344   1-01-80  12:08a
     QUIZ1    DAT       353   3-24-88   9:10a
     QUIZ2    DAT       343   1-01-80  12:10a
@@ -1338,15 +1338,15 @@ machines:
     QUIZ4    DAT       348   1-01-80  12:16a
     QUIZPRES EXE     44580   4-04-88   9:33a
     QUIZPRES TXT      1597   3-17-88   2:42p
-    READ     ME        996   2-02-88  12:00a
+    READ     ME        996   2-02-88
     RETURN   CHN      1781   9-16-86   3:30p
-    SAMPLE   M        4590   2-02-88  12:00a
-    SETUP    BAT      4552   2-02-88  12:00a
+    SAMPLE   M        4590   2-02-88
+    SETUP    BAT      4552   2-02-88
     STATUS   DAT        79   8-05-16  10:59p
-    SWAPDIR  EXE      6656   2-02-88  12:00a
+    SWAPDIR  EXE      6656   2-02-88
     TUTOR    FRM      1167   3-28-88  11:37p
     UTILITY  DAT       185   3-02-88  11:57a
-    YESBOOT  COM        20   2-02-88  12:00a
+    YESBOOT  COM        20   2-02-88
     FILE_ID  DIZ       207   3-21-11   9:59p
           103 file(s)     665981 bytes
                           527872 bytes free
@@ -1892,8 +1892,8 @@ machines:
      Volume in drive A is BBD27
      Directory of A:\
 
-    $READ_ME 1ST      3328  10-24-88  12:00a
-    $TOC              1537  10-24-88  12:00a
+    $READ_ME 1ST      3328  10-24-88
+    $TOC              1537  10-24-88
     -------- ###         0   8-07-87   9:53a
     -------- ---         0   8-07-87   9:53a
     -------- 100         0   8-07-87   9:53a
@@ -1950,17 +1950,17 @@ machines:
     DESK     TXT      5343  11-03-88   3:35p
     DISKOVER TXT      3567  10-31-88   6:30p
     DRAG     SKE      2561  11-08-87   9:46a
-    FLUSHOT  DAT       128  10-24-88  12:00a
-    FLU_POKE COM       844  10-24-88  12:00a
-    FLU_REG  FRM      2048  10-24-88  12:00a
-    FSP      COM     15505  10-24-88  12:00a
-    FSP      TXT     74049  10-24-88  12:00a
-    F_FEED               1  10-24-88  12:00a
+    FLUSHOT  DAT       128  10-24-88
+    FLU_POKE COM       844  10-24-88
+    FLU_REG  FRM      2048  10-24-88
+    FSP      COM     15505  10-24-88
+    FSP      TXT     74049  10-24-88
+    F_FEED               1  10-24-88
     GO       BAT       448  10-18-88  12:07a
     GOODBYE  TXT       677   2-16-88  10:16a
     GRBBD27  DAT     12584  11-02-88   9:41a
     GRBBD27  NAM       352  11-02-88   9:41a
-    HARDWARE TXT      1152  10-24-88  12:00a
+    HARDWARE TXT      1152  10-24-88
     HPJ      CHN     22355  11-04-88   4:27p
     HPJ      TXT      2818  11-04-88   9:13a
     ID_LIST  BAS      1060   9-30-88   1:57p
@@ -1973,18 +1973,18 @@ machines:
     MKTPLACE TXT      9263  10-11-88   3:41p
     MORSE    COM     52403  10-19-88  12:30p
     MORSE    TXT      8730  11-03-88  10:58a
-    MY_OWN   CPY      1408  10-24-88  12:00a
+    MY_OWN   CPY      1408  10-24-88
     PASRUN   COM     12230   5-11-87  11:50a
     PRESENT  CHN     32197  11-04-88   4:33p
-    PRINT    BAT       512  10-24-88  12:00a
+    PRINT    BAT       512  10-24-88
     PSUTIL2  CFG        15  11-02-88   9:45a
     PSUTIL2  EXE     81822  11-01-88   3:13p
     PSUTIL2  TXT      7432  11-03-88   3:28p
-    RAMNET   TXT      3245  10-24-88  12:00a
+    RAMNET   TXT      3245  10-24-88
     REPTCARD TXT      2360  11-04-88   4:37p
     RETURN   CHN      1814   5-25-88   5:34p
-    REWARD   FRM      1890  10-24-88  12:00a
-    REWARD   LST      2176  10-24-88  12:00a
+    REWARD   FRM      1890  10-24-88
+    REWARD   LST      2176  10-24-88
     SCENE    SKE      3031   1-18-88  10:12p
     SCROLL   COM       296   7-20-88   6:43p
     SET1     DAT      8192   7-30-88  12:36p
@@ -2001,9 +2001,9 @@ machines:
     SQUARES  TXT      2793  10-07-88  11:17a
     STATUS   DAT        82   8-05-16  10:59p
     TEST     BAT     13324  10-07-88   9:38a
-    THE_COOP TXT      3328  10-24-88  12:00a
+    THE_COOP TXT      3328  10-24-88
     TITLE    SKE      2625  11-27-87   5:18p
-    UPDATES  TXT      3840  10-24-88  12:00a
+    UPDATES  TXT      3840  10-24-88
     WAIT     COM       153   7-21-88   7:30a
     WRITE    COM        39  10-11-88   4:03p
     FILE_ID  DIZ       207  10-24-11  10:26p
@@ -2057,7 +2057,7 @@ machines:
     BLUELINE TXT      2244  11-14-88  10:57p
     BLUENOTE TXT      7586  11-21-88   2:41p
     BRUN30   EXE     70680   4-07-87  10:48a
-    BUFFER   SYS       211   7-20-88  12:00a
+    BUFFER   SYS       211   7-20-88
     BUFFER   TXT      3026  12-01-88  10:36a
     CONTENTS TXT      2660  12-02-88  11:04a
     CREDITS  TXT      2763  12-02-88  11:14a
@@ -2342,28 +2342,28 @@ machines:
     -------- 210         0   8-07-87   9:53a
     -------- 211         0   8-07-87   9:53a
     -------- 212         0   8-07-87   9:53a
-    1        BIN      6053   2-01-89  12:00a
-    1        EXE      1026   2-01-89  12:00a
-    1        NUM      5609   2-01-89  12:00a
-    2        NUM      5609   2-01-89  12:00a
+    1        BIN      6053   2-01-89
+    1        EXE      1026   2-01-89
+    1        NUM      5609   2-01-89
+    2        NUM      5609   2-01-89
     214124   EXE     29686   3-07-89  12:21p
     214124   TXT      2625   3-08-89   8:12a
-    3        NUM       100   2-01-89  12:00a
-    3A       NUM       100   2-01-89  12:00a
-    4        NUM      8007   2-01-89  12:00a
-    4A       NUM      8007   2-01-89  12:00a
-    5        NUM       100   2-01-89  12:00a
-    5A       NUM       100   2-01-89  12:00a
-    6        NUM      5137   2-01-89  12:00a
-    6A       NUM      5137   2-01-89  12:00a
-    7        NUM      6053   2-01-89  12:00a
+    3        NUM       100   2-01-89
+    3A       NUM       100   2-01-89
+    4        NUM      8007   2-01-89
+    4A       NUM      8007   2-01-89
+    5        NUM       100   2-01-89
+    5A       NUM       100   2-01-89
+    6        NUM      5137   2-01-89
+    6A       NUM      5137   2-01-89
+    7        NUM      6053   2-01-89
     ABOUT    TXT      1501  11-14-88   8:43p
     BEGIN    EXE      8208   3-07-89   7:04p
     BLUEBOOT PAK      3012   1-06-89  11:05a
     BLUELINE CHN     14863   3-30-88   9:57a
     BLUELINE TXT      2244  11-14-88  10:57p
     BLUENOTE TXT      8835   3-05-89  10:59p
-    BRUN30   EXE     70680   2-01-89  12:00a
+    BRUN30   EXE     70680   2-01-89
     CHCHAR   EXE     13008   2-13-89  12:05p
     CONTENTS TXT      1826   3-02-89   2:12p
     COPYIT   BAT       216   3-03-89   4:31p
@@ -2373,26 +2373,26 @@ machines:
     DESK     TXT      4805   3-07-89   4:38p
     DISKOVER TXT      3386   3-07-89   8:52a
     DUNSMALL EXE     62897   2-13-89  12:45p
-    F1       COM      2043   2-01-89  12:00a
+    F1       COM      2043   2-01-89
     F2       COM      1744   1-31-89   2:31p
-    F5       COM        31   2-01-89  12:00a
-    F6       COM       272   2-01-89  12:00a
-    F7       COM       268   2-01-89  12:00a
-    F8       EXE      4801   2-01-89  12:00a
-    F9       EXE      1789   2-01-89  12:00a
+    F5       COM        31   2-01-89
+    F6       COM       272   2-01-89
+    F7       COM       268   2-01-89
+    F8       EXE      4801   2-01-89
+    F9       EXE      1789   2-01-89
     GO       BAT       483   2-16-89   1:38p
     GOBACK   EXE      6144   2-16-89   1:36p
     GOODBYE  TXT       677   2-16-88  10:16a
     GRBBD31  DAT      8008   2-22-89   8:24a
     GRBBD31  NAM       224   2-22-89   8:24a
-    H1       OVL      1163   2-01-89  12:00a
-    H2       OVL      2527   2-01-89  12:00a
-    H3       OVL      1758   2-01-89  12:00a
-    H4       OVL      1543   2-01-89  12:00a
-    H5       OVL      1748   2-01-89  12:00a
-    H6       OVL      2417   2-01-89  12:00a
-    H7       OVL      1961   2-01-89  12:00a
-    H8       OVL      1009   2-01-89  12:00a
+    H1       OVL      1163   2-01-89
+    H2       OVL      2527   2-01-89
+    H3       OVL      1758   2-01-89
+    H4       OVL      1543   2-01-89
+    H5       OVL      1748   2-01-89
+    H6       OVL      2417   2-01-89
+    H7       OVL      1961   2-01-89
+    H8       OVL      1009   2-01-89
     INMAIL   CHN      1768   9-22-88   5:05p
     INMAIL   TXT      2703  11-14-88  10:42p
     LARGCARD DCK      4756   8-19-88   4:59p
@@ -2401,7 +2401,7 @@ machines:
     MENU     TXT      1143   3-08-89   1:28p
     MKTPLACE TXT      3390   3-03-89   2:58a
     MORAFFS  TXT     15470   3-08-89   1:37p
-    NAME                 5   2-01-89  12:00a
+    NAME                 5   2-01-89
     PASRUN   COM     12230   5-11-87  11:50a
     PERIODIC EXE     76956   2-14-89   5:35p
     PERIODIC SCR    122097  12-16-88   2:21p
@@ -2413,11 +2413,11 @@ machines:
     REPTCARD TXT      2149   3-06-89   4:45a
     RETURN   CHN      1814   5-25-88   5:34p
     RETURN30 EXE      4048   6-24-87  10:05a
-    REVIEW   1         409   2-01-89  12:00a
+    REVIEW   1         409   2-01-89
     REVIEW   2         769   3-07-89   7:04p
-    REVIEW   3         747   2-01-89  12:00a
+    REVIEW   3         747   2-01-89
     REVIEW   4         917   1-01-88   2:22a
-    REVIEW   5         649   2-01-89  12:00a
+    REVIEW   5         649   2-01-89
     REVIEW   6         787   2-13-89  12:27p
     STATUS   DAT        78   8-05-16  11:00p
     FILE_ID  DIZ       207  10-24-11  10:26p
@@ -2466,7 +2466,7 @@ machines:
     BLUENOTE TXT      9711   4-05-89   3:51p
     BOXZUM   EXE     24449   4-06-89   8:02a
     BOXZUM   TXT      2691   4-05-89   3:22p
-    BRUN30   EXE     70680   2-01-89  12:00a
+    BRUN30   EXE     70680   2-01-89
     CHITUTOR EXE     65628   1-24-89   9:10a
     CHITUTOR TXT      1278   4-05-89   3:03p
     CONTENTS TXT      2442   4-05-89   3:03p
@@ -2551,7 +2551,7 @@ machines:
     BLUELINE CHN     14863   3-30-88   9:57a
     BLUELINE TXT      2250   4-05-89   3:37p
     BLUENOTE TXT      7126   5-17-89  12:49p
-    BRUN30   EXE     70680   2-01-89  12:00a
+    BRUN30   EXE     70680   2-01-89
     BUDGET   TXT      2985   5-17-89  12:48p
     CONFILE  FAC      4516   5-01-89   2:53p
     CONTENTS TXT      2299   5-04-89   4:52p
@@ -2633,7 +2633,7 @@ machines:
     BLUELINE CHN     14863   3-30-88   9:57a
     BLUELINE TXT      2250   4-05-89   3:37p
     BLUENOTE TXT      6177   6-21-89   2:50p
-    BRUN30   EXE     70680   2-01-89  12:00a
+    BRUN30   EXE     70680   2-01-89
     CHARACT  DAT      8456   1-01-80  12:53a
     CM       EXE     31760   6-21-89   6:54p
     CM       TXT      7022   6-21-89   7:27p
@@ -2721,7 +2721,7 @@ machines:
     BLUENOTE TXT      5004   7-18-89  12:05p
     BOXASCII CPF      4451   7-13-89  11:16a
     BOXBLANK CPF      4451   7-13-89  11:15a
-    BRUN30   EXE     70680   2-01-89  12:00a
+    BRUN30   EXE     70680   2-01-89
     CAVERNS  000     43008   7-13-89   5:01p
     CAVERNS  COM     45770   7-13-89   5:01p
     CAVERNS  DAT        26   5-18-89   7:48p
@@ -2800,7 +2800,7 @@ machines:
     BLUELINE CHN     14863   3-30-88   9:57a
     BLUELINE TXT      2250   4-05-89   3:37p
     BLUENOTE TXT     11573   8-14-89   2:13p
-    BRUN30   EXE     70680   2-01-89  12:00a
+    BRUN30   EXE     70680   2-01-89
     CONTENTS TXT      2256   8-14-89  10:22a
     CREDITS  TXT      3539   8-11-89   9:43a
     DESK     TXT      1926   8-14-89  10:23a
@@ -6126,9 +6126,10 @@ machines:
     MEMPHELP TLL      2442   3-22-93  12:46p
     MEMPHELP TXT      9029   4-02-93  11:10a
     NEWUSER  TXT      7952   4-01-93   7:59a
-    ODM78~1              0   4-08-93  10:01a
+    ODM78                0   4-08-93  10:01a
     ODM78    WRD      7377   4-01-93   8:54a
     ODM78MKT TXT      5167   4-05-93   9:58a
+    ODM78~1              0   4-08-93  10:01a
     ODMENU   EXE     61790   4-08-93   9:46a
     PCXVIEW  EXE     86788   2-08-93   7:59a
     PHONE    MTP       406   3-30-93  10:11a
@@ -6146,7 +6147,7 @@ machines:
     WORDUP   CFG       290   5-08-93   4:31p
     WORDUP   EXE     36920   1-29-93  11:41a
     FILE_ID  DIZ       204   4-19-15   9:57p
-           53 file(s)     689085 bytes
+           54 file(s)     689085 bytes
                           513536 bytes free
 
 [[Source](https://archive.org/details/odm78)]

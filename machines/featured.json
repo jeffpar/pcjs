@@ -150,6 +150,12 @@
     "@tags": "home,pcx86,game,windows"
   },
   {
+    "@title": "PC Magazine Utilities (1987)",
+    "@permalink": "/software/pcx86/sw/magazines/pcm/",
+    "@preview": ".png",
+    "@tags": "shareware,pcx86"
+  },
+  {
     "@title": "IBM OS/2 1.0 (1987)",
     "@permalink": "/software/pcx86/sys/os2/ibm/1.0/",
     "@preview": ".png",

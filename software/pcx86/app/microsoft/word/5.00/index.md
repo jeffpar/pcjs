@@ -2,6 +2,7 @@
 layout: page
 title: Microsoft Word 5.00 (for DOS)
 permalink: /software/pcx86/app/microsoft/word/5.00/
+preview: https://miscdisks.pcjs.org/pcx86/app/microsoft/word/5.00/WORD50-PROGRAM1.jpg
 redirect_from: /disks/pcx86/apps/microsoft/word/5.00/
 machines:
   - id: ibm5170

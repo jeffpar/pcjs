@@ -2,6 +2,7 @@
 layout: page
 title: Microsoft FORTRAN Compiler 5.00
 permalink: /software/pcx86/lang/microsoft/fortran/compiler/5.00/
+preview: https://miscdisks.pcjs.org/pcx86/lang/microsoft/fortran/compiler/5.00/FORTRAN-V500-DISK1-06576.jpg
 machines:
   - id: ibm5170
     type: pcx86

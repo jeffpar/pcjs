@@ -2,6 +2,7 @@
 layout: page
 title: Microsoft Word 2.00
 permalink: /software/pcx86/app/microsoft/word/2.00/
+preview: https://miscdisks.pcjs.org/pcx86/app/microsoft/word/2.00/WORD20-DISK1.jpg
 machines:
   - id: ibm5160
     type: pcx86

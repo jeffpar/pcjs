@@ -23,6 +23,6 @@ machines:
     DR       COM     18880   7-01-84   9:30a
     DR       HLP     27600   7-01-84   9:30a
     RDT      COM     40832   7-01-84   9:30a
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
             5 file(s)      87945 bytes
                            91136 bytes free

@@ -2,6 +2,7 @@
 layout: page
 title: MicroPro WordStar 3.24
 permalink: /software/pcx86/app/other/wordstar/3.24/
+preview: https://miscdisks.pcjs.org/pcx86/app/other/wordstar/3.24/WS324-MOUNTABLE.jpg
 redirect_from: /disks/pcx86/apps/other/wordstar/3.24/
 machines:
   - id: ibm5150
@@ -28,11 +29,11 @@ an interesting review/rant from 1983 on this and other versions of WordStar for 
      Volume in drive A has no label
      Directory of A:\
 
-    WSOVLY1  OVR     41216  11-15-82  12:00a
-    WSMSGS   OVR     28160  11-15-82  12:00a
-    INSTALL  BAS     17152  10-01-82  12:00a
-    PRINT    TST      3968   1-01-80  12:00a
-    WS       COM     20864   2-01-83  12:00a
+    WSOVLY1  OVR     41216  11-15-82
+    WSMSGS   OVR     28160  11-15-82
+    INSTALL  BAS     17152  10-01-82
+    PRINT    TST      3968   1-01-80
+    WS       COM     20864   2-01-83
             5 file(s)     111360 bytes
                            48128 bytes free
 

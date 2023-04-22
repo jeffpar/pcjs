@@ -84,7 +84,7 @@ For more information about this software, see the [PCjs blog](/blog/2018/04/01/)
     C7DUTBL  MON       128   7-17-85  11:00a
     PTR07              128   7-17-85  11:00a
     DU07              1024   7-17-85  11:00a
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            63 file(s)     273064 bytes
                            54272 bytes free
 

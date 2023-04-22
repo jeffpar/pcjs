@@ -2,6 +2,7 @@
 layout: page
 title: Norton Utilities 4.00 (Standard Edition)
 permalink: /software/pcx86/util/norton/4.00/
+preview: https://miscdisks.pcjs.org/pcx86/util/norton/4.00/NU400-1987-05-15-DISK1.jpg
 redirect_from: /disks/pcx86/tools/other/norton/4.00/
 machines:
   - id: ibm5160

@@ -2,6 +2,7 @@
 layout: page
 title: Microsoft QuickC for Windows 1.00
 permalink: /software/pcx86/lang/microsoft/c/qcwin/
+preview: https://miscdisks.pcjs.org/pcx86/lang/microsoft/c/qcwin/MSQCWIN-DISK1.jpg
 machines:
   - id: ibm5170
     type: pcx86

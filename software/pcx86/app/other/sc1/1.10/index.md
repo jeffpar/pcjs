@@ -21,18 +21,18 @@ machines:
      Volume in drive A has no label
      Directory of A:\
 
-    SC       COM     29184   1-01-80  12:00a
-    SC       OVL     16512   1-01-80  12:00a
-    SC       HLP      8064   1-01-82  12:00a
-    BALANCE  CAL     13824   1-01-80  12:00a
-    BARRIER  CAL      3200   1-01-80  12:00a
-    BRKEVN   CAL      4096   1-01-80  12:00a
-    COLOR    COM        22   1-01-80  12:00a
-    MONO     COM        22   1-01-80  12:00a
-    AUTOEXEC BAT         5   4-19-82  12:00a
-    AUTOBW   BAT         9   4-19-82  12:00a
-    AUTO40   BAT        14   4-19-82  12:00a
-    AUTOBW40 BAT        18   4-19-82  12:00a
+    SC       COM     29184   1-01-80
+    SC       OVL     16512   1-01-80
+    SC       HLP      8064   1-01-82
+    BALANCE  CAL     13824   1-01-80
+    BARRIER  CAL      3200   1-01-80
+    BRKEVN   CAL      4096   1-01-80
+    COLOR    COM        22   1-01-80
+    MONO     COM        22   1-01-80
+    AUTOEXEC BAT         5   4-19-82
+    AUTOBW   BAT         9   4-19-82
+    AUTO40   BAT        14   4-19-82
+    AUTOBW40 BAT        18   4-19-82
            12 file(s)      74970 bytes
                            81408 bytes free
 

@@ -83,6 +83,6 @@ from the August 1981 time frame.
     PAS2     EXE     99200   8-31-81  12:00p
     PASCAL              50   8-31-81  12:00p
     PASCAL   LIB     83456   8-31-81  12:00p
-    LINK     EXE     43264   8-04-81  12:00a
+    LINK     EXE     43264   8-04-81
             9 file(s)     325374 bytes
                            31744 bytes free

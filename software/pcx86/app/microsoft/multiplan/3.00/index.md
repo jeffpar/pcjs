@@ -2,6 +2,7 @@
 layout: page
 title: Microsoft Multiplan 3.00
 permalink: /software/pcx86/app/microsoft/multiplan/3.00/
+preview: https://miscdisks.pcjs.org/pcx86/app/microsoft/multiplan/3.00/MULTIPLAN300-DISK1.jpg
 machines:
   - id: ibm5170
     type: pcx86

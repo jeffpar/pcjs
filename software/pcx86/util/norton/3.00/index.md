@@ -2,6 +2,7 @@
 layout: page
 title: Norton Utilities 3.00
 permalink: /software/pcx86/util/norton/3.00/
+preview: https://miscdisks.pcjs.org/pcx86/util/norton/3.00/NU300-1984-12-07.jpg
 machines:
   - id: ibm5160
     type: pcx86

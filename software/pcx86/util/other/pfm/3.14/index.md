@@ -891,7 +891,7 @@ paulc@bangate.compaq.com
      Volume in drive A is PFM
      Directory of A:\
 
-    PFM      COM     47616   2-14-91  12:00a
+    PFM      COM     47616   2-14-91
     PFM      DOC    174592   1-02-97   1:59p
             2 file(s)     222208 bytes
                            99328 bytes free

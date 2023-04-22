@@ -2,6 +2,7 @@
 layout: page
 title: Microsoft Word for Windows 2.0c
 permalink: /software/pcx86/app/microsoft/winword/2.0c/
+preview: https://miscdisks.pcjs.org/pcx86/app/microsoft/winword/2.0c/WINWORD20-DISK1.jpg
 redirect_from: /disks/pcx86/apps/microsoft/winword/2.0c/
 machines:
   - id: ibm5170

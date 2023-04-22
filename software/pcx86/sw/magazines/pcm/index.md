@@ -2,6 +2,7 @@
 layout: page
 title: PC Magazine Disks
 permalink: /software/pcx86/sw/magazines/pcm/
+preview: https://miscdisks.pcjs.org/pcx86/sw/magazines/pcm/PCMAG-UTIL-VOL1-1987.png
 redirect_from: /disks/pcx86/shareware/pcmag/
 machines:
   - id: pcmag
@@ -357,9 +358,9 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
     LANDPAGE          5130   9-24-87   2:26p
     PORTPAGE          5809   9-24-87   2:23p
-    RUN      ASM     21967   2-16-88  12:00a
-    RUN      BAS     10250   2-16-88  12:00a
-    RUN      COM      1053   2-16-88  12:00a
+    RUN      ASM     21967   2-16-88
+    RUN      BAS     10250   2-16-88
+    RUN      COM      1053   2-16-88
     RUN      DOC      1806  12-23-87   2:40p
             6 file(s)      46015 bytes
                           112128 bytes free
@@ -386,14 +387,14 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
      Volume in drive A is VOL07N06
      Directory of A:\
 
-    ALPHSOUP C        2548   3-29-88  12:00a
-    CALC     COM      2674   3-29-88  12:00a
-    CALC     DOC      1793   3-29-88  12:00a
-    FIG1     SCR       239   3-29-88  12:00a
-    FPDEMO   C         802   3-29-88  12:00a
-    LANDPAGE          2239   3-29-88  12:00a
-    PORTPAGE          2413   3-29-88  12:00a
-    QUADRANT C        2793   3-29-88  12:00a
+    ALPHSOUP C        2548   3-29-88
+    CALC     COM      2674   3-29-88
+    CALC     DOC      1793   3-29-88
+    FIG1     SCR       239   3-29-88
+    FPDEMO   C         802   3-29-88
+    LANDPAGE          2239   3-29-88
+    PORTPAGE          2413   3-29-88
+    QUADRANT C        2793   3-29-88
             8 file(s)      15501 bytes
                           142848 bytes free
 
@@ -405,10 +406,10 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
      Directory of A:\
 
     PP707    ZIP     10813   3-01-89   8:55p
-    TOUCH    ASM     30485   4-12-88  12:00a
-    TOUCH    BAS      9962   4-12-88  12:00a
-    TOUCH    COM      1021   4-12-88  12:00a
-    TOUCH    DOC      1460   4-12-88  12:00a
+    TOUCH    ASM     30485   4-12-88
+    TOUCH    BAS      9962   4-12-88
+    TOUCH    COM      1021   4-12-88
+    TOUCH    DOC      1460   4-12-88
             5 file(s)      53741 bytes
                           105472 bytes free
 
@@ -419,18 +420,18 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
      Volume in drive A is VOL07N08
      Directory of A:\
 
-    BITTEST  C        2017   4-26-88  12:00a
-    MEM512   ASM      2398   4-26-88  12:00a
-    MEM512   BAS      1416   4-26-88  12:00a
-    OPCODE   PAS      1390   4-26-88  12:00a
-    STAYDOWN ASM     18205   4-26-88  12:00a
-    STAYDOWN BAS      8507   4-26-88  12:00a
-    STAYDOWN COM       859   4-26-88  12:00a
-    STAYDOWN DOC      2019   4-26-88  12:00a
-    WAKEUP   ASM      9188   4-26-88  12:00a
-    WAKEUP   BAS      9168   4-26-88  12:00a
-    WAKEUP   EXE      1072   4-26-88  12:00a
-    WARMBOOT BAS       980   4-26-88  12:00a
+    BITTEST  C        2017   4-26-88
+    MEM512   ASM      2398   4-26-88
+    MEM512   BAS      1416   4-26-88
+    OPCODE   PAS      1390   4-26-88
+    STAYDOWN ASM     18205   4-26-88
+    STAYDOWN BAS      8507   4-26-88
+    STAYDOWN COM       859   4-26-88
+    STAYDOWN DOC      2019   4-26-88
+    WAKEUP   ASM      9188   4-26-88
+    WAKEUP   BAS      9168   4-26-88
+    WAKEUP   EXE      1072   4-26-88
+    WARMBOOT BAS       980   4-26-88
            12 file(s)      57219 bytes
                           101376 bytes free
 
@@ -441,17 +442,17 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
      Volume in drive A is VOL07N09
      Directory of A:\
 
-    DUMP     ASM     11331   5-17-88  12:00a
-    DUMP     BAS      6923   5-17-88  12:00a
-    DUMP     EXE       790   5-17-88  12:00a
+    DUMP     ASM     11331   5-17-88
+    DUMP     BAS      6923   5-17-88
+    DUMP     EXE       790   5-17-88
     EXTENDED PAS       956   3-29-88  11:15a
     MOUSDEMO BAS      2940   3-29-88  11:12a
-    RECORDER ASM     22481   5-17-88  12:00a
-    RECORDER BAS     12596   5-17-88  12:00a
-    RECORDER COM      1309   5-17-88  12:00a
-    RECORDER DOC      1467   5-17-88  12:00a
-    TD       C        5646   5-17-88  12:00a
-    TRYTD    C        1799   5-17-88  12:00a
+    RECORDER ASM     22481   5-17-88
+    RECORDER BAS     12596   5-17-88
+    RECORDER COM      1309   5-17-88
+    RECORDER DOC      1467   5-17-88
+    TD       C        5646   5-17-88
+    TRYTD    C        1799   5-17-88
     WRITE    PAS      2046   3-29-88  11:14a
            12 file(s)      70284 bytes
                            87552 bytes free
@@ -463,20 +464,20 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
      Volume in drive A is VOL07N10
      Directory of A:\
 
-    INFO     ASM      4070   5-31-88  12:00a
-    INFO     BAS      1560   5-31-88  12:00a
-    INFO     COM       281   5-31-88  12:00a
-    MENU     C       11061   5-31-88  12:00a
-    PCMAG    H         257   5-31-88  12:00a
-    RHCTRL   ASM      4004   5-31-88  12:00a
-    RHCTRL   BAS      1825   5-31-88  12:00a
-    RHCTRL   COM       339   5-31-88  12:00a
-    TD       ASM     11805   5-31-88  12:00a
-    TOGGLE   ASM      4186   5-31-88  12:00a
-    TOGGLE   BAS      3757   5-31-88  12:00a
-    TOGGLE   COM       338   5-31-88  12:00a
-    TOGGLE   DOC      1954   5-31-88  12:00a
-    TRYTD    ASM      4052   5-31-88  12:00a
+    INFO     ASM      4070   5-31-88
+    INFO     BAS      1560   5-31-88
+    INFO     COM       281   5-31-88
+    MENU     C       11061   5-31-88
+    PCMAG    H         257   5-31-88
+    RHCTRL   ASM      4004   5-31-88
+    RHCTRL   BAS      1825   5-31-88
+    RHCTRL   COM       339   5-31-88
+    TD       ASM     11805   5-31-88
+    TOGGLE   ASM      4186   5-31-88
+    TOGGLE   BAS      3757   5-31-88
+    TOGGLE   COM       338   5-31-88
+    TOGGLE   DOC      1954   5-31-88
+    TRYTD    ASM      4052   5-31-88
            14 file(s)      49489 bytes
                           107520 bytes free
 
@@ -487,9 +488,9 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
      Volume in drive A is VOL07N12
      Directory of A:\
 
-    ALLKEYS  ASM     20549   6-28-88  12:00a
-    ALLKEYS  BAS      5179   6-28-88  12:00a
-    ALLKEYS  COM       870   6-28-88  12:00a
+    ALLKEYS  ASM     20549   6-28-88
+    ALLKEYS  BAS      5179   6-28-88
+    ALLKEYS  COM       870   6-28-88
     ALLKEYS  DOC      1724   5-23-88   4:08p
     DATETIME PAS      2770   4-28-88   9:58a
     DEMOFILE TXT       199   4-28-88   9:56a
@@ -521,9 +522,9 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
     QFN      ASM      9121   6-06-88   1:29p
     QFN      OBJ       595   6-06-88   1:29p
     QFRESH   SCR       597   6-06-88   1:33p
-    SETMODE  ASM     27426   7-01-88  12:00a
-    SETMODE  BAS     11387   7-01-88  12:00a
-    SETMODE  COM      2092   7-01-88  12:00a
+    SETMODE  ASM     27426   7-01-88
+    SETMODE  BAS     11387   7-01-88
+    SETMODE  COM      2092   7-01-88
     SETMODE  DOC      2003   6-06-88   3:21p
     TRYQFN   ASM      3990   6-06-88   1:29p
     TRYQFN   EXE      1211   6-06-88   1:29p
@@ -558,9 +559,9 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
     NOPRTSC  PAS       428   6-30-88  10:41a
     PATHSUB  C       12179   6-30-88  10:39a
     QFN      C        4359   4-25-88   9:00a
-    RAMVIEW  ASM     37857   8-01-88  12:00a
-    RAMVIEW  BAS     13574   8-01-88  12:00a
-    RAMVIEW  COM      2517   8-01-88  12:00a
+    RAMVIEW  ASM     37857   8-01-88
+    RAMVIEW  BAS     13574   8-01-88
+    RAMVIEW  COM      2517   8-01-88
     RAMVIEW  DOC      1685   8-01-88   3:11p
     RETRNDEM BAT       552   6-30-88  12:22p
     TRYQFN   C         972   4-25-88   8:52a
@@ -581,9 +582,9 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
     ENETBIOS COM      1102   5-31-88  12:56p
     FILECOPY ASM     10094   7-25-88   2:36p
     FILECOPY BAS      1832   7-25-88   2:42p
-    FONTEDIT ASM     58115   9-13-88  12:00a
-    FONTEDIT BAS     15437   9-13-88  12:00a
-    FONTEDIT COM      2890   9-13-88  12:00a
+    FONTEDIT ASM     58115   9-13-88
+    FONTEDIT BAS     15437   9-13-88
+    FONTEDIT COM      2890   9-13-88
     MAKE     PAS       440   7-25-88   2:38p
     PROCPARM PAS      1089   7-25-88   2:37p
     QWIKSORT C        3723   5-24-88  11:03a
@@ -605,22 +606,22 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
     BOXES3   ZIP      9376   3-01-89   9:00p
     EXAMPLE  BAT       140   8-16-88   8:33a
     FND      BAT       484   8-16-88   8:33a
-    MAKEBAS  ASM     41114   9-27-88  12:00a
-    MAKEBAS  BAS     12359   9-27-88  12:00a
-    MAKEBAS  COM      2287   9-27-88  12:00a
+    MAKEBAS  ASM     41114   9-27-88
+    MAKEBAS  BAS     12359   9-27-88
+    MAKEBAS  COM      2287   9-27-88
     MAKEBAS  DOC      1629   8-23-88   9:09a
     NEWNODE  ASM      4792   5-31-88   2:05p
     NEWNODE  COM       696   5-31-88   2:05p
     NUMLKOFF COM         8  11-29-87   3:54p
-    QSORTI   ASM      3364   9-27-88  12:00a
-    QSORTI   C        1483   9-27-88  12:00a
-    QSORTI   EXE       609   9-27-88  12:00a
+    QSORTI   ASM      3364   9-27-88
+    QSORTI   C        1483   9-27-88
+    QSORTI   EXE       609   9-27-88
     SELFMOD  PAS      1177   7-18-88   8:45a
     SENDCODE COM       457   8-16-88   8:32a
     SFIND    C        6175   7-18-88   9:42a
-    TRYQSI             271   9-27-88  12:00a
-    TRYQSI   ASM      6844   9-27-88  12:00a
-    TRYQSI   EXE      1152   9-27-88  12:00a
+    TRYQSI             271   9-27-88
+    TRYQSI   ASM      6844   9-27-88
+    TRYQSI   EXE      1152   9-27-88
            19 file(s)      94417 bytes
                            59904 bytes free
 
@@ -631,9 +632,9 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
      Volume in drive A is VOL07N17
      Directory of A:\
 
-    DCACHE   ASM     55450  10-11-88  12:00a
-    DCACHE   BAS     10901  10-11-88  12:00a
-    DCACHE   COM      1998  10-11-88  12:00a
+    DCACHE   ASM     55450  10-11-88
+    DCACHE   BAS     10901  10-11-88
+    DCACHE   COM      1998  10-11-88
     DCACHE   DOC      2036   9-07-88   9:32a
     DO       BAT      1281   9-06-88   2:58p
     ENV717   ARC      3172   6-19-88   6:33p
@@ -666,13 +667,13 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
     PP718    ZIP      7005   3-01-89   9:02p
     SHFTPICK COM        10   9-19-88   3:36p
     SHFTPICK SCR        89   7-12-88   2:17p
-    XPANBOSS ASM      5889  10-31-88  12:00a
-    XPANBOSS BAS      5328  10-31-88  12:00a
-    XPANBOSS COM       886  10-31-88  12:00a
-    XPANDISK ASM     38309  10-31-88  12:00a
-    XPANDISK BAS     10335  10-31-88  12:00a
+    XPANBOSS ASM      5889  10-31-88
+    XPANBOSS BAS      5328  10-31-88
+    XPANBOSS COM       886  10-31-88
+    XPANDISK ASM     38309  10-31-88
+    XPANDISK BAS     10335  10-31-88
     XPANDISK DOC      2121   9-19-88   2:45p
-    XPANDISK SYS      1876  10-31-88  12:00a
+    XPANDISK SYS      1876  10-31-88
            21 file(s)      98028 bytes
                            56320 bytes free
 
@@ -691,9 +692,9 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
     PP719    ZIP      7410   3-01-89   9:08p
     SIMPLIFY MAC       923   6-23-88  11:48a
     SUMDIR   PAS      1346   7-15-88   3:24p
-    TED      ASM     47242  11-15-88  12:00a
-    TED      BAS     15923  11-15-88  12:00a
-    TED      COM      2984  11-15-88  12:00a
+    TED      ASM     47242  11-15-88
+    TED      BAS     15923  11-15-88
+    TED      COM      2984  11-15-88
     TED      DOC      2380  10-11-88   9:33a
     USER_LOG BAT       404   7-18-88  11:55a
     WIPE     BAT       334  10-11-88   9:41a
@@ -710,9 +711,9 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
 
     BAT_CASE BAT       601   8-22-88  12:09p
     BIGGER   PAS      2491   7-14-88   9:53a
-    CONFIG   ASM     37443  11-29-88  12:00a
-    CONFIG   BAS      9281  11-29-88  12:00a
-    CONFIG   CTL      1676  11-29-88  12:00a
+    CONFIG   ASM     37443  11-29-88
+    CONFIG   BAS      9281  11-29-88
+    CONFIG   CTL      1676  11-29-88
     CONFIG   DOC      2406  10-24-88  11:18a
     CURSOR   PAS      1656   7-14-88   9:57a
     ENV720   ZIP      7063   3-01-89   9:15p
@@ -789,9 +790,9 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
      Volume in drive A is VOL08N01
      Directory of A:\
 
-    BCOPY    ASM     50166   1-17-89  12:00a
-    BCOPY    BAS     12279   1-17-89  12:00a
-    BCOPY    COM      2267   1-17-89  12:00a
+    BCOPY    ASM     50166   1-17-89
+    BCOPY    BAS     12279   1-17-89
+    BCOPY    COM      2267   1-17-89
     BCOPY    DOC      1996  12-06-88  10:27a
     CATALOG  BAT       200   9-16-88  11:16a
     CATALOGD BAT       256   9-18-88   1:52p
@@ -846,9 +847,9 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
     QB       BAT       123   9-08-88   3:55p
     QC       BAT       115   9-08-88   3:54p
     RCOPY    BAT       896  10-06-88  12:12p
-    SMOOTH   ASM     40545   2-14-89  12:00a
-    SMOOTH   BAS     10173   2-14-89  12:00a
-    SMOOTH   COM      1855   2-14-89  12:00a
+    SMOOTH   ASM     40545   2-14-89
+    SMOOTH   BAS     10173   2-14-89
+    SMOOTH   COM      1855   2-14-89
     SMOOTH   DOC      2110   1-09-89  11:55a
     TIMEBOMB BAT       132   1-09-89   2:51p
     TSO      C        1682  10-05-88   2:18p
@@ -1345,16 +1346,16 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
     CHG_SET2 BAT       206  12-20-88   2:33p
     CHG_SET3 BAT       162  12-20-88   2:33p
     COL      WK1      1915   4-28-89   3:23p
-    DCOMPRES ASM     30720  11-01-89  12:00a
-    DCOMPRES COM     28313  11-01-89  12:00a
+    DCOMPRES ASM     30720  11-01-89
+    DCOMPRES COM     28313  11-01-89
     EDITOR   BAS      5350  10-31-89   1:30p
     MCOL     WK1      1783   4-28-89   3:24p
     MPDIV    ASM      4713  10-31-89  10:12a
     MPIDIV   ASM      4004  10-31-89  10:12a
     MPMUL2   ASM      3513  10-31-89  10:13a
-    PCMANAGE C       22691  11-01-89  12:00a
+    PCMANAGE C       22691  11-01-89
     PCMANAGE DOC      4929  10-31-89   2:42p
-    PCMANAGE EXE     21158  11-01-89  12:00a
+    PCMANAGE EXE     21158  11-01-89
     QCASE    WK1      2847   4-04-89  11:10a
     TEXTCOM  BAT        85   2-09-89   2:33p
     TRIG     PAS      1710  10-31-89   1:32p
@@ -3219,7 +3220,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
     ALTPAUSE SCR       426   2-14-92   4:35p
     CASE     XLM      7223   9-23-92  11:35a
     CASE2    XLM      6157   9-23-92  11:36a
-    CONFIG   DLG      2397  10-27-92  12:00a
+    CONFIG   DLG      2397  10-27-92
     DAYS     DBF       140   6-08-92  11:10a
     DAYS     PRG       768   6-08-92  11:05a
     DAYS2    PRG      1366   6-08-92  12:51p
@@ -3228,7 +3229,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
     FILEDLG  PAS      2938   1-05-92   4:38p
     FILEDLG  RC        281   1-05-92   4:03p
     FILEDLG  RES       190   1-05-92   4:03p
-    HELPPLAN DOC      4363  10-27-92  12:00a
+    HELPPLAN DOC      4363  10-27-92
     HEXVIEW            499   7-11-92   1:20p
     HEXVIEW  C       28655   7-11-92   1:19p
     HEXVIEW  DEF       298   7-11-92   1:18p
@@ -3241,20 +3242,20 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
     HEXVIEW  RC        707   7-11-92   1:18p
     HEXVIEW  RES      1109   7-11-92   1:18p
     LOAD     WPM       787   5-04-92  10:23a
-    MAKETIME DOC      5404  10-27-92  12:00a
+    MAKETIME DOC      5404  10-27-92
     RANDFI   BAS      5296   1-27-92   9:57a
-    README   DOC       573  10-27-92  12:00a
-    WTIME    BMP       630  10-27-92  12:00a
-    WTIME    C       44025  10-27-92  12:00a
-    WTIME    DEF       348  10-27-92  12:00a
+    README   DOC       573  10-27-92
+    WTIME    BMP       630  10-27-92
+    WTIME    C       44025  10-27-92
+    WTIME    DEF       348  10-27-92
     WTIME    DOC      7876  10-05-92  12:44p
-    WTIME    EXE     22240  10-27-92  12:00a
-    WTIME    H        4345  10-27-92  12:00a
-    WTIME    HLP     14509  10-27-92  12:00a
-    WTIME    HPJ       718  10-27-92  12:00a
-    WTIME    ICO       766  10-27-92  12:00a
-    WTIME    RC        911  10-27-92  12:00a
-    WTIME    RTF     20051  10-27-92  12:00a
+    WTIME    EXE     22240  10-27-92
+    WTIME    H        4345  10-27-92
+    WTIME    HLP     14509  10-27-92
+    WTIME    HPJ       718  10-27-92
+    WTIME    ICO       766  10-27-92
+    WTIME    RC        911  10-27-92
+    WTIME    RTF     20051  10-27-92
            42 file(s)     262535 bytes
                            37888 bytes free
 
@@ -3302,7 +3303,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
     ESTRING  TPU      1744   5-24-92  12:03p
     EXCEPT   BAT       566   6-09-92  11:04a
     HEXVIEW            499   7-11-92   1:20p
-    HEXVIEW  C       29043   8-28-92  12:00a
+    HEXVIEW  C       29043   8-28-92
     HEXVIEW  DEF       298   7-11-92   1:18p
     HEXVIEW  EXE    137728   8-28-92  11:02a
     HEXVIEW  H        1645   8-28-92  10:53a
@@ -3332,7 +3333,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
     TEST2    RES        99   7-27-92  12:13a
     TIME!    C       15980   9-22-92   1:37p
     TIME!    DEF       642   8-24-92   5:20p
-    TIME!    DOC      3383   9-22-92  12:00a
+    TIME!    DOC      3383   9-22-92
     TIME!    EXE     10656   9-22-92   1:37p
     TIME!    H         982   8-24-92   5:19p
     TIME!    ICO       766   4-23-92  11:02a
@@ -3710,7 +3711,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
     VBMBTEST EXE     16128  11-27-92  12:30p
     VBMBTEST PAS      1676  11-25-92   2:25p
     VERBOSMB PAS      2755  11-27-92  11:56a
-    WCLIB    DOC     36447   4-26-93  12:00a
+    WCLIB    DOC     36447   4-26-93
     WCLIB    WCL     13232   4-26-93  11:17p
     WCLIBC   ZIP     19383   4-26-93  11:21p
            21 file(s)     133377 bytes
@@ -4472,3 +4473,5 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
     XDIR     COM      1396   4-13-87   8:51a
            54 file(s)     294053 bytes
                            31744 bytes free
+
+![PC Magazine Utilities Vol. 1]({{ site.software.miscdisks.server }}/pcx86/sw/magazines/pcm/PCMAG-UTIL-VOL1-1987.png)

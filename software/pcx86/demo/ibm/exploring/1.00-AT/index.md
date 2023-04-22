@@ -78,7 +78,7 @@ For more information about this software, see the [PCjs blog](/blog/2018/04/01/)
     C6DUTBL  MON       896   2-24-84  12:08a
     PTR06              128   2-24-84  12:02a
     DU06             18304   2-24-84  12:02a
-    VENDOR-# DA1*        0   7-04-83  12:00a
+    VENDOR-# DA1*        0   7-04-83
            57 file(s)     266659 bytes
                            66560 bytes free
 

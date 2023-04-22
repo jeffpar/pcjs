@@ -2,6 +2,7 @@
 layout: page
 title: Microsoft Multiplan 4.20
 permalink: /software/pcx86/app/microsoft/multiplan/4.20/
+preview: https://miscdisks.pcjs.org/pcx86/app/microsoft/multiplan/4.20/MULTIPLAN420-DISK1.jpg
 machines:
   - id: ibm5170
     type: pcx86

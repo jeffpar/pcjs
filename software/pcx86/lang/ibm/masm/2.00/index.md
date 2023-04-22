@@ -2,6 +2,7 @@
 layout: page
 title: IBM Macro Assembler 2.00
 permalink: /software/pcx86/lang/ibm/masm/2.00/
+preview: https://miscdisks.pcjs.org/pcx86/lang/ibm/masm/2.00/IBM-MASM-200.jpg
 redirect_from: /disks/pcx86/tools/ibm/masm/2.00/
 machines:
   - id: ibm5160
@@ -47,7 +48,7 @@ Directory listing of the 320Kb distribution diskette is provided below.
     SALEX4   SAL       938   7-18-84  12:01p
     UTEST    PAS      3144   7-18-84  12:01p
     SAMPLE2  BAT      4864   7-18-84  12:01p
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            26 file(s)     304445 bytes
                             8192 bytes free
 
