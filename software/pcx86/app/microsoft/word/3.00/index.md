@@ -2,6 +2,7 @@
 layout: page
 title: Microsoft Word 3.00 (for DOS)
 permalink: /software/pcx86/app/microsoft/word/3.00/
+preview: https://miscdisks.pcjs.org/pcx86/app/microsoft/word/3.00/WORD30-DISK1-PROGRAM.jpg
 redirect_from: /disks/pcx86/apps/microsoft/word/3.00/
 machines:
   - id: ibm5160

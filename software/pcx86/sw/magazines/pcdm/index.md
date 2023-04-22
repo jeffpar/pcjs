@@ -2,6 +2,7 @@
 layout: page
 title: PC Disk Magazine Diskettes
 permalink: /software/pcx86/sw/magazines/pcdm/
+preview: https://miscdisks.pcjs.org/pcx86/sw/magazines/pcdm/PCDISKMAG-DISK1.jpg
 redirect_from: /disks/pcx86/shareware/pcdiskmag/
 machines:
   - id: pcdm
@@ -37,7 +38,7 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the ma
     PERPCAL  BAS      5507   7-28-83   3:22p
     AUTOBAR  BAS     13332   7-28-83   3:24p
     DEMOSTAT DAT      3693   6-21-83  11:20p
-    BDATA             6016   7-29-82  12:00a
+    BDATA             6016   7-29-82
     BDATA2            3584   8-04-82   9:46a
     PYRAMID  BAS      6945   7-28-83   3:23p
     DISKMAP  COM     10070   6-01-83   2:00p
@@ -106,9 +107,9 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the ma
     PCDUMP   COM      2960   1-31-84  12:19p
     PIECHART BAS     19350   2-06-84   8:08p
     BIBLIO   BAS     13581   1-18-84  12:06a
-    QUIKPRO1 BAS      1024  10-20-83  12:00a
-    RANDWRT           7296   1-01-83  12:00a
-    RANDWRT2         23808   1-29-84  12:00a
+    QUIKPRO1 BAS      1024  10-20-83
+    RANDWRT           7296   1-01-83
+    RANDWRT2         23808   1-29-84
     SORTF    EXE      7040  10-22-83   3:12p
     MERGEF   EXE      6912  10-22-83   9:16p
     ATC      EXE     25600  11-10-83   9:26p
@@ -128,8 +129,8 @@ You can examine the disks, starting with "PC Disk Magazine (Disk 01)", in the ma
     TUTOR    BAS     11613   3-14-84   5:31a
     ASSUME   DAT      1291   3-11-84   1:24p
     SCREEN            5747   3-09-84   4:01a
-    QUIKPRO2 BAS      1024   1-04-84  12:00a
-    RANDPRT           6016   1-04-84  12:00a
+    QUIKPRO2 BAS      1024   1-04-84
+    RANDPRT           6016   1-04-84
     RANDPRT2         23296   1-01-80  12:04a
     SHARKHUN COM      7328   1-01-80  12:04a
     SHARK             8192  10-06-83   7:34a

@@ -2,6 +2,7 @@
 layout: page
 title: Inside the IBM PC (1983)
 permalink: /software/pcx86/sw/books/inside_the_ibm_pc/
+preview: https://miscdisks.pcjs.org/pcx86/sw/books/inside_the_ibm_pc/INSIDE-THE-IBM-PC-1A.jpg
 machines:
   - id: ibm5150
     type: pcx86

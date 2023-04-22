@@ -2,6 +2,7 @@
 layout: page
 title: Digital Research Pascal/MT+ 3.11
 permalink: /software/pcx86/lang/dresearch/pascal/3.11/
+preview: https://miscdisks.pcjs.org/pcx86/lang/dresearch/pascal/3.11/PASCALMT311-DISK1.jpg
 redirect_from: /disks/pcx86/tools/dresearch/pascal/3.11/
 machines:
   - id: ibm5150

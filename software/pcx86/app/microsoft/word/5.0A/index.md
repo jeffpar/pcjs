@@ -2,6 +2,7 @@
 layout: page
 title: Microsoft Word 5.0A
 permalink: /software/pcx86/app/microsoft/word/5.0A/
+preview: https://miscdisks.pcjs.org/pcx86/app/microsoft/word/5.0A/WORD50A-PROGRAM1.jpg
 machines:
   - id: ibm5170
     type: pcx86

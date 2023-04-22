@@ -2,6 +2,7 @@
 layout: page
 title: IBM FORTRAN Compiler 1.00
 permalink: /software/pcx86/lang/ibm/fortran/1.00/
+preview: https://miscdisks.pcjs.org/pcx86/lang/ibm/fortran/1.00/IBM-FORTRAN-V100-DISK1.jpg
 machines:
   - id: ibm5150
     type: pcx86

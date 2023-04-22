@@ -2,6 +2,7 @@
 layout: page
 title: Small Computer Book Club
 permalink: /software/pcx86/sw/misc/scbc/
+preview: https://miscdisks.pcjs.org/pcx86/sw/misc/scbc/SCBC-1990.jpg
 redirect_from: /disks/pcx86/shareware/scbc/
 machines:
   - id: scbc

@@ -334,7 +334,7 @@ which can be loaded in any IBM PC AT-compatible machine.
     ENAB11   UNP       768   5-18-86   2:14a
     ENABLE   TXT      1234   3-27-86  12:05p
     ENABLE   UNP      1152   4-24-86   7:47p
-    EWBACKUP UNP      2304   8-01-82  12:00a
+    EWBACKUP UNP      2304   8-01-82
     EXECUVSN TXT      3117   3-27-86  12:09p
     EXECUVSN UNP      3328   4-24-86   7:47p
     EZWRITER UNP      3584   4-24-86   7:49p
@@ -374,7 +374,7 @@ which can be loaded in any IBM PC AT-compatible machine.
     LOAD-US  DOC      2304   1-15-85  10:22a
     LOADCALC UNP      1152   3-20-85   6:03p
     LOTUS    TXT      3924   3-27-86   3:41p
-    LOTUS1A  UNP       256   3-14-18  12:00a
+    LOTUS1A  UNP       256   3-14-18
     LY       UNP      1280   4-24-86   7:48p
     MAXTHINK UNP       896   4-24-86   7:48p
     MEMSHIFT TXT      1312   3-27-86   1:56p
@@ -496,7 +496,7 @@ which can be loaded in any IBM PC AT-compatible machine.
     UNP123   TXT       640   3-20-85   6:03p
     UNPROT   B         128   3-02-87   7:21p
     UNPROT   DOC       512   3-02-87   7:21p
-    VCBACKUP DOC      8064   8-01-82  12:00a
+    VCBACKUP DOC      8064   8-01-82
     VISICALC UNP      2560   4-24-86   7:48p
     VOLKSWRT UNP      2048  12-16-86   8:18p
     WORD     UNP      2304   3-02-87   7:21p

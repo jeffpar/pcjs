@@ -2,6 +2,7 @@
 layout: page
 title: Microsoft Multiplan 4.00
 permalink: /software/pcx86/app/microsoft/multiplan/4.00/
+preview: https://miscdisks.pcjs.org/pcx86/app/microsoft/multiplan/4.00/MULTIPLAN400-DISK1.jpg
 machines:
   - id: ibm5170
     type: pcx86

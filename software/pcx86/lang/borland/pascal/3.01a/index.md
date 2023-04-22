@@ -2,6 +2,7 @@
 layout: page
 title: Borland Turbo Pascal 3.01A
 permalink: /software/pcx86/lang/borland/pascal/3.01a/
+preview: https://miscdisks.pcjs.org/pcx86/lang/borland/pascal/3.01a/TURBO-PASCAL-301A-8087-BCD.jpg
 redirect_from: /disks/pcx86/tools/borland/pascal/3.01a/
 machines:
   - id: ibm5170-msdos320

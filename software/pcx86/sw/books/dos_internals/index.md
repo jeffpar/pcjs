@@ -552,3 +552,7 @@ A directory listing of the *DOS Internals* diskette that accompanied the book is
     Total files listed:
           387 file(s)     829578 bytes
                           291328 bytes free
+
+<!-- Documentation -->
+
+{% include gallery/documents.html width="200" height="260" %}

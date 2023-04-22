@@ -2,6 +2,7 @@
 layout: page
 title: Norton Utilities 4.00 (Advanced Edition)
 permalink: /software/pcx86/util/norton/4.00/advanced/
+preview: https://miscdisks.pcjs.org/pcx86/util/norton/4.00/advanced/NU400-ADV-DISK1.jpg
 redirect_from: /disks/pcx86/tools/other/norton/4.00/advanced/
 machines:
   - id: ibm5160

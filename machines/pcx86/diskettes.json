@@ -10339,6 +10339,7 @@
 						{
 							"@title": "PC Magazine Utils Vol1",
 							"@diskette": "PCMAG-UTIL-VOL1-1986.json",
+							"@photo": "PCMAG-UTIL-VOL1-1987.png",
 							"@format": "PC320K"
 						},
 						{
@@ -10480,6 +10481,9 @@
 			"@versions": {
 				"pcsig": {
 					"@title": "PC-SIG Diskette Library"
+				},
+				"pcsig08": {
+					"@title": "PC-SIG CD-ROM (8th Edition)"
 				},
 				"scbc": {
 					"@title": "Small Computer Book Club",

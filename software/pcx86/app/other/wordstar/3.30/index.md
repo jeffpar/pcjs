@@ -25,9 +25,9 @@ are provided below.  The disk images were obtained from [WinWorld](https://winwo
      Volume in drive A has no label
      Directory of A:\
 
-    WINSTALL COM      1152   3-02-83  12:00a
-    WINSTALL OVR     38528   3-02-83  12:00a
-    WS       INS     43776   3-02-83  12:00a
+    WINSTALL COM      1152   3-02-83
+    WINSTALL OVR     38528   3-02-83
+    WS       INS     43776   3-02-83
             3 file(s)      83456 bytes
                            75776 bytes free
 
@@ -36,11 +36,11 @@ are provided below.  The disk images were obtained from [WinWorld](https://winwo
      Volume in drive A has no label
      Directory of A:\
 
-    WSOVLY1  OVR     41216   4-12-83  12:00a
-    WSMSGS   OVR     29056   4-12-83  12:00a
+    WSOVLY1  OVR     41216   4-12-83
+    WSMSGS   OVR     29056   4-12-83
     WSU      COM     21376   1-01-80  12:02a
-    PRINT    TST      3968   4-12-83  12:00a
-    WSCOLOR  BAS      6656   4-12-83  12:00a
+    PRINT    TST      3968   4-12-83
+    WSCOLOR  BAS      6656   4-12-83
     WS       COM     21376   1-01-80  12:09a
             6 file(s)     123648 bytes
                            35840 bytes free
@@ -50,9 +50,9 @@ are provided below.  The disk images were obtained from [WinWorld](https://winwo
      Volume in drive A has no label
      Directory of A:\
 
-    SPELSTAR OVR     22784   3-31-83  12:00a
-    SPELSTAR DCT     97024   3-31-83  12:00a
-    SAMPLE   TXT      3328   3-31-83  12:00a
+    SPELSTAR OVR     22784   3-31-83
+    SPELSTAR DCT     97024   3-31-83
+    SAMPLE   TXT      3328   3-31-83
             3 file(s)     123136 bytes
                            36352 bytes free
 
@@ -75,6 +75,6 @@ are provided below.  The disk images were obtained from [WinWorld](https://winwo
      Volume in drive A has no label
      Directory of A:\
 
-    MAILMRGE OVR     11520   3-31-83  12:00a
+    MAILMRGE OVR     11520   3-31-83
             1 file(s)      11520 bytes
                           148480 bytes free

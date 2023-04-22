@@ -2,6 +2,7 @@
 layout: page
 title: Norton Utilities 2.01
 permalink: /software/pcx86/util/norton/2.01/
+preview: https://miscdisks.pcjs.org/pcx86/util/norton/2.01/NU201-1983-11-03-SIDEA.jpg
 machines:
   - id: ibm5160
     type: pcx86

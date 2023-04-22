@@ -42,13 +42,13 @@ out where they came from.
      Volume in drive A is UNFILED
      Directory of A:\
 
-    CREFB    EXE     13824  11-10-81  12:00a
+    CREFB    EXE     13824  11-10-81
     DEBUG    EXE     15232  11-14-84  10:13a
     EXE2BINC EXE      1649  10-12-84   7:00p
     EXE2BINE EXE      2816  11-14-84  10:15a
     EXE2BINF EXE      1649   2-24-84   5:41p
-    EXEMOD   EXE     11034   1-01-80  12:00a
-    EXEPACK  EXE      7924   1-01-80  12:00a
+    EXEMOD   EXE     11034   1-01-80
+    EXEPACK  EXE      7924   1-01-80
     LIB220   EXE     23168  11-27-84   9:20a
     LIB300   EXE     14015  10-31-84   4:57p
     LIB302A  EXE     28716  10-16-85   5:00a
@@ -69,10 +69,10 @@ out where they came from.
     LINK4X   EXE     58758   1-25-85  11:32a
     LOCATE   EXE      1649   9-03-83   3:40a
     MASM127  EXE     81280  11-27-84   9:25a
-    MASM307  EXE    100928   1-01-80  12:00a
-    MASM350  EXE     83128   1-01-80  12:00a
-    SYMDEB3X DOC      5098   1-01-80  12:00a
-    SYMDEB3X EXE     36326   1-01-80  12:00a
+    MASM307  EXE    100928   1-01-80
+    MASM350  EXE     83128   1-01-80
+    SYMDEB3X DOC      5098   1-01-80
+    SYMDEB3X EXE     36326   1-01-80
     SYMDEB4A EXE     34810   6-14-86  12:14a
            32 file(s)    1086044 bytes
                           120320 bytes free
