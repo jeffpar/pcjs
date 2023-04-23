@@ -952,6 +952,44 @@
       ]
     },
     {
+      "name": "Node: fileimage.js --file --map",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/fileimage/fileimage.js",
+      "args": [
+        "--file=VT100.bin",
+        "--format=bytes",
+        "--output=VT100.json5",
+        "--comments",
+        "--overwrite"
+      ],
+      "cwd": "${workspaceFolder}/machines/dec/vt100/rom",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
+      "name": "Node: fileimage.js --file --merge",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/fileimage/fileimage.js",
+      "args": [
+        "--file=109592-001.hex",
+        "--merge=109591-001.hex",
+        "--output=t",
+        "--overwrite",
+        "--comments"
+      ],
+      "cwd": "${workspaceFolder}/machines/pcx86/compaq/deskpro386/rom/1988-01-28",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
       "name": "Node: diskdump.js (deprecated)",
       "type": "node",
       "request": "launch",

@@ -12,6 +12,7 @@ import os         from "os";
 import path       from "path";
 import PCJSLib    from "../modules/pcjslib.js";
 import Device     from "../../machines/modules/device.js";
+import net        from "../../machines/modules/netio.js";
 import str        from "../../machines/shared/lib/strlib.js"
 
 let device = new Device("node");
@@ -97,7 +98,7 @@ class FileImage {
         let obj = this;
 
         let encoding = null;
-        let sExt = path.extname(sFile);
+        let sExt = path.extname(sFile).slice(1).toLowerCase();
         if (sExt == FileImage.FORMAT.JSON || sExt == FileImage.FORMAT.HEX || sExt == "lst" || sExt == "txt") {
             encoding = "utf8";
         }
@@ -111,15 +112,27 @@ class FileImage {
             printf("loadFile(%s,%d,%d)\n", sFilePath, iStart, nSkip);
         }
 
-        fs.readFile(sFilePath, options, function(err, buf) {
-            if (err) {
-                printError(err);
-                done(err);
-                return;
-            }
-            obj.setData(buf, iStart, nSkip, sExt);
-            done(null);
-        });
+        if (net.isRemote(sFilePath)) {
+            net.getFile(sFilePath, options.encoding, function(err, status, buf) {
+                if (err) {
+                    printError(err);
+                    done(err);
+                    return;
+                }
+                obj.setData(buf, iStart, nSkip, sExt);
+                done(null);
+            });
+        } else {
+            fs.readFile(sFilePath, options, function(err, buf) {
+                if (err) {
+                    printError(err);
+                    done(err);
+                    return;
+                }
+                obj.setData(buf, iStart, nSkip, sExt);
+                done(null);
+            });
+        }
     }
 
     /**
@@ -461,6 +474,7 @@ class FileImage {
                          *      @   label
                          *      .   reference
                          *      +   bias (ie, value to be added to all following offsets)
+                         *      ;   comment (comments can also follow any of the above symbols)
                          *
                          * then we should produce the following corresponding JSON:
                          *
@@ -557,11 +571,18 @@ class FileImage {
                                     /* falls through */
                                 case '@':
                                 case '.':
+                                case ';':
                                     aValue['o'] = parseInt(sValue, 16) + nBias;
                                     if (sSegment) {
                                         aValue['s'] = parseInt(sSegment, 16);
                                     }
-                                    if (sType != '.') break;
+                                    if (sType == ';') {
+                                        sComment = sSymbol.trim();
+                                        sSymbol = "";
+                                    }
+                                    else {
+                                        if (sType != '.') break;
+                                    }
                                     match = sSymbol.match(/^([A-Z_][A-Z0-9_]*):\s*(.*)/i);
                                     if (match) {
                                         sSymbol = match[1];

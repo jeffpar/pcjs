@@ -138,9 +138,9 @@ and passed on to the PCx80 Debugger.  Here are the rebuild steps:
 
 	asm8080 -lVT100.txt VT100.asm
 	grep -E "[0-9]+ [0-9A-D]+.*;;" VT100.txt | sed -E "s/ *[0-9]+ ([0-9A-F]+).*;(;.*)/     \1   .   \2/" > VT100.map
-	filedump --file=VT100.bin --format=bytes --output=VT100.json5 --comments --overwrite
+	fileimage --file=VT100.bin --format=bytes --output=VT100.json5 --comments --overwrite
 
-You can omit `--comments` from the filedump command to reduce the size of the [VT100](VT100.json5) file.
+You can omit `--comments` from the [FileImage](/tools/fileimage/) command to reduce the size of the [VT100](VT100.json5) file.
 
 Some [VT100.asm](VT100.asm) clean-up remains, because there are still chunks of data that were incorrectly disassembled as code.
 From a reassembly standpoint, it doesn't matter too much, because all the 8080 instructions unambiguously reassemble into their
