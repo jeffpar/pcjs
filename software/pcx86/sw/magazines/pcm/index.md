@@ -4475,3 +4475,7 @@ NOTE: PC Magazine (Vol. 06 No. 09) is available at the Internet Archive as "[PC 
     XDIR     COM      1396   4-13-87   8:51a
            54 file(s)     294053 bytes
                            31744 bytes free
+
+<!-- Documentation -->
+
+{% include gallery/documents.html %}

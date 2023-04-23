@@ -10347,6 +10347,14 @@
 							"@diskette": "PCMAG-UTIL-VOL2.json",
 							"@format": "PC360K"
 						}
+					],
+					"@documents": [
+						{
+							"@title": "PC Magazine Utilities Disk Library - User Handbook (1989)",
+							"@link": "https://miscdisks.pcjs.org/pcx86/sw/magazines/pcm/PCMAG-UTIL-BOOKLET-1989.pdf",
+							"@cover": "PCMAG-UTIL-BOOKLET-1989.jpg",
+							"@source": "PCjs"
+						}
 					]
 				},
 				"pctj": {
