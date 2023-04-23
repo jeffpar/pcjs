@@ -202,7 +202,3 @@ Directory listings of disks containing software that accompanied *Unauthorized W
     WTEST    C        6348   7-06-98   5:58p
            97 file(s)     616117 bytes
                           574976 bytes free
-
-<!-- Documentation -->
-
-{% include gallery/documents.html width="200" height="260" %}

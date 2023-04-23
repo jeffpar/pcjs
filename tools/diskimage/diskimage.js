@@ -1366,6 +1366,11 @@ function processDisk(di, diskFile, argv, diskette)
          */
         if (diskFile.indexOf("/private") >= 0 || diskFile.indexOf("/pcsig8") >= 0) return;
 
+        if (typeof argv['checkpage'] == "string") {
+            if (argv['verbose']) printf("checking %s for '%s'...\n", diskFile, argv['checkpage']);
+            if (diskFile.indexOf(argv['checkpage']) < 0) return;
+        }
+
         let sListing = di.getFileListing(0, 4);
         if (!sListing) return;
         let sIndex = "", sIndexNew = "", sAction = "";
@@ -1666,10 +1671,19 @@ function processDisk(di, diskFile, argv, diskette)
          * Step 4: Add a document gallery section if there are any documents associated with this software.
          */
         if (diskette.documents) {
-            let sHeader = "\n<!-- Documentation -->\n";
-            let sGallery = sHeader + "\n{% include gallery/documents.html width=\"200\" height=\"260\" %}\n";
-            if (sIndexNew && sIndexNew.indexOf(sHeader) < 0) {
-                sIndexNew += sGallery;
+            let skip = true;
+            for (let document of diskette.documents) {
+                if (document['@link'] != path.dirname(sIndexFile) + path.sep) {
+                    skip = false;
+                    break;
+                }
+            }
+            if (!skip) {
+                let sHeader = "\n<!-- Documentation -->\n";
+                let sGallery = sHeader + "\n{% include gallery/documents.html width=\"200\" height=\"260\" %}\n";
+                if (sIndexNew && sIndexNew.indexOf(sHeader) < 0) {
+                    sIndexNew += sGallery;
+                }
             }
         }
 

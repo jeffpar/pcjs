@@ -2067,7 +2067,3 @@ by Schulman, Brown, Maxey, Michels, Kyle
 		missing u-umlaut () in "Die endgltige Referenz"
 	
 	--- END OF FILE ---
-
-<!-- Documentation -->
-
-{% include gallery/documents.html width="200" height="260" %}

@@ -83,13 +83,13 @@
         "@documents": [
           {
             "@title": "COMPAQ Enhanced Color Graphics Board COMPAQ Color Monitor Technical Reference Guide (Dec 1986)",
-            "@cover": "COMPAQ_Enhanced_Color_Graphics_Board_1986_12.jpg",
-            "@source": "https://archive.org/embed/trg-enhanced-color-graphics-board-1986-12"
+            "@link": "https://archive.org/details/trg-enhanced-color-graphics-board-1986-12",
+            "@cover": "COMPAQ_Enhanced_Color_Graphics_Board_1986_12.jpg"
           },
           {
             "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume I, May 1987)",
-            "@cover": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol1_1987-05.jpg",
-            "@source": "https://archive.org/embed/trg-80286-vol-1-1987-05"
+            "@link": "https://archive.org/details/trg-80286-vol-1-1987-05",
+            "@cover": "COMPAQ_80286-Based_Products_Technical_Reference_Guide_Vol1_1987-05.jpg"
           },
           {
             "@title": "COMPAQ 80286-Based Products Technical Reference Guide (Volume II, May 1987)",
@@ -133,39 +133,37 @@
         "@documents": [
           {
             "@title": "COMPAQ DeskPro 386 Technical Reference Guide (Volume I, Sep 1986)",
-            "@file": "COMPAQ_DeskPro_386_Technical_Reference_Guide_Vol1_1986-09.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-kRDehAMRp7BDfn0A?e=MNNw9w",
-            "@cover": "jpg",
+            "@link": "https://archive.org/details/compaq-desk-pro-386-technical-reference-guide-vol-1-1986-09",
+            "@cover": "COMPAQ_DeskPro_386_Technical_Reference_Guide_Vol1_1986-09.jpg",
             "@source": "PCjs"
           },
           {
             "@title": "COMPAQ DeskPro 386 Technical Reference Guide (Volume II, Sep 1986)",
-            "@file": "COMPAQ_DeskPro_386_Technical_Reference_Guide_Vol2_1986-09.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9g-kS9Xp8xd_kHMKCqg?e=fWqJ0F",
-            "@cover": "jpg",
+            "@link": "https://archive.org/details/compaq-desk-pro-386-technical-reference-guide-vol-2-1986-09",
+            "@cover": "COMPAQ_DeskPro_386_Technical_Reference_Guide_Vol2_1986-09.jpg",
             "@source": "PCjs"
           },
           {
             "@title": "COMPAQ DeskPro 386/20 Technical Reference Guide (Volume 1, Oct 1987)",
-            "@cover": "COMPAQ_DeskPro_386-20_Technical_Reference_Guide_Vol1_1987-10.jpg",
-            "@source": "https://archive.org/embed/trg-deskpro-386-20-vol-1-1987-10"
+            "@link": "https://archive.org/details/trg-deskpro-386-20-vol-1-1987-10",
+            "@cover": "COMPAQ_DeskPro_386-20_Technical_Reference_Guide_Vol1_1987-10.jpg"
           },
           {
             "@title": "COMPAQ DeskPro 386/20 Technical Reference Guide (Volume 2, Oct 1987)",
-            "@cover": "COMPAQ_DeskPro_386-20_Technical_Reference_Guide_Vol2_1987-10.jpg",
-            "@source": "https://archive.org/embed/trg-deskpro-386-20-vol-2-1987-10"
+            "@link": "https://archive.org/details/trg-deskpro-386-20-vol-2-1987-10",
+            "@cover": "COMPAQ_DeskPro_386-20_Technical_Reference_Guide_Vol2_1987-10.jpg"
           },
           {
             "@title": "COMPAQ DeskPro 386/25 Technical Reference Guide (Volume I, Aug 1988)",
-            "@file": "COMPAQ_DeskPro_386-25_Technical_Reference_Guide_Vol1_1988-08.pdf",
             "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gq5BThwmEpfyp0EBdA?e=53SAyY",
+            "@file": "COMPAQ_DeskPro_386-25_Technical_Reference_Guide_Vol1_1988-08.pdf",
             "@cover": "jpg",
             "@source": "PCjs"
           },
           {
             "@title": "COMPAQ DeskPro 386/25 Technical Reference Guide (Volume II, Aug 1988)",
-            "@cover": "COMPAQ_DeskPro_386-25_Technical_Reference_Guide_Vol2_1988-08.jpg",
-            "@source": "https://archive.org/embed/trg-lte-deskpro-386-25-1988-08"
+            "@link": "https://archive.org/details/trg-lte-deskpro-386-25-1988-08",
+            "@cover": "COMPAQ_DeskPro_386-25_Technical_Reference_Guide_Vol2_1988-08.jpg"
           }
         ]
       },
@@ -174,8 +172,8 @@
         "@documents": [
           {
             "@title": "Technical Reference Guide COMPAQ LTE Personal Computer COMPAQ LTE/286 Personal Computer (Mar 1990)",
-            "@cover": "COMPAQ_LTE_LTE286_Technical_Reference_Guide_1990_03.jpg",
-            "@source": "https://archive.org/embed/trg-lte-lte-286-1990-03"
+            "@link": "https://archive.org/details/trg-lte-lte-286-1990-03",
+            "@cover": "COMPAQ_LTE_LTE286_Technical_Reference_Guide_1990_03.jpg"
           }
         ]
       }

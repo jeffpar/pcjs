@@ -107,7 +107,3 @@ From Page 58:
     README   TXT       112  12-07-15   1:09p
             3 file(s)       1629 bytes
                           157696 bytes free
-
-<!-- Documentation -->
-
-{% include gallery/documents.html width="200" height="260" %}
