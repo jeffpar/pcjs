@@ -4342,9 +4342,9 @@ class DebuggerX86 extends DbgLib {
     /**
      * addSymbols(sModule, nSegment, sel, off, addr, len, aSymbols)
      *
-     * As filedump.js (formerly convrom.php) explains, aSymbols is a JSON-encoded object whose properties consist
-     * of all the symbols (in upper-case), and the values of those properties are objects containing any or all of
-     * the following properties:
+     * As fileimage.js (formerly filedump.js, which was formerly convrom.php) explains, aSymbols is a JSON-encoded object
+     * whose properties consist of all the symbols (in upper-case), and the values of those properties are objects containing
+     * any or all of the following properties:
      *
      *      'v': the value of an absolute (unsized) value
      *      'b': either 1, 2, 4 or undefined if an unsized value

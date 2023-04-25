@@ -1152,7 +1152,7 @@
         "@documents": [
           {
             "@title": "iAPX 86,88 User's Manual (1981)",
-            "@link": "http://bitsavers.trailing-edge.com/pdf/intel/_dataBooks/1981_iAPX_86_88_Users_Manual.pdf",
+            "@link": "https://archive.org/details/bitsavers_inteldataBrsManual_57011881",
             "@cover": "/documents/manuals/intel/8086/covers/iAPX_86_88_Users_Manual--1981.jpg",
             "@source": "",
             "@tags": "8086,manuals"
@@ -1197,16 +1197,15 @@
             "@tags": "80286,c-2,errata"
           },
           {
-            "@title": "80286/80287 Programmer Reference (1987)",
-            "@link": "/documents/manuals/intel/80286/progref/",
-            "@file": "80286_and_80287_Programmers_Reference_Manual_1987.pdf",
-            "@cover": "/documents/manuals/intel/80286/covers/80286_and_80287_Programmers_Reference_Manual_1987.jpg",
-            "@source": "PCjs",
+            "@title": "80286/80287 Programmer's Reference (1987)",
+            "@link": "https://archive.org/details/bitsavers_intel80286287ProgrammersReferenceManual1987_27505703",
+            "@cover": "/documents/manuals/intel/80286/covers/80286_and_80287_Programmers_Reference_Manual--1987.jpg",
+            "@source": "",
             "@tags": "80286,manuals"
           },
           {
             "@title": "iAPX 286 Hardware Reference (1983)",
-            "@link": "http://bitsavers.trailing-edge.com/pdf/intel/_dataBooks/1983_iAPX_286_Hardware_Reference.pdf",
+            "@link": "https://archive.org/details/bitsavers_inteldataBwareReference_14476097",
             "@file": "iAPX_286_Hardware_Reference--1983.pdf",
             "@cover": "/documents/manuals/intel/80286/covers/iAPX_286_Hardware_Reference--1983.jpg",
             "@source": "",
@@ -1214,15 +1213,15 @@
           },
           {
             "@title": "iAPX 286 OS Writer's Guide (1983)",
-            "@link": "http://bitsavers.trailing-edge.com/pdf/intel/_dataBooks/1983_iAPX_286_Operating_System_Writers_Guide.pdf",
+            "@link": "https://archive.org/details/bitsavers_inteldataBatingSystemWritersGuide_13845467",
             "@file": "iAPX_286_Operating_System_Writers_Guide--1983.pdf",
             "@cover": "/documents/manuals/intel/80286/covers/iAPX_286_Operating_System_Writers_Guide--1983.jpg",
             "@source": "",
             "@tags": "80286,manuals"
           },
           {
-            "@title": "iAPX 286 Programmer Reference (1985)",
-            "@link": "http://bitsavers.trailing-edge.com/pdf/intel/_dataBooks/1985_iAPX_286_Programmers_Reference_Manual.pdf",
+            "@title": "iAPX 286 Programmer's Reference (1985)",
+            "@link": "https://archive.org/details/bitsavers_inteldataBrammersReferenceManual_32084049",
             "@file": "iAPX_286_Programmers_Reference_Manual--1985.pdf",
             "@cover": "/documents/manuals/intel/80286/covers/iAPX_286_Programmers_Reference_Manual--1985.jpg",
             "@source": "",
@@ -1230,80 +1229,57 @@
           },
           {
             "@title": "Intel 80386 LOADALL (Undated)",
-            "@link": "/documents/manuals/intel/80386/loadall",
-            "@doclink": "https://1drv.ms/b/s!ArcO_mFRe1Z9y01qsVjEVDOp6jtA?e=QPORSa",
-            "@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%219677&authkey=ANztYc1MLQbbSbc&em=2",
-            "@file": "80386--LOADALL.pdf",
+            "@link": "/documents/manuals/intel/80386/loadall/",
+            "@file": "/documents/manuals/intel/80386/files/80386--LOADALL.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386--LOADALL.jpg",
             "@source": "PCjs",
             "@tags": "80386,correspondence"
           },
           {
             "@title": "Intel 80386: Returning to Real Mode (Jan 8, 1986)",
-            "@link": "/documents/manuals/intel/80386/real_mode/",
-            "@doclink": "https://1drv.ms/b/s!ArcO_mFRe1Z9y0-OLUapE5Ng16eE?e=jZhwo7",
-            "@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%219679&authkey=AIjbkfk4F4QwFwc&em=2",
-            "@file": "80386--Returning_To_Real_Mode--1986-01-08.pdf",
+            "@link": "/documents/manuals/intel/80386/files/80386--Returning_To_Real_Mode--1986-01-08.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386--Returning_To_Real_Mode--1986-01-08.jpg",
             "@source": "PCjs",
             "@tags": "80386,correspondence"
           },
           {
             "@title": "Intel 80386: 80386 Virtual I/O Bit Map (Jan 20, 1986)",
-            "@link": "/documents/manuals/intel/80386/virtual_io/",
-            "@doclink": "https://1drv.ms/b/s!ArcO_mFRe1Z9y1GUWpMiWJsch4WY?e=m5PqdV",
-            "@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%219681&authkey=AFnjNpQBcB--0mg&em=2",
-            "@file": "80386--Virtual_IO_Bit_Map--1986-01-20.pdf",
+            "@link": "/documents/manuals/intel/80386/files/80386--Virtual_IO_Bit_Map--1986-01-20.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386--Virtual_IO_Bit_Map--1986-01-20.jpg",
             "@source": "PCjs",
             "@tags": "80386,correspondence"
           },
           {
             "@title": "Intel 80386: B1 Stepping (Dec 17, 1986)",
-            "@link": "/documents/manuals/intel/80386/",
-            "@doclink": "https://1drv.ms/b/s!ArcO_mFRe1Z9y1IxqYQUkSo_O4iM?e=rnQJzs",
-            "@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%219682&authkey=AEfZ8ZaNL0NcbQo&em=2",
-            "@file": "80386-B1--1986-12-17.pdf",
+            "@link": "/documents/manuals/intel/80386/files/80386-B1--1986-12-17.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386-B1--1986-12-17.jpg",
             "@source": "PCjs",
             "@tags": "80386,errata"
           },
           {
             "@title": "Intel 80386: B1 Stepping (Mar 26, 1987)",
-            "@link": "/documents/manuals/intel/80386/#b1-errata",
-            "@doclink": "https://1drv.ms/b/s!ArcO_mFRe1Z9y1TLTqezBt6HKHSl?e=ZTEaXv",
-            "@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%219684&authkey=AK2RVA8nicNnuSE&em=2",
-            "@file": "80386-B1--1987-03-26.pdf",
+            "@link": "/documents/manuals/intel/80386/files/80386-B1--1987-03-26.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386-B1--1987-03-26.jpg",
             "@source": "PCjs",
             "@tags": "80386,errata"
           },
           {
             "@title": "Intel 80386: B1 Stepping (Apr 30, 1987)",
-            "@link": "/documents/manuals/intel/80386/#b1-errata",
-            "@doclink": "https://1drv.ms/b/s!ArcO_mFRe1Z9y1MaBMvad0xRguqB?e=hxD29y",
-            "@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%219683&authkey=ALH_uf99SdzHoGo&em=2",
-            "@file": "80386-B1--1987-04-30.pdf",
+            "@link": "/documents/manuals/intel/80386/files/80386-B1--1987-04-30.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386-B1--1987-04-30.jpg",
             "@source": "PCjs",
             "@tags": "80386,errata"
           },
           {
             "@title": "Intel 80386: B1 Stepping (Sep 1, 1987)",
-            "@link": "/documents/manuals/intel/80386/#b1-errata",
-            "@doclink": "https://1drv.ms/b/s!ArcO_mFRe1Z9y1V1IFE0Tx0SVz1s?e=QjhfTk",
-            "@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%219685&authkey=AOk5zM5Dc6GRkMo&em=2",
-            "@file": "80386-B1--1987-09-01.pdf",
+            "@link": "/documents/manuals/intel/80386/files/80386-B1--1987-09-01.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386-B1--1987-09-01.jpg",
             "@source": "PCjs",
             "@tags": "80386,errata"
           },
           {
             "@title": "Intel 80386: C0 Stepping (Mar 30, 1987)",
-            "@link": "/documents/manuals/intel/80386/#c0-stepping",
-            "@doclink": "https://1drv.ms/b/s!ArcO_mFRe1Z9y1Zm_zbqFQIOtwis?e=0UYdn2",
-            "@embed": "https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%219686&authkey=AEtBQMi2LAOP9nE&em=2",
-            "@file": "80386-C0--1987-03-30.pdf",
+            "@link": "/documents/manuals/intel/80386/files/80386-C0--1987-03-30.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386-C0--1987-03-30.jpg",
             "@source": "PCjs",
             "@tags": "80386,errata"
@@ -1325,6 +1301,13 @@
             "@embed": "",
             "@file": "80386--Architecture_Specification--1985-06-15.pdf",
             "@cover": "/documents/manuals/intel/80386/covers/80386--Architecture_Specification--1985-06-15.jpg",
+            "@source": "PCjs",
+            "@tags": "80386,specs"
+          },
+          {
+            "@title": "Intel 80386 Slides (Undated)",
+            "@link": "/documents/manuals/intel/80386/files/80386--Intel_Slides.pdf",
+            "@cover": "/documents/manuals/intel/80386/covers/80386--Intel_Slides.jpg",
             "@source": "PCjs",
             "@tags": "80386,specs"
           }

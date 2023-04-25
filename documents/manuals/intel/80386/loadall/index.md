@@ -5,7 +5,7 @@ permalink: /documents/manuals/intel/80386/loadall/
 redirect_from: /pubs/pc/reference/intel/80386/loadall/
 ---
 
-[The following information is from an undated 6-page Intel "Internal Correspondence" document]
+[The following information is from an undated 6-page Intel "[Internal Correspondence](../files/80386--LOADALL.pdf)" document]
 
 ### LOADALL (0F07H)
 
@@ -273,5 +273,3 @@ loaded for a page granular segment gives a byte granular limit, so should contai
    0C0     |   ES(AR)
    0C4     |   ES(BASE)
    0C8     |   ES(LIMIT)
-
-{% include web/embed.html src="https://onedrive.live.com/embed?cid=7D567B5161FE0EB7&resid=7D567B5161FE0EB7%219677&authkey=ANztYc1MLQbbSbc&em=2" %}

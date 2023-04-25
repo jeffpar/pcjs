@@ -45,9 +45,9 @@ From [http://minuszerodegrees.net/bios/BIOS_5170_10JAN84_6MHZ.zip](http://minusz
 	1. BIOS_5170_10JAN84_U27_6181028_27256_6MHZ.BIN  --> Use this to create a U27 using a 27256 EPROM (rated at 150nS or faster)
 	2. BIOS_5170_10JAN84_U47_6181029_27256_6MHZ.BIN  --> Use this to create a U47 using a 27256 EPROM (rated at 150nS or faster)
 
-The JSON-encoded ROM image that PCjs uses was created using the *FileDump* command-line *merge* option:
+The JSON-encoded ROM image that PCjs uses was created using the [FileImage](/tools/fileimage/) command-line *merge* option:
 
-	filedump --file=/machines/pcx86/ibm/5170/rom/bios/1984-01-10/BIOS_5170_10JAN84_U27_6181028_27256_6MHZ.BIN --merge=/machines/pcx86/ibm/5170/rom/bios/1984-01-10/BIOS_5170_10JAN84_U47_6181029_27256_6MHZ.BIN --output=ATBIOS-REV1.json5 --overwrite
+	fileimage --file=/machines/pcx86/ibm/5170/rom/bios/1984-01-10/BIOS_5170_10JAN84_U27_6181028_27256_6MHZ.BIN --merge=/machines/pcx86/ibm/5170/rom/bios/1984-01-10/BIOS_5170_10JAN84_U47_6181029_27256_6MHZ.BIN --output=ATBIOS-REV1.json5 --overwrite
 	
 Since a MAP file ([bios/ATBIOS-REV1.map](bios/1984-01-10/ATBIOS-REV1.map)) exists as well, it is automatically appended to the JSON file
 ([ATBIOS-REV1](bios/1984-01-10/ATBIOS-REV1.json5)) when using a ROM input file (or JSON output file) with a matching filename.
@@ -82,9 +82,9 @@ From [http://minuszerodegrees.net/bios/BIOS_5170_10JUN85_6MHZ.zip](http://minusz
 	1. BIOS_5170_10JUN85_U27_6480090_27256.BIN  --> Use this to create a U27 using a 27256 EPROM (rated at 150nS or faster)
 	2. BIOS_5170_10JUN85_U47_6480091_27256.BIN  --> Use this to create a U47 using a 27256 EPROM (rated at 150nS or faster)
 
-The JSON-encoded ROM image that PCjs uses was created using the *FileDump* command-line *merge* option:
+The JSON-encoded ROM image that PCjs uses was created using the [FileImage](/tools/fileimage/) command-line *merge* option:
 
-	filedump --file=/machines/pcx86/ibm/5170/rom/bios/1985-06-10/BIOS_5170_10JUN85_U27_6480090_27256.BIN --merge=/machines/pcx86/ibm/5170/rom/bios/1985-06-10/BIOS_5170_10JUN85_U47_6480091_27256.BIN --output=ATBIOS-REV2.json5 --overwrite
+	fileimage --file=/machines/pcx86/ibm/5170/rom/bios/1985-06-10/BIOS_5170_10JUN85_U27_6480090_27256.BIN --merge=/machines/pcx86/ibm/5170/rom/bios/1985-06-10/BIOS_5170_10JUN85_U47_6480091_27256.BIN --output=ATBIOS-REV2.json5 --overwrite
 
 ### IBM PC AT ROM BIOS (Rev 3)
 
@@ -116,6 +116,6 @@ From [http://minuszerodegrees.net/bios/BIOS_5170_15NOV85_8MHZ_VARIATION_2.zip](h
 	1. BIOS_5170_15NOV85_U27_61X9266_27256.BIN  --> Use this to create a U27 using a 27256 EPROM (rated at 150nS or faster)
 	2. BIOS_5170_15NOV85_U47_61X9265_27256.BIN  --> Use this to create a U47 using a 27256 EPROM (rated at 150nS or faster)
 
-The JSON-encoded ROM image that PCjs uses was created using the *FileDump* command-line *merge* option:
+The JSON-encoded ROM image that PCjs uses was created using the [FileImage](/tools/fileimage/) command-line *merge* option:
 
-	filedump --file=/machines/pcx86/ibm/5170/rom/bios/1985-11-15/BIOS_5170_15NOV85_U27_61X9266_27256.BIN --merge=/machines/pcx86/ibm/5170/rom/bios/1985-11-15/BIOS_5170_15NOV85_U47_61X9265_27256.BIN --output=ATBIOS-REV3.json5 --overwrite
+	fileimage --file=/machines/pcx86/ibm/5170/rom/bios/1985-11-15/BIOS_5170_15NOV85_U27_61X9266_27256.BIN --merge=/machines/pcx86/ibm/5170/rom/bios/1985-11-15/BIOS_5170_15NOV85_U47_61X9265_27256.BIN --output=ATBIOS-REV3.json5 --overwrite

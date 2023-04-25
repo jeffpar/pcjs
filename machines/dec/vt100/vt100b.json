@@ -166,7 +166,7 @@
     "size": 8192,
     "bus": "busMemory",
     "@doc": [
-      "The following ROM dump was generated with 'filedump --file=/machines/dec/vt100/rom/VT100.bin --format=bytes --decimal --symbols=array'"
+      "The following ROM dump was generated with 'fileimage --file=/machines/dec/vt100/rom/VT100.bin --format=bytes --decimal --symbols=array'"
     ],
     "values": [
       243,49,78,32,195,59,0,0,205,253,0,251,201,0,0,0,
@@ -963,7 +963,7 @@
     "diagnostics": true,
     "touchType": true,
     "@doc": [
-      "The following ROM dump was generated with 'filedump --file=/machines/dec/vt100/rom/23-018E2.bin --format=bytes --decimal'"
+      "The following ROM dump was generated with 'fileimage --file=/machines/dec/vt100/rom/23-018E2.bin --format=bytes --decimal'"
     ],
     "fontROM": [
       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

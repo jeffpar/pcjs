@@ -9,9 +9,9 @@ redirect_from: /devices/pcx86/video/ibm/ega/
 
 We have only one IBM EGA ROM revision, dated September 13, 1984.
 
-To (re)build the JSON-encoded IBM EGA ROM with symbols, run the following command:
+To (re)build the JSON-encoded IBM EGA ROM with symbols, run the following [FileImage](/tools/fileimage/) command:
 
-	filedump --file=archive/IBM-EGA.rom --format=bytes --decimal
+	fileimage --file=archive/IBM-EGA.rom --format=bytes --decimal
 	
 The symbol information in the MAP file will be automatically converted and appended to the dump of the ROM file. 
 

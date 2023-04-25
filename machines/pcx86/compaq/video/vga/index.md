@@ -48,14 +48,14 @@ for mating a VGA-style monitor and VGA graphics to your AT.
 
 A copy of the board's [VGA ROM BIOS](109360-001/COMPAQ-VGA-1988-05-18.json) was created by [dumping](/machines/pcx86/compaq/deskpro386/rom/#dumping-the-roms)
 the contents of each EPROM chip to a *.hex* file, and then merging the *.hex* files with the following
-[FileDump]({{ site.github.pages }}/tools/old/filedump/) command:
+[FileImage](/tools/fileimage/) command:
 
 	cd 109360-001
-	filedump --file=109793-002.hex --merge=109794-002.hex --output=COMPAQ-VGA-1988-05-18.json
+	fileimage --file=109793-002.hex --merge=109794-002.hex --output=COMPAQ-VGA-1988-05-18.json
 
 For a more human-readable dump, use the `--comments` option:
 
-	filedump --file=109793-002.hex --merge=109794-002.hex --output=1988-05-18.dump --comments
+	fileimage --file=109793-002.hex --merge=109794-002.hex --output=1988-05-18.dump --comments
 
 The COMPAQ VGA ROM BIOS concludes with the usual copyright string and author initials:
 
@@ -72,4 +72,4 @@ from an [earlier revision](http://bitsavers.trailing-edge.com/pdf/compaq/firmwar
 the same part number (109360-001).
 
 	cd 109360-001
-	filedump --file=http://bitsavers.trailing-edge.com/pdf/compaq/firmware/109360-001_VGA/109328-002.BIN --merge=http://bitsavers.trailing-edge.com/pdf/compaq/firmware/109360-001_VGA/109327-002.BIN --output=COMPAQ-VGA-1987-10-27.json
+	fileimage --file=http://bitsavers.trailing-edge.com/pdf/compaq/firmware/109360-001_VGA/109328-002.BIN --merge=http://bitsavers.trailing-edge.com/pdf/compaq/firmware/109360-001_VGA/109327-002.BIN --output=COMPAQ-VGA-1987-10-27.json

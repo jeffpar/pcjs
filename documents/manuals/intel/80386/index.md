@@ -194,7 +194,7 @@ rather than with an ID number.
 
 #### B1 Stepping
 
-From a December 17, 1986 Intel document titled "**80386-B1 STEPPING INFORMATION**":
+From a December 17, 1986 Intel document titled "[80386-B1 STEPPING INFORMATION](files/80386-B1--1986-12-17.pdf)":
 
     80386-B1 component identifier readable in DH after reset: 03H
     80386-B1 revision  identifier readable in DL after reset: 03H
@@ -570,8 +570,7 @@ Here's what the world knew about 80386 problems in the B1 stepping, as of Decemb
 
 	**Workaround**: No workaround is necessary in a working system.
 
-An errata update dated March 26, 1987, produced internally by IBM rather than Intel, noted two additional
-issues:
+[80386 Errata from March 26, 1987](files/80386-B1--1987-03-26.pdf), produced internally by IBM rather than Intel, noted two additional issues:
 
 + Maximum Sized Segments Need Alignment
 + CR3/TRx Move Corrupts LIP (Linear Instruction Pointer)
@@ -588,15 +587,12 @@ than the double fault (exception 8) handler. A subsequent fault, though, will le
 
 > Workaround: No workaround is necessary in a working system.
 
-On April 30, 1987, another errata update omitted #18, as well as the two new issues documented by IBM
-(which, like #18, Intel must have decided were not significant problems "in a working system"), and added
-the following:
+[80386 Errata from April 30, 1987](files/80386-B1--1987-04-30.pdf) omitted #18, as well as the two new issues documented by IBM (which, like #18, Intel must have decided were not significant problems "in a working system"), and added the following:
 
 + Breakpoints Malfunction after Reading CR3, TR6, or TR7
 + Return Address Incorrect for Segment Limit Fault during FNINIT
 
-On September 1, 1987, the final 80386-B1 errata update that I'm aware of continued to list previous errata (#1-#17),
-plus the two errata from April 30 (#18 and #19), along with the following new errata:
+[80386 Errata from September 1, 1987](files/80386-B1--1987-09-01.pdf), the final 80386-B1 errata update that I'm aware of, continued to list previous errata (#1-#17), plus the two errata from April 30 (#18 and #19), along with the following new errata:
 
 + VERR/VERW/LAR/LSL Instructions Malfunction with Bad Selector
 + Coprocessor Malfunctions with Paging Enabled
@@ -792,7 +788,7 @@ a double sigma sign. All 80386s produced after the B1 stepping should be free of
 #### C0 Stepping
 
 The only information we have regarding the C0 stepping comes from a March 30, 1987 document titled
-"**80386-C0 STEPPING INFORMATION**":
+"[80386-C0 STEPPING INFORMATION](files/80386-C0--1987-03-30.pdf)":
 
     80386-C0 component identifier readable in DH after reset: 03H
     80386-C0 revision  identifier readable in DL after reset: 04H

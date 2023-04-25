@@ -27,6 +27,38 @@ function printError(err)
 }
 
 /**
+ * getFullPath(sFile)
+ *
+ * @param {string} sFile
+ * @returns {string}
+ */
+function getFullPath(sFile)
+{
+    if (sFile[0] == '~') {
+        sFile = os.homedir() + sFile.substr(1);
+    }
+    else {
+        sFile = getServerPath(sFile);
+    }
+    return sFile;
+}
+
+/**
+ * getServerPath(sFile)
+ *
+ * @param {string} sFile
+ * @returns {string}
+ */
+function getServerPath(sFile)
+{
+    let match = sFile.match(/^\/(disks\/|)(machines|software|diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|cdroms|private)(\/.*)$/);
+    if (match) {
+        sFile = path.join(rootDir, (match[2] == "machines" || match[2] == "software"? "" : "disks"), match[2], match[3]);
+    }
+    return sFile;
+}
+
+/**
  * @class {FileImage}
  */
 class FileImage {
@@ -103,7 +135,7 @@ class FileImage {
             encoding = "utf8";
         }
         let options = {encoding: encoding};
-        let sFilePath = sFile; // path.join(rootDir, sFile);
+        let sFilePath = getFullPath(sFile);
 
         if (!this.sFilePath) {
             this.sFilePath = sFilePath;
