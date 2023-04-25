@@ -15,72 +15,64 @@
           },
           {
             "@title": "Microsoft Programmer's Library (1.3)",
-            "@file": "MSTOOLS-CD005-MSPL10.pdf",
             "@link": "/documents/books/mspl13/",
-            "@cover": "png",
+            "@cover": "MSTOOLS-CD005-MSPL10.png",
             "@source": "PCjs",
             "@tags": "msdos"
           },
           {
             "@title": "The MS-DOS Encyclopedia (1988)",
             "@author": "Ray Duncan",
-            "@file": "The_MS-DOS_Encyclopedia.pdf",
             "@link": "/documents/books/mspl13/msdos/encyclopedia/",
-            "@cover": "jpg",
+            "@cover": "The_MS-DOS_Encyclopedia.jpg",
             "@source": "PCjs",
             "@tags": "msdos"
           },
           {
-            "@title": "PC Magazine Programmer’s Technical Reference: The Processor and Coprocessor",
+            "@title": "PC Magazine Programmer’s Technical Reference: The Processor and Coprocessor (1992)",
             "@author": "Robert L. Hummel",
-            "@file": "PC_Magazine_Programmers_Technical_Reference.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBmvhei-z1oAma67Q?e=o78PLZ",
-            "@cover": "jpg",
+            "@link": "https://archive.org/details/pc-magazine-programmers-technical-reference-1992",
+            "@cover": "PC_Magazine_Programmers_Technical_Reference-1992.jpg",
             "@source": "PCjs",
             "@tags": "x86"
           },
           {
-            "@title": "Programmer’s Guide to the EGA, VGA, and Super VGA Cards (3rd Edition)",
+            "@title": "Programmer’s Guide to the EGA, VGA, and Super VGA Cards (1994)",
             "@author": "Richard F. Ferraro",
-            "@file": "Programmers_Guide_to_the_EGA_VGA_and_Super_VGA_Cards.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBtP4xjq0RlWgs8zQ?e=KOtgmQ",
-            "@cover": "jpg",
+            "@link": "https://archive.org/details/programmers-guide-to-the-ega-vga-and-super-vga-cards-1994",
+            "@cover": "Programmers_Guide_to_the_EGA_VGA_and_Super_VGA_Cards-1994.jpg",
             "@source": "PCjs",
             "@tags": "video"
           },
           {
-            "@title": "Programming the 8086 and 8088",
+            "@title": "Programming the 8086/8088 (1983)",
             "@author": "James W. Coffron",
-            "@file": "Programming_the_8086_and_8088.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBlkWuMx38i-e-gTQ?e=eBrRKx",
-            "@cover": "jpg",
+            "@link": "https://archive.org/details/Programming_The_8086_8088_by_James_Coffron",
+            "@cover": "Programming_the_8086_8088-1983.jpg",
             "@source": "PCjs",
             "@tags": "x86"
           },
           {
-            "@title": "Programming the 80386",
+            "@title": "Programming the 80386 (1987)",
             "@author": "John H. Crawford and Patrick P. Gelsinger",
-            "@file": "Programming_The_80386.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBn20ZNpaVBpNx7MA?e=zdZkND",
-            "@cover": "jpg",
+            "@link": "https://archive.org/details/programming8038600craw",
+            "@cover": "Programming_The_80386-1987.jpg",
             "@source": "PCjs",
             "@tags": "x86"
           },
           {
-            "@title": "The 8086 Book",
+            "@title": "The 8086 Book (1980)",
             "@author": "Russell Rector and George Alexy",
-            "@file": "The_8086_Book.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBp7iGjoHzNtD3hIg?e=tYxd3v",
-            "@cover": "jpg",
+            "@link": "https://archive.org/details/The_8086_Book_Russell_Rector_George_Alexy",
+            "@cover": "The_8086_Book-1980.jpg",
             "@source": "PCjs",
             "@tags": "x86"
           },
           {
-            "@title": "The Zen of Assembly Language",
+            "@title": "The Zen of Assembly Language (1990)",
             "@author": "Michael Abrash",
-            "@file": "The_Zen_of_Assembly_Language.pdf",
-            "@link": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBqukL44g6Fo5RuZA?e=QI3Zv5",
-            "@cover": "",
+            "@link": "https://archive.org/details/zenofassemblylan0001abra",
+            "@cover": "The_Zen_of_Assembly_Language-1990.jpg",
             "@source": "PCjs",
             "@tags": "msdos"
           }
