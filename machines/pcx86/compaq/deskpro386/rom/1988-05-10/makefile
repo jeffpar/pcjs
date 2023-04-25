@@ -2,14 +2,17 @@
 # Steps to produce a binary ROM from a JSON-encoded ROM, and then disassemble and re-assemble it.
 #
 
+FIMG=node ../../../../../../tools/fileimage/fileimage.js
+TEXTOUT=node ../../../../../../tools/misc/old/textout/bin/textout.js
+
 all: 1988-05-10-test.rom
 
 1988-05-10.rom: 1988-05-10.json
-	node ../../../../../../modules/filedump/bin/filedump --file=1988-05-10.json --output=1988-05-10.rom --format=rom
+	$(FIMG) --file=1988-05-10.json --output=1988-05-10.rom --format=rom
 
 1988-05-10-test.nasm: 1988-05-10.rom
 	ndisasm -o0x8000 1988-05-10.rom > 1988-05-10-test.nasm
-	node ../../../../../../modules/textout/bin/textout --file=1988-05-10-test.nasm --nasm > temp.nasm
+	$(TEXTOUT) --file=1988-05-10-test.nasm --nasm > temp.nasm
 	mv temp.nasm 1988-05-10-test.nasm
 
 1988-05-10-test.rom: 1988-05-10-test.nasm

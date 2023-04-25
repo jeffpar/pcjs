@@ -10,13 +10,13 @@ Each ROM chip apparently contains 32Kb of data, but only the upper 16Kb of each 
 	VGA_Wonder_V3-1.02_EVEN.BIN
 	VGA_Wonder_V3-1.02_ODD.BIN
 
-and merge them into a single 64Kb file, using the PCjs [FileDump](/tools/old/filedump/) utility:
+and merge them into a single 64Kb file, using the PCjs [FileImage](/tools/fileimage/) utility:
 
-	filedump --file=1988-11-11/archive/VGA_Wonder_V3-1.02_EVEN.BIN --merge=1988-11-11/archive/VGA_Wonder_V3-1.02_ODD.BIN --format=rom --output=1988-11-11/archive/VGA_Wonder_V3-1.02.rom
+	fileimage --file=1988-11-11/archive/VGA_Wonder_V3-1.02_EVEN.BIN --merge=1988-11-11/archive/VGA_Wonder_V3-1.02_ODD.BIN --format=rom --output=1988-11-11/archive/VGA_Wonder_V3-1.02.rom
 
 Then, within the resulting 64Kb file, we extract the ROM code+data from the upper 32Kb:
 
-	filedump --file=1988-11-11/archive/VGA_Wonder_V3-1.02.rom --offset=32768 --format=bytes --comments --output=1988-11-11/VGA_Wonder_V3-1.02.json5
+	fileimage --file=1988-11-11/archive/VGA_Wonder_V3-1.02.rom --offset=32768 --format=bytes --comments --output=1988-11-11/VGA_Wonder_V3-1.02.json5
 
 And now we have a JSON-encoded ROM image that PCjs machines can load.
 
@@ -24,7 +24,7 @@ And now we have a JSON-encoded ROM image that PCjs machines can load.
 
 To create a human-readable dump, you can use the following command:
 
-	filedump --file=1988-11-11/VGA_Wonder_V3-1.02.json5 --format=bytes --comments
+	fileimage --file=1988-11-11/VGA_Wonder_V3-1.02.json5 --format=bytes --comments
 
 Here are the first 12 lines from [VGA_Wonder_V3-1.02.json5](1988-11-11/VGA_Wonder_V3-1.02.json5):
 

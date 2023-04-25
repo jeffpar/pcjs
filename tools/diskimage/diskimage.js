@@ -287,7 +287,7 @@ function getFullPath(sFile)
  */
 function getDiskServer(diskFile)
 {
-    let match = diskFile.match(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9]*[a-z]*-disks|cdroms|private)\//);
+    let match = diskFile.match(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|cdroms|private)\//);
     return match && (match[1] + match[2]);
 }
 
@@ -303,7 +303,7 @@ function getServerPath(sFile)
      * In addition to disk server paths, we had to add /machines (for diskette config files) and /software (for Markdown files
      * containing supplementary copy-protection disk data).
      */
-    let match = sFile.match(/^\/(disks\/|)(machines|software|diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9]*[a-z]*-disks|cdroms|private)(\/.*)$/);
+    let match = sFile.match(/^\/(disks\/|)(machines|software|diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|cdroms|private)(\/.*)$/);
     if (match) {
         sFile = path.join(rootDir, (match[2] == "machines" || match[2] == "software"? "" : "disks"), match[2], match[3]);
     }
