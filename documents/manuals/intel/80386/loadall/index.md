@@ -5,7 +5,7 @@ permalink: /documents/manuals/intel/80386/loadall/
 redirect_from: /pubs/pc/reference/intel/80386/loadall/
 ---
 
-[The following information is from an undated 6-page Intel "[Internal Correspondence](../files/80386--LOADALL.pdf)" document]
+[The following information is from an undated 6-page Intel "[Internal Correspondence](../files/80386_LOADALL.pdf)" document]
 
 ### LOADALL (0F07H)
 

@@ -5,7 +5,7 @@ permalink: /documents/manuals/intel/80286/loadall/
 redirect_from: /pubs/pc/reference/intel/80286/loadall/
 ---
 
-[The following information is from an undated 15-page Intel document titled "[Undocumented iAPX 286 Test Instruction](/documents/manuals/intel/80286/files/80286--LOADALL.pdf)", pp. 1-4]
+[The following information is from an undated 15-page Intel document titled "[Undocumented iAPX 286 Test Instruction](/documents/manuals/intel/80286/files/80286_LOADALL.pdf)", pp. 1-4]
 
 ### LOADALL (0F05H)
 

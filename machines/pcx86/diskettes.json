@@ -8579,10 +8579,10 @@
 					"@documents": [
 						{
 							"@title": "Graphics for the IBM PC (1984)",
-							"@file": "Graphics_for_the_IBM_PC.pdf",
+							"@file": "Graphics_for_the_IBM_PC-1984.pdf",
 							"@link": "/software/pcx86/sw/books/graphics_for_the_ibm_pc/",
-							"@doclink": "https://1drv.ms/b/s!ArcO_mFRe1Z9gqBjvPCIs98PvKf1UA?e=gEOQUS",
-							"@cover": "/documents/books/programming/covers/Graphics_for_the_IBM_PC.jpg",
+							"@doclink": "https://archive.org/details/graphics-for-the-ibm-pc-1984",
+							"@cover": "/documents/books/programming/covers/Graphics_for_the_IBM_PC-1984.jpg",
 							"@source": "PCjs",
 							"tags": "graphics"
 						}
