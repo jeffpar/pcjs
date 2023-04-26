@@ -5,7 +5,7 @@ permalink: /documents/manuals/intel/80286/exceptions/
 redirect_from: /pubs/pc/reference/intel/80286/exceptions/
 ---
 
-[The following information is from an undated 15-page Intel document titled "[Undocumented iAPX 286 Test Instruction](/documents/manuals/intel/80286/files/80286--LOADALL.pdf#page=13)", pp. 13-14.
+[The following information is from an undated 15-page Intel document titled "[Undocumented iAPX 286 Test Instruction](/documents/manuals/intel/80286/files/80286_LOADALL.pdf#page=13)", pp. 13-14.
 NOTE: The initial reference to LOADALL as "opcode 0F04H" and the subsequent references to the "0F05H opcode" are exactly
 as they appear in the original document. Whether or not they were mistakes is unknown.]
 
