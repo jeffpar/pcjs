@@ -1,7 +1,7 @@
 ---
 layout: page
 title: PCjs FileImage Utility
-permalink: /tools/fileimage
+permalink: /tools/fileimage/
 ---
 
 [FileImage](fileimage.js) is a Node command-line application that reads/writes PCjs file images, producing JSON-encoded versions of binary files (eg, ROM images).  It supersedes the older PCjs [FileDump](../misc/old/filedump/) utility.
