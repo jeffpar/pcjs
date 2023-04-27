@@ -3,6 +3,7 @@
 *.obj
 .DS_Store
 .history
+.jekyll-metadata
 .sass-cache
 Thumbs.db
 Gemfile.lock
