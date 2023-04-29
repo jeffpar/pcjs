@@ -2,6 +2,7 @@
 layout: page
 title: QEMM-386 v6.02
 permalink: /software/pcx86/sys/ext/quarterdeck/qemm386/6.02/
+preview: https://diskettes.pcjs.org/pcx86/sys/ext/quarterdeck/qemm386/6.02/QEMM386-602.jpg
 redirect_from: /disks/pcx86/tools/other/qemm386/6.02/
 machines:
   - id: deskpro386

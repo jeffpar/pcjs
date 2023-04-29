@@ -599,6 +599,21 @@
 					}
 				}
 			},
+			"P70": {
+				"@title": "IBM PS/2 Model P70",
+				"@versions": {
+					"1.01": {
+						"@title": "IBM PS/2 Model P70 Reference 1.01",
+						"@media": [
+							{
+								"@diskette": "IBM-PS2-P70-REF-101.json",
+								"@photo": "jpg",
+								"@format": "PC1440K"
+							}
+						]
+					}
+				}
+			},
 			"@title": "IBM Diagnostics"
 		},
 		"@server": "/disks/diskettes"

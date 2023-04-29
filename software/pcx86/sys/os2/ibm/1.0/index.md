@@ -98,7 +98,7 @@ IBM OS/2 1.0 has been pre-installed on this machine's 20Mb hard disk, along with
     SYSINST  PIP     21964  10-21-87  12:00p
     SYSLABL  EXE      6896  10-21-87  12:00p
     VIOCALLS DLL     13981  10-21-87  12:00p
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            56 file(s)    1115375 bytes
                           328192 bytes free
 
@@ -161,7 +161,7 @@ IBM OS/2 1.0 has been pre-installed on this machine's 20Mb hard disk, along with
     VIOTBL   DCP     52150  10-21-87  12:00p
     4201     DCP     17069  10-21-87  12:00p
     5202     DCP       404  10-21-87  12:00p
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            55 file(s)    1076370 bytes
                           367104 bytes free
 
@@ -208,7 +208,7 @@ IBM OS/2 1.0 has been pre-installed on this machine's 20Mb hard disk, along with
     TREE     COM     28928  10-21-87  12:00p
     VDISK    SYS      4662  10-21-87  12:00p
     XCOPY    EXE     40656  10-21-87  12:00p
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            39 file(s)    1061894 bytes
                           386048 bytes free
 
@@ -239,7 +239,7 @@ IBM OS/2 1.0 has been pre-installed on this machine's 20Mb hard disk, along with
     RESTORE  COM     54896  10-21-87  12:00p
     SETCOM40 EXE      8654  10-21-87  12:00p
     INTRO        <DIR>      10-21-87   2:10p
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            23 file(s)     505672 bytes
 
      Directory of A:\INTRO

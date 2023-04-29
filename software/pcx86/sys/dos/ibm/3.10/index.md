@@ -113,7 +113,7 @@ Removed functions:
     SYS      COM      3727   3-07-85   1:43p
     TREE     COM      2831   3-07-85   1:43p
     VDISK    SYS      3307   3-07-85   1:43p
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            39 file(s)     277474 bytes
                            61440 bytes free
 
@@ -140,7 +140,7 @@ Removed functions:
     SAMPLES  BAS      2363   3-07-85   1:43p
     SPACE    BAS      1851   3-07-85   1:43p
     VDISK    LST    136313   3-07-85   1:43p
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            19 file(s)     242890 bytes
                           108544 bytes free
 
@@ -187,6 +187,6 @@ Removed functions:
     SYS      COM      3727   3-07-85   1:43p
     TREE     COM      2831   3-07-85   1:43p
     VDISK    SYS      3307   3-07-85   1:43p
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            39 file(s)     278394 bytes
                            61440 bytes free

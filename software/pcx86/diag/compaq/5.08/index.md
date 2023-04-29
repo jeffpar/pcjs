@@ -2,6 +2,7 @@
 layout: page
 title: COMPAQ Diagnostics 5.08
 permalink: /software/pcx86/diag/compaq/5.08/
+preview: https://diskettes.pcjs.org/pcx86/diag/compaq/5.08/COMPAQ-DIAGS-508-012988-REVK.jpg
 redirect_from: /disks/pcx86/diags/compaq/5.08/
 machines:
   - id: deskpro386

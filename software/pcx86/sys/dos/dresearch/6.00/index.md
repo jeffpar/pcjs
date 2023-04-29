@@ -2,6 +2,7 @@
 layout: page
 title: Digital Research DR DOS 6.00
 permalink: /software/pcx86/sys/dos/dresearch/6.00/
+preview: https://diskettes.pcjs.org/pcx86/sys/dos/dresearch/6.00/DRDOS600-STARTUP.jpg
 redirect_from: /disks/pcx86/dos/dresearch/6.00/
 machines:
   - id: ibm5170-drdos600

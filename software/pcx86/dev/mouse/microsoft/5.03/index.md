@@ -2,6 +2,7 @@
 layout: page
 title: MS Mouse 5.03
 permalink: /software/pcx86/dev/mouse/microsoft/5.03/
+preview: https://diskettes.pcjs.org/pcx86/dev/mouse/microsoft/5.03/MSMOUSE-503-DISK1-REVISED.jpg
 machines:
   - id: ibm5170
     type: pcx86

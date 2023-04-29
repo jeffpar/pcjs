@@ -108,7 +108,7 @@ New functions:
     LCD      CPI     10752   3-17-87  12:00p
     4201     CPI     17089   3-18-87  12:00p
     5202     CPI       459   3-17-87  12:00p
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            25 file(s)     340496 bytes
                             9216 bytes free
 
@@ -149,7 +149,7 @@ New functions:
     BASIC    PIF       369   3-17-87  12:00p
     BASICA   PIF       369   3-17-87  12:00p
     MORTGAGE BAS      6251   3-17-87  12:00p
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            33 file(s)     302443 bytes
                            43008 bytes free
 
@@ -163,7 +163,7 @@ New functions:
     LIB      EXE     22912   3-17-87  11:00p
     LINK     EXE     39076   3-17-87  11:00p
     VDISK    ASM     75284   3-17-87  11:00p
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
             6 file(s)     156250 bytes
                           202752 bytes free
 
@@ -224,6 +224,6 @@ New functions:
     BASIC    PIF       369   3-17-87  12:00p
     BASICA   PIF       369   3-17-87  12:00p
     MORTGAGE BAS      6251   3-17-87  12:00p
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            53 file(s)     582994 bytes
                           128512 bytes free

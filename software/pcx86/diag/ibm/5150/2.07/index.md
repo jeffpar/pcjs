@@ -61,6 +61,6 @@ This disk displays the following startup messages:
     US0CUA   DGS      3864   6-12-84  12:00p
     US1SDL   DGS      5045   6-12-84  12:00p
     US0BSC   DGS      5417   6-12-84  12:00p
-    VENDOR-# DA1*        0   7-04-83  12:00a
+    VENDOR-# DA1*        0   7-04-83
            27 file(s)      81689 bytes
                            91648 bytes free

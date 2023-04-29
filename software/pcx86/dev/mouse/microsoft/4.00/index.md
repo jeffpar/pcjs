@@ -2,6 +2,7 @@
 layout: page
 title: Microsoft Mouse 4.00
 permalink: /software/pcx86/dev/mouse/microsoft/4.00/
+preview: https://diskettes.pcjs.org/pcx86/dev/mouse/microsoft/4.00/MSMOUSE-039599-400-DISK1-SYSTEM.jpg
 redirect_from: /disks/pcx86/tools/microsoft/mouse/4.00/
 machines:
   - id: ibm5160

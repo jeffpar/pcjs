@@ -32,41 +32,41 @@ of the disk is provided below.
      Volume in drive A has no label
      Directory of A:\
 
-    IBMBIO   COM*     2560   5-29-81  12:00a
-    IBMDOS   COM*     5566   5-29-81  12:00a
-    COMMAND  COM      2576   5-29-81  12:00a
-    DEBUG    COM      5450   5-27-81  12:00a
-    TIME     COM       243   5-19-81  12:00a
-    DATE     COM       245   5-20-81  12:00a
-    ASM      COM      6389   5-15-81  12:00a
-    FORMAT   COM      2048   5-29-81  12:00a
-    HEX2BIN  COM       483   5-07-81  12:00a
-    BASIC    COM     11008   6-04-81  12:00a
-    CHKDSK   COM      1224   5-30-81  12:00a
-    EDLIN    COM      2231   5-29-81  12:00a
-    MODE     COM       675   1-01-80  12:00a
-    COMMENTS          3561   6-05-81  12:00a
-    MOVBAS   COM       128   4-23-81  12:00a
-    BAS18    COM     11008   6-04-81  12:00a
-    BASICA   COM     14976   6-04-81  12:00a
-    AUTOEXEC BAK        24   1-01-80  12:00a
-    SYS      COM       896   6-03-81  12:00a
-    BAS18A   COM     14976   6-04-81  12:00a
-    COMMENTS BAK      3560   6-05-81  12:00a
-    FCOMP    COM      1408   4-13-81  12:00a
-    DISKCOPY COM      1211   6-04-81  12:00a
-    CONVERT  COM      3200   4-15-81  12:00a
-    COMP     COM       256   4-15-81  12:00a
-    KILO     BAS       768   4-23-81  12:00a
-    20HAL    COM      1792   4-24-81  12:00a
-    SPCWAR   BAS      5120   5-22-81  12:00a
-    TTY      ASC      2432   5-22-81  12:00a
-    VCOPY    BAT        26   4-24-81  12:00a
-    SHIPS    MAC      1792   6-01-81  12:00a
-    CIRCLE   MAC       384   6-01-81  12:00a
-    RBAS     COM     32768   4-25-81  12:00a
-    THREED   BAS      3072   1-01-80  12:00a
-    CUBE     DAT       402   4-30-81  12:00a
+    IBMBIO   COM*     2560   5-29-81
+    IBMDOS   COM*     5566   5-29-81
+    COMMAND  COM      2576   5-29-81
+    DEBUG    COM      5450   5-27-81
+    TIME     COM       243   5-19-81
+    DATE     COM       245   5-20-81
+    ASM      COM      6389   5-15-81
+    FORMAT   COM      2048   5-29-81
+    HEX2BIN  COM       483   5-07-81
+    BASIC    COM     11008   6-04-81
+    CHKDSK   COM      1224   5-30-81
+    EDLIN    COM      2231   5-29-81
+    MODE     COM       675   1-01-80
+    COMMENTS          3561   6-05-81
+    MOVBAS   COM       128   4-23-81
+    BAS18    COM     11008   6-04-81
+    BASICA   COM     14976   6-04-81
+    AUTOEXEC BAK        24   1-01-80
+    SYS      COM       896   6-03-81
+    BAS18A   COM     14976   6-04-81
+    COMMENTS BAK      3560   6-05-81
+    FCOMP    COM      1408   4-13-81
+    DISKCOPY COM      1211   6-04-81
+    CONVERT  COM      3200   4-15-81
+    COMP     COM       256   4-15-81
+    KILO     BAS       768   4-23-81
+    20HAL    COM      1792   4-24-81
+    SPCWAR   BAS      5120   5-22-81
+    TTY      ASC      2432   5-22-81
+    VCOPY    BAT        26   4-24-81
+    SHIPS    MAC      1792   6-01-81
+    CIRCLE   MAC       384   6-01-81
+    RBAS     COM     32768   4-25-81
+    THREED   BAS      3072   1-01-80
+    CUBE     DAT       402   4-30-81
            35 file(s)     144458 bytes
                             8192 bytes free
 

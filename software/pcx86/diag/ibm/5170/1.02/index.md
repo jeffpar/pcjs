@@ -66,6 +66,6 @@ This disk displays the following startup messages:
     PARA1    DGS       237  11-30-83   1:22p
     US0PCN   DGS      1936   4-25-84   8:13p
     SHUTDOWN EXE      1280  11-11-83  10:10a
-    VENDOR-# DA1*        0   7-04-83  12:00a
+    VENDOR-# DA1*        0   7-04-83
            26 file(s)     125509 bytes
                           224256 bytes free

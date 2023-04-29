@@ -2,6 +2,7 @@
 layout: page
 title: Microsoft Mouse 2.50
 permalink: /software/pcx86/dev/mouse/microsoft/2.50/
+preview: https://diskettes.pcjs.org/pcx86/dev/mouse/microsoft/2.50/MSMOUSE-250.jpg
 redirect_from: /disks/pcx86/tools/microsoft/mouse/2.50/
 ---
 

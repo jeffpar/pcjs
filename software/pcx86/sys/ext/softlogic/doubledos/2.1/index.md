@@ -2,6 +2,7 @@
 layout: page
 title: DoubleDOS 2.1
 permalink: /software/pcx86/sys/ext/softlogic/doubledos/2.1/
+preview: https://diskettes.pcjs.org/pcx86/sys/ext/softlogic/doubledos/2.1/DOUBLEDOS.jpg
 machines:
   - id: ibm5160-doubledos
     type: pcx86

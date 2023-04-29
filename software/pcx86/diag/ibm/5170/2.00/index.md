@@ -69,6 +69,6 @@ This disk displays the following startup messages:
     US1GPIB  DGS      6410   4-05-85   3:16p
     US1PGC   DGS     10276   6-06-85   2:31p
     DSKETTE1 DGS      3732   6-05-85   8:45a
-    VENDOR-# DA1*        0   7-04-83  12:00a
+    VENDOR-# DA1*        0   7-04-83
            30 file(s)     164632 bytes
                           182272 bytes free

@@ -2,6 +2,7 @@
 layout: page
 title: Microsoft MS-DOS 3.20
 permalink: /software/pcx86/sys/dos/microsoft/3.20/
+preview: https://diskettes.pcjs.org/pcx86/sys/dos/microsoft/3.20/MSDOS320-DISK3-PROGREF1.jpg
 redirect_from:
   - /disks/pcx86/dos/microsoft/3.20/
   - /disks/pc/dos/microsoft/3.20/

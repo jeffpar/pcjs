@@ -2,6 +2,7 @@
 layout: page
 title: DESQview 1.02
 permalink: /software/pcx86/sys/ext/quarterdeck/desqview/1.02/
+preview: https://diskettes.pcjs.org/pcx86/sys/ext/quarterdeck/desqview/1.02/DESQVIEW-102.jpg
 redirect_from: /disks/pcx86/tools/other/desqview/1.02/
 machines:
   - id: ibm5170

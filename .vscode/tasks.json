@@ -31,7 +31,7 @@
     {
       "type": "shell",
       "label": "bundle serve uncompiled",
-      "command": "bundle exec jekyll serve --host 0.0.0.0 --incremental --port 4000 --config _config.yml,_developer.yml",
+      "command": "bundle exec jekyll serve --host 0.0.0.0 --port 4000 --config _config.yml,_developer.yml",
       "problemMatcher": [],
       "runOptions": {
         "runOn": "folderOpen"

@@ -2,6 +2,7 @@
 layout: page
 title: COMPAQ MS-DOS 1.10
 permalink: /software/pcx86/sys/dos/compaq/1.10/
+preview: https://diskettes.pcjs.org/pcx86/sys/dos/compaq/1.10/COMPAQ-DOS110B.jpg
 redirect_from:
   - /disks/pcx86/dos/compaq/1.10/
   - /disks/pcx86/dos/compaq/

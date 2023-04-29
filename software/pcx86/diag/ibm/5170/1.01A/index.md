@@ -2,6 +2,7 @@
 layout: page
 title: IBM PC AT Advanced Diagnostics 1.01
 permalink: /software/pcx86/diag/ibm/5170/1.01A/
+preview: https://diskettes.pcjs.org/pcx86/diag/ibm/5170/1.01A/5170-DIAG-101A.jpg
 redirect_from: /disks/pcx86/diags/ibm/5170/1.01a/
 machines:
   - id: ibm5170
@@ -68,7 +69,7 @@ This disk displays the following startup messages:
     CPS200   DGS      2731  12-01-83  12:56p
     KYBD     DGS      6148   2-29-84   4:32p
     PCNET    DGS      1936   4-09-84   9:13a
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            26 file(s)     146074 bytes
                           202752 bytes free
 
