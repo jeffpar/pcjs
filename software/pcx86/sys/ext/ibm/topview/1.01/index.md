@@ -104,7 +104,7 @@ To manually start TopView: {% include machine-command.html type='button' label='
     WA       TBL        56   3-28-85  12:00p
     WELCOME  EXT      2560   3-28-85  12:00p
     WP       TBL        53   3-28-85  12:00p
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            42 file(s)     276865 bytes
                            57344 bytes free
 
@@ -130,6 +130,6 @@ To manually start TopView: {% include machine-command.html type='button' label='
     TUTORIAL EXT      6556  11-07-84  12:00p
     TUTORIAL PIF       369  11-07-84  12:00p
     WASWAP   BAT      1190  11-07-84  12:00p
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            18 file(s)     205022 bytes
                           146432 bytes free

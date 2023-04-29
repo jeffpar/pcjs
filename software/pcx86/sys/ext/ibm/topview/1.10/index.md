@@ -77,6 +77,6 @@ second (Tutorial) disk, but we don't have a copy of it.
     WA       TBL        56   2-20-86  12:00p
     WELCMPIF           369   2-20-86  12:00p
     WELCOME  EXT      2560   2-20-86  12:00p
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            46 file(s)     328055 bytes
                             8192 bytes free

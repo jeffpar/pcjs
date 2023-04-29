@@ -69,6 +69,6 @@ This disk displays the following startup messages:
     EXTDRV2  DGS      4825  11-12-85   9:52a
     SHIPDISK COM       974   1-08-86  10:06a
     US2FDK   DGS      4688   1-08-86  10:12a
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            32 file(s)     132897 bytes
                            38912 bytes free

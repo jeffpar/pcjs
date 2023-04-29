@@ -29,46 +29,46 @@ using the [PCjs Debugger](debugger/).
      Volume in drive A has no label
      Directory of A:\
 
-    IBMBIO   COM*     1920   7-23-81  12:00a
-    IBMDOS   COM*     6400   8-13-81  12:00a
-    COMMAND  COM      3231   8-04-81  12:00a
-    FORMAT   COM      2560   8-04-81  12:00a
-    CHKDSK   COM      1395   8-04-81  12:00a
-    SYS      COM       896   8-04-81  12:00a
-    DISKCOPY COM      1216   8-04-81  12:00a
-    DISKCOMP COM      1124   8-04-81  12:00a
-    COMP     COM      1620   8-04-81  12:00a
-    DATE     COM       252   8-04-81  12:00a
-    TIME     COM       250   8-04-81  12:00a
-    MODE     COM       860   8-04-81  12:00a
-    EDLIN    COM      2392   8-04-81  12:00a
-    DEBUG    COM      6049   8-04-81  12:00a
-    LINK     EXE     43264   8-04-81  12:00a
-    BASIC    COM     10880   8-04-81  12:00a
-    BASICA   COM     16256   8-04-81  12:00a
-    ART      BAS      1920   8-04-81  12:00a
-    SAMPLES  BAS      2432   8-04-81  12:00a
-    MORTGAGE BAS      6272   8-04-81  12:00a
-    COLORBAR BAS      1536   8-04-81  12:00a
-    BUG      BAS       640   8-04-81  12:00a
-    CALENDAR BAS      3840   8-04-81  12:00a
-    MUSIC    BAS      4224   8-04-81  12:00a
-    DONKEY   BAS      3584   8-04-81  12:00a
-    BLUE     BAS      1152   8-04-81  12:00a
-    HUMOR    BAS       640   8-04-81  12:00a
-    POP      BAS       768   8-04-81  12:00a
-    FORTY    BAS       768   8-04-81  12:00a
-    DANDY    BAS       640   8-04-81  12:00a
-    MARCH    BAS       768   8-04-81  12:00a
-    STARS    BAS       768   8-04-81  12:00a
-    HAT      BAS       768   8-04-81  12:00a
-    SCALES   BAS       640   8-04-81  12:00a
-    SAKURA   BAS       512   8-04-81  12:00a
-    CIRCLE   BAS      1664   8-04-81  12:00a
-    PIECHART BAS      2304   8-04-81  12:00a
-    SPACE    BAS      1920   8-04-81  12:00a
-    BALL     BAS      2048   8-04-81  12:00a
-    COMM     BAS      4352   8-04-81  12:00a
+    IBMBIO   COM*     1920   7-23-81
+    IBMDOS   COM*     6400   8-13-81
+    COMMAND  COM      3231   8-04-81
+    FORMAT   COM      2560   8-04-81
+    CHKDSK   COM      1395   8-04-81
+    SYS      COM       896   8-04-81
+    DISKCOPY COM      1216   8-04-81
+    DISKCOMP COM      1124   8-04-81
+    COMP     COM      1620   8-04-81
+    DATE     COM       252   8-04-81
+    TIME     COM       250   8-04-81
+    MODE     COM       860   8-04-81
+    EDLIN    COM      2392   8-04-81
+    DEBUG    COM      6049   8-04-81
+    LINK     EXE     43264   8-04-81
+    BASIC    COM     10880   8-04-81
+    BASICA   COM     16256   8-04-81
+    ART      BAS      1920   8-04-81
+    SAMPLES  BAS      2432   8-04-81
+    MORTGAGE BAS      6272   8-04-81
+    COLORBAR BAS      1536   8-04-81
+    BUG      BAS       640   8-04-81
+    CALENDAR BAS      3840   8-04-81
+    MUSIC    BAS      4224   8-04-81
+    DONKEY   BAS      3584   8-04-81
+    BLUE     BAS      1152   8-04-81
+    HUMOR    BAS       640   8-04-81
+    POP      BAS       768   8-04-81
+    FORTY    BAS       768   8-04-81
+    DANDY    BAS       640   8-04-81
+    MARCH    BAS       768   8-04-81
+    STARS    BAS       768   8-04-81
+    HAT      BAS       768   8-04-81
+    SCALES   BAS       640   8-04-81
+    SAKURA   BAS       512   8-04-81
+    CIRCLE   BAS      1664   8-04-81
+    PIECHART BAS      2304   8-04-81
+    SPACE    BAS      1920   8-04-81
+    BALL     BAS      2048   8-04-81
+    COMM     BAS      4352   8-04-81
            40 file(s)     144725 bytes
                             6144 bytes free
 

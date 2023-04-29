@@ -145,7 +145,7 @@ New functions:
     SAMPLES  BAS      2363  12-30-85  12:00p
     SPACE    BAS      1851  12-30-85  12:00p
     VDISK    LST    136315  12-30-85  12:00p
-    VENDOR-# DO1*        0   7-04-83  12:00a
+    VENDOR-# DO1*        0   7-04-83
            60 file(s)     563032 bytes
                           135168 bytes free
 
@@ -195,7 +195,7 @@ New functions:
     TREE     COM      3357  12-30-85  12:00p
     VDISK    SYS      3307  12-30-85  12:00p
     XCOPY    EXE     11200  12-30-85  12:00p
-    VENDOR-# WT1*        0   7-04-83  12:00a
+    VENDOR-# WT1*        0   7-04-83
            42 file(s)     318772 bytes
                            22528 bytes free
 
@@ -222,7 +222,7 @@ New functions:
     SAMPLES  BAS      2363  12-30-85  12:00p
     SPACE    BAS      1851  12-30-85  12:00p
     VDISK    LST    136315  12-30-85  12:00p
-    VENDOR-# WT1*        0   7-04-83  12:00a
+    VENDOR-# WT1*        0   7-04-83
            19 file(s)     244310 bytes
                           107520 bytes free
 

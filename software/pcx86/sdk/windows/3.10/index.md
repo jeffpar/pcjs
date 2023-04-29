@@ -2,6 +2,7 @@
 layout: page
 title: Microsoft Windows SDK 3.10
 permalink: /software/pcx86/sdk/windows/3.10/
+preview: https://diskettes.pcjs.org/pcx86/sdk/windows/3.10/WIN31SDK-DISK01.jpg
 machines:
   - id: ibm5170
     type: pcx86

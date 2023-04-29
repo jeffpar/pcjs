@@ -2,6 +2,7 @@
 layout: page
 title: IBM PC Diagnostics 2.05
 permalink: /software/pcx86/diag/ibm/5150/2.05/
+preview: https://diskettes.pcjs.org/pcx86/diag/ibm/5150/2.05/5150-DIAG-205.jpg
 redirect_from: /disks/pcx86/diags/ibm/5150/2.05/
 machines:
   - id: ibm5150
@@ -62,7 +63,7 @@ This disk displays the following startup messages:
     US0CUA   DGS      3977  10-21-83  11:20a
     US1SDL   DGS      5045   6-03-83  10:50a
     US0BSC   DGS      5417   6-03-83   8:47a
-    VENDOR-# DA1*        0   7-04-83  12:00a
+    VENDOR-# DA1*        0   7-04-83
            26 file(s)      74936 bytes
                            98816 bytes free
 

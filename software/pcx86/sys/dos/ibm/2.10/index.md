@@ -52,7 +52,7 @@ PC DOS 2.10 was finalized in October 1983 and released on November 1, 1983.
     MORE     COM       384  10-20-83  12:00p
     BASIC    COM     16256  10-20-83  12:00p
     BASICA   COM     26112  10-20-83  12:00p
-    VENDOR-# DA1*        0   7-04-83  12:00a
+    VENDOR-# DA1*        0   7-04-83
            26 file(s)     145470 bytes
                            28672 bytes free
 
@@ -76,6 +76,6 @@ PC DOS 2.10 was finalized in October 1983 and released on November 1, 1983.
     SPACE    BAS      1920  10-20-83  12:00p
     BALL     BAS      2048  10-20-83  12:00p
     COMM     BAS      4352  10-20-83  12:00p
-    VENDOR-# DA1*        0   7-04-83  12:00a
+    VENDOR-# DA1*        0   7-04-83
            16 file(s)     107534 bytes
                            69120 bytes free

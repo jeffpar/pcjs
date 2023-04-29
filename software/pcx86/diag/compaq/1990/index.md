@@ -2,6 +2,7 @@
 layout: page
 title: COMPAQ SystemPro
 permalink: /software/pcx86/diag/compaq/1990/
+preview: https://diskettes.pcjs.org/pcx86/diag/compaq/1990/COMPAQ-CONFLIB-1.03-071090.jpg
 machines:
   - id: deskpro386
     type: pcx86

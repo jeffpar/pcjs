@@ -2,6 +2,7 @@
 layout: page
 title: Microsoft Windows SDK 3.00
 permalink: /software/pcx86/sdk/windows/3.00/
+preview: https://diskettes.pcjs.org/pcx86/sdk/windows/3.00/WIN30SDK-1200K-DEVTOOLS.jpg
 machines:
   - id: ibm5170
     type: pcx86

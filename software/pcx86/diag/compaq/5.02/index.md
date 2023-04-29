@@ -2,6 +2,7 @@
 layout: page
 title: COMPAQ Diagnostics 5.02
 permalink: /software/pcx86/diag/compaq/5.02/
+preview: https://diskettes.pcjs.org/pcx86/diag/compaq/5.02/COMPAQ-DIAGS-502-051987-REVC.jpg
 machines:
   - id: deskpro386
     type: pcx86

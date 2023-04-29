@@ -76,6 +76,6 @@ This disk displays the following startup messages:
     MUSIC2   DGS      7755   1-20-87  10:54a
     SHUTDOWN EXE      1169   1-20-87  10:02a
     VERSION  207        35   1-20-87  10:20a
-    VENDOR-# DA1*        0   7-04-83  12:00a
+    VENDOR-# DA1*        0   7-04-83
            35 file(s)     245478 bytes
                           101376 bytes free

@@ -2,6 +2,7 @@
 layout: page
 title: "COMPAQ User Programs (1987)"
 permalink: /software/pcx86/diag/compaq/1987/
+preview: https://diskettes.pcjs.org/pcx86/diag/compaq/1987/COMPAQ-UTILS-506-110387-REVG.jpg
 redirect_from: /disks/pcx86/diags/compaq/utilities/1987/
 machines:
   - id: deskpro386
