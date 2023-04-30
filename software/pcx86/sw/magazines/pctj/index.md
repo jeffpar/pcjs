@@ -569,7 +569,7 @@ over time.  [Let us know](mailto:Jeff@pcjs.org) if you find more.  Thanks.
     TAD      COM       104  10-01-84  10:10a
     UNDRLN   COM       132  11-09-87   9:58a
     VDEL     COM       404  11-05-87  10:04a
-    WHERE    EXE      7552   1-01-80  12:00a
+    WHERE    EXE      7552
     XMEM     COM      1332  10-06-85   7:36p
            31 file(s)     244792 bytes
 

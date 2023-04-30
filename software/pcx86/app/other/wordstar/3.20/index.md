@@ -39,12 +39,12 @@ You can browse all of the [Additional Materials](#additional-materials) below.
      Volume in drive A has no label
      Directory of A:\
 
-    WS       COM     20480   1-01-80
-    WSMSGS   OVR     27264   1-01-80
-    WSOVLY1  OVR     40960   1-01-80
-    INSTALL  BAS     14848   1-01-80
-    WSBAUD   BAS      1152   1-01-80
-    EXAMPLE  TXT      9216   1-01-80
+    WS       COM     20480
+    WSMSGS   OVR     27264
+    WSOVLY1  OVR     40960
+    INSTALL  BAS     14848
+    WSBAUD   BAS      1152
+    EXAMPLE  TXT      9216
             6 file(s)     113920 bytes
                            45568 bytes free
 
@@ -55,7 +55,7 @@ You can browse all of the [Additional Materials](#additional-materials) below.
      Volume in drive A has no label
      Directory of A:\
 
-    MAILMRGE OVR     11520   1-01-80
+    MAILMRGE OVR     11520
             1 file(s)      11520 bytes
                           148480 bytes free
 
@@ -70,12 +70,12 @@ You can browse all of the [Additional Materials](#additional-materials) below.
     IBMDOS   COM*     6400   5-07-82  12:00p
     COMMAND  COM      4959   5-07-82  12:00p
     WS       COM     20480   1-01-80  12:02a
-    WSMSGS   OVR     27264   1-01-80
-    WSOVLY1  OVR     40960   1-01-80
-    EXAMPLE  TXT      9216   1-01-80
-    INSTALL  BAS     14848   1-01-80
-    WSBAUD   BAS      1152   1-01-80
-    MAILMRGE OVR     11520   1-01-80
+    WSMSGS   OVR     27264
+    WSOVLY1  OVR     40960
+    EXAMPLE  TXT      9216
+    INSTALL  BAS     14848
+    WSBAUD   BAS      1152
+    MAILMRGE OVR     11520
     SETCLOCK COM       853   9-19-82
     INSTALL              0   1-01-80  12:40a
     ASTCLOCK COM       813   9-18-82
@@ -100,6 +100,30 @@ You can browse all of the [Additional Materials](#additional-materials) below.
     WSBAUD   BAS      1152   2-23-13   8:45a
             7 file(s)     122496 bytes
                            36352 bytes free
+
+### Directory of WordStar 3.20 (MailMerge Demo)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    MAILMRGE OVR     11520
+            1 file(s)      11520 bytes
+                          148480 bytes free
+
+![WordStar 3.20 (MailMerge Demo)]({{ site.software.miscdisks.server }}/pcx86/app/other/wordstar/3.20/MM320-DEMO.jpg)
+
+### Directory of WordStar 3.20 (SpellStar Demo)
+
+     Volume in drive A has no label
+     Directory of A:\
+
+    SPELSTAR OVR     22784
+    SPELSTAR DCT     99200
+    SAMPLE   TXT      3328
+            3 file(s)     125312 bytes
+                           34304 bytes free
+
+![WordStar 3.20 (SpellStar Demo)]({{ site.software.miscdisks.server }}/pcx86/app/other/wordstar/3.20/SS120-DEMO.jpg)
 
 <!-- Documentation -->
 
