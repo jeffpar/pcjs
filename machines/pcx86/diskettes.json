@@ -6618,6 +6618,18 @@
 								"@format": "PC160K"
 							},
 							{
+								"@title": "WordStar 3.20 (MailMerge Demo)",
+								"@diskette": "MM320-DEMO.json",
+								"@photo": "jpg",
+								"@format": "PC160K"
+							},
+							{
+								"@title": "WordStar 3.20 (SpellStar Demo)",
+								"@diskette": "SS120-DEMO.json",
+								"@photo": "jpg",
+								"@format": "PC160K"
+							},
+							{
 								"@title": "WordStar 3.20 (Backup)",
 								"@diskette": "WS320-BACKUP.json",
 								"@format": "PC160K"
