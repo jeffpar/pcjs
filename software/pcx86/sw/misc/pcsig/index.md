@@ -37,8 +37,15 @@ Our PC-SIG "database" doesn't include descriptions of all the disks yet, so resu
 
 ### Notes Regarding This Collection
 
-Disks 1-2485 were initially populated from the PC-SIG Library [9th Edition CD-ROM (December 1990)](https://archive.org/details/the-pc-sig-library-on-cd-rom-ninth-edition).  Note that while the face of the CD-ROM says "April 1990", the contents are actually
-circa December 1990.
+You can browse the collection by diskette:
+
+- [0001-0999](0001-0999/)
+- [1000-1999](1000-1999/)
+- [2000-2999](2000-2999/)
+- [3000-3999](3000-3999/)
+- [4000-4999](4000-4999/)
+
+Disks 1-2485 were initially populated from the PC-SIG Library [9th Edition CD-ROM (December 1990)](https://archive.org/details/the-pc-sig-library-on-cd-rom-ninth-edition).  Note that while the face of the CD-ROM says "April 1990", the contents are actually circa December 1990.
 
 Some of the disks had issues:
 
@@ -58,8 +65,7 @@ Also, the following disks were apparently "double-zipped":
   - DISK0316.ZIP contained DISKO316.ZIP ('O' instead of '0')
   - DISK0912.ZIP contained DISK0912.ZIP
 
-The following disks were then "back-filled" from the [8th Edition CD-ROM (April 1990)](/software/pcx86/sw/misc/pcsig08/0001/),
-spanning disks 1-2121, since they had been removed from the 9th Edition:
+The following disks were then "back-filled" from the [8th Edition CD-ROM (April 1990)](/software/pcx86/sw/misc/pcsig08/0001/), spanning disks 1-2121, since they had been removed from the 9th Edition:
 
   - DISK0126, DISK0232, DISK0395, DISK0601, DISK0623, DISK0624, DISK0626, DISK0712
   - DISK0757, DISK0758, DISK0792, DISK0914, DISK0969, DISK1024, DISK1036, DISK1061
@@ -69,15 +75,11 @@ spanning disks 1-2121, since they had been removed from the 9th Edition:
   - DISK1915, DISK1916, DISK1969, DISK1979, DISK1980, DISK1981, DISK2000, DISK2030
   - DISK2063
 
-Why didn't we simply start with the [8th Edition CD-ROM (April 1990)](/software/pcx86/sw/misc/pcsig08/0001/)
-and then fill in additions from subsequent editions?  Because the 8th Edition did not preserve the diskettes as well
-as later editions; the 9th and later editions used ZIP files to preserve diskettes, whereas the 8th Edition only did
-so in a few cases (eg, if filenames used characters that weren't allowed on CD-ROM).
+Why didn't we simply start with the [8th Edition CD-ROM (April 1990)](/software/pcx86/sw/misc/pcsig08/0001/) and then fill in additions from subsequent editions?  Because the 8th Edition did not preserve the diskettes as well as later editions; the 9th and later editions used ZIP files to preserve diskettes, whereas the 8th Edition only did so in a few cases (eg, if filenames used characters that weren't allowed on CD-ROM).
 
 Disks 2486-2804 were populated from the [10th Edition CD-ROM (September 1991)](https://archive.org/details/The_PC-Sig_Library_Shareware_for_the_IBM_PC_and_Compatibles_PC-SIG_Tenth_Edition).
 
-Disks 2805-3404 were populated from the [12th Edition CD-ROM (March 1993)](https://archive.org/details/PC-Sig_Library_12th_Edition_PC-SIG_1993),
-which was missing the following disks:
+Disks 2805-3404 were populated from the [12th Edition CD-ROM (March 1993)](https://archive.org/details/PC-Sig_Library_12th_Edition_PC-SIG_1993), which was missing the following disks:
 
   - DISK2814, DISK2820, DISK2840, DISK2841, DISK2842, DISK2868, DISK2869, DISK2897
   - DISK2898, DISK2915, DISK2923, DISK2934, DISK2993, DISK3112, DISK3128, DISK3169
@@ -105,8 +107,7 @@ Disks 3405-4313 were populated from the [13th Edition CD-ROM (March 1994)](https
   - DISK4280, DISK4281, DISK4282, DISK4283, DISK4284, DISK4294, DISK4295, DISK4296
   - DISK4297, DISK4298, DISK4299, DISK4300, DISK4301, DISK4311, DISK4312
 
-Last but not least, a small number of *original* PC-SIG diskettes have been located, so those have replaced the CD-ROM versions,
-since that's how the library was originally distributed.  Those diskettes include:
+Last but not least, a small number of *original* PC-SIG diskettes have been located, so those have replaced the CD-ROM versions, since that's how the library was originally distributed.  Those diskettes include:
 
   - [DISK0147](0001-0999/DISK0147/), [DISK0287](0001-0999/DISK0287/), [DISK0288](0001-0999/DISK0288/), [DISK0825](0001-0999/DISK0825/), [DISK0830](0001-0999/DISK0830/), [DISK0904](0001-0999/DISK0904/), [DISK0905](0001-0999/DISK0905/), [DISK0918](0001-0999/DISK0918/)
   - [DISK1287](1000-1999/DISK1287/), [DISK1288](1000-1999/DISK1288/), [DISK1364](1000-1999/DISK1364/), [DISK1643](1000-1999/DISK1643/), [DISK1665](1000-1999/DISK1665/), [DISK1933](1000-1999/DISK1933/), [DISK2018](2000-2999/DISK2018/), [DISK2029](2000-2999/DISK2029/)
