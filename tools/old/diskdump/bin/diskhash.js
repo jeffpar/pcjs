@@ -14,8 +14,8 @@ var fs = require("fs");
 var path = require("path");
 var crypto = require('crypto');
 
-var Str = require("../../../../../machines/shared/lib/strlib");
-var Proc = require("../../../../../machines/shared/lib/proclib");
+var Str = require("../../../../machines/shared/lib/strlib");
+var Proc = require("../../../../machines/shared/lib/proclib");
 var args = Proc.getArgs();
 
 /**

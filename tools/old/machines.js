@@ -14,12 +14,12 @@ var fs = require("fs");
 var glob = require("glob");
 var path = require("path");
 var xml2js = require("xml2js");
-let strlib = require("../../../machines/shared/lib/strlib");
-var proclib = require("../../../machines/shared/lib/proclib");
+let strlib = require("../../machines/shared/lib/strlib");
+var proclib = require("../../machines/shared/lib/proclib");
 var args = proclib.getArgs();
 
 var idAttrs = '@';
-var sRootDir = "../../..";
+var sRootDir = "../..";
 
 /**
  * @typedef {Object} Machine
