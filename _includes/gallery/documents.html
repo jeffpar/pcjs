@@ -1,7 +1,7 @@
 {% assign title = include.title | default: "Documents" %}
 {% assign group = include.group | default: "@documents" %}
 {% assign group_link = include.link %}
-{% assign group_id = group_link | slugify | prepend: "gallery-" %}
+{% assign group_id = title | slugify %}
 {% assign cover_width = include.width | default: "200" %}
 {% assign cover_height = include.height | default: "" %}
 {% assign path = include.path | default: include.target | default: page.permalink %}
