@@ -283,6 +283,42 @@ function getDiskDB(info)
     return diskDB;
 }
 
+process
+
+/**
+ * processCollection(sCollection, argv)
+ *
+ * @param {string} sCollection
+ * @param {Object} argv
+ */
+function processCollection(sCollection, argv)
+{
+    let diskettesFile = path.join(rootDir, "disks", sCollection, "pcx86", sCollection == "pcsigdisks"? "diskettes-annotated.json" : "diskettes.json");
+    printf("reading %s...\n", diskettesFile.slice(rootDir.length));
+    let diskettes = JSON.parse(fs.readFileSync(diskettesFile, {encoding: "utf8"}));
+    let processObjects = function(obj, curPath, defTitle = "") {
+        let disks = obj['@media'];
+        let title = obj['@title'] || defTitle;
+        if (disks) {
+            for (let disk of disks) {
+                let diskInfo = disk['@diskInfo'];
+                let diskTitle = diskInfo && diskInfo['diskTitle'];
+                if (diskTitle) title += " - " + diskTitle;
+                title = title.replace(/"/g, '&quot;');
+                printf("  - [%s](%s)\n", title, curPath + "/");
+            }
+            return;
+        }
+        let props = Object.keys(obj);
+        for (let prop of props) {
+            if (typeof obj[prop] != "object") continue;
+            let objPath = prop[0] == "@"? curPath : path.join(curPath, prop);
+            processObjects(obj[prop], objPath, title);
+        }
+    };
+    processObjects(diskettes, "/software");
+}
+
 /**
  * processFolders(sDir, argv)
  *
@@ -860,7 +896,11 @@ if (args.argc < 2) {
          * Use "--trim" along with "--folders=json" to trim @diskInfo objects.
          */
         processFolders(sDir, argv);
-    } else {
+    }
+    else if (typeof argv['collection'] == "string") {
+        processCollection(argv['collection'], argv);
+    }
+    else {
         printf("nothing to do\n");
     }
 }
