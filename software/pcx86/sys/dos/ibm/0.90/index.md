@@ -44,12 +44,12 @@ of the disk is provided below.
     BASIC    COM     11008   6-04-81
     CHKDSK   COM      1224   5-30-81
     EDLIN    COM      2231   5-29-81
-    MODE     COM       675   1-01-80
+    MODE     COM       675
     COMMENTS          3561   6-05-81
     MOVBAS   COM       128   4-23-81
     BAS18    COM     11008   6-04-81
     BASICA   COM     14976   6-04-81
-    AUTOEXEC BAK        24   1-01-80
+    AUTOEXEC BAK        24
     SYS      COM       896   6-03-81
     BAS18A   COM     14976   6-04-81
     COMMENTS BAK      3560   6-05-81
@@ -65,7 +65,7 @@ of the disk is provided below.
     SHIPS    MAC      1792   6-01-81
     CIRCLE   MAC       384   6-01-81
     RBAS     COM     32768   4-25-81
-    THREED   BAS      3072   1-01-80
+    THREED   BAS      3072
     CUBE     DAT       402   4-30-81
            35 file(s)     144458 bytes
                             8192 bytes free

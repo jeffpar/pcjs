@@ -29,8 +29,8 @@ that's what we boot with here.  A directory listing of the 160Kb diskette is pro
      Volume in drive A has no label
      Directory of A:\
 
-    IBMBIO   COM*     1920   1-01-80
-    IBMDOS   COM*     6400   1-01-80
+    IBMBIO   COM*     1920
+    IBMDOS   COM*     6400
     COMMAND  COM     17792  10-20-83  12:00p
     READ_ME  1ST      4992   4-16-84   3:14p
     DOUBLEDO EXE     38912   2-28-85   9:13p
