@@ -649,7 +649,7 @@ Sunnyvale  Ca. 94086
 
 ### Directory of PC-SIG Library Disk #1908
 
-     Volume in drive A is DISK1908
+     Volume in drive A has no label
      Directory of A:\
 
     CASTLE   BIN     43040  10-24-89  10:16a

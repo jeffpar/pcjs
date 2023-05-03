@@ -851,10 +851,10 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--collection=pcsig/0001-0999/DISK0186",
+        "--collection=pcsig/0001-0999/DISK0126",
         "--checkdisk",
-        "--metadata",
-        "--rebuild"
+        "--rebuild",
+        "--verbose"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,

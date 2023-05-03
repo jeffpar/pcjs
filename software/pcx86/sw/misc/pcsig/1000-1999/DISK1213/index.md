@@ -702,7 +702,7 @@ screen and any other key to restart it.
 
 ### Directory of PC-SIG Library Disk #1213
 
-     Volume in drive A is DISK1213
+     Volume in drive A has no label
      Directory of A:\
 
     DINV     DAT      3840   7-12-88   4:54p
@@ -716,6 +716,6 @@ screen and any other key to restart it.
     OTHER    DOC      6528  10-28-88  11:01p
     PRINT    BAT       384   7-12-88   8:05p
     READ     ME        256   7-12-88   5:13p
-    RECIPE   DAT     74496
+    RECIPE   DAT     74496   1-01-80
            12 file(s)     222506 bytes
                            94208 bytes free

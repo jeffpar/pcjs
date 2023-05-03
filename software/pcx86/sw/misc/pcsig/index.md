@@ -67,15 +67,15 @@ Also, the following disks were apparently "double-zipped":
 
 The following disks were then "back-filled" from the [8th Edition CD-ROM (April 1990)](/software/pcx86/sw/misc/pcsig08/0001/), spanning disks 1-2121, since they had been removed from the 9th Edition:
 
-  - DISK0126, DISK0232, DISK0395, DISK0601, DISK0623, DISK0624, DISK0626, DISK0712
-  - DISK0757, DISK0758, DISK0792, DISK0914, DISK0969, DISK1024, DISK1036, DISK1061
-  - DISK1119, DISK1137, DISK1185, DISK1195, DISK1213, DISK1257, DISK1272, DISK1355
-  - DISK1363, DISK1413, DISK1414, DISK1493, DISK1555, DISK1583, DISK1608, DISK1649
-  - DISK1707, DISK1708, DISK1710, DISK1752, DISK1780, DISK1813, DISK1863, DISK1908
-  - DISK1915, DISK1916, DISK1969, DISK1979, DISK1980, DISK1981, DISK2000, DISK2030
+  - DISK0126,  DISK0232,  DISK0395,  DISK0601,  DISK0623, DISK0624*, DISK0626*, DISK0712
+  - DISK0757,  DISK0758,  DISK0792,  DISK0914*, DISK0969, DISK1024,  DISK1036*, DISK1061
+  - DISK1119*, DISK1137*, DISK1185*, DISK1195,  DISK1213, DISK1257,  DISK1272,  DISK1355
+  - DISK1363,  DISK1413,  DISK1414,  DISK1493*, DISK1555, DISK1583,  DISK1608*, DISK1649
+  - DISK1707,  DISK1708,  DISK1710,  DISK1752,  DISK1780, DISK1813,  DISK1863,  DISK1908
+  - DISK1915*, DISK1916,  DISK1969,  DISK1979,  DISK1980, DISK1981,  DISK2000,  DISK2030
   - DISK2063
 
-Why didn't we simply start with the [8th Edition CD-ROM (April 1990)](/software/pcx86/sw/misc/pcsig08/0001/) and then fill in additions from subsequent editions?  Because the 8th Edition did not preserve the diskettes as well as later editions; the 9th and later editions used ZIP files to preserve diskettes, whereas the 8th Edition only did so in a few cases (eg, if filenames used characters that weren't allowed on CD-ROM).
+Why didn't we simply start with the [8th Edition CD-ROM (April 1990)](/software/pcx86/sw/misc/pcsig08/0001/) and then fill in additions from subsequent editions?  Because the 8th Edition did not preserve the diskettes as well as later editions; the 9th and later editions used ZIP files to preserve diskettes, whereas the 8th Edition only did so in a few cases (eg, if filenames used characters that weren't allowed on CD-ROM); those cases are indicated above with an asterisk.
 
 Disks 2486-2804 were populated from the [10th Edition CD-ROM (September 1991)](https://archive.org/details/The_PC-Sig_Library_Shareware_for_the_IBM_PC_and_Compatibles_PC-SIG_Tenth_Edition).
 

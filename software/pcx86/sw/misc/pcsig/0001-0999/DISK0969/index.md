@@ -98,7 +98,7 @@ Sunnyvale Ca. 94086
 
 ### Directory of PC-SIG Library Disk #0969
 
-     Volume in drive A is DISK0969
+     Volume in drive A has no label
      Directory of A:\
 
     BCHECK3  EXE    230850   6-04-87   2:21p

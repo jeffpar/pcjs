@@ -2261,7 +2261,7 @@ Sunnyvale CA 94086
 
 ### Directory of PC-SIG Library Disk #1257
 
-     Volume in drive A is DISK1257
+     Volume in drive A has no label
      Directory of A:\
 
     DISKWIZ  ARC     83573   2-14-89  12:00a

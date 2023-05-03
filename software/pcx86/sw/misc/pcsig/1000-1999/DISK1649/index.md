@@ -714,7 +714,7 @@ Sunnyvale  Ca. 94086
 
 ### Directory of PC-SIG Library Disk #1649
 
-     Volume in drive A is DISK1649
+     Volume in drive A has no label
      Directory of A:\
 
     CALUTIL  DEF      2222   4-21-88   3:14p

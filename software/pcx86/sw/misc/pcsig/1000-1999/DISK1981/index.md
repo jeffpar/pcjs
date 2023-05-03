@@ -181,7 +181,7 @@ Del         Delete char.     The character under the cursor will be deleted.
 
 ### Directory of PC-SIG Library Disk #1981
 
-     Volume in drive A is DISK1981
+     Volume in drive A has no label
      Directory of A:\
 
     FILE1981 TXT      4589   1-04-90  11:53a

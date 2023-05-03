@@ -77,7 +77,7 @@ Sunnyvale  Ca. 94086
 
 ### Directory of PC-SIG Library Disk #1707
 
-     Volume in drive A is DISK1707
+     Volume in drive A has no label
      Directory of A:\
 
     CORRMAT  EXE     52240  12-17-88  10:02a

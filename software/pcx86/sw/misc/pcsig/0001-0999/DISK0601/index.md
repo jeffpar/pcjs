@@ -54,7 +54,7 @@ Sunnyvale, CA  94086
 
 ### Directory of PC-SIG Library Disk #0601
 
-     Volume in drive A is DISK0601
+     Volume in drive A has no label
      Directory of A:\
 
     DREAM3   ARC    194187   1-16-87   1:13a

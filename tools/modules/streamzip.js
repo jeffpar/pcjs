@@ -1205,6 +1205,13 @@ export default class StreamZip extends events.EventEmitter {
          * resulting in a Date where getFullYear() < 1980.  We allow that, so that the caller
          * can detect that case and act accordingly; however, if date/time WAS set, then
          * we do NOT allow those values.
+         *
+         * Unfortunately, while files without dates were zipped by PKZIP with a date of zero,
+         * when such files are unzipped with a modern `unzip` utility, the date is set to the
+         * UNIX epoch, and when such files are re-zipped with a modern `zip` utility, the date
+         * is set to Jan 1 1980, which is NOT zero.  By "rounding up" invalid dates to the
+         * oldest valid MS-DOS date, modern zip utilities fail to preserve original timestamps
+         * (or rather, the lack thereof); they should have re-zipped any date < 1980 as zero.
          */
         let errors = 0;
         let orig = { ...d };

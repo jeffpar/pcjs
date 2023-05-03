@@ -97,7 +97,7 @@ Sunnyvale  Ca. 94086
 
 ### Directory of PC-SIG Library Disk #1555
 
-     Volume in drive A is DISK1555
+     Volume in drive A has no label
      Directory of A:\
 
     110      TBC     13499   6-13-89   8:44a

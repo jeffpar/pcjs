@@ -75,7 +75,7 @@ Sunnyvale  Ca. 94086
 
 ### Directory of PC-SIG Library Disk #0232
 
-     Volume in drive A is DISK0232
+     Volume in drive A has no label
      Directory of A:\
 
     ADDSPPC  BAT      1280   1-19-88   6:05a

@@ -111,7 +111,7 @@ SYSOPS: Send us your letterhead to register a copy of this program.
 
 ### Directory of PC-SIG Library Disk #0712
 
-     Volume in drive A is DISK0712
+     Volume in drive A has no label
      Directory of A:\
 
     BAS               6234   2-17-88   8:01p

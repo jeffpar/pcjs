@@ -191,12 +191,12 @@ function checkArchive(sPath, fExt)
     for (let sExt of [".ZIP", ".zip", ".ARC", ".arc"]) {
         if (fExt) {
             if (sPath.endsWith(sExt)) {
-                sArchive = sPath.slice(0, -sExt.length);
+                sArchive = sPath;   // sPath.slice(0, -sExt.length);
                 break;
             }
             continue;
         }
-        let sFile = sPath + sExt;
+        let sFile = sPath.endsWith(sExt)? sPath : (sPath + sExt);
         if (existsFile(sFile)) {
             sArchive = sFile;
             break;
@@ -1723,14 +1723,16 @@ function processDisk(di, diskFile, argv, diskette)
 }
 
 /**
- * addMetaData(di, sDir, sPath)
+ * addMetaData(di, sDir, sPath, aFiles)
  *
  * @param {DiskInfo} di
  * @param {string} sDir
  * @param {string} sPath
+ * @param {Array.<FileData>} [aFiles]
  */
-function addMetaData(di, sDir, sPath)
+function addMetaData(di, sDir, sPath, aFiles)
 {
+    sPath = path.join(sDir, sPath);
     let sArchiveDir = checkArchive(sPath, true);
     if (sArchiveDir) {
         let sArchiveFile = checkArchive(sArchiveDir);
@@ -1746,7 +1748,7 @@ function addMetaData(di, sDir, sPath)
                     if (!data) continue;
                     let file = {
                         hash: getHash(data),
-                        path: path.join(sArchiveFile, sPath.slice(sArchiveDir.length)).slice(sDir.length - 1),
+                        path: sPath.slice(sDir.length),
                         attr: DiskInfo.ATTR.METADATA,
                         date: stats.mtime,
                         size: data.length
@@ -1755,6 +1757,11 @@ function addMetaData(di, sDir, sPath)
                 }
             }
             di.addMetaData(aArchiveData);
+        }
+    }
+    if (aFiles) {
+        for (let i = 0; i < aFiles.length; i++) {
+            addMetaData(di, sDir, aFiles[i].path, aFiles[i].files);
         }
     }
 }
@@ -1876,8 +1883,9 @@ function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarg
             /*
              * Walk aFileData and look for archives accompanied by folders containing their expanded contents.
              */
+            if (arcType) sDir = sDir.slice(0, -4);
             for (let i = 0; i < aFileData.length; i++) {
-                addMetaData(di, sDir, aFileData[i].path);
+                addMetaData(di, sDir, aFileData[i].path, aFileData[i].files);
             }
             if (done) {
                 done(di);

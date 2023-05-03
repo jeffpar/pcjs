@@ -71,7 +71,7 @@ Sunnyvale Ca. 94086
 
 ### Directory of PC-SIG Library Disk #1363
 
-     Volume in drive A is DISK1363
+     Volume in drive A has no label
      Directory of A:\
 
     FAAREGUL DTA    107576  12-21-87  11:00a

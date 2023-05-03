@@ -328,7 +328,7 @@ Foreign customers add $5 (US) for postage and handling.
 
 ### Directory of PC-SIG Library Disk #1813
 
-     Volume in drive A is DISK1813
+     Volume in drive A has no label
      Directory of A:\
 
     DIARY    DOC      8131   8-18-89   5:46p

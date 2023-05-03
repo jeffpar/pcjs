@@ -3,9 +3,9 @@ layout: page
 title: "PC-SIG Diskette Library (Disk #316)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0316/
 machines:
-  - id: ibm5150
+  - id: ibm5160
     type: pcx86
-    config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
+    config: /machines/pcx86/ibm/5160/cga/256kb/machine.xml
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
@@ -13,7 +13,7 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-{% include machine.html id="ibm5150" %}
+{% include machine.html id="ibm5160" %}
 
 {% comment %}info_begin{% endcomment %}
 

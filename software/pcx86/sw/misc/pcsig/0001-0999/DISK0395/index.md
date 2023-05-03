@@ -2351,7 +2351,7 @@ Sunnyvale, CA 94086
 
 ### Directory of PC-SIG Library Disk #0395
 
-     Volume in drive A is DISK0395
+     Volume in drive A has no label
      Directory of A:\
 
     ARRAY              206   5-17-85   6:23a

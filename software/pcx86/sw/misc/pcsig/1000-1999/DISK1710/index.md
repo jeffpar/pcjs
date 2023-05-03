@@ -486,7 +486,7 @@ manual should contain an explanation.
 
 ### Directory of PC-SIG Library Disk #1710
 
-     Volume in drive A is DISK1710
+     Volume in drive A has no label
      Directory of A:\
 
     CATALOG  DOC     20518  11-17-89   9:26a

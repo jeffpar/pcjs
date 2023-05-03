@@ -92,7 +92,7 @@ your hard disk.
 
 ### Directory of PC-SIG Library Disk #1272
 
-     Volume in drive A is DISK1272
+     Volume in drive A has no label
      Directory of A:\
 
     FILE1272 TXT      1076  12-14-89   9:42a

@@ -131,7 +131,7 @@ FILES_3  DOC        0   2-12-89  11:22a
 
 ### Directory of PC-SIG Library Disk #1979
 
-     Volume in drive A is DISK1979
+     Volume in drive A has no label
      Directory of A:\
 
     DCMOT    CHN     25116   1-01-80  12:13a

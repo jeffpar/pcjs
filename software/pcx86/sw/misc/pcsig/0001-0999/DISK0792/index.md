@@ -1849,7 +1849,7 @@ screen and any other key to restart it.
 
 ### Directory of PC-SIG Library Disk #0792
 
-     Volume in drive A is DISK0792
+     Volume in drive A has no label
      Directory of A:\
 
     BRUN30   EXE     70680   4-07-87  10:48a

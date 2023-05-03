@@ -344,7 +344,7 @@ Foreign customers add $10 (US) for postage and handling.
 
 ### Directory of PC-SIG Library Disk #1780
 
-     Volume in drive A is DISK1780
+     Volume in drive A has no label
      Directory of A:\
 
     APPOINTS DOC      7656   1-19-89   2:28p
