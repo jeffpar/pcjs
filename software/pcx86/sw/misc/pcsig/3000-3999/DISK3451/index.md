@@ -16,6 +16,29 @@ machines:
 {% include machine.html id="ibm5150" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #3451 SoftScene PCX Artwork Volume 3  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   Files are in ZIPPED (archived) form.                                  ║
+║                                                                         ║
+║   To UNZIP files, type: PKUNZIP [file name].ZIP (Enter)                 ║
+║                                                                         ║
+║   After UNZIPPING, use your own .PCX program to view or print the       ║
+║                                                                         ║
+║   included on this disk.                                                ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

@@ -16,6 +16,26 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║       <<<<  PC-SIG Disk #2870 PAINLESS PAYROLL FOR WINDOWS  >>>>        ║
+  ╠═════════════════════════════════════════════════════════════════════════╣
+  ║                                                                         ║
+  ║  To read the introductory information, type:  TYPE README.1ST  (Enter)  ║
+  ║                                                                         ║
+  ║  To start the program, type: WIN WINSETUP  (press Enter)                ║
+  ║                                                                         ║
+  ║  To print registration info, type: COPY REGISTER.TXT PRN  (Enter)       ║
+  ║                                                                         ║
+  ║                                                                         ║
+  ║                                           Copyright 1991, PC-SIG, Inc.  ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REGISTER.TXT
 
 {% raw %}

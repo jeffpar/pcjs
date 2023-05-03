@@ -136,6 +136,26 @@ Copyright 1990 FreeBooter(tm) Software
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1735  LOTTO BUSTER  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To begin, type:  INFO (press Enter)                                     ║
+║                                                                         ║
+║ To start using the program, type:  COPY READ.ME PRN (press Enter)       ║
+║                                                                         ║
+║ To print further documentation, type:  COPY LOTTO.TXT (press Enter)     ║
+║                                                                         ║
+║ To view FILES.TXT, type:  TYPE FILES.TXT                                ║
+║ To view NOTES.TXT, type:  TYPE NOTES.TXT                                ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## LOTTO.TXT
 
 {% raw %}

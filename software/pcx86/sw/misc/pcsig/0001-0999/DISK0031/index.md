@@ -67,6 +67,23 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #31 MVP FORTH  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read the documentation enter TYPE MVPFORTH.DOC and (press enter)     ║
+║ The documentation refers to the book "Starting Forth", and it is        ║
+║ a good idea to have a copy on hand.                                     ║
+║                                                                         ║
+║ To copy the documentation to your printer type:                         ║
+║                  COPY MVPFORTH.DOC PRN and (press enter)                ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MVPFORTH.ASM
 
 {% raw %}

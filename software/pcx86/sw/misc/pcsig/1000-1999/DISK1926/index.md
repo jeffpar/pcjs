@@ -83,6 +83,33 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1926  GRAPHS FOR FORTRAN   >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read documentation,  type: BROWSE GRAPH.DOC                          ║
+║ To print documentation, type: COPY GRAPH.DOC PRN                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+
+ To read any document or source code files, type..
+ --------------------------------------------------
+ browse *.*
+
+
+ Suggested installation procedure (from floppy drive A: to hard drive C:)
+ ------------------------------------------------------------------------
+ copy a:browse.* c:\    copy BROWSE to root directory on hard disk
+ mkdir c:\graph         make a sub-directory for Graph files
+ copy a:*.* c:\graph    copy all files to C:\GRAPH
+ c:                     change to drive C:
+ cd c:\graph            change to sub-directory C:\GRAPH
+
+```
+{% endraw %}
+
 ## GRAPH.DOC
 
 {% raw %}

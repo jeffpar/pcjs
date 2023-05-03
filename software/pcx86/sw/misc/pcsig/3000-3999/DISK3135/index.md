@@ -14,6 +14,28 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3135 IMPULSE! ONE  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To install the program, type:  INSTALL  (press Enter)                  ║
+║                                                                         ║
+║  To print the program documentation after the installation process,     ║
+║  type:  COPY IONE.DOC PRN  (press Enter)                                ║
+║                                                                         ║
+║                                                                         ║
+║                                        (C) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3135
 

@@ -1118,6 +1118,32 @@ Summary of options (# denotes number):
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1634  FUGUE UTILITIES  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation for the programs (CAT, INFO, TELL, FI,           ║
+║     CHD, EXCLUDE, ASK, YES, WHEREIS, FILTER, XQT) type:                 ║
+║                                                                         ║
+║               COPY <FILENAME.DOC> PRN  (press Enter)                    ║
+║                                                                         ║
+║ To start any of those programs after reading the documenation, type:    ║
+║                           <FILENAME>                                    ║
+║                                                                         ║
+║                                                                         ║
+║ To print documentation for the DIR program, type:                       ║ 
+║                    COPY DI.DOC PRN  (press Enter)                       ║
+║ To start DIR program, type:  DI (press enter)                           ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SiG Inc.
+
+```
+{% endraw %}
+
 ## INFO.DOC
 
 {% raw %}

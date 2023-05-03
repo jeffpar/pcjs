@@ -16,6 +16,26 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3176 GOLDHUNT  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the documentation, type:  COPY GOLDHUNT.DOC PRN  <enter>      ║
+║                                                                         ║
+║  To start the game, type:  GOLDHUNT  <enter>                            ║
+║                                                                         ║
+║  For a catalog of the author's products, type:  TYPE READ.ME  <enter>   ║
+║                                                                         ║
+║                                                                         ║
+║                                         (c) Copyright 1992, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GOLDHUNT.DOC
 
 {% raw %}

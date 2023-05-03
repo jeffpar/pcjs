@@ -181,6 +181,24 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #662 DATABOSS (Disk 1 of 2)  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║     This is first disk of the DATABOSS data management system.          ║
+║     It contains the user's manual and other documentation.              ║
+║                                                                         ║
+║    To print the DATABOSS user's manual type: AUTOEXEC (press enter).    ║
+║                                                                         ║
+║    Refer to Disk #623 for the actual DATABOSS program.                  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0662

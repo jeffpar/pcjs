@@ -14,6 +14,33 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #3992 MICROEMACS FOR WINDOWS  >>>>           ║
+║                         Disk 2 of 2 (3991 also)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  MEWS11.ZIP and MEWR11.ZIP are archives which contain the complete      ║
+║  source code for MICROEMACS FOR WINDOWS, but are not necessary to       ║
+║  to run the program.                                                    ║
+║                                                                         ║
+║  To Extract, type:  PKUNZJR [archive] [drive]:\[subdirectory]           ║
+║                                                                         ║
+║  The files will be located in the drive and subdirectory specified in   ║
+║  the above command line.                                                ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3992
 

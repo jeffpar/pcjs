@@ -84,6 +84,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 956 PROFONEDIT PLUS >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, Type: MANUAL (press enter)   ║
+║                                                                         ║
+║ To run the program, Type: PFEPLUS (press enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PFEPLUS.DOC
 
 {% raw %}

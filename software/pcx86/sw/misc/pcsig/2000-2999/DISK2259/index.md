@@ -76,6 +76,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  PC-SIG Disk #2259  PTE, THE PROGRAMMER'S TEXT EDITOR  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type:  COPY PTE.DOC PRN (press ENTER)           ║
+║                                                                         ║
+║ To start the program, type:  PTE (press ENTER)                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## PTE.DOC
 
 {% raw %}

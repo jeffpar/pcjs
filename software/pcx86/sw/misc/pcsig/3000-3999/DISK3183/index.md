@@ -1109,6 +1109,23 @@ machines:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3183 Book Librarian  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Print documentation, type;  COPY BL.DOC PRN  (press Enter)          ║
+║                                                                         ║
+║  To Start the program, type;  BL  (press Enter)                         ║
+║                                                                         ║
+║                                                                         ║
+║                                         (c)Copyright 1992, PC-SIG, Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

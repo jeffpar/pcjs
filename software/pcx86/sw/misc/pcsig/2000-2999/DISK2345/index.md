@@ -38,6 +38,21 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═══════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #2345  ULTIMATE SCREEN MANAGER  >>>>        ║
+╠═══════════════════════════════════════════════════════════════════════╣
+║ To begin using the program, type:  COPY README PRN  (press ENTER)     ║
+║                               or:  TYPE README  (press ENTER)         ║
+╚═══════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+```
+{% endraw %}
+
 ## INVOICE.DOC
 
 {% raw %}

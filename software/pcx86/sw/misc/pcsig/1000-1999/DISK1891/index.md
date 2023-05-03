@@ -111,6 +111,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1891  TEST MANAGEMENT  >>>>                 ║
+║                         (disk 2 of 2, 1891 also)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Copy all files from disk 1 & 2 to your hard drive.                      ║
+║                                                                         ║
+║ To run the program, type: TMS  (press enter)                            ║
+║                                                                         ║
+║ To print documentation, type: COPY MANUAL.TMS PRN  (press enter)        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## WARNING.TXT
 
 {% raw %}

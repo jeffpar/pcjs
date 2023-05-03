@@ -40,6 +40,25 @@ machines:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #3289  THELMA THISTLEBLOSSOM  >>>>          ║
+║                         Disk 1 of 2 (also #3295)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To start THELMA THISTLEBLOSSOM, type:  INSTALL  (press Enter).         ║
+║                                                                         ║
+║  Follow the installation procedure given to you on your monitor.        ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3289

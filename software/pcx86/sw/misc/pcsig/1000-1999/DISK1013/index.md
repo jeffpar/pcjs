@@ -863,6 +863,23 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1013 COGO and PLOT  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation for this disk on to your printer, type:       ║
+║                       MANUAL (press enter)                              ║
+║                                                                         ║
+║ To start COGO, Type: COGO (press enter)                                 ║
+║                                                                         ║
+║ To start PLOT you must first load BASIC then load the program PLOTM     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HLP3.BAS
 
 {% raw %}

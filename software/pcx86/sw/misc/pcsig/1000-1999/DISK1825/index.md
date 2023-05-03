@@ -1136,6 +1136,20 @@ If %gang = 80, you will send 1 pro, 3 punks, and 13 'cruits.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1825  IT'S A CRIME  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  IAC (press enter)                              ║
+║                                                                         ║
+║ To print documentation, type:  COPY IACMAN.TXT PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## IACMAN.TXT
 
 {% raw %}

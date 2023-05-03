@@ -69,6 +69,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #903  VAR Grade  (Disk 1 of 3)  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   For instructions on installing the program, type:                     ║
+║                                                                         ║
+║                  README (press enter)                                   ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c)Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0903

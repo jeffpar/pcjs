@@ -86,6 +86,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<< Disk #1108  HOME MANAGEMENT II  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: COPY HM2.DOC PRN (press enter)        ║
+║                                                                         ║
+║ To run the program BUDGET, type: BUDGET (press enter)                   ║
+║                                                                         ║
+║ To run the program TYPER, type: TYPER (press enter)                     ║
+║                                                                         ║
+║ To run the program PBP, type: PBP (press enter)                         ║
+║                                                                         ║
+║ To run the program QUIK, type: QUIK (press enter)                       ║
+║                                                                         ║
+║ To run the program STOCKS, type: STOCKS (press enter)                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## HM2.DOC
 
 {% raw %}

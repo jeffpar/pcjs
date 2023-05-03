@@ -67,6 +67,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<  PC-SIG Disk #2825 CMTS - CHURCH MEMBERSHIP TRACKING SYSTEM  >>>  ║
+║                    (Disk 3 of 3, also #2541, #2542)                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the installation instructions, insert disk 1 (#2541) in drive  ║
+║ A and type:  COPY README.1ST PRN  (press Enter)                         ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2825

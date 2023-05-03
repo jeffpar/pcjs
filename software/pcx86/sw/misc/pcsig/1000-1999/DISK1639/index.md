@@ -92,6 +92,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk #1639  OWL PERSONAL PORTFOLIO MANAGER  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  OPPM (press enter)                             ║
+║                                                                         ║
+║ To view the documentation, type:  README  (press enter)                 ║
+║                                                                         ║
+║ To print documentation, type:  COPY README.? PRN (press enter)          ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c)Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1639
@@ -125,6 +143,13 @@ Sunnyvale  Ca. 94086
     GO       BAT        38   1-01-80   1:37a
     GO       TXT       805   1-01-80   3:14a
     FILE1639 TXT      2887   7-09-90   7:19p
+    DEMODATA     <DIR>    
+           27 file(s)     304735 bytes
+
+     Directory of A:\DEMODATA
+
+    .            <DIR>    
+    ..           <DIR>    
     PORTDIR  DAT       781   1-04-89  10:12a
     PORTMAS  DAT       429   1-04-89  10:12a
     PURSALE  DAT       816   1-04-89  10:12a
@@ -132,5 +157,8 @@ Sunnyvale  Ca. 94086
     STKINC   DAT       250   1-04-89  10:12a
     ASSETS   DAT       350   1-04-89  10:12a
     INDEX    DAT       680   1-04-89  10:12a
-           33 file(s)     315607 bytes
-                           28672 bytes free
+            9 file(s)      10872 bytes
+
+    Total files listed:
+           36 file(s)     315607 bytes
+                           27648 bytes free

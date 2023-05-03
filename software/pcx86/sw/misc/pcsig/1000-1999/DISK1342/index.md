@@ -84,6 +84,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<< Disk #1342 MORTPLAN  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for MORTPLAN, type MANUAL (press enter)      ║
+║                                                                         ║
+║ To start the program, type: MORTPLAN (press enter)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1342

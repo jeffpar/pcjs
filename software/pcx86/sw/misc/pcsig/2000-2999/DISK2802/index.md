@@ -117,6 +117,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #2802 SOFTSCENE PCX ARTWORK  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To extract the files, have PKUNZIP in your path or same directory and   ║
+║ type: PKUNZIP A:SCENES01.ZIP [destination drive]:\subdirectory name     ║
+║       PKUNZIP A:SCENES02.ZIP [destination drive]:\subdirectory name     ║
+║       PKUNZIP A:SCENES03.ZIP [destination drive]:\subdirectory name     ║
+║       PKUNZIP A:OTHERS.ZIP [destination drive]:\subdirectory name       ║
+║                                                                         ║
+║ To print documentation, type: COPY README.DOC PRN  (press Enter)        ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REGFORM.DOC
 
 {% raw %}

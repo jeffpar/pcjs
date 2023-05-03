@@ -843,6 +843,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  DISK # 2360 MEGADRAW  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║    To start the program, type: MEGADRAW (press enter)                   ║
+║                                                                         ║
+║                                                                         ║
+║    To copy the documentation, type:                                     ║
+║                                                                         ║
+║                           COPY MEGADRAW.DOC PRN (press enter)           ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
 ## MEGADRAW.DOC
 
 {% raw %}

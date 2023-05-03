@@ -16,6 +16,22 @@ machines:
 {% include machine.html id="ibm5150" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #3314 PTD - Personalized Training  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To install, insert disk 1 (#3313) and type:  GO  (press Enter)          ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REGISTER.TXT
 
 {% raw %}

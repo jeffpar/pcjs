@@ -218,6 +218,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #1650  HEXTODEC & DECTOHEX  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start HEXTODEC program, type:  HEXTODEC (press enter)                ║
+║ To start DECTOHEX program, type:  DECTOHEX (press enter)                ║
+║                                                                         ║
+║ To print documentation, type:  COPY FILE1650.TXT PRN                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HEXTODEC.BAS
 
 {% raw %}

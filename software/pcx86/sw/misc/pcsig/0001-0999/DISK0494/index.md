@@ -255,6 +255,24 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  Disk #494 THE WORLD DIGITIZED (Disk 1 of 3)  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type the command,             ║
+║                COPY READ.ME PRN (press enter)                           ║
+║                                                                         ║
+║ To install the system to your hard drive type INSTALL (press enter)     ║
+║                                                                         ║
+║ To install the system to 3 floppies type INSTALL1 (press enter)         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## TUTORIAL.TXT
 
 {% raw %}
@@ -961,18 +979,49 @@ XIX.  A Program to Address the Speed/Detail Dilemma:
     READ     ME       6359   4-13-87   9:14p
     REGSTRTN LTR       389  11-06-88   8:45p
     TUTORIAL TXT     34201   2-12-87  10:45p
+    AFRICA       <DIR>    
+    ANTARCTI     <DIR>    
+    AUSTRALI     <DIR>    
+    SOUTHAME     <DIR>    
+           17 file(s)      66710 bytes
+
+     Directory of A:\AFRICA
+
+    .            <DIR>    
+    ..           <DIR>    
     AF0      MPS     23088   1-16-86   8:09p
     AF1      MPS     17264   1-16-86   8:11p
     AF2      MPS     11018   5-01-86   7:00p
     AF3      MPS     42340   5-01-86   7:03p
+            6 file(s)      93710 bytes
+
+     Directory of A:\ANTARCTI
+
+    .            <DIR>    
+    ..           <DIR>    
     AN0      MPS     23340  12-20-86   5:48p
     AN1      MPS      4226  12-20-86   5:49p
+            4 file(s)      27566 bytes
+
+     Directory of A:\AUSTRALI
+
+    .            <DIR>    
+    ..           <DIR>    
     AU0      MPS     18247   1-16-86   8:33p
     AU1      MPS     14270   1-16-86   8:35p
     AU2      MPS      5450   1-16-86   8:35p
+            5 file(s)      37967 bytes
+
+     Directory of A:\SOUTHAME
+
+    .            <DIR>    
+    ..           <DIR>    
     SA0      MPS     47414   1-16-86   9:25p
     SA1      MPS     35841   1-16-86   9:28p
     SA2      MPS      1185   1-16-86   9:28p
     SA3      MPS     15788   1-16-86   9:30p
-           26 file(s)     326181 bytes
-                           22528 bytes free
+            6 file(s)     100228 bytes
+
+    Total files listed:
+           38 file(s)     326181 bytes
+                           18432 bytes free

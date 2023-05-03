@@ -14,6 +14,24 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2946 SOLVEIT!  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For manual installation of disk 2, type:  README2  <enter>              ║
+║   (This is not necessary for the automatic installation.)               ║
+║                                                                         ║
+║                                         (c) Copyright 1992, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2946
 

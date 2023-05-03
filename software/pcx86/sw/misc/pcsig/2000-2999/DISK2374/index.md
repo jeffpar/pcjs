@@ -101,6 +101,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  DISK # 2374 HEADACHE FREE 1 of 2 (also 2375  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║    To start chapter 1 type:  CHAPTI                                     ║
+║                                                                         ║
+║    To start chapter 2 type:  CHAPTII                                    ║
+║                                                                         ║
+║    To start chapter 3 type:  CHAPTIII                                   ║
+║                                                                         ║
+║    To print notes on HEADACHE FREE, type: COPY READ.ME PRN              ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2374

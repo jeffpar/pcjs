@@ -514,6 +514,44 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #2399  DAYO TIME & BILLING  >>>>             ║
+║                     (Disk #1 of 2, #2400 also)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read author's note, type:  TYPE README (press Enter)                 ║
+║                                                                         ║
+║ NOTE:  To update earlier DAYO modules, you will need Disk #2396, DAYO   ║
+║ UPDATE & CONVERSION.                                                    ║
+║                                                                         ║
+║ To print the registration form, type:  COPY DAYO.TXT PRN (press Enter)  ║
+║                                                                         ║
+║ Copy the contents of the DAYO module into a directory on your hard      ║
+║ disk (i.e. \DAYOTB) and run the self-extracting file.  Insert Disk #2,  ║
+║ copy the EXE files into the DAYOTB directory, and run them.  It is      ║
+║ highly recommended that most DAYO modules have their own directory.)    ║
+║                                                                         ║
+║   To do this, type from the root directory of the hard disk/drive       ║
+║   that you want to put DAYO on:                                         ║
+║                                                                         ║
+║              MD \DAYO[specific]              (press Enter)              ║
+║              CD \DAYO[specific]              (press Enter)              ║
+║              DAYO[specific] (the .EXE file)  (press Enter)              ║
+║                                                                         ║
+║   To print the module's documentation, type:                            ║
+║              COPY [module's filename].DOC PRN (press Enter)             ║
+║                                                                         ║
+║ To print this GO file, type:  COPY GO.TXT PRN (press Enter)             ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2399

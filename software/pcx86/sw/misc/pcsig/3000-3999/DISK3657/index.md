@@ -16,6 +16,41 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #3657 MAXimize Gold Disk 1 of 2  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║    MAXimize comes to you in Zipped (compressed) format.                 ║
+║                                                                         ║
+║    Copy all files into a temporary sub-directory on your hard drive.    ║
+║                                                                         ║
+║    To Unzip MAXimize Gold, type: PKUNZIP MAXGOLD (press enter).         ║
+║                                                                         ║
+║    To Install MAXimize, simply run the INSTALL.EXE program provided.    ║
+║    This program should be located in the directory you unpacked the     ║
+║    files into.                                                          ║
+║                                                                         ║
+║    After installing MAXimize, you can start it by either entering MENU  ║
+║    or MAX at the DOS prompt from the MAXimize directory.                ║
+║    For example: C: (press Enter)                                        ║
+║                 CD \MAX (press Enter)                                   ║
+║                 MAX (press Enter)                                       ║
+║                                                                         ║
+║                                                                         ║
+║    After installation is complete, you may delete all files in the      ║
+║    temporary sub-directory you created at the start.                    ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## FEATURES.DOC
 
 {% raw %}

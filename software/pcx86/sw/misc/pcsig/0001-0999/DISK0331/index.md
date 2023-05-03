@@ -3132,6 +3132,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #331 Medlin Accounting >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To view or print the documentation or to install the programs          ║
+║          type: GO (press enter)                                         ║
+║                                                                         ║
+║  To start the PC-GL program type: PC-GL (press enter)                   ║
+║                                                                         ║
+║  To start the PC-AR program type: PC-AR (press enter)                   ║
+║                                                                         ║
+║  To start the PC-PR program type: PC-PR (press enter)                   ║
+║                                                                         ║
+║  To start the PC-AP program type: PC-AP (press enter)                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0331

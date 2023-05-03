@@ -356,6 +356,32 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1845  SPORT LEAGUE MANAGEMENT  >>>>            ║
+║                         (disk 2 of 2, 1844 also)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ You MUST copy files to a hard drive and use PKUNZIP (disk #1364) to     ║
+║     extract files.                                                      ║
+║                                                                         ║
+║ To start SPORTS MANAGEMENT program, type: TEAMMGRM (press enter)        ║
+║                                                                         ║
+║ To print documentation for SPORTS MANAGEMENT, type:                     ║
+║                            COPY SPTSMGMT.DOC PRN                        ║
+║ To print documentation for FOOTBALL MANAGER, type:                      ║
+║                            COPY FOOTBAMG.DOC PRN                        ║
+║ To print documentation for BASEBALL MANAGER, type:                      ║
+║                            COPY BASEBAMG.DOC PRN                        ║
+║ To print documentation for BASKETBALL MANAGER, type:                    ║
+║                            COPY BASKBAMG.DOC PRN                        ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1845

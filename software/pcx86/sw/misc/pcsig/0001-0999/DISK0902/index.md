@@ -83,6 +83,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 902 HEBREW QUIZ PROGRAM  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for HEBREW QUIZ PROGRAM, Type:               ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║ To run the HEBREW QUIZ PROGRAM, Type:                                   ║
+║             HEBREW (press enter)                                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0902

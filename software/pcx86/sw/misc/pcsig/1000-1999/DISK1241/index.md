@@ -90,6 +90,25 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1241 MANDEL VGA & EGA  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, insert disk #1076 & type:    ║
+║                                                                         ║
+║             PRINTMAN (press enter)                                      ║
+║                                                                         ║
+║ To start the program, insert disk #1076 & type:                         ║
+║                                                                         ║
+║             MANDEL (press enter)                                        ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1241

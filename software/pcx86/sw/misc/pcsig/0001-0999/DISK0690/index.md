@@ -130,6 +130,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<< Disk No 690  Best-Plan Planning System (Disk 1 of 3) >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:                                     ║
+║                  DOC (press enter)                                      ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0690

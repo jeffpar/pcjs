@@ -1297,6 +1297,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk #1911  BANKBOOK  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program on a monochrome system, type:  BB MONO (press enter)   ║
+║ To start program on a color system, type:  BB COLOR (press enter)       ║
+║                                                                         ║
+║ To print documentation, type:  COPY BB.DOC PRN                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1911

@@ -1258,6 +1258,20 @@ Sunnyvale, CA   94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  Disk No 1100 PARENTS HOME COMPANION: MANAGING COLIC  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view the documentation, type: README (press enter)                   ║
+║                                                                         ║
+║ To run the program, type: PHC (press enter)                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HELP.TXT
 
 {% raw %}

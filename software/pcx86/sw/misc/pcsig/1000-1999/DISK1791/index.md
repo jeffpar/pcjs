@@ -130,6 +130,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1791  MATCH-MAKER/DOOR  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: MM           (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY MM.DOC PRN                           ║
+║                                                                         ║
+║ To start program, type: DOOR         (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY READ-ME.DOR PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MM.DOC
 
 {% raw %}

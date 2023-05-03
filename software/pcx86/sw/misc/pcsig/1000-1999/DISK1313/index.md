@@ -1439,6 +1439,30 @@ EXAMPLE.DBF.....Example database of citations from a horticulturist.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk No 1313  COMPUTER DARKROOM, PROFESSIONAL LIBRARIAN  >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:                                     ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To start the program Computer Darkroom, type:                         ║
+║                                                                         ║
+║             CDR (press enter)                                           ║
+║                                                                         ║
+║   To start the program Professional Librarian, type:                    ║
+║                                                                         ║
+║             PL (press enter)                                            ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1313

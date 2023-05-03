@@ -435,6 +435,36 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2463  APORIA  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  Copy APORIA to a subdirectory on your hard drive:                      ║
+║                       C:                                                ║
+║                       MD [subdirectory name]                            ║
+║                       CD [subdirectory name]                            ║
+║                       COPY A:APORIA.ZIP                                 ║
+║                                                                         ║
+║  Unzip APORIA.ZIP using PC-SIG #1364:  PKUNZIP APORIA                   ║
+║                                                                         ║
+║  To print the introductory instructions, type:                          ║   
+║                       COPY AP_READ.ME PRN  (press Enter)                ║
+║                                                                         ║
+║  To print the manual, type:  COPY APORIA.MAN PRN  (press Enter)         ║
+║                                                                         ║
+║  To print the order form, type:  COPY ORDER.TXT PRN  (press Enter)      ║
+║                                                                         ║
+║  To read the changes in APORIA, type:  TYPE CHANGES.TXT  (press Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2462

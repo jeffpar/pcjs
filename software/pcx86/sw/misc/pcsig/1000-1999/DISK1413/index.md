@@ -94,7 +94,22 @@ Sunnyvale CA 94086
 (408) 730-9291
 (c) Copyright 1989 PC-SIG, Inc.
 
-
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk No 1413 RECORDS & TAPES DATABASE  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type RNT (press enter)                            ║
+║                                                                         ║
+║ To look at the documentation on your screen, type VIEW (press enter)    ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

@@ -972,6 +972,33 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 482 ENCODE/DECODE  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To print the documentation, type:                                     ║
+║             COPY ENCODE.TXT PRN (press enter)                           ║
+║   To run the program DECIPHER, type:                                    ║
+║             DECIPHER (press enter)                                      ║
+║   To run the program DECODE, type:                                      ║
+║             DECODE (press enter)                                        ║
+║   To run the program DECRYPT, type:                                     ║
+║             DECRYPT (press enter)                                       ║
+║   To run the program ENCIPHER, type:                                    ║
+║             ENCIPHER (press enter)                                      ║
+║   To run the program ENCODE, type:                                      ║
+║             ENCODE (press enter)                                        ║
+║   To run the program ENCRYPT, type:                                     ║
+║             ENCRYPT (press enter)                                       ║
+║   To run the program MAKEKEY, type:                                     ║
+║             MAKEKEY (press enter)                                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

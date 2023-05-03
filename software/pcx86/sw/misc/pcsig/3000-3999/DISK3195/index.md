@@ -14,6 +14,33 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  PC-SIG Disk #3195  DAYO BILLING & INVOICING DOCUMENT  >>>>    ║
+║                        Disk 2 of 2 (also ##2800)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the program documentation and installation instructions, type: ║
+║                     COPY README PRN  (press Enter)                      ║
+║                                                                         ║
+║ After copying the program files to a subdirectory on your hard drive    ║
+║ (see README), extract the program by typing:  DAYOBI  (press Enter)     ║
+║                                                                         ║
+║ Print the manual by typing:  COPY DAYOBILL.DOC PRN  (press Enter)       ║
+║                                                                         ║
+║ Start the program by typing:  DAYOBILL  (press Enter)                   ║
+║                                                                         ║
+║                                                                         ║
+║                                       (c) Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3195
 

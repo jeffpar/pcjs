@@ -14,6 +14,27 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #3152  DEFENDER OF BOSTON  >>>>            ║
+║                     Disk 2 of 3 (also #3151, #3199)                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To install the program onto your hard disk, insert disk 1 (#3151)      ║
+║  into the floppy drive and type:  INSTALL  (press Enter)                ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3152
 

@@ -160,6 +160,13 @@ Sunnyvale Ca. 94086
 
     COPYRITE TXT      1781   4-23-87   8:20p
     FILES496 TXT      1066   6-09-24   2:22p
+    NORTHAME     <DIR>    
+            3 file(s)       2847 bytes
+
+     Directory of A:\NORTHAME
+
+    .            <DIR>    
+    ..           <DIR>    
     NA0      MPS     69492   1-16-86   8:56p
     NA1      MPS    156264   1-16-86   9:09p
     NA2      MPS     27571   1-16-86   9:12p
@@ -169,5 +176,8 @@ Sunnyvale Ca. 94086
     GR0      MPS     48423   1-16-86   9:18p
     GR1      MPS     19060   1-16-86   9:20p
     PA1      MPS      9221   1-16-86   9:21p
-           11 file(s)     351758 bytes
-                            5120 bytes free
+           11 file(s)     348911 bytes
+
+    Total files listed:
+           14 file(s)     351758 bytes
+                            4096 bytes free

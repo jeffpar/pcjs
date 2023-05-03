@@ -51,7 +51,25 @@ PC-SIG
 Sunnyvale  Ca. 94086                                                    
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
-
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔════════════════════════════════════════════════════════════════════════════╗
+║                         <<<< Disk No 1707 SPPC >>>>                        ║
+╠════════════════════════════════════════════════════════════════════════════╣
+║ This is one of a four disk set.  You will need disks 232, 623 and 1708 in  ║
+║ order to complete this package.                                            ║
+║                                                                            ║
+║ The first disk has the installation instructions and documentation.        ║
+║                                                                            ║
+║ To install the package, type INSTALL (press enter)                         ║
+║                                                                            ║
+║ To print the documentation, type COPY README PRN (press enter)             ║
+╚════════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

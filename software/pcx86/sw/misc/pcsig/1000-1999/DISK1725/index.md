@@ -159,6 +159,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1725  BSIM  >>>>                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: BSIM (press enter)                              ║
+║                                                                         ║
+║ To print documentation, type: COPY BSIMFILE.TXT PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1725

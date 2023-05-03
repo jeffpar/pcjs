@@ -57,6 +57,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  DISK #2490 JORJ 2 of 2 (also #2489)  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   Please refer to Disk #1 for the installation instructions.            ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2490

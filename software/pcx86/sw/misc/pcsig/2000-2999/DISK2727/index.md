@@ -46,6 +46,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #2727  SUPER-MAINT #2 (also 2726)  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print instructions, insert disk #1 and type: COPY README.1ST PRN     ║
+║                                                                         ║
+║ To install program, insert disk #1 and type: INSTALL  (press enter)     ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NEW2MAKE.TXT
 
 {% raw %}

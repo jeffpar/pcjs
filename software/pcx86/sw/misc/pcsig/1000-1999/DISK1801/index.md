@@ -75,6 +75,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1801  SAILSCOR  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start program, type: SAILSCOR   (press enter)                        ║
+║                                                                         ║
+║ To print documentation, type: COPY SAILSCOR.DOC PRN   (press enter)     ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+```
+{% endraw %}
+
 ## SAILSCOR.DOC
 
 {% raw %}

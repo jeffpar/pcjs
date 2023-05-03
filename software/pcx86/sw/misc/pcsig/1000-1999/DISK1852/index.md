@@ -83,6 +83,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1852  UNDER THE GULF  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: UTG                                             ║
+║                                                                         ║
+║ To print documentation, type: COPY UTG.DOC PRN                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1852

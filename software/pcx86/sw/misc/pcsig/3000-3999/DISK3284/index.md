@@ -14,6 +14,26 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #3284 SOFTWARE JUKEBOX 2/2  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To Start SOFTWARE JUKEBOX, Insert disk#3283 type INFO (Enter).         ║
+║                                                                         ║
+║  Follow installation instructions.                                      ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3284
 

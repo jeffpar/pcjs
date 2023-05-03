@@ -76,6 +76,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1575 PC Quote  >>>>                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program, type:  INSTALL (press enter)                        ║
+║                                                                         ║
+║ For installation instructions and manual, type:                         ║
+║             COPY MANUAL.DOC PRN                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

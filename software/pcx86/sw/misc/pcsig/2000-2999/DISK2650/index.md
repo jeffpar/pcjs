@@ -90,6 +90,56 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #2650  BLANK-IT, PIK, & BOTHSIDES  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  NOTE: All of the three programs have been made into self-extracting    ║
+║        files for organizational and space-saving purposes. There        ║
+║        is a note on the documentation of both PIK and BOTHSIDES that    ║
+║        you will need PKUNZIP in order to access the files of each       ║
+║        program. However, for your convenience, each of the three pro-   ║
+║        grams has been changed into a form (.EXE) so that PKUNZIP is     ║
+║        no longer a requirement.                                         ║
+║                                                                         ║
+║  BLANK-IT =                                                             ║
+║        Copy BLANK-IT.EXE to [hard drive:\subdirectory].                 ║
+║                                                                         ║
+║        To extract the files, type:  BLANK-IT  (press Enter)             ║
+║                                                                         ║
+║        To print the documentation and installation instructions, type:  ║
+║                  COPY BLANK-IT.DOC PRN  (press Enter)                   ║
+║                  COPY README.DOC PRN    (press Enter)                   ║
+║                                                                         ║
+║        To print the registration form, type:  COPY REGISTER.DOC PRN     ║
+║                                                                         ║
+║  PIK = Copy PIK120.* to [hard drive:\subdirectory].                     ║
+║                                                                         ║
+║        To extract the files, type:  PIK120  (press Enter)               ║
+║                                                                         ║
+║        To print the documentation and installation instructions, type:  ║
+║                  COPY PIK.DOC PRN  (press Enter)                        ║
+║                  COPY ORDER.FRM PRN  (press Enter)                      ║
+║                                                                         ║
+║  BOTHSIDES =                                                            ║
+║        Copy BOTH35.* to [hard drive:\subdirectory].                     ║
+║                                                                         ║
+║        To extract the files, type:  BOTH35  (press Enter)               ║
+║                                                                         ║
+║        To print the documentation and installation instructions, type:  ║
+║                  COPY BOTH.DOC PRN  (press Enter)                       ║
+║                  COPY ORDER.FRM PRN  (press Enter)                      ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2650

@@ -97,6 +97,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1491 TESSERACT  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Copy the programs on this disk into a sub-directory on your hard drive  ║
+║ then unarchive the program.                                             ║
+║                                                                         ║
+║ If you wanted to unarchive the file called TESS-5.ARC, you would type   ║
+║                       PKXARC TESS-5.ARC (press enter)                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## TESSPARK.ASM
 
 {% raw %}

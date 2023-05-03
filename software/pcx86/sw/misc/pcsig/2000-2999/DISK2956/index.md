@@ -16,6 +16,25 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #2956 CONQUEST  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print the documentation, type:  COPY READ.ME PRN    (press Enter)   ║
+║                                     COPY GUIDE.DOC PRN  (press Enter)   ║
+║                                                                         ║
+║  To print the order form, type:  COPY ORDER.DOC PRN  (press Enter)      ║
+║                                                                         ║
+║  To start the game, type:  CONQUEST  (press Enter)                      ║
+║                                                                         ║
+║                                         (c) Copyright 1992, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GUIDE.DOC
 
 {% raw %}

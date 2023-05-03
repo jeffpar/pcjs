@@ -82,6 +82,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #1701  PYRAMID SOLITAIRE  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  PYSTART (press enter), press F5 key            ║
+║ To install program onto hard drive, type:  PYSTART (press enter),       ║
+║                                            press F3 key                 ║
+║                                                                         ║
+║ To print documentation, type:  PYSTART (press enter), press F2 key      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PYRAMID.DOC
 
 {% raw %}

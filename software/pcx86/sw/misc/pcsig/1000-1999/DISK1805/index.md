@@ -711,6 +711,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1805  AMORT70  >>>>                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: RUN                                             ║
+║                                                                         ║
+║ To print documentation, type: COPY AMORTIZE.DOC PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1805

@@ -16,6 +16,35 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3323  OVERKILL  >>>>                  ║
+║                        Disk 1 of 2 (also #3324)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  First copy the files from both disks 1 and 2 to a high density floppy  ║
+║  disk or to a subdirectory on your hard drive.                          ║
+║                                                                         ║
+║  Then from the new location, unzip the OVERKILL.ZIP file by typing:     ║
+║                                         PKUNZIP OVERKILL  (press Enter) ║
+║                                                                         ║
+║  You may now delete OVERKILL.ZIP by typing:  DEL OVERKILL.ZIP  (Enter)  ║
+║                                                                         ║
+║  To print program information, type:  COPY OVERKILL.DOC PRN  (Enter)    ║
+║                                                                         ║
+║  To start the program, type:  OVERKILL  (press Enter)                   ║
+║                                                                         ║
+║  To read the catalog, type:  CATALOG  (press Enter)                     ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDER.DOC
 
 {% raw %}

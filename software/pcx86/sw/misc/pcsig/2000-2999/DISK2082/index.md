@@ -85,6 +85,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  Disk No 2082 PC-FILE disk 1 of 3 (2083 & 2084 also) >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program to your hard disk, type INSTALL (press enter)    ║
+║                                                                         ║
+║ For documentation on this program, insert disk 3 and type:  DOC         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VENDOR.DOC
 
 {% raw %}

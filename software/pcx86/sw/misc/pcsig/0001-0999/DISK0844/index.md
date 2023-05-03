@@ -1988,6 +1988,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #844  ABC FUN KEYS  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, type:                        ║
+║                       COPY ABC.DOC PRN                                  ║
+║                                                                         ║
+║ To run the program, Type: ABC (press enter)                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## REGISTER.DOC
 
 {% raw %}

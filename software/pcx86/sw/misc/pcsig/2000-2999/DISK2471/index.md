@@ -55,6 +55,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #2471  FLAN - RETIREMENT PLANNER   >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To read author's note, type:  TYPE README.1ST (press Enter)           ║
+║                                                                         ║
+║   To print the manual, type:  UGUIDE (press Enter)                      ║
+║                                                                         ║
+║   To begin the program, type:  RETIRE (press Enter)                     ║
+║                                                                         ║
+║   To print the registration form, type:  ORDER (press Enter)            ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## UGUIDE.TXT
 
 {% raw %}

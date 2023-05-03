@@ -1426,6 +1426,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 184 DOS Utilities #9  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start a program, type the name of the program you wish to run.       ║
+║                                                                         ║
+║ Example, if you wanted to run the program called COVER.COM, you         ║
+║ would type COVER (press enter)                                          ║
+║                                                                         ║
+║ Most of the programs on this disk have documentation on how to use them ║
+║ It is in ASCII format and can be copied to your printer.                ║
+║                                                                         ║
+║ Example, if you wanted to print the documentation for COVER.COM, you    ║
+║ would type COPY COVER.DOC PRN (press enter)                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## RM18.ASM
 
 {% raw %}

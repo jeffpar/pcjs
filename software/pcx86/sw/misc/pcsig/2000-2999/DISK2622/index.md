@@ -54,6 +54,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2622  LOGIMENU  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the documentation and installation instructions, type:        ║
+║                     COPY README PRN  (press Enter)                      ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LOGIREF.TXT
 
 {% raw %}

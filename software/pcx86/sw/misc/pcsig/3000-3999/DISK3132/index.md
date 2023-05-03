@@ -14,6 +14,25 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #3132 VSUM  2 of 2 (also 3131)   >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  The installation instructions are located on disk #3131.               ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3132
 

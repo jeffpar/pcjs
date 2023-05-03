@@ -14,6 +14,29 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3193  CMS-GOLD  >>>>                 ║
+║                   Disk 3 of 3 (also #742 and #3192)                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  The program files of CMS-GOLD are installed from disks 1 and 2 of the  ║
+║  CMS-GOLD set.  This third disk is not automatically installed but is   ║
+║  called from the main program as needed (to update an old version of    ║
+║  the program, etc.).                                                    ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3193
 

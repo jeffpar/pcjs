@@ -103,6 +103,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #2037  LASER LETTERHEAD PLUS  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program onto your hard drive, type: INSTALL C  (press enter) ║
+║                                                                         ║
+║ To start program, type: LETTER       (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY MANUAL.DOC PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

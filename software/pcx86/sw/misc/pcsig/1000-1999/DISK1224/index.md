@@ -2105,6 +2105,25 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1224 TINY FONTS  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To load the FLYSPECK font to your laser printer, type FLY (press enter) ║
+║                                                                         ║
+║ To load the MYOPIO font to your laser printer, type MY (press enter)    ║
+║                                                                         ║
+║ After the font is loaded into your laser printer, simply copy the       ║
+║ the file you would like to print to your laser printer.                 ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LNKFILES.TXT
 
 {% raw %}

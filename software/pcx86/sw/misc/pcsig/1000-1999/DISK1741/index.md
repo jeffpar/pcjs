@@ -76,6 +76,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1741  A2Z  >>>>                          ║
+║                      (disk 2 of 2, 1740 also)                           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Copy diskettes 1 and 2 into a directory on you hard drive.              ║
+║                                                                         ║
+║ To start program, type: A2ZBASE                                         ║
+║                                                                         ║
+║ To print documentation, type: COPY DEMO.DOC PRN                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## TIPS.DOC
 
 {% raw %}

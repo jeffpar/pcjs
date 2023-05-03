@@ -84,6 +84,21 @@ Sunnyvale, Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk #618 MAKEMYDAY  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, Type:                        ║
+║                    COPY MMD.DOC PRN (press enter)                       ║
+║                                                                         ║
+║ To run MakeMyDay enter at DOS prompt: MMD (press enter)                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MMD.DOC
 
 {% raw %}

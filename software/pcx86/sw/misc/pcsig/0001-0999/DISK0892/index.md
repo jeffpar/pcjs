@@ -1056,6 +1056,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No. 892  COLLEGE FOOTBALL POOL  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To run the COLLEGE FOOTBALL POOL program, Type: INSTALL (press enter)   ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0892

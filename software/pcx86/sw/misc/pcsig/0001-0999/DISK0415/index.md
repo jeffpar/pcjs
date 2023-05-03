@@ -777,6 +777,28 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk #415 W-ED, &  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Print the documentation for W-ED Type the following command:        ║
+║             COPY READ.ME LPT1  (press enter)                            ║
+║                                                                         ║
+║  To Start W-ED Type the following command:                              ║
+║               WED   (press enter)                                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To Print the documentation for "&" Type the following command:          ║
+║            COPY &.DOC LPT1  (press enter)                               ║
+║                                                                         ║
+║ To Start "&" Type the following command:                                ║
+║                       &   (press enter)                                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0415

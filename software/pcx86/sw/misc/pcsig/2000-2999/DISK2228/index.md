@@ -2048,6 +2048,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  PC-SIG Disk #2228 DIRECTORY FREEDOM  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To start the program, type: DF (press enter)                          ║
+║                                                                         ║
+║                                                                         ║
+║   To print the documentaion, type: COPY DF350.TXT PRN (press enter)     ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REGISTER.TXT
 
 {% raw %}

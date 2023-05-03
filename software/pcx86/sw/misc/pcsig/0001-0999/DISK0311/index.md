@@ -55,6 +55,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk #311 THE MOVIE DATABASE (Disk 1 of 2)  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+║                                                                         ║
+║ To start the program type: MOVIES (press enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MOVIES.DOC
 
 {% raw %}

@@ -60,6 +60,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #2693 BATCHMAKER  >>>>                ║
+║                           2 OF 2 (also #2692)                           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program, insert disk 1 and type: SETUP (press Enter)     ║
+║                                                                         ║
+║ To print the documentation, insert disk 1 and type: GO (press Enter)    ║
+║                                                                         ║
+║ To run the program, insert disk 1 and type: BATMAKER (press Enter)      ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2693

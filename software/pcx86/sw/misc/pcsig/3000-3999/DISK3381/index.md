@@ -14,6 +14,36 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3381 EXECUTIONERS  >>>>               ║
+║                          Disk 1 of 2 (3382 also)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Install this game to your disk, type:                               ║
+║     [hard drive letter]:  (press ENTER)                                 ║
+║     CD\       (press ENTER)                                             ║
+║     MD XCUTE  (press ENTER)                                             ║
+║     CD XCUTE  (press ENTER)                                             ║
+║                                                                         ║
+║  Insert disk 1 (#3381) in drive A and type:                             ║
+║     A:XCUTE1  (press ENTER)  (or type B:XCUTE1 if installing from B)    ║
+║                                                                         ║
+║  Insert disk 2 (#3382) in drive A and type:                             ║
+║     A:XCUTE2  (press ENTER)  (or type B:XCUTE2 if installing from B)    ║
+║                                                                         ║
+║  To start, type:  XCUTE  (press ENTER)                                  ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3381
 

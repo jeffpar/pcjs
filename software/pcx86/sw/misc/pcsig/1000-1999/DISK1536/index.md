@@ -101,6 +101,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 1536 HEXAGAME/PC  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start HEXAGAME, type HEXAGAME (press enter)                          ║
+║                                                                         ║
+║ To start LINSOLVE, type LINSOLVE (press enter)                          ║
+║                                                                         ║
+║ To start MANAGAME, type MANAGAME (press enter)                          ║
+║                                                                         ║
+║ To start MLTIGAME, type MLTIGAME (press enter)                          ║
+║                                                                         ║
+║ To start PCPFON, type PCPFON (press enter)                              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PCPQA.TXT
 
 {% raw %}

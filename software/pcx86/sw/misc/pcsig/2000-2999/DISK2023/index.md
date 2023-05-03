@@ -73,6 +73,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  Disk #2023  ACTIVE LIFE FOR OS/2 PRESENTATION MANAGER  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print installation instructions, type:  COPY README.TXT PRN (Enter)  ║
+║                                                                         ║
+║ To print documentation, type:  COPY AL.DOC PRN (press Enter)            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

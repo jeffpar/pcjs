@@ -14,6 +14,25 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3450 VBRUN200.DLL  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  Some Windows programs require VBRUN200.DLL to operate.  Copy this      ║
+║  file into a subdirectory on your hard disk that is in your DOS path    ║
+║  statement.                                                             ║
+║                                                                         ║
+║                                        (C) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3450
 

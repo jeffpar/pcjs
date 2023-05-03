@@ -91,6 +91,34 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #2286  ELFTREE  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install ELTREE on your hard drive, type:                             ║
+║                        C:MD \ELFTREE (press Enter)                      ║
+║                        C:CD \ELFTREE (press Enter)                      ║
+║                        C:COPY A:*.*  (press Enter)                      ║
+║                                                                         ║
+║ To self-extract the program on your hard drive, type:  ELFTREE (Enter)  ║
+║                                                                         ║
+║ To print documentation, type:  COPY ELFTREE.HLP PRN  (press Enter)      ║
+║                            and COPY README.ELF PRN (Enter)              ║
+║                                                                         ║
+║ For directions on putting ELFTREE in your AUTOEXEC.BAT file, type:      ║
+║                        TYPE AUTOEXEC.ELF  (press Enter)                 ║
+║                                                                         ║
+║ To print order form, type:  COPY ORDER.ELF PRN (press Enter)            ║
+║                                                                         ║
+║ To start ELFTREE, type:  ET (press Enter)                               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2286

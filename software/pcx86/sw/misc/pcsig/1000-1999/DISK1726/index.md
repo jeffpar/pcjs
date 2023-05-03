@@ -69,6 +69,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1726  PHONE  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: PHONE                                           ║
+║                                                                         ║
+║ To print documentation, type: COPY PHONE.DOC PRN                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1726

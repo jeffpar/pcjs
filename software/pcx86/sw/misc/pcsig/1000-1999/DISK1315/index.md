@@ -152,6 +152,24 @@ Sunnyvale, Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 1315 Diver's Log and More  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program Diver's Log, type: DIVE (press enter)              ║
+║                                                                         ║
+║ To start the program High Points, type: HP (press enter)                ║
+║                                                                         ║
+║ To start the program Minimuf, type: MINIMUF (press enter)               ║
+║                                                                         ║
+║ To start the program ERB, type: BULLET20 (press enter)                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MINIMUF.DOC
 
 {% raw %}

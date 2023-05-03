@@ -60,6 +60,26 @@ of play including a duel with the Black Archer, and sound support.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #3980 BOW & ARROW AND GRADITOR  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  Both games require Microsoft Windows in order to run.                  ║
+║                                                                         ║
+║  To Play BOW & ARROW, type:  WIN B&ARROW  (press Enter)                 ║
+║                                                                         ║
+║  To Play GRADITOR, type:  WIN GRADITOR  (press Enter)                   ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GRADITOR.TXT
 
 {% raw %}

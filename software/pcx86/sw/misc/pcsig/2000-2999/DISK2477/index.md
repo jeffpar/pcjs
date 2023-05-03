@@ -89,6 +89,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2477  CLUB-EZ   >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print documentation and installation instructions, type:            ║
+║                  COPY README.TXT PRN (press Enter)                      ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

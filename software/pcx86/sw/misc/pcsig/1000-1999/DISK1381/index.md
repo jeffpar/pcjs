@@ -103,6 +103,24 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 1381 FACT PACK  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type FACTRACE (press enter)                       ║
+║                                                                         ║
+║ To start the program, type TABLE (press enter)                          ║
+║                                                                         ║
+║ To view the documentation on your screen, type VIEW (press enter)       ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## READMEFP.DOC
 
 {% raw %}

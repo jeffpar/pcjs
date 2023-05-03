@@ -88,7 +88,20 @@ Sunnyvale  Ca. 94086
 (408) 730-9291
 (c) Copyright 1988,89 PC-SIG, Inc.
 
-
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1195 PCSHIFT  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type MENU (press enter)                           ║
+║                                                                         ║
+║ From the menu you can start the program and print the documentation     ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

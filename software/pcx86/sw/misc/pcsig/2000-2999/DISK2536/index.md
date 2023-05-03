@@ -120,6 +120,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PCSIG Disk #2536 ATLAS OF THE WORLD  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To unarchive the program files to your hard drive, first make a        ║
+║  subdirectory, then type : PKUNZIP ATLAS.ZIP X:\SUBIDR                  ║
+║  (substitute X:\SUBDIR with your drive and the subdirectory you made)   ║
+║                                                                         ║
+║   To start the program, type: ATLAS2MN                                  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1991, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2536

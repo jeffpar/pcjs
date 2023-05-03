@@ -80,6 +80,32 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+╔══════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #2657 WinEdit  >>>>                    ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║         Installing WinEdit                                               ║
+║                                                                          ║
+║           Winedit requires only one file to run: WINEDIT.EXE.  Copy this ║
+║           file to a directory on your path, and you can start.  You      ║
+║           should also copy the WinHelp file, WINEDIT.HLP, to the same    ║
+║           directory.  If you are running Windows in 386 enhanced mode,   ║
+║           you can copy the file EDTEMP.PIF to your Windows directory     ║
+║           to allow WinEdit to compile from within a window.              ║
+║                                                                          ║
+║           To start, type: WIN WINEDIT (press Enter)                      ║
+║                                                                          ║
+║                                          (c) COPYRIGHT 1991, PC-SIG INC. ║
+╚══════════════════════════════════════════════════════════════════════════╝
+
+```
+{% endraw %}
+
 ## WINEDIT.TXT
 
 {% raw %}

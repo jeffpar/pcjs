@@ -299,6 +299,29 @@ machines:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #3420 INSIGHT FINANCIAL PROGRAMS  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ The programs included on this disk are in Zipped (compressed) format.   ║
+║                                                                         ║
+║ Copy all of the files to a sub-directory on your hard disk drive.       ║
+║                                                                         ║
+║ To Unzip the programs, type: PKUNZIP (file name) (press Enter).         ║
+║                                                                         ║
+║ PKUNZIP is available from PC-SIG or on most local Bulletin Boards.      ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INT.DOC
 
 {% raw %}

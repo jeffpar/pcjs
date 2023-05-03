@@ -14,6 +14,24 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3181 Tangle  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Start the game, type;  TANGLE  (Enter)                              ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3181
 

@@ -68,6 +68,20 @@ Sunnyvale  Ca. 94086
     REGISTER           880   2-02-92  10:21p
     LICENSE  AGR       772   2-17-92  12:07p
     FILE3006 TXT       861   2-01-92  12:54p
+    WCS0         <DIR>    
+           16 file(s)      35593 bytes
+
+     Directory of A:\WCS0
+
+    .            <DIR>    
+    ..           <DIR>    
+    MY-CORP      <DIR>    
+            3 file(s)          0 bytes
+
+     Directory of A:\WCS0\MY-CORP
+
+    .            <DIR>    
+    ..           <DIR>    
     1        NP        330   1-01-92   1:00a
     2        NP        257   1-01-92   1:00a
     3        NP        260   1-01-92   1:00a
@@ -91,11 +105,28 @@ Sunnyvale  Ca. 94086
     2        T92       164   1-01-92   1:00a
     WCS      SET       800   1-01-92   1:00a
     WCS      ARY       205   1-01-92   1:00a
-    WCS_NP~1 LST       160   2-07-92  11:33p
-    1~1      NP        204   2-07-92  11:33p
-    2~1      NP         74   2-07-92  11:33p
-    WCS_NP~2 LST       160   2-07-92  11:33p
-    1~2      NP        107   2-07-92  11:33p
-    2~2      NP        262   2-07-92  11:33p
-           44 file(s)      48005 bytes
-                           99840 bytes free
+    PROJCT-B     <DIR>    
+           26 file(s)      11445 bytes
+
+     Directory of A:\WCS0\MY-CORP\PROJCT-B
+
+    .            <DIR>    
+    ..           <DIR>    
+    WCS_NP   LST       160   2-07-92  11:33p
+    1        NP        204   2-07-92  11:33p
+    2        NP         74   2-07-92  11:33p
+    TASK-1       <DIR>    
+            6 file(s)        438 bytes
+
+     Directory of A:\WCS0\MY-CORP\PROJCT-B\TASK-1
+
+    .            <DIR>    
+    ..           <DIR>    
+    WCS_NP   LST       160   2-07-92  11:33p
+    1        NP        107   2-07-92  11:33p
+    2        NP        262   2-07-92  11:33p
+            5 file(s)        529 bytes
+
+    Total files listed:
+           56 file(s)      48005 bytes
+                           97280 bytes free

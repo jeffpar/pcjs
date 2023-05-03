@@ -70,6 +70,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 212 RBBS-PC  (Disk 1 of 5) >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ The program on this disk is in an archived format, in order to run it   ║
+║ you must unarchive it first.                                            ║
+║                                                                         ║
+║ Create a sub-directory on your hard disk and copy these files into it   ║
+║ then go to that sub-directory and un-archive the program.               ║
+║                                                                         ║
+║ To unarchive (or unZIP) the program on this disk, type:                 ║
+║                         PKUNZIP -X RBBS-EXE.ZIP                         ║
+║                                                                         ║
+║ There is also an archived description of changes to this program        ║
+║  on this disk. To unZIP it type:                                        ║
+║			  PKUNZIP -X BULLET6.ZIP                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0212

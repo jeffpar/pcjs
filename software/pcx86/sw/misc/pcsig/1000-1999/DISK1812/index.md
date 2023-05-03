@@ -445,6 +445,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1812  EASY QUOTE  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Must have PKXARC to install program.                                    ║
+║                                                                         ║
+║ To start program, type: EASYQTE                                         ║
+║                                                                         ║
+║ To print documentation, type: COPY EASYQTE.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1812

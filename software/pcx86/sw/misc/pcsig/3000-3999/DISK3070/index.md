@@ -16,6 +16,30 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SID Disk #3069  MULTIMEDIA 1  >>>>               ║
+║                     Disk 2 of 3 (also #3068, #3070)                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Insert Disk #3068 in drive A:                                           ║
+║                                                                         ║
+║   To read the introduction, type:  TYPE READ-ME.DOC  (press Enter)      ║
+║                                                                         ║
+║   To view, or print the manual, type:  MANUAL  (press Enter)            ║
+║   To start the program, type:  GO              (press Enter)            ║
+║                                                                         ║
+║   To install to hard drive C, type:  INSTALLC  (press Enter)            ║
+║   To install to hard drive D, type:  INSTALLD  (press Enter)            ║
+║                                                                         ║
+║                                                                         ║
+║                                         (c) Copyright 1992, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HELP-US.TXT
 
 {% raw %}

@@ -198,6 +198,32 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #hlp3  -  THE HELPER  >>>>                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+
+
+  The Helper 3.2 - Creating help files and hypertext documents
+  -------------------------------------------------------------
+  First read the file readme.doc by typing:
+  TYPE README.DOC        or print it out with
+  TYPE README.DOC >PRN
+
+  How to start the program:
+  -------------------------
+  At the DOS prompt type:
+  HELPER      (press Enter)
+
+  Optional command-line parameters can be added if desired:
+  HELPER [fn] [/M]    fn = filename to edit,
+                      /M = force mono colors for color card with mono screen.
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

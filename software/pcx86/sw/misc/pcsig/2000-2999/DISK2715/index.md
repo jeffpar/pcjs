@@ -385,6 +385,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  PC-SIG Disk #2715  THE ELECTRONIC CATALOG CONSTRUCTION KIT  >>>> ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install the program to Hard Disk C type:  HD                        ║
+║                                                                         ║
+║  To install the program to Disk Drive B type: FLOPPY                    ║
+║          {You need a 720K disk in drive B for this option}              ║
+║                                                                         ║
+║  After installing the program, print the documentation and installation ║
+║  instructions by typing:  COPY READ.ME PRN  (press Enter)               ║
+║                           COPY KIT.DOC PRN  (press Enter)               ║
+║                                                                         ║
+║  Start the program by typing:  CATALOG  (press Enter)                   ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2715

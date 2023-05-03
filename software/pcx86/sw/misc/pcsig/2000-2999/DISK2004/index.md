@@ -127,6 +127,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #2004  PC-IRIS/PC-MERLIN/PC-LOCK  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: IRIS         (press enter)                      ║
+║                                                                         ║
+║ To start program, type: MERLIN       (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY MERLIN.DOC PRN (press enter)         ║
+║                                                                         ║
+║ To start program, type: LOCK         (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY LOCK.DOC PRN    (press enter)        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LOCK.DOC
 
 {% raw %}

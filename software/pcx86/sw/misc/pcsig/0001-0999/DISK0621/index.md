@@ -70,6 +70,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #621 RBBS-PC Disk 3 of 5  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Please note that the contents of this disk are in archived form.        ║
+║ In order to access any of the files on them, you must un-archive them   ║
+║ first.  Use the un-archiving program provided on this disk.  The best   ║
+║ way to do this is to make a subdirectory on your hard disk and then     ║
+║ copy the contents of all four disks into it.  Once this is done         ║
+║ you can then go to your hard disk, get into your subdirectory and then  ║
+║ type PKUNZIP *.ZIP (press enter).                                       ║
+║                                                                         ║
+║ Make sure that you read all of the documentation for RBBS-PC,           ║
+║ this will answer most of your questions about this system.              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## 10-NET.ASM
 
 {% raw %}

@@ -14,6 +14,34 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  PC-SIG Disk #3074 BACKGROUND DISKETTE FORMATTER & ONEPASS  >>>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To Print the documentation for BACKGROUND, type:  COPY READ_ME.1ST PRN  ║
+║                                                                  (Enter)║
+║ To Start BACKGROUND, type:  BGFORMAT  (Enter)                           ║
+║_________________________________________________________________________║
+║                                                                         ║
+║ To Print the documentation for ONEPASS, type:  COPY ONEPASS.DOC PRN     ║
+║                                                                  (Enter)║
+║ To Start ONEPASS, type:  1PASS  (Enter)                                 ║
+║                                                                         ║
+║ To print the registration form, type:  COPY MAILER PRN       (Enter)    ║
+║                                        COPY INVOICE.ONE PRN  (Enter)    ║
+║                                                                         ║
+║                                          (c) Copyright 1993, PC-SIG Inc.║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3074
 

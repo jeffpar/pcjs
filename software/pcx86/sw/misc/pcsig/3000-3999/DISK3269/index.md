@@ -16,6 +16,26 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3269  DISC POLICE  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the instructions, type:  COPY INTRO.DOC PRN  (press Enter)    ║
+║                                                                         ║
+║  To start the program, type:  WIN DP  (press Enter)                     ║
+║                                                                         ║
+║  NOTE: You must have Microsoft Windows 3.x to run this program.         ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INTRO.TXT
 
 {% raw %}

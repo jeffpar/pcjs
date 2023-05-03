@@ -86,6 +86,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1635 TASK MASTER  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  TM (press enter)                               ║
+║ To install program on hard drive, type:  INSTALL (press enter)          ║
+║                                                                         ║
+║ To print documentation, type:  COPY TM.DOC PRN                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## TM.DOC
 
 {% raw %}

@@ -59,6 +59,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║                <<<<  PC-SIG Disk #2880  QUATRIS II  >>>>                ║
+  ╠═════════════════════════════════════════════════════════════════════════╣
+  ║  To view all documentation files, type: READDOC  (press Enter)          ║
+  ║                                                                         ║
+  ║  To start the program, type: QUATRIS2  (press Enter)                    ║
+  ║                                                                         ║
+  ║  To print the documentation files, type: COPY *.DOC PRN  (press Enter)  ║
+  ║                                                                         ║
+  ║                                           Copyright 1991, PC-SIG, Inc.  ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## QCOMMENT.DOC
 
 {% raw %}

@@ -94,6 +94,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #2055  NONPROFIT GENERAL LEDGER  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program onto hard drive, type:  HINSTALL (press enter)       ║
+║ To install program for floppy drive use, type:  FINSTALL (press enter)  ║
+║                                                                         ║
+║ To start program, type:  NGLSTART (press enter)                         ║
+║                                                                         ║
+║ To print documentation, type:  COPY NGL111.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SAMPLE.DOC
 
 {% raw %}

@@ -51,6 +51,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<< PC-SIG Disk #2959  EASY*GEN EMPLOYEE ATTITUDE SURVEY GENERATOR >>> ║
+║                   Disk #2 of 3 (also #2958 and #2960)                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  This disk will be called by the program when you install Disk #1 into  ║
+║  your hard drive.  Insert Disk #1 and type "GO" for instructions.       ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2959

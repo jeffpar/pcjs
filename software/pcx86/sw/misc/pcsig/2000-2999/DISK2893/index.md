@@ -51,6 +51,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #2893  FAST INVOICE WRITER  >>>>            ║
+║                        Disk 2 of 2 (also #1147)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read the installation instructions, type:  README  (press Enter)     ║
+║                                                                         ║
+║ After installing the program onto your hard drive, change to that       ║
+║ hard drive/sudirectory, and begin the program by typing: INVOICE (Enter)║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2893

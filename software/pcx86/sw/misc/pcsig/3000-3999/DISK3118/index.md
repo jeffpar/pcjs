@@ -14,6 +14,37 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #3118 EM SOLITAIRE GAMES  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ First create a subdirectory on the destination drive by typing:         ║
+║                   MD [subdirectory name]  (press Enter)                 ║
+║ To change to that subdirectory, type:  CD [subdirectory name]  (Enter)  ║
+║                                                                         ║
+║ Then to install the files, type:  A:PYRMID10  (press Enter)             ║
+║                              or:  A:KLONDK30  (press Enter)             ║
+║                              or:  A:PKRSOL20  (press Enter)             ║
+║                                                                         ║
+║ To print the documentation, type:  COPY PYRAMID.DOC PRN  (press Enter)  ║
+║                               or:  COPY KLONDIKE.DOC PRN  (press Enter) ║
+║                               or:  COPY POKER.DOC PRN  (press Enter)    ║
+║                                                                         ║
+║ To start the game, type:  PYRAMID  (press Enter)                        ║
+║                      or:  KLONDIKE  (press Enter)                       ║
+║                      or:  POKER  (press Enter)                          ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3118
 

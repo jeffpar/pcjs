@@ -40,6 +40,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #2780 26 BMP file for Windows  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unzip the files to your windows directory, type:                     ║
+║       PKUNZIP A:26-WALLS.ZIP [destination drive]:\subdirectory name     ║
+║                                                                         ║
+║ ** be sure to have PKUNZIP in your path.                                ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2780

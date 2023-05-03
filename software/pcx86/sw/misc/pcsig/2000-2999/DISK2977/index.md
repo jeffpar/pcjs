@@ -149,6 +149,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  PC-SIG Disk #2977 CROSSWORD CLIPPER FOR WINDOWS   >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print installation instructions, type:  COPY README.DOC PRN         ║
+║                                                     (press Enter)       ║
+║                                                                         ║
+║  To print documentation, type:  COPY CWCLIP.DOC PRN  (press Enter)      ║
+║                                                                         ║
+║  To print registration form, type:  COPY REGISTER.DOC PRN  (press Enter)║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

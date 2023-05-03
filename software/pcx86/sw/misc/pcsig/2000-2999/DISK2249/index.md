@@ -2409,6 +2409,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #2249  FX - File eXaminer  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print out documentation and installation instructions, type:         ║
+║                   COPY FX.TXT PRN (press ENTER)                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2249

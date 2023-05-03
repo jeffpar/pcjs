@@ -81,6 +81,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1804  BJ-FILES  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: BJ-FILES  (press enter)                         ║
+║                                                                         ║
+║ To print documentation, type: COPY BJF-READ.ME PRN (press enter)        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1804

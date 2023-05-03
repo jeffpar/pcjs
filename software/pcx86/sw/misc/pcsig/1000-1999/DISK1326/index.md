@@ -81,6 +81,28 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<< Disk No 1326 Mandelbrot Zoom Lens, SCI-CALC >>>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To print the documentation, type:                                     ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To start the Mandelbrot Zoom Lens, type:                              ║
+║                                                                         ║
+║             MANZOOM (press enter)                                       ║
+║                                                                         ║
+║   To start the SCI-CALC program, type:                                  ║
+║                                                                         ║
+║             SC (press enter)                                            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANZOOM.DOC
 
 {% raw %}

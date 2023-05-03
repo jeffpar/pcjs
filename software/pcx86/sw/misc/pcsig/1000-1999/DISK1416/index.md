@@ -94,6 +94,20 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk No 1416 WORDSTAR 2000 MOUSE MENUS  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To look at the documentation on your screen, type VIEW (press enter)    ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1416

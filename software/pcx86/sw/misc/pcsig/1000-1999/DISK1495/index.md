@@ -324,6 +324,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk No: 1495  ALICE IN WONDERLAND  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the manual, type: MANUAL (press enter)                         ║
+║                                                                         ║
+║ To view the documentation on your screen, type VIEW (press enter)       ║
+║                                                                         ║
+║ To start the program, type: AIW (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1495

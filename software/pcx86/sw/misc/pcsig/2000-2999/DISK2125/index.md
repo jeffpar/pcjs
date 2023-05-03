@@ -509,6 +509,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 2125 FLAGS  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: COPY FLAGS.DOC PRN (press enter)      ║
+║                                                                         ║
+║ To start the program, type: FLAGS (press enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2125

@@ -54,6 +54,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #2566 PC-TYPE 4 OF 4  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To install the program, insert disk #455 and type: INSTALL            ║
+║                                                                         ║
+║   To print the documentation, type: PRINTDOC                            ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1991, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2566

@@ -59,6 +59,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1966  CASH CONTROL  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type:  COPY CASHC.DOC PRN (press Enter)         ║
+║                                                                         ║
+║ To read author's last minute notes, type:  TYPE README (press Enter)    ║
+║                                                                         ║
+║ To install CASH CONTROL, type:  INSTALL (press Enter)                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1966

@@ -44,6 +44,34 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #3026  WHOOP IT UP! FOR WINDOWS  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To read the introductory information, type:  TYPE README.TXT  (Enter)   ║
+║                                                                         ║
+║ INSTALLATION PROCEDURES:                                                ║
+║   Copy the files on this disk to your Windows subdirectory.             ║
+║                                                                         ║
+║   From the File Manager, double click on WHOOP.EXE to start the program.║
+║                                                                         ║
+║   You can drag WHOOP.EXE into your Program Manager Startup group and    ║
+║   WHOOP IT UP! will start automatically every time you start Windows.   ║
+║                                                                         ║
+║ To print the registration form, type:  COPY ORDER.TXT PRN  (press Enter)║
+║                                                                         ║
+║ To read the licensing information, type:  TYPE LICENSE.TXT  (Enter)     ║
+║                                                                         ║
+║                                                                         ║
+║                                       (c) Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LICENSE.TXT
 
 {% raw %}

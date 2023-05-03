@@ -87,6 +87,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2298  THE EXPLORERS  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation and installation instructions, type:             ║
+║                   COPY E_README.1ST PRN (press ENTER)                   ║
+║									  ║
+║ To view EXPL.DOC file, type:  TYPE EXPL.DOC (press ENTER)               ║
+║              To print, type:  COPY EXPL.DOC PRN (press ENTER)           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2298

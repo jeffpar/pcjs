@@ -64,6 +64,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 2050 DIVER'S LOGBOOK  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program Diver's Log, type: DIVE (press enter)              ║
+║                                                                         ║
+║ To print the manual, type:  COPY README.DOC PRN                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

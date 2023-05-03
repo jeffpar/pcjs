@@ -88,6 +88,19 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═══════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #10746  QWIKMATH  >>>>                    ║
+╠═══════════════════════════════════════════════════════════════════════╣
+║ To begin using the program, type:  1ST-TIME  (press ENTER)            ║
+║                                                                       ║
+╚═══════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2371

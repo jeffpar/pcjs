@@ -72,6 +72,18 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #1576  ELRAY LEGAL DICTIONARY  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type:  COPY READ.ME PRN   (press enter)         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1576

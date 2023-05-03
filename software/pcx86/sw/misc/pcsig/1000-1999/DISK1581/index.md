@@ -96,6 +96,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1581  SIMPLICITY  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program on hard drive, type:  INSTALL (press ente)           ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║ To print documentation, type:  COPY SIMPLE.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SIMPLE21.DOC
 
 {% raw %}

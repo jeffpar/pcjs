@@ -73,6 +73,49 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1133 WORLD GENERATOR  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program onto hard drive, type:  INSTALL (press enter)        ║
+║                                                                         ║
+║ To print the documentation, type:  COPY WORLDGEN.DOC PRN                ║
+║                                                                         ║
+║ To start the program, type:  WORLDGEN (press enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+## TITLES.TXT
+
+{% raw %}
+```
+╦   ╦ ╔═══╗ ╔═══╗ ╦    ╦═══╗ ╔═══╗ ╔════ ╔══╗     World Generator
+║ ║ ║ ║   ║ ╠══╦╝ ║    ║ ╔═╝ ║   ╥ ╠═══  ║  ╚╗    Version 1.3
+╚═╩═╝ ╚═══╝ ╩  ╩  ╚═══ ╩═╝   ╚═══╝ ╚════ ╩   ║    AUGUST 1989
+═══ The ═ World ═ Processor ═════════════════╝
+
+This program is designed to produce solar systems for SF role  playing  games, 
+but is not directly based on the rules of any one game.
+
+WORLDGEN.EXE Requires an IBM PC or compatible with CGA graphics, RGB monitor, 
+and DOS 2.0 or later.  It was originally written in Turbo Pascal version 3.1, 
+but is now re-written for Turbo Pascal 4/5.  Full source code is supplied  if 
+you  register  your program;  registered users will also be sent version 2.00 
+when it is ready (probably early 1990).  This program performs a lot of  disk 
+access;  unless you modify the source code,  it will assume that instructions 
+and the file for this title section are on the same disk as the program.
+
+           Copyright <c> Marcus L. Rowland  1987, 1988, 1989
+
+User registration £5.00 or $10.00 from
+     Marcus L. Rowland, 22 Westbourne Park Villas, London W2 5EA, ENGLAND
+```
+{% endraw %}
+
 ## WGINS1.TXT
 
 {% raw %}

@@ -2510,6 +2510,50 @@ Copyright 1984 by ABComputing					   May 15, 1984
 ```
 {% endraw %}
 
+## CPYRIGHT.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════════╗
+║									      ║
+║									      ║
+║	       Copyright 1984 by ABComputing. ALL RIGHTS RESERVED	      ║
+║									      ║
+║									      ║
+╚═════════════════════════════════════════════════════════════════════════════╝
+
+
+	       PC FIRING LINE/PC UNDERGROUND, or portions thereof, are
+	  not to be  sold or used  in a	product	 for sale without  the
+	  written consent of ABComputing.  The only exception is  that
+	  small	excerpts may be	used for critical review.
+
+	       Copies may be made for non-profit use.
+
+	       If clarification	 is required,  contact ABComputing  at
+	  P.O. Box  5503, North	 Hollywood, CA	91616-5503.  Or	 phone
+	  (818)	509-9002.
+
+	       Associations that aid the handicapped are encouraged to
+	  contact us if	our material, in any form, can be of value.
+
+┌──────────────────────────────────┐
+│ DisKclaimer			   │
+└──────────────────────────────────┘
+
+	       We  cannot  guarantee   the  accuracy  of,   or	assume
+	  responsibility for, information  on a	diskette.   All	source
+	  code and text	is used	at your	own risk.
+
+
+
+
+		     ┌──────────────────────────────────┐
+		     │ File Name: ██  cpyright.txt  ██	│
+		     └──────────────────────────────────┘
+```
+{% endraw %}
+
 ## DOS1.TXT
 
 {% raw %}
@@ -4291,6 +4335,22 @@ Copyright 1984 by ABComputing					   May 15, 1984
 		     ┌──────────────────────────────────┐
 		     │ File Name: ██   forth3.txt   ██	│
 		     └──────────────────────────────────┘
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No: 160  PC Firing Issue #2  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To start this disk, type:                                             ║
+║                                                                         ║
+║             PCFL (press enter)                                          ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

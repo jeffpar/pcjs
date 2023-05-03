@@ -76,6 +76,24 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No 725  Turnkey (Demo version)  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:                                     ║
+║                  COPY README PRN (press enter)                          ║
+║                                                                         ║
+║   To install the program, type:                                         ║
+║                  INSTALL (press enter)                                  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0725

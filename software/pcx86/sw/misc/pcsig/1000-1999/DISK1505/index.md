@@ -121,6 +121,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  Disk No 1505 BROTHER'S KEEPER (disk 2 of 2, 1504)  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║               Refer to Disk 1504 for documentation.                     ║
+║                                                                         ║
+║ To run BROTHER'S UTILITIES, type: BROTHERU  (press Enter)               ║
+║                                                                         ║
+║ To run BROTHER'S KEEPER BOX TREE CHART, type:  BKBOX (press Enter)      ║
+║                                                                         ║
+║ To run BROTHER'S KEEPER MORE REPORTS, type:  BKREPORT (press Enter)     ║
+║                                                                         ║
+║ To run GEDCOM, type:  BKGEDCOM (press Enter)                            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1505

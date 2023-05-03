@@ -166,6 +166,24 @@ FILES    TXT        0   2-17-90  10:44p
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  Disk #1977  THE ELECTRICAL DBS (disk 1 of 2, also 1978) >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install files onto your hard drive, type: INSTALL  (press enter)     ║
+║                                                                         ║
+║                        AFTER INSTALLATION                               ║
+║                                                                         ║
+║ To start program, type: RUN          (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY MANUAL.DOC PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MESSAGE1.TXT
 
 {% raw %}
@@ -221,6 +239,59 @@ FILES    TXT        0   2-17-90  10:44p
 
 
 
+```
+{% endraw %}
+
+## DBHELP.TXT
+
+{% raw %}
+```
+───────────────────────────────────────────────────────────────────────────────
+KEY         FUNCTION         COMMENT
+───────────────────────────────────────────────────────────────────────────────
+ F          Find Record.     With this function you can find a record in any
+                             file by any key.
+
+ E          Edit Record.     Edit the highlighted record.
+
+ D          Delete Record.   The highlighted record and subrecords are deleted.
+
+ A          Add Record.      Allows addition of a new record to the file.
+ C          Copy Record.     Same as Add but copies fields from current record.
+
+ Q          Quit to Menu.    Quit back to the main menu.
+
+ N          Next Record.     The next record will be displayed.
+ P          Previous Record. The Previous record will be displayed.
+
+ T          First Record.    The first record will be displayed.
+ L          Last Record.     The last record will be displayed.
+
+ +/-        Switch Files.    Switch to next or previous file in Database.
+───────────────────────────────────────────────────────────────────────────────
+───────────────────────────────────────────────────────────────────────────────
+                         ─* EDIT MODE KEYS *─
+───────────────────────────────────────────────────────────────────────────────
+F1          Abort Edit/Add.  This key may be used to Abort the Edit or Add
+                             functions.  The data files will not be updated.
+F5          Delete Field.    The field is deleted from the cursor position to
+                             the end of the field and the cursor is placed at
+                             the left margin of the field.
+F10         Done Edit/Add.   This key is used to end editing. The record is
+                             written to the data files.
+Tab key     Skip to margin.  This function will skip to start or end of field
+                             contents.
+─┘ key     End field edit.  This key will end editing in the current field.
+                             The cursor is moved to the next field.
+─          Backspace.       This key will cause the cursor to move left and
+                             erase the character to the left.
+Ins         Insert Toggle.   This key will toggle the insert mode On/Off.
+Del         Delete char.     The character under the cursor will be deleted.
+           Field Up.        This key is used to move to the previous field.
+           Field Down.      This key is used to move to the next field.
+           Cursor Left.     This key moves the cursor to the left.
+Ü           Cursor right.    This key moves the cursor to the right.
+───────────────────────────────────────────────────────────────────────────────
 ```
 {% endraw %}
 

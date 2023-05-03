@@ -134,6 +134,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No: 185  Dos Utilities no 10  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To run an EXE,COM, or BAT program simply type its name and press       ║
+║  <ENTER>.  For instructions on running BASIC programs, please           ║
+║  refer to your computer manual concerning BASIC language files.         ║
+║  To read DOC files simply enter TYPE filename.ext and press             ║
+║  <ENTER>.                                                               ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SDIR.DOC
 
 {% raw %}

@@ -151,6 +151,30 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 993 BOARD GAMES  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To see the documentation for PC PENTE, Type: RULES (press enter)        ║
+║                                                                         ║
+║ To run PC PENTE on a CGA system, Type: IBMPENTE (press enter)           ║
+║                                                                         ║
+║ To run PC PENTE on a Hercules system, Type: PCPENTE (press enter)       ║
+║                                                                         ║
+║ To print the documentation for PYRAMIDS, Type:                          ║
+║             COPY MANUAL.DOC LPT1: (press enter)                         ║
+║                                                                         ║
+║ To run the program PYRAMIDS, Type: PYRAMIDS (press enter)               ║
+║                                                                         ║
+║ To print the documentation for YAHTZEE, Type:                           ║
+║             COPY YAHTZEE.DOC LPT1: (press enter)                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

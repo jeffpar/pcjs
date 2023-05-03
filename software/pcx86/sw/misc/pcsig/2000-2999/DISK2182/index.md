@@ -75,6 +75,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  DISK #2182 PBWINDOWS  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To start the program, type : PBWNDO2 (press enter)                    ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2182

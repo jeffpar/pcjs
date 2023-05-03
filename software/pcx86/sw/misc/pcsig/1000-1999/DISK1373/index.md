@@ -82,6 +82,21 @@ Sunnyvale, CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk No 1373 THE PRICE BOOK (Disk 1 of 2)  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type PB (press enter)                             ║
+║                                                                         ║
+║ For documentation on the program, insert disk #1374 into drive A> and   ║
+║ type GO (press enter)                                                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1373

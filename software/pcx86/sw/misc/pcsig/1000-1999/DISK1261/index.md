@@ -135,6 +135,22 @@ Learning System, press <ANY KEY> to continue.
 ```
 {% endraw %}
 
+## RUN.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<<  Disk No: 1261 WORD PERFECT 4.2 LEARNING SYSTEM (Disk 2 of 2)  >>>>║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program to your hard disk, insert disk #1260 in drive A: ║
+║ and type GOHARD (press enter)                                           ║
+║                                                                         ║
+║ To run the program from your floppy drive, insert disk #1260 in drive A:║
+║ and type GOSOFT (press enter)                                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1261

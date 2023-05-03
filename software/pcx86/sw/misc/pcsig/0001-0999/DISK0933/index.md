@@ -117,6 +117,26 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk No 933 SORTED DIRECTORY and FLIST/PC  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for SORTED DIRECTORY, Type:                  ║
+║             COPY SD.DOC LPT1: (press enter)                             ║
+║                                                                         ║
+║ To start the SORTED DIRECTORY, Type: CD (press enter)                   ║
+║                                                                         ║
+║ To print the documentation for FLIST/PC, Type:                          ║
+║             COPY FLIST.PRN LPT1: (press enter)                          ║
+║                                                                         ║
+║ To run the program FLIST/PC, Type: FLIST (press enter)                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PGMDESC.TXT
 
 {% raw %}

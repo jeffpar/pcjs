@@ -135,6 +135,52 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## HOTKEY.DOC
+
+{% raw %}
+```
+
+
+
+
+
+
+                                    HOTKEY v1.04
+                       Keyboard Speedup Program for the IBM PC
+
+
+          On a normal PC, HOTKEY will roughly double the keyboard
+          auto-repeat rate.  This makes moving the cursor around a LOT
+          faster and easier! 
+
+          Most keyboard speed-up programs share an annoying trait with the
+          hardware repeat built into your keyboard:  they keep stuffing
+          keystrokes into the type-ahead buffer even when the program
+          reading the keyboard is falling behind.  This causes an
+          unpredictable "overshoot" when you release the key! 
+
+          HOTKEY solves this problem by only repeating a key if your
+          keyboard type-ahead buffer is empty.  This keeps the auto-repeat
+          in sync with each program, giving you fast auto-repeat for fast
+          programs and slow auto-repeat for slow programs.  HOTKEY even
+          performs the same service on your hardware auto-repeat,
+          virtually eliminating overshoot while retaining the advantages
+          of faster operation!  (Note:  you can still type ahead -- just
+          press the same key repeatedly.)
+
+          Unlike some keyboard speed-up programs, HOTKEY does NOT have
+          trouble when you use Alt plus the numeric keypad to type
+          graphic characters - it won't run away on you!
+
+          HOTKEY should normally be installed in your AUTOEXEC.BAT file
+          BEFORE any other keyboard-sensitive programs.
+
+          CAUTION: Because HOTKEY does tricky things with the hardware
+          and BIOS, it may not work on all machines - test it carefully!
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0759
@@ -143,6 +189,14 @@ Sunnyvale  Ca. 94086
      Directory of A:\
 
     FILE0759 TXT      2961  10-23-90  10:29a
+    WRITRSHV     <DIR>    
+    MOREPFCT     <DIR>    
+            3 file(s)       2961 bytes
+
+     Directory of A:\WRITRSHV
+
+    .            <DIR>    
+    ..           <DIR>    
     GO       BAT        28   6-26-89   6:56p
     GUIDE            27983   4-28-90  10:29p
     GUIDE    BAT        87   6-25-89  11:12p
@@ -151,10 +205,19 @@ Sunnyvale  Ca. 94086
     HVN               2770   4-29-90  12:46a
     HVNHELP           1396   4-28-90  10:38p
     README            1137   4-28-90   3:50a
-    README~1          1047   8-31-90   8:49a
-    GO~1     BAT        28   4-16-90   8:18p
-    GUIDE~1          18910   5-08-90   9:47a
+           10 file(s)      35573 bytes
+
+     Directory of A:\MOREPFCT
+
+    .            <DIR>    
+    ..           <DIR>    
+    README            1047   8-31-90   8:49a
+    GO       BAT        28   4-16-90   8:18p
+    GUIDE            18910   5-08-90   9:47a
     MP       WPK     12721   8-31-90   8:59a
     MP       WPM       465   8-31-90   9:02a
-           14 file(s)      71705 bytes
-                           84992 bytes free
+            7 file(s)      33171 bytes
+
+    Total files listed:
+           20 file(s)      71705 bytes
+                           83968 bytes free

@@ -66,6 +66,31 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  PC-SIG Disk #2889 PREP  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  First extract files to a subdirectory by typing:                       ║
+║                               PREPZIP [drive:\directory]  (press Enter) ║
+║                                                                         ║
+║  To print documentation, type:  COPY PREP.DOC PRN  (press Enter)        ║
+║                                                                         ║
+║  To print starting instructions, type:  COPY README.TXT PRN             ║
+║                                                        (press Enter)    ║
+║                                                                         ║
+║  To start the program, type:  PREP  (press Enter)                       ║
+║                                                                         ║
+║  To print registration form, type:  COPY REGISTER.DOC PRN (press Enter) ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VENDOR.TXT
 
 {% raw %}

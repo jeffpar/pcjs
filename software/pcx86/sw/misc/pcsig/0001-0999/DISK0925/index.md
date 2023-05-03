@@ -108,6 +108,25 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 925 LSTSQR  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for LSTSQR, Type:                            ║
+║             COPY LSTSQR.DOC LPT1: (press enter)                         ║
+║                                                                         ║
+║ To run the program LSTSQR with a 8086 coprocessor, Type:                ║
+║             LSTSQR (press enter)                                        ║
+║                                                                         ║
+║ To run the program LSTSQR with a 8087 coprocessor, Type:                ║
+║             LSTSQR87 (press enter)                                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LSTSQR.DOC
 
 {% raw %}

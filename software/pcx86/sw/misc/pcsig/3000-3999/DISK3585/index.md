@@ -14,6 +14,24 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #3585 LEGAL EAGLE FOR WINDOWS 2 of 2  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To Start the program, insert disk #3584, and type:  GO  <enter>         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1993, PC-SIG Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3585
 

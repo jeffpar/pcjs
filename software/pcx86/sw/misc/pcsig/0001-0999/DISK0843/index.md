@@ -120,6 +120,25 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #843 OMEGA-LINK   >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type: MANUAL (press enter)    ║
+║                                                                         ║
+║ To start OMEGA LINK, type: OMEGA (press enter)                          ║
+║                                                                         ║
+║ To start the External Protocal handler, type: OMEGAEXT (press enter)    ║
+║                                                                         ║
+║ Please Note: One-to-one has been moved to disk #1031. We are sorry for  ║
+║ any inconvenience this may have caused you.                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LICENSE.DOC
 
 {% raw %}

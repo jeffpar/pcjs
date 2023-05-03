@@ -93,6 +93,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #2007  PERSONAL PORTFOLIO ANALYZER  >>>>           ║
+║                        (disk 2 of 2, 2006 also)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, insert disk 1 and type: PA2   (press enter)           ║
+║                                                                         ║
+║ To print documentation, insert disk 1 and type: COPY PAVER21.DOC PRN    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

@@ -1076,6 +1076,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No 485  Icon Maker & Fx Matrix  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation on this disk, type:                        ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To run the Icon Maker program, type:                                  ║
+║             IM (press enter)                                            ║
+║                                                                         ║
+║   To run the FXMatrix program, type:                                    ║
+║             FXMATRIX (press enter)                                      ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## IM.DOC
 
 {% raw %}

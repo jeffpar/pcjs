@@ -97,6 +97,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk No 897  PRO MAN (Program Manager)  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for PROGRAM MANAGER, Type:                   ║
+║             COPY README.DOC LPT1: (press enter)                         ║
+║                                                                         ║
+║ To run the program PROGRAM MANAGER,                                     ║
+║ Copy all programs to your hard disk and Type: INSTALL (press enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDER.DOC
 
 {% raw %}

@@ -74,6 +74,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2297  KNOW-IT-ALL  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation and installation instructions, type:             ║
+║                      COPY READ.ME PRN  (press ENTER)                    ║
+║									  ║
+║ To start program, type:  NOITALL  (press ENTER)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2297

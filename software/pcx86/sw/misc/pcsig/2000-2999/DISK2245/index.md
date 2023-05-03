@@ -38,6 +38,27 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2245 SWAPDOS  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  For special installation instructions refer to the READ.ME file.       ║
+║                                                                         ║
+║  To print the documentation, type: COPY SWAPDOS.DOC PRN                 ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDER.DOC
 
 {% raw %}

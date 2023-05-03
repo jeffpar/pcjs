@@ -71,6 +71,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk #1625  MAINTENANCE DATA BASE  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  MDB (press enter)                              ║
+║                or type:  MDB87 (press enter)                            ║
+║                                                                         ║
+║ To print documentation, type:  COPY FILE1625.TXT PRN                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1625

@@ -32,6 +32,20 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 1397 PIANOMAN GOES BAROQUE  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type PG-BAROQ (press enter)                       ║
+║                                                                         ║
+║ To look at the documentation on your screen, type VIEW (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PG-BAROQ.TXT
 
 {% raw %}

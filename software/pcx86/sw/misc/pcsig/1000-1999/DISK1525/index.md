@@ -609,6 +609,19 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1525 CLICHE FINDER  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ The program on this disk is archived.  To install the program to your   ║
+║ floppy drive B: type DOTWO (press enter) and follow the directions      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HELP.DOC
 
 {% raw %}

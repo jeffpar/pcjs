@@ -81,6 +81,18 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1256  EZDESK version 1.0  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program to your hard disk, type INSTALL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1256

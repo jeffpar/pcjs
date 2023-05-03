@@ -45,6 +45,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2661  PROBLEMS 2 OF 2 >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation insert disk #1 and type:  COPY PROBLEMS.DOC PRN  ║
+║                                                       (press Enter)     ║
+║                                                                         ║
+║ To start the program insert disk #1 and type:  GO (press Enter)         ║
+║                                                                         ║
+║                                    (c) Copyright 1991, PC-SIG Inc.      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2661

@@ -79,6 +79,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1928  THE MANAGER'S TOOLBOX  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: GO           (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY README.2ND PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1928

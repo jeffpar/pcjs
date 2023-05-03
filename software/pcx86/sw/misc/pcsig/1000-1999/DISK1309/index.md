@@ -179,6 +179,26 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk No 1309  ROSEWOOD JOURNAL version 3.00  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:                                     ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To start the program, type:                                           ║
+║                                                                         ║
+║             JOURNAL (press enter)                                       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## JOURNAL.DOC
 
 {% raw %}

@@ -90,6 +90,18 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #1017 PC-CALC+ (Disk 3 of 3)  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, Type DOC (press enter).      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1017

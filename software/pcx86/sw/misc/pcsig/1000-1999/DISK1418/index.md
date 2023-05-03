@@ -77,6 +77,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk #1418 SLIDE.PC  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To start using this program, type:  COPY README PRN  (press enter)    ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1418

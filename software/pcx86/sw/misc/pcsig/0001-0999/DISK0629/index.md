@@ -101,6 +101,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #629 PC-ART  >>>>                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type the command,             ║
+║                   PRTDOC (press enter)                                  ║
+║                                                                         ║
+║ To start the program type PC-ART (press enter)                          ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PC-ART.DOC
 
 {% raw %}

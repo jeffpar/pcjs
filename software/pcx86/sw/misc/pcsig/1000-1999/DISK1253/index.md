@@ -37,6 +37,25 @@ machines:
     added.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  Disk No 1253  PATIENT MANAGEMENT SYSTEM (Disk 3 of 5)  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, insert disk #1251, and type:                ║
+║                   COPY PMS.DOC PRN (press enter)                        ║
+║                                                                         ║
+║ To install the program, insert disk #1255, and type:                    ║
+║                       STARTUP (press enter)                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1253
 

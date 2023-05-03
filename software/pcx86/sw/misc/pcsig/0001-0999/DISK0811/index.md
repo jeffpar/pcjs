@@ -125,6 +125,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #811 INTELLI-TRIEVE  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type:                         ║
+║                  COPY IT.DOC PRN (press enter)                          ║
+║                                                                         ║
+║ To start the program type: IT  (press enter)                            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## IT.DOC
 
 {% raw %}

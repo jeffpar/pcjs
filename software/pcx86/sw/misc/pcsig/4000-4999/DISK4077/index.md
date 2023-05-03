@@ -678,6 +678,24 @@ and whatever else truly improves the game.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #4077 DESTRUCTION ZONE  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Print the documentation, type:  COPY DZONE.DOC PRN  (press Enter)   ║
+║                                                                         ║
+║  To Play the game, type:  DZONE  (press Enter)                          ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #4077

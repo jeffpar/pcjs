@@ -441,6 +441,26 @@ are looking at.  Any other key will return you to your previous Menu.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3573 RAPID RESPONSE  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Print the documentation, type: COPY RAPID.DOC PRN  (press Enter)    ║
+║                                                                         ║
+║  To Install the game, type:  INSTALL  (press Enter)                     ║
+║                                                                         ║
+║  To Start the game, type:  RR  (press Enter)                            ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LICENSE.DOC
 
 {% raw %}

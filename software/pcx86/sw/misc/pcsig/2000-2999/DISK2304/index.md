@@ -98,6 +98,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2304  FRACTINT  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program, create a directory on your hard drive (C,D,...):║
+║                       C:MD \FRACTINT                                    ║
+║                       C:CD \FRACTINT                                    ║
+║                       C:COPY A:FRAINT.EXE                               ║
+║                       C:FRAINT                                          ║
+║                                                                         ║
+║ To print documentation and instructions, type:                          ║
+║                       COPY FRACTINT.DOC PRN                             ║
+║                                                                         ║
+║ To start the program FRACTINT, type:  FRACTINT (press ENTER)            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2304

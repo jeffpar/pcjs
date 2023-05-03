@@ -67,6 +67,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1082 EASY PROJECT  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install EASY PROJECT on a floppy system, type INSTALLF (press enter) ║
+║                                                                         ║
+║ To install it on a hard disk, type INSTALLH (press enter)               ║
+║                                                                         ║
+║ To start the program after it has been installed, type:                 ║
+║                            EP (press enter)                             ║
+║                                                                         ║
+║ To print documentation, type: COPY EP.DOC PRN (press enter)             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VENDOR.DOC
 
 {% raw %}

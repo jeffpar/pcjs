@@ -3,9 +3,9 @@ layout: page
 title: "PC-SIG Diskette Library (Disk #1105)"
 permalink: /software/pcx86/sw/misc/pcsig/1000-1999/DISK1105/
 machines:
-  - id: ibm5170
+  - id: ibm5150
     type: pcx86
-    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
@@ -13,7 +13,7 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-{% include machine.html id="ibm5170" %}
+{% include machine.html id="ibm5150" %}
 
 {% comment %}info_begin{% endcomment %}
 
@@ -75,6 +75,14 @@ machines:
      Volume in drive A has no label
      Directory of A:\
 
+    DATA         <DIR>    
+    HELP         <DIR>    
+            2 file(s)          0 bytes
+
+     Directory of A:\DATA
+
+    .            <DIR>    
+    ..           <DIR>    
     BP-TBL            1536   6-01-88  12:00p
     BP-DEF   F00      1664   6-01-88  12:00p
     P1901D04 DIF      1408   6-01-88  12:00p
@@ -111,6 +119,12 @@ machines:
     P1984    F02      1920   6-01-88  12:00p
     P1984-04 IN       1160   6-01-88  12:00p
     P1984    DBS     13056   6-01-88  12:00p
+           38 file(s)      96491 bytes
+
+     Directory of A:\HELP
+
+    .            <DIR>    
+    ..           <DIR>    
     #MENU9   1        3328   6-01-88  12:00p
     #EDIT4   4        6016   6-01-88  12:00p
     #MENU0   1        1536   6-01-88  12:00p
@@ -192,5 +206,8 @@ machines:
     #UTLT3   2        2688   6-01-88  12:00p
     #UTLT3   1        3456   6-01-88  12:00p
     #EDIT7   3        3328   6-01-88  12:00p
-          117 file(s)     301020 bytes
-                          890880 bytes free
+           83 file(s)     204529 bytes
+
+    Total files listed:
+          123 file(s)     301020 bytes
+                               0 bytes free

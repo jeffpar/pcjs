@@ -104,6 +104,22 @@ To begin, type PAY and press the ENTER key.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  Disk No 1019 PC-PAYROLL, 1990 VERSION (disk #2 of 2)  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation on this disk, type:                        ║
+║                                                                         ║
+║             COPY PCPAY.DOC PRN (press enter)                            ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NOTES.TXT
 
 {% raw %}

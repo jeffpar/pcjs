@@ -101,6 +101,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No 984 DOUBLE BOGIE KILLER  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type DBK (press enter)                            ║
+║                                                                         ║
+║ For help with the program, type HELP (press enter)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0984

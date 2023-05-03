@@ -133,6 +133,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk No 953 DECISION ANALYSIS SYSTEM  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To run self-extracting program, type: DAS240 (press enter)              ║
+║                                                                         ║
+║ To print the documentation, Type: MANUAL (press enter)                  ║
+║                                                                         ║
+║ To run the program, Type: DAS (press enter)                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0953

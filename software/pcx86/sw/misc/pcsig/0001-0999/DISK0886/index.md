@@ -71,6 +71,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 866  CALIFORNIA DIVORCE  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read the introduction, Type: README (press enter)                    ║
+║                                                                         ║
+║ To start the program, Type: SHOW DIVORCE (press enter)                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0886

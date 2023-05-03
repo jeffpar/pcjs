@@ -82,6 +82,20 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 1194 MEGAGOPOLY  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type MEGA (press enter)                           ║
+║                                                                         ║
+║ To copy the documentation to your printer, type DOC (press enter)       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1194

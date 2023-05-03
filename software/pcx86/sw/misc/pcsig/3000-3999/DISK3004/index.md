@@ -49,6 +49,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3004 WINDOWS REMINDER  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print installation instructions, type:  COPY README.TXT PRN         ║
+║                                                    (press Enter)        ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

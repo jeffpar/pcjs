@@ -36,6 +36,233 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## ADCOPY.TXT
+
+{% raw %}
+```
+⌠
+A page from our Readability brochure.
+⌡
+
+Every so often a program comes along that changes the way we do
+things.  Spelling checkers have made typos a venial sin,  Now,
+thanks to Readability, there's no excuse for writing a report or
+article that isn't suited to its audience.
+
+Although style checkers have been around since the early 1980's,
+none gave become smash best sellers.  Why?  Because buyers have
+recognized that they've all had a major flaw.
+
+Until now, all style checkers have implicitly assumed that "good
+writing is good writing."  They haven't been programmed to ask
+the writers why something has been written, and they haven't been
+able to take the purpose into account in their calculations. 
+
+This has caused the analyses produced by these programs to have a
+disturbing "sameness" about them.  In fact, the "advice" these
+programs give is the same whether they're evaluating a bedtime
+story for 8-year olds, or a treatise for Ph.D.'s.
+
+Readability solves this problem.  It's the first style checker
+programmed to recognize that there's no such thing as an "ideal"
+writing style.  It "knows" that different writing styles are
+needed for different audiences and purposes.
+
+Like the other programs it can produce an analysis based on a
+model of what's called all-purpose writing.  But it can also do
+analyses based on ideal models for newspaper articles,
+advertising copy, novels, magazine feature stories, children's
+books and technical reports.  It even includes 2 models for which
+the objective is to score as low as possible.  These are
+government reports and bureaucratic gobbledygook.  Although you
+may be a bureaucrat, dean, or vice president, you needn't write
+like one!
+
+Readability is unique in many other ways.  Rather than just
+compute a single readability index, it computes 6 different ones. 
+For instance, it computes a "bricks to mortar ratio." "Bricks"
+are the more difficult information-laden words and "mortar" are
+the 400 most common words in the English language.  In general
+purpose writing about 60% of the words you use should be
+"mortar."  But if you're writing for students or blue collar
+workers, that percentage should be even higher.  
+
+
+Readability also looks at the way you've mixed long and short
+sentences in your text, and the percentage of sentences
+containing only short words.  Controlling these factors may
+determine whether the reader goes beyond page 1.
+
+
+Finally, Readability looks at each of your sentences
+individually.  It classifies each as being one of nine types. 
+Some types, like Simple and Elegant, are almost always desirable. 
+Others, such as Complicated and Pompous, should usually be
+changed.
+
+"All this sounds really good, but are these claims true?  Can
+this program possibly be as useful and as easy-to-use as you
+claim?"
+
+Thanks to our 30-day unconditional money-back guarantee, you can
+easily find out.  Call our 24-hour toll free order line,
+1-800-288-SCAN, Ext. 982, and order a copy for 74.90 ($69.95 plus
+$4.95 for shipping a& handling).  We accept Mastercard, Visa and
+American Express.  When Readability arrives a few days later, see
+for yourself.
+
+If you're disappointed, send it back.  We'll mail your refund the
+same day we receive the package.  But if it's as good as we say,
+tell others in your organization about it.  They'll bee amazed
+what it can do for them.
+```
+{% endraw %}
+
+## BUREAU.TXT
+
+{% raw %}
+```
+⌠
+Summary of the Educational Resources
+Information Center (ERIC) Redesign
+⌡
+The 16 clearinghouses acquire, review and disseminate documents,
+prepare indexes and abstracts which are entered into the ERIC
+database.  Each clearinghouse also prepares periodic reports,
+digests, and other documents that cover research in the areas
+assigned to the clearinghouse.  The clearinghouse configuration
+follows:
+
+Adult, Career, and Vocational Education.  Covers adult,
+continuing, career and vocational educational and related areas
+such as proprietary schools.  Includes all levels of adult and
+continuing education from basic literacy training through
+professional skill upgrading; vocational and technical education
+covering all service areas for secondary, postsecondary, and
+adult populations; career education and career development
+programs for all ages and populations in educational,
+institutional commercial, and industrial settings.
+
+Counseling and Personnel.  Covers preparation, practice, and
+supervision of counselors at all educational levels and in all
+settings; theoretical development of counseling and guidance;
+personnel procedures such as testing and interviewing and the
+analysis and dissemination of the resultant information; group
+work and case work; nature of pupil, student, and adult
+characteristics; personnel workers and their relation to career
+planning, family consultations and student orientation
+activities.
+
+Educational Management.  Covers leadership, management, finance,
+governance, and structure of public and private secondary
+schools.  Includes schools, school districts, and other
+educational agencies with emphasis on training, practice and
+theory of administration, inservice and preservice preparation of
+administrators; methods and varieties of organizations;
+organizational change and finance; and research on the components
+of effective schooling.
+
+Elementary and Early Childhood Education.  Covers physical,
+cognitive, social, educational and cultural development of
+children from birth through early adolescence.  Includes learning
+theory, research and practice related to the development of young
+children.
+
+Handicapped and Gifted Children.  Covers education and
+development of the special child, including prevention,
+identification, assessment, intervention and enrichment. 
+Includes areas relevant to both handicapped and gifted
+populations including early childhood education, curriculum,
+teaching methods, administration, career education, teacher
+preparation, legislative and judicial requirements, program
+development and evaluation, and related services.
+```
+{% endraw %}
+
+## CHILD.TXT
+
+{% raw %}
+```
+⌠
+RIBSY BECOMES A MASCOT, BEVERLY CLEARY, P.110-111
+⌡
+"Never mind, Danny.  You showed him, and that is enough." His
+mother spoke sharply before she escaped from the classroom with
+Frisky safe inside the box.
+     It was all over.  The class slid back into their seats and
+waited to see what Mr. Woody would say about the interesting time
+they had had when they were supposed to be learning arithmetic.
+     The principal came to the front of the room and gave Ribsy a
+stern look.  Then he faced the expectant class.  "Boys and
+girls."  Mr. Woody sounded very serious.  "Dogs are not allowed
+on the school grounds."  The class looked guilty.  They all knew
+this, but it was Mr. Woody himself who had called the dog their
+mascot.
+     "And I'm afraid I made a mistake in making an exception -" 
+Mr. Woody looked once more at Ribsy.
+     Now Ribsy looked guilty.  He understood he had done
+something wrong, but he was not sure what it was.  He thought
+dogs were supposed to chase squirrels and get rid of them.
+     "- but this dog looked like such a friendly dog," continued
+Mr. Woody, "and he seemed so well behaved that I overlooked the
+rule."
+     Ribsy waved his tail wistfully to show that he did not mean
+to do anything wrong, that he was really a very nice dog.
+     "Now we know," said Mr. Woody, "that a dog does not make a
+good mascot and that the rule is right.  This should be a lesson
+for all of us.  I'm afraid the dog will have to go."
+     "Oh-" The class made a sad sound.  They loved their mascot
+and did not want him to go.  Neither did they want this morning,
+which had been such fun, turned into a lesson in obeying rules.
+     When Mr. Woody looked at Ribsy, the dog stopped waving his
+tail and let it droop.  He knew he had not succeeded in making
+everything all right again.  He hung his head and looked
+dejected.
+     "Come on, boy," said Mr. Woody kindly, and took hold of
+Ribsy's collar. "Come along with me."
+
+```
+{% endraw %}
+
+## EXAMPLE.TXT
+
+{% raw %}
+```
+⌠
+What is a Word Processing Program?
+⌡
+You can consider your word processing system (program plus 
+computer) as a typewriter equipped with built-in scissors, paste 
+and correction fluid and designed to function as a copier as 
+well. This means that you'll never have to rewrite a page 
+because it contained an error. Instead, you simply correct the 
+error. And if you want to send the same letter to a number of 
+people, the word processing program will copy the letter for 
+you. All you have to do is change the name and address. Sounds 
+great, doesn't it? You'll be surprised to find how much time and 
+work your word processing program will save.
+
+Generally speaking, a word processing program functions in the 
+same way as a highly sophisticated typewriter. You don't have to 
+interrupt your work in any way when a line fills up or a page 
+becomes full. Your word processing program advances 
+automatically to a new line or a new page. And by using the many 
+special effects available on your printer - such as italics, 
+boldface, underlining and special characters - you can create 
+professional, attractively styled letters.
+
+Moreover, it's easy to indent text, provide a straight right-
+hand margin, center text, etc. And you can look over your work 
+before you print a single page, since your letter is shown on 
+the screen. What's more, you can rearrange it as desired before 
+printing. This means that in the future, you'll never have to 
+check-read texts that have been written by others, corrected by 
+others and (perhaps) delayed by others. Thanks to your word 
+processing program, you'll now be able to control the entire 
+process yourself.
+```
+{% endraw %}
+
 ## FILE2333.TXT
 
 {% raw %}
@@ -66,6 +293,495 @@ PC-SIG
 Sunnyvale  Ca. 94086                                                    
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<PC-SIG DISK #2333 READABILITY PLUS >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To start the program, type: READ                                       ║
+║                                                                         ║
+║  To print the documentation, type: COPY READ.DOC PRN                    ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+
+```
+{% endraw %}
+
+## GOODGOV.TXT
+
+{% raw %}
+```
+⌠
+Tax Guide for Small Business, page 72
+Publication 334 (Rev. Nov. 87)
+⌡
+Exchange for Corporate Stocks.
+
+In certain cases, exchanges for corporate stock are nontaxable. 
+The rules for these nontaxable exchanges are given below.
+
+A corporation's own stock.  A corporation may dispose of its own
+stock, including treasury stock, without having a recognized gain
+of loss.  For options acquired or lapsed after July 18, 1984,
+there is no recognized gain or loss by a corporation as to any
+lapse or acquisition of an option to buy or sell its own stock,
+including treasury stock.
+
+Stock for stock of the same corporation.  You may exchange common
+stock in the same corporation, or preferred stock for preferred
+stock in the same corporation, without having recognized gain or
+loss.
+
+Convertible stocks and bonds.  If you convert bonds into stock,
+or preferred stock into common stock, there is no recognized gain
+or loss.  For this rule to apply, the stock you receive must be
+in the same corporation as the bond or preferred stock you
+convert.  The conversion also must be made according to the terms
+of the bond or preferred stock certificate.
+
+Property for stock.  If you transfer property to a corporation in
+exchange for stock or securities in that corporation, and
+immediately afterwards you are in control of the corporation, the
+exchange is usually nontaxable.  This rule applies both to
+individual investors and groups of investors who transfer
+property to a corporation.
+
+However, if the property exchanged includes depreciable property,
+you may be taxed on ordinary gain because of depreciation.  See
+Chapter 23.
+
+Control of a corporation.  To be in control of the corporation,
+you or your group of investors must own, immediately after the
+exchange, at least 80% of the total combined voting power of all
+classes of stock entitled to vote and at least 80% of the
+outstanding shares of each class of nonvoting stock.
+
+Example.  You and Bill Jones transfer property having a basis of
+$100,00 to a corporation for stock having a fair market value of
+$300,00.  However, this represents only 75% of each class of
+stock of that corporation.  The other 25% already had been issued
+to someone else.  You and Bill recognized a taxable gain of
+$200,000 on the transaction.
+
+Services rendered.  The term property does not include services
+rendered or to be rendered to the issuing corporation. 
+Therefore, stock received for services is income to the
+recipient.
+
+Example.  You transfer property worth $35,000 and render services
+valued at $3,000 to a corporation in exchange for stock valued at
+$38,000.  Right after the exchange you own 85% of the outstanding
+stock.  No gain is recognized on the exchange of property;
+however, you will recognize ordinary income of $3,000 as payment
+for services you rendered.
+
+Property of relatively small value.  The term property does not
+include property that is of relatively small value when it is
+compared to the value of stock and securities already owned or to
+be received for services by the transferor, if the main purpose
+of the transfer is the nonrecognition of gain or loss by other
+transferrers. 
+
+Property transferred will not be considered to be of relatively
+small value if the fair market value of the property transferred
+is at least 10% of the fair market value of the stock and
+securities already owned or to be received for services by such
+person.
+
+Stock Received in disproportion to property transferred.  If a
+group of investors exchange property for corporate stock, each
+investor does not have to receive stock in proportion to his or
+her interest in the property transferred.  However,, if a
+disproportionate transfer takes place, it will be treated for tax
+purposes in accordance with its true nature.  It may be treated
+as if the stock and securities had been received in proportion
+and then some of it had been used to make gifts, to pay
+compensation for services, or to satisfy obligations of the
+transferor.
+
+Money or other Property.  If, in a nontaxable exchange of
+property for corporate stock, you also receive money or property
+other than stock, you may have a taxable gain.  However, you are
+taxed only up to the amount of money plus the fair market value
+of the other property you receive.  The rules for figuring gain
+in this situation generally follow those for a Partially
+nontaxable exchange discussed earlier under Like-kind exchanges. 
+No loss is recognized.
+```
+{% endraw %}
+
+## GOVREP.TXT
+
+{% raw %}
+```
+⌠
+Planning Paper I
+Toward Informed Decision-Making On Retirement
+Policy: A Portfolio Of Studies Related To The Retirement Decision
+pages 17-18
+
+III. METHODOLOGICAL ISSUES AND SUBSTANTIVE APPLICATIONS
+⌡
+
+The goals emerging from this portfolio (see p. 6-7) are ambitious
+ones: to improve forecasts of retirement and related trends, and
+to evaluate options for influnecing when people choose to retire. 
+But what problems need to be solved to improve forecasts, and
+what options should be evaluated?  This section considers these
+two questions.  In addition, it can be applied to help resolve
+issues in each of the four  substantive areas corresponding to
+federal objectives for the retired elderly.
+
+⌠
+Forecasting the Retirement Decision:  What Problems Should Be
+Addressed?
+⌡
+
+In our review of the literature on retirement, we identified over
+50 factors that appear to influence the retirement decision. 
+These factors can be organized into three categories.  The first
+consists of government programs such as social security, the
+personal income tax, and various regulations governing employer
+practices.  The second category is comprised of individual-level
+factors, such as demographic and family-related characteristics,
+private pension coverage and other financial matters, health, and
+attitudes toward work and retirement.  Finally, there are factors
+related to the employer and the market place, such as the
+employer's size and industry, type of pension plan provided,
+policies about retaining older workers, and concerns about
+productivity, costs, and upward mobility for younger employees. 
+Also included in this last category are macro-economic conditions
+such as inflation and unemployment.  Research about the effect of
+these factors on the retirement decision is summarized in
+Appendix B.
+
+What is the importance of these factors (and the retirement
+decision in general) in making predictions about retirement
+trends, the needs and status of retirement systems, and the like? 
+As described earlier (page 3), the retirement decision figures
+most heavily in long-range forecasts, since these are highly
+sensitive to shifts in the demographic characteristics of the
+population, whereas short-term forecasts, in contrast, are most
+sensitive to economic changes.  Long-range forecasting models
+tend to be micro-simulations, while the short-range ones are
+macro-economic or actuarial in nature.  (Specif examples of all
+three types of models are provided in Appendix C).
+
+One example of how the factors influencing the retirement
+decision are typically handled in these microeconomic simulations
+is seen in the DYNASIM 2 model developed by the Urban Institute. 
+From existing survey data (in this case, the Longitudinal
+Retirement History Survey), a regression anaalysis is done to
+model the extent to which factors such as demographic
+characteristics, health, and financial status have affected
+current retirement decisions.  This model is then used in
+conjunction with other models which were developed to exlain or
+predict employment patterns, occupational and demographic
+changes, and pension coverage and benefits.  The final set of
+models, DYNASIM, is then applied to a new sample of individuals
+to forecast interatively annual changes, such as in the decision
+to withdraw from the labor force.
+```
+{% endraw %}
+
+## MAGAZINE.TXT
+
+{% raw %}
+```
+⌠
+Family Ties, Laura Fissinger
+⌡
+     Naomi's the mother, Wynonna's the daughter. Mother is
+beautiful, daughter is handsome. Naomi, christened Diana, chose
+her new name from the Bible. Wynonna, christened Christina, chose
+her new name from a rock tune called "Route 66." Naomi sings
+harmony and countermelodies, Wynonna takes the lead. Naomi, 41,
+is orderly, pragmatic, iron willed, funny and prone to spats.
+Wynonna, 23 is messy, daydreamy, iron willed, funny and prone to
+spats. Both women live with emotions naked enough to startle
+unsuspecting new acquaintances. Tomorrow is their debut at New
+York's tony Lincoln Center, so today part of what's naked is
+nervousness. When Naomi gets nervous she reverts to a tradition
+of her rural Kentucky roots. She speaks her mind before her mind
+has a chance to censor itself.
+     "I'm known for my candor," Naomi says, smiling. "We wear our
+hearts on our sleeves, and I've said our interviews are governed
+by our hormones -"
+     "I do not wear my heart on my sleeve," says Wynonna, who
+gets serious when nervous. "Speak for yourself."
+     "Oceans of emotion over here." Naomi winks and nods toward
+Wynonna. "I remember the time this guy started out an interview
+by saying, 'So where'd y'all meet:' and I said, 'We met at the
+wrestling matches. We were sitting on either side of a little old
+lady who kept screaming, "Awww, squeeze their brains out!" ' "
+     Wynonna wants to talk business. (Naomi gets a lot of memos
+about her candor.)"It's very hard, in a world that's so big
+sometimes, for you to feel there's a place for you in it," says
+the elder Judd. "I'm starting to feel that country music, even at
+the Grammys is becoming bigger and brighter than ever. They're
+giving slots to country performers right next to, like, Billy
+Idol. To me, that says country music is coming out of the
+closet."
+     As for the Judds, they're pushing themselves out. Their
+third LP, Heartland, takes on a jazz song (Ella Fitzgerald's "Cow
+Cow Boogie"), a pot cut cowritten by a favorite Tina Turner
+writer Graham Lyle ("Maybe Your Baby's Got the Blues"), a
+timeless mountain hymn ("The Sweetest Gift") and Elvis Presley's
+"Don't Be Cruel." "Brent [Maher, the Judds' producer] said, 'I
+think you girls can get away with this,' " says Wynonna of the
+Elvis cover. Maher also arranged for the Jordanaires to sing
+background parts, as they did for Elvis. Naomi glances up from
+painting her fingernails snow white. "We're Elvis's biggest fans
+in the universe," she says. "Anyway, Gordon from the Jordanaires,
+he and Wy were talking, and he interrupted and said, 'You know
+what just occurred to me, getting to know you two? If Elvis were
+still alive the three of you would be fast friends.' I said, 'Oh,
+noooo, don't say that!'"
+     Wynonna studies her mother's suddenly serious face. "It
+would have been great. We could have gone bowling." The two of
+them lean against each other and laugh.
+     
+     Elvis acquitted himself nicely as a country and rock
+crooner; it's when he went pop that he went wrong. When Nashville
+went pop in the seventies, country music went wrong. Ironically,
+county music is crossing over more now that so many of its young
+stars are new traditionalists, like Dwight Yoakam, Steve Earle,
+Rosanne Cash, the O'Kanes - and the Judds. In the three years of
+professional music making, Wynonna and Naomi have passed by many
+of their more experienced peers: two platinum LPs (Why Not Me and
+Rockin' with the Rhythm), eight Number One country singles, three
+Grammys and umpteen country-music awards. Their records have
+started to do some serious charting in Europe. And they're set to
+star in an NBC-TV sitcom pilot loosely based on the Judds' own
+small-town-girls-meet-big-changes saga (working title: Why Not
+Me), to be aired in the fall. Wynonna's younger sister, Ashley,
+18, is also a cast member. "Ashley's the number-one reason [for
+doing the pilot] in a lot of ways," says Naomi, who's been known
+to get tears in her eyes when contemplating all the time she and
+Ashley have been apart in the last three years. Finally, they can
+have her with them.
+     If the pilot becomes a series, the Judds will probably scoop
+up new fans for Judd music - not that their demographics could
+get any more diverse. The duo's acoustic-based coalescence of
+Patsy Cline country, early rock, Forties jazz, bluegrass and folk
+pulls admirers from all factions. Wynonna's longtime idol Bonnie
+Raitt is now a fan and friend. Sammy Davis Jr. brought his
+instamatic to one of the Reno shows. In a Fargo, North Dakota,
+hotel, the heavy-metal group Ratt shouted out Judd song titles
+every time they spotted a Judd in the hallway. Merle Haggard has
+told Wynonna that she's his favorite female singer, that every
+line she sings "is like a confession." Steve Winwood and Anita
+Baker confessed fanhood backstage at this year's Grammys. Robert
+Palmer has sent Naomi a flower ("He's dangerously suave," she
+says). Judge William H. Webster, the new director of the CIA,
+comes to their shows with his Secret Service men and has asked
+the Judds to dinner. The duo recently played a gig with James
+Brown, who recited a list of TV shows he'd seen them on. And
+something of a mutual-admiration society had developed between U2
+and the Judds, and the two groups are planning to meet.
+     Naomi looks up from her nails as Elvis, Wynonna's dachshund,
+scuttles across the plush carpeting of the Manhattan hotel
+penthouse. Her expression is pure rascal. "But is Keokuk, Iowa,
+going to understand?"
+     
+     One of the Judds' biggest hits to date is a requiem to the
+world's lost innocence called "Grandpa (Tell Me 'bout the Good
+Old Days)." Naomi's paternal grandfather was the illegitimate
+farmer son of a Kentucky circuit doctor; he died while reading
+his Bible. Her maternal grandfather "excused himself from the
+dinner table when Mama was twelve, walked in the back and blew
+his brains out. Every generation on my mother's side has a
+suicide....But I lived a Walton-type existence."
+     "I don't see your world as being Walton at all, Mom,"
+Wynonna says.
+     Little brother Brian was Naomi's best pal. One day when the
+family was coming in from swimming, somebody noticed a lump on
+Brian's shoulder. They wrote it off to the heavy bag he lugged
+around on his paper route. It turned out to be cancer.
+     Glen and Polly Judd spent a couple of years taking Brian
+around to specialists, looking for a commutation of the death
+sentence. Naomi went from being an honor student and Sunday-
+school teacher to being the pinch-hitting head of the household. 
+     Following Brian's death, the family splintered. No one
+talked about Brian. Glen Judd became an alcoholic and left his
+wife for a woman in her early thirties. Naomi impulsively married
+a longtime suitor and became pregnant right away. Wynonna was
+born during Naomi's high-school-graduation week. The family moved
+to Los Angeles. Naomi doesn't talk about what soured the
+marriage. Wynonna was eight and Ashley four when the divorce
+became final.
+     For a while, Naomi did secretarial and modeling jobs to
+support the family. The poverty was a grind, but the lack of
+Kentucky values in Hollyweird bothered Naomi even more. She
+relocated them to a mountaintop house in Morrill, Kentucky, with
+no phone and no electricity. A cheap plastic guitar given by a
+friend was co-opted by Wynonna. At first, making music was just
+something to do. When it became virtually all she wanted to do.
+     "I left Morrill the night before I was supposed to testify
+against my father in their divorce trial," Naomi says. "Mom
+needed all of us kids to take sides with her against Daddy,
+because the kids were the only investment she'd made in her
+life."
+     Another mother-daughter war escalated in California. Ashley
+was even-tempered, easygoing; Naomi and Wynonna were not, and
+they fought with gloves off. Some days their only communication
+was singing together while Wy played the guitar. A nursing degree
+in hand, Naomi moved the gang again, this time to an exurb of
+Nashville called Franklin. Wynonna wouldn't help around the
+house, her grades were iffy, her attitude lousy. Music was the
+only thing she gave herself to. Naomi figured a shot at a music 
+     career might help her grow up. 
+     The first few years in Franklin weren't much easier than the
+ones that preceded them. Naomi and her mother were still on the
+outs; she and her musician boyfriend Larry Strickland (who used
+to sing with Presley) broke up and reunited on a too-regular
+basis. Money was in extremely short supply. At one of the lowest
+points, Naomi contemplated killing herself. But she didn't.
+":Because I had kids," she says. "Because until my dying breath
+I"m going to be around to aggravate them." Naomi's grin is
+rueful.
+     Wynonna thought about ending it all after a fight so serious
+that her mother had said, "Don't even bother coming
+home....You're no longer my daughter." For two months Wy lived
+with her father in Florida. Larry brought Wynonna her things when
+his band was in the area. "Larry said, 'Your mother loves you.
+You guys are meant to be.'...I knew if I went home, it would be
+on her terms." Soon after, Wynonna drank a little and went
+driving and looking for an accident to get into. Her speed kept
+increasing. "I was driving real fast....I literally came this
+close to doing it. And I didn't....I put on the brakes real fast
+and did a 360 spin."
+     Back in Franklin, an uneasy peace was maintained as Naomi
+took their homemade demo tapes around to Nashville producers.
+Brent Maher's daughter was one of Naomi's nursing patients. When
+the girl was released from the hospital, Naomi gave a tape to
+Maher.
+
+```
+{% endraw %}
+
+## NOVEL.TXT
+
+{% raw %}
+```
+⌠
+To Kill A Mocking Bird, Harper Lee, P. 16-17
+⌡
+     Miss Stephanie Crawford said some of the town council told
+Mr. Radley that if he didn't take Boo back, Boo would die of mold
+from the damp.  Besides, Boo could not live forever on the bounty
+of the county.
+     Nobody knew what form of intimidation Mr. Radley employed to
+keep Boo out of sight, but Jem figured that Mr. Radley kept him
+chained to the bed most of the time.  Atticus said no, it wasn't
+that sort of thing, that there were other ways of making people
+into ghosts.
+     My memory came alive to see Mrs. Radley occasionally open
+the front door, walk to the edge of the porch, and pour water on
+her cannas.  But every day Jem and I would see Mr. Radley walking
+to and from town.  He was a thin leathery man with colorless
+eyes, so colorless they did not reflect light.  His cheekbones
+were sharp and his mouth was wide, with a thin upper lip and a
+full lower lip.  Miss Stephanie Crawford said he was so upright
+he took the word God as his only law, and we believed her,
+because Mr. Radley's posture was ramrod straight.
+     He never spoke to us.  When he passed we would look at the
+ground and say, "Good morning, sir," and he would cough in reply. 
+Mr. Radley's elder son lived in Pensacola; he came home at
+Christmas, and he was one of the few persons we ever saw enter or
+leave the place.  From the day Mr. Radley took Arthur home,
+people said the house died.
+     But there came a day when Atticus told us he'd wear us out
+if we made any noise in the yard and commissioned Calpurnia to
+serve in his absence if she heard a sound out of us.  Mr. Radley
+was dying.
+     He took his time about it.  Wooden sawhorses blocked the
+road at each end of the Radley lot, straw was put down on the
+sidewalk, traffic was diverted to the back street.  Dr. Raynolds
+parked his car in front of our house and walked to the Radley's
+every time he called.  Jem and I crept around the yard for days. 
+At last the sawhorses were taken away, and we stood watching from
+the front porch when Mr. Radley made his final journey past our
+house.
+     "There goes the meanest man ever God blew breath into,"
+murmured Calpurnia, and she spat meditatively into the yard.  We
+looked at her in surprise, for Calpurnia rarely commented on the
+ways of white people.
+     The neighborhood thought when Mr. Radley went under Boo
+would come out, but it had another think coming: Boo's elder
+brother returned from Pensacola and took Mr. Radley's place.  The
+only difference between him and his father was their ages.  Jem
+said Mr. Nathan Radley "bought cotton," too.  Mr. Nathan would
+speak to us, however, when we said good morning, and sometimes we
+saw him coming from town with a magazine in his hand.
+     The more we told Dill about the Radleys, the more he wanted
+to know, the longer he would stand hugging the light-pole on the
+corner, the more he would wonder.
+     "Wonder what he does in there," he would murmur.
+"Looks like he'd just stick his head out the door."
+     Jem said. "He goes out, all right, when it's pitch dark. 
+Miss Stephanie Crawford said she woke up in the middle of the
+night one time and saw him looking straight through the window at
+her...said his head was like a skull lookin' at her.  Ain't you
+ever waked up at night and heard him, Dill.  He walks like this--
+" Jem slid his feet through gravel.  "Why do you think Miss
+Rachel locks up so tight at night?  I've seen his tracks in our
+back yard many a mornin', and one night I heard him scratching on
+the back screen, but he was gone time Atticus got there."
+     "Wonder what he looks like?" said Dill.
+     Jem gave a reasonable description of Boo:  Boo was about
+six-and-a-half feet tall, judging from his tracks; he dined on
+raw squirrels and any cats he could catch, that's why his hands
+were bloodstained-if you ate an animal raw, you could never wash
+the blood off.  There was a long jagged scar that ran across his
+face; what teeth he had were yellow and rotten; his eyes popped,
+and he drooled most of the time.
+"Let's try to make him come out," said Dill.  "I'd like to see
+what he looks like."
+     Jem said if Dill wanted to get himself killed, all he had to
+do was go up and knock on the front door.
+     Our first raid came to pass only because Dill bet Jem The
+Gray Ghost against two Tom Swifts that Jem wouldn't get any
+farther than the Radley gate.  In all his life, Jem had never
+declined a dare.
+```
+{% endraw %}
+
+## NWSPAPER.TXT
+
+{% raw %}
+```
+⌠
+Pride and joy of his race, Jim Myers
+⌡
+     Some day, Chris Schurz might run away from everyone to all
+the glories the world can grant to speed and grace.  Some day.
+     Today, Schurz is alone, a 17-year-old cross country runner
+who has sped so far ahead of his peers that few who revere his
+speed and grace dare guess how far his talents will take him. 
+Schurz, a senior at Mesa's Westwood High, is the only three-time
+state cross country champion in Arizona history.
+     By most estimations, Schurz--who friends and family call
+Chuckie--runs for something more than a school, a community, a
+state.  He lives in the Salt River Indian Community, a
+reservation northeast of Phoenix, next to Scottsdale and Mesa. 
+His mother is Sioux; his father, Pima.
+     The family says word there's a young runner--maybe even a
+future national or Olympic champion, and Indian champion--has
+reached Indian communities across the USA.
+     "Yes, people get excited," says his mother, Valerie.  "They
+say, 'He's a Sioux boy, a Pima boy.'"
+
 ```
 {% endraw %}
 
@@ -2035,6 +2751,81 @@ printed manual will be sent.
 
 Our federal ID number is 52-1583735.
 
+```
+{% endraw %}
+
+## TECHMAN.TXT
+
+{% raw %}
+```
+⌠
+Running MS DOS, by Van Wolverton, pages 26-27
+⌡
+When you test drive a car, you already know how to start it.  The
+test drive is to help you become familiar with the controls, the
+steering, the brakes, the overall "feel" of the car.  Now it's
+time to take a test drive with DOS.  Your learned how to start
+DOS in the last chapter.  It's time to begin learning how to
+control DOS, how to "steer" it in the direction of one task of
+another, and how to call a halt when you want or need to.
+
+That's what this chapter is all about.  It introduces you to the
+directory of files that DOS keeps on each disk, and shows you how
+to use the specific keys on your keyboard.   You use these keys
+to tell DOS to cancel lines or commands, freeze the display, and
+restart DOS.
+
+To try the examples given here, start up your computer, as you
+did in the last chapter.  Enter the appropriate date and time, so
+that DOS responds with the system prompt, A> (C> of you are using
+a fixed disk).  Don't worry about leaving your computer on while
+you read the text between examples; DOS is patient.
+
+Note:  Part of this chapter deals with keys that have special
+meaning for DOS.  If you are not using an IBM personal computer,
+you may want to check your documentation for equivalent keys on
+your system.
+
+Recall from Chapter 1 that information stored on a disk is stored
+as a file.  DOS automatically keeps and updates a list of every
+file you save on every diskette you use.  This list is called
+directory.  If you create and save a new file, DOS adds it to the
+list.  If you revise and old file, DOS keeps track of that, too. 
+The directory eliminates the need to keep a separate record of
+everything you save on each diskette.  You can tell DOS you want
+to see the directory whenever DOS is displaying the system
+prompt.
+
+The example on the next section serves the double purpose of
+showing you a directory and showing you around the DOS system
+disk itself.  As you use the system more, you will come to
+recognize many of the DOS commands.  Before you look at a
+directory, though, you should know a little about how DOS saves
+your files.
+
+Whenever you create a file, you give it a name, called the file
+name, of up to eight characters.  Of you wish, you can add a
+suffix, called the extension, of up to three more letters. 
+(Chapter 4 and 5 present more on files).  
+Whenever you ask DOS to show you the directory of a diskette, it
+lists your files by name (and extension, if there is one).  It
+also shows you the size of your file, in units called bytes, and
+it gives you the date and the time file was either created or
+last changed (that's why DOS prompts you for the date and time).
+
+Note:  A byte is the amount of storage required to hold one
+character in computer memory or on a disk.  Here are a few
+familiar items and their sizes, in bytes: the letters abcd, 4
+bytes (1 byte per letter); the words United States, 13 bytes
+(blanks count); a double-spaced, typewritten page, 1500 bytes;
+this book, 600,000 bytes (approximately).
+
+Depending on which version of DOS you're using, and whether your
+drives use one or both sides of a diskette, your diskettes hold
+from 163,840 to 368,640 bytes.  For convenience, quantities the
+large are usually given in kilobytes, or K.  One kilobyte equals
+1024 bytes, so the capacity of your diskettes can range from 160K
+360K.
 ```
 {% endraw %}
 

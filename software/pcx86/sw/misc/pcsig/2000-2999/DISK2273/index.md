@@ -113,6 +113,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #2273  METZ UTILITIES FOR WINDOWS  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view installation instructions, type:  TYPE README.TXT (press Enter) ║
+║                                 or type:  COPY README.TXT PRN  (Enter)  ║
+║                                                                         ║
+║ To print documentation for individual programs after they have been     ║
+║       extracted, type:  COPY <filename>.DOC PRN  (press Enter)          ║
+║                                                                         ║
+║             *          *          *          *          *               ║
+║                                                                         ║
+║ NOTE:  MTMBETA.EXE (METZ Task Manager) mentioned in README.TXT          ║
+║ is not being carried by PC-SIG at this time because the program is      ║
+║ a Beta version.                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

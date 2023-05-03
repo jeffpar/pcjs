@@ -125,6 +125,27 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 922 WIZQUIZ, JEM  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for WIZQUIZ, Type:                           ║
+║                  COPY README LPT1: (press enter)                        ║
+║                                                                         ║
+║ To run the program WIZQUIZ, Type: WIZQUIZ (press enter)                 ║
+║                                                                         ║
+║ To print the documentation for JEM, Type:                               ║
+║                  COPY JEM.DOC LPT1: (press enter)                       ║
+║                                                                         ║
+║ To run the program JEM, Type: JEM (press enter)                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## JEM.DOC
 
 {% raw %}

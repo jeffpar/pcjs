@@ -57,6 +57,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk #1777  SCREENSAVER  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  SS (press enter)                               ║
+║                                                                         ║
+║ To print documentation, type:  COPY READ.ME PRN                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1777

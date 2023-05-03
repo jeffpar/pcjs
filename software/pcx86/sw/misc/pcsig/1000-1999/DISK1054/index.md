@@ -105,6 +105,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<< Disk No. 1054 PROCON FORTUNE >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║           To start the program, type: FORTUNE (press Enter)             ║
+║                                                                         ║
+║ For a copy of the instructions, type:  COPY README.DOC PRN (press Enter)║
+║                                                                         ║
+║ For ordering information, type:  COPY ORDER.DOC PRN (press enter)       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NEW.DOC
 
 {% raw %}

@@ -91,6 +91,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═══════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2352  pEDIT  >>>>                     ║
+╠═══════════════════════════════════════════════════════════════════════╣
+║ To begin using the program, type:  COPY READ.ME PRN  (press ENTER)    ║
+║                               or:  TYPE READ.ME  (press ENTER)        ║
+║                                                                       ║
+║ To print manual, type:  COPY PEDIT.DOC PRN (press ENTER)              ║
+║                                                                       ║
+║ To print registration form, type:  COPY REGISTER.DOC PRN (press Enter)║
+╚═══════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+```
+{% endraw %}
+
 ## PEDIT.DOC
 
 {% raw %}

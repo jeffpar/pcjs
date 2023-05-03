@@ -80,6 +80,23 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #839 GREETINGWARE  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the instructions to your printer type:                          ║
+║                     COPY README.1ST PRN (press enter)                   ║
+║                                                                         ║
+║ To start greetingware BIRTHDAY, Type: BDAYCARD (press enter)            ║
+║                                                                         ║
+║ To start greetingware CHRISTMAS, Type: XMASCARD (press enter)           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0839

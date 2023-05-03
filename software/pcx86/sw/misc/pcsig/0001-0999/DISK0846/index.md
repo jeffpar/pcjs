@@ -95,6 +95,21 @@ Type in the command Golotus and press <ENTER>
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk #846 LOTUS LEARNING SYSTEM  (disk 1 of 2)  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type;                         ║
+║                         PRINTME (press enter)                           ║
+║ Put disk 846 in drive a and disk 847 in drive b                         ║
+║ To start the LOTUS LEARNING SYSTEM type; LEARN B:LOTUS (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INSTALL.TXT
 
 {% raw %}

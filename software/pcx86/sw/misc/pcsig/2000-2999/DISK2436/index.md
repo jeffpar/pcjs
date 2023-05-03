@@ -77,6 +77,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #2436  FRAC  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To read the introductory note, type:  TYPE README  (press Enter)       ║
+║                                                                         ║
+║  To play FRAC, type:  FRAC  (press Enter)                               ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2436

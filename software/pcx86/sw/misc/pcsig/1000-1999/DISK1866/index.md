@@ -57,6 +57,24 @@ FILES     TXT   This file
 ```
 {% endraw %}
 
+## FILES.TXT
+
+{% raw %}
+```
+BAKLABEL does one thing....print sequentially numbered and dated 
+labels for diskettes used in backing up hard disks.  The user 
+selects the number of labels, a title line, and the name of the 
+drive being backed up.
+
+Files on the BAKLABEL Disk
+
+BAKLABEL  ARC   Archived version for BBSes
+BAKLABEL  EXE   BakLabel Program file
+MANUAL    COM   Self-browsing documentation
+FILES     TXT   This file
+```
+{% endraw %}
+
 ## FILE1866.TXT
 
 {% raw %}
@@ -97,6 +115,45 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1866  LABEL UTILITES  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: LABELIT                                         ║
+║                                                                         ║
+║ To print documentation, type: LABELIT\MANUAL                            ║
+║                                                                         ║
+║ To start program, type: BAKLABEL                                        ║
+║                                                                         ║
+║ To print documentation, type: BAKLABEL\MANUAL                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+## FILES.TXT
+
+{% raw %}
+```
+LABELIT is a program designed to print multiple labels, such as return 
+address labels.  It saves label files, label formats, and includes 
+screen color setting and special printer control codes.  Shareware fee:
+$15.
+
+
+Files on the LABELIT disk:
+
+LABELIT ARC   Archived version for BBSes
+LABELIT EXE   Main program file
+MANUAL  COM   Self-browsing documentation.
+3-UP    DES   Sample label definition file.
+AUTHOR  LAB   Sample label file.
+FILES   TXT   This File
+```
+{% endraw %}
+
 ## FILES.TXT
 
 {% raw %}
@@ -128,13 +185,30 @@ FILES   TXT   This File
     GO       BAT        38   1-01-80   1:37a
     FILE1866 TXT      2443  12-22-89   2:47p
     GO       TXT       848   1-01-80   2:05a
+    LABELIT      <DIR>    
+    BAKLABEL     <DIR>    
+            5 file(s)       3329 bytes
+
+     Directory of A:\LABELIT
+
+    .            <DIR>    
+    ..           <DIR>    
     3-UP     DES        17  11-11-88   2:58p
     AUTHOR   LAB        77  11-02-88   1:35p
     LABELIT  EXE    104130  11-11-88   2:41p
     MANUAL   COM     11501  11-23-88  12:57a
     LABELIT  ARC     77511  11-23-88   1:04a
+            7 file(s)     193236 bytes
+
+     Directory of A:\BAKLABEL
+
+    .            <DIR>    
+    ..           <DIR>    
     BAKLABEL EXE     38186  11-23-88   1:24a
-    MANUAL~1 COM      2048  11-23-88   1:24a
+    MANUAL   COM      2048  11-23-88   1:24a
     BAKLABEL ARC     33740  11-23-88   1:25a
-           11 file(s)     270539 bytes
-                           46080 bytes free
+            5 file(s)      73974 bytes
+
+    Total files listed:
+           17 file(s)     270539 bytes
+                           44032 bytes free

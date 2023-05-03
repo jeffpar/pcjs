@@ -132,6 +132,26 @@ The file name may be any standard MS-DOS file name.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 1404 TEXT FILE UTILITIES  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start a program on this disk simply type the name of the program     ║
+║ that you would like to run, if you would like to run the QDEL program   ║
+║ you would type   QDEL (press enter)                                     ║
+║                                                                         ║
+║ And to copy the documentation to your printer for that program you would║
+║ type,  COPY QDEL.DOC PRN (press enter)                                  ║
+║                                                                         ║
+║ Repeat the above process to run the other programs, just use the        ║
+║ name of the program you would like to use.                              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HUNTMOD.DOC
 
 {% raw %}

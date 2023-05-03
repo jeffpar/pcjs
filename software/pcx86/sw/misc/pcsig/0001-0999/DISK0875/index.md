@@ -319,6 +319,29 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No 875  Q-Ref, VXREF, Clock  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation for QREF to your printer, Type:               ║
+║                        COPY READ.ME PRN (press enter)                   ║
+║                                                                         ║
+║ To start the QREF program, Type: QREF (press enter).                    ║
+║                                                                         ║
+║ To copy the documentation for VX to your printer, Type:                 ║
+║                        COPY VX.DOC PRN (press enter)                    ║
+║                                                                         ║
+║ To start the VX program, Type: VX (press enter)                         ║
+║                                                                         ║
+║ To copy the documenatation for CLOCK to your printer, Type:             ║
+║                        COPY CLOCK.DOC PRN (press enter)                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HANDSGEN.BAS
 
 {% raw %}

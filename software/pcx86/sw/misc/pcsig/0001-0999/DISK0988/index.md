@@ -131,6 +131,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  Disk No 988 MESSAGE MASTER and ADDRESS BOOK  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for MESSAGE MASTER, Type:                    ║
+║             COPY READ.ME LPT1: (press enter)                            ║
+║                                                                         ║
+║ To print the documentation for Address Book, Type:                      ║
+║             COPY ADDRESS.DOC LPT1: (press enter)                        ║
+║                                                                         ║
+║ To run the program ADDRESS BOOK, Type:                                  ║
+║             ADDRESS (press enter)                                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INTRO.TXT
 
 {% raw %}

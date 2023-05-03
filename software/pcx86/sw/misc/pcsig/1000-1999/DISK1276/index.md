@@ -74,6 +74,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk No 1276  THE RECORD FINDER version 2.04  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:                                     ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To run the program, type:                                             ║
+║                                                                         ║
+║             RECORDS (press enter)                                       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1276

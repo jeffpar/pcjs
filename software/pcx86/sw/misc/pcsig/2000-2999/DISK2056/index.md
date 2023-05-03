@@ -79,6 +79,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk #2056  UNISCREEN disk 1 of 2 (2057 also)  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the documentation, and type:  COPY HELP.TXT PRN                ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2056

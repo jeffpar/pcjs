@@ -95,6 +95,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #2041  APEX FUTURES AND COMMODITIES  >>>>          ║
+║                        (disk 2 of 2, 2040 also)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, insert disk 1 and type: APEX         (press enter)    ║
+║                                                                         ║
+║ To print documentation, type: COPY MANUAL.DOC PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

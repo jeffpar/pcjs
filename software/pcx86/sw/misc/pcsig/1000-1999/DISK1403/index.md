@@ -425,6 +425,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1403 LOVEDOS  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ The program on this disk is contained in a self-extracting archive. You ║
+║ must unpack this archive before you can use the program.                ║
+║                                                                         ║
+║ To print the documentation on your printer, type:                       ║
+║                                      COPY LOVEDOS.DOC PRN (press enter) ║
+║                                                                         ║
+║ To extract the program, type:  LOVEDOS (press enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LOVEDOS.DOC
 
 {% raw %}

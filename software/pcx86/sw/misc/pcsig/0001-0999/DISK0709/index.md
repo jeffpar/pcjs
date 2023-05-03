@@ -94,6 +94,31 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk #709 DMASTER, PC-CRYP2 and INSTACALENDAR  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for PC-CRYP2, Type                           ║
+║               COPY PC-CRYP2.DOC LPT1  (press enter)                     ║
+║                                                                         ║
+║ To start PC-CRYP2, Type: PC-CRYP2 (press enter)                         ║
+║                                                                         ║
+║ To print the documentation for DMASTER, Type:                           ║
+║               COPY DMASTER.HLP LPT1  (press enter)                      ║
+║                                                                         ║
+║ To start DMASTER, Type: DMASTER (press enter)                           ║
+║                                                                         ║
+║ To print the documentation for INSTALCAL, Type:                         ║
+║               COPY INSTACAL.DOC PRN (press enter)                       ║
+║                                                                         ║
+║ To start INSTACAL, Type: INSTACAL (press enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INSTACAL.DOC
 
 {% raw %}

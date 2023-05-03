@@ -58,6 +58,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #3094 TURBO OVERDRIVE PACKAGE  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print the documentation, type:  COPY TOPDOC.ASC PRN  (press Enter)  ║
+║                                                                         ║
+║  To see a demonstration, type:  BIGDEMO  (press Enter)                  ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3094

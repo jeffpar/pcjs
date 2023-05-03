@@ -113,6 +113,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  Disk No 955 AUTOMATED PLANNING FORM (APF)  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, Type: COPY README.DOC LPT1: (press enter)   ║
+║                                                                         ║
+║ To run the program, Type: GOAPF (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PCSIG.TXT
 
 {% raw %}

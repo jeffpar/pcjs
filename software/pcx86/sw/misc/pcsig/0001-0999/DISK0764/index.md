@@ -121,6 +121,24 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #764 COMPASS  >>>>                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To Start the program type COMPASS at the prompt.                        ║
+║                                                                         ║
+║ Refer to the read.me file for further instructions.                     ║
+║                                                                         ║
+║ All the documentation is in the form of on line help, once in the       ║
+║ program select the option help.                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0764

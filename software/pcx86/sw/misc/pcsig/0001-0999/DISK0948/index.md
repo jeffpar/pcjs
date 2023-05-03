@@ -1739,6 +1739,21 @@ problem, don't pound on the console keyboard.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk No 948 FORA  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, Type:                                       ║
+║             COPY FORA.DOC LPT1: (press enter)                           ║
+║                                                                         ║
+║ To run the program, Type: FORA (press enter)                            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0948

@@ -100,6 +100,40 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #2466  GIST   >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Included on this disk are two self-extracting programs.  RTRIM30 is     ║
+║ the author's small useful utility public domain program he is including ║
+║ with GIST and consists of two files RTRIM.DOC and RTRIM.EXE.  Note      ║
+║ that both programs plus their respective extracted files will not fit   ║
+║ on a single 360K floppy disk.                                           ║
+║                                                                         ║
+║   To extract RTRIM30, type:  RTRIM30 (press Enter)                      ║
+║                                                                         ║
+║   To print RTRIM30's documentation, type:  COPY RTRIM.DOC PRN (Enter)   ║
+║                                                                         ║
+║   To run the program, type:  RTRIM (press Enter)                        ║
+║                                                                         ║
+║=========================================================================║
+║                                                                         ║
+║   To extract GIST, type:  GIST44 (press Enter)                          ║
+║                                                                         ║
+║   To read a history of the program, type:  TYPE UPDATE.DOC (press Enter)║
+║                                                                         ║
+║   To print the program's documentation and installation instructions,   ║
+║                type:  COPY GIST.DOC PRN (press Enter)                   ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SHORT.DOC
 
 {% raw %}

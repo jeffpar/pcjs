@@ -104,6 +104,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk No 1422 GARDEN CITY SOFTWARE COLLECTION  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program HYPNO, type HYPNO (press enter)                    ║
+║                                                                         ║
+║ To start the program METRON, type METRON (press enter)                  ║
+║                                                                         ║
+║ To start the program MORTGAGE, type MORTGAGE (press enter)              ║
+║                                                                         ║
+║ To start the program PC_SOUND, type PC_SOUND (press enter)              ║
+║                                                                         ║
+║ To start the program TIMEZONE, type TIMEZONE (press enter)              ║
+║                                                                         ║
+║ To start the program TUNER, type TUNER (press enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1422

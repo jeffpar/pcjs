@@ -1486,6 +1486,26 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No 1530 PHONE MESSAGE & COMTRAC  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install PHONE MESSAGE to your system, type PM (press enter)          ║
+║                                                                         ║
+║ To copy the documentation for PHONE MESSAGE to your printer, type:      ║
+║                           COPY PM.DOC PRN (press enter)                 ║
+║                                                                         ║
+║ To run COMTRAC type, CO (press enter)                                   ║
+║                                                                         ║
+║ To copy the documentation for COMTRAC to your printer, type:            ║
+║                            COPY COMTRAC.DOC PRN (press enter)           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PM.DOC
 
 {% raw %}

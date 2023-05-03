@@ -16,6 +16,22 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3087 Jumble Fever  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print installation instructions, type: COPY README.TXT PRN (Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PROFILE.TXT
 
 {% raw %}

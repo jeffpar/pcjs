@@ -51,6 +51,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2446  PKDISK   >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation and instructions, type:  COPY MANUAL PRN (Enter) ║
+║                                                                         ║
+║ NOTE:  It IS recommended you read the documentation before running this ║
+║ program!                                                                ║
+║                                                                         ║
+║ To place PKDISK in memory, type:  DP (press Enter)                      ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2446

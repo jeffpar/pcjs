@@ -81,6 +81,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1855  BID-BIZ  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To self-unarchive the program, type:  BIDBIZ19 (drive:)   (press Enter) ║
+║                                                                         ║
+║ After unarchiving, start program by typing: BIDBIZ      (press enter)   ║
+║                                                                         ║
+║ To print documentation, type: COPY BIDBIZ.DOC PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1855

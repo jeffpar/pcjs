@@ -766,6 +766,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk No. 1090  BATTLE GROUND and ARIONX: SEEKER of GANS  >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for BATTLE GROUND type:                      ║
+║                COPY BG.DOC PRN (press Enter)                            ║
+║                                                                         ║
+║ To start BATTLE GROUND, Type: BG (press enter)                          ║
+║                                                                         ║
+║                     * * * * * * * * * * * * * *                         ║
+║                                                                         ║
+║ For instructions about ARIONX to start the game, type:                  ║
+║                CD ARIONX (press Enter)                                  ║
+║                COPY ARIONX.HIS PRN  (press Enter)                       ║
+║          then,                                                          ║
+║                README (press Enter)                                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1090
@@ -810,8 +834,18 @@ Sunnyvale  Ca. 94086
     GO       TXT      1264   1-01-80  12:27a
     FILE1090 TXT      3484   8-13-90   9:15p
     GO       BAK      1264   1-01-80   7:08a
+    ARIONX       <DIR>    
+           38 file(s)     193759 bytes
+
+     Directory of A:\ARIONX
+
+    .            <DIR>    
+    ..           <DIR>    
     GAME3    EXE     95750   2-21-88  12:44p
     README   EXE     41192   2-21-88   1:09p
     ARIONX   HIS      5749   2-20-88   1:47p
-           40 file(s)     336450 bytes
-                            2048 bytes free
+            5 file(s)     142691 bytes
+
+    Total files listed:
+           43 file(s)     336450 bytes
+                            1024 bytes free

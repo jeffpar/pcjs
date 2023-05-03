@@ -2253,6 +2253,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk No 1504 BROTHER'S KEEPER (disk 1 of 2, 1505)  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type:  COPY BROTHER.DOC (press Enter)           ║
+║                          also, COPY SORTF.DOC (press Enter)             ║
+║                           and, COPY REGISTER.DOC (press Enter)          ║
+║                                                                         ║
+║ To start the program, type:  BK (press Enter)                           ║
+║                                                                         ║
+║         Disk #1505 contains files to be used with BROTHER.EXE.          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+```
+{% endraw %}
+
 ## REGISTER.DOC
 
 {% raw %}

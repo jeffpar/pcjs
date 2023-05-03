@@ -69,6 +69,31 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║               <<<<  PC-SIG Disk #2882 CRYSTAL CAVES  >>>>               ║
+  ╠═════════════════════════════════════════════════════════════════════════╣
+  ║                                                                         ║
+  ║ To install this program, follow these steps:                            ║
+  ║                                                                         ║
+  ║                  MAKE A SUBDIRECTORY ON YOUR HARD DRIVE (or 1.2 floppy) ║
+  ║                  COPY ALL FILES TO THE SUBDIRECTORY                     ║
+  ║                  TYPE "CRYSTAL" TO UNARCHIVE PROGRAM FILES              ║
+  ║                                                                         ║
+  ║ To start CRYSTAL CAVES, type:  CC1  (press Enter)                       ║
+  ║                                                                         ║
+  ║ To print the registration form, type:  COPY ORDER.FRM PRN  (Enter)      ║
+  ║                                                                         ║
+  ║ To view the catalog of Apogee products, type:  CATALOG  (press Enter)   ║
+  ║                                                                         ║
+  ║                                           Copyright 1991, PC-SIG, Inc.  ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2882

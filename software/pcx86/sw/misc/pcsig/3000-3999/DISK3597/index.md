@@ -16,6 +16,33 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3597 SOLAR WINDS  >>>>               ║
+║                          Disk 2 of 2 (also #3596)                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install the game to your hard disk, type:                           ║
+║     [hard drive letter]:  (press Enter)                                 ║
+║     CD\  (press Enter)                                                  ║
+║     MD SOLAR  (press Enter)                                             ║
+║     CD SOLAR  (press Enter)                                             ║
+║                                                                         ║
+║  To extract the files from drive A, insert disk 2 (#3597) and type:     ║
+║     A:PKUNZIP A:SOLARWND  (press Enter)                                 ║
+║     (use B: in place of A: if installing from drive B)                  ║
+║                                                                         ║
+║  To configure the game, type:  COPY SOLAR1.DOC PRN  (press Enter)       ║
+║  To start the game, type:  SOLAR1  (press Enter)                        ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LICENSE.DOC
 
 {% raw %}

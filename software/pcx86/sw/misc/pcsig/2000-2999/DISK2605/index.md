@@ -90,6 +90,191 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<<  PC-SIG Disk #2605 METZ WINDOW UTILITIES 2 of 2 (also #2373) >>>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   The files contained on this disk are self extracting archive files.   ║
+║   By creating these files this way, we can provide more programs on     ║
+║   each diskette and you can un-archive them without any special tools.  ║
+║                                                                         ║
+║   MTM.EXE - METZ Task Manager                                           ║
+║   PH.EXE  - METZ Phones                                                 ║
+║   RNR.EXE - METZ Runner                                                 ║
+║   TM.EXE  - METZ Time                                                   ║
+║                                                                         ║
+║ Simply run the desired self extracting archive to extract it's contents.║
+║ For example, to extract the Phones files, copy PH.EXE to your disk then ║
+║ type PH.  The contents of PH.EXE will be extracted.  PH.EXE does not    ║
+║ delete itself.                                                          ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1991, PC-SIG Inc.
+```
+{% endraw %}
+
+## FREEMEM.DOC
+
+{% raw %}
+```
+                            METZ Freemem OS/2 Version 1.0                               
+                                         1/15/90                                        
+                                                                                        
+METZ Software                                                                           
+OS/2 Version by Tom Landon                                                              
+P.O. Box 6042                                                                           
+Bellevue, Wa. 98008-0042, U.S.A.                                                        
+sales (24 hr) .. (206) 646-5600                                                         
+support       .. (206) 641-4525                                                         
+                                                                                        
+GEnie: A.METZ    Compuserve: [73567,1637]                                               
+                                                                                        
+Freemem is 'Freeware'.  No payment is necessary for this application.                   
+                                                                                        
+                                                                                        
+                              Overview                                                  
+                                                                                        
+                                                                                        
+Freemem.exe is a moveable, popup, free memory display for OS/2 1.XX.                    
+                                                                                        
+   - Freemem will keep itself on top of other windows so that it is always              
+     visible.                                                                           
+                                                                                        
+   - With the left mouse button, click and drag Freemem to move it to the               
+     desired location on your screen.  This position will be stored                     
+     in the current OS2.INI for subsequent startups. (The default startup               
+     position is the upper left corner of your screen.)                                 
+                                                                                        
+   - Add Freemem to your startup.cmd file.                                              
+                                                                                        
+   - As an OS/2 applications developer I have found freemem to be a                     
+     useful tool for detecting memory managment problems within applications.           
+     Since FREEMEM remains visible, tracking memory usage is simplified.                
+                                                                                        
+Non-mouse users.                                                                        
+                                                                                        
+    When Freemem has the input focus the following function keys work.                  
+    (Alt+Tab to shift focus between windows, since Freemem has no caption               
+    bar it is difficult to tell if it has the focus.  See the OS/2 Users Guide          
+    for more information.)                                                              
+                                                                                        
+    F1   - Displays the about box, which contains configuration options.                
+                                                                                        
+    ALT+F7 - Allows you to move Freemem with the keyboard arrow keys.  Press            
+                enter when done.                                                        
+                                                                                        
+    ALT+F4 - Closes Freemem.                                                            
+                                                                                        
+Mouse users.                                                                            
+                                                                                        
+    - Freemem can be moved with a click and drag motion of the left mouse               
+      button.                                                                           
+                                                                                        
+    - The right mouse button clicked on Freemem will close it.                          
+                                                                                        
+    - A left mouse button double click on the Freemem window will display the           
+      About box containing configuration options.                                       
+                                                                                        
+                                                                                        
+                                 Configuration Options                                  
+                                                                                        
+                                                                                        
+Invert Window.                                                                          
+                                                                                        
+    Normally Freemem displays free memory with black text on a white background.        
+    Checking this option will cause free memory to be displayed with white text         
+    on a black background.                                                              
+                                                                                        
+Beancount.                                                                              
+                                                                                        
+    Normally Freemem displays the size of the single largest block of memory.           
+    This method is quite fast, so the display is updated every half second.             
+    To display total memory available check the beancount option.   Freemem will        
+    allocate memory blocks and total the sizes. Because nearly all of memory            
+    is being allocated, OS/2 will discard and swap segments to disk.                    
+                                                                                        
+Beancount frequency.                                                                    
+                                                                                        
+    Enter how frequently you want beancounting to be performed.                         
+                                                                                        
+Minimum beancount allocation.                                                           
+                                                                                        
+    Freemem will allocate available segments this size or larger.   Typically,          
+    the minimum size should be about 1024 bytes.  Attempting to allocate                
+    smaller segments could cause OS/2 to discard or swap segments to disk,              
+    resulting in poor performance.  If swapping is disabled, smaller sizes can          
+    be used, such as 0, to get a more accurate reading of total physical memory         
+    available.                                                                          
+                                                                                        
+     Information in this document is subject to change without notice                   
+and does not represent any commitment on the part of METZ Software.  No                 
+warranties of any kind are associated with this product.                                
+                                                                                        
+Your comments and suggestions are always welcome.                                       
+
+```
+{% endraw %}
+
+## TIME.DOC
+
+{% raw %}
+```
+                       METZ Time OS/2 Version 1.0                                       
+                              Jan 24, 1990                                              
+                                                                                        
+METZ Software                                                                           
+OS/2 Version by Tom Landon                                                              
+P.O. Box 6042                                                                           
+Bellevue, Wa. 98008-0042, U.S.A.                                                        
+sales (24 hr) .. (206) 646-5600                                                         
+support       .. (206) 641-4525                                                         
+                                                                                        
+GEnie: A.METZ    Compuserve: [73567,1637]                                               
+                                                                                        
+Time is 'Freeware'.  No payment is necessary for this application.                      
+                                                                                        
+                                                                                        
+                              Overview                                                  
+                                                                                        
+Time.exe is a moveable, popup, digital date/time clock for OS/2 1.1+.                   
+                                                                                        
+   - Time will keep itself on top of other windows so that it is always                 
+     visible.                                                                           
+   - With the left mouse button, click and drag Time to move it to the                  
+     desired location on your screen.  This position will be stored                     
+     in the current WIN.INI for subsequent startups. (The default startup               
+     position is the upper left corner of your screen.)                                 
+   - Add Time to your STARTUP.CMD.                                                      
+                                                                                        
+-Non-mouse windows users can interact with Time as follows:                             
+   When Time has the input focus the following function keys work:                      
+   (Alt+Tab to shift focus between windows, since Time has no caption                   
+   bar it is difficult to tell if it does have the focus.)                              
+                                                                                        
+   F1     - displays the about box, which contains configuration options.               
+   ALT+F7 - allows you to move Time with the keyboard arrow keys, press                 
+            enter when done.                                                            
+   ALT+F4 - closes Time.                                                                
+                                                                                        
+Mouse users:                                                                            
+   Time can be moved with a click and drag motion.                                      
+   The right mouse button clicked on Time will close it.                                
+   A double click on the Time window will display the About box containing              
+      configuration options.                                                            
+                                                                                        
+     Information in this document is subject to change without notice                   
+and does not represent any commitment on the part of METZ Software.  No                 
+warranties of any kind are associated with this product.                                
+                                                                                        
+Your comments and suggestions are always welcome.                                       
+
+```
+{% endraw %}
+
 ## FREEMEM.DOC
 
 {% raw %}
@@ -252,6 +437,21 @@ Your comments and suggestions are always welcome.
 
 {% raw %}
 ```
+  METZ Software                        Sales         (206) 641-4525
+  P.O. Box 6042                        Support       (206) 641-4525
+  Bellevue, Wa., 98008-0042, U.S.A.    Fax           (206) 644-6026
+
+  GEnie: A.METZ    Compuserve: [73567,1637]
+
+  METZ_OS2.ZIP - OS/2 Versions of METZ Time & Freemem
+
+```
+{% endraw %}
+
+## README.TXT
+
+{% raw %}
+```
   METZ Software                        Support       (206)-641-4525
   P.O. Box 6042                        Sales         1-800-447-1712
   Bellevue, Wa., 98008-0042, U.S.A.    International (206) 641-4525
@@ -369,7 +569,17 @@ file format.  (LHarc Version 1.13c)
     GO       BAK       971  10-05-90   2:47p
     GO       TXT      1497   4-12-91   9:37a
     FILE2605 TXT      4888   4-12-91   9:48a
+    OS2          <DIR>    
+           10 file(s)     182349 bytes
+
+     Directory of A:\OS2
+
+    .            <DIR>    
+    ..           <DIR>    
     METZ_OS2 ZIP     17723   3-08-90   7:38p
-    README~1 TXT       314   8-13-90   9:35p
-           11 file(s)     200386 bytes
-                          115712 bytes free
+    README   TXT       314   8-13-90   9:35p
+            4 file(s)      18037 bytes
+
+    Total files listed:
+           14 file(s)     200386 bytes
+                          114688 bytes free

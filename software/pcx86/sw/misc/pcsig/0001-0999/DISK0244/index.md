@@ -86,6 +86,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk #244 SLIDE GENERATION  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type the command,             ║
+║                   SLIDEDOC (press enter)                                ║
+║                                                                         ║
+║ To start the program type SLIDE (press enter)                           ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SUBMIT.DOC
 
 {% raw %}

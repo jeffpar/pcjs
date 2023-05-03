@@ -74,6 +74,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                      <<<<  Disk #827 T-REF  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type the command,             ║
+║                          COPY T-REF.DOC PRN (press enter)               ║
+║                                                                         ║
+║ To Start the T-REF program type, T-REF (press enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## T-REF.DOC
 
 {% raw %}

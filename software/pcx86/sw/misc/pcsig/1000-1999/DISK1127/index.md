@@ -87,6 +87,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1127 TERRA*TIME & WCD  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To run self-extracting TERRA*TIME, type: TERRA50  (press enter)         ║
+║ To run self-extracting WORLD CITY DISTANCE, type: WCD50ZIP (press enter)║
+║                                                                         ║
+║ To start TERRA*TIME, type: TT (press enter)                             ║
+║ To print TERRA*TIME documentation, type: COPY TT.DOC PRN (press enter)  ║
+║                                                                         ║
+║ To start WCD, type: WCD (press enter)                                   ║
+║ To print WCD documentation, type: COPY WCD50.DOC PRN (press enter)      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1127

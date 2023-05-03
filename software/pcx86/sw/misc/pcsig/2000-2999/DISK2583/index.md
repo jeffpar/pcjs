@@ -83,6 +83,31 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║<< PC-SIG Disk #2583  TESSERACT CXL USER INTERFACE DEVELOPMENT SYSTEM >> ║
+║                     Disk #1 of 2  (also #2584)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  Select the hard disk drive onto which you wish to place the TCXL       ║
+║  System and change to that drive [C:].                                  ║
+║                                                                         ║
+║  To begin installing the program, and with this disk in your floppy     ║
+║  drive [A:], type from your hard drive:                                 ║
+║                       A:COPYTCXL A  (press Enter)                       ║
+║                                                                         ║
+║  Copy the files from the two floppies onto the new hard drive           ║
+║  subdirectory and then from that directory, type:  START  (press Enter) ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2583

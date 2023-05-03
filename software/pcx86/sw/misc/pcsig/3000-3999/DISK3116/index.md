@@ -3,9 +3,9 @@ layout: page
 title: "PC-SIG Diskette Library (Disk #3116)"
 permalink: /software/pcx86/sw/misc/pcsig/3000-3999/DISK3116/
 machines:
-  - id: ibm5170
+  - id: ibm5150
     type: pcx86
-    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
+    config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
@@ -13,7 +13,7 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-{% include machine.html id="ibm5170" %}
+{% include machine.html id="ibm5150" %}
 {% comment %}samples_begin{% endcomment %}
 
 ## FILE3116.TXT
@@ -80,6 +80,17 @@ Sunnyvale  Ca. 94086
      Directory of A:\
 
     FILE3116 TXT      3627   6-09-92  11:39a
+    TALK         <DIR>    
+    CLUES        <DIR>    
+    MAPS         <DIR>    
+    TILES        <DIR>    
+    PICTS        <DIR>    
+            6 file(s)       3627 bytes
+
+     Directory of A:\TALK
+
+    .            <DIR>    
+    ..           <DIR>    
     25       TLK       605  11-10-91   6:25p
     DEFAULT  TLK        98  10-07-91   8:32p
     0        TLK        98  10-07-91   8:34p
@@ -190,6 +201,12 @@ Sunnyvale  Ca. 94086
     161      TLK       644  11-26-91   6:59p
     162      TLK       683  11-29-91   2:44p
     163      TLK       411  11-26-91   6:59p
+          112 file(s)      49486 bytes
+
+     Directory of A:\CLUES
+
+    .            <DIR>    
+    ..           <DIR>    
     DEFAULT  CLU       137  10-16-91   7:59a
     131      CLU       646  11-24-91   5:15p
     178      CLU       646  11-10-91   8:35p
@@ -213,13 +230,31 @@ Sunnyvale  Ca. 94086
     150      CLU       334  11-27-91   8:57a
     149      CLU       529  11-27-91   8:57a
     312      CLU       568  11-27-91   8:57a
+           25 file(s)      11344 bytes
+
+     Directory of A:\MAPS
+
+    .            <DIR>    
+    ..           <DIR>    
     A_000004 MAP     36295  11-27-91   8:16a
     A_000003 MAP     15739  11-27-91  11:42a
     A_000001 MAP      2726  11-16-91   6:02p
     A_000005 MAP     35896  11-27-91  12:18p
     A_000002 MAP     10987  11-27-91   9:13a
+            7 file(s)     101643 bytes
+
+     Directory of A:\TILES
+
+    .            <DIR>    
+    ..           <DIR>    
     BARGRAPH TIL       804   9-18-91   2:50p
     A_DATA_1 TIL     32004  12-19-91  12:10a
+            4 file(s)      32808 bytes
+
+     Directory of A:\PICTS
+
+    .            <DIR>    
+    ..           <DIR>    
     VASCAM_1 PIC      1348   9-18-91  10:03p
     2000     PIC      1348  10-15-91   1:09p
     2002     PIC      1348  10-15-91   1:49p
@@ -231,5 +266,8 @@ Sunnyvale  Ca. 94086
     2014     PIC      1348  10-16-91  11:23a
     2016     PIC      1348  10-16-91  12:10p
     2018     PIC      1348  10-16-91  12:16p
-          152 file(s)     213736 bytes
-                          963072 bytes free
+           13 file(s)      14828 bytes
+
+    Total files listed:
+          167 file(s)     213736 bytes
+                           13312 bytes free

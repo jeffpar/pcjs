@@ -1060,6 +1060,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #2299  SON OF STAGEFRIGHT  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type:  COPY AGTBLURB.TXT PRN (press ENTER)      ║
+║                                                                         ║
+║ To view CONTEST.TXT, type:  TYPE CONTEST.TXT (press ENTER)              ║
+║                                                                         ║
+║ To print the orderform, type:  COPY ORDERFRM.AGT PRN (press ENTER)      ║
+║                                                                         ║
+║ To load SON OF STAGEFRIGHT, type:  RUNME! (press ENTER)                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2299

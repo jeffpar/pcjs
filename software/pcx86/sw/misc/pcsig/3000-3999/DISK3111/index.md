@@ -514,6 +514,33 @@ Potomac, MD 20854        215-622-7563 (38.4K V.32)
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3111 DRUM BLASTER  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install this program to your hard disk, type:                       ║
+║      [hard disk drive letter]:  (press Enter)                           ║
+║      CD\  (press Enter)                                                 ║
+║      MD DBLAST  (press Enter)                                           ║
+║      CD DBLAST  (press Enter)                                           ║
+║      COPY A:*.*  (press Enter)                                          ║
+║      PKUNZIP DBLAST  (press Enter)                                      ║
+║                                                                         ║
+║  Then to print the documentation, type:  COPY DB.DOC PRN (press Enter)  ║
+║                                                                         ║
+║  To start the program, type:  DB  (press Enter)                         ║
+║                                                                         ║
+║  To print the order form, type:  COPY ORDER.DOC PRN  (press Enter)      ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3111

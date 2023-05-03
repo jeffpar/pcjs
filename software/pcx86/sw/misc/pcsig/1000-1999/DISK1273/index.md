@@ -789,6 +789,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk No 1273  VISUAL DISPLAY EDITOR (VDE)  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   The files on this disk are stored in ZIP file format.  To extract     ║
+║   the individual files from archive, use the PKUNZIP utility provided.  ║
+║   Type: PKUNZIP [filename] [destination]   (press enter)                ║
+║                                                                         ║
+║   For example; [filename] = vde152                                      ║
+║                [destination] = C:\VDE                                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LQCHAR.DOC
 
 {% raw %}

@@ -89,6 +89,35 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  PC-SIG Disk #2468  CRIBBAGE BY CROSBY and MASTERMIND  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ CRIBBAGE BY CROSBY =                                                    ║
+║    To access CRIBBAGE BY CROSBY from A: root directory, type:           ║
+║                       CD CRIBBAGE  (press Enter)                        ║
+║                       DIR          (press Enter)                        ║
+║                       CRIBBAGE     (press Enter)                        ║
+║                                                                         ║
+║=========================================================================║
+║ To return to root directory, type:  CD \                                ║
+║=========================================================================║
+║                                                                         ║
+║ MASTERMIND =                                                            ║
+║    To access MASTERMIND from A: root directory, type:                   ║
+║                       CD MM   (press Enter)                             ║
+║                       DIR     (press Enter)                             ║
+║                       MM      (press Enter)                             ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2468
@@ -99,6 +128,14 @@ Sunnyvale  Ca. 94086
     GO       BAT        40   1-01-80   6:00a
     FILE2468 TXT      2887   1-01-80   1:54a
     GO       TXT      1695   1-01-80   8:54a
+    MM           <DIR>    
+    CRIBBAGE     <DIR>    
+            5 file(s)       4622 bytes
+
+     Directory of A:\MM
+
+    .            <DIR>    
+    ..           <DIR>    
     MM       EXE     65847   5-23-90  10:11p
     SAYERR   C        5009   3-24-90   2:00p
     MOUSE    H        2700   3-25-90   4:47p
@@ -108,7 +145,16 @@ Sunnyvale  Ca. 94086
     MOUSE    C       15091   5-04-90   9:16p
     MM       C       52767   5-23-90  10:09p
     MYSCREEN H        1178   3-17-90  10:11a
+           11 file(s)     159288 bytes
+
+     Directory of A:\CRIBBAGE
+
+    .            <DIR>    
+    ..           <DIR>    
     CRIBBAGE EXE    136052   5-23-90   7:38p
     RNUM     RDM        14   5-23-90   8:14p
-           14 file(s)     299976 bytes
-                           14336 bytes free
+            4 file(s)     136066 bytes
+
+    Total files listed:
+           20 file(s)     299976 bytes
+                           12288 bytes free

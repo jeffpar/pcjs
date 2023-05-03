@@ -45,6 +45,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #3025 ENGLISH RECALL  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print installation instructions, type:  COPY README PRN             ║
+║                                                    (press Enter)        ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3025

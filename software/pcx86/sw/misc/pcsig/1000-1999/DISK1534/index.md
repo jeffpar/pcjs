@@ -87,6 +87,24 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 1534 WORD-PART DICTIONARY  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type WP (press enter)                             ║
+║                                                                         ║
+║ To install the program to your hard drive, type LOAD_WP (press enter)   ║
+║                                                                         ║
+║ To view the documentation on your screen, type VIEW (press enter)       ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## WP.DOC
 
 {% raw %}

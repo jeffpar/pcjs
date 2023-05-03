@@ -839,6 +839,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #1619  ANALYZE / X-BATCH  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start ANALYZE, type:  ANALYZE (press enter)                          ║
+║ To start X-BATCH, type:  DEMO /M (press enter) for monochrome displays  ║    
+║                          DEMO    (press enter) for color displays       ║    
+║                                                                         ║
+║ To print ANALYZE documentation, type: COPY ANALYZE.DOC PRN (press enter)║
+║ To print X-BATCH documentation, type: COPY XBATCH.DOC PRN (press enter) ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## XBATCH.DOC
 
 {% raw %}

@@ -75,6 +75,47 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  PC-SIG Disk #2281  INTEXT MULTILINGUAL WORD PROCESSING  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation and installation instructions, type:             ║
+║                   COPY MANUAL.DOC PRN  (press ENTER)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
+## COPYRT.TXT
+
+{% raw %}
+```
+╔═══════════════════════════════════════════════╗ ╔══════════════════════════╗
+║                                               ║ ║                          ║
+║                                               ║ ║                          ║
+║                                               ║ ║       Version 1.2A       ║
+║                                               ║ ║                          ║
+║                                               ║ ║                          ║
+║                    INTEXT                     ║ ╚══════════════════════════╝
+║          Multilingual Wordprocessor           ║ ╔══════════════════════════╗
+║                                               ║ ║                          ║
+║                                               ║ ║                          ║
+║                                               ║ ║  Loading. Please wait..  ║
+║                                               ║ ║                          ║
+║                                               ║ ║                          ║
+╚═══════════════════════════════════════════════╝ ╚══════════════════════════╝
+╔═══════════════════════════════════════════════╗ ╔══════════════════════════╗
+║     (c) 1990                                  ║ ║  Tel: (203) 975-7412     ║
+║     Intex Software Systems Int'l Ltd.         ║ ║  Fax: (203) 975-7317     ║
+║     PO Box 3068, Stamford, CT 06905-0068      ║ ║  Tlx: 287960 INTEX UR    ║
+╚═══════════════════════════════════════════════╝ ╚══════════════════════════╝
+```
+{% endraw %}
+
 ## INFO.TXT
 
 {% raw %}
@@ -101,6 +142,36 @@ Sunnyvale  Ca. 94086
      program by typing: INTEXT /I
 
      Before Epson LQ 24-pin users start Intext, they should enter: 24PIN
+```
+{% endraw %}
+
+## INTRO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════╗ ╔═════════════════════════════════════════╗
+║           INTEXT LANGUAGES      ║ ║         INTEXT REGISTRATION             ║
+║──────────────┬──────────────────║ ║─────────────────────────────────────────║
+║ ARABIC       │ PERSIAN (Farsi)  ║ ║ If you did not purchase your copy of    ║
+║              │                  ║ ║ Intext, and find the program of value,  ║
+║ EUROPEAN:    │ POLISH           ║ ║ please contribute.                      ║
+║   Danish     │                  ║ ║                                         ║
+║   Dutch      │ RUSSIAN          ║ ║ There are two levels of registration:   ║
+║   Finnish    │                  ║ ║                                         ║
+║   French     │ TURKISH          ║ ║    $49 - Entitling you to a printed     ║
+║   German     │                  ║ ║          manual, and the latest         ║
+║   Italian    │ YUGOSLAVIAN:     ║ ║          version (if available).        ║
+║   Norwegian  │   Albanian       ║ ║                                         ║
+║   Portuguese │   Croatian       ║ ║    $25 - Excluding manual.              ║
+║   Spanish    │   Macedonian     ║ ╚═════════════════════════════════════════╝
+║   Swedish    │   Serbian        ║ ╔═════════════════════════════════════════╗
+║              │   Serbo-Croatian ║ ║ (c) INTEX SOFTWARE SYSTEMS INT'L LTD    ║
+║ GAELIC       │   Slovenian      ║ ║ PO BOX 3068, STAMFORD, CT 06905-0068    ║
+║              │                  ║ ║──────────────────┬──────────────────────║
+║ GREEK        │ CHINESE:         ║ ║       TEL        │         FAX          ║
+║              │   European       ║ ║  (203) 975-7412  │    (203) 975-7317    ║
+║ HEBREW       │   East European  ║ ║                  │                      ║
+╚══════════════╧══════════════════╝ ╚══════════════════╧══════════════════════╝
 ```
 {% endraw %}
 

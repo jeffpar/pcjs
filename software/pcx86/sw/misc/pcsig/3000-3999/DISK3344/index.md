@@ -14,6 +14,69 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## FILE1.TXT
+
+{% raw %}
+```
+╔════════════════════════════════════════════════════════════════════════════╗
+║ This is the first of two sample text files that will be used by the        ║
+║ OPEN INSTALL demo installation.                                            ║
+║                                                                            ║
+║                                                                            ║
+║ This file should be 1840 bytes.                                            ║
+║                                                                            ║
+║                                                                            ║
+║                                                                            ║
+║ Open INSTALL will copy this file to the location you specify during        ║
+║ the demonstration installation.                                            ║
+║                                                                            ║
+║                                                                            ║
+║                                                                            ║
+║ View the script file (GOODSOFT) to see how to copy files using             ║
+║ the OPEN INSTALL script language.                                          ║
+║                                                                            ║
+║                                                                            ║
+║                                          Open INSTALL                      ║
+║                                       by The GoodSoft Co.                  ║
+║                                    1630 30th Street Suite #235             ║
+║                                         Boulder CO 80301                   ║
+╚════════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+## FILE2.TXT
+
+{% raw %}
+```
+╔══════════════════════════════════════════════════════════════════╗
+║ This is the second of two sample text files that will            ║
+║ will be used by the Open INSTALL demo installation.              ║
+║                                                                  ║
+║                                                                  ║
+║ This file should be 1610 bytes long.                             ║
+║                                                                  ║
+║                                                                  ║
+║                                                                  ║
+║                                                                  ║
+║ Open INSTALL will copy this file to the location you specify     ║
+║ during the demonstration installation.                           ║
+║                                                                  ║
+║                                                                  ║
+║ View the script file (GOODSOFT) to see how to copy files         ║
+║ using the Open INSTALL script language.                          ║
+║                                                                  ║
+║                                                                  ║
+║                                       Open INSTALL               ║
+║                                    by The GoodSoft Co.           ║
+║                                1630 30th Street Suite #235       ║
+║                                     Boulder CO 80301             ║
+╚══════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3344
 

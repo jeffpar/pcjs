@@ -79,6 +79,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1497  DIRECT MAINT   >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program, type:  INSTALL x (press enter)                      ║
+║  ( x is the hard drive you wish to install the program to)              ║
+║ To print documentation, type:  COPY README PRN  (press enter)           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+ (c) PC-SIG 1990
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1497

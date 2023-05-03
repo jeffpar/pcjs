@@ -61,6 +61,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  DISK # 2366 EGA MOUSE PAINT  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║      To start EGA Mouse Paint type:  EGAMP30B                           ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2366

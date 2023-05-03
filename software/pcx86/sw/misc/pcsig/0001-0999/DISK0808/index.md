@@ -78,6 +78,13 @@ machines:
     TGL      BAT       512   2-23-87  10:51a
     TGL      EXE    289168   6-22-87  10:38a
     TGL      INT       512   6-22-87   9:33a
+    HELP         <DIR>    
+            7 file(s)     298896 bytes
+
+     Directory of A:\HELP
+
+    .            <DIR>    
+    ..           <DIR>    
     A        HLP      1536   4-29-87   4:41p
     B        HLP       512   4-29-87   9:23a
     C        HLP      1024   4-29-87   3:10p
@@ -123,5 +130,8 @@ machines:
     PN       HLP       512   5-13-87   4:29p
     PNC      HLP      1024   4-29-87   3:12p
     TOP      HLP      1016   4-28-87  12:07p
-           51 file(s)     345480 bytes
-                            2048 bytes free
+           47 file(s)      46584 bytes
+
+    Total files listed:
+           54 file(s)     345480 bytes
+                               0 bytes free

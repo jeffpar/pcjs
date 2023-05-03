@@ -560,6 +560,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2445  BACKREM   >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To read the beginning note from the author, type:  TYPE READ.ME (Enter)║
+║                                                                         ║
+║  To print the manual, type:  COPY BACKREM.DOC PRN (press Enter)         ║
+║                                                                         ║
+║  To configure the program, type:  BRCONFIG (press Enter)                ║
+║                                                                         ║
+║  To start the program, type:  BACKREM (press Enter)                     ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2445

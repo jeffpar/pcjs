@@ -306,6 +306,58 @@ white lettering.  Mounting screws included.
 ```
 {% endraw %}
 
+## CMOSHLP.TXT
+
+{% raw %}
+```
+╔════════════════════════════════════════════════════════════════════════════╗
+║                          CATALOG-ON-A-DISK Help                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+╔═══════════════════════════════[ Keys: ]════════════════════════════════════╗
+║         F1:    This Help             Alt-h:  Help Bar                      ║
+║         Esc:   Exit Current Window   Alt-x:  Exit Program                  ║
+║         Alt-i: Program Information   Alt-p:  Print the Cataog              ║
+║                                                                            ║
+║           Home, End, PgUp or PgDn:   More Categories Or Products           ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+
+╔═════════════════[ Finding Products And Ordering Them: ]════════════════════╗
+║To choose a catagory place the menu bar over your choice and press enter.   ║
+║                                                                            ║
+║To pick an item place the menu bar over that item and press enter.          ║
+║                                                                            ║
+║To order the item press O or Enter and follow the prompts.                  ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+
+═════════════════════════════[ Press Any Key ]════════════════════════════════
+╔══════════════════════[ Searching Within Categories: ]══════════════════════╗
+║Alt-s to SEARCH for an Order Number, Item Description, or Price.            ║
+║Type in what you want to search for.  Ex: widget                            ║
+║<b> to search from the first item      <Enter> to search from the last      ║
+║                   NOTE: This search is not case sensitive.                 ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+╔═════════════════[ When You're Done Viewing and Ordering ]══════════════════╗
+║ Esc:  To go from Catalog to the Exit Menu.                                 ║
+║                                                                            ║
+║ Before Printing the Order Enter Your Name and Address.  You only have to   ║
+║ do this the first time you order.                                          ║
+║                                                                            ║
+║ Review your order.                                                         ║
+║                                                                            ║
+║ Print the order form to your printer or a text file.                       ║
+║                                                                            ║
+║ If you return to the catalog you may resume ordering, as long as you       ║
+║ haven't exited the program.                                                ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+═════════════════════════════[ Press Any Key ]════════════════════════════════
+```
+{% endraw %}
+
 ## COMP.TXT
 
 {% raw %}
@@ -489,6 +541,110 @@ PC-SIG
 Sunnyvale  Ca. 94086                                                    
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
+```
+{% endraw %}
+
+## FIRST.TXT
+
+{% raw %}
+```
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║      ░░░░░▒▒▒▓▓████████████████████████████████████████████▓▓▒▒▒░░░░░      ║
+║      ░░░░░▒▒▒▓▓█                                          █▓▓▒▒▒░░░░░      ║
+║      ░░░░░▒▒▒▓▓█            CATALOG-ON-A-DISK             █▓▓▒▒▒░░░░░      ║
+║      ░░░░░▒▒▒▓▓█                                          █▓▓▒▒▒░░░░░      ║
+║      ░░░░░▒▒▒▓▓████████████████████████████████████████████▓▓▒▒▒░░░░░      ║
+║                                                                            ║
+║                                                                            ║
+║      The Tool For Sending Product Catalogs To Computer-Using Customers     ║
+║                                                                            ║
+║                                                                            ║
+║                                                                            ║
+║                                                                            ║
+║                                                                            ║
+║                                                                            ║
+║      ░░░░░▒▒▒▓▓████████████████████████████████████████████▓▓▒▒▒░░░░░      ║
+║                       Easy To Read and Build Catalogs                      ║
+║      ░░░░░▒▒▒▓▓████████████████████████████████████████████▓▓▒▒▒░░░░░      ║
+║                                                                            ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+       ░░░░░▒▒▒▓▓█████████████████████████████████████████████▓▓▒▒▒░░░░
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║      ░░░░░▒▒▒▓▓███████████ HOW TO GET STARTED: ████████████▓▓▒▒▒░░░░░      ║
+║                                                                            ║
+║    1. Read The README File For The Latest Information                      ║
+║                                                                            ║
+║    2. To Make Your Own Catalog:  Sorry, you will have to read the          ║
+║       manual!  The good news is it's short and easy!                       ║
+║                                                                            ║
+║    3. To View Our Sample Catalog:  Press a Key                             ║
+║                                                                            ║
+║ [ These are Sample Opening Screens That You Can Change for Your Catalog ]  ║
+║                                                                            ║
+║         ┌─────────┐                         This program was written by a  ║
+║   ┌─────┴───┐     │              (tm)       member of the Association of   ║
+║ ──│         │O    │──────────────────       Shareware Professionals (ASP)  ║
+║   │   ┌─────┴╨──┐ │  Association of                                        ║
+║   │   │         │─┘  Shareware              EmmaSoft                       ║
+║   └───│    O    │    Professionals          PO Box 238, Lansing, NY 14882  ║
+║ ──────│    ║    │────────────────────       VOICE:        (607) 533-4685   ║
+║       └────╨────┘    MEMBER                 BBS (MODEM):  (607) 533-7072   ║
+║      ░░░░░▒▒▒▓▓█████████████████████████████████████████████▓▓▒▒▒░░░░      ║
+╚════════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #3037 CATALOG-ON-A-DISK  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print the documentation, type:  COPY MANUAL.TXT PRN  (press Enter)  ║
+║                                                                         ║
+║  To print the new information, type:  COPY README PRN  (press Enter)    ║
+║                                                                         ║
+║  To see a demo of the catalog, type:  CATALOG  (press Enter)            ║
+║                                                                         ║
+║  To print the order form, type:  COPY ORDER.FRM PRN  (press Enter)      ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+## HEADER.TXT
+
+{% raw %}
+```
+   ┌───────────────────────────────────────┐
+   │█▓▓▓▒▒▒▒▒░░░░-=≡ C W I ≡=-░░░░▒▒▒▒▒▓▓▓█│ 
+   ├───────────────────────────────────────┤  
+   │ •-=≡  CONSOLIDATED WIDGETS, INC  ≡=-• │ 
+   │      1000 Widget Industrial Park      │ 
+   │              Building 10              │ 
+   │         Widgetville, NY 14882         │ 
+   ├───────────────────────────────────────┤  
+   │           Visit CWI World             │ 
+   │        Headquarters Next Time         │ 
+   │        You Are In Widgetville         │ 
+   │                                       │ 
+   │             WIDGET KEYS               │ 
+   │                                       │        
+   │       <Esc> Order     Dn  More        │
+   │      Alt-h  Help      Up  More        │
+   │         F1  Help    Left  More        │  ┌───────────────────────────┐
+   │       PgDn  More   Right  More        │  │ This is a sample "header" │
+   │       PgUp  More   Alt-i  Info        │  │   screen you can change   │
+   │      Alt-x  Exit                      │  │      for your catalog.    │  
+   │                                       │  └───────────────────────────┘
+   │█▓▓▓▒▒▒▒▒░░░░░░░░░░░░░░░░░░░░░▒▒▒▒▒▓▓▓█│
+   └───────────────────────────────────────┘
 ```
 {% endraw %}
 

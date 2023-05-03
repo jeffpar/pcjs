@@ -62,6 +62,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║                <<<<  PC-SIG Disk #2685 Hypershell  >>>>                 ║
+  ║                     Disk 3 of 3 (also #1720, #2597)                     ║
+  ╠═════════════════════════════════════════════════════════════════════════╣
+  ║                                                                         ║
+  ║      To print floppy and hard drive installation instructions,          ║
+  ║                type: COPY README.HS3 PRN (press Enter)                  ║
+  ║                                                                         ║
+  ║                                                                         ║
+  ║                                           Copyright 1991, PC-SIG, Inc.  ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2685

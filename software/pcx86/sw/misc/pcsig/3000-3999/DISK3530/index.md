@@ -16,6 +16,25 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #3530 Leong & Dominoze  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Print documentation for LEONG, type: COPY LEONG.DOC PRN (Enter)     ║
+║                                                                         ║
+║  To Start the game LEONG, type:  LEONG (Enter)                          ║
+║                                                                         ║
+║  To Start the game DOMINOZE, type:  DOMINOZE (Enter)                    ║
+║                                                                         ║
+║                                                                         ║
+║                                        (C) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDER.DOC
 
 {% raw %}

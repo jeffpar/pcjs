@@ -95,6 +95,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1790  PHOEBE  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unarchive files, type:  PHOEBE5 (press enter)                        ║
+║ To start program, type:  PHOEBE (press enter)                           ║
+║                                                                         ║
+║ To print documentation, type:  COPY PHOEBE.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1790

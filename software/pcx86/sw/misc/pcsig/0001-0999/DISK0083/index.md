@@ -470,6 +470,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 83 WORMCITY & MORE  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation on this disk, type:                          ║
+║             COPY *.DOC LPT1: (press enter)                              ║
+║                                                                         ║
+║ To run the programs on this disk, please consult you BASIC language     ║
+║ manual for specific instructions for your computer system.              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GRPH64K.BAS
 
 {% raw %}

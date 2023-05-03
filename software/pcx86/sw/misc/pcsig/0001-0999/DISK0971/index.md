@@ -88,6 +88,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 971 MULTI-BASE  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, Type: COPY MBASEUG.DOC LPT1: (press enter)  ║
+║                                                                         ║
+║ To run the program, Type: CONFIGUR (press enter)                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MBASEUG.DOC
 
 {% raw %}

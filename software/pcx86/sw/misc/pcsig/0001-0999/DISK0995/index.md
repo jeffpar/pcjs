@@ -84,6 +84,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk No 995 H&P CALENDAR  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view the documentation for CALENDAR, Type:README (press enter)       ║
+║                                                                         ║
+║ To run the program CALENDAR, Type: CAL (press enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0995

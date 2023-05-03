@@ -251,6 +251,33 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk #2476  PERSONAL FINANCIAL ACCOUNTING SYSTEM (PFAS)  >>>>   ║
+║                       (Disk 2 of 2, also #1129)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, insert Disk 2, type: PRINTDOC (press Enter) ║
+║                                                                         ║
+║                                                                         ║
+║ NOTE:  Before continuing with the following directions, make a backup   ║
+║        copy of the program.  A counter is activated when the program    ║
+║        is opened or "browsed."  Use the backup copy to install PFAS on  ║
+║        your hard drive.                                                 ║
+║                                                                         ║
+║                                                                         ║
+║ To browse program temporarily, insert Disk 1, type:  PFAS (press Enter) ║
+║                                                                         ║
+║ To install for full use, insert Disk 1, type:     INSTALL (press Enter) ║
+║                                                                         ║
+║                                                                         ║
+║                                       (c) Copyright 1990, PC-SIG Inc.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PFAS.DOC
 
 {% raw %}

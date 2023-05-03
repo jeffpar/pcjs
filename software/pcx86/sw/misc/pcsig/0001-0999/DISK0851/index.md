@@ -120,6 +120,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk #851 ASTRONOMY STAR CATALOG (Disk 1 of 2) >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type; MANUAL (press enter)    ║
+║                                                                         ║
+║ To view the documentation on your screen type; VIEW (press enter)       ║
+║                                                                         ║
+║ To start the program type; STARCAT (press enter)                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0851

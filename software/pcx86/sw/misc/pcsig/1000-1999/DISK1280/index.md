@@ -825,6 +825,31 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 1280 Card Game Collection >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To print the documentation, type:                                     ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To run Accordian Solitare, type:                                      ║
+║             ACCORD (press enter)                                        ║
+║                                                                         ║
+║   To run Red Dog, type:                                                 ║
+║             REDDOG (press enter)                                        ║
+║                                                                         ║
+║   To run Poker Solitare, type:                                          ║
+║             POKERS (press enter)                                        ║
+║                                                                         ║
+║   To run Holdem Poker, type:                                            ║
+║             HOLDEM (press enter)                                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HOLDEM.DOC
 
 {% raw %}

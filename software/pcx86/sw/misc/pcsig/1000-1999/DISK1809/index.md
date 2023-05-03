@@ -85,6 +85,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #1809  PC-FOOD  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start program, type:  PCFOOD  (press Enter)                          ║
+║                                                                         ║
+║ To print documentation, type:  DOC  (press Enter)                       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1809

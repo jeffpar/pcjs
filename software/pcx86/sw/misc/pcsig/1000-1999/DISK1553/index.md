@@ -65,6 +65,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1553  PARTYDOT  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start PARTYDOT, type:  PARTYDOT (press enter)                        ║
+║                                                                         ║
+║ To print documentation, type:  COPY PARTYDOT.TXT PRN (press enter)      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PARTYDOT.TXT
 
 {% raw %}

@@ -55,6 +55,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║                   <<<<  PC-SIG Disk #2900 4DOS  >>>>                    ║
+  ║                        Disk 2 of 2 (also #1773)                         ║
+  ╠═════════════════════════════════════════════════════════════════════════╣
+  ║                                                                         ║
+  ║ To read the installation information, insert disk #1 and type:          ║
+  ║                                          TYPE README.1ST  (press Enter) ║
+  ║                                                                         ║
+  ║                                            Copyright 1992, PC-SIG, Inc. ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2900

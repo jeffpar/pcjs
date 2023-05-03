@@ -75,6 +75,32 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  PC-SIG Disk #2614  THE STATHELP PACKAGE & RPNCALC  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ THE STATHELP PACKAGE =                                                  ║
+║                                                                         ║
+║   To print the documentation and installation instructions, type:       ║
+║                    COPY README.1ST PRN  (press Enter)                   ║
+║                                                                         ║
+║                                                                         ║
+║ RPNCALC =                                                               ║
+║                                                                         ║
+║   To extract RPNCALC from its self-extracting file, type:  RPNC (Enter) ║
+║                                                                         ║
+║   To print the documentation and installation instructions, type:       ║
+║                   COPY RPNCALC.DOC PRN  (press Enter)                   ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2614

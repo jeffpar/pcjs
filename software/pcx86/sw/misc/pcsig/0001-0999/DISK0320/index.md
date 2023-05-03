@@ -70,6 +70,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 320  PC-FASTYPE  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To run the program on an AT KEYBOARD, type ATFT (press enter)           ║
+║ To run the program on an ENHANCED KEYBOARD, type ENFT (press enter)     ║
+║                                                                         ║
+║ To print information about the program, type:  COPY README.TXT PRN      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

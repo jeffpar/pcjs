@@ -994,6 +994,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #2421  CD DOT CHALLENGE   >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print author's documentation and instructions, type:                 ║
+║                    COPY DOTS.DOC PRN (press Enter)                      ║
+║                                                                         ║
+║ To start game, type:  DOTS (press Enter)                                ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2421

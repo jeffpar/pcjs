@@ -225,6 +225,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #2798 Fastgraph/Light #2 of 3  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To install the prgram, insert disk #1 and type: INSTALL (press Enter)   ║
+║                                                                         ║
+║ To print documentation, insert disk #2 and type: COPY USER1.TXT PRN     ║
+║                         insert disk #3 and type: COPY USER2.TXT PRN     ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## USER1.TXT
 
 {% raw %}

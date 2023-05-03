@@ -60,6 +60,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2827  METROCATE  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To view the program documentation, type:  L6 METROCAT.DOC  (press Enter)║
+║                                                                         ║
+║ To print the documentation, type:  COPY METROCAT.DOC PRN  (Enter)       ║
+║                                                                         ║
+║ To begin METROCATE, type:  METROCAT  (press Enter)                      ║
+║                                                                         ║
+║ NOTE: Program ordering information can be found within METROCATE.       ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## METROCAT.DOC
 
 {% raw %}

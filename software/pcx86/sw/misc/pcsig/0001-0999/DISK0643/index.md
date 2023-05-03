@@ -67,6 +67,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                       <<<<  Disk #643 TASM  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, type:                        ║
+║                           COPY TASM.DOC PRN (press enter)               ║
+║                                                                         ║
+║ To start the program, type: TASM (press enter).                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## TASM_BBS.DOC
 
 {% raw %}

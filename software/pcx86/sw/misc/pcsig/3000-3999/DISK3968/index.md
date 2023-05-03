@@ -5568,6 +5568,494 @@ you need complete copies of the manual and disk with each licenesed copy)
 ```
 {% endraw %}
 
+## QUESTION.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════════╗
+║                                                                             ║
+║ Welcome to QUESTION.TXT!  Hopefully you'll find the answer to your question ║
+║ in this collection.                                                         ║
+║                                                                             ║
+║ o If you have a general question about data integrity, security, viruses,   ║
+║   system sectors or similar things, the help index in Integrity Master may  ║
+║   provide the answer (Hit F1 and then "I").  If that fails, read the manual ║
+║   (file I-M.DOC), especially part two on "Data Integrity and Viruses".      ║
+║                                                                             ║
+║ o If you're having trouble using the menus in Integrity Master try the      ║
+║   tutorial offered in SetupIM.                                              ║
+║                                                                             ║
+║ o If all else fails, please contact us or the Advanced Support Group for    ║
+║   assistance.  See details in file SUPPORT.DOC (IMVIEW SUPPORT.DOC          ║
+║   to read this file).                                                       ║
+║                                                                             ║
+╚═════════════════════════════════════════════════════════════════════════════╝
+Q: I start SetupIM and suddenly nothing happens or I see the display
+   scroll and then get disorganized.  The program seems to be stuck.
+
+A: Insert formatted media (e.g., diskettes) in all removable drives, run
+   SetupIM, and try waiting about 10 seconds and hitting the ENTER key
+   several times.  You may be using a program which is trying to write a
+   message to the screen while SetupIM is checking out your disk drives.
+   You can safely ignore any garbage which appears on your screen. SetupIM
+   will write a full report to file IMPROC.TXT.  Be sure to check this
+   file.   The most common cause for this type of problem is using
+   DRIVER.SYS to assign a duplicate drive letter to a floppy drive:
+
+   You may have a statement like this in the \CONFIG.SYS file:
+
+                 DEVICE=DRIVER.SYS /D:0 /F:0
+
+   The numbers could be 0 as above or have some other value.  DRIVER.SYS
+   may try to write a message to the screen to ask you to insert a new
+   disk and hit a key when SetupIM checks this drive. Deleting this line
+   should solve the problem. Once you finish running SetupIM you may
+   restore the line. IM will have know enough not to access the
+   duplicate logical drive.
+
+Q:  How do I scan multiple disks for viruses?
+
+A:  Please hit F1 in IM and select "Scanning for viruses" from the help
+    index or read the section on scanning in the user guide (I-M.DOC
+    file). From the command line you can use the /VM parameter to
+    quickly scan multiple disks.  Use /Dx to tell IM which drive to
+    scan.  IM will return a DOS error level of 64 or greater if it
+    encounters a virus.
+
+Q:  I want to do nothing other than scan a disk for known viruses how do
+    I use Integrity Master to accomplish that?
+
+A:  If this is a disk that you've already "INITIALIZED" with Integrity Master
+    then just use the CHECK menu to check that disk.  If this a new disk to
+    Integrity Master then use the INITIALIZE menu, to do an initialize of
+    all the files.  You can save time in both cases by using the option
+    menu to limit initializing or checking to executable programs.  You can
+    also use the "V" option on the check menu to ONLY check for known viruses,
+    but if you do this you lose all the additional benefits of integrity
+    checking.
+
+Q:  I'd like to setup a batch file that sometimes does a quick check and
+    sometimes does normal, full integrity checking.  Since there's no command
+    line option to change the type of checking, how do I do this?
+
+A:  Set your options for quick checking by using the OPTIONS menu.  Then
+    select the first option on that menu to save (Write) the parameter file.
+    This saves your options in file IM.PRM.  You can now copy that file to a
+    different file  let's say QC.PRM ("COPY IM.PRM QC.PRM").  Now execute IM
+    and set your options back for full checking.  Save (Write) those
+    options.  You now have two files: QC.PRM (for quick checking) and IM.PRM
+    (for normal checking).  IM with no change will use the options in IM.PRM.
+    Anytime, you want to do a quick check just invoke IM with: "IM QC.PRM" and
+    you'll be using the quick check options.  If QC.PRM is not in the current
+    directory, be sure to code the complete path on the control card
+    (e.g., "IM D:\utils\QC.PRM").
+
+Q:  Sometimes IM comes up with different colors on the screen than before.
+    What's going on?
+
+A:  IM checks the DOS video mode indictor on your PC to see if you are
+    in color or monochrome mode, as well as directly checking your video
+    adapter.  This allows you to use the DOS "MODE BW80" to indicate
+    that a two-color display is present on a color adapter card.  Some
+    programs change this value to an incorrect value.  If this happens
+    to you, use the DOS mode command to set the video mode back to the
+    correct state.  For example, enter "MODE CO80" to restore normal
+    color mode.  You can also use the command line override (or SetupIM)
+    so IM comes up using whatever colors you prefer.  "IM /C" would
+    force IM to use color mode.
+
+Q:  I just tried to do a check or initialize on my hard disk. Integrity Master
+    replied that this disk was not working.  It IS working!  What's wrong?
+                                                ~~
+A:  File "DISKhelp.TXT" describes how to correct this problem. Read file
+    DISKhelp.TXT using your favorite program, copy it to your printer ("COPY
+    DISKHELP.TXT PRN") or enter the command:
+          IMVIEW DISKHELP.TXT
+    to display this file.
+
+Q: I just entered the command IMVIEW (or IMPRINT) and nothing happened. My
+   PC just said "Bad command or file name".
+
+A: IMVIEW.COM and IMPRINT.BAT must be either in the current directory or
+   in one of the directories in your DOS path.  To put these in the path,
+   enter the command PATH at the DOS prompt and you'll see a list of
+   directories on your disk.  You can copy IMVIEW.COM or IMPRINT.BAT into any
+   of these directories.
+
+Q: I don't have my original DOS install diskettes to do a clean boot from. How
+   do I install Integrity Master?
+
+A: It's only important to have a certified clean copy if a virus may already
+   in control of your PC.  In most cases you can safely install using your
+   DOS files in place on your hard disk.  
+
+Q: I use DOS 4.0. I get a message saying that SHARE needs to be loaded for
+   large media, when I boot from diskette.   Do I need to copy SHARE.EXE to
+    my Integrity Master boot floppy?
+
+A:  Integrity Master does not need SHARE.  You may wish to copy it so other
+    programs can use it.  If so, just copy it to your diskette. DOS will
+    automatically load it when you boot.
+
+Q:  I just checked several disks but I can't find the report file.  What
+    happened?
+
+A:  If you have the report file option turned on in automatic mode (check the
+    OPTION menu), then the report file is written to the first disk that you
+    check.  If you later switch to check another disk, without turning off the
+    report file, the reports will still go to the same file on the same disk.
+    You can choose to have this file always written to the same disk by
+    selecting this on the OPTION menu.
+
+    If you specified a report file name "of your choice", and did not
+    include a drive or directory specification as part of the file
+    name, then it will be written to the current disk and directory when
+    you start checking or initializing.
+
+Q:  Other anti-virus products don't say I have to boot my PC before checking
+    my files; why do I have to boot before checking with Integrity Master?
+
+A:  Actually, if you thoroughly read your documentation you'll probably see
+    that your product DOES suggest you boot from a diskette; we're just
+    a bit more up front about this issue.  If you're satisfied with the level
+    of protection obtained from other products without booting, then you don't
+    need to boot. IT IS OUR GOAL TO PROTECT AGAINST ALL VIRUSES NOT JUST KNOWN
+    VIRUSES.  The reason we ask you to boot from a write protected floppy
+    before checking, is that this is the ONLY way to be sure that a virus is
+    not already resident and in control of your PC.   Integrity Master
+    checks memory for resident viruses, so it is somewhat safe NOT to boot.
+    If you choose to do this, be sure you always have the latest version
+    of Integrity Master.
+
+Q:  I want to write my reports to my printer.  IM reports that my printer
+    isn't working, but it is!  What can I do?
+
+A:  You have a printer which is not compatible with the standard IBM BIOS
+    functions that IM uses.  There's an easy way around this.  Just use
+    the OPTION menu to write the reports to a file called "PRN".  This
+    will allow DOS to route the print for you.
+
+Q:  IM just detected a change to a program.   Only this one program changed,
+    I don't think it's a virus.   What are some programs known to change
+    themselves?
+
+A:  There are too many programs to list them all here.  Many programs will be
+    changed when you run the install or option update program for that
+    program.  WordStar is a well known example.  A new program is SETVER.EXE
+    which is part of DOS 5.  Whenever you run SETVER to set the DOS version
+    for a program, SETVER stores this information by modifying its own code.
+    This will result in IM reporting a change to SETVER.EXE every time you
+    run the program.    Changing certain options in MicroSoft Windows (R)
+    will also change the program itself (WIN.COM).
+
+Q:  IM keeps reporting that my boot sector has changed.  It is NOT reporting
+    a known virus. The boot sector seems to change every day. I don't think
+    I've got a virus.  What's going on?
+
+A:  If your boot sector keeps changing repeatedly and you have an older HP
+    or Zenith PC, you may have one of the models that changes its boot
+    sector every time you boot.  If you use a program like STACKER which
+    establishes a virtual (not a real) disk, do not be concerned if the boot
+    sector on the virtual (e.g., Stacker) disk keeps changing.  This is normal
+    behavior.  As a matter of fact, changes to the boot sector of any disk
+    which can not be booted from, generally do not represent a problem.  If
+    you have any doubt about whether it's a virus, save a few of your
+    BOOT.SRL files (Run an Initialize boot sector after IM reports a change)
+    and send these along with the other information called for in file
+    SUPPORT.DOC to us.  We'll check to see if a virus might be present in
+    your boot sector.
+
+Q:  IM detected a virus on my PC.  I reloaded my system sectors and either
+    deleted or reloaded all infected files, yet the virus keeps coming back!
+    What should I do?
+
+A:  Somewhere a virus is eluding your checks; please check the following:
+
+  o Did you install IM after booting from a clean floppy?  It's absolutely
+    vital to do a cold boot before checking.
+
+  o Are you using a task switcher (or multi-tasker) such as windows?  If so,
+    then this program may be saving some of your infected programs in its
+    "swap" file.  This file often ends in the letters ".SWP".   Delete
+    this file if it exists.
+
+  o Be sure you check ALL files and floppies which come into contact with
+    your computer.  You may have missed a file or diskette somewhere.  Please
+    take the extra time and check them all.
+
+  o It's possible that viral code is hidden somewhere other than an executable
+    file.  IM normally checks only executable files (programs and overlays)
+    for known viruses.  Try selecting "Disk for known Viruses" on the CHECK
+    menu and selecting "Check All files" on that menu.  This will check
+    all files as well as system sectors on your disk.  Check any other
+    disks that you've been using.
+
+Q:  I use an executable compression program (e.g., LXEXE or PKlite), am I in
+    danger of the compressed files being infected?
+
+A:  If a virus should infect ANY of your files, compressed or not, IM can
+    detect this fact.  So if a virus should infect a compressed executable
+    file, IM will have no trouble detecting this.  On the other hand if a
+    known virus infects a program and then that program is compressed, IM
+    may or may not recognize the virus in the compressed file.  However if
+    the virus should attempt to spread, IM will detect this.
+
+Q:  IM just detected a virus in one of my system sectors, and says to
+    reload the system sector.  I've never run an "Initialize", so I don't
+    have the sector reload file (.SRL).  Help!   What do I do?
+
+A:  This reinforces an important point: DO AN INITIALIZE ON ALL YOUR DISKS
+    SO THAT YOU CAN EASILY RECOVER ANY DAMAGE TO A SYSTEM SECTOR.  Don't wait;
+    DO IT NOW!  If you lost your boot sector, you're in luck, otherwise you
+    have some serious work ahead of you.
+
+    BEFORE YOU DO ANYTHING, POWER OFF AND BOOT FROM A WRITE PROTECTED DISKETTE
+    CONTAINING A CLEAN COPY OF DOS THEN:
+
+  o You can manually reload the DOS boot sector by entering the command:
+    "SYS C:" where "C" is the drive with the damaged boot sector.  You must
+    logged on to drive A: when you enter this command.
+
+  o Manually reloading partition sectors is MUCH more difficult.  Before you
+    go any further, make sure you have as much of your data backed up as
+    possible.  There is a serious risk that what you are about to do may
+    render your disk unreadable!  Try one of the following options:
+
+    1) If you have DOS 5, try the command: "FDISK /MBR" to create a new
+       partition sector (AKA Master Boot Record).  Be careful; this is NOT
+       documented and may not always work.
+
+    2) If you can locate an identically formatted hard disk you could use IM
+       (INITIALIZE partition sector) to capture the sector reload file and
+       then reload it on your damaged disk (use Reload "Missing Partition")
+       to accomplish this.
+
+    3) Some of the utility programs such as Norton or MACE may be able to
+       repair this sector. If they don't replace the sector, you could use
+       one of the sector editors to write zeros over the first part of the
+       boot sector and then turn the "disk fix-it" program loose again.  Our
+       testing shows that these programs don't always succeed and may
+       further damage your disk.
+
+    4) The last alternative is to do a low level format.  This completely
+       removes all data from your hard disk.  See the next question for
+       details on how to do this.
+
+Q:  How do I do a low-level format?
+
+A:  This procedure varies with the type of computer your have and the type
+    of disk controller board.  If you have an IBM PC then you have (or can
+    get) a diskette containing a program to low level format your drive.
+    Some other manufacturers provide this also.  Running SPINRITE to do a
+    low-level format is NOT what we want to do here.  We MUST do a
+    DESTRUCTIVE format. Check the documentation that came with your disk
+    controller board for the technique to low-level format or call the
+    manufacturer for information on how to do this.  Be sure to explain that
+    all you really want to do is to replace the partition sector (master
+    boot record).  They may have a utility to do just that.  The procedure
+    for some common Western Digit controllers is as follows:
+
+    Enter "DEBUG"  (from your DOS boot diskette)
+
+    at the DEBUG prompt ("-") enter: "g=C800:5"   (press ENTER)
+
+    at this point you should be able to follow the directions. You will need
+    to know whether you are formatting your first on second hard disk and
+    the layout (heads and cylinders plus and bad tracks) but often you can
+    just hit ENTER and accept the defaults.  To find the bad track list open
+    your PC and look on the drive itself.
+
+Q:  I was just checking a diskette for viruses and IM detected the
+    DataCrime 2 virus in a file.  When I restarted IM it detected the
+    DataCrime virus resident in memory!  I never executed the program
+    which was infected, so how did the virus get control of my PC?
+
+A:  The virus wasn't really resident or in control of your PC. What happened
+    was that a piece of the viral code was left somewhere in memory -
+    probably in one of DOS's file buffers.  Although IM takes great pains to
+    clear its own buffers and areas of memory, it's not unusual to get a
+    false indication of the virus being active in memory after detecting
+    a virus in a file or system sector.
+
+Q:  When I first start IM, I see something red flash on my screen, but I
+    can't make out what it says.
+
+A:  When IM first starts, it looks for the parameter file (IM.PRM)
+    which contains all your option settings.  On some PCs this can be a
+    slow process, so IM announces that it is: "Searching for and reading
+    parameter file."   On faster PCs, this message appears as barely a blur!
+
+Q: IM reports invalid time and date stamps on many of my files.  Do I have
+   a virus?
+
+A: Maybe!  If it's only executable files with the illegal values, you'll
+   need to check further to make sure there's no unknown virus on the
+   loose.  If you have such a virus, IM should be detecting unexplained
+   changes to executable programs.  Try following the procedures
+   outlined in the manual (or the I-M.DOC file) for determining if file
+   changes are due to viruses.  (Basically, what you do is to run a full
+   check, execute a suspect program, cold boot, and run another full
+   check.)  There are some common causes for files to have illegal time
+   and date stamps (such as 62 seconds):
+
+   1) There is reportedly a backup program ("Intelligent Backup") which
+      marks files by setting the seconds field to an illegal value.
+
+   2) Some anti-virus products attempt to "immunize" your files by setting
+      the seconds of time stamp of your programs to 62.  This works only
+      against a handful of viruses but some programs do this anyway.
+
+   3) Central Point's (PC Tools) Datamon will reportedly mark encrypted files
+      by setting the seconds field to 62.
+
+Q:  IM says I have a virus resident in memory, but I doubt this, since I have
+    another anti-virus product which reports nothing.  What's going on?
+
+A:  Some anti-virus products execute as a resident program (TSR) to monitor
+    your system and check for signs of known viruses.  To check for these
+    viruses, they use fragments of the same viruses that IM checks for.
+    It's a standard practice to keep these fragments encrypted or stored in
+    pieces, but some products don't follow this practice.  You probably have
+    such a product.  To double check, remove any line in your CONFIG.SYS and
+    AUTOEXEC.BAT file which executes this product.  Cold boot your PC.  Now
+    run IM.  If the other product was at fault, IM will now detect no virus.
+
+Q:  When I run IM under Microsoft Windows, it reports "General failure"
+    reading some files.  This is supposed to be a hardware error.  What's
+    happening?
+
+A:  Microsoft Windows has certain files open.  When IM tries to read these
+    files it is unable to.  The message returned to IM varies from one PC
+    to another.  On some PCs, you may see merely that certain files can not
+    be opened.  On other PCs (such as yours), a critical error is returned to
+    IM.  IM is simply reporting the error returned to its critical error
+    handler.  We are looking into ways to determine the true rather than
+    the simply the reported cause of errors such as this.
+
+Q:  I'm using STACKER on my PC and IM keeps reporting boot sector corruption
+    on my stacker volume.  What gives?
+
+A:  STACKER closely simulates an actual DOS disk drive on its volume. It
+    pretends to have an actual boot sector.  This boot sector is not a real
+    boot sector and may change from moment to moment.  Viruses can not spread
+    by infecting this boot sector and since it can change at any time,
+    checking this boot sector is a waste of time.  When you check a STACKER
+    volume, just check the files and not the system sectors. Don't do a
+    "Check Entire disk integrity" which includes the system sectors on the
+    STACKER volumes.  If you use the command line, use "/CD" rather than
+    "/CE".  Automatic handling of STACKER volumes will be available soon.
+
+Q:  IM reports corruption of its own report file.  Why?
+
+A:  This can happen in only one circumstance.  If you select a report
+    file with a name of your own choice and then check the disk and
+    directory containing that report file, IM will write to that file
+    between the time that it checks it and the time that the file is
+    closed.  We recommend using auto-named report files or placing them
+    on a disk different from the disk being checked to avoid this message.
+
+Q:  I am getting errors when reading a disk I think is working OK.
+    Why does IM report an error.
+
+A:  See file DISKhelp.TXT
+
+Q:  How do I get rid of that wait for keypress at the end of processing.
+
+A:  If you enter a command line parameter such as "/CR" or "/CD", and
+    specify no pause either by using the option menu or with the
+    "/N" or "/NE" parameter, IM will pause only briefly after it
+    finishes checking.
+
+Q:  How can I quickly remove boot sector viruses (such as Stoned or
+    Michelangelo) from numerous diskettes?
+
+A:  If your diskettes are bootable, the DOS "SYS" command can be used to
+    quickly remove boot sector viruses.  (You can always try the SYS command
+    it won't hurt anything)  Be sure to boot from a write protected copy
+    of DOS and then issue the "SYS x:"  command (x is the disk you wish
+    to clean).
+
+    For non-bootable disks, locate an uninfected disk of the same type
+    as that which is infected.  Use IM to initialize the boot sector data
+    for that diskette.  Temporarily remove all other "BOOT.SRL" files
+    from your disks.  Make sure the "BOOT.SRL" (boot sector reload file)
+    which IM just created is present either in your current directory
+    or in the root directory of one of your disks.  Now:
+
+    o Run IM and turn the report file off.
+
+    o Change to the drive containing an infected floppy (Commands menu).
+
+    o Tell IM to reload the boot sector.
+
+    o Insert and another diskette and keep reloading. IM will locate the
+      BOOT.SRL file on one of your other disks and reload the sectors on
+      each floppy diskette.
+
+Q:  How can I avoid having separate report files on each disk IM checks?
+
+A:  Use the Options menu to set the auto-named report file to go to
+    a specific disk of your choosing.  All reports will then go to this
+    disk, independent of the disk being checked.
+
+Q:  I see:  "Changes in directory xxxxxx:" but no changes appear on my
+    screen.  Why is this?
+
+A:  If you have asked IM to exclude files or directories from checking,
+    IM will remove their associated integrity data the next time you
+    run a check.  If you have asked IM not to tell you about excluded files
+    or directories, it will still alert you that it is updating the
+    integrity data for directories where something is being excluded.
+    This notice appears only once when IM first removes the preexisting
+    integrity data for the excluded files and directories.
+
+Q:  Integrity Master reported a file as having a problem or being suspicious
+    yet I didn't see why.  Where's the explanation?
+
+A:  You probably have your halt options set to halt only on serious
+    problems or emergencies.  In this situation the detail information is
+    written only to your report file.  Please read the report for the
+    detail information on what was found wrong with the file.
+
+Q:  I tried the "/L" option on my laptop but the screen is not very legible.
+
+A:  The "/L" (LCD) option is intended for older CGA compatible laptops such
+    as the Toshiba 1000.  Newer laptops (especially VGA gray scale displays)
+    should work fine with no special video override.  If the display doesn't
+    look right on a newer laptop try the "/M" rather than the "/L" command
+    line switch.
+
+Q:  I just did a "DIR" on a diskette which had the "Stoned" boot sector
+    virus.  When I ran IM, it reported the virus was active in memory.
+    Can I get a virus by just doing a DIR?
+
+A:  No; you cannot get infected unless you execute an infected program
+    or boot from an infected diskette.  When you did the "DIR", a copy of
+    the infected boot sector was read into memory.   IM then detected this
+    image of the virus in memory.  Although the virus is in memory, this
+    is harmless since the virus code is never executed.
+
+
+Q:  When I run Integrity Master on an empty directory, it lists a large
+    number of files as deleted (or sometimes added).  These files don't
+    exist there.
+
+A:  You are using the DOS "APPEND" command.  This makes files appear to
+    present in any directory which are actually in the appended directory.
+    Type "APPEND" and hit ENTER to see if you are using it. When you
+    installed DOS this command may have been placed in your AUTOEXEC.BAT
+    file.   You almost certainly don't need it.  If you don't want to
+    get rid of it, just enter the command "APPEND ;" before you execute IM
+    or include this in a .BAT file to execute IM.
+
+Q:  I don't like the way IM displays dates or times.
+
+A:  Execute IMsetup and select "Change Format for date or time" from the
+    "Advanced option" menu.
+
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

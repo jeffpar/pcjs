@@ -40,6 +40,31 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<<  PC-SIG Disk #697  THE FRONT OFFICE 1 OF 3 (also #698,2311)  >>>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To begin the program, insert Disk #698 and type:  GO (Enter)           ║
+║  to read the installation instructions.                                 ║
+║                                                                         ║
+║  To print those instructions, type:  COPY READ.ME PRN (press Enter)     ║
+║                                                                         ║
+║  Once you have read the file and the config.sys file is setup,          ║
+║  to install program (from Disk #698) type:  INSTALL (press Enter)       ║
+║                                                                         ║
+║  To print the manual for THE FRONT OFFICE, insert Disk #2311 and        ║
+║  type:  PRINTMAN (press Enter)                                          ║
+║                                                                         ║
+║  To start program, type:  TFO (press Enter)                             ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HELP0101.TXT
 
 {% raw %}

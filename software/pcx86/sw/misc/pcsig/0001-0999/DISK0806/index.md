@@ -138,6 +138,13 @@ Sunnyvale Ca. 94086
     TGL      EXE    289168   6-22-87  10:29a
     TGL      INT       512   6-22-87   9:31a
     FILES806 TXT      2133   1-04-88  11:58a
+    HELP         <DIR>    
+            7 file(s)     294885 bytes
+
+     Directory of A:\HELP
+
+    .            <DIR>    
+    ..           <DIR>    
     A        HLP      1536   4-29-87   4:41p
     B        HLP       512   4-29-87   9:23a
     C        HLP      1024   4-29-87   3:10p
@@ -185,5 +192,8 @@ Sunnyvale Ca. 94086
     PN       HLP       512   5-13-87   4:29p
     PNC      HLP      1024   4-29-87   3:12p
     TOP      HLP      1016   4-28-87  12:07p
-           53 file(s)     342493 bytes
-                            3072 bytes free
+           49 file(s)      47608 bytes
+
+    Total files listed:
+           56 file(s)     342493 bytes
+                            1024 bytes free

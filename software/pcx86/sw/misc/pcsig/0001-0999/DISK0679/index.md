@@ -93,6 +93,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No 679  IT (Ideal Terminal)  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: COPY IT.DOC PRN (press enter)         ║
+║                                                                         ║
+║ To run the program, type:  IT (press enter)                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## IT.DOC
 
 {% raw %}

@@ -101,6 +101,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #797 TEST AND TRAIN  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type:                         ║
+║                      COPY TEST.DOC PRN (press enter)                    ║
+║                                                                         ║
+║ To start the program type: TEST1 (press enter)                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0797

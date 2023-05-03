@@ -63,6 +63,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #1762  W2/1090-MISC GENERATOR  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: W2 (press enter)                                ║
+║                                                                         ║
+║ To print documentation, type: COPY W2.DOC PRN (press enter)             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1762

@@ -86,6 +86,49 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  PC-SIG Disk #2864  JENNINGS' MATH CASTLE and QUICKSTART  >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To start working with the programs, copy each program (*.ZIP) with     ║
+║  PKUNZIP.EXE accompany each to a separate floppy disk or separate       ║
+║  directory on your hard drive and then, from that drive, type:          ║
+║                   PKUNZIP [filename]  (press Enter)                     ║
+║                                                                         ║
+║  The files from the zipped program file will extract.  To then begin    ║
+║  each of the two programs, type "GO" for instructions.                  ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #2864  JENNINGS' QUICKSTART  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the introductory documentation and installation instructions,  ║
+║ type:  COPY READ.ME PRN  (press Enter)                                  ║
+║                                                                         ║
+║ To print the manual, type:  COPY MANUAL.DOC PRN  (press Enter)          ║
+║                                                                         ║
+║ To print the license agreement, type:  COPY LICENSE.DOC PRN  (Enter)    ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LICENSE.DOC
 
 {% raw %}

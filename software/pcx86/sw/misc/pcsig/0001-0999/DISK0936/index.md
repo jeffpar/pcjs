@@ -659,6 +659,33 @@ Sunnyvale, CA. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No 936 DCOPY, MYMENU, MENUEZ  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for DCOPY, Type:                             ║
+║                  COPY DCOPY.DOC LPT1: (press enter)                     ║
+║                                                                         ║
+║ To run the program DCOPY, Type: DCOPY (press enter)                     ║
+║                                                                         ║
+║ To run the program MYMENU, type: MYMENU (press enter)                   ║
+║                                                                         ║
+║ To print the documentation for MENUEZ, Type:                            ║
+║                  COPY MEZ.DOC LPT1: (press enter)                       ║
+║                                                                         ║
+║ To run the program MENUEZ, Type: MEZ (press enter)                      ║
+║                                                                         ║
+║ PLEASE NOTE: Menu-Matic has been updated, and because of the size of    ║
+║ the update, it would not fit on this disk. It has been put on disk      ║
+║ #1141. We're sorry for any inconvenience this may have caused you.      ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MEZ.BAS
 
 {% raw %}

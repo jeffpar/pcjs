@@ -67,6 +67,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #976 MANAGEMENT ACTION EXPERT  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unarchive the program, type:  UNPACK MAE.ARC                         ║
+║                                                                         ║
+║ To run the program Management Action Expert, type: MAE (press enter)    ║
+║                                                                         ║
+║ To print the documentation for Management Action Expert, Type:          ║
+║             COPY MAE.DOC LPT1: (press enter)                            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## CIR.DOC
 
 {% raw %}

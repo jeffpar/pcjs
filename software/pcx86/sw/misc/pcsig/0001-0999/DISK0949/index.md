@@ -76,6 +76,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk no 949 STATISTCAL CONSULTANT  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, Type: COPY STATCON.DOC LPT1: (press enter)  ║
+║                                                                         ║
+║ To run the program, Type: STATCON (press enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDER.TXT
 
 {% raw %}

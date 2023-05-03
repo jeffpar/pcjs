@@ -69,6 +69,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #2053  SUPERMENU  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program onto hard drive, type:  INSTALL (press enter)        ║
+║ To start program, type:  SUPRMENU                                       ║
+║                                                                         ║
+║ To print documentation, type:  COPY SUPRMENU.DOC PRN                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SUPRMENU.DOC
 
 {% raw %}

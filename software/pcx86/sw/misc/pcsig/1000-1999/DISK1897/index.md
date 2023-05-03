@@ -117,6 +117,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #1897  PC BINGO AND WORDS*WORDS  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start PC BINGO, type:  PCBINGO (press enter)                         ║
+║ To start WORDS*WORDS, type:  WW (press enter)                           ║
+║                                                                         ║
+║ To print PC BINGO documentation, type:  COPY PCBINGO.DOC PRN            ║
+║ To print WORDS*WORDS documentation, type:  COPY WW.DOC PRN              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1897

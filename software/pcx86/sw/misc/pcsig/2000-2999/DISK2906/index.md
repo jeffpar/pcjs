@@ -38,6 +38,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║             <<<<  PC-SIG Disk #2906 EZ-MENU by PERRY  >>>>              ║
+  ╠═════════════════════════════════════════════════════════════════════════╣
+  ║                                                                         ║
+  ║  To print the readme file, type:  COPY READ-ME.1ST PRN  (press Enter)   ║
+  ║                                                                         ║
+  ║  To install EZ-MENU, type:  INSTALL  (press Enter)                      ║
+  ║                                                                         ║
+  ║                                           Copyright 1992, PC-SIG, Inc.  ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2906

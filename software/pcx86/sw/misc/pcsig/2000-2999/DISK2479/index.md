@@ -68,6 +68,26 @@ machines:
     try MED#1, and launch your small medical practice into the next century.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<  PC-SIG Disk #2479 MED #1 - MEDICAL OFFICE MANAGEMENT SYSTEM  >>>   ║
+║                  Disk 2 of 3 (also #2478, #2480)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print the documentation and installation instructions, insert       ║
+║  Disk #1 and type:  COPY README.1ST PRN (press Enter)                   ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2479
 

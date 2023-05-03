@@ -14,6 +14,34 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #3264 CASTLE OF THE WINDS   >>>>           ║
+║                        Disk 1 of 2 (also #3265)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To unzip the files to a pre-created subdirectory on your hard drive,   ║
+║  insert disk 1 (#3264) and type:                                        ║
+║                                                                         ║
+║         PKUNZIP CASTLE [hard drive:\subdirectory]  (press Enter)        ║
+║                                                                         ║
+║  Then insert disk 2 (#3265) and copy all the files to the hard disk     ║
+║  by typing:  COPY *.* [hard drive:\subdirectory]  (press Enter)         ║
+║                                                                         ║
+║  To start the game, switch to the hard drive and the subdirectory and   ║
+║  type:  WIN CASTLE  (press Enter)                                       ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3264
 

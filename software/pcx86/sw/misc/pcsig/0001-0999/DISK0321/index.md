@@ -512,6 +512,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 321  HOME APPLICATIONS  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the weather program, type WEATHER (press enter)                ║
+║                                                                         ║
+║ To run AC, type: AC (press enter)                                       ║
+║                                                                         ║
+║ To run the programs written in BASIC, consult your BASIC language manual║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GUITAR.BAS
 
 {% raw %}

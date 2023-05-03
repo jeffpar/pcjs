@@ -166,6 +166,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #1912  TV/VOLAPUK AND CRAZYDOS  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start VOLAPUK program, type:  VOLAPUK (press enter)                  ║
+║ To start TV1 program, type:  TV1 (press enter)                          ║
+║ To start TV2 program, type:  TV2 (press enter)                          ║
+║ To start CRAZYDOS program, type:  CRAZY (press enter)                   ║
+║                                                                         ║
+║ To print TV/VOLAPUK documentation, type:  COPY NEW.DOC PRN              ║
+║ To print CRAZYDOS documentation, type:  COPY CRAZYDOS.DOC PRN           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NEW.DOC
 
 {% raw %}

@@ -52,6 +52,23 @@ machines:
     ~ reschedules your outstanding ticklers
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk No 2190 CONTACT PLUS  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: COPY READ.ME PRN (press enter)        ║
+║                                                                         ║
+║ To start the program, type: C (press enter)                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2190
 

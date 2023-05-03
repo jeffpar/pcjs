@@ -103,6 +103,21 @@ Sunnyvale, Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #517 IMAGEPRINT  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, type:                        ║
+║                  COPY IPV3.DOC PRN  (press enter)                       ║
+║                                                                         ║
+║ To start the program, type: IP  (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## IPV3.DOC
 
 {% raw %}

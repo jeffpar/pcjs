@@ -61,6 +61,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #2855  REXL - LAZARILLO DE TORMES  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the documentation, type:  COPY README PRN  (press Enter)       ║
+║                                                                         ║
+║ To install the program, type:  INSTALL  (press Enter)                   ║
+║                                                                         ║
+║ After installation, begin LAZARILLO by typing:  REXL  (Enter)           ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2855

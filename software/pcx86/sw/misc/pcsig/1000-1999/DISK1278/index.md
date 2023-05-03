@@ -79,6 +79,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<< Disk No. 1278 TREK TRIVIA Volume I & FUN WITH LETTERS AND WORDS >>> ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To run TREK TRIVIA, type:  TREK1 (press Enter)                        ║
+║                                                                         ║
+║   To run FUN WITH LETTERS & WORDS, type:  FUNLW (press Enter)           ║
+║                                                                         ║
+║   To print documentation for FUN WITH LETTERS & WORDS, type:            ║
+║                   COPY FUNLW.RME PRN (press Enter)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG, Inc.
+
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1278

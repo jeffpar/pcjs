@@ -55,6 +55,32 @@ machines:
     memory to store data.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  DISK #2343 TELEMATE  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install the program, insert disk #1 and type:                       ║
+║                                                                         ║
+║                                             TMINST (press enter)        ║
+║                                                                         ║
+║  To print documentation, insert disk #3 and type:                       ║
+║                                                                         ║
+║                                             COPY TELEMATE.DOC PRN       ║
+║                                                           (press enter) ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2343
 

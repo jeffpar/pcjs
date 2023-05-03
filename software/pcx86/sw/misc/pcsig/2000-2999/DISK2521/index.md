@@ -204,6 +204,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  DISK #2521 PERSONAL TAROT  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the instructions, type: COPY HELP.DOC PRN                     ║
+║                                                                         ║
+║  To install the program to a floppy type: FLOPPY                        ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1991, PC-SIG Inc.
+```
+{% endraw %}
+
 ## HELP.DOC
 
 {% raw %}

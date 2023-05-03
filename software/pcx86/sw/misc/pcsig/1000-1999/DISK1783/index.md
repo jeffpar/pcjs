@@ -42,6 +42,20 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 1783 QEDIT ADVANCED  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: <drive destination>:Q <filename>            ║
+║                                                                         ║
+║ To print the documentation, type: COPY QEDIT.DOC PRN (press enter)      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDERFRM.DOC
 
 {% raw %}

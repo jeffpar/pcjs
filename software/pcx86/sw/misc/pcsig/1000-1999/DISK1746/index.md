@@ -71,6 +71,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #1746  PIROUETTE  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read introductory instructions, type:  TYPE READ.ME (press Enter)    ║
+║                                                                         ║
+║ To print installation instructions, type:  COPY INSTALL.TXT PRN (Enter) ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+```
+{% endraw %}
+
 ## INSTALL.TXT
 
 {% raw %}

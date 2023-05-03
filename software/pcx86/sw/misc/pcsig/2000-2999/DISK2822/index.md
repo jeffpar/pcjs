@@ -59,6 +59,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #2282  MODEL-S  >>>>                  ║
+║                    Disk #1 of 3 (also #2283, #2284)                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the installation instructions, type:                          ║
+║                                   COPY READ-ME.DOC PRN  (press Enter)   ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2822

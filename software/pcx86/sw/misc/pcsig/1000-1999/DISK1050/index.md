@@ -213,6 +213,33 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     Disk No 1050 Handwriting Analyst, Advanced Menu, Magic Fingers      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To run the program Handwriting Analyst, type:                         ║
+║             START (press enter)                                         ║
+║                                                                         ║
+║   To print the documentation for Advanced Menu, type:                   ║
+║             COPY AMDOC.PRN LPT1: (press enter)                          ║
+║                                                                         ║
+║   To run the program Advanced Menu, type:                               ║
+║             DEMO (press enter)                                          ║
+║                                                                         ║
+║   To print the documentation for Magic Fingers, type:                   ║
+║             COPY README LPT1: (press enter)                             ║
+║                                                                         ║
+║   To run the program Magic Fingers, type:                               ║
+║             MFL (press enter)                                           ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1050
@@ -254,6 +281,16 @@ Sunnyvale  Ca. 94086
     QUICK5            1049   2-01-89   9:46p
     START    EXE      8016   7-29-89  11:17p
     WRITERS  WRT      1620   2-02-89   5:31p
+    MEMTEST      <DIR>    
+           35 file(s)     273136 bytes
+
+     Directory of A:\MEMTEST
+
+    .            <DIR>    
+    ..           <DIR>    
     TESTMEM  COM     12351  10-01-86   8:50a
-           35 file(s)     285487 bytes
-                           17408 bytes free
+            3 file(s)      12351 bytes
+
+    Total files listed:
+           38 file(s)     285487 bytes
+                           16384 bytes free

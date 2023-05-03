@@ -46,6 +46,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #3054  TALKING ABC'S  >>>>               ║
+║                        Disk 1 of 2 (also #3100)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To install the program, type:  INSTALL  (press Enter)                   ║
+║                                                                         ║
+║ Then start the program by typing:  ABC  (press Enter)                   ║
+║                                                                         ║
+║ And print the documentation by typing:  COPY README PRN  (press Enter)  ║
+║                                                                         ║
+║ And print the order form by typing:  COPY ORDER.DOC PRN  (press Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                       (c) Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3054

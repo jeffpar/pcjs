@@ -63,6 +63,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1055 LOAN WARRIOR  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: COPY LW.TXT PRN  (press enter)        ║
+║                                                                         ║
+║ To start the program, type: STARTLW2  (press enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LW-DSCL.TXT
 
 {% raw %}

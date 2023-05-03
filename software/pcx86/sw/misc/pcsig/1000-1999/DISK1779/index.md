@@ -347,6 +347,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  Disk #1779  THE PROGRADE SYSTEM disk 2 of 2 (1778)  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program, insert disk 1 and type: HARD (press enter)      ║
+║                         insert disk 2 and type: HARD2 (press enter)     ║
+║                                                                         ║
+║ To start program, insert disk 1 and type:  BEGIN (press enter)          ║
+║                                                                         ║
+║ To print documentation, type:  COPY PROGRADE.TXT PRN                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PROGRADE.TXT
 
 {% raw %}

@@ -178,6 +178,31 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 911 MIX IT UP  >>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To run the program NEVADA POKER MACHINE, Type:                          ║
+║                  POKER (press enter)                                    ║
+║                                                                         ║
+║ To print the documentation for PRO LOTTO, Type:                         ║
+║                  COPY PROLOTTO.DOC LPT1: (press enter)                  ║
+║                                                                         ║
+║ To run the program PRO LOTTO, Type: PL (press enter)                    ║
+║                                                                         ║
+║ To print the documentation for MUTANT INVASION, Type:                   ║
+║                  COPY README.DOC LPT1: (press enter)                    ║
+║                                                                         ║
+║ To run the program MUTANT INVASION, Type: MUTANTS (press enter)         ║
+║                                                                         ║
+║ To run the program INTERCEPT, Type: INTERC (press enter)                ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

@@ -430,6 +430,31 @@ Check number:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  Disk No 1328  BIG RIG, GEMINI-2, NUKEWAR, SOPWITH  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To print the documentation on this disk, type:                        ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To run the program Big Rig, type:                                     ║
+║             BIGRIG (press enter)                                        ║
+║                                                                         ║
+║   To run the program Gemini-2, type:                                    ║
+║             GEMINI2 (press enter)                                       ║
+║                                                                         ║
+║   To run the program Nukewar, type:                                     ║
+║             NUKEWAR (press enter)                                       ║
+║                                                                         ║
+║   To run the program SOPWITH, type:                                     ║
+║             SOPWITH (press enter)                                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SOPWITH.DOC
 
 {% raw %}

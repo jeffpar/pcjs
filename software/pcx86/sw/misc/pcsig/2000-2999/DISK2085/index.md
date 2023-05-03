@@ -93,6 +93,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk No **** EXPRESSCHECK (Disk 2 of 2) >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: PRINTDOC (press enter)                ║
+║                                                                         ║
+║ To run the program, insert disk 1, and type: CHECK (press enter)        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDERFRM.DOC
 
 {% raw %}

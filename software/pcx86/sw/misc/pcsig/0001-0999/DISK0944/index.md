@@ -264,6 +264,26 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk No 944 DOS CONTROLLER, MR MENU  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for DOS CONTROLLER, Type:                    ║
+║             COPY DOSCNTRL.DOC LPT1: (press enter)                       ║
+║                                                                         ║
+║ To run the program DOS CONTROLLER, Type: DOSCNTRL (press enter)         ║
+║                                                                         ║
+║ To print the documentation for MR MENU, Type:                           ║
+║             COPY MRMENU.DOC LPT1: (press enter)                         ║
+║                                                                         ║
+║ To run the program MR MENU, Type: MRMENU (press enter)                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MRMENU.DOC
 
 {% raw %}

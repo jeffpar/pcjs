@@ -130,6 +130,34 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #528 NEW YORK WORD  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Welcome to NEW YORK WORD version 2.30. To find out info about           ║
+║ installing the program on your system, type the READ.ME file. If you    ║
+║ have a hard disk system, you must use the file INSTALL.BAT. If you      ║
+║ have a floopy system, you must use the file FINSTALL.BAT.               ║
+║                                                                         ║
+║ If you have trouble installing the program, please call the PC-SIG      ║
+║ technical service department.                                           ║
+║                                                                         ║
+║ If you register, you also get the speller, keyboard remapping           ║
+║ facility, and the New York Word printed manual (102 pages). Send a      ║
+║ check for $45.00 + $2 shipping ($7 overseas) to :                       ║
+║                                                                         ║
+║               Marc Adler                                                ║
+║               138 - 23 Hoover Ave.                                      ║
+║               Jamaica, New York  11435                                  ║
+║                                                                         ║
+║ The registration form is in a file called REGISTER.DOC.                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INSTALL.DOC
 
 {% raw %}

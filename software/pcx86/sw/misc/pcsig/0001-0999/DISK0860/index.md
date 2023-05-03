@@ -560,6 +560,31 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  Disk #860 REIPS, THE SIMPLE BOOKKEEPER and TYPERITE  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To get information on starting REIP, type START (press enter)           ║
+║                                                                         ║
+║ To start the program, Type: RS (press enter)                            ║
+║                                                                         ║
+║ To copy the documentation for THE SIMPLE BOOKKEEPER to your printer,    ║
+║                     Type: COPY BKKP.DOC PRN (press enter)               ║
+║                                                                         ║
+║ To start the program, Type: BKKP (press enter)                          ║
+║                                                                         ║
+║ To copy information about TYPERITE to your printer, Type:               ║
+║                             COPY READ.ME PRN (press enter)              ║
+║                                                                         ║
+║ To start the program, Type: TYPERITE (press enter)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0860

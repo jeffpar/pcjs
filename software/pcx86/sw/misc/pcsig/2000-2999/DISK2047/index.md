@@ -86,6 +86,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #2047  APEX POINT AND FIGURE  >>>>              ║
+║                        (disk 2 of 2, 2046 also)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, insert disk 1 and type: APEX         (press enter)    ║
+║                                                                         ║
+║ To print documentation, type: COPY MANUAL.DOC PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

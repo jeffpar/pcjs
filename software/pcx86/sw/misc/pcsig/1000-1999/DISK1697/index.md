@@ -3551,6 +3551,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk #1697  DML & XREF  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unarchive program files and install onto hard drive, type:           ║
+║                                        INSTALLH (press enter)           ║
+║ To start DML program, type:  DMLTEST (press enter)                      ║
+║ To start XREF program, type:  XREF (press enter)                        ║
+║                                                                         ║
+║ To print DML documentation, type:  COPY DML.DOC PRN                     ║
+║ To print XREF documentation, type:  COPY XREF.DOC PRN                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1697

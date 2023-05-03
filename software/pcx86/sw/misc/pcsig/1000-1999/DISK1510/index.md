@@ -75,6 +75,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 1510 SCREENPAINT  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To watch a demo of the program, type DEMO (press enter)                 ║
+║                                                                         ║
+║ To view the documentation on your screen, type VIEW (press enter)       ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

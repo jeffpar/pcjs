@@ -87,6 +87,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #1781  CMOS-RAM/CHEKCMOS  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start CMOS_RAM, type:  CMOS_RAM (press enter)                        ║
+║ To start CHEKCMOS, type:  CHEKCMOS (press enter)                        ║
+║                                                                         ║
+║ To print documentation, type:  COPY CMOS_RAM.DOC PRN                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1781

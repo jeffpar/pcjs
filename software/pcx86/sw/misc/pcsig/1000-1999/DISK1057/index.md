@@ -93,6 +93,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk No 1057 EXPRESSCHECK (Disk 1 of 2) >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, insert #2085 and type: PRINTDOC (press enter)   ║
+║ To customize the program, type: SETUP                                   ║
+║ To run the program, type: CHECK (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## WHATSNEW.DOC
 
 {% raw %}

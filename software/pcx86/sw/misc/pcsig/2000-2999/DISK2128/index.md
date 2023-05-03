@@ -96,6 +96,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2128  MEAL MASTER  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print installation instructions, type:  COPY README PRN (Enter)      ║
+║                                                                         ║
+║ To print registration form, type:  COPY REGISTER PRN (press Enter)      ║
+║                                                                         ║
+║ Once program is installed, to start program, type:  MM (press Enter)    ║
+║                                                                         ║
+║ Follow instructions according to the MM.TXT file.                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## MM.TXT
 
 {% raw %}

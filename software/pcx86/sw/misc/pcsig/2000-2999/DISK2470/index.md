@@ -66,6 +66,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk 2470  HANDICAP II   >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To read the author's introductory note, type:  TYPE READ.ME (Enter)    ║
+║                                                                         ║
+║  To begin program, type:  HANDICAP (press Enter)                        ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2470

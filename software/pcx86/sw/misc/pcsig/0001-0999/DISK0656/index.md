@@ -81,6 +81,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 656 REAL ESTATE SYSTEM  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, type: MANUAL (press enter)   ║
+║                                                                         ║
+║ To start the program, type: RES (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## RES.DOC
 
 {% raw %}

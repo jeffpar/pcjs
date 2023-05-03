@@ -78,6 +78,23 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk #870 HGMIBM  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type:                         ║
+║                           PRINTDOC (press enter)                        ║
+║                                                                         ║
+║ To start the program, Type: HGCIBM (press enter)                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+ 
+ 
+```
+{% endraw %}
+
 ## HGCIBM.DOC
 
 {% raw %}

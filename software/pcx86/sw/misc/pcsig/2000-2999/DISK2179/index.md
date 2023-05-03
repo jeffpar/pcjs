@@ -79,6 +79,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk No 2179 SALES COMMISION TRACKER  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program, type: AINSTALL [drive path] (press enter)       ║
+║                                                                         ║
+║ To start the program, type: SCT (press enter)                           ║
+║                                                                         ║
+║ To print the documentation, type: COPY SCT.DOC PRN (press enter)        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SCT.DOC
 
 {% raw %}

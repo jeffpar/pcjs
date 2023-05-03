@@ -1065,6 +1065,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No: 283 DOS Utilities No 15  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the manuals on this disk, type:                              ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To run an EXE or COM program simply type its name and press <ENTER>.  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INT_PORT.DOC
 
 {% raw %}

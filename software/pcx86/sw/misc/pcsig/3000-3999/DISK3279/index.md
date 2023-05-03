@@ -82,6 +82,26 @@ machines:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3279  Q-INSTALL   >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To view information on Q-INSTALL, type:  README  (press Enter)         ║
+║                                                                         ║
+║  To install the program, type:  INSTALL  (press Enter)                  ║
+║                                                                         ║
+║  After installation, to print the documentation, type:  QINSTDOC        ║
+║                                                          (press Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3279

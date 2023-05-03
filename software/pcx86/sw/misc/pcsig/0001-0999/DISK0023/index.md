@@ -392,6 +392,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #23 BOWLING LEAGUE SECRETARY  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type: COPY BOWL.DOC PRN  (press enter)          ║
+║                                                                         ║
+║ To run the program, type: BOWL  (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0023

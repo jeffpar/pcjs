@@ -58,6 +58,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  DISK #2510 PCBBREEZE II  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To start the program, type: PCBREEZE                                   ║
+║                                                                         ║
+║  To view instructions on printing the documentation, type: README       ║
+║                                                                         ║
+║  To read or print the registration form, type: READFRM                  ║
+║                                                PRINTFRM                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990-1991, PC-SIG Inc.
+```
+{% endraw %}
+
 ## PCBREEZE.TXT
 
 {% raw %}

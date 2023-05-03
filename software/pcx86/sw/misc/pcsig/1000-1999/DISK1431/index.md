@@ -111,19 +111,27 @@ Sunnyvale CA 94086
     README            1515   4-28-88   2:48a
     GO       BAT        38   6-02-89   9:13a
     FILE1431 TXT      1667   6-02-89   9:25a
+    TOOLS        <DIR>    
+    MANUAL       <DIR>    
+           10 file(s)     132441 bytes
+
+     Directory of A:\TOOLS
+
+    .            <DIR>    
+    ..           <DIR>    
     MENU     CMD     12595   2-13-88  10:19a
-    EMACS~1  HLP      8841   2-13-88  10:14a
+    EMACS    HLP      8841   2-13-88  10:14a
     FINDCOM  CMD      1178   2-13-88  10:20a
     BDATA    CMD       531   2-13-88  10:19a
     ME110    RC       1704   2-13-88  10:14a
     ME150    RC       1564   2-13-88  10:17a
-    README~1         11790   2-13-88  10:17a
+    README           11790   2-13-88  10:17a
     SHELL    CMD      2351   2-13-88  10:19a
     AMIGA    RC       5086   2-13-88  10:19a
     ST520    RC       4216   2-13-88  10:17a
     NEWPAGE  CMD      2268   2-13-88  10:20a
     TRAND    CMD       467   2-13-88  10:19a
-    EMACS~1  RC       4187   2-13-88  10:14a
+    EMACS    RC       4187   2-13-88  10:14a
     BPAGE    CMD     11051   2-13-88  10:13a
     WPAGE    CMD      4215   2-13-88  10:18a
     FUNC     CMD       504   2-13-88  10:09a
@@ -135,7 +143,16 @@ Sunnyvale CA 94086
     DECOMP   BAK       816   2-13-88  11:09a
     COMPALL  BAK       896   2-13-88  11:08a
     COMPALL  BAT       816   2-13-88  11:09a
+           26 file(s)      88664 bytes
+
+     Directory of A:\MANUAL
+
+    .            <DIR>    
+    ..           <DIR>    
     EMACS    DXZ     64760   2-13-88  10:46a
     EMACS    TXZ     13259   2-13-88  10:12a
-           34 file(s)     299124 bytes
-                            6144 bytes free
+            4 file(s)      78019 bytes
+
+    Total files listed:
+           40 file(s)     299124 bytes
+                            4096 bytes free

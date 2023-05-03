@@ -14,6 +14,37 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  PC-SIG Disk #2954  C*GEN CUSTOMER SURVEY GENERATOR  >>>>      ║
+║                  Disk #1 of 3 (also #2955 and #2960)                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the instructions, type:  COPY README.1ST PRN  (press Enter)    ║
+║                                                                         ║
+║ To start the program, type:  INSTALL  (press Enter)                     ║
+║                                                                         ║
+║     NOTE:  This program has a limitation of 10 customer surveys per     ║
+║     Survey Disk. If more surveys are needed to decide whether or not    ║
+║     your company can benefit from buying C*GEN, refer to the README.1ST ║
+║     file, Section 4.5 "Creating a Survey Disk, Printed Questionnaires." ║
+║                                                                         ║
+║     This suggestion does not circumvent your responsibility to buy      ║
+║     the program from the author should it be a program you find         ║
+║     valuable to your business.                                          ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2954
 

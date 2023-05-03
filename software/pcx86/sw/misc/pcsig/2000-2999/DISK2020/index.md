@@ -2888,6 +2888,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  Disk #2020 FLODRAW Disk 3 of 3 (912 and 913 also)  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, insert disk 1 and type:  FLODRAW (press enter)    ║
+║                                                                         ║
+║ To print the documentation for FLODRAW, type:   MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## UPDATE.DOC
 
 {% raw %}

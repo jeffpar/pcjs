@@ -16,6 +16,33 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #3418 NISUS MISSILE MASTER  >>>>           ║
+║                         Disk 2 of 2 (3417 also)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Install this game to your hard disk, type:                          ║
+║     [hard drive letter]:  (Enter)                                       ║
+║     CD\  (Enter)                                                        ║
+║     MD MISSILE                                                          ║
+║     CD MISSILE                                                          ║
+║                                                                         ║
+║  To Extract files, insert disk 2 (#3418) in drive A (or B) and type:    ║
+║     A:PKUNZIP A:MISSILE  (use B: instead of A: if disk is in B drive)   ║
+║                                                                         ║
+║  To Start the game, type:  MISSILE  (Enter)                             ║
+║                                                                         ║
+║  You can also start the game from within Windows. See your Windows      ║
+║  documentation on running programs.                                     ║
+║                                                                         ║
+║                                        (C) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

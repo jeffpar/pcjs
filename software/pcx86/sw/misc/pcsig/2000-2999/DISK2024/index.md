@@ -270,6 +270,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #2024  SPLOT (SCREEN PLOT)  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print intro materials, type:  COPY README PRN (press Enter)          ║
+║                                                                         ║
+║ To start program, type:  SPLOT (press Enter)                            ║
+║                                                                         ║
+║ To print documentation, type:  COPY SPLOT.DOC PRN  (press Enter)        ║
+║                                                                         ║
+║ To print the HPLOT documentation, type:  COPY HPLOT.DOC PRN (Enter)     ║
+║                                                                         ║
+║ To print the PLOTDUMP documentation, type: COPY PLOTDUMP.DOC PRN (Enter)║
+║                                                                         ║
+║ To print registration form, type:  COPY PAYFORM PRN (press Enter)       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIg Inc.
+```
+{% endraw %}
+
 ## HPLOT.DOC
 
 {% raw %}

@@ -88,6 +88,24 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #845 COST EFFECTIVE  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type;                         ║
+║                         COPY MANUAL.CEF PRN (press enter)               ║
+║                                                                         ║
+║ To start the program, type; CEF (press enter)                           ║
+║                                                                         ║
+║ Please Note: If you have a Leading Edge Model D this program will not   ║
+║ function correctly.                                                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0845

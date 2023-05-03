@@ -38,6 +38,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2304  FRACTINT  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view the readme file, type: TYPE README.WIN   (press Enter)          ║
+║                                                                         ║
+║ To install the program, create a directory on your hard drive (C,D,...):║
+║                       C:MD \FRACTINT  (press Enter)                     ║
+║                       C:CD \FRACTINT  (press Enter)                     ║
+║                       A:PKUNZIP WINFRA C:\FRACTINT  (press Enter)       ║
+║                                                                         ║
+║ To print documentation and instructions, type:                          ║
+║                       COPY WINFRACT.DOC PRN                             ║
+║                                                                         ║
+║ To start the program FRACTINT, type:  WIN WINFRACT (press ENTER)        ║
+║                                                                         ║
+║                                       (c) COPYRIGHT 1991, PC-SIG INC.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## WINFRACT.DOC
 
 {% raw %}

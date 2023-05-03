@@ -322,6 +322,28 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #663 DATABOSS (Disk 2 of 2)  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║     This is second disk of the DATABOSS data management system.         ║
+║     It contains the actual program files needed to run DATABOSS.        ║
+║                                                                         ║
+║    NOTE: Please read the documentation on Disk #662 before installing   ║
+║          and running the program.                                       ║
+║                                                                         ║
+║    To install the files to a floppy disk, type FLOPPY (press enter).    ║
+║                                                                         ║
+║    To install the files to a hard disk type FIXED (press enter).        ║
+║                                                                         ║
+║     Once installed, type DATABOSS to load the program.                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0663

@@ -769,6 +769,22 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1438 AUDIO II  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type AUDIO (press enter)                          ║
+║                                                                         ║
+║ To look at the documentation on your screen, type VIEW (press enter)    ║
+║                                                                         ║
+║ To copy the documentation to your printer, type AUDIODOC (press enter)  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1438

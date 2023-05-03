@@ -49,6 +49,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #3093  THE AUTO DOCTOR  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print the documentation, type:  COPY README.DOC PRN  (press Enter)  ║
+║                                                                         ║
+║  To start the program, type:  ADOC  (press Enter)                       ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

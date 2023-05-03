@@ -995,6 +995,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk #2029  FIND DUPLICATES/COPYCON/GBLINK  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start GBLINK program, type: GBLINK       (press enter)               ║
+║ To print documentation, type: COPY GBLINK.DOC PRN                       ║
+║                                                                         ║
+║ Use PKUNZIP to extract files from FD212                                 ║
+║ To start FIND DUPLICATES program, type: FD  (press enter)               ║
+║ To print documentation, type: COPY FD.DOC PRN                           ║
+║                                                                         ║
+║ Use PKUNZIP to extract files from CC312                                 ║
+║ To start COPYCON program, type: COPYCON     (press enter)               ║
+║ To print documentation, type: COPY COPYCON.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2029

@@ -68,6 +68,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1465 Lunch Box  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type LUNCHBOX (press enter)                       ║
+║                                                                         ║
+║ To look at the documentation on your screen, type VIEW (press enter)    ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LUNCHBOX.DOC
 
 {% raw %}

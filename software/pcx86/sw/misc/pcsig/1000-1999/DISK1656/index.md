@@ -78,6 +78,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  Disk #1656  KING JAMES BIBLE SEARCH PROGRAM disk 3 of 4  >>>>    ║
+║                      (1654, 1655 and 1657 also)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, insert disk 1 and type:  CONCORD (press enter)        ║
+║ To install program on hard drive, insert disk 1 and type:               ║
+║                                   INSTALL (press enter)                 ║
+║                                                                         ║
+║ To print documentation, insert disk 1 and type:  COPY CONCORD.PRN PRN   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1656

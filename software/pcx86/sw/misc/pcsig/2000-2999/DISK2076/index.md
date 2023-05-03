@@ -532,6 +532,26 @@ manual should contain an explanation.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #2076  CREATIVITY PACKAGE  >>>>                 ║
+║                   Disk 2 of 3 (2075 and 2077 also)                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start THUNDER THOUGHT, insert disk 2 and type:  THUNDER (press enter)║
+║ To start VERSIFIER, insert disk 3 and type:  VERSE (press enter)        ║
+║                                                                         ║
+║ To print the book, insert disk 1 and type: READ and follow instructions ║
+║ To view or print documentation for THUNDER THOUGHT, insert disk 2 and   ║
+║          type:  THUNDOC and press F1 for Help                           ║
+║ To view or print documentation for VERSIFIER, insert disk 3 and         ║
+║          type:  VERSEDOC and press F1 for Help                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2076

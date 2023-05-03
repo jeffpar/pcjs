@@ -91,6 +91,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #199 PC-CALC+ (Disk 1 of 3)  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program to your hard drive, type INSTALL (press enter)   ║
+║                                                                         ║
+║ For documentation for PC-CALC+, insert disk number 1017 in drive A>     ║
+║ and type GO (press enter)                                               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0199

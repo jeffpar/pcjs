@@ -2518,6 +2518,21 @@ You may keep this invoice for your records.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1084 FREEWORD  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To run the program, type: FW (press enter)                              ║
+║                                                                         ║
+║ To copy the documentation to your printer, type: COPY FW.DOC PRN        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1084

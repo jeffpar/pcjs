@@ -2031,6 +2031,13 @@ Building Statuses
     README   TWO      1289   3-18-89  11:54a
     REGISTER DOC      1537   3-18-89  12:16p
     USRGUIDE DOC     29432   3-18-89  12:12p
+    PMDEMO       <DIR>    
+            7 file(s)      93375 bytes
+
+     Directory of A:\PMDEMO
+
+    .            <DIR>    
+    ..           <DIR>    
     AMORE    WIN       228  10-15-87  11:12a
     ARC      WIN       632   8-11-88  12:57p
     ARCH     WIN       360   8-11-88   3:08p
@@ -2097,7 +2104,7 @@ Building Statuses
     PERS     WIN       476   8-13-88  12:44a
     PERS2    WIN       572  10-09-87   5:54p
     PET      WIN        18   8-11-88  10:25p
-    PMDEMO~1 BAT        48   8-16-88   3:21p
+    PMDEMO   BAT        48   8-16-88   3:21p
     PMDEMOLP BAT        50   8-16-88   2:57p
     PMDM     IRP       392   8-12-88   9:10p
     PMDM     PTO       512   8-11-88   3:49p
@@ -2159,5 +2166,8 @@ Building Statuses
     UNT      WIN        18   8-11-88  10:10p
     YES      WIN        14   8-11-88  10:17p
     YTD      WIN      1268  10-14-87   4:55p
-          134 file(s)     284152 bytes
-                          897024 bytes free
+          130 file(s)     190777 bytes
+
+    Total files listed:
+          137 file(s)     284152 bytes
+                               0 bytes free

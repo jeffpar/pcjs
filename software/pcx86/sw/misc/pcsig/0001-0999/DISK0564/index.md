@@ -109,6 +109,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<< Disk No 564  Dos Util. version 3.31 >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To run a program, type the name of the file that you wish to run.       ║
+║ For example, if you wanted to run the program called SHOW, you would    ║
+║ type the following:                                                     ║
+║                SHOW (press enter)                                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## CONSOLE.ASM
 
 {% raw %}

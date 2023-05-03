@@ -72,6 +72,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #2771  AN OUNCE OF PREVENTION  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To install the program, type:  INSTALL  (press enter)                 ║
+║                                                                         ║
+║   To print the documentation, type:  COPY MANUAL PRN  (press enter)     ║
+║                                                                         ║
+║   To run the program, type:  OZUTIL   (press enter)                     ║
+║                                                                         ║
+║   To load the program in resident memory, type: OZRES  (press enter)    ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+                                            Copyright (c) 1991, PC-SIG Inc.
+```
+{% endraw %}
+
 ## VENDOR.DOC
 
 {% raw %}

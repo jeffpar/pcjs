@@ -97,6 +97,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No 1221 EGA TREK & MAH JONGG  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unarchive EGATREK, type: EGATRK21  (press enter)                     ║
+║                                                                         ║
+║ To unarchive MAHJONGG, type: MAHJNG33  (press enter)                    ║
+║                                                                         ║
+║ To start EGA TREK, type TREK (press enter)                              ║
+║                                                                         ║
+║ To start MAH JONGG, type MAHJONGG (press enter)                         ║
+║                                                                         ║
+║ To print the documentation for EGA TREK, type:                          ║
+║                  COPY TREK.DOC PRN  (press enter)                       ║
+║                                                                         ║
+║ To print the documentation for MAH JONGG, type:                         ║
+║                  COPY MAJONGG.DOC PRN  (press enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1221

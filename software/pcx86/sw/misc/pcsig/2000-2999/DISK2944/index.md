@@ -14,6 +14,25 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2944 AMORTIZEIT!  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  For installation instructions, type:  README  <enter>                  ║
+║                                                                         ║
+║  To install the program, type:  INSTALL  <enter>                        ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2944
 

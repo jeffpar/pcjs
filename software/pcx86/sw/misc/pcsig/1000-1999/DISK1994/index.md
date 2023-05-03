@@ -980,6 +980,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #1994  DOS-EZ, MAKESYS AND LISTBACK  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start MAKESYS, type:  MAKESYS (press enter)                          ║
+║ To start LISTBACK using DOS 3.3 or higher, type LISTBACK (press enter)  ║
+║ To start LISTBACK using DOS 2.0 to 3.2, type LSTBACK2 (press enter)     ║
+║                                                                         ║
+║ To print documentation for DOS-EZ, type:  COPY DOSEZ.DOC PRN            ║
+║ To print documentation for MAKESYS, type:  COPY MAKESYS.DOC PRN         ║
+║ To print documentation for LISTBACK, type:  COPY LISTBACK.DOC PRN       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LISTBACK.DOC
 
 {% raw %}

@@ -132,6 +132,33 @@ In Australia:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #3265 CASTLE OF THE WINDS   >>>>           ║
+║                        Disk 2 of 2 (also #3264)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print installation instructions, type: COPY INSTALL.DOC PRN (Enter) ║
+║                                                                         ║
+║  To print the order form, type:  COPY ORDER.DOC PRN  (press Enter)      ║
+║                                                                         ║
+║  To unzip the files to your hard disk, insert disk 1 (#3264) and        ║
+║  type:  PKUNZIP CASTLE [hard drive:\subdirectory]  (press Enter)        ║
+║                                                                         ║
+║  Then insert disk 2 (#3265) and copy all the files to the hard disk     ║
+║  by typing:  COPY *.* [hard drive:\subdirectory]  (press Enter)         ║
+║                                                                         ║
+║  To start the game, switch to the hard drive and the subdirectory,      ║
+║  then type:  WIN CASTLE  (press Enter)                                  ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INSTALL.DOC
 
 {% raw %}

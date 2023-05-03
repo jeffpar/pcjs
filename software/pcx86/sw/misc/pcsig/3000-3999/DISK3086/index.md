@@ -53,6 +53,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3086  PC-INDEX  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the program documentation, type:  COPY PCI.DOC PRN     (Enter) ║
+║                                            COPY README.DOC PRN  (Enter) ║
+║                                                                         ║
+║ To start PC-INDEX, type:  PCI  (press Enter)                            ║
+║                                                                         ║
+║ To print the registration form, type:  COPY ORDER.FRM PRN  (press Enter)║
+║                                                                         ║
+║ To print the documentation for PS2ASC.EXE, a Postscript to ASCII file   ║
+║ converter for use with PC-INDEX, type:  COPY PS2ASC.DOC PRN  (Enter)    ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3086

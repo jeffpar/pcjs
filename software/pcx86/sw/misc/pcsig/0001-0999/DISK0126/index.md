@@ -193,7 +193,6 @@ PC Software Interest Group
 1125 Stewart Ct  Suite G
 Sunnyvale, CA 94086
 (408) 730-9291
-
 ```
 {% endraw %}
 
@@ -210,7 +209,6 @@ Library Routine           Enter "DO GUIDE" at dBASE II dot prompt
 State-Zip code checker    Enter "DO STATEZIP" at dBASE II dot prompt
 Conversion program        Enter "DO CONVERT" at dBASE II dot prompt
 Back-up program           Enter "DO BACKUP" at dBASE II dot prompt
-
 ```
 {% endraw %}
 
@@ -395,8 +393,10 @@ can be taken.
 
 
 
-. DO MAIL
-Enter date as mm/dd/yy:
+. DO MAIL
+
+Enter date as mm/dd/yy:
+
 
 
 
@@ -410,23 +410,20 @@ Enter date as mm/dd/yy:
 
  enter desired action 
 WAITING 
-. 
 . 
-. 
-. 
-. 
-. QUIT
+
+. 
+. 
+
+. 
+
+. 
+
+. QUIT
+
 *** END RUN     dBASE II     ***
 
 
-oseph W. Pixler                
-1125 Singing Meadow Rd         
-Diamond Bar, CA 91710           
-
-
-Dear Mr. Pixler       
-
-This  is  the body of a form 
 ```
 {% endraw %}
 

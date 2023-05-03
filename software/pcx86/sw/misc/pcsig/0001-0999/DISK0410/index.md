@@ -3286,6 +3286,13 @@ be opened (via the 'open statement').
     DIREC    DOC      1152   7-15-85   8:49p
     FILES410 TXT       755  10-21-85  11:56a
     USERMAN  DOC    125824   7-16-85   9:19p
+    DK1          <DIR>    
+            4 file(s)     127731 bytes
+
+     Directory of A:\DK1
+
+    .            <DIR>    
+    ..           <DIR>    
     B0ADVCLR          1536   9-18-84   4:19p
     B0ADVNT          25600   7-15-85   7:36p
     B0BASE             526   9-18-84   5:22p
@@ -3311,5 +3318,8 @@ be opened (via the 'open statement').
     F0STEXT           2560   9-18-84   4:30p
     F0TRAVL           5632   9-18-84   4:35p
     F0VOCAB          10240   9-18-84   4:48p
-           28 file(s)     325123 bytes
-                           26624 bytes free
+           27 file(s)     197392 bytes
+
+    Total files listed:
+           31 file(s)     325123 bytes
+                           25600 bytes free

@@ -16,6 +16,24 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  PC-SIG Disk #3311 PUZZYVGA  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To start, type:  MAKEPZY  (press Enter)                                ║
+║                                                                         ║
+║  To print the documentation, type:  COPY README.1ST PRN  (press Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VENDOR.DOC
 
 {% raw %}

@@ -261,6 +261,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1466 BOAT BOX  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type BOATBOX (press enter)                        ║
+║                                                                         ║
+║ To look at the documentation on your screen, type VIEW (press enter)    ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1466

@@ -103,6 +103,20 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 1419 MAZE CUBE  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type MC (press enter)                             ║
+║                                                                         ║
+║ For information about the program, type README (press enter)            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1419

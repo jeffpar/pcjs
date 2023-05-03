@@ -151,6 +151,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #1913 OSMOSIS SOLITAIRE AND BINGO  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start OSMOSIS SOLITAIRE, type:  OSMOSIS (press enter)                ║
+║ To start BINGO, type:  BINGO (press enter)                              ║
+║                                                                         ║
+║ To print OSMOSIS SOLITAIRE documentation, type:  COPY OSMOSIS.DOC PRN   ║
+║ To print BINGO documentation, type:  COPY BINGO.TXT PRN                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## OSMOSIS.DOC
 
 {% raw %}

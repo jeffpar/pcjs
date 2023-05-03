@@ -14,6 +14,30 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3184  AUTOMAN  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To install the program, copy the files to a subdirectory on your       ║
+║  hard drive and type:  AUTOM  (press Enter)                             ║
+║                                                                         ║
+║  To then print the documentation, type:  COPY AUTOMAN.LST PRN  (Enter)  ║
+║                                                                         ║
+║  To start the program, type:  AUTOMAN  (press Enter)                    ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3184
 

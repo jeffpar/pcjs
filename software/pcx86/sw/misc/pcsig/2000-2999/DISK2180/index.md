@@ -69,6 +69,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No. 2180 STARSIDE  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: COPY READ.ME PRN (press Enter)        ║
+║                                                                         ║
+║ To view Help documents, type:  TYPE HELP1.DOC (press Enter)             ║
+║                                TYPE HELP2.DOC (etc.)                    ║
+║                                                                         ║
+║ To start the program, type: STARSIDE (press enter)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HELP1.DOC
 
 {% raw %}

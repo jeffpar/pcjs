@@ -100,6 +100,22 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk No 1405 PC-AGENT  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type RUN (press enter)                            ║
+║                                                                         ║
+║ To look at the documentation on your screen, type VIEW (press enter)    ║
+║                                                                         ║
+║ To copy the documentation to your printer, type PCHELP (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PCAGENT.DOC
 
 {% raw %}

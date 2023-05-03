@@ -50,6 +50,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #2603  DAN (Data Analysis) >>>>             ║
+║                        Disk 2 of 2 (also #2602)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To begin the program, insert Disk 1, and type:  TYPE READ.ME  (Enter)   ║
+║                                                                         ║
+║ To print the instructions, type:  COPY READ.ME PRN  (Enter)             ║
+║                                                                         ║
+║                                                                         ║
+║                                       (c) Copyright 1991, PC-SIG Inc.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2603

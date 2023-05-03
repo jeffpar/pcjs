@@ -16,6 +16,32 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #2886 ZILCH  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To read the introductory documentation, type:  TYPE README.DOC  (Enter)║
+║                                                                         ║
+║  To print the manual, type:  MANUAL  (press Enter)                      ║
+║                                                                         ║
+║  To install ZILCH on a hard disk, type:  SETUP  (press Enter)           ║
+║                                                                         ║
+║  To print the floppy disk installation information, type:               ║
+║                                                                         ║
+║                                      COPY FLOPPY.DOC PRN  (press Enter) ║
+║                                                                         ║
+║  To start the program after installation, type:  ZILCH  (press Enter)   ║
+║                                                                         ║
+║  To print the registration form, type:  COPY ORDERFRM.DOC PRN  (Enter)  ║
+║                                                                         ║
+║                                         (c) Copyright 1992, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDERFRM.DOC
 
 {% raw %}

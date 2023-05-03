@@ -100,6 +100,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1668  SPEECH  >>>>                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start SPEECH program, type:  SPEECH (press enter)                    ║
+║ To start SAY program, type:  SAY (press enter)                          ║
+║ To start SAYTIME program, type:  SAYTIME (press enter)                  ║
+║                                                                         ║
+║ To print documentation for SPEECH, type:  COPY SPEECH.DOC PRN           ║
+║ To print documentation for SAY, type:  COPY SAY.DOC PRN                 ║
+║ To print documentation for SAYTIME, type:  COPY SAYTIME.DOC PRN         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REGIST.TXT
 
 {% raw %}

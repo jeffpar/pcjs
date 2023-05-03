@@ -241,6 +241,20 @@ Sunnyvale, CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 1129 PC-SOFT-E  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, type: PRINTDOC (press enter) ║
+║                                                                         ║
+║ To start the program, type: PFAS (press enter)                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PFAS.DOC
 
 {% raw %}

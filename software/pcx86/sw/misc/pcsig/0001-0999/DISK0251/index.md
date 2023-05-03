@@ -75,6 +75,24 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<< Disk No 251  TIME AND MONEY Ver. 2.1 >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:                                     ║
+║                  MANUAL (press enter)                                   ║
+║                                                                         ║
+║   To run the program, type:                                             ║
+║                  TAMSTART (press enter)                                 ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0251

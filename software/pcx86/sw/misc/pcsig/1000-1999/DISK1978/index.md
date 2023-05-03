@@ -225,6 +225,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  Disk #1978  THE ELECTRICAL DBS (disk 2 of 2, also 1977) >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install files to your hard drive, insert disk 1, and type: INSTALL   ║
+║                                                                         ║
+║                        AFTER INSTALLATION                               ║
+║                                                                         ║
+║ To start program, type: RUN          (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY MANUAL.DOC PRN  (press enter)        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## KEYFILES.TXT
 
 {% raw %}

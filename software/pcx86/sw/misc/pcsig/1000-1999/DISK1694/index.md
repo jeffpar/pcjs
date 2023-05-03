@@ -504,6 +504,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #1694  FORMGEN'S DISK DUPBLICATOR  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type:  COPY DUP.DOC PRN (press ENTER)           ║
+║                                COPY UPGRADE.DOC PRN (press Enter)       ║
+║                                COPY VENDOR.DOC PRN (press Enter)        ║
+║                                                                         ║
+║ To run the program, type:  DUP (press Enter)                            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## VENDOR.DOC
 
 {% raw %}

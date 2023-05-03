@@ -30,6 +30,25 @@ available one around.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #3518 PCS GAME PACK II  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Play FLIP-IT, type:  FLIP14 (press Enter)                           ║
+║                                                                         ║
+║  To Play RENJU, type:  RENJU14 (press Enter)                            ║
+║                                                                         ║
+║  To Play FALLZONE, type:  ZONE12 (press Enter)                          ║
+║                                                                         ║
+║                                                                         ║
+║                                        (C) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3518

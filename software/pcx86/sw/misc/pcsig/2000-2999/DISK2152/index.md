@@ -531,6 +531,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  DISK #2152 FILEBASE  >>>>                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:   FILEBASE                                      ║
+║                                                                         ║
+║ To print documentation, type: COPY TBMANUAL.DOC                         ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2152

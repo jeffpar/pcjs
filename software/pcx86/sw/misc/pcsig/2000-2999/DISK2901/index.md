@@ -44,6 +44,31 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG DISK #2901 MOVIE GUIDE  >>>>                ║
+║                        Disk 2 of 2  (#2379 also)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ The files for MOVIE GUIDE are contained in a self-unarchiving file      ║
+║ called MOVIE3B. To unarchive the program type: MOVIE3B X                ║
+║ (X is the drive and path were you want the program to be located)       ║
+║ (example MOVIE3B C:\MOVIE)                                              ║
+║                                                                         ║
+║ Once unarchived, start MOVIE GUIDE from where your program was          ║
+║ unarchived by typing:  MOVIE  (press Enter)                             ║
+║                                                                         ║
+║                                                                         ║
+║                                          (c) COPYRIGHT 1991, PC-SIG INC.║
+╚═════════════════════════════════════════════════════════════════════════╝
+
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2901

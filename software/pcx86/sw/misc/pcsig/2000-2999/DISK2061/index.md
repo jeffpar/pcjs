@@ -89,6 +89,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<<  Disk #2061  PAINLESS ACCOUNTING disk 3 of 3 (2059, 2060 also) >>> ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program onto hard drive, insert disk 2059 and type:          ║
+║                                       CINSTALL (press enter)            ║
+║                                                                         ║
+║ To print documentation, insert disk 2059 and type:  MANUAL-C            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2061

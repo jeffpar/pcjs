@@ -87,6 +87,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk #2086 GOLF SCOREKEEPER  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: GOLFSKOR   (press enter)                    ║
+║                                                                         ║
+║ To print the documentation, type: COPY GOLFSKOR.DOC PRN  (press enter)  ║
+║                                                                         ║
+║ To familiarize yourself with the program quickly, read the section in   ║
+║   the manual titled ``Getting Started, Fast.''                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## GOLFSKOR.DOC
 
 {% raw %}

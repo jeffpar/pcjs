@@ -79,6 +79,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 2188 PERSONAL C - SCREEN  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: COPY HELP.TXT PRN (press enter)       ║
+║                                                                         ║
+║ To start the program, type: UNIFORM  (press enter)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HELP.TXT
 
 {% raw %}

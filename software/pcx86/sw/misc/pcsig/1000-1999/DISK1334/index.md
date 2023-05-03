@@ -66,6 +66,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1334 TOUCH TYPE TUTOR  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: TTT (press enter)                           ║
+║                                                                         ║
+║ To print the documentation, type: COPY MANUAL.DOC PRN  (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

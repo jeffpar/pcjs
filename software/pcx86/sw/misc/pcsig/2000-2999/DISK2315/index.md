@@ -433,6 +433,82 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## REGISTER.TXT
+
+{% raw %}
+```
+████████████████████████████████████████████████████████████████████████████
+
+           REGISTRATION BENEFITS, SUBSCRIPTION BENEFITS
+
+████████████████████████████████████████████████████████████████████████████
+
+$10 registration per issue brings latest LATEST MAILING LIST DATABASE on 
+disk and any updates to the newsletter portion of this system. $30 yearly 
+subscription provides four quarterly issues with updated information and 
+revised distributor mailing lists! If you are a shareware author preparing a 
+new release or updated version, can you afford NOT to have a CURRENT VERSION 
+of the mailing list of RATED shareware distributors? Submitting your disk to
+the RIGHT distributor can mean MANY FUTURE REGISTRATIONS!
+
+Think of it this way: would you pay someone $30 a year to come in to your 
+office and maintain your mailing list of vendors?
+
+██████ TIP ██████ If we get considerable momentum behind this publication
+I may consider going monthly. That is a lot of information flow in a very
+concentrated forum. Encourage me to work for YOU! Monthly updates if
+there is a large volume of interest!
+
+This is a shareware software package: PLEASE make copies for your friends
+and associates. 
+  
+A WORD ABOUT SHAREWARE: If you are new to computers you may not have 
+heard the term SHAREWARE. Basically this means an author or group has 
+prepared a software program which you are free to copy and encouraged to 
+share with others, but the author requests a REGISTRATION FEE. If you 
+received this disk from a shareware distributor who charged $3 or $4 you 
+have only paid a DISTRIBUTION/HANDLING FEE to copy and produce a disk of 
+which NO PORTION goes to the author of the software.
+
+You are encouraged to pay the final REGISTRATION FEE which goes to the author 
+of this software. This fee is also a matter of good conscience. The idea is 
+that if the program is useful, you become a registered user of the program. 
+
+$10 registration per issue brings latest LATEST MAILING LIST DATABASE on 
+disk and any updates to the newsletter portion of this system. $30 yearly 
+subscription provides four quarterly issues with updated information and 
+revised distributor mailing lists! If you are a shareware author preparing a 
+new release or updated version, can you afford NOT to have a CURRENT VERSION 
+of the mailing list of RATED shareware distributors? Submitting your disk to
+the RIGHT distributor can mean MANY FUTURE REGISTRATIONS!
+
+  +--------------------------------------------------------------------------+
+  | Turn your printer on and press both Shift-PrtSc keys together to print.  |
+  |         Please make sure entire form appears on screen!                  |
+  |                                                                          |
+  |   To: Seattle Scientific Photography     Optional on the back: who       |
+  |       Dept SMS                           provided your copy of           |
+  |       POB 1506                           THE $HAREWARE MARKETING $YSTEM  |
+  |       Mercer Island, WA 98040            Improvements? Have a question?  |
+  |       Telephone (206) 236-0470                                           |
+  |                                                                          |
+  | From: __________________________          What program version           |
+  |                                           of $M$ are you                 |
+  |       __________________________          using? _______                 |
+  |                                           (see version number            |
+  |       __________________________          on the top README screen       |
+  |                                                                          |
+  |     qty ordered: ____      SINGLE ISSUE REGISTRATION                     |
+  |                            $10.00 postpaid  (Check in US funds)          |
+  |                            Washington residents add 8.1% sales tax       |
+  |                                                                          |
+  |                            ANNUAL SUBSCRIPTION - 4 ISSUES                |
+  |     qty ordered: ____      $30.00 postpaid  (Check in US funds)          |
+  |                            Washington residents add 8.1% sales tax       |
+  +--------------------------------------------------------------------------+
+```
+{% endraw %}
+
 ## TUTORIAL.TXT
 
 {% raw %}

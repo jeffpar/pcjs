@@ -47,6 +47,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  PC-SIG Disk #3072  MEDPAS  >>>>                  ║
+║                     Disk 2 of 3 (also #3071, #3073)                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To display the installation instructions, type:  README  (press Enter) ║
+║                                                                         ║
+║  To print the registration form, type:  COPY REGISTER.FRM PRN  (Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                         (c) Copyright 1992, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

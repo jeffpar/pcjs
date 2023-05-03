@@ -14,6 +14,29 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2925  VMIX 386  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read the initial instructions, type:  TYPE READ.ME  (press Enter)    ║
+║                                                                         ║
+║ To extract the files, type:  VMIX278 [drive:\path]  (press Enter)       ║
+║                                                                         ║
+║ After extracting the files, change to the drive\directory where VMIX    ║
+║ is now located and print the documentation by typing:                   ║
+║                                       COPY VMIX.DOC PRN  (press Enter)  ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2925
 

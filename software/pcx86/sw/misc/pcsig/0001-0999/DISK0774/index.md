@@ -55,6 +55,19 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  Disk #774 THE MOVIE DATABASE (disk 2 of 2)  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ This disk contains additional files for the MOVIES program on disk      ║
+║ #311, refer to the documentation on that disk.                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0774

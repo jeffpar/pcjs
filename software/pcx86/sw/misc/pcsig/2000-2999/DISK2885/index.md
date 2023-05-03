@@ -63,6 +63,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #2885  SCALABLE LASERJET III FONTS  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print out the program documentation, type:  COPY READ.ME PRN (Enter) ║
+║                                                                         ║
+║ To print out the tutorial, type:  COPY SOFTFONT.DOC PRN  (press Enter)  ║
+║                                                                         ║
+║ To install SCALABLE LASERJET III FONTS, type:  INSTALL (press Enter)    ║
+║                                                                         ║
+║ To print out the registration form, type:  REGISTER  (press Enter)      ║
+║                                                                         ║
+║ To read the registration special offer, type:  TYPE SPECIAL.OFF (Enter) ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REGISTER.DOC
 
 {% raw %}

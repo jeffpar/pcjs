@@ -14,6 +14,28 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #3302 BIBLE MEMORY FOR WINDOWS  >>>>         ║
+║                    Disk 2 of 3 (also #3301 and #3303)                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To Start BIBLE MEMORY FOR WINDOWS, insert disk #1 and type:  GO  <cr>  ║
+║                                                                         ║
+║  Follow instructions for copying, unzipping and starting the program.   ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3302
 

@@ -86,6 +86,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1636  TWODISKS  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program using monochrome monitor, type:  TDMONO (press enter)  ║
+║ To start program using color monitor, type:  TWODISKS (press enter)     ║
+║                                                                         ║
+║ To print documentation, type:  COPY TWODISKS.DOC PRN                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1636

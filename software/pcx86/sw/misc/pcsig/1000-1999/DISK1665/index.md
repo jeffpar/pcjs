@@ -92,6 +92,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #1665  KEDITOR disk 2 of 2 (1643)  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, insert disk 1 and type:  KED (press enter)            ║
+║                                                                         ║
+║ To print documentation, insert disk 1 and type:  COPY README.1ST PRN    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1665

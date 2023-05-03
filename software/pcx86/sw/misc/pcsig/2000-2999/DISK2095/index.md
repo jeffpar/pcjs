@@ -373,6 +373,33 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #2095 VIRUSCAN, CLEAN-UP, VSHIELD  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the documentation, type:                                       ║
+║    COPY SCANV66B.DOC PRN (for VIRUSCAN)                                 ║
+║    COPY CLEAN66.DOC PRN  (for CLEAN-UP)                                 ║
+║    COPY VSHLD66.DOC PRN  (for VSHIELD)                                  ║
+║                                                                         ║
+║ To print the virus characteristics list, type: COPY VIRLIST.TXT PRN     ║
+║                                                                         ║
+║ To run VIRUSCAN, type:  SCAN x (x is the drive to be scanned)           ║
+║                                                                         ║
+║ To run CLEAN-UP, type:  CLEAN                                           ║
+║                                                                         ║
+║ To run VSHILED, type :  VSHIELD                                         ║
+║                                                                         ║
+║                                   (c) Copyright 1990, PC-SIG Inc.       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SCANV66B.DOC
 
 {% raw %}

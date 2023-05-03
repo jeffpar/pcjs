@@ -101,6 +101,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  Disk #1556  LETTER SHIFT and TRIPLE OTHELLO  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start LETTER SHIFT, type:  LS (press return)                         ║
+║ To start TRIPLE OTHELLO, type:  TOTHELLO (press enter)                  ║
+║                                                                         ║
+║ To print LETTER SHIFT documentation, type:  COPY LS.DOC PRN             ║
+║ To print TRIPLE OTHELLO documentation, type:  COPY TOTHELLO.TXT PRN     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## TOTHELLO.TXT
 
 {% raw %}

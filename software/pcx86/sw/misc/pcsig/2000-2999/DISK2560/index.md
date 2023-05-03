@@ -63,6 +63,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║<<< PC-SIG Disk #2560 Q4TOOLS - PROGRAMMING TOOLS FOR QUICKBASIC 4.X >>>>║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To start the program, type: Q4T-DEMO                                   ║
+║                                                                         ║
+║  To print the documentation, type: COPY Q4TOOL.DOC PRN                  ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1991, PC-SIG Inc.
+```
+{% endraw %}
+
 ## Q4T-DEMO.BAS
 
 {% raw %}

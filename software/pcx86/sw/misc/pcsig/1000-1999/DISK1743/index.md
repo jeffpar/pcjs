@@ -93,6 +93,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1743  THS ENGLISH  >>>>                     ║
+║                       (disk 2 of 2, 1742 also)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, insert disk 1 and type: THS                           ║
+║                                                                         ║
+║ To print documentation, type: COPY FILE1743.TXT PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1743

@@ -212,6 +212,35 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2391  RSE UTILITIES  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To access the any of the utilities that are on this disk, type:         ║
+║                 CD [directory name]  (press Enter)                      ║
+║                 DIR  (press Enter)                                      ║
+║                                                                         ║
+║ To extract the files from the .EXE file found within the subdirectory,  ║
+║ type the name of the .EXE file (example in BRITE, type:  BRTLINE (Enter)║
+║                                                                         ║
+║ After extracting the files from the .EXE file, type RUNME if it exists  ║
+║ to read the instructions.  (For BRTLINE, type BL.)                      ║
+║                                                                         ║
+║ To print the .TXT files that belong to the some of the utilities, type: ║
+║                 COPY [filename.TXT] PRN (press Enter)                   ║
+║                                                                         ║
+║ To return to the A: root directory before going to another utility,     ║
+║ type:  CD \  (press Enter)                                              ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2391
@@ -222,11 +251,56 @@ Sunnyvale  Ca. 94086
     GO       TXT      1695  12-06-90   6:23a
     GO       BAT        40   1-01-80   6:00a
     FILE2391 TXT      4761  12-10-90  11:51a
+    BRITE        <DIR>    
+    FILENOTE     <DIR>    
+    NABBIT       <DIR>    
+    PCDIR        <DIR>    
+    PCIMAGES     <DIR>    
+    REMIND       <DIR>    
+            9 file(s)       6496 bytes
+
+     Directory of A:\BRITE
+
+    .            <DIR>    
+    ..           <DIR>    
     BRTLINE  EXE      6078   9-05-90   1:27p
+            3 file(s)       6078 bytes
+
+     Directory of A:\FILENOTE
+
+    .            <DIR>    
+    ..           <DIR>    
     PCFN13   EXE     30235   9-04-90   8:16p
+            3 file(s)      30235 bytes
+
+     Directory of A:\NABBIT
+
+    .            <DIR>    
+    ..           <DIR>    
     NABBIT   EXE     17605   9-04-90   9:54a
+            3 file(s)      17605 bytes
+
+     Directory of A:\PCDIR
+
+    .            <DIR>    
+    ..           <DIR>    
     PCDIR12  EXE     44161   9-04-90   8:18p
+            3 file(s)      44161 bytes
+
+     Directory of A:\PCIMAGES
+
+    .            <DIR>    
+    ..           <DIR>    
     PCIMAGES EXE     59448   8-29-90  10:09a
+            3 file(s)      59448 bytes
+
+     Directory of A:\REMIND
+
+    .            <DIR>    
+    ..           <DIR>    
     REMINDME EXE     32057   7-29-90  10:56a
-            9 file(s)     196080 bytes
-                          120832 bytes free
+            3 file(s)      32057 bytes
+
+    Total files listed:
+           27 file(s)     196080 bytes
+                          114688 bytes free

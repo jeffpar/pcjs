@@ -37,6 +37,26 @@ machines:
     end products.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1170  SAGEWORDS  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: SW  (press enter)                               ║
+║                                                                         ║
+║ To view information, type: TYPE SWREAD.ME  (press enter)                ║
+╚═════════════════════════════════════════════════════════════════════════╝
+
+
+(c) Copyright 1989, PC-SIG, Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1170
 

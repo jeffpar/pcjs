@@ -14,6 +14,27 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  PC-SIG Disk #3273  HWARE  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To read the instructions, type:  TYPE README.1ST  (press Enter)        ║
+║                                                                         ║
+║  To start the program, type:  HWARE3  (press Enter)                     ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3273
 

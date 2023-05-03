@@ -148,6 +148,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1731  QUICK CHECK BOOK >>>>                 ║
+║                       (disk 2 of 2, #1721 also)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, insert disk 1 and type:  QCB (press enter)            ║
+║                                                                         ║
+║ To print documentation, insert disk 1 and type: COPY README PRN         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

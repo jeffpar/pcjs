@@ -52,6 +52,36 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2879  ORION ODYSSEY  >>>>               ║
+║                        Disk 2 of 2 (also #2878)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  Copy the files on both diskettes (#2878, #2879) to a subdirectory on   ║
+║  your hard drive:                                                       ║
+║                        C:          (press Enter)                        ║
+║                        C:CD \      (press Enter)                        ║
+║                        MD ORION    (press Enter)                        ║
+║                        CD ORION    (press Enter)                        ║
+║                        COPY A:*.*  (press Enter)                        ║
+║                                                                         ║
+║  To unzip SAIPHIMG.ZIP (from the hard drive), type:                     ║
+║                                        PKUNZIP SAIPHIMG  (press Enter)  ║
+║                                                                         ║
+║  To unzip SAIPH, type:  PKUNZIP SAIPH  (press Enter)                    ║
+║                                                                         ║
+║  To print the documentation, type:  COPY ORION.DOC PRN  (press Enter)   ║
+║                                                                         ║
+║  To start the game, type:  ORION  (press Enter)                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORION.DOC
 
 {% raw %}

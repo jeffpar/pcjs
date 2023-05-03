@@ -518,6 +518,34 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk No 262 PC-GOLF 1.5  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To print the manual, and you are using BASICA, type:                  ║
+║             BASICA USER.DOC (press enter)                               ║
+║                                                                         ║
+║   To print the manual, and you are using GWBASIC, type:                 ║
+║             GWBASIC USER.DOC (press enter)                              ║
+║                                                                         ║
+║   To run the program, and you are using BASICA, type:                   ║
+║             AUTOEXEC (press enter)                                      ║
+║                                                                         ║
+║   To run the program, and you are using GWBASIC, type:                  ║
+║             GWSTART (press enter)                                       ║
+║                                                                         ║
+║   Please note: These commands are based on the fact that you have       ║
+║   either copied BASICA or GWBASIC to the floppy and are running it      ║
+║   in the A drive, or have copied this disk to a hard drive and have     ║
+║   copied GWBASIC or BASIC into the subdirectory you have set up for     ║
+║   PC-GOLF.                                                              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SYNOPSIS.TXT
 
 {% raw %}

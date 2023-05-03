@@ -133,6 +133,26 @@ Sunnyvale, Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk No 961 MINI MINDER and INVENTORY SORT  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for INVENTORY SORT, Type:                    ║
+║             COPY INVSORT.DOC LPT1: (press enter)                        ║
+║                                                                         ║
+║ To run the program INVENTORY SORT, Type:                                ║
+║             INVSORT (press enter) or                                    ║
+║             INVSORT1 (press enter)                                      ║
+║                                                                         ║
+║ To print the documentation for MINI MINDER, Type:                       ║
+║             COPY MINI.DOC LPT1: (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INVSORT.DOC
 
 {% raw %}

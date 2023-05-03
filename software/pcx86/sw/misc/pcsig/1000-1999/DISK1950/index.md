@@ -71,6 +71,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1950  DOS PRACTICE  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To extract files, type: UNZIPDP      (press enter)                      ║
+║                                                                         ║
+║ To start program, type: DP           (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY README PRN                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1950

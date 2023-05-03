@@ -625,6 +625,22 @@ results.  Other examples were listed in the article.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No: 114  Assembly  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation on this disk, type:                        ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## KBDFIX.BAS
 
 {% raw %}

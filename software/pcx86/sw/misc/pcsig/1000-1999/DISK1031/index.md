@@ -5446,6 +5446,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1031 ONE TO ONE  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type: MANUAL (press enter)    ║
+║                                                                         ║
+║ To start ONE TO ONE, type: 121 (press enter)                            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1031

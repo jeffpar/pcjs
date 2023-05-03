@@ -16,6 +16,34 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  PC-SIG Disk #3532 ALMANAC  >>>>                  ║
+║                         Disk 2 of 2 (#2457 also)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Install this program to your hard disk, create a temporary          ║
+║  subdirectory and copy all files from disks 1 and 2. To do this, type:  ║
+║     [hard drive letter]:  (press Enter)                                 ║
+║     CD\  (press Enter)                                                  ║
+║     MD TEMP  (press Enter)                                              ║
+║     CD TEMP  (press Enter)                                              ║
+║                                                                         ║
+║  Insert disk 1 (#2457) in drive A (or B) and type:                      ║
+║     COPY A:*.*  (press Enter)  (use B: for the B drive)                 ║
+║                                                                         ║
+║  Insert disk 2 (#3532) in drive A (or B) and type:                      ║
+║     COPY A:*.*  (press Enter)  (use B: for the B drive)                 ║
+║                                                                         ║
+║  To Install the program type:  WIN SETUP  (press Enter)                 ║
+║                                                                         ║
+║                                        (C) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

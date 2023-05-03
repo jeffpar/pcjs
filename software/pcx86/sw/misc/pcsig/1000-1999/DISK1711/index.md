@@ -264,6 +264,24 @@ HAVE FUN!
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1711  TOMMY'S CROSSWORDS  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start XWORDS program, type: XWORDS                                   ║
+║                                                                         ║
+║ To print documentation, type: COPY XWORDS.DOC PRN                       ║
+║                                                                         ║
+║ To start GINRUMMY program, type: GINRUMMY                               ║
+║                                                                         ║
+║ To print documentation, type: COPY GINRUMMY.DOC PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## XWORDS.DOC
 
 {% raw %}

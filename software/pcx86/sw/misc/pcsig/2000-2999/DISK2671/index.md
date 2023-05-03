@@ -6161,6 +6161,25 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2671 EASY-STATS  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To view installation instructions, type:  READTHIS (press Enter)        ║
+║                                                                         ║
+║ To install on a floppy disk, type: UNPACK-F  (press Enter)              ║
+║                                                                         ║
+║ To install on a hard disk, type: UNPACK-H  (press Enter)                ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2671

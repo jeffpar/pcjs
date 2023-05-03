@@ -14,6 +14,30 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3275 IMAGE GALLERY  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To unzip the files to your hard disk, type:                            ║
+║                                                                         ║
+║        PKUNZIP GALLRY11 [hard drive:\subdirectory]  (press Enter)       ║
+║                                                                         ║
+║  To print the documentation, type:  COPY GAL.DOC PRN  (press Enter)     ║
+║                                                                         ║
+║  After installation, start the program by typing:  GAL  (press Enter)   ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3275
 

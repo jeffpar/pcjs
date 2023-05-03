@@ -70,6 +70,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #2582 NOVA (formerly Galaxy  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  The program documentaion comes in archived format, it is not needed    ║
+║  to run the program.                                                    ║
+║                                                                         ║
+║  To start the program type: NOVA                                        ║
+║                                                                         ║
+║  To unarchive the documentaion, copy NOVA.EXE to your target drive      ║
+║  and subdirectory type: NOVA                                            ║
+║                                                                         ║
+║  To print the installation instructions, type: COPY README PRN          ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1991, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2582

@@ -46,6 +46,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #2663 CHESS FOR WINDOWS  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  The files for the CHESS program come in a self-extracting file called  ║
+║  CHESSW.EXE. Copy this file to a subdirectory on your hard drive, and   ║
+║  type, CHESSW to extract the files.                                     ║
+║                                                                         ║
+║  Once unarchived,                                                       ║
+║  To start the program from DOS, type: WIN CHESS                         ║
+║                                                                         ║
+║  To print more instructions, type: COPY README.TXT PRN                  ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2663

@@ -113,6 +113,23 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No 1432 RADIO REPAIR and RADIATION  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view the text file for RADIO REPAIR, type VIEW (press enter)         ║
+║                                                                         ║
+║ To copy the text file for RADIO REPAIR to your printer, type            ║
+║                           PRINT (press enter)                           ║
+║                                                                         ║
+║ To run RADIATION, type R (press enter)                                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## RADIO.TXT
 
 {% raw %}

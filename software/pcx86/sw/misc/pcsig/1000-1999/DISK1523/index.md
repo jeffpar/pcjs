@@ -211,6 +211,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1523 A_CURSE & MORE  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start A_CURSE, type: A_CURSE (press enter)                           ║
+║                                                                         ║
+║ To start ASTEROID FIELD BATTLE, type: AFB (press enter)                 ║
+║                                                                         ║
+║ To print documentation for ASTEROID FIELD BATTLE, type:                 ║
+║          COPY AFB.TXT PRN                                               ║
+║                                                                         ║
+║ To start OTH, type: OTH (press enter)                                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## OTH.TXT
 
 {% raw %}

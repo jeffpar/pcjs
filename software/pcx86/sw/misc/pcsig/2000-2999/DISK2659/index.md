@@ -612,6 +612,64 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## #WB-CHGS.TXT
+
+{% raw %}
+```
+ 3/6/91  3.0A   WinMacro feature added.  Now you can have system
+                 and application macro hotkeys with WinBatch.  See
+                 documentation and samples.  See GLOBAL.WDF and NOTEPAD.WDF
+
+                 Real Dialog boxes added.  Now you can have full scale
+                 windows dialog boxes for user prompting.
+
+                 Added better error messages for WinExec (Run Command) errors
+
+                 FileAppend command added.  Now you can add stuff on to the
+                 end of existing files, thus making a new file...
+
+ 1/30/91  2.0D   Fixed the CallExt function. Its really fixed now!
+
+ 1/21/91  2.0C   Fixed IniWritePvt, IniReadPvt, and DateTime functions
+                 Added WallPaper, DirRename, ItemCount and ItemExtract
+                 functions.
+
+ 1/ 8/91  2.0B   Fixed the setup program to put WBT in the 
+                 WIN.INI [extensions] section correctly (ARRGGGHHH)
+
+ 1/ 2/91  2.0A	 Initial Shareware Release of WinBatch.
+
+ 4/20/89  1.X    Previous incarnations of this code.
+```
+{% endraw %}
+
+## #WB-INI.TXT
+
+{% raw %}
+```
+Here are some pointers on the keywords that WinBatch stores
+in the WIN.INI file. THIS INFORMATION IS NOT AN INVITATION TO FEEL FREE
+TO DINK THESE PARAMETERS.  Generally the information in the ini file
+is for the software to use and is not meant for user input.  In fact,
+in the OS2 Presentation Manager, the INI information is not in a human
+readable format.   Regards to G.K. 
+
+					
+[WinBatch]	The Section header
+
+Info =		(Alphabet soup) WinBatch licensing info (Don't modify)
+Info2=		(Numbers) Additional Licensing information (Don't modify)
+
+                *** Note: Other WBT files, either supplied by us or
+                    others may feel that the WinBatch section of the
+                    WIN.INI file is fair game, and may add additional
+                    items not documented in this file.
+
+
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2659
@@ -627,6 +685,13 @@ Sunnyvale  Ca. 94086
     GO       TXT      1180   6-12-91   3:59p
     GO       BAT        28   6-12-91  11:47a
     FILE2659 TXT      4071   6-12-91   4:01p
+    WINBATCH     <DIR>    
+            9 file(s)     102442 bytes
+
+     Directory of A:\WINBATCH
+
+    .            <DIR>    
+    ..           <DIR>    
     WB_HELP  CR$     15677   3-07-91   2:09a
     WINBATHK DL$      1966   3-07-91   2:09a
     WINMACHK DL$      5254   3-07-91   2:09a
@@ -655,5 +720,8 @@ Sunnyvale  Ca. 94086
     GLOBAL   WD$       286   2-17-91   3:44p
     NOTEPAD  WD$       101   1-31-91  10:21a
     STONES   WTX       369   8-14-89  12:30a
-           36 file(s)     318554 bytes
-                           23552 bytes free
+           30 file(s)     216112 bytes
+
+    Total files listed:
+           39 file(s)     318554 bytes
+                           22528 bytes free

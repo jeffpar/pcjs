@@ -387,6 +387,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 938 CHEMICAL  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: CHEM   (press enter)                        ║
+║                                                                         ║
+║ To start CHEMVIEW, type: CHEMVIEW  (press enter)                        ║
+║                                                                         ║
+║ To print the documentation, type:  COPY CHEM.DOC PRN (press enter)      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0938

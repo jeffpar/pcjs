@@ -115,6 +115,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #1753  CHURCH SHAREWARE SOFTWARE  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For installation instructions, type:  README (press enter)              ║
+║                                                                         ║
+║ After installing, to start the program, type: CHURCH (press enter)      ║
+║                                                                         ║
+║ To print documentation, type: COPY CHURCH.DOC PRN   (press enter)       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1753
@@ -127,7 +143,24 @@ Sunnyvale  Ca. 94086
     GO       BAT        38   1-01-80   1:37a
     FILE1753 TXT      3701   8-09-90   3:45p
     GO       TXT       694   1-01-80   3:11a
+    CSS          <DIR>    
+            6 file(s)      10097 bytes
+
+     Directory of A:\CSS
+
+    .            <DIR>    
+    ..           <DIR>    
     PROGRAM  EXE    295209   6-14-90   6:25a
+    SCREENS  TXT <DIR>    
+            4 file(s)     295209 bytes
+
+     Directory of A:\CSS\SCREENS.TXT
+
+    .            <DIR>    
+    ..           <DIR>    
     SCREENS  EXE     39563   6-05-90   5:07a
-            7 file(s)     344869 bytes
-                           13312 bytes free
+            3 file(s)      39563 bytes
+
+    Total files listed:
+           13 file(s)     344869 bytes
+                           11264 bytes free

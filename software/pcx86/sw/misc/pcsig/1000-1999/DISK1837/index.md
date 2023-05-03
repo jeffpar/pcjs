@@ -295,6 +295,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1837  FLASHBOX  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: FLASHBOX (press enter)                          ║
+║                                                                         ║
+║ To print documentation, type: COPY FLASHBOX.DOC PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1837

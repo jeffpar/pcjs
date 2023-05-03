@@ -107,6 +107,22 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1388 The Winning Bid  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type WB (press enter)                             ║
+║                                                                         ║
+║ To view info about the program, type VIEW (press enter)                 ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## WB.DOC
 
 {% raw %}

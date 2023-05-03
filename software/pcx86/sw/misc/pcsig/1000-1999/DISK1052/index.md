@@ -70,6 +70,28 @@ Sunnyvale, CA   94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    Disk No 1052 THE FINDATA CORPORATE PROFILE DATABASE (Disk 2 of 2)    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, insert disk #1051 and        ║
+║ type: MANUAL (press enter)                                              ║
+║                                                                         ║
+║ To install the program on a floppy disk system, insert disk #1051 and   ║
+║ type: FLOP (press enter)                                                ║
+║                                                                         ║
+║ To install the program on a hard disk system, insert disk #1051 and     ║
+║ type: HARD (press enter)                                                ║
+║                                                                         ║
+║ PLEASE NOTE: You must have a copy of either PC-FILE+ or dBASE III       ║
+║ in order to look through these database files.                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1052

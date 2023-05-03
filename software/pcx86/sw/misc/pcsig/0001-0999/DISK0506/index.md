@@ -77,6 +77,19 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk #506 BIBLIOGRAPHY OF BUSINESS ETHICS (Disk 1 of 2  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For copy the documentation to your printer, Type:                       ║
+║                     COPY README PRN (press enter)                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0506

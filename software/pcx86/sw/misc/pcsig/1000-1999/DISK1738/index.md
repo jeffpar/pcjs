@@ -360,6 +360,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1738  POWER DESK  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Type INSTALL to copy onto your hard drive.                              ║
+║                                                                         ║
+║ To start program, type: PD                                              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1738

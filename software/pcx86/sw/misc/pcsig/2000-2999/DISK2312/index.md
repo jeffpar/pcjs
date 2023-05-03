@@ -203,6 +203,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  DISK #2312 PCOPY & PDELETE  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start PCOPY, type: \PCOPY\PCOPY                                      ║
+║                                                                         ║
+║ To print the documentation for PCOPY, type: COPY \PCOPY\PCOPY.DOC PRN   ║
+║                                                                         ║
+║ To start PDELETE, type: PDELETE                                         ║
+║                                                                         ║
+║ To print the documentation for PDELETE, TYPE: COPY PDELETE.DOC PRN      ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## ORDERFRM.DOC
 
 {% raw %}
@@ -320,6 +340,66 @@ Sunnyvale  Ca. 94086
 
         Send order to: Patri-Soft  P.O. Box 8263  San Bernardino, CA  92412
 
+```
+{% endraw %}
+
+## ORDERFRM.DOC
+
+{% raw %}
+```
+
+                        Registered PCOPY 8.5c Order Form
+
+        --------------------------------------------------------------------
+        VISA/Mastercard orders are only accepted through telephone orders.
+        Call Public Software Library: 800-242-4775 or 713-665-7017 to order.
+        --------------------------------------------------------------------
+
+        _____ Registration of all Patriquin Utilities with
+                includes program disk and User's Guide...........@  $45.00
+
+        _____ Update Service -- in addition to above, send the
+              next version automatically when it is available....@ +$15.00
+
+        --------------------------------------------------------------------
+
+        _____ PCOPY     -- File Copy, Move, Backup, Update, more!...$20.00
+        _____ PSEARCH   -- Locate files on your disk. Outstanding!..$20.00
+        _____ PALERT    -- Warns you of low disk space..............$15.00
+        _____ PATTR     -- Manage attributes of DOS files...........$10.00
+        _____ PDAILY    -- Automatically execute commands once/day..$10.00
+        _____ PDELETE   -- Save space with automatic disk cleanup...$15.00
+        _____ PPRINT    -- Advanced file print w/special formats....$15.00
+
+        _____ Update a registered set with new disk and manual -
+              show proof of previous registration  SER=_________....$15.00
+
+        _____ Shipping/Handling for orders outside USA, add ........$ 5.00
+
+        _______ Purchase Order Included.
+        _______ Please invoice us. (Orders over $100 only)
+        _______ Check or money Order (US FUNDS) included
+
+                                 Total amount of my order is:    $________
+
+                  Disk Size (circle one)?    5 1/4     3 1/2
+        ===================================================================
+
+
+        Name: __________________________________________________
+
+        Company: _______________________________________________
+
+        Address: _______________________________________________
+
+                 _______________________________________________
+
+        City: ________________________  State: ________  Zip: __________
+
+
+        I learned about PCOPY from: _____________________________________
+
+        Send order to: Patri-Soft  P.O. Box 8263  San Bernardino, CA  92412
 ```
 {% endraw %}
 
@@ -1351,11 +1431,21 @@ of PDELETE.
     GO       BAT        28  10-04-90   5:21a
     GO       TXT       958  10-09-90   2:30p
     FILE2312 TXT      7179  10-09-90   3:36p
+    PCOPY        <DIR>    
+            8 file(s)     135352 bytes
+
+     Directory of A:\PCOPY
+
+    .            <DIR>    
+    ..           <DIR>    
     ORDERFRM DOC      2377   7-03-90   9:27a
     PCOPY    DOC     77537   7-03-90   9:27a
     PCOPY    EXE    115272   7-03-90   9:27a
     PCREADME          1530   7-03-90   9:27a
     PMOVE    BAT        29   7-03-90   9:27a
     WHATSNEW          2594   7-03-90   9:27a
-           13 file(s)     334691 bytes
-                           20480 bytes free
+            8 file(s)     199339 bytes
+
+    Total files listed:
+           16 file(s)     334691 bytes
+                           19456 bytes free

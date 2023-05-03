@@ -14,6 +14,32 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  PC-SIG Disk #3291 WINBACK  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To extract the files to your hard disk, first create a subdirectory    ║
+║  on you hard disk by typing:  MD WINBACK  (press Enter)                 ║
+║                                                                         ║
+║  Change to the subdirectory by typing:  CD WINBACK  (press Enter)       ║
+║                                                                         ║
+║  Then to extract the files from drive A type:  A:WINBACK (press Enter)  ║
+║                                                                         ║
+║  After extracting the files, to print out the installation              ║
+║  instructions type:  COPY _README.1ST PRN  (press Enter)                ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3291
 

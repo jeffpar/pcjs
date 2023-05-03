@@ -85,6 +85,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #832 BEYOND THE TITANIC  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start BEYOND THE TITANIC type, BEYOND (press enter)                  ║
+║                                                                         ║
+║ To start THE KINGDOM OF KROZ type, KINGDOM (press enter)                ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HELP.TXT
 
 {% raw %}

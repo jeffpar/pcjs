@@ -83,6 +83,27 @@ Ph 501-925-3666
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1722  PERSONAL APT  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start using the program, type: COPY README PRN  (press enter)        ║
+║                                                                         ║
+║ To print the manual, type:  PRINTDOC (press Enter)                      ║
+║                                                                         ║
+║ To view educational discount policy, type:  TYPE SCHOOLS.TXT (Enter)    ║
+║                                                                         ║
+║ To print registration form, type:  COPY REGISTER.TXT PRN (press Enter)  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## INVOICE.TXT
 
 {% raw %}

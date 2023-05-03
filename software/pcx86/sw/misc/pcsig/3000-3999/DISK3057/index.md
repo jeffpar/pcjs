@@ -38,6 +38,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #ULTIMATE SPANISH  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start the program, type: TEACHERS   (press Enter)                    ║
+║                                                                         ║
+║ To print the documentation, type: COPY TEACHER.DOC   (press Enter)      ║
+║                                                                         ║
+║                                                                         ║
+║                                 Copyright (c) 1992, PC-SIG Inc.         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## TEACHER.DOC
 
 {% raw %}

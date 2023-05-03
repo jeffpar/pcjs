@@ -693,6 +693,19 @@ MENU     BAT        9   Batch file to run Menu. Just type MENU and <Enter>
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk No 1077 The DIET DISK  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To run the program and also print the documentation, type               ║
+║                     MENU (press enter)                                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LOSSAVG.DOC
 
 {% raw %}

@@ -14,6 +14,35 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  PC-SIG Disk #3305 FEDB, SMART DIRECTORY & EZ-LABELER  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To install FEDB, type:  FEDB11TD  (press Enter)                        ║
+║                                                                         ║
+║  Then to view the documentation, type:  FEDBDOC  (press Enter)          ║
+║                                                                         ║
+║  To install SMART DIRECTORY, type:  EZDR11TD  (press Enter)             ║
+║                                                                         ║
+║  Then to view the documentation, type:  DRDOC  (press Enter)            ║
+║                                                                         ║
+║  To install EZ-LABELER, type:  EZLBL10T  (press Enter)                  ║
+║                                                                         ║
+║  Then to view the documentation, type:  EZLBLDOC  (press Enter)         ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3305
 

@@ -65,6 +65,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk No 2208 PC-GLOSSARY  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To run self-extracting program, type: GLOSRY22  (press enter)           ║
+║                                                                         ║
+║ To start program, after being extracted, type: GL  (press enter)        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2208

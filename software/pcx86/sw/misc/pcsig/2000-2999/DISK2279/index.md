@@ -429,6 +429,20 @@ MAIL_TO2 NTX     2048  Clipper index file on addressed users
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #2279  EASYMAIL - NETWORK EMAIL  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type:  COPY EASYMAIL.DOC PRN  (press Enter)     ║
+║                           and  COPY DATAFILE.DOC PRN  (press Enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2279

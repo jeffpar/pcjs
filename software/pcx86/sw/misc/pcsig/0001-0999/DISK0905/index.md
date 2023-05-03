@@ -1969,6 +1969,24 @@ that you cannot find, perhaps it was there once.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   Disk No 905  DROEGE (Disk 2 of 2)                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation for DROEGE, type                           ║
+║             COPY FIRST.DOC LPT1: <enter>                                ║
+║                                                                         ║
+║      Do not attempt to use this program without reading at least        ║
+║                       some of the documentation.                        ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HOWTO.DOC
 
 {% raw %}

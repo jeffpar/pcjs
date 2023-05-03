@@ -67,6 +67,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk #1967  ZGRAF  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation and instructions, type:                          ║
+║                     COPY ZGRAF.DOC PRN (press Enter)                    ║
+║                                                                         ║
+║ To start program, type:  ZGRAF (press Enter)                            ║
+║                                                                         ║
+║ To execute the DEMO, type:  DEMO (press Enter)                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## ZGRAF.DOC
 
 {% raw %}

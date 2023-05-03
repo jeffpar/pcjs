@@ -103,6 +103,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  Disk #1545 ACCOUNTS PAYABLE LITE Disk 1 of 2 (1546)  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program to either a floppy drive system or a hard drive      ║
+║ system, type: INSTALL (press enter)                                     ║
+║                                                                         ║
+║ To print documentation, insert disk #1546 and type:                     ║
+║          PRINT-AP (press enter)                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDER.DOC
 
 {% raw %}

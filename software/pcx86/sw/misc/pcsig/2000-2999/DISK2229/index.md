@@ -84,6 +84,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #2229   VGA JIGSAW PUZZLE  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, copy each file to the printer, finishing one    ║
+║ before beginning the next.  Type:  COPY ALIVE.DOC PRN  (press ENTER)    ║
+║                                    COPY VJIG.DOC PRN  (press ENTER)     ║
+║                                    COPY README.DOC PRN  (press ENTER)   ║
+║                                    COPY REGISTER.DOC PRN  (press ENTER) ║
+║                                                                         ║
+║ To start the program, type:  VJIG  (press ENTER)                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

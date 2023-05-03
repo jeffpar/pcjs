@@ -1206,6 +1206,23 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #436 HAM RADIO #1  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, type: MANUAL (press enter)   ║
+║                                                                         ║
+║ To start the program, load BASIC, then load the BASIC program that you  ║
+║ wish to run. For example: assuming that BASIC is already loaded, type:  ║
+║                    LOAD "FILENAME" (press enter)                        ║
+║ FILENAME is equal to the program you wish to run                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HAMCALC.BAS
 
 {% raw %}

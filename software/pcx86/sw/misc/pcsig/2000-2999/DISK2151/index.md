@@ -123,6 +123,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #2151 TURBODRAW  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  DRAW (press enter)                             ║
+║                                                                         ║
+║ To print documentation, type:  COPY TBDRAW.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2151

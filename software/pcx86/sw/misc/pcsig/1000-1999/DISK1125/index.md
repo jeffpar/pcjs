@@ -77,6 +77,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk No 1125 THE GARDNER'S ASSISTANT  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Type README (press enter) for information about the program             ║
+║                                                                         ║
+║ To start the program, type: TGA                                         ║
+║                                                                         ║
+║                                     COPYRIGHT (c) 1990 PC-SIG INC       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+
+
+
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1125

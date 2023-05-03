@@ -80,6 +80,22 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1371 QUICKTRAN  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type QT (press enter)                             ║
+║                                                                         ║
+║ To view the documentation on you screen, type VIEW (press enter)        ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## QT.DOC
 
 {% raw %}

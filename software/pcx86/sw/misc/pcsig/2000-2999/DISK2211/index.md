@@ -59,6 +59,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #2211 THE BILLING STATEMENT >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To run the program, type: STMT2SW  (press enter)                        ║
+║                                                                         ║
+║ To print documentation, type: STMT2SW.DOC PRN  (press enter)            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## STMT2SW.DOC
 
 {% raw %}

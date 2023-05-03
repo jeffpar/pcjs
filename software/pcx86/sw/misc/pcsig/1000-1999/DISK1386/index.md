@@ -93,6 +93,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #1386  P-ROBOTS  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print instructions, type:  COPY README.TXT PRN (press ENTER)         ║
+║                                                                         ║
+║ To view instructions, type:  GO (press ENTER)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

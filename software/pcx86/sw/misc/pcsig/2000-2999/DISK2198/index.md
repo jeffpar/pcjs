@@ -81,6 +81,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 2198 PERSONAL SECRETARY  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: PS  (press enter)                           ║
+║                                                                         ║
+║ To print the documentation, type: COPY README PRN (press enter)         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PS.DOC
 
 {% raw %}

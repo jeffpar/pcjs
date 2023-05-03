@@ -167,6 +167,30 @@ to use the program please be sure to register.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  PC-SIG Disk #3808 FONTME!  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install this program to your hard disk, type:                       ║
+║     [hard drive letter]:  (press Enter)                                 ║
+║     MD FONTME  (press Enter)                                            ║
+║     CD FONTME  (press Enter)                                            ║
+║     A:PKUNZIP A:FONTME20  (press Enter) (use B: in place of A: if       ║
+║                                          installing from the B drive)   ║
+║                                                                         ║
+║  Then to install into Windows, type:                                    ║
+║     WIN SETUP  (press Enter)                                            ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3808

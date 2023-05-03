@@ -290,6 +290,21 @@ Duplicate.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1469 CRYSTAL  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type CRYSTAL (press enter)                        ║
+║                                                                         ║
+║ To copy the documentation to your printer, type                         ║
+║                          COPY CRYSTAL.DOC LPT1 (press enter)            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## KMGF3.TXT
 
 {% raw %}

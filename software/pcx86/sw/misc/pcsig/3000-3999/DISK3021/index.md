@@ -52,6 +52,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #15387  Windows Utilities  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To begin using the program, type:  COPY README.TXT PRN  (press ENTER)   ║
+║                               or:  TYPE README.TXT  (press ENTER)       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1992, PC-SIG Inc.
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

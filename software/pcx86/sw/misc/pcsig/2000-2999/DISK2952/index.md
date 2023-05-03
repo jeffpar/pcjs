@@ -106,6 +106,27 @@ Version 2.1x- 7/92
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #2952 ARCHIVER FOR WINDOWS   >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To copy all the files to your hard drive, type:                        ║
+║                       COPY *.* [hard drive]:\[directory name]  <enter>  ║
+║                                                                         ║
+║  To unzip the program, type: PKUNZIP ARCHIVER (Enter)                   ║
+║                                                                         ║
+║  After unzipping the program, start the installation process by typing: ║
+║                           SETUP <enter>                                 ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2952

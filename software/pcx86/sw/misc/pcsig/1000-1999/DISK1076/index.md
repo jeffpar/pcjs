@@ -116,6 +116,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1076 MANDEL VGA & EGA  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, type: PRINTMAN (press enter) ║
+║                                                                         ║
+║ To start the program, type: MANDEL (press enter)                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

@@ -89,6 +89,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  PC-SIG Disk #2032  MPLUS Graphic Interface Library   >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read author's "last minute notes," type:  TYPE README.DOC (Enter)    ║
+║                                                                         ║
+║ To print the REFERENCE GUIDE, type:  COPY MPLUS.DOC PRN (press Enter)   ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MPLUS.DOC
 
 {% raw %}

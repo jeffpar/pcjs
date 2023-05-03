@@ -108,6 +108,19 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1138 CLASSIC SOLUTIONS  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read how to install the program to your hard drive, type             ║
+║                        README (press enter)                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1138

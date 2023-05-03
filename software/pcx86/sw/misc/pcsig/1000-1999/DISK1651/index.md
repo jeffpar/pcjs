@@ -75,6 +75,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  Disk #1651  TECHNOJOCK'S TURBO TOOLKIT disk 1 of 2 (1652)  >>>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, unarchive files using ARCX.COM located on disk #1651  ║
+║                                                                         ║
+║ To print documentation, type:  COPY MANUAL.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REGISTER.DOC
 
 {% raw %}

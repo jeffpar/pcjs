@@ -161,6 +161,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #878 TEACHER'S DATABASE  >>>>                  ║ 
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, Type:                        ║
+║                   COPY README40.DOC PRN (press enter)                   ║
+║                                                                         ║
+║ To start the program, Type: TDB (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c)Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## README40.DOC
 
 {% raw %}

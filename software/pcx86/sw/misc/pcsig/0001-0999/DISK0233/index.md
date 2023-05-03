@@ -123,6 +123,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #233  NEWBASE II  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To see an overview of the files, type:  README (press Enter)            ║
+║                                                                         ║
+║ To read author's program description, type:                             ║
+║                      TYPE INFO.DOC (press Enter)                        ║
+║                                                                         ║
+║ To print out order form, type:  ORDER (press Enter)                     ║
+║                                                                         ║
+║ To print out the documentation and instructions, type:  MANUAL (Enter)  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## ORDERFRM.DOC
 
 {% raw %}

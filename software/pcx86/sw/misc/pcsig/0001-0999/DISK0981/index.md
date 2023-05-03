@@ -88,6 +88,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 981 MASTERFILE  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, Type: COPY MASTER.DOC LPT1: (press enter)   ║
+║                                                                         ║
+║ To run the program, Type: MASTER (press enter)                          ║
+║                                                                         ║
+║ Please Note: DO NOT run this program from the original disk.            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0981

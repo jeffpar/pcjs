@@ -79,6 +79,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk #1774  PCHELP & UTILITIES disk 1 of 2 (2026 also)  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program onto hard drive, type:  INSTALL (press enter)        ║
+║                                                                         ║
+║ To start program, type:  HELP (press enter)                             ║
+║                                                                         ║
+║ To print documentation, type:  COPY HELP.DOC PRN                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HELP.DOC
 
 {% raw %}

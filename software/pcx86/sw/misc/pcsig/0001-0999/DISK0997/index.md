@@ -70,6 +70,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 997 OPUS 1 BRAIN TEASERS  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, Type: COPY README.1ST LPT1: (press enter)   ║
+║                                                                         ║
+║ To run the program, Type:  EPQUIZ (press enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0997

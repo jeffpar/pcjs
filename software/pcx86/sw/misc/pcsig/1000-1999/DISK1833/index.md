@@ -72,6 +72,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1833  SAPPHIRE  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program onto your hard drive, type: INSTALL (press enter)    ║
+║                                                                         ║
+║ To print documentation, type: COPY MANUAL.TXT PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.TXT
 
 {% raw %}

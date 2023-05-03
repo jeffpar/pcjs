@@ -389,6 +389,61 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  Disk No 877  BARCODE, HYDE & CURSOR, DOVETAIL III  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation for BARCODE to your printer, Type:            ║
+║                        COPY BARCODE.DOC PRN (press enter)               ║
+║ To start BARCODE, Type: BARCODE  (press enter)                          ║
+║                                                                         ║
+║ To copy the documentation for CURSOR to your printer, Type:             ║
+║                        COPY CURSOR.TXT PRN (press enter)                ║
+║ To start CURSOR, Type: CURSOR1 or CURSOR2 (press enter)                 ║
+║                                                                         ║
+║ For instructions on the HYDE program, Type: GO (press enter)            ║
+║                        COPY README.TXT PRN (press enter)                ║
+║ To start HYDE, Type: HYDE (press enter)                                 ║
+║                                                                         ║
+║ To copy the documentation for DOVETAIL III, Type:                       ║
+║                         COPY DOCMTIII.TXT PRN (press enter)             ║
+║                                                                         ║
+║ To start DOVETAIL III, Type:  DOVEIII (press enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  Disk No 877  BARCODE, HYDE & CURSOR, DOVETAIL III  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation for BARCODE to your printer, Type:            ║
+║                        COPY BARCODE.DOC PRN (press enter)               ║
+║ To start BARCODE, Type: BARCODE  (press enter)                          ║
+║                                                                         ║
+║ To copy the documentation for CURSOR to your printer, Type:             ║
+║                        COPY CURSOR.TXT PRN (press enter)                ║
+║ To start CURSOR, Type: CURSOR1 or CURSOR2 (press enter)                 ║
+║                                                                         ║
+║ For instructions on the HYDE program, Type: GO (press enter)            ║
+║                        COPY README.TXT PRN (press enter)                ║
+║ To start HYDE, Type: HYDE (press enter)                                 ║
+║                                                                         ║
+║ To copy the documentation for DOVETAIL III, Type:                       ║
+║                         COPY DOCMTIII.TXT PRN (press enter)             ║
+║                                                                         ║
+║ To start DOVETAIL III, Type:  DOVEIII (press enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c)Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

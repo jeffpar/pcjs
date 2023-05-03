@@ -14,6 +14,26 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  PC-SIG Disk #3318 MAPIT  >>>>                  ║
+║                         Disk 2 of 2 (also #3317)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  For instructions, insert disk 1 (#3317) and type:  GO  (press Enter)   ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3318
 

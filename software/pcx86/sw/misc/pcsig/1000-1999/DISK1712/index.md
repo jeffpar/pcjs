@@ -91,6 +91,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1712  QBSCR SCREEN ROUTINES  >>>>              ║
+║                    (disk 1 of 3, #1713 and #1714 also)                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type : RUNME1ST (press enter)                         ║
+║                                                                         ║
+║ To print documentation, type: COPY QBSCR#.DOC PRN  (press enter)        ║
+║        # = 1, 2, or 3.  QBSCR4 is on disk 2                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## QBSCR1.DOC
 
 {% raw %}

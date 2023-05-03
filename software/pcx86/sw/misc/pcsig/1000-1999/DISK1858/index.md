@@ -83,6 +83,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1858  PARASORT  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ You MUST use PKXARC to extract the files.                               ║
+║                                                                         ║
+║ To start program, type: PS  (press enter)                               ║
+║                                                                         ║
+║ To print documentation, type: COPY PS42X.DOC PRN                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PS42X.DOC
 
 {% raw %}

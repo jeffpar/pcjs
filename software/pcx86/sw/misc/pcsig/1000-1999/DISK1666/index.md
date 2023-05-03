@@ -78,6 +78,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1666  GOVERN U.S.  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  GOVERN (press enter)                           ║
+║                                                                         ║
+║ To print documentation, type:  COPY MANUAL PRN                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1666

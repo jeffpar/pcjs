@@ -63,6 +63,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1898  ROOM  >>>>                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start program, type:  ROOM  (press enter)                            ║
+║                                                                         ║
+║ To print documentation, type: COPY ROOM.DOC PRN   (press enter)         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## ROOM.DOC
 
 {% raw %}

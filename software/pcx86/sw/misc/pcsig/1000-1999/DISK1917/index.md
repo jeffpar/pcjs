@@ -100,6 +100,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1917  TOTAL RECALL  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: ZRECALL      (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY FILE1917.TXT PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1917

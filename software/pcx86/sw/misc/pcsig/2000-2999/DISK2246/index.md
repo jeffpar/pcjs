@@ -94,6 +94,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2246 PONY EXPRESS  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   In order to run the program it must first be installed.               ║
+║                                                                         ║
+║   To install the program, type: PEINST (press enter)                    ║
+║                                                                         ║
+║   To run the program, type: PE (press enter)                            ║
+║                                                                         ║
+║   To print the documentation, type: COPY RUNBOOK.DOC PRN (press enter)  ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LICENSE.DOC
 
 {% raw %}

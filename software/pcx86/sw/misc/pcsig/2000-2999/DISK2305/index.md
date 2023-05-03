@@ -88,6 +88,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk #2305  BRAINSTORM  2 of 2 (also 1957)  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start using the program, insert disk 1927 and type:                  ║
+║                    COPY READ.ME PRN   (press enter)                     ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2305

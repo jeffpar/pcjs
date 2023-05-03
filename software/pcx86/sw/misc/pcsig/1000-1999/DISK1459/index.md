@@ -81,6 +81,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1459 TURBO APPRENTICE  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type TAPINST (press enter)                        ║
+║                                                                         ║
+║ To look at the documentation on your screen, type VIEW (press enter)    ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## TAP.DOC
 
 {% raw %}

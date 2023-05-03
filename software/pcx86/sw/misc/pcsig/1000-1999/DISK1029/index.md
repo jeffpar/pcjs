@@ -5624,6 +5624,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #1029 CC-SURVEYOR 2 of 2 (also #926) >>>>          ║ 
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start using the program, insert disk #926 and type:                  ║
+║                                    COPY README.NOW PRN  (press enter)   ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1029

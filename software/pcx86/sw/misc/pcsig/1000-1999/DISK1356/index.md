@@ -118,6 +118,26 @@ AUTOEXEC.BAT       Batch file to automatically start DISK.EXE
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk No: 1356  DiskFile version 1.5  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the manual, type:                                            ║
+║                                                                         ║
+║                  MANUAL (press enter)                                   ║
+║                                                                         ║
+║   To run the program, type:                                             ║
+║                                                                         ║
+║                  DISK (press enter)                                     ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1356

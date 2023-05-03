@@ -77,6 +77,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No. 882  THE POOL MANAGER  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print startup documentation, type:  COPY README.DOC PRN (press Enter)║
+║                                                                         ║
+║ To print the registration form, type:  COPY REGFORM PRN (press Enter)   ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+```
+{% endraw %}
+
 ## POOLMGR.DOC
 
 {% raw %}

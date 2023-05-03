@@ -500,6 +500,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #2396  DAYO UPDATE AND CONVERSION   >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To read the author's note, type:  TYPE README (press Enter)            ║
+║                                                                         ║
+║  To print the registration form, type:  COPY DAYO.TXT PRN (press Enter) ║
+║                                                                         ║
+║  This DAYO module is used to update earlier versions of DAYO programs.  ║
+║  (Note that the executable file may be named DAYOUE.EXE instead of      ║
+║  DAYOUPDT.EXE.)                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2396

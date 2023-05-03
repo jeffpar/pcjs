@@ -59,6 +59,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #2652  PAINLESS EVENT PROCESSOR  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the installation instructions, type:                           ║
+║                   COPY README.1ST PRN  (press Enter)                    ║
+║                                                                         ║
+║ To print the manual, type:  COPY MANUAL.TXT PRN  (press Enter)          ║
+║                                                                         ║
+║ To print the registration form, type:  COPY REGISTER.TXT PRN  (Enter)   ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.TXT
 
 {% raw %}

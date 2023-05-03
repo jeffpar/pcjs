@@ -1517,6 +1517,21 @@ DISKETTE SIZE: ____ 5 1/4"  ___ 3 1/2"     PAYMENT OF $_____________ ENCLOSED
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1945  FILE PATCH  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: FILEBATC     (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY FILEBATC.DOC PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+Copyright (c) 1990 PC-SIG INC.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1945

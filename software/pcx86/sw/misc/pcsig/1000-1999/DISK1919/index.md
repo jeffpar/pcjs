@@ -68,6 +68,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1919  FINANCE PLUS  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: FPLUS        (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY FILE1919.TXT PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1919

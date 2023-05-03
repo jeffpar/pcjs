@@ -136,6 +136,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  DISK #2340 PROGRAMMER'S PRODUCTIVITY PACK  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To install the program, type:  PPP25D (press enter)                    ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2340

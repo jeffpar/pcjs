@@ -4154,6 +4154,22 @@ financially damages DSZ's author.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  PC-SIG Disk #3330 PC Board  >>>>                ║
+║                   Disk 3 of 4 (also #3328, #3329, #3330)                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install, insert disk 1 (#3328) and type:  INSTALL  (press Enter)    ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3330

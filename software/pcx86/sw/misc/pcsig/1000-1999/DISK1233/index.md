@@ -37,6 +37,22 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1233 GRADESCAN  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type GRDSCN (press enter)                         ║
+║                                                                         ║
+║ To install program to your hard disk, type INSTALL (press enter)        ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

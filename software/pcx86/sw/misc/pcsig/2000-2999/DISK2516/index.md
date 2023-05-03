@@ -61,6 +61,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║<<<< DISK #2516 THE ICON MENU SELECTION PROGRAM 1 OF 2 (ALSO #2517) >>>> ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   Please refer to disk #2517 for installation instructions.             ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1991, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2516

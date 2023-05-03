@@ -65,6 +65,24 @@ Sunnyvale, Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  Disk No 896 Pocket Filer, Pocket Notes  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for POCKET FILER, Type:                      ║
+║             COPY PF.DOC LPT1: (press enter)                             ║
+║ To run the program POCKET FILER, Type: PF (press enter)                 ║
+║                                                                         ║
+║ To print the documentation for POCKET NOTES, Type:                      ║
+║             COPY PN.DOC LPT1: (press enter)                             ║
+║ To run the program POCKET NOTES, Type: PN (press enter)                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PF.DOC
 
 {% raw %}

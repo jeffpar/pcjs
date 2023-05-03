@@ -101,6 +101,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #791 POKER AND ULTIMA21  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start POKER type: POKER (press enter)                                ║
+║                                                                         ║
+║ To print POKER documentation, type: COPY POKER.DOC PRN (press enter)    ║
+║                                                                         ║
+║ To start ULTIMA21 type: ULTIMA21 (press enter)                          ║
+║                                                                         ║
+║ To print ULTIMA21 documentation, type: COPY ULTIMA21.DOC PRN            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## POKER.DOC
 
 {% raw %}

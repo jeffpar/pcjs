@@ -109,6 +109,23 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 1223 IMPAIRED  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To load the font to your laser printer, type IMP (press enter)          ║
+║                                                                         ║
+║ After the font is loaded into your laser printer, simply copy the       ║
+║ text file you wish to print to your laser printer.                      ║
+║                                                                         ║
+║ To copy information to your printer, type MANUAL (press enter)          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## IMPAIRED.TXT
 
 {% raw %}

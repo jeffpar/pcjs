@@ -16,6 +16,23 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #3138 SUPER SHAREWARE SYSTEM  >>>>          ║
+║                         Disk 1 of 2 (also #3139)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  For instructions on how to install the program, type:  HELPME (Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VENDOR.DOC
 
 {% raw %}

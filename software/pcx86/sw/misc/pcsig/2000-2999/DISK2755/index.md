@@ -114,6 +114,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #2755  SUPERTRAQ disk 1 of 2  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the documentation (disk 2), type:  COPY README.STQ PRN (Enter) ║
+║                                                                         ║
+║ To install the program to drive C (disk 1), type:  INSTALL  (Enter)     ║
+║                                                                         ║
+║ To run the program, after installation, type:  STQ  (press Enter)       ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+                                            Copyright (c) 1991, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2755

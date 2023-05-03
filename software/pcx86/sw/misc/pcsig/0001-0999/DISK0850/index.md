@@ -115,6 +115,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk #850 INSURE  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type;                         ║
+║                COPY INSURE.DOC PRN (press enter)                        ║
+║                                                                         ║
+║ To start the program type; INSURE  (press enter)                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INSURE.DOC
 
 {% raw %}

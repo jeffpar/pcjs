@@ -16,6 +16,31 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  PC-SIG Disk #3571 KUNG FU LOUIE vs. THE MARTIAL ARTS POSSE  >>>> ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Install this game on your hard disk, type:                          ║
+║     [hard drive letter]:  (press Enter)                                 ║
+║     CD\  (press Enter)                                                  ║
+║     MD KUNGFU  (press Enter)                                            ║
+║     CD KUNGFU  (press Enter)                                            ║
+║                                                                         ║
+║  To Extract the files from drive A, type in the following:              ║
+║                                                                         ║
+║     A:PKUNZIP -D A:KUNGFU  (press Enter)                                ║
+║                                                                         ║
+║     (replace A: with B: if installing the game from drive B)            ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## KUNGFU.DOC
 
 {% raw %}

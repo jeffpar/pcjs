@@ -89,6 +89,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #1842  REFORMAT / RSTPRINT  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start REFORMAT, type: CD\REFORMAT (press enter)                      ║
+║                          REFORMAT    (press enter)                      ║
+║ Then, to print REFORMAT's documentation, type: COPY REFORMAT.DOC PRN    ║
+║                                                                         ║
+║ To start RSTPRINT, type: CD\RSTPRINT (press enter)                      ║
+║                          RSTPRINT    (press enter)                      ║
+║ Then, to print RSTPRINT's documentation, type: COPY RSTPRINT.DOC PRN    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1842
@@ -99,11 +118,28 @@ Sunnyvale  Ca. 94086
     GO       BAT        38   1-01-80   1:37a
     GO       TXT       885   1-01-80   1:55a
     FILE1842 TXT      2887   7-13-90  11:28a
+    RSTPRINT     <DIR>    
+    REFORMAT     <DIR>    
+            5 file(s)       3810 bytes
+
+     Directory of A:\RSTPRINT
+
+    .            <DIR>    
+    ..           <DIR>    
     COPYRITE IFO       834   5-07-90   8:49p
     RSTPRINT DOC     13754   5-30-90   7:19p
     RSTPRINT EXE     37982   5-30-90   7:15p
-    COPYRI~1 IFO       834   5-07-90   8:49p
+            5 file(s)      52570 bytes
+
+     Directory of A:\REFORMAT
+
+    .            <DIR>    
+    ..           <DIR>    
+    COPYRITE IFO       834   5-07-90   8:49p
     REFORMAT DOC     12820   5-30-90   9:24p
     REFORMAT EXE     64679   5-30-90   9:05p
-            9 file(s)     134713 bytes
-                           23040 bytes free
+            5 file(s)      78333 bytes
+
+    Total files listed:
+           15 file(s)     134713 bytes
+                           22016 bytes free

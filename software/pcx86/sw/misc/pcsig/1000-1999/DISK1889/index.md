@@ -119,6 +119,20 @@ OrderFrm.txt    -       The registration form for BestGues.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1889  BESTGUES  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: BESTGUES     (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY BESTGUES.PRN PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDERFRM.TXT
 
 {% raw %}

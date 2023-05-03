@@ -487,6 +487,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  PC-SIG Disk #CBASE THE C DATABASE LIBRARY  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   The files on this disk come in archived format.                       ║
+║   Please refer to CBASE.RME for installation instructions.              ║
+║                                                                         ║
+║   To print the instructions, type: COPY CBASE.RME PRN (press enter)     ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2247

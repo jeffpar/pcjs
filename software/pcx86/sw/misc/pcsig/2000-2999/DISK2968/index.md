@@ -42,6 +42,34 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2968  Fonts Galore #8  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ Note: You must have Adobe Type Manager installed in Windows 3.0 in      ║
+║       order to use these fonts.                                         ║
+║                                                                         ║
+║ To install the fonts:                                                   ║
+║                                                                         ║
+║ From the Main program group in Windows 3.0, open the ATM control panel  ║
+║ and click on "Add". Next, click on any subdirectory, or press Enter.    ║
+║ From there, choose the drive that has fonts. Once that's completed,     ║
+║ choose the fonts to be installed and click on "Add". You can install    ║
+║ all the fonts on the disk by clicking on the first font and dragging    ║
+║ the highlight bar to the bottom of the list. Once the fonts have been   ║
+║ installed, click on Exit. You will be required to restart Windows so    ║
+║ the fonts can be accessed by your applications.                         ║
+║                                                                         ║
+║                                                                         ║
+║                                       (c) Copyright 1992, PC-SIG Inc.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## RSSTFRA_.DOC
 
 {% raw %}

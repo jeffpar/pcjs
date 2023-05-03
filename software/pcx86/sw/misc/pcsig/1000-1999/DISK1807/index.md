@@ -862,6 +862,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1807  BOOK MEMO DISPLAY  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Copy disk onto root of hard drive.                                      ║
+║                                                                         ║
+║ To start installation, type: UNARC                                      ║
+║                                                                         ║
+║ To print documentation, type: COPY FILE1807.TXT PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SHOWMEMO.ASM
 
 {% raw %}

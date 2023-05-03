@@ -419,6 +419,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  DISK # 2373 DBCLEAN  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print documentation type: COPY DBCLEAN.DOC PRN                     ║
+║                                                                         ║
+║   To start dbClean, type: DBCLEAN                                       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2373

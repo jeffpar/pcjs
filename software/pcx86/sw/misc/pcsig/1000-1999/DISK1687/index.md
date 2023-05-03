@@ -84,6 +84,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1687  READ.COM AND READIT  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start READ.COM, type:  READ (press enter)                            ║
+║ To start READIT, type:  READIT (press enter)                            ║
+║                                                                         ║
+║ To print READ.COM documentation, type:  COPY READ.DOC PRN               ║
+║ To print READIT documentation, type:  COPY READIT.DOC PRN               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## READ.DOC
 
 {% raw %}

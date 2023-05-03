@@ -928,6 +928,23 @@ program!  Register now by sending a check to:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 1376 ARMADA UTILITIES  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start a program, type the name of the program that you wish to run   ║
+║ Example, if you wanted to run the program called ALTPAGE you would type ║
+║                           ALTPAGE (press enter)                         ║
+║                                                                         ║
+║ If you wanted to copy the documentation to your printer, you would type ║
+║                       COPY ALTPAGE.DOC PRN (press enter)                ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MIDIPOP.DOC
 
 {% raw %}

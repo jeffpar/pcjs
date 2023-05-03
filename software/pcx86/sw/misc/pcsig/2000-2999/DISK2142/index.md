@@ -80,6 +80,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #2142 CHOU I  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To unarchive CHOU I, type:  CHOU_223 x:\path (press enter)             ║ 
+║                                                                         ║
+║  (Note: x is the drive where you want to unarchive the program to)      ║
+║                                                                         ║
+║  To start program, type:  CHOU (press enter)                            ║ 
+║                                                                         ║
+║  To view documentaion, type : MANUAL (press enter)                      ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2142

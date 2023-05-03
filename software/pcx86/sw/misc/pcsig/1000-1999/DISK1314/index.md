@@ -163,6 +163,78 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk No 1314 Program Grab Bag  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To print the documentation, type:                                     ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To start the Metric program, type:                                    ║
+║             METRIC (press enter)                                        ║
+║                                                                         ║
+║   To start CHK4BOMB, type:                                              ║
+║             CHK4BOMB (press enter)                                      ║
+║                                                                         ║
+║   To start BACKTALK, type:                                              ║
+║             BACKTALK (press enter)                                      ║
+║                                                                         ║
+║   To start DRAIN, type:                                                 ║
+║             DRAIN (press enter)                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+## GO2.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk No 1314 Program Grab Bag  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To start EATERS, type:                                                ║
+║             EATERS (press enter)                                        ║
+║                                                                         ║
+║   To start the PC-SIG logo show, type:                                  ║
+║             LOGO (press enter)                                          ║
+║                                                                         ║
+║   To start the MELT program, type:                                      ║
+║             MELT (press enter)                                          ║
+║                                                                         ║
+║   To start the OBLITER8, type:                                          ║
+║             OBLITER8 (press enter)                                      ║
+║                                                                         ║
+║   To display the GOLDEN.TXT, type:                                      ║
+║             PYTHAG (press enter)                                        ║
+║                                                                         ║
+║   To use the SCRAMBLE program, type:                                    ║
+║             SCRAMBLE (press enter)                                      ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+## GO3.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk No 1314 Program Grab Bag  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To use the UNSCRAM program, type:                                     ║
+║             UNSCRAM (press enter)                                       ║
+║                                                                         ║
+║   To use the THATSALL program, type:                                    ║
+║             THATSALL (press enter)                                      ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GOLDEN.TXT
 
 {% raw %}

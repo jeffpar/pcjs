@@ -54,6 +54,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #2590  PC-CARD CATALOG  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To read the program introductory information, type:  TYPE README (Enter)║
+║                                                                         ║
+║ To install the program to your hard drive, type: INSTALL A: C: PCCC     ║
+║ (substitue C: if you want to install to a different drive )             ║
+║                                                                         ║
+║ To print the documentation, type:  COPY PCCC.DOC PRN  (Enter)           ║
+║                                                                         ║
+║                                    (c) Copyright 1991, PC-SIG Inc.      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PCCC.DOC
 
 {% raw %}

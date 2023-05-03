@@ -73,6 +73,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<  Disk #2021  ACTIVE LIFE FOR MS-DOS (disk 1 of 2, #2022 also)  >>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read installation instructions, type:  TYPE README.TXT (Enter)       ║
+║                                                                         ║
+║ To print documentation, type:  COPY AL.DOC PRN (press Enter)            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

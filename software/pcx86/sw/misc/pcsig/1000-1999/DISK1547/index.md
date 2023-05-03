@@ -117,6 +117,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  Disk #1547  PAYROLL LITE disk 1 of 2 (also 1548)  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start PAYROLL LITE, type:  INSTALL (press enter)                     ║
+║                                                                         ║
+║ To print documentation, insert disk #1548 and type:                     ║
+║                               PRINT-PR (press enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDER.DOC
 
 {% raw %}

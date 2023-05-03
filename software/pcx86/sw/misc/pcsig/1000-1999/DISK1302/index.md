@@ -89,6 +89,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  PC-SIG Disk #1302  HOME BUDGET MANAGEMENT SYSTEM  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For instructions, type:  README (press ENTER)                           ║
+║ 		  							  ║
+║ To print a copy of a test drive of the program, type:                   ║
+║                COPY TESTDRIV.DOC PRN (press ENTER)                      ║
+║                                                                         ║
+║ To print a copy of the order form, type:  COPY ORDER.FRM PRN (Enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## HBMS.DOC
 
 {% raw %}

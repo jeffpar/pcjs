@@ -156,6 +156,26 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk No 810  DISK NAVIGATOR (DNAV) version 1.3  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation on this disk, type:                        ║
+║                                                                         ║
+║             COPY DNAV.DOC PRN (press enter)                             ║
+║                                                                         ║
+║   To run the program, type:                                             ║
+║                                                                         ║
+║             DNAV (press enter)                                          ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0810

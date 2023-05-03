@@ -581,6 +581,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #1769  LASERLABEL AND DOWNLOAD  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start LASERLABEL, type:  LL (press enter)                            ║
+║ To start DOWNLOAD, type:  DOWNLOAD (press enter)                        ║
+║                                                                         ║
+║ To print LASERLABEL documentation, type:  README.COM                    ║
+║ To print DOWNLOAD documentation, type:  COPY DOWNLOAD.TXT PRN           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1769

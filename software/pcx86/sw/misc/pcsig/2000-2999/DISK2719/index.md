@@ -68,6 +68,33 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+ ╔═══════════════════════════════════════════════════════════════════════╗
+ ║             <<<<  PC-SIG DISK #2719 FLEXIBAK PLUS  >>>>               ║
+ ╠═══════════════════════════════════════════════════════════════════════╣
+ ║   Installation:                                                       ║
+ ║                                                                       ║
+ ║       Installation is a very straightforward process. All you need    ║
+ ║  to do is insert the disk on which FLEXIBAK Plus is located into      ║
+ ║  the drive, select that drive as the current drive by typing "A:"     ║
+ ║  or "B:" (depending on the drive in which the disk is inserted)       ║
+ ║  at the DOS prompt. Now type "INSTALL" and press <ENTER> and then     ║
+ ║  follow the instructions. Alternatively, if you acquired your copy    ║
+ ║  of FLEXIBAK Plus by downloading it from a BBS or you prefer to       ║
+ ║  manually install it, just create a directory on your hard disk       ║
+ ║  and copy all the files to that directory.                            ║
+ ║                                                                       ║
+ ║  To print all documentation files, type: COPY *.DOC PRN  (press Enter)║
+ ║                                                                       ║
+ ║                                     (c) COPYRIGHT 1991, PC-SIG INC.   ║
+ ╚═══════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HISTORY.DOC
 
 {% raw %}

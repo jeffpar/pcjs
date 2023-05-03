@@ -94,6 +94,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2935  DATA MANAGER  >>>>               ║
+║                        (Disk 1 of 2, also #2936)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To install DATA MANAGER, from Disk #1 type:  INSTALL  (press Enter)    ║
+║                                                                         ║
+║  To print the manual after installing the program, type:                ║
+║                                   COPY MANUAL.DOC PRN  (press Enter)    ║
+║                                                                         ║
+║  NOTE:  Registration information can be found in the UTILITIES menu     ║
+║         within either the Office or Home main menus.                    ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2935

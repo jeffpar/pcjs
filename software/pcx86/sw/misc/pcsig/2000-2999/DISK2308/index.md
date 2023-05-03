@@ -74,6 +74,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk #2308  Laser Graphics  2 of 2 (also 2027)  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start using the program, insert disk #2027 and type:                 ║
+║                             COPY LASER_0.DOC PRN (press enter)          ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2308

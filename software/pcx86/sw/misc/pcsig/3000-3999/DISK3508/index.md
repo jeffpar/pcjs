@@ -384,6 +384,31 @@ Version 1.0
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3508 DRAGON SHARD  >>>>               ║
+║                         Disk 2 of 2 (also #3206)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install the program to your hard disk, type:                        ║
+║     [hard drive letter]:  (press Enter)                                 ║
+║     CD\  (press Enter)                                                  ║
+║     MD DRAGON  (press Enter)                                            ║
+║     CD DRAGON  (press Enter)                                            ║
+║                                                                         ║
+║  Insert disk 2 (#3508) in drive A (or B) and type:                      ║
+║     A:PKUNZIP A:DRAGON  (press Enter)  (use B: if using B drive)        ║
+║                                                                         ║
+║  To start the game, type:  RUNME  (press Enter)                         ║
+║                                                                         ║
+║                                                                         ║
+║                                        (C) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3508

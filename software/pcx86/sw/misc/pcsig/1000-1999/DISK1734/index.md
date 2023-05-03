@@ -498,6 +498,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1734  CASSETTE!  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: CASSETTE                                        ║
+║                                                                         ║
+║ To print documentation, type: COPY CASSETTE.DOC PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1734

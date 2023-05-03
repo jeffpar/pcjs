@@ -82,6 +82,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1705 C_WINDOW TOOLKIT 2 of 2 >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ The documentation for this disk is on Disk #1007.                       ║
+║                                                                         ║
+║ To print the documentation, type: MANUAL (press enter)                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1705

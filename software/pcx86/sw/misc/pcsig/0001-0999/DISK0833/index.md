@@ -104,6 +104,25 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  Disk #833 GRAPHTIME-II (Hercules version) disk 1 of 2  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║    This is the first disk of the GRAPHTIME package. It contains the     ║
+║     startup modules.                                                    ║
+║                                                                         ║
+║ For installation procedures refer to the readme file on this disk.      ║
+║ To do so type the following:  TYPE README (press enter) or to copy it   ║
+║ to your printer type: COPY README PRN (press enter)                     ║
+║                                                                         ║
+║ To start the program type: GT (press enter)                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0833

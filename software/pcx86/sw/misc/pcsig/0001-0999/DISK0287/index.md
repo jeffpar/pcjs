@@ -233,6 +233,62 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## README.DOC
+
+{% raw %}
+```
+
+
+
+
+Program name:	File Express (tm)
+	       (C) Copyright 1991 Expressware Corporation
+
+Developer   :   Expressware Corporation
+                P.O. Box 1800
+                Duvall, WA 98019
+                (206) 788-0932  office
+                (206) 788-4493  fax
+                (206) 788-4008  BBS
+                (800) 753-FILE  orders only
+
+Price       :   $99.00
+
+
+
+
+What is File Express?
+
+File Express is a database management program written for the IBM Personal 
+Computer and PC-compatible computers.  Using File Express, information 
+of virtually any kind can be put into the computer, printed, sorted, 
+displayed and reported.  For example, a list of names and addresses can be 
+entered, then they can be sorted into zip code sequence or last name 
+sequence, printed out onto mailing labels, and updated as the list changes.  
+The same data can be included in reports, or simply displayed on the 
+computer screen when needed.  Customized form letters can also be written 
+in File Express by merging names from the database file with a letter. 
+
+File Express is very popular among first-time database users and non-
+technical users.  But as File Express has continued to be improved over 
+the last six years, it has also become very powerful.  Some of its early 
+first-time  users have advanced to true "power users" and we have
+addressed their  needs too, while maintaining the simplicity of the manual 
+and the software.  
+
+
+Installing File Express
+
+The diskettes included in this package contain compressed files which
+must be expanded using the File Express Installation program.  To do
+this, insert the diskette labelled "0287 File Express" into drive A and
+at the DOS prompt A>, type INSTALL and press <Enter>.  Then follow the
+instructions on the screen.
+
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0287

@@ -76,6 +76,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk #835 MULTIFILE  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start MULTIFILE, type: MF (press enter)                              ║
+║                                                                         ║
+║ To start ONELABEL, type: ONELABEL (press enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0835

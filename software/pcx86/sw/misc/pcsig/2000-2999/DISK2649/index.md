@@ -741,6 +741,28 @@ order on-line thru the support BBS, Xevious, at 508-875-3618.  Use
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2649  SUPERFLY  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read information about the program and author, type:                 ║
+║                      TYPE FLY.TXT  (press Enter)                        ║
+║                                                                         ║
+║ To print the instructions, type:  COPY FLY.DOC PRN  (press Enter)       ║
+║                                                                         ║
+║ To start SUPERFLY, type:  FLY  (press Enter)                            ║
+║                                                                         ║
+║ To print the registration form, type:  COPY ORDERFRM.TXT PRN  (Enter)   ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDERFRM.TXT
 
 {% raw %}

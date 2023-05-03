@@ -358,6 +358,24 @@ See the SAMPLE.TTI file in this distribution for an example of a .TTI file.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 980  VANILLA SNOBOL4  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:                                     ║
+║                  PRINTMAN (press enter)                                 ║
+║                                                                         ║
+║   To run the program, type:                                             ║
+║                  SNOBOL4 (press enter)                                  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SNOBOL4.DOC
 
 {% raw %}

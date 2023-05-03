@@ -131,6 +131,19 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #402 CROSS ASSEMBLER 370  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, type:                        ║
+║                          MANUAL (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0402
@@ -143,6 +156,16 @@ Sunnyvale Ca. 94086
     GO       TXT       463   2-24-89   1:08p
     MANUAL   BAT       146   2-24-89   1:09p
     READ     ME       7733   1-07-88   9:45p
+    BAT          <DIR>    
+    CPY          <DIR>    
+    LIB          <DIR>    
+    R42          <DIR>    
+            9 file(s)      11109 bytes
+
+     Directory of A:\BAT
+
+    .            <DIR>    
+    ..           <DIR>    
     BLDLIB   BAT       895  10-31-87   2:27p
     BLDUTIL  BAT       620  10-31-87   2:05p
     INSTALL  BAT      1482   1-07-88   7:28a
@@ -150,6 +173,12 @@ Sunnyvale Ca. 94086
     RUNDEMO  BAT      4088   1-05-88   8:54p
     RUNMAC   BAT       816   1-03-88   8:37a
     RUNUTIL  BAT       670  10-31-87   2:46p
+            9 file(s)      11763 bytes
+
+     Directory of A:\CPY
+
+    .            <DIR>    
+    ..           <DIR>    
     EQUREGS  CPY       328  10-29-87   5:28a
     EQUSVCS  CPY       809   1-07-88   5:20a
     IHADCB   CPY      2489  10-29-87   5:44a
@@ -158,12 +187,24 @@ Sunnyvale Ca. 94086
     IHAPSW   CPY       799   1-05-88   6:11a
     IHASCB   CPY      1145  11-08-87   4:30p
     MVS      CPY      4828   6-06-87   9:22a
+           10 file(s)      12039 bytes
+
+     Directory of A:\LIB
+
+    .            <DIR>    
+    ..           <DIR>    
     DAT      ALC      2176   7-22-86   3:45p
     DTIME    ALC      2048   4-26-87   1:13p
     PET      ALC      1920   1-01-87   9:16a
     SSP      ALC      4314   8-20-87   6:13a
     SYNERROR ALC      4138  10-30-87   5:49a
     TIMER    ALC       827   4-07-85   6:25a
+            8 file(s)      15423 bytes
+
+     Directory of A:\R42
+
+    .            <DIR>    
+    ..           <DIR>    
     A370     EXE     56530   1-07-88   5:04a
     E370P42  EXE     40514   1-07-88   5:05a
     E370R42  EXE     50546   1-07-88   5:04a
@@ -174,5 +215,8 @@ Sunnyvale Ca. 94086
     READ     ME2       295  11-28-88   9:39p
     SEE      COM     16768   1-03-88   8:30a
     T370     COM      4864   1-03-88   8:30a
-           36 file(s)     266973 bytes
-                           36864 bytes free
+           12 file(s)     216639 bytes
+
+    Total files listed:
+           48 file(s)     266973 bytes
+                           32768 bytes free

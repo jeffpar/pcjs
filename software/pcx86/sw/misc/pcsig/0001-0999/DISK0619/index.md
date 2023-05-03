@@ -71,6 +71,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<< Disk No 619  Hotboot II plus Insults >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:                                     ║
+║                  COPY HOTBOOT.DOC PRN (press enter)                     ║
+║                                                                         ║
+║   To run HotBoot, type:                                                 ║
+║                  HOTBOOT (press enter)                                  ║
+║                                                                         ║
+║   To run Insults, type:                                                 ║
+║                  INSULTS (press enter)                                  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c)Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0619

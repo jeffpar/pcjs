@@ -58,6 +58,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2623  SYSTEM MASTER  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To begin using the program, type:  COPY README.1ST PRN  (press ENTER)   ║
+║                               or:  TYPE README.1ST  (press ENTER)       ║
+║                                                                         ║
+║                                                                         ║
+║                                      (c) Copyright 1991, PC-SIG Inc.    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SM_PURGE.DOC
 
 {% raw %}

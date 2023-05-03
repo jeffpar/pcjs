@@ -1561,6 +1561,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No 1239 THE AEIUS GRADEBOOK  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type GRD (press enter)                            ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## JR.TXT
 
 {% raw %}

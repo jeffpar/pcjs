@@ -67,7 +67,23 @@ Sunnyvale CA, 94086
 (408) 730-9291
 (c) Copyright 1987,88 PC-SIG, Inc.
 
-
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #757 SPANISH VERB CONJUGATEOR >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To Print the documentation for SPANISH type the following command:     ║
+║             COPY READ.ME PRN    (press enter)                           ║
+║                                                                         ║
+║  To Start the program type SPANISH  (press enter)                       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

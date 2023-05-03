@@ -164,6 +164,53 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk #779 PMENU, PC-BANNER, SCREEN OFF AND KEYBOARD LOCK >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To Start Promenu for your Epson printer Type PMENU332 (press enter)     ║
+║                                                                         ║
+║ To Start Promenu for your Proprinter Type PROMNU32 (press enter)        ║
+║                                                                         ║
+║ To Start Patch Type PATCH (press enter)                                 ║
+║                                                                         ║
+║ To Start PC-Banner Type PCBANV3A (press enter)                          ║
+║                                                                         ║
+║ To Start the SCREEN OFF program Type SCRNOFF3 (press enter)             ║
+║                                                                         ║
+║ To Start the KEYLOCK program Type KYLOCK (press enter)                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk #779 PMENU, PC-BANNER, SCREEN OFF AND KEYBOARD LOCK >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To Print the documentation for PC-BANNER type the following command:    ║
+║                    COPY README.NOW PRN (press enter)                    ║
+║                                                                         ║
+║ To Print the documentation for PATCH type the following command:        ║
+║                    COPY PATCH.DOC PRN (press enter)                     ║
+║                                                                         ║
+║ To Print the documentation for SCRNOFF3 type the following command:     ║
+║                    COPY SCRNKY.DOC PRN (press enter)                    ║
+║                                                                         ║
+║ To Print the documentation for PMENU330 type the following command:     ║
+║                    COPY PMENU330.DOC PRN (press enter)                  ║
+║                                                                         ║
+║ To Print the documentation for PROMNU30 type the following command:     ║
+║                    COPY PROMNU30.DOC PRN (press enter)                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## KYLOCK.ASM
 
 {% raw %}

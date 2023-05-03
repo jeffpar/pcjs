@@ -79,6 +79,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2278  MOUSE TOOLS  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation and program instructions, type:                  ║
+║                 COPY MOUSTOOL.DOC PRN  (press Enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## SHAREWRE.TXT
 
 {% raw %}

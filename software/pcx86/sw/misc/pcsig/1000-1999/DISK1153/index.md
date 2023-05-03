@@ -85,6 +85,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  Disk No 1153 MarketPLUS Disk 1 of 2 (2005 also)  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install MarketPlus, type INSTALL (press enter)                       ║
+║                                                                         ║
+║ To view information on the program, type README (press enter)           ║
+║                                                                         ║
+║ To print the documentation, type PRINTDOC (press enter)                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INVOICE.DOC
 
 {% raw %}

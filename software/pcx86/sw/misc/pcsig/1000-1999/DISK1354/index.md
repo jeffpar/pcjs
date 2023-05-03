@@ -68,6 +68,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk No 1354 Stock Charting System version 2.55 >>>>        ║
+║		Program	Disk (#2 of 2; 246 also)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To start the program, insert disk #1 and type:                        ║
+║                               SM2 (press enter)                         ║
+║                                                                         ║    
+║   For instructions on printing the manual for this program,             ║
+║                             TYPE README (press enter)                   ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

@@ -102,6 +102,24 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 1092 Scndsign & MONODRAW  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for Scndsign, type: PRTDOC (press enter)     ║
+║                                                                         ║
+║ To run the program SCNDSIGN, type: SCNDSIGN (press enter)               ║
+║                                                                         ║
+║ To print the documentation for MONODRAW, type: MANUAL (press enter)     ║
+║                                                                         ║
+║ To run the program MONODRAW, type: MDRAW (press enter)                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MDRAW.DOC
 
 {% raw %}

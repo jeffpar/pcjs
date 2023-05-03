@@ -65,6 +65,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk #913 FLODRAW disk 2 of 3 (912 and 2020 also) >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, insert disk 1 and type:  FLODRAW (press enter)    ║
+║                                                                         ║
+║ To print the documentation for FLODRAW, insert disk 3 and type:         ║
+║                       MANUAL (press enter)                              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0913

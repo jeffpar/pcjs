@@ -97,6 +97,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║             <<<< PC-SIG #2357  WITHIN AND BEYOND DOS >>>>               ║
+  ╠═════════════════════════════════════════════════════════════════════════╣
+  ║                                                                         ║
+  ║  To print documentation and installation instructions, type:            ║
+  ║                    COPY READ.ME PRN (press ENTER)                       ║
+  ║                                                                         ║
+  ║                                                                         ║
+  ║                                    (c) Copyright 1990, PC-SIG Inc.      ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2357

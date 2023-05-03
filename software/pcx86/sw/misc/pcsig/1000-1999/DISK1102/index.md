@@ -2094,6 +2094,25 @@ E88.DOC ...... The complete documentation for The E88 Text Editor           |
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<< Disk No 1102 THE E88 TEXT EDITOR & NAMES  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for the E88 TEXT EDITOR, type:               ║
+║                             E88.DOC (press enter)                       ║
+║                                                                         ║
+║ To run the E88 TEXT EDITOR, type: RUNME  (press enter)                  ║
+║                                                                         ║
+║ To print the documentation for NAMES, type: NAMDOC (press enter)        ║
+║                                                                         ║
+║ To run the program NAMES, type: NAMES (press enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NAMES.DOC
 
 {% raw %}

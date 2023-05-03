@@ -176,6 +176,33 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #1715   SPC-AR, TAKOFF, SC-ESTIMATE  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To use programs, you must first unarchive SPC-AR, TAKOFF, and SC-EST    ║
+║ to your hard drive.                                                     ║
+║                                                                         ║                               
+║ To start SPC-AR program, type: SPC-AR                                   ║
+║                                                                         ║
+║ To print SPC-AR documentation, type: COPY SPCAR.DOC PRN                 ║
+║                                                                         ║
+║                                                                         ║
+║ To Start TAKOFF program, type: TAKOFF                                   ║
+║                                                                         ║
+║ To print TAKOFF documentation, type: COPY TAKOFF.DOC PRN                ║
+║                                                                         ║
+║                                                                         ║
+║ To start SC-ESTIMATE program, type: SC-EST                              ║
+║                                                                         ║
+║ To print SC-ESTIMATE documentation, type: COPY SC-EST.DOC PRN           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SC-EST.DOC
 
 {% raw %}

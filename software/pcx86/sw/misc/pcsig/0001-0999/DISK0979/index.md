@@ -78,6 +78,18 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 979 THE VIRTUAL LIBRARY  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the book, Type: COPY CHAPTER.* LPT1: (press enter)             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0979

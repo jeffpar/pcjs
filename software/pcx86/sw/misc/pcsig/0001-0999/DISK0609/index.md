@@ -91,6 +91,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #609  DISK SPOOL II >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start using this program, type:  DS (press Enter)                    ║
+║                                                                         ║
+║         **Follow author's instructions to extract files**               ║
+║                                                                         ║
+║ To print documentation, type:  COPY SP2.DOC PRN (press Enter)           ║
+║                                                                         ║
+║   ...or, if you request the demo program, SP2.DOC will print            ║
+║      during the demo.  Type:  SP2DEMO                                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0609

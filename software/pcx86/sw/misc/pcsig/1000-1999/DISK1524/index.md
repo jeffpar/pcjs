@@ -98,6 +98,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                      <<<<  Disk No 1524 SPROGH  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type SPROGH (press enter)                         ║
+║                                                                         ║
+║ To view the documentation on your screen, type VIEW (press enter)       ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LILSPROG.BAS
 
 {% raw %}

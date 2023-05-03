@@ -72,6 +72,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1887  KB0ZP MESSAGE HANDLER  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: KB0ZP-M      (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY KB0ZP.DOC PRN                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1887

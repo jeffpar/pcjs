@@ -63,6 +63,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #711 GET LUCKY!  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print out the documentation to your printer, Type:                   ║
+║                          PRINT-GL (press enter)                         ║
+║                                                                         ║
+║ To start the program, Type: GETLUCKY (press enter)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0711

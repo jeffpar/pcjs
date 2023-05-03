@@ -118,6 +118,18 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 946  BASKETBALL  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To run the program BASKETBALL, Type: BASKBALL (press enter)             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0946

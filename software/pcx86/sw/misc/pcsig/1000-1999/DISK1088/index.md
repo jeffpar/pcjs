@@ -132,6 +132,24 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<<  Disk No 1088 THE BOOK REPORT & 1001 TOPICS FOR COMPOSITION  >>>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for 1001 TOPICS, type: PRINTDOC (press enter)║
+║                                                                         ║
+║ To run the program of 1001 TOPICS, type: TOPICS (press enter)           ║
+║                                                                         ║
+║ To print the documentation for BOOK REPORT, type: MANUAL (press enter)  ║
+║                                                                         ║
+║ To run BOOK REPORT, type: BOOK (press enter)                            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1088

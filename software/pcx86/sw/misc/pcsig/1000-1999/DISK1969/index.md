@@ -59,7 +59,20 @@ PC-SIG
 Sunnyvale  Ca. 94086                                                    
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
-
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1969  MASTER MENU  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program, type: INSTALL    (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY PASMENU.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

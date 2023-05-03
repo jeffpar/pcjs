@@ -539,6 +539,36 @@ program or from the manual.
 ```
 {% endraw %}
 
+## README.TXT
+
+{% raw %}
+```
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+▓                                                                         ▓
+▓                                  WSMX80                                 ▓
+▓                                                                         ▓
+▓              This  disk  has the files for WSMX80 including  the        ▓
+▓         manual on the disk.   The first thing that you will want        ▓
+▓         to  do is to make a copy of the entire  disk.  Then  you        ▓
+▓         will want to make your own copy of the manual. To do so,        ▓
+▓         use the following procedure:                                    ▓
+▓          (1)  Log the computer to the drive that this disk is in        ▓
+▓                    (that is,  if it is in drive B:, type "B:" so        ▓
+▓                    that you get a "B>" prompt.                          ▓
+▓          (2)  Make sure that your printer is on.  Set it so that        ▓
+▓                    it  is NOT "ON-LINE" or NOT  "SELECT"ed,  and        ▓    
+▓                    press   the   formfeed   button.     If   the        ▓ 
+▓                    perforations  do  not line up just above  the        ▓ 
+▓                    print head,  use the knob on the roller  (not        ▓ 
+▓                    the linefeed button) to line it up.                  ▓
+▓          (3)  Enter the following command:                              ▓
+▓	                  WSMX WSMXDOC                                    ▓
+▓         The manual should handle ensuing questions.                     ▓
+▓                                                                         ▓
+▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+```
+{% endraw %}
+
 ## WSMXDOC.TXT
 
 {% raw %}

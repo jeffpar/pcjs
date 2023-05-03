@@ -130,6 +130,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 889 FAMTRACK and DOS-PRO  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print out the documentation for FAMTRACK, Type:                      ║
+║                  COPY FT_DOC.ASC LPT1: (press enter)                    ║
+║                                                                         ║
+║ To run the FAMTRACK program, Type FT (press enter)                      ║
+║                                                                         ║
+║ To print out the documentation for DOS-Pro, Type:                       ║
+║                  COPY README.DOC LPT1: (press enter)                    ║
+║                                                                         ║
+║ To run the DOS-PRO program, Type  M (press enter)                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

@@ -82,6 +82,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #1610  SALES CALL REPORTS  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program onto hard drive, type:  AINSTALL (press enter)       ║
+║ To start program after installing, type:  SCR (press enter)             ║
+║                                                                         ║
+║ To print documentation, type:  COPY SCR.DOC PRN                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SCR.DOC
 
 {% raw %}

@@ -110,6 +110,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 1217 REMEMBER-IT  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type REMEMBER (press enter)                       ║
+║                                                                         ║
+║ To copy the documentation to your printer, type DOC (press enter)       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NEWUSER.DOC
 
 {% raw %}

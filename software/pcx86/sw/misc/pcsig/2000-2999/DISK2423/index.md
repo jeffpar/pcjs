@@ -76,6 +76,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #2423  ROMEO AND JULIET   >>>>             ║
+║                      (Disk 2 of 2, #2422 also)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the author's documentation and installation instructions,      ║
+║    insert Disk 1 and type:  COPY MANUAL.TXT PRN (press Enter)           ║
+║                                                                         ║
+║ (After inserting Disk 1, you may want to first type:  README (Enter!))  ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

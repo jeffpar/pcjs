@@ -16,6 +16,23 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## BBS.TXT
+
+{% raw %}
+```
+
+╔═════════════════════════════════════════════════════════════════╗
+║ EmmaSoft now has a BBS for software support.  There is no charge║
+║ to use this service.  All the latest versions of EmmaSoft Soft- ║
+║          ware is here, as well as many other programs.          ║
+║                           For EmmaSoft                          ║
+║ Shareware Products and Many other shareware files call our BBS: ║
+║     EmmaSoft Shareware Board  24 Hours 300/1200/2400 N,8,1      ║
+║    BBS: (607) 533-7072   VOICE ONLY: (607) 533-4685  No Charge  ║
+╚═════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## FILE2726.TXT
 
 {% raw %}
@@ -43,6 +60,23 @@ PC-SIG
 Sunnyvale  Ca. 94086
 (408) 730-9291
 (c) Copyright 1991 PC-SIG, Inc.
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #2726  SUPER-MAINT #1 (also 2727)  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ For instructions and information, type:  COPY README.1ST PRN (enter)    ║
+║                                                                         ║
+║ To install program, type:   INSTALL  (press enter)                      ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

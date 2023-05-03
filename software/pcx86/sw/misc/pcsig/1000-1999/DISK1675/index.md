@@ -78,6 +78,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════════╗
+║            <<<< Disk No. 1675 The Nutritionist (1148 also) >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════════╣
+║ The program and documentation are on disk number 1148.                      ║
+║                                                                             ║
+║ To start the program, type:  NUT (press enter)                              ║
+║                                                                             ║
+║ To print the documentation, type:  COPY SWMANUAL.DOC PRN (press enter)      ║
+║                                                                             ║
+╚═════════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1675

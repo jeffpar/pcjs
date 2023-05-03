@@ -73,6 +73,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2429  ANIMAL FARM   >>>>                ║
+║                      (Disk 2 of 2, #2428 also)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the author's documentation and installation instructions,      ║
+║    insert Disk 1 and type:  COPY MANUAL.TXT PRN (press Enter)           ║
+║                                                                         ║
+║ (After inserting Disk 1, you may want to first type:  TYPE README.TXT)  ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2429

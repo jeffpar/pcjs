@@ -105,6 +105,33 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║      <<<<  PC-SIG Disk #2826 MR. BILL 3/3 (also #469 & #470)  >>>>      ║
+  ╠═════════════════════════════════════════════════════════════════════════╣
+  ║                                                                         ║
+  ║  To print information about CONVTADD, type:  COPY README PRN  (Enter)   ║
+  ║                                                                         ║
+  ║                     *     *     *     *     *     *                     ║
+  ║                                                                         ║
+  ║  To view instructions on how to install onto a floppy system, type:     ║
+  ║                                                          FLOPPY (Enter) ║
+  ║                                                                         ║
+  ║      Note:  If you are installing to a floppy, you will need to         ║
+  ║             also type HARD to view instructions for all users.          ║
+  ║                                                                         ║
+  ║  To view instructions on how to install onto a hard drive, type:        ║
+  ║                                                           HARD (Enter)  ║
+  ║                                                                         ║
+  ║                                                                         ║
+  ║                                           Copyright 1991, PC-SIG INC.   ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HARD.TXT
 
 {% raw %}

@@ -2008,6 +2008,23 @@ Repeat this for each of the above-named files.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No. 1106  FLEXICAL  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view instructions on how to unarchive the files on this disk type:   ║
+║                           READ_FXC.ME (press Enter)                     ║
+║                                                                         ║
+║ To read the author's description of programs on this disk, type:        ║
+║                           TYPE DES_FXC.DOC                              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG INC.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1106

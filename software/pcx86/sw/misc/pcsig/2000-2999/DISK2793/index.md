@@ -54,6 +54,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2793 KIDPIX  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Create a subdirectory on your hard drive and copy all files to it.      ║
+║ To create a subdirectory, go to the drive you want and type:            ║
+║       MD [subdirectory name]                                            ║
+║ To copy all the files to the hard drive, type:                          ║
+║       COPY [source drive]:*.* [destination drive]:\subdirectory name    ║
+║                                                                         ║
+║ To extract the files, type: BMPFILES (press Enter)                      ║
+║                             PCXFILES (press Enter)                      ║
+║                                                                         ║
+║ To print documentation type: COPY KIDPIX.TXT PRN  (press Enter)         ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## KIDPIX.TXT
 
 {% raw %}

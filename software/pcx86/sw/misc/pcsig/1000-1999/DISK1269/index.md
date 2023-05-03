@@ -181,6 +181,20 @@ FILEDESC TXT  Describes files.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk #1269 HOGBEAR ADVENTURE  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To start the program, type: HOGBEAR2  (press enter)                    ║
+║                                                                         ║
+║  To print the documenation, type: COPY MANUAL.DOC PRN (press enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## FILEDESC.TXT
 
 {% raw %}

@@ -106,6 +106,20 @@ FILES    TXT    This file.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1335 BURN-IN  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type BURNIN (press enter)                         ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1335

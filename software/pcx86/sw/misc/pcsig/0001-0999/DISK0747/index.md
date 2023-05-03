@@ -100,6 +100,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #747  FOOTBALL FUN   >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print documentation and installation instructions, type:            ║
+║                   COPY README PRN (press Enter)                         ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0747

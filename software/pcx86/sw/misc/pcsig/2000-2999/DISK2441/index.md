@@ -82,6 +82,136 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  DISK #2456  Windows Arcade Games  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start any of these games, type: WIN program                          ║
+║ (example;   A>WIN ATMOIDS )                                             ║
+║                                                                         ║
+║ You can also easily start the games by going to the File Manager, and   ║
+║ double klicking on the program you wish to start.                       ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
+## LISTICO.DOC
+
+{% raw %}
+```
+
+			 --== LISTICO - Version 1.0  ==--
+
+           Copyright (C) 1990 by Philippe Rabergeau.  All Rights Reserved.
+
+
+LISTICO is not a WINDOWS 3.0 application but a MS-DOS utility that
+display WINDOWS 3.0 ICONS in your VGA (or EGA) graphics board.
+
+                                  -========-
+
+BBS Distribution file must be named LICO10.ZIP or LICO10.EXE
+BBS Description: List your WIN 3.0 ICONS with C source
+
+
+LISTICO  DOC .... This file!
+LISTICO  EXE .... The program
+LISTICO  C   .... C Source code of LISTICO.EXE
+LISTICO  LST .... List of all my personal icons sort by CRC32 value
+LISTICO  SOR .... List of all my personal icons sort by filename
+PROPLUS  ICO .... icon of one of my shareware
+PRO$TOCK ICO .... an other one!
+
+USAGE:
+------
+LISTICO [option] filename
+
+Option:		/E .... EGA  640x350x16
+		/S .... SVGA 800x600x16 (VGA ATI Wonder only)
+		/F .... Filename included
+		/D .... Directory sort by Filename
+		/C .... Directory sort by CRC value
+
+
+SUPPORT THIS SOFTWARE:
+======================
+
+	- by sending to me your original icons.
+	- by sending to me technical information about the file format
+	  used by a windows 3.0 icon file!
+	  (I have found most of this information by hexadecimal analyse!)
+	- by sending to me technical information about your SUPER VGA
+	  board in order that I convert this utility to run in
+	  800x600x16 or 1024x768x16 video mode.
+	- by writing a better documentation for this software. I am not
+	  the right guy to do that.
+
+
+
+Catalog of Shareware and Freeware Software
+------------------------------------------
+
+PROP15.ZIP        Give more Power to Your Prodigy software
+~~~~~~~~~~
+PROPLUS Version 1.5 - Shareware registration fee: $29
+
+
+PRO$10.ZIP        Download stock quote from Prodigy
+~~~~~~~~~~
+PRO$TOCK Version 1.0 - Shareware registration fee: $29
+
+Download in unattended mode thousand of stock quotes
+from Prodigy service
+
+
+YSYS11.ZIP        Technical support of your software
+~~~~~~~~~~
+YOURSYS Version 1.1 - Freeware
+
+This utility is available in all my shareware products,
+I used it for the technical support of all my software.
+
+
+M2P11.ZIP         Convert Minitel frame into bitmap
+~~~~~~~~~
+MIN2PRT Version 1.1 - Shareware registration fee: $80
+
+Convert a Minitel frame (French Videotex Protocol)
+into monochrome bitmap graphics: PCX format and HP Laserjet printer.
+
+
+You want to contact me:
+-----------------------
+
+- PRODIGY on-line service ........... User ID#  WNWB44A
+- GEnie on-line service ............. User ID#  P.RABERGEAU
+- Compuserve on-line service ........ User ID#  [73567,2755]
+- PC-LINK on-line service ........... Screen name: Philippe
+- MINITEL Network (MSC) ............. Access code: NYN, User ID#  PHILIPPE
+- INFOLOOK Gateway (NYNEX/New York) . Access code: GO NYN, User ID#  PHILIPPE
+- By Mail ........................... Philippe Rabergeau
+                                      512 E. 5th St.  #9
+                                      New York, NY 10009
+- By phone .......................... (212) 505-6203 (7PM to 11PM EST)
+
+
+Enjoy using LISTICO,
+
+Philippe Rabergeau,
+Software Writer
+
+```
+{% endraw %}
+
 ## LISTICO.DOC
 
 {% raw %}
@@ -278,6 +408,13 @@ Shareware.
     FILE2441 TXT      2665  10-22-90   4:32p
     GO       BAT        40   1-01-80   6:00a
     GO       TXT       962  12-11-90   2:10p
+    LISTICO      <DIR>    
+           15 file(s)      86662 bytes
+
+     Directory of A:\LISTICO
+
+    .            <DIR>    
+    ..           <DIR>    
     LISTICO  DOC      3168   8-24-90   6:07p
     LISTICO  EXE     20170   8-24-90   6:07p
     LISTICO  C       13082   8-24-90   6:07p
@@ -285,5 +422,8 @@ Shareware.
     LISTICO  SOR     11741   8-24-90   6:07p
     PROPLUS  ICO       766   8-24-90   6:07p
     PRO$TOCK ICO       766   8-24-90   6:07p
-           21 file(s)     148096 bytes
-                            7168 bytes free
+            9 file(s)      61434 bytes
+
+    Total files listed:
+           24 file(s)     148096 bytes
+                            6656 bytes free

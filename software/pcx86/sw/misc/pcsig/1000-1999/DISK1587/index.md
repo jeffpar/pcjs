@@ -160,6 +160,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk #1587 VGACAD Disk 1 of 3  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ The programs on this three disk set have been archived.  You will first ║
+║ need to unarchive the files with PKUNZIP                                ║
+║                      To unarchive, type in the following:               ║
+║       PKUNZIP filename.zip  c:\(path)   (press enter)                   ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REGISTER.DOC
 
 {% raw %}

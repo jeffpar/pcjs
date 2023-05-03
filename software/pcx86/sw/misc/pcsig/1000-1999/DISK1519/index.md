@@ -90,6 +90,25 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1519 LETRHEAD  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type LETRHEAD (press enter)                       ║
+║                                                                         ║
+║ To view the documentation on your screen, type VIEW (press enter)       ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+║                                                                         ║
+║ To copy the registration information to your printer, type              ║
+║                          REGFORM (press enter)                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LETRHEAD.DOC
 
 {% raw %}

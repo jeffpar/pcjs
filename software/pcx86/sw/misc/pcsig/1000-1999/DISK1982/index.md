@@ -532,6 +532,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk #1982  FLASHPAC PASCAL LIBRARY   1 of 2 (also 2093)  >>>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, insert disk #2093 and type:               ║
+║                             PRTDOC (press enter)                        ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

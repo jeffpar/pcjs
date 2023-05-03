@@ -146,6 +146,67 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<< Disk No 649  WALMYR PROGRAMS (Disk 2 OF 2) >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   For instruction on how to start the programs on this disk, type:      ║
+║                                                                         ║
+║                       README (press enter)                              ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+## WTA.TXT
+
+{% raw %}
+```
+                   INSTRUCTIONS FOR USING WTA 
+
+
+  In  this  course  you  will  be  working with a computer system
+called the "Interactive Computer Examination Manager" or WTA.  It 
+will prepare and print all your homework assignments and it  will
+also  grade  them  for you.  It will do many other things to help 
+you master the materials in this  course,  so  please  take  good
+advantage of all the options that WTA makes available to you.
+
+  You will find that the WTA program is very easy to use, and the
+following are the step-by-step instructions that you will need in
+order to use the computer system.
+
+
+INSTRUCTIONS FOR USE ON A DUAL FLOPPY DRIVE SYSTEM
+
+  1. Go to the 'lab' and check out a copy of the WTA DISK.
+
+  2. Insert the WTA DISK in Drive A of the computer.
+
+  3. Insert your data disk in Drive B of the computer.
+
+  4. Turn on the computer (if the computer is already on, reboot
+     it by holding down the 'Ctrl' and 'Alt' keys and then tap
+     the 'Del' key.
+
+
+INSTRUCTIONS FOR USE ON A HARD DRIVE SYSTEM
+
+  1. Turn on the computer and when it gives you the cursor, issue
+     the  command, CD\WTA <cr>.  If the computer is already on,
+     issue the command, CD\WTA <cr>.
+
+  2. Insert your data disk in Drive A of the computer.
+
+  3. Issue the command, WTA <cr>.
+
+```
+{% endraw %}
+
 ## WTA.TXT
 
 {% raw %}
@@ -203,19 +264,36 @@ INSTRUCTIONS FOR USE ON A HARD DRIVE SYSTEM
     FILES649 TXT      2338   8-03-88   1:59p
     GO       TXT       694   6-30-88   9:10a
     GO       BAT        38  10-19-87   3:56p
+    ITA          <DIR>    
+    WTA          <DIR>    
+            7 file(s)      22996 bytes
+
+     Directory of A:\ITA
+
+    .            <DIR>    
+    ..           <DIR>    
     README   1ST       779  11-22-87   9:28a
     README   2ND       531  11-22-87   9:27a
     README   3RD       593   6-11-86  12:49a
     README   BAT        93   6-11-86   1:24a
     ARCE     COM      4084   3-11-86  11:38p
     ITA      ARC     54878   6-18-06   3:38a
-    README~1 1ST       806   9-02-86   3:04a
-    README~1 2ND       703   9-02-86   3:05a
-    README~1 3RD       593   6-11-86  12:49a
-    README~1 BAT        93   6-11-86   1:24a
-    ARCE~1   COM      4084   3-11-86  11:38p
+            8 file(s)      60958 bytes
+
+     Directory of A:\WTA
+
+    .            <DIR>    
+    ..           <DIR>    
+    README   1ST       806   9-02-86   3:04a
+    README   2ND       703   9-02-86   3:05a
+    README   3RD       593   6-11-86  12:49a
+    README   BAT        93   6-11-86   1:24a
+    ARCE     COM      4084   3-11-86  11:38p
     WTA0     ARC      5563   9-02-86   3:05a
     WTA1     ARC    133882  11-22-87   9:01a
     WTA2     ARC    111200  12-23-55  12:20p
-           19 file(s)     340878 bytes
-                           12288 bytes free
+           10 file(s)     256924 bytes
+
+    Total files listed:
+           25 file(s)     340878 bytes
+                           10240 bytes free

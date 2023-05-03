@@ -64,6 +64,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2746 QUESTMAKER  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To read the installation instructions, type:  README  (press Enter)     ║
+║                                                                         ║
+║ To install the program to your hard drive, type: INSTALL (press Enter)  ║
+║                                                                         ║
+║ To print documentation after installation, type: PRINTDOC (press Enter) ║
+║                                                                         ║
+║ To run the program after installation, type: QM21  (press Enter)        ║
+║                                                                         ║
+║ To print the registration form, type:  COPY REG.DOC PRN  (press Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2746

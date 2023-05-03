@@ -1615,6 +1615,59 @@ successful!
 ```
 {% endraw %}
 
+## REG-DIET.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════════╗
+║    ┌───────────────────────────────────────────────────────────────────┐    ║
+║    │ ░░░░░░░▒▒▒▒▒▒▒▓▓▓▓▓▓ The Diet Disk For Windows ▓▓▓▓▒▒▒▒▒▒▒░░░░░░░ │    ║
+║    └───────────────────────────────────────────────────────────────────┘    ║
+║                                                                             ║
+║    The Diet Disk   (Windows Version) is "Shareware".  That is, no money     ║
+║    goes to the Author until you send a registration fee.  The companies     ║
+║    that distributes these "shareware" disks, get a small fee for their      ║
+║    services, the disk, mailing, etc.  It is usually $3 to $5 per disk.      ║
+║    None of that money ever goes to the Author.  The shareware companies     ║
+║    do not pay the authors for the disks or the right to distribute them.    ║
+║                                                                             ║
+║    This is why your registration is greatly appreciated and helps           ║
+║    keep the shareware concept alive.  You get a chance to try out many      ║
+║    disks of software, but only register the ones you really like and        ║
+║    use often.                                                               ║
+║                                                                             ║
+║    In return for this registration, you will have my most sincere           ║
+║    thanks and gratitude.  You will also receive the latest version of       ║
+║    the software.  The registered version WILL NOT have the opening and      ║
+║    closing "shareware messages" on them.                                    ║
+║                                                                             ║
+╠═════════════════════════════════════════════════════════════════════════════╣
+║     Please send $25.00 Check or Money Order to:                             ║
+║                                                                             ║
+║             M.D. Smith                                                      ║
+║             1000 Monte Sano Blvd.,SE                                        ║
+║             Huntsville, AL  35801                                           ║
+║             (205) 533-3131  Ext. 214                                        ║
+║                                                                             ║
+║             THANK YOU VERY MUCH !                                           ║
+║                                                  M.D. Smith      Author     ║
+╟─────────────────────────────────────────────────────────────────────────────╢
+║   Please register me for The Diet Disk / Windows and send the update disk.  ║
+║     ■ I got my current disk from _________________________________________  ║
+║                                                                             ║
+║ ┌────────────────────────────────────┬────────────────────────────────────┐ ║
+║ │ Name:                              │ Company:                           │ ║
+║ ├────────────────────────────────────┼────────────────────────────────────┤ ║
+║ │ Address:                           │ City:                  State:      │ ║
+║ ├──────────────────┬─────────────────┴────────────────────────────────────┘ ║
+║ │ Zip:             │                                                        ║
+║ └──────────────────┘                                                        ║
+║                                                                             ║
+║                                                                             ║
+╚═════════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## WEIGHT.DOC
 
 {% raw %}

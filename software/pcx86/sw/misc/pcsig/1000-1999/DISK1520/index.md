@@ -484,6 +484,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk No 1520 MAYAN CALENDAR  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view the manual, type: MAYANDOC (press enter)                        ║
+║                                                                         ║
+║ To run the program, type: MAYAN (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1520

@@ -1809,6 +1809,35 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk No 885 MISCELLANEOUS UTILITIES for the C PROGRAMER  >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ The files on this disk are archived and must be expanded before they    ║
+║ can be used.                                                            ║
+║                                                                         ║
+║ If you're using a two floppy system, insert a blank formatted disk in   ║
+║ your B drive, and enter:                                                ║
+║                                                                         ║
+║          A:PKXARC A:filename                                            ║
+║                                                                         ║
+║ Insert the name of the file you wish to unarchive where <filename> is   ║
+║ written. The unarchived files will be put on your B drive.              ║
+║                                                                         ║
+║ If you're using a Hard disk, copy PKXARC.COM and the file you wish to   ║
+║ unarchive into a subdirectory on your hard drive and enter:             ║
+║                                                                         ║
+║          PKXARC filename                                                ║
+║                                                                         ║
+║ Insert the name of the file you wish to unarchive where <filename> is   ║
+║ written. The unarchived files will be put on your C drive.              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PATCH.DOC
 
 {% raw %}

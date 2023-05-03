@@ -41,6 +41,32 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #2815  DAYO SHIPPING LOG  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the installation instructions, type:  COPY README PRN  (Enter) ║
+║                                                                         ║
+║ After installing the program as per the instructions, extract the files ║
+║ of DAYO SHIPPING LOG by typing:  DAYOSE  (press Enter)                  ║
+║                                                                         ║
+║ To start the program, type:  DAYOLOG  (press Enter)                     ║
+║                                                                         ║
+║ To print the registration form, type:  COPY REGISTER PRN  (press Enter) ║
+║                                                                         ║
+║ To read the information regarding technical support, type:              ║
+║                                             TYPE ASP.TXT  (press Enter) ║
+║                                                                         ║
+║                                                                         ║
+║                                            Copyright 1991, PC-SIG, Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2815

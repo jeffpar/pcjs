@@ -180,6 +180,20 @@ WIS      EXE    85056  11-30-88   1:38a
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  Disk No 1498 WISDOM OF THE AGES (Disk 1 of 4)  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view the documentation on your screen, type VIEW (press enter)       ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INSTALL.TXT
 
 {% raw %}

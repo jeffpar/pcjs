@@ -14,6 +14,33 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3390  KILOBLASTER  >>>>                ║
+║                        Disk 2 of 2 (also #3385)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  A subdirectory KILO should have been made for you when you installed   ║
+║  Disk #3385 by typing GO and following the instructions.                ║
+║                                                                         ║
+║  Add this file to the KILO subdirectory by typing:                      ║
+║                                   PKUNZIP KILO2 [drive:\KILO]  (Enter)  ║
+║                                                                         ║
+║  To print the program documentation and instructions, type:             ║
+║                                       COPY KILO.DOC PRN  (press Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3390
 

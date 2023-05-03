@@ -137,6 +137,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1765 PRO-INST  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unarchive program, type: PRO_INST (press enter)                      ║
+║                                                                         ║
+║ To install program, type: INSTALL    (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY MANUAL.DOC PRN  (press enter)        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INSTALL.DOC
 
 {% raw %}

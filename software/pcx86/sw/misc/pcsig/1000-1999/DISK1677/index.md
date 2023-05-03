@@ -89,6 +89,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1677  CHECKEASE >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  CHECK (press enter)                            ║
+║                                                                         ║
+║ To print documentation, type:  COPY README.CE PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1677

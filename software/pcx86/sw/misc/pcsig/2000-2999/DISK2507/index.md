@@ -117,8 +117,25 @@ machines:
     TOPSTAT  EXE     12899   6-28-88
     ORDER    DOC      1909   5-01-90  10:01a
     SERVER   BAT       115   5-01-90  10:01a
+    REMOTE       <DIR>    
+    SERVER       <DIR>    
+           32 file(s)     339537 bytes
+
+     Directory of A:\REMOTE
+
+    .            <DIR>    
+    ..           <DIR>    
     CONFIG   SYS        42   6-28-88
     RTN                  2   6-28-88
-    CONFIG~1 SYS        27   6-28-88
-           33 file(s)     339608 bytes
-                            3072 bytes free
+            4 file(s)         44 bytes
+
+     Directory of A:\SERVER
+
+    .            <DIR>    
+    ..           <DIR>    
+    CONFIG   SYS        27   6-28-88
+            3 file(s)         27 bytes
+
+    Total files listed:
+           39 file(s)     339608 bytes
+                            1024 bytes free

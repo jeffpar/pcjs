@@ -79,7 +79,6 @@ PC-SIG
 Sunnyvale  Ca. 94086                                                    
 (408) 730-9291                                                          
 (c) Copyright 1988 PC-SIG, Inc.                                         
-
 ```
 {% endraw %}
 
@@ -1330,6 +1329,24 @@ Sunnyvale  Ca. 94086
 	 to the address given above.  Please add $3.00 for shipping,
 	 $5.00 for shipment by airmail outside the U.S.
 h
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk #1792 HOME LOAN/YOUR FINANCIAL ANALYST  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start HOME LOAN, type:  HL (press enter)                             ║
+║ To start YOUR FINANCIAL ANALYST type:  FINANCE (press enter)            ║
+║                                                                         ║
+║ To print HOME LOAN documentation, type:                                 ║
+║                                COPY INTRO.DOC PRN (press enter)         ║
+║ To print YOUR FINANCIAL ANALYST documentation, type:                    ║
+║                                PRINT (press enter)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

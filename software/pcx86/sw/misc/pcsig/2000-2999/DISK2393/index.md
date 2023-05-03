@@ -85,6 +85,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2393  TIMESTAX   >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read the installation instructions, type:  TYPE README.TXT (Enter)   ║
+║                                                                         ║
+║ To print the documentation, type:  COPY TIMESTAX.TXT PRN (press Enter)  ║
+║                                                                         ║
+║ To print registration form, type:  COPY TIMESTAX.LIC PRN (press ENTER)  ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

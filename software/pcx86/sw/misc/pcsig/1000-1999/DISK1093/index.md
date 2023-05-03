@@ -512,6 +512,20 @@ Sunnyvale, CA   94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                      <<<<  Disk No 1093 JOBS  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  The program files on this disk are archived. You must first unarchive  ║
+║ the files before you will be able to use them. For instructions on how  ║
+║ to use the unarchiving utility program, type: INSTALL (press enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## JOBS31B0.TXT
 
 {% raw %}

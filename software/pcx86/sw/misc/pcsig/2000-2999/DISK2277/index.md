@@ -383,6 +383,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  PC-SIG Disk #2277  GRAPHIC WORKSHOP, GRAFCAT, CROPGIF  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view instructions on how to start all three programs, type:          ║
+║     TYPE READ.ME  (press Enter)                                         ║
+║                                                                         ║
+║ To print out the documentation of each of the three programs after      ║
+║     unzipping them, type:  COPY <respective program filename>.DOC PRN   ║
+║                            (press Enter)                                ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## GRAFCAT.DOC
 
 {% raw %}

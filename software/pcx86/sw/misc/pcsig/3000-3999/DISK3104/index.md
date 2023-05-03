@@ -105,6 +105,23 @@ DIR is any Dircetory that you desire the .PCX file to go to.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #3104 BIBLE VIEW CLIP ART >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To Print the installation instructions, type;  PRT-DOC  (enter)         ║
+║                                                                         ║
+║ To Print the order form, type;  COPY ORDER.FRM PRN  (enter)             ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3104

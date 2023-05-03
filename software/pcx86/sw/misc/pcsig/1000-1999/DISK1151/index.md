@@ -93,6 +93,20 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1151 ROAM  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install ROAM to your hard disk, type INSTALL (press enter)           ║
+║                                                                         ║
+║ To view the documentation for ROAM, type LOOK ROAM.DOC (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ROAM.DOC
 
 {% raw %}

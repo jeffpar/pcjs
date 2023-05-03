@@ -79,6 +79,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                       <<<<  Disk #1005 APPLY  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, Type:                        ║
+║                           PMANUALS (press enter)                        ║
+║                                                                         ║
+║ To start the program, you must first make a back-up of this disk.       ║
+║ Then copy the following files from your DOS disk to your back-up disk.  ║
+║ FIND.EXE and SORT.EXE. After you have copied these two files over to    ║
+║ your back-up disk, type: APPLY (press enter) to start the program.      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## UNWS.DOC
 
 {% raw %}

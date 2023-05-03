@@ -125,6 +125,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  Disk #1627  ELECTRONIC INFORMATION SYSTEM   >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print installation instructions, type:  COPY README.1ST PRN (Enter)  ║
+║                                                                         ║
+║ To self extract documentation files, type:  MAKEDOCS (press Enter)      ║
+║                                                                         ║
+║ To print documentation files, type:  COPY [filename.DOC] PRN (Enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+```
+{% endraw %}
+
 ## VENDOR.DOC
 
 {% raw %}

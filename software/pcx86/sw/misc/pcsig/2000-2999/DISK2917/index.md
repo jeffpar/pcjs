@@ -66,6 +66,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #2917  PC-WIZARD POWERMASTER PLUS+  >>>>       ║
+║                         Disk 2 of 2 (also #2706)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ This disk will be requested during the installation procedure executed  ║
+║ from Disk #1.  For more information, insert Disk #1 and type:           ║
+║                                                      GO  (press Enter)  ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2917

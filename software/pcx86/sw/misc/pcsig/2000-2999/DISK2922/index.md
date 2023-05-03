@@ -58,6 +58,63 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #2922  MAH JONGG -V-G-A-  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  Copy the files on this diskette to either a high density floppy        ║
+║  diskette or to a subdirectory on your hard drive, and then unzip       ║
+║  the MJVGA30.ZIP file:                                                  ║
+║                                                                         ║
+║    Hard drive:                                                          ║
+║        C:               (press Enter)                                   ║
+║        CD \             (press Enter)                                   ║
+║        MD MAHJONGG      (press Enter)                                   ║
+║        CD MAHJONGG      (press Enter)                                   ║
+║        COPY A:*.*       [assuming the program diskette is in A:]        ║
+║        PKUNZIP MJVGA30  (press Enter)                                   ║
+║                                                                         ║
+║    Floppy:                                                              ║
+║        Copy *.* B:      [assuming the program diskette is in A: and     ║
+║                         the high density drive is B:]                   ║
+║        PKUNZIP MJVGA30  (press Enter)                                   ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #2922  MAH JONGG -V-G-A-  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ cont.                                                                   ║
+║  To read the instructions on how to further extract the program files,  ║
+║  type:  TYPE README.1ST  (press Enter)                                  ║
+║                                                                         ║
+║  To extract the BLANKS.ZIP files, type:  PKUNZIP BLANKS  (press Enter)  ║
+║                                                                         ║
+║  To print the program manual, type:  COPY MJVGA30.DOC PRN  (Enter)      ║
+║                                                                         ║
+║  NOTE:  There are five other document files.  Print them by following   ║
+║         the previous format, or view them by typing:                    ║
+║                                           TYPE [filename.DOC]  (Enter)  ║
+║                                                                         ║
+║  To start MAH JONGG -V-G-A-, type:  MJVAG30  (press Enter)              ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MJ8514.DOC
 
 {% raw %}

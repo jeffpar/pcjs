@@ -60,6 +60,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3032  JOKE TALK  >>>>                 ║
+║                        Disk 2 of 2 (also #3031)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ Installation of the files on this diskette will be called during the    ║
+║ installation of Disk #1.  Insert Disk #1, type "GO1" and follow the     ║
+║ instructions.                                                           ║
+║                                                                         ║
+║                                       (c) Copyright 1992, PC-SIG Inc.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

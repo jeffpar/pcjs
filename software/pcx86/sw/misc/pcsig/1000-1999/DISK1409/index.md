@@ -94,6 +94,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1409 EASY ACCESS  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ For instructions to install and start the program, type:                ║
+║                  COPY READ.ME PRN   (press enter)                       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## INVOICE.DOC
 
 {% raw %}

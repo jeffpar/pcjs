@@ -71,6 +71,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1483 QMODEM SST (Disk 4 of 5)  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Please note: In order for QMODEM to work efficiently a hard drive is    ║
+║ recommended. Create a subdirectory and copy all five  disks into it,    ║
+║ then type QM (press enter) and follow the instructions. Make sure       ║
+║ that you carefully read the documentation before using the program.     ║
+║ The documentation file will explain and asnwer most of your questions.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1483

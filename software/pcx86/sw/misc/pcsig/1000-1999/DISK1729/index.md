@@ -131,6 +131,19 @@ Copyright (c) 1988/89/90, by EUGENE L. WOODS, PE/EE.  All rights reserved.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1729  FONE: BUSINESS >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: FONE                                            ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1729

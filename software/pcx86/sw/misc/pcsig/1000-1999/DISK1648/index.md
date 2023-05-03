@@ -84,6 +84,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1648  SHOP  >>>>                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  SHOP (press enter)                             ║
+║                                                                         ║
+║ To print documentation, type:  SHOPDOC                                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1648

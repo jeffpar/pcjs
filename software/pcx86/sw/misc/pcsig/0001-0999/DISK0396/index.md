@@ -69,6 +69,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk No: 396  PDS*BASE (Disk 1 of 2)  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To install type program, type: INSTALL (press enter)                  ║
+║                                                                         ║
+║   To view more on installation doc, type: LIST README.DOC (press enter) ║
+║                                                                         ║
+║   To print documentation, insert disk 2, and type: MANUAL (press enter) ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## QUICKGO.DOC
 
 {% raw %}

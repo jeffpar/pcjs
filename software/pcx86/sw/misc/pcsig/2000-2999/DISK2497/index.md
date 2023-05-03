@@ -59,6 +59,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  DISK #2497 QUE ACCOUNTING TIME & ATTENDANCE  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To install the program from your hard drive root directory, type:       ║
+║ A:INSTALL SUBDIRECTORY  (eg. C>A:INSTALL TAMAS )                        ║
+║                                                                         ║
+║ To start the program once it's been installed, type: TAMAS              ║
+║ (Note: The program needs at least FILES=20 in your config.sys)          ║
+║                                                                         ║
+║ To print the documentation, type: COPY TNAMAN.TXT PRN   and             ║
+║                                   COPY OPERMAN.TXT PRN                  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990-1991, PC-SIG Inc.
+
+```
+{% endraw %}
+
 ## DISCLAIM.TXT
 
 {% raw %}
@@ -1765,6 +1788,910 @@ Mail Order and check payment to:
   West Chester, PA 19382
 
  
+```
+{% endraw %}
+
+## TNAMAN.TXT
+
+{% raw %}
+```
+╔══════════════════════╗
+║FEATURES AND BENEFITS ║
+╚══════════════════════╝
+
+
+                       HARDWARE REQUIREMENTS
+
+ The system requires an IBM PC or PC compatible computer with
+640K memory, a printer, and a 5 1/4 inch diskette drive, although
+a hard disk is highly recommended.
+
+                                
+                         SYSTEM BENEFITS
+
+ $ Increased accuracy in Payroll calculations
+ $ Reduction in Payroll Preparation Time
+ $ Improved efficiency in labor allocation
+ $ Timely reporting of errant behavior
+ $ Improved forecasting using historical data
+
+
+                         SYSTEM FEATURES
+
+ * Customized workrules
+ * Reporting by client specified groupings
+ * Menu and screen driven
+ * Live tutorial
+ * Pop-up validation tables
+ * Query and Report Writer capabilities
+ * Transmission capabilities
+ * Interface with General Ledger and other popular software
+ * Customized programming
+ * Support Network
+
+                                                  
+                        SYSTEM OPERATIONS
+
+ The emphasis on ease of use is demonstrated in the ergonomically
+designed user interface. The Menus and screens provided serve as
+a control center to the various functions performed daily and on
+an interim basis.
+
+ The daily process includes the iterative process of collecting
+employee punches, producing edit reports and making the necessary
+modifications to employee time records and schedules.
+
+ On a less frequent interval (eg. weekly), the current period is
+posted, final reports are produced, transactions are archived,
+and changes are made to employee schedules for the upcoming week.╔════════════════╗
+║SYSTEM BENEFITS ║
+╚════════════════╝
+
+ Increased accuracy in Payroll calculations
+
+ *   Elimination of clerical errors through computerized
+     calculations.
+ *   Instantaneous comparison of time records against predefined
+     management or labor negotiated constraints.
+ *   Data integrity through badge validation and edit routines
+     that only allow posting of good transactions.
+ **  Audit trail database shows what changes were made by who and
+     when.
+
+ Reduction in Payroll preparation time
+
+ *   Automatic cost extensions for gross pay, overtime and
+     differential calculations.
+ *   Transmission of time records directly into computer files.
+ *   Reduces staff clerical requirements freeing up personnel for
+     other activities.
+ *   Provide on demand, neat, typed reports for presentation
+ **  Provide transmission capabilities of data to Payroll
+     department and/or Service bureaus
+
+ Improved efficiency in labor allocation
+
+ *   Timely information allows for immediate reaction to avoid
+     unnecessary costs such as overtime.
+ *   Historical database easily massaged to aid in forecasting
+     and budgetary needs.
+ *   Dynamic changes to employee schedule, workrules and job
+     assignments.
+ *   Record department / location, and job costing changes via
+     time clock punch
+
+ Timely reporting of errant behavior
+
+ *   Edit reports show employees reporting late, leaving early,
+     extending breaks, etc..
+ *   History files can be used to highlight trends and document
+     past behavior.
+ *   Instant access tells which employees are absent or late for
+     current shift.
+
+ Improved forecasting using historical data
+
+ *   Determine average labor costs per job class within specific
+     locations.
+ *   Show cyclical trends to aid forecasting of labor
+     requirements.╔══════════════════╗
+║SYSTEM OPERATIONS ║
+╚══════════════════╝
+
+
+Daily Process
+
+
+ *   Employee(s) records arrival, breaks and departure at time
+     clock.
+ *   Operator selects the clock for transmission of data to
+     computer or sets up for night time transmission.
+ *   Operator runs the Transfer and Time Card Validation report
+     to produce a report of time records failing validations as
+     determined by the assignment of workrules to each employee.
+ *   Operator distributes reports to supervisory personnel for
+     confirmation and authorization of errors.
+ *   Operator adjusts time card records accordingly using the
+     Time Card Maintenance function.
+ *   Management requests various reports to determine weekly
+     hours, approaching overtime, scheduled hours and other
+     employee data used to make quick schedule adjustments.
+
+
+
+End of Period
+
+
+ *   Processes all records in the system for the current period
+     and prints out final Time Sheet reports.
+ **  Transactions are posted to the General Ledger trial balance.
+ *   Active file is closed and archived to the cumulative history
+     files.
+ *   Employee Master Schedules are modified and rolled forward
+     for the upcoming week.
+╔════════════════╗             
+║SYSTEM FEATURES ║
+╚════════════════╝
+
+
+Customized Workrules
+
+ *   Group employees together with similar edit rules such as the
+     same start and ending times, lunch and break durations,
+     grace periods for arrival and departures, overtime and
+     differential calculations and more.
+ *   Modified at any time.
+ *   Flexibility ranges from having zero edits to a vast
+     combination of individual factors.
+
+
+Report by Groupings
+
+ *   Three levels of reporting: Corporate, Company, and Workrule
+ *   All reports may be executed for groupings and other
+     delimiters such as date and hour ranges.
+ *   All reports are dynamic and may be executed at will and as
+     often as desired to assure the most up todate information.
+ *   Powerful Query and Report Writer can produce most reports
+     imaginable. Works with any DBASE type file.
+
+Menu and Screen driven
+
+ *   Latest technology using popup windows and highlight bars
+     makes system easy to use.
+
+
+Live Tutorial
+
+ *   Practice system is based on a group of practice workrules
+     and employees assigned during training sessions.
+ *   Practice system may be invoked at any time while the real
+     data is safely stored on a separate area of the computer.
+ *   Provides all the features of real system.
+ *   Integrated with system.
+
+
+Popup Validation Tables
+
+ *   Data entry validated against tables to avoid errors in
+     recording.
+ *   Tables are accessible from within data entry mode to access
+     desired values.
+ *   User defined codes for Time Codes, Authorization
+     overrides,job classes and workrules.
+
+
+Query and Report Writer
+
+ **  Access window to data that allows operator to design his/her
+     own data groups that may be printed or displayed on the CRT
+     terminal.
+
+
+Transmission Capabilities
+
+ **  Payroll transactions may be transmitted to headquarters.
+
+
+Interface with QUE General Ledger and Payroll
+
+ **  System can be linked into QUE Accounting General Ledger
+     or Payroll.
+ *   Data may be converted to other file formats used by popular
+     spreadsheet programs and other systems.
+
+ 
+Customization
+
+ **  Any part of the system may be modified to meet the
+     individual customer's needs. Functions may be added or
+     deleted as desired.
+ **  Other systems development and consulting services available.
+ *   Solely owned, developed and maintained by QUE Accounting.
+ **  Customized manual
+
+Support Network
+
+ **  Telephone support by experienced computer users.
+ **  Remote linkup capabilities enable support from afar as if
+     the support individual were physically on location.
+
+
+
+** If desired by client, these features can be easily
+implemented. The base version does not include these items.  
+╔══════════════════════╗
+║FUNCTIONAL DESCRIPTION║
+╚══════════════════════╝
+
+
+
+
+INTRODUCTION
+
+
+
+The Time and Attendance (T&A) system is used to collect, store
+and validate time card entries as they are entered into the
+computer via an electronic time clock interface, through the
+keyboard or converted over from another computer system.
+
+
+In order to use the system properly, a strong functional
+understanding is needed. That is the intent of this section as
+well as to introduce you to the various terms and concepts used
+throughout this manual.
+
+
+This section groups the various functions into four main areas:
+
+
+      SETUP
+      DAILY PROCESSING
+      PERIOD END PROCESS
+      UTILITIES
+
+
+
+If you wish to skip this section and begin entering your tables
+proceed to the MT section of the operator's manual.
+
+╔══════╗
+║SETUP ║
+╚══════╝
+
+T & A requires that applicable rules and regulations be set in
+table formats recognized by the system. As an added benefit, this
+exercise forces a rethink of payroll policies and many times
+highlights inconsistencies and inefficiencies resulting from the
+implementation of the manual system.
+
+The table and rules listed below constitute the SETUP section.
+They may be changed as often as needed but are rarely modified
+after the initial setup. 
+
+These tables are presented in the order in which they are to be
+entered. The sequence given facilitates the SETUP process since
+certain files depend on the entries of other files for
+completion.
+
+System Tables
+
+     Time Code Table
+     Setup Table
+     Job Class Table
+     Override Table
+     Holiday Table
+     Workrules
+     Employee Master
+     Employee Schedules 
+     Clock Menu
+
+
+
+Time Code Table
+
+The Time Code Table contains the time codes and calculation
+factors recognized by the system. Certain predetermined values
+must reside in the table for the system to function properly.
+These codes are:
+     
+    Code    Description     Factor
+
+     HOL  holiday records    1.0
+     REG  time card entries  1.0
+     VAC  vacation time      1.0
+
+The file may be expanded to include overtime codes, sick time,
+personal time off and other categories.  Only codes residing in
+this table may be used in the system
+
+     150  time and a half    1.5
+     200  double time        2.0
+     SCK  sick time          1.0
+     PTO  personal time off  1.0
+Usage:
+
+Time codes are assigned in the workrule file for overtime and
+differential calculations and are required when entering time
+entries.  Entries retrieved from a clock are given REG default
+values.
+
+Holiday records are assigned Time code='HOL'
+
+Setup Table
+
+The Setup Table contains many fields which control processing.
+Each company in your system must have a separate company record
+in this file.
+
+The fields include:
+
+  Company Code         The Company Code and Password are
+  Password             used to gain access. With the 
+  Corporate Access     Corporate Access set on, the person
+                       logging into this company may access
+                       records in other companies.
+
+  Number of periods    The total number of periods (weeks, 
+  Current period       months,etc..) and the current period
+  Week Date            in the year. The Week Date is the
+                       week ending date of the current week.
+
+  Screen Header        This text will be printed on top of
+  Report Header        each screen and report and usually
+  Printer Code         includes the company name. The
+                       printer code is used to send a
+                       sequence to the printer to compress,
+                       bold or italicize print.
+
+  Automatic Backup     When this field is turnrd on then
+    and Restore        anytime the computer is disrupted 
+  End of Period        (eg. rebooted) during an update
+    Status             a warning message will come on and
+  Bar Code for Gantt   an automatic restoration of files
+    Charts             from the last 'good save' will occur.
+
+Job Class Table
+
+The Job Class Table contains job classes, job descriptions and
+pay rates for all the valid job classes accepted by the system.
+Job classes are entered in the Employee Master file and when
+needed into the actual time card entries and employee schedules.
+All records coming from an electronic clock are automatically
+assigned the job class in the employee's master record when no
+temporary assignments have been entered on the clock.
+
+When a Job class other than that of the employee's master record
+appears in a time record a 'TJ' (temporary job) is marked in the
+validation matrix of the Validation report. If the job class
+doesn't exist a 'IJ' (invalid job) is used.
+
+In determining gross pay on the Time Sheet report, the higher
+rate between the temporary and master job classes is used in the
+calculation.
+
+Example
+
+    Jobclass Description  Rate
+
+    CASHR    Cashier      7.500
+    COOK     Cook        12.500
+    PANTRY   Pantry cook  9.750
+    DISHWR   Dishwasher   7.250 
+
+Usage:
+
+Used in Time Sheet to produce gross pay, validated in the Time
+Card Validation report and entered in the Employee Master, Time
+Card and Schedule.
+ 
+Override Code Table
+
+The override code table is a collection of codes used to track
+authorization of exceptional time entries such as overtime,
+leaving early and working in another job class. The appearance of
+an override, as entered in the time card function, overrides the
+otherwise normal error suspension associated with that record. 
+
+One predetermined value is assigned for generated records. When
+holiday records are created or entries are pulled from the
+employee's schedule, a GEN will be placed in the override field.
+Example
+
+     Code  Description 
+
+     GEN  generated record     
+     OT   authorized overtime
+     LOK  late arrival OK
+     EOK  early arrival ok
+
+Usage:
+
+Overrides error flag in Time Card Validation report and is
+entered using the Time Card option in EM.
+
+Holiday Table
+
+The Holiday table is a collection of dates for paid holidays in
+the coming year. Whenever a period is processed during a holiday
+week, time records are generated for all  individuals that
+receive holiday pay.
+
+     Date     Description
+
+     1/1/90   New Years
+    1/16/90   Martin Luther King
+    4/13/90   Good Friday
+    7/04/90   Independence day
+
+Usage:
+
+Used to create Holiday pay records and identify schedule
+conflicts in the Time Card Validation Report.
+
+Workrules
+
+The workrule file contains records for groups of employees that
+share the same policies, overtime and differential calculations.
+The record is used in the validation report process to determine:
+
+        late and early arrivals
+        long and short lunch period
+        late and early departures
+        lunch period deductions
+        daily and weekly overtime
+
+In the Time Sheet report, the workrule is used in calculating:
+
+        overtime rates(daily and weekly)
+        differentials based on day of the week
+        pay for holidays actually worked
+
+A more extensive description of each field is provided in the
+Operation Manual.
+
+Employee Master
+
+Each employee in the system must have a record in the Employee
+Master file. The master file keeps track of an employee's
+demographics and pay information. Notably, address, name, social
+security number, status, pay rate and job class are stored here.
+
+A workrule and job class entry are required for employees. Both
+values must pre-exist in the appropriate tables before entered.
+The pay rate field, automatically transferred over from the
+Jobclass Table during an Add, may be overriden, so that,
+seniority and other differences between employees may be noted
+without requiring a new job classification.
+
+Usage:
+
+Used to store information related to an employee. Controls
+processing.
+
+Employee Schedule
+
+The use of employee schedules is optional. Simply speaking, if a
+schedule is set up in the current period it will be used by the
+Validation report to edit start and ending times and/or create
+time card entries.
+
+The operator has the option of using one or all of the days
+within the current period. To skip a day, leave the start and end
+times blank, and the default values in the Workrule will be used
+for early and late time checks.
+
+To use the daily record for creating records place a 'T' in the
+ADD field. The next time the validation report is ran for that
+employee two records will be created for each schedule entry with
+a "T" ADD value.
+
+Schedule created records can only be deleted from the time card
+file through the F5 time card function.
+
+Example
+
+     10/10/89 10/11/89 10/12/89 10/13/89 ...
+
+Start  07:30   -----    08:00     09:00
+End    15:00   -----    16:00     12:00
+Add      T     -----      F         T
+Job   DISHWR   -----   DISHWR    CASHER
+Code   REG     -----    REG       REG
+
+Usage:
+
+In the above scenario, two of the entries would create records on
+the time card file. The entry marked with a 'F' ADD field would
+be used as a schedule validation only. The blank entry for
+10/11/89 would default to the entries in the workrule for
+starting and ending time validations.
+
+
+Clock Menu
+
+The clock menu includes several functions that provide the
+mechanism to bring time card entries from electronic time clocks
+and other computerized systems into the QUE Time and Attendance
+package. It is a safe assumption that the communications software
+needed to bring records to the computer is provided by the
+external company.
+
+QUE works with any ASCII type file that is produced by other
+systems. ASCII files are a standard on PC compatible machines and
+should present little problem for any vendor dealing in this
+environment. However there are those companies which chose to
+keep file structures proprietary. This in itself should raise
+questions on the firm's motives.
+
+Certain field lengths and other criteria exists as defined in the
+operation manual.
+
+Usage
+
+To interface the system with outside input from time clocks
+and/or other systems.
+╔═════════════╗
+║Daily Process║
+╚═════════════╝
+
+This section describes the functions which are done normally on a
+day to day basis. Depending on your volume they may be done more
+or less frequently. Frequency, therefore, is a function of demand
+and not a limitation of the system. 
+
+Collecting data
+
+Time Card entries constitute the basic level of information used
+by the system. The data can be entered using the F5 Time Card
+function within the EM module or collected externally from time
+clocks using the transfer process(TR) on the CK menu. Also by
+using the special ADD function within the employee schedule
+function, records can be generated for vacation and other
+time-off categories.
+
+ An employee's schedule serves two purposes; 
+
+     1) to monitor starting and ending times for variable
+        shifts
+     2) to create records in the time card file for
+        vacation and other time-off categories.
+
+The schedule is interactive and is read each time the Validation
+report is executed. Therefore adjustments may be made on a daily
+basis. If however, records were created in the time card file by
+error through the scheduling process, they must be deleted
+through the Time Card function (EM).
+
+Each shift's entries must include at least two card entries; an
+arrival punch and one for departure. Additional entries may be
+made for logging in and out of breaks and temporary assignments
+to other departments and/or job classes. 
+
+Time is recorded in military format ranging from 00:00 to 23:59. 
+
+The acceptable punch values are '1','9',' ' and '2'. The punches
+are automatically set by the time clock but must be entered if
+entries are keyed through the Time Card entry function.
+
+For systems obtaining clock records from electronic time clocks
+or other systems, the TR function on the CK menu must be used to
+transfer time card records into the system. Certain crucial edits
+are performed in this process and displayed on an edit report.
+They include duplicate time card entries and records with invalid
+or disabled badges.  These records are not transferred into the
+system amd must be entered by hand after correction.
+
+
+Modifying data
+
+Once in the system records can be added, changed or deleted
+through the Time Card function F5 in the EM module. Certain
+validations are automatically performed as data is entered. These
+includes job class and override code verifications, and correct
+time and date values. An audit trail can be established for all
+records changed through keypunch. 
+
+Validation report
+
+The validation report performs the various edits established in
+the Workrule file and calculates the hours worked for each
+employee and day within the selected period. The report provides
+also for the selection of individual workrules and date ranges to
+accommodate the need to have several supervisors inspect employee
+reports simultaneously.
+
+The edit restrictions are based on workrule values and if used,
+employee schedules. The range of edits may be extensive or
+liberal as need be for individual situations.
+
+ The basic edits include:
+
+     automatic rounding of actual time 
+     short and long break durations
+     early and late arrivals
+     early and late departures
+     job class validations
+     missing or duplicate punches
+     daily and weekly overtime
+
+Each shift must contain at least two punches. The system begins
+counting a shift when it detects a '1' punch and determines the
+end of the shift with the first subsequent '9' punch. Any punches
+in between must constitute break durations (spaces) or
+interdepartmental transfers ('2' punches).
+
+The total time per shift is calculated as the difference between
+the arrival and departure punches minus any break durations
+either as a result of time punches or as an automatic deduction
+as noted in the Workrule file.
+
+
+Automatic Rounding
+
+Each record is rounded according to the time accounting unit in
+the workrule. If the field contains a '1', rounding is done only
+at the conclusion of the shift otherwise each time card entry is
+rounded to the next occurrence of the time account unit.
+(workrule file).
+
+Example
+
+   Time Accounting Unit    Actual Time   Adjusted Time
+                                        (after rounding)
+          3                  7:31          7:30
+          3                  7:33          7:33
+          3                  7:34          7:36
+          6                  7:31          7:36
+          6                  7:33          7:36
+          6                  7:34          7:36   
+     
+         
+
+Early and Late Arrivals and Departures
+
+The early and late checks are performed on arrivals and
+departures. Each time frame has an associated grace period
+composed of a before and after grace figure. These values are
+stored in the Workrule file as minutes and are applied
+against the actual times entered in a shift and compared to the
+starttime on the workrule or if employee schedules are used to
+the start time for the given date. 
+
+These two sided graces provide the means to avoid unnecessary
+labor expenses associated with unworked time. Also with the
+application of a short before grace on departure accompanied with
+a long after grace, employees are more apt to leave on schedule. 
+
+This same logic may be applied to arrivals to discourage lateness
+and early arrivals.
+
+
+Example
+
+ Assuming the Time Accounting unit=6
+
+ Before   Actual Time    After    Schedule Time  Adjust Time
+
+  -3         17:34        +15         17:30          17:30
+  -5         17:34        +15         17:30          17:30
+  -5         17:22        +15         17:30          17:24
+
+
+The actual grace periods are 17:31 - 17:45
+                             17:25 - 17:45
+                             17:25 - 17:45  respectively.
+
+
+Short and Long Durations
+
+
+Lunch periods are deducted from the total hours per shift if the
+PAID FOR LUNCH field in the Workrule is set to 'N'. As determined
+by the LUNCH REQUIRED field, lunch is deducted using the actual
+punched values or the default duration recorded in the workrule.
+If the value is 'N' lunch is only deducted if there are actual
+lunch punches made. 
+
+Applying the lunch grace to the total lunch period in effect
+increases the time span. A 30 minute lunch with a 10 minute grace
+extends to a 40 minute time frame. Any lunch period within the 40
+minutes would constitute a 'within grace' deduction of 30
+minutes.
+
+Durations below the thirty would be highlighted as a 'short
+lunch' (SL) while times exceeding the forty would be marked as an
+'extended lunch'(EL) on the Time Card Validation report. 
+
+Job Class Validations
+
+Any time card entry may contain a JOBCLASS value other than what
+is normally assigned to the individual in the Master file. This
+is to identify temporary job assignments and allows for proper
+tracking of expenses by job categories. If the value is different
+a check is peformed to verify that the value exists in the valid
+JOBCLASS TABLE. If it doesn't a 'IJ' is placed in the JC column
+of the validation report, otherwise a 'TJ' notation is made. 
+
+Missing and Duplicate Punches
+
+There are certain punch values that must exist in sequence to
+signify a valid shift. If a '9' punch is missing or a there are
+two '9' punches in succession a missing or duplicate error is
+noted, respectively.
+
+Overtime
+
+
+The system will identify daily and weekly overtime by comparing
+actual values to the limits imposed in the DAILY OVERTIME and
+WEEKLY OVERTIME  fields in the employee's assigned workrule.
+Hours which are considered daily overtime are not considered in
+the weekly determination. Each workrule has the option of
+applying one or both overtime calculations.
+
+
+Example
+
+
+  Daily Hours        Over  Under  Over  Under  Over  Under
+                      8     10     10    12     12    24
+    8.5                 .5 OT
+   10.5                              2.5 OT  
+   12.0                                           4.0 OT    
+
+
+Management Queries
+
+One of the most used feature of the system is the ability to
+query against the collected information.
+
+The Approaching Overtime report is used in avoiding unnecessary
+overtime. The selection screen to the report provides the ability
+to select a given group of employees that exceed the time limit
+entered.
+
+The Tardy and Late report can be used to track errant behavior on
+a timely basis.*
+
+The Time Sheet summary is used to track expenses over a period of
+time beyond the current period. It produces the average hourly
+cost per job class and aids in the budgeting process.*
+
+Employee schedules may be produced in ghant chart style reports
+or vertical text displays. The vertical display is a printed copy
+of what appears on the employee schedule option in the EM
+function. Each employee in the range selected will have a printed
+schedule.
+
+The ghant selections are more useful in depicting schedule
+bottlenecks and conflicts. The advantage of having bar charts is
+readily captured in both formats; showing all employees for a
+given day or all days in the period for each employee.
+
+For a detailed example of reports please consult the operational
+manual.
+
+
+
+* Represents two of the many reports derived using the built-in
+Query and Report Writer function.╔═════════════════╗
+║PERIOD PROCESSING║
+╚═════════════════╝
+
+This section describes the processes that occur at the end of a
+pay period. Once a period is closed the time card records can no
+longer be modified but may be displayed through the history
+queries.
+
+
+Time Sheet Report 
+
+The TS module applies the time card records to the logic placed
+within the workrule file and creates gross dollar figures for the
+period of time selected. It shows all temporary job assignments,
+overtime, vacation and other time off categories as separate
+entries for each day in the selected time frame. A summary for
+these distinct categories is given for each employee, as well as,
+a grand total for all employees in the selected range.
+
+The TS function does not perform validations and assumes only
+good transactions are being processed. As an added security
+measure, a check may be made to force a good VR before this
+report can be created.
+
+The following example shows how Time Cards are transferred into
+Time Sheet Entries.
+
+           ADJ
+  DATE     TIME PUNCH CODE JOB   HRS FACTOR RATE DIFF GROSS
+  
+ 10/10/89  07:30  1   REG  COOK      
+ 10/10/89  11:30      REG  COOK
+ 10/10/89  12:00      REG  COOK
+ 10/10/89  16:00  9   REG  COOK   8  1.00  8.00  0.00  64.00
+ 10/11/89  07:30  1   VAC  COOK   
+ 10/11/89  16:00  9   VAC  COOK   8  1.00  8.00  0.00  64.00
+ 10/12/89  07:30  1   REG  COOK
+ 10/12/89  10:00  2   REG  DISH  1.5 1.00  8.00  0.00  12.00
+ 10/12/89  11:30      REG  COOK
+ 10/12/89  12:00      REG  COOK
+ 10/12/89  16:30  9   REG  COOK  6.5 1.00  8.00  0.00  52.00
+                                  .5 1.50  8.00  0.00   6.00
+ 10/13/89  20:00  1   REG  COOK 
+ 10/14/89  03:00  9   REG  COOK  5.0 1.00  8.00  1.00  41.00
+
+At first glance its obvious there are less time sheet
+transactions than there are time card entries. This is an
+expected outcome of the conversion process which summarizes daily
+time records by timecode and jobclass.
+
+Straight Transfer
+
+On a normal day, such as 10/10, there will be one time sheet
+entry for the total amount of time worked minus lunch if
+applicable.
+
+An individual may punch out for lunch even though it is not
+deducted as well as having lunches deducted automatically without
+any punches. 
+
+Generated Records
+
+On 10/11, a schedule entry was used to generate a vacation
+record. This is signified by the GEN override code, which is also
+used to identify records created for non-working holidays. 
+
+Temporary Assignment / Job Costing
+
+The 10/12 entry shows what happens when an individual is assigned
+to another area. The time card entry at 10:00 has a job class
+entry of DISH. When the time sheet program recognizes this break
+in sequence it assigns the calculated period to the previous
+jobclass (COOK) and upon recognizing a second change back to the
+original jobclass, calculates the time period spent in the
+temporary assignment.
+
+Daily Overtime
+
+Also as indicated by this shift's entry is an overtime
+calculation of one/half hour. This constitutes a separate
+overtime record with a payment factor one and a half times
+greater (time and a half) than normal.
+
+Crossing over Dates
+
+The last entry in our example shows that shifts may expand over
+date ranges without causing any problems.
+
+The time sheet file is stored for future reference and is
+archived into the yearly file during the PE Period End process.
+
+Posting to General Ledger or Payroll
+
+If desired, the gross pay for each employee can be transferred to
+the QUE Payroll system or directly into the General Ledger. With
+the Payroll intermediary step, taxes and other deductions can be
+removed in creating net pay figures and labor cost posting can be
+done simultaneously with these entries.
+
+Closing a Period
+
+When the current period is closed, the pay period range is moved
+forward, current transactions are archived and erased and
+employee schedules, so marked, are carried forward into the next
+period.
+
+Historical data may be accessed through one of the 'can' reports
+provided in the History Report menu or more flexibility and
+formats can be achieved using the RW Query and Report Writer.
+
+At the end of the year, the history file is archived into a file
+bearing the current year's name (eg TAAA1989) and the records for
+that copy are erased from the yearly history file.
+
+
 ```
 {% endraw %}
 

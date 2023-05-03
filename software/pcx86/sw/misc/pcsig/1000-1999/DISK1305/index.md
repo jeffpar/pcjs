@@ -599,6 +599,34 @@ SAMPLE   DAT  Sample Data File for PROCESS.EXE
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk No 1305 WHAT, PROCESS, Fantasy, Gemcap  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To print the documentation, type:                                     ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To start WHAT, type:                                                  ║
+║             WHAT (press enter)                                          ║
+║                                                                         ║
+║   To start PROCESS, type:                                               ║
+║             PROCESS (press enter)                                       ║
+║                                                                         ║
+║   To start FANTASY, type:                                               ║
+║             FANTASY (press enter)                                       ║
+║                                                                         ║
+║   To start a demo of FANTASY, type:                                     ║
+║             START (press enter)                                         ║
+║                                                                         ║
+║   To start GEMCAP, type:                                                ║
+║             GEMCAP (PRESS ENTER)                                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PROCESS.DOC
 
 {% raw %}

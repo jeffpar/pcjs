@@ -1481,6 +1481,25 @@ That's it...
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2546 DESKTOP PAINT  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print installation instructions type:  COPY README. PRN  (Enter)    ║
+║                                                                         ║
+║  To print documentation after installing DESKTOP PAINT, type:           ║
+║                   COPY DTP.DOC PRN  (press Enter)                       ║
+║                                                                         ║
+║                                                                         ║
+║                                       (c) Copyright 1991, PC-SIG Inc.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2546

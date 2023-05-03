@@ -70,6 +70,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 1542  LORAN LOCATOR  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To print the documentation, type:                                     ║
+║             COPY LORAN50.DOC PRN (press enter)                          ║
+║   To run the program LORAN LOCATOR, type:                               ║
+║             LX5S (press enter)                                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LORAN50.DOC
 
 {% raw %}

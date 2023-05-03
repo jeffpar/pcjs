@@ -78,6 +78,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  PC-SIG Disk #1130  PICTURETHIS (also #1474, #2301, #2302)  >>>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print beginning documentation and installation instructions, type:   ║
+║                 COPY READTHIS.1ST PRN (press Enter)                     ║
+║                                                                         ║
+║ To print further documentation, disks #1474, #2301, and #2302           ║
+║ (refer to READTHIS.1ST file), type:  COPY [filename].TXT PRN (Enter)    ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1130

@@ -63,6 +63,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<< Disk No 524 ExpressCalc version  (Disk 1 of 2) >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation on using EXPRESSCALC insert disk #525 and    ║
+║ type:            PRINTDOC  (press enter)                                ║
+║                                                                         ║
+║ To start the program, type CALC (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0524

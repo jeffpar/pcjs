@@ -164,6 +164,27 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #874  ZZAP, VECTOR, 400 and RPN  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation for ZZAP to your printer, Type:               ║
+║                    COPY MANUAL PRN (press enter)                        ║
+║                                                                         ║
+║ To start the ZZAP program, Type: ZZAPDEMO (press enter).                ║
+║                                                                         ║
+║ To start the VECTOR program, Type: VECTOR (press enter).                ║
+║                                                                         ║
+║ To start the 400 program, Type: 400 (press enter).                      ║
+║                                                                         ║
+║ To start the RPN program, Type: RPN (press enter).                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDER.DOC
 
 {% raw %}

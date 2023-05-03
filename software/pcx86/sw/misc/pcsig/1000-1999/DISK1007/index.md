@@ -82,6 +82,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1007 C_WINDOW TOOLKIT 1 of 2 >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ This disk is the first in a set of two.  The other disk is disk #1705.  ║
+║                                                                         ║
+║ To copy the documentation to your printer, type: MANUAL (press enter)   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1007

@@ -94,6 +94,69 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║         <<<< PC-SIG #2338  PC ASSEMBLER HELPER & TUTOR #2 >>>>          ║
+  ╠═════════════════════════════════════════════════════════════════════════╣
+  ║                                                                         ║
+  ║  To read author's introductory note, type:  TYPE PCREADME.DOC (Enter)   ║
+  ║                                                                         ║
+  ║  To access author's installation instructions from the program drive,   ║
+  ║                   type:  CD PCTUTOR (press Enter)                       ║
+  ║                          DIR (press Enter)                              ║
+  ║                          COPY UNPACK.DOC PRN (press Enter)              ║
+  ║                                                                         ║
+  ║             *          *          *          *          *               ║
+  ║                                                                         ║
+  ║  To extract the files that belong to the accompanying program, BASIC's  ║
+  ║  BLOAD (reads data from disk into memory), type:  BLOAD (press Enter)   ║
+  ║                                                                         ║
+  ║                                                                         ║
+  ║                                                                         ║
+  ║                                        (c) Copyright 1990, PC-SIG Inc.  ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+
+
+
+```
+{% endraw %}
+
+## UNPACK.DOC
+
+{% raw %}
+```
+
+
+
+             This subdirectory contains a compressed file which makes up disk4
+             of The PC Assembler Tutor. The Tutor no longer fits on 3 disks so
+             it is divided to make 4 disks.
+
+             This file is self-extracting. You enter the name of a file on the
+             command line, just as you would the name of a program.
+
+               >disk4
+
+             The program will start and unpack all the files into the current
+             directory. Before starting, the program will prompt you to make
+             sure that you want to continue. Press N if you don't want to go
+             on.
+
+             You may unpack it directly to floppy disk. Just use an empty
+             formatted disk and make the floppy disk drive the current
+             directory.
+
+             The list of all files is in FILELIST.DOC which is in the
+             \COMMENTS subdirectory of disk1. You start doing the Tutor by
+             reading INTRO1.DOC and INTRO2.DOC and then doing the chapters
+             starting with chapter 0.
+
+```
+{% endraw %}
+
 ## UNPACK.DOC
 
 {% raw %}
@@ -139,7 +202,17 @@ Sunnyvale  Ca. 94086
     GO       BAT        36  10-05-90   1:52a
     FILE2338 TXT      3183  10-05-90   1:19p
     GO       TXT      1587  10-05-90   3:03a
+    PCTUTOR      <DIR>    
+            6 file(s)      12399 bytes
+
+     Directory of A:\PCTUTOR
+
+    .            <DIR>    
+    ..           <DIR>    
     UNPACK   DOC      1082   8-13-90   1:18p
     DISK4    EXE     80308   8-11-90   5:42p
-            7 file(s)      93789 bytes
-                           64000 bytes free
+            4 file(s)      81390 bytes
+
+    Total files listed:
+           10 file(s)      93789 bytes
+                           63488 bytes free

@@ -46,6 +46,34 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2883 PCX-SHOW  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Create a subdirectory on your hard drive and copy all files to it.      ║
+║ To create a subdirectory, go to the drive you want and type:            ║
+║       MD [subdirectory name]                                            ║
+║ To copy all the files to the hard drive, type:                          ║
+║       COPY [source drive]:*.* [destination drive]:\subdirectory name    ║
+║                                                                         ║
+║ To extract the files, type: PCXSHOW4 (press Enter)                      ║
+║                                                                         ║
+║ To print the documentation after extraction, type:                      ║
+║                                   COPY SHOW.DOC PRN  (Enter)            ║
+║                                   COPY SHOWPREP.DOC PRN  (press Enter)  ║
+║                                                                         ║
+║ To run the demo script presentation, type:  PCXSH4  (press Enter)       ║
+║                                                                         ║
+║ To print the order form, type:  COPY ORDER.FRM PRN  (press Enter)       ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2883

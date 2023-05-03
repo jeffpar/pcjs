@@ -28,6 +28,31 @@ machines:
 ```
 {% endraw %}
 
+## INSTALL.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  PC-SIG Disk #3865 & 3866 MOVIE WINDOWS ANIMATION UTILITY  >>>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  You must install MOVIE WINDOWS ANIMATION UTILITY on a Hard Disk.       ║
+║                                                                         ║
+║  Put disk #3865 in your floppy drive and from the Program Manager select║
+║                                                                         ║
+║  File, Run. Type the floppy drive letter (A or B), followed by a colon  ║
+║                                                                         ║
+║  and the word SETUP. Click the OK button and WINDOWS COLORING BOOK will ║
+║                                                                         ║
+║  install itself, prompting you for disk #3871 when ready.               ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3865

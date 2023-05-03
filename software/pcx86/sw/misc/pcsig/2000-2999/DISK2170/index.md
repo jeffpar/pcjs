@@ -66,6 +66,18 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk No 2170 PC_UTIL (disk 1 of 2, also 2171)  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the file description, type: COPY READ.ME PRN (press enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2170

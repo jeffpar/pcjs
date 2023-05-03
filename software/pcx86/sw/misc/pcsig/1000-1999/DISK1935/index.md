@@ -101,6 +101,20 @@ POPTXT22.ARC            Poptext units for Turbo Pascal 5.5
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1935  POPTEXT  >>>>                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Use PKXARC to extract files.                                            ║
+║                                                                         ║
+║ To print documentation, type: COPY READ.ME PRN   (press enter)          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## FW.DOC
 
 {% raw %}

@@ -88,6 +88,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #745 WILDCAT! 1 OF 2 (also 746)   >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║ For instructions and information, type:   COPY READ.ME PRN              ║
+║                                                                         ║
+║ To install program, type:   INSTALL                                     ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VENDOR.DOC
 
 {% raw %}

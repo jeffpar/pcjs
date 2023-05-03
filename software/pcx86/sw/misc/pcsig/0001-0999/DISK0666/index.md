@@ -109,6 +109,23 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk No 666 SPL  >>>>                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, you must call the author     ║
+║ and obtain the password to unlock the manual portion of the program.    ║
+║                                                                         ║
+║ His name is Dennis Baer and his phone number is 516-694-5872.           ║
+║                                                                         ║
+║ There is no charge for the password.                                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## READTHIS.DOC
 
 {% raw %}

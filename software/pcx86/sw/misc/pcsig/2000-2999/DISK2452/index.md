@@ -121,6 +121,33 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #2452  THE MAGIC FONT MACHINE   >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read the author's program descriptions, type:                        ║
+║                                TYPE DESCRIPT.TXT (press Enter)          ║
+║                                                                         ║
+║ To self-extract MAGIC-1, type:  MAGIC-1 (press Enter)                   ║
+║                                                                         ║
+║ To self-extract MAGIC-2, type:  MAGIC-2 (press Enter)                   ║
+║                                                                         ║
+║ To read notes from the author, type:  TYPE README.1ST (Enter)           ║
+║                                type:  TYPE READ.ME (Enter)              ║
+║                                                                         ║
+║ To print the User Guidelines, type:  TYPE MAGIFONT.DOC (press Enter)    ║
+║                                                                         ║
+║ To print the order form, type:  ORDER (press Enter)                     ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2452

@@ -78,6 +78,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║<< PC-SIG Disk #2857  TESSERACT CXL USER INTERFACE DEVELOPMENT SYSTEM >> ║
+║                     Disk #3 of 3  (also #2583 & 2584)                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To install the program, insert disk #1 & type: INSTALL (press Enter)   ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2857

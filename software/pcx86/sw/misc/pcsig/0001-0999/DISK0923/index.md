@@ -82,6 +82,18 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk No 923 PROFESSIONAL REAL ESTATE ANALYST  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ First load LOTUS, then Load the file called AUTO123 from within LOTUS   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0923

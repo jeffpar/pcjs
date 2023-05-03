@@ -50,6 +50,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #2602  DAN (Data Analysis) >>>>             ║
+║                        Disk 1 of 2 (also #2603)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the documentation and installation instructions, type:         ║
+║                        COPY READ.ME PRN  (Enter)                        ║
+║                                                                         ║
+║ To view the instructions, type:  TYPE READ.ME  (press Enter)            ║
+║                                                                         ║
+║ To print the registration form, type:  COPY ORDER.FRM PRN  (Enter)      ║
+║                                                                         ║
+║                                                                         ║
+║                                       (c) Copyright 1991, PC-SIG Inc.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2602

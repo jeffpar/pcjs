@@ -85,6 +85,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1936  MYFAMILY  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install MYFAMILY onto a floppy drive, type: MYFAMILY B: (press enter)║
+║                                                                         ║
+║ To install MYFAMILY onto a hard drive, type: MYFAMILY C:   (press enter)║
+║                                                                         ║
+║ To start program, type: MYFAMILY     (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY READ.ME PRN                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1936

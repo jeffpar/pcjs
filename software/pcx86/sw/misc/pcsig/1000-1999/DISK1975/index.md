@@ -71,6 +71,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  Disk #1975  PC-SUPER MENU PLUS  disk 1 of 2 (1976 also)  >>>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program onto hard drive, type:  INSTALLR (press enter)       ║
+║ To start program, type:  SM (press enter)                               ║
+║                                                                         ║
+║ To print documentation, insert disk 2 and type:  PRTDOC (press enter)   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1975

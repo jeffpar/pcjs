@@ -77,6 +77,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  Disk No 1251  PATIENT MANAGEMENT SYSTEM (Disk 1 of 5)  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type:  COPY PMS.DOC PRM  (press enter)      ║
+║                                                                         ║
+║ To install the program, insert disk #1255 into drive A: and type,       ║
+║                         STARTUP (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PMS.DOC
 
 {% raw %}

@@ -1249,6 +1249,30 @@ so it is not necessary.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ Disk No 1306 EXACCT (Exact Account) version 1.0, GANTT CHARTING PROGRAM ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:                                     ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To start EXACCT, type:                                                ║
+║                                                                         ║
+║             EXACCT (press enter)                                        ║
+║                                                                         ║
+║   To Start the GANTT CHARTING PROGRAM, type:                            ║
+║                                                                         ║
+║             GANTT (press enter)                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1306

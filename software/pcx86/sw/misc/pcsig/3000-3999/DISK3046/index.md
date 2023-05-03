@@ -14,6 +14,26 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3046 MEGABACK  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install the program, type:  INSTALL  <enter>                        ║
+║                                                                         ║
+║  To print the User Manual after installation, type:                     ║
+║                                         COPY MEGABACK.DOC PRN  <enter>  ║
+║                                                                         ║
+║                                         (c) Copyright 1992, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3046
 

@@ -92,6 +92,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #298 PLANETS AND MORE  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation for PLANETS to your printer, Type:            ║
+║                          MANUAL (press enter)                           ║
+║                                                                         ║
+║ To start PLANETS, Type: PLANETS (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LEYGREF1.BAS
 
 {% raw %}

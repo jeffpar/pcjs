@@ -45,6 +45,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     PC-SIG Disk #2133 TAKIN' CARE OF BUSINESS Accounts Receivable       ║
+║                                                                         ║
+║        (Note: This module requires disks #2130 & #2131 to run)          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To print the documentation, type:   PRINT-AR (press Enter)            ║ 
+║                                                                         ║
+║   To install the program, insert Disk #2130 and type:  INSTALL (Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2133

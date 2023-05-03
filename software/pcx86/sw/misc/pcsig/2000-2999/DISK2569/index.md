@@ -64,6 +64,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2569  MEMOS&MORE  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print the documentation and installation instructions, type:        ║
+║                   COPY README.1ST PRN  (press Enter)                    ║
+║                                                                         ║
+║  To print the SAMPLES.DOC file, type:  COPY SAMPLES.DOC PRN  (Enter)    ║
+║                                                                         ║
+║  To print the order form, type:  COPY ORDER.DOC PRN  (press Enter)      ║
+║                                                                         ║
+║  To print the site license form, type:  COPY SITELICE.DOC PRN  (Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LICENSE.DOC
 
 {% raw %}

@@ -63,6 +63,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1934  FBNCAT  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: FBNCAT       (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY FILE1934.TXT PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1934

@@ -46,6 +46,23 @@ CAUTION:
 ```
 {% endraw %}
 
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk #2625  DABUTIL  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation for Dabutil, type: COPY DABUTIL.DC1 PRN (Enter)  ║
+║                                           COPY DABUTIL.DC2 PRN (Enter)  ║
+║                                                                         ║
+║ To print a registration form, type: COPY DABUTIL2.REG PRN (press Enter) ║
+║                                                                         ║
+║                                        (c) COPYRIGHT 1991, PC-SIG INC.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2625

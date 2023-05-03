@@ -240,6 +240,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #2454  CHURCH VISITATION SYSTEM   >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print instructions, type:  COPY CVS.DOC PRN (press Enter)            ║
+║                                                                         ║
+║ For installation instructions, type:  INSTALL                           ║
+║                                                                         ║
+║ To start program after it is set up in the hard drive, make sure you    ║
+║ are in the correct directory and type:  CVS (press Enter)               ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2454

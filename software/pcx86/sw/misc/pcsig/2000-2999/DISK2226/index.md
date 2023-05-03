@@ -84,6 +84,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #2226  INVIEW   >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  Begin working with INVIEW by copying the program either to your        ║
+║  hard drive or to a high density diskette.  To extract the program,     ║
+║  type:  INVIEW (press Enter)                                            ║
+║                                                                         ║
+║  To print documentation and installation instructions, type:            ║
+║                  COPY INVIEW.DOC PRN (press Enter)                      ║
+║                                                                         ║
+║  To print registration form, type:  COPY REGISTER.DOC PRN (press Enter) ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2226

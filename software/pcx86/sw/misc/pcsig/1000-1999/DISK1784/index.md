@@ -399,6 +399,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1784  SMART CALCULATOR  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  CALC (press enter)                             ║
+║                                                                         ║
+║ To print documentation, type:  COPY CALC.DOC PRN                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1784

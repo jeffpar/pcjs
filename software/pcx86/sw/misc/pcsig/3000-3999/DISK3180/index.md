@@ -224,6 +224,26 @@ machines:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3180 ATLANTIS  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the documentation, type:  COPY ATLANTIS.DOC PRN  (Enter)      ║
+║                                                                         ║
+║  To start the game, type:  ATLANTIS  (press Enter)                      ║
+║                                                                         ║
+║  To read the author's catalog, type:  TYPE READ.ME  (press Enter)       ║
+║                                                                         ║
+║                                                                         ║
+║                                         (c) Copyright 1992, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3180

@@ -78,6 +78,31 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<< PC-SIG Disk #2311  THE FRONT OFFICE 3 OF 3 (also ##697, #698) >>>> ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  This diskette contains the manual for THE FRONT OFFICE.  To print      ║
+║  it, type:  PRINTMAN (press Enter)                                      ║
+║                                                                         ║
+║  To begin the program, insert Disk #698 and type:  GO (Enter)           ║
+║  to read the installation instructions.                                 ║
+║                                                                         ║
+║  To print those instructions, type:  COPY READ.ME PRN (press Enter)     ║
+║                                                                         ║
+║  Once you have read the file and the config.sys file is setup,          ║
+║  to install program (from Disk #698) type:  INSTALL (press Enter)       ║
+║                                                                         ║
+║  To start program, type:  TFO (press Enter)                             ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2311

@@ -107,6 +107,27 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 967 ADVENTURE and MUSIC  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for games, Type: README (press enter)        ║
+║                                                                         ║
+║ To run the program NEBULA, Type: NEBULA (press enter)                   ║
+║                                                                         ║
+║ To run the program DARK CONTINENT, Type: DARKCON (press enter)          ║
+║                                                                         ║
+║ To print the documentation for the DULCIMER TUNER, Type:                ║
+║             COPY READ.ME LPT1: (press enter)                            ║
+║                                                                         ║
+║ To run the DULCIMER TUNER, Type: CPI HELLO (press enter)                ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

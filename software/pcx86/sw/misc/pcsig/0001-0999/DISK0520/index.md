@@ -144,6 +144,24 @@ Sunnyvale, CA  94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #519,520 Budgtrak >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To Print the documentation for Budgtrak type the following command:    ║
+║             COPY BUDGDOC LPT1  (press enter)                            ║
+║                                                                         ║
+║  To Start Budgtrak Type the following command:                          ║
+║             BUDG    (press enter)                                       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NOTES519.TXT
 
 {% raw %}

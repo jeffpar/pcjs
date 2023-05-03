@@ -94,6 +94,28 @@ Here is what "CHANGING TIMES" magazine has to say about PFROI in their
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  PC-SIG Disk #360  PFROI, PORTFOLIO MANAGEMENT WITH ROI  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read author's description of PFROI, type:  TYPE DESCRIP.DOC (Enter)  ║
+║                                                                         ║
+║ To run PFROI, type:  PFROI                                              ║
+║                                                                         ║
+║ To print instructions for READ AND RUN and then GRFX2, type:            ║
+║                      COPY RNR.DOC PRN (press Enter)                     ║
+║                      COPY GRFX2.DOC PRN (press Enter)                   ║
+║                                                                         ║
+║ To read author's articles, type:  TYPE PATENTS.TXT                      ║
+║                                   TYPE TAXES.TXT                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## GRFX2.DOC
 
 {% raw %}
@@ -341,6 +363,145 @@ Bellevue, WA 98007
 ```
 Execute (run) the program "RNR.EXE" to view menu from which "CMP"
 type text files may be decompressed and read.
+```
+{% endraw %}
+
+## TAXES.TXT
+
+{% raw %}
+```
+ ┌───────────────────────────────┐
+ │ INCOME TAX = PRODUCTIVITY TAX │
+ └───────────────────────────────┘
+ As an economic observer, one notes that there are basically three types of 
+ taxes a government can impose: 1) Income tax, 2) Consumption tax (e.g. sales 
+ taxes, value-added taxes, tariffs), or 3) Asset tax.  In a free-market 
+ economy, the imposition of each type of tax will differently influence the 
+ choices of individuals with regard to income (i.e. work vs. leisure), 
+ savings/investment, and consumption.  
+
+ In the absence of taxes, people will presumably work, save and consume 
+ (spend) at levels commeasurate with their own ability and desires.  This 
+ would theoretically produce an economically optimized society.  However, 
+ given the necessity for taxes to support services that government can best 
+ provide, it seems desirable that taxes should be structured so as to at 
+ least not cause economic sub-optimizaton.  
+
+ Viewing current taxes from the point of view of an average taxpayer of 
+ middle class means, the approximate tax burden on a two income, home-owning 
+ married couple grossing $50,000/year living in a state with a hypothetical 
+ 5% income tax and 5% sales tax is as follows: 
+
+  Gross Income               :  $50,000
+  IRA contribution           : -$ 4,000  (savings/investment)
+  Mortgage/Other Deductions  : -$ 8,000  (non-taxed consumption)
+  State Tax Deductions       : -$ 3,000
+                               --------
+  Federal Taxable Income     :  $35,000
+  Federal Income Tax         : -$ 6,047  (an INCOME TAX)
+                                -------
+                                $28,953
+  State Income Adjustments   :  $ 3,000
+                                -------
+                                $31,953
+  State/Local Income Tax     : -$ 1,600  (an INCOME TAX)
+  Property Tax               : -$ 1,400  (an ASSET TAX) 
+  Social Security Tax (6.5%) : -$ 3,250  (an INCOME TAX)
+                                -------
+  Consumable Income             $25,703
+  Tax-Exempt Consumption     : -$ 7,000
+  Other Savings (4% * 50K)   : -$ 2,000
+                                -------
+  Taxable Consumption        :  $16,703
+  Sales Tax (@5%)            : -$   835  (CONSUMPTION TAX)
+  Gasoline Taxes             : -$   200  (CONSUMPTION TAX)
+  Excise Tax on Home         : -$   100  (CONSUMPTION TAX)
+  (Amortized over 20 years)                                       
+
+ Breaking the tax burden down by category shows:
+      
+   INCOME TAXES         $10,897      81%
+   ASSET TAXES          $ 1,400      10%
+   CONSUMPTION TAXES    $ 1,135       9%
+                        -------
+                        $13,432
+      
+ This example shows that the American tax burden is imbalanced between the 
+ three types of taxes, with the majority of the burden by a wide margin being 
+ comprised of an income tax.  
+      
+ 
+ The impact of this disproportionate tax burden on the economy as a whole can 
+ be seen by examining how income taxes affect the utility of income to the 
+ individual.  Since income can only be spent or saved, a rational individual 
+ will look at how an income tax affects those two options.  
+      
+ By saving income, an individual foregoes current consumption in favor of 
+ future consumption.  He or she will be less willing to do so unless they 
+ believe that saving will enable a higher level of future consumption.  For 
+ this to be possible, the income which is saved must itself earn income which 
+ means it must be invested.  However, income taxes reduce investment income, 
+ thus reducing the value of savings.  Income taxes thus act as an incentive 
+ for the individual to consume and as a disincentive to save and invest.  
+      
+ Despite the cuts in the top marginal U.S. income tax rates over the past 30 
+ years, the real income tax burden on the average taxpayer has actually 
+ increased.  This is the result of inflation induced bracket creep, higher 
+ state and local income taxes, and expanding social security taxes.  It is 
+ not surprising therefore, that over this time period the savings rate of 
+ individuals has dropped from 7% down to below 3% of income recently (1988).  
+ 
+ The declining savings rate has resulted in higher interest rates.  It has 
+ also resulted in corresponding lower rate of industrial investment than our 
+ strongest foreign trade competitors whose real interest rates are relatively 
+ lower.  The lower industrial investment means that on average, American
+ companies are turning fewer out new products and processes, and are 
+ operating with older, less efficient plant and equipment.  
+
+ A severe unfavorable trade imbalance and a decline in relative per capita 
+ income are the already apparent result of these policies.  Reversal of this 
+ situation will require either an economic calamity to re-stimulate savings, 
+ or alternatively, but unlikely, a recognition by politicians that the income 
+ tax is not a "progressive tax", but is rather a "Productivity Tax".  
+      
+ ┌─────────────────────────── 40% Socialist ? ───────────────────────────┐
+ │                                                                       │
+ │ In the example above, the total tax burden of $13,432 comprises 27%   │
+ │ of the couple's gross income of $50,000.  Adding the 6.5% matching    │
+ │ Social Security payment made by their employer, plus corporate        │
+ │ taxes and inflation paid indirectly through the price of goods and    │
+ │ services will raise the couple's total direct and indirect tax burden │
+ │ to over 37%.  This is the percentage of Gross National Product that   │
+ │ is spent by local, state and federal governments in the USA.          │
+ │ Although we view ourselves as a capitalist, free market nation, these │
+ │ figures belie the fact that we are already almost 40% socialist.      │ 
+ │                                                                       │
+ │ Stated in other terms, almost 40% of spending in this country is      │
+ │ a result of "collective" decision making as opposed to individual     │
+ │ decision-making.  This raises the question: If a majority of the      │
+ │ income of the majority of people is channeled through government      │
+ │ offices, will the private sector ever stand a chance with a public    │
+ │ dependent upon public payroll and political handouts?  One would      │
+ │ think not.  Perhaps it is time to place a constitutional cap on total │
+ │ government spending so we will remain a country of free individuals.  │
+ │                                                                       │
+ │ Robert Nile Hobbs, Pres., Techserve, inc.                             │
+ └───────────────────────────────────────────────────────────────────────┘
+ ╓───────────────────────────────────────────────────────────────────────╖
+ ║ Copyright (C) 1988, Techserve, inc.  (Box 70056, Bellevue, WA 98007)  ║
+ ╙───────────────────────────────────────────────────────────────────────╜
+ 
+ 
+ ╓───────────────────────────────────────────────────────────────────────╖
+ ║ This article may be reproduced in whole or part provided copyright    ║
+ ║ notice is preserved.  Persons concerned with this subject are in      ║
+ ║ fact encouraged to send a copy of this to their congressmen and       ║
+ ║ legislators with a request for action to cap governmental spending    ║
+ ║ and to re-structure taxes in an economically balanced fashion.        ║
+ ╙───────────────────────────────────────────────────────────────────────╜
+
+
+
 ```
 {% endraw %}
 

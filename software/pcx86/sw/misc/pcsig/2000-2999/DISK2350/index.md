@@ -90,6 +90,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═══════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #2350  IMAGE ACCESS  >>>>                ║
+╠═══════════════════════════════════════════════════════════════════════╣
+║ To start the program, type:  IA  (press ENTER)                        ║
+║                                                                       ║
+║ To print documentation, type:  copy MANUAL.DOC prn  (press ENTER)     ║
+╚═══════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

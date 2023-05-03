@@ -109,6 +109,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #1829  MINIMAX/EXECUTIVE EDITOR  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: MM                                              ║
+║                                                                         ║
+║ To print documentation, type: COPY MINIREAD.ME PRN                      ║
+║                                                                         ║
+║ To start program, type: EXED                                            ║
+║                                                                         ║
+║ To print documentation, type: COPY EXEDREAD.ME PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1829

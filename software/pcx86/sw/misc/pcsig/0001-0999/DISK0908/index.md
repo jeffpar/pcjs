@@ -1927,6 +1927,32 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk No 908 DIREDIT, D&T, TEST DRIVE  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start DIREDIT, type: DIREDIT  (press enter)                          ║
+║                                                                         ║
+║ To print documentation for DIREDIT, type: COPY DIREDIT.DOC PRN          ║
+║                                                                         ║
+║ To start DT, type: DT (press enter)                                     ║
+║                                                                         ║
+║ To print documentation for DT, type: COPY DT.DOC PRN                    ║
+║                                                                         ║
+║ To start TESTDRIVE, type: TESTDRIV (press enter)                        ║
+║                                                                         ║
+║ To print documentation for TESTDRIVE, type: TESTDOC (press enter)       ║
+║                                                                         ║
+║ Please Note: If you purchased this disk for HDTEST it has been moved    ║
+║ to disk #1209.  The program was updated and can no longer fit on this   ║
+║ disk.                                                                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## TESTDRIV.DOC
 
 {% raw %}

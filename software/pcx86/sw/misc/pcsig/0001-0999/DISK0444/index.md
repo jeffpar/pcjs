@@ -305,6 +305,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk No: 444  Hotkey, xDOS and EZ-Menu  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the manuals on this disk, type: MANUAL (press enter)           ║
+║                                                                         ║
+║ To run one of the programs on this disk, look for the name of the       ║
+║ program with the extension of .EXE or .COM. Example:                    ║
+║ If you wanted to run the program called HOTKEY you would type:          ║
+║                            HOTKEY (press enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HOTKEY.DOC
 
 {% raw %}

@@ -73,6 +73,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk #1899  DFM  >>>>                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Copy DFM21.EXE to your hard drive and type: DFM21 (press enter)         ║
+║                                                                         ║
+║ To start program, type: DFM          (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY MANUAL.DOC PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1899

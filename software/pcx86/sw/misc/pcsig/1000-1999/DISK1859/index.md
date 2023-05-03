@@ -878,6 +878,32 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1859  GARTHS SHAREWARE UTILITIES  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start BUDGET, type: BUDGET (press enter)                             ║
+║                                                                         ║
+║ To print BUDGET's documentation, type: COPY BUDGET.DOC PRN (press enter)║
+║                                                                         ║
+║ To print UTILITY's documentation, type: COPY UTILITY.DOC PRN            ║
+║                                                                         ║
+║ To run COPYDISK, type: COPYDISK  (press enter)                          ║
+║                                                                         ║
+║ To run D, type: D (press enter)                                         ║
+║                                                                         ║
+║ To run Date Directory, type: DDIR (press enter)                         ║
+║                                                                         ║
+║ To run DIRLABEL, type: DIRLABEL  (press enter)                          ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GROUP.DOC
 
 {% raw %}

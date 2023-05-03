@@ -1660,6 +1660,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1099 FORM MASTER  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: COPY FM.DOC PRN (press enter)         ║
+║                                                                         ║
+║ To run the program, type: FM (press enter)                              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c)Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## TUTORIAL.DOC
 
 {% raw %}

@@ -99,6 +99,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1544  KLONDIKE/SLOT  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start KLONDIKE, type:  KLONDIKE (press enter)                        ║
+║ To start SLOT, type:  SLOT (press enter)                                ║
+║                                                                         ║
+║ To print KLONDIKE documentation, type:  COPY KLONDIKE.DOC PRN           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## KLONDIKE.DOC
 
 {% raw %}

@@ -97,6 +97,20 @@ Sunnyvale, CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1394 READ MY DISK!  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type RMD! (press enter)                           ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

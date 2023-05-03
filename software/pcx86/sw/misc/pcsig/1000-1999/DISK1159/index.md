@@ -127,6 +127,35 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  Disk #1159 CONSTRUCTION ESTIMATOR & MORE  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ The three programs contained in this disk are in a self-unarchiving     ║
+║ files.  You can unarchive directly to a blank disk or hard drive        ║
+║ directory by repacing the x with your appropiate path.                  ║
+║ (eg. STOCK C:\WORK to extract the files to the hard drive subdirectory) ║
+║                                                                         ║
+║ To self-unarchive CONSTRUCTION ESTIMATOR, type:  ESTIMATE x             ║
+║                                                                         ║
+║ After unarchiving, start program by typing: ESTIMATOR                   ║
+║                                                                         ║
+║ To self-unarchive BANKER, type:  BANKER12 x                             ║
+║                                                                         ║
+║ After unarchiving, start program by typing: BANKER                      ║
+║                                                                         ║
+║ To self-unarchive STOCK, type: STOCK x                                  ║
+║                                                                         ║
+║ After unarchiving, start program by typing: STOCK                       ║
+║                                                                         ║
+║                                         COPYRIGHT (c) 1990 PC-SIG INC   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1159

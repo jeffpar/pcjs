@@ -106,6 +106,22 @@ Operation:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1023 QMODEM SST (Disk 3 of 5)  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Please note: In order for QMODEM to work efficiently a hard drive is    ║
+║ recommended. Create a subdirectory and copy all five  disks into it,    ║
+║ then type QM (press enter) and follow the instructions. Make sure       ║
+║ that you carefully read the documentation before using the program.     ║
+║ The documentation file will explain and answer most of your questions.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## QMHOST.DOC
 
 {% raw %}

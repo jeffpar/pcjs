@@ -66,6 +66,34 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #3016  SFWARE FONT UTILITIES  >>>>          ║
+║                  Disk 2 of 4 (also #3001, #3017, #3018)                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  Insert disk 2 (#3016) into drive A.                                    ║
+║  Create a subdirectory on your hard drive.  From the subdirectory on    ║
+║  the hard drive type:                                                   ║
+║          COPY A:PKUNZIP.EXE  (press Enter)                              ║
+║          PKUNZIP A:SFW11AP2  (press Enter)                              ║
+║  Then insert disk 1 (#3001) into drive A and type:                      ║
+║          PKUNZIP A:SFW11AP1  (press Enter)                              ║
+║  Then insert disk 3 (#3017) into drive A and type:                      ║
+║          PKUNZIP A:SFW11AD1  (press Enter)                              ║
+║  Then insert disk 4 (#3018) into drive A and type:                      ║
+║          PKUNZIP A:SFW11AD2  (press Enter)                              ║
+║          PKUNZIP A:SFW11AEX  (press Enter)                              ║
+║  To print program instructions, type:  COPY READ.ME PRN  (press Enter)  ║
+║  To print printing instructions, type:  COPY PRINTDOC PRN  (Enter)      ║
+║  To print registration form, type:  COPY ORDER.FRM  (press Enter)       ║
+║                                           Copyright 1992, PC-SIG Inc.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PATTERN.DOC
 
 {% raw %}

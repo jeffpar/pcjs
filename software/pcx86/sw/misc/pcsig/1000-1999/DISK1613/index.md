@@ -99,6 +99,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #1613  YOUR FINANCIAL ADVISOR  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To read author's instructions, type:  TYPE READ.ME (press Enter)       ║
+║                                                                         ║
+║                                                                         ║
+║  NOTE:  This program may be referenced as HOME LOAN or YOUR FINANCIAL   ║
+║         ANALYST in the documentation for this program.                  ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                       (c) Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HOMELOAN.DOC
 
 {% raw %}

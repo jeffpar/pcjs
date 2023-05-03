@@ -76,6 +76,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2653 FINGER VGA  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To start the program, type: FVGA   (press enter)                      ║
+║   (Note: make sure your mouse driver is loaded before you start)        ║
+║                                                                         ║
+║   To print instructions, type: COPY README.DOC   (press Enter)          ║
+║                                                                         ║
+║   To print the registration form, type: COPY REGISTER.DOC (press Enter) ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+                              .
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

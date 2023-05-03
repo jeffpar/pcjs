@@ -98,6 +98,18 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #862 STATMATE/PLUS (Disk 2 of 3)  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For documentation refer to disk number 863.                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0862

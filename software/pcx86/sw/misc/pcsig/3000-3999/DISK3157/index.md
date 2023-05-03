@@ -14,6 +14,26 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3157 WIN RX ANTIVIRUS  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  This program requires Microsoft Windows.                               ║
+║                                                                         ║
+║  To install, type:  WIN INSTALL  (press Enter)                          ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3157
 

@@ -132,6 +132,18 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk #1932  TURBO LESSONS 5.0  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type: PRINTLES (press enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1932

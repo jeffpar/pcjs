@@ -26,6 +26,28 @@ machines:
     conduct any statistical analysis that is available.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔════════════════════════════════════════════════════════════════════════════╗
+║                         <<<< Disk No 1708 SPPC >>>>                        ║
+╠════════════════════════════════════════════════════════════════════════════╣
+║ This is one of a four disk set.  You will need disks 232, 623 and 1707 in  ║
+║ order to complete this package.                                            ║
+║                                                                            ║
+║ The first disk has the installation instructions and documentation.        ║
+║                                                                            ║
+║ To install the package, type INSTALL (press enter)                         ║
+║                                                                            ║
+║ To print the documentation, type COPY README PRN (press enter)             ║
+╚════════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1708
 

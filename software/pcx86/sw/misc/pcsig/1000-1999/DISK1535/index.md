@@ -92,6 +92,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk No 1535 FAMILY TREE JOURNAL disk 1 of 2  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program type : FTREE (press enter)                         ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║ To print documentation type : COPY INSTRUCT PRN                         ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1535

@@ -14,6 +14,36 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3595 METAL GRIND  >>>>               ║
+║                          Disk 2 of 2 (also #3594)                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install the game to your hard disk, type:                           ║
+║     [hard drive letter]:  (press Enter)                                 ║
+║     CD\  (press Enter)                                                  ║
+║     MD METAL  (press Enter)                                             ║
+║     CD METAL  (press Enter)                                             ║
+║                                                                         ║
+║  To extract the files from drive A, insert disk 2 (#3595) and type:     ║
+║     A:PKUNZIP A:METAL  (press Enter)                                    ║
+║     (use B: in place of A: if installing from drive B)                  ║
+║                                                                         ║
+║  To read online documentation, type:  README  (press Enter)             ║
+║  To start the game, type:  METAL  (press Enter)                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3595
 

@@ -110,6 +110,33 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #1152  MULTI-MERGE & QUIKSORT  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ ***NOTE***Both programs on this diskette (MULTI-MERGE and QUIKSORT)     ║
+║           have a file named READ.ME.  To differentiate between the      ║
+║           two and to allow both program files to be on the same disk,   ║
+║           QUICKSORT's READ.ME file was renamed to README.TXT by         ║
+║           PC-SIG for distribution purposes.                             ║
+║                                                                         ║
+║              *          *          *          *          *              ║
+║                                                                         ║
+║ To start MULTI MERGE, type MERGE (press Enter)                          ║  
+║                                                                         ║
+║ For information about MULTI MERGE, type:  README (press Enter)          ║
+║                                                                         ║
+║ To start QUIKSORT, type:  QUIKSORT (press Enter)                        ║
+║                                                                         ║
+║ For documentation on QUIKSORT, type:  TYPE README.TXT (press Enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

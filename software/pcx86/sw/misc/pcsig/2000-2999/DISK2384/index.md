@@ -77,6 +77,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  DISK #2384 TUTOR DOS 1 of 4 (also 2385,2386,2387)  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To install TUTOR DOS to your hard drive type: INSTALL                   ║
+║                                                                         ║
+║ To run TUTOR DOS, type: TUTORDOS                                        ║
+║                                                                         ║
+║ To print the documentation, type: TUTORDOS.DOC                          ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
 ## TUTORDOS.DOC
 
 {% raw %}

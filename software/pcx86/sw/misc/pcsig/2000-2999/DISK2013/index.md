@@ -56,6 +56,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk #2013  KAKA!  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: KAKA         (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY README PRN                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2013

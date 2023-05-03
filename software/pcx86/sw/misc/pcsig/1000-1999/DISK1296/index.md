@@ -154,6 +154,19 @@ FBFILES  EXE           Program to set your Config.sys file.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1292 FASTBUCKS  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, type:                        ║
+║                MANUAL (press Enter)                                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INSTALL.DOC
 
 {% raw %}

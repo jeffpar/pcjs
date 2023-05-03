@@ -234,6 +234,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2903 BERT'S DINOSAURS  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print the documentation, type:  COPY BDMANUAL.DOC PRN  (Enter)      ║
+║                                                                         ║
+║  To start the program, type:  BD  (Enter)                               ║
+║                                                                         ║
+║  To print instructions on how to install this program on a hard disk,   ║
+║  type:   COPY README.1ST PRN  (press Enter)                             ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2903

@@ -975,6 +975,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #742  CHURCH MEMBERSHIP SYSTEM  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program, type: INSTALL  (press enter)                        ║
+║ To print instructions for installation, type: COPY INSTALL.DOC PRN      ║
+║                                                                         ║
+║                       ** AFTER INSTALLATION **                          ║
+║                                                                         ║
+║ To start the program, type: CMS  (press enter)                          ║
+║                                                                         ║
+║ To print the documentation, type: COPY CMS.DOC PRN  (press enter)       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INSTALL.DOC
 
 {% raw %}

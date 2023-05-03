@@ -92,6 +92,23 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1114  THI USER LIB  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the documentation for THI, Type:                               ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║ To run the program THI, Type: THI (press enter)                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## THINGFIL.BAS
 
 {% raw %}

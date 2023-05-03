@@ -277,6 +277,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 1164 FOR PHOTOGRAPHERS  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type PHOTO (press enter)                          ║
+║                                                                         ║
+║ To copy the documentation to your printer, type PRINT (press enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INTRO.DOC
 
 {% raw %}

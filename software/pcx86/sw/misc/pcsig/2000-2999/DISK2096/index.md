@@ -116,6 +116,24 @@ program, you will need an assembler, linker and a program to convert  an
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk No 2096 FONTED  >>>>                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║ To intall the program on hard drive type : HDI                          ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2096

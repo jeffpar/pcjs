@@ -90,6 +90,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 2187 HOUSEHOLD REGISTER  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: COPY HR.DOC PRN (press enter)         ║
+║                                                                         ║
+║ To start the program, type: HR (press enter)                            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HRFILES.TXT
 
 {% raw %}
@@ -179,6 +193,105 @@ Sunnyvale  Ca. 94086
        README   TXT  Intructions for quickly starting Household Register
                      and other useful information.
 
+```
+{% endraw %}
+
+## HRHLP1.TXT
+
+{% raw %}
+```
+───────────────────────────────────────────────────────────────────────────────
+KEY         FUNCTION         COMMENT
+───────────────────────────────────────────────────────────────────────────────
+ F          Find Record.     With this function you can find an item indexed
+                             by category, location or owner.
+
+ E          Edit Record.     Edit the displayed record.
+
+ D          Delete Record.   Delete the displayed record.
+
+ A          Add Record.      Allows addition of a new record to the file.
+
+ C          Copy Record.     Same as Add but copies fields from current record.
+
+ Q/ESC      Quit to Menu.    Quit back to the main menu.
+
+ N          Next Record.     The next record will be displayed.
+
+ P          Previous Record. The Previous record will be displayed.
+
+ T          First Record.    The first record will be displayed.
+
+───────────────────────────────────────────────────────────────────────────────
+───────────────────────────────────────────────────────────────────────────────
+KEY         FUNCTION         COMMENT
+───────────────────────────────────────────────────────────────────────────────
+ L          Last Record.     The last record will be displayed.
+
+ S          Search File.     Displays selector screen where you can set-up
+                             search criteria.  Selections are displayed on the
+                             main screen.
+
+ R          Report Screen.   Displays the report selection screen where you can
+                             select the type of report, where you want the
+                             report listed and how to index the report.
+
+ +          Menu On.         Allows the popup menus for the category, location
+                             and owner fields to be displayed when adding or
+                             editing a record.
+
+ -          Menu Off.        Turns the popup menus off for the category,
+                             location and owner fields.  With menus off, you
+                             type data into the fields instead of selecting an
+                             item from a menu.
+
+_______________________________________________________________________________
+───────────────────────────────────────────────────────────────────────────────
+                         ─* EDIT MODE KEYS *─
+───────────────────────────────────────────────────────────────────────────────
+ESC         Abort Edit/Add.  This key may be used to Abort the Edit or Add
+                             functions.  The data files will not be updated.
+
+F5          Delete Field.    The field is deleted from the cursor position to
+                             the end of the field and the cursor is placed at
+                             the left margin of the field.
+
+F10         Done Edit/Add.   This key is used to end editing. The record is
+                             written to the data files.
+
+Tab key     Skip to margin.  This function will skip to start or end of field
+                             contents.
+
+─┘ key     End field edit.  This key will end editing in the current field.
+                             The cursor is moved to the next field.
+
+─          Backspace.       This key will cause the cursor to move left and
+                             erase the character to the left.
+
+_______________________________________________________________________________
+───────────────────────────────────────────────────────────────────────────────
+                         ─* EDIT MODE KEYS *─
+───────────────────────────────────────────────────────────────────────────────
+Ins         Insert Toggle.   This key will toggle the insert mode On/Off.
+
+Del         Delete char.     The character under the cursor will be deleted.
+
+           Field Up.        This key is used to move to the previous field.
+
+           Field Down.      This key is used to move to the next field.
+
+           Cursor Left.     This key moves the cursor to the left.
+
+Ü           Cursor right.    This key moves the cursor to the right.
+
+
+
+
+
+
+
+                            ** END OF HELP FILE **
+───────────────────────────────────────────────────────────────────────────────
 ```
 {% endraw %}
 
@@ -285,6 +398,78 @@ evaluated in pairs and the pairs joined by a logical operator are evaluated top
 to bottom to determine if the item is selected for output.
 
 Note 2:  All comparisons are case insensitive.
+```
+{% endraw %}
+
+## PRHLP.TXT
+
+{% raw %}
+```
+───────────────────────────────────────────────────────────────────────────────
+                     *** PRINTER INSTALLATION HELP ***
+───────────────────────────────────────────────────────────────────────────────
+* Selecting Your Printer *
+If your printer type is not displayed, press F)ind and return to get a listing
+of the printers in the file.  If your printer is listed, highlight the printer
+using the arrow keys and press return.  Your printer will then be displayed on
+the Printer Installation Screen.  Next press S)elect and the printer codes will
+be recorded for use by Household Register.
+
+If your printer is not listed, its necessary to add a printer definition for
+your printer.  To add a printer its necessary to enter the printer name, the
+printer control codes for normal, compressed, bold/emphasied, underlined and
+whether you will enter the codes in decimal, hex or ASCII.
+
+To enter your printer definition, press A)dd, and fill in the following fields:
+(1) PRINTER TYPE - the name you give your definition so you can recognize it in
+the future, example Epson RX-80. (2) Enter D, H, or A to (decimal,hex, ASCII)
+indicate with which you want to enter the control code instructions.  The ID
+and Description fields for the first four entries cannot be edited by you.
+You can edit these fields after the first four fields, but the entries will not
+be used by Household Register. ** Please Continue To The Next Page **
+_______________________________________________________________________________
+_______________________________________________________________________________
+To use all the printing features of Household Register you must enter the On
+Codes and Off Codes for Normal, Compressed, Bold and Underline.  The codes that
+are used to implement the different instructions can usually be found in your
+printer manual, they may be listed in decimal, hex, ASCII or all three.
+
+For example the instruction characters to make an Epson MX/RX/FX/LQ print bold
+are the "ESC"  character followed by an "E".  Each of the following correctly
+define this sequence:
+                        DECIMAL      27  69
+                        HEX          1B  45
+                        ASCII        ESC  E
+                  or    ASCII        ^[  E
+
+After entering the on/off codes for your printer press F10 to exit the data
+entry. Next press S)elect and your printer definition will be written to a
+file for use by Household Register.
+
+
+
+       ** PLEASE REFER TO MANUAL FOR ADDITIONAL INFORMATION IF NEDDED **
+
+_______________________________________________________________________________
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+END
 ```
 {% endraw %}
 

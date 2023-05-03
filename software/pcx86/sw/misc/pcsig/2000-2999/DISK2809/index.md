@@ -45,6 +45,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2809  DAYO RENTAL POS  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the installation instructions, type:  COPY README PRN  (Enter) ║
+║                                                                         ║
+║ To print the registration form, type:  COPY REGISTER PRN  (Enter)       ║
+║                                                                         ║
+║ After installing the program as per the installation instructions,      ║
+║ print the manual by typing:  COPY DAYOPOSR.DOC PRN  (press Enter)       ║
+║                                                                         ║
+║ To start DAYO ORDER ENTRY, type:  DAYOPOSR  (press Enter)               ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2809

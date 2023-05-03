@@ -69,6 +69,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1938  GAMES FOR EGA  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For instructions on how to unarchive the file GAMES.ZOO which contains  ║
+║       all the games, type:  COPY READ.ME PRN (press Enter)              ║
+║                                                                         ║
+║   (To just view the instructions, type:  TYPE READ.ME (press Enter)     ║
+║                                                                         ║
+║ For a list of all games on the disk, type:  COPY FILE.LST PRN (Enter)   ║
+║                                                                         ║
+║ To print documentation of any of the listed games, type:                ║
+║                  COPY [game].DOC PRN (press Enter)                      ║
+║                                                                         ║
+║                  (ex: COPY ALIENS.DOC PRN (Enter))                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1938

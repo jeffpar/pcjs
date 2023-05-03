@@ -111,6 +111,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk #1563  GuessIT II and TOWER OF HANOI  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start GuessIT II, type:  GUESSIT (press enter)                       ║
+║ To start TOWER OF HANOI, type:  HANOI (press enter)                     ║
+║                                                                         ║
+║ To print documentation for GuessIT II, type:                            ║
+║                                      COPY GUESSIT.DOC PRN (press enter) ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GUESSIT.DOC
 
 {% raw %}

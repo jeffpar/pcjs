@@ -5522,6 +5522,27 @@ DispLns:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+ ╔═════════════════════════════════════════════════════════════════════════╗
+ ║               <<<<  #2634 POWER BASIC LIBRARY #4  >>>>                  ║
+ ╠═════════════════════════════════════════════════════════════════════════╣
+ ║                                                                         ║
+ ║ To unzip the files, you will need PKUNZIP. If you don't have it in your ║
+ ║ software library, you will find it on POWER BASIC LIBRARY #1, #3, #5,   ║
+ ║ and #6.                                                                 ║
+ ║                                                                         ║
+ ║ To unzip a utility, type:  PKUNZIP [filename.ZIP]  (press Enter)        ║
+ ║                                                                         ║
+ ║                                                                         ║
+ ║                                       (c) Copyright 1991, PC-SIG Inc.   ║
+ ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PORT4.BAS
 
 {% raw %}

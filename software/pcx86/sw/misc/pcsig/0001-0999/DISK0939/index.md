@@ -578,6 +578,23 @@ Limited product support is provided.  Call 206/468-3330 during hours of
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 939 FLIGHT and MORSE  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for FLIGHT, Type:                            ║
+║             COPY FLIGHT.TXT LPT1: (press enter)                         ║
+║                                                                         ║
+║ To run the program FLIGHT, Type: FLIGHT (press enter)                   ║
+║                                                                         ║
+║ To run the program MORSE, Type: MORSE (press enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0939

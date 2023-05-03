@@ -119,6 +119,21 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 1173 RUNE-CASTER 1.01  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type RUNES (press enter)                          ║
+║                                                                         ║
+║ Please Note: This program is specifically  designed for your            ║
+║ Hercules Mono Graphics Card and will not run on a color system          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1173

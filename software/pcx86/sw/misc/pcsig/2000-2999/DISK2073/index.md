@@ -103,6 +103,19 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk #2073  HOME MAINTENANCE AND REPAIR  >>>>            ║
+║                       disk 2 of 2 (#2072 also)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, insert disk # 2072 and type:  START (press enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2073

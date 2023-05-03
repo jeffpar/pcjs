@@ -63,6 +63,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #2567 GRABPLUS & LASERLABEL  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To install the program insert disk #1145, and type: INSTALL  (Enter)   ║
+║                                                                         ║
+║  To print the documentation, insert disk #1145, and type: README (Enter)║
+║                                                                         ║
+║  Once installed and configured, to start GRABPlus, type: GRAB  (Enter)  ║
+║                                                                         ║
+║  Once installed, to start LaserLabel, type: LL   (press Enter)          ║
+║                                                                         ║
+║                                     (c) Copyright 1991, PC-SIG Inc.     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2567

@@ -80,6 +80,38 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  PC-SIG Disk #2620 DAYO SMART REPORTS 2 of 2 (also #2417) >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  This DAYO module comes in a self-extracting compressed format.         ║
+║  You will require a hard drive or high density drive, 640K RAM, and     ║
+║  DOS 3.3 in order to install the program to your computer.              ║
+║  Please NOTE your CONFIG.SYS file must exist on your boot disk/drive,   ║
+║  and it must have (as a minimum), BUFFERS=30, and FILES=55.             ║
+║  Run a DAYO program to create this file should you not have one, or     ║
+║  do not know how to create/edit it.                                     ║
+║                                                                         ║
+║  If you are installing the entire DAYO system, then we recommend        ║
+║  that you use the DAYO SETUP disk. It will create the necessary         ║
+║  directories and copy the files. After running SETUP, run MENU.BAT      ║
+║  from the \DAYO directory. Enter/select each of the modules from the    ║
+║  menu, and if the module is present the program will handle the         ║
+║  creation of all databases, index and configuration files.              ║
+║                                                                         ║
+║  For manual installation, create a subdirectory called DAYORPT, and     ║
+║  copy all the files from the distrubution disks, then switch to the     ║
+║  that subdirectory and type; DAYORD then DAYORE. Once this is done      ║
+║  type DAYOR to start, or COPY DAYORPT.DOC to print the documentation    ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2620

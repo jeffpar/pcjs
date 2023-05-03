@@ -71,6 +71,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #2088 20TH CENTURY FARO  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: FARO   (press enter)                        ║
+║                                                                         ║
+║ To print the documentation, type: COPY FARO.URN PRN  (press enter)      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2088

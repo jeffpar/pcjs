@@ -75,6 +75,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1793  MARK'S CHECKBOOK PLUS  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: CKBK                                            ║
+║                                                                         ║
+║ To print documentation, type: COPY CKBK.DOC PRN                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1793

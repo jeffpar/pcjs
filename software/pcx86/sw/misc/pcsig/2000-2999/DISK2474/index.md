@@ -913,6 +913,23 @@ help the author to make improvements and correct errors.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #2474  FLIGHT PLAN SYSTEM   >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print author's "getting started" instructions, type:                 ║
+║                 TYPE README.DOC (press Enter)                           ║
+║                 TYPE README2.DOC (press Enter)                          ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

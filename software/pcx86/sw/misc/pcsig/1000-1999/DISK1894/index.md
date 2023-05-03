@@ -75,6 +75,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #1894  GARDEN PRODUCTIVITY CALCULATOR  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: GARDPRO      (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY FILE1894.TXT PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1894

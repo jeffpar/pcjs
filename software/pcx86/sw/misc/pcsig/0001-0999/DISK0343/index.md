@@ -74,6 +74,26 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk No 343  Word Processing for Kids  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║        To print the documentation for this program, type:               ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║        To start the program, type:                                      ║
+║                                                                         ║
+║             WPK (press enter)                                           ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0343

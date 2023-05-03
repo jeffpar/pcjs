@@ -73,6 +73,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  Disk No 2201 MACBETH disk 2 of 2 (also 2200)  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, insert disk 1 and type: MACBETH (press enter)     ║
+║                                                                         ║
+║ To print the docs, insert disk 1 and type: COPY MANUAL.DOC PRN          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2201

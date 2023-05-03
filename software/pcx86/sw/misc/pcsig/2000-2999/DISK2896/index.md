@@ -49,6 +49,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG DISK #2896  STATLINE  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print out the program documentation, type:                           ║
+║                                       COPY STAT.DOC PRN  (press Enter)  ║
+║                                                                         ║
+║ There are a couple ways provided to install STATLINE. Refer to "Install-║
+║ ing Statline" in the documentation (STAT.DOC file) for instructions.    ║
+║                                                                         ║
+║ To print the order form, type:  COPY ORDER.FRM PRN  (press Enter)       ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+
+
+```
+{% endraw %}
+
 ## STAT.DOC
 
 {% raw %}

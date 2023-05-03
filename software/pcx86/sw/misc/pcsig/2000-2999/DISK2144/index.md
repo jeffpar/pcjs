@@ -79,6 +79,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 2144 JIGSAW MANIA  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: JMSTART      (press enter)                  ║
+║                                                                         ║
+║ To print the documenation, type: COPY JM.DOC PRN (press enter)          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## JM.DOC
 
 {% raw %}

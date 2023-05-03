@@ -163,6 +163,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  PC-SIG Disk #2131 TAKIN' CARE OF BUSINESS Main (also #2130)>>>>  ║
+║                                                                         ║
+║ (Note: One or more of the following required also = #2130, #2132-#2135) ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:   PRINTDOC (press enter)            ║
+║                                                                         ║
+║                                                                         ║
+║   To install the program, type :   INSTALL (press enter)                ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2131

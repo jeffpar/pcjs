@@ -16,6 +16,26 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #3226 BLACKJACK FOR WINDOWS  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  The games on this disk require Windows 3.x in order to run.            ║
+║                                                                         ║
+║  To play BLACKJACK FOR WINDOWS, type:  WIN BJ  (press Enter)            ║
+║                                                                         ║
+║  To play LAS VEGAS VIDEO BLACKJACK FOR WINDOWS, type:  WIN JACK         ║
+║                                                          (press Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

@@ -71,6 +71,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1336 StupenDOS  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: SD-161 (press enter)                        ║
+║                                                                         ║
+║ To print the documentation, type:  COPY SD.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1336

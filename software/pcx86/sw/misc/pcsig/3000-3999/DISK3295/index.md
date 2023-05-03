@@ -14,6 +14,28 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #3295  THELMA THISTLEBLOSSOM  >>>>          ║
+║                         Disk 2 of 2 (also #3289)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To start, insert disk 1 (#3289) and type:  INSTALL  (press Enter)      ║
+║                                                                         ║
+║  Follow the installation procedure given to you on your monitor.        ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3295
 

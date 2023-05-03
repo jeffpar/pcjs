@@ -124,6 +124,31 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  Disk No 895 SCOUT and SELECT I MENU SYSTEM (SIMS)  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ The Scout program is in a self-extracting archive.  In order to use the ║
+║ program, you must unpack the archive.                                   ║
+║                                                                         ║
+║ To extract the Scout program, type SCOUT44 (press enter) and follow the ║
+║ instructions.                                                           ║
+║                                                                         ║
+║ To print the documentation for SIMS, Type:                              ║
+║                  COPY SIMS.DOC LPT1: (press enter)                      ║
+║                                                                         ║
+║ For the SIMS program demonstration Type MENU DEMO, and press return.    ║
+║ To operate, a text source code file must be created with a separate     ║
+║ word processing program (e.g., EDLIN). Use MAKEMENU to convert text     ║
+║ file into menu format. Afterwards the menu can be operated by the       ║
+║ program MENU, preferably from a batch file when completed.              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SIMS.DOC
 
 {% raw %}

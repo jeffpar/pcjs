@@ -51,6 +51,24 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2225  WORD GALLERY  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type:  COPY WG.DOC PRN (press Enter)            ║
+║                                                                         ║
+║ To start program, type:  WG (press Enter)                               ║ 
+║                                                                         ║
+║ To print a copy of the registration form, type:                         ║
+║                    COPY WGREG.FRM PRN (press Enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## WG.DOC
 
 {% raw %}

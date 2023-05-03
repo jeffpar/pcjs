@@ -602,6 +602,32 @@ FILES    TXT            this file
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk No 1327  DESTINY, DAILY BREAD  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To print the Destiny manual, type:                                    ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To run the Destiny program, type:                                     ║
+║                                                                         ║
+║             PLAY (press enter)                                          ║
+║                                                                         ║
+║   To print the Daily Bread manual, type:                                ║
+║                                                                         ║
+║             PRINTDB (press enter)                                       ║
+║                                                                         ║
+║   To run the Daily Bread program, type:                                 ║
+║                                                                         ║
+║             DB (press enter)                                            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1327

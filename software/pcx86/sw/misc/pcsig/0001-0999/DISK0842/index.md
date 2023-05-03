@@ -81,6 +81,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                       <<<<  Disk #842 BOX   >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type:                         ║
+║                COPY BOX.DOC PRN (press enter)                           ║
+║                                                                         ║
+║ To start the program, type: BOX (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GRAB.DOC
 
 {% raw %}

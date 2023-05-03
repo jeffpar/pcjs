@@ -85,6 +85,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  Disk No 983 NATIONAL BUREAU OF STANDARDS LIFE-CYCLE COST  >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, Type:  COPY NBLCC PRN (press enter)         ║
+║                                                                         ║
+║ To start the program, type NBSLCC (press enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0983

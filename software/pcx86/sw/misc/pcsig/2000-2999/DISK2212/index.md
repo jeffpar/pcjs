@@ -107,6 +107,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔════════════════════════════════════════════════════════════════════════════╗
+║                <<<< # 2212 S A M ' s   M E N U  >>>>                       ║
+╠════════════════════════════════════════════════════════════════════════════╣
+║   To Install the Menu on your hard drive, at the DOS prompt type:          ║
+║              A:> HDINSTALL                                                 ║
+║                                                                            ║
+║   To Send the documentation to your printer, at the DOS prompt type:       ║
+║              A:> PRINTDOC                                                  ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+
+
+
+```
+{% endraw %}
+
 ## HDINSTAL.DOC
 
 {% raw %}

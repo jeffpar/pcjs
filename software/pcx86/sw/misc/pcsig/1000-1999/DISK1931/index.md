@@ -91,6 +91,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1931  MICRO STATISTICS PACKAGE  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: MSP          (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY PARTIAL.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1931

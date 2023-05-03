@@ -1625,6 +1625,630 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  Disk No. 1075  TIME TRAVELER and FACING THE EMPIRE  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for FACING THE EMPIRE, type:                 ║
+║                    COPY FTE.DOC PRN (press Enter)                       ║
+║                                                                         ║
+║ To start FACING THE EMPIRE, type:  FTE (press Enter)                    ║
+║                                                                         ║
+║                       *  *  *  *  *  *  *  *  *                         ║
+║                                                                         ║
+║ To work TIME TRAVELER, type:  CD TIMETRAV                               ║
+║                                                                         ║
+║ To view information on TIME TRAVELER, type:  LOOK (press enter)         ║
+║                                                                         ║
+║ To start TIME TRAVELER, type: TIMETRAV (press enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
+## LOOK.TXT
+
+{% raw %}
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                               Time Traveler (tm)
+
+                                  Version 2.0
+
+
+              You may copy and FREELY share this program with others.
+           To become a registered user of Time Traveler send $12.00 to:
+
+                                Conrad R. Button
+                               13807 S.E. 282 St.
+                                Kent, WA 98042
+
+           As and added bonus for registering, you will be sent a FREE
+             copy of ANY ONE of the text adventure in our series.
+
+
+                      (C) Copyright 1989 by Conrad Button
+                              All Rights Reserved
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                               COPYRIGHT NOTICE
+
+
+                       (c) Copyright 1989 Conrad Button
+                            - All rights reserved -
+
+
+              You are granted a limited license to use Time Traveler.
+         It may be used or copied only in accordance with the terms
+         of this license outlined in the section "Restricted Permission
+         to Copy".
+
+              Information on this disk is subject to change without
+         notice and does not represent a commitment on the part of
+         Conrad Button.  Conrad Button may make improvements and/or
+         changes to this disk or to the product(s) and/or the
+         program(s) described in this disk at any time.
+
+              This product could include technical inaccuracies or
+         typographical errors.  Changes are periodically made to the
+         information herein.  Such changes may be incorporated in new
+         editions of the publication.
+
+              Time Traveler is a trademark of Conrad Button.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                               TABLE OF CONTENTS
+
+
+               How to Start a Game  . . . . . . . . . . .  4
+
+               How to Play a Game . . . . . . . . . . . .  4
+
+               Hints on Playing Games . . . . . . . . . .  5
+
+               Restricted Permission to Copy  . . . . . .  6
+
+               Why Pay for the Games  . . . . . . . . . .  7
+
+               Game Series Information  . . . . . . . . .  8
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                             HOW TO START THE GAME
+
+         To start Time Traveler, use the following instructions.
+
+              1.  Start your computer in the usual manner.
+              2.  Insert the game disk into Drive A.
+              3.  Type A: and press Enter.
+              4.  Type TIMETRAV and press Enter.
+              5.  Follow the instructions on the screen.
+
+         If you are using a monochrome monitor or a one color graphics
+         monitor you should add an M to the end of step 4
+         (i.e. TIMETRAV M).  This will allow the screen to be more
+         readable on these monitors.
+
+
+
+
+
+                                  HOW TO PLAY
+
+              A text adventure is a fictional novel in which you
+         are the main character.  You will be given a quest which you
+         must successfully complete.  You may also be asked to
+         collect treasures during your travels.
+
+              Your PC will become your guide.  It will tell you what
+         it sees and hears, and will obey your commands, (most of the
+         time).  Although it speaks fluent English, it has trouble
+         understanding long sentences.  Please limit your commands to
+         not more than two words, with the verb as the first word
+         (e.g.  throw ball).  If the computer does not know or
+         understand a word, it will tell you so.  In that case, please
+         use another word of similar meaning.
+
+              We strongly advise you to build a map during your
+         travels so that you can easily return to previously explored
+         areas.
+
+              The computer will give you the following information at
+         the start of each round of play:
+
+              1.  A description of your current location.
+              2.  Items that you can see at this location.
+              3.  Directions in which you can move (n-north, s-south,
+                  e-east, w-west, u-up, d-down)
+              4.  Treasures will be marked by an '*' before and after
+                  the word.
+
+         You must then respond by typing the action you wish to
+         perform.
+
+
+
+
+
+
+                                      -4-
+
+
+
+
+
+
+
+
+                                 * * HINTS * *
+
+         Most actions require two words such as:
+              Light torch
+              Get ruby
+              Drop axe
+              Examine door
+
+         However, some actions need only one word:
+              Help - for clues or advice
+              Quit - to stop playing
+
+         Others only need a single letter:
+            U,D,N,S,E,W - which mean go up, go down, go north, etc.
+            L - look to see where you are
+            I - list your inventory.
+
+         To save your current status so that you can resume play
+         later, type SAVE GAME.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      -5-
+
+
+
+
+
+
+
+
+                         RESTRICTED PERMISSION TO COPY
+
+              Time Traveler is not a public domain program, and never
+         has been.  It is Copyright(C) 1989 by Conrad Button.  The
+         conditions under which you may copy the Time Traveler program
+         and documentation are clearly outlined below.
+
+         WARNING!!!  The author intends to vigorously prosecute
+         copyright violations.
+
+         INDIVIDUALS AND COMPUTER CLUBS
+              Private individuals and computer clubs are granted
+         permission by the author to freely copy the Time Traveler disk
+         for non business use as long as the disk is not modified
+         in any way.  You may give the disk to friends, upload the files
+         to electronic bulletin boards, or distribute the disk through
+         computer clubs.  However, you may not sell the disk for profit.
+         User groups may charge a fee to cover the actual cost of the
+         disk and of administration.
+         This fee may not in any case exceed $10.00 total (equivalent
+         U.S. dollars).  Exceptions to these rules must be received
+         in writing from Conrad Button.
+
+         NO RENTING OR LEASING
+              Time Traveler may not be rented or leased under any
+         circumstances.
+
+         EXTRA COPIES
+              When multiple copies are required, Time Traveler is
+         available at quantity discounts.  Write Conrad Button for
+         quantity prices.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      -6-
+
+
+
+
+
+
+
+
+                         SO WHY PAY $12.00 TO REGISTER
+                               TIME TRAVELER?
+
+
+              When you pay for Time Traveler you participate in
+         User-Supported software.  That means you join thousands
+         of people who get good quality software at affordable prices.
+         Here are more reasons to register by paying $15.00:
+
+
+              - The luxury of trying out a program before you buy it
+         is rare.  When you register (by sending in your money) you
+         are saying, "I support buying software this way; and truly
+         want to help continue this trend of keeping prices down."
+
+              - Registering also means you will be notified about
+         updates to Time Traveler as well as other adventures.
+
+              - If you are using the product, you should pay for it.
+         What it boils down to is this - it's the right thing to do.
+
+              - As an added bonus, you may select a FREE copy of
+         ANY ONE of our other adventures when you register.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      -7-
+
+
+
+
+
+
+
+
+                     BUTTON'S EDUCATIONAL AND ADVENTURE GAMES
+
+              A whole new world of adventure is at your fingertips.
+         Let our software and your PC take you into previously
+         unexplored regions where you will experience new challenges,
+         confront danger, and find untold treasures.
+
+              Conrad Button offers a Educational Game Series and an
+         Adventure Series.  The Educational Series can help you improve
+         your geography skills by taking you on expeditions to Africa
+         and Asia.
+
+              THE ASIAN CHALLENGE -- As a Special Senate Investigator,
+         you have been sent to Asia on a mission to gather important
+         information.  You must report to the Foreign Aid Committee
+         shortly on whether or not to grant additional funds to the
+         needy countries of the continent.  Learn about different
+         Asian countries and their location as you travel.  You must
+         hurry because there is not much time before the committee
+         will meet.  (Educational Series)
+
+              AFRICAN SAFARI -- You are the senior photographer for
+         the International Geographic Magazine.  You have been sent to
+         Africa to photograph the people, land and animals of the
+         continent.  As you trek the high plains of Africa you will
+         learn many different things about the people and geography
+         of this vast continent.  (Educational Series)
+
+              NEBULA -- You are a NASA explorer sent to investigate a
+         newly discovered star system.  Your mission is to collect
+         specimens from the new galaxy.  Will you be able to complete
+         your mission or will you be engulfed by the unknown perils of
+         the universe?  (Novice)
+
+              DARK CONTINENT -- You have traveled to darkest Africa in
+         search of King Solomon's Diamond.  But after 3 days, your
+         native bearers desert you and take your money and supplies.
+         Will you survive and find the diamond, or will you be
+         swallowed by this vast continent?  (Intermediate)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                      -8-
+
+
+
+
+
+
+
+
+              RED PLANET -- The Federation of Earth has sent you to
+         the planet Mars to secure the lost treasures of Aukbaa.  Upon
+         achieving planetary orbit you find that your fuel is
+         depleted.  Can you acquire the Lost Treasures of Aukbaa and
+         return home?  (Advanced)
+
+              TIME TRAVELER -- The year is 2285.  The people of the
+         Earth are dying from a mysterious plague.  A now extinct
+         plant could provide the much needed cure.  Time Travel is
+         your only hope.  Have you ever imagined the thrill of
+         traveling back in time to visit the Old West, to participate
+         in the American Revolution, to explore Ancient Egypt and the
+         Age of the Dinosaur?  TIME TRAVELER will transport you to
+         these bygone days.  (Expert)
+
+              SPECIAL AGENT -- The President of the United States has
+         sent you on a mission to the Soviet Union.  You are to locate
+         and photograph their new ballistic missile, the SS-X-27.
+         Perhaps you desire to serve your country as a SPECIAL AGENT
+         to the President, performing a secret mission deep within the
+         Soviet Union.  (Expert)
+
+              SANCTUARY -- A nuclear war has devastated the Earth.
+         You are one of the few remaining survivors.  Gangs of mutants
+         roam the land.  You must find a sanctuary to ensure your
+         survival.  Have you ever wondered what civilization would be
+         like following a nuclear war?  Would there be a SANCTUARY for
+         protection against the mutated beings inhabiting this world?
+         (Master)
+
+              RAIDERS OF THE STAR TEMPLE -- As a Professor of Archeology,
+         you have specialized in the ancient Mayan culture.  You recently
+         read an article concerning the possible existence of a lost Mayan
+         temple somewhere near Chichen Itza on the Yucatan Peninsula.
+         And you have heard an Indian legend which tells of a Star Temple
+         containing a fabulous treasure of diamonds.  You are resolved to
+         find this temple, if it truly exists.  (Master)
+
+              AVENGER OF RUBICON -- Your King and fellow warriors have been
+         slain. You have been severely wounded.  As you stagger from the
+         battlefield, you vow to avenge this carnage.  You will seek out
+         and destroy the perpetrator of this foul deed - Lugor the Evil
+         Presence.  You are about to face the greatest challenge of your
+         life!  (Grand Master)
+
+              ADVENTURE HINT DISK -- The hint disk is designed to
+         provide clues and helpful hints.  This one disk covers ALL of
+         the adventure game series (Educational series excluded).
+
+
+
+
+
+
+
+
+
+                                      -9-
+
+
+
+```
+{% endraw %}
+
 ## LOOK.TXT
 
 {% raw %}
@@ -2250,8 +2874,18 @@ Sunnyvale  Ca. 94086
     GO       BAT        38  10-19-87   3:56p
     FILE1075 TXT      3193   8-13-90   9:13p
     GO       TXT      1264   1-01-80  12:26a
+    TIMETRAV     <DIR>    
+           19 file(s)     195627 bytes
+
+     Directory of A:\TIMETRAV
+
+    .            <DIR>    
+    ..           <DIR>    
     LOOK     BAT       896   4-16-88   6:32a
     LOOK     TXT     13312   2-07-89  12:21a
     TIMETRAV EXE    100802   2-16-89   2:48a
-           21 file(s)     310637 bytes
-                           38912 bytes free
+            5 file(s)     115010 bytes
+
+    Total files listed:
+           24 file(s)     310637 bytes
+                           37888 bytes free

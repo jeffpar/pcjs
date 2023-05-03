@@ -502,6 +502,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  Disk #1685  AUTOMATIC FORTRAN FORMAT STATEMENTS  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  FMT (press enter)                              ║
+║                                                                         ║
+║ To print documentation, type:  COPY FMT.DOC PRN                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1685

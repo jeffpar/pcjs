@@ -72,6 +72,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk No 1421 GARDEN CITY SOFTWARE COLLECTION  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program HIST_PAL, type HIST_PAL (press enter)              ║
+║                                                                         ║
+║ To start the program GCATALOG, type GCATALOG (press enter)              ║
+║                                                                         ║
+║ To start the program FISHTANK, type FISHTANK (press enter)              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1421

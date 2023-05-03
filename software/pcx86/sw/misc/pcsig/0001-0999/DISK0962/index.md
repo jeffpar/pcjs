@@ -148,6 +148,31 @@ Sunnyvale, CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  Disk No 962 Indent, Select Xtrac Utility (SXU), PDVIM  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for INDENT, Type:                            ║
+║             COPY INDENT.MAN LPT1: (press enter)                         ║
+║                                                                         ║
+║ To run the program INDENT, Type:                                        ║
+║             INDENT (press enter)                                        ║
+║                                                                         ║
+║ To print the documentation for SELECT XTRAC UTILITY (SXU), Type:        ║
+║             COPY README.DOC LPT1: (press enter)                         ║
+║                                                                         ║
+║ To run the program SELECT XTRAC UTILITY (SXU), Type:                    ║
+║             SXU (press enter)                                           ║
+║                                                                         ║
+║ To run the program PDVIM, Type:                                         ║
+║             PDVIM (press enter)                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0962

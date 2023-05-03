@@ -14,6 +14,24 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  PC-SIG Disk #3062 2/2 THE SMALL BUISNESS ADVISOR  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ Insert disk #3061, and type:  GO  <enter>                               ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3062
 

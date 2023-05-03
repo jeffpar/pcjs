@@ -31,6 +31,24 @@ machines:
     libraries, or add them to an existing library.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk #912 FLODRAW disk 1 of 3 (913 and 2020 also) >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type:  FLODRAW (press enter)                      ║
+║                                                                         ║
+║ To print the documentation for FLODRAW, insert disk 3 and type:         ║
+║                       MANUAL (press enter)                              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0912
 

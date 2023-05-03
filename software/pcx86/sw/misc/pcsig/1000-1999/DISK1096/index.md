@@ -86,6 +86,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 1096 KB0ZP CONTEST LOG  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To copy the documentation to your printer, type:                      ║
+║                       COPY *.DOC PRN  (press enter)                     ║
+║                                                                         ║
+║   To run the program, type: KB0ZP   (press enter)                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1096

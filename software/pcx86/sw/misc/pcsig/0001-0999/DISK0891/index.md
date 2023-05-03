@@ -125,6 +125,23 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk No 891 WHEEL OF MISFORTUNE and SOLITAIRE  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation on this disk, type:                          ║
+║                  MANUAL (press enter)                                   ║
+║                                                                         ║
+║ To start the WHEEL OF MISFORTUNE game, Type: WHEEL (press enter)        ║
+║                                                                         ║
+║ To start the SOLITAIRE game, Type: SOL (press enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## TOMMYS.DOC
 
 {% raw %}

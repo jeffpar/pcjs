@@ -176,6 +176,20 @@ PURCHASE OR LICENSE ARRANGEMENT.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1874  GENAMORT  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: GENAMORT     (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY GENAMORT.DOC PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1874

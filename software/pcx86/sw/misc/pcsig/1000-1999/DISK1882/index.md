@@ -272,6 +272,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1882  AZ REAL ESTATE FINANCE  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start using the program, type:  COPY README.DOC PRN  (press Enter)   ║
+║                                                                         ║
+║ To print order form, type:  COPY ORDRFORM.DOC PRN  (press Enter)        ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## HELHELP.TXT
 
 {% raw %}

@@ -72,6 +72,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #1645  PAINTER'S APPRENTICE >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  PA (press enter)                               ║
+║ To install program onto hard drive, type:  INSTALL (press enter)        ║
+║                                                                         ║
+║ To print documentation, type:  COPY PA.DOC PRN                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PA.DOC
 
 {% raw %}

@@ -91,6 +91,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  DISK #2450 MBW, Horse, YingYang, and Others  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start any of these games, type: WIN program                          ║
+║ (example;   A>WIN HORSE )                                               ║
+║                                                                         ║
+║ You can also easily start the games by going to the File Manager, and   ║
+║ double klicking on the program you wish to start.                       ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2450

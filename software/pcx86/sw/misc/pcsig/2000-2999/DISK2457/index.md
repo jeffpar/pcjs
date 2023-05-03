@@ -174,6 +174,28 @@ Data:  (714)590-0500
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2457  ALMANAC  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To "quickstart" ALMANAC, type:  WIN ALMSETUP  (press Enter)             ║
+║                                                                         ║
+║ To start the program from Windows Program Manager choose "RUN" from the ║
+║ "FILE" menu.                                                            ║
+║                                                                         ║
+║ The manual for ALMANAC is contained in a Windows Write file called      ║
+║ ALMANAC.WRI, choose this file from Write or from the File Manager.      ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## READ-ME.TXT
 
 {% raw %}

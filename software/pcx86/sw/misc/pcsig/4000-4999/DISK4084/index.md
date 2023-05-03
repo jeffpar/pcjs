@@ -14,6 +14,35 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #4084 FORMS COMBO PACK  >>>>             ║
+║                       Disk 4 of 4 (4081 thru 4084)                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To View all form descriptions, insert disk 1 (#4081) and type:         ║
+║     FORMS  (press Enter)                                                ║
+║                                                                         ║
+║  There are several form packs on these disks, entitled FORMS_X, where   ║
+║  "X" is a different letter for each form pack.  To extract the forms    ║
+║  to a subdirectory on your hard disk, type:                             ║
+║     FORMS_X [drive letter]:\[subdirectory name]  (press Enter)          ║
+║                                                                         ║
+║  For the bonus forms pack on disk 4 (#4084) type:                       ║
+║     BONUSFRM [drive letter]:\[subdirectory name]  (press Enter)         ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #4084
 

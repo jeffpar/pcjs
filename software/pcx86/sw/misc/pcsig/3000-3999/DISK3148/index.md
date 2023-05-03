@@ -16,6 +16,24 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #3148  THE POKER PROGRAM  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the documentation, type:  COPY POKER.TXT PRN  (press Enter)   ║
+║                                                                         ║
+║  To start the game, type:  POKER  (press Enter)                         ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## POKER.TXT
 
 {% raw %}

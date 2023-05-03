@@ -14,6 +14,38 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  DISK #2487  IDEALIST  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To extract this program to your hard drive, first create a subdirectory ║
+║ on your hard drive by typing:  C:            (press Enter)              ║
+║                                MD \IDEALIST  (press Enter)              ║
+║                                CD \IDEALIST  (press Enter)              ║
+║                                COPY A:*.*    (press Enter)              ║
+║                                                                         ║
+║ To extract the program, type:  IDEA20  (press Enter)                    ║
+║                                                                         ║
+║ To print the documentation, type:  COPY IDEALIST.DOC PRN  (press Enter) ║
+║                                                                         ║
+║ To run the program, type:  RUN  (press Enter)                           ║
+║                                                                         ║
+║ To read a note from the author, type:  TYPE SWDESIGN.TXT  (press Enter) ║
+║                                                                         ║
+║                                                                         ║
+║                                         (c) Copyright 1991, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2487
 

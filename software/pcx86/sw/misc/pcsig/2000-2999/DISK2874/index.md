@@ -52,6 +52,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO1.TXT
+
+{% raw %}
+```
+
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2874  SHOW TALK  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the documentation for SHOW TALK, type:  PRINTDOC  (Enter)      ║
+║                                                                         ║
+║ To view the documentation, type:  TYPE README.DOC    (press Enter)      ║
+║                                   TYPE SHOWTALK.DOC  (press Enter)      ║
+║                                   TYPE ORDER.FRM     (press Enter)      ║
+║                                                                         ║
+║ To begin SHOW TALK, type either:  GO  or  RUNME  (press Enter)          ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

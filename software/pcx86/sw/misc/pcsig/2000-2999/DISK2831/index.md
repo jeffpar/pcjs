@@ -45,6 +45,35 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #2831  THE ANIMATED ALPHABET  >>>>           ║
+║                       Disk 1 of 2 (also #2832)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To run the program, copy all the files onto your hard drive:            ║
+║                    C:           (to change to your hard drive)          ║
+║                    MD \ALPHABET (or other directory name)               ║
+║                    CD \ALPHABET (to change to the new directory)        ║
+║                    COPY A:*.*   (copy files first from one diskette     ║
+║                                  and then the other)                    ║
+║                                                                         ║
+║ To extract the files from ALPHA1 and ALPHA2, at the C:\ALPHABET> prompt,║
+║ type:  ALPHA1  (press Enter and the files will extract). Then type:     ║
+║        ALPHA2  (press Enter)                                            ║
+║                                                                         ║
+║ For program/registration information, type:  TYPE READ.ME  (press Enter)║
+║                                                                         ║
+║ To start THE ANIMATED ALPHABET, type:  ALPHABET  (press Enter)          ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2831

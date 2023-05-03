@@ -41,6 +41,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2781 BMP FILES #1  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Create a subdirectory on your hard drive and copy all files to it.      ║
+║ To create a subdirectory, go to the drive you want and type:            ║
+║       MD [subdirectory name]                                            ║
+║ To copy all the files to the hard drive, type:                          ║
+║       COPY [source drive]:*.* [destination drive]:\subdirectory         ║
+║                                                                         ║
+║ To extract the files, type: PKUNZIP BMPPIC1 [destination drive]:\subdir ║
+║ ** You must have PKUNZIP in your path or same directory **              ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2781

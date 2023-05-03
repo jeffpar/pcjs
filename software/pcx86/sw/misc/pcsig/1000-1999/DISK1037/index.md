@@ -697,6 +697,23 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #1037 PC-KWICK and other Utilities  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Make sure to read the documentaton for each of the programs before      ║
+║ running them. If you would like to run a program, type the name of the  ║
+║ file that you wish to run. For example if you wanted to run PC-KWICK    ║
+║ you would type: SHAREPCK (press enter). All files with the extension    ║
+║ .EXE or .COM will run automatically when you type the filename. As in   ║
+║ the case with PC-KWICK, the filename is SHAREPCK.COM.                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## RECONFIG.DOC
 
 {% raw %}

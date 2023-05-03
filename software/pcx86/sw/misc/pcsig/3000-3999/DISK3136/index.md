@@ -14,6 +14,31 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3136 ADDRESSIT  >>>>                 ║
+║                         Disk 1 of 2 (also #3137)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print installation instructions, insert disk 1 (#3136) and type:    ║
+║                                                                         ║
+║        COPY README.SIG PRN  (press Enter)                               ║
+║                                                                         ║
+║  To install the program, insert disk 1 (#3136) and type:                ║
+║                                                                         ║
+║        INSTALL  (press Enter)                                           ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3136
 

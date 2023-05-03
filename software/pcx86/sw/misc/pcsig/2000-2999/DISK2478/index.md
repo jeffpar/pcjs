@@ -139,6 +139,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<  PC-SIG Disk #2478  MED #1 - MEDICAL OFFICE MANAGEMENT SYSTEM  >>>  ║
+║                  Disk 1 of 3 (also #2479, #2480)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print the documentation and installation instructions, type:        ║
+║                   COPY README.1ST PRN (press Enter)                     ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2478

@@ -86,6 +86,61 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #2887  HAVE YOU READ THAT MOVIE? and  >>>>      ║
+║                         COMPUTER TRIVIA QUIZ                            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Make a directory on your computer hard drive for each of the games and  ║
+║ then copy the respective zipped file and PKUNZIP.EXE to it. Or copy     ║
+║ the files to respective floppy disks. (For subdirectories, see below.)  ║
+║                                                                         ║
+║                 C:                         (press Enter)                ║
+║                 MD \[directory name]       (press Enter)                ║
+║                 CD \[directory name]       (press Enter)                ║
+║                 COPY [filename.ext]        (for each file)              ║
+║                 PKUNZIP [zipped filename]  (press Enter)                ║
+║                                                                         ║
+║ HAVE YOU READ THAT MOVIE? =                                             ║
+║   To print the program documentation, type:                             ║
+║                                   COPY FILMNLIT.DOC PRN  (press Enter)  ║
+║                                                                         ║
+║   To start the game, type:  FILMNLIT  (press Enter)                     ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #2887  HAVE YOU READ THAT MOVIE? and  >>>>      ║
+║                         COMPUTER TRIVIA QUIZ                            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ (cont.)                                                                 ║
+║                                                                         ║
+║ COMPUTER TRIVIA QUIZ =                                                  ║
+║   To read the quick instructions, type:  TYPE README  (press Enter)     ║
+║                                                                         ║
+║   To print the program documentation, type:  COPY QUIZ.DOC PRN  (Enter) ║
+║                                                                         ║
+║   To start the game, type:  QUIZ  (press Enter)                         ║
+║                                                                         ║
+║   To print the registration form, type:  COPY QUIZ.FRM PRN  (Enter)     ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## FILMNLIT.DOC
 
 {% raw %}

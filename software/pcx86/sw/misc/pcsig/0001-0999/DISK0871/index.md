@@ -1935,6 +1935,26 @@ THE FILES:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk No 871 Fancy Label and FileFriend  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation for FANCY LABEL to your printer, type:        ║
+║             COPY FLABEL.DOC LPT1: (press enter)                         ║
+║                                                                         ║
+║ To run FANCY LABEL, type: FLABEL (press enter)                          ║
+║                                                                         ║
+║ To copy the documentation for FILEFRIEND to your printer, type:         ║
+║             COPY FF_EVAL.DOC LPT1: (press enter)                        ║
+║                                                                         ║
+║ To run FILEFRIEND, type: FFINST (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0871

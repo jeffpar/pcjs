@@ -155,6 +155,76 @@ Sunnyvale, CA 94086
 ```
 {% endraw %}
 
+## HELP.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                       Most-Used Zoomrack Keys                           ║
+║                       ═══════════════════════                           ║
+║                                                                         ║
+║   F1 - Loads Help Rack                                                  ║
+║                                                                         ║
+║   F2 - Pulls cards out of rack so you can read them & puts them back    ║
+║        in the rack after you are through with them.                     ║
+║                                                                         ║
+║   F3 - Moves you to Disk Directory Rack if you are in a database rack,  ║
+║        or loads a highlighted rack if you are in the Disk Directory     ║
+║        rack.                                                            ║
+║                                                                         ║
+║   F4 - Toggle the "Multi-Rack" mode on and off.                         ║
+║                                                                         ║
+║   F5 - Expands the view of a field that is highlighted on a card.       ║
+║                                                                         ║
+║   F6 - Allows you to edit the field you have highlighted on a card.     ║
+║                                                                         ║
+║   F7 - Allows you to activate a macro you have defined.                 ║
+║                                                                         ║
+║   F8 - Search for an iten in a highlighted field on a card.             ║
+║                                                                         ║
+║   F9 - Moves you backward one card in a rack.                           ║
+║                                                                         ║
+║   F10 - Moves you forward one card in a rack.                           ║
+║                                                                         ║
+║   ESC - Puts the command menu in a "Safety Zone"; Sort of a Panic       ║
+║         Button.                                                         ║
+║                                                                         ║
+║   Up & Down Cursor Keys - Moves the highlight bar up and down through   ║
+║                           a rack.                                       ║
+║                                                                         ║
+║   CTRL + Cursor Keys - Lets you move the highlight bar around in the    ║
+║                        Menu Window.                                     ║
+║                                                                         ║
+║   --------------> How to start demonstration rack <------------------   ║
+║                                                                         ║
+║   Type ZR at a DOS prompt to start the program.                         ║
+║                                                                         ║
+║   Zoomracks will load and it will display the disk directory rack.      ║
+║                                                                         ║
+║   Use the cursor key to move the highlight bar down to the file         ║
+║   MACDEMO.                                                              ║
+║                                                                         ║
+║   Press [F3] to load the rack into memory.                              ║
+║                                                                         ║
+║   Follow the instructions on the cards. They will show you what can be  ║
+║   done with Zoomracks. To move forward through the cards, press the     ║
+║   F10 key.                                                              ║
+║                                                                         ║
+║   ----------------------->  How To Quit  <---------------------------   ║
+║                                                                         ║
+║   Alt-E followed by Q followed by D - Quits Zoomracks program and       ║
+║                                       Discards racks.                   ║
+║                                                                         ║
+║   Alt-E followed by Q followed by S - Quits Zoomracks program and       ║
+║                                       Saves racks.                      ║
+║                                                                         ║
+║   Alt-E followed by Q followed by R - Saves Racks but doesn't quit      ║
+║                                       program (Save work in progress)   ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LICENSE.TXT
 
 {% raw %}

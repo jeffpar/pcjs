@@ -63,6 +63,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk #2064  LIBERTY BELL AND WHEEL  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start LIBERTY BELL, type:  LBELL (press enter)                       ║
+║ To start WHEEL, type:  WHEEL (press enter)                              ║
+║                                                                         ║
+║ To print documentation, type:  COPY FILE2064.TXT PRN                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2064

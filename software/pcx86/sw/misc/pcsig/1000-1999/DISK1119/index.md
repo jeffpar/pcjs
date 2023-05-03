@@ -4005,6 +4005,26 @@ machines:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk No 1119 FLUSHOT+, HDSENTRY and more  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation for FLUSHOT to your printer, type             ║
+║                             PRINT (press enter)                         ║
+║                                                                         ║
+║ In order to run FLUSHOT you must first copy all of the needed files     ║
+║ to the root directory of your hard drive. We have simplified this task  ║
+║ for you, all you have to type to copy all needed files to your hard     ║
+║ drive is, INSTALL (press enter)                                         ║
+║                                                                         ║
+║ To start FLUSHOT, type FSP (presss enter) from your C: prompt           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HARDWARE.TXT
 
 {% raw %}

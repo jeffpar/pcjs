@@ -80,6 +80,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #598 MASTER KEY  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type:                         ║
+║                     MANUAL (press enter)                                ║
+║                                                                         ║
+║ To start the program type: INSTALL (press enter)                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PMK-UTIL.DOC
 
 {% raw %}

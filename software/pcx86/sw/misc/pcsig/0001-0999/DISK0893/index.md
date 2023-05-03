@@ -224,6 +224,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<< Disk No 893 The PRIVATE LINE and WEAKLINK >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for PRIVATE LINE, Type:                      ║
+║                  COPY PRIVATE.DOC PRN  (press enter)                    ║
+║                                                                         ║
+║ To run the program PRIVATE LINE, Type: PRIVATE (press enter)            ║
+║                                                                         ║
+║ To print the documentation for Weaklink, Type:                          ║
+║                  COPY WEAKLINK.DOC PRN  (press enter)                   ║
+║                                                                         ║
+║ To start WEAKLINK, install PM.SYS and CONFIG.M on master unit, NET0.SYS ║
+║ and CONFIG.S on slave unit. Connect PC's with modem cable. Type "PS" on ║
+║ slave unit. (See documentation for optional parameters).                ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LISTER.BAS
 
 {% raw %}

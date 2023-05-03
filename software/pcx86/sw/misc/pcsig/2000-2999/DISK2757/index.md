@@ -51,6 +51,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2757 PRODEV*MEMBER  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read the installation instructions, type:  LIST README.DOC  (Enter)  ║
+║                                                                         ║
+║   (Printing and viewing of documentation is in the INSTALL program.)    ║
+║                                                                         ║
+║ To run the program after installation, type: MEMBER (press Enter)       ║
+║                                                                         ║
+║ To print the registration form, type:  COPY REGISTER.DOC PRN  (Enter)   ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

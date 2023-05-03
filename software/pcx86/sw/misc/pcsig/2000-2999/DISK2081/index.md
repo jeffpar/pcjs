@@ -234,6 +234,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  Disk #2081  SEBFU AND QUICK DIRECTORY  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start SEBFU, type:  GO (press enter)                                 ║
+║ To start QUICK DIRECTORY, type:  QD (press enter)                       ║
+║                                                                         ║
+║ To print SEBFU documentation, type:  COPY TUTR.DOC PRN                  ║
+║ To print QUICK DIRECTORY documentation, type:  COPY QUIK.DOC PRN        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## QUIK.DOC
 
 {% raw %}

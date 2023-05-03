@@ -1155,6 +1155,24 @@ The sleeves will fit in standard disk holders.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No 1226 DISK_TAG & FONEBOOK  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the DISK_TAG program, type DISK_TAG (press enter)              ║
+║                                                                         ║
+║ To copy DISK_TAG documentation to the printer, type MANUAL (press enter)║
+║                                                                         ║
+║ To start the FONEBOOK program, type FONEBOOK (press enter)              ║
+║                                                                         ║
+║ To copy FONEBOOK documentation to the printer, type DOC (press enter)   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1226

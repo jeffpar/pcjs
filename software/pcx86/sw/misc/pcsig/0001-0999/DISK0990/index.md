@@ -339,6 +339,25 @@ MSDOS is a trademark of Microsoft.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk #990 STAT Disk 1 of 4 (also #991,#992,2292) >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To start using the program insert disk #990 and type:                  ║
+║                    COPY README PRN  (press enter)                       ║
+║                                                                         ║
+║  To print out the manuals insert disk #990 and type:                    ║
+║                    COPY *.MAN PRN  (press enter)                        ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c)Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## HANDBOOK.TXT
 
 {% raw %}

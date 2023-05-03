@@ -71,6 +71,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                      <<<<  Disk #1487 2FACED  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type 2FACED (press enter)                         ║
+║                                                                         ║
+║ To print the documentation type:  COPY 2FACED.DOC PRN (press enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c)Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1487

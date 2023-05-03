@@ -73,6 +73,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1961  SPC-INVENTORY PLUS >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  SPCINV  (press enter)                          ║
+║                                                                         ║
+║ To print documentation, type:  COPY SPCINV.DOC PRN  (press enter)       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SPCINV.DOC
 
 {% raw %}

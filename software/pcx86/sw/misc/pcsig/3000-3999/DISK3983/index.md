@@ -79,6 +79,28 @@ Lizzie Garbutt			lizzy
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #3983 WINDOWS ARCADE GAMES III  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  All of these games require Microsoft Windows in order to run.          ║
+║                                                                         ║
+║  To Play Block Breaker, type:  WIN BLOCKE  (press Enter)                ║
+║                                                                         ║
+║  To Play Space Walls, type:  WIN SPACEW  (press Enter)                  ║
+║                                                                         ║
+║  To Play Kye, type:  WIN KYE  (press Enter)                             ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

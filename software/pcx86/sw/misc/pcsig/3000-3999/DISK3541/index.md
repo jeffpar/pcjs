@@ -14,6 +14,34 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3541 Words of Jesus  >>>>              ║
+║                       Disk 1 of 5 (#3542-3545 also)                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  This game requires 2.3 megabytes of free hard disk space. To Install,  ║
+║  type:                                                                  ║
+║                                                                         ║
+║  INSTALL [source drive] [destination drive] [subdirectory]  (Enter)     ║
+║                                                                         ║
+║  For example, INSTALL A C WORDS will install the program from the A     ║
+║  drive to the C drive in the subdirectory called "words," and will      ║
+║  create a subdirectory called "words" if it does not already exist.     ║
+║                                                                         ║
+║  After installing the program, to Start the game type: START-ME (Enter) ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3541
 

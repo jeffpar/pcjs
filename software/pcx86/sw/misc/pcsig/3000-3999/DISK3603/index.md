@@ -14,6 +14,37 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3603 BANDOR II  >>>>                 ║
+║                     Disk 3 of 3 (also #3601, #3602)                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install the game to your hard disk, type:                           ║
+║     [hard drive letter]:  (press Enter)                                 ║
+║     CD\  (press Enter)                                                  ║
+║     MD BANDOR2  (press Enter)                                           ║
+║     CD BANDOR2  (press Enter)                                           ║
+║                                                                         ║
+║  To extract the files from drive A, insert disk 3 (#3603) and type:     ║
+║     A:PKUNZIP -D A:BANDOR2  (press Enter)                               ║
+║     (use B: in place of A: if installing from drive B)                  ║
+║                                                                         ║
+║  To print documentation, type:  COPY MANUAL.DOC PRN  (press Enter)      ║
+║  To configure the game, type:  CONFIG  (press Enter)                    ║
+║  To start the game, type:  BANDOR2  (press Enter)                       ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3603
 

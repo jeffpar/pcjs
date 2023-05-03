@@ -192,6 +192,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk No 1245 THESAUR / THESAUR PLUS  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start THESAUR, type: THESAUR (press enter)                           ║
+║                                                                         ║
+║ To start THESAUR PLUS, type: THESPLUS (press enter)                     ║
+║                                                                         ║
+║ To print documentation, type: COPY THESPLUS.DOC PRN (press enter)       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## THESPLUS.DOC
 
 {% raw %}

@@ -37,6 +37,23 @@ enjoyment.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3254 ICY METAL >>>>                  ║ 
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the documentation, type:  COPY ICYMETAL PRN  <enter>          ║
+║                                                                         ║
+║  To start the program, type:  ICYMETAL  <enter>                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ICYMETAL.DOC
 
 {% raw %}

@@ -9753,6 +9753,21 @@ JUL-8-89                     YOUR COMPUTER COMPANY                     PAGE 1
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  Disk #1546  ACCOUNTS PAYABLE LITE Disk 2 of 2 (1545)  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To intsall program to either a floppy drive system or a hard drive      ║
+║ system, insert disk #1545 and type: INSTALL (press enter)               ║
+║                                                                         ║
+║ To print documentation, type:  PRINT-AP (press enter)                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDER.DOC
 
 {% raw %}

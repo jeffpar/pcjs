@@ -917,6 +917,27 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<< Disk No 322  More Music >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To run the program PIANO.COM, type:                                   ║
+║                  PIANO (press enter)                                    ║
+║                                                                         ║
+║   To run the program MINWALTZ.EXE, type:                                ║
+║                  MINWALTZ (press enter)                                 ║
+║                                                                         ║
+║ To run the programs written in BASIC, please consult your BASIC         ║
+║ language manual for the commands needed for your specific machine type. ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HAPPYB.BAS
 
 {% raw %}

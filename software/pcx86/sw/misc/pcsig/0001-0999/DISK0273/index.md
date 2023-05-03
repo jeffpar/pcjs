@@ -433,6 +433,31 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #273 BEST UTILITIES >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation on this disk, use the following commands:    ║
+║                                                                         ║
+║                       COPY BACKSCRL.DOC LPT1:                           ║
+║                       COPY BROWSE.DOC LPT1:                             ║
+║                       COPY GCOPY.DOC LPT1:                              ║
+║                       COPY GDEL.DOC LPT1:                               ║
+║                       COPY MEMBRAIN.DOC LPT1:                           ║
+║                       COPY MOVE.DOC LPT1:                               ║
+║                       COPY NDOSEDIT.DOC LPT1:                           ║
+║                       COPY SDIR24C.DOC LPT1:                            ║
+║                       COPY ST.DOC LPT1:                                 ║
+║                       COPY WHEREIS.DOC LPT1:                            ║
+║                       COPY SP.DOC LPT1:                                 ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MOVE.DOC
 
 {% raw %}

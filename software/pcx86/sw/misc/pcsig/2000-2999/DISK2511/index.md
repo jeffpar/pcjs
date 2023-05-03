@@ -51,6 +51,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  PC-SIG Disk #2511  The Complete Sales Automation System  >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program, type:  SAS50  (press ENTER)                     ║
+║                                                                         ║
+║       NOTE: After typing "SAS50," instructions will be given on         ║
+║             how to install the program to the hard drive.               ║
+║                                                                         ║
+║                                                                         ║
+║ To print documentation after installation, type:                        ║
+║                                 COPY SAS.DOC PRN  (press ENTER)         ║
+║                                                                         ║
+║ To run the program after installation, type:  SAS (press ENTER)         ║
+║                                                                         ║
+║                                                                         ║
+║                                      (c) Copyright 1991, PC-SIG Inc.    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2511

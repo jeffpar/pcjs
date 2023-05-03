@@ -81,6 +81,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk #2070  MODEL-S disk 1 of 2 (2071 also)  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program onto hard drive, type:  INSTALL (press enter)        ║
+║ To start program, type:  MDS (press enter)                              ║
+║                                                                         ║
+║ To print documentation, type:  COPY READ-ME.DOC PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## READ-ME.DOC
 
 {% raw %}

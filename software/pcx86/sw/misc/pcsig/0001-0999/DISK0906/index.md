@@ -256,6 +256,23 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk No 906 MISCELLANEOUS UTILITIES  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ How to start: Most of the programs on this disk are archived and must   ║
+║ be un-archived, with PKXARC, to be useful. Place PKXARC and the file    ║
+║ you wish to un-archive on a blank formatted disk and type:              ║
+║                                                                         ║
+║                  PKXARC [filename] (press enter)                        ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LINE26.DOC
 
 {% raw %}

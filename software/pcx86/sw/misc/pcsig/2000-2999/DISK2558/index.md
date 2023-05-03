@@ -60,6 +60,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2558  POWERCHESS  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print the instructions for POWERCHESS, type:                        ║
+║                 COPY HELP_PCH.TXT PRN  (press Enter)                    ║
+║                                                                         ║
+║  To start the program, type:  CHESS  (press Enter)                      ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HELP_PCH.TXT
 
 {% raw %}

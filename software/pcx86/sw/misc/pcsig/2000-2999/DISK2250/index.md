@@ -121,6 +121,29 @@ Fax.   germany 08067 / 1053
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<<  PC-SIG Disk #2250 MEGACAD Disk 1 of 3 (also #2251,#2252)  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To install MEGACAD, type:  INSTALL                                      ║
+║                                                                         ║
+║ To start the program, type:  MEGA                                       ║
+║                                                                         ║
+║ To print the documentation, insert disk# 2250 and type:                 ║
+║                                               COPY MEGACAD.DOC PRN      ║
+║                                                                         ║
+║ To print information on registering MEGACAD, type:                      ║
+║                                               COPY BESTELL.TXT PRN      ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG Inc.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## TASTEN.DOC
 
 {% raw %}

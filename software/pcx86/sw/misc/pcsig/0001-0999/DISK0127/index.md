@@ -79,6 +79,26 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 127 PC-MUSICIAN   >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation on this disk, type:                        ║
+║                                                                         ║
+║             PRINTDOC (press enter)                                      ║
+║                                                                         ║
+║   To run the program, type:                                             ║
+║                                                                         ║
+║             TYPE READ.ME (press enter)                                  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MUSICIAN.DOC
 
 {% raw %}

@@ -90,6 +90,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║                        <<<  Label Master  >>>                            ║
+╟──────────────────────────────────────────────────────────────────────────╢
+║ To print the documentation type:  COPY README PRN  (press enter)         ║
+║                                                                          ║
+║ To start the program type:  LM  (press enter)                            ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0750

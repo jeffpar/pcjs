@@ -46,6 +46,24 @@ DG       DES    Detailed program description
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3268  DAILY GOLD  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To read the documentation, type:  START  (press Enter)                 ║
+║                                                                         ║
+║  To install the program, type:  INSTALL  (press Enter)                  ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REG.DOC
 
 {% raw %}

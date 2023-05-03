@@ -80,6 +80,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                      <<<<  Disk #1909  GRAPH  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  GRAPH (press enter)                            ║
+║                                                                         ║
+║ To print documentation, type:  COPY GRAPH.DTA PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1909

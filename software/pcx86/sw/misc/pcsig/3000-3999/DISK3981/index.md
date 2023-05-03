@@ -234,6 +234,33 @@ all of the above programs, send $20 to the address listed above.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #3981 WINDOWS BOARD GAMES II  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  All of these games require Microsoft Windows in order to run.          ║
+║                                                                         ║
+║  To Run PENTONIMO PUZZLE, type:  WIN PENT (press Enter)                 ║
+║                                                                         ║
+║  To Run 3-D TIC-TAC-TOE, type:  WIN WINTTT (press Enter)                ║
+║                                                                         ║
+║  To Run SIMON BY GAMBER, type:  WIN SIMON (press Enter)                 ║
+║                                                                         ║
+║  To Run BATTLEGRID!, type:  WIN BG (press Enter)                        ║
+║                                                                         ║
+║  You can also run these programs by using the run command in            ║
+║  the Windows Program Manager and File Manager.                          ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDERFRM.TXT
 
 {% raw %}

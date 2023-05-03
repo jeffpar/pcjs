@@ -2417,6 +2417,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No: 167  Basic Aids No 1  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   How to Start: From BASIC, type in LOAD"filename, then run.  To        ║
+║   read the files with the DOC extensions, enter TYPE filename.DOC       ║
+║   and press <ENTER>.                                                    ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PSQUISH.BAS
 
 {% raw %}

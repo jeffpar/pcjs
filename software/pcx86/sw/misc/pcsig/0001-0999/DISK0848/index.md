@@ -67,6 +67,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #848 JUDY CLONE  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type;                         ║
+║                             COPY JUDY.DOC PRN (press enter)             ║
+║                                                                         ║
+║ To install the program, type: INSTALLJ (press enter                     ║
+║                                                                         ║
+║ To start the JUDY CLONE program; type JUDY (press enter)                ║
+║                                                                         ║
+║ To load JUDY memory resident, type; JK (press enter)                    ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## JUDY.DOC
 
 {% raw %}

@@ -85,6 +85,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  Disk #1778  THE PROGRADE SYSTEM disk 1 of 2 (1779)  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program onto your hard drive, type: HARD  (press enter)  ║
+║                                                                         ║
+║ To start program, type:  BEGIN (press enter)                            ║
+║                                                                         ║
+║ To print documentation, insert disk 2 and type:  COPY PROGRADE.TXT PRN  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1778
@@ -111,6 +127,13 @@ Sunnyvale  Ca. 94086
     GO       BAT        38   1-01-80   1:37a
     GO       TXT       694   5-05-90   4:44p
     FILE1778 TXT      2581   6-05-90   1:59p
+    HLPSCRNS     <DIR>    
+           20 file(s)     260766 bytes
+
+     Directory of A:\HLPSCRNS
+
+    .            <DIR>    
+    ..           <DIR>    
     19       U        1408   1-01-80  12:25a
     5        U        1536   1-01-80  12:30a
     1        U        1536   1-01-80  12:17a
@@ -133,5 +156,8 @@ Sunnyvale  Ca. 94086
     20       U         768   1-01-80  12:25a
     21       U        1152   1-01-80  12:41a
     22       U         512  10-21-89   1:06a
-           41 file(s)     288473 bytes
-                            9216 bytes free
+           24 file(s)      27707 bytes
+
+    Total files listed:
+           44 file(s)     288473 bytes
+                            8192 bytes free

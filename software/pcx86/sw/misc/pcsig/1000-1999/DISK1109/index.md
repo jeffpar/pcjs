@@ -82,6 +82,18 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1109 CELL SYSTEMS  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To run the program Cell Systems, Type: CELSYS (press enter)             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1109

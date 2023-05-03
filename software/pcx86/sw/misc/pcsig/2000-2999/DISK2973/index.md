@@ -800,6 +800,25 @@ p                       EXAMPLE TEXT FILE FOR BREEZE V4.6
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #2973 BREEZE  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read the installation instructions, type:  TYPE INSTALL.DOC  (Enter) ║
+║                                                                         ║
+║ To install BREEZE, type:  INSTALL  (press Enter)                        ║
+║                                                                         ║
+║ After installing BREEZE, print the next set of instructions by typing:  ║
+║                                       COPY README.1ST PRN  (press Enter)║
+║                                                                         ║
+║                                         (c) Copyright 1992, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INSTALL.DOC
 
 {% raw %}

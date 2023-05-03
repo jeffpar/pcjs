@@ -16,6 +16,67 @@ machines:
 {% include machine.html id="ibm5150" %}
 {% comment %}samples_begin{% endcomment %}
 
+## FUTUR.TXT
+
+{% raw %}
+```
+╔════════════════════════════════════════════════════════════════════════════╗
+║                                                                            ║
+║          In new versions I will be incorpore to the E-SCREEN               ║
+║                                                                            ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+        - New menú for the creation of screen input data fields.
+
+                       Add field        ALT-F?
+                       Delete field     ALT-F?
+                       Modify field     ALT-F?
+                       Consulting field ALT-F?
+                       See fields       ALT-F?
+                       Test fields
+                       General param.
+
+          and posibily some more.
+
+        - Write the input fields to a file reusable by E-SCREEN with the
+          screen name and .DAT extension.
+
+        - Creation of the corresponding font code for Clipper 5.0x,
+	  Clipper Summer 87, dBASE, Cobol, Power Basic 2.x, Turbo Basic,
+	  Quick Basic 4.x, MS Basic 7.x, C y Pascal.
+
+        - Support of any new macros on the .GEN files.
+
+              @inid@    init input field declaration
+              @endd@    end     "    "       "
+              @inii@    init input field commands
+              @endi@    end    "     "      "
+
+              @iname@   variable name
+              @idecl@   variable type
+
+              @ifgc@    input fore ground color
+              @ibgc@    input back ground color
+              @iattr@   input attribute color
+              @iy@      input line Y
+              @ix@      input column X
+              @imax@    maxium accepted value on the input
+              @imin@    minium     "      "        "
+              @ifilt@   filter     "      "        "
+              @itop@    number of input fields
+
+          and posibly some more.
+
+        - Including a support to writing the input fields and his values
+          to files compatibles with other languages, and envidently also
+          the font code for supported languages.
+
+        - Support to EGA/VGA adapters on the 43/50 línes mode, and also
+          the correspondet font code.
+
+```
+{% endraw %}
+
 ## MODIF.TXT
 
 {% raw %}

@@ -16,6 +16,23 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3522 LADDER MAN  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Start the game, type:  LADDER  (press Enter)                        ║
+║                                                                         ║
+║  To Print the documentation, type:  COPY LADDER.DOC PRN  (press Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                        (C) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LAD_REG.DOC
 
 {% raw %}

@@ -14,6 +14,27 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #7146B PRESCHOOL PACK  >>>>              ║
+║                        Disk 2 of 2 (also #7146A)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To read the instructions on how to install the file on this diskette,  ║
+║  insert Disk 1 and type:  GO  <Enter>                                   ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3392
 

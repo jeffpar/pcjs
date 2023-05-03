@@ -217,6 +217,19 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                      <<<<  Disk No 1189 ALT  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type INSTALL (press enter) and follow the         ║
+║ directions.                                                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1189

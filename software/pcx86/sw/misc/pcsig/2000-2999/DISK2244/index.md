@@ -76,6 +76,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #2244 QUICK CALCULATORS  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the documentation, type: COPY QCALC.DOC PRN (press enter)     ║
+║                                                                         ║
+║  To start the program, type: QCALC (press enter)                        ║
+║                                                                         ║
+║  To make the program memory resident, type: QCALC /M                    ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## QCALC.DOC
 
 {% raw %}

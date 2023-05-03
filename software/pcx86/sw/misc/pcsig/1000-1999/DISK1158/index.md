@@ -88,6 +88,21 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1158 GRAMARCY  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type GRAMARCY (press enter)                       ║
+║                                                                         ║
+║ To read the documentation on the program, type GRAMARCY (press enter)   ║
+║ Then select option 2 from the menu                                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1158

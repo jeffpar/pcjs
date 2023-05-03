@@ -59,6 +59,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1879  POWER SHELL  >>>>                     ║
+║                       (disk 2 of 2, 1878 also)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program onto your hard drive,                                ║
+║ insert disk 1 and type: INSTALL (press enter)                           ║
+║                                                                         ║
+║ To start program, type: PSHELL       (press enter)                      ║
+║                                                                         ║
+║ To print documentation, insert disk 1 and type: COPY INSTALL.DOC PRN    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1879

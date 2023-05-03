@@ -97,6 +97,33 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<< Disk No 857  LEDGER EXPRESS Demo version 1.01 >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  The file on this disk in in an archived format. To access this file,   ║
+║  you must unarchive the file to your hard disk drive. We have included  ║
+║  on this disk a BATCH file with will automatically create a             ║
+║  sub-directory on your hard disk called LEDGERX and unarchive the file  ║
+║  into this sub-directory. If you wish to do this at this time, type:    ║
+║                                                                         ║
+║                  INSTALL (press enter)                                  ║
+║                                                                         ║
+║  Once the installation is complete, you may enter the new sub-directory ║
+║  by accessing your C drive and typing:                                  ║
+║                                                                         ║
+║                CD\LEDGERX (press enter)                                 ║
+║                                                                         ║
+║  To print the documentation for Ledger Express, type:                   ║
+║                                                                         ║
+║                MANUAL (press enter)                                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LEDGER.DOC
 
 {% raw %}

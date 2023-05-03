@@ -77,6 +77,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  Disk No 1255  PATIENT MANAGEMENT SYSTEM (Disk 5 of 5)  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, insert disk #1251, and type:                ║
+║                   COPY PMS.DOC PRN (press enter)                        ║
+║                                                                         ║
+║ To install the program, type: STARTUP  (press enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1255
@@ -96,7 +111,17 @@ Sunnyvale  Ca. 94086
     GO       BAT        38  10-19-87   3:56p
     GO       TXT       617   5-02-90   7:24p
     FILE1255 TXT      1261   6-01-90   2:55a
+    PROC         <DIR>    
+           13 file(s)     308196 bytes
+
+     Directory of A:\PROC
+
+    .            <DIR>    
+    ..           <DIR>    
     PROCEDUR DAT     11960   3-21-90  11:51p
     PROCEDUR IDX      5120   3-21-90  11:51p
-           14 file(s)     325276 bytes
-                           28672 bytes free
+            4 file(s)      17080 bytes
+
+    Total files listed:
+           17 file(s)     325276 bytes
+                           27648 bytes free

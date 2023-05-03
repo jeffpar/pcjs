@@ -134,6 +134,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2443  WACKY1   >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read author's documentation and instructions, type:                  ║
+║                    TYPE README.TXT (press Enter)                        ║
+║                    TYPE COMFILE.DOC (press Enter)                       ║
+║                    TYPE GRAPHICS.DOC (press Enter)                      ║
+║                                                                         ║
+║ To print any of these documents, type:  COPY [filename] PRN (Enter)     ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GRAPHICS.DOC
 
 {% raw %}

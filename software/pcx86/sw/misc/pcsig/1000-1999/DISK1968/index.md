@@ -55,6 +55,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1968  CROSSREF  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start program, type:  CROSSREF  (press enter)                        ║
+║                                                                         ║
+║ To print documentation, type:  COPY CROSSREF.DOC PRN  (press enter)     ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1968

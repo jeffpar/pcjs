@@ -16,6 +16,28 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  DISK #2491 NUMERICAL RECIPES IN PASCAL  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print instructions for this disk, type: COPY MRREADME.DOC PRN       ║
+║                                                                         ║
+║  To unarchive the zipped files, type: PKUNZIP filename.zip destination  ║
+║  (Note - Do not unzip the files directly on the distribution disk       ║
+║  there will not be enough room to extract the files, instead give a     ║
+║  destination path. eg PKUNZIP NRPDATA.ZIP C:\PASCAL )                   ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
 ## NRINFO.DOC
 
 {% raw %}

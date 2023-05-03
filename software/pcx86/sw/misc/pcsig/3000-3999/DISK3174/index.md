@@ -16,6 +16,26 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3174 LAVACAP  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the documentation, type:  COPY LAVACAP.DOC PRN  (Enter)       ║
+║                                                                         ║
+║  To start the game, type:  LAVACAP  (Enter)                             ║
+║                                                                         ║
+║  To print the registration form, type:  COPY LAVA_REG.DOG PRN  (Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                         (c) Copyright 1992, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LAVA_REG.DOC
 
 {% raw %}

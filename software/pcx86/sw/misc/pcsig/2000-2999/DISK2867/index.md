@@ -72,6 +72,34 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #2867  TIMESET and RIGHTIME  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unzip the two programs, either copy the zipped files and PKUNZIP to  ║
+║ a diskette, or copy them to a subdirectory on your hard drive.  (Note,  ║
+║ if you copy them to a 360K diskette, first unzip TIMESET and then       ║
+║ delete the TIMESET6.ZIP file.  Then unzip RIGHTM11.ZIP.  Otherwise,     ║
+║ there won't be enough room on the diskette.)                            ║
+║                                                                         ║
+║ After copying the files, unzip the programs by typing:                  ║
+║                                       PKUNZIP [filename]  (press Enter) ║
+║                                                                         ║
+║ After unzipping the files and before starting the programs according to ║
+║ the instructions, print the documentation/instructions by typing:       ║
+║                                                                         ║
+║                  COPY TIMESET6A.DOC PRN  (press Enter)                  ║
+║                  COPY RIGHTIME.TXT PRN   (press Enter)                  ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## RIGHTIME.TXT
 
 {% raw %}

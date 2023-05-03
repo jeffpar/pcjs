@@ -90,6 +90,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2293  POWER LABEL  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation and installation instructions, type:             ║
+║                     COPY PL.DOC PRN  (press ENTER)                      ║
+║                                                                         ║
+║ To view documentation, type:  HELP (press ENTER)                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2293

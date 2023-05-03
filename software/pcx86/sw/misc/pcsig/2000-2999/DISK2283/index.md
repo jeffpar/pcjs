@@ -95,6 +95,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #2283  THE DIET BALANCER  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view installation instructions, type:  README  (press ENTER)         ║
+║                          To print, type:  COPY README.TXT PRN  (Enter)  ║
+║                                                                         ║
+║ For further documentation, type:  COPY HELP2.TXT PRN  (press ENTER)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## HELP2.TXT
 
 {% raw %}
@@ -348,12 +364,26 @@ To Install on a fixed drive other than C:
     GO       BAT        40   1-01-80   6:00a
     GO       TXT       650   1-01-80   3:45a
     FILE2283 TXT      2961   7-17-90  11:18a
+    DATA         <DIR>    
+    FOODS        <DIR>    
+           10 file(s)     176234 bytes
+
+     Directory of A:\DATA
+
+    .            <DIR>    
+    ..           <DIR>    
     INTAKE1  DAT       189   2-27-90   9:54a
     INTAKE1  IDX       292   2-27-90   9:54a
     INTAKE2  DAT      1296   2-27-90   9:54a
     INTAKE2  IDX       511   2-27-90   9:54a
     DATES    DAT       200   1-23-90  10:18a
     DATES    IDX       146   1-23-90  10:18a
+            8 file(s)       2634 bytes
+
+     Directory of A:\FOODS
+
+    .            <DIR>    
+    ..           <DIR>    
     FILESTAT DAT       120   1-23-90  10:18a
     FRUITDRK DTA      1264   2-27-90   9:54a
     FRUITDRK IND       847   2-27-90   9:54a
@@ -467,5 +497,8 @@ To Install on a fixed drive other than C:
     TACOBELL FFI       726   1-23-90  10:18a
     WENDYS   FFD       553   1-23-90  10:18a
     WENDYS   FFI       484   1-23-90  10:18a
-          127 file(s)     275028 bytes
-                          901632 bytes free
+          115 file(s)      96160 bytes
+
+    Total files listed:
+          133 file(s)     275028 bytes
+                           15360 bytes free

@@ -141,6 +141,39 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #2481  PRINTGL & SOFT87 >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ PRINTGL =                                                               ║
+║   To access PRINTGL from the A: root directory, type:                   ║
+║                 CD PRINTGL  (press Enter)                               ║
+║                 DIR         (press Enter)                               ║
+║                                                                         ║
+║   To read installation instructions, type:  README (press Enter)        ║
+║                                                                         ║
+║   To print PRINTGL's documentation, type:  COPY PRINTGL.DOC PRN (Enter) ║
+║                                                                         ║
+║=========================================================================║
+║ To return to the A: root directory, type:  CD / (press Enter)           ║
+║=========================================================================║
+║                                                                         ║
+║ SOFT87 =                                                                ║
+║   To access SOFT87 from the A: root directory, type:                    ║
+║                 CD SOFT87  (press Enter)                                ║
+║                 DIR        (press Enter)                                ║
+║                                                                         ║
+║   To print the SOFT87 documentation, type:  COPY SOFT87.DOC PRN (Enter) ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2481
@@ -151,8 +184,22 @@ Sunnyvale  Ca. 94086
     GO       BAT        40   1-01-80   6:00a
     GO       TXT      2003  11-19-90   7:00a
     FILE2481 TXT      4959  11-01-90   5:07p
+    SOFT87       <DIR>    
+    PRINTGL      <DIR>    
+            5 file(s)       7002 bytes
+
+     Directory of A:\SOFT87
+
+    .            <DIR>    
+    ..           <DIR>    
     SOFT87   COM     14562   5-05-90
     SOFT87   DOC      4853  10-05-90   2:26p
+            4 file(s)      19415 bytes
+
+     Directory of A:\PRINTGL
+
+    .            <DIR>    
+    ..           <DIR>    
     README   BAT        85   9-01-90   1:12a
     README   1        1185   9-01-90   1:12a
     README   2        1024   9-01-90   1:12a
@@ -162,5 +209,8 @@ Sunnyvale  Ca. 94086
     PRINTGL  DOC     85448   9-01-90   1:12a
     CHARSET  PLT      7609   9-01-90   1:12a
     SAMPLE   PLT      1525   9-01-90   1:12a
-           14 file(s)     224319 bytes
-                           91136 bytes free
+           11 file(s)     197902 bytes
+
+    Total files listed:
+           20 file(s)     224319 bytes
+                           89088 bytes free

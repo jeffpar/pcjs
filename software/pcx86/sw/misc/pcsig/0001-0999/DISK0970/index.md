@@ -113,6 +113,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 970 MSFORMS  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, insert disk #1453 and type:                 ║
+║                                                                         ║
+║                  MANUAL (press enter)                                   ║
+║                                                                         ║
+║ To run the program, Type: MSFORMS (press enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0970

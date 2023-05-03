@@ -71,6 +71,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1828  SOFTWARE MANAGER  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: MENU                                            ║
+║                                                                         ║
+║ To print documentation, type: COPY MNU.DOC PRN                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1828
@@ -85,6 +99,13 @@ Sunnyvale  Ca. 94086
     MNU      DOC     33122  10-10-87
     MNULIB1  PRM        83  10-10-87
     MNUTMP   BAT        22  10-10-87
+    MNU_V1       <DIR>    
+            8 file(s)      35917 bytes
+
+     Directory of A:\MNU_V1
+
+    .            <DIR>    
+    ..           <DIR>    
     MNU0     MNU       369  10-10-87
     MNUCHR   PRM      1024  10-10-87
     MNULGN   COM     12579  10-10-87
@@ -94,5 +115,8 @@ Sunnyvale  Ca. 94086
     MNUSUP   000     33536  10-10-87
     MNUSUP   COM     57586  10-10-87
     MNUU     MNU       356  10-10-87
-           16 file(s)     156144 bytes
-                          154624 bytes free
+           11 file(s)     120227 bytes
+
+    Total files listed:
+           19 file(s)     156144 bytes
+                          153600 bytes free

@@ -14,6 +14,26 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #3229 WARHEADS FOR WINDOWS  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  This program requires Windows 3.x in order to run.                     ║
+║                                                                         ║
+║  To start the game, type:  WIN WARHEAD  (press Enter)                   ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3229
 

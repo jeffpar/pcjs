@@ -557,6 +557,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #1021 PC-BILL MASTER  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation on your printer, Type:                        ║
+║                  MANUAL (press enter)                                   ║
+║                                                                         ║
+║ To start the program, type: BMASTER (press enter)                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1021

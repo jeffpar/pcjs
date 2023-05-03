@@ -47,7 +47,6 @@ PC-SIG (Software Interest Group)
 1030 East Duane Avenue, Suite D
 Sunnyvale, CA  94086
 (408) 730-9291
-
 ```
 {% endraw %}
 

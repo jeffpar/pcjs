@@ -2046,6 +2046,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1719  FIND-X  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unzip files to a hard drive, type: UZIPFDXH  (press enter)           ║
+║                                                                         ║
+║ To unzip files to a floppy drive, type: UZIPFDXF  (press enter)         ║
+║                                                                         ║
+║ To print installation info, type: COPY READ_FDX.ME  (press enter)       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1719

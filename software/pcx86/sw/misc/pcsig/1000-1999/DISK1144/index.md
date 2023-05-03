@@ -71,6 +71,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1144 SPELL GAMES  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type: COPY SPELL.DOC PRN  (press enter).        ║
+║                                                                         ║
+║ To start the program, type: SPELL (press enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SPELL.DOC
 
 {% raw %}

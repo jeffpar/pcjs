@@ -59,6 +59,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1878  POWER SHELL  >>>>                     ║
+║                       (disk 1 of 2, 1879 also)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program onto your hard drive, type: INSTALL (press enter)    ║
+║                                                                         ║
+║ To start program, insert disk 2 and type: PSHELL (press enter)          ║
+║                                                                         ║
+║ To print documentation, type: COPY INSTALL.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INSTALL.DOC
 
 {% raw %}

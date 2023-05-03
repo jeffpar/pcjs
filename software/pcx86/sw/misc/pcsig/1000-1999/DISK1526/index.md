@@ -60,6 +60,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #1526  PROBLEMS  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type:  COPY README.DOC PRN (press Enter)        ║
+║                                                                         ║
+║ To start the program, type:  PROBLEMS (press Enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

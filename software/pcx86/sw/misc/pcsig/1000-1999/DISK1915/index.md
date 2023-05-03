@@ -85,6 +85,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  Disk #1915  APPLICATIONS FOR MICROSOFT WINDOWS  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program, type:  INSTALL (press enter)                        ║
+║                                                                         ║
+║ To print documentation, type:  COPY $README.1ST PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PRESRLSE.TXT
 
 {% raw %}

@@ -14,6 +14,29 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #2642 BACK & FORTH #2 (also #2641)  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To extract the program, type: B&F-171B [hard drive:\subdirectory](Enter)║
+║                                                                         ║
+║ To print the documentation after extracting the files, type:            ║
+║                   COPY B&N-170.DOC PRN  (press Enter)                   ║
+║                                                                         ║
+║ To run the program, type:  BNF  (press Enter)                           ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2642
 

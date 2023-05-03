@@ -57,6 +57,34 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #2876  MULE'S END POKER-SLOTS & 21  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ NOTE:  The card games are in zipped format so they could both fit on    ║
+║ this diskette. You will need either two floppy disk drives or a floppy  ║
+║ and a hard drive in order to extract the files.                         ║
+║                                                                         ║
+║ MULE'S END POKER-SLOTS =                                                ║
+║   To extract the program files for POKER-SLOTS, from your source drive  ║
+║   type:  PKUNZIP MULEPOKR.ZIP [destination drive\subdirectory:]         ║
+║                                                                         ║
+║   To view/print the documentation and play the game, type:  GO  (Enter) ║
+║                                                                         ║
+║ MULE'S END 21 =                                                         ║
+║   To extract the program files for 21, from your source drive type:     ║
+║   PKUNZIP MULE21.ZIP [destination drive\subdirectory:]                  ║
+║                                                                         ║
+║   To view/print the documentation and play the game, type:  GO  (Enter) ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## 21.DOC
 
 {% raw %}

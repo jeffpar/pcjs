@@ -14,6 +14,37 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  PC-SIG Disk #3753 LETTERHUNT  >>>>               ║
+║                     Disk 3 of 3 (#3751 and #3752 also)                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Install this game to your hard disk, type:                          ║
+║     [hard drive letter]:  (press Enter)                                 ║
+║     CD\  (press Enter)                                                  ║
+║     MD TEMPDIR  (press Enter)                                           ║
+║     CD TEMPDIR  (press Enter)                                           ║
+║                                                                         ║
+║  To Extract the files from drive A, insert disk 3 (#3753) and type:     ║
+║     A:PKUNZIP A:LTRHUNT  (press Enter)                                  ║
+║     (if installing from drive B use B: in place of A:)                  ║
+║                                                                         ║
+║  To Install, type:  INSTALL  (press Enter)                              ║
+║                                                                         ║
+║  You may then delete the files in the TEMPDIR subdirectory.             ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3753
 

@@ -109,6 +109,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #2019  SPEAKER/DISKTEST/HEXEDIT  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: DISKTEST\DISKTEST  (press enter)                ║
+║                                                                         ║
+║ To start program, type: HEXEDIT\HEXEDIT    (press enter)                ║
+║                                                                         ║
+║ To start program, type: SPEAKER\SPEAKER    (press enter)                ║
+║                                                                         ║
+║ To print documentation, type: COPY SPEAKER\README PRN                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2019
@@ -119,11 +137,35 @@ Sunnyvale  Ca. 94086
     FILE2019 TXT      3775   1-04-90  11:59a
     GO       BAT        38   1-01-80   1:37a
     GO       TXT       848   1-01-80   3:09a
+    DISKTEST     <DIR>    
+    HEXEDIT      <DIR>    
+    SPEAKER      <DIR>    
+            6 file(s)       4661 bytes
+
+     Directory of A:\DISKTEST
+
+    .            <DIR>    
+    ..           <DIR>    
     DISKTEST EXE     28304   7-30-89   7:06a
+            3 file(s)      28304 bytes
+
+     Directory of A:\HEXEDIT
+
+    .            <DIR>    
+    ..           <DIR>    
     HEXEDIT  EXE     30461   7-29-89   6:49a
+            3 file(s)      30461 bytes
+
+     Directory of A:\SPEAKER
+
+    .            <DIR>    
+    ..           <DIR>    
     DRIVER   DAT      4620   6-08-89  12:22p
     MSHERC   COM      6749   3-07-88   5:10a
     READ     ME       3057   6-16-89   6:17p
     SPEAKER  EXE    107857   7-29-89   7:06a
-            9 file(s)     185709 bytes
-                          133120 bytes free
+            6 file(s)     122283 bytes
+
+    Total files listed:
+           18 file(s)     185709 bytes
+                          130048 bytes free

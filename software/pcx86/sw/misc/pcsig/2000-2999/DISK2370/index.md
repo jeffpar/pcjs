@@ -95,6 +95,19 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═══════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #2320  SAVE THE PLANET >>>>               ║
+╠═══════════════════════════════════════════════════════════════════════╣
+║ To start the program, type:  STP  (press ENTER)                       ║
+║                                                                       ║
+╚═══════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2370

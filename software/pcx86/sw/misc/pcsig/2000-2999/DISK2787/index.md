@@ -61,6 +61,33 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2787  FORMULA I  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To read the short introductory documentation, type:                     ║
+║                                              TYPE README.1ST  (Enter)   ║
+║                                                                         ║
+║ To start the program, type:  FORMULA1  (press Enter)                    ║
+║                                                                         ║
+║ To print the registration, type:  COPY REGISTER.DOC PRN  (press Enter)  ║
+║                                                                         ║
+║ To read about other programs the author offers, type:                   ║
+║                                              TYPE README.TOO  (Enter)   ║
+║                                                                         ║
+║ To print the request for free evaluation copies of those programs,      ║
+║ type:  COPY DEMO.REQ PRN  (press Enter)                                 ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REGISTER.DOC
 
 {% raw %}

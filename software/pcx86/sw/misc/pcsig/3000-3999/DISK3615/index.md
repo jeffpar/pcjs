@@ -14,6 +14,39 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  PC-SIG Disk #3615 PullDown Menus for DOS Disk 1 of 3  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║     PullDown Menus for DOS comes to you in three Zipped (compressed)    ║
+║     files.                                                              ║
+║                                                                         ║
+║     Copy all files from the three distribution disks to a sub-          ║
+║     directory on your hard disk drive.                                  ║
+║                                                                         ║
+║     To Unzip the files, type: PKUNZIP (file name) (press Enter).        ║
+║                                                                         ║
+║     After Unzipping all three Zipped files, type: INSTALL (press Enter).║
+║                                                                         ║
+║     Follow the installation instructions given to you by the author.    ║
+║                                                                         ║
+║     Please read the README.DOC included for operation instructions.     ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3615
 

@@ -143,6 +143,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #42  KERMIT   >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  NOTE:  The manual for this version of KERMIT is provided in hard copy  ║
+║         form from the author upon registration.                         ║
+║                                                                         ║
+║  To print the help file on this disk, type:                             ║
+║                  COPY MSKERM.HLP PRN (press Enter)                      ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0042

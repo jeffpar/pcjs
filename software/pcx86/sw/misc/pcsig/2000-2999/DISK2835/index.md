@@ -781,6 +781,32 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #2835  FINANCIER PLUS FOR WINDOWS  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ FINANCIER PLUS comes in zipped format. To extract the files, you will   ║
+║ need to unzip them to a subdirectory on your hard drive by typing:      ║
+║               PKUNZIP F-PLUS [hard drive:]\[subdirectory]               ║
+║                                                                         ║
+║ The files can then be transferred back to two diskettes if you want to  ║
+║ run the program from floppies, or can be stored in the subdirectory.    ║
+║                                                                         ║
+║ To print out the program manual, type:  COPY MANUAL.DOC PRN  (Enter)    ║
+║                                                                         ║
+║ Start FINANCIER PLUS by typing:  WIN FINANCE  or go to the File Manager ║
+║ and double klick on FINANCE.                                            ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2835

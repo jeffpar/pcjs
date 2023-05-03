@@ -75,6 +75,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1060  PC-DRAFT II  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program, insert the disk 1060 in drive A,                ║
+║ goto your root directory, and type: A:INSTALL  (press enter)            ║
+║                                                                         ║
+║                      ** AFTER INSTALLATION **                           ║
+║ To run the program, type: DRAFT2 (press enter)                          ║
+║                                                                         ║
+║ To print documentation, type: COPY DRAFT2.DOC PRN (press enter)         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VENDOR.DOC
 
 {% raw %}

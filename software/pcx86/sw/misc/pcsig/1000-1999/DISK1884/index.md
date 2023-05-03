@@ -78,6 +78,20 @@ Resistor.exe   -   This is a non-TSR version of the program.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1884  RESISPOP  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: RESISPOP     (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY RESISPOP.DOC PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## RESISPOP.DOC
 
 {% raw %}

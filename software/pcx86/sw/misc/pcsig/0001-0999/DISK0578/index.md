@@ -71,6 +71,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  Disk No: 578  C TUTOR version 2.2 (disk 2 of 2)  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the source code on this disk, type:                          ║
+║                                                                         ║
+║             PRINTALL (press enter)                                      ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VC.DOC
 
 {% raw %}
@@ -485,6 +501,13 @@ Sunnyvale  Ca. 94086
     WHILE    C         453  11-10-89  12:00p
     WRTMORE  C         173  11-10-89  12:00p
     WRTSOME  C          63  11-10-89  12:00p
+    ANSWERS      <DIR>    
+           96 file(s)     212213 bytes
+
+     Directory of A:\ANSWERS
+
+    .            <DIR>    
+    ..           <DIR>    
     CH02_1   C          95  11-10-89  12:00p
     CH02_2   C         195  11-10-89  12:00p
     CH03_1A  C         277  11-10-89  12:00p
@@ -510,5 +533,8 @@ Sunnyvale  Ca. 94086
     CH11_2   C        1078  11-10-89  12:00p
     CH12_1   C         834  11-10-89  12:00p
     CH12_2   C        1226  11-10-89  12:00p
-          120 file(s)     228291 bytes
-                          952320 bytes free
+           27 file(s)      16078 bytes
+
+    Total files listed:
+          123 file(s)     228291 bytes
+                           30720 bytes free

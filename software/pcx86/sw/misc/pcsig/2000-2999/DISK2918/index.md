@@ -16,6 +16,24 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║         <<<<  PC-SIG Disk #2918 MORFORM 1/2 (also 2919)  >>>>           ║
+  ╠═════════════════════════════════════════════════════════════════════════╣
+  ║                                                                         ║
+  ║  MOREFORM must be installed on a hard drive before it can be executed.  ║
+  ║                                                                         ║
+  ║  To install MORFORM, you must type: MORINSTL (press Enter)              ║
+  ║                                                                         ║
+  ║                                                                         ║
+  ║                                           Copyright 1992, PC-SIG, Inc.  ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VENDOR.DOC
 
 {% raw %}

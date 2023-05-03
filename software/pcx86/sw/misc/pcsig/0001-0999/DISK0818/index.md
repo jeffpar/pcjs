@@ -103,6 +103,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #818  DFSTICKLE and XCUTE  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read author's note, type:  TYPE README.DFS (press Enter)             ║
+║                                                                         ║
+║ To start DFSTICKL type: DFSTICKL (press Enter)                          ║
+║                                                                         ║
+║         To print the screens, as suggested by the author, press         ║
+║         the PRINT SCREEN key.                                           ║
+║                                                                         ║
+║ To start XCUTE, type XCUTE (press Enter)                                ║
+║                                                                         ║
+║ To copy the documentation for XCUTE to your printer type:               ║
+║                       COPY README.DOC PRN (press Enter)                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0818

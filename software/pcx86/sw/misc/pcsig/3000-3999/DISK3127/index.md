@@ -16,6 +16,28 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3127  VOICE BLASTER  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To extract the program files to your hard drive and a subdirectory,    ║
+║  type:  PKUNZIP VOICBLTR [hard drive:\subdirectory] (press Enter)       ║
+║                                                                         ║
+║  Then to start the program, type:  VBLASTER  (press Enter)              ║
+║                                                                         ║
+║  The files CANTGTUP, COMANDER, ILLBEBAC and ALERTK2 contain sample      ║
+║  VOC files which can be extracted using PKUNZIP.  Type:                 ║
+║                                                                         ║
+║     PKUNZIP [name of file] [hard drive:\subdirectory] (press Enter)     ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GREET.TXT
 
 {% raw %}

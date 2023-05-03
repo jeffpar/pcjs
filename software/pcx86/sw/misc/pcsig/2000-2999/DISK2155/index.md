@@ -51,6 +51,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  DISK #2155 THE GREGORIAN CALENDAR   >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: YEAR086                                         ║
+║ If you have a 386, type: YEAR386                                        ║
+║ 						                          ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2155

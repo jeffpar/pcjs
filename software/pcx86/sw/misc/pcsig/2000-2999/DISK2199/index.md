@@ -149,6 +149,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 2199 CUDUP / PAR  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To run self-extracting CUDUP file, type: CUDUP1  (press enter)          ║
+║ To run self-extracting PAR file, type: PAR11  (press enter)             ║
+║                                                                         ║
+║                         ** AFTER EXTRACTING **                          ║
+║                                                                         ║
+║ To run CUDUP, type: CUDUP  (press enter)                                ║
+║ To print CUDUP's documentation, type: COPY CUDUP.DOC PRN (press enter)  ║
+║                                                                         ║
+║ To run PAR, type: PAR  (press enter)                                    ║
+║ To print PAR's documentation, type: COPY PAR11.DOC PRN (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2199

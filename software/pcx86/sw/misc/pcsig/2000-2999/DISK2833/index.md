@@ -14,6 +14,30 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2833 DESKTOP PAINT 256  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install to your hard drive, type:                                   ║
+║                                                                         ║
+║     [hard drive letter]:  (press Enter)                                 ║
+║     CD\  (press Enter)                                                  ║
+║     MD DTPV  (press Enter)                                              ║
+║     CD DTPV  (press Enter)                                              ║
+║     A:DTPV20  (press Enter)  (or B:DTPV20 if installing from drive B)   ║
+║     DTPINSTL  (press Enter)                                             ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2833
 

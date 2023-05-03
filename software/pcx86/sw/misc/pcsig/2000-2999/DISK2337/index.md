@@ -94,6 +94,82 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║         <<<< PC-SIG #2337  PC ASSEMBLER HELPER & TUTOR #1 >>>>          ║
+  ╠═════════════════════════════════════════════════════════════════════════╣
+  ║  To read author's introductory note, type:  TYPE PCREADME.DOC (Enter)   ║
+  ║                                                                         ║
+  ║  To access author's installation instructions from the program drive,   ║
+  ║                   type:  CD PCTUTOR (press Enter)                       ║
+  ║                          DIR (press Enter)                              ║
+  ║                          COPY UNPACK.DOC PRN (press Enter)              ║
+  ║                                                                         ║
+  ║                                                                         ║
+  ║                                        (c) Copyright 1990, PC-SIG Inc.  ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+
+
+
+```
+{% endraw %}
+
+## UNPACK.DOC
+
+{% raw %}
+```
+
+
+
+             This subdirectory contains compressed files which make up disk1,
+             disk2 and disk3 of The PC Assembler Tutor. It no longer fits on 3
+             disks so it is divided into 4 disks. Disk4 is included in this
+             directory if you received this on a high-density disk. Otherwise
+             it is on a separate disk.
+
+             These files are self-extracting. You enter the name of a file on
+             the command line, just as you would the name of a program.
+
+               >disk1-A
+
+             The program will start and unpack all the files into the current
+             directory. Before starting, these programs will prompt you to
+             make sure that you want to continue. Press N if you don't want to
+             go on.
+
+             Disk1 is divided into two parts:  DISK1-A and DISK1-B. This is so
+             that DISK1-A, which contains the i/o interface program for the
+             Tutor, may be electronically transmitted. You need to unpack both
+             DISK1-A.COM and DISK1-B.EXE into the current directory and then
+             run DISK1MAK.BAT (which is in DISK1-B.EXE). It is a batch file
+             which will create subdirectories and put all the files in their
+             proper subdirectories.
+
+             In order to use DISK1MAK.BAT, you need to put an empty, formatted
+             DSDD (or larger) disk in a drive and give the batch file the name
+             of the drive:
+
+               >disk1mak  a:
+
+             disk1mak will copy the files from the current directory to the
+             specified drive. You must give a drive specification.
+
+             Disks 2, 3 (and 4) need no subdirectories. They are the chapters
+             of the Tutor. You may unpack them directly to floppy disk. Just
+             use an empty formatted disk and make the floppy disk drive the
+             current directory.
+
+             The list of all files is in FILELIST.DOC which is in the
+             \COMMENTS subdirectory of disk1. You start doing the Tutor by
+             reading INTRO1.DOC and INTRO2.DOC and then doing the chapters
+             starting with chapter 0.
+
+```
+{% endraw %}
+
 ## UNPACK.DOC
 
 {% raw %}
@@ -158,10 +234,20 @@ Sunnyvale  Ca. 94086
     GO       BAT        36  10-05-90   1:52a
     GO       TXT      1034  10-05-90   2:10a
     FILE2337 TXT      3183  10-05-90  12:39p
+    PCTUTOR      <DIR>    
+            5 file(s)       5622 bytes
+
+     Directory of A:\PCTUTOR
+
+    .            <DIR>    
+    ..           <DIR>    
     UNPACK   DOC      2213   8-13-90   7:01p
     DISK1-A  COM     25872   8-13-90  11:36a
     DISK1-B  EXE     76299   8-13-90   6:39p
     DISK2    EXE    110530   8-12-90  10:36p
     DISK3    EXE     96348   8-11-90   7:38p
-            9 file(s)     316884 bytes
-                           38912 bytes free
+            7 file(s)     311262 bytes
+
+    Total files listed:
+           12 file(s)     316884 bytes
+                           37888 bytes free

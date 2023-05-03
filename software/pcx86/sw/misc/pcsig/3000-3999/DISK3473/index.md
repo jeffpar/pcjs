@@ -14,6 +14,66 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## SNDFORM.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════SoundForms══════════════════════════════════╗
+║  Instructions:                                                              ║
+║  <RETURN> - toggle between Create Object Screen & Construction Screen.      ║
+║  <ESC> ---- back out of screens and menus                                   ║
+║                                                                             ║
+║     Create Object Screen (this is default screen):                          ║
+║        Space Bar --- toggle drawing Pen Up/Down.                            ║
+║        Cursor Keys - move cursor and draw Object                            ║
+║                      [Vertical axis is frequency, Horizontal time]          ║
+║        "P" --------- Play Object                                            ║
+║        F2 ---------- Redraw Object                                          ║
+║        Alt/E ------- Erase (with Pen Down - for editing)                    ║
+║        1-6 --------- Select Object                                          ║
+║        Alt/F ------- Files                                                  ║
+║        Alt/O ------- Options                                                ║
+║                                                                             ║
+║     Construction Screen:                                                    ║
+║        Cursor Keys - move cursor to Object                                  ║
+║        F1 ---------- mark Object to connect From (pen goes down)            ║
+║        F2 ---------- mark Object to connect To (pen goes up)                ║
+║        "P" --------- Play Construction                                      ║
+║        Alt/F ------- Files                                                  ║
+║        Alt/O ------- Options                                                ║
+║                                                                             ║
+╚═══════════════ [H] for Help with Options, <RET> for Program ════════════════╝
+╔══════════════════════════════════Options════════════════════════════════════╗
+║                                                                             ║
+║  Use Alt/O on either screen. Up/Down Arrows + <RET> to select Option,       ║
+║  or press first letter of Option.                                           ║
+║                                                                             ║
+║  Create Object Screen:                                                      ║
+║     Create - Enter number of Object to create. #1 is ready at startup.      ║
+║              2-6 are not. Do this the first time you make object 2-6, or    ║
+║              after deleting Object. Only Created Objects appear on          ║
+║              Construction Screen.                                           ║
+║     Delete - Enter number of Object to delete. Program returns to Object 1. ║
+║     Pace --- Enter value from .01 to 2 (represents seconds. This changes    ║
+║              the time Object takes to play. Each cursor increment to the    ║
+║              right is one timing unit.                                      ║
+║     New ---- Clears data for all Objects. Starts over.                      ║
+║     Help --- This and previous page.                                        ║
+║                                                                             ║
+║  Construction Screen:                                                       ║
+║     Erase --- Erases most recent connection.                                ║
+║     Reverse - Enter Object to reverse, followed by comma, followed by       ║
+║               Object destination.                                           ║
+║     Help ---- This and previous page.                                       ║
+║                                                                             ║
+║                                                                             ║
+╚══════════════════[H] for previous page, <RET> for Program═══════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3473
 

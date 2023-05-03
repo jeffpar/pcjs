@@ -91,6 +91,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #1896  VEGAS JOHNNY'S DRAW POKER  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: POKER        (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY POKER.DOC PRN                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## POKER.DOC
 
 {% raw %}

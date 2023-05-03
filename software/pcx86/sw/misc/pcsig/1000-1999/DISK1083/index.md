@@ -80,6 +80,20 @@ Sunnyvale, CA  94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 1083 CODE-BLUE  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To run the program on a floppy-based system, type: CB2 (press enter)    ║
+║                                                                         ║
+║ To run the program on a hard-disk based system, type: CB (press enter)  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NEWINFO.TXT
 
 {% raw %}

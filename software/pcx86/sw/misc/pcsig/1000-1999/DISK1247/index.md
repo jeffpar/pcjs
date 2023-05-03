@@ -5082,6 +5082,26 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  Disk No 1247  TURBO ENHANCEMENT TOOLKIT FOR PASCAL  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:                                     ║
+║                                                                         ║
+║             MANUAL (press manual)                                       ║
+║                                                                         ║
+║   To run the program, type:                                             ║
+║                                                                         ║
+║             DEMO (press enter)                                          ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1247
@@ -5112,6 +5132,14 @@ Sunnyvale Ca. 94086
     GO       BAT        38  10-19-87   3:56p
     GO       TXT      1002  12-14-88   8:22a
     MANUAL   BAT       147   6-08-88   3:02p
+    TP4          <DIR>    
+    TP5          <DIR>    
+           25 file(s)     291464 bytes
+
+     Directory of A:\TP4
+
+    .            <DIR>    
+    ..           <DIR>    
     SSDISK   TPU      3120  11-05-88  10:18p
     SSDOS    TPU       400   9-12-88  10:01p
     SSGETKEY TPU      1232   9-12-88  10:01p
@@ -5119,12 +5147,21 @@ Sunnyvale Ca. 94086
     SSMOUSE  TPU      2784  11-03-88   7:28a
     SSPRT    TPU       640   9-12-88  10:01p
     SSVIDEO  TPU     11872   9-12-88  10:01p
-    SSDISK~1 TPU      3296  11-02-88   9:56p
-    SSDOS~1  TPU       400  11-02-88   9:56p
-    SSGETK~1 TPU      1312  11-02-88   9:56p
-    SSKBD~1  TPU      1216  11-02-88   9:56p
-    SSMOUS~1 TPU      3680  11-03-88   8:33p
-    SSPRT~1  TPU       672  11-02-88   9:56p
-    SSVIDE~1 TPU     12800  11-02-88   9:57p
-           37 file(s)     336040 bytes
-                            6144 bytes free
+            9 file(s)      21200 bytes
+
+     Directory of A:\TP5
+
+    .            <DIR>    
+    ..           <DIR>    
+    SSDISK   TPU      3296  11-02-88   9:56p
+    SSDOS    TPU       400  11-02-88   9:56p
+    SSGETKEY TPU      1312  11-02-88   9:56p
+    SSKBD    TPU      1216  11-02-88   9:56p
+    SSMOUSE  TPU      3680  11-03-88   8:33p
+    SSPRT    TPU       672  11-02-88   9:56p
+    SSVIDEO  TPU     12800  11-02-88   9:57p
+            9 file(s)      23376 bytes
+
+    Total files listed:
+           43 file(s)     336040 bytes
+                            4096 bytes free

@@ -57,6 +57,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2581  VUIMAGE  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To print the documentation and installation instructions, type:       ║
+║                   COPY VUIMG.DOC PRN  (press Enter)                     ║
+║                                                                         ║
+║   For information on other programs available from OFFE Enterprises,    ║
+║                type:  TYPE PROGRAMS.DOC  (press Enter)                  ║
+║                                                                         ║
+║   To print out the order form, type:  COPY ORDERFRM.DOC PRN  (Enter)    ║
+║                                                                         ║
+║   To start the program, type: VUIMG (Enter)                             ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDERFRM.DOC
 
 {% raw %}

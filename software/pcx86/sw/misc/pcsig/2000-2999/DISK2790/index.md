@@ -45,6 +45,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  PC-SIG Disk #2790 PSYCHOTROPIC DRUGS & THE NURSING PROCESS >>>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the documentation, type: COPY README.DOC PRN  (press Enter)    ║
+║                                                                         ║
+║ To run the program, from the floppy, type: CPI CONTROL (press Enter)    ║
+║                                                                         ║
+║ To install the program to the hard drive, type: INSTALL (press Enter)   ║
+║                                                                         ║
+║ To run the program from the hard drive, type: NSS2  (press Enter)       ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

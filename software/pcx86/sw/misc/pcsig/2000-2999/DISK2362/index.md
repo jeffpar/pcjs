@@ -90,6 +90,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  DISK #2363 ROOT DIRECTORY - FLOWERS    >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ For instructions on installing, and starting the program, type:         ║
+║                                                                         ║
+║ TYPE README (to view instruction on screen)                             ║
+║                                                                         ║
+║ COPY README PRN (to copy the instructions to the printer)               ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2362

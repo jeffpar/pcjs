@@ -53,6 +53,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3023  LASERTOME  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To extract the program files from LASER10.EXE onto another drive,       ║
+║ change to that drive and type:  A:LASERT10  (press Enter)               ║
+║                                                                         ║
+║ After the files have been extracted, print the program documentation    ║
+║ and installation instructions by typing:                                ║
+║                                                                         ║
+║                                 COPY LASERT.TXT PRN  (press Enter)      ║
+║                                                                         ║
+║ Print the registration form by typing:  COPY REGISTER.TXT PRN  (Enter)  ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3023

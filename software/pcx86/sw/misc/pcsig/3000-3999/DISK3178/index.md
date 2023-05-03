@@ -16,6 +16,23 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3178 Tribolo  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Print documentation, type;  COPY TRIBOLO.DOC PRN  (Enter)           ║
+║                                                                         ║
+║  To Start the game, type;  TRIBOLO  (Enter)                             ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## TRIBOLO.DOC
 
 {% raw %}

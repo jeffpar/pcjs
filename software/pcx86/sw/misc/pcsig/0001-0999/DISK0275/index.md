@@ -86,6 +86,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #275 PC-CHECK MANAGER  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, type: MANUAL (press enter)   ║
+║                                                                         ║
+║ To start the program, type: PCC (press enter).                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PCC.DOC
 
 {% raw %}

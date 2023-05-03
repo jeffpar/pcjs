@@ -877,6 +877,26 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #829 NEW YORK EDIT  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To obtain a copy of the documentation from this disk you must first     ║
+║ unarchive it. To do this, insert this disk into drive A: and then       ║
+║ insert a BLANK FORMATTED disk into drive B:. Then type,                 ║
+║                  ARCE MANUAL.ARC B: (press enter)                       ║
+║                                                                         ║
+║ In order to read the documentation for NEW YORK EDIT you must now load  ║
+║ the documentation file into the editor then print it out.               ║
+║                                                                         ║
+║ To start NEW YORK EDIT type, ME (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REGISTER.DOC
 
 {% raw %}

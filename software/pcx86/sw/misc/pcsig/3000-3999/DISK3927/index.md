@@ -16,6 +16,32 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  PC-SIG Disk #3927 TRIVIA SHELL-MYS WORLD/WILDLIFE  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  The files included on this distribution disk are in Zipped             ║
+║  (compressed) format.                                                   ║
+║                                                                         ║
+║  Copy all files on this disk to two subdirectories on your hard disk.   ║
+║                                                                         ║
+║  To Unzip the files, type: PKUNZIP (filename) (press Enter).            ║
+║                                                                         ║
+║  To Start the programs, type: GO (press Enter).                         ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ADVELIM.TXT
 
 {% raw %}

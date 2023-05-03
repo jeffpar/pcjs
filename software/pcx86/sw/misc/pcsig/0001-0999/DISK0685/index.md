@@ -5563,6 +5563,20 @@ MATCH4:		MOV	AX,SI
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #685 NEW FIG FORTH  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unpack this disk to your B drive, type UNPACK B:. To unpack          ║
+║ this disk to a hard drive, type UNPACK C:\[subdirectory if              ║
+║ necessary].                                                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0685

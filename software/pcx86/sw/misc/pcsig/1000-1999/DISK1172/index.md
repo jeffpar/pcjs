@@ -1235,6 +1235,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 1172 DMAIL  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: DMAIL (press enter)                         ║
+║                                                                         ║
+║ To print the documentation, type: COPY DMAIL.DOC PRN   (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## PC-SIG.TXT
 
 {% raw %}

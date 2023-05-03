@@ -789,6 +789,25 @@ end
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+ ╔═════════════════════════════════════════════════════════════════════════╗
+ ║               <<<<  #2635 POWER BASIC LIBRARY #5  >>>>                  ║
+ ╠═════════════════════════════════════════════════════════════════════════╣
+ ║                                                                         ║
+ ║  To print documentation, type:  COPY LIBRARY.DOC PRN  (press Enter)     ║
+ ║                                                                         ║
+ ║  To unzip the files, type:  PKUNZIP [filename.ZIP)  (press Enter)       ║
+ ║                                                                         ║
+ ║                                                                         ║
+ ║                                       (c) Copyright 1991, PC-SIG Inc.   ║
+ ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HUFFMAN.BAS
 
 {% raw %}

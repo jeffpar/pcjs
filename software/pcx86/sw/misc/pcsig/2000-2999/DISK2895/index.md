@@ -1609,6 +1609,29 @@ Happy computing. Thank You!
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2895  DOS MASTER  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To read the summary of the program, type:  TYPE PROMO.DOC  (press Enter)║
+║                                                                         ║
+║ To print the documentation and installation instructions, type:         ║
+║                                          COPY DM.DOC PRN  (press Enter) ║
+║                                                                         ║
+║ To start the program, type:  DMS  (press Enter)                         ║
+║                                                                         ║
+║ To print the registration form, type:  COPY REGISTER.DOC PRN  (Enter)   ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PROMO.DOC
 
 {% raw %}

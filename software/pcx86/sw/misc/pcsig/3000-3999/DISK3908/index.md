@@ -16,6 +16,30 @@ machines:
 {% include machine.html id="ibm5150" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #3908 ONE-NIL AND ROCKSTAR  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  You will need the file PKUNZIP.EXE in order to decompress the files    ║
+║  on this distribution disk.                                             ║
+║                                                                         ║
+║  Copy all files to a subdirectory on your hard disk drive.              ║
+║                                                                         ║
+║  To Unzip the files, type: PKUNZIP (filename) (press Enter).            ║
+║                                                                         ║
+║  To Start either program, after decompression, type: RUN (press Enter). ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## FILE_ID.TXT
 
 {% raw %}

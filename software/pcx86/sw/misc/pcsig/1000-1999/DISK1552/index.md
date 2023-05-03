@@ -87,6 +87,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1552  LOTTO MAGIC WHEEL  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start LOTTO MAGIC WHEEL, type:  WHEEL (press enter)                  ║
+║                                                                         ║
+║ To print documentation, type:  COPY WHEEL.DOC PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1552

@@ -62,6 +62,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  PC-SIG Disk #2596  TEST MAKER 2 of 2 (also #1551)  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   Before you start the program, copy all the files from both disks to   ║
+║   your hard drive or high density drive.                                ║
+║                                                                         ║
+║   To start the program, type:  T  (press Enter)                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1991, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2596

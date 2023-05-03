@@ -30,6 +30,26 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 2207 STACKEY / BATUTIL  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install on a floppy drive, type: INSTFLOP  (press enter)             ║
+║ To install on a hard drive, type: INSTHARD  (press enter)               ║
+║                                                                         ║
+║                      ** AFTER INSTALLATION **                           ║
+║ To start STACKEY, type: STACKEY   (press enter)                         ║
+║ To print STACKEY's documentation, type: COPY STACKEY.DOC PRN            ║
+║                                                                         ║
+║ To start BATUTIL, type: BATUTIL    (press enter)                        ║
+║ To print BATUTIL's documentation, type: COPY BATUTIL.DOC PRN            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VENDOR.DOC
 
 {% raw %}

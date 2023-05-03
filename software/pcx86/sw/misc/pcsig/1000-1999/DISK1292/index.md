@@ -99,6 +99,31 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<<  Disk No 1292  YES, RUN FOUR, ROBIN, LOTTO MAGIC WHEELER  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To print the documentation, type:                                     ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To run the YES program, type:                                         ║
+║             YES (press enter)                                           ║
+║                                                                         ║
+║   To run the RUN FOUR program, type:                                    ║
+║             FOUR (press enter)                                          ║
+║                                                                         ║
+║   To run the ROBIN program, type:                                       ║
+║             ROBIN (press enter)                                         ║
+║                                                                         ║
+║   To run the LOTTO program, type:                                       ║
+║             FREEWHL (press enter)                                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## THS.DOC
 
 {% raw %}

@@ -1015,6 +1015,31 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk No: 1359  AgraMenu, ArgaCopy & AgraFind  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start ARGA-MENU, type ARGAMENU (press enter)                         ║
+║                                                                         ║
+║ To copy the documentation for ARGA-MENU to your printer, type           ║
+║                           MENUDOC (press enter)                         ║
+║                                                                         ║
+║ To start ARGA-FIND, type ARGAFIND (press enter)                         ║
+║                                                                         ║
+║ To copy the documentation for ARGA-FIND to your printer, type           ║
+║                           FINDDOC (press enter)                         ║
+║                                                                         ║
+║ To start ARGA-COPY, type ARGACOPY (press enter)                         ║
+║                                                                         ║
+║ To copy the documentation for ARGA-COPY to your printer, type           ║
+║                           COPYDOC (press enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1359

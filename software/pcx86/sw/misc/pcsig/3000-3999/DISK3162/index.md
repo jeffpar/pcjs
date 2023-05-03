@@ -14,6 +14,25 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #3162 TYPING WORLD  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start the program, type: TW   (Press Enter)                          ║
+║                                                                         ║
+║                                                                         ║
+║                                       (c) Copyright 1992, PC-SIG Inc.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3162
 

@@ -67,6 +67,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║                     <<<<Disk #2349 EASY MANAGE >>>>                     ║
+  ╠═════════════════════════════════════════════════════════════════════════╣
+  ║                                                                         ║
+  ║   To start the program, insert disk #1 and type: MENU (press enter)     ║
+  ║                                                                         ║
+  ║   To print documentation, insert disk #2 and type:                      ║
+  ║                                           COPY MANUAL PRN  (press enter)║
+  ║                                                                         ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+  (c) Copyright 1990, PC-SIG Inc.
+
+
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2348

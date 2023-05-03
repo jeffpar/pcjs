@@ -16,6 +16,34 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #3089 SHAREWARE TRACKER  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To install the program, copy the files on this disk to your hard      ║
+║   drive\subdirectory.                                                   ║
+║                                                                         ║
+║   To then extract the files, from the hard drive\subdirectory, type:    ║
+║                              SWT20  (Enter)                             ║
+║                                                                         ║
+║                                                                         ║
+║   To print the program documentation, type:  COPY                       ║
+║                                   COPY README.1ST PRN    (press Enter)  ║
+║                                   COPY MANUAL.FRM PRN    (press Enter)  ║
+║                                   COPY REGISTER.DOC PRN  (press Enter)  ║
+║                                                                         ║
+║   To start SHAREWARE TRACKER, type:  SWT  (press Enter)                 ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REVISION.TXT
 
 {% raw %}

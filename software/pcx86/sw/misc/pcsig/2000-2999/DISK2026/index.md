@@ -79,6 +79,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk #2026  PCHELP & UTILITIES disk 2 of 2 (1774 also)  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program onto hard drive, insert disk 1 and type:             ║
+║                                       INSTALL (press enter)             ║
+║ To start program, type:  HELP (press enter)                             ║
+║                                                                         ║
+║ To print documentation, type:  COPY HELP.DOC PRN                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2026

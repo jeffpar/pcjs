@@ -647,6 +647,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  Disk #1834  AT-SLOW/LOADKEY/HANDY DANDY UTILITIES  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start AT-SLOW, type:  AT-SLOW (press enter)                          ║
+║ To start LOADKEY, type:  LOADKEY1 (press enter)                         ║
+║                                                                         ║
+║ To print documentation for AT-SLOW, type:  COPY AT-SLOW.DOC PRN         ║
+║ To print documentation for LOADKEY, type:  COPY LOADKEY.DOC PRN         ║
+║ To print documentation for HANDY DANDY UTILITIES, type:                 ║
+║                                            COPY ALLABOUT.IT PRN         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LOADKEY.DOC
 
 {% raw %}

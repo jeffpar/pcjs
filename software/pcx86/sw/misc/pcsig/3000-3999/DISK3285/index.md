@@ -314,6 +314,34 @@ machines:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #3285 STABLE - TECHNICAL GRAPHS  >>>>        ║
+║                          Disk 1 of 2 (also #3286)                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print the documentation, insert disk 2 (#3286) and type:            ║
+║                                                                         ║
+║                COPY STABLE.DOC PRN  (press Enter)                       ║
+║                                                                         ║
+║  To print registration information, insert disk 2 (#3286) and type:     ║
+║                                                                         ║
+║                COPY REGISTER.DOC PRN  (press Enter)                     ║
+║                                                                         ║
+║  To start the program, insert disk 1 (#3285) and type:                  ║
+║                                                                         ║
+║                WIN STABLE  (press Enter)                                ║
+║                                                                         ║
+║  This program requires Microsoft Windows 3.x to run.                    ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VENDOR.DOC
 
 {% raw %}

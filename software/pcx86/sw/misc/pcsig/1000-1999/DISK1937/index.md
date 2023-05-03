@@ -77,6 +77,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                      <<<<  Disk #1937  XTAB  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: XTAB         (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: PRN_DOC   (press enter)                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1937

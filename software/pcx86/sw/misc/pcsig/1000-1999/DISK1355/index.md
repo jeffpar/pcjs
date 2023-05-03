@@ -60,7 +60,25 @@ Sunnyvale, CA 94086
 (408) 730-9291
 (c) Copyright 1988,89 PC-SIG, Inc.
 
-
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  Disk No 1355 TLC FOR TRUCKS (Disk 2 of 2)  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, insert disk #1085 & type:    ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║ To run the program, insert disk #1085 & type:                           ║
+║                                                                         ║
+║             TLC (press enter)                                           ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

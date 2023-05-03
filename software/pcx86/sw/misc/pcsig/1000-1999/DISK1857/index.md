@@ -107,6 +107,20 @@ BRUN30.EXE      Microsoft Quickbasic runtime module
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1857  USA BOX  >>>>                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: USABOX                                          ║
+║                                                                         ║
+║ To print documentation, type: COPY USABOX.DOC PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## USABOX.DOC
 
 {% raw %}

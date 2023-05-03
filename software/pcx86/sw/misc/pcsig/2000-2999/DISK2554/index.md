@@ -14,6 +14,29 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2554  DROPCAPS  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To use DROPCAPS' PCX files in your desktop publishing, graphics,       ║
+║  or paint application, copy the self-extracting file DROPCAPS.EXE to    ║
+║  the subdirectory where the application is.  Extract the PCX files      ║
+║  from DROPCAPS.EXE by typing:  DROPCAPS  (press Enter)                  ║
+║                                                                         ║
+║  To view program documentation, type:  TYPE READ.ME  (press Enter)      ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2554
 

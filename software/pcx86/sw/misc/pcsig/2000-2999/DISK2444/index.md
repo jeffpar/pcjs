@@ -170,6 +170,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #2444  SYSTEM GUARDIAN PACKAGE   >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for SYSGUARD, type: COPY SYSGUARD.DOC PRN    ║
+║ To start the program, type:  SYSGUARD ON (press Enter)                  ║
+║                                                                         ║
+║ To print the documentation for ATTRIB, type:  COPY ATTRIB.DOC PRN       ║
+║ To start the program, type:  ATTRIB (press Enter)                       ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SYSGUARD.DOC
 
 {% raw %}

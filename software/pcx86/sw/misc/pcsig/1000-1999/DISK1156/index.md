@@ -111,6 +111,20 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 1156 MANAGEMENT MENTOR  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type MM (press enter)                             ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter).   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## USER.DOC
 
 {% raw %}

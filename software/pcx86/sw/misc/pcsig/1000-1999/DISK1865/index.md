@@ -83,6 +83,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1865  THE WINNING EDGE-LOTTO  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view documentation, type:  GO (press Enter)                          ║
+║                                                                         ║
+║ To print documentation, type:  COPY README.DOC PRN (press Enter)        ║
+║                                                                         ║
+║ To start program, type: LOTTO1                                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG INC.
+
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

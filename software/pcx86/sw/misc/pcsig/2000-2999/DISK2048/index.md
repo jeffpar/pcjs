@@ -142,6 +142,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk #2048  WARP-TEN and PRINT-matic  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start WARP-TEN, type:  WARPTEN (press enter)                         ║
+║ To start PRINT-MATIC, type:  PMATIC (press enter)                       ║
+║                                                                         ║
+║ To print documentation, type:  COPY MANUAL PRN                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2048

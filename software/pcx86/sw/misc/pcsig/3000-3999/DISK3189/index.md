@@ -16,6 +16,28 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔════════════════════════════════════════════════════════════════════════╗
+║    <<<<  PC-SIG Disk #3189  SHAREDEBATE INTERNATIONAL ISSUE #7  >>>>   ║
+║                      (Disk 1 of 2, also #3190)                         ║
+╠════════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║ To print the program description, type:  COPY SUMMARY.TXT PRN  (Enter) ║
+║                                                                        ║
+║ To view the documentation on your screen, type:  TYPE READ.ME  (Enter) ║
+║                                                                        ║
+║ To start the program, type:  DBATE007  (press Enter, "007" = 3 digits) ║
+║                                                                        ║
+║                                                                        ║
+║                                       (c) Copyright 1992, PC-SIG Inc.  ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+```
+{% endraw %}
+
 ## SUMMARY.TXT
 
 {% raw %}

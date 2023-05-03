@@ -109,6 +109,22 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk No 1382 b_CRYPT  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type B_CRYPT (press enter)                        ║
+║                                                                         ║
+║ To view disclaimer notice, type VIEW (press enter)                      ║
+║                                                                         ║
+║ To copy the documentation to your printer, type DOC (press enter)       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1382

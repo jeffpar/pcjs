@@ -89,6 +89,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 883 XXXPERT  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for XXXPERT, type:                           ║
+║                    MANUAL (press enter)                                 ║
+║                                                                         ║
+║ To run the XXXPERT program, Type: XXXPERT (press enter)                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## XXXPERT.DOC
 
 {% raw %}

@@ -107,6 +107,33 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1538 CHURCH TREASURER  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print documentation, type: TUTOR (press enter)                       ║
+║                               MANUAL (press enter)                      ║
+║                               NOTES  (press enter)                      ║
+║                                                                         ║
+║ To install the program, type: PROG [*]  (press enter)                   ║
+║        "*" : DF installing to drive B                                   ║
+║              UDDF updating to drive B                                   ║
+║              HD installing to drive C                                   ║
+║              UDHD updating to drive C                                   ║
+║                                                                         ║
+║ To install Tutorial Trial disk, make a copy of the disk and type:       ║
+║                     SETUP (press enter)                                 ║
+║                                                                         ║
+║ To start the program, type: CT (press enter)                            ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1538

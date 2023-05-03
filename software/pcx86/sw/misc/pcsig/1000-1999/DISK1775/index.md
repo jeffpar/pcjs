@@ -113,6 +113,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1775  XPORT AND XCLONE  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start XPORT, type:  XPORT (press enter)                              ║
+║ To start XCLONE, type:  XCLONE (press enter)                            ║
+║                                                                         ║
+║ To print XPORT documentation, type:  COPY XPORT.DOC PRN                 ║
+║ To print XCLONE documentation, type:  COPY XCLONE.DOC PRN               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## XCLONE.DOC
 
 {% raw %}

@@ -16,6 +16,21 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #3203 SALETRAC 2/2 (3053 also)  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To Install the program, insert disk #3053, and type:  GO  (Enter)      ║
+║                                                                         ║
+║                                       (c) Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NOTE.DOC
 
 {% raw %}

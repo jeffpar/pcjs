@@ -94,6 +94,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═══════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #2372  PROFESSIONAL CAM CAD  >>>>          ║
+╠═══════════════════════════════════════════════════════════════════════╣
+║ To start the program, type:  PCC                                      ║
+║                                                                       ║
+║ To print documentation, type:  COPY PCC_DOC.PRT PRN                   ║
+╚═══════════════════════════════════════════════════════════════════════╝
+(c) 1990, PC-SIG INC.
+
+
+
+
+
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2372

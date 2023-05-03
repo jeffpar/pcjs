@@ -11536,6 +11536,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk No 1111 A86/D86 ASSEMBLER & DEBUGGER  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unarchive the program type: UNPACK                                   ║
+║                                                                         ║
+║ To print the instructions, type: COPY READ.ME PRN (press enter)         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1111

@@ -61,6 +61,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2770  EQUATOR  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To copy all files to hard drive or high desity drive, type:           ║
+║      COPY *.* [destination drive]:\subdirectory's name (press Enter)    ║
+║                                                                         ║
+║   To run the self extracting program type:  EQ (press Enter)            ║
+║                                                                         ║
+║   To install the program on drive C, type:  INSTALL (press Enter)       ║
+║                                                                         ║
+║   Once extracted or installed, to start the program, type:              ║
+║       EQUATOR  (press Enter)                                            ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+                                            Copyright (c) 1991, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2770

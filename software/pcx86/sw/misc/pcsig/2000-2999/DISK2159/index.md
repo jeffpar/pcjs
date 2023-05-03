@@ -104,6 +104,23 @@ MAKESCOR.COM - Program to reset/recreate SCORES.DAT file
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  DISK #2159 THE LAND  >>>>                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ This program requires a hard disk, about 900k of free space, and        ║
+║ CGA or EGA graphics.                                                    ║
+║ Make a subdirectory on your hard disk and copy all files on this disk   ║
+║ and #2158 to it. Once this is done go to hard disk and type: THELAND    ║
+║ To print documentation, type: COPY PDLAND.DOC PRN                       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PDLAND.DOC
 
 {% raw %}

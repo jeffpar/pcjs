@@ -88,6 +88,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1387  NCAAPOOL & NFLPOOL >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the programs, type: NCAAPOOL (press Enter)                     ║
+║                              NFLPOOL (press Enter)                      ║
+║                                                                         ║
+║ To copy the documentation to your printer, type:                        ║
+║                              COPY NCAAPOOL.DOC PRN (press Enter)        ║
+║                              COPY NFLPOOL.DOC PRN (press Enter)         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## NCAAPOOL.DOC
 
 {% raw %}

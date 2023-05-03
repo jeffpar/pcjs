@@ -16,6 +16,27 @@ machines:
 {% include machine.html id="ibm5150" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+ ╔═════════════════════════════════════════════════════════════════════════╗
+ ║               <<<<  #2632 POWER BASIC LIBRARY #2  >>>>                  ║
+ ╠═════════════════════════════════════════════════════════════════════════╣
+ ║                                                                         ║
+ ║ To unzip the files, you will need PKUNZIP. If you don't have it in your ║
+ ║ software library, you will find it on POWER BASIC LIBRARY #1, #3, #5,   ║
+ ║ and #6.                                                                 ║
+ ║                                                                         ║
+ ║ To unzip a utility, type:  PKUNZIP [filename.ZIP]  (press Enter)        ║
+ ║                                                                         ║
+ ║                                                                         ║
+ ║                                       (c) Copyright 1991, PC-SIG Inc.   ║
+ ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ANIM.BAS
 
 {% raw %}

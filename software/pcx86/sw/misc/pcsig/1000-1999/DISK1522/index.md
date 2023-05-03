@@ -95,6 +95,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1522 PRNTEST PROGRAM  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start PRINT CONTROL PROGRAM, type:  PCP (press enter)                ║
+║                                                                         ║
+║ To start PRNTEST, type:  PRNTEST (press enter)                          ║
+║                                                                         ║
+║ To print out the documentation, type:                                   ║
+║              COPY PRNTEST.DOC PRN (press enter)                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1522

@@ -16,6 +16,20 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #3506 STICK FIGHTER II  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Start the game, type:  SFII  (press Enter)                          ║
+║                                                                         ║
+║                                        (C) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SFII.DOC
 
 {% raw %}

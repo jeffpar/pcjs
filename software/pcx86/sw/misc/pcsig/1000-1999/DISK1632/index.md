@@ -119,6 +119,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1632  GRADING ASSISTANT  >>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program and documentation, type:  INSTALL (press enter)      ║
+║                                                                         ║
+║ To run program after installation, switch to the program disk/path,     ║
+║ then type:  TGA (press enter)                                           ║
+║                                                                         ║
+║ To print documentation after installation, switch to the documentation  ║
+║ disk/path, then type:  COPY TGA.DOC PRN (press enter)                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## TGA.DOC
 
 {% raw %}

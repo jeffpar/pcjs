@@ -1332,6 +1332,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1584  FC & FC DOC >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start FC, type:  FC (press enter)                                    ║
+║                                                                         ║
+║ To print documentation for FC, type: COPY FC.DOC PRN (press enter)      ║
+║                                                                         ║
+║ To start FCDOC, type:  FCDOC (press enter)                              ║
+║                                                                         ║
+║ To print documentation, for FCDOC type: COPY FCDOC.DOC PRN (press enter)║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1584
