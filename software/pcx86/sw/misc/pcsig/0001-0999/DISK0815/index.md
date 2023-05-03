@@ -73,6 +73,19 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #815 MODULA-2 Disk 2 of 2  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the tutorial to your printer insert disk number 814 into drive  ║
+║ A: and type PRINTEXT (press enter)                                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0815
@@ -170,6 +183,13 @@ Sunnyvale Ca. 94086
     VARYFILE MOD       988   1-18-89  12:00p
     WORDADDR MOD      1001   1-18-89  12:00p
     WRITESM  MOD       604   1-18-89  12:00p
+    ANSWERS      <DIR>    
+           91 file(s)     168338 bytes
+
+     Directory of A:\ANSWERS
+
+    .            <DIR>    
+    ..           <DIR>    
     CH02E1   MOD       249   1-18-89  12:00p
     CH02E2   MOD       393   1-18-89  12:00p
     CH02E3   MOD       843   1-18-89  12:00p
@@ -195,5 +215,8 @@ Sunnyvale Ca. 94086
     CH12E2   MOD      2602   1-18-89  12:00p
     CH14E1   MOD      1799   1-18-89  12:00p
     CH14E2   MOD       635   1-18-89  12:00p
-          115 file(s)     198153 bytes
-                          984064 bytes free
+           27 file(s)      29815 bytes
+
+    Total files listed:
+          118 file(s)     198153 bytes
+                           66560 bytes free

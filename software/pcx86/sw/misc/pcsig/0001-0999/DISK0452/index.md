@@ -94,6 +94,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #452 THE AMULET OF YENDOR (HACK)  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+║                                                                         ║
+║ To Start the program type HACK (press enter)                            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HACK.DOC
 
 {% raw %}

@@ -107,6 +107,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #2805  WACKY2  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To read printer information, type:  TYPE W2GRAPH.DOC  (press Enter)     ║
+║                                                                         ║
+║ To print the installation instructions, type:                           ║
+║                                   COPY COMFILE.DOC PRN  (press Enter)   ║
+║                                                                         ║
+║ To print the registration information, type:                            ║
+║                                    COPY README.TXT PRN  (press Enter)   ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

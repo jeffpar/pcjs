@@ -946,6 +946,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No: 53  Sounds  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   For instructions on running BASIC programs, please                    ║
+║   refer to your computer manual concerning BASIC language files.        ║
+║   For instructions on ASM listings, refer to your Assembler manual.     ║
+║   To read TXT files simply enter TYPE filename.ext and (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LRS.BAS
 
 {% raw %}

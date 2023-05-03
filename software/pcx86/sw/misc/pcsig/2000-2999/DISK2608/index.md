@@ -134,6 +134,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  PC-SIG Disk #2608 PAINLESS PAYROLL #2 (also #2607)  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To install the program to your hard drive, type: PINSTALL (press Enter) ║
+║ (the intall program will create the neccesary subdirectories, and       ║
+║  give you the option of printing the manual)                            ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+                              .
+```
+{% endraw %}
+
 ## MANUAL-P.TXT
 
 {% raw %}

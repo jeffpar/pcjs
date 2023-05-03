@@ -70,6 +70,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #2586  THE BETTER DIET ANALYZER  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To read the preliminary documentation and installation instructions,   ║
+║  type:  README  (press Enter)                                           ║
+║                                                                         ║
+║  To print the program manual, type:  COPY MANUAL.DOC PRN  (press Enter) ║
+║                                                                         ║
+║  To install THE BETTER DIET ANALYZER, type:  INSTALL  (press Enter)     ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

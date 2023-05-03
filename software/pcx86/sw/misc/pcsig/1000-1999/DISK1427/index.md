@@ -119,6 +119,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 1427 THE SPORTS STATBOOK  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program insert disk #1426 and type, SSMENU (press enter)   ║
+║                                                                         ║
+║ To copy the documentation to your printer, insert disk #1426 and type   ║
+║                           COPY SSDOC LPT1 (press enter)                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1427

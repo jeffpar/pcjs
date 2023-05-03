@@ -16,6 +16,25 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3262 MICROTEXT  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print the documentation, type:  COPY MICROTXT.DOC PRN  (Enter)      ║
+║                                                                         ║
+║  To start the program, type:  MICROTXT  (press Enter)                   ║
+║                                                                         ║
+║  To print the order form, type:  ORDER  (press Enter)                   ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MICROTXT.DOC
 
 {% raw %}

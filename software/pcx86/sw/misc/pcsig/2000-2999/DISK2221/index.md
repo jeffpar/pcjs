@@ -138,6 +138,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #2221 PERSONALITY ANALYSIS SYSTEM  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the documentation for Personality Analysis System, type:       ║
+║             COPY PASARC.DOC PRN (press enter)                           ║
+║                                                                         ║
+║ Personality Analysis System is archived; the documentation includes     ║
+║    instructions for using the self-extracting program PASARC.EXE.       ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PASARC.DOC
 
 {% raw %}

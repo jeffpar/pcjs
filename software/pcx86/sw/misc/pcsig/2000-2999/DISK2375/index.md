@@ -48,6 +48,141 @@ machines:
     many different types of headaches.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## DIARY.TXT
+
+{% raw %}
+```
+╔═══════════════════════════════════════════════════════════════╗
+║                          HEADACHE DIARY                       ║
+╚═══════════════════════════════════════════════════════════════╝
+
+Try to keep a 60-day diary concurrent with the 60-day record of
+food eaten.  Here are some of the things to note down:
+
+1. NERVOUS  -- You were unusually nervous on a particular day.  
+
+2. CALM -- You were unusually calm (this would apply if you are
+ordinarily nervous.
+ 
+3. DEPRESSED -- If not part of your usual pattern.
+
+4. CHEERFUL -- Should be recorded if you are ordinarily
+depressed.
+
+5. ARGUMENTS -- (fight with boss, etc.) -- Again this is recorded
+if out of the norm.
+
+6. EVERYTHING SMOOTH -- Recorded if unusual.
+
+7. UNUSUAL NEWS RECEIVED -- Mark down even if the news doesn't
+appear to be significant.
+
+8. ELATION -- Not just cheerful but overflowing joy.
+
+10. FATIGUE -- If not your usual state.
+
+11. ENERGY -- If not your usual state.
+
+12. STRESSFUL NEWS -- This usually includes death of a spouse or
+a member of the immediate family, loss of your job, a prison
+sentence, a pregnancy (wanted or unwanted) or other events that
+will have a pronounced effect on the average person.  This could
+also include many other things according to the person's way of
+life and mental attitude.
+
+13. WEATHER - Good, bad?  Usual or unusual?  
+
+14. WORLD EVENTS 
+
+15. SEXUAL DRIVE -- High, low, normal.
+
+These are merely suggestions.  Write down what you think is
+significant but do so every day to get as detailed a record as
+possible.
+```
+{% endraw %}
+
+## DIET.TXT
+
+{% raw %}
+```
+╔═══════════════════════════════════════════════════════════════╗
+║                                                               ║
+║                       RECORD OF MEALS                         ║
+║                                                               ║
+╚═══════════════════════════════════════════════════════════════╝
+
+┌───────────────────────────────────────────────────────────────┐
+│BREAKFAST                                                      │
+│                                                               │
+│                                                               │
+│                                                               │
+│                                                               │
+│                                                               │
+│                                                               │
+└───────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────────────────────────────────────────┐
+│ LUNCH                                                         │
+│                                                               │
+│                                                               │
+│                                                               │
+│                                                               │
+│                                                               │
+│                                                               │
+└───────────────────────────────────────────────────────────────┘
+                                                                 
+┌───────────────────────────────────────────────────────────────┐
+│ DINNER                                                        │
+│                                                               │
+│                                                               │
+│                                                               │
+│                                                               │
+│                                                               │
+│                                                               │
+└───────────────────────────────────────────────────────────────┘
+
+┌───────────────────────────────────────────────────────────────┐
+│ SNACKS                                                        │
+│                                                               │
+│                                                               │
+│                                                               │
+│                                                               │
+│                                                               │
+└───────────────────────────────────────────────────────────────┘
+
+Try to keep a record of all food and drinks consumed for a period
+of 60 days.  This is useful to see if there is a correlation
+between individual foods and migraine attacks.
+
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                        <<<<  DISK # 2375  >>>>                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║    To start chapter 4 type:                                             ║
+║                                                                         ║
+║                        CHAPTIV                                          ║
+║                                                                         ║
+║    To start chapter 5 type:                                             ║
+║                                                                         ║
+║                        CHAPTV                                           ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2375
 

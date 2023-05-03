@@ -71,6 +71,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk No. 954  MINISTER ASSIGN PROGRAM  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the installation instructions and documentation for            ║
+║             MINISTER, type:  COPY MPMANUAL.TXT PRN  (press enter)       ║
+║                                                                         ║
+║                                                                         ║
+║   Please Note: The THI USER LIBRARY has been moved to disk #1114        ║
+║   due to space limitations. We apologize for the inconvenience.         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## MPMANUAL.TXT
 
 {% raw %}

@@ -79,6 +79,18 @@ Sunnyvale, CA   94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 1132 SPORTSBOOK  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: SPORTS (press enter)                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1132

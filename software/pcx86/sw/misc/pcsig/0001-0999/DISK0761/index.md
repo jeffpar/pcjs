@@ -106,6 +106,24 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #761 IMP SHELL  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the description files, type:                                   ║
+║                                                                         ║
+║                    COPY IMPDESC1.TXT PRN  (press enter)                 ║
+║                    COPY IMPDESC2.TXT PRN  (press enter)                 ║
+║                                                                         ║
+║ To start the program type: IMPSHELL   (press enter)                     ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## IMPDESC1.TXT
 
 {% raw %}

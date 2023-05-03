@@ -79,6 +79,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk #2074  STATISTICALLY ACCURATE BASEBALL  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  SABPCV3 (press enter)                          ║
+║                                                                         ║
+║ To print documentation, type:  COPY SABPC.DOC PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## READ1ST.DOC
 
 {% raw %}
@@ -657,11 +671,21 @@ NOTE: There is a new feature in SABpcV3.exe the Computer manager is now a
     FILE2074 TXT      2517   1-29-90   3:45p
     GO       BAT        38   1-01-80   1:37a
     GO       TXT       540   1-30-90  12:43p
+    TEAMS        <DIR>    
+           10 file(s)     263989 bytes
+
+     Directory of A:\TEAMS
+
+    .            <DIR>    
+    ..           <DIR>    
     BJAYS_88 DAT      2125   9-07-89   1:33a
     CUBS_88  DAT      2125   9-07-89   1:34a
     GIANTS88 DAT      2125   9-07-89   1:34a
     OAK_1988 DAT      2125   9-07-89   1:34a
     REDSOX50 DAT      2125   1-31-89  10:24p
     YANKS_36 DAT      2125   1-31-89  10:25p
-           15 file(s)     276739 bytes
-                           34816 bytes free
+            8 file(s)      12750 bytes
+
+    Total files listed:
+           18 file(s)     276739 bytes
+                           33792 bytes free

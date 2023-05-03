@@ -14,6 +14,46 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔════════════════════════════════════════╗
+║  ▄▄▄▄▄  ▄▄▄▄▄     ▄▄▄▄▄  ▄▄▄▄▄  ▄▄▄▄▄  ║
+║  █   █  █   █     █   █    █    █   █  ║
+║  █▄▄▄█  █     ▄▄▄ █▄▄▄▄    █    █  ▄▄  ║
+║  █      █   ▄     ▄   █    █    █   █  ║
+║  █      █▄▄▄█     █▄▄▄█  ▄▄█▄▄  █▄▄▄█  ║
+║                                        ║
+╚════════════════════════════════════════╝
+
+PC-SIG is the world's oldest and largest distributor of shareware.
+Since 1982 PC-SIG has been compiling the most respected shareware
+collection anywhere by actively seeking top software authors and
+their high quality programs.
+
+Shareware is a unique approach to software retailing in which
+consumers purchase software directly from the author.  Individual
+authors avoid costly marketing, promotion, and packaging by
+allowing their programs to be copied and shared with few
+restrictions.  PC-SIG plays a vital role in the shareware process by
+bringing shareware to the consumer.  As a central distributor,
+PC-SIG can give these programs the exposure they deserve at a
+fraction of the cost of bringing a single software package to
+market.  In the end, the consumer wins with great software at
+prices far below traditional retail markets.
+
+The end user also wins with the opportunity to try the full program
+before buying it from the author.  This ``try-before-you-buy''
+method of software distribution is successful because shareware is
+high-quality software.  Authors are confident that once you have
+used their programs you'll be impressed and want to register.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2593
 

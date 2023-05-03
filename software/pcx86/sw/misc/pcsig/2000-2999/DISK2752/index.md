@@ -44,6 +44,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #2752  PRODEV*QUOTE UTILITY  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the installation instructions, type:                           ║
+║                                        COPY READ-ME.DOC PRN  (Enter)    ║
+║                                                                         ║
+║ (Viewing/printing of documentation is also in installation procedure.)  ║
+║                                                                         ║
+║ To print the registration form, type:  COPY REGISTER.DOC PRN  (Enter)   ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## READ-ME.DOC
 
 {% raw %}

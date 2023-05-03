@@ -14,6 +14,28 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #3053 SALETRAC 1/2 ( 3203 also)  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Print the installation instructions, type:                          ║
+║                                           COPY README.1ST PRN  (Enter)  ║
+║                                                                         ║
+║  To Install the program, type:  INSTALL2  (Enter)                       ║
+║                                                                         ║
+║  To Start the program after installation, type:  RUN  (Enter)           ║
+║                                                                         ║
+║                                       (c) Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3053
 

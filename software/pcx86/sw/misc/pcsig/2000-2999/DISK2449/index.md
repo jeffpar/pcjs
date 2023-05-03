@@ -105,6 +105,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<<  PC-SIG Disk #2449  9 O'CLOCK PERSONAL TIME-TRACKING SYSTEM   >>>> ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ If this is the first time you are looking at 9 O'CLOCK, type:  1ST-TIME ║
+║                        1ST-TIME (press Enter)                           ║
+║                                                                         ║  
+║ To view and print documentation for the main program, type:             ║
+║                         9OHELP (press Enter)                            ║
+║                                                                         ║
+║ To view and print documentation for 9OLOGP, type:  9OLOG (press Enter)  ║
+║                                                                         ║
+║ To view and print ordering information, type:  AEORDER (press Enter)    ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2449

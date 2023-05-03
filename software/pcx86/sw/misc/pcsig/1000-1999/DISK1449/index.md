@@ -81,6 +81,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk No 1449 QUIZZER  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type QUIZZER (press enter)                        ║
+║                                                                         ║
+║ To view information about the program, type README (press enter)        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1449

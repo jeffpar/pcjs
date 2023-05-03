@@ -9107,6 +9107,20 @@ JUL-5-89                       WORK DEMO ACCOUNTS                      PAGE 1
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  Disk #1548  PAYROLL LITE disk 2 of 2  (also 1547)  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start PAYROLL LITE, inset disk #1547 and type:  INSTALL (press enter)║
+║                                                                         ║
+║ To print documentation, type:  PRINT-PR  (press enter)                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDER.DOC
 
 {% raw %}

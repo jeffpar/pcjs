@@ -71,6 +71,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 1041 PUSHBUTTON  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, type PRINTME (press enter)   ║
+║                                                                         ║
+║ Type README (press enter) for brief instructions                        ║
+║                                                                         ║
+║ To run the program, type: INSTALL (press enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PUSHBUTN.DOC
 
 {% raw %}

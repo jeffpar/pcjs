@@ -60,6 +60,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3031  JOKE TALK   >>>>                ║
+║                        Disk 1 of 2 (also #3032)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To install the program to drive C, type: INSTALLC (press Enter)         ║
+║ To install the program to drive D, type: INSTALLD (press Enter)         ║
+║                                                                         ║
+║ Then start the program by typing:  RUNME  (press Enter)                 ║
+║                                                                         ║
+║ To print the documentation, type: PRINTDOC  (press Enter)               ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

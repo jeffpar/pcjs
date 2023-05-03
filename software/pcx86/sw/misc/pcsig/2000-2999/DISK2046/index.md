@@ -283,6 +283,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #2046  APEX POINT AND FIGURE  >>>>              ║
+║                        (disk 1 of 2, 2047 also)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: APEX         (press enter)                      ║
+║                                                                         ║
+║ To print documentation, insert disk 2 and type: COPY MANUAL.DOC PRN     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2046

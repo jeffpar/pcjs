@@ -77,6 +77,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #614 NEW YORK ADVENTURE  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, Type:                        ║
+║                           COPY NEWYORK.DOC PRN (press enter)            ║
+║                                                                         ║
+║ To start the program, Type: NEWYORK (press enter)                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NEWYORK.DOC
 
 {% raw %}

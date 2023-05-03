@@ -112,6 +112,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1564  MAST MAIL >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unarchive files and install program on hard drive, type:  HARDDISK   ║
+║              C:\name of target directory (press enter)                  ║                          ║
+║ To unarchive files onto floppy disks, type:  EXEDISK B: (press enter)   ║
+║                                                                         ║
+║ To print documentation:  Select print manual option at main menu        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LICENSE.DOC
 
 {% raw %}

@@ -54,6 +54,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<< PC-SIG Disk #2668 HOME & BUSINESS LEGAL GUIDE  >>>>         ║
+║                  Disk 3 of 3 (also #2539 and #2540)                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To begin, insert Disk 1 in Drive A, type "GO" and follow the           ║
+║  instructions.                                                          ║
+║                                                                         ║
+║                                                                         ║
+║                                     (c) Copyright 1991, PC-SIG Inc.     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2668

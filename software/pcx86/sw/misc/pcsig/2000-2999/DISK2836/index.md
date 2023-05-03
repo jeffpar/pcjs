@@ -50,6 +50,31 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #2836  PC-TALK  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To view the beginning documentation, type:  TYPE README  (press Enter)  ║
+║                                                                         ║
+║ To print the program documentation, type:  COPY PC-TALK.DOC PRN (Enter) ║
+║                                                                         ║
+║ To print the order form, type:  COPY ORDER.FRM PRN  (press Enter)       ║
+║                                                                         ║
+║   OR, to print all of the above documentation, type:  PRINTDOC  (Enter) ║
+║                                                                         ║
+║                                                                         ║
+║ To begin the tutorial, type:  RUNME  (press Enter)                      ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PC-TALK.DOC
 
 {% raw %}

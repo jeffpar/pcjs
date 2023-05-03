@@ -15904,6 +15904,30 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #767 THE BIBLE (disk 2 of 7)  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ This disk is the first of seven disks which hold the Bible in text      ║
+║ files.                                                                  ║
+║                                                                         ║
+║ To install this disk onto three formatted floppy disks, insert this     ║
+║ disk in your a drive, and use the command:                              ║
+║                                                                         ║
+║                                FLOPPY                                   ║
+║                                                                         ║
+║ To install this disk onto your hard drive, insert this disk in your a   ║
+║ drive, and use the command:                                             ║
+║                                                                         ║
+║                                 HARD                                    ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0767

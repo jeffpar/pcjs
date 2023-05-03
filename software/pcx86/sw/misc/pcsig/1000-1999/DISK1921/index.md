@@ -75,6 +75,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1921  ZIP APPEAL  >>>>                      ║
+║                   (disk 1 of 3, 1922, 1923 also)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install files onto your hard drive, type: INSTALL (press enter)      ║
+║                                                                         ║
+║ To start program, type: ZIP-CODE     (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY FILE1921.TXT PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1921

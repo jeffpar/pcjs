@@ -145,6 +145,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #513 BMENU and OTHERS  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, type:                        ║
+║                        COPY READ.ME PRN (press enter)                   ║
+║                                                                         ║
+║ To start BMENU, type: MENU (press enter)                                ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NOTICE.TXT
 
 {% raw %}

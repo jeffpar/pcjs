@@ -81,6 +81,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1118  SCREEN-DO  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for SCREEN-DO, type:                         ║
+║                    PRINTDOC (press enter)                               ║
+║                                                                         ║
+║ To run the SCREEN-DO program, Type: SD (press enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SDMANUAL.DOC
 
 {% raw %}

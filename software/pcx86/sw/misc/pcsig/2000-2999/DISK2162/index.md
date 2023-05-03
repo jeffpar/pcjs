@@ -62,6 +62,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk #2162 MORAFF'S PINBALL  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: PINBALL      (press enter)                  ║
+║                                                                         ║
+║ To view the documentation, type: README  (press enter)                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2162

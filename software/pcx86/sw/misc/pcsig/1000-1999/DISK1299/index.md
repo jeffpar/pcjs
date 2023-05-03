@@ -768,6 +768,27 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1299 Utilties Galore  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for the programs, type:                      ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To run any of the programs on this disk, simply type in the name      ║
+║   of the program you wish to run then press the ENTER key. For          ║
+║   example, to run LABEL you would type:                                 ║
+║                                                                         ║
+║             LABEL (press enter)                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MERPRN.TXT
 
 {% raw %}

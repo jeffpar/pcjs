@@ -100,6 +100,57 @@ code to this program also.  Please indicate this on your request.
 ```
 {% endraw %}
 
+## TEACHABC.TXT
+
+{% raw %}
+```
+Thanks for trying out TeachABC's V1.0 by Logical Thought
+Software.
+
+This program was created using Turbo PascalV6.0.  A better
+version using Grasp V4.0 with digitized speech, graphics for each
+letter, and soundblaster music is in the works.  I also am
+working on a program I call Grid Paint.  It allows kids to
+construct pictures using "blocks" or triangles, squares, circles,
+diagonals, birds, fences, etc.  Allows sixteen colors and
+requires VGA graphics.  I also have a spelling program called
+Spell Wizard V1.0 that displays a picture, says the word,
+and shows the number of letters to spell the word.  Will include
+a help button to encourage kids to keep progressing.  So far it
+includes 20 pictures of 3 to 5 letter words.  Requires VGA
+graphics and a Soundblaster board.  I am also working on a
+program that teaches the time.  Write about these programs if you
+are interested in receiving them when they are completed.
+
+To run TeachABC's V1.0, type teachabc <enter>.
+
+Hints:
+
+To bypass the opening screen, press any key.
+
+To turn the sound off or on in the main screen press the F10 key.
+
+Press F1 key to show where the letter's key is located. 
+
+After two presses of the wrong key, the screen will show the
+location of the correct key.
+
+
+My philosophy is to keep my program's cost as low as a paperback
+book.  Therefore, I will usually charge from $5 to $8.  To
+register this program, send $5.00 to:
+
+Steven Schmitz
+Logical Thought Software
+4442 Wood Duck Ave.
+Juneau, AK 99801
+
+Everyone that registers has the opportunity to receive the source
+code to this program also.  Please indicate this on your request.
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3078
@@ -114,7 +165,17 @@ code to this program also.  Please indicate this on your request.
     GO       BAT        26  11-30-90   6:26p
     ABCS200E EXE    139388  11-24-90   6:35p
     FILE3078 TXT      1925   5-26-92   4:59p
+    TEACH        <DIR>    
+            8 file(s)     143808 bytes
+
+     Directory of A:\TEACH
+
+    .            <DIR>    
+    ..           <DIR>    
     TEACHABC TXT      1665   4-02-92   8:14p
     TEACHABC EXE     40496   4-02-92   7:51p
-            9 file(s)     185969 bytes
-                          132096 bytes free
+            4 file(s)      42161 bytes
+
+    Total files listed:
+           12 file(s)     185969 bytes
+                          131072 bytes free

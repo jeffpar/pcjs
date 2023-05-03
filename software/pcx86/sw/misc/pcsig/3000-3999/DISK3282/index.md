@@ -14,6 +14,32 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #3282 SBS UTILITY PACK  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To start one of the programs, type one of the following:               ║
+║                                                                         ║
+║              BREAKZIP  (press Enter)                                    ║
+║              SBSBOOT  (press Enter)                                     ║
+║              SBSCOM  (press Enter)                                      ║
+║              SBSPHONE  (press Enter)                                    ║
+║              SBSPRINT  (press Enter)                                    ║
+║              VOC2W4S  (press Enter)                                     ║
+║              HYPSER  (press Enter)                                      ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3282
 

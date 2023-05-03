@@ -183,6 +183,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No 1006 PROPHET version 2.2  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type PROPHET (press enter)                        ║
+║                                                                         ║
+║ For information about the program, type READIT (press enter)            ║
+║                                                                         ║
+║ To copy the documentation to your printer, type PRINTDOC (press enter)  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1006

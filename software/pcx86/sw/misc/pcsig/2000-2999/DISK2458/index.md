@@ -67,6 +67,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2458  PARENTS  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To extract the program, type:  PARWIN  (press Enter)                    ║
+║                                                                         ║
+║ To print documentation and installation instructions, type:             ║
+║                 COPY PARENTS.TXT PRN  (press Enter)                     ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2458

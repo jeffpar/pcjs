@@ -81,6 +81,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk                   >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, create:  subdirectory on hard drive                   ║
+║                     copy:  COIN_DB.EXE to subdirectory                  ║
+║   from subdirectory type:  COIN                                         ║
+║                                                                         ║
+║ To print documentation, type: COPY PC_SIG.DOC PRN                       ║
+║   				COPY COIN_DB.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PC_SIG.DOC
 
 {% raw %}

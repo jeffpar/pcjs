@@ -79,6 +79,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1606  VERSA-SPOOL  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start VERSA-SPOOL, type:  SPOOL (press enter)                        ║
+║                                                                         ║
+║ To print documentation, type:  COPY SPOOL.DOC PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+ 
+```
+{% endraw %}
+
 ## SPOOL.DOC
 
 {% raw %}

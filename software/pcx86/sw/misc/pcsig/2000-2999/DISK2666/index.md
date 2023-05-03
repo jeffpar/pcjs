@@ -73,6 +73,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #2666 EXTEND-A-NAME disk 2 of 2  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program, insert disk 1 and type: INSTALL  (press Enter)  ║
+║                                                                         ║
+║ To run the program after installation, type: XNAME  (press Enter)       ║
+║                                                                         ║
+║ To read the documentation, disk 2, type: README (press Enter)           ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

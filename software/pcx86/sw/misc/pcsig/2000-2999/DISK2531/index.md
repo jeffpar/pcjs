@@ -2049,6 +2049,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2531 EZHELP REFERENCE  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print the documentation, type: COPY USERS.DOC PRN (press Enter)     ║
+║                                                                         ║
+║  To start the program, type : EZ  (press Enter)                         ║
+║                                                                         ║
+║  To install the program to your hard drive, type : INSTALL              ║
+║                                                        (press Enter)    ║
+║  To print an registration form, type: COPY ORDER.DOC PRN                ║
+║                                                         (press Enter)   ║
+║                                       (c) COPYRIGHT 1991, PC-SIG INC.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDER.DOC
 
 {% raw %}
@@ -2281,6 +2301,16 @@ This is the Air topic accessed throught menu 10.
     GO       BAT        28   4-19-91   8:52a
     GO       TXT      1002   4-19-91   9:01a
     FILE2531 TXT      2073   4-19-91   9:03a
+    SRC          <DIR>    
+           24 file(s)     293753 bytes
+
+     Directory of A:\SRC
+
+    .            <DIR>    
+    ..           <DIR>    
     SPAWNHLP C        2641   2-28-91
-           24 file(s)     296394 bytes
-                           12288 bytes free
+            3 file(s)       2641 bytes
+
+    Total files listed:
+           27 file(s)     296394 bytes
+                           11264 bytes free

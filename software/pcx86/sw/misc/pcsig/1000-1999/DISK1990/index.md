@@ -230,6 +230,20 @@ January 22, 1990
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1990  FOOTBALL  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: FOOTBALL     (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY FOOTBALL.DOC PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1990

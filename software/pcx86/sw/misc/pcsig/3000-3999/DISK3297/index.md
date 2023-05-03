@@ -14,6 +14,27 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3297 WINGRAB  >>>>                   ║
+║                        Disk 2 of 2 (also #3296)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install the program, insert disk 1 (#3296) and type:                ║
+║                                                                         ║
+║                    INSTALL  (press Enter)                               ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3297
 

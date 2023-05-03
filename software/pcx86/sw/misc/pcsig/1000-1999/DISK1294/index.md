@@ -4015,6 +4015,26 @@ Sunnyvale, CA   94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  Disk No: 1294  DAC EASY TUTORIAL, version 1.0  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:                                     ║
+║                                                                         ║
+║             PRINTALL (press enter)                                      ║
+║                                                                         ║
+║   To display the documentation, type:                                   ║
+║                                                                         ║
+║             DISPLAY (press enter)                                       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INDEX.TXT
 
 {% raw %}

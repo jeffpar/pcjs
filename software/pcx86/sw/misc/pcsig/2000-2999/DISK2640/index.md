@@ -46,6 +46,31 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2640  ANIMATED SHAPES  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  ANIMATED SHAPES comes in compressed form.  For instructions on         ║
+║  decompressing the program, type:  READ1ST  (press Enter)               ║
+║                                                                         ║
+║  After decompressing is completed, type "SHAPES" to begin the program.  ║
+║                                                                         ║
+║  To read about other programs available from the author, type:          ║
+║                        README  (press Enter)                            ║
+║                                                                         ║
+║  To print the order form, type:  COPY ORDER.DOC PRN  (press Enter)      ║
+║                                                                         ║
+║  ...To utilize the mouse, type:  GRASPRT  (press Enter)                 ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2640

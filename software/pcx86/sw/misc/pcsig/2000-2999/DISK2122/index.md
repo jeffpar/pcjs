@@ -16,6 +16,23 @@ machines:
 {% include machine.html id="ibm5150" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk #2122 VGACAD Disk 3 of 3  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ The programs on this three disk set have been archived.  You will first ║
+║ need to unarchive the files with PKUNZIP                                ║
+║                      To unarchive, type in the following:               ║
+║       PKUNZIP filename.zip  c:\(path)   (press enter)                   ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REGISTER.DOC
 
 {% raw %}

@@ -90,6 +90,25 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk No 1095 SBW Documentation (Disk 2 of 2)  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ This dBase III plus program requires that you have dBase III to run it  ║
+║                                                                         ║
+║ For complete documentation and a tutorial for the program, insert disk  ║
+║ #1094 into drive A: and type: PRINTALL (press enter)                    ║
+║ This will copy a tutorial and needed documentation to your printer.     ║
+║                                                                         ║
+║ This will give you all the necessary information about how to run the   ║
+║ program useing dBase III plus.                                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README1.DOC
 
 {% raw %}

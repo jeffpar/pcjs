@@ -14,6 +14,39 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  PC-SIG Disk #3625 MATH PAK IV FOR WINDOWS AND DOS  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║      MATH PAK IV is in Zipped (compressed) format.                      ║
+║                                                                         ║
+║      To Unzip, copy all files into a temporary subdirectory on your     ║
+║      hard disk drive.                                                   ║
+║      Type: PKUNZIP MATHPAK4 (press Enter).                              ║
+║                                                                         ║
+║      After file have Unzipped, type: SETUP (press Enter).               ║
+║                                                                         ║
+║      SETUP will take you from DOS into Windows.                         ║
+║                                                                         ║
+║      Once you have entered Windows, follow the installation             ║
+║      instructions given to you by the author.                           ║
+║                                                                         ║
+║      After installation is complete you may delete files copied into    ║
+║      your temporary subdirectory.                                       ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3625
 

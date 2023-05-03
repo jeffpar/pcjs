@@ -14,6 +14,35 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<  PC-SIG Disk #3401  THE PALACE OF DECEIT - THE DRAGON'S PLIGHT  >>> ║
+║                        Disk 1 of 2 (also #3402)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  The files on this disk are compressed under PALACE.LZH. To uncompress  ║
+║  them to a new subdirectory on your hard drive, type:                   ║
+║                                                                         ║
+║      LHA E PALACE [hard drive:\[subdirectory name]\  (press Enter)      ║
+║                                                                         ║
+║  Answer "Y" at the prompt to accept the new subdirectory. The files     ║
+║  will uncompress to the new subdirectory.                               ║
+║                                                                         ║
+║  Add the file from Disk 2 as per Disk 2's "GO" directions.              ║
+║                                                                         ║
+║  To start the game from the hard drive, type:                           ║
+║                               WIN \[game's subdirectory]\P2_1  (Enter)  ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3401
 

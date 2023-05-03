@@ -66,6 +66,20 @@ Sunnyvale, CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk No 1374 THE PRICE BOOK (Disk 2 of 2)  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view the documentation for the program, type VIEW (press enter)      ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1374

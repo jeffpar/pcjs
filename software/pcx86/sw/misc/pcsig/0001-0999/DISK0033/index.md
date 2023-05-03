@@ -2995,6 +2995,29 @@ cseg    ends
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #33 Dos and printer utilities  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║       To print the documentation for a program, type:                   ║
+║                      COPY filename.ext PRN (press enter)                ║
+║                                                                         ║
+║        To display the documentation for a program type:                 ║
+║                       TYPE filename.ext (press enter)                   ║
+║                                                                         ║
+║          where 'filename' is the name of the documentation file         ║
+║            and 'ext' is the file extention (usually DOC or TXT)         ║
+║                                                                         ║
+║      To run a program with a .COM or .EXE extention just type the       ║
+║            name of the file (i.e. NEWT) and then press enter.           ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GRAFTRAX.ASM
 
 {% raw %}

@@ -73,6 +73,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<  Disk #2022  ACTIVE LIFE FOR MS-DOS (disk 2 of 2, #2021 also) >>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program onto hard drive, insert disk 1 and type:             ║
+║                                                INSTALL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2022

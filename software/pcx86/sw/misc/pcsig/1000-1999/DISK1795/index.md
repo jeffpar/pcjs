@@ -63,6 +63,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1795  MAILING-MADE-EZ  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print documentation, type: COPY MANUAL.DOC PRN                       ║
+║                                                                         ║
+║ To install the program, type: INSTALL                                   ║
+║                                                                         ║
+║ To start program, type: MME                                             ║
+║                                                                         ║
+║                                                                         ║
+║                                          COPYGIGHT (c) 1990 PC-SIG INC  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

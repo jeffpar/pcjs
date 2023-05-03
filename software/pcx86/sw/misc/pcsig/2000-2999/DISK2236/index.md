@@ -71,6 +71,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2236  ZAPCODE  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ ZAPCODE is a self-extracting file.  To extract ZAPCODE, type:  ZAPCODE  ║
+║                                                                         ║
+║ To print documentation for ZAPCODE, type:  COPY ZAPCODE.DOC PRN         ║
+║                                                       (press ENTER)     ║
+║                                                                         ║
+║ To print registration form, type:  COPY INVOICE.DOC  (press ENTER)      ║
+║                                                                         ║
+║ To start the program ZAPCODE, type:  ZAPCODE  (press ENTER)             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2236

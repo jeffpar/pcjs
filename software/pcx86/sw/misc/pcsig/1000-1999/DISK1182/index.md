@@ -96,6 +96,27 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk No 1182 VIBRATING, ROTATIONG, and COOLING  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start 2DWAVE, type 2DWAVE (press enter)                              ║
+║                                                                         ║
+║ To start LAPLACE, type LAPLACE (press enter)                            ║
+║                                                                         ║
+║ To start SUR-PAGE, type SURPAGE (press enter)                           ║
+║                                                                         ║
+║ To start SURFACE, type SURFACE (press enter)                            ║
+║                                                                         ║
+║ To copy information about the above programs to your printer, type      ║
+║                              INFODOC (press enter)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1182

@@ -16,6 +16,27 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #3080  BD/PATCH UTILITY  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ Copy the program files to a subdirectory on your hard drive.            ║
+║                                                                         ║
+║ To print the documentation, type:  COPY README.TXT PRN    (press Enter) ║
+║                                    COPY QUICKREF.TXT PRN  (press Enter) ║
+║                                                                         ║
+║ Then start the program by typing:  PATCH  (press Enter)                 ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## QUICKREF.TXT
 
 {% raw %}

@@ -60,6 +60,359 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## BBKEYS.TXT
+
+{% raw %}
+```
+│─ Tab left
+αQ Line drawing
+αW Write file
+αE Expand LNG
+αR Repeat replace
+αT Change case
+αU Undo
+αI Insert file
+αP Adjust special 
+αA Settings
+αS Repeat search reverse
+αD Delete block
+αF Repeat find
+αG Switch to file
+αH Help
+αJ Break & Next Line
+αK Join line
+αL Last DOS command
+αZ Abort
+αX Execute named macro
+αC Center line
+αV Name macro
+αB Bullet off
+αN Reread file
+αM Delete macro
+F1 Mark start
+F2 Mark end
+F3 Grab
+F4 Cut
+F5 Shift left
+F6 Shift right
+F7 Copy
+F8 Paste
+F9 Unmark
+F10 Paste window
+Home Home
+Up Row up
+PgUp Page up
+Left Col left
+Right Col right
+End End of screen
+Down Row down
+PgDn Page down
+Ins Insert/Overstrike
+Del Delete char
+⌂F1 Mark col start
+⌂F2 Mark col end
+⌂F3 Grab col
+⌂F4 Cut col
+⌂F5 Remove col
+⌂F6 Replace col
+⌂F7 Copy col
+⌂F8 Paste col
+⌂F9 Clear paste
+⌂F10 Change case region
+^F1 Window 1
+^F2 Window 2
+^F3 Window 3
+^F4 Window 4
+^F5 Window 5
+^F6 Window 6
+^F7 Window 7
+^F8 Window 8
+^F9 Window 9
+^F10 Window 10
+αF1 DOS window
+αF2 Exit to DOS
+αF3 Do command
+αF4 Kill window
+αF5 Switch to Window
+αF6 Select
+αF7 Expand
+αF8 Frame/Move
+αF9 Color/B&W
+αF10 Select color
+^Left Word left
+^Right Word right
+^End Right of screen
+^PgDn End of file
+^Home Left of screen
+α1 Backup file
+α2 Show bindings
+α3 Insert number
+α4 Repeat key
+α5 Edit screen
+α6 Goto start marker
+α7 Set Delimeters
+α8 Ruler
+α0 LNG window
+^PgUp Start of file
+^A Options
+^B Bullet
+^C ASCII chart
+^D Delete line
+^E End of line
+^F Find
+^G Goto
+Backspace Backspace
+Tab Tab
+^J Return
+^K Break line
+^L Insert line
+Return Return & insert line
+^N New file
+^O Tab left
+^P Adjust paragraph
+^Q Insert special char
+^R Find & Replace
+^S Search reverse
+^T Transpose
+^U Undelete line
+^V Define macro
+^W Delete to eol
+^X Execute macro
+^Y Yank line
+^Z Exit
+Esc Menus
+ Self insert
+ Self insert
+ Self insert
+ Self insert
+Space Self insert
+! Self insert
+" Self insert
+# Self insert
+$ Self insert
+% Self insert
+& Self insert
+' Self insert
+( Self insert
+) Self insert
+* Self insert
++ Self insert
+, Self insert
+- Self insert
+. Self insert
+/ Self insert
+0 Self insert
+1 Self insert
+2 Self insert
+3 Self insert
+4 Self insert
+5 Self insert
+6 Self insert
+7 Self insert
+8 Self insert
+9 Self insert
+: Self insert
+; Self insert
+< Self insert
+= Self insert
+> Self insert
+? Self insert
+@ Self insert
+A Self insert
+B Self insert
+C Self insert
+D Self insert
+E Self insert
+F Self insert
+G Self insert
+H Self insert
+I Self insert
+J Self insert
+K Self insert
+L Self insert
+M Self insert
+N Self insert
+O Self insert
+P Self insert
+Q Self insert
+R Self insert
+S Self insert
+T Self insert
+U Self insert
+V Self insert
+W Self insert
+X Self insert
+Y Self insert
+Z Self insert
+[ Self insert
+\ Self insert
+] Self insert
+^ Self insert
+_ Self insert
+` Self insert
+a Self insert
+b Self insert
+c Self insert
+d Self insert
+e Self insert
+f Self insert
+g Self insert
+h Self insert
+i Self insert
+j Self insert
+k Self insert
+l Self insert
+m Self insert
+n Self insert
+o Self insert
+p Self insert
+q Self insert
+r Self insert
+s Self insert
+t Self insert
+u Self insert
+v Self insert
+w Self insert
+x Self insert
+y Self insert
+z Self insert
+{ Self insert
+| Self insert
+} Self insert
+~ Self insert
+^Backspace Delete word
+Ç Self insert
+ü Self insert
+é Self insert
+â Self insert
+ä Self insert
+à Self insert
+å Self insert
+ç Self insert
+ê Self insert
+ë Self insert
+è Self insert
+ï Self insert
+î Self insert
+ì Self insert
+Ä Self insert
+Å Self insert
+É Self insert
+æ Self insert
+Æ Self insert
+ô Self insert
+ö Self insert
+ò Self insert
+û Self insert
+ù Self insert
+ÿ Self insert
+Ö Self insert
+Ü Self insert
+¢ Self insert
+£ Self insert
+¥ Self insert
+₧ Self insert
+ƒ Self insert
+á Self insert
+í Self insert
+ó Self insert
+ú Self insert
+ñ Self insert
+Ñ Self insert
+ª Self insert
+º Self insert
+¿ Self insert
+⌐ Self insert
+¬ Self insert
+½ Self insert
+¼ Self insert
+¡ Self insert
+« Self insert
+» Self insert
+░ Self insert
+▒ Self insert
+▓ Self insert
+│ Self insert
+┤ Self insert
+╡ Self insert
+╢ Self insert
+╖ Self insert
+╕ Self insert
+╣ Self insert
+║ Self insert
+╗ Self insert
+╝ Self insert
+╜ Self insert
+╛ Self insert
+┐ Self insert
+└ Self insert
+┴ Self insert
+┬ Self insert
+├ Self insert
+─ Self insert
+┼ Self insert
+╞ Self insert
+╟ Self insert
+╚ Self insert
+╔ Self insert
+╩ Self insert
+╦ Self insert
+╠ Self insert
+═ Self insert
+╬ Self insert
+╧ Self insert
+╨ Self insert
+╤ Self insert
+╥ Self insert
+╙ Self insert
+╘ Self insert
+╒ Self insert
+╓ Self insert
+╫ Self insert
+╪ Self insert
+┘ Self insert
+┌ Self insert
+█ Self insert
+▄ Self insert
+▌ Self insert
+▐ Self insert
+▀ Self insert
+α Self insert
+ß Self insert
+Γ Self insert
+π Self insert
+Σ Self insert
+σ Self insert
+µ Self insert
+τ Self insert
+Φ Self insert
+Θ Self insert
+Ω Self insert
+δ Self insert
+∞ Self insert
+φ Self insert
+ε Self insert
+∩ Self insert
+≡ Self insert
+± Self insert
+≥ Self insert
+≤ Self insert
+⌠ Self insert
+⌡ Self insert
+÷ Self insert
+≈ Self insert
+° Self insert
+• Self insert
+· Self insert
+√ Self insert
+ⁿ Self insert
+² Self insert
+■ Self insert
+  Self insert
+
+```
+{% endraw %}
+
 ## FILES611.TXT
 
 {% raw %}
@@ -191,6 +544,21 @@ Sunnyvale Ca. 94086
                 ____________________________________________________________
                 ____________________________________________________________
 
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk #611 BlackBeard  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, Type:                        ║
+║                 COPY BBMAN.DOC PRN (press enter)                        ║
+║                                                                         ║
+║ To Start BlackBeard, Type: BB (press enter)                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

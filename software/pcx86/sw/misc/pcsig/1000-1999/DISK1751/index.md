@@ -2194,6 +2194,20 @@ Version History:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1751  PC-UTIL  >>>>                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To extract utilities onto your hard drive, type: EXTRACT                ║
+║                                                                         ║
+║ To print documentation, type: COPY README.TXT                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## BSAVE.DOC
 
 {% raw %}

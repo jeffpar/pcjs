@@ -610,6 +610,26 @@ machines:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<<  PC-SIG Disk #2251 MEGACAD Disk 2 of 3 (also #2250,#2252)  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To install MEGACAD, insert disk #2250 and type:  INSTALL                ║
+║                                                                         ║
+║ To start the program, type:  MEGA                                       ║
+║                                                                         ║
+║ To print the documentation, insert disk# 2250 and type:                 ║
+║                                               COPY MEGACAD.DOC PRN      ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG Inc.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## STRINGS.TXT
 
 {% raw %}

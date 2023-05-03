@@ -196,6 +196,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  PC-SIG Disk #3079  IQ TEST & COLOR TEST FOR WINDOWS  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  Print the intallation documentation by typing:                         ║
+║                                                                         ║
+║          COPY IQTEST.TXT PRN    (press Enter)   for IQ Test             ║
+║          COPY COLORTST.TXT PRN  (press Enter)   for Color Test          ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## IQTEST.TXT
 
 {% raw %}

@@ -749,6 +749,26 @@ Where did you find it? ________________________________________________________
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #3693 BIG FOR 1-2-3 and BIG FOR WP  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print documentation for BIG FOR 1-2-3, type:                        ║
+║     COPY BIG123.DOC PRN  (press Enter)                                  ║
+║                                                                         ║
+║  To print documentation for BIG FOR WP, type:                           ║
+║     COPY BIGWP.DOC PRN  (press Enter)                                   ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3693

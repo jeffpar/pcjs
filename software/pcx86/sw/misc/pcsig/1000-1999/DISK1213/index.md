@@ -279,7 +279,20 @@ Sunnyvale CA 94086
 (408) 730-9291
 (c) Copyright 1988,89 PC-SIG, Inc.
 
-
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1213 PC BARTENDER  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type DRINKS (press enter)                         ║
+║                                                                         ║
+║ To copy the documentation to your printer, type PRINT (press enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

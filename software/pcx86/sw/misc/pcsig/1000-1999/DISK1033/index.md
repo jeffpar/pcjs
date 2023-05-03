@@ -84,6 +84,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1033 QUICK LIST  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for Quick List, type: MANUAL (press enter)   ║
+║                                                                         ║
+║ To start the program, type: PROPERTY (press enter)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1033

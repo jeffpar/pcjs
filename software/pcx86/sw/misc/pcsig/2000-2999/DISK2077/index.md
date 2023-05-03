@@ -76,6 +76,29 @@ FILES.TXT     List of files on the disk
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #2077  CREATIVITY PACKAGE  >>>>                 ║
+║                   Disk 3 of 3 (2075 and 2076 also)                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start THUNDER THOUGHT, insert disk 2 and type:  THUNDER (press enter)║
+║ To start VERSIFIER, insert disk 3 and type:  VERSE (press enter)        ║
+║ To print the book, insert disk 1 and type: READ and follow instructions ║
+║ To view or print documentation for THUNDER THOUGHT, insert disk 2 and   ║
+║          type:  THUNDOC                                                 ║
+║ To view or print documentation for VERSIFIER, insert disk 3 and         ║
+║          type:  VERSEDOC                                                ║
+╚═════════════════════════════════════════════════════════════════════════╝
+
+
+
+Copyright 1990 PC-SIG, Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2077

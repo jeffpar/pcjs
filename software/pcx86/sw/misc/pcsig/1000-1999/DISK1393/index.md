@@ -73,6 +73,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 1393 DISKETTE MANAGER CUDM  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unpack CUDM, type: CUDM31 (press enter)                              ║
+║                                                                         ║
+║ To print the docs, after being unpacked, type:                          ║
+║                    COPY CUDM31.DOC PRN (press enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1393

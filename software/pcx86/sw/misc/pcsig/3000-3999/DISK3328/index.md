@@ -14,6 +14,25 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  PC-SIG Disk #3328 PC Board  >>>>                ║
+║                   Disk 1 of 4 (also #3329, #3330, #3331)                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install the program, type:  INSTALL  (press Enter)                  ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3328
 

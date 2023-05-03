@@ -89,6 +89,20 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1393 PIANOMAN GOES BACH  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type PLAYBACH (press enter)                       ║
+║                                                                         ║
+║ To look at the documentation on your screen, type VIEW (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1395

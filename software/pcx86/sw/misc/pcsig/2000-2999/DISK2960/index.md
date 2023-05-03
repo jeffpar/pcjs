@@ -74,6 +74,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2960  SURVEY DISK  >>>>                ║
+║             Disk #3 of 3 (also #2954-#2955 or #2958-#2959)              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  This disk is the third disk for either C*GEN CUSTOMER SURVEY GENERATOR ║
+║  (PC-SIG Disks #2954 - #2955) or EASY*GEN EMPLOYEE ATTITUDE SURVEY      ║
+║  GENERATOR (PC-SIG Disks #2958 - #2959).                                ║
+║                                                                         ║
+║  Read the instructions accompanying each of the programs for directions ║
+║  on how to use the Survey Disk.                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2960

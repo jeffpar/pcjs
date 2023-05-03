@@ -93,6 +93,19 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1352 CROSS ASSEMBLER 370  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For instructions on how to use this program, insert disk #402 & type:   ║
+║                  MANUAL (press enter)                                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1352
@@ -103,6 +116,14 @@ Sunnyvale Ca. 94086
     FILE1352 TXT       914   2-28-89   9:40a
     GO       BAT        38  11-04-87   1:33p
     GO       TXT       463   2-24-89   1:30p
+    CBL          <DIR>    
+    UTIL         <DIR>    
+            5 file(s)       1415 bytes
+
+     Directory of A:\CBL
+
+    .            <DIR>    
+    ..           <DIR>    
     CALL370  CBL      1116  11-19-87   5:31a
     CALL370  IDY      3584   1-01-88   8:52a
     CALL370  INT      2304   1-01-88   8:52a
@@ -120,11 +141,20 @@ Sunnyvale Ca. 94086
     TESTCOM  ALC       103  11-20-87  12:14p
     TESTSQA  ALC      1799  11-20-87   8:52a
     TESTSQA  BIN       640   1-03-88  11:24a
+           19 file(s)      37687 bytes
+
+     Directory of A:\UTIL
+
+    .            <DIR>    
+    ..           <DIR>    
     DEMOSEE1 KSF      2048   7-05-86   8:33a
     DEMOSEE2 KSF      1280   7-13-86   7:24a
     ONEBLANK ALC         3   5-03-87   8:33a
     PRINTDOC ALC      6444   1-03-88   7:55a
     SEE      ALC    101040   1-03-88   7:40a
     T370     ALC     28499   1-03-88   8:27a
-           26 file(s)     178416 bytes
-                          129024 bytes free
+            8 file(s)     139314 bytes
+
+    Total files listed:
+           32 file(s)     178416 bytes
+                          126976 bytes free

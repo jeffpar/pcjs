@@ -78,6 +78,23 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk #521 FREEFILE  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To display information on using FREEFILE type:                          ║
+║                  TYPE FF.DOC  (press enter)                             ║
+║ To print the information on using FREEFILE type:                        ║
+║                  COPY FF.DOC LPT1: (press enter)                        ║
+║                                                                         ║
+║ To run FREEFILE type: FF (press enter)                                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0521

@@ -57,6 +57,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  PC-SIG Disk #2574  CTRLCLIB - THE CTRL+C LIBRARY  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print the documentation and installation instructions, type:        ║
+║                  COPY README.1ST PRN  (press Enter)                     ║
+║                                                                         ║
+║  To view the Quick Reference file, type:  TYPE QUICKREF.DOC  (Enter)    ║
+║                                                                         ║
+║  To print the registration form, type:  COPY REGISTER.FRM PRN  (Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HISTORY.DOC
 
 {% raw %}

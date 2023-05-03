@@ -624,6 +624,35 @@ All lines have same # characters..
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  Disk No 326  Epson printer utilities                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To start any of the programs on this disk which have the extension EXE ║
+║  or COM, type in the name of the program and press enter. For example,  ║
+║  to start FASTPRT.COM, you would enter FASTPRT (press enter). To start  ║
+║  the programs ending with the extension BAS, you must use a version of  ║
+║  the BASIC language to run the program. Please consult your BASIC       ║
+║  language manual for more specific commands for your system and version ║
+║  of BASIC.                                                              ║
+║  To print out the documentation on the programs type:                   ║
+║                                                                         ║
+║  copy *.doc prn (press enter)                                           ║
+║                                                                         ║
+║  Please note: if you bought this disk for the LABELING program called,  ║
+║  LBL it has been updated do DMASTER.  The program no resides on disk    ║
+║  number 709.                                                            ║
+║                                                                         ║
+║  Sorry for any inconvenience this may have caused you.                  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GRAF.DOC
 
 {% raw %}

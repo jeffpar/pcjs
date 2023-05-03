@@ -16,6 +16,32 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #3707 STELLAR EXPLORER BY TCI  >>>>         ║
+║                          Disk 2 of 2 (#3706 also)                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Install this game to your hard disk, type:                          ║
+║     [hard drive letter]:  (press Enter)                                 ║
+║     CD\  (press Enter)                                                  ║
+║     MD STELLAR (press Enter)                                            ║
+║     CD STELLAR (press Enter)                                            ║
+║                                                                         ║
+║  To Extract the files from drive A, insert disk 3 (#3707) and type:     ║
+║     A:PKUNZIP A:STELLAR  (press Enter)                                  ║
+║     (if installing from drive B use B: in place of A:)                  ║
+║                                                                         ║
+║  To Start the game, type:  WIN STELLAR  (press Enter)                   ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

@@ -16,6 +16,37 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## MIT.TXT
+
+{% raw %}
+```
+╔════════════════════════════════════════════════════════╗
+║ General Instructions:                                  ║
+║   While in any given chapter,                          ║
+║   Screens may be changed in 2 ways:                    ║
+║     >> "+","-",PgUp,PgDn = forward/backward 1 screen   ║
+║     >> F1 = enter screen number directly               ║
+║   F2    = chapter contents                             ║
+║   F3    = this information                             ║
+║   Alt/M = main menu                                    ║
+║   Alt/X = exit to DOS                                  ║
+║                                      any key to resume ║
+╚════════════════════════════════════════════════════════╝
+╔════════════════════════════════════════════════════════════════════╗
+║ File Locations: (3.5",5.25")                                       ║
+║                                                                    ║
+║ Main Menu ---  1,1    Scales ----------- 1,2   Meredith Monk - 2,3 ║
+║ Preface -----  1,1    Intervals -------- 2,3   Melody Writer - 2,4 ║
+║ Schedule ----  1,1    Musical Analysis - 2,3   Keybaord ------ 2,4 ║
+║ Course Info -- 1,1    Harmony ---------- 2,3   Pitch Memory -- 2,4 ║
+║ Acoustics ---- 1,1    Sound Polltion --- 2,3   SoundForms ---- 2,4 ║
+║ Pitch Basics - 1,2    Harry Partch ----- 2,3   Editor -------- 2,4 ║
+║ Rhythm ------- 1,2    Creativity ------- 2,3                       ║
+║                         (any key to resume)                        ║
+╚════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PITCH.TXT
 
 {% raw %}

@@ -63,6 +63,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1839  SALBIZ  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To self-unarchive the program, type:  SALBIZ (drive:)   (press Enter)   ║
+║                                                                         ║
+║ After unarchiving, start program by typing: SALBIZ      (press enter)   ║
+║                                                                         ║
+║ To print documentation, type: COPY SALBIZ.DOC PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1839

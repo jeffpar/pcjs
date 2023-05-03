@@ -77,6 +77,27 @@ in the help menu of the program.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #3218 Windows Arcade Games II  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To start a game, type:  WIN [name of program]  (press Enter).          ║
+║                                                                         ║
+║  The names of the programs on this disk are AFORCE, BANGBANG, DALEKS,   ║
+║  STARBASE, MISSLE and BITMAP (the game of Hex Tetris).                  ║
+║                                                                         ║
+║  Each of these program can also be run using the RUN command in the     ║
+║  program manager for Windows.                                           ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## STARBASE.TXT
 
 {% raw %}

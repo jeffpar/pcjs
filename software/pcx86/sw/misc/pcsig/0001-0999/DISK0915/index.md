@@ -3155,6 +3155,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk No 915 Edir  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for EDIR, Type:                              ║
+║                  MANUAL (press enter)                                   ║
+║                                                                         ║
+║   To run the program EDIR, Type: EDIR1301 (press enter)                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0915

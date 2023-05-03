@@ -83,6 +83,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #1680  CAT disk 1 of 2 (1681 also)  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, insert disk 2 and type:   CAT (press enter)           ║
+║                                                                         ║
+║ To print documentation, type:   COPY README.TXT PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

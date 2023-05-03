@@ -35,6 +35,20 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════════╗
+║                      <<<<  Disk No 762  Quest-3D  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type QUEST3D (press enter)                            ║
+║                                                                             ║
+║ To view information about the program, type TYPE README.DOC (press enter)   ║
+╚═════════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PART1.DOC
 
 {% raw %}

@@ -685,6 +685,20 @@ Neil Albala, 233 S. Panorama Circle, Tucson AZ 85745, 602 884-1177
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk #854 DATABASE PUBLISHER  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, type: COPY DATAPUB.DOC PRN   ║
+║                                                                         ║
+║ To start the program, type: DATAPUB (press enter)                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0854
@@ -706,6 +720,13 @@ Neil Albala, 233 S. Panorama Circle, Tucson AZ 85745, 602 884-1177
     GO       BAT        38  10-19-87   2:14p
     FILE0854 TXT      2221   1-19-90   9:58a
     GO       TXT       540   1-17-90   1:46p
+    DATA         <DIR>    
+           15 file(s)     209051 bytes
+
+     Directory of A:\DATA
+
+    .            <DIR>    
+    ..           <DIR>    
     06191709           322  10-05-87   3:58p
     06192248           251  10-05-87   3:58p
     06192446           197  10-05-87   3:59p
@@ -742,5 +763,8 @@ Neil Albala, 233 S. Panorama Circle, Tucson AZ 85745, 602 884-1177
     CATEGORY DP        492  11-14-87   1:32p
     DEFAULTS           189  12-18-89  11:51a
     NAMES    DP      11500   3-14-85   3:48a
-           50 file(s)     229939 bytes
-                           56320 bytes free
+           38 file(s)      20888 bytes
+
+    Total files listed:
+           53 file(s)     229939 bytes
+                           54272 bytes free

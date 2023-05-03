@@ -70,6 +70,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk No: 334  RBBS-PC (Disk 2 of 5)  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To use the files on this disk, you must unarchive them first using    ║
+║   the program PKUNZIP.  You should create a subdirectory on your        ║
+║   hard drive where you wish RBBS-PC to reside, copy the files on this   ║
+║   disk into that subdirectory, then use PKUNZIP to unarchive the files  ║
+║   by typing:                                                            ║
+║                                                                         ║
+║             PKUNZIP *.ZIP (press enter).                                ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PCKERMIT.TXT
 
 {% raw %}

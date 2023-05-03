@@ -719,6 +719,26 @@ fee per copy to:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #1663  SYNERGISTIC SOFTWARE  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Programs on this disk must be unarchived using a program such as        ║
+║    PKUNPAC (on disk 1330)                                               ║
+║ To start COLORFIX program, type:  COLORFIX (press enter)                ║
+║ To start FIREWORK program, type:  FIREWORK (press enter)                ║
+║ To start GCP program, type:  GCP (press enter)                          ║
+║                                                                         ║
+║ To print COLORFIX documentation, type:  COPY COLORFIX.DOC PRN           ║
+║ To print FIREWORK documentation, type:  COPY FIRE43.DOC PRN             ║
+║ To print GCP documentation, type:  COPY GCP420.DOC PRN                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1663

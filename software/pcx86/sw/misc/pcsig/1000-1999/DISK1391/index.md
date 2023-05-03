@@ -155,6 +155,20 @@ prevent possible duplication of game files.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1391 LOTTO-TRAX  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: LOTTO (press enter)                         ║
+║                                                                         ║
+║ To print documentation, type: COPY README.DOC PRN  (press enter)        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

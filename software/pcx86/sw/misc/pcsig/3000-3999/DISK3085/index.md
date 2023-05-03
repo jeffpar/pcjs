@@ -14,6 +14,28 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<< PC-SIG Disk #3085 THE MULTIMEDIA WORKSHOP >>>>           ║
+║                        Disk 1 of 2 (also #3202)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To read the installation instructions, type:  BEGIN  <enter>           ║
+║                                                                         ║
+║  To start the program, type:  TMW  <enter>                              ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3085
 

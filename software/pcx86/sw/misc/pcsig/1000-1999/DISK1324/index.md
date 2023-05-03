@@ -4862,6 +4862,26 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk No 1324  DBSCAN 1.00, EXTLIB  >>>>                 ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║   To print the documentation, type:                                      ║
+║                                                                          ║
+║             MANUAL (press enter)                                         ║
+║                                                                          ║
+║ To run the DBSCAN program, copy all the DBSCAN files on this disk to     ║
+║ your dBASE directory; then enter DBSCAN and the name of the .DBF file to ║
+║ want to scan.                                                            ║
+║                                                                          ║
+║ For instructions on how to use EXTLIB, please read the program's manual. ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1324

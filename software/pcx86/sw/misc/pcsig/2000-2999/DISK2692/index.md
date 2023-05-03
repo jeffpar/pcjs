@@ -130,6 +130,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #2692 BATCHMAKER  >>>>                ║
+║                           1 OF 2 (also #2693)                           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program, type: SETUP (press Enter)                       ║
+║                                                                         ║
+║ To print the documentation, type: COPY README.DOC PRN  (press Enter)    ║
+║                                                                         ║
+║ To run the program, type: BATMAKER (press Enter)                        ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

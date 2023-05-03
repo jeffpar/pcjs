@@ -99,6 +99,18 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  Disk No 1120 BLACK MAGIC SYSTEM DISK (Disk 1 of 3)  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program, type: INSTALL (press enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1120

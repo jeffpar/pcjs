@@ -244,6 +244,23 @@ READ      ME    LAST MINUTE CHANGES AND INSTALLATION INSTRUCTIONS
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk #1188  POINT & SHOOT BACKUP/RESTORE >>>>            ║
+╟─────────────────────────────────────────────────────────────────────────╢
+║   To start using the program, type:  COPY READ.ME PRN  (press Enter)    ║
+║                                                                         ║
+║   To view author's notes, type:  TYPE FILES.TXT (press Enter)           ║
+║                                                                         ║
+║   To type documentation, type:  COPY PASBRDOC.TXT PRN (press Enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG, Inc.
+```
+{% endraw %}
+
 ## PASBRDOC.TXT
 
 {% raw %}

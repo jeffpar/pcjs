@@ -1746,6 +1746,26 @@ MCI Mail: DBATTERSON.
 ```
 {% endraw %}
 
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2392  PC REVIEWS   >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print author's documentation and installation instructions, type:   ║
+║                   COPY README.TXT PRN (press ENTER)                     ║
+║                                                                         ║
+║  To start PC REVIEWS, type:  GO (press ENTER)                           ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GRAMATIK.TXT
 
 {% raw %}

@@ -108,6 +108,22 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1472 THE MUSIC MINDER  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program type, MUSMIND (press enter)                        ║
+║                                                                         ║
+║ To view the documentation on your screen, type VIEW (press enter)       ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}
@@ -368,7 +384,17 @@ IBM, Quicksilver and Epson are trademarks of their respective companies.
     VIEW     BAT        42   7-27-89  10:56a
     PAGE     COM       325   1-06-87   4:21p
     MANUAL   BAT       152   7-27-89  10:56a
+    DATA         <DIR>    
+           17 file(s)     302178 bytes
+
+     Directory of A:\DATA
+
+    .            <DIR>    
+    ..           <DIR>    
     TITLE    NDX      1024  11-02-88   6:53a
     MUSLIB   DBF      2201   9-12-88  10:35p
-           18 file(s)     305403 bytes
-                            9216 bytes free
+            4 file(s)       3225 bytes
+
+    Total files listed:
+           21 file(s)     305403 bytes
+                            8192 bytes free

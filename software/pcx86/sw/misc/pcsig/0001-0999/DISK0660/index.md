@@ -118,6 +118,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk No 660 EMPLOYEE MANAGEMENT SYSTEM  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unpack EMS, type: EMSARC4 (press enter)                              ║
+║                                                                         ║
+║ To print documentation, type: COPY EMSARC4.DOC PRN (press enter).       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0660

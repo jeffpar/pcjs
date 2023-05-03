@@ -73,6 +73,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk #1811  HOME INVENTORY RECORD KEEPER  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ You must use PKUNZIP to install this program.                           ║
+║                                                                         ║
+║ To start program, type: HOMEINV                                         ║
+║                                                                         ║
+║ To print documentation, type: README                                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1811

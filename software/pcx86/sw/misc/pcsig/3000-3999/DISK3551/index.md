@@ -71,6 +71,32 @@ Microsoft Windows applications.  You may do any of the following:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3551 File Commander  >>>>              ║
+║                          Disk 2 of 2 (#3350 also)                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Install, create a new subdirectory on your hard disk, switch to     ║
+║  that subdirectory, and type:  A:PKUNZIP A:FILECMDR  (press Enter).     ║
+║  Use B: in place of A: if installing from the B drive.                  ║
+║                                                                         ║
+║  After all files are extracted to your hard disk type:                  ║
+║    WIN WSETUP  (press Enter)                                            ║
+║                                                                         ║
+║  In the program installation Install files to a separate subdirectory.  ║
+║  After the program installation is complete you may delete the files    ║
+║  that were extracted to the first subdirectory to free up hard disk     ║
+║  space.                                                                 ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3551

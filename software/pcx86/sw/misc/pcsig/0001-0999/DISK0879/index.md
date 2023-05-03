@@ -580,6 +580,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk No 879 BIORHYTHM MONTHLY SCHEDULE PROGRAM  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, Type:                        ║
+║                        COPY *.DOC PRN (press enter)                     ║
+║                                                                         ║
+║ To start BIORHYTHM, Type: BIO (press enter)                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

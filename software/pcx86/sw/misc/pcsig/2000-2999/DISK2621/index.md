@@ -405,6 +405,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2621  CALCOUNT  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To begin using the program, type:  COPY CALCOUNT.TXT PRN (press Enter)  ║
+║                               or:  TYPE CALCOUNT.TXT (press Enter)      ║
+║                                                                         ║
+║ To print the registration form, type:  COPY CALSHARE.TXT PRN  (Enter)   ║
+║                                                                         ║
+║                                                                         ║
+║                                      (c) Copyright 1991, PC-SIG Inc.    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2621

@@ -59,7 +59,23 @@ PC-SIG
 Sunnyvale  Ca. 94086                                                    
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
-
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk #2063 DEEP SPACE (disk 3 of 3, also 866, 867  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, insert disk 1, type: DS3D (press enter)               ║
+║                                                                         ║
+║ To install program, insert disk 1, type: INSTALL [destination drive]    ║
+║                                                                         ║
+║ To print documentation, insert disk 2, and type:                        ║
+║                    COPY TEXT.TXT PRN (press enter)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

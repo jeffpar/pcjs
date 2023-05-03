@@ -69,6 +69,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  DISK #2368 C++ TUTOR Disk 1 of 2 (also #2369)   >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║                                                                         ║
+║    For instructions on getting started type:                            ║
+║                 TYPE READ.ME (to view instructions on screen)           ║
+║                 COPY READ.ME PRN (to print instructions)                ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2368
@@ -163,6 +187,13 @@ Sunnyvale  Ca. 94086
     GO       BAT        24  10-03-90   1:40a
     GO       TXT      1116  10-03-90  11:58p
     FILE2368 TXT      1999  10-03-90   3:00p
+    ANSWERS      <DIR>    
+           88 file(s)     215595 bytes
+
+     Directory of A:\ANSWERS
+
+    .            <DIR>    
+    ..           <DIR>    
     CH01_1   CPP       227   7-20-90  12:00p
     CH01_2   CPP       193   7-20-90  12:00p
     CH02_1   CPP       848   7-20-90  12:00p
@@ -193,5 +224,8 @@ Sunnyvale  Ca. 94086
     CH11_1A  HPP      1105   7-20-90  12:00p
     CH11_1B  CPP      2152   7-20-90  12:00p
     CH11_1C  CPP      2008   7-20-90  12:00p
-          117 file(s)     254665 bytes
-                          927744 bytes free
+           32 file(s)      39070 bytes
+
+    Total files listed:
+          120 file(s)     254665 bytes
+                            9216 bytes free

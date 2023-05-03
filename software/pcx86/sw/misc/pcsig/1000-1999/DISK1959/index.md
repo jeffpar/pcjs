@@ -755,6 +755,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1959  EDFIX2/ QB4CREF/ ASCORT  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program EDFIX2, type: EDFIX2 (press enter)                     ║
+║                                                                         ║
+║ To print documentation, type: COPY EDFIX2.DOC PRN                       ║
+║                                                                         ║
+║ To start program QB4CREF, type: QB4CREF (press enter)                   ║
+║                                                                         ║
+║ To print documentation, type: COPY QB4CREF.DOC PRN                      ║
+║                                                                         ║
+║ To start program ASCORT, type: ASCORT (press enter)                     ║
+║                                                                         ║
+║ To print documentation, type: COPY ASCORT.DOC PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## QB4CREF.DOC
 
 {% raw %}

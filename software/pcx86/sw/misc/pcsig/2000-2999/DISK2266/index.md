@@ -78,6 +78,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #2266  CIPHER  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To extract the program, type:  CIPHER12  (press ENTER)                  ║
+║                                                                         ║
+║ For a description of CIPHER, type:  TYPE CIPHER.TXT  (press Enter)      ║
+║                                 or  COPY CIPHER.TXT PRN  (press Enter)  ║
+║                                                                         ║
+║ To print documentation, type:  COPY CIPHER.DOC PRN  (press ENTER)       ║
+║                                                                         ║
+║ To start the program, type:  CIPHER  (press ENTER)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2266

@@ -86,6 +86,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<   Disk No. 2256 WORD PLAY   >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type WP (press enter)                             ║
+║                                                                         ║
+║ For information about the program, type README (press enter)            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2256

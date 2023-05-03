@@ -109,6 +109,18 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #1989  MENU-RANGE FOR LOTUS 1-2-3  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type: COPY MASTER.PRN PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1989

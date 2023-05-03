@@ -102,6 +102,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1991  GIFTBASE  >>>>                      ║
+║                       (disk 1 of 2, 1992 also)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install files onto your hard drive, type: GO  (press enter)          ║
+║                                                                         ║
+║ To start program, type: GB           (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: TYPE GB.DOC PRN                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1991

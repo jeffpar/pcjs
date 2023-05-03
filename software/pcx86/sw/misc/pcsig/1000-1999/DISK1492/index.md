@@ -647,6 +647,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk No 1492 Crystal Ball  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ The program on this disk are in an archived format.  What that means    ║
+║ is that you must unarchive it first in order to run it.                 ║
+║                                                                         ║
+║ To unarchive an archived file on this disk place a blank formatted disk ║
+║ into drive B> and keep this disk in drive A>.                           ║
+║                                                                         ║
+║ If you want to unarchive the files for CRYSTAL you would type:          ║
+║             PKXARC CRYSTAL.ARC B:                                       ║
+║                                                                         ║
+║ This will unarchive all of the needed files onto your B drive.          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1492

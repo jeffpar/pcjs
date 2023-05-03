@@ -139,6 +139,22 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 1361 PC-POSTCARD PLUS  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program on a color system type, PCD (press enter)          ║
+║                                                                         ║
+║ To start the program on a regular system type, PC (press enter)         ║
+║                                                                         ║
+║ For information on the program, type README (press enter)               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

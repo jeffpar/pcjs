@@ -128,6 +128,18 @@ with parser' is a shareware recommended for registration.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 1070 PARTICLE SIMULATOR >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For information about the program, type README (press enter)            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1070

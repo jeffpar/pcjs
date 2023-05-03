@@ -50,6 +50,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #2617  YOUR REAL ESTATE PARTNER  >>>>         ║
+║                        Disk 1 of 2 (also #2618)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation and installation instructions, type:       ║
+║                   COPY README.TXT PRN  (press Enter)                    ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INTRO.TXT
 
 {% raw %}

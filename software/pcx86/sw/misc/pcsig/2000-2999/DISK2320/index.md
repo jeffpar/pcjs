@@ -111,6 +111,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  DISK #2320 ORGANIZE!  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To start the program from DOS, type: WIN ORGANIZE, or                  ║
+║  From the Windows File Manager, choose:ORGANIZE.EXE                     ║
+║                                                                         ║
+║  You can view or print the manual MANUAL.WRI with Windwos Write.        ║
+║                                                                         ║
+║  The password to get into the program is: SHARE                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
 ## INVOICE.TXT
 
 {% raw %}

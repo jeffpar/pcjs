@@ -134,7 +134,20 @@ Sunnyvale CA 94086
 (408) 730-9291
 (c) Copyright 1989 PC-SIG, Inc.
 
-
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1414 SS1 (Disk 1 of 2)  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type SS1 (press enter)                            ║
+║                                                                         ║
+║ To look at program information on your screen, type VIEW (press enter)  ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

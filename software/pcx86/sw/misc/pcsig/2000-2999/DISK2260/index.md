@@ -83,6 +83,24 @@ profit from it.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #2260  SHAREDEBATE INTERNATIONAL #2  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type:  DBATE002  (press Enter, "002" = 3 digits)  ║
+║                                                                         ║
+║ To view documentation on your screen, type:  TYPE READ.ME (press Enter) ║
+║                                                                         ║
+║ To print out documentation, type:  COPY READ.ME PRN (press Enter)       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## VALIDATE.DOC
 
 {% raw %}

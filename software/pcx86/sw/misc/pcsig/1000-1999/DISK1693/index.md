@@ -70,6 +70,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk #1693  AMORTIZATION CALCULATOR  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To extract program files, type:  AMORTIZE (press enter)                 ║
+║ To start program, type:  AMORT (press enter)                            ║
+║                                                                         ║
+║ To print documentation after extracting, type:  COPY AMORT.DOC PRN      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

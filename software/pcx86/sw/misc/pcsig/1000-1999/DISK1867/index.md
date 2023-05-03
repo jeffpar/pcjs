@@ -79,6 +79,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1867  LCG/REMIND  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: LCG_REMIND  (press enter)                       ║
+║                                                                         ║
+║ To print documentation, type: COPY LCG_RMND.DOC PRN (press enter)       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1867

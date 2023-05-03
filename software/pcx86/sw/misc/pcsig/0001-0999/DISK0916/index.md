@@ -63,6 +63,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk #916  Play `N' Learn  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view author's introductory remarks, type:  TYPE READ.ME (press Enter)║
+║                                          and  TYPE INTRO.DOC (Enter)    ║
+║                                                                         ║
+║ To print the documentation and instructions for this disk, type:        ║
+║                         PRINT (press Enter)                             ║
+║                                                                         ║
+║ To print the list of software offered by the author, type:              ║
+║                   COPY OTHER.DOC PRN (press Enter)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## INTRO.DOC
 
 {% raw %}

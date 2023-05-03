@@ -16,6 +16,23 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #3377 DAYO SALES MANAGEMENT SYSTEM  >>>>      ║
+║                          Disk 2 of 2 (3362 also)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  For instructions, insert disk 1 (#3362) and type:  GO  (Enter)         ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VENDOR.DOC
 
 {% raw %}

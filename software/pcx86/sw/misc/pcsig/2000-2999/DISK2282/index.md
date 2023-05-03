@@ -69,6 +69,31 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #2282  DIEGO1 AND HEIDELBE  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ It is first necessary to unzip each file with PKUNZIP (Disk #1364       ║
+║      in PC-SIG Shareware library):  PKUNZIP <zipped file name>          ║   
+║                                                                         ║
+║ To print documentation and installation instructions, type:             ║
+║      COPY READ.ME PRN  (press Enter)                                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
+## PR.TXT
+
+{% raw %}
+```
+Heidelbe is a fully functional PostScript font for Ventura Publisher and Windows/PageMaker users with the MGX PostScript Driver. Full documentation included along with eps files created with Corel Draw as well as the driver. A character mapping chart is contained in the 7 page PageMaker publication. This face may be considered a refinement to MacHumaine. A calligraphic font well suited for certificates,awards, and diplomas. This font is released as Shareware. The Designer participates in the $20 registration fee. (C) 1990 Published Perfection! * Steve Shubitz.
+```
+{% endraw %}
+
 ## PR.TXT
 
 {% raw %}
@@ -87,7 +112,24 @@ Heidelbe is a fully functional PostScript font for Ventura Publisher and Windows
     GO       BAT        40   1-01-80   6:00a
     GO       TXT       730   1-01-80   5:54a
     FILE2282 TXT      2147   7-17-90   1:27p
+    DIEGO1       <DIR>    
+    HEIDELBE     <DIR>    
+            5 file(s)       2917 bytes
+
+     Directory of A:\DIEGO1
+
+    .            <DIR>    
+    ..           <DIR>    
     DIEGO1   ZIP     68669   1-21-90   4:54p
+            3 file(s)      68669 bytes
+
+     Directory of A:\HEIDELBE
+
+    .            <DIR>    
+    ..           <DIR>    
     HEIDELBE ZIP     86556   2-04-90   9:37p
-            5 file(s)     158142 bytes
-                               0 bytes free
+            3 file(s)      86556 bytes
+
+    Total files listed:
+           11 file(s)     158142 bytes
+                          158720 bytes free

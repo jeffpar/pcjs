@@ -80,6 +80,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #2209  DSK-RAK!  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To install the program to the hard drive, type:  HDINSTAL (press Enter) ║
+║                                                                         ║
+║ To start the program, type:  GO (press Enter)                           ║
+║                                                                         ║
+║ To print the documenation, type: COPY MANUAL.DOC PRN  (press enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

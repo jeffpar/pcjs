@@ -8639,6 +8639,33 @@ changes:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #2909 POWERCOMM and COMMO  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ COMMO=                                                                  ║
+║   Unzip the COMMO file to a subdirectory on your hard drive by typing:  ║
+║                PKUNZIP COMMO52 [hard drive:\subdirectory]               ║
+║                                                                         ║
+║   If you are interested in COMMO for the HP 95LX file, unzip CMOHP52    ║
+║   in the same way. The HP version shares the same documentation files   ║
+║   that COMMO has.                                                       ║
+║                                                                         ║
+║   To print the program manual, type:  COPY COMMO.DOC PRN  (Enter)       ║
+║                                                                         ║
+║ POWERCOMM=                                                              ║
+║   Unzip PCOMM170 to a POWRCOMM subdirectory on your hard drive.  Read   ║
+║   POWRCOMM.WRI from Windows for setup instructions.                     ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2909

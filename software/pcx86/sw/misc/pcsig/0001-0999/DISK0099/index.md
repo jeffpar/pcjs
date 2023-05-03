@@ -81,6 +81,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No: 99  Public BBS and more  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   All the files on this disk are ASCII text files which can either      ║
+║   be view on your computer screen or printed on your printer.           ║
+║                                                                         ║
+║   To print a file, type:                                                ║
+║                                                                         ║
+║             COPY <FILENAME> PRN (press enter)                           ║
+║                                                                         ║
+║   To view a file, type:                                                 ║
+║                                                                         ║
+║             TYPE <FILENAME> (press enter)                               ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0099

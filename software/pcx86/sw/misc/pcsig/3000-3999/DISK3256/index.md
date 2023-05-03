@@ -16,6 +16,22 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3256 MED-ICD9 >>>>                    ║ 
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type:  PRTMANL  <enter>                     ║
+║                                                                         ║
+║ To start the program, type:  MED_ICD9  <enter>                          ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MED_ICD9.DOC
 
 {% raw %}

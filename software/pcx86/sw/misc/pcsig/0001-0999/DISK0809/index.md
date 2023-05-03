@@ -180,6 +180,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  Disk #809 THE REMARKABLE GENERAL LEDGER Disk 2 of 2  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                    THE UNITED KINGDOM VERSION                           ║
+║                                                                         ║
+║ To obtain instructions for start up procedures type:                    ║
+║                    COPY READ.ME PRN (press enter)                       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0809

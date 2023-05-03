@@ -58,6 +58,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2765 MINE FIELD  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print documentation, type:  COPY MF.DOC PRN  (press Enter)           ║
+║                                                                         ║
+║ To run the program, type:  MF  (press Enter)                            ║
+║                                                                         ║
+║ To print the registration form, type:  COPY REGISTER.FRM PRN  (Enter)   ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MF.DOC
 
 {% raw %}

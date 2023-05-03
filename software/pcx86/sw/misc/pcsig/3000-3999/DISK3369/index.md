@@ -315,6 +315,23 @@ That's all there is to it!
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3369 HYPEROID  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  This game requires Microsoft Windows.                                  ║
+║                                                                         ║
+║  To Run, type:  WIN HYPEROID  (Enter)                                   ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3369

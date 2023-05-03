@@ -75,6 +75,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════════╗
+║                      <<<< Disk No 1706 Scout-EM >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════════╣
+║ The program on this disk is contained in a self-extracting archive.  You    ║
+║ must unpack the program before you use it.                                  ║
+║                                                                             ║
+║ To unpack the program, type: SCTEM44 (press enter) and follow the instruc-  ║
+║ tions.                                                                      ║
+╚═════════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1706

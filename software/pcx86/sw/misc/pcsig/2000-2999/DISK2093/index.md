@@ -81,6 +81,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk #2093  FLASHPAC PASCAL LIBRARY   1 of 2 (also 1982)  >>>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, insert disk #2093 and type:               ║
+║                             PRTDOC (press enter)                        ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2093
@@ -90,6 +106,16 @@ Sunnyvale  Ca. 94086
 
     GO       TXT       652   1-01-80  11:52a
     FILE2093 TXT      2443   7-13-90  11:45p
+    DEMO         <DIR>    
+    TP4          <DIR>    
+    TP5          <DIR>    
+    TP55         <DIR>    
+            6 file(s)       3095 bytes
+
+     Directory of A:\DEMO
+
+    .            <DIR>    
+    ..           <DIR>    
     DEMO     EXE     28171   3-15-90   3:21a
     DISKDEMO EXE     12886   3-15-90   3:21a
     KBDDEMO  EXE     14798   3-15-90   3:21a
@@ -100,6 +126,12 @@ Sunnyvale  Ca. 94086
     KBDDEMO  PAS      4521   3-15-90   3:21a
     PRTDEMO  PAS      3222   3-15-90   3:21a
     VIODEMO  PAS     32163   3-15-90   3:21a
+           12 file(s)     181799 bytes
+
+     Directory of A:\TP4
+
+    .            <DIR>    
+    ..           <DIR>    
     FPDISK   TPU      3120   3-15-90   3:21a
     FPDOS    TPU      1392   3-15-90   3:21a
     FPKBD    TPU      1152   3-15-90   3:21a
@@ -107,19 +139,34 @@ Sunnyvale  Ca. 94086
     FPPRT    TPU       640   3-15-90   3:21a
     FPVIDEO  TPU     12208   3-15-90   3:21a
     FPGETKEY TPU      1232   3-15-90   3:21a
-    FPDISK~1 TPU      3712   3-15-90   3:21a
-    FPDOS~1  TPU      2448   3-15-90   3:21a
-    FPKBD~1  TPU      1600   3-15-90   3:21a
-    FPMOUS~1 TPU      3696   3-15-90   3:21a
-    FPPRT~1  TPU      1040   3-15-90   3:21a
-    FPVIDE~1 TPU     13744   3-15-90   3:21a
-    FPGETK~1 TPU      1488   3-15-90   3:21a
-    FPDISK~2 TPU      3664   3-15-90   3:21a
-    FPDOS~2  TPU      2416   3-15-90   3:21a
-    FPGETK~2 TPU      1600   3-15-90   3:21a
-    FPKBD~2  TPU      1664   3-15-90   3:21a
-    FPMOUS~2 TPU      3600   3-15-90   3:21a
-    FPPRT~2  TPU      1056   3-15-90   3:21a
-    FPVIDE~2 TPU     13472   3-15-90   3:21a
-           33 file(s)     262654 bytes
-                           40960 bytes free
+            9 file(s)      22560 bytes
+
+     Directory of A:\TP5
+
+    .            <DIR>    
+    ..           <DIR>    
+    FPDISK   TPU      3712   3-15-90   3:21a
+    FPDOS    TPU      2448   3-15-90   3:21a
+    FPKBD    TPU      1600   3-15-90   3:21a
+    FPMOUSE  TPU      3696   3-15-90   3:21a
+    FPPRT    TPU      1040   3-15-90   3:21a
+    FPVIDEO  TPU     13744   3-15-90   3:21a
+    FPGETKEY TPU      1488   3-15-90   3:21a
+            9 file(s)      27728 bytes
+
+     Directory of A:\TP55
+
+    .            <DIR>    
+    ..           <DIR>    
+    FPDISK   TPU      3664   3-15-90   3:21a
+    FPDOS    TPU      2416   3-15-90   3:21a
+    FPGETKEY TPU      1600   3-15-90   3:21a
+    FPKBD    TPU      1664   3-15-90   3:21a
+    FPMOUSE  TPU      3600   3-15-90   3:21a
+    FPPRT    TPU      1056   3-15-90   3:21a
+    FPVIDEO  TPU     13472   3-15-90   3:21a
+            9 file(s)      27472 bytes
+
+    Total files listed:
+           45 file(s)     262654 bytes
+                           36864 bytes free

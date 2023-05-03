@@ -109,6 +109,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk #754 PORTRAC  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To copy the documentation to the printer type:                          ║
+║                                                                         ║
+║                          COPY MANUAL PRN (press enter)                  ║
+║                                                                         ║
+║                                                                         ║
+║ To start the program, type PT (press enter)                             ║
+║                                                                         ║
+║ To configure your program, type: SETSYS (press enter)                   ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0754
@@ -123,12 +144,26 @@ Sunnyvale  Ca. 94086
     PT       BAT        75   3-15-89   1:29a
     README            3456  10-19-89   8:59a
     SETSYS   BAT        22   9-14-89   3:05p
+    UVSTR        <DIR>    
+            8 file(s)     110090 bytes
+
+     Directory of A:\UVSTR
+
+    .            <DIR>    
+    ..           <DIR>    
     AMORTIZE EXE     19745  10-18-89  11:18p
     BRUN20   EXE     69454   1-16-87  11:44a
     PORTRAC  EXE     88241  10-18-89   4:43p
     SETIT                0   1-01-80  12:52a
     SETSYS   EXE      8433   1-01-80  12:51a
     STORE               32   1-01-80  12:52a
+    ACNT1        <DIR>    
+            9 file(s)     185905 bytes
+
+     Directory of A:\UVSTR\ACNT1
+
+    .            <DIR>    
+    ..           <DIR>    
     ABC               1339  10-15-89   1:58a
     ASSETS             315  10-15-89  12:23a
     B1                 197   1-01-80   1:15a
@@ -162,5 +197,8 @@ Sunnyvale  Ca. 94086
     XS3                322  10-15-89  12:51a
     XS4                552  10-15-89   1:10a
     XS5                 92  10-15-89   1:58a
-           46 file(s)     305689 bytes
-                           21504 bytes free
+           35 file(s)       9694 bytes
+
+    Total files listed:
+           52 file(s)     305689 bytes
+                           18432 bytes free

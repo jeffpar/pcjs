@@ -83,6 +83,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1003 PROFILE  (Disk 2 of 2  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, Type: PRINTDOC (press enter)                ║
+║                                                                         ║
+║ To start PROFILE, insert disk 1 and type: PF (press enter)              ║
+║                                                                         ║
+║ To install PROFILE to your hard disk, Type: INSTALL (press enter)       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PF-INTRO.TXT
 
 {% raw %}

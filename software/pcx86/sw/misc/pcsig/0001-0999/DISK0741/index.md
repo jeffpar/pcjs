@@ -69,6 +69,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #0741  PURCHASE ORDER SYSTEM  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: PURCHASE  (press enter)                     ║
+║                                                                         ║
+║ To print the documentation, type: COPY PURCHASE.DOC PRN  (press enter)  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## PURCHASE.DOC
 
 {% raw %}

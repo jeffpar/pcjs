@@ -74,6 +74,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1903  THE WEATHER PROGRAM  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: WEATHER      (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY WEATHER.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## WEATHER.DOC
 
 {% raw %}

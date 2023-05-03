@@ -85,6 +85,18 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk No 297 THE WONDERFUL WORLD OF EAMON (disk 2 of 4)  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To run the program, type: EAMON (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0297

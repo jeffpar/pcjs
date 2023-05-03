@@ -104,6 +104,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #898 PC-TED & COPYFIT-IT  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the manuals on this disk, type:                                ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║ To run the program COPYFIT-IT, Type: COPYFIT (press enter)              ║
+║                                                                         ║
+║ To run the program PC-TED, Type: TED24 (press enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0898

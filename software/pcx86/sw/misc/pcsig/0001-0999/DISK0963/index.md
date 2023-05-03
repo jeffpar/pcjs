@@ -65,6 +65,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 963 PAY-TIME (Disk 1 of 2) >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, insert disk #1034 and type:                 ║
+║                       PRNTDOC  (press enter)                            ║
+║                                                                         ║
+║ To run the program, Type: PAY (press enter)                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0963

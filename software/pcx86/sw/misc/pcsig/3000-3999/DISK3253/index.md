@@ -14,6 +14,25 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3253 MYTHMASTER  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To view the installation instructions, insert disk 1 (#3251) and       ║
+║  type:  GO  (press Enter)                                               ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1993, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3253
 

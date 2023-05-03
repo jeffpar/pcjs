@@ -107,6 +107,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk #2003  SERIAL FILE COPY  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type: COPY SFC.DOC PRN (press Enter)            ║
+║                                                                         ║
+║ To start SERIAL FILE COPY, type:  SFC (press Enter)                     ║
+║                                                                         ║
+║ To print the registration form, type:  COPY SFC.INV PRN (press Enter)   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## SFC.DOC
 
 {% raw %}

@@ -72,6 +72,31 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2435  WORDFIND   >>>>                   ║
+║                     (Disk 2 of 2, #2434 also)                           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read author's notes about the program, type:  TYPE S-WARE.ASC (Enter)║
+║                                                                         ║
+║ To start the program, type:  WORDFIND (press Enter)                     ║
+║           (Note: WORDFIND can be started from both disks)               ║
+║                                                                         ║
+║ To print the documentation and installation instructions, insert Disk 1 ║
+║           and type:  COPY WORDFIND.DOC PRN (press Enter)                ║
+║                                                                         ║
+║ To view author's note regarding his registration bonus (Disk 1) type:   ║
+║                    TYPE BONUS.DOC (press Enter)                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2435

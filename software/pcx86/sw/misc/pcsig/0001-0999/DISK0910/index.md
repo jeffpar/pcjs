@@ -76,6 +76,19 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk No 910 BILLING MANAGER Disk 2 of 2)  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║      To start the installation procedure,  insert disk #909 and         ║
+║      type: BM1_BGIN (press enter)                                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0910

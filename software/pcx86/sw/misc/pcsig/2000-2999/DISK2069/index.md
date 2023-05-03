@@ -65,6 +65,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk #2069  CURVE DIGITIZER disk 2 of 2 (2068 also)  >>>>   ║
+║                 FOR USE WITH HERCULES GRAPHICS ADAPTER                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, insert disk 1 and type:  CURVE (press enter)          ║
+║                                                                         ║
+║ To print documentation, insert disk 2 and type:  PRINTDOC               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

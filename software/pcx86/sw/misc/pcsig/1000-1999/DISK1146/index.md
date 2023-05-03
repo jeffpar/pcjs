@@ -113,6 +113,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk No 1146 LOGIN  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentaton to your printer, type MANUAL (press enter)     ║
+║                                                                         ║
+║ To install the program to your hard drive, type INSTALL (press enter)   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LN1.TXT
 
 {% raw %}

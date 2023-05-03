@@ -882,6 +882,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk #2078  FANTASY SPORTS DRAFTER >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unarchive program, type:  PKUNZIP FANDRAFT (press enter)             ║
+║ To start program, type:  FSD (press enter)                              ║
+║                                                                         ║
+║ To print documentation, type:  COPY FDMANUAL.DOC PRN                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

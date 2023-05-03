@@ -71,6 +71,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  Disk #2292 STAT Disk 4 of 4 (also #990,#991,#992  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To start using the program insert disk #990 and type:                  ║
+║                    COPY README PRN  (press enter)                       ║
+║                                                                         ║
+║  To print out the manuals insert disk #990 and type:                    ║
+║                    COPY *.MAN PRN  (press enter)                        ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c)Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2292

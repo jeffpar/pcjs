@@ -144,6 +144,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1895  M2JFTOOLS  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ Use PKUNZIP to extract files.  For instructions on using PKUNZIP with   ║
+║   this disk type:  COPY READ_M2J.ME PRN  (press enter)                  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+```
+{% endraw %}
+
 ## DES_M2JF.DOC
 
 {% raw %}

@@ -1782,6 +1782,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #397 CHECKBOOK SYSTEM  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print out the CHECKLIST Documentation enter:                       ║
+║                      COPY CHEKLIST.DOC PRN                              ║
+║                                                                         ║
+║   To print out the CHECKDEMO Documentation enter:                       ║
+║                      COPY CHEKDEMO.DOC PRN                              ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0397

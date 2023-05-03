@@ -324,6 +324,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #1178 BOOK MINDER   >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print author's introduction, type:  COPY READ.ME PRN (press Enter)   ║
+║                                    and COPY INTRO.DOC PRN (press Enter) ║
+║                                                                         ║
+║ To view author's description of BOOK MINDER, type:                      ║
+║                     TYPE APPNDX.DOC (press Enter)                       ║
+║                                                                         ║
+║ To print the documentation and instructions for BOOK MINDER, type:      ║
+║                          PRINT (press Enter)                            ║
+║                                                                         ║
+║ To print the list of software offered by the author, type:              ║
+║                    COPY OTHER.DOC PRN (press Enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## INTRO.DOC
 
 {% raw %}

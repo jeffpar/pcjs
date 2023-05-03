@@ -259,6 +259,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║      <<<<  PC-SIG Disk #2871 PAINLESS ACCOUNTING FOR WINDOWS  >>>>      ║
+  ║                         Disk 1 of 2 (also #2872)                        ║
+  ╠═════════════════════════════════════════════════════════════════════════╣
+  ║                                                                         ║
+  ║  To read the introductory information, type:  TYPE README.1ST  (Enter)  ║
+  ║                                                                         ║
+  ║  To read the features listing, type:  TYPE FEATURES.TXT  (press Enter)  ║
+  ║                                                                         ║
+  ║  To print the manual, type:  COPY PAW-MAN.TXT PRN  (press Enter)        ║
+  ║                                                                         ║
+  ║  To start the program, type:  WIN WINSETUP  (press Enter)               ║
+  ║                                                                         ║
+  ║  To print registration info, type:  COPY REGISTER.TXT PRN  (Enter)      ║
+  ║                                                                         ║
+  ║                                           Copyright 1992, PC-SIG, Inc.  ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PAW-MAN.TXT
 
 {% raw %}

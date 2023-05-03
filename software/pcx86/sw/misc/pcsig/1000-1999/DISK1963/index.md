@@ -140,6 +140,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  Disk #1963   TRACKSTAR I & CALENDAR PROGRAM BY SMALL  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  TS (press Enter)                               ║
+║                                                                         ║
+║ To print documentation, type:  COPY TS.DOC PRN (press Enter)            ║
+║                                                                         ║
+║ To start program, type:  CALENDAR (press Enter)                         ║
+║                                                                         ║
+║ To print documentation, type:  GO (press Enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## TS.DOC
 
 {% raw %}

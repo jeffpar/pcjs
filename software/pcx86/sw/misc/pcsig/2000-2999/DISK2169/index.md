@@ -1960,6 +1960,25 @@ concept!
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 2169 HOME CONTROL  >>>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation of GAMEPORT, type: COPY GAMEPORT.DOC PRN     ║
+║ To start GAMEPORT, type: GAMEPORT  (press enter)                        ║
+║                                                                         ║
+║ To print the documentation of SENDX10, type: COPY SENDX10.DOC PRN       ║
+║ To start Sendx10, type: SENDX10  (press enter)                          ║
+║                                                                         ║
+║ To print the documentation of SYNCHX10, type: COPY SYNCHX10.DOC PRN     ║
+║ To start SYNCHX10, type: SYNCHX10  (press enter)                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HCSVIDEO.TXT
 
 {% raw %}

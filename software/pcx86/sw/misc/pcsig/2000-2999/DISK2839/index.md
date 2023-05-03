@@ -69,6 +69,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2839  ARCTIC ADVENTURE  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To start playing ARCTIC ADVENTURE, type:  AAI  (press Enter)           ║
+║                                                                         ║
+║  To review Apogee's catalog, type:  CATALOG  (press Enter)              ║
+║                                                                         ║
+║  To print out the order form, have your printer read and type:          ║
+║                                                PRINTME  (press Enter)   ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2839

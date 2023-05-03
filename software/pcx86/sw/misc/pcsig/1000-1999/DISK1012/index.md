@@ -1502,6 +1502,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1012 DOLLAR-PRO  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, Type: DPM (press enter) for a mono system         ║
+║                                                                         ║
+║ To start the program, Type: DPC (press enter) for a color system        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MONYM.BAS
 
 {% raw %}

@@ -64,6 +64,32 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║      <<<<  PC-SIG Disk #3005 WORDCRUNCHER 1/2 (also #3015)  >>>>        ║
+  ╠═════════════════════════════════════════════════════════════════════════╣
+  ║ To install the WordCruncher you must decopress both diskettes onto      ║
+  ║ your hard drive.                                                        ║
+  ║                                                                         ║
+  ║      To install, type:       C:\           (press Enter)                ║
+  ║                              MD WC         (press Enter)                ║
+  ║                              CD WC         (press Enter)                ║
+  ║                              COPY A:.      (press Enter)                ║
+  ║                                                                         ║
+  ║ Insert disk #2, and Type:    COPY A:.      (press Enter)                ║
+  ║                              PKZ WCSHARE1.ZIP    (press Enter)          ║
+  ║                              PKZ WCSHARE2.ZIP    (press Enter)          ║
+  ║                                                                         ║
+  ║ To start the program, type:  WCVSHARE     (press Enter)                 ║
+  ║                                                                         ║
+  ║                                           Copyright 1992, PC-SIG, Inc.  ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INFO.DOC
 
 {% raw %}

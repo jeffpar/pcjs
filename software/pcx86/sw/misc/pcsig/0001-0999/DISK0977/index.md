@@ -85,6 +85,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<   Disk No 977 PROINDEX   >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for ProIndex, Type: MANUAL (press enter)     ║
+║                                                                         ║
+║ To view the documentation on your srceen, type: VIEW (press enter)      ║
+║                                                                         ║
+║ To run the program ProIndex, Type: PROINDEX (press enter)               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PROINDEX.DOC
 
 {% raw %}

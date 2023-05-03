@@ -712,6 +712,20 @@ MENU	DW	32,24		;each cell is 32(h) X 24(v) dots
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1824  TURBOFLOW  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  FLOW (press enter)                             ║
+║                                                                         ║
+║ To print documentation, type:  COPY TBFLOW.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1824

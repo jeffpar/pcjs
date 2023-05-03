@@ -586,6 +586,32 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  PC-SIG Disk #2715 The Electronic Catalog Construction Kit  >>>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To install the program on a floppy disk, type: FLOPPY  (press enter)    ║
+║                                                                         ║
+║ To install to the hard drive. Copy all files to a subdirectory, and     ║
+║ (from the subdirectory) type: ARCE WEBSTER.ARC   (press Enter)          ║
+║ Once the files have been uncompressed;                                  ║
+║                                                                         ║
+║ To view the documentation, type: WAURADOC   (press Enter)               ║
+║                                                                         ║
+║ To start WAURA, type: WAURA   (press Enter)                             ║
+║                                                                         ║
+║ To start WQUICK, type: WQUICK   (press Enter)                           ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VENDOR.DOC
 
 {% raw %}

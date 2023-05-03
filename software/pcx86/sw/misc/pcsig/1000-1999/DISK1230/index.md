@@ -51,6 +51,23 @@ machines:
     All functions are menu driven with on-screen help.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1230 JOB COST  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type JCMENU (press enter)                         ║
+║                                                                         ║
+║ To copy the documentation to your printer, type JCMANUL (press enter)   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1230
 

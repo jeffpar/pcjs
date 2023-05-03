@@ -304,6 +304,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  Disk #1340  PC-PROJECT (Disk 1 of 2, #1341 also)  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation and installation instructions, insert      ║
+║           Disk 1341 and type:  COPY PCPROJ.DOC PRN (press Enter)        ║
+║                         also,  COPY README.DOC PRN (press Enter)        ║
+║                          and,  COPY FORM.DOC PRN (press Enter)          ║
+║                                                                         ║
+║   To install PC-PROJECT (this disk #1340), type:  INSTALL (press Enter) ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

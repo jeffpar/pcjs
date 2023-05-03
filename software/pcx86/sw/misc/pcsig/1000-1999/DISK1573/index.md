@@ -68,6 +68,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1573  CASINO SLOT MACHINES  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start SLOT, type:  SLOT (press enter)                                ║
+║ To start KENO, type:  KENO (press enter)                                ║
+║ To start LOW-BALL, type:  LOW-BALL (press enter)                        ║
+║                                                                         ║
+║ To print documentation, type:  COPY SLOT.TXT PRN                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SLOT.TXT
 
 {% raw %}

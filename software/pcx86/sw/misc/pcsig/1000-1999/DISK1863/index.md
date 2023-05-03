@@ -69,7 +69,20 @@ PC-SIG
 Sunnyvale  Ca. 94086                                                    
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
-
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1863  MATHPLOT  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: MATHPLOT                                        ║
+║                                                                         ║
+║ To print documentation, type: COPY MANUAL.TXT PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 
@@ -91,7 +104,7 @@ Sunnyvale  Ca. 94086
 
         Qty                           Unit price               Total
 
-        ___   MATHPLOT                  $25.00                ______
+        ___   MATHPLOT                  $25.00                ______
 ```
 {% endraw %}
 
@@ -1944,7 +1957,7 @@ Sunnyvale  Ca. 94086
 
 
 
-                                      26
+                                      26
 ```
 {% endraw %}
 

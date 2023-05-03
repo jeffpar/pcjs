@@ -161,6 +161,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk No 253  3by5 Starter Kit version 5.0 (Disk 1 of 2)  >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the manual, insert disk #1298 and type: MANUAL (press enter)   ║
+║                                                                         ║
+║ For information about the program, type README (press enter)            ║
+║                                                                         ║
+║ To run the program, type: 3BY5 (press enter)                            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0253

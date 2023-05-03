@@ -48,6 +48,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  PC-SIG Disk #2891 COMMANDER KEEN 4: GOODBY GALAXY (VGA)  >>>   ║
+║                         Disk 1 of 2 (also #2892)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unarchive the program to your hard drive, type: KEEN4-1 PATH         ║
+║ (eg. KEEN4-1 C:\KEEN)                                                   ║
+║                                                                         ║
+║ Repeat the same step with Disk #2892                                    ║
+║                                                                         ║
+║ Once unarchived, to start the program from the hard drive, type: KEEN4E ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992 PC-SIG, INC.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2891

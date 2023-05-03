@@ -136,6 +136,34 @@ Sunnyvale, CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<  Disk #1291  Small Business Zoomrack Set  >>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ This disk contains a number of racks which should be useful to          ║
+║ anyone who uses Zoomracks. To load the racks on this disk,              ║
+║ do the following from within the Zoomracks program.                     ║
+║                                                                         ║
+║ 1) Insert this disk in the B drive of your system.                      ║
+║ 2) Load Zoomracks as you would do normally.                             ║
+║ 3) Press ALT-E to go to the EXTRAS menu                                 ║
+║ 4) Press K to go to the CHANGE DISKS menu                               ║
+║ 5) Press B to load the directory of the B drive                         ║
+║ 6) Move the highlight bar down to the rack you want to load with the    ║
+║     cursor keys.                                                        ║
+║ 7) Press F3 to load the rack.                                           ║
+║                                                                         ║
+║ For users with a hard drive: You may copy the files onto your           ║
+║ hard-disk where Zoomracks is residing, thus making it easier to load    ║
+║ the files on this disk by cutting out steps 3-5 in the intructions      ║
+║ above.                                                                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1291

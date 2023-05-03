@@ -98,6 +98,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1572  PC-ZIPPER  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start PC-ZIPPER, type:  ZIP (press enter)                            ║
+║ To start ZIPTEST, type:  ZIPTEST (press enter)                          ║
+║                                                                         ║
+║ To print PC-ZIPPER documentation, type:  COPY PCZIPPER.TXT PRN          ║
+║ To print ZIPTEST documentation, type:  COPY ZIPTEST.TXT PRN             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PCZIPPER.TXT
 
 {% raw %}

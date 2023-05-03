@@ -103,6 +103,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║<<<<  PC-SIG Disk #2587 THE VOLUNTEER NETWORK #1 (also #2587, #2588) >>>>║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  For instructions on getting started, type: README (Enter)              ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1991, PC-SIG Inc.
+```
+{% endraw %}
+
+## ERROR.TXT
+
+{% raw %}
+```
+Unmatched number of parameters                                                  Has been defined private already                                                Cannot find procedure file                                                      Syntax error in filter expression                                               Cannot locate command file                                                      Not a Character expression                                                      File currently open                                                             No more variable space available                                                Maximum number of variables exceeded                                            File does not exist                                                             Data item not found                                                             Macro must be a character string                                                Either syntax error in expression, or data type mismatch,or variable undefined  Must operate on data type                                                       Invalid variable name                                                           Undefined variable encountered                                                  Invalid drive specifier                                                         Invalid report form file                                                        Report stack overflow                                                           You must use character string for file names, field names or variable names     Unrecognizable dCode, incompatible object file                                  Error creating file                                                             Error opening file                                                              Error closing file                                                              Error reading file                                                              Error writing file                                                              Error positioning in file                                                       BAD field name                                                                  BAD field type                                                                  Record out of range                                                             Not a dBASE III data base                                                       No such record in index                                                         Illegal key                                                                     No data base in use in area                                                     No INDEX file in use in area                                                    Creating from this file would end up with more than max. allowed # of fields!   Creating from this file would end up with more than max. allowed record size!   Index SYNC error                                                                Maximum allowed number of records reached                                       FIELD not found                                                                 Too many digits                                                                 Printer is either not connected or turned off                                   Not enough memory                                                               Mode error in forming file name                                                 Illegal work area number or alias                                               PARSER STACK OVERFLOW                                                           MACRO STACK OVERFLOW                                                            Not a LABEL file                                                                Illegal relation expression                                                     Editor stack overflow                                                           Filter expression not logical                                                   Cyclic relation not allowed                                                     No more file name space                                                         Too many relations in this chain                                                Bad path name                                                                   File server module error                                                        Binary file not found                                                           Memory allocation error                                                         Memory de-allocation error                                                      Maximum number of load modules exceeded                                         Feature not yet implemented                                                     Invalid function key or function number                                         Value out of range                                                              Stack underflow                                                                 Undefined function encountered                                                  Passing variable not defined                                                    Illegal function parameter(s)                                                   Expression stack overflow                                                       Maximum number of READs in a format file has been exceeded                      Structure invalid                                                               Syntax error in locate expression                                               Locate expression is not logical                                                Valid expression is either illegal or not of logical type                       Invalid order number                            
+```
+{% endraw %}
+
 ## ERROR.TXT
 
 {% raw %}
@@ -125,15 +149,32 @@ Unmatched number of parameters                                                  
     GO       BAT        38   1-31-91  12:58a
     GO       TXT       649   3-11-91   1:42p
     FILE2587 TXT      5925   3-11-91   3:44p
+    MANUAL       <DIR>    
+    VOLNET       <DIR>    
+            9 file(s)       9794 bytes
+
+     Directory of A:\MANUAL
+
+    .            <DIR>    
+    ..           <DIR>    
     PR       COM     11759   1-19-88   5:04p
     VCONT             1792   1-01-80  12:42a
     VFILE            28924   1-01-80  12:40a
     VTITLE             390   1-01-80  12:39a
     VUSER            58726   1-01-80  12:42a
-    GO~1     BAT       794   5-18-90  12:47a
+            7 file(s)     101591 bytes
+
+     Directory of A:\VOLNET
+
+    .            <DIR>    
+    ..           <DIR>    
+    GO       BAT       794   5-18-90  12:47a
     PKUNZIP  EXE     23528   3-15-90   1:10a
     VDATA    ZIP     31610   5-02-90  11:55a
     VOLNET   BAT        47   5-18-90  12:49a
     VREPT    ZIP    114462  12-04-89   7:38a
-           17 file(s)     281826 bytes
-                           31744 bytes free
+            7 file(s)     170441 bytes
+
+    Total files listed:
+           23 file(s)     281826 bytes
+                           29696 bytes free

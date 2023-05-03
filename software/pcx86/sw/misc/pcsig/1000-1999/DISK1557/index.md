@@ -125,6 +125,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1557  PC-SPEEDY MAILER  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start PC-SPEEDY MAILER, type:  MAIL (press enter)                    ║
+║                                                                         ║
+║ To print documentation, type:  PRTDOC (press enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

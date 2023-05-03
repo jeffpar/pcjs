@@ -892,6 +892,23 @@ REPORT   TXT     2069   4-29-89  10:45a   Problem report text
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #2052  MULTIBACK AND FINDZZ  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start COPY model of MULTIBAK, type:  MBC (press enter)               ║
+║ To start RENAME model of MULTIBAK, type:  MBR (press enter)             ║
+║ To start FINDZZ, type:  FNZ (press enter)                               ║
+║                                                                         ║
+║ To print MULTIBAK documentation, type:  MANUAL                          ║
+║ To print FINDZZ documentation, type:  COPY FNZMAN.TXT PRN               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MULTIBAK.DOC
 
 {% raw %}

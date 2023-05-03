@@ -96,6 +96,24 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  Disk #834 GRAPHTIME II (Hercules version) disk 2 of 2  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║            To print the help files, type: COPY *.GTH PRN                ║
+║             This will print instructions on how to use                  ║
+║                       the GRAPHTIME commands.                           ║
+║                                                                         ║
+║     This is the RUNTIME disk. To start program, put disk #833 in        ║
+║              drive A and type: GT (press enter)                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0834

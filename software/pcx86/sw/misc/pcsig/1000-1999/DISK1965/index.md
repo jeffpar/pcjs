@@ -89,6 +89,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #1965  HANGMAN  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: HANGMAN      (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: HMREAD                                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1965

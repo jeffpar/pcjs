@@ -62,6 +62,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #2232   VGA CONCENTRATION  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, copy each file to the printer, finishing one    ║
+║ before beginning the next.  Type:  COPY ALIVE.DOC PRN  (press ENTER)    ║
+║                                    COPY VC.DOC PRN  (press ENTER)       ║
+║                                    COPY README.DOC PRN  (press ENTER)   ║
+║                                    COPY REGISTER.DOC PRN  (press ENTER) ║
+║                                                                         ║
+║ To start the program, type:  VC  (press ENTER)                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

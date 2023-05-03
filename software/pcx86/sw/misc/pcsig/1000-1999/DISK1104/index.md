@@ -281,6 +281,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<< Disk No 1104  SONG CATALOGING SYSTEM FOR RECORD COLLECTORS  >>>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: PRINT (press enter)                   ║
+║                                                                         ║
+║ To run the program, type: MUSIC (pres enter)                            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INTRO.DOC
 
 {% raw %}

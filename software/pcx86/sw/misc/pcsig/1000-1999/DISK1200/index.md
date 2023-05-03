@@ -147,6 +147,28 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 1200 ANYWORD  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start INDEXER, type INDEXER (press enter)                            ║
+║                                                                         ║
+║ To start CONVCRLF, type CONVCRLF (press enter)                          ║
+║                                                                         ║
+║ To start FINDER, type FINDER (press enter)                              ║
+║                                                                         ║
+║ To start SFIND, type SFIND (press enter)                                ║
+║                                                                         ║
+║ To start MAKEID, type MAKEID (press enter)                              ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SFIND.DOC
 
 {% raw %}

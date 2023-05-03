@@ -3076,6 +3076,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1885  CONLOG  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: CONLOG       (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY CONLOG.DOC PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1885

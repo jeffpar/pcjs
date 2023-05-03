@@ -14,6 +14,35 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  PC-SIG Disk #2983 F-PROT  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install this program to your hard drive, type:                      ║
+║                                                                         ║
+║     [hard drive letter]:  (press Enter)                                 ║
+║     CD\  (press Enter)                                                  ║
+║     MD FPROT  (press Enter)                                             ║
+║     CD FPROT  (press Enter)                                             ║
+║     A:FPROT207  (press Enter)                                           ║
+║                                                                         ║
+║  To print installation instructions, type:  COPY INSTALL.DOC PRN        ║
+║                                             (press Enter)               ║
+║                                                                         ║
+║  To start the program, type:  F-PROT  (press Enter)                     ║
+║                                                                         ║
+║                                                                         ║
+║                                        (C) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2983
 

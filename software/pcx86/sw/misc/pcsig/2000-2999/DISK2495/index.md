@@ -459,6 +459,580 @@ accessing history files.
 ```
 {% endraw %}
 
+## DPDOC.TXT
+
+{% raw %}
+```
+┌────────────────────┐
+│RE REPEATING ENTRIES│
+└────────────────────┘
+
+a) descriptions
+
+The RE function is used to create transactions to be
+automatically transferred each period to the General Ledger
+transaction file.  During the End of Period (EP) process, the
+Repeating entries are checked against the Chart of Accounts.  If
+the account has been closed or in the case of assets, retired,
+the transaction will not be posted to the new period's General
+Ledger.
+
+
+
+    17:16:32        * PRACTICE AAA COMPANY *           06/04/90
+                      Accounting Main Menu            Period:13
+
+    F1 Help     ESC Exit          F6 Calculator     F10 Window
+
+              ┌──────────<< Batch Records >>───────────────┐
+              │Comp:    AAA   Source : RE                  │
+              │                                            │
+              │Transactions:       6    Total:        0.00 │
+    ┌─────────┴────────────────────────────────────────────┴──┐
+    │Account Dept  TransDate     Amount   Reference     Descr │
+    ├─────────────────────────────────────────────────────────┤
+    │ 1120   15    05/15/90      100.00     cash      money re│
+    │ 1120   15    05/15/90     -100.00     cash      offset f│
+    │ 5300   16    05/22/90    12300.00     rent      rent all│
+    │ 1120   16    05/22/90   -12300.00                       │
+    │ 1120   15    05/22/90 -1000000.00                       │
+    │ 1130   16    05/22/90  1000000.00     account           │
+    └─────────────────────────────────────────────────────────┘
+                           F3 Print Batch
+
+      A Add     E Edit    D Delete   <>  to move    Esc to exit
+
+
+
+As the example shows, the screen format is very much like the ET
+ADD function.  All entries in RE are given an 'RE' source code.
+
+For control, no records will be written until the entire batch is
+balanced.  If unbalanced, the modify screen will display, forcing
+adjustments to records that have been entered before exiting.
+
+b) operations
+
+
+1) Add and Edit
+
+The Add, Edit and Delete operations are exactly like the Add,
+Edit and Delete operations decribed in the ET Transaction Entry
+module.
+
+Please see the ET Transaction Entry portion of this manual.
+
+
+2) Delete
+
+This function will delete a transaction from the repeating entry
+file.  Any transaction deleted during the current period will
+still be included in the GL transaction file unless specifically
+deleted from that file also.  Subsequent periods will not contain
+the deleted entry.
+
+F3 Print Report
+
+
+This option prints the entire batch of repeating entries since
+there are usually not enough to warrent a selection screen on
+account and transaction number range.
+
+Please see the Report Examples in the Appendix.
+
+F4 Post Immediate
+
+
+This program allows the owner to post individul batches to the
+General Ledger without having to wait for the EP process.  The
+advantage here is to allow entry of repeating entries at any
+point during the current period and to post them immediately.
+
+
+
+
+```
+{% endraw %}
+
+## DTDOC.TXT
+
+{% raw %}
+```
+┌────────────────────┐
+│DT DEPARTMENT MASTER│
+└────────────────────┘
+
+
+ATTENTION
+
+  There must be at least one department identified for each
+company in the system.
+
+ 
+a) description
+
+DT is used to add, modify and delete department records.  Each
+department number must be unique within that specific company
+when entered.
+
+The department master is used in validations during transaction
+entry and in report production to help determine how information
+is to be summarized and printed.
+
+A department record may be identified as a group, single, or
+subsidiary department.  A group department may include one or
+many subsidiaries.  The ENDING DEPARTMENT field identifies the
+last department for a given group. GRPIND with a value of 'Y'
+indicates a group department. A 'N' GRPIND indicates a subsidiary
+department or a single department unaligned with a given group. 
+
+In certain functions, like the balance sheet and income
+statements, the client may select all group departments by
+entering a "99".  The group indicator (GRPIND) therefore is used
+for purposes beyond the identification of group records.
+
+
+    16:56:34       * PRACTICE AAA COMPANY *            06/04/90
+                      Department Master               Period:13
+
+   F1 Help      ESC Exit           F6 Calculator     F10 Window
+
+     Comp    Dept     Department Name       Grpind     End Dept
+
+      AAA      13   Group Department           Y         19
+      AAA      15   East Bay Toke Club         N         15
+      AAA      16   East bay S & R             N         16
+      AAA      18   test department            N         18
+      AAA      20   Group Data Processing      Y         29
+      AAA      22   test sub department        N         22
+
+
+                        F3 print report
+
+     A Add     E Edit     D Delete       to move   Esc to exit
+
+
+b) operations
+
+1) Add and Edit
+
+
+
+
+   16:56:34       * PRACTICE AAA COMPANY *            06/04/90
+                     Department Master               Period:13
+
+   F1 Help      ESC Exit          F6 Calculator     F10 Window
+
+    ┌────────────────────────────────────────────────────────┐
+    │Comp    Dept     Department Name     Grpind     End Dept│
+    │                                                        │
+    │ AAA      13   Group Department           Y         19  │
+  ┌─┴────────────────────────────────────────────────────────┴┐
+  │(Comp) (Dept)            (Name)        (Grpind)  (End Dept)│
+  │ AAA     16    East bay S & R              N           16  │
+  └─┬────────────────────────────────────────────────────────┬┘
+    │ AAA      20   Group Data Processing      Y         29  │
+    │ AAA      22   test sub department        N         22  │
+    └────────────────────────────────────────────────────────┘
+
+            Ctrl-W save edits    Esc exit without saving
+
+
+
+
+
+  The Add/Edit screen is similar to the Add/Edit screens in other
+functions. Ctrl-W will save the current changes and ESC will
+restore the record back to its values prior to changing.
+
+  The COMPANY must exist in the system's STARTUP file, before the
+transaction will be accepted.  The ENDING DEPARTMENT field
+appears only if a Y is entered for the GROUP FIELD ? prompt.  The
+value must be equal to or greater than the DEPARTMENT in order to
+be accepted.
+
+
+
+2) Delete
+
+
+To DELETE a record, it must exist on the file.  Any department
+with active transactions will not be deleted.  If this occurs, a
+message will appear on the screen "To delete a department under
+this condition, first delete the transactions".
+
+
+
+    16:56:34       * PRACTICE AAA COMPANY *            06/04/90
+                       Department Master              Period:13
+
+    F1 Help      ESC Exit          F6 Calculator     F10 Window
+
+   ┌──────────────────────────────────────────────────────────┐
+   │Comp    Dept     Department Name       Grpind     End Dept│
+   ├──────────────────────────────────────────────────────────┤
+   │ AAA      13   Group Department           Y         19    │
+   │ AAA      15   East Bay Toke Club         N         15    │
+   │ AAA      16   East bay S & R             N         16    │
+   │ AAA      18   test department            N         18    │
+   └──────────────────────────────────────────────────────────┘
+           ┌───────────────────────────────────────────┐
+           │  This record will be deleted from the file│
+           │        Do you want to do this? Y/N        │
+           └───────────────────────────────────────────┘
+
+
+
+F3 Print Report
+
+  The report option is simply a straight record by record print
+of the Department master file
+ 
+                         Department List
+
+        Comp    Dept   Name               Grp     Erange    
+
+        ABC      10    ACCOUNTING          Y        19
+        ABC      20    FINANCE             N        20
+        ABC      30    PRODUCTION          Y        49
+        BBC      10    ACCOUNTING          N        10
+
+```
+{% endraw %}
+
+## EPDOC.TXT
+
+{% raw %}
+```
+┌────────────────────────────┐
+│PE END OF PERIOD PROCESSING │
+└────────────────────────────┘
+ 
+PE is used to archive the current data files and to prepare the
+system for the new period.  In order to execute, all transactions
+must be posted and the required financial statements executed and
+balanced.
+
+While running, the screen will indicate the program's progress. 
+The first screen to appear is a WARNING message that describes the
+procedure and tells the user how to abort the process in case of
+accidental selection.
+
+The first validation checks for unposted transactions.  If there
+were modifications, deletions, or additions to the General Ledger
+(Accounts Payable and Accounts Receivable if installed) transaction
+files since the last execution of the financial statements the
+following message will appear:
+
+
+     'Unposted Transactions.  Need to run both Income
+      and Balance Sheet.'
+
+
+If one of the required statements was executed the message will
+request the one still needed.  For example:
+
+
+     'Income Statement ran.  Still need to run 
+      Balance Sheet.'
+
+
+Continuing, if both of the required statements were executed and
+the balance sheet is balanced, a message will appear on the screen
+defining the process to follow.
+
+
+     'Updating account balances ...'
+
+
+At this point, Files will be updated and backup copies made.  Once
+done, the current Trial Balance is archived.  The name assigned is
+composed of the 'AS OF DATE' of the current period and a two
+character mnemonic indicating the file type.  For example, a period
+ending May 31, 1985 will have an associated file archived as
+T053186.  The user will be prompted for a new period 'AS OF DATE'
+for each company in the system.
+
+
+     'Please enter new period As of Date' 06/30/86 
+
+If the new date is greater than the old period date, the repeating
+entries are validated and transferred to the now empty GL
+transaction file.  Any transaction with an account number that has
+been retired or closed in the GL master will not be copied.
+
+If the old period happens to be the end of the fiscal year, the
+income statement accounts are "zeroed" out and the Trial Balance
+updated for the Retained Earnings account specified in the SETUP
+file.
+
+Finally, the files are reindexed and control is returned to the
+MAIN MENU.
+```
+{% endraw %}
+
+## ETDOC.TXT
+
+{% raw %}
+```
+
+┌─────────────────────┐
+│ET ENTER TRANSACTIONS│
+└─────────────────────┘
+
+a) description
+
+ET is used to record general transactions not recorded in the
+specific modules (Accounts Payable/Accounts Receivable).  When
+added, modified or deleted the transaction is posted to the
+General Ledger Transaction file and the Trial Balance
+immediately.
+
+ET transactions can only be entered for a the signon company
+during a given session.
+
+At the start of each update function, a special security flag is
+set to assure only balanced batches are posted.  During the
+normal exit of the ET function an automatic file backup is
+executed if the AUTO RESTORE flag is set on in the company's
+setup file. In the case of an abnormal termination, such as a
+power loss, an automatic file recovery is conducted during the
+sign on process. This effectively restores the General Ledger and
+Trial Balance to the point prior to the aborted function.
+
+
+
+
+    22:34:08         * PRACTICE AAA COMPANY *         06/06/90
+                   General Ledger Transactions       Period:10
+
+    F1 Help    ESC Exit           F6 Calculator     F10 Window
+
+         ┌────────────────<< Batches >>─────────────────┐
+         │                                              │
+         │Comp  Code   Period  Batch Date  Batch Number │
+         ├──────────────────────────────────────────────┤
+         │ AAA   CSD    10     06/06/90          2      │
+         │ AAA   JE     10     06/06/90          3      │
+         │ AAA   INV    10     06/06/90         10      │
+         │ AAA   RE     10     07/31/89        999      │
+         └──────────────────────────────────────────────┘
+     F3 print report  F4 select batch  F5 transaction register
+
+     A Add     E Edit    D Delete   <>  to move    Esc to exit
+
+b) Operations
+ 
+1) Add and Edit
+
+ The Add, Edit and Delete functions deal with the batch group
+record. Add and Edit provide the means to add new batch header
+records and change existing ones, respectively. The batch date
+and batch number must be unique for the given company when
+entered.
+
+ In the case of Edit, only the Code, Batch date and Batch Number
+can be changed. If any of these values are changed the change is
+also reflected in each of the transaction records composing the
+batch.
+
+ For instance if we were to change the source code in the first
+batch listed, from CSD to CSR then all those transactions in the
+batch would be changed accordingly.
+
+
+2) Delete
+
+ In the delete mode, all records associated with the batch will
+be deleted and the Trial Balance updated. This powerful command
+has a warning message displayed at time of selection.
+Furthermore, precautions have been placed in the system to allow
+the disabling of this function through the Company Setup file
+(ST).
+
+F3 Print Report
+
+ This option will list all batches in the system giving a total
+transaction count and dollar amount for each.
+
+ Please refer to the Report Example appendix for an example of
+the report layout.
+
+ 
+F4 select batch
+ 
+ This option opens a particular batch for viewing and/or
+modifications.
+
+
+
+   22:34:08        * PRACTICE AAA COMPANY *           06/06/90
+                  General Ledger Transactions        Period:10
+
+   F1 Help      ESC Exit         F6 Calculator     F10 Window
+
+            ┌───────────<< Batch Records >>───────────────┐
+            │Comp:    AAA   Source : RE                   │
+            │Batch Date: 07/31/89  Batch Numb:  999       │
+            │Transactions:       2    Total:         0.00 │
+    ┌───────┴─────────────────────────────────────────────┴───┐
+    │Account Dept  TransDate   Amount    Reference     Descr  │
+    ├─────────────────────────────────────────────────────────┤
+    │ 1130   15   06/06/90      100.00   cash deposit  mellon │
+    │ 1120   15   06/06/90     -100.00   transfer             │
+    │ 1210   15   06/06/90  1000000.00                        │
+    │ 1220   15   06/06/90  1000000.00   sales to dt          │
+    │ 4200   16   06/06/90 -2000000.00                        │
+    └─────────────────────────────────────────────────────────┘
+
+      A Add     E Edit    D Delete  <>  to move   Esc to exit
+
+
+1) Add and Edit
+
+a) Description
+
+ A batch consists of a number of transaction records which
+together net to the balance of zero. If the Change and Delete
+flag is set in the Company Setup record, records may be changed
+for Accounts, Departments and Amounts.
+
+ When exiting the batch, the balance must be equal to zero or the
+individual will be stuck in the process until the batch is in
+balance. Turning off the computer or 'rebooting' to avoid
+balancing will be recognized during the next signon process and
+depending on the security measure selected, an online restore
+will be automatically performed to assure data integrity. This
+option is controlled in the Setup function.
+
+ Assuming the batch is balanced the trial balance is updated
+during the exit process and the user is returned to the Batch
+listing screen. 
+
+ Several Edits are in place to assure intergrity and to avoid
+costly keying errors. Besides forced balancing, account and
+departments must be validated for the selected company while
+amounts entered in the transaction amount field must be within
+the range determined in the General Ledger for that particular
+account number.
+
+ In particularly the range function helps control common mistakes
+with debit and credits by allowing the specification of negative
+and positive dollar amounts. For instance, a sales account number
+may be set up to handle transaction amounts in the range of -
+999,999.99 to -9.99. If the keyer were to erroneously enter a
+positive figure recognition would be immediate.
+
+b) operations
+
+As in most multi-record display screens desired records are
+selected by highlighting them and pressing enter. In the case of
+Add a blank record appears. Fields may be navigated by using the
+navigation keys described in the appendix. CTrl W saves the
+changes made or adds a new record if that be the case. The ESC
+key aborts the process and restores the batch back to the state
+prior to selecting the record.
+
+2) Delete
+
+The current highlighted record may be deleted by pressing  the
+delete key (D). A confirmation message will appear before the
+record is actually deleted and the batch balance reduced.
+ 
+ F5 Transaction Register
+
+
+This option provides the ability to create various reports by
+allowing the operator to chose an Account and Transaction Date
+range, and by selecting specific Source Codes.  Default values
+exist in the fields in order to facilitate the process.  A source
+code window is provided by hitting the F10 key.
+
+The screen body appears below: 
+
+                                      
+                                      ┌────────────────────────┐
+                                      │     Source Codes:      │
+                                      │                        │
+   ENTER START TRANS DATE   07/02/86  │CSD - cash disbursements│
+   ENTER END TRANS DATE     07/02/86  │CSR - cash receipts     │
+                                      │JE  - journal entry     │
+                                      │RJE - reverse journal   │
+                                      │PPA - prior period adj  │
+   ENTER SOURCE CODE(S)               └────────────────────────┘
+                                                                
+   ENTER ACCOUNT #  -- START      0 
+   (To cancel enter 0)  END    9999 
+ 
+
+
+Any combination of the above fields may be used to select records
+from the General Ledger transaction file.  Please note only those
+transactions pertaining to the company selected will be
+displayed. 
+
+To cancel a request and return to the GL menu, enter a zero in
+the END account number field or press the ESC kay.
+
+The Transaction register may also be used to print all records
+within a given batch. As the function is selected a prompt will
+appear asking whether or not a single batch list is desired. By
+entering the Batch Date and Batch number the entire batch is
+printed. *
+
+
+*  NOTE: This idea came from several users who desired an easy
+way to see an entire batch of transactions.
+
+Report Examples
+
+Some common report examples from the Transaction Register
+function may include the following: 
+ 
+ Request: 
+     Find all cash receipt transactions entered during the month.
+     
+
+ Selection criteria: 
+     Enter "CSR" in the first source code field and the first and
+     last dates of the month 07/01/86 - 07/31/86.
+ 
+ Request: 
+     Get all cash account entries regardless of source code. 
+
+ Selection Criteria: 
+     Enter the cash account range in the START and END account 
+     fields and leave Source Code fields blank.
+ 
+ Request: 
+     List all transactions for the current period. 
+
+ Selection Criteria: 
+     Simply enter the date parameters that assure all records 
+     will be selected 01/01/80 - 12/31/87 and leave the other
+     fields at default values.
+
+ Request: 
+     List all cash transactions with "CSD" and "CSR" source
+     codes.
+
+ Selection Criteria: 
+     Enter "CSR" and "CSD" into the first 2 source code fields
+     and the appropriate account range for cash accounts based on
+     the Chart of Accounts.
+
+
+The above examples may or may not be useful for your particular
+needs but they do show the possible selection criteria available.
+As you become more familiar with the software and the
+application, requests will be tailored to specific needs. 
+
+More specifity is available through the Report Writer option
+described in Chapter 5.
+```
+{% endraw %}
+
 ## FUNCKEY.TXT
 
 {% raw %}
@@ -1475,6 +2049,175 @@ future reference.
 ```
 {% endraw %}
 
+## GLDOC.TXT
+
+{% raw %}
+```
+┌────────────────────────┐
+│GL GENERAL LEDGER MASTER│
+└────────────────────────┘
+
+Introduction
+
+The General Ledger Master programs are used to enter and modify
+the General Ledger Chart of Accounts (GL).  Comprehension of the
+following information is crucial to the successful implementation
+of the accounting package.  Practice is STRONGLY RECOMMENDED
+before attempting to set up the chart of accounts for your actual
+business.  See the Utility Menu for a more detailed description
+of the Practice System.
+ 
+All the transaction programs use the GL to validate entries and
+to produce reports.  The Report program formats the financial
+statements based on the account TYPE assigned.  One GL Master is
+created for all the companies in a corporation.  Individual
+accounts are assigned by adding them with the ADD option.
+
+
+a) Description
+ 
+The number entered into the ACCOUNT NUMBER field must be unique
+for the corporation.  If an account record already exist with the
+account entered, a message will appear '** ALREADY HAVE AN ENTRY
+FOR THIS ACCOUNT **' and the screen will be redisplayed.
+
+Duplicate account numbers are not allowed. Group account numbers
+within the boundaries of another defined group and ending range
+values that extend into another group field are disallowed.
+Detailed field descriptions
+
+The CLASSIFICATION field relates to the accounting classification
+of Assets, Liabilities, Capital, Revenue and Expense.  It is
+required that the account numbers entered for any classification
+be contiguous or the financial statements might produce erroneous
+balances.  The range file determines the allowable range for
+accounts within a given classification.  Any value other than
+that specified will be discarded and an 'OUT OF RANGE' error
+displayed.
+
+The TYPE field is used to describe the type of account for
+transaction posting and financial statement headings. 
+
+o  A TYPE 'P' account designates that when encountered during a
+balance sheet or income statement (financials) execution, the
+printer will advance and print the Account DESCRIPTION centered
+at the top of the next page.
+
+o  A TYPE 'T' field will print the description in the center of
+the page without advancing.
+
+o  A TYPE 'S' account when encountered will print the current
+total of the prior postable accounts (L) since the last 'S'
+entry.
+
+o  A TYPE 'G' will print the description and total of preceding
+'L' balances up to the last 'G' entry. 
+
+o  A TYPE 'M' account is used to subtract the current 'S' type
+account from  the preceding 'S' type. Its most familar use is to
+determine Gross Profit on a income statement.
+
+o  Finally, an 'L' type account represents a postable account
+used for the recording of daily operations.  Only L TYPE accounts
+may be posted. An 'L' account may be designated as a GROUP
+account by entering the ENDING RANGE account.
+The GROUP FIELD entry is to identify an account with
+subsidiaries. The 'ENDING ACCOUNT' number is the ending range of
+the subsidiary accounts.  That is, any account greater than or
+equal to the group account and less than or equal to the ending
+account will be included in the "group" account balance.  The
+group field designator is also used to identify which accounts
+appear on the financial statements.  Since only group fields do
+appear, to include single postable account records enter 'Y'. 
+The system will automatically enter the same account number in
+the ENDING ACCOUNT field.  A group account cannot be within
+another group account for unpredictable results may occur.
+
+The CLOSED INDICATOR is used to stop entry of transactions from
+ET, AR, and AP transaction programs. To close an account enter a
+'Y' via the Modification option.
+
+The RETIREMENT DATE field appears for asset classified accounts
+only.  It is used to automatically delete repeating depreciation
+entries from the RE file.  When the current period's date exceeds
+the retirement date, the entry is deleted from the repeating
+transaction batch during the EP process after the final
+transaction is posted to the new period.
+
+1) Add Edit
+
+
+
+     15:29:15       * PRACTICE AAA COMPANY *       06/20/90
+                     General Ledger Master         Period:1
+
+      F1 Help     ESC Exit       F6 Calculator     F10 Window
+
+    ┌────────────────────────────────────────────────────────┐
+    │Account Description            Class  Type Group Endrang│
+    ├────────────────────────────────────────────────────────┤
+    │ 1100 Cash                        A      L    Y     1149│
+    │ 1120 Bank Two                    A      L    N     1120│
+    │ 1130 Bank three                  A      L    N     1130│
+    │ 1150 Accounts Receivable         A      L    Y     1150│
+    │ 1160 Notes Receivable            A      L    Y     1160│
+    │ 1210 Raw Materials               A      L    Y     1210│
+    │ 1220 Finished Goods - WIP also   A      L    Y     1220│
+    │ 1299 CURRENT ASSETS              A      S    N     1299│
+    │ 1300 Equipment                   A      L    Y     1339│
+    │ 1320 Truck                       A      L    N     1320│
+    │ 1340 Accumulated Depreciation    A      L    Y     1340│
+    │ 1350 FIXED ASSETS                A      S          1350│
+    └────────────────────────────────────────────────────────┘
+                 F3 Print report        F4 Display totals
+
+        A Add    E Edit   D Delete   <> to move    Esc to exit
+
+
+
+2) Delete
+
+This function is used to delete records from the account master. 
+No deletion will be allowed if there exist transaction records in
+the Accounts Payable(AP), Accounts Receivable(AR), or General
+Ledger(ET) transaction files.  To delete these accounts, you must
+first delete the corresponding transactions.  This check is
+provided to assure that all transactions are posted and 
+included in the financial statements. 
+
+F3 Print Records
+
+The Print account option lists the account records stored in the
+Chart of Accounts.  To print all accounts, hit the ESC key to
+accept the default values placed on the screen by the computer. 
+The screen appears below. To exit place a zero in the END account
+field and hit the RETURN key.
+
+                                
+               ENTER ACCOUNT #     -- START     0 
+               (TO CANCEL ENTER 0 HERE) END  9999 
+
+F4 Display Totals
+ 
+ 
+This option prints the current Trial Balance in Account sequence
+either by company or for the corporation.
+
+
+                          TRIAL BALANCE
+
+ Comp Acct Dept  Description     Beginning   Current     YTD 
+ 
+ AAA  1100  10   CASH             100.00     100.00     200.00 
+ AAA  1100  15   CASH               0.00     100.00     100.00 
+ AAA  1100  16   CASH               0.00      10.00      10.00 
+ AAA  1120  10   CASH AT BANK1    200.00      10.00     210.00 
+ AAA  1120  15   CASH AT BANK1    200.00       0.00     200.00 
+ AAA  1120  16   CASH AT BANK1      0.00       0.00       0.00 
+
+```
+{% endraw %}
+
 ## INSTALL.TXT
 
 {% raw %}
@@ -2101,6 +2844,352 @@ discounts by showing volumes purchased.
 ```
 {% endraw %}
 
+## RPDOC.TXT
+
+{% raw %}
+```
+┌──────────────────┐
+│RP REPORT PROGRAM │
+└──────────────────┘
+
+a) description
+
+The Report Program (RP) provides access to the financial
+statements and account queries.  At any time during the current
+period these reports may be executed.  Since the system has
+automatic posting, they provide figures as of that moment in
+time.
+
+The consolidated Balance Sheet and Income Statement must be
+executed and balanced following any modifications to the
+transaction files before an end of period (EP) can be performed. 
+Balance Sheets by department and by company do not have to
+balance in order to close the current period's books.
+
+
+
+
+                   * Your Company Name Here * 
+                         Report Program 
+
+
+               A.   EXIT - RETURN TO MAIN MENU 
+               B.   BALANCE SHEET per Company 
+               C.   BALANCE SHEET Consolidated 
+               D.   BALANCE SHEET per Department 
+               E.   INCOME STATEMENT per Company 
+               F.   INCOME STATEMENT Consolidated 
+               G.   INCOME STATEMENT per Department 
+               H.   QUERY AN ACCOUNT 
+               I.   DETAILED TRIAL BALANCE. 
+               J.   DETAILED BALANCE SHEET 
+               K.   DETAILED INCOME STATEMENT 
+
+                    ENTER A SELECTION:      
+
+
+
+
+Balance Sheet per Company
+
+The Balance Sheet option first prompts us for the company name: 
+
+               Select a COMPANY
+               Hit the ESC key to exit
+ 
+and provides for request cancellation.  If an invalid company is
+entered an error message will appear and the program will abort
+and return to the Report Menu.
+
+All non zero accounts defined as group accounts will be printed.
+If the total Assets is not equal to Liabilities and Capital, an
+error message will be printed on the last line of the report.  An
+"Unbalanced" message is however, highly unlikely due to the
+stringent validation routines used in the transaction programs.  
+After the Balance Sheet is created, the user will be asked: 
+
+                Do you want subsidiary schedules?
+ 
+Entering a 'Y' will produce a seperate schedule for each group
+account defined in the Chart of Accounts.  A balance will be
+printed for each account within the group account's defined
+range.
+
+
+Balance Sheet Consolidated 
+
+This option is used to create the consolidated balance sheet. 
+All company balances both Year to Date and Current will be
+combined in this report.  Similar to option B, the user will have
+the option of producing subsidiary schedules.
+
+A new feature provided in Version 2.0 is the ability to select
+the companies to combine.
+
+
+Balance Sheet Departmental 
+
+This option allows the production of balance sheets by
+departments within a specific company.  All group departments may
+be selected by entering "99" into the department field.  The
+entry screen appears below:
+
+
+             Select a Company      BAR 
+             Select a department of 99 for all   0 
+             Make sure the PRINTER is on ! 
+             Enter a "Q" to quit and return to MENU 
+ 
+
+Only those departments assigned in the Department Master (DT)
+table will be used.  Group departments, like group accounts, will
+combine the amounts for all subsidiaries in the reported fiqure. 
+To get a balance sheet for a subsidiary department either change
+the department's group indicator on the department master to 'Y'
+prior to a '99' department selection or select it specifically by
+entering the department number in the selection screen.
+
+
+Income Statements 
+ 
+Since the Income Statement selection screens are identical to
+those used for the Balance Sheets, an operational clarification
+is not needed.  However, the report formats do differ.  Notably,
+the calculation of NET INCOME and percentages for each line item
+appear on the statements.  For a detailed example of all reports
+in this section see REPORT EXAMPLES. 
+
+
+Query an Account
+
+
+
+          Select a Company or leave blank for ALL   BAR 
+          Enter the desired ACCOUNT                1000 
+          Select a department                 0 
+          (enter 99 for all) 
+          Enter a "Q" to quit and return to MENU 
+ 
+
+To QUERY an account enter the desired account number.  A second
+screen will ask whether or not Year to Date or Current data is
+requested and whether or not to display the data to the CRT or
+the printer.
+
+If the account is present on the General Ledger Master, the
+description field and all transactions in the current or history
+GL, AR and AP transaction files will be printed.
+
+Unlike the Transaction Register functions provided in ET, AP, and
+AP, querying an account includes transactions from all files.
+
+
+Detailed Trial Balances
+
+The DETAILED TRIAL BALANCE list all transactions in the current
+Accounts Payable, Accounts Receivable and General Ledger files. 
+The report is broken down by department within account and lists
+only those departments with transactions.
+
+The DETAILED BALANCE SHEET and DETAILED INCOME STATEMENT have
+been provided to allow the accountant to select only those
+accounts associated with a specific financial statement. This
+facilitates research, since history transaction listings can be
+lengthy.
+
+```
+{% endraw %}
+
+## SUDOC.TXT
+
+{% raw %}
+```
+┌──────────────────────────────────┐
+│TB Trial Balance and Comparisons  │
+└──────────────────────────────────┘
+
+a) description.
+
+TB is primarily used to enter the initial account balances for each
+company defined in the SETUP file.  It can also be used to modify
+or display trial balances and, to compare by company or
+corporation, account balances from different periods. Option E
+produces a variance report of budget and actual balances. Option F
+is used to enter the current and Yearly budget figures. 
+
+
+                   * Your Company Name Here *
+                           SU Start Up
+
+
+               A.   EXIT - RETURN TO MAIN MENU 
+               B.   Display Trial Balances 
+               C.   Change Trial Balances 
+               D.   Periodic Comparison 
+               E.   Budget Comparison 
+               F.   Budget Entries 
+               G.   Create Trial Balance File 
+
+                    ENTER A SELECTION:      
+
+b) Operations
+
+
+Display Trial Balances
+
+Displays a record from the Trial Balance file to the screen.
+
+
+               Enter ACCOUNT   1000 
+               Enter COMPANY           XYZ 
+               Enter DEPARTMENT         10 
+                    YTD Balance              1000.00 
+                    Current Bal              1000.00 
+                    Current Budget            500.00 
+                    YTD Budget               1000.00 
+
+
+
+No modifications may be done on this screen. 
+Pressing any key but the ESC key will advance to the next record.
+
+Change Trial Balance 
+
+Allows us to change a record in the current period's Trial balance
+file. The accountant may start at a specific account number by
+filling in the appropriate field or may elect automatic prompting. 
+
+
+                  Enter Starting Company   XYZ 
+                  Enter Starting Account   1000 
+
+
+The system will list the accounts in Company, Account and
+Department order.
+
+When displayed the user may change either the YEAR TO DATE or
+CURRENT balance field or both. Hitting the return key advances to
+the next field and then the next record on file.
+
+
+            ** Hit ESC to Quit ** 
+                                          Description 
+
+            Enter ACCOUNT    1000         CASH Account 
+            Enter COMPANY     XYZ 
+            Enter DEPARTMENT   10 
+
+            YTD balance       123.45 
+            Current Balance   100.00 
+
+
+
+The user may exit from this screen by hitting the ESCape key.  Any
+changes prior to this will be saved in the current file.  
+
+
+Periodic Comparisons
+
+The financial compare program will allows us to compare any two
+previous accounting periods. Both periods must exist on the current
+disk or an error message will appear:
+
+ 'Sorry Can't find both files'
+
+ Past period files are saved during the EP process.
+
+
+The selection screen appears below: 
+
+
+                   * Your Company Name Here * 
+                       SU Period Compare 
+
+
+            Enter first period  (MM/DD/YY) ' 01/31/86 
+                  second period (MM/DD/YY) ' 02/28/86 
+
+            Do you want Group Accounts only ?   
+            Enter the Company desired or   
+               leave blank for ALL 
+
+
+
+Budget Comparisons
+ 
+The Budget Comparison program displays the Variance between the
+current period's account balances in the Trial Balance and the
+Budgeted amount (see OPTION F on entering budget).
+
+The selection screen appears below: 
+
+
+                   * Your Company Name Here * 
+                       SU Budget Compare 
+
+
+                 Do you want Group Accounts only ? 
+                 Enter the Company desired or 
+                    leave blank for ALL 
+
+
+
+See an example of the report layout in the REPORT EXAMPLE section
+of this manual.
+
+
+Budget Entries
+
+Like OPTION C, the Budget can be entered through an automatic
+prompting mode that is based on the combination of Company, Account
+and Department.
+ 
+
+                  Enter Starting Company   XYZ 
+                  Enter Starting Account   1000 
+
+
+When displayed the user may change either the YEAR TO DATE or
+CURRENT budget field or both. Hitting the return key advances to
+the next field and then the next record on file.
+
+
+               ** Hit ESC to Quit ** 
+                                        Description 
+
+               Enter ACCOUNT    1000    CASH Account 
+               Enter COMPANY     XYZ 
+               Enter DEPARTMENT   10 
+
+               YTD budget        123.45 
+               Current Budget    100.00 
+
+
+
+The user may exit from this screen by hitting the ESCape key.  Any
+changes prior to this will be saved in the current file.
+
+
+Create Trial Balance
+
+This option displays the following description when chosen: 
+
+ 
+          ** This procedure automatically erases the ** 
+          ** current Trial Balance file and rebuilds ** 
+          ** it record by record based on the Ac-    ** 
+          ** counts and Departments in the current   ** 
+          ** files. 
+
+          Do you wish to continue ? 
+
+
+
+
+CAUTION All balances are destroyed when this procedure is executed.
+```
+{% endraw %}
+
 ## TABLECON.TXT
 
 {% raw %}
@@ -2159,6 +3248,93 @@ APPENDIX
        F. Windowed Screen
        G. Conversion from older versions
     
+```
+{% endraw %}
+
+## UTDOC.TXT
+
+{% raw %}
+```
+┌──────────────┐
+│ UTILITY MENU │
+└──────────────┘
+
+UT provides certain functions essential for proper system use.
+
+
+
+                   * YOUR COMPANY NAME HERE *
+                          UTILITY MENU
+
+
+               A.   EXIT - RETURN TO MAIN MENU
+               B.   BACKUP to diskette
+               C.   RESTORE from diskette
+               D.   REINDEX All Files
+               E.   RESTORE from online
+               F.   PRACTICE System Install
+               G.   PRACTICE System Deinstall
+               H.   Access to DOS
+               I.   Query and Report Writer
+               J.   Notepad
+               K.   Calculator
+               L.   Read Manual on-line
+ 
+                    Enter a Selection:      
+
+
+
+
+
+
+The BACKUP facilities (B) are used to back up the current
+period's transaction files to diskette.  The backups are a safety
+measure in case of hardware failures or accidental file deletion. 
+Backups can be created as often as desired but frequency usually
+depends on the volume of activity.  If the AUTO RESTORE flag is
+set in the company's setup record, an online backup is saved each
+time records have been modified. The files are stored in the
+\ACCT directory with a SAV extension.  Offline backups require
+formatted diskettes for operations.  Consult your DOS manual for
+the FORMAT command if necessary.
+
+The RESTORE programs (C and D) are used to copy saved files back
+into the system.  Caution is advised since any data not stored on
+the back ups will be overwritten.  Once complete, the REINDEX
+option must be executed.  In case of hard disk failure, a
+reinstall of the software is necessary before an Offline restore
+can be completed. 
+
+The REINDEX utility recreates the inter-file relationships
+necessary for data retrieval.  This facility should be the first
+course of action taken when the system 'hangs' or produces bad
+data during program execution.  If it fails to alleviate the
+problem, try restoring back up files before reindexing. 
+
+The system comes equipped with a PRACTICE set of files for the
+General Ledger Chart of Accounts and Department Master.  For
+first time users and those exploring new areas of the system, it
+is advised to perform such activity using these files prior to
+production use.
+
+Selecting the PRACTICE SYSTEM INSTALL Option copies the practice
+files into the production environment after it safely saves the
+current files to the backups (Online Backup).
+
+To end the Practice session, select option G.  All data entered
+in the Practice System will be saved so that a customized test 
+system may evolve.  This feature allows a trainee to pick up
+where he/she left off.
+
+Option H allows direct access to the operating system without
+leaving the Accounting System.  Any DOS command can be executed,
+including other programs, as long as there is enough memory. 
+
+The Query, Notepad and Calculator functions are utility programs
+described in detail in the appendix.
+
+Option L allows viewing the operation manual on-line without
+leaving the system.
 ```
 {% endraw %}
 

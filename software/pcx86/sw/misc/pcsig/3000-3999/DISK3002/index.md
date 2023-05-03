@@ -47,6 +47,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  PC-SIG Disk #3002 SNOOP  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print documentation, type:  COPY SNOOP.DOC PRN  (press Enter)       ║
+║                                                                         ║
+║  To run the program, type:  SNOOP  (press Enter)                        ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SNOOP.DOC
 
 {% raw %}

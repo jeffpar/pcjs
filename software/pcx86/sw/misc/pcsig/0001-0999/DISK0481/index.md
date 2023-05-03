@@ -83,6 +83,74 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #481 STILL RIVER SHELL  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for STILL RIVER SHELL type the command:      ║
+║               MANUAL (press enter)                                      ║
+║                                                                         ║
+║ To start the program, Type: SR (press enter)                            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+## GOODIES.DOC
+
+{% raw %}
+```
+Here are some programs to make your batch files better.
+
+XDOS  calls another batch file from within a batch file, executes
+the called batch file and returns to the next line after the XDOS
+statement.  XDOS invoked batch files may themselves contain  XDOS
+statements.
+
+	SAMPLE prog1		(sample command)
+	
+
+	SAMPLE.BAT:
+
+	(other dos commands)
+	XDOS DOASM %1		(calls DOASM batch file and returns)
+	(other dos commands)
+
+
+	DOASM.BAT:		(edit, assemble and display output)
+
+	COPY %1.asm %1.bak	(backup file)
+	XDOS EDIT %1.asm	(call procedure to edit file)
+	XDOS ASM %1		(call procedure to assemble file)
+	XDOS LINKIT %1.obj	(call procedure to link file)
+
+
+PUSHD pushes the current directory onto a stack and establishes a
+new current directory.
+
+POPD  pops  a  directory  off  the stack and makes it the current
+directory.
+
+Posit: you want to execute an editor from any directory; but, the
+editor  only  edits files in its own directory.  In addition, you
+want to have only one copy of the editor and the batch file  that
+calls it.
+
+	EDIT.BAT:	     (called in above procedure)
+
+	COPY %1 \editdir     (copy file from current dir to edit dir)
+	PUSHD \editdir       (save current dir; est \EDITDIR as new cur dir)
+	XEDIT %1             (edit file within \EDITDIR)
+	POPD		     (restore original dir)
+	COPY \editdir\%1     (copy edited file back to original dir)
+	DEL \editdir\%1      (remove working copy from \EDITDIR)
+
+
+```
+{% endraw %}
+
 ## GOODIES.DOC
 
 {% raw %}
@@ -187,9 +255,19 @@ to the Shell's command set.
     SRF1     BAT      1220   1-03-89   2:13a
     SRUPDATE HIS      7552   1-14-89   2:14p
     SRVER258 DOC      7808   1-14-89   4:42p
+    GOODIES      <DIR>    
+           15 file(s)     216258 bytes
+
+     Directory of A:\GOODIES
+
+    .            <DIR>    
+    ..           <DIR>    
     GOODIES  DOC      1455   2-14-86   1:58p
     POPD     EXE      6592  10-19-84   4:07p
     PUSHD    EXE      6923  10-19-84   4:06p
     XDOS     EXE     10547   4-22-85   1:18p
-           18 file(s)     241775 bytes
-                           68608 bytes free
+            6 file(s)      25517 bytes
+
+    Total files listed:
+           21 file(s)     241775 bytes
+                           67584 bytes free

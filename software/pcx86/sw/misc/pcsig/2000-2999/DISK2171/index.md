@@ -66,6 +66,18 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk No 2171 PC_UTIL (disk 2 of 2, also 2170)  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the file description, type: COPY READ.ME PRN (press enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2171
@@ -77,6 +89,14 @@ Sunnyvale  Ca. 94086
     GO       BAT        38  10-19-87   3:56p
     GO       TXT       386   4-26-90   5:35a
     FILE2171 TXT      1851   4-26-90   6:57p
+    QUICK_C      <DIR>    
+    LETS_C       <DIR>    
+            6 file(s)       3939 bytes
+
+     Directory of A:\QUICK_C
+
+    .            <DIR>    
+    ..           <DIR>    
     CL       BAT       128  12-06-89   9:50a
     PC_EXER  C        1920  12-06-89  11:40a
     PC_EXER  EXE     12355  12-06-89  11:47a
@@ -84,14 +104,23 @@ Sunnyvale  Ca. 94086
     PC_SUMRY         10368  12-06-89  11:49a
     PC_UTIL  C       20608  12-06-89  11:47a
     PC_UTIL  OBJ      5891  12-06-89  11:47a
-    READ~1   ME       1664  12-06-89   9:51a
-    PC_UTI~1 OBJ      5047  12-06-89  12:04p
-    READ~2   ME       1664  12-06-89   9:47a
-    PC_EXE~1 EXE     13984  12-06-89  12:04p
-    PC_UTI~1 C       20864  12-06-89  11:59a
-    PC_HED~1 H         768  12-06-89   9:40a
-    PC_SUM~1         10368  12-06-89  11:49a
-    CL~1     BAT       128  12-06-89   9:46a
-    PC_EXE~1 C        1920  12-06-89  11:55a
-           20 file(s)     112384 bytes
-                           41984 bytes free
+    READ     ME       1664  12-06-89   9:51a
+           10 file(s)      53702 bytes
+
+     Directory of A:\LETS_C
+
+    .            <DIR>    
+    ..           <DIR>    
+    PC_UTIL  OBJ      5047  12-06-89  12:04p
+    READ     ME       1664  12-06-89   9:47a
+    PC_EXER  EXE     13984  12-06-89  12:04p
+    PC_UTIL  C       20864  12-06-89  11:59a
+    PC_HEDR  H         768  12-06-89   9:40a
+    PC_SUMRY         10368  12-06-89  11:49a
+    CL       BAT       128  12-06-89   9:46a
+    PC_EXER  C        1920  12-06-89  11:55a
+           10 file(s)      54743 bytes
+
+    Total files listed:
+           26 file(s)     112384 bytes
+                           40960 bytes free

@@ -107,6 +107,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk #866 DEEP SPACE (disk 1 of 2, also #867)  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For installation instructions, type:  TYPE README.DOC (press Enter)     ║
+║                                                                         ║
+║ To start program, type:  DS3D (press Enter)                             ║
+║                                                                         ║
+║ To print documentation, insert disk 2, and type:                        ║
+║                    COPY TEXT.TXT PRN (press Enter)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

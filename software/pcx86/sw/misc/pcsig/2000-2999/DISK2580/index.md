@@ -79,6 +79,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  PC-SIG Disk #2580  TEMPLEXX: THE TEMPLATE MULTIPLEXER  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To read the list of the application programs currently supported by    ║
+║  TEMPLEXX, type:  Type SUPPLIED.LST  (press Enter)                      ║
+║                                                                         ║
+║  To print the documentation and installation instructions, type:        ║
+║                    COPY READ.ME PRN  (press Enter)                      ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2580
@@ -126,6 +145,16 @@ Sunnyvale  Ca. 94086
     FILE2580 TXT      4145   3-18-91  11:37a
     GO       BAT        38   1-31-91  12:58a
     GO       TXT       925   2-27-91   5:47a
+    WP5      0   <DIR>    
+           41 file(s)     300443 bytes
+
+     Directory of A:\WP5.0
+
+    .            <DIR>    
+    ..           <DIR>    
     PC-SIG   DOC      1421   9-16-90   4:32p
-           41 file(s)     301864 bytes
-                           35840 bytes free
+            3 file(s)       1421 bytes
+
+    Total files listed:
+           44 file(s)     301864 bytes
+                           34816 bytes free

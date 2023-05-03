@@ -154,6 +154,31 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #1462  HP DESKJET FONTS & UTILITIES  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print documentation, type:  COPY README.1ST PRN (press Enter)       ║
+║                                                                         ║
+║  To install the program and read installation instructions, type:       ║
+║                        INSTALL (press Enter)                            ║
+║                                                                         ║
+║  To read the registration offer, type:  TYPE SPECIAL.OFF (press Enter)  ║
+║                                                                         ║
+║  To print the registration form, type:  COPY REGISTER.DOC PRN (Enter)   ║
+║                                                                         ║
+║  To read list of Elfring Soft Font products, type:  TYPE CATALOG (Enter)║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REGISTER.DOC
 
 {% raw %}

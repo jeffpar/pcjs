@@ -2411,6 +2411,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No: 35  Games Series No 5  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   How to start: For instructions on running BASIC programs, please      ║
+║   refer to your computer manual concerning BASIC language programs.     ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GOLF.BAS
 
 {% raw %}

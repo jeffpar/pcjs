@@ -85,6 +85,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  Disk No 2083 PC-FILE disk 2 of 3 (2082 & 2084 also) >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program to your hard disk, type INSTALL (press enter)    ║
+║                                                                         ║
+║ For documentation on this program, insert disk 3 and type:  DOC         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2083

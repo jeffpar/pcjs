@@ -1403,6 +1403,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3097 CUTZIT  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To read the introductory information, type:  TYPE CUTZREAD.ME  (Enter) ║
+║                                                                         ║
+║  To print the documentation, type:  CUTZMAN  (press Enter)              ║
+║                                                                         ║
+║  To start the program, type:  CUTZIT  (press Enter)                     ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3097

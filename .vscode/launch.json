@@ -826,27 +826,6 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --extract --expand",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
-      "args": [
-        "--all='/disks/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0478/archive/DISK0478.ZIP'",
-        "--extract",
-        "--expand",
-        "--overwrite",
-        "--quiet",
-        "--verbose",
-        "--extdir=%d"
-      ],
-      "cwd": "${workspaceFolder}",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ]
-    },
-    {
       "name": "Node: diskimage.js --extract --expand --normalize",
       "type": "node",
       "request": "launch",
@@ -872,9 +851,29 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--collection=pcsig/0001-0999/DISK0147",
+        "--collection=pcsig/0001-0999/DISK0186",
         "--checkdisk",
+        "--metadata",
         "--rebuild"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
+      "name": "Node: diskimage.js --collection --extract --expand --normalize",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
+      "args": [
+        "--collection=pcsig/1000-1999/DISK1535",
+        "--extract",
+        "--expand",
+        "--normalize",
+        "--overwrite"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,
@@ -889,26 +888,9 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--collection=miscdisks",
+        "--collection=pcsig/0001-0999/DISK0186",
         "--checkpage",
         "--rebuild"
-      ],
-      "cwd": "${workspaceFolder}",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ]
-    },
-    {
-      "name": "Node: diskimage.js --collection --extract",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
-      "args": [
-        "--collection",
-        "--extract",
-        "--quiet"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,

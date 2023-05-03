@@ -496,6 +496,33 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═══════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #2346  TEXTOUT, CONVDW, TEXTCON  >>>>         ║
+╠═══════════════════════════════════════════════════════════════════════╣
+║ To start the program TEXTOUT/5, type:  TEXTOUT5 (press ENTER)         ║
+║                                                                       ║
+║ To print out documentation for TEXTOUT5, type:                        ║
+║                                COPY TEXTOUT5.DOC PRN (press ENTER)    ║
+║                                                                       ║
+║ To start the program CONVDW, type:  CONVDW   (press ENTER)            ║
+║                                                                       ║
+║ To print out documentation for CONVDW, type:                          ║
+║                                COPY CONVDW.DOC PRN  (press ENTER)     ║
+║                                                                       ║
+║ To start the program TEXTCON, type:  TEXTCON  (press ENTER)           ║
+║                                                                       ║
+║ To print out documentation for TEXTCON, type:                         ║
+║                                COPY TEXTCON.DOC PRN  (press ENTER)    ║
+╚═══════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+```
+{% endraw %}
+
 ## TEXTOUT5.DOC
 
 {% raw %}

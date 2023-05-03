@@ -908,6 +908,36 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## README.TXT
+
+{% raw %}
+```
+╔═══════ DB-VCR Quick-Start Instructions   Version 3.0 ═══════╗
+║ To print the db-VCR Documentation    type:   PRNTDOC        ║
+║                                                             ║
+║ To execute the db-VCR system         type:   DB-VCR         ║
+║    (default = color and sound)                              ║
+╠═════════════════════════════════════════════════════════════╣
+║    You may however, wish to use one of db-VCR's parameter   ║
+║  switches which will allow db-VCR to be customized for your ║
+║    particular computer.  The parameters are listed below:   ║
+║                                                             ║
+║    /B - load in Black & White (color disabled)              ║
+║    /S - load without sound effects                          ║
+║    /F - If your monitor produces flicker (snow)             ║
+║    /C - If your monitor is not clearing the screen properly ║
+║  /DRIVE=D: If you wish to use a data disk for your entries  ║
+║        (See the db-VCR.DOC file for more information)       ║
+╠═════════════════════════════════════════════════════════════╣
+║ Example:To load db-VCR in Black & White w/out Sound effects ║
+║                                                             ║
+║                 type:   DB-VCR /B /S                        ║
+║                                                             ║
+║       Any parameters used must be separated by a space!     ║
+╚═════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1347

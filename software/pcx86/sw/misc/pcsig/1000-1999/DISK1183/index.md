@@ -1021,6 +1021,24 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk No 1183 MTOOL & CONVERT  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start MTOOL, type MTOOL (press enter)                                ║
+║                                                                         ║
+║ To copy documentation for MTOOL to the printer, type MTDOC (press enter)║
+║                                                                         ║
+║ To start CONVERT, type CONVERT (press enter)                            ║
+║                                                                         ║
+║ To copy CONVERT documentation to the printer, type CDOC (press enter)   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MTOOL.DOC
 
 {% raw %}

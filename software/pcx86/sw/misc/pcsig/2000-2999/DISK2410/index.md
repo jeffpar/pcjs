@@ -506,6 +506,43 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  PC-SIG Disk #2410  DAYO AR (ACCOUNTS RECEIVABLE)  >>>>       ║
+║                     (Disk #2 of 2, #2409 also)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read author's note, type:  TYPE README (press Enter)                 ║
+║                                                                         ║
+║ NOTE:  To update earlier DAYO modules, you will need Disk #2396, DAYO   ║
+║ UPDATE & CONVERSION.                                                    ║
+║                                                                         ║
+║ To print the registration form, type:  COPY DAYO.TXT PRN (press Enter)  ║
+║                                                                         ║
+║ If you purchased it, insert #2395 (DAYO MENU (CLOCK & SETUP)) to set up ║
+║ the DAYO package, which includes DAYO AR.                               ║
+║                                                                         ║
+║ Otherwise, copy the contents of this disk into the \DAYOAR directory    ║
+║ on your hard disk (see directions found on GO file, Disk #2409) and run ║
+║ the self-extracting file found on this disk.                            ║
+║                                                                         ║
+║   To print this disk's documentation, if any, type:                     ║
+║              COPY [module's filename].DOC PRN (press Enter)             ║
+║                                                                         ║
+║ NOTE:  The #2395 DAYO MENU program/batch file (MENU.BAT) has the        ║
+║ respective module's subdirectories in it, and will require editing if   ║
+║ you decide to use it and place the DAYO modules elsewhere.              ║
+║                                                                         ║
+║ To print this GO file, type:  COPY GO.TXT PRN (press Enter)             ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2410

@@ -900,6 +900,26 @@ programs are self-prompting.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 1316  MANAGING PEOPLE  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:                                     ║
+║                                                                         ║
+║             PRINTDOC (press enter)                                      ║
+║                                                                         ║
+║   To start the program, type:                                           ║
+║                                                                         ║
+║             MENU (press enter)                                          ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INTERVEW.DOC
 
 {% raw %}

@@ -332,6 +332,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  << Disk No 269  BetaTool's BASIC Development System (Demo version) >>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To read the documentation on this disk enter:                         ║
+║                                                                         ║
+║                       MANUAL (press enter)                              ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SAMPLE.BAS
 
 {% raw %}

@@ -146,6 +146,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 292 SPACEWARS  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start SPACEWARS on a hercules graphics card, type SWH (press enter)  ║
+║                                                                         ║
+║ To start SPACEWARS on a color graphics card, type SWC (press enter)     ║
+║                                                                         ║
+║ To print SPACEWARS Documentation type: copy spacewar.doc prn            ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SPACEWAR.DOC
 
 {% raw %}

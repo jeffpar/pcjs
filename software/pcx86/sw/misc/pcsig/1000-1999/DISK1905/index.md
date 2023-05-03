@@ -81,6 +81,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1905  PRO FOOTBALL LINEMAKER  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  PFL (press enter)                              ║
+║                                                                         ║
+║ To print documentation, type:  COPY PFL.DOC PRN                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1905

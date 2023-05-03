@@ -271,6 +271,24 @@ NUMBER  .DOC   Documentation for NUMBER.EXE
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk No 1214 IT'S ALL IN THE BABY'S NAME  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, BABY (press enter)                                ║
+║                                                                         ║
+║ To print the documentation to your printer, type BABDOC (press enter)   ║
+║                                                                         ║
+║ To start the game NUMBER, type NUMBER (press enter)                     ║
+║                                                                         ║
+║ To print the documentation for NUMBER, type NUMDOC (press enter)        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NUMBER.DOC
 
 {% raw %}

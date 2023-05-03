@@ -63,6 +63,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #2848  LEANER  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Install Leaner to your hard drive, type:                            ║
+║                                                                         ║
+║         C:                                               (Enter)        ║
+║         MD \LEANER                                       (Enter)        ║
+║         CD \LEANER                                       (Enter)        ║
+║         A:LEAN200   (With PC-SIG disk #2848 in drive A)  (Enter)        ║
+║                                                                         ║
+║ To begin the program, type:  LEANER  (press Enter)                      ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2848

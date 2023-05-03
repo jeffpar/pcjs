@@ -93,6 +93,23 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1001 MACPASTE  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, Type:                        ║
+║                        MANUAL (press enter)                             ║
+║                                                                         ║
+║ To start a program simply type in the name of the program you wish to   ║
+║ run.  For example, if you wanted to run the MACPASTE program you would  ║
+║ type:  MACPASTE (press enter)                                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MACBLANK.DOC
 
 {% raw %}

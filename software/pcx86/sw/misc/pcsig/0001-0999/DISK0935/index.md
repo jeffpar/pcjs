@@ -454,6 +454,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk No 935  MSPANTOC & BIBLIO & LIST-MGR  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation on this disk, type:                          ║
+║                  COPY READ.ME PRN  (press Enter)                        ║
+║                                                                         ║
+║ When READ.ME is finished printing, type:                                ║
+║                  MANUAL (press Enter)                                   ║
+║                                                                         ║
+║ To run the program MSPANTOC, Type: MSP (press enter)                    ║
+║                                                                         ║
+║ To run the program BIBLIO, Type: BIBLIO (press enter)                   ║
+║                                                                         ║
+║ To run the program LIST-MGR, Type: LIST-MGR (press enter)               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## LIST-MGR.DOC
 
 {% raw %}

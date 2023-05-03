@@ -115,6 +115,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #422 SCREENWRIGHT PROFESSIONAL  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program and print manual type: SWSETUP  (press enter)        ║
+║                                                                         ║
+║ To start program after installation, type: SWPRO  (press enter)         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SWPRO.TXT
 
 {% raw %}

@@ -165,6 +165,23 @@ Sunnyvale, CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #641 MAHJONG  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation type MANUAL (press enter)                    ║
+║                                                                         ║
+║ To start the CGA program type MAHJONG (press enter)                     ║
+║                                                                         ║
+║ To start the Hercules program type HMAHJONG (press enter)               ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HERCULES.DOC
 
 {% raw %}

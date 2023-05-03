@@ -70,6 +70,28 @@ Sunnyvale, Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1045 ELECTRON  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ For information about the program, type: README (press enter)           ║
+║                                                                         ║
+║ To start the program on an IBM machine [or clone], type:                ║
+║                                                                         ║
+║             ELEC87 (press enter)                                        ║
+║                                                                         ║
+║ To start the program on a Tandy 1000, type:                             ║
+║                                                                         ║
+║             ELECTRON (press enter)                                      ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1045

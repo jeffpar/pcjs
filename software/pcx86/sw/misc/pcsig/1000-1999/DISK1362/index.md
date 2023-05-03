@@ -82,6 +82,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk No 1362 THE PASSING PASSAGES & GS-TESTIT DATA DISK >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Copy all files to your hard drive, unarchive files will take up 800K    ║
+║ To unarchive the program, type: FLYING (press enter)                    ║
+║                                                                         ║
+║ For info on the programs, type: TYPE README.DOC (press enter)           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

@@ -111,6 +111,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No 1337 PCC PERSONAL C COMPILER  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program to your hard drive, type INSTALLH followed by    ║
+║ your hard disk drive letter and then (press enter)                      ║
+║                                                                         ║
+║ Example, if your hard disk is drive C: you would type,                  ║
+║                       INSTALLH C: (press enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PCC.DOC
 
 {% raw %}

@@ -95,6 +95,21 @@ Type in the command Golotus and press <ENTER>
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk #847 LOTUS LEARNING SYSTEM  (disk 2 of 2)  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For documentation, insert disk #846 and type; printme or readme.        ║
+║                                                                         ║
+║ Put disk #846 in drive a and disk #847 in drive b                       ║
+║ To start the LOTUS LEARNING SYSTEM type; LEARN B:LOTUS (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0847

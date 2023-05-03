@@ -531,6 +531,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #1562  ADVERTISING RESPONSE MANAGER >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type:  AINSTALL (press enter)                     ║
+║                                                                         ║
+║ To print the documentation, type: COPY ARM.DOC PRN (press enter)        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1562

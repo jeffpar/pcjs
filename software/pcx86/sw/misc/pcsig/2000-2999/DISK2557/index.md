@@ -67,6 +67,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #2557  ALITE   >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  The program is distributed in archived format. In order to install it  ║
+║  to your system, type: TINSTALL                                         ║
+║                                                                         ║
+║  To print installation instructions, type: COPY READ.ME PRN             ║
+║                                                                         ║
+║                                                                         ║
+║                                      (c) Copyright 1991, PC-SIG Inc.    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LICENSE.DOC
 
 {% raw %}

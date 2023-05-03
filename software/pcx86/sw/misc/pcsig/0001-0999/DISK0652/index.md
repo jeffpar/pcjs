@@ -76,6 +76,28 @@ Sunnyvale, CA  94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #611 Hi-Res Rainbow  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║          To look at the documentation on your screen enter:             ║
+║                             TYPE README.1ST    (press enter)            ║
+║                                                                         ║
+║          To print out the documentation enter:                          ║
+║                              COPY README.1ST    (press enter)           ║
+║                                                                         ║
+║          To Start HI-Res Rainbow type the following command:            ║
+║                                                                         ║
+║                             HIRES (press enter)                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NOTES652.TXT
 
 {% raw %}

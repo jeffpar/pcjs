@@ -79,6 +79,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk #2119 MENU CONSTRUCTION SET (disk 2 of 2, 1924 also) >>>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start using the program, type:  COPY README PRN  (press enter)       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## MCS.TXT
 
 {% raw %}
@@ -477,11 +492,21 @@ Sunnyvale  Ca. 94086
     GO       BAT        38   1-01-80   1:37a
     GO       TXT       575   1-01-80   1:42a
     FILE2119 TXT      2369   7-13-90  11:31p
+    EXAMPLE      <DIR>    
+           10 file(s)     244200 bytes
+
+     Directory of A:\EXAMPLE
+
+    .            <DIR>    
+    ..           <DIR>    
     MCS      DBF      2559   6-11-89   2:30p
     MCS      DBT      3433   6-08-89   9:13p
     MCS      NTX      2048   6-08-89   9:13p
     MCSTITLE DBF       541   6-08-89   9:13p
     MCSTITLE NTX      2048   6-08-89   9:13p
     SETTINGS DAT      5065   6-11-89   2:30p
-           15 file(s)     259894 bytes
-                           55296 bytes free
+            8 file(s)      15694 bytes
+
+    Total files listed:
+           18 file(s)     259894 bytes
+                           54272 bytes free

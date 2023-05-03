@@ -52,6 +52,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  PC-SIG Disk #2760 THINKING MAN'S SOLITAIRE disk 2 of 2 >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To install the program, view or print documentation, insert disk 1      ║
+║       and type: TMSTART  (press Enter)                                  ║
+║                                                                         ║
+║ To finish installing, insert disk 2 and type: INSTALL (press Enter)     ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2760

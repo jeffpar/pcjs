@@ -1307,6 +1307,33 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk No 1074 GAME FUN FOR ALL  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for EGA Casino, type:                        ║
+║               COPY CASINO.DOC LPT1: (press enter)                       ║
+║ To run the program EGA Casino, type: CASINO (press enter)               ║
+║                                                                         ║
+║ To see the documentation for XWord, type:                               ║
+║               GO (press enter)                                          ║
+║ To run the program XWord, type: XWORD (press enter)                     ║
+║                                                                         ║
+║ To print the documentation for Castle Droganya, type:                   ║
+║                COPY DROGANYA.DOC LPT1: (press enter)                    ║
+║ To run the programs Castle Droganya and PC Minute Math, please          ║
+║      consult your Basic language manual for the correct syntax          ║
+║        for your machine.                                                ║
+║ To run the LIAR'S POKER program, type LPOKER (press enter)              ║
+║ To copy the documentation for LIAR'S POKER to your printer, type        ║
+║                     COPY LPOKER.DOC LPT1: (press enter)                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LPOKER.DOC
 
 {% raw %}

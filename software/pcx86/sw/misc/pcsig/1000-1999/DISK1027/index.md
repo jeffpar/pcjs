@@ -59,6 +59,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1027  AMORTIZATION TABLE  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the AMORTIZATION program, type: AMOR (press Enter)             ║
+║                                                                         ║
+║ To print the documentation, type: PRINTMAN  (press Enter)               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1027

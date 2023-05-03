@@ -105,6 +105,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk #2001  KINGDOM OF KROZ II/RETURN TO KROZ  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start KINGDOM OF KROZ II, type: KINGDOM  (press enter)               ║
+║                                                                         ║
+║ To start RETURN TO KROZ, type: RETURN  (press enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2001

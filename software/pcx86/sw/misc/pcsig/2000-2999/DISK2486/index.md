@@ -50,6 +50,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2486 SOFF-BALLS  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print out documentation for SOFF-BALLS, type:                        ║
+║                                COPY README PRN  (press ENTER)           ║
+║                                                                         ║
+║ To start the program SOFF-BALLS, type:  SB  (press ENTER)               ║
+║                                                                         ║
+║ To print out the registration form, type:  COPY INVOICE.DOC PRN  (Enter)║
+║                                                                         ║
+║                                                                         ║
+║                                     (c) Copyright 1991, PC-SIG Inc.     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INVOICE.DOC
 
 {% raw %}

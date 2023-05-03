@@ -56,6 +56,31 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  DISK #2379 MOVIE GUIDE  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ The files for MOVIE GUIDE are contained in a self-unarchiving file      ║
+║ called MOVIE2. To unarchive the program type: MOVIE2 X                  ║
+║ (X is the drive and path were you want the program to be located)       ║
+║ (example MOVIE2 C:\MOVIE)                                               ║
+║                                                                         ║
+║ Once unarchived, to start MOVIE GUIDE, type: MOVIE                      ║
+║                                                                         ║
+║ To print the documentation, type: COPY MOVIE.DOC PRN                    ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2379

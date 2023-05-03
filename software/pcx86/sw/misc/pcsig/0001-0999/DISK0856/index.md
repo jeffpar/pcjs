@@ -551,6 +551,29 @@ Papillion, NE  68046
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<< Disk #856 FUNCTION KEY HELPER, FONT EDITOR and GROCERY >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation for FONT EDITOR to your printer, type;        ║
+║                COPY FONTEDIT.DOC PRN (press enter)                      ║
+║                                                                         ║
+║ To copy the documentation for GROCERY to your printer, type;            ║
+║                COPY GROCERY.DOC PRN (press enter)                       ║
+║                                                                         ║
+║ To start the FUNCTION KEY HELPER, type; FKH (press enter)               ║
+║                                                                         ║
+║ To start the FONT EDITOR for a 40 column computer, type; FONTED40       ║
+║ To start the FONT EDITOR for a 80 column computer, type; FONTED80       ║
+║                                                                         ║
+║ To start the GROCERY program, type; GROCERY (press enter)               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GROCERY.DOC
 
 {% raw %}

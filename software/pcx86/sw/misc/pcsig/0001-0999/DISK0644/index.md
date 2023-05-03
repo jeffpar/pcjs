@@ -192,6 +192,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk #644 THE STOCK TRADER  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ You must first run the configuration program before you start,          ║
+║ to do this type: CONFIG (press enter) and follow the prompts.           ║
+║                                                                         ║
+║ To start the program type: STOCK (press enter)                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NOTES.TXT
 
 {% raw %}

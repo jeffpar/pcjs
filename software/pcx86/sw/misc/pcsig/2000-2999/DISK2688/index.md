@@ -46,6 +46,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2688  WALLMAC  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ WALLMAC =                                                               ║
+║   Copy the BMP files to your Windows subdirectory.                      ║
+║                                                                         ║
+║   Run the Windows program:  WIN  (press Enter)                          ║
+║                                                                         ║
+║   From the Program Manager, choose the Control Panel.                   ║
+║   From Control Panel, choose Desktop.                                   ║
+║   From Desktop, choose Wallpaper.                                       ║
+║   From Wallpaper, choose Colormac or Monomac.                           ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

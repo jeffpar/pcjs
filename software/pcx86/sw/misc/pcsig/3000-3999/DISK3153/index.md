@@ -14,6 +14,31 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  PC-SIG Disk #3153 DTSEARCH  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To install the program, type:  INSTALL  (press Enter)                  ║
+║                                                                         ║
+║  After installation, change to the drive\subdirectory where the program ║
+║  files are located and start the program by typing:  DTSEARCH  (Enter)  ║
+║                                                                         ║
+║  The program manual can be printed by typing:                           ║
+║                                          COPY DTSEARCH.DOC PRN  (Enter) ║
+║                                                                         ║
+║                                                                         ║
+║                                         (c) Copyright 1993, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3153
 

@@ -1211,6 +1211,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #702 DANCAD3D (Disk 1 of 4)  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, Type,                        ║
+║                           COPY DANCAD3D.DOC PRN (press enter)           ║
+║                                                                         ║
+║ To install DANCAD3D, Type: INSTALL (press enter)                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PCSIG.TXT
 
 {% raw %}

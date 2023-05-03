@@ -91,6 +91,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk No 2145 HANDICAP HORSE RACING  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To create your track, type: TRACK (press enter. This must be done first)║
+║                                                                         ║
+║ To start the program, type: RACE  (press enter)                         ║
+║                                                                         ║
+║ To print the documentation, type: COPY README.HRI PRN (press enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2145

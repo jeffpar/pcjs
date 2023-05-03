@@ -54,6 +54,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<< PC-SIG Disk #2539 HOME & BUSINESS LEGAL GUIDE  >>>>         ║
+║                  Disk 1 of 3 (also #2540 and #2668)                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the instructions, type:  COPY READ.ME PRN  (press Enter)      ║
+║                                                                         ║
+║  To install the program to your hard drive, type:  INSTALL  (Enter)     ║
+║                                                                         ║
+║                                                                         ║
+║                                     (c) Copyright 1991, PC-SIG Inc.     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VENDOR.DOC
 
 {% raw %}

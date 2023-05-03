@@ -1013,6 +1013,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1820  DOCUHELPER  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  DOCUMENT (press enter)                         ║
+║                                                                         ║
+║ To print documentation, type:  COPY DOCUMENT.DOC PRN                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1820

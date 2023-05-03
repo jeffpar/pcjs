@@ -99,6 +99,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2274  EASYEDIT II  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For installation instructions, type:  READ.ME  (press Enter)            ║
+║                                                                         ║
+║ (When answering the INSTALL questions, make sure to answer "Y" or "N"   ║
+║      when confirming the directory you want the program to go to.)      ║
+║                                                                         ║
+║ To read the README.1ST file, type:  TYPE README.1ST  (press Enter)      ║
+║                                                                         ║
+║ To print manual, type:  COPY EASYMAN.TXT PRN  (press Enter)             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2274

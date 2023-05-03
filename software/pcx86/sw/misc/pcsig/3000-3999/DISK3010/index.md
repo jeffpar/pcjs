@@ -65,6 +65,31 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #3010  COSMO'S COSMIC ADVENTURES  >>>>        ║
+║                         Disk 1 of 2 (also #3076)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To install the program files, follow the directions after typing:      ║
+║                                                 INSTALL  (press Enter)  ║
+║                                                                         ║
+║  Follow the same instructions for Disk 2.                               ║
+║                                                                         ║
+║  To view Apogee's catalog of games, type:  CATALOG  (press Enter)       ║
+║                                                                         ║
+║  To print the order form, have your printer ready and type:             ║
+║                                      COPY ORDER.FRM PRN  (press Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                       (c) Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3010

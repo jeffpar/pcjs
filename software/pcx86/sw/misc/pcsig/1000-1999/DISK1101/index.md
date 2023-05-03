@@ -940,6 +940,49 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1101 UTILITY POTLUCK  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ MasterDOS replaces the DOS commands with single keystrokes. You have    ║
+║ files and want them on drive A? Place the cursor on the files, mark     ║
+║ them and type "CA[return]". The "C" tells MasterDOS to copy, the "A"    ║
+║ says where, and RETURN tell MasterDOS to start. Do you know a files     ║
+║ name just forgot what directory it is in. Type: L, the filename,        ║
+║ [RETURN], and there it is. MasterDOS has has terminal emulation with    ║
+║ BATCH file transfer capabilities and much more.                         ║
+║                                                                         ║
+║ MasterDOS allows you to get the most from your computer. MasterDOS      ║
+║ has all of the DOS commands, more features and personal options.        ║
+║                                                                         ║
+║                       A must for all PC users.                          ║
+║                                                                         ║
+║       Type:    D followed by the [ENTER] key to run MasterDOS           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1101 UTILITY POTLUCK  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for AUTONUM, type DOC (press enter)          ║
+║                                                                         ║
+║ To start AUTONOUM, type AUTONUM (press enter)                           ║
+║                                                                         ║
+║ To print the documentation for CIPHER, type CIPDOC (press enter)        ║
+║                                                                         ║
+║ To start CIPHER, type CIPHER (press enter)                              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

@@ -120,6 +120,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk No 931 SPEEDYMAILER  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, Type:                                       ║
+║             COPY READ-ME.DOC LPT1: (press enter)                        ║
+║                                                                         ║
+║ To run the program, Type: SMAIL (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## READ-ME.DOC
 
 {% raw %}

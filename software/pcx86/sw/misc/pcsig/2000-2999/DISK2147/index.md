@@ -159,6 +159,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #2147 ECOMASTER & BORDER  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start ECOMASTER, type:  ECO (press enter)                            ║
+║                                                                         ║
+║ To start BORDER, type:  BORDER (press enter)                            ║
+║ To print documentatin, type : COPY BORDER.DOC PRN (press enter)         ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2147

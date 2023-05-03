@@ -81,6 +81,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk No 996 DO-IT-YOURSELF PROMO KIT  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To run the BIRTHDAY CARD program, Type BDAYCARD (press enter)           ║
+║                                                                         ║
+║ To run the CHRISTMAS CARD program, Type: XMASCARD (press enter)         ║
+║                                                                         ║
+║ To change the messages for a card, Type: CHNGMSG (press enter)          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0996

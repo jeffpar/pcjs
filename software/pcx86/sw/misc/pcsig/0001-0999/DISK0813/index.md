@@ -121,6 +121,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk #813 SOAR Disk 2 of 2  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program, insert disk 1 and type: INSTALL (press enter)       ║
+║                                                                         ║
+║ To print installation instruction, type: COPY README.NOW PRN            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0813

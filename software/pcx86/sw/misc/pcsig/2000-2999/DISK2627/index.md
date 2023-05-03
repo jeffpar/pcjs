@@ -51,6 +51,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #26326 DAYO BRAIN  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   Make a subdirectory named \BRAIN on your hard drive, copy the files   ║
+║   to it. To extract the files type, BRAIN2. Once the files have been    ║
+║   extracted, type BRAIN to start.                                       ║
+║                                                                         ║
+║   To print the documentation, type: COPY BRAIN.DOC PRN (press Enter)    ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2627

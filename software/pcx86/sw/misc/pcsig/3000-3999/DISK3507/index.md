@@ -14,6 +14,31 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #3507 HUMONGOUS CAVES  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  This game needs to be extracted to a disk drive that has at least      ║
+║  1.2 megabytes of free disk space.  To Extract the files, type:         ║
+║                                                                         ║
+║  HUGECAVE [destination drive letter]:\[destination subdirectory]        ║
+║                                                       (press Enter)     ║
+║                                                                         ║
+║  To Start the game, switch to the destination drive and subdirectory    ║
+║  and type:  HUGECAVE  (press Enter)                                     ║
+║                                                                         ║
+║                                                                         ║
+║                                        (C) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3507
 

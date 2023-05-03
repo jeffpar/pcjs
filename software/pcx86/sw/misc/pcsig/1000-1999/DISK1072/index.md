@@ -90,6 +90,20 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  Disk No 1072 DIFFERENTIAL EQUATIONS and CALCULUS  >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start a program type, FILENAME (press enter), FILENAME is equal      ║
+║ to the name of the program that you want to load. Example, if you       ║
+║ wanted to load the EULER program you would type EULER (press enter).    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

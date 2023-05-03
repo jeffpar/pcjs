@@ -3454,6 +3454,20 @@ END
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk No: 309  Assembly Utilities No 3  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To read the the files with the DOC or TXT extension enter              ║
+║  TYPE filename.ext and press (press enter).  For instructions on ASM    ║
+║  listings, refer to your Assembler manual.                              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INIT.ASM
 
 {% raw %}

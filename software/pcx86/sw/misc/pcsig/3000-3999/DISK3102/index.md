@@ -1950,6 +1950,17 @@ Sunnyvale  Ca. 94086
     READ     ME       1694   6-08-91   7:33a
     README   EXE      8528   3-12-91   8:00p
     FILE3102 TXT       916   8-27-92   3:43a
+    EXAMPLES     <DIR>    
+    MSC6         <DIR>    
+    POWERC       <DIR>    
+    QUICKC       <DIR>    
+    TURBOC       <DIR>    
+           13 file(s)      69812 bytes
+
+     Directory of A:\EXAMPLES
+
+    .            <DIR>    
+    ..           <DIR>    
     JOYTEST  C        1171   5-27-91   3:04p
     JOYTEST  EXE     11037   9-09-89   6:31p
     MUSTEST  EXE     10232   6-15-91   9:12a
@@ -1957,13 +1968,40 @@ Sunnyvale  Ca. 94086
     CGAHAND  EXE     13024   9-23-91  12:55p
     TCHAND   C         921   9-22-91   9:29p
     PCHAND   C         835   9-23-91  12:55p
+            9 file(s)      38954 bytes
+
+     Directory of A:\MSC6
+
+    .            <DIR>    
+    ..           <DIR>    
     MOUSEMSM LIB     28469   9-23-91   8:59p
     JOYMSM   LIB      4153   5-28-91   8:23p
+            4 file(s)      32622 bytes
+
+     Directory of A:\POWERC
+
+    .            <DIR>    
+    ..           <DIR>    
     MOUSEPCM LIB     23970   9-23-91   7:32p
     JOYPCM   LIB      1138   5-27-91   3:27p
+            4 file(s)      25108 bytes
+
+     Directory of A:\QUICKC
+
+    .            <DIR>    
+    ..           <DIR>    
     MOUSEQCM LIB     44341   9-23-91   7:44p
     JOYQCM   LIB      6201   5-28-91  10:38p
+            4 file(s)      50542 bytes
+
+     Directory of A:\TURBOC
+
+    .            <DIR>    
+    ..           <DIR>    
     MOUSETCM LIB     25600   9-22-91   9:53p
     JOYTCM   LIB      3072   5-31-91  12:51p
-           23 file(s)     245710 bytes
-                           66560 bytes free
+            4 file(s)      28672 bytes
+
+    Total files listed:
+           38 file(s)     245710 bytes
+                           61440 bytes free

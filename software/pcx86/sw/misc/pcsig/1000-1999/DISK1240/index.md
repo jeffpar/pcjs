@@ -69,6 +69,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1240  CUNNING FOOTBALL  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print program and registration information, type:                    ║
+║                  COPY CFB_READ.ME PRN (press Enter)                     ║
+║                                                                         ║
+║ To start the program, type:  CFB (press Enter)                          ║
+║         (To begin play, choose "Leave Setup Menu.")                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1240

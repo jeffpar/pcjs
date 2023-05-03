@@ -3596,6 +3596,32 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2655 CALENDAR KEEPER  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   The files for CALENDAR KEEPER are in the self-extracting file CAL30.  ║
+║   To extract the program files, copy the files on this disk to either   ║
+║   a subdirectory on your hard drive or to a high density floppy disk.   ║
+║                                                                         ║
+║   After copying the files over, extract the files by typing: GO (Enter) ║
+║                                                                         ║
+║   To print the documentation for CALENDAR KEEPER, type:                 ║
+║                        COPY CALENDAR.DOC PRN  (press Enter)             ║
+║                                                                         ║
+║   To start the program, type:  CALENDAR  (press Enter)                  ║
+║                                                                         ║
+║   To print the registration form, type:  COPY REGISTER.FRM PRN  (Enter) ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2655

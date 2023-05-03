@@ -82,6 +82,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1770  PHOENIX WORD  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  PW (press enter)                               ║
+║                                                                         ║
+║ To print documentation, type:  COPY README PRN                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1770

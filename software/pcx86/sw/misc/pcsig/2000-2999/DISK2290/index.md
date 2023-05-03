@@ -79,6 +79,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #2290  NG_MAKER PROGRAMMER'S TOOL  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view description of Shareware, type:  TYPE SHAREWRE.TXT (Enter)      ║
+║                                                                         ║
+║ To print documentation, type:  COPY NG_MAKER.DOC PRN (press Enter)      ║
+║                                COPY NG_SPLIT.DOC PRN (press Enter)      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## NG_SPLIT.DOC
 
 {% raw %}

@@ -75,6 +75,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #1632  GRADING ASSISTANT 2 of 2  >>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program and documentation, insert disk #1 and type:          ║
+║                                               INSTALL (press Enter)     ║
+║                                                                         ║
+║ To run program after installation, switch to the program disk/path,     ║
+║ then type:  TGA (press Enter)                                           ║
+║                                                                         ║
+║ To print documentation after installation, switch to the documentation  ║
+║ disk/path, then type:  COPY TGA.DOC PRN (press Enter)                   ║
+║                                                                         ║
+║ To print additional documentation, type: COPY *.TGA PRN (press Enter)   ║
+║                                                                         ║
+║                                         (c) COPYRIGHT 1991, PC-SIG INC. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2678

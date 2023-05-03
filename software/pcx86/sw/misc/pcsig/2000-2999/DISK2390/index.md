@@ -97,6 +97,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  PC-SIG Disk #2390  SHAREDEBATE INTERNATIONAL #3   >>>>       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type:  DBATE003 (press Enter; "003" = 3 digits)   ║
+║                                                                         ║
+║ To view documentation on your screen, type:  TYPE READ.ME (press Enter) ║
+║                                                                         ║
+║ To print out the documentation, type:  COPY READ.ME PRN (press Enter)   ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VALIDATE.DOC
 
 {% raw %}

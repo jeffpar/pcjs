@@ -79,6 +79,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #2294  UNCLAIMED FUNDS DATABASE  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program on "C" drive, type:  INSTALL  (press ENTER)          ║
+║                                                                         ║
+║ To start program once installed, type:  START (press ENTER)             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2294

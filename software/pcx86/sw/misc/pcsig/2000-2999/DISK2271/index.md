@@ -54,6 +54,22 @@ machines:
     program uses ASCII, making it compatible with your word processor.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #2271  RAMDESK & RESEARCH  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For instructions on how to begin program, type:  INSTALL (press ENTER)  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2271
 
@@ -66,7 +82,17 @@ machines:
     RAMD     EXE    215829   6-25-90   4:26p
     GO       BAT        40   1-01-80   6:00a
     GO       TXT       419   1-01-80   3:17a
-    INSTRS~1 BAT      2568   8-10-89   7:12p
+    RESEARCH     <DIR>    
+            7 file(s)     220576 bytes
+
+     Directory of A:\RESEARCH
+
+    .            <DIR>    
+    ..           <DIR>    
+    INSTRSCH BAT      2568   8-10-89   7:12p
     RSCH     EXE    131418   6-07-90  11:08a
-            8 file(s)     354562 bytes
-                            2048 bytes free
+            4 file(s)     133986 bytes
+
+    Total files listed:
+           11 file(s)     354562 bytes
+                            1024 bytes free

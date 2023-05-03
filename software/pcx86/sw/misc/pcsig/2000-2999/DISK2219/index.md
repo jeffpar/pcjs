@@ -176,6 +176,30 @@ FILES IN THESE PROGRAMS:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<<  Disk #2219 ELECTRIC LEDGER, POINT OF SALE/INVENTORY, AMORT  >>>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  ELECTRIC LEDGER, and POINT OF SALE/INVENTORY both come in self         ║
+║  un-archiving programs.                                                 ║
+║                                                                         ║
+║  For instructions on ELECTRIC LEDGER, type:   COPY ELARC.DOC PRN        ║
+║                                                                         ║
+║  For instructions on POINT OF SALE, type:   COPY POSIARC.DOC PRN        ║
+║                                                                         ║
+║  To run AMORT, type:   AMORT                                            ║
+║                                                                         ║
+║                                                                         ║
+║                                               Copyright (c) 1990 PC-SIG ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## POSIARC.DOC
 
 {% raw %}

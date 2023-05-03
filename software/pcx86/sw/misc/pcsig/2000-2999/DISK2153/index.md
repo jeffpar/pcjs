@@ -272,6 +272,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  DISK #2153 FOOTBALL COMPU-SCHEDULE     >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To start program, type:  CSCHED   (press enter)                        ║
+║                                                                         ║
+║  To print documentation, type:  COPY CSCHED.DOC PRN  (press enter)      ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright, PC-SIG Inc.
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2153

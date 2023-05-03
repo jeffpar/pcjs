@@ -14,6 +14,28 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3695 WINSPELL  >>>>                   ║
+║                       Disk 1 of 2 (#3696 also)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Install this program to your hard disk, copy all files from disks   ║
+║  1 and 2 (#3695 and #3696) to a temporary subdirectory.                 ║
+║                                                                         ║
+║  From the temporary subdirectory type:  WIN INSTALL  (press Enter)      ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3695
 

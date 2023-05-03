@@ -61,6 +61,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2425  POWERBATCH   >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To read a note from the author, type:  TYPE README.1ST (press Enter)   ║
+║                                                                         ║
+║  To print documentation and installation instructions, type:            ║
+║                 COPY POWERBAT.DOC PRN (press Enter)                     ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## POWERBAT.DOC
 
 {% raw %}

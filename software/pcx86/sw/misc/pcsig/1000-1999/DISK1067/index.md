@@ -83,6 +83,23 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1067 DOSHELP  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view information about the program, type: README (press enter)       ║
+║                                                                         ║
+║ To copy the quick reference guide to your printer, type:                ║
+║                         PRTGUIDE (press enter)                          ║
+║                                                                         ║
+║ To start the program, type: HELP (press enter)                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1067

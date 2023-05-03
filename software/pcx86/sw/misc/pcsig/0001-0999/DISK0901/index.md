@@ -77,6 +77,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 901  PC-Books  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for PC-BOOKS, Type:                          ║
+║                  MANUAL (press enter)                                   ║
+║                                                                         ║
+║ To run the program PC-BOOKS, Type: PC-BOOK1 (press enter)               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PC-BOOKS.DOC
 
 {% raw %}

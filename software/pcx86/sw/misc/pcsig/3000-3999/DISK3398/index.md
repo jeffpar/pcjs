@@ -16,6 +16,22 @@ machines:
 {% include machine.html id="ibm5150" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3398 NEOPAINT  >>>>                   ║
+║                       Disk 2 of 2 (3397 also)                           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Install this program, insert disk 1 (#3397) and type: GO (Enter)    ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## DEALER.DOC
 
 {% raw %}

@@ -109,6 +109,18 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk No 1211 CHRISTMAS CONCERT volume I  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type CMENU1 (press enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1211

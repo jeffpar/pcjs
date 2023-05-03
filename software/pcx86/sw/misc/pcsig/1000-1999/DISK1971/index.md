@@ -79,6 +79,30 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1971  WORD FUGUE  >>>>                      ║
+║                      (disk 2 of 2, #1970 also)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, insert disk 1 and type:  WF (press Enter)             ║
+║                                                                         ║
+║ To print documentation, type:                                           ║
+║                                COPY README.1 PRN   (press Enter)        ║
+║                                COPY UPDATE.DOC PRN (press Enter)        ║
+║                                MANUAL (press Enter)                     ║
+║                                                                         ║
+║ To print the tutorial, type:                                            ║
+║                                COPY TUTORIAL.DOC PRN (press Enter)      ║
+║                                                                         ║
+║ To print registration form, type:                                       ║
+║                                COPY ORDER.FRM PRN (press Enter)         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## TUTORIAL.DOC
 
 {% raw %}

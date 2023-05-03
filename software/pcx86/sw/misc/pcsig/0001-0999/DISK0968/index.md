@@ -84,6 +84,19 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk #968 QCHECK3--CHECKING ACCOUNT MANAGEMENT  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For instructions on how to run the program, type: README (press enter)  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c)Copyright 1990, PC-SIG, Inc.
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

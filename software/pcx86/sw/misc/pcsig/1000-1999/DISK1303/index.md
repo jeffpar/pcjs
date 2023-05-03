@@ -1792,6 +1792,34 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 1303  SCRDES, PRNSET  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To print the documentation, type:                                     ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   How to start SCRDES:                                                  ║
+║                                                                         ║
+║    At the DOS prompt type [drive:]\[path]\scrdes to execute the         ║
+║    program.  At the program header, press any key to begin entry of     ║
+║    characters or to load a screen file.  The screen will be cleared     ║
+║    to the initial default color.                                        ║
+║                                                                         ║
+║   How to start PRNSET:                                                  ║
+║                                                                         ║
+║    Type PRNSET (press enter).  To run PrnSet, both PRNSET.EXE and       ║
+║    PRNSET.DAT must be on the default disk or somewhere on the DOS       ║
+║    path, where PRNSET can find it.  The full syntax for starting        ║
+║    PrnSet is: PRNSET [[d:][\path]datafile] [{+|-}inst[/n]]...           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PRNSET.DOC
 
 {% raw %}

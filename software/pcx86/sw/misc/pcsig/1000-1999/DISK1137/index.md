@@ -62,6 +62,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  Disk No 1137 SEARCHLIGHT BBS (Disk 2 of 2)  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, insert disk #1137 into       ║
+║ drive A: and type MANUAL (press enter)                                  ║
+║                                                                         ║
+║ To start the program, type insert disk #1136 in drive A: and type       ║
+║ SLBBS (press enter)                                                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HELP.TXT
 
 {% raw %}

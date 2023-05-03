@@ -1050,6 +1050,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #794 COMPOSER by OAK TREE SOFTWARE  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the manual type: COPY COMPOSER.DOC PRN (press enter)           ║
+║                                                                         ║
+║ To start the program type: COMPOSER (press enter)                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0794

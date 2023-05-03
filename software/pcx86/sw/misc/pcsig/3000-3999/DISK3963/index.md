@@ -14,6 +14,36 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  PC-SIG Disk #3963 ZIP'R  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Install this game to your hard disk, type:                          ║
+║     [hard drive letter]:  (press Enter)                                 ║
+║     CD\  (press Enter)                                                  ║
+║     MD ZIPR  (press Enter)                                              ║
+║     CD ZIPR  (press Enter)                                              ║
+║                                                                         ║
+║  To Extract the files from drive A, insert the disk and type:           ║
+║     A:PKUNZIP A:ZIPR  (press Enter)                                     ║
+║     (if installing from drive B use B: in place of A:)                  ║
+║                                                                         ║
+║  To Print documentation, type:  COPY ZIPR.DOC PRN  (press Enter)        ║
+║                                                                         ║
+║  To Start, type:  ZIPR  (press Enter)                                   ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3963
 

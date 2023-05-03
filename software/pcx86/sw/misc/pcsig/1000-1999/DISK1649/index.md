@@ -75,7 +75,20 @@ PC-SIG
 Sunnyvale  Ca. 94086                                                    
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
-
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk #1649  CALUTIL MODULA 2 PROGRAMMING TOOLS >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  MOD (press enter)                              ║
+║                                                                         ║
+║ To print documentation, type:  COPY MOD2TOOL.DOC PRN                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

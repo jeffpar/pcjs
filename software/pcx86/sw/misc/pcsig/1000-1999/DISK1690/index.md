@@ -62,6 +62,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  Disk #1690  EDUACTION OF HANDICAPPED ACT  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  EAHCA (press enter)                            ║
+║                                                                         ║
+║ To print documentation, type:  COPY EAHCA.1 PRN (press enter)           ║
+║                                COPY EAHCA.2 PRN (press enter)           ║
+║                                COPY EAHCA.3 PRN (press enter)           ║
+║                                COPY EAHCA.4 PRN (press enter)           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

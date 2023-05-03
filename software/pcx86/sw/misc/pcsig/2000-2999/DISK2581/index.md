@@ -55,6 +55,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  PC-SIG Disk #2581  FIGMENT - THE IMAGINATION PROCESSOR  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To extract the program files, type:  FIGPKG (press Enter)              ║
+║                                                                         ║
+║  To try the example story game provided, type:  FIGMENT  (press Enter)  ║
+║                                                                         ║
+║  To print the documentation and installation instructions, type:        ║
+║                  COPY FIGMENT.DOC PRN  (press Enter)                    ║
+║  To print the order form, type:  COPY ORDER.FRM PRN  (press Enter)      ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2581

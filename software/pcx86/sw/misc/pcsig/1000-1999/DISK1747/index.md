@@ -51,6 +51,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1746  PIROUETTE  >>>>                       ║
+║                      (disk 2 of 2, 1746 also)                           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, insert disk 1 and type: PIRO                          ║
+║                                                                         ║
+║ To print documentation, insert disk 1 and type: COPY READ.ME PRN        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LICENSE.TXT
 
 {% raw %}

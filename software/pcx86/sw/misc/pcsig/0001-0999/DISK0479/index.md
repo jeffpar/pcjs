@@ -1198,6 +1198,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #479  AM-TAX 1990  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print the documentation, type:  PRINTDOC  (press Enter)             ║
+║                                                                         ║
+║  To start AM-TAX 1990, type:  TAX90  (press Enter)                      ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0479

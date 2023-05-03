@@ -445,6 +445,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #615 SOOTHSAYER  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view instructions about unarchiving and running the program, type:   ║
+║                               VIEW (press enter)                        ║
+║ To print these instructions type COPY README.1ST PRN                    ║
+║ To print documentation type SOOTHDOC (press enter) after unarchiving.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ARCE.DOC
 
 {% raw %}

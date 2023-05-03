@@ -98,6 +98,19 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk #852 ASTRONOMY STAR CATALOG (disk 2 of 2) >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For information about this program, insert disk 851 into drive A>       ║
+║ and type GO.                                                            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0852

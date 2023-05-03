@@ -57,6 +57,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #2503  PC SYSTEM MANAGER  >>>>              ║
+║                      Disk 2 of 2  (also #2502)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print the documentation and installation instructions, type:        ║
+║  COPY MANUAL.DOC PRN  (press Enter)                                     ║
+║                                                                         ║
+║                                                                         ║
+║                                      Copyright 1990-1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

@@ -494,6 +494,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1819  CRIBBAGE PARTNER  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  CP (press enter)                               ║
+║                                                                         ║
+║ To print documentation, type:  COPY CP.DOC PRN   (press enter)          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1819

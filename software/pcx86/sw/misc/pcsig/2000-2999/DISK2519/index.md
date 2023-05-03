@@ -49,6 +49,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  DISK #2519 EVENTMAN  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To install EVENTMAN to your hard drive or high density disk, type:      ║
+║ INSTALL X (where X is the letter of your hard drive)                    ║
+║                                                                         ║
+║ After installation, to start the program, type: EVENTMAN                ║
+║                                                                         ║
+║ To print the documentation, type: COPY README2.TXT PRN                  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1991, PC-SIG Inc.
+```
+{% endraw %}
+
 ## INFO.TXT
 
 {% raw %}

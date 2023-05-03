@@ -636,6 +636,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║                         <<< #752 The BRAIN >>>                           ║
+╟──────────────────────────────────────────────────────────────────────────╢
+║                                                                          ║
+║  To print the documentation type:   COPY BRAIN.DOC PRN  (press enter)    ║
+║                                                                          ║
+║  To start the program type:   BRAIN  (press enter)                       ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0752

@@ -75,6 +75,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1482 PERSONAL LEDGER  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: MANUAL (press enter)                  ║
+║                                                                         ║
+║ To start the PERSONAL LEDGER program, type: PL (press enter)            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PL.DOC
 
 {% raw %}

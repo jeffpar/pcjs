@@ -98,6 +98,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<< Disk #2123 PROBABILITY & STATISTICS Disk 2 of 2 (also #985) >>>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, insert disk 1 and type:                     ║
+║             COPY *.DOC PRN   (press enter)                              ║
+║                                                                         ║
+║ To start KSSTAT, type: KSSTAT (press enter)                             ║
+║                                                                         ║
+║ To start KSPROB, type: KSPROB (press enter)                             ║
+║                                                                         ║
+║ To start KSPDAT, type: KSPDAT (press enter)                             ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2123

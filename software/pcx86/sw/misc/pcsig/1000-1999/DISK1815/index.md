@@ -76,6 +76,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1815  LOTTO-MAGIC  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  MAGIC (press enter)                            ║
+║                                                                         ║
+║ To print documentation, type:  COPY MAGIC.DOC PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1815

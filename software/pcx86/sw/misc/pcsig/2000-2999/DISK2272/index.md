@@ -1008,6 +1008,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #2272 4EDIT, 4ZIP, & XDIR  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print documentation for 4EDIT, type: COPY 4EDIT.TXT PRN              ║
+║                                                                         ║
+║ To print documentation for 4ZIP, type : COPY 4ZIP.TXT PRN               ║
+║                                                                         ║
+║ To print documentation for XDIR, type : COPY XDIR.TXT PRN               ║
+║                                                                         ║
+║                                     (c) Copyright 1990 PC-SIG INC.      ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SHORTDOC.DOC
 
 {% raw %}

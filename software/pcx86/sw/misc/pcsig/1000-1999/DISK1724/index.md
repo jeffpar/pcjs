@@ -97,6 +97,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #1724  THE ELECTRIC ALMANAC  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: ALMANAC                                         ║
+║                                                                         ║
+║ To print documentation, type: COPY FILE1724.TXT PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1724

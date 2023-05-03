@@ -2193,6 +2193,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  PC-SIG Disk #2551  ALT  >>>>                     ║
+║                       Disk 2 of 2 (also #1189)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To begin procedures, insert Disk 1 and type:  GO  (press Enter)        ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2551

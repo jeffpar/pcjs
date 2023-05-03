@@ -166,6 +166,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  DISK #2160 REMIND AND CALENDAR 25  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start REMIND, type: REMIND                                           ║
+║ To start CALENDAR, type: CALENDAR                                       ║
+║ To print documentation for REMIND, type: COPY REMIND.DOC PRN            ║
+║ To print documentation for CALENDAR, type: COPY CALENDAR.DOC PRN        ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REMIND.DOC
 
 {% raw %}

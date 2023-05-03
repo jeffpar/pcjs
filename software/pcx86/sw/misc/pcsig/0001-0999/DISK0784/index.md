@@ -1299,6 +1299,24 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #784 CHECKMATE  >>>>                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To display information for the CheckMate program, type:                 ║
+║                      TYPE CM.DOC (press enter)                          ║
+║                  and TYPE READ.ME (press enter)                         ║
+║                  and TYPE CHECKS.DOC (press enter)                      ║
+║                                                                         ║
+║ To print out the manual on your printer, type:                          ║
+║              COPY CM.DOC PRN (press enter)                              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDER.DOC
 
 {% raw %}

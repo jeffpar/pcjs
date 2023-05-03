@@ -14,6 +14,36 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  PC-SIG Disk #3817 SOUNDTOOL & SND TO WAV CONVERTER  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install SOUNDTOOL to your hard disk, type:                          ║
+║     [hard drive letter]:  (press Enter)                                 ║
+║     CD\  (press Enter)                                                  ║
+║     MD SNDTOOL  (press Enter) (this creates a subdirectory              ║
+║     CD SNDTOOL  (press Enter)  called SNDTOOL)                          ║
+║     A:SNDTOOL  (press Enter)  (use B: if installing from drive B)       ║
+║                                                                         ║
+║  To start, type:  WIN SNDTOOL  (press Enter)                            ║
+║                                                                         ║
+║  To install SND TO WAV CONVERTER, follow the above steps except         ║
+║  replace SNDTOOL with SNDTOWAV.                                         ║
+║                                                                         ║
+║  Then to start, type:  WIN SNDTOWAV  (press Enter)                      ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3817
 

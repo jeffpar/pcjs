@@ -133,6 +133,19 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #1011 ACM VOL 1-5 (Disk 4 of 4)  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For information on how to unarhive the programs on this disk, Type:     ║
+║                        COPY READ.ME PRN (press enter)                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1011

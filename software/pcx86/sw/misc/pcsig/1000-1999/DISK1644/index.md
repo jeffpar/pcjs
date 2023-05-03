@@ -172,6 +172,25 @@ GAMES.DAT - DATA FILE FOR GAMES.EXE
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1644  UNO AND GAMES  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation for GAMES, type:  COPY GAMES.DOC PRN (Enter)     ║
+║                                                                         ║
+║ To start GAMES program, type:  GAMES (press Enter)                      ║
+║                                                                         ║
+║ To print documentation for DCAL, type:  COPY DCAL.DOC PRN (Enter)       ║
+║                                                                         ║
+║ To start YCAL, type:  YCAL (press Enter)                                ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1644

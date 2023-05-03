@@ -58,6 +58,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2988 FIRST IMPRESSION  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print documentation, type:  COPY IMPRESS.DOC PRN (press Enter)      ║
+║                                                                         ║
+║  To print registration form, type:  COPY REGISTER.DOC PRN (press Enter) ║
+║                                                                         ║
+║  For quick start instructions, type:  TYPE README.1ST (press Enter)     ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REGISTER.DOC
 
 {% raw %}

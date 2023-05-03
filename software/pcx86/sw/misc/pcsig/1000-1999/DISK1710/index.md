@@ -437,7 +437,6 @@ PC-SIG
 Sunnyvale  Ca. 94086                                                    
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
-
 ```
 {% endraw %}
 
@@ -466,6 +465,20 @@ okay.)
 If you aren't familiar with the CONFIG.SYS file, your DOS
 manual should contain an explanation.
 
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1710  PENNAME  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view the documentation, type:  PENDOC (press enter)                  ║
+║                                                                         ║
+║ To run the program, type:  PENNAME (press enter)                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

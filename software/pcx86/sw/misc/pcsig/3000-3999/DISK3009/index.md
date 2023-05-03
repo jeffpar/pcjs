@@ -50,6 +50,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  PC-SIG Disk #2219 ELECTRIC POSI (POINT-OF-SALE/INVENTORY) >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  ELECTRIC POSI comes in archived format.  Due to this, you must first   ║
+║  install this program.                                                  ║
+║                                                                         ║
+║  To install, type:  GO-POSI  (press Enter)                              ║
+║                                                                         ║
+║                                          (c) Copyright 1992 PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INSTRUCT.DOC
 
 {% raw %}

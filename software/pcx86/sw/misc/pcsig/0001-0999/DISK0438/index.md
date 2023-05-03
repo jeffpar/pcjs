@@ -343,6 +343,54 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No: 438  PRINTER UTILITIES  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To print the manuals on this disk, type:                              ║
+║                                                                         ║
+║             MANUAL (press Enter)                                        ║
+║                                                                         ║
+║   To start the PANASONIC PRINTER SETUP UTILITIES, type:                 ║
+║                                                                         ║
+║             CR8CMD (press Enter)                                        ║
+║                                                                         ║
+║   To start the EPSON PRINTER UTILITY, type:                             ║
+║                                                                         ║
+║             SETE (press Enter)                                          ║
+║                                                                         ║
+║   To start the STAR PRINTER UTILITY, type:                              ║
+║                                                                         ║
+║             SETLQ (press Enter)                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
+## GO2.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No: 438  PRINTER UTILITIES  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To start the BANNER program, type:                                    ║
+║                                                                         ║
+║             BANNER (press enter)                                        ║
+║                                                                         ║
+║   To start the BASIC PROGRAM LISTER, type:                              ║
+║                                                                         ║
+║             LISTASC (press enter)                                       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## LISTASC.DOC
 
 {% raw %}

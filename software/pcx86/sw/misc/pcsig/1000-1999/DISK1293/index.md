@@ -133,6 +133,34 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  Disk No: 1293 Gamescape, Giant Space Slug, Marooned Again, Ringwielder ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for Gamescape, type:                         ║
+║                    COPY SCAPE.DOC PRN (press enter)                     ║
+║ Gamescape is archived, the documentation includes instructions for      ║
+║     using the self-extracting program SCAPE.EXE.                        ║
+║                                                                         ║
+║ To print the documentation for Giant Space Slug, type:                  ║
+║                    COPY SLUG.DOC PRN (press enter)                      ║
+║ To start Giant Space Slug, type: SLUG (press enter)                     ║
+║                                                                         ║
+║ To print the documentation for Marooned Again, type:                    ║
+║                    COPY MAROONED.DOC PRN (press enter)                  ║
+║ To start Marooned Again, type: MAROONED (press enter)                   ║
+║                                                                         ║
+║ To print the documentation for RingWielder, type:                       ║
+║                    COPY RINGARC.DOC PRN (press enter)                   ║
+║ RingWielder is archived, the documentation includes instructions for    ║
+║     using the self-extracting program RINGARC.EXE.                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MAROONED.DOC
 
 {% raw %}

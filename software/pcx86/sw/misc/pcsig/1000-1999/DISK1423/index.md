@@ -90,6 +90,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1423  MULTI ASSISTANT  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation and installation instructions, type:             ║
+║                     COPY MAST.DOC PRN (press Enter)                     ║
+║                                                                         ║
+║ To start MULTI ASSISTANT, type:  MAST (press Enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## MAST.DOC
 
 {% raw %}

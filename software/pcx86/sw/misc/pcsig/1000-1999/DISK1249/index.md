@@ -128,6 +128,30 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk No 1249  PHOTO PACK  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:                                     ║
+║                                                                         ║
+║             MANUAL (press manual)                                       ║
+║                                                                         ║
+║   To run the program on a CGA or EGA system, type:                      ║
+║                                                                         ║
+║             MENU (press enter)                                          ║
+║                                                                         ║
+║   To run the program on a Monochrome system, type:                      ║
+║                                                                         ║
+║             MMENU (press enter)                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1249

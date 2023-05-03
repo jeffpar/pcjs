@@ -825,6 +825,29 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 55  Games #9  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To start the Buck Mann's poker, type:                                 ║
+║                                                                         ║
+║             SMSPOKER (press enter)                                      ║
+║                                                                         ║
+║   To print the documentation on this disk, type:                        ║
+║                                                                         ║
+║             COPY *.DOC PRN (press enter)                                ║
+║                                                                         ║
+║   To run the BASIC language programs on this disk, please consult       ║
+║   your BASIC language manual for the specifics for your system.         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HRSERACE.BAS
 
 {% raw %}

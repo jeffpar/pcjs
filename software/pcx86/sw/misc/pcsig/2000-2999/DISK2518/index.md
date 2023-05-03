@@ -482,6 +482,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  DISK #2518 PRINTSELECTOR  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To unarchive the files to your hard drive.  First make a subdirectory,  ║
+║ then type; ARCE *.AR X:\SUBDIR  (where X:\SUBDIR is your drive and      ║
+║                                  the subdirectory you created)          ║
+║                                                                         ║
+║ Once the files have been unarchived.                                    ║
+║ To print instructions, type: COPY READ1ST.DOC PRN                       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1991, PC-SIG Inc.
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

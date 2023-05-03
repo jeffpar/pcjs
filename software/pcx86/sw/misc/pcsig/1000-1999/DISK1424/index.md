@@ -100,6 +100,22 @@ FILES        TXT     This file
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk No 1424 VIDEO LIBRARIAN  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type VLB (press enter)                            ║
+║                                                                         ║
+║ To look at the documentation on your screen, type VIEW (press enter)    ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MAINHELP.TXT
 
 {% raw %}

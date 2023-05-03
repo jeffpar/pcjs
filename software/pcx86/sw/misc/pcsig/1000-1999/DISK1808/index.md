@@ -282,6 +282,20 @@ those colors within the program under development.  Registration fee is $20.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1808  COLORSET  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: COLORSET                                        ║
+║                                                                         ║
+║ To print documentation, type: COPY COLORSET.DOC PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1808

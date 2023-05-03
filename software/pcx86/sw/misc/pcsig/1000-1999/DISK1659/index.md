@@ -88,6 +88,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1659  FISH-N-LOG  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unpack program, type:  UNPAKFNL (press enter)                        ║
+║ To start program, type:  XFNL (press enter)                             ║
+║                                                                         ║
+║ To print documentation, type:  PRINTDOC                                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1659

@@ -103,6 +103,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1518 PC-ARENA (TM)  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the PC-CHESS program, type PCCHESS (press enter)               ║
+║                                                                         ║
+║ To start the PC-OTHELL program, type PCOTHELL (press enter)             ║
+║                                                                         ║
+║ To view infor about the programs, type VIEW (press enter)               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## READ-ME.DOC
 
 {% raw %}

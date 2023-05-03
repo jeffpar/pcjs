@@ -1272,6 +1272,26 @@ JOHN MEAD
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  DISK #2500 BASS CLASS  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the documentation, type:  COPY BCLASS.DOC PRN  (Enter)        ║
+║                                                                         ║
+║  To install the program to your hard drive C:, type:  BCINSTAL  (Enter) ║
+║                                                                         ║
+║  To start the program, type:  BASSCLAS  (press Enter)                   ║
+║                                                                         ║
+║                                                                         ║
+║                                       (c) Copyright 1991, PC-SIG Inc.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDERFRM.TXT
 
 {% raw %}

@@ -102,6 +102,18 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #701 DANCAD3D  (Disk 1 of 4)  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the DANCAD3D system, Type: INSTALL (press enter).              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0701

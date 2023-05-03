@@ -100,6 +100,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  Disk #1571  CALENDAR PROGRAM and TIKLER >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start CALENDAR program, type:  CAL (press enter)                     ║
+║ To start TIKLER program, type:  TICKLER (press enter)                   ║
+║                                                                         ║
+║ To print TIKLER documentation, type:  COPY TIKLER.DOC PRN               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## TIKLER.DOC
 
 {% raw %}

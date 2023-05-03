@@ -394,6 +394,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1984  COST-BIZ  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  COSBIZ (press enter)                           ║
+║                                                                         ║
+║ To print documentation, type:  COPY COSBIZ.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1984

@@ -50,6 +50,21 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk #1816  SCRIPTURE disk 1 of 2 (1817 also)  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  SCRIPT1 (press enter)                          ║
+║                                                                         ║
+║ To print documentation, type:  SCRIPTDC (press enter)                   ║
+║                                COPY SCRIPT.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## QUICK.DOC
 
 {% raw %}

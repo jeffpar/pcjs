@@ -97,6 +97,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 942 HYDROFLO  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, Type: COPY README PRN  (press enter)        ║
+║                                                                         ║
+║ To run the program, Type: HF   (press enter)                            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0942

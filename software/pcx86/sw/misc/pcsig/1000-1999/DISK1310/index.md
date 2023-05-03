@@ -98,6 +98,30 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<<  Disk No 1310 INTCAL version 1.0, PC-PORTFOLIO version S.1.0  >>>> ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:                                     ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To start the program INTCAL, type:                                    ║
+║                                                                         ║
+║             INTCAL (press enter)                                        ║
+║                                                                         ║
+║   To start the program PC-PORTFOLIO, type:                              ║
+║                                                                         ║
+║             PCP (press enter)                                           ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PCP.DOC
 
 {% raw %}
@@ -879,6 +903,13 @@ address.
     GO       BAT        38  10-19-87   3:56p
     GO       TXT      1310   2-21-89  11:52a
     MANUAL   BAT       147  12-15-88  12:39p
+    INVEST       <DIR>    
+           13 file(s)     272338 bytes
+
+     Directory of A:\INVEST
+
+    .            <DIR>    
+    ..           <DIR>    
     BONDS    DAT        92   8-22-88  11:10a
     BONDS    IDX       632   8-22-88  11:10a
     BONDS    POR        20   4-30-88   3:51p
@@ -905,5 +936,8 @@ address.
     UPDATE   POR        70   4-30-88   3:56p
     AT&T     DAT       828   8-30-88  11:15a
     AT&T     IDX       632   8-30-88  11:15a
-           38 file(s)     288526 bytes
-                           12288 bytes free
+           28 file(s)      16188 bytes
+
+    Total files listed:
+           41 file(s)     288526 bytes
+                           11264 bytes free

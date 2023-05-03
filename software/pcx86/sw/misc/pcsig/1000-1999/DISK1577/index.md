@@ -414,6 +414,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #1577  INSTANT ACCESS MENU SYSTEM  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start INSTANT ACCESS, type:  CONFIG (press enter)                    ║       ║
+║                                                                         ║
+║ To print documentation, type:  COPY MANUAL.TXT PRN  (press enter)       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INFOFORM.TXT
 
 {% raw %}

@@ -83,6 +83,44 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #1056  MANAGING YOUR FOOD  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ The files for this program are contained in two self un-archiving       ║
+║ files called MYF30 (containing the program and documentation) and       ║
+║ MYF3DATA (containing the data), which can be extracted to two floppies  ║
+║ or a hard drive.                      				  ║
+║									  ║
+║ To extract the complete program to the hard drive, at C: (D:, etc.)     ║
+║ type:  MD MYF								  ║
+║	 CD MYF								  ║
+║	 A:MYF      (When MYF is finished, type:)			  ║
+║        A:MYF3DATA							  ║
+║ 			                                                  ║
+║ To extract the program to two floppies (with program disk in A:)        ║
+║ put an empty formatted disk in Drive B and type:                        ║
+║        B:  (to change the default drive to B:); then from B: type:      ║
+║	 A:MYF  (and type Y for Yes at "ready" question) 		  ║
+║	 								  ║
+║ Put in a new diskette in B: and type:  A:MYF3DATA   and then Y for Yes. ║
+║									  ║
+║ Once the files have been extracted, change drive to the desired drive   ║
+║ where your new extracted MYF file is.                                   ║
+║									  ║
+║ To print the documentation, type:  COPY MYF.DOC PRN			  ║
+║									  ║
+║ To start the program, type: MYF                                         ║
+║									  ║
+║					(c) Copyright 1990, PC-SIG Inc.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1056

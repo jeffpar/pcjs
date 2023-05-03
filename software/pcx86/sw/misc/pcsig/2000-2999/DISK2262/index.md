@@ -67,6 +67,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #2262 THE PARCEL SHIPPING PROGRAM  >>>>         ║
+║                       disk 1 of 2 (#2319 also)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation and installation instructions, type:             ║
+║                 COPY MANUAL.DOC PRN (press ENTER)                       ║
+║   									  ║
+║ To print registration form, type:  COPY REGISTER.DOC PRN (press ENTER)  ║
+║									  ║
+║ To start program, see Disk #2319                                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

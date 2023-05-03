@@ -72,6 +72,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║      <<<<  PC-SIG Disk #2872 PAINLESS ACCOUNTING FOR WINDOWS  >>>>      ║
+  ║                        Disk 2 of 2 (#2871 also)                         ║
+  ╠═════════════════════════════════════════════════════════════════════════╣
+  ║                                                                         ║
+  ║  Insert disk #1 of PAW before proceeding.                               ║
+  ║                                                                         ║
+  ║  To start the program, type:  WIN WINSETUP  (press Enter)               ║
+  ║                                                                         ║
+  ║  To print the manual, type:  COPY PAW-MAN.TXT PRN  (press Enter)        ║
+  ║                                                                         ║
+  ║  To print registration info, type:  COPY REGISTER.TXT PRN  (Enter)      ║
+  ║                                                                         ║
+  ║                                                                         ║
+  ║                                           Copyright 1992, PC-SIG, Inc.  ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2872

@@ -12763,6 +12763,19 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<< Disk No 525 ExpressCalc version  (Disk 2 of 2) >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation on using EXPRESSCALC type:                   ║
+║                             PRINTDOC  (press enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDERFRM.DOC
 
 {% raw %}

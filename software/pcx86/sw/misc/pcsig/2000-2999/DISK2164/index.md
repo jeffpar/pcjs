@@ -104,6 +104,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 2164 CLASSROOM JEOPARDY  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: COPY JEOP.TXT PRN  (press enter)      ║
+║                                                                         ║
+║ To start the program, type: JP-GAME    (press enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## JEOP.TXT
 
 {% raw %}

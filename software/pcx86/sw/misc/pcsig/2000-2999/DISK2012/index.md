@@ -65,6 +65,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                      <<<<  Disk #2012  VBUG  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To start program, type:  VBUG  (press enter)                          ║
+║                                                                         ║
+║   To print documentation, type:  COPY VBUG.DOC PRN  (press enter)       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## VBUG.DOC
 
 {% raw %}

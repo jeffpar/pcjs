@@ -598,6 +598,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #840 SHORTCUT  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type:                         ║
+║                  COPY START.DOC PRN  (press enter)                      ║
+║                                                                         ║
+║ To start the program, type: SHORTCUT (press enter)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REFER.DOC
 
 {% raw %}

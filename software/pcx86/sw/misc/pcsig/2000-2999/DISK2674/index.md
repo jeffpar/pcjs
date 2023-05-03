@@ -68,6 +68,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #2674 JOB COST  2 of 2 (also #1230)  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the manual, type: JCMANUL (press Enter)                        ║
+║                                                                         ║
+║                                        (c) COPYRIGHT 1991, PC-SIG INC.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2674

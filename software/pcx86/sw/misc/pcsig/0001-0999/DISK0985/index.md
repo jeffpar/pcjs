@@ -98,6 +98,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<< Disk #985 PROBABILITY & STATISTICS Disk 1 of 2 (also #2123) >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for this disk, Type:                         ║
+║             COPY *.DOC PRN   (press enter)                              ║
+║                                                                         ║
+║ To unarchive programs, type: KSPRCHRT     (press enter)                 ║
+║                              NOT          (press enter)                 ║
+║                              BINO         (press enter)                 ║
+║                              WEIB         (press enter)                 ║
+║                              SIMCOR       (press enter)                 ║
+║                                                                         ║
+║ To print file description, type: COPY README.1 PRN (press enter)        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## KSPRBAS.BAS
 
 {% raw %}

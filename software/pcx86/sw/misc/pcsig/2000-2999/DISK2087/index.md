@@ -149,6 +149,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #2087 FICTIONARY  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: FICT    (press enter)                       ║
+║                                                                         ║
+║ To print the documentation, type: COPY FICT.DOC PRN  (press enter)      ║
+║									  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2087

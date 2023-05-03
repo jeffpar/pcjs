@@ -127,6 +127,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1721  QUICK CHECK BOOK >>>>                 ║
+║                       (disk 1 of 2, #1731 also)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  QCB (press enter)                              ║
+║                                                                         ║
+║ To print documentation, type: COPY README PRN                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1721

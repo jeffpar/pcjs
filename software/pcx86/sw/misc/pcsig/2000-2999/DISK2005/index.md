@@ -85,6 +85,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk 2005 MarketPLUS Disk 2 of 2 (1153 also)  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ This is the second disk in a two disk set.  The following commands work ║
+║ when the first disk is in the disk drive.                               ║
+║                                                                         ║
+║ To install MarketPlus, type INSTALL (press enter)                       ║
+║                                                                         ║
+║ To view information on the program, type README (press enter)           ║
+║                                                                         ║
+║ To print the documentation, type PRINTDOC (press enter)                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2005

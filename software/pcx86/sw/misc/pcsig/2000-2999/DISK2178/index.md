@@ -1217,6 +1217,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk No 2178 SBAS GENERAL LEDGER  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: COPY GL.DOC PRN (press enter)         ║
+║                                                                         ║
+║ To start the program, type: GL (press enter)                            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2178

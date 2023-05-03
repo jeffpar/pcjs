@@ -98,6 +98,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No 994 FINANCIAL CALCULATOR  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, Type: COPY README.DOC LPT1: (press enter)   ║
+║                                                                         ║
+║ To run the program, Type: FC (press enter)                              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

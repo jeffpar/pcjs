@@ -46,10 +46,20 @@ Professional version. Airline quality w/weather interface. *Pre-Duat Prep.
     FBO_ASGN BAT       104   3-18-91   6:30p
     FBOZ     BAT        51  10-19-90   5:29p
     INSTALL  BAT      2384   3-18-91   6:31p
+    TAKE-OFF DIR <DIR>    
+           15 file(s)      17052 bytes
+
+     Directory of A:\TAKE-OFF.DIR
+
+    .            <DIR>    
+    ..           <DIR>    
     A1       ###    122750   3-02-91   9:39a
     A2       ###     45499   3-02-91   9:39a
     A1       #@#     53100   3-26-91   1:08p
     A2       #@#     95873   3-26-91   1:09p
     R        EXE     14077   4-21-88   2:54p
-           19 file(s)     348351 bytes
-                            1024 bytes free
+            7 file(s)     331299 bytes
+
+    Total files listed:
+           22 file(s)     348351 bytes
+                               0 bytes free

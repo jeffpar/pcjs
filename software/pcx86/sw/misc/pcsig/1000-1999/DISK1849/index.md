@@ -73,6 +73,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #1849  MASTERY LEARNING: COMPOSITION >>>>        ║
+║                   (disk 3 of 4, 1847,1848,1849 also)                    ║ 
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To start the program, type:  1   (press enter)                        ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1849

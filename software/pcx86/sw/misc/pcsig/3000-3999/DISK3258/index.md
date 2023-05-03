@@ -14,6 +14,38 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  PC-SIG Disk #3258 GAKUSEI  >>>>                 ║
+║                         Disk 1 of 2 (also #3259)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install the program, first create a subdirectory on your hard       ║
+║  drive by typing:  MD GAKUSEI  (press Enter)                            ║
+║                                                                         ║
+║  Change to the subdirectory by typing:  CD GAKUSEI  (press Enter)       ║
+║                                                                         ║
+║  To extract the files, insert disk 1 (#3258) and type:                  ║
+║         GAKUSEI1 [hard drive:\subdirectory]  (press Enter)              ║
+║                                                                         ║
+║  Then insert disk 2 (#3259) and type:                                   ║
+║         GAKUSEI2 [hard drive:\subdirectory]  (press Enter)              ║
+║                                                                         ║
+║  To print the documentation, type:  COPY GAKUSEI.DOC PRN (press Enter)  ║
+║                                                                         ║
+║  To start the program, type:  GAKUSEI  (press Enter)                    ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3258
 

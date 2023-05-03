@@ -366,6 +366,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  PC-SIG Disk #2559  EZ-WINDOWS PULL-DOWN MENU LIBRARY  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the documentation and instructions for EZ-WINDOWS, type:      ║
+║                  COPY EZWINDO.DOC PRN  (press Enter)                    ║
+║                                                                         ║
+║  To print the registration information, type:                           ║
+║                  COPY REGISTER.DOC PRN  (press Enter)                   ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PDDEMO.BAS
 
 {% raw %}

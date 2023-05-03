@@ -96,6 +96,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1589  PC-PUNCH  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  PCPUNCH (press enter)                          ║
+║                                                                         ║
+║ To print documentation, type:  COPY README.1ST PRN   (press enter)      ║
+║                                COPY PCPUNCH.DOC PRN  (press enter)      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PCPUNCH.DOC
 
 {% raw %}

@@ -72,6 +72,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1868  MMSORT AND MMREPORT  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: MMSORT                                          ║
+║                                                                         ║
+║ To print documentation, type: COPY FILE1868.TXT PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1868

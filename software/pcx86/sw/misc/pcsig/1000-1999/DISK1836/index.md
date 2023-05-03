@@ -63,6 +63,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #1836 WRECK TANGLE  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: WT (press enter)                            ║
+║                                                                         ║
+║ For information about the program, type: README (press enter)           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## WTDESC.TXT
 
 {% raw %}

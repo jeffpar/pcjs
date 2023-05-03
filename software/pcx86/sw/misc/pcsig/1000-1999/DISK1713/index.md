@@ -91,6 +91,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1713  QBSCR SCREEN ROUTINES  >>>>              ║
+║                    (disk 2 of 3, #1712 and #1714 also)                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To finnish printing the documentation, type: COPY QBSCR4.DOC PRN        ║
+║                                                                         ║
+║ To start SCREEN BUILDER, type: SB  (press enter)                        ║
+║                                                                         ║
+║ To print documentation for SCREEN BUILDER, type: COPY SB.DOC PRN        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SB.DOC
 
 {% raw %}

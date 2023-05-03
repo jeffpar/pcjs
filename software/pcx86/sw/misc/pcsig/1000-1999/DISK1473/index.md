@@ -806,6 +806,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 1473 HYPERSKETCH  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start the program, type: BOX (press enter)                           ║
+║                                                                         ║
+║ To print the documentation, type: COPY BOX.DOC PRN (press enter)        ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## PCSIG.TXT
 
 {% raw %}

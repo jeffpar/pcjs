@@ -83,6 +83,26 @@ Call (616) 245-8376 tech support, information, or overseas orders.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3572 HOOSIER CITY  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Print the documentation, type: COPY HCMAN.DOC PRN  (press Enter)    ║
+║                                                                         ║
+║  To Start the game, type: HC  (press Enter)                             ║
+║                                                                         ║
+║  To Install the game to your hard disk, type: INSTALL  (press Enter)    ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HCMAN.DOC
 
 {% raw %}

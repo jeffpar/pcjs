@@ -233,6 +233,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  Disk #1692  BEGIN, A TACTICAL STARSHIP SIMULATION  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  BEGIN (press enter)                            ║
+║                                                                         ║
+║ To print documentation, type:  COPY BEGINAD.TXT PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1692

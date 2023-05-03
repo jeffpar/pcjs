@@ -223,6 +223,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1614 SKYCLOCK  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start SKYCLOCK, type:  SKYCLOCK (press return)                       ║
+║                                                                         ║
+║ To print documentation, type:  COPY SKY*.DOC PRN    (press enter)       ║
+║                                COPY CLOCK*.DOC PRN  (press enter)       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SKY1.DOC
 
 {% raw %}

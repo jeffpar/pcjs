@@ -89,6 +89,22 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1509 ZYAC CALCULATOR  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type ZYACIBM (press enter)                        ║
+║                                                                         ║
+║ To view the documentation on your screen, type VIEW (press enter)       ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INFO.TXT
 
 {% raw %}

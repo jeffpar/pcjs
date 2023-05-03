@@ -649,6 +649,28 @@ MENU     BAT        9   Batch file to run Menu. Just type MENU and <Enter>
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ << Disk No 1325 PREGNANT version 1.7, WEIGHT CONTROL version 8.80706 >> ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To print the documentation, type:                                     ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To start the program PREGNANT, type:                                  ║
+║                                                                         ║
+║             PREGNANT (press enter)                                      ║
+║                                                                         ║
+║   To start the WEIGHT CONTROL programs, type                            ║
+║                                                                         ║
+║             WT-MENU (press enter)                                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LOSS-AVG.DOC
 
 {% raw %}

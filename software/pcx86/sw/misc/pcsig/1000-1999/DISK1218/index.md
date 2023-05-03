@@ -71,6 +71,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #1218  RECONFIG  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type:  COPY RECONFIG.DOC PRN (press ENTER)      ║
+║                                                                         ║
+║ To print installation instructions, type:  COPY README PRN (press ENTER)║
+║                                                                         ║
+║ To print Menu Construction Set, type:  COPY MCS.DOC PRN (press ENTER)   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## INSTALL.TXT
 
 {% raw %}

@@ -49,6 +49,38 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔════════════════════════════════════════════════════════════════════════╗
+║   <<<<  PC-SIG Disk #2843  TELE-CODE  (Disk 2 of 2, also #1083)  >>>>  ║
+╠════════════════════════════════════════════════════════════════════════╣
+║                                                                        ║
+║          * Make a subdirectory, TELECODE, on your hard drive:          ║
+║                                                                        ║
+║                C:                                    (press Enter)     ║
+║                C:MD \TELECODE                        (press Enter)     ║
+║                C:CD \TELECODE                        (press Enter)     ║
+║      Disk #1   C:COPY [floppy drive]:*.*             (press Enter)     ║
+║      Disk #2   C:COPY [floppy drive]:*.*             (press Enter)     ║
+║                C:PKZ TELCO1  (to extract the files)  (press Enter)     ║
+║                                                                        ║
+║                                                                        ║
+║  Please note that all TELECODE files and TCRUN files need to be in     ║
+║  the same directory.                                                   ║
+║                                                                        ║
+║  To print the documentation, type: COPY TELECODE.DOC PRN (Enter)       ║
+║                                                                        ║
+║  After reading the documentation, start TELECODE by typing:  TC (Enter)║
+║                                                                        ║
+║                                                                        ║
+║                                        (c) COPYRIGHT 1991, PC-SIG INC. ║
+╚════════════════════════════════════════════════════════════════════════╝
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2843

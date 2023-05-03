@@ -108,6 +108,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 914 PC-DEMO  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for PC-DEMO, Type:                           ║
+║                  COPY READ.ME LPT1: (press enter)                       ║
+║                                                                         ║
+║ To run the program PC-DEMO, Type: PC-DEMO (press enter)                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0914

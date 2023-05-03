@@ -105,6 +105,23 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk #823 INTERACTIVE MATRIX CALCULATOR  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type:                         ║
+║                  COPY *.DOC PRN (press enter)                           ║
+║                                                                         ║
+║ To start the MATRIX CALCULATOR type, MATRIX  (press enter)              ║
+║                                                                         ║
+║ To start the STEPREG program type, STEPREG (press enter)                ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MATRIX.DOC
 
 {% raw %}

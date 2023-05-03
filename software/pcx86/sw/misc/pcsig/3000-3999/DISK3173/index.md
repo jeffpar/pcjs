@@ -14,6 +14,28 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<< PC-SIG Disk #3137  WORD GALLERY  (Disk 2 of 2, also #2225) >>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  Insert Disk 1 to read the SETUP instructions. The WGSETUP file is on   ║
+║  Disk 2 (this disk).                                                    ║
+║                                                                         ║
+║  After the program is setup, start it by typing:  WG  (press Enter)     ║
+║                                                                         ║
+║  To print the registration form, type:  COPY WGORDER.FRM PRN  (Enter)   ║
+║                                                                         ║
+║                                         (c) Copyright 1992, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3173
 

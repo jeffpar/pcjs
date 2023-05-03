@@ -1079,6 +1079,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  Disk #884  BOWLING LEAGUE SECRETARY'S SYSTEM  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program type:  BOWL   (press enter)                            ║
+║ (FILES=16 and BUFFERS=20 must be in CONFIG.SYS)                         ║
+║ To print documentation type:  COPY BOWL.DOC PRN                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0884

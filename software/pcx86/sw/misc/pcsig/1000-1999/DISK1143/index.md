@@ -73,6 +73,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk No. 1143  PC-QUIZZER  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for PC-QUIZZER, Type:                        ║
+║                       COPY QUIZ.DOC PRN (press Enter)                   ║
+║                                                                         ║
+║ To print registration form, type:  COPY REGIS.DOC PRN (press Enter      ║
+║                                                                         ║
+║ To run the program PC-QUIZZER, Type: QUIZ (press Enter)                 ║
+║                                                                         ║
+║ To read notes from author, type:  TYPE NEWS.DOC (press Enter)           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## NEWS.DOC
 
 {% raw %}

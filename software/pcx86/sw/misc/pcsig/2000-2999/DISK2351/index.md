@@ -203,6 +203,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═══════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2351  TAG_ALONG  >>>>                 ║
+╠═══════════════════════════════════════════════════════════════════════╣
+║ To view the note from the author, type:  TYPE ABSTRACT.DOC (Enter)    ║
+║                                                                       ║
+║ To begin using the program, type:  README  (press Enter)              ║
+║                                                                       ║
+║ To read further instructions by author, type:                         ║
+║                   TYPE DISTRIB.DOC (press Enter)                      ║
+╚═══════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2351

@@ -68,6 +68,33 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #2641 BACK & FORTH #1 (also #2642)  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To extract the program, type: B&F-171A [hard drive:\subdirectory](Enter)║
+║                                                                         ║
+║ After extracting the files, print the documentation by typing:          ║
+║                  COPY B&N-170.DOC PRN  (press Enter)                    ║
+║                                                                         ║
+║ To run the program, type:  BNF  (press Enter)                           ║
+║                                                                         ║
+║                                                                         ║
+║    NOTE: The documentation refers to an installation file needed for    ║
+║    installing the program.  However, this version of BACK & FORTH       ║
+║    does not need that file in order to work, and therefore the author   ║
+║    did not include it with the package.                                 ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2641

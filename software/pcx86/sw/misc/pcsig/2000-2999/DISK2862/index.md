@@ -74,6 +74,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  DISK #2862  ASTROMEEUS  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  Unzip the files to a directory and run ASTROWIN.EXE from the File      ║
+║  Manager or install as an icon from the Program Manager and double      ║
+║  click.                                                                 ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+
+
+```
+{% endraw %}
+
 ## LONGLAT.TXT
 
 {% raw %}

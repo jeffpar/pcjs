@@ -1124,6 +1124,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #1319  BASSTOUR   >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print author's beginning instructions, type:                         ║
+║                  COPY README.DOC PRN (press Enter)                      ║
+║                                                                         ║
+║ To print the BASSTOUR documentation, type:  COPY BT.DOC PRN (Enter)     ║
+║                                                                         ║
+║ To install BASSTOUR, type:  BTINSTAL (press Enter)                      ║
+║                                                                         ║
+║ To view "Common Questions and Problems with BassTour," type:            ║
+║                     TYPE Q&A.TXT (press Enter)                          ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LAKERECS.TXT
 
 {% raw %}

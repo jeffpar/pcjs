@@ -91,6 +91,25 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<< Disk No 1323 VARAMORT and REFUND  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the VARAMORT program, type: VARAMORT (press enter)             ║
+║                                                                         ║
+║ To start the REFUND program, type: REFUND (press enter)                 ║
+║                                                                         ║
+║ Please Note:                                                            ║
+║                                                                         ║
+║ The Personal Ledger program has been updated and will no-longer fit on  ║
+║ this disk.  It can know be found on disk #1482                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1323

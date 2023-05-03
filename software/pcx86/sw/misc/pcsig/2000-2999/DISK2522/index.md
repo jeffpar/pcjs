@@ -47,6 +47,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  DISK #2522 UNOSCORE  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To start the program, type: ONE                                        ║
+║                                                                         ║
+║  To print the documentation, type: UNOSCORE.DOC PRN                     ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1991, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2522

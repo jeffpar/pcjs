@@ -14,6 +14,28 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3309 PKZIP V204G  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Install the program files to another disk, type:                    ║
+║                                                                         ║
+║     PKZ204E [drive letter]:\[subdirectory]  (Enter)                     ║
+║                                                                         ║
+║  To Print all documentation files, type: COPY *.DOC PRN  (Enter)        ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3309
 

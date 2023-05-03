@@ -103,6 +103,58 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## README.DOC
+
+{% raw %}
+```
+* UNREGISTERED COPY *
+
+			 PC-TALK  (THE SPEECH LIBRARY)              Vers 2.1
+			 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  PC-TALK (THE SPEECH LIBRARY) is a NEW product for business and personal
+  applications. The library consist of several words/phrases that can be
+  used in all sorts of applications. There is no special hardware need to
+  use the SPEECH LIBRARY (excellent speech quality that works thru your PC
+  speaker).  The speech commands can be put in any batch file (*.bat) and
+  added to your programs/menus. This package is very easy to use, you simply
+  need to type PC-TALK at the dos prompt, followed by the words/phrases you
+  would like to say (example: to say HELLO WELCOME, type in "PC-TALK HELLO
+  WELCOME"). Also included in this package is PCX display program that you
+  can use to create your own TALKING SLIDESHOW for PRESENTATIONS, PRODUCT
+  DEMO'S and TUTORIALS.  When you register, you will receive a complete
+  speech library with over 1,000,000 bytes(3 disk) of speech, music and
+  sound effects .
+
+
+	* A SPEECH LIBRARY with a real HUMAN VOICE.
+
+        * SYSTEM REQUIREMENTS:  256K memory,  one floppy
+          disk and any  monitor. (hard disk recommended)
+
+        * Designed to work on any IBM-PC Compatible.
+
+	* Type "RUNME" to start the TUTORIAL program.
+
+        * NOW THE PC CAN TALK.
+          ~~~~~~~~~~~~~~~~~~~
+        * Please register your shareware by sending $29.50 to:
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+                     CREATIVE SOFTWARE SOUNDS INC.
+                              C.S.S.  Inc.
+                           3005 Glenmore Ave.
+			  Baltimore, MD 21214
+			    (410) 665-0193                     ASP MEMBER
+
+
+	   CALL toll free  1-800-847-0309  for CREDIT CARD ORDERS.
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3033
@@ -118,16 +170,23 @@ Sunnyvale  Ca. 94086
     ORDER    FRM      1553   2-21-92  11:12a
     PRINTDOC BAT       188   2-21-92  11:12a
     FILE3033 TXT      2073   6-30-92   9:17a
+    PC-TALK      <DIR>    
+            9 file(s)     197642 bytes
+
+     Directory of A:\PC-TALK
+
+    .            <DIR>    
+    ..           <DIR>    
     README   DOC      1867   2-14-92   1:51p
-    RUNME~1  BAT       128   2-14-92   1:51p
+    RUNME    BAT       128   2-14-92   1:51p
     TUTOR    BAT     12518   2-14-92   1:51p
     PC-TALK  DOC     23104   2-14-92   1:51p
     PC-TALK  EXE     12096   2-14-92   1:51p
     BIGPAUSE BAT        80   2-14-92   1:51p
     CANDID   BAT       492   2-14-92   2:08p
-    GO~1     BAT        30   2-14-92   1:51p
+    GO       BAT        30   2-14-92   1:51p
     MAKE-BAT BAT      1459   2-14-92   1:51p
-    ORDER~1  FRM      1565   2-14-92   1:51p
+    ORDER    FRM      1565   2-14-92   1:51p
     PHONE    BAT       246   2-14-92   1:51p
     AFTERNOO          2048   2-14-92   1:51p
     BIRTHDAY          1664   2-14-92   1:51p
@@ -154,5 +213,8 @@ Sunnyvale  Ca. 94086
     THANKYOU          1665   2-14-92   1:51p
     WELCOME           1152   2-14-92   1:51p
     WHISTLE           3072   2-14-92   1:51p
-           44 file(s)     335676 bytes
-                            4096 bytes free
+           38 file(s)     138034 bytes
+
+    Total files listed:
+           47 file(s)     335676 bytes
+                            2048 bytes free

@@ -296,6 +296,20 @@ WHEELS   ARC    10880   1-27-90  12:45a  Wheel of Fortune (BASIC)
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1458 MICRO SERVE  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: MICROSRV  (press enter)                     ║
+║                                                                         ║
+║ To print the documentation, type: COPY MICROSRV.DOC PRN (press enter)   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GOODBYE.TXT
 
 {% raw %}

@@ -73,6 +73,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1745  MT-TRACKER  >>>>                      ║
+║                       (dsk 2 of 2, #1744 also)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program, insert disk 1 and type:                         ║
+║    INSTMT [source] [destination]  (press enter)                         ║
+║                                                                         ║
+║                       AFTER INSTALATION                                 ║
+║ To start program, type: MT  (press enter)                               ║
+║                                                                         ║
+║ To print documentation, type: PRINTDOC  (press enter)                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1745

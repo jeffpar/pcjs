@@ -1600,6 +1600,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1617  DISAM  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start DISAM UTILITIES, type:  DISAM (press enter)                    ║
+║ To start DISAM FILE HANDLER, type:  DFH3 (press enter)                  ║
+║                                                                         ║
+║ To print documentation, type:  COPY DISAM.DOC PRN (press enter)         ║
+║                                COPY DSMLOGIC.DOC PRN (press enter)      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1617

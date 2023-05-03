@@ -14,6 +14,37 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  PC-SIG Disk #3156 BDEXX  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install this program on your hard drive, type:                      ║
+║      [hard drive letter]:  (press Enter)                                ║
+║      CD\  (press Enter)                                                 ║
+║      MD BDEXX  (press Enter)                                            ║
+║      CD BDEXX  (press Enter                                             ║
+║                                                                         ║
+║  If installing from drive A, type:                                      ║
+║      A:BDEXX200  (press Enter)                                          ║
+║                                                                         ║
+║  If installing from drive B, type:                                      ║
+║      B:BDEXX200  (press Enter)                                          ║
+║                                                                         ║
+║  To print the starting instructions, type:                              ║
+║      COPY README.DOC PRN  (press Enter)                                 ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3156
 

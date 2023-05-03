@@ -49,6 +49,18 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk No 499 PROCOMM  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For instructions on how to install PROCOMM, type VIEW (press enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LICENSE.DOC
 
 {% raw %}

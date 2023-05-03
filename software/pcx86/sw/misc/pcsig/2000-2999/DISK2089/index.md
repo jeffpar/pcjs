@@ -93,6 +93,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #2089 STAINED GLASS  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: SG  (press enter)                           ║
+║                                                                         ║
+║ To print the documentation, type: COPY SG.DOC PRN  (press enter)        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## SG.DOC
 
 {% raw %}

@@ -604,6 +604,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1947  EZWIN  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: EZWIN        (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY EZHELP.TXT PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1947

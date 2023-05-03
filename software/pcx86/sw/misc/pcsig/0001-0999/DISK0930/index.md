@@ -131,6 +131,25 @@ UNDO      EXE   PROGRAM TO UNARC THE AUXILIARY FILE DURING INSTALLATION
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  PC-SIG Disk #930  POINT & SHOOT HARD DISK MANAGER   >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print installation instructions, type:  COPY READ.ME PRN (Enter)    ║
+║                                                                         ║
+║  To view author's notes, type:  TYPE FILES.TXT (press Enter)            ║
+║                                                                         ║
+║  After installing program, type:  COPY PASDOC.TXT PRN (press Enter)     ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ASBDOC.TXT
 
 {% raw %}

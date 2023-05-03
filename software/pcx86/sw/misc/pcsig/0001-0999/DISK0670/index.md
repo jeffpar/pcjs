@@ -85,6 +85,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #670 GRAPHTIME II  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, insert disk #669 in drive A and type:             ║
+║                       GO  (press enter)                                 ║
+║                                                                         ║
+║ To print the documentation, insert disk #669 in drive A and type:       ║
+║                       PRINTHLP  (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0670

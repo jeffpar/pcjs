@@ -112,6 +112,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2296  SUPER GAME PAK  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view documentation, type:  TYPE READALL.TXT (press ENTER)            ║
+║	  or to print it, type:  COPY READALL.TXT PRN (press ENTER)       ║
+║									  ║
+║ To start any of the games, type:  <filename> (press ENTER)              ║
+║                     example:  BLOCK5 (press ENTER)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## READALL.TXT
 
 {% raw %}

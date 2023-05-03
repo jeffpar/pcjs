@@ -597,6 +597,33 @@ for your callers, and more!
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3606 DARE TO DREAM  >>>>              ║
+║                      Disk 3 of 3 (also #3604, #3605)                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install the game to your hard disk, type:                           ║
+║     [hard drive letter]:  (press Enter)                                 ║
+║     CD\  (press Enter)                                                  ║
+║     MD DARE2DRM  (press Enter)                                          ║
+║     CD DARE2DRM  (press Enter)                                          ║
+║                                                                         ║
+║  To extract the files from drive A, insert disk 3 (#3600) and type:     ║
+║     A:PKUNZIP A:DARE2DRM  (press Enter)                                 ║
+║     (use B: in place of A: if installing from drive B)                  ║
+║                                                                         ║
+║  To print documentation, type:  COPY DARE2DRM.DOC PRN  (press Enter)    ║
+║  To start the game, type:  WIN DARE2DRM  (press Enter)                  ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3606

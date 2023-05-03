@@ -77,6 +77,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 1175 WORTHY OPPONENT  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: WORTHY (press enter)                        ║
+║                                                                         ║
+║ To print the documentation, type: COPY WORTHY.DOC PRN    (press enter)  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1175

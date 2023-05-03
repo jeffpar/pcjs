@@ -140,6 +140,41 @@ command execution.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2845  BCS MENU PROGRAM  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program to your hard drive, create a subdirectory on     ║
+║ your hard drive (ex. BCSMENU) and copy the files on this diskette to it.║
+║ Then change to that drive and subdirectory so the prompt is at:         ║
+║                             C:\BCSMENU>                                 ║
+║                                                                         ║
+║ To extract the files from BCSMNU20, type:  BCSMNU20  (press Enter)      ║
+║                                                                         ║
+║ To add BCS MENU PROGRAM to your Autoexec.bat so the program will come   ║
+║ up every time you start your computer, type:  TYPE ADD2AUTO.BAT  at     ║
+║ the DOS prompt to display the appropriate wording to be added at the    ║
+║ end of your Autoexec.bat file.                                          ║
+║                                                                         ║
+║ To print out the program documentation, type:                           ║
+║                                    COPY BCSMENU.DOC PRN  (press Enter)  ║
+║                                                                         ║
+║ To begin the program, type:  BCSMENU  (press Enter)                     ║
+║                                                                         ║
+║ To print the order form, type:  COPY ORDER.DOC PRN                      ║
+║                                                                         ║
+║ To print any of the other DOC files, type:                              ║
+║                                 COPY [filename].DOC PRN  (press Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2845

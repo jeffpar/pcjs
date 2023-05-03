@@ -79,6 +79,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  Disk #869 PC-MAIL (disk 2 of 3, also 868, 1475)  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, insert disk 1, and type: PCMAIL  (press enter)        ║
+║                                                                         ║
+║ To print documentation, insert disk 1, and type: PRTDOC (press enter)   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0869

@@ -118,6 +118,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk #1621  EXPLORING THE COSMOS (DEMO) >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start EXPLORING THE COSMOS, type:  COS (press enter)                 ║
+║ To install on hard drive, type:  INSTALL (press enter)                  ║
+║                                                                         ║
+║ To print documentation, type:  COPY READ.ME PRN  (press enter)          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1621

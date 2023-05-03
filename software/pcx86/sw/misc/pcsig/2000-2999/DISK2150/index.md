@@ -88,6 +88,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk  2150 HUGO'S HOUSE OF HORRORS   >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ This program is contained in a self un-archiving file called HUGO.EXE   ║
+║ First copy HUGO.EXE to the hard disk (you need about 900k of free space)║
+║ From hard disk, type:  HUGO (to un-archive the program)                 ║
+║ Once the files have been un-archived Type:   HHH  to begin              ║
+║ To print the documentation, type: COPY MANUAL.DOC PRN  (press enter)    ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2150

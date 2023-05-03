@@ -114,6 +114,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk No 1098 SCHEDULE MAGIC  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: MANUAL (press enter)                  ║
+║                                                                         ║
+║ To run the program, type: MAGIC (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

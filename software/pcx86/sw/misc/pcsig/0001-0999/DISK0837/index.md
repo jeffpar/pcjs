@@ -67,6 +67,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #837 HOME MONEY MANAGER  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program onto floppies, type:                             ║
+║                  FLOPPY (press enter)                                   ║
+║                                                                         ║
+║ To install the program onto a hard drive, type:                         ║
+║                  HARDDISK (press enter)                                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HMMII.DOC
 
 {% raw %}

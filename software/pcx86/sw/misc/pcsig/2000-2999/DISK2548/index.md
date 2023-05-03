@@ -14,6 +14,31 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2548  FASTFILE  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To read the author's preliminary notes and instructions, type:         ║
+║                      TYPE README  (press Enter)                         ║
+║                                                                         ║
+║  To print the program's manual, type:  COPY MANUAL.DOC PRN  (Enter)     ║
+║                                                                         ║
+║  To install the program, type:  INSTALL  (press Enter)                  ║
+║                                                                         ║
+║  To run FASTFILE, type:  FF  (press Enter)                              ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2548
 

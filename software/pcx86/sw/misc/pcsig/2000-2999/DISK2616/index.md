@@ -67,6 +67,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #2616  LASER LETTERHEAD PLUS  >>>>               ║
+║                       Disk 2 of 2  (also #2037)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   If you mistakenly put this diskette in first, insert Disk 1, type:    ║
+║             GO  (press Enter)  and follow the instructions.             ║
+║                                                                         ║
+║   NOTE: During the installation process, you will be prompted to        ║
+║   insert this disk to install its contents.                             ║
+║                                                                         ║
+║                                                                         ║
+║                                    (c) Copyright 1991, PC-SIG Inc.      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2616

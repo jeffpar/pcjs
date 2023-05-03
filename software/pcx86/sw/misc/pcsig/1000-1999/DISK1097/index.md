@@ -942,6 +942,70 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## FILES.TXT
+
+{% raw %}
+```
+┌──────────────────────── Disk Files for FormGen 3.31 ────────────────────────┐
+│                                                                             │
+│   FORM     CFG    FormGen configuration file                                │
+│   FORM     COL    FormGen overlay file                                      │
+│   FORM     DOC    Brief documentation for unregistered version              │
+│   FORM     EXE    FormGen program                                           │
+│   FORM     HLP    FormGen overlay file                                      │
+│   FORM     OVL    FormGen overlay file                                      │
+│   B&W      BAT    Black & White configuration setup                         │
+│   COLOR    BAT    Color configuration setup                                 │
+│   COMPAQ   BAT    Compaq configuration setup                                │
+│   MANUAL   BAT    Prints brief documentation                                │
+│   MONO     BAT    TTL monochrome setup                                      │
+│   B&W      CFG    Black & White configuration                               │
+│   COLOR    CFG    Color configuration                                       │
+│   COMPAQ   CFG    Compaq configuration                                      │
+│   MONO     CFG    TTL monochrome                                            │
+│   BBS-DIST DOC    Distribution terms for BBS or Shareware distribution      │
+│   UPGRADE  DOC    Upgrade notice                                            │
+│   CHARS    FRM    Sample form                                               │
+│   CREDIT   FRM    Sample form                                               │
+│   DESIGN   FRM    Sample form                                               │
+│   EXPENSE  FRM    Sample form                                               │
+│   INSERTIO FRM    Sample form                                               │
+│   MAP      FRM    Sample form                                               │
+│   MESSAGE  FRM    Sample form                                               │
+│   REF      FRM  * use FormGen to print this reference card                  │
+│   REG      FRM  * use FormGen to print this registration form               │
+│   SCREEN   FRM    Sample form                                               │
+│   UPGRADE  FRM  * use FormGen to print this upgrade notice                  │
+│   WO       FRM    Sample form                                               │
+│   BBS-DESC TXT    Brief description for BBS or catalog listing              │
+│   FILES    TXT    list of files                                             │
+│   READ     ME     brief instructions for getting started                    │
+└─────────────────────────────────────────────────────────────────────────────┘
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 1097 RESUMEBEST & FORMGEN  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view information obout RESUMEBEST, load BASIC then load the program  ║
+║                       README.BAS                                        ║
+║                                                                         ║
+║ To run the programs, use a version of the BASIC programming language.   ║
+║ Please consult your BASIC language manual for complete instructions     ║
+║ for your specific system.                                               ║
+║                                                                         ║
+║ FORMGENS documentation is in the form of on-line help, once in the      ║
+║ program you can ask for help                                            ║
+║                                                                         ║
+║ To run the program FORMGEN, type: FORM (press enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INTRO.BAS
 
 {% raw %}

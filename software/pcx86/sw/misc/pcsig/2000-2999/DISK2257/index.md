@@ -143,6 +143,23 @@ TSS.EXE            Code generating program.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #2257  THE TURBO-SCREEN SYSTEM  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type:  COPY FILES.TXT PRN  (press ENTER)        ║
+║                                                                         ║
+║ To print further documentation and installation instructions, type:     ║
+║                                COPY TSS.MAN PRN  (press ENTER)          ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2257

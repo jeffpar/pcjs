@@ -78,6 +78,34 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  DISK #2432  THE LAST WORD  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print important information from the author, type:                  ║
+║                    COPY READ.ME PRN (press Enter)                       ║
+║                                                                         ║
+║  To print the On-Line Help, type:  COPY LWORD.HLP PRN (press Enter)     ║
+║                                                                         ║
+║  To print the manual, type:  COPY LWORD.TXT PRN (press Enter)           ║
+║                                                                         ║
+║  To start THE LAST WORD, type:  LWORD  (press Enter)                    ║
+║                                                                         ║
+║  To print the registration form, type:  COPY REGISTER.TXT PRN (Enter)   ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                      (c) Copyright 1990, PC-SIG Inc.    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
 ## LWORD.TXT
 
 {% raw %}

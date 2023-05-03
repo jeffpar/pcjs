@@ -85,6 +85,34 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #2439  EZ-FORMS' DATABASE  >>>>             ║
+║             Disk 1 of 2 (EZ-FORMS EXECUTIVE) (also #2440)               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║NOTE:  EZ-FORMS' DATABASE consists of two programs (EZ-FORMS EXECUTIVE   ║
+║       and EZ-INFORMA DB) that work together to bring you information    ║
+║       processing at its best.                                           ║
+║                                                                         ║
+║  For a list of EZX's products, type:  TYPE !EZX!!!!  (press Enter)      ║
+║                                                                         ║
+║  For more details on the products, type:  EZXINFO  (press Enter)        ║
+║                                                                         ║
+║  For registration/technical support information, type:  SUPPORT (Enter) ║
+║                                                                         ║
+║  For documentation and installation instructions, type:  README (Enter) ║
+║                                                                         ║
+║ Insert Disk #2 to install EZ-INFORMA DB.                                ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2439

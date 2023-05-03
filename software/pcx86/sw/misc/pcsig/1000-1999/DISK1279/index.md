@@ -184,6 +184,34 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<<  Disk No 1279 THE NAVIGATOR, DISKDUPE, VIRUSCHK version 1.12  >>>> ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:                                     ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To install The Navigator, type:                                       ║
+║                                                                         ║
+║             INSTALL (press enter)                                       ║
+║                                                                         ║
+║   To run DISKDUPE, type:                                                ║
+║                                                                         ║
+║             DISKDUPE (press enter)                                      ║
+║                                                                         ║
+║   To run VIRUSCHK, type:                                                ║
+║                                                                         ║
+║             VIRUSCHK (press enter)                                      ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NAVIGATE.DOC
 
 {% raw %}

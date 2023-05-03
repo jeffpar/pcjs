@@ -12329,6 +12329,30 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #766 THE BIBLE (DISK 1 OF 7)  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ This disk is the first of seven disks which hold the Bible in text      ║
+║ files.                                                                  ║
+║                                                                         ║
+║ To install this disk onto three formatted floppy disks, insert this     ║
+║ disk in your a drive, and use the command:                              ║
+║                                                                         ║
+║                                FLOPPY                                   ║
+║                                                                         ║
+║ To install this disk onto your hard drive, insert this disk in your a   ║
+║ drive, and use the command:                                             ║
+║                                                                         ║
+║                                 HARD                                    ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## QUESTION.TXT
 
 {% raw %}

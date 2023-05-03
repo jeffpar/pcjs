@@ -110,6 +110,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk No 900 ESL WRITER (disk 2 of 2)  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for ESL WRITER, Type:                        ║
+║             COPY READ.ME LPT1: (press enter)                            ║
+║                                                                         ║
+║ To run the program ESL WRITER, Type: PREWRITE (press enter)             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0900

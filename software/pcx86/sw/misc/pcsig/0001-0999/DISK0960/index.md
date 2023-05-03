@@ -161,6 +161,33 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<< Disk No 960 FINANCIAL  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To run the program The Menu, Type: THE_MENU (press enter)               ║
+║                                                                         ║
+║ To print the documentation for Monthly Loan Amortizization, Type:       ║
+║             COPY MONAMORT.DOC LPT1: (press enter)                       ║
+║                                                                         ║
+║ To run the program Monthly Loan Amortizization, Type:                   ║
+║             MONAMORT (press enter)                                      ║
+║                                                                         ║
+║ To print the documentation for Convert, Type:                           ║
+║             COPY CONVERT.TXT LPT1: (press enter)                        ║
+║                                                                         ║
+║ To run the program Convert, Type: CONVERT (press enter)                 ║
+║                                                                         ║
+║ To print the documentation for Loancalc, Type:                          ║
+║             COPY LOANCALC.DOC LPT1: (press enter)                       ║
+║ To run the program Loancalc, Type: LOANCALC (press enter)               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LOANCALC.DOC
 
 {% raw %}

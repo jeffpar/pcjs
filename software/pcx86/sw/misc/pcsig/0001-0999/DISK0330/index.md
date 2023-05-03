@@ -304,6 +304,30 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk No: 330  Ledger and Business  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the manuals on this disk, type:                              ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To start Datacount II, type:                                          ║
+║                                                                         ║
+║             DATAC (press enter)                                         ║
+║                                                                         ║
+║                                                                         ║
+║   To start the other programs on this disk, please refer top their      ║
+║   manuals for instructions and to your BASIC language manual.           ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MA.BAS
 
 {% raw %}

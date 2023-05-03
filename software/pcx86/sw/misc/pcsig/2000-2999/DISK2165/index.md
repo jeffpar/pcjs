@@ -71,6 +71,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 2165 MICROMACROBAT  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: COPY MB.DOC PRN (press enter)         ║
+║                                                                         ║
+║ To start the program, type: MB  (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MB.DOC
 
 {% raw %}

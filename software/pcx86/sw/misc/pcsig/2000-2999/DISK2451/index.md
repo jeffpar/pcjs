@@ -83,6 +83,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2451  MUSICAL BLOCKS   >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To begin using MUSICAL BLOCKS, type:  COPY README PRN (press Enter)     ║
+║                                  or:  TYPE README (press Enter)         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2451

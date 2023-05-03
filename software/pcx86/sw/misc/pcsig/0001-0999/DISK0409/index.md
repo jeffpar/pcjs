@@ -2053,6 +2053,13 @@ the documentation binder for SNOBASIC.
     STARTUP  BAT       128   9-18-84   1:09p
     STARTUP2 BAT       256   9-18-84   1:09p
     STARTUP3 BAT       256   9-18-84   1:09p
+    DK0          <DIR>    
+           20 file(s)     219260 bytes
+
+     Directory of A:\DK0
+
+    .            <DIR>    
+    ..           <DIR>    
     B0SYS              796   9-18-84   1:36p
     B9999ACC OUN      5010  12-02-84   9:36p
     B9999LOG          5606  12-02-84   9:38p
@@ -2060,5 +2067,8 @@ the documentation binder for SNOBASIC.
     FBASICER ROR      9600   9-14-84   9:49p
     FBASICLO GS       1024   1-07-87   6:30p
     FBASICME SGS       128   7-22-84   5:44p
-           26 file(s)     257808 bytes
-                           52224 bytes free
+            9 file(s)      38548 bytes
+
+    Total files listed:
+           29 file(s)     257808 bytes
+                           51200 bytes free

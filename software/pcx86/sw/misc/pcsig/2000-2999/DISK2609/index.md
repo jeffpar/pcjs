@@ -107,6 +107,32 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  PC-SIG Disk #2609  PAINLESS ACCOUNTING/PAYROLL COMPANION  >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  You must have installed PAINLESS ACCOUNTING or PAYROLL for the         ║
+║  this program to work.                                                  ║
+║                                                                         ║
+║  Before you can run the program you will need to copy the file          ║
+║  PCACOM-D.EXE to the subdirectory where PAINLESS ACCOUNTING or PAYROLL  ║
+║  reside.                                                                ║
+║                                                                         ║
+║  To unarchive the program files, type: PACOMP-D (press Enter)           ║
+║                                                                         ║
+║  Once dearchived to start the program, type:  PAG5-D (press Enter)      ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+                              .
+```
+{% endraw %}
+
 ## MANUAL-G.TXT
 
 {% raw %}

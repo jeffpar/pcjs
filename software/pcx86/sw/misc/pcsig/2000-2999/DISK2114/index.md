@@ -104,6 +104,32 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #2114 COOPER GRAPHIC 15  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For Printshop graphics, use files GRP15.*                               ║
+║ To print documentation for Printshop graphics, type:                    ║
+║                       COPY NUPSHOP.DOC PRN                              ║
+║                                                                         ║
+║ For Printmaster graphics, use files GPM15.*                             ║
+║ To print documentation for Printmaster graphics, type:                  ║
+║                       COPY OLDPMAS.DOC PRN                              ║
+║                                                                         ║
+║ To unarchive First Publisher Art Images graphics, type: CGART15         ║
+║ To unarchive Gem Img Images graphics, type: CGIMG15                     ║
+║ To unarchive MacPaint Mac Images graphics, type: CGMAC15                ║
+║ To unarchive MicroSoft Paint MSP Images graphics, type: CGMSP15         ║
+║ To unarchive PC Paintbrush PCX Imgages graphics, type: CGPCX15          ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NUPSHOP.DOC
 
 {% raw %}

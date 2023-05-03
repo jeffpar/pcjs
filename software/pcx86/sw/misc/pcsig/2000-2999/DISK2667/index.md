@@ -968,6 +968,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2667 ACTAEON  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the documentation, type: COPY ACTAEON.DOC PRN (press Enter)   ║
+║                                                                         ║
+║  To start the proggram, type: ACTAEON (press Enter)                     ║
+║                                                                         ║
+║  To print the registration form, type: COPY ORDER.FRM PRN (press Enter) ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SHAREW.TXT
 
 {% raw %}

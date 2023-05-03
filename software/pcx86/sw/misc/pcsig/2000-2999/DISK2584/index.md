@@ -83,6 +83,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║<< PC-SIG Disk #2584  TESSERACT CXL USER INTERFACE DEVELOPMENT SYSTEM >> ║
+║                     Disk #2 of 2  (also #2583)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║         Insert Disk #1, type GO, and follow the instructions.           ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2584

@@ -204,6 +204,23 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<< Disk No 1206 BOYAN TELECOMMUNICATIONS Disk 1 of 2) >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the instructions for this disk, type:                        ║
+║                                                                         ║
+║             COPY README.1 PRN (press enter)                             ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1206

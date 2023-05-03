@@ -16,6 +16,26 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3058 VISUAL COMPARE  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print the general information, type:  COPY README.DOC PRN  (Enter)  ║
+║                                                                         ║
+║  To print the documentation, type:  COPY MANUAL.DOC PRN  (press Enter)  ║
+║                                                                         ║
+║  To print the registration form, type:  COPY REGISTER.DOC PRN  (Enter)  ║
+║                                                                         ║
+║  To start the program, type:  VCS  (press Enter)                        ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## KEDIT.DOC
 
 {% raw %}

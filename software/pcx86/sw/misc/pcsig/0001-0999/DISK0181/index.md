@@ -85,6 +85,25 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #181 NEWKEY  >>>>                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type:                                       ║
+║                    COPY NEWKEY.DOC PRN   (press enter)                  ║
+║                    COPY README PRN       (press enter)                  ║
+║                                                                         ║
+║ To start the program, type: NEWKEY (press enter)                        ║
+║                                                                         ║
+║ To start the program demo, type: DEMO (press enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c)Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## NEWKEY.DOC
 
 {% raw %}

@@ -107,6 +107,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1205 IDCSHELL/NARC  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unarchive the program, copy IDC40.EXE to a place where there are     ║
+║ sufficient spaces and type: IDC40  (press enter)                        ║
+║                                                                         ║
+║ To print documentation for all the utils program, type:                 ║
+║                         CD\IDCUTIL  (press enter)                       ║
+║                         COPY IDCUTILS.DOC PRN  (press enter)            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1205
@@ -119,6 +136,16 @@ Sunnyvale  Ca. 94086
     GO       TXT       771   5-03-90   2:11p
     FILE1205 TXT      3257   5-30-90   2:14p
     AM1      EXE     46754  12-19-90   8:51a
+    IDCUTIL      <DIR>    
+            6 file(s)     219641 bytes
+
+     Directory of A:\IDCUTIL
+
+    .            <DIR>    
+    ..           <DIR>    
     IDCUTIL  EXE     84137  12-19-90   8:50a
-            6 file(s)     303778 bytes
-                           15360 bytes free
+            3 file(s)      84137 bytes
+
+    Total files listed:
+            9 file(s)     303778 bytes
+                           14336 bytes free

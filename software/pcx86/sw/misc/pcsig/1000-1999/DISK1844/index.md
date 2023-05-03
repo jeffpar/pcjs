@@ -256,6 +256,32 @@ and scheduling.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1844  SPORT LEAGUE MANAGEMENT  >>>>            ║
+║                         (disk 1 of 2, 1845 also)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ You MUST copy files to a hard drive and use PKUNZIP (disk #1364) to     ║
+║     extract files.                                                      ║
+║                                                                         ║
+║ To start SPORTS MANAGEMENT program, type: TEAMMGRM (press enter)        ║
+║                                                                         ║
+║ To print documentation for SPORTS MANAGEMENT, type:                     ║
+║                            COPY SPTSMGMT.DOC PRN                        ║
+║ To print documentation for FOOTBALL MANAGER, type:                      ║
+║                            COPY FOOTBAMG.DOC PRN                        ║
+║ To print documentation for BASEBALL MANAGER, type:                      ║
+║                            COPY BASEBAMG.DOC PRN                        ║
+║ To print documentation for BASKETBALL MANAGER, type:                    ║
+║                            COPY BASKBAMG.DOC PRN                        ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SPTSMGMT.DOC
 
 {% raw %}

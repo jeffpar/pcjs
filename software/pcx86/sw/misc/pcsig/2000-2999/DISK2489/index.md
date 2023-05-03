@@ -57,6 +57,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  DISK #2489 JORJ 1 of 2 (also 2490)  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the installation instructions, type:  COPY READ.ME PRN (Enter) ║
+║                                                                         ║
+║                                                                         ║
+║                                         (c) Copyright 1991, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2489

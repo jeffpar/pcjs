@@ -1170,6 +1170,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 229 FUNNELS & BUCKETS  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the FUNNELS & BUCKETS program, type: FUNNELS (press enter)     ║
+║                                                                         ║
+║ To start the AIR TRAFFIC CONTROLLER (ATC) game, type ATC (press enter)  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0229

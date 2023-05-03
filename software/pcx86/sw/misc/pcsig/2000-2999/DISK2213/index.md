@@ -39,6 +39,23 @@ Unmatched number of parameters                                                  
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  Disk #2213 REFERENCE MANAGEMENT SYSTEM 1 OF 2 (also 2214 >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program, type: INSTALL (press enter)                     ║
+║                                                                         ║
+║ To run the program, type: RSX  (press enter)                            ║
+║                                                                         ║
+║ To print documentation, type: COPY RSX.DOC PRN  (press enter)           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2213

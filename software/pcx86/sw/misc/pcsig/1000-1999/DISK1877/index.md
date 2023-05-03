@@ -10746,6 +10746,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1877  ANARKEY  >>>>                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Use PKXARC or PKUNZIP to extract files.                                 ║
+║                                                                         ║
+║ To start program, type: ANARKEY      (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY ANARKEY.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1877

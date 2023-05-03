@@ -606,6 +606,28 @@ will appear.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1503 GETFILE & More  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║         To run the GETFILE program, type GETFILE (press enter)          ║
+║                                                                         ║
+║         To run the COPYALL program, type COPYALL (press enter)          ║
+║                                                                         ║
+║         To run the SETATTR program, type SETATTR (press enter)          ║
+║                                                                         ║
+║         To run the WISEDIR program, type WISEDIR (press enter)          ║
+║                                                                         ║
+║         To run the FILEVEIWER program, type FV (press enter)            ║
+║                                                                         ║
+║         To run the MAXI-FORM program, type MAXI (press enter)           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INFO.DOC
 
 {% raw %}

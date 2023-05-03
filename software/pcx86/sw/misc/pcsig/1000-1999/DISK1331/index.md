@@ -504,6 +504,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 1331  CIRCLE SOFTWARE  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To print the documentation on this disk, type:                        ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To install the program, type:                                         ║
+║                                                                         ║
+║             INSTALL (press enter)                                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## BEGINNER.DOC
 
 {% raw %}

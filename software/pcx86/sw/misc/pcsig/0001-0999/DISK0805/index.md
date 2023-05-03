@@ -2130,6 +2130,75 @@ Sunnyvale, CA  94086
 ```
 {% endraw %}
 
+## SUBMIT.TXT
+
+{% raw %}
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║              PC-SIG SOFTWARE LIBRARY SUBMISSION FORM                     ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║ PC-SIG Inc.                                                              ║
+║ 1030D East Duane Avenue                                                  ║
+║ Sunnyvale, CA 94086                                                      ║
+║ (408) 730-9291                                                           ║
+║                   ┌────────────────────────────┐                         ║
+║                   │Enter Name and Address below│                         ║
+║                   └────────────────────────────┘                         ║
+║                                                                          ║
+║          ────────────────────────────────────────────────                ║
+║                                                                          ║
+║          ────────────────────────────────────────────────                ║
+║                                                                          ║
+║          ────────────────────────────────────────────────                ║
+║                                                                          ║
+║          ────────────────────────────────────────────────                ║
+║                                                                          ║
+║  Day Time Phone Number (    )____________________________                ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║ Type of Submission                                                       ║
+║                                                                          ║
+║ [] New public domain program(s)                                          ║
+║ [] New User-supported program - suggested donation $____________         ║
+║ [] PROGRAM UPDATE, Corrected version of program(s) already in library    ║
+║    Disk number which program is on ____________                          ║
+║    File name of program going to be updated ____________________________ ║
+║                                                                          ║
+║ Source Language: [] Basic  [] Pascal  [] Assembly  [] C                  ║
+║                  [] Other ______________________________________________ ║
+║                                                                          ║
+║ Are you the author ?  [] YES  [] NO - Please list author below           ║
+║                                                                          ║
+║             Name       ____________________________________              ║
+║             Address    ____________________________________              ║
+║                        ____________________________________              ║
+║ Phone #                ____________________________________              ║
+║                                                                          ║
+║ Special requirements: [] EGA  [] CGA  [] HERCULES  [] MONOCHROME         ║
+║ DOS Version ________________                                             ║
+║ Other requirements needed ______________________________________________ ║
+║ ________________________________________________________________________ ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║ Please describe each file enclosed in a text file on your disk, this     ║
+║ will help me as well as you.                                             ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                         ┌────────────────┐                               ║
+║                         │CHECK ONE PLEASE│                               ║
+║                         └────────────────┘                               ║
+║ [] The enclosed programs are to the best of my knowledge in the public   ║
+║    domain market an may be freely distributed.                           ║
+║ [] I Wrote the enclosed program(s) and I hereby place them in the public ║
+║    domain market to be distributed freely.                               ║
+║ [] I Wrote the enclosed program(s) and hereby place them in the category ║
+║    of SHAREWARE, or user supported, software and give permission to      ║
+║    PC-SIG to distribute my program.                                      ║
+║                                                                          ║
+║                Signed _________________________ Date _____________       ║
+║                                                                          ║
+║ Which disk(s) would you like in return for your disk(s)________________  ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## URESP.TXT
 
 {% raw %}

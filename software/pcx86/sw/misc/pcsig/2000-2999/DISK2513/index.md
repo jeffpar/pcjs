@@ -858,6 +858,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║<<DISK #2513 THE BATES DIRECTORY OF U.S. LIBRARIES 2 of 2 (also #2512) >>║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  For starting instructions insert disk #2512, and type: README          ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1991, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2513

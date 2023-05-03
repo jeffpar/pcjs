@@ -476,6 +476,19 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## RUN.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  Disk No 1367 FREQUENT FLYER  (Disk 3 of 3)  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program to your hard disk insert disk #1365 into drive A ║
+║ and type INSTALL (press enter)                                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1367

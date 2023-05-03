@@ -36,6 +36,24 @@ machines:
 
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════════╗
+║                      <<<< Disk No. 751  AsEasyAs >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════════╣
+║                                                                             ║
+║  To start the program, type:  ASEASY (press enter)                          ║
+║      									      ║
+║  To install the program on a hard drive or another floppy disk, type:	      ║
+║           SETUP							      ║
+║									      ║
+║  To print information on AsEasyAs type:  COPY READ.ME PRN		      ║
+╚═════════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LICENSE.DOC
 
 {% raw %}

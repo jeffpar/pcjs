@@ -73,6 +73,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2428  ANIMAL FARM   >>>>                ║
+║                      (Disk 1 of 2, #2429 also)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the author's documentation and installation instructions,      ║
+║                type:  COPY MANUAL.TXT PRN (press Enter)                 ║
+║                                                                         ║
+║        (You may want to first type:  TYPE README.TXT (Enter))           ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HEADER.BAS
 
 {% raw %}

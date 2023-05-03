@@ -40,6 +40,21 @@ machines:
     plenty of help screens.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #1574  THE EDITING KEYPADS  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type:  COPY READ.ME PRN (press enter)           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1574
 

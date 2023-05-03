@@ -699,6 +699,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #2233  EGA COLORING BOOK  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type:  COPY ECBMAN.DOC PRN  (press ENTER)       ║
+║                                                                         ║
+║ To start program, type:  ECB  (press ENTER)                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2233

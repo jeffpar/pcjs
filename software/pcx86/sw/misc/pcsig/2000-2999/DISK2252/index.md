@@ -36,6 +36,29 @@ machines:
     MEGACAD -- A software package for people who are serious about CAD.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<<  PC-SIG Disk #2252 MEGACAD Disk 3 of 3 (also #2250,#2252)  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To install MEGACAD, insert disk #2250 and type:  INSTALL                ║
+║                                                                         ║
+║ To start the program, type:  MEGA                                       ║
+║                                                                         ║
+║ To print the documentation, insert disk# 2250 and type:                 ║
+║                                               COPY MEGACAD.DOC PRN      ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG Inc.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2252
 

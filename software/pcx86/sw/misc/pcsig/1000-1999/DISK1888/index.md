@@ -93,6 +93,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1888  IDEA TREE  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: GO           (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY MANUAL.IT PRN                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1888

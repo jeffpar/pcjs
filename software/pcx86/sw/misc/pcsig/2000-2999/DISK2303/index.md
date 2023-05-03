@@ -91,6 +91,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2303  SCREEN MACHINE  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For documentation and program instructions, type:                       ║
+║                  COPY SM.TXT PRN (press Enter)                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## SM.TXT
 
 {% raw %}

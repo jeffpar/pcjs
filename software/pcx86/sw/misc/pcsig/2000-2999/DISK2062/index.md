@@ -86,6 +86,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk No 2062 IMAGEPRINT (disk 2 of 2, also 517  >>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: COPY UTILS.DOC PRN (press enter)      ║
+║                                                                         ║
+║ To run the program, insert disk 1, type: IP (press enter)               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## UTILS.DOC
 
 {% raw %}

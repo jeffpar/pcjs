@@ -79,6 +79,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #2430  CIVIL WAR BATTLE SET   >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print author's instructions, type:  COPY AMCIV.DOC PRN (Enter)      ║
+║                                                                         ║
+║  To start the game, type:  CIVILWAR (press Enter)                       ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2430

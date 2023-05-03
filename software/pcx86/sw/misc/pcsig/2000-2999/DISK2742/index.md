@@ -50,6 +50,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  PC-SIG Disk #2742 THE CASE OF CRIME TO THE NINTH POWER  >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To start the program, type: CLIFF   (press Enter)                      ║
+║                                                                         ║
+║  To print documentation, type: COPY HANDBOOK.DOC PRN   (press Enter)    ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+                              .
+```
+{% endraw %}
+
 ## HANDBOOK.DOC
 
 {% raw %}

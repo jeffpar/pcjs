@@ -71,6 +71,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1087 DRIVECHK & ALIGN  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for DRIVECHK, type: PRINTDOC (press enter)   ║
+║                                                                         ║
+║ To run the program DRIVECHK, type:  DRIVECHK (press enter)              ║
+║                                                                         ║
+║ To print the documentation for ALIGN, type: MANUAL (press enter)        ║
+║                                                                         ║
+║ To run the program ALIGN, type: ALIGN (press enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## OVERVIEW.DOC
 
 {% raw %}

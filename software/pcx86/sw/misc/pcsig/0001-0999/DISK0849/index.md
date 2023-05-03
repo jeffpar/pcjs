@@ -435,6 +435,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #849 GRAPHIC COACH  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type;                         ║
+║               MANUAL (press enter)                                      ║
+║                                                                         ║
+║ To start the program type; COACH42 (press enter)                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GRFILES.TXT
 
 {% raw %}

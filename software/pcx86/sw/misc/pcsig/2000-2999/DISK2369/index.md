@@ -5630,6 +5630,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  DISK #2369 C++ TUTOR Disk 2 of 2 (also #2368)   >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║                                                                         ║
+║    For instructions on getting started type:                            ║
+║                 TYPE READ.ME (to view instructions on screen)           ║
+║                 COPY READ.ME PRN (to print instructions)                ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
 ## INTRO.TXT
 
 {% raw %}

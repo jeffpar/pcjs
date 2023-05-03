@@ -44,6 +44,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  PC-SIG Disk #2690 WINPOST  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To start the program from DOS, type: WIN WINPOST   (press Enter)       ║
+║                            or                                           ║
+║  From within the Windows File Manager, click on WINPOST.EXE to start.   ║
+║                                                                         ║
+║  From the Windows Write application, load WINPOST.WRI for documentation.║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VENDOR.DOC
 
 {% raw %}

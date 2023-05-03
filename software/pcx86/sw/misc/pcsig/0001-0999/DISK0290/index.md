@@ -2559,6 +2559,25 @@ Self-Employed Health
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<< Disk No 290  TAX 88  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the manual files on this disk, type:                         ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To run the worksheet, load it as you would any normal Lotus           ║
+║   worksheet file. Please consult your Lotus manual for complete         ║
+║   instructions.                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## WHATSNEW.DOC
 
 {% raw %}

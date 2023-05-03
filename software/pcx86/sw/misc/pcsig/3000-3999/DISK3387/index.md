@@ -14,6 +14,35 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3387 MAJOR STRYKER  >>>>               ║
+║                          Disk 2 of 2 (also #2829)                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install to your hard drive, type:                                   ║
+║     [hard drive letter]:  (press Enter)                                 ║
+║     CD\  (press Enter)                                                  ║
+║     MD MAJOR  (press Enter)                                             ║
+║     CD MAJOR  (press Enter)                                             ║
+║  Insert disk 2 (#3387) in drive A and type:                             ║
+║     COPY A:ARJ.EXE  (press Enter)  (or type B:ARJ.EXE if from drive B)  ║
+║  Insert disk 1 (#2829) in drive A and type:                             ║
+║     ARJ E -V A:#1MAJOR.A01  (press Enter)                               ║
+║     When prompted, insert disk 2 (#3387) in drive A.                    ║
+║  To install the program files, type:  INSTALL  (press Enter)            ║
+║  To start the game, type:  MAJOR  (press Enter)                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3387
 

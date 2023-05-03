@@ -64,6 +64,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 696  QUBECALC  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To print the documentation on this disk, type: PRINTDOC (press enter) ║
+║                                                                         ║
+║   To run the program, type: QUBECALC (press enter)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REGISTER.DOC
 
 {% raw %}

@@ -14,6 +14,39 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #3959 DTSEARCH FOR WINDOWS  >>>>           ║
+║                     Disk 2 of 2 (also disk #3960)                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install files on your hard drive, type in the following:            ║
+║                                                                         ║
+║     [hard drive letter]:  (press Enter)                                 ║
+║     cd\  (press Enter)                                                  ║
+║     md dtsearch  (press Enter)                                          ║
+║     cd dtsearch  (press Enter)                                          ║
+║                                                                         ║
+║  Insert disk 1 (#3959) and type:  A:DTSW  (press Enter)                 ║
+║                                   (use B: in place of A: for B drive)   ║
+║  Insert disk 2 (#3960) and type:  A:DTSDOC  (press Enter)               ║
+║                                   (use B: in place of A: for B drive)   ║
+║                                                                         ║
+║  To start type:  DTSWIN  (press Enter)                                  ║
+║                                                                         ║
+║  The DOS version of dtSearch is on disk #3153.                          ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3959
 

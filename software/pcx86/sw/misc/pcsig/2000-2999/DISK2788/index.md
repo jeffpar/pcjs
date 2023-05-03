@@ -56,6 +56,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2788 TUTORIALWRITER  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To install this program to your hard drive, create a subdirectory     ║
+║   called \TWRITE by typing MD\TWRITE at the C:> prompt, then type       ║
+║   A:TWRITE2 to unarchive the program files.                             ║
+║                                                                         ║
+║                                                                         ║
+║   After the installation, to start the program, type: TWRITER           ║
+║                                                                         ║
+║   To print instructions, type: COPY REAMDE.1ST PRN                      ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                    (c) Copyright 1991, PC-SIG Inc.      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2788

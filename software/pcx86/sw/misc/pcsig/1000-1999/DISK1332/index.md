@@ -69,6 +69,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1332 HyperHelper  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy information about the program to your printer, type             ║
+║                           MANUAL (press enter)                          ║
+║                                                                         ║
+║ To view the information about the program, type VIEW (press enter)      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SAMPLE.TXT
 
 {% raw %}

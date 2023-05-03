@@ -16,6 +16,22 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## AVEXTRA.TXT
+
+{% raw %}
+```
+
+───────────────────────────────────────────────
+       LCD: Led's Change Directory v4.0b
+     Copyright (c) 1990 by Keith Ledbetter
+             All rights reserved.
+
+Be sure to read the HISTORY.DOC file for a list
+of new features in this version of the program.
+───────────────────────────────────────────────
+```
+{% endraw %}
+
 ## LCD.DOC
 
 {% raw %}

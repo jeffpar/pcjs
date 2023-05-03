@@ -16,6 +16,28 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #3288  SUPER FONTS I   >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the documentation, type: COPY READ.ME PRN  (press Enter)      ║
+║                                    COPY SOFTFONT.DOC PRN  (press Enter) ║
+║                                    COPY WINDOWS.DOC PRN  (press Enter)  ║
+║                                                                         ║
+║  To print registration information, type:  COPY REGISTER.DOC  (Enter)   ║
+║                                                                         ║
+║  To install the program, type:  INSTALL  (press Enter)                  ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MSWORD.DOC
 
 {% raw %}

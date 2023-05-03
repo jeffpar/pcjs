@@ -74,7 +74,22 @@ PC-SIG
 Sunnyvale  Ca. 94086                                                    
 (408) 730-9291                                                          
 (c) Copyright 1988 PC-SIG, Inc.                                         
-
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  Disk #1555  REVELATION TUTORIAL disk 2 of 2  >>>>            ║
+║                           also Disk #1554                               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start REVELATION TUTORIAL, type:  REV (press enter)                  ║
+║                                                                         ║
+║ To print documentation go to disk #1554, type:                          ║
+║                                      COPY REV.DOC PRN   (press enter)   ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

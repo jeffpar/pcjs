@@ -92,6 +92,23 @@ Sunnyvale, CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                      <<<< Disk No 1040 PC-FOTO >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type: PRTDOC (press enter)                      ║
+║                                                                         ║
+║ To run the program, type: FOTO (press enter)                            ║
+║                                                                         ║
+║ PC-FOTO has on-line help, simply press the appropriate key and the help ║
+║ screen pops up.                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INSTALL.DOC
 
 {% raw %}

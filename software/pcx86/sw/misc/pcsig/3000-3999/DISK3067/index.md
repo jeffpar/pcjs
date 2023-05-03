@@ -14,6 +14,31 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3067  WORD RESCUE  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To install the program files, follow the directions after typing:      ║
+║                                                 INSTALL  (press Enter)  ║
+║                                                                         ║
+║  To view Apogee's catalog of games, type:  CATALOG  (press Enter)       ║
+║                                                                         ║
+║  To print the order form, have your printer ready and type:             ║
+║                                      COPY ORDER.FRM PRN  (press Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                       (c) Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3067
 

@@ -99,6 +99,18 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  Disk #1875  THE RETIREMENT FINANCIAL PROJECTOR  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type: RFP_READ (press enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1875

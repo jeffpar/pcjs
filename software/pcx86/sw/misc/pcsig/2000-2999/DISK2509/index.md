@@ -52,6 +52,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  DISK #2509  SHEETCUT  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the documentation, type:  COPY README PRN                      ║
+║                                                                         ║
+║ To start SHEETCUT, type:  SHEETCUT  or  SC                              ║
+║                                                                         ║
+║                                                                         ║
+║                                       (c) Copyright 1991, PC-SIG Inc.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2509

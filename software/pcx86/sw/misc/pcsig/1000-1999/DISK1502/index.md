@@ -87,6 +87,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 1502 XACT SERIES CALCULATORS  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unarchive and install program, type: RUNME  (press enter)            ║
+║                                                                         ║
+║                  ** AFTER INSTALLATION **                               ║
+║                                                                         ║
+║ To start the X11SHARE program, type: X11SHARE (press enter)             ║
+║ To print X11SHARE documentation, type: COPY X11SHARE.DOC PRN            ║
+║                                                                         ║
+║ To start the X12SHARE program, type X12SHARE (press enter)              ║
+║ To print X12SHARE documentation, type: COPY X12SHARE.DOC PRN            ║
+║                                                                         ║
+║ To start the X16SHARE program, type X16SHARE (press enter)              ║
+║ To print X16SHARE documentation, type: COPY X16SHARE.DOC PRN            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## X11SHARE.DOC
 
 {% raw %}

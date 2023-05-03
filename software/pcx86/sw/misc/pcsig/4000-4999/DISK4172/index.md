@@ -931,6 +931,34 @@ machines:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #4172 NEW LANGUAGE STUDY PROGRAMS  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   All of the files included on this distribution disk are in ZIPPED,    ║
+║   or compressed format.                                                 ║
+║                                                                         ║
+║   Copy all files to a sub-directory on your hard disk drive.            ║
+║                                                                         ║
+║   To UNZIP a file, type: UNZIP (file name) (press Enter).               ║
+║   e.g. UNZIP RUSSIAN (press Enter).                                     ║
+║                                                                         ║
+║                                                                         ║
+║   To Start any of the programs, after UNZIPPING, use the RUNME...       ║
+║   included for you within the compressed file.                          ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REGISTER.DOC
 
 {% raw %}

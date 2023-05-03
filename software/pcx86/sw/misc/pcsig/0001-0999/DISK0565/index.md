@@ -104,6 +104,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk No 565  PC-PAYROLL, 1990 VERSION (disk #1 of 2)  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation on this program, insert disk #2 and type:  ║
+║                                                                         ║
+║             COPY PCPAY.DOC PRN (press enter)                            ║
+║                                                                         ║
+║   To run the program, type:                                             ║
+║                                                                         ║
+║             PAY (press enter)                                           ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NOTES.TXT
 
 {% raw %}

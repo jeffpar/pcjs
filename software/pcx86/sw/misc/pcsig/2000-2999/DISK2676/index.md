@@ -45,6 +45,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #2676  EGA COLORING BOOK 2 OF 2  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║           Insert disk #1 (2233) and type: GO  (press enter)             ║
+║                                                                         ║
+║                                        (c) COPYRIGHT 1991, PC-SIG INC.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2676

@@ -854,6 +854,21 @@ FILES    TXT        This file
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1569   dEDIT  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start dEDIT, type:  DEDIT (press enter)                              ║
+║ To install dEDIT to a hard disk, type:  HDINSTAL (press enter)          ║
+║                                                                         ║
+║ To print documentation, type:  RUNME (press enter)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1569

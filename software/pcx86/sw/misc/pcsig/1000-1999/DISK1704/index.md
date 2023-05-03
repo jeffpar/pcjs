@@ -134,6 +134,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1436 PC-CHART  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program to floppy disks, type FLOPPY (press enter)       ║
+║                                                                         ║
+║ To install the program to your hard drive, type HARD (press enter)      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GRAFTRAX.DOC
 
 {% raw %}

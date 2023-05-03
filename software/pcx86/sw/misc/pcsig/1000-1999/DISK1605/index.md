@@ -5170,6 +5170,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1605  Directory eXtended >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start Directory eXtended, type:  DX (press enter)                    ║
+║                                                                         ║
+║ To print documentation, type: COPY DX.DOC PRN (press enter)             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1605

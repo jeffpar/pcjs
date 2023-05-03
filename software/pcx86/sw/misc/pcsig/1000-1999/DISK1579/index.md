@@ -70,6 +70,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk #1579  DIETAID  disk 2 of 2 (also 1578)  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start DIETAID, insert disk #1578 and type:  DIETAID (press enter)    ║
+║                                                                         ║
+║ To view the documentation, insert disk #1578 and type:                  ║
+║                                                README (press enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HELP.TXT
 
 {% raw %}

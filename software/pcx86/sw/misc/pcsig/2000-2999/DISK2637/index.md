@@ -48,6 +48,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #2637 SLIMMER  2 of 2  (1489 also  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To view instructions on how to install SLIMMER, insert disk #1 and    ║
+║   type: GO (press Enter)                                                ║
+║                                                                         ║
+║                                       (c) COPYRIGHT 1991, PC-SIG INC.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SLIMMER.DOC
 
 {% raw %}

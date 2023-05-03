@@ -60,6 +60,32 @@ Description:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #3266 COLORADO UTILITIES DISK MANAGER  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To install the program, type:  CUDM341  (press Enter)                 ║
+║                                                                         ║
+║   Then to print the documentation, type:  COPY CUDM34.DOC PRN  (Enter)  ║
+║                                                                         ║
+║   To run the program, type:  CUDM  (press Enter)                        ║
+║                                                                         ║
+║   To install the COLORADO UTILITIES DUPLICATE FILE MANAGER, type:       ║
+║   CUDUP (press Enter)                                                   ║
+║                                                                         ║
+║   Then to print the documentation, type:  CUDUP  (press Enter)          ║
+║                                                                         ║
+║   To run the program, type:  CUDUP  (press Enter)                       ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VENDOR.DOC
 
 {% raw %}

@@ -16,6 +16,26 @@ machines:
 {% include machine.html id="ibm5150" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2553  VGA PAINT  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the operating instructions for VGA PAINT, type:                ║
+║                 COPY VGAPAINT.DOC PRN  (press Enter)                    ║
+║                                                                         ║
+║ To read the updated features of VGAPAINT, type: TYPE VGAP11.DOC (Enter) ║
+║                                                                         ║
+║ To run the program, type:  VGAP11  (press Enter)                        ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VGAP11.DOC
 
 {% raw %}

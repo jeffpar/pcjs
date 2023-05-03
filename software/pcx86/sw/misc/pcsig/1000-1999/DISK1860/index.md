@@ -111,6 +111,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1860  FILE ACCESS  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: FAX                                             ║
+║                                                                         ║
+║ To print documentation, type: COPY FILE1860.TXT PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1860

@@ -74,6 +74,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1910  PC-INVENTORY+  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  PCI (press enter)                              ║
+║                                                                         ║
+║ To print documentation, type:  COPY PCI.HLP PRN                         ║
+║ (Note:  this same file can be read from within the program, type F1)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LICENSE.DOC
 
 {% raw %}

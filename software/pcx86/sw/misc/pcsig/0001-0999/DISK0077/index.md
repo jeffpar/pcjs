@@ -1375,6 +1375,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                      <<<<  Disk No: 77  1RD  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the manual on this disk, type:                               ║
+║                                                                         ║
+║             DOC (press enter)                                           ║
+║                                                                         ║
+║   To run the program, type:                                             ║
+║                                                                         ║
+║             1RD (press enter)                                           ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0077

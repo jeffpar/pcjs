@@ -4650,6 +4650,30 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk No 1063 FRP GAME MASTER UTILITY  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program to a floppy disk, type:                          ║
+║                                                                         ║
+║           FLOPPY (press enter)                                          ║
+║                                                                         ║
+║ To install the program to a hard drive, type:                           ║
+║                                                                         ║
+║           HARD (press enter)                                            ║
+║                                                                         ║
+║ Once the files have been installed, to print the documentation, type:   ║
+║                                                                         ║
+║           COPY *.DOC PRN (press enter)                                  ║
+║                                                                         ║
+║ To start the program, type: INSTALL (press enter)                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}

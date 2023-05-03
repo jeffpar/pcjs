@@ -14,6 +14,27 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║                <<<<  PC-SIG Disk #2597 HYPERSHELL  >>>>                 ║
+  ║                     Disk 2 of 3 (also #1720, #2685)                     ║
+  ╠═════════════════════════════════════════════════════════════════════════╣
+  ║                                                                         ║
+  ║    To print floppy and hard drive installation instructions, type:      ║
+  ║                   COPY README.TWO PRN  (press Enter)                    ║
+  ║                                                                         ║
+  ║                                                                         ║
+  ║                                           Copyright 1991, PC-SIG, Inc.  ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2597
 

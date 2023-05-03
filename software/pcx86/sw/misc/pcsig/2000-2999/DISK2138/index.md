@@ -83,6 +83,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  Disk #2138 ANOTHER LIFELESS PLANET & ME WITH NO BEER  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type: COPY NOBEER.DOC PRN (press enter)         ║
+║                                                                         ║
+║ To run self-archiving program, type: NOBEER [destination] (press enter) ║
+║                                                                         ║
+║ To install on a floppy disk, type: FLOPPY  (press enter)                ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NOBEER.DOC
 
 {% raw %}

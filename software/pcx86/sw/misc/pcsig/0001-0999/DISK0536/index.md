@@ -139,6 +139,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk No 536 PC-TOOLS  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To display information on using PC-Tools type:                          ║
+║                  TYPE READ.ME  (PRESS ENTER)                            ║
+║                                                                         ║
+║ To print information on using PC-Tools type:                            ║
+║                  COPY READ.ME LPT1: (PRESS ENTER)                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0536

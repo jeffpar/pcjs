@@ -78,6 +78,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  PC-SIG Disk #1474  PICTURETHIS (also #1130, #2301, #2302)  >>>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print beginning documentation and installation instructions, insert  ║
+║        Disk #1130 and type:  COPY READTHIS.1ST PRN (press Enter)        ║
+║                                                                         ║
+║ To print further documentation, disks #1474, #2301, and #2302           ║
+║ (refer to READTHIS.1ST file), type:  COPY [filename].TXT PRN (Enter)    ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## KEYS.TXT
 
 {% raw %}
@@ -1020,6 +1040,14 @@ Sunnyvale  Ca. 94086
     GO       BAT        40   1-01-80   6:00a
     FILE1474 TXT      2295   9-19-90   9:14a
     GO       TXT      1002   1-01-80  12:46a
+    FONTS        <DIR>    
+    KARTOON      <DIR>    
+           17 file(s)      92127 bytes
+
+     Directory of A:\FONTS
+
+    .            <DIR>    
+    ..           <DIR>    
     FONT111  FIN       753   4-07-90   8:17p
     FONT111  FNM        12   4-07-90   8:17p
     FONT81   FIN       753   4-07-90   8:05p
@@ -1039,6 +1067,12 @@ Sunnyvale  Ca. 94086
     STANDARD SFT      5310   2-20-90  11:17a
     SYMBOL   SFT      6718   2-23-90  12:54p
     ZAPFDB   SFT     21098   2-25-90   6:33p
+           21 file(s)      39519 bytes
+
+     Directory of A:\KARTOON
+
+    .            <DIR>    
+    ..           <DIR>    
     !CHIN    1         300   1-01-80   1:55a
     !CHIN    2         242   1-01-80   2:04a
     !CHIN    3         978   1-01-80   2:05a
@@ -1108,5 +1142,8 @@ Sunnyvale  Ca. 94086
     KINSHA   FAC        20   1-01-80   1:33a
     SADSAM   FAC        20   5-16-90   7:27a
     YUKYUK   FAC        20   4-07-90   5:04p
-          103 file(s)     150004 bytes
-                           96256 bytes free
+           71 file(s)      18358 bytes
+
+    Total files listed:
+          109 file(s)     150004 bytes
+                           92160 bytes free

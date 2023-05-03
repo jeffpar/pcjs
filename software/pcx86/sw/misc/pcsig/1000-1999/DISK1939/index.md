@@ -69,6 +69,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1939  ALIEN WORLDS  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To extract files for ALIENSFX.EXE, type: ALIENSFX   (press enter)       ║
+║                                                                         ║
+║ To start program, type: ALIEN        (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY ALIEN.DOC PRN                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SUBMIT.TXT
 
 {% raw %}

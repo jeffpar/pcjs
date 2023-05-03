@@ -1601,6 +1601,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No: 44  Game Series No 7  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  How to Start: To read DOC files, enter TYPE filename.ext and           ║
+║  press <ENTER>.  For instructions on running BASIC programs,            ║
+║  please refer to your computer manual concerning BASIC language         ║
+║  files.                                                                 ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HANOI.BAS
 
 {% raw %}

@@ -4905,6 +4905,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  Disk #1560  CHEQUE-IT-OUT Disk 2 of 2  (also 1559)  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program to either a floppy drive system or a hard drive      ║
+║ system, type: INSTALL (press enter)                                     ║
+║                                                                         ║
+║ To print documentation, type:  PRINTDOC (press enter)                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDER.DOC
 
 {% raw %}

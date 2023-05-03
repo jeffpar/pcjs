@@ -57,6 +57,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2615  KWIKSTAT  >>>>                  ║
+║                   Disk 3 of 3 (also #654 and #655)                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To begin the Simulations Module, type:  README  (press Enter)           ║
+║                                                                         ║
+║ To install KWIKSTAT, insert Disk 1 and type:  README  (press Enter)     ║
+║                                                                         ║
+║ To print a copy of the order form from Disk 1, type:                    ║
+║                                      COPY ORDER PRN  (press Enter)      ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## KSSIMU.DOC
 
 {% raw %}

@@ -64,6 +64,19 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk #580 PASCAL TUTORIAL (Disk 2 of 2)  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For instructions, insert disk number 579 into drive A: and Type:        ║
+║                           COPY READ.ME LPT1: (press return)             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INTDATA.TXT
 
 {% raw %}
@@ -286,6 +299,13 @@ Sunnyvale  Ca. 94086
     WRITELNX PAS      1445  12-01-89  12:00p
     WRITEMR  PAS       186  12-01-89  12:00p
     WRITESM  PAS       182  12-01-89  12:00p
+    ANSWERS      <DIR>    
+          109 file(s)     192645 bytes
+
+     Directory of A:\ANSWERS
+
+    .            <DIR>    
+    ..           <DIR>    
     CH02_1   PAS       181  12-01-89  12:00p
     CH02_2A  PAS       284  12-01-89  12:00p
     CH02_2B  PAS       294  12-01-89  12:00p
@@ -309,5 +329,8 @@ Sunnyvale  Ca. 94086
     CH15_2   PAS      1795  12-01-89  12:00p
     CH16_1A  PAS      3043  12-01-89  12:00p
     CH16_1B  PAS      1775  12-01-89  12:00p
-          131 file(s)     216532 bytes
-                          964096 bytes free
+           25 file(s)      23887 bytes
+
+    Total files listed:
+          134 file(s)     216532 bytes
+                           40960 bytes free

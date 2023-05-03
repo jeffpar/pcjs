@@ -120,6 +120,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1637  WINDOW MENU >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  WM (press enter)                               ║
+║ To install program onto hard drive, type:  WMINSTAL (press enter)       ║
+║                                                                         ║
+║ To print documentation, type:  COPY WM. DOC PRN                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## WM(C)'89.DOC
 
 {% raw %}

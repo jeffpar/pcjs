@@ -14,6 +14,33 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  PC-SIG Disk #3512 FVRS Fleet Vehicle Record System  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║     The FVRS.ZIP file is in zipped (archived format).                   ║
+║                                                                         ║
+║     To Unzip the file, type PKUNZIP FVRS.ZIP (Enter).                   ║
+║                                                                         ║
+║     After unzipping, type: GO (Enter), and follow the instructions      ║
+║                                                                         ║
+║     given to you by the author of FVRS.                                 ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3512
 

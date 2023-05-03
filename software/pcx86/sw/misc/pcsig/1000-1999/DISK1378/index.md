@@ -79,6 +79,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1378 VISION FREEWARE   >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  VISFW (press enter)                            ║
+║ To print installation instructions, type PRINTME (press enter)          ║
+║ To print documentation, type:  COPY VISFW.DOC PRN (press enter)         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VISFW.DOC
 
 {% raw %}

@@ -46,6 +46,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2721 DAYMASTER  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To extract the DAYMASTER files, copy the files on this disk to your     ║
+║       [destination drive:\subdirectory] and type:  DAYM360  (Enter)     ║
+║                                                                         ║
+║ To print documentation after extraction, type: COPY READ1ST.DOC PRN     ║
+║                                                                         ║
+║ To run the program after extraction, type: DAYMSTR (press Enter)        ║
+║                                                                         ║
+║ To print the registration form, type:  COPY INVOICE.DOC PRN  (Enter)    ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2736

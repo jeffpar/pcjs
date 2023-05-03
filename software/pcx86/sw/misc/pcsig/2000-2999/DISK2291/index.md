@@ -81,6 +81,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<<<  PC-SIG Disk #2291  FAMILY  HISTORY SYSTEM (#361, #632 also)  >>>> ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To install program, view, and print documentation, insert Disk #1      ║
+║  and type:  GO (press Enter)                                            ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2291

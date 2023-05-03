@@ -156,6 +156,26 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<< Disk No 1043  Snap Filer, Master Menu >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for Snap Filer, type                         ║
+║             COPY SNAP.DOC LPT1: (press enter)                           ║
+║                                                                         ║
+║ To run the program Snap Filer, type: SNAP (press enter)                 ║
+║                                                                         ║
+║ To print the documentation for Master Menu, type:                       ║
+║             COPY MMSTR.DOC LPT1: (press enter)                          ║
+║                                                                         ║
+║ To run the program Menu Master, type: MENU (press enter)                ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MMSTR.DOC
 
 {% raw %}

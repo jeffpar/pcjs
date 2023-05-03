@@ -854,6 +854,39 @@ REV 3:10      Since you have kept my command to endure patiently, I will also ke
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #3301 BIBLE MEMORY FOR WINDOWS  >>>>         ║
+║                    Disk 1 of 3 (also #3302 and #3303)                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  Create a subdirectory for BIBLE MEMORY on your hard drive by typing:   ║
+║                           C:            <cr>                            ║
+║                           MD \BMWINDOW  <cr>                            ║
+║                           CD \BMWINDOW  <cr>                            ║
+║                                                                         ║
+║  Copy the files on each of the three program diskettes to the hard      ║
+║  drive\subdirectory by typing from the hard drive:  COPY A:*.*  <cr>    ║
+║                                                                         ║
+║  Unzip the first zipped file by typing:  PKUNZIP BMWIN  <cr>            ║
+║                                                                         ║
+║  Follow this procedure with the other two zipped files.                 ║
+║                                                                         ║
+║  After unzipping the files, you can delete all the ZIP files by typing: ║
+║                                           DEL *.ZIP  <cr>               ║
+║                                                                         ║
+║  After unzipping the files, type:  GO1  <cr>.                           ║
+║                                                                         ║
+║  Page down to and follow the instructions under: STARTING BIBLE MEMORY  ║
+║  3.0 FOR WINDOWS.                                                       ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3301

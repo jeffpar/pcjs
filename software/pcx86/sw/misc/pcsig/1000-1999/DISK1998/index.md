@@ -79,6 +79,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1998  WORDS  >>>>                        ║
+║                       (disk 1 of 2, 1999 also)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: WORDS        (press enter)                      ║
+║                                                                         ║
+║ To print documentation, insert disk 2 and type: COPY WORDS.DOC PRN      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## QUIZ.DOC
 
 {% raw %}

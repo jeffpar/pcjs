@@ -126,6 +126,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  DISK #2456  Windows Arcade Games  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start any of these games, type: WIN program                          ║
+║ (example;   A>WIN ATMOIDS )                                             ║
+║                                                                         ║
+║ You can also easily start the games by going to the File Manager, and   ║
+║ double klicking on the program you wish to start.                       ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
 ## KLOTZ.DOC
 
 {% raw %}

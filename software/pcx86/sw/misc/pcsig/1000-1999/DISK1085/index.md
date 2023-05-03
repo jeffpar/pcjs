@@ -67,6 +67,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No 1085 TLC TRUCK DATA SYSTEM  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+║                                                                         ║
+║ To run the program, type: TRUCKS (press enter)                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.TXT
 
 {% raw %}
@@ -1351,24 +1365,41 @@ Sunnyvale  Ca. 94086
     TRUCKS   EXE    208768   2-19-89  12:19p
     UPDATING TXT      9831  10-23-88   5:55p
     USETLC   TXT     44362   2-13-90  10:00a
+    DEMO         <DIR>    
+    FILES        <DIR>    
+           16 file(s)     270067 bytes
+
+     Directory of A:\DEMO
+
+    .            <DIR>    
+    ..           <DIR>    
     BIDLIST  DBF        90   3-26-88  12:59p
     DESCRIP  DBF      2018   2-19-89   6:41p
     FUELS    DBF     16124   7-12-88   7:29a
     REPAIRS  DBF     27469   8-13-88   7:42p
     SCHEDULE DBF       640   8-14-88   2:49p
-    BIDLIS~1 DBF        90   3-26-88  12:59p
+            7 file(s)      46341 bytes
+
+     Directory of A:\FILES
+
+    .            <DIR>    
+    ..           <DIR>    
+    BIDLIST  DBF        90   3-26-88  12:59p
     CREW     NDX      1024   8-14-88   4:50p
-    DESCRI~1 DBF      1024   8-11-88   6:28p
+    DESCRIP  DBF      1024   8-11-88   6:28p
     FUELNO   NDX      1024   8-14-88   4:50p
-    FUELS~1  DBF       512   8-11-88   6:27p
+    FUELS    DBF       512   8-11-88   6:27p
     LICENSE  NDX      1024   8-14-88   4:50p
     NUMBER   NDX      1024   8-14-88   4:50p
     OPERATOR NDX      1024   8-14-88   4:50p
-    REPAIR~1 DBF       512   8-11-88   6:28p
+    REPAIRS  DBF       512   8-11-88   6:28p
     REPAIRS  NDX      1024   8-14-88   4:50p
     SCHEDIV  NDX      1024   8-14-88   4:50p
-    SCHEDU~1 DBF       322   8-14-88   4:45p
+    SCHEDULE DBF       322   8-14-88   4:45p
     SCHEDULE NDX      1024   8-14-88   4:50p
     VIN      NDX      1024   8-14-88   4:50p
-           33 file(s)     328084 bytes
-                           20480 bytes free
+           16 file(s)      11676 bytes
+
+    Total files listed:
+           39 file(s)     328084 bytes
+                           18432 bytes free

@@ -77,6 +77,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1856  WYS-AR  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ You MUST copy files to a hard drive and use PKXARC to extract files.    ║
+║                                                                         ║
+║ To start program, type: WYS-AR                                          ║
+║                                                                         ║
+║ To print documentation, type: COPY WYS-AR.DOC PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## WYS-AR.DOC
 
 {% raw %}

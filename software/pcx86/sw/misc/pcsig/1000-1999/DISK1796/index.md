@@ -76,6 +76,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  Disk #1796  THE NIGHT SKY  (disk 1 of 4) >>>>             ║
+║                    (also disk 1797, 2139, 2140)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start program, insert disk #1797 and type:  NIGHT  (press enter)     ║
+║                                                                         ║
+║ To print documentation, insert disk 2139 and type:                      ║
+║                           COPY MANUAL.DOC PRN  (press enter)            ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1796

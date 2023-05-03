@@ -38,6 +38,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+  ╔═════════════════════════════════════════════════════════════════════════╗
+  ║         <<<<  PC-SIG Disk #2919 MORFORM 2/2 (also 2918)  >>>>           ║
+  ╠═════════════════════════════════════════════════════════════════════════╣
+  ║                                                                         ║
+  ║  MOREFORM must be installed on a hard drive before it can be executed.  ║
+  ║                                                                         ║
+  ║  To install MORFORM, you must insert disk #1 and type: MORINSTL (Enter) ║
+  ║                                                                         ║
+  ║                                                                         ║
+  ║                                           Copyright 1992, PC-SIG, Inc.  ║
+  ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2919

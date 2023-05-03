@@ -61,7 +61,23 @@ Sunnyvale Ca. 94086
 (408) 730-9291
 (c) Copyright 1987,88 PC-SIG, Inc.
 
-
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #758 FRENCH VERB CONJUGATOR >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To Print the documentation for FRENCH type the following command:      ║
+║             COPY README PRN    (press enter)                            ║
+║                                                                         ║
+║  To Start the program type FRENCH   (press enter)                       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

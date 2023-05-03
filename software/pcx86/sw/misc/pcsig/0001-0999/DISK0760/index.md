@@ -102,6 +102,24 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk #760 MINIGEN  >>>>                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To Print the documentation for MINIGEN type the command:               ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║  To start the program type MINIGEN  (press enter)                       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0760

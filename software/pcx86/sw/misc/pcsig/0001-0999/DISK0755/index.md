@@ -76,6 +76,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔══════════════════════════════════════════════════════════════════════════╗
+║                         <<< #755 CANTONESE  >>>                          ║
+╟──────────────────────────────────────────────────────────────────────────╢
+║                                                                          ║
+║ To print the documentation, type:  TYPE READ-ME.DOC PRN  (press enter)   ║
+║                                                                          ║
+║ To start the program, type:  CANTONES  (press enter)                     ║
+║                                                                          ║
+╚══════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## READ-ME.DOC
 
 {% raw %}

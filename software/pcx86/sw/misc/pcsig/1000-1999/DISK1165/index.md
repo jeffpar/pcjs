@@ -121,6 +121,20 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1165 PC DASHBOARD  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type PCD (press enter)                            ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PCDASH.DOC
 
 {% raw %}

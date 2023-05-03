@@ -98,6 +98,22 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 1528 STOCK CHARTS  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type STKCHT (press enter)                         ║
+║                                                                         ║
+║ To view the documentation on your screen, type VIEW (press enter)       ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## STKCHT.DOC
 
 {% raw %}

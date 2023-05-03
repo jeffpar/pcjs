@@ -148,6 +148,18 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk No 1360 ALCHEMY DESKTOP PUBLISHING UTILITIES >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For information on how to use each program, type READ (press enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1360

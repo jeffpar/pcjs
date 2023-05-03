@@ -98,6 +98,29 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #789 CARDTRAK AND OTHERS >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view the documentation for CARDTRAK type:                            ║
+║                       READ   (press enter)                              ║
+║                                                                         ║
+║ To start the CARDTRAK program type CARDTRAK (press enter)               ║
+║                                                                         ║
+║ To start the LOTOPIKS program type LOTOPIKS (press enter)               ║
+║                                                                         ║
+║ To start the MONTAGE program type MONTAGE2 (press enter)                ║
+║                                                                         ║
+║ To install the EGA SCREEN SAVE program type EGABLANK (press enter)      ║
+║ After a few minutes your screen will shut down just type any key to     ║
+║ reactivate it.                                                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0789

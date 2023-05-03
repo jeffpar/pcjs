@@ -50,6 +50,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #2618  YOUR REAL ESTATE PARTNER  >>>>         ║
+║                        Disk 2 of 2 (also #2617)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   Insert Disk 1 and type "GO" for instructions on how to print the      ║
+║   instructions for YOUR REAL ESTATE PARTNER.                            ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2618

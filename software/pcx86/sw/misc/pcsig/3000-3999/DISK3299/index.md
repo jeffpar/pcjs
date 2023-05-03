@@ -14,6 +14,27 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #3299 SUPER MACRO LIBRARY FOR LOTUS  >>>>       ║
+║                   Disk 2 of 3 (also #3298 and #3300)                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start SUPER MACRO LIBRARY FOR LOTUS, insert disk 3 and type: GO <cr> ║
+║                                                                         ║
+║ Follow the installation instructions.                                   ║
+║                                                                         ║
+║                                         (c) Copyright 1993, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3299
 

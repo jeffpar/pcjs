@@ -77,6 +77,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #1886  SAMFB-THE MORSE CODE PROGRAM  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: SAMFB        (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY &READ.ME PRN                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1886

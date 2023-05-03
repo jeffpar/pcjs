@@ -63,6 +63,26 @@ Hal Jurcik
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3290 VBTOOLBOX PRO  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the documentation, type:  COPY _README.TXT PRN  (press Enter) ║
+║                                                                         ║
+║  To start the program, type:  WIN VBTBOX2B  (press Enter)               ║
+║                                                                         ║
+║  Microsoft Windows 3.x is required to run this program.                 ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG, Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VENDOR.TXT
 
 {% raw %}

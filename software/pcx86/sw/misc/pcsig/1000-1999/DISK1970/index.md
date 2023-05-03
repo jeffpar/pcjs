@@ -77,6 +77,33 @@ machines:
     text body.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1970  WORD FUGUE  >>>>                      ║
+║                      (disk 1 of 2, #1971 also)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  WF (press Enter)                               ║
+║                                                                         ║
+║ To print documentation,insert disk 2 and type:                          ║
+║                                COPY README.1 PRN   (press Enter)        ║
+║                                COPY UPDATE.DOC PRN (press Enter)        ║
+║                                MANUAL (press Enter)                     ║
+║                                                                         ║
+║ To print the tutorial, insert disk 2 and type:                          ║
+║                                COPY TUTORIAL.DOC PRN (press Enter)      ║
+║                                                                         ║
+║ To print registration form, insert disk 2 and type:                     ║
+║                                COPY ORDER.FRM PRN (press Enter)         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1970
 

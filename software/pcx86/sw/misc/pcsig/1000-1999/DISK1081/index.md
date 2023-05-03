@@ -83,6 +83,18 @@ Sunnyvale, CA   94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk No 1081 MODULA-2 COMPILER (Disk 2 of 2)  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Instert disk #1080 into drive A: and type GO (press enter)              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1081

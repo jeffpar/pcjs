@@ -84,6 +84,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk #1702  MAILING LIST MANAGEMENT DATABASE   >>>>         ║
+║                   <<<<  disk 1 of 2 (1703 also)  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To extact program files, insert disk 1 and type:  MAIL_LST (press enter)║
+║                          insert disk 2 and type:  DBASE (press enter)   ║
+║ To start program, type:  CUSTOMER (press enter)                         ║
+║                                                                         ║
+║ To print documentation, type:  VIEWCUST (press enter)                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

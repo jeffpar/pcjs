@@ -75,6 +75,37 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2740 WORKBASE & RECAP  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Create a subdirectory on your hard drive for each program and copy all  ║
+║ appropriate files respectively.                                         ║
+║                                                                         ║
+║   To create a subdirectory, go to the drive you want and type:          ║
+║     MD [subdirectory name]                                              ║
+║   To copy all the files to the hard drive, type:                        ║
+║     COPY [source drive]:[filename.EXE] [destination drive]:\subdirectory║
+║                                                                         ║
+║ To extract the files, type: REKAP    (press enter)                      ║
+║                             WORKBS   (press enter)                      ║
+║                                                                         ║
+║ To print or view documentation for WORKBASE after extraction,           ║
+║                       type: WORKDOC  (press enter)                      ║
+║                                                                         ║
+║ To run WORKBASE after extraction, type: WORKBASE  (press enter)         ║
+║                                                                         ║
+║ To print documentation for RECAP, type: COPY RECAP.DOC PRN (press enter)║
+║                                                                         ║
+║ To run the RECAP after extraction, type: RECAP (press enter)            ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2740

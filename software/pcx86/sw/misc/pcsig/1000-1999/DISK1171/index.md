@@ -86,6 +86,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1171 THE COMPUTER BAKER  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type:  BAKE (press enter)                         ║
+║                                                                         ║
+║ To view the documentation, type:  TYPE BAKER.DOC (press enter)          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1171

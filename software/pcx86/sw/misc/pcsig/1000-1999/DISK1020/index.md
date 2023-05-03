@@ -92,6 +92,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1020 IMX CO-PILOT  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view installation procedures, type: READ (press enter)               ║
+║                                                                         ║
+║ To isntall the program, type: INSTALL (press enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}
@@ -136,6 +150,13 @@ payable to:
     GO       BAT        38   3-24-88   2:22p
     GO       TXT       540   3-24-88   2:28p
     READ     BAT        42   1-27-89   2:15p
+    IMS          <DIR>    
+            8 file(s)      89865 bytes
+
+     Directory of A:\IMS
+
+    .            <DIR>    
+    ..           <DIR>    
     IMSINIT  EXE    130608   2-11-87   4:27p
     CFNAME   IMS       130   1-01-80   6:12p
     IMSSET   IMS      5310   7-22-86   4:06p
@@ -146,5 +167,8 @@ payable to:
     DIAL     IMS      1074   7-16-86   3:25p
     DIAL     ADR       672   7-15-86   5:35p
     INST1    BAT       256   1-01-80   6:13p
-           17 file(s)     228352 bytes
-                           80896 bytes free
+           12 file(s)     138487 bytes
+
+    Total files listed:
+           20 file(s)     228352 bytes
+                           79872 bytes free

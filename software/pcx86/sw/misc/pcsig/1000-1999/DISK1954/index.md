@@ -105,6 +105,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1954  BOWLSTAT  >>>>                     ║
+║                        (Disk 2 of 2, #1953 also)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type:  MANUAL (press Enter)                     ║
+║                                                                         ║
+║ To start program, insert Disk 1 and type:  BOWLSTAT (press Enter)       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## HELP0.TXT
 
 {% raw %}

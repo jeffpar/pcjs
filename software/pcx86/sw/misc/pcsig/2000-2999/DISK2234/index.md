@@ -235,6 +235,34 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  PC-SIG Disk #2234  VPT, VFONT, READ, SEL, SNOOP, V7CURS  >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation for VPT, type:  COPY VPT.MAN PRN  (press ENTER)  ║
+║ Follow instructions to install and use utility program.                 ║
+║                                                                         ║
+║ To print documentation for VFONT, type:  COPY VFONT.MAN PRN  (ENTER)    ║
+║ Follow instructions to install and use utility program.                 ║
+║                                                                         ║
+║ To print documentation for VFONT2, type:  COPY VFONT2.MAN PRN  (ENTER)  ║
+║ Follow instructions to install and use utility program.                 ║
+║                                                                         ║
+║ To print documentation for READ, type:  COPY READ.MAN PRN  (press ENTER)║
+║ Follow instructions to install and use utility program.                 ║
+║                                                                         ║
+║ To print documentation for SEL, type:  COPY SEL.MAN PRN  (press ENTER)  ║
+║ Follow instructions to install and use utility program.                 ║
+║                                                                         ║
+║ To print documentation for V7CURS, type:  COPY V7CURS.MAN PRN  (ENTER)  ║
+║ Follow instructions to install and use utility program.                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2234

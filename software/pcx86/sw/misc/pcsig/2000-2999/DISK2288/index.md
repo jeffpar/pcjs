@@ -105,6 +105,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2288  TECHSTAFF TOOLS  >>>>              ║
+║ 			(Disk 1 of 2, also #2289)	                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type:  COPY OPTION PRN  (press Enter)           ║
+║ 				 COPY ORDER PRN   (press Enter)           ║
+║                                COPY SITE PRN    (press Enter)           ║
+║                                COPY HFV.DOC PRN (press Enter)           ║
+║ 									  ║
+║ To just view any of those documents, type:  TYPE <filename>             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## HFV.DOC
 
 {% raw %}

@@ -16,6 +16,194 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## AMAZE.TXT
+
+{% raw %}
+```
+
+ █▀▀▀ █  █ █▀▀█ █▀▀▀ █▀▀█     █▀▀▀ █  █ █▀▀█ █▀▀█ █▀▀▀ █   █ █▀▀█ █▀▀█ █▀▀▀  █
+ ▀▀▀█ █  █ █▀▀▀ █▀▀  █▀█▀     ▀▀▀█ █▀▀█ █▀▀█ █▀█▀ █▀▀  █ █ █ █▀▀█ █▀█▀ █▀▀   ▀
+ ▀▀▀▀ ▀▀▀▀ ▀    ▀▀▀▀ ▀ ▀▀     ▀▀▀▀ ▀  ▀ ▀  ▀ ▀ ▀▀ ▀▀▀▀ ▀▀▀▀▀ ▀  ▀ ▀ ▀▀ ▀▀▀▀  ▀
+
+It's ... The Amazing Shareware Promotion!   More than  4 Megabytes of shareware
+and  freeware  for as little as  $1  PER  MEG.  Communications,  Entertainment,
+Business, Finance, Programming and more!  Ordered separately from a disk vendor
+you could pay as much as  $84  to get all these programs.  Why pay more?
+
+┌─ Get all these programs! ───────────────────────────────────────────────────┐
+│                                                                             │
+│ "G" -- The Quick Directory Switcher ││ DaSi - The Mystical "PC-Ouija Board" │
+│ GO -- Install-From-Diskette Program ││ Print Handy Little Reference Books!  │
+│ Challenging Ultra-Quiz Trivia Games ││ SpaceInv Arcade Game for Monochrome  │
+│ The Hitch-hiker's Guide Trivia Game ││ LoveFire -- The Romantic Adventure!  │
+│ Parse-O-Matic -- The Export Expert! ││ SmartPhone:  Save money on LD calls  │
+│ The Award-Winning "HandsOff!" Alarm ││ Sapphire -- The Zero-Maintenance BBS │
+│ The SEE Utilities: Shell or Publish ││ The very different "Free Speech" BBS │
+│ Pinnacle's All-in-One Modem Utility ││ Pyroto Mountain Magic & Politics BBS │
+│                                                                             │
+│                   Plus bonus programs at no extra cost!                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+▄▄▄            ▄     ▄        ▄   ▄    ▄▄▄▄   ▄▄▄▄           ▄   ▄  ▄   ▄     ▄
+█   ▄▄▄ ▄▄▄ █ ▄█▄  ▄▄█ ▄▄▄ ▄▄ ▄ ▄▄█ ▄▄▄   █   █  █ ▄▄▄ ▄▄▄ ▄▄█  ▄█▄ █▄▄ ▄ ▄▄▄ █
+█   ▄▄█ █ █    █   █ █ █▄█ █  █ █ █ █▄█ █▀▀   █▀█▀ █▄█ ▄▄█ █ █   █  █ █ █ █▄▄ █
+█▄▄ █▄█ █ █    █▄  █▄█ █▄▄ █▄ █ █▄█ █▄▄ ▄     █ █▄ █▄▄ █▄█ █▄█   █▄ █ █ █ ▄▄█ ▄
+
+Sometimes people hesitate to support shareware  because they don't know who the
+authors are.   We're  Pinnacle Software,  and we've been writing software since
+1971 -- and shareware since  1985!   Want to find out a little more  before you
+send in the order form?  Dial our 24-hour support BBS at 514-345-8654,  or call
+up our Voice Support Line at 514-345-9578 if you need some program information.
+
+
+        And now ... here's the order form!   (Just $4 for 4 megabytes!)
+
+
+
+───────────────────────────────────────────────────────────────────────────────
+ORDER FORM SEE212A                              THE AMAZING SHAREWARE PROMOTION
+───────────────────────────────────────────────────────────────────────────────
+
+
+Where did you  hear  about  Pinnacle Software's  Amazing  Shareware  Promotion?
+
+[_____________________________________________________________________________]
+
+
+_______________________________________________________________________________
+
+DESCRIPTION                                                     PRICE  ENCLOSED
+______________________________________________________________ _______ ________
+
+
+Please send me your Amazing Shareware Promotion ...
+
+
+On 3.50" 1.44 diskettes                                         $   4  ________
+
+
+On 3.50" 720K diskettes                                         $   6  ________
+
+
+On 5.25" 360K diskettes                                         $   8  ________
+
+
+Return Postage                                                  $   2         2
+
+______________________________________________________________________ ________
+
+TOTAL ENCLOSED
+______________________________________________________________________ ________
+
+Please remit your payment  by cheque or money order  in U.S. or Canadian funds.
+PRIORITY PROCESSING:  WE SHIP *THE SAME DAY* ON ALL ORDERS PAID BY MONEY ORDER.
+
+** RETURN **  If you are not satisfied, simply return the material you received
+** POLICY **  (diskettes etc.) to us for a complete refund.
+
+
+
+                                      [B]
+
+FROM:  ___________________________
+
+       ___________________________
+
+       ___________________________
+[C]
+
+
+                               PINNACLE  SOFTWARE
+[C]                            CP 386 Mount Royal
+                                Montreal, Quebec
+                                 CANADA H3P 3C6
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+[A] - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - [A]
+                                      [X]
+        ┌────────────┐
+        │            │   1 - Put other pages under this page
+        │ HOW TO USE │   2 - Fold this flap under, using line [A]
+        │    THIS    │   3 - Fold [B] over [X] above
+        │  ENVELOPE  │   4 - Tape [B] and  [C]
+        │            │   5 - Slide in enclosures (cards, cheques, etc.)
+        └────────────┘   6 - Tape envelope closed
+
+  Owing to the extremely low price of this offer, we can process orders only
+  through our Canadian office.  U.S. postage to Canada is 40 cents (not 29).
+
+
+  █▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀█
+  █│││││││││││││││││││││││   DISTRIBUTION  NOTICE   ││││││││││││││││││││││││█
+  █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
+
+  SEE, GETKEY, GO-MENU, SV & MIDNIGHT Copyright (C) 1991,92 Pinnacle Software
+  of Montreal, Quebec.  Dial 514-345-9578 if you need more information.
+
+  We'd be pleased to hear your  comments and suggestions!   Why not give us a
+  call?  Dial 514-345-9578 -- ask for Tim.
+
+  You are  entitled  and  encouraged  to  use the  Pinnacle Software programs
+  cited in the copyright notice FREE OF CHARGE, with these restrictions:
+
+  ■ You may not alter the files in any way (though they may be compressed, or
+    stored on varied media).
+
+  ■ You are  permitted  to copy  portions  of the text files related to these
+    utilities for your own use,  provided these excerpts are distributed with
+    one or more of the programs included in "The SEE Utilities".
+
+  ■ If you are giving any subset of "The SEE Utilities" to others, (i.e. any-
+    thing other than the complete package),
+    you must include a copy of                 ┌────────────────────────────┐
+    this file (AMAZE.TXT)                      │ Replace this part with the │
+    and add this legal            ┌────────────┤ names of SEE utilities you │
+    notice to your                │            │ are using in your package. │
+    documentation:                │            └────────────────────────────┘
+                                  │
+    ╔═══════════════════════════  │  ═══════════════════════════════════════╗
+    ║                     ┌───────┴───────┐                                 ║
+    ║      The programs    SEE and GO-MENU    were created by Pinnacle      ║
+    ║      Software and are used by permission.   For more information      ║
+    ║      about Pinnacle Software, please see the text file AMAZE.TXT      ║
+    ║                                                                       ║
+    ╚═══════════════════════════════════════════════════════════════════════╝
+
+    If you do not have any formal documentation,  you must include the notice
+    in a text file named READ.ME.
+
+  ■ For  optimum performance  and for your protection,  we recommend that you
+    download the latest copy of SEE from our support BBS at 514-345-8654.
+
+
+```
+{% endraw %}
+
 ## CG-MAN.DOC
 
 {% raw %}
@@ -663,6 +851,22 @@ message via easyplex to ASP Ombudsman 70007,3536.
 
                         -13-
                                  
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #3244  CHILDREN'S GRAPHICS  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To start the program, type:  CG-GO  (press Enter)                      ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

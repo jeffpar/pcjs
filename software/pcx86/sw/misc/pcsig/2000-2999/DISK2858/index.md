@@ -197,6 +197,30 @@ machines:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  PC-SIG Disk #2825  VPIC  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the introductory instructions, type:                           ║
+║                                    COPY README.1ST PRN  (press Enter)   ║
+║                                                                         ║
+║ To print the documentation, type:  COPY VPIC.TXT PRN  (press Enter)     ║
+║                                    COPY VPIC.DOC PRN  (press Enter)     ║
+║                                    COPY CONFIG.DOC PRN  (press Enter)   ║
+║                                    COPY WAIT.DOC PRN  (press Enter)     ║
+║                                                                         ║
+║ To select the correct graphics configuration, type: CONFIG (press Enter)║
+║                                                                         ║
+║ To print the order form, type:  COPY ORDRFORM PRN  (press Enter)        ║
+║                                                                         ║
+║                                         (c) COPYRIGHT 1992, PC-SIG INC. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VPIC.TXT
 
 {% raw %}

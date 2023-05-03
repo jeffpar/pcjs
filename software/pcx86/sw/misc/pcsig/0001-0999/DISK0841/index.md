@@ -87,6 +87,21 @@ Sunnyvale, CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #841 MANDELBROT MAGIC  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type:                         ║
+║                  COPY MM.DOC PRN (press enter)                          ║
+║                                                                         ║
+║   Start the program by typing: MM (press enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MM.DOC
 
 {% raw %}

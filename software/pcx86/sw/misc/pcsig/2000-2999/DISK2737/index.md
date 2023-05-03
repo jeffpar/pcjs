@@ -50,6 +50,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #2737 POKER SLOT disk 1 of 2 >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To install the program, view or print documentation, type: PSSTART      ║
+║                                                                         ║
+║ To finish installing, insert disk 2 and type: COPY *.* C:\GAMES         ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PSLOT.DOC
 
 {% raw %}

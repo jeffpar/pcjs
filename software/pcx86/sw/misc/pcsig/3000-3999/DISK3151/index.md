@@ -14,6 +14,30 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #3151  DEFENDER OF BOSTON  >>>>            ║
+║                     Disk 1 of 3 (also #3152, #3199)                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  For introductory instructions, type:  TYPE README.1ST  (Enter)         ║
+║                                                                         ║
+║  To install the program onto your hard disk, type:  INSTALL  (Enter)    ║
+║                                                                         ║
+║  To play the game after you install it, type:  START  (Enter)           ║
+║                                                                         ║
+║                                                                         ║
+║                                         (c) Copyright 1992, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3151
 

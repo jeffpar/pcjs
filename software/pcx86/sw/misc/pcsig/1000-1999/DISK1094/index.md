@@ -7609,6 +7609,33 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk No 1094 SBW Documentation (Disk 1 of 2)  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To PRINT the first chapter of the tutorial type at the 'A>' prompt:     ║
+║                      COPY CHAPTER1.TXT PRN (press enter)                ║
+║                                                                         ║
+║ To PRINT all the chapters of the tutorial type at the 'A>' prompt:      ║
+║                      PRINTALL (press enter)                             ║
+║                                                                         ║
+║ To display the first chapter of the tutorial type at the 'A>' prompt:   ║
+║                      type CHAPTER1.TXT (press enter)                    ║
+║                                                                         ║
+║ To display & print hold down the [Ctrl] key and then strike the [PrtSc] ║
+║                      type CHAPTER1.TXT (press enter)                    ║
+║                                                                         ║
+║ To Suspend display & print hold down the [Ctrl] and strike the [NumLock]║
+║                      type CHAPTER1.TXT (press enter)   or the [S] key   ║
+║                                                                         ║
+║ To print screen hold down the [Shift] key and then strike the [PrtSc]   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1094

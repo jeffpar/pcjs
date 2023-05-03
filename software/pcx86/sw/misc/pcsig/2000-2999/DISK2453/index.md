@@ -63,6 +63,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2453  THE ASTROLOGER   >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read a note from the author, type:  TYPE BLURB (press Enter)         ║
+║                                                                         ║
+║ To read instructions, type:  TYPE READ.ME (press Enter)                 ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2453

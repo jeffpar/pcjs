@@ -146,6 +146,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #1682  CAPACITY AND LOCKTITE  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start CAPACITY, type:  CAP-210b (press Enter)                        ║
+║ To start LOCKTITE, type:  LTP (press Enter)                             ║
+║                                                                         ║
+║ To print CAPACITY documentation, type:  COPY CAPACITY.DOC PRN (Enter)   ║
+║ To print LOCKTITE documentation, type:  COPY LOCKTITE.DOC PRN (Enter)   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## MAKE-CTL.TXT
 
 {% raw %}

@@ -70,6 +70,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 1198 GANTT & SCHEDULING  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, refer to disk #593                                ║
+║                                                                         ║
+║ To print the documentation for GANTT, type GANTTDOC (press enter)       ║
+║                                                                         ║
+║ To print the documentation for SCHEDULE, type SCHEDDOC (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1198

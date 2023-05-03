@@ -57,6 +57,36 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #2975  ANCIENTS I: THE DEATHWATCH   >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install this program on a subdirectory on your hard disk called     ║
+║  ANCIENTS, insert this disk in drive A and type:                        ║
+║                                                                         ║
+║                      [hard drive]:                                      ║
+║                      MD \ANCIENTS  (press Enter)                        ║
+║                      CD \ANCIENTS  (press Enter)                        ║
+║                      COPY A:*.*    (press Enter)                        ║
+║                                                                         ║
+║  To extract the files, type:  FW-ANCEN  (press Enter)                   ║
+║                                                                         ║
+║  To read the introductory material, type:  TYPE README.1ST  (Enter)     ║
+║                                                                         ║
+║  To print the program documentation, type:  COPY MANUAL.DOC PRN  (Enter)║
+║                                                                         ║
+║  To start the game, type:  BEGIN  (press Enter)                         ║
+║                                                                         ║
+║  To print the registration form, type:  COPY REGISTER.DOC PRN  (Enter)  ║
+║                                                                         ║
+║                                         (c) Copyright 1992, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2975

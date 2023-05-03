@@ -153,18 +153,25 @@ Sunnyvale, CA  94086
     WPSF8    MAC      2691  12-26-86   7:36p
     WPSF9    MAC      2348  12-26-86   7:36p
     WPSTART  MAC       558  12-26-86   7:34p
-    CHOICE~1 BAT        93  12-10-86  12:07p
-    CHOICE~1 PMT        68  12-10-86  11:37p
-    DATE~1   PMT        96  12-10-86  10:37p
+    WORDSTAR     <DIR>    
+           59 file(s)     160245 bytes
+
+     Directory of A:\WORDSTAR
+
+    .            <DIR>    
+    ..           <DIR>    
+    CHOICE   BAT        93  12-10-86  12:07p
+    CHOICE   PMT        68  12-10-86  11:37p
+    DATE     PMT        96  12-10-86  10:37p
     ENABLE   MAC      1749  12-10-86   8:02p
-    ENABLE~1 TBL      1293  12-10-86   9:11p
-    ENABLE~1 EXE     35632  12-22-86   5:14p
+    ENABLE   TBL      1293  12-10-86   9:11p
+    ENABLE_D EXE     35632  12-22-86   5:14p
     HELPRET  MAC      1253  12-10-86   8:09p
-    INIT~1   BAT        12  12-10-86   1:47p
-    INIT~1   MAC        90  12-10-86   1:50p
-    RUN~1    BAT        61  12-10-86  10:30p
+    INIT     BAT        12  12-10-86   1:47p
+    INIT     MAC        90  12-10-86   1:50p
+    RUN      BAT        61  12-10-86  10:30p
     TESTFILE           896  12-10-86   9:06p
-    TIME~1   PMT       102  12-10-86  10:36p
+    TIME     PMT       102  12-10-86  10:36p
     WORDSTAR PMT        78  12-10-86  11:09p
     WSBLOCK  MAC      1759  12-10-86   8:17p
     WSBLOCK  TBL      1293  12-10-86   9:21p
@@ -190,5 +197,8 @@ Sunnyvale, CA  94086
     WSSCREEN MAC      1774  12-10-86   8:18p
     WSSCREEN TBL      1293  12-10-86   9:28p
     WSSTATUS TBL      1293  12-10-86   9:33p
-           95 file(s)     236868 bytes
-                           27648 bytes free
+           39 file(s)      76623 bytes
+
+    Total files listed:
+           98 file(s)     236868 bytes
+                           25600 bytes free

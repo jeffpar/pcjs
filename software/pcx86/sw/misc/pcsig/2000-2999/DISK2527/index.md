@@ -123,6 +123,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║ <<< PC-SIG Disk #2527 DAVE'S GAMES: PENTRIX, BOGGLER, & DOUBLECROSS >>> ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To read the note by the author, type:  GO  (press Enter)              ║
+║                                                                         ║
+║   To read the documentation for the games, type:  MISC  (press Enter)   ║
+║                                                                         ║
+║   To start PENTRIX, type:  PENTRIX  (Enter)                             ║
+║   To start BOGGLER, type:  BOGGLER  (Enter)                             ║
+║   To start DOUBLECROSS, type:  DBLCROSS  (Enter)                        ║
+║                                                                         ║
+║   To print out the questionnaire, type:  COPY QUESTION.DOC PRN  (Enter) ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NOTICE.DOC
 
 {% raw %}

@@ -63,6 +63,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 917  TODO  >>>>                             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for TODO, Type:                              ║
+║                  COPY TODO.DOC LPT1: (press enter)                      ║
+║                                                                         ║
+║ To run the program TODO, Type: TODO17 (press enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0917

@@ -65,6 +65,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #237 PC-General ledger  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║          To print out the documentation enter:                          ║
+║                                                                         ║
+║                              MANUAL  (press enter)                      ║
+║                                                                         ║
+║          To Start PC-Genral Ledger type the following command:          ║
+║                                                                         ║
+║                              GLMENU  (press enter)                      ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c)Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0237

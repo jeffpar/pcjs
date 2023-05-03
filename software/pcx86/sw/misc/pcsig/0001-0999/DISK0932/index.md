@@ -65,6 +65,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #932 LABCOAT  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type:                                       ║
+║             COPY README-1.DOC PRN (press Enter)                         ║
+║             COPY README-2.DOC PRN (press Enter)                         ║
+║             COPY RELEASE.DOC PRN (press Enter)                          ║
+║             COPY REG.DOC PRN (press Enter)                              ║
+║                                                                         ║
+║ To run the program, type: LABCOAT (press enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## README-1.DOC
 
 {% raw %}

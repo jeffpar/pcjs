@@ -16,6 +16,31 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  PC-SIG Disk #2991 GALACTIX  >>>>                 ║
+║                         Disk 1 of 2 (also #2992)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  Create a subdirectory on your hard drive. Then with disk 1 (#2991)     ║
+║  in the floppy drive, copy the disk 1 files to the subdirectory on your ║
+║  hard disk.  Then insert disk 2 (#2992) and copy those files to the     ║
+║  same subdirectory.  To install the program, change to that directory   ║
+║  and type:                                                              ║
+║             INSTALL  (press Enter)                                      ║
+║                                                                         ║
+║  To read/print the documentation, type:  README  (press Enter)          ║
+║                                                                         ║
+║  To read/print the registration form, type:  ORDRFORM  (press Enter)    ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LHA.DOC
 
 {% raw %}

@@ -83,6 +83,20 @@ READ.ME       Read.me file for UNIVERSE ANALYZER
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #1772  UNIVERSE ANALYZER  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  UNIVERSE (press enter)                         ║
+║                                                                         ║
+║ To print documentation, type:  COPY UNIVERSE.HLP PRN                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1772

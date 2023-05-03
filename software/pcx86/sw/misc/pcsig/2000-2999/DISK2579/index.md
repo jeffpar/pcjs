@@ -59,6 +59,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2579  MAXCAT  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the program's documentation, type:  PRINTDOC  (press Enter)   ║
+║                                                                         ║
+║  To start MAXCAT, type:  MAXCAT  (press Enter)                          ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MAXCAT.DOC
 
 {% raw %}

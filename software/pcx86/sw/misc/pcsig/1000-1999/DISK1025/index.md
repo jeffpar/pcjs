@@ -69,6 +69,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk No: 1025  PDS*BASE (Disk 2 of 2)  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To unarchive the manual, copy the file MANUAL.EXE to either a blank   ║
+║   floppy disk or a hard drive and type:                                 ║
+║                                                                         ║
+║                  MANUAL (press enter)                                   ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REGISTER.DOC
 
 {% raw %}

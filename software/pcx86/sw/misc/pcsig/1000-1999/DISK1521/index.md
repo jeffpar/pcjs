@@ -97,6 +97,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<< Disk No 1521 Teacher Works >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ The program on this disk is contained in a self-extracting archive.     ║
+║                                                                         ║
+║ For more information on extracting the program, type                    ║
+║                                        TYPE READ.ME (press enter)       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1521

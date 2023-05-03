@@ -55,6 +55,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  Disk #2426  UNISCREEN disk 3 of 3 (2056, 2057 also)  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║    To print the installation instructions, insert disk #2056 and        ║
+║    type:  COPY HELP.TXT PRN  (press Enter)                              ║
+║                                                                         ║
+║                               (c) Copyright 1991, PC-SIG INC.           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2624

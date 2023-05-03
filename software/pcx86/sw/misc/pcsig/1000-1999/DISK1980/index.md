@@ -82,7 +82,6 @@ PC-SIG
 Sunnyvale  Ca. 94086                                                    
 (408) 730-9291                                                          
 (c) Copyright 1989 PC-SIG, Inc.                                         
-
 ```
 {% endraw %}
 
@@ -109,6 +108,23 @@ NEMAFIX  CHN    11755   1-01-80  12:08a
 WIREFIX  CHN     9381   1-01-80  12:37a
 FILES_4  DOC        0   2-12-89  11:22a
        14 File(s)    234496 bytes free
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #1980  THE ELECTRICAL DBS DISK  >>>>             ║
+║                (disk 4 of 5, 1977, 1978, 1979, 1981 also)               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install files onto your hard drive, insert disk 1 and type: INSTALL  ║
+║                                                                         ║
+║ To start program, type: RUN          (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY MANUAL.DOC PRN                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

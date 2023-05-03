@@ -82,6 +82,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  Disk #2220  TURBO SCREDIT (disk 2 of 2, also 1653)  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                        ** INSERT DISK 1 **                              ║
+║ To install the program, type: INSTALL [type] [from] [to] (press enter)  ║
+║ type - H for hard drive, F for floppy drive                             ║
+║ from - source drive                                                     ║
+║ to - destination drive and path                                         ║
+║                                                                         ║
+║ To print installation's documentation, type: COPY README.DOC PRN        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

@@ -16,6 +16,27 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2807  DAYO MEMBERSHIP  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the installation instructions, type:  COPY README PRN  (Enter) ║
+║                                                                         ║
+║ After installing the program as per the installation instructions,      ║
+║ print the manual by typing:  COPY DAYOMEM.DOC PRN   (press Enter)       ║
+║                                                                         ║
+║ Start DAYO MEMBERSHIP by typing:  DAYOMEM  (press Enter)                ║
+║                                                                         ║
+║                                        (c) Copyright 1992 PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VENDOR.DOC
 
 {% raw %}

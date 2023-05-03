@@ -77,6 +77,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #2467  WRITER'S NAMEBASE   >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type:  COPY NAMEBASE.DOC PRN (press Enter)      ║
+║                                                                         ║
+║ To begin the program, type:  NAMEBASE (press Enter)                     ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## NAMEBASE.DOC
 
 {% raw %}

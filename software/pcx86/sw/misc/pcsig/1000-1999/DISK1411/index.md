@@ -72,6 +72,24 @@ Sunnyvale, CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 1411 SOLITAIRE CARD GAMES  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program EVEN-OUT, type EVEN-OUT (press enter)              ║
+║                                                                         ║
+║ To start the program ELEVENS, type ELEVENS (press enter)                ║
+║                                                                         ║
+║ To start the program BLOCK11, type BLOCK11 (press enter)                ║
+║                                                                         ║
+║ To view program information, type VIEW (press enter)                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1411

@@ -63,6 +63,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk #1883  THE SWAP UTILITIES  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ All the files on this disk are self-unarchiving.                        ║
+║                                                                         ║
+║ To unarchive the documentation, type: SDOC70                            ║
+║                                                                         ║
+║ To print the documentation once extracted, type: COPY SDOC PRN          ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1883

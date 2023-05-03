@@ -60,6 +60,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #3022  BIZWIZ FINANCIAL CALCULATOR  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To read the installation instructions, type:  TYPE README.TXT  (Enter)  ║
+║                                                                         ║
+║ To print the respective order forms, type:                              ║
+║                                   COPY ORDERFRM.TXT PRN  (press Enter)  ║
+║                                   COPY SITEFRM.TXT PRN   (press Enter)  ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDERFRM.TXT
 
 {% raw %}

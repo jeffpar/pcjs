@@ -73,6 +73,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  Disk No 2200 MACBETH disk 1 of 2 (also 2201)  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type: MACBETH  (press enter)                      ║
+║                                                                         ║
+║ To print the documentation, type: COPY MANUAL.TXT PRN (press enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.TXT
 
 {% raw %}

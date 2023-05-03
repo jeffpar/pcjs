@@ -49,6 +49,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #1818  CLEANUP  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start program, type:  CD\CLEANUP (press enter)                       ║
+║                          CLEANUP (press enter)                          ║
+║                                                                         ║
+║ To print documentation, type:  CD\CLEANUP (press enter)                 ║
+║                                COPY CLEANUP.DOC PRN                     ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1818
@@ -59,8 +78,18 @@ Sunnyvale  Ca. 94086
     GO       BAT        38   1-01-80   1:37a
     GO       TXT       883   7-11-90   1:24a
     FILE1818 TXT      1259   7-12-90   3:46p
+    CLEANUP      <DIR>    
+            4 file(s)       2180 bytes
+
+     Directory of A:\CLEANUP
+
+    .            <DIR>    
+    ..           <DIR>    
     COPYRITE IFO       834   5-07-90   8:49p
     CLEANUP  DOC     15356   6-06-90   2:10p
     CLEANUP  EXE     73480   6-06-90   1:04p
-            6 file(s)      91850 bytes
-                           67072 bytes free
+            5 file(s)      89670 bytes
+
+    Total files listed:
+            9 file(s)      91850 bytes
+                           66560 bytes free

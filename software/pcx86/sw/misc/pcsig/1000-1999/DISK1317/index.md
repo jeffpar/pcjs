@@ -139,6 +139,26 @@ FILES    TXT    Listing of all files
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk No 1317  RECIPE INDEX SYSTEM  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:                                     ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To install the program to your hard drive, and assuming that your     ║
+║   hard drive is drive C:, type RISCOPY C (press enter)                  ║
+║                                                                         ║
+║   To start the program type, RIS (press enter).                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1317

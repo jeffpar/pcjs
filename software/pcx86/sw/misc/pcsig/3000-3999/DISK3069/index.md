@@ -16,6 +16,84 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## BUSS-APP.TXT
+
+{% raw %}
+```
+~1F╔══════════════════════════════════════════════════════════════════════════════╗
+║~74                            BUSINESS APPLICATIONS                             ~1F║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║   ~30  YOU CAN SELL YOUR WIDGET OR ANY PRODUCTS WITH MULTIMEDIA 1.           ~1F   ║
+║   ~30  Listed below are some of the applications you can create with this    ~00 ~1F  ║
+║   ~30  new and exciting package.                                             ~00 ~1F  ║
+║     ~00                                                                       ~00~1F  ║
+║                                                                              ║
+║   ~71 * SALES PRESENTATIONS            * NEW PRODUCT INTRODUCTION            ~1F   ║
+║   ~71                                                                        ~00 ~1F  ║
+║   ~71 * SELLING YOUR SERVICES          * SALES TOOL FOR YOUR SALES STAFF     ~00 ~1F  ║
+║   ~71                                                                        ~00 ~1F  ║
+║   ~71 * COURSEWARE AUTHORING           * TUTORIALS (C.B.T.)                  ~00 ~1F  ║
+║   ~71                                                                        ~00 ~1F  ║
+║   ~71 * DISK BASED ADVERTISING         * RETAIL STORE -CUSTOMER CATCHER-     ~00 ~1F  ║
+║   ~71                                                                        ~00 ~1F  ║
+║   ~71 * MAILING TO YOUR CUSTOMERS      * BUSINESS REPORT DEMONSTRATION       ~00 ~1F  ║
+║   ~71                                                                        ~00 ~1F  ║
+║   ~71 * HAND OUTS AT TRADE SHOWS       * MAKE A COMMERCIAL ON A DISK         ~00 ~1F  ║
+║     ~00                                                                       ~00~1F  ║
+║                                                                              ║
+║  You can use this package to create a new product/service presentation       ║
+║  which can be given to your sales staff to use on sales calls.  The sales    ║
+║  person can play the demonstration on the customer's computer (no special    ║
+║  hardware needed).  Better yet, you can mail a presentation disk to all of   ║
+║  your customers and new prospects (direct mail marketing).                   ║
+║                                                                              ║
+║  Imagine you're in a crunch to finish a breakthrough business report.        ║
+║  Use MULTIMEDIA 1 to combine your charts and a convincing voice-over to      ║
+║  produce a complete AUDIO/VIDEO demonstration. All this on a standard PC.    ║
+║                                                                              ║
+║  With MULTIMEDIA 1 you can enrich your business presentations with speech,   ║
+║  music and high-quality images, and interactivity helps you customize your   ║
+║  communications to each of your audience's specific interest.                ║
+║                                                                              ║
+║  Need to train someone ?  With MULTIMEDIA 1 you can create a tutorial on     ║
+║  your product or service. The tutorial you create can interact, teach and    ║
+║  test your trainees. MULTIMEDIA will help convey what text alone cannot.     ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+                               ~74 EASY TO USE ~1F
+                               ─────────────
+        No programming experience is required to use MULTIMEDIA 1. If 
+        you know how to use a word processor then you will be mastering 
+        this package within a few days. The following command lines were 
+        used to create the business example that you have just viewed.
+
+          ~00                                                              ~00~1F
+        ~74    COMMAND LINE             |        DESCRIPTION/COMMENTS    ~00  ~1F
+        ~33                             |                                ~00  ~1F
+        ~71    show house1.gif          |        display house1 image    ~00  ~1F
+        ~71    say buyme1               |        play buy me speech      ~00  ~1F
+        ~71    zoom out                 |        shrink screen effect    ~00  ~1F
+        ~71                             |                                ~00  ~1F
+        ~71    show house2.gif          |        display house2 image    ~00  ~1F
+        ~71    say buyme2               |        output speech           ~00  ~1F
+        ~71    delay                    |        wait for 1 second       ~00  ~1F
+        ~71    rotate 10                |        rotate screen 10 times  ~00  ~1F
+        ~71    say wow                  |        play the wow speech     ~00  ~1F
+        ~71    scroll down              |        move screen down effect ~1F
+    
+        It only takes a few lines to combine video and speech per screen.
+        One line to display the graphic image, one line to play the
+        sound/speech file and one line for special effects. You will need 
+        to know only a few commands to get started with MULTIMEDIA 1. 
+        Once you have learned the basics of MULTIMEDIA 1 you can create 
+        your masterpiece with over 100 interactive AUDIO/VIDEO screens.
+
+
+                      PRESS Esc TO RETURN TO THE MAIN MENU
+```
+{% endraw %}
+
 ## EDITHELP.TXT
 
 {% raw %}
@@ -281,6 +359,34 @@ machines:
 
  MORE HELP IS AVAILABLE WHEN YOU REGISTER YOUR SHAREWARE.
  ───────────────────────────────────────────────────────
+```
+{% endraw %}
+
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SID Disk #3069  MULTIMEDIA 1  >>>>               ║
+║                     Disk 2 of 3 (also #3068, #3070)                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   Insert Disk #3068 in drive A:                                         ║
+║                                                                         ║║   To read the introduction, type:  TYPE READ-ME.DOC  (press Enter)      ║
+║                                                                         ║
+║   To view, or print the manual, type:  MANUAL  (press Enter)            ║
+║   To start the program, type:  GO              (press Enter)            ║
+║                                                                         ║
+║   To install to hard drive C, type:  INSTALLC  (press Enter)            ║
+║   To install to hard drive D, type:  INSTALLD  (press Enter)            ║
+║   To start the program, type: GO   (press Enter)                        ║
+║   To view, or print the manual, type: MANUAL   (press Enter)            ║
+║                                                                         ║
+║   To install to hard drive C, type: INSTALLC   (press Enter)            ║
+║   To install to hard drive D, type: INSTALLD   (press Enter)            ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

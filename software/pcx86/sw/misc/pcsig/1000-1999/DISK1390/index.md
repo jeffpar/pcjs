@@ -86,6 +86,22 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1390 SLIDEMANAGER  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type SLIDEMGR (press enter)                       ║
+║                                                                         ║
+║ To look at the documentation on your screen, type VIEW (press enter)    ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SLIDEMAN.TXT
 
 {% raw %}

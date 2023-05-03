@@ -75,6 +75,24 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #475 TUNE TRIVIA  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation to your printer type:                         ║
+║                  COPY MANUAL  PRN  (press enter)                        ║
+║                                                                         ║
+║ To start the program, Type: TUNETRIV (press enter)                      ║
+║                                                                         ║
+║ Please note, PC Monopoly was removed from this disk per Parkerbrothers  ║
+║ request.                                                                ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0475

@@ -69,6 +69,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  PC-SIG Disk #2427  LORD OF THE FLIES  >>>>             ║
+║                      (Disk 2 of 2, #2426 also)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the author's documentation and installation instructions,      ║
+║       insert Disk 1 and type:  COPY MANUAL.TXT PRN (press Enter)        ║
+║                                                                         ║
+║        (You may want to first type:  TYPE README.TXT (Enter))           ║
+║                                                                         ║
+║ To run the program, first run a version of Basic.  Next, type:          ║
+║                       RUN "LOF" (press Enter)                           ║
+║                                                                         ║
+║ To exit back to DOS, type:  SYSTEM (press Enter)                        ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2427

@@ -81,6 +81,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║      <<<<  Disk #1684  SECURTIY ANALYSIS AND PORTFOLIO MANAGER  >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  SAPM (press enter)                             ║
+║                                                                         ║
+║ To print documentation, type:  COPY MANUAL.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

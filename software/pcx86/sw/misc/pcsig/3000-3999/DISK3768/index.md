@@ -1350,6 +1350,24 @@ Fax:          (301) 657-5971
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  PC-SIG Disk #3768 PROVIEW  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print documentation, type:  COPY PV.DOC PRN  (press Enter)          ║
+║                                                                         ║
+║  To start, type:  PV  (press Enter)                                     ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LICENSE.DOC
 
 {% raw %}

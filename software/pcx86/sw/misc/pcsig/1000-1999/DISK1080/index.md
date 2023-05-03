@@ -3391,6 +3391,23 @@ Sunnyvale, CA   94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk No 1080 MODULA-2 COMPILER (Disk 1 of 2)  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ The program and documentation for this program are archived, you must   ║
+║ first unarchive the files on both disks in order to run the program     ║
+║                                                                         ║
+║ The best way to unarchive the files on these disks is to create a       ║
+║ subdirectory and copy the files from the two disks into it, then        ║
+║ unarchive the files by typing, PKXARC *.ARC (press enter)               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1080

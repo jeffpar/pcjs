@@ -28,6 +28,31 @@ machines:
     necessary. The LaserJet fonts require 1.4MB of disk space.
 {% comment %}info_end{% endcomment %}
 
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  DISK #2334 RUBICON PUBLISHER 3 OF 3 (also 2334, 2335)  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ For instructions on installing RUBICON insert disk #1 and type:         ║
+║                                                                         ║
+║ TYPE README (to veiw the file on screen)                                ║
+║                                                                         ║
+║ COPY README PRN (to copy the file to the printer)                       ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2336
 

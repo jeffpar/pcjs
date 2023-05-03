@@ -78,6 +78,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk #1831  MORSOFT CALCULATOR   >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  MORCALC (press enter)                          ║
+║                                                                         ║
+║ To print documentation, type:  COPY MORCALC.DOC PRN  (press enter)      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MORCALC.DOC
 
 {% raw %}

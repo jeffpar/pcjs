@@ -623,6 +623,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No: 62  Inventory Program  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To run the BASIC language programs on this disk, please consult the    ║
+║  section of your computer manual concerning BASIC programs and thier    ║
+║  use.                                                                   ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INVENTRY.BAS
 
 {% raw %}

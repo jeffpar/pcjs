@@ -14,6 +14,32 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #3476 SUPER BALL! & BANANOID  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To play SUPER BALL!, type:  SB  (press Enter)                          ║
+║                                                                         ║
+║  To play BANANOID, type:  BANANOID  (press Enter)                       ║
+║                                                                         ║
+║  To play BANANOID in full screen mode, type:  FULLSCR  (press Enter)    ║
+║                                                                         ║
+║  The full screen mode of BANANOID is not compatible with all VGA        ║
+║  monitors.                                                              ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3476
 

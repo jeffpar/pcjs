@@ -1020,6 +1020,26 @@ machines:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3040  F.GODMOM  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To Print the documentation, type:  COPY FGODMOM.DOC PRN  (press Enter) ║
+║                                                                         ║
+║  To Print the order form, type:  COPY ORDERFRM.DOC PRN  (press Enter)   ║
+║                                                                         ║
+║  To Start the game, type:  FGODMOM  (press Enter)                       ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDERFRM.DOC
 
 {% raw %}

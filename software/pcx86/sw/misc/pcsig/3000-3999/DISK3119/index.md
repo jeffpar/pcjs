@@ -54,6 +54,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3119 SWORD QUEST I  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print documentation, type:  COPY QUEST1V2.DOC PRN  (press Enter)    ║
+║                                                                         ║
+║  To start the game, type:  QUEST1V2  (press Enter)                      ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## SHAREWRE.TXT
 
 {% raw %}

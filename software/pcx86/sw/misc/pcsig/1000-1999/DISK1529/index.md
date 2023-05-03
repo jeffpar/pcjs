@@ -100,6 +100,25 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1529 ADA_TUTR   >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ This program is in an archived form, it must be unarchived in order to  ║
+║ run the program.  To do this make a subdirectory on your hard disk and  ║
+║ copy the files on this disk into it.  Then from within the subdirectory ║
+║ on your hard disk, type INSTALL (press enter) this will unarchive all   ║
+║ of the needed files for you and let you run the program.                ║
+║                                                                         ║
+║ To run the program after you have unarchived it, type                   ║
+║                          ADA_TUTR (press enter)                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1529

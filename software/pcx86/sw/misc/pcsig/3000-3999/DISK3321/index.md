@@ -16,6 +16,23 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  PC-SIG Disk #3321  THE CATACOMB ABYSS 3-D ADVENTURE  >>>>     ║
+║                       Disk 1 of 2 (also #3322)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  Start CATACOMB ABYSS by typing:  START  (press Enter)                  ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HELP.TXT
 
 {% raw %}

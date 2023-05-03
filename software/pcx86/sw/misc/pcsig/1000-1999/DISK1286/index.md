@@ -93,6 +93,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk No: 1286  DISKSCAN version 1.21 >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: COPY DS.DOC PRN (press enter)         ║
+║                                                                         ║
+║ To run the program, type: DS (press enter)                              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1286

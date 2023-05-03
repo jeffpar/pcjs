@@ -158,6 +158,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1907  CALENDAR MATE  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  INSTALL  (press enter)                         ║
+║                                                                         ║
+║ To print documentation, type:  COPY CALMATE3.DOC PRN (press enter)      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## ORDER.DOC
 
 {% raw %}

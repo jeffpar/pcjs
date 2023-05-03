@@ -108,6 +108,22 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 1372 STORM version 5.04  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type STORM (press enter)                          ║
+║                                                                         ║
+║ The program has on-line help, while in the program press your F1 key    ║
+║                                                                         ║
+║ To view information on the program, type VIEW (press enter)             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1372

@@ -101,6 +101,32 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2434  WORDFIND   >>>>                 ║
+║                       (Disk 1 of 2, #2435 also)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation and installation instructions, type:             ║
+║                  COPY WORDFIND.DOC PRN (press Enter)                    ║
+║                                                                         ║
+║ To view the author's note regarding his registration bonus, type:       ║
+║                      TYPE BONUS.DOC (press Enter)                       ║
+║                                                                         ║
+║ To start WORDFIND, type:  WORDFIND                                      ║
+║            (Note:  WORDFIND can be started from both disks)             ║
+║                                                                         ║
+║ To read author's notes about the program, insert Disk 2 and type:       ║
+║                      TYPE S-WARE.ASC (press Enter)                      ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## WORDFIND.DOC
 
 {% raw %}

@@ -88,6 +88,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║<<<<  PC-SIG Disk #2242 GENESIS: Series II PROGRAM DISK (also 2243) >>>> ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   For special instructions on installing the program, type:             ║
+║                          COPY README.DOC PRN                            ║
+║                                                                         ║
+║   To install the program on hard drive C:, type: INSHD1 (press enter)   ║
+║                                                                         ║
+║   To start program once the installation is complete, type: GENESIS     ║
+║                                                                         ║
+║   To print documentation, type: PRINTDOC (press enter)                  ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

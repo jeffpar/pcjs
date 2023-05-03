@@ -68,6 +68,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                      <<<<  Disk #744 PRTLABEL  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation for PRTLABEL to your printer type,            ║
+║                  COPY PRTLABEL.DOC PRN (press enter)                    ║
+║                                                                         ║
+║ To start the program, type:                                             ║
+║                  PRTLABEL (press enter)                                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0744

@@ -79,6 +79,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1873  FINANCE + PLUS  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unpack disk 1, type: FP752_1 [destination path] (press enter)        ║
+║ To unpack disk 2, type: FP752_2 [destination path] (press enter)        ║
+║                                                                         ║
+║ To view documentation, type: README                                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1873

@@ -89,6 +89,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1996  EASY INVENTORY  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To self-unarchive the program, type:  EASINV15 (drive:  (press enter)   ║
+║                                                                         ║
+║ After unarchiving, start program by typing: EASINV      (press enter)   ║
+║                                                                         ║
+║ To print documentation, type: COPY EASINV.DOC PRN       (press enter)   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1996

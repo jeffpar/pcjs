@@ -55,6 +55,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3095 REAL NUMBERS  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To read the introductory documentation, type:  TYPE TAPE.DOC  (Enter)  ║
+║                                                                         ║
+║  To print the program documentation, type:  COPY README.DOC PRN  (Enter)║
+║                                                                         ║
+║  To start the program, type:  TAPE  (press Enter)                       ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

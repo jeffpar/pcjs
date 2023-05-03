@@ -2089,6 +2089,52 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk No 1176 DABUTIL, EZDO, CAPP, and EASYDOS  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start CATALOG, type CATALOG (press enter)                            ║
+║                                                                         ║
+║ To start DI, type DI (press enter)                                      ║
+║                                                                         ║
+║ To start ENC, type ENC (press enter)                                    ║
+║                                                                         ║
+║ To start FF, type FF (press enter)                                      ║
+║                                                                         ║
+║ To start LD, type LD (press enter)                                      ║
+║                                                                         ║
+║ To start SD, type SD (press enter)                                      ║
+║                                                                         ║
+║ To start EASYDOS, type EASYDOS (press enter)                            ║
+║                                                                         ║
+║ To start EZDO, type EZDO (press enter)                                  ║
+║                                                                         ║
+║ To start CAPP, type CAPP (press enter)                                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk No 1176 DABUTIL, EZDO, CAPP, and EASYDOS  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation for DABUTIL collection, type DABDOC (press enter)║
+║                                                                         ║
+║ To print documentation for EZDO, type EZDOC (press enter)               ║
+║                                                                         ║
+║ To print documentation for CAPP, type CAPPDOC (press enter)             ║
+║                                                                         ║
+║ To display the documentation for EASYDOS, type README (press enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HELP.DOC
 
 {% raw %}

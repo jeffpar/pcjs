@@ -118,6 +118,19 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 1180 PROPMAN  (Disk 2 of 2)  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program to your hard drive, insert disk #1179 into drive ║
+║ A and type PMINSTALL (press enter)                                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1180

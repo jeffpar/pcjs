@@ -81,6 +81,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  Disk #2071  MODEL-S disk 2 of 2 (2070 also)  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program onto hard drive, type:  INSTALL (press enter)        ║
+║ To start program, type:  MDS (press enter)                              ║
+║                                                                         ║
+║ To print documentation, type:  COPY READ-ME.DOC PRN                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2071

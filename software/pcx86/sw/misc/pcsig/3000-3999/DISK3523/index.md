@@ -942,6 +942,27 @@ Peace.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #3523 FORZEE & WOWZEE  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Start the game, type:  FORZEE  (press Enter)                        ║
+║                                                                         ║
+║  To Print the documentation, type:  COPY FORZEE.DOC PRN (press Enter)   ║
+║                                                                         ║
+║  To Start the game, type:  WOWZEE  (press Enter)                        ║
+║                                                                         ║
+║  To Print the documentation, type:  COPY WOWZEE.DOC PRN (press Enter)   ║
+║                                                                         ║
+║                                                                         ║
+║                                        (C) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDER.DOC
 
 {% raw %}

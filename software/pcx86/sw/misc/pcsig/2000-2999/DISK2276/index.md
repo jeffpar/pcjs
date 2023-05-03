@@ -77,6 +77,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  PC-SIG Disk #2276  DINO PICTURE DATABASE & MEMOR-E  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view file descriptions, type:  TYPE PC-SIG  (press Enter)            ║
+║                                                                         ║
+║ To load DINO, type:  DD  (press Enter)                                  ║
+║                                                                         ║
+║ To start MEMOR-E, type:  MEMORY  (press Enter)                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2276

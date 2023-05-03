@@ -105,6 +105,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2289  TECHSTAFF TOOLS  >>>>              ║
+║ 			(Disk 2 of 2, also #2288)	                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type:  COPY OPTION PRN  (press Enter)           ║
+║ 				 COPY ORDER PRN   (press Enter)           ║
+║                                COPY SITE PRN    (press Enter)           ║
+║                                COPY TSI.DOC PRN (press Enter)           ║
+║ 									  ║
+║ To just view any of those documents, type:  TYPE <filename>  (Enter)    ║
+║ 									  ║
+║ For TECHSTAFF SYSTEM INFORMATION, type:  TSI  (press Enter)		  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## TSI.DOC
 
 {% raw %}

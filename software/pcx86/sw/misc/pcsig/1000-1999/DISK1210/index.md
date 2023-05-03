@@ -73,6 +73,20 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1210 RECIPES   >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type RECIPES (press enter)                        ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PBS.BAS
 
 {% raw %}

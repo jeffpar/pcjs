@@ -91,6 +91,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  Disk #1660  TRACK MAN DATABASE MANAGEMENT SYSTEM  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install program to hard drive, copy all files to your hard drive     ║
+║ then to unarchive program, type: TRAKMANT (press enter)                 ║
+║                                                                         ║
+║ To start program, type: TDBMS (press enter)                             ║
+║                                                                         ║
+║ To print documentation, type:  COPY TMANF.DOC PRN  (press enter)        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1660

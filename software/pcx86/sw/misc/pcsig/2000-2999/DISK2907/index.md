@@ -16,6 +16,31 @@ machines:
 {% include machine.html id="ibm5150" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #2907  POWER BBS FOR WINDOWS  >>>>           ║
+║                        Disk 1 of 2 (also #2908)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unzip the files from the two zipped files contained on the two       ║
+║ diskettes, copy PKUNZIP.EXE on Disk 2 to a temporary subdirectory on    ║
+║ on your hard drive. Then from that subdirectory, unzip the files to the ║
+║ subdirectory by typing:                                                 ║
+║                                                                         ║
+║       PKUNZIP [floppy drive with PBBS diskette]:PBBS188A  <enter>       ║
+║                                                                         ║
+║ Insert Disk 2 and do the same thing, this time with PBBS188B.           ║
+║                                                                         ║
+║ After decompressing the files, print the installation instructions by   ║
+║ typing:  COPY SHARWARE.DOC PRN  <enter>                                 ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HSLINK.TXT
 
 {% raw %}
@@ -38,6 +63,117 @@ PowerBBS uses.
 
 ** In order to use the above MACROS and HSLINK, be sure your powrbbs.exe
    file is dated June 9, 1992, or later.
+```
+{% endraw %}
+
+## ORDER.TXT
+
+{% raw %}
+```
+────────────────────────────────────────────────────────────────────────────
+────────────────────────────────────────────────────────────────────────────
+──────────────────── ▓▓▓▓▓▓▓ ───────────────────────────────────────────────
+──────────────────── ██   ██ ───────────────────────────────────────────────
+──────────────────── ▓▓▓▓▓▓▓  ▓▓▓  ▓ ▓ ▓  ▓▓▓  ▓▓▓▓ ────────────────────────
+──────────────────── ██       █ █  █ █ █  █▄   █  █ ────────────────────────
+──────────────────── ▓▓       █ █  █ █ █  █▀   █▀█  ────────────────────────
+──────────────────── ██       ▓▓▓  ▓▓▓▓▓  ▓▓▓  ▓  ▓  BBS ───────────────────
+────────────────────────────────────────────────────────────────────────────
+────────────────────────────────────────────────────────────────────────────
+
+                ****************************************
+                         POWERbbs Order Form
+
+PowerBBS for WINDOWS (Windows Version):  This version of PowerBBS,
+ includes WINDOWS Protocols, and all the advanced features
+ that PowerBBS has to offer as a BBS.  This bbs is
+ good, if you are looking to run your BBS on one computer
+ (without SHARE LOADED, as it is not needed). SHARING is not
+ supported in this version, but as long as you are running on one computer
+ (and do not have SHARE loaded) it should not be needed.
+ Normal Price is $95 per copy.
+
+PowerBBS for WINDOWS (Windows Professional (Commercial) Version):
+ This version of PowerBBS, includes all the features of the Windows
+ Version. In addition, SHARING support is included for NETWORK
+ support. As long as you have WINDOWS working and configured for your
+ NETWORK, PowerBBS will use WINDOWS internal SHARING skemes
+ to make the information available to all your nodes.
+ You are licensed to use PowerBBS at one location (building or
+ a home), with this version.  This is also a license to use PowerBBS
+ for Commerical use.
+ -------------------------------------------------------------------
+  The Professional Version includes built in capabilities to permit
+  your user to download and upload mail, using the QuickMail
+  standard.
+ -------------------------------------------------------------------
+ Normal Price is $180 per copy.
+
+PowerBBS (DOS Professional Version)
+ This version of PowerBBS is our DOS Version.  It comes with a FOSSIL driver
+ that will permit you to run up to 25 lines on one computer using a
+ multitasker (compatable with Desqview).  You lose out on the WINDOWS
+ capabilities, but PowerBBS for DOS runs much quicker (and also on XTs).
+ Using the INT 14 FOSSIL, you can easily set up and operate a multiline
+ bbs using Desqview (tm) and your favorite multiport card.
+ Normal Price is $95 per copy.
+
+**********************************************************************
+* CREDIT CARDS are now accepted for purchase of PowerBBS.  To charge *
+* PowerBBS to your MC/VISA, call up the PowerBBS Support Line at     *
+* 516-822-7396 (USR DUAL), 516-822-7568 (2400).  You will be able to *
+* charge your purchase online.                                       *
+**********************************************************************
+
+  If you are ordering through the mail,
+  payment should be made by check. (Payable to Russell Frey)
+
+  (You may order with your credit card only online via the support bbs)
+
+  Remit to: Russell Frey
+            35 Fox Ct.
+            Hicksville, NY 11801
+
+                                                      Price       Total
+              Program/Description         # Copies    Per Copy    Cost
+
+PowerBBS for WINDOWS Bulletin Board System
+(Windows Version)                          _________   $95.00   _____________
+
+
+PowerBBS for WINDOWS Bulletin Board System
+(Windows Professional Version)             _________  $180.00   _____________
+
+
+PowerBBS for DOS (Professional Version)    _________   $95.00   _____________
+
+
+ Name     ___________________________________________________________________
+
+ Full Name to be used as SysOp ______________________________________________
+
+ BBS #    (______) _______________________
+
+ Home #   (______) _______________________
+
+ Address  ___________________________________________________________________
+
+          ___________________________________________________________________
+
+          ___________________________________________________________________
+
+          ___________________________________________________________________
+
+Have you ever run a BBS before?        Yes        No
+
+
+If yes, what BBS Software did you use?   ____________________________________
+
+
+Where did you learn about PowerBBS?  ________________________________________
+
+
+Do you want a 5.25" disk                      Yes        No
 ```
 {% endraw %}
 

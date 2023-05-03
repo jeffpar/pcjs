@@ -95,6 +95,37 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #2939 BACK & FORTH PROFESSIONAL #5  >>>>       ║
+║                  (also #2641, #2642, #2937, and #2938)                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Create a subdirectory on your hard drive and copy all files to it.      ║
+║ To create a subdirectory, go to the drive you want and type:            ║
+║       MD [subdirectory name]                                            ║
+║ To copy all the files to the hard drive, type:                          ║
+║       COPY [source drive]:*.* [destination drive]:\subdirectory name    ║
+║                                                                         ║
+║ To uncompress the files, PKUNZIP must be in your path or directory.     ║
+║ Go to your subdirectory and type:  PKUNZIP BNFP200A  (press Enter)      ║
+║                                    PKUNZIP BNFP200B  (press Enter)      ║
+║                                    PKUNZIP BNFP200C  (press Enter)      ║
+║                                    PKUNZIP BNFP200D  (press Enter)      ║
+║                                    PKUNZIP BNFP200E  (press Enter)      ║
+║                                                                         ║
+║ To print the program manual, type:  COPY BFP-200.DOC PRN  (press Enter) ║
+║                                                                         ║
+║ For quick start, type:  BFPSETUP  (press Enter)                         ║
+║ Then type:  BNF  (press Enter)                                          ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2939

@@ -402,6 +402,34 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  Disk No 1312  CATALOG version 1.20, SETPRINT, SHUFFLES  >>>>     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:                                     ║
+║                                                                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║   To start the program CATALOG, type:                                   ║
+║                                                                         ║
+║             CATALOG (press enter)                                       ║
+║                                                                         ║
+║   To start the program SETPRINT, type:                                  ║
+║                                                                         ║
+║             SETPRINT (press enter)                                      ║
+║                                                                         ║
+║   To start the program SHUFFLES, type:                                  ║
+║                                                                         ║
+║             SHUFR (press enter)                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README_R.TXT
 
 {% raw %}

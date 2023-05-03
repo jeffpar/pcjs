@@ -125,6 +125,31 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 989 Basic Line Numbers  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for BASIC LINE NUMBERS, Type:                ║
+║             PRINTMAN (press enter)                                      ║
+║                                                                         ║
+║ To run the program for BASIC LINE NUMBERS, Type:                        ║
+║             BASLIN (press enter)                                        ║
+║                                                                         ║
+║ To print the documentation for LEARNING CURVES, Type:                   ║
+║             COPY READ.TXT LPT1: (press enter)                           ║
+║                                                                         ║
+║ To print the documentation for WEIGHT and MEASURE CONVERSION, Type:     ║
+║             COPY README LPT1: (press enter)                             ║
+║                                                                         ║
+║ To run the program for WEIGHT and MEASURE CONVERSION, Type:             ║
+║             RUN (press enter)                                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LRNCRVPR.BAS
 
 {% raw %}

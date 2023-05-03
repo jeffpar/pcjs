@@ -69,6 +69,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #3124 HUGO III, JUNGLE OF DOOM >>>>          ║
+║                        Disk 2 of 2 (also #3042)                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To install HUGO III, insert disk #3042 and type: INSTALL (press Enter)  ║
+║                                                                         ║
+║ Then start the program by typing:  HUGO  (press Enter)                  ║
+║                                                                         ║
+║ To print the documentation, type:  COPY MANUAL.DOC  (press Enter)       ║
+║                                                                         ║
+║ To print the registration information, type:  COPY README.DOC PRN       ║
+║                                       COPY README.DOC PRN  (pressEnter) ║
+║                                                                         ║
+║                                                                         ║
+║                                         (c) Copyright 1992, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3124

@@ -72,6 +72,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #558  PC-PROMPT  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print User's Guide for PC-Prompt, type:                              ║
+║                                COPY HELP.DOC PRN (press Enter)          ║
+║                                                                         ║
+║ For further instructions, type:  TYPE README.TXT (press Enter)          ║
+║                                                                         ║
+║ To read author's notes, type:  TYPE NOTES558.TXT (press Enter           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## HELP.DOC
 
 {% raw %}

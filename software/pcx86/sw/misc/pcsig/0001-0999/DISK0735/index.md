@@ -1096,6 +1096,13 @@ Sunnyvale, CA  94086
     FILE0735 TXT      2366   9-08-89   9:25a
     GO       BAT       527   8-14-89   1:00p
     INSTALL  COM     24130   8-14-89   1:00p
+    DEMO         <DIR>    
+           13 file(s)     285582 bytes
+
+     Directory of A:\DEMO
+
+    .            <DIR>    
+    ..           <DIR>    
     ACCOUNT  DAT       792   8-14-89   1:00p
     ACCOUNT  IDX       546   8-14-89   1:00p
     CHCKBDGT MSC       257   8-14-89   1:00p
@@ -1106,5 +1113,8 @@ Sunnyvale, CA  94086
     CHKRGSTR IDX      1086   8-14-89   1:00p
     REGPAY   DAT      1183   8-14-89   1:00p
     REGPAY   IDX      2106   8-14-89   1:00p
-           22 file(s)     295481 bytes
-                           12288 bytes free
+           12 file(s)       9899 bytes
+
+    Total files listed:
+           25 file(s)     295481 bytes
+                           11264 bytes free

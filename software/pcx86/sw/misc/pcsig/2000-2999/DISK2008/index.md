@@ -139,6 +139,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #2008  OVERLORD  >>>>                      ║
+║                    (disk 1 of 3, 2009, 2010 also)                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install files onto your hard drive, type: INSTALL  (press enter)     ║
+║                                                                         ║
+║ To start program, type: OL           (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: COPY OLORD.DOC PRN                        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2008

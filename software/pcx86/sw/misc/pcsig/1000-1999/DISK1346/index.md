@@ -118,6 +118,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1346  CRISP  >>>>                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  CRSP (press enter)                             ║
+║                                                                         ║
+║ To print the documentation, type:  COPY README.DOC PRN                  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

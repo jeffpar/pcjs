@@ -50,7 +50,20 @@ Sunnyvale Ca. 94086
 (408) 730-9291
 (c) Copyright 1989 PC-SIG, Inc.
 
-
+```
+{% endraw %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk No 1363 THE PASSING PASSAGES & GS-TESTIT DATA DISK >>>>    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start GS-TESTIT or PASSAGES insert disk #1362, type GO (press enter) ║
+║                                                                         ║
+║ For info on the programs type, READ (press enter)                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
 ```
 {% endraw %}
 

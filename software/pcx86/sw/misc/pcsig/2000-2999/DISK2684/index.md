@@ -46,6 +46,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2684 SHERLOCK  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To start the program, type: SHERLOCK   (press Enter)                  ║
+║                                                                         ║
+║   To print the documentation, type: COPY SHERLOCK.DOC   (press Enter)   ║
+║                                                                         ║
+║   To print the registration form, type: COPY REGISTER.DOC  (press Enter)║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## REGISTER.DOC
 
 {% raw %}

@@ -188,6 +188,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  Disk No 1140 International Game Collection  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start PRINCE, type PRINCE (press enter)                              ║
+║                                                                         ║
+║ For documentation on PRINCE, type COPY PRINCE.DOC PRN (press enter)     ║
+║                                                                         ║
+║ To start PC PONTOON, type PONTOON (press enter)                         ║
+║                                                                         ║
+║ To start BALL CATCHER, type BALL (press enter)                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MMSOFTWE.DOC
 
 {% raw %}

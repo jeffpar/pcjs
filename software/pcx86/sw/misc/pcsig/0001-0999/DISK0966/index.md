@@ -80,6 +80,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #966 Astrol96  >>>>                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For information on the program, insert disk #1 and type:                ║
+║             COPY README.DOC PRN  (press enter)                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## GRAPHICS.DOC
 
 {% raw %}

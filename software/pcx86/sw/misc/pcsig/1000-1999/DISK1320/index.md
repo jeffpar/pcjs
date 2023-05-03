@@ -980,6 +980,26 @@ ORDER    TXT     Label Order Form
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 1320  DISKCAT  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:                                     ║
+║                                                                         ║
+║             DOC (press enter)                                           ║
+║                                                                         ║
+║   To start the program, type:                                           ║
+║                                                                         ║
+║             DISKCAT (press enter)                                       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDER.TXT
 
 {% raw %}

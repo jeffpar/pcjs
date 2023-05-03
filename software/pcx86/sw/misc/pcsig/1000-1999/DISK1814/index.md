@@ -457,6 +457,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1814  PAUL'S GAMES  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start TANKS, type:  TANKS (press enter)                              ║
+║ To start BLASTER, type:  BLASTER (press enter)                          ║
+║ To start MEMORY, type:  MEMORY (press enter)                            ║
+║                                                                         ║
+║ To print documentation, type:  COPY FILE1814.TXT PRN                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MEMORY.BAS
 
 {% raw %}

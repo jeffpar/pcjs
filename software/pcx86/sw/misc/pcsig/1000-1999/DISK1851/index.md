@@ -103,6 +103,22 @@ README.1ST--Little instruction on INSTALL.
 ```
 {% endraw %}
 
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1851  READY SET DRAW  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install and unpack program, type: INSTALL  (press enter)             ║
+║                                                                         ║
+║ To start program, type: RSDRAW  (press enter)                           ║
+║                                                                         ║
+║ To print documentation, type: COPY RSDRAW.DOC PRN  (press enter)        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1851

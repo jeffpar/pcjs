@@ -94,6 +94,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk No 1038 THE WONDERFUL WORLD OF EAMON (disk 3 of 4)  >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To run the program, insert disk #296 and type: EAMON (press enter)      ║
+║                                                                         ║
+║ Enter your characters name and goto the main hall, then select          ║
+║ option 1 (go on adventure) and follow the instructions.                 ║
+║ You need disk #296 to run this adventure.                               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1038

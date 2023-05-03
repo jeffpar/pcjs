@@ -368,6 +368,22 @@ HAVE FUN!
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1612  GIN RUMMY/METEORS >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start GIN RUMMY, type:  GINRUMMY (press enter)                       ║
+║ To start METEORS, type:  METEORS (press enter)                          ║
+║                                                                         ║
+║ To print GIN RUMMY documentation, type:  COPY GINRUMMY.DOC PRN          ║
+║ To print METEORS documentation, type:  COPY METEORS.DOC PRN             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## METEORS.DOC
 
 {% raw %}

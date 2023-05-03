@@ -88,6 +88,26 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk #453 ADVENTUREWARE  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To Start the CRIME game type CRIME (press enter)                        ║
+║                                                                         ║
+║ To Start the HAUNTED game type HAUNTED (press enter)                    ║
+║                                                                         ║
+║ To Start the ISLAND game type ISLAND (press enter)                      ║
+║                                                                         ║
+║ To Start the SUBMARINE game type SUBMARIN (press enter)                 ║
+║                                                                         ║
+║ To Start the TERROR game type TERROR (press enter)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0453

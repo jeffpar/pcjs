@@ -42,6 +42,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2801  DAYO LITTLE POS  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the program documentation and installation instructions, type: ║
+║                     COPY README PRN  (press Enter)                      ║
+║                                                                         ║
+║ After copying the program files to a subdirectory on your hard drive    ║
+║ (see README), extract the program by typing:  DAYOPS  (press Enter)     ║
+║                                                                         ║
+║ Then start the program by typing:  DAYOPOSS  (press Enter)              ║
+║                                                                         ║
+║ To print the registration form, type:  COPY REGISTER PRN  (press Enter) ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2801

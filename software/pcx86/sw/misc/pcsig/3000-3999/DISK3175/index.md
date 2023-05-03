@@ -16,6 +16,26 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3175  MINDCUBE  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the documentation, type:  COPY MINDCUBE.DOC PRN  (Enter)      ║
+║                                                                         ║
+║  To start the game, type:  MINDCUBE  (Enter)                            ║
+║                                                                         ║
+║  To read the author's catalog, type:  TYPE READ.ME  (Enter)             ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MINDCUBE.DOC
 
 {% raw %}

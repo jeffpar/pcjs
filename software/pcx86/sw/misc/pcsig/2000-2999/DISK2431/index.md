@@ -81,6 +81,30 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  DISK #2431  CODE TO CODE  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To self-extract program files, type:  CTOC30  (press Enter)            ║
+║                                                                         ║
+║  To read the file descriptions, type:  TYPE READ.ME  (press Enter)      ║
+║                                                                         ║
+║  To print the program documentation, type:  COPY CTC.DOC PRN  (Enter)   ║
+║                                                                         ║
+║  To begin CODE TO CODE, type:  CTC  (press Enter)                       ║
+║                                                                         ║
+║                                                                         ║
+║                                     (c) Copyright 1990, PC-SIG Inc.     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+
+
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2431

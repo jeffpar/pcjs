@@ -51,6 +51,44 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2646  MERCURY  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ The files for MERCURY are in a self-extracting form.  To extract the    ║
+║ files, copy the files on this diskette to a subdirectory on your        ║
+║ hard drive, ex:  A>C:          (press Enter)                            ║
+║                  C>CD \        (Enter)                                  ║
+║                  C>MD \MERCURY (Enter)                                  ║
+║                  C>CD \MERCURY (Enter)                                  ║
+║                  C>COPY A:*.*  (Enter)                                  ║
+║                  C>MRCRY200    (Enter and wait till files are extracted)║
+║                  C>MRCRYAUX    (Enter and wait till files are extracted)║
+║                                                                         ║
+║ To read the introductory instructions, type:  TYPE README  (Enter)      ║
+║                                                                         ║
+║ To print the manual containing the installation instructions, type:     ║
+║                      COPY MANUAL PRN  (press Enter)                     ║
+║                                                                         ║
+║ To print the registration form, type:  COPY REGISTER.DOC PRN  (Enter)   ║
+║                                                                         ║
+║ To extract the files of the accompanying program DIALTHAT, you may first║
+║ want to put it in its own subdirectory.  After making a subdirectory    ║
+║ and copying the file DIALT101.EXE to it, type "DIALT101" to extract     ║
+║ the files from DIALT101.                                                ║
+║                                                                         ║
+║ To print the documentation and installation instructions, type:         ║
+║                  COPY DIALTHAT.DOC PRN  (press Enter)                   ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2646

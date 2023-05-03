@@ -77,6 +77,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2264  TESTWRITER  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ TestWriter comes to you already unarced.                                ║
+║                                                                         ║
+║ To view README.1ST, type:  TYPE README.1ST  (press Enter)               ║
+║                                                                         ║
+║ To print documentation, type:  COPY TW.DOC PRN  (press Enter)           ║
+║                                                                         ║
+║ To start program, type:  TW                                             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2264

@@ -1209,6 +1209,276 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## SPKR.DOC
+
+{% raw %}
+```
+                               V1.01 22 Mar 1986
+
+                           SPK Device Documentation
+                           ------------------------
+
+        Purpose
+        -------
+
+        SPKR.SYS is a DOS installable device driver that allows any
+        application to produce arbitrary pitch/duration sounds on the
+        PC's speaker.  SPKR requires DOS 2.0 or later and an IBM PC
+        compatible machine.
+
+
+        Installation
+        ------------
+
+        To install SPKR, follow two steps: place the file SPKR.SYS in
+        the root directory of your boot diskette or hard disk, and
+        modify the CONFIG.SYS file to include the statement
+        "device=spkr.sys".
+
+        In case you are not familiar with CONFIG.SYS: this is a small
+        text file that DOS reads when booting.  It contains various
+        pieces of information that DOS and other programs can use when
+        setting themselves up.  Look in the root directory of your boot
+        disk for the file CONFIG.SYS.  If no such file exists, just
+        type:
+
+                copy con \config.sys<Enter>
+                device=spkr.sys<Enter>
+
+        Then press Ctrl-Z (you'll see "^Z") and <Enter>, and you're
+        done.
+
+        If you already have a CONFIG.SYS file (which is likely), you
+        must edit it to include the statement "device=spkr.sys".  Do
+        this using your text editor or word processor in text mode (or
+        Edlin, heaven forbid).  Retain all existing information, and add
+        the new line.
+
+        Now reboot your machine.  If all goes well, it will boot as
+        usual.  There will be no immediate indication that anything has
+        happened, except that you will see SPKR's logo and copyright.
+
+        If you have a hard disk and wish to place SPKR.SYS in a
+        directory other than the root, you may do so.  Just alter the
+        CONFIG.SYS statement to reflect the full path where SPKR.SYS can
+        be found.
+
+
+        Using the SPK device
+        --------------------
+
+        When DOS finds the "device=spkr.sys" line in config.sys, it
+        loads and installs the SPKR.SYS program as a virtual device.
+        What this means, practically speaking, is that there is now a
+        new "device" attached to your PC. You already have several
+        devices installed: CON, PRN, COM1 and COM2, AUX, your disk
+        drives, and possibly a RAM (or virtual) disk if you have
+        installed VDISK.SYS or another disk emulator.
+
+        The new device is known to DOS by the name "SPK" (note: this is
+        NOT "SPKR", it's "SPK", no R).  Like other output devices, you
+        can write (send information) to the device.  SPK is an "output
+        only" device like a printer: you can send information to it, but
+        you cannot receive information from it.
+
+        To use SPK, you must send a series of frequencies and durations
+        to the SPK device.  Durations are measured in PC clock ticks,
+        which occur about 18.2 times per second; thus, for example, a
+        duration of 18 is about one second.
+
+        The syntax of data sent to SPK is:
+
+            {<frequency>,<duration>;}<CR>
+
+        The {} means that you can send one or more sequences of
+        frequency and duration to the device.  The <CR> is a carriage
+        return, ASCII code 13.
+
+        Here are two examples of valid sequences for SPK:
+
+            1000,18;<CR>
+                Make a 1000 cps tone for one second
+
+            1000,18;2000,36;<CR>
+                Make a 1000 cps tone for one second, then a
+                2000 cps tone for two seconds.
+
+        A frequency of 0 is a "rest": no sound will be issued for the
+        specified duration.
+
+        SPK's sounds are played in background.  That is, control is
+        returned immediately to the program that sends data to SPK (the
+        "foreground" program).  The sounds will be played while
+        foreground execution continues.
+
+        There are many ways to send information to SPK.  The simplest is
+        to do it right from the keyboard, at the DOS prompt:
+
+                copy con spk<Enter>
+                1000,18<Enter>
+                ^Z<Enter>
+
+        The "copy con spk" command tells DOS that you want to copy input
+        from the console input (the keyboard) to the SPK device (the
+        speaker).  The keyboard input "1000,18<Enter>" is copied to the
+        SPK device when you hit the Ctrl-Z (end of copy) and <Enter>
+        (execute) keys.
+
+        Another way to write to the device is to copy a small textfile
+        to SPK.  For example, type
+
+                copy con spkdemo.txt<Enter>
+                1000,10;2000,5;<Enter>
+                ^Z<Enter>
+
+        You should now have a small textfile called SPKDEMO, the
+        contents of which are "1000,10;2000,5".  To send it to the
+        speaker (sounding two tones), just type
+
+                copy spkdemo.txt spk
+                        or
+                type spkdemo.txt > spk
+
+        You could, of course, put either of those two commands in a DOS
+        batch file.
+
+        It is also possible to send data to SPK from high level
+        languages or from assembler programs.  The following examples
+        lack error checking for conciseness; you should add checks to
+        ensure that the SPK device is installed (typically by trapping
+        for an error in opening the file "SPK").
+
+        In BASIC:
+
+                10 FREQ=1000: DUR=10: GOSUB 1000
+                20 END
+                1000 'Sound speaker at FREQ for DUR
+                1010 OPEN "SPK" FOR OUTPUT AS #1
+                1020 PRINT #1, FREQ;",";DUR;";"
+                1030 CLOSE 1
+                1040 RETURN
+
+                This is a bit superfluous in BASIC, however, since
+                BASIC's "SOUND" statement provides essentially the
+                same function.  The main difference is that SPK's
+                sounds play in background.
+
+
+        In C:
+
+                spkr (freq, dur)
+                unsigned freq, dur;
+                {
+                FILE *spk, *fopen();
+
+                        spk = fopen("SPK","w");
+                        fprintf (spk, "%u,%u;\n", freq, dur);
+                        fclose(spk);
+                }
+
+
+        In Turbo Pascal:
+
+                Procedure Spkr (Freq, Dur: Integer);
+                Var f: Text;
+                Begin
+                    Assign (f, 'SPK');
+                    Rewrite (f);
+                    WriteLn (f, Freq, ',', Dur, ';');
+                    Close (f)
+                End;
+
+
+        SPK and PCED
+        ------------
+
+        If you are using the PCED command interface, you can send data
+        to the speaker using the SEND user-installed command:
+
+            SEND SPK 1000,10;2000,5;\13
+
+
+        Limits
+        ------
+
+        Valid frequencies are 0 (rest), and 20 through 30000.  Only your
+        dog will hear frequencies above approximately 15000 cps.
+
+        Valid durations are 1 through 65535 (about an hour).
+
+        All numeric input is treated modulo 65536; that is, if you
+        specify a number larger than 65536, SPKR will actually use the
+        remainder of your input divided by 65536.
+
+        If your input is outside of the valid range, it will be
+        converted to the highest or lowest value, as appropriate.  Thus,
+        e.g., a frequency of 35000 will be changed to 30000.
+
+        SPK can store up to 128 frequency/duration pairs.  Additional
+        sounds will be discarded.
+
+        There is a limit of 255 characters per input line to SPKR (i.e.,
+        maximum of 255 characters sent before a carriage return).  Data
+        beyond 255 characters will be discarded.
+
+        Any data sent to SPK other that '0' through '9', ';', ',', and
+        carriage returns are ignored.
+
+        Invalid frequency/duration pairs are discarded.
+
+
+        Frequency Chart
+        ---------------
+
+        Here is an approximate frequency chart:
+
+            A  440           E 659
+            B  494           F 698
+            C  523           G 784
+            D  587
+
+        The 523 Hz "C" is middle C.  To increase a note by one octave,
+        double the frequency; to decrease by one octave, halve it.
+
+
+
+        Copyright/License/Warranty
+        --------------------------
+
+        This document and the current version of the program file
+        SPKR.SYS ("the software") are copyrighted by the author.  The
+        copyright owner hereby licenses you to: use the software; make
+        as many copies of the program and documentation as you wish;
+        give such copies to anyone; and distribute the software and
+        documentation via electronic means.
+
+        However, you are specifically prohibited from charging, or
+        requesting donations, for any such copies, however made.  An
+        exception is granted to recognized not-for-profit user's
+        groups, which are authorized to charge a small fee (not to
+        exceed $7) for materials, handling, postage, and general
+        overhead.  NO FOR-PROFIT ORGANIZATION IS AUTHORIZED TO CHARGE
+        ANY AMOUNT FOR DISTRIBUTION OF COPIES OF THE SOFTWARE OR
+        DOCUMENTATION.
+
+        No copy of the software may be distributed or given away without
+        this document; and this notice must not be removed.
+
+        There is no warranty of any kind, and the copyright owner is not
+        liable for damages of any kind.  By using the software, you
+        agree to this.
+
+        The software and documentation are:
+
+                             Copyright (c) 1986 by
+                            Christopher J. Dunford
+                           10057-2 Windstream Drive
+                           Columbia, Maryland 21044
+                                (301) 992-9371
+                             CompuServe 76703,2002
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0279
@@ -1223,15 +1493,36 @@ Sunnyvale Ca. 94086
     PINST    EXE     30021   4-15-88  12:00p
     PLAYRPNO EXE     68437   4-15-88  12:00p
     README            1619   4-15-88  12:00p
+    SPKR         <DIR>    
+    TP4          <DIR>    
+    TUNES        <DIR>    
+           10 file(s)     219481 bytes
+
+     Directory of A:\SPKR
+
+    .            <DIR>    
+    ..           <DIR>    
     SPKR     DOC     10104   4-15-88  12:00p
     SPKR     SYS      1692   4-15-88  12:00p
     TRAPEZE  SPK       781   4-15-88  12:00p
+            5 file(s)      12577 bytes
+
+     Directory of A:\TP4
+
+    .            <DIR>    
+    ..           <DIR>    
     PLAYDEM1 MUZ        96   4-15-88  12:00p
     PLAYDEM1 OBJ       154   4-15-88  12:00p
     PLAYDEM2 MUZ       204   4-15-88  12:00p
     PLAYDEM2 OBJ       262   4-15-88  12:00p
     PLAYDEMO PAS       724   4-15-88  12:00p
     PLAYIT   PAS      3335   4-15-88  12:00p
+            8 file(s)       4775 bytes
+
+     Directory of A:\TUNES
+
+    .            <DIR>    
+    ..           <DIR>    
     AULD     MUZ      1948   4-15-88  12:00p
     BATTLE   MUZ       356   4-15-88  12:00p
     BLAZES   COM      5406   4-15-88  12:00p
@@ -1291,5 +1582,8 @@ Sunnyvale Ca. 94086
     WHISTLER MUZ       432   4-15-88  12:00p
     WILLOW   MUZ       424   4-15-88  12:00p
     YELOROSE MUZ       252   4-15-88  12:00p
-           75 file(s)     311785 bytes
-                            7168 bytes free
+           61 file(s)      74952 bytes
+
+    Total files listed:
+           84 file(s)     311785 bytes
+                            3072 bytes free

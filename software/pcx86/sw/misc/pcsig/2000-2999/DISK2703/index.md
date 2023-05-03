@@ -50,6 +50,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2703  PILOT LOG BOOK  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print the documentation and installation instructions, type:        ║
+║                   COPY README.BK PRN  (press Enter)                     ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2703

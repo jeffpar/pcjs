@@ -144,6 +144,19 @@ OF THE USE OF THE MATERIAL ON THIS DISKETTE.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No: 193  Freewill  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For instructions on the text files text files on this disk, type        ║
+║                              C2 (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PRINTING.DOC
 
 {% raw %}

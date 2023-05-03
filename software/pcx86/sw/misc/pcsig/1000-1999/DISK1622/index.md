@@ -104,6 +104,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  Disk #1622  CALL MASTER disk 1 of 2 (1623)  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  CALLMAST (press enter)                         ║
+║                                                                         ║
+║ To print documentation, insert disk 2 and type:  COPY CMQSTART.DOC PRN  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1622

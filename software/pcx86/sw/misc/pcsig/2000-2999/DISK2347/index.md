@@ -78,6 +78,24 @@ MANUAL.BAT              batch file to print manual
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═══════════════════════════════════════════════════════════════════════╗
+║             <<<<  PC-SIG Disk #2347  INDEX MAKER  >>>>                ║
+╠═══════════════════════════════════════════════════════════════════════╣
+║ To read introduction from author, type:  TYPE FILE.TXT (press ENTER)  ║
+║                                                                       ║
+║ To start the program, type:  INDEXER  (press ENTER)                   ║
+║                                                                       ║
+║ To print documentation, type:  MANUAL (press ENTER)                   ║
+║                                                                       ║
+║                                        (c) Copyright 1990, PC-SIG Inc.║
+╚═══════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INDEXER.DOC
 
 {% raw %}

@@ -14,6 +14,26 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  PC-SIG Disk #3075 LPE - LASER PRINTER ENVELOPE  >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Before starting the program, print the documentation by typing:         ║
+║                                        COPY LPE.DOC >PRN  (press Enter) ║
+║                                                                         ║
+║ To start the program, type:  LPE  (press Enter)                         ║
+║                                                                         ║
+║                                         (c) Copyright 1992, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3075
 

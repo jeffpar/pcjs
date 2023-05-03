@@ -129,6 +129,24 @@ Listing of archive : 'INSTALL2.EXE'
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #2215  ZYPHYR  >>>>                       ║
+║                       (Disk 1 of 2 also #2216)                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program, type; C: (press enter)                          ║
+║                    A: INSTALL \x (press enter)                          ║
+║ \x - destination path                                                   ║
+║ Do the same for disk #2                                                 ║
+║                                                                         ║
+║ To print documentation, after installing, type: COPY ZYPHYR.DOC PRN     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LICENSE.DOC
 
 {% raw %}

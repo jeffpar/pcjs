@@ -89,6 +89,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  PC-SIG Disk #2664 PILOT  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To start the program, type: PILOT   (press Enter)                     ║
+║                                                                         ║
+║   To print documentation, type: COPY READ.ME PRN   (press Enter)        ║
+║                                                                         ║
+║                                                                         ║
+║                                  (c) Copyright 1991, PC-SIG Inc.        ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2664

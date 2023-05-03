@@ -49,6 +49,29 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+ ╔═════════════════════════════════════════════════════════════════════════╗
+ ║                <<<<  PC-SIG Disk #2743 MULTIWORD  >>>>                  ║
+ ╠═════════════════════════════════════════════════════════════════════════╣
+ ║                                                                         ║
+ ║ The files for this program are distributed in self extracting format.   ║
+ ║                                                                         ║
+ ║ To start the installation process type: MW120   (press Enter)           ║
+ ║                                                                         ║
+ ║ After installation, to start the program, type: MULTWORD   (press Enter)║
+ ║ Or as a Memory Resident program, type: MULTWORD /R   (press Enter)      ║
+ ║                                                                         ║
+ ║ To print the documentation, type: COPY MULTWORD.DOC PRN   (press Enter) ║
+ ║                                                                         ║
+ ║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+ ╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2743

@@ -48,6 +48,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2638  MARXMENU  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program, type:  INSTALL  (press Enter)                   ║
+║                                                                         ║
+║ To print the order form, type:  COPY ORDER.TXT PRN  (press Enter)       ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDER.TXT
 
 {% raw %}

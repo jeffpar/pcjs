@@ -103,6 +103,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║    <<<<  Disk #807 THE REMARKABLE GENERAL LEDGER Disk 2 of 2  >>>>      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To obtain instructions for start up procedures type:                    ║
+║                    COPY READ.ME PRN (press enter)                       ║
+║                                                                         ║
+║ To copy the documentation to your printer type:                         ║
+║                 COPY \DOC\TGL.DOC PRN (press enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0807
@@ -127,6 +143,16 @@ Sunnyvale  Ca. 94086
     RPLTMPLT DBF       131   1-27-86   4:26p
     SYSTEM   DBF       547   1-19-87  11:22a
     TRNTMPLT DBF       355  12-16-86   1:49p
+    DOC          <DIR>    
+           18 file(s)      14414 bytes
+
+     Directory of A:\DOC
+
+    .            <DIR>    
+    ..           <DIR>    
     TGL      DOC     70656   7-07-87  11:43a
-           18 file(s)      85070 bytes
-                           70656 bytes free
+            3 file(s)      70656 bytes
+
+    Total files listed:
+           21 file(s)      85070 bytes
+                           70144 bytes free

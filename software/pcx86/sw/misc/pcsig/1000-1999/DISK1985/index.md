@@ -1113,6 +1113,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #1985  FCP ACCOUNTING  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ Use PKXARC to extract files from FPCACCT.ARC                            ║
+║                                                                         ║
+║ To start program, type: ACCT         (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: TYPE ACCT.DOC PRN                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1985

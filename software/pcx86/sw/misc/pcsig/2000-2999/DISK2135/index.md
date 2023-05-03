@@ -45,6 +45,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║     <<<<  PC-SIG Disk #2135  TAKIN' CARE OF BUSINESS Payroll  >>>>      ║
+║                                                                         ║
+║        (Note: This module requires disks #2130 & #2131 to run)          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║    To print the documentation, type:  PRINT-PR (press Enter)            ║
+║                                                                         ║
+║    To install the program, type:  INSTALL (press Enter)                 ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2135

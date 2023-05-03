@@ -516,6 +516,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #2149  CRAFTY LI'L HELPER   >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation, type:  COPY CRAFTY.TXT PRN (press Enter)        ║
+║                                                                         ║
+║ To start the program, type:  CRAFTY (press Enter)                       ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2149

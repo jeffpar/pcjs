@@ -14,6 +14,34 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #3131 VSUM  1 of 2 (also 3132)   >>>>        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ This program has been compressed. In order to install it please type:   ║
+║           ARJLITE E -V280000 VSUM hardrive:\subdirectory  (press Enter) ║
+║                                                                         ║
+║ Please insert the second disk when the program prompts you for the next ║
+║ disk/volume, and press "y" to complete the uncompression task.          ║
+║                                                                         ║
+║ Once uncompressed, print the documentation by typing:                   ║
+║                                    COPY READ_ME.1ST PRN   (press Enter) ║
+║                                    COPY VSUM_REG.DOC PRN  (press Enter) ║
+║                                    COPY VALIDATE.DOC PRN  (press Enter) ║
+║                                                                         ║
+║ Run the program by typing:  VSUM  (press Enter)                         ║
+║                                                                         ║
+║                                         (c) Copyright 1992, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3131
 

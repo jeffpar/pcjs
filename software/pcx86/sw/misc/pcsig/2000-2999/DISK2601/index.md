@@ -85,6 +85,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #2601 2 of 2 (also #2595)   >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To install the program to your computer's hard drive, make a           ║
+║  subdirectory (\SELLMORE), and copy all files from both disks to it.    ║
+║                                                                         ║
+║  To start program, type:  SELLMORE  (press Enter)                       ║
+║                                                                         ║
+║  To print docmentation, type:  COPY SELLMORE.DOC  (press Enter)         ║
+║                                                                         ║
+║                                                                         ║
+║                                     (c) Copyright 1991, PC-SIG Inc.     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2601

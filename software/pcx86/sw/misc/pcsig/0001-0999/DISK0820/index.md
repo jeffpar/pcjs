@@ -80,6 +80,19 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                     <<<<  Disk #820 SEEKEASY  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To copy the documentation for SEEKEASY to your printer type:            ║
+║                           COPY SEEKREAD.ME PRN (press enter)            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0820

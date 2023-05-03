@@ -14,6 +14,27 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  PC-SIG Disk #3139 SUPER SHAREWARE SYSTEM  >>>>          ║
+║                   (PRINTER INSTALLATION AND UTILITIES)                  ║
+║                         Disk 2 of 2 (also #3138)                        ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  For instructions on how to install the program, insert disk 1 (#3138)  ║
+║  and type:  HELPME  (press Enter)                                       ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3139
 

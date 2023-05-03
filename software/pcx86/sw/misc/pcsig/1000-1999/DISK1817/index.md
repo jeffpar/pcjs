@@ -99,6 +99,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       <<<<  Disk #1817  SCRIPTURE disk 2 of 2 (1816 also)  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  SCRIPT2 (press enter)                          ║
+║                                                                         ║
+║ To print documentation, type:  SCRIPTDC (press enter)                   ║
+║                                COPY SCRIPT.DOC PRN                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## QUICK.DOC
 
 {% raw %}

@@ -89,6 +89,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #2473  UDECIDE   >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read documentation from the author, type:  TYPE README.LST (Enter)   ║
+║                                                                         ║
+║ To print the program documentation, type:  COPY UD.DOC PRN (press Enter)║
+║                                                                         ║
+║ To print the registration form, type:  COPY REGISTER.FRM PRN (Enter)    ║
+║                                                                         ║
+║ To run the program, type:  UD (press Enter)                             ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2473

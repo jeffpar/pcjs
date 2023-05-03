@@ -66,6 +66,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #2706  PC-WIZARD POWERMASTER II  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║            NOTE: Install this program from the floppy ONLY!             ║
+║                                                                         ║
+║ To print the documentation and installation instructions, type:         ║
+║                    COPY MANUAL.DOC PRN  (press Enter)                   ║
+║                                                                         ║
+║ To install the program to you hard drive, type: INSTALL   (press Enter) ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

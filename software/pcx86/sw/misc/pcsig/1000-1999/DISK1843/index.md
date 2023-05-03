@@ -75,6 +75,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1843 EIMS  >>>>                          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To self-unarchive the program, type:  EIMS12 (drive:)   (press Enter)   ║
+║                                                                         ║
+║ After unarchiving, start program by typing: EIMS        (press enter)   ║
+║                                                                         ║
+║ To print documentation, type: COPY EIMS.DOC PRN         (press enter)   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1843

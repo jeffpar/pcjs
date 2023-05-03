@@ -95,11 +95,28 @@ Sunnyvale CA 94086
     FILE1486 TXT      1442   7-27-89   5:02p
     GO       BAT        21   3-08-88   4:54p
     INSTALL  BAT       984   3-08-88   5:22p
+    SAGE         <DIR>    
+            4 file(s)       2447 bytes
+
+     Directory of A:\SAGE
+
+    .            <DIR>    
+    ..           <DIR>    
     FLOWER   BIN     16391   1-01-80  12:02a
     SAGE     EXE     47613   3-08-88   5:31p
+    PL           <DIR>    
+            5 file(s)      64004 bytes
+
+     Directory of A:\SAGE\PL
+
+    .            <DIR>    
+    ..           <DIR>    
     ATLANTIS EXE     47407   3-02-88  12:53a
     EGYPT    EXE     46559   3-02-88   1:08a
     GREECE   EXE     46579   3-02-88   1:22a
     INTRO    EXE     72113   3-02-88   1:59a
-            9 file(s)     279109 bytes
-                           37888 bytes free
+            6 file(s)     212658 bytes
+
+    Total files listed:
+           15 file(s)     279109 bytes
+                           35840 bytes free

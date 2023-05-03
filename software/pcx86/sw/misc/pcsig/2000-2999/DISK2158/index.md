@@ -74,6 +74,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  DISK #2158 THE LAND  >>>>                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ This program requires a hard disk, about 900k of free space, and        ║
+║ CGA or EGA graphics.                                                    ║
+║ Make a subdirectory on your hard disk and copy all files on this disk   ║
+║ and #2159 to it. Once this is done go to hard disk and type: THELAND    ║
+║ To print documentation, insert disk #2159 and type: COPY PDLAND.DOC PRN ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2158

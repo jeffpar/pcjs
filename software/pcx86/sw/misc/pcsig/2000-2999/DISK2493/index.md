@@ -113,6 +113,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  DISK #2493 MICROLINK BOARD GAMES  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To start YAHT, type: MLYAHT                                           ║
+║   To print the instructions, type: COPY MLYAHT.DOC PRN                  ║
+║                                                                         ║
+║   To start SHUT THE BOX, type: MLSHUT                                   ║
+║   To print the instructions, type: COPY MLSHUT.DOC PRN                  ║
+║                                                                         ║
+║   To start OTRA, type: MLOTRA                                           ║
+║   To print the instructions, type: COPY MLOTRA.DOC PRN                  ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1991, PC-SIG Inc.
+```
+{% endraw %}
+
 ## MLOTRA.DOC
 
 {% raw %}

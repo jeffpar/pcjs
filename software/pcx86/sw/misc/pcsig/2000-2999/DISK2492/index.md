@@ -74,6 +74,27 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2492  FINANCIER  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the documentation, type:  COPY MANUAL.DOC PRN  (press Enter)   ║
+║                                                                         ║
+║ After reading the documentation...                                      ║
+║   To install FINANCIER to your hard drive, type:  SETUP   (press Enter) ║
+║                                                                         ║
+║   To begin the program, type:  FINANCE  (press Enter)                   ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG Inc.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

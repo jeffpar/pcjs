@@ -128,6 +128,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1368 RGB^TECHWRITER  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type TW (press enter)                             ║
+║                                                                         ║
+║ To view the documentation on your screen, type VIEW (press enter)       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LASERJET.BAS
 
 {% raw %}

@@ -80,6 +80,20 @@ Sunnyvale, CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                      <<<<  Disk No 1511 VERSE  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type VERSE (press enter)                          ║
+║                                                                         ║
+║ To view the documentation on your screen, type README (press enter)     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VERSE.DOC
 
 {% raw %}
@@ -265,6 +279,13 @@ GENIE, or at this address:
     README   BAT        34   6-26-88  12:45p
     VERSE    DOC      5729   7-06-88   8:19p
     VERSE    EXE     14608   6-21-88   7:46a
+    VERSE        <DIR>    
+            8 file(s)      23104 bytes
+
+     Directory of A:\VERSE
+
+    .            <DIR>    
+    ..           <DIR>    
     VERSE    APR      6916   8-04-89   2:09p
     VERSE    AUG      7644   8-04-89   2:09p
     VERSE    DEC      7425   8-04-89   2:09p
@@ -277,5 +298,8 @@ GENIE, or at this address:
     VERSE    NOV      5942   8-04-89   2:09p
     VERSE    OCT      7223   8-04-89   2:09p
     VERSE    SEP      9060   8-04-89   2:09p
-           19 file(s)     109333 bytes
-                           45568 bytes free
+           14 file(s)      86229 bytes
+
+    Total files listed:
+           22 file(s)     109333 bytes
+                           45056 bytes free

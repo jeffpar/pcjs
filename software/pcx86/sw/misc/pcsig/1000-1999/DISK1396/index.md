@@ -85,6 +85,20 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk No 1396 PIANOMAN DOES BEETHOVEN  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type LVB (press enter)                            ║
+║                                                                         ║
+║ To look at the documentation on your screen, type VIEW (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LVB.TXT
 
 {% raw %}

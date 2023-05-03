@@ -16,6 +16,26 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  PC-SIG Disk #3170 OILCAP  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the documentation, type:  COPY OILCAP.DOC PRN  (Enter)        ║
+║                                                                         ║
+║  To start the game, type:  OILCAP5  (Enter)                             ║
+║                                                                         ║
+║  To print the registration form, type:  COPY OIL_REG.DOC PRN  (Enter)   ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## OIL_REG.DOC
 
 {% raw %}

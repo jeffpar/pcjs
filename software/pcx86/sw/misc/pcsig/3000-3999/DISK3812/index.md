@@ -14,6 +14,39 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  PC-SIG Disk #3812 FONTSHOW  >>>>                 ║
+║                    Disk 2 of 3 (#3811 and #3450 also)                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  If you do not have the file VBRUN200.DLL in your \WINDOWS or           ║
+║  \WINDOWS\SYSTEM subdirectory, copy that file from disk #3450 into      ║
+║  either subdirectory.                                                   ║
+║                                                                         ║
+║  To install this game to your hard disk, type:                          ║
+║     [hard drive letter]:  (press Enter)                                 ║
+║     CD\  (press Enter)                                                  ║
+║     MD TEMPDIR  (press Enter)                                           ║
+║     CD TEMPDIR  (press Enter)                                           ║
+║                                                                         ║
+║  To extract the files from drive A, insert disk 2 (#3812) and type:     ║
+║     A:PKUNZIP A:FONTSHOW  (press Enter)                                 ║
+║     (if installing from drive B use B: in place of A:)                  ║
+║                                                                         ║
+║  To install in Windows, type:  WIN SETUP  (press Enter)                 ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3812
 

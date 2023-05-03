@@ -204,6 +204,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk #708 Backgammon and More  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To start the BACKGAMMON game, type:   RUN (press enter)                 ║
+║                                                                         ║
+║ To start the FOREIGN LANGUAGE HANGMAN game, type: HANGMAN (press enter) ║
+║                                                                         ║
+║ To start WHEEL you must first load BASIC and then load WHEEL.BAS        ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## ISBN.DOC
 
 {% raw %}

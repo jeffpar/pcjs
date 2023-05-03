@@ -72,6 +72,23 @@ software, and a subscription to our newsletter.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #2745 M-LABEL  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To view/print the documentation, type: MAILDOC  (press Enter)           ║
+║                                                                         ║
+║ To run the program, type: MLABEL  (press Enter)                         ║
+║                                                                         ║
+║                                        (c) Copyright 1991, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HELP.DOC
 
 {% raw %}

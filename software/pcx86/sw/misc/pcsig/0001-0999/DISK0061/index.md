@@ -304,6 +304,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║           <<<<  Disk No: 61  Printgr and IPCO Programs  >>>>            ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  How to Start: Consult the .DOC and .TXT files for directions.  To run  ║
+║  a program with the suffix .COM, .EXE, or .BAT, just type its name,     ║
+║  i.e., for PRINTGR1.EXE, type PRINTGR and hit <ENTER>.  To run the      ║
+║  BASIC programs, consult the directions for your computer system.       ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ITALICS.BAS
 
 {% raw %}

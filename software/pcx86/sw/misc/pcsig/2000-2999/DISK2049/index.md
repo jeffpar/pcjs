@@ -77,6 +77,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║   <<<<  Disk #2049  CHECKBOOK MANAGEMENT disk 2 of 2 (393 also)  >>>>   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, insert disk #1, and type: CHECKS (press enter)        ║
+║                                                                         ║
+║ To print documentation, type:  COPY CHECKS.1 PRN (press enter)          ║
+║                                COPY CHECKS.2 PRN (press enter)          ║
+║                                COPY CHECKS.3 PRN (press enter)          ║
+║                                COPY CHECKS.4 PRN (press enter)          ║
+║                                COPY CHECKS.5 PRN (press enter)          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2049

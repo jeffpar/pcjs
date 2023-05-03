@@ -110,6 +110,22 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 904 DROEGE (Disk 1 of 2)  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for DROEGE, Type                             ║
+║             COPY READ1.ME PRN (press enter)                             ║
+║                                                                         ║
+║ Do not attempt to use this program without reading at least some of the ║
+║ documentation.                                                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0904

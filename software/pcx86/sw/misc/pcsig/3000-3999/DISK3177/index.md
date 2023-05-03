@@ -16,6 +16,26 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3177  MARBLE MAN  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the documentation, type:  COPY MARBLE.DOC PRN  (Enter)        ║
+║                                                                         ║
+║  To start the game, type:  MARBLE  (Enter)                              ║
+║                                                                         ║
+║  To print the registration form, type:  COPY MARBLE.REG PRN  (Enter)    ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MARBLE.DOC
 
 {% raw %}

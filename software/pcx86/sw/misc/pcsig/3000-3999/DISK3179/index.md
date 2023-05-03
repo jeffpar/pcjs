@@ -204,6 +204,26 @@ machines:
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3179  BOLO BALL  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  To print the documention, type:  COPY BOLOBALL.DOC PRN  (press Enter)  ║
+║                                                                         ║
+║  To print the registration form, type:  COPY BB_REG.DOC PRN  (Enter)    ║
+║                                                                         ║
+║  To start the game, type:  BOLOBALL  (press Enter)                      ║
+║                                                                         ║
+║                                                                         ║
+║                                         (c) Copyright 1992, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3179

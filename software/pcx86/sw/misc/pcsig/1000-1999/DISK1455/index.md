@@ -89,6 +89,13 @@ Sunnyvale CA 94086
     GO       BAT        38   6-02-89   9:13a
     PAGE     COM       325   1-06-87   4:21p
     README            1515   4-28-88   2:59a
+    COMPRSD      <DIR>    
+            6 file(s)      22523 bytes
+
+     Directory of A:\COMPRSD
+
+    .            <DIR>    
+    ..           <DIR>    
     ALINE    HXZ      9391   2-14-88  10:10a
     ANSI     CXZ      2440   2-14-88  10:10a
     BASIC    CXZ      5155   2-14-88  10:11a
@@ -131,5 +138,8 @@ Sunnyvale CA 94086
     WINDOW   CXZ      7251   2-14-88  10:06a
     WORD     CXZ      6079   2-14-88  10:07a
     Z309     CXZ      4070   2-14-88  10:08a
-           47 file(s)     270289 bytes
-                           25600 bytes free
+           44 file(s)     247766 bytes
+
+    Total files listed:
+           50 file(s)     270289 bytes
+                           23552 bytes free

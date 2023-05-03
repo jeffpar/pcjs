@@ -160,6 +160,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No. 1229  EDNA'S COOK BOOK  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type:  ECB (press Enter)                          ║
+║                                                                         ║
+║ For Quick-Start Instructions, type:  COPY READ.ME PRN (press Enter)     ║
+║                                                                         ║
+║ To copy the documentation to your printer, type PRINTDOC (press Enter)  ║
+║                                                                         ║
+║ To copy RECONSTRUCT OPERATING INSTRUCTIONS, type:                       ║
+║                    COPY RECONST.DOC PRN (press Enter)                   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

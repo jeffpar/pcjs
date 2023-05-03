@@ -113,6 +113,18 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #671 FREEWAY Disk 1 of 3  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║      For complete instructions and documentation refer to disk 672      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #0671

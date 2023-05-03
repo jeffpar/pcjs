@@ -676,6 +676,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1757  PC-DRAFT-CAD  >>>>                    ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print installation instructions, type:  COPY READ.ME PRN (Enter)     ║
+║                                                                         ║
+║                                       (c) Copyright 1990, PC-SIG Inc.   ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1757

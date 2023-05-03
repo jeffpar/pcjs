@@ -85,6 +85,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  PC-SIG Disk #1321  TURBO PASCAL UTILS and STUDENT PASCAL   >>>>  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print documentation for P_PASCAL TRANSLATOR/INTERPRETER, type:       ║
+║                    COPY READ.ME PRN (press Enter)                       ║
+║                                                                         ║
+║ To view author's comments for STUDENT PASCAL, type:  TYPE README (Enter)║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1321
@@ -98,9 +116,23 @@ Sunnyvale  Ca. 94086
     DO       BAT       428   6-15-90  12:56a
     PC_SIG   NOT      1592   6-15-90   1:18a
     READ     ME      20959   6-02-90  12:39a
+    P_PASCAL     <DIR>    
+    SAMPLES      <DIR>    
+            8 file(s)      26606 bytes
+
+     Directory of A:\P_PASCAL
+
+    .            <DIR>    
+    ..           <DIR>    
     INTERPRE EXE     48830   6-01-90  12:31a
     TRANSLAT EXE     57012   6-15-90  12:50a
-    DO~1     BAT       428   6-15-90  12:56a
+    DO       BAT       428   6-15-90  12:56a
+            5 file(s)     106270 bytes
+
+     Directory of A:\SAMPLES
+
+    .            <DIR>    
+    ..           <DIR>    
     SETS     PAS       800   9-19-89   1:03a
     HELLO    PAS       108   4-21-89  12:53a
     GCD      PAS       417   4-25-89  12:56a
@@ -131,5 +163,8 @@ Sunnyvale  Ca. 94086
     COMPLEX  PAS       766   4-02-90   1:47a
     PRINTLPT PAS      2709   5-16-90  12:16a
     FILRECRD PAS      1644   4-27-90  12:12a
-           39 file(s)     191238 bytes
-                          111616 bytes free
+           32 file(s)      58362 bytes
+
+    Total files listed:
+           45 file(s)     191238 bytes
+                          109568 bytes free

@@ -43,6 +43,33 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+╔═════════════════════════════════════════════════════════════════════════╗
+║         <<<<  PC-SIG Disk #2763  PHONE by Vison Computing  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║ To print the installation instructions, type:  COPY README PRN  (Enter) ║
+║                                                                         ║
+║ To install PHONE, type:  INSTALL  (press Enter)                         ║
+║                                                                         ║
+║ To extract the PHONE.DOC file after installation, TYPE:  PFILES (Enter) ║
+║                                                                         ║
+║ To print the manual, type:  COPY PHONE.DOC PRN  (press Enter)           ║
+║                                                                         ║
+║ To begin the program, type:  PHONE  (press Enter)                       ║
+║                                                                         ║
+║ To print the registration form, type:  COPY REGISTER.ME PRN  (Enter)    ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2763

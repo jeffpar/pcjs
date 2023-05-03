@@ -69,6 +69,24 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk #790 MINISTER`S SERMON INDEXER  >>>>             ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: COPY INDEXER.DOC PRN  (press enter)   ║
+║                                                                         ║
+║ To install program, type: INSTALL   (press enter)                       ║  
+║                                                                         ║ 
+║ To run the program, type: INDEXER   (press enter)                       ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INDEXER.DOC
 
 {% raw %}

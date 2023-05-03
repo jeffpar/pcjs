@@ -90,6 +90,25 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #2269  PRO-CR  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To extract program, type:  PRO-CR  (press Enter)                        ║
+║                                                                         ║
+║ To print README.DOC, type:  COPY README.DOC PRN  (press Enter)          ║
+║                                                                         ║
+║ To print documentation and installation instructions, type:             ║
+║                  COPY MANUAL.DOC PRN  (press ENTER)                     ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2269

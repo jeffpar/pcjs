@@ -116,6 +116,28 @@ Sunnyvale CA 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 1370 GARC'S UTILITIES  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ The programs on this disk are in subdicrectories.  To get to the        ║
+║ programs CHANGE DIRECTORIES.                                            ║
+║                                                                         ║
+║ Example, to run the program COLORSET you would type the following:      ║
+║                                                                         ║
+║ A> CD\COLORSET (press enter)                                            ║
+║ A> COLORSET (press enter)                                               ║
+║                                                                         ║
+║ In each subdirectory is a program called MANUAL.COM, so if you want     ║
+║ to read the manual on a particular, type MANUAL (press enter) when you  ║
+║ are within a subdirectory.                                              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1370
@@ -126,16 +148,47 @@ Sunnyvale CA 94086
     FILE1370 TXT      1883   5-02-89   9:38a
     GO       BAT        38   4-24-89   4:39p
     GO       TXT      1156   5-02-89   9:47a
+    COLORSET     <DIR>    
+    EPSET        <DIR>    
+    FINDBBS      <DIR>    
+    TEXTSRCH     <DIR>    
+            7 file(s)       3077 bytes
+
+     Directory of A:\COLORSET
+
+    .            <DIR>    
+    ..           <DIR>    
     COLOR    COM       512   1-16-84  11:42p
     COLORS   ANS      1753   6-05-88  10:57a
     MANUAL   COM      4322  11-23-88   1:53a
     SEECOLOR BAT       182  10-24-88   2:20a
     SETCOLOR BAT        35   6-01-88  10:37a
+            7 file(s)       6804 bytes
+
+     Directory of A:\EPSET
+
+    .            <DIR>    
+    ..           <DIR>    
     DISK1370 ZIP      6505   3-26-90  12:34p
+            3 file(s)       6505 bytes
+
+     Directory of A:\FINDBBS
+
+    .            <DIR>    
+    ..           <DIR>    
     FINDBBS  EXE     41466  10-20-88   4:55a
-    MANUAL~1 COM      2048  11-23-88   2:02a
+    MANUAL   COM      2048  11-23-88   2:02a
     USBBS    LST     64292  10-24-88   4:45a
-    MANUAL~2 COM      6742  11-23-88   1:41a
+            5 file(s)     107806 bytes
+
+     Directory of A:\TEXTSRCH
+
+    .            <DIR>    
+    ..           <DIR>    
+    MANUAL   COM      6742  11-23-88   1:41a
     TEXTSRCH EXE     46904  10-31-88  10:11a
-           14 file(s)     177838 bytes
-                          137216 bytes free
+            4 file(s)      53646 bytes
+
+    Total files listed:
+           26 file(s)     177838 bytes
+                          133120 bytes free

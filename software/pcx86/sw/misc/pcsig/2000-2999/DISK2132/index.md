@@ -45,6 +45,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║       PC-SIG Disk #2132 TAKIN' CARE OF BUSINESS General Ledger          ║
+║                                                                         ║
+║       (Note: This module requires disks #2130 & #2131 to run)           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║   To print the documentation, type:   PRINT-GL (press Enter)            ║ 
+║                                                                         ║
+║   To install the program, type :   INSTALL (press enter)                ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2132

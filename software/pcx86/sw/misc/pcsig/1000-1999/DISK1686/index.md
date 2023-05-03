@@ -80,6 +80,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk #1686  WORDMASTER  >>>>                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ For installation instructions, type:  TYPE README.1ST (press Enter)     ║
+║                                                                         ║
+║ To print documentation, type:  COPY WM.DOC PRN   or follow the          ║
+║ instructions in the README.1ST file.                                    ║
+║                                                                         ║
+║ To start program, type:  WM (press Enter)                               ║
+║                                                                         ║
+║ To print registration form, type:  COPY REGISTER PRN                    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 ## WM.DOC
 
 {% raw %}

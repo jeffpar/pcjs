@@ -69,6 +69,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1476 FLIGHT and MORSE  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for FLIGHT insert disk #939 and type:        ║
+║             COPY FLIGHT.TXT LPT1: (press enter)                         ║
+║                                                                         ║
+║ To run the program FLIGHT insert disk #939 and type:  FLIGHT            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1476

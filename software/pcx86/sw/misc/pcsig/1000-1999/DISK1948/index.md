@@ -63,6 +63,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk #1948  ASC2COM  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To unpack program, type: UNPACK [destination path] (press enter)        ║
+║                                                                         ║
+║ To start program, type: ASC2COM      (press enter)                      ║
+║                                                                         ║
+║ To print documentation, type: ASC2DOC (press enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1948

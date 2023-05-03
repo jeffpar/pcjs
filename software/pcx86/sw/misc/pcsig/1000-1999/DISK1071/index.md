@@ -103,6 +103,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<< Disk No 1071 TEACHERS TWOSOME  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To run the program GRADER, type: GRADER! (press enter)                  ║
+║                                                                         ║
+║ To print the documentation for CLASS RECORD, type CLASSDOC (press enter)║
+║                                                                         ║
+║ To run the program CLASS RECORD, type: CLASSREC (press enter)           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1071

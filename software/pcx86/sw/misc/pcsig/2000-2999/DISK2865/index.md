@@ -60,6 +60,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║        <<<<  PC-SIG Disk #2865 SHAREWARE MARKETING $YSTEM  >>>>         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: COPY README PRN (press Enter)         ║
+║                                                                         ║
+║ To install the program, insert disk #1 and type: INSTALL (press Enter)  ║
+║                                                                         ║
+║                                         (c) COPYRIGHT 1992, PC-SIG INC. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2865

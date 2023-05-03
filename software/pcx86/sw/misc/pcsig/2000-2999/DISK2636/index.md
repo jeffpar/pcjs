@@ -16,6 +16,29 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO.TXT
+
+{% raw %}
+```
+
+╔═══════════════════════════════════════════════════════════════════════════╗
+║                <<<<  #2636 POWER BASIC LIBRARY #6  >>>>                   ║
+╠═══════════════════════════════════════════════════════════════════════════╣
+║                                                                           ║
+║ To print documentation, type:  COPY LIBRARY.DOC PRN  (press Enter)        ║
+║                                                                           ║
+║ To unzip the files, you will need PKUNZIP, which is one of the files      ║
+║ in the self-extracting file PKZ102.EXE.  Extract the files by typing      ║
+║ "PKZ102."                                                                 ║
+║                                                                           ║
+║ To unzip the utilities on this disk, type:  PKUNZIP [filename.ZIP) (Enter)║
+║                                                                           ║
+║                                                                           ║
+║                                         (c) Copyright 1991, PC-SIG Inc.   ║
+╚═══════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LIBRARY.DOC
 
 {% raw %}

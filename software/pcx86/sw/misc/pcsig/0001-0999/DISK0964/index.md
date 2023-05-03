@@ -131,6 +131,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 964 MINI COUPCAT  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, Type: COPY MINICOUP.DOC LPT1: (press enter) ║
+║                                                                         ║
+║ To run the program on a floppy system, Type: INSTFLOP (press enter)     ║
+║                                                                         ║
+║ To run the program on a hard disk system, Type: INSTHARD (press enter)  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MINICOUP.DOC
 
 {% raw %}

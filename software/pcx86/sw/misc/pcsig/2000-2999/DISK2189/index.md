@@ -90,6 +90,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║             <<<<  Disk No 2189 VIDEO TAPE CONTROL  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To install the program, type: INSTALL  (press enter)                    ║
+║                                                                         ║
+║ To print the documentation, type: COPY VTC.DOC PRN  (press enter)       ║
+║                                                                         ║
+║ To start the program, type: VTC (press enter)                           ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## VTC.DOC
 
 {% raw %}

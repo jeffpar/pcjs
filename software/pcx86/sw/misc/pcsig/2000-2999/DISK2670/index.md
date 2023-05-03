@@ -104,6 +104,31 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2670  CARR'S GAMES  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ MINELAYER =                                                             ║
+║   To read the documentation, type:  TYPE MINELAY.DOC  (press Enter)     ║
+║   To play MINELAYER, type:  MINELAY  (press Enter)                      ║
+║                                                                         ║
+║ MIX AND MATCH =                                                         ║
+║   To print the instructions, type:  COPY MIXMATCH.DOC PRN  (Enter)      ║
+║   To play MIX AND MATCH, type:  MIXMATCH  (press Enter)                 ║
+║                                                                         ║
+║ ISLANDS OF DANGER =                                                     ║
+║   To read the documentation, type:  TYPE DANGER.DOC  (press Enter)      ║
+║   To play ISLANDS OF DANGER, type:  DANGER  (press Enter)               ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1991, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MINELAY.DOC
 
 {% raw %}

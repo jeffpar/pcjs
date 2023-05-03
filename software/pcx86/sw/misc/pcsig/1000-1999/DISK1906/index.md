@@ -93,6 +93,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk #1906  LOTTO CHALLENGER  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print program and registration information, type:                    ║
+║                      COPY README PRN (press Enter)                      ║
+║                                                                         ║
+║ After extracting the FILES.COM file (see author's instructions in       ║
+║ README file), print further documentation according to author's         ║
+║ instructions.                                                           ║
+║                                                                         ║
+║ To start program, type:  LC (press enter)                               ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1906

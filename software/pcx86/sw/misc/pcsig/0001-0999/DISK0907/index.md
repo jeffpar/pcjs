@@ -2176,6 +2176,21 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 907 FUNKYTOOLBOX  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ How to Start: The files *.TBX and *.BAS must be loaded from BASICA or   ║
+║ GW-BASIC. Please consult your BASIC or GW-BASIC manual for full         ║
+║ instructions on how to load a BASIC program on your specific computer   ║
+║ system.                                                                 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## GOBANANA.DOC
 
 {% raw %}

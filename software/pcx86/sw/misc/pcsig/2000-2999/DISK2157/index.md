@@ -94,6 +94,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  DISK #2157  OPEN DOOR  >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To view documentation, type:  README                                    ║
+║                                                                         ║
+║ To print manual, type:  COPY OPENDOOR.MAN PRN (press Enter)             ║
+╚═════════════════════════════════════════════════════════════════════════╝
+(c) Copyright 1990, PC-SIG Inc.
+
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2157

@@ -957,6 +957,24 @@ GEnie at R.ROBERDS1, or on WWIVNet at 5 @9979, or on VNet at 5 @9198.
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #3550 AOTE - Aces of the Eno  >>>>           ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Print documentation, type: COPY AOTE.DOC PRN  (press Enter)         ║
+║                                                                         ║
+║  To Start the game, type: AOTE  (press Enter)                           ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## ORDER.DOC
 
 {% raw %}

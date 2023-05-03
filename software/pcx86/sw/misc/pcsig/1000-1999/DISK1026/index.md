@@ -3178,6 +3178,23 @@ Sunnyvale, CA. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                   <<<<  Disk No 1026 EDDY, TPOP  >>>>                   ║
+╟─────────────────────────────────────────────────────────────────────────╢
+║ To print the documentation for this disk, type:                         ║
+║             MANUAL (press enter)                                        ║
+║                                                                         ║
+║ To run the program EDDY, Type: EDDY (press enter)                       ║
+║                                                                         ║
+║ To run the program TPOP, Type: TPOP (press enter)                       ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## README.DOC
 
 {% raw %}

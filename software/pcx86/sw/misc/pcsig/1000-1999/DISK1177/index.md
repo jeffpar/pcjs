@@ -79,6 +79,20 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  Disk No 1177 COMPUTER SOLITAIRE  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type INSTRUCT (press enter)                       ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## INFO.DOC
 
 {% raw %}

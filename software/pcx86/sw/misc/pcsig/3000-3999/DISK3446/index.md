@@ -14,6 +14,31 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║          <<<<  PC-SIG Disk #3446 TIME MASTER FOR WINDOWS  >>>>          ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  Copy all files to your hard drive by typing: MD TIMEMAST (Enter),      ║
+║  copy *.* (Drive letter) (Enter).                                       ║
+║                                                                         ║
+║  Unarchive ZIP file by typing: PKUNZIP TIMEMAS1.ZIP (Enter)             ║
+║                                                                         ║
+║  After unarchiving file, Install program by typing: INSTALL (Enter)     ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1992, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3446
 

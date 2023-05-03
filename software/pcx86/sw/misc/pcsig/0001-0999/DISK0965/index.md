@@ -152,6 +152,22 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                  <<<<  Disk No 965 MYSTIC PASCAL  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, Type:                                       ║
+║             COPY READ.ME LPT1: (press enter) then                       ║
+║             COPY *.DOC (press enter)                                    ║
+║                                                                         ║
+║ To run the program, Type: MYSTIC (press enter)                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PAS1.DOC
 
 {% raw %}

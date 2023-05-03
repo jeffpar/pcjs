@@ -76,6 +76,19 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  Disk No 1139 CLASSIC SOLUTIONS  >>>>               ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read how to install the program to your hard drive, insert disk      ║
+║ #1138 into drive A> and type  README (press enter)                      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PKARC.DOC
 
 {% raw %}

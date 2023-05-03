@@ -14,6 +14,34 @@ machines:
 ---
 
 {% include machine.html id="ibm5170" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3743 SVTIMECLOCK  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To Install to your hard disk, type:                                    ║
+║     [hard drive letter]:  (press Enter)                                 ║
+║     CD\  (press Enter)                                                  ║
+║     MD TEMP  (press Enter)                                              ║
+║     CD TEMP  (press Enter)                                              ║
+║                                                                         ║
+║  To Extract files from drive A, type:                                   ║
+║     A:SVTCLOCK  (press Enter)  (use B: if installing from B drive)      ║
+║                                                                         ║
+║  To Install the program, type:  WIN SVINSTAL  (press Enter)             ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3743
 

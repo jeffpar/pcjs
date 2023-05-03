@@ -90,6 +90,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║            <<<<  Disk No 2183 HOME OFFICE TAX 1989  >>>>                ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation, type: COPY MANUAL.DOC PRN (press enter)     ║
+║                                                                         ║
+║ To start the program, type: HOT  (press enter)                          ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## MANUAL.DOC
 
 {% raw %}

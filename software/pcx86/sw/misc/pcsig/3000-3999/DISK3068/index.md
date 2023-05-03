@@ -16,6 +16,28 @@ machines:
 {% include machine.html id="ibm5170" %}
 {% comment %}samples_begin{% endcomment %}
 
+## GO1.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  PC-SIG Disk #3068  MULTIMEDIA 1  >>>>               ║
+║                     Disk 1 of 3 (also #3069, #3070)                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║   To read the introduction, type:  TYPE READ-ME.DOC  (press Enter)      ║
+║                                                                         ║
+║   To view, or print the manual, type:  MANUAL  (press Enter)            ║
+║   To start the program, type:  GO              (press Enter)            ║
+║                                                                         ║
+║   To install to hard drive C, type:  INSTALLC  (press Enter)            ║
+║   To install to hard drive D, type:  INSTALLD  (press Enter)            ║
+║                                                                         ║
+║                                                                         ║
+║                                         (c) Copyright 1992, PC-SIG Inc. ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## READ-ME.DOC
 
 {% raw %}

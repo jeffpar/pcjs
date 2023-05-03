@@ -459,6 +459,23 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  DISK #2161 THE CARDSHOP >>>>                      ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type: CARD                                            ║
+║ (You must have FILES=20 and BUFFERS=20 in your config.sys file)         ║
+║ To print documentation, type: COPY CARD.DOC PRN                         ║
+║ To install the program to the hard disk, type: INSTALLC                 ║
+║                                                                         ║
+║                                                                         ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2161

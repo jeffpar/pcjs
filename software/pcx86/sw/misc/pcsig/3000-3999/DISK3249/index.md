@@ -14,6 +14,33 @@ machines:
 ---
 
 {% include machine.html id="ibm5150" %}
+{% comment %}samples_begin{% endcomment %}
+
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                <<<<  PC-SIG Disk #3249  MARKETEDGE  >>>>                ║
+║                     Disk 3 of 3 (also #3247, #3248)                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║  To print installation instructions, insert disk 1 (#3247) and type:    ║
+║                                                                         ║
+║        COPY README.SHR PRN  (press Enter)                               ║
+║                                                                         ║
+║  To install the program, insert disk 1 and type:  INSTALL  (Enter)      ║
+║                                                                         ║
+║  To print the documentation, insert disk 3 (#3249) and type:            ║
+║                                                                         ║
+║        COPY MANUAL.SHR PRN  (press Enter)                               ║
+║                                                                         ║
+║                                                                         ║
+║                                        (c) Copyright 1993, PC-SIG Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
+{% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #3249
 

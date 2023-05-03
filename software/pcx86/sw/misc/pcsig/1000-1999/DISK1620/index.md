@@ -83,6 +83,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  Disk #1620 REALQUIK  >>>>                         ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start program, type:  REALTY (press enter)                           ║
+║                                                                         ║
+║ To print documentation, type:  COPY READTHIS.DOC PRN (press enter)      ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## READTHIS.DOC
 
 {% raw %}

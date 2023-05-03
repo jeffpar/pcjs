@@ -979,12 +979,6 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
     } else if (!(attr & DiskInfo.ATTR.VOLUME)) {
         let fPrinted = false;
         let fQuiet = argv['quiet'];
-        if (argv['collection']) {
-            if (existsFile(sPath)) {
-                if (!fPrinted && !fQuiet) printf("extracted: %s\n", sFile);
-                return true;
-            }
-        }
         if (argv['expand'] && !noExpand) {
             let arcType = isArchiveFile(sFile);
             if (arcType) {
@@ -1031,6 +1025,10 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
                 return true;
             }
         }
+        if (argv['collection'] && existsFile(sPath) && !argv['overwrite']) {
+            if (!fPrinted && !fQuiet) printf("extracted: %s\n", sFile);
+            return true;
+        }
         if (!fQuiet) printf("extracting: %s\n", sFile);
         /*
          * Originally, "normalize" was just an import option (to fix line endings of known text files on
@@ -1053,7 +1051,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
                 db = convertBASICFile(sPath, db, true);
             }
             else if (isTextFile(sPath)) {
-                db = normalizeForHost(db);
+                db = normalizeForHost(db, true);
             }
         }
         fSuccess = writeFile(getFullPath(sPath), db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
@@ -1875,15 +1873,15 @@ function readDir(sDir, arcType, arcOffset, sLabel, sPassword, fNormalize, kbTarg
         let db = new DataBuffer();
         let di = new DiskInfo(device);
         if (di.buildDiskFromFiles(db, diskName, aFileData, kbTarget, getHash, sectorIDs, sectorErrors, suppData)) {
-            if (done) {
-                done(di);
-                return null;
-            }
             /*
              * Walk aFileData and look for archives accompanied by folders containing their expanded contents.
              */
             for (let i = 0; i < aFileData.length; i++) {
                 addMetaData(di, sDir, aFileData[i].path);
+            }
+            if (done) {
+                done(di);
+                return null;
             }
         }
         return di;
@@ -2030,8 +2028,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
  */
 function getArchiveFiles(zip, verbose)
 {
-    let aFileData = [];
-    let aDirectories = [];
+    let aFiles = [];
     if (verbose) {
         printf("reading: %s\n", zip.fileName);
         printf("Filename        Length   Method       Size  Ratio   Date       Time       CRC\n");
@@ -2042,30 +2039,42 @@ function getArchiveFiles(zip, verbose)
     for (let entry of entries) {
 
         let file = {path: entry.name, name: path.basename(entry.name), nameEncoding: "cp437"};
-        //
-        // The 'time' field in StreamZip entries is a UTC time, which is unfortunate,
-        // because file times stored in a ZIP file are *local* times.
-        //
-        // So I've updated StreamZip to include the file's local time as a Date object
-        // ('date') in the entry object.  If it's not available (eg, we're using an older
-        // version of StreamZip), then we'll fall back to our 'time' field work-around.
-        //
+        /*
+         * The 'time' field in StreamZip entries is a UTC time, which is unfortunate,
+         * because file times stored in a ZIP file are *local* times.
+         *
+         * So I've updated StreamZip to include the file's local time as a Date object
+         * ('date') in the entry object.  If it's not available (eg, we're using an older
+         * version of StreamZip), then we'll fall back to our 'time' field work-around.
+         */
         file.date = entry.date;
         if (!file.date) {
             let date = new Date(entry.time);
             file.date = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
         }
-        if (entry.isDirectory) {
-            file.attr = DiskInfo.ATTR.SUBDIR;
-            file.size = -1;
-            file.data = new DataBuffer();
-            file.files = [];
-            aDirectories.push(file);
-        } else {
-            let data;
+        /*
+         * Not all archives provide discrete entries for every subdirectory before they are
+         * referenced, so we must always examine every entry for subdirectory components and
+         * add them to the file list if they don't already exist.
+         */
+        let files = aFiles, subDir = "";
+        let sep = file.path.indexOf('/') >= 0? '/' : '\\';
+        let dirs = (entry.isDirectory? file.path : path.dirname(file.path)).split(sep);
+        for (let dir of dirs) {
+            if (!dir || dir == '.') continue;
+            subDir += dir + '/';
+            let file = files.find(function(file) { return file.name == dir && file.attr == DiskInfo.ATTR.SUBDIR; });
+            if (!file) {
+                file = {path: subDir, name: dir, attr: DiskInfo.ATTR.SUBDIR, size: -1, data: new DataBuffer(), files: []};
+                files.push(file);
+            }
+            files = file.files;
+        }
+        if (!entry.isDirectory) {
             /*
              * HACK to skip decompression for all entries (--verbose=skip) or all entries except a named entry.
              */
+            let data;
             if (typeof verbose == "string" && (verbose == "skip" || verbose != entry.name)) {
                 data = new DataBuffer(entry.size);
             }
@@ -2076,22 +2085,12 @@ function getArchiveFiles(zip, verbose)
             file.attr = DiskInfo.ATTR.ARCHIVE;
             file.size = data.length;
             file.data = data;
+            files.push(file);
         }
         if (entry.messages && entry.messages.length) {
             for (let message of entry.messages) {
                 messages += message + "\n";
             }
-        }
-        let d, sDir = path.dirname(file.path) + path.sep;
-        for (d = 0; d < aDirectories.length; d++) {
-            let dir = aDirectories[d];
-            if (dir.path == sDir) {
-                dir.files.push(file);
-                break;
-            }
-        }
-        if (d == aDirectories.length) {
-            aFileData.push(file);
         }
         if (verbose) {
             /*
@@ -2121,7 +2120,7 @@ function getArchiveFiles(zip, verbose)
             let filesize = file.size;
             if (filesize < 0) {
                 filesize = 0;
-                filename += "/";
+                filename += path.sep;
             }
             let method = entry.method < 0? methodsARC[-entry.method - 2] : methodsZIP[entry.method];
             if (entry.encrypted) method += '*';
@@ -2137,7 +2136,7 @@ function getArchiveFiles(zip, verbose)
         }
     }
     if (messages) printf("%s", messages);
-    return aFileData;
+    return aFiles;
 }
 
 /**
@@ -2221,12 +2220,12 @@ function readArchiveFiles(sArchive, arcType, arcOffset, sLabel, sPassword, verbo
         // printfDebug: printf,
         holdErrors: true
     });
-    zip.on('ready', () => {
+    zip.on('ready', function readArchiveFilesReady() {
         let aFileData = getArchiveFiles(zip, verbose);
         zip.close();
         done(aFileData);
     });
-    zip.on('error', (err) => {
+    zip.on('error', function readArchiveFilesError(err) {
         printError(err, sArchive);
     });
 }

@@ -65,6 +65,21 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 1439 CD MASTER  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type CDMSTR (press enter)                         ║
+║                                                                         ║
+║ To copy program information to your printer, type:                      ║
+║             COPY READ1ST.DOC                                            ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## READ1ST.DOC
 
 {% raw %}

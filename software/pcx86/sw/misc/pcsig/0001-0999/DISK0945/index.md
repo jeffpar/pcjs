@@ -121,6 +121,31 @@ Sunnyvale Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk No 945 ROCKET SIMULATION  >>>>                 ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the documentation for LAUNCHER, Type:                          ║
+║           COPY LAUNCHER.DOC LPT1: (press enter)                         ║
+║                                                                         ║
+║ To run the program, Type: LAUNCHER (press enter)                        ║
+║                                                                         ║
+║ To run the program LANDER, Type: LANDER (press enter)                   ║
+║                                                                         ║
+║ To run the program CLUSTER, Type: CLUSTER (press enter)                 ║
+║                                                                         ║
+║ To run the program HYPER, Type: HYPER (press enter)                     ║
+║                                                                         ║
+║ To run the program WALLPAP, Type: WALLPAP (press enter)                 ║
+║                                                                         ║
+║ To run the program WATOR, Type: WATOR (press enter)                     ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## LAUNCHER.DOC
 
 {% raw %}

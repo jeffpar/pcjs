@@ -1728,6 +1728,1172 @@ INCOMPATIBILITIES:
 ```
 {% endraw %}
 
+## PLOTTER.DOC
+
+{% raw %}
+```
+
+
+
+
+
+        PLOTTER.DOC    Documentation for Plotter      4/19/86
+
+            This  package  of programs contain  a  demonstration  program 
+        written  in  Turbo  Pascal  along with a set  of  procedures  for 
+        plotting  high resolution (640x400 pixel)  graphs.   The  plotter 
+        routines are intended for engineering and scientific applications 
+        where  X-Y  coordinate line plots are needed and  where  standard 
+        color graphic adaptor screen dumps are inadequate.   The routines 
+        are  simple  to use and provide a high resolution hard copy  from 
+        printers compatible with the Epson MX-80/FX-80 dot graphics.   It 
+        has  been tested on IBM PCs and ATs and a Radio Shack model 3000.  
+        I  have  not  tried it on any other  systems.   The  software  is 
+        composed of three files:
+
+             o DEMOPLOT.PAS - A  pascal demonstration program which  uses 
+             the Pascal graphics procedures contained in HiResPlt.pas.
+
+             o HiResPlt.PAS - A   file  of  Pascal  routines  which   are 
+             necessary to draw axis and perform plotting.  The procedures 
+             work in conjunction with another program,  HIPLOT2,  written 
+             in  assembly  code  which actually  performs  the  plotting.  
+             HiResPlt.pas  is used as an "include" file in programs  like 
+             DEMOPLOT which require graphics.
+
+             o HIPLOT2.EXE - This  assembly code plotter attaches  itself 
+             to   the   system  as  a   run-and-remain-resident   program 
+             accessible via a single interrupt.  Access through interrupt 
+             was   chosen  to  simplify  interfacing  to   higher   level 
+             languages.  As a result, only the interface routines need to 
+             be customized to a particular compiler.
+
+             o PLOTTER.DOC - This description of the plotter software.
+
+        BACKGROUND:
+
+             HIPLOT2   was  originally  written  to  provide   a   higher 
+        resolution  curve  than  was  available with  the  640x200  pixel 
+        resolution  of  an IBM Color  Graphics  Adapter  (CGA).   HIPLOT2 
+        "draws"  the plot into a large buffer to a resolution of  640x400 
+        pixels.   At  the  same  time,  it can optionally  draw  a  lower 
+        resolution  curve of 640x200 pixels on the CGA.   When a hardcopy 
+        is requested, the higher resolution curve is sent from the buffer 
+        to the printer in the Epson bit graphics format.   This is to  be 
+        contrasted  with a screen dump which has the same  resolution  as 
+        the display.
+
+             Because   the  printed  resolution  is  different  from  the 
+        displayed  resolution,  the characters stored in the  buffer  and 
+        printed  on the hardcopy are selected from a different  character 
+        matrix  made  compatible with the higher  resolution.   The  CGA, 
+        however,  receives  the  lower resolution IBM ROM character  set.  
+        HIPLOT2 maps the character matrix to the CGA differently than  is 
+        done in other graphics packages like BASICA.   Mapping is done on 
+
+
+                                        1
+
+
+
+        a  pixel boundary where the characters can be placed anywhere  on 
+        the CGA display.   In BASICA,  placement is restricted to column-
+        row  boundarys.   Bit mapping provides flexibility when  labeling 
+        axis tics.
+
+             Future  plans  include modifying HIPLOT2 to use  the  higher 
+        resolution  of  the IBM Enhanced Graphics Adapter (EGA) if  used, 
+        however  until  then,  the software uses the  highest  resolution 
+        available  on  the CGA.   It will work on the EGA  but  only  the 
+        reduced 640x200 resolution compatible with the CGA.  You may need 
+        to type "mode co80" before running the graphics software.  If you 
+        notice  loss  of  sync  when using a card other  than  the  color 
+        graphics  card,  you may need to reboot to avoid damage  to  your 
+        monitor. 
+
+
+
+             DEMOPLOT.PAS  is  a small demonstration program.   The  user 
+        should  try the demonstration program first to see how it  works.  
+        This  is done by first running HIPLOT2 to load the  machine  code 
+        plotter   into  memory  and  then  running  Turbo   Pascal   with 
+        DEMOPLOT.PAS as the work file.   Again, you may need to run "mode 
+        co80" before running Turbo if you use an EGA.
+
+             The  demonstration  program first asks if a  color  graphics 
+        card is available.   If a no is given,  plotting to the screen is 
+        suppressed.   The  program then draws a diagonal line and a  box.  
+        It  then allows the user to position a crosshair using the cursor 
+        keys.   Absolute  coordinates  are displayed at the  top  of  the 
+        screen.  When the user presses <enter>, the program will ask if a 
+        hard  copy is desired.   A "y" followed by an <enter> will  cause 
+        the  program  to attempt to send the plot to  the  printer.   Any 
+        other character or simply an <enter> will cause the program to go 
+        to the next demonstration.
+
+             The  next  demonstration  is a more realistic  plot  of  the 
+        absolute  value of a sine wave followed by a simple dotted  line.  
+        Again,  the  user  is  given  the opportunity  to  read  out  the 
+        coordinates of the curve with a crosshair and then to get a  hard 
+        copy of the curve.   To simply view the operation of the plotter, 
+        simply  keep hitting <enter> and the demonstration will  progress 
+        from beginning to end.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        2
+
+
+
+
+             If you have the same hardware configuration as I, you should 
+        have no problem running the program.  I do not have the resources 
+        to  try  the software on any more than a few systems so I  cannot 
+        say  what will or will not work.   The two systems which  I  have 
+        been able to use the software on are:
+
+        Configuration:      1                        2
+        Type:               IBM PC, 256k main board  IBM AT
+        Graphics board:     IBM CGA                  IBM EGA
+        Disc Drives:        2ea. Teac DSDD Floppies  20 Mbyte hard disc
+        Total RAM:          640k                     512k
+        IBM DOS version:    2.0                      3.10
+
+             It also seems to run on a Radio Shack model 3000.
+
+
+             The  only  difference  between the operation  on  the  above 
+        systems  involves  the  timing used to fast move  the  crosshair.  
+        Look in the source code and set the value of a constant  MinCount 
+        in  procedure Crosshair.   Correctly setting it is not  mandatory 
+        but  it  removes the jerkyness that might otherwise exist of  the 
+        value is not set for your system.
+
+             There  are several reasons why the software may not work  on 
+        your  system.   First,  of course,  is that you may have  a  very 
+        different display board than I do.  The software will try to plot 
+        points  using interrupt 10h.   If your graphics adapter  modifies 
+        this  interrupt  routine,  the  results  will  be  unpredictable.  
+        Secondly,  HIPLOT2  will  try  to attach a pointer to  itself  at 
+        interrupt  64h.   If you already have something attached to  that 
+        interrupt, the software will give you an error message and abort.  
+        Some hard disk software configurations,  for instance, may attach 
+        their  software to the same pointer,  so  be  careful.
+
+             Finally,  there  have been reports of damage to monitors  if 
+        they are driven by the wrong sync.   Since this software does not 
+        address  the  hardware  directly,  there should  be  no  problem.  
+        HiResPlt  uses  the Turbo graphics procedures and  HIPLOT2  plots 
+        points  via interrupt 10H,  therefore there should be no problem.  
+        If you use a different display adaptor,  you should verify that a 
+        sync error will not occur.
+
+          Because  of the wide variety of configurations,  the  following 
+        disclaimer is necessary:
+
+
+        DISCLAIMER:
+             This  software is provided free for public domain on an  "as 
+        is"  basis for others to use on a non-profit basis.   The  Author 
+        will  in no way be held responsible to you or to any third  party 
+        for  any  damages  such  as lost  profits  or  savings  or  other 
+        incidental  or  consequential damages resulting from the  use  of 
+        this  software  or its misuse whether or not the Author has  been 
+        advised of the possibility of such damages.
+
+
+                                        3
+
+
+
+
+
+                      DESCRIPTION OF PROCEDURES IN HiResPlt
+
+             The  plotter procedures and functions described next are all 
+        part of the plotter package.   The demonstration program does not 
+        have any procedures or functions unique to it alone.
+
+
+        Hcmd(CMD,I1,I2:integer)
+
+             This  and  Htext perform the actual interrupts  to  HIPLOT2.  
+        Hcmd has three arguments.   CMD is a command integer which  tells 
+        HIPLOT2 what you want it to do.   I1 and I2,  also integers,  are 
+        the parameters which may be required.  When coordinates are to be 
+        specified, I1 represents X and I2 represents Y.
+
+        Command   Function
+             0    Set origin (cursor) of next curve to point I1,I2
+             1    Plot line from last point (origin) to I1,I2
+             2    Not used from Hcmd.  See Htext
+             3    Clear plotter buffer and, if selected, the CRT screen
+             4    Make hardcopy on Epson MX-80 or equivalent printer
+             5    Home cursor to x=0, y=0.
+             6    Set mode bits to least significant byte of I1
+             7    Set line pattern to pattern in I1
+             8    Set pixel "color". I1=0 for white (Erase), I1=1 for
+                  black (default).  Used to erase curve.
+             9    Do not use
+             10   Do not use
+             11   Set x window to I1 and I2   (I2 > I1)  Prevents 
+                  plotting outside of window. 
+             12   Set y window to I1 and I2   (I2 > I1)  Prevents
+                  plotting outside of window.
+             13   Do not use
+
+
+
+        Htext(CMD:Integer, S:String, I:Integer)-
+
+             This  is  similar  to Hcmd except it is  intended  for  text 
+        command  2 where S is the string to be placed on the graph at the 
+        cursor location and I is the maximum length.   The string printed 
+        will be the lesser of the length of the string or I. 
+
+
+        Hdraw(IX1,IY1,IX2,IY2)-
+
+             This draws a line from IX1,  IY1 to IX2, IY2 in the non-axis 
+        mode.  It is similar to Plot except it uses absolute co-ordinates 
+        and does not draw from the last point.
+
+
+        Pattern(I:Integer)-
+
+
+
+                                        4
+
+
+
+             This sets the line pattern to reflect the bit pattern of the 
+        integer,  I.   If used,  it must be placed after Axis or SetPlot.  
+        Note   that   Pattern($FFFF)   will  make  a   solid   line   and 
+        Pattern($CCCC)  will  produce  a dotted line with  medium  length 
+        dots.
+
+
+        ScreenOn  and ScreenOff-
+
+             These  procedures  enable or disable plotting  to  the  CRT.  
+        Normally,  ScreenOn would be used unless the system does not have 
+        an  IBM  color  graphic adapter such as the CGA or  the  EGA,  or 
+        something equivalent.
+
+
+
+        ToUpper(S:String)-   This simply converts string S to upper case.
+
+
+        Beep-                This just makes a short beep near middle C.
+
+
+        Alarm-               This produces a more noticeable tone
+
+
+
+        SetOption(B:Byte)-
+
+             HIPLOT2  has a set of 8 flags which select  options.   These 
+        are only useful to other procedures.  If interested, refer to the 
+        comments in the routine.
+
+
+
+        Option(I:Integer, B:Boolean)-
+
+             The  same comments as for SetOption.   This just allows  the 
+        individual setting of the bits.
+             
+
+        BW80-
+             This resets the CRT back to text mode after a plot.
+
+
+        Cls-
+             This  clears  the screen.   It has no effect on the  plotter 
+        buffer.  Clearing the buffer is done with Hcmd using command 3.
+
+
+        Box(IX1,IY1,IX2,IY2)-
+
+             This will draw a box with the main diagonal from IX1, IY1 to 
+        IX2, IY2.
+
+
+
+
+                                        5
+
+
+
+        FindReal(IX,IY:Integer, Xval,Yval:Real)-
+
+             This converts the integer absolute screen values to the real 
+        values computed by Axis.  It is not used in non-axis plotting.
+
+
+        SetCross(IX,IY:Integer)-
+
+             A utility routine for placing a crosshair on the plot.  User 
+        does not need to use this directly.  It is called by Crosshair.
+
+
+        DaTime(I:Integer)-
+
+             This  places  the date and the time at the  left  and  right 
+        sides  of the plot.   It is invoked in Axis so you do not need it 
+        unless you plan to use SetPlot instead.   I=0 places them at  the 
+        bottom, I=1 places them at the top.
+
+
+        SetTypeComputer(I1,I2: Integer)-
+
+             This  sets  the timing in the crosshair updating routine  to 
+        match  the type of computer used.   This routine allows low  rate 
+        keypresses  to  move  the  crosshair  in  small  steps  and  fast 
+        keypresses  to  move the crosshair in large  steps.   It  is  not 
+        required  to invoke this routine,  but it makes the operation  of 
+        the crosshair appear smoother.
+
+
+        Crosshair(Ix,Iy:Integer)-
+
+             This draws a crosshair on either an axis or a non-axis  plot 
+        and  allows the user to read out the values into the integers Ix, 
+        Iy.   In the axis mode,  Ix, Iy should be converted to real graph 
+        values by using FindReal.
+
+
+        Hcopy(Str1,Str2:string)-
+
+             If  Str1 is the string "PAUSE",  the routine will ask  if  a 
+        hardcopy  is desired.   Without it,  a hardcopy is  automatically 
+        made.  If Str2 is the string "EJECT", then a page will be ejected 
+        after plotting.
+
+        Vcheck-
+
+             This  is  a  function  which checks to see  if  the  HIPLOT2 
+        software is loaded.   If it is not,  Vcheck will be set to 0 else 
+        Vcheck  will be set equal the current HIPLOT2 version  number  if 
+        HIPLOT2 is loaded.
+
+
+
+        FmtNum(Val:real)-
+
+
+                                        6
+
+
+
+
+             This is used by Axis to place a formatted number on the plot 
+        at the current cursor position.
+
+
+
+        Xinit-     This is used by Axis to initialize the plotter. 
+
+
+
+        SetPlot-
+
+             This  initializes  the plotter for subsequent  plotting  for 
+        cases where line drawings alone are desired (non-axis  plotting).  
+        The  global  scale factors are set to create a screen where  x=0, 
+        y=0  represents the upper left part of the screen as  in  Turbo's 
+        Plot.   The lower right co-ordinates are x=639, y=399.  Note that 
+        the  vertical  resolution is twice that of Turbo.   This  routine 
+        takes  the  place  of  Axis.   Either  use  SetPlot  or  Axis  to 
+        initialize the plotter.
+
+
+
+        Axis(X1,X2,X3,Y1,Y2,Y3:Real)-
+
+             This initializes the CRT and plotter buffer,  draws the axis 
+        and  sets the required scale factors for later plotting.   For  a 
+        linear X-axis,  X1 is the start value,  X2 is the stop value, and 
+        X3  is  the incremental value to be added at  each  tic.   For  a 
+        Logarithmic X-axis,  X1 is the starting decade,  x2 is the number 
+        of decades and x3=0.  The same is true for the Y axis.   When the 
+        axis is drawn, if the values to be printed require an exponential 
+        format,  they  are  scaled with the multiplication factor  placed 
+        close by in a box near the axis.   Not included in the  parameter 
+        list  but used as a global variable is Alpha[n],  where n  ranges 
+        from 1 to 9.   These are the strings to be printed.   Alpha[1] is 
+        the x-axis label,  Alpha[2] is the Y-axis label and the remainder 
+        constitute the heading.
+
+
+
+        ReOrg-
+
+             This  resets  the origin flag so that the next point  to  be 
+        plotted will become the starting point for the next curve.   This 
+        allows  multiple curves to be plotted.   This is used only in the
+        axis plotting mode.
+
+
+
+        Interpolate(Var I1,I2: Integer;  I3,I4: Integer)-
+
+             When  a program asks the plotter to plot out of  the  active
+        window, the plotter will stop plotting at the boundarys.  HIPLOT2
+        simply   stops  placing  pixels  but  acts  as  if  the  plot  is
+
+
+                                        7
+
+
+
+        continuing.   Because only integers are passed to HIPLOT2,  it is
+        possible for overflow to place the point at the other side of the
+        active   window.    Interpolate   helps   calculate   the   point
+        corresponding  to  the edge of the window to allow  limiting  the
+        line drawn to the boundary to avoid the problem.   The routine is
+        intended for internal use only.
+
+        Hplot(X,Y:real)-
+
+             The  values  of  X,Y are plotted after  being  scaled.   The
+        scaling  is based on the values selected by the user in the  call
+        to Axis.   There is no separate windowing or whatever as in  more
+        sophisticated  plotter packages.   This is used only in the  axis
+        mode.  For non-axis mode, use Hdraw.
+
+
+
+        Insert(X,Y:Real, I:Integer)-
+
+             This places the single digit integer,  I,  at a location  on
+        the plot specified by X and Y.   X and Y are real quantities.   I
+        ranges from 1 through 9.
+
+
+
+        FINAL COMMENTS:
+
+             That's  it.   The plotter package is meant to be easy to use
+        at the expense of some flexibility.  This is the first version to
+        be  released although I have used various versions in my own work
+        for several years in Turbo-Pascal,  FORTRAN and BASIC.   I  would
+        like  to  revisit this software in detail in a few months  and  I
+        would  appreciate  any comments and suggested  modifications.   I
+        have not released the source for HIPLOT2 yet since I plan to make
+        some significant changes.  One of these may be a search algorithm
+        to  place the routine at an available interrupt in case  the  one
+        currently used has already been taken.   Another will be to allow
+        drawing a high resolution curve on the enhanced graphics adapter.
+        Please send comments and  suggestions  to  me.   Please  describe
+        your  machine.    I  would  like to know if there are clones that
+        have  problems  with this software.
+
+
+                                 Roger Coleman
+                                 2011 Bradway St NE
+                                 Palm Bay, Fl
+                                      32905
+                                 (305) 724-6873
+
+
+
+
+
+
+
+                                        8
+
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+                          A Final Note:
+
+Cursor speed constant:
+
+       The demonstration program was modified to allow direct
+entry of MinCount99 which sets the minimum count between any two
+keypresses of the same cursor control arrow.  This discriminates
+between two finger taps and holding the key down.  The latter
+means to move the cursor in bigger steps.  Unfortunately, this
+test makes the software processor speed sensitive.
+
+       In retrospect, I should have calculated time using the
+system clock rather than relying on processor speed because of
+the wide variety of machines in the world.  Alas, its too late
+now.   That will be left for the next version when I add mouse
+software.
+
+       DEMOPLOT was modified at the last moment to allow you to
+select the value for the speed constant.  If my suggestions do
+not work best for your machine, try doubling the constant by a
+factor of 2 to move the cursor quickly when the key is held down.
+Reduce the constant by a factor by 2 to allow the cursor to move
+in small steps on individual key presses.  You can fine tune the
+value if you want.  The number is typed as a constant.
+
+
+
+NEW HIPLOT2:
+    The current HIPLOT2 version is 10-08-86 8:40PM and it replaces
+    the version 2-23-86  12:08PM.  The only difference is to modify
+    hardcopy routine for faster output.  It now uses INT 17h rather
+    than the much slower INT 21h.
+
+
+OLD WARNING MESSAGE:
+    The documentation has a stiff warning to make the user pay
+    attention when he first tries it on his system.  After using
+    the software on a number of clones, it appears that the worst
+    thing that should happen is that HIPLOT2 will not load.  It looks
+    to see if the interrupt is occupied before installing itself.
+    If the vector is 0000:0000 then it assumes it to be available.
+    If not, it says that 64h is occupied and returns you to the
+    system.   The Pascal procedures have a function Vcheck which
+    looks for the 16 bit sequence A55Ah and a valid version number.
+    To keep the plotting routines as fast as possible, the check is
+    done only once.  If something changes the vector during a plot
+    than there could be a problem.  Just make sure to include
+    Vcheck in your software and avoid changing int 64h during a plot.
+
+
+COMPATIBILITIES:
+    I have found the software to work on:
+    o IBM PC
+    o IBM XT
+    o IBM AT
+    o PC Limited 8 Mhz AT
+    o Wells American 8 Mhz
+    o Wells American 10 Mhz
+    o Lanier C-2400 AT
+    o Radio Shack 3000
+
+    I have not kept a list of printers that it works on but I know
+    it has worked on a good number.  The only printer that did not work
+    well with it was a Star Radix-15 which does not work with 123
+    graphs either for the same reason.  The bit mapped graphics are
+    8 pixels high and a line feed should skip 8 pixels worth.  The
+    Star skips more and leaves a gap.   Just my luck that the printer
+    happens to belong to my fiance'.
+
+INCOMPATIBILITIES:
+    o Some network software use the same interrupt vector and Hiplot2
+    will not allow loading.  If you network, try not installing the
+    network software prior to plotting to your printer.
+
+    o As I said, the Star Radix-15 skips lines.
+
+
+
+
+       R. Coleman  1/18/87
+
+
+```
+{% endraw %}
+
+## PLOTTER.DOC
+
+{% raw %}
+```
+
+
+
+
+
+        PLOTTER.DOC    Documentation for Plotter      4/19/86
+
+            This  package  of programs contain  a  demonstration  program 
+        written  in  Turbo  Pascal  along with a set  of  procedures  for 
+        plotting  high resolution (640x400 pixel)  graphs.   The  plotter 
+        routines are intended for engineering and scientific applications 
+        where  X-Y  coordinate line plots are needed and  where  standard 
+        color graphic adaptor screen dumps are inadequate.   The routines 
+        are  simple  to use and provide a high resolution hard copy  from 
+        printers compatible with the Epson MX-80/FX-80 dot graphics.   It 
+        has  been tested on IBM PCs and ATs and a Radio Shack model 3000.  
+        I  have  not  tried it on any other  systems.   The  software  is 
+        composed of three files:
+
+             o DEMOPLOT.PAS - A  pascal demonstration program which  uses 
+             the Pascal graphics procedures contained in HiResPlt.pas.
+
+             o HiResPlt.PAS - A   file  of  Pascal  routines  which   are 
+             necessary to draw axis and perform plotting.  The procedures 
+             work in conjunction with another program,  HIPLOT2,  written 
+             in  assembly  code  which actually  performs  the  plotting.  
+             HiResPlt.pas  is used as an "include" file in programs  like 
+             DEMOPLOT which require graphics.
+
+             o HIPLOT2.EXE - This  assembly code plotter attaches  itself 
+             to   the   system  as  a   run-and-remain-resident   program 
+             accessible via a single interrupt.  Access through interrupt 
+             was   chosen  to  simplify  interfacing  to   higher   level 
+             languages.  As a result, only the interface routines need to 
+             be customized to a particular compiler.
+
+             o PLOTTER.DOC - This description of the plotter software.
+
+        BACKGROUND:
+
+             HIPLOT2   was  originally  written  to  provide   a   higher 
+        resolution  curve  than  was  available with  the  640x200  pixel 
+        resolution  of  an IBM Color  Graphics  Adapter  (CGA).   HIPLOT2 
+        "draws"  the plot into a large buffer to a resolution of  640x400 
+        pixels.   At  the  same  time,  it can optionally  draw  a  lower 
+        resolution  curve of 640x200 pixels on the CGA.   When a hardcopy 
+        is requested, the higher resolution curve is sent from the buffer 
+        to the printer in the Epson bit graphics format.   This is to  be 
+        contrasted  with a screen dump which has the same  resolution  as 
+        the display.
+
+             Because   the  printed  resolution  is  different  from  the 
+        displayed  resolution,  the characters stored in the  buffer  and 
+        printed  on the hardcopy are selected from a different  character 
+        matrix  made  compatible with the higher  resolution.   The  CGA, 
+        however,  receives  the  lower resolution IBM ROM character  set.  
+        HIPLOT2 maps the character matrix to the CGA differently than  is 
+        done in other graphics packages like BASICA.   Mapping is done on 
+
+
+                                        1
+
+
+
+        a  pixel boundary where the characters can be placed anywhere  on 
+        the CGA display.   In BASICA,  placement is restricted to column-
+        row  boundarys.   Bit mapping provides flexibility when  labeling 
+        axis tics.
+
+             Future  plans  include modifying HIPLOT2 to use  the  higher 
+        resolution  of  the IBM Enhanced Graphics Adapter (EGA) if  used, 
+        however  until  then,  the software uses the  highest  resolution 
+        available  on  the CGA.   It will work on the EGA  but  only  the 
+        reduced 640x200 resolution compatible with the CGA.  You may need 
+        to type "mode co80" before running the graphics software.  If you 
+        notice  loss  of  sync  when using a card other  than  the  color 
+        graphics  card,  you may need to reboot to avoid damage  to  your 
+        monitor. 
+
+
+
+             DEMOPLOT.PAS  is  a small demonstration program.   The  user 
+        should  try the demonstration program first to see how it  works.  
+        This  is done by first running HIPLOT2 to load the  machine  code 
+        plotter   into  memory  and  then  running  Turbo   Pascal   with 
+        DEMOPLOT.PAS as the work file.   Again, you may need to run "mode 
+        co80" before running Turbo if you use an EGA.
+
+             The  demonstration  program first asks if a  color  graphics 
+        card is available.   If a no is given,  plotting to the screen is 
+        suppressed.   The  program then draws a diagonal line and a  box.  
+        It  then allows the user to position a crosshair using the cursor 
+        keys.   Absolute  coordinates  are displayed at the  top  of  the 
+        screen.  When the user presses <enter>, the program will ask if a 
+        hard  copy is desired.   A "y" followed by an <enter> will  cause 
+        the  program  to attempt to send the plot to  the  printer.   Any 
+        other character or simply an <enter> will cause the program to go 
+        to the next demonstration.
+
+             The  next  demonstration  is a more realistic  plot  of  the 
+        absolute  value of a sine wave followed by a simple dotted  line.  
+        Again,  the  user  is  given  the opportunity  to  read  out  the 
+        coordinates of the curve with a crosshair and then to get a  hard 
+        copy of the curve.   To simply view the operation of the plotter, 
+        simply  keep hitting <enter> and the demonstration will  progress 
+        from beginning to end.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        2
+
+
+
+
+             If you have the same hardware configuration as I, you should 
+        have no problem running the program.  I do not have the resources 
+        to  try  the software on any more than a few systems so I  cannot 
+        say  what will or will not work.   The two systems which  I  have 
+        been able to use the software on are:
+
+        Configuration:      1                        2
+        Type:               IBM PC, 256k main board  IBM AT
+        Graphics board:     IBM CGA                  IBM EGA
+        Disc Drives:        2ea. Teac DSDD Floppies  20 Mbyte hard disc
+        Total RAM:          640k                     512k
+        IBM DOS version:    2.0                      3.10
+
+             It also seems to run on a Radio Shack model 3000.
+
+
+             The  only  difference  between the operation  on  the  above 
+        systems  involves  the  timing used to fast move  the  crosshair.  
+        Look in the source code and set the value of a constant  MinCount 
+        in  procedure Crosshair.   Correctly setting it is not  mandatory 
+        but  it  removes the jerkyness that might otherwise exist of  the 
+        value is not set for your system.
+
+             There  are several reasons why the software may not work  on 
+        your  system.   First,  of course,  is that you may have  a  very 
+        different display board than I do.  The software will try to plot 
+        points  using interrupt 10h.   If your graphics adapter  modifies 
+        this  interrupt  routine,  the  results  will  be  unpredictable.  
+        Secondly,  HIPLOT2  will  try  to attach a pointer to  itself  at 
+        interrupt  64h.   If you already have something attached to  that 
+        interrupt, the software will give you an error message and abort.  
+        Some hard disk software configurations,  for instance, may attach 
+        their  software to the same pointer,  so  be  careful.
+
+             Finally,  there  have been reports of damage to monitors  if 
+        they are driven by the wrong sync.   Since this software does not 
+        address  the  hardware  directly,  there should  be  no  problem.  
+        HiResPlt  uses  the Turbo graphics procedures and  HIPLOT2  plots 
+        points  via interrupt 10H,  therefore there should be no problem.  
+        If you use a different display adaptor,  you should verify that a 
+        sync error will not occur.
+
+          Because  of the wide variety of configurations,  the  following 
+        disclaimer is necessary:
+
+
+        DISCLAIMER:
+             This  software is provided free for public domain on an  "as 
+        is"  basis for others to use on a non-profit basis.   The  Author 
+        will  in no way be held responsible to you or to any third  party 
+        for  any  damages  such  as lost  profits  or  savings  or  other 
+        incidental  or  consequential damages resulting from the  use  of 
+        this  software  or its misuse whether or not the Author has  been 
+        advised of the possibility of such damages.
+
+
+                                        3
+
+
+
+
+
+                      DESCRIPTION OF PROCEDURES IN HiResPlt
+
+             The  plotter procedures and functions described next are all 
+        part of the plotter package.   The demonstration program does not 
+        have any procedures or functions unique to it alone.
+
+
+        Hcmd(CMD,I1,I2:integer)
+
+             This  and  Htext perform the actual interrupts  to  HIPLOT2.  
+        Hcmd has three arguments.   CMD is a command integer which  tells 
+        HIPLOT2 what you want it to do.   I1 and I2,  also integers,  are 
+        the parameters which may be required.  When coordinates are to be 
+        specified, I1 represents X and I2 represents Y.
+
+        Command   Function
+             0    Set origin (cursor) of next curve to point I1,I2
+             1    Plot line from last point (origin) to I1,I2
+             2    Not used from Hcmd.  See Htext
+             3    Clear plotter buffer and, if selected, the CRT screen
+             4    Make hardcopy on Epson MX-80 or equivalent printer
+             5    Home cursor to x=0, y=0.
+             6    Set mode bits to least significant byte of I1
+             7    Set line pattern to pattern in I1
+             8    Set pixel "color". I1=0 for white (Erase), I1=1 for
+                  black (default).  Used to erase curve.
+             9    Do not use
+             10   Do not use
+             11   Set x window to I1 and I2   (I2 > I1)  Prevents 
+                  plotting outside of window. 
+             12   Set y window to I1 and I2   (I2 > I1)  Prevents
+                  plotting outside of window.
+             13   Do not use
+
+
+
+        Htext(CMD:Integer, S:String, I:Integer)-
+
+             This  is  similar  to Hcmd except it is  intended  for  text 
+        command  2 where S is the string to be placed on the graph at the 
+        cursor location and I is the maximum length.   The string printed 
+        will be the lesser of the length of the string or I. 
+
+
+        Hdraw(IX1,IY1,IX2,IY2)-
+
+             This draws a line from IX1,  IY1 to IX2, IY2 in the non-axis 
+        mode.  It is similar to Plot except it uses absolute co-ordinates 
+        and does not draw from the last point.
+
+
+        Pattern(I:Integer)-
+
+
+
+                                        4
+
+
+
+             This sets the line pattern to reflect the bit pattern of the 
+        integer,  I.   If used,  it must be placed after Axis or SetPlot.  
+        Note   that   Pattern($FFFF)   will  make  a   solid   line   and 
+        Pattern($CCCC)  will  produce  a dotted line with  medium  length 
+        dots.
+
+
+        ScreenOn  and ScreenOff-
+
+             These  procedures  enable or disable plotting  to  the  CRT.  
+        Normally,  ScreenOn would be used unless the system does not have 
+        an  IBM  color  graphic adapter such as the CGA or  the  EGA,  or 
+        something equivalent.
+
+
+
+        ToUpper(S:String)-   This simply converts string S to upper case.
+
+
+        Beep-                This just makes a short beep near middle C.
+
+
+        Alarm-               This produces a more noticeable tone
+
+
+
+        SetOption(B:Byte)-
+
+             HIPLOT2  has a set of 8 flags which select  options.   These 
+        are only useful to other procedures.  If interested, refer to the 
+        comments in the routine.
+
+
+
+        Option(I:Integer, B:Boolean)-
+
+             The  same comments as for SetOption.   This just allows  the 
+        individual setting of the bits.
+             
+
+        BW80-
+             This resets the CRT back to text mode after a plot.
+
+
+        Cls-
+             This  clears  the screen.   It has no effect on the  plotter 
+        buffer.  Clearing the buffer is done with Hcmd using command 3.
+
+
+        Box(IX1,IY1,IX2,IY2)-
+
+             This will draw a box with the main diagonal from IX1, IY1 to 
+        IX2, IY2.
+
+
+
+
+                                        5
+
+
+
+        FindReal(IX,IY:Integer, Xval,Yval:Real)-
+
+             This converts the integer absolute screen values to the real 
+        values computed by Axis.  It is not used in non-axis plotting.
+
+
+        SetCross(IX,IY:Integer)-
+
+             A utility routine for placing a crosshair on the plot.  User 
+        does not need to use this directly.  It is called by Crosshair.
+
+
+        DaTime(I:Integer)-
+
+             This  places  the date and the time at the  left  and  right 
+        sides  of the plot.   It is invoked in Axis so you do not need it 
+        unless you plan to use SetPlot instead.   I=0 places them at  the 
+        bottom, I=1 places them at the top.
+
+
+        SetTypeComputer(I1,I2: Integer)-
+
+             This  sets  the timing in the crosshair updating routine  to 
+        match  the type of computer used.   This routine allows low  rate 
+        keypresses  to  move  the  crosshair  in  small  steps  and  fast 
+        keypresses  to  move the crosshair in large  steps.   It  is  not 
+        required  to invoke this routine,  but it makes the operation  of 
+        the crosshair appear smoother.
+
+
+        Crosshair(Ix,Iy:Integer)-
+
+             This draws a crosshair on either an axis or a non-axis  plot 
+        and  allows the user to read out the values into the integers Ix, 
+        Iy.   In the axis mode,  Ix, Iy should be converted to real graph 
+        values by using FindReal.
+
+
+        Hcopy(Str1,Str2:string)-
+
+             If  Str1 is the string "PAUSE",  the routine will ask  if  a 
+        hardcopy  is desired.   Without it,  a hardcopy is  automatically 
+        made.  If Str2 is the string "EJECT", then a page will be ejected 
+        after plotting.
+
+        Vcheck-
+
+             This  is  a  function  which checks to see  if  the  HIPLOT2 
+        software is loaded.   If it is not,  Vcheck will be set to 0 else 
+        Vcheck  will be set equal the current HIPLOT2 version  number  if 
+        HIPLOT2 is loaded.
+
+
+
+        FmtNum(Val:real)-
+
+
+                                        6
+
+
+
+
+             This is used by Axis to place a formatted number on the plot 
+        at the current cursor position.
+
+
+
+        Xinit-     This is used by Axis to initialize the plotter. 
+
+
+
+        SetPlot-
+
+             This  initializes  the plotter for subsequent  plotting  for 
+        cases where line drawings alone are desired (non-axis  plotting).  
+        The  global  scale factors are set to create a screen where  x=0, 
+        y=0  represents the upper left part of the screen as  in  Turbo's 
+        Plot.   The lower right co-ordinates are x=639, y=399.  Note that 
+        the  vertical  resolution is twice that of Turbo.   This  routine 
+        takes  the  place  of  Axis.   Either  use  SetPlot  or  Axis  to 
+        initialize the plotter.
+
+
+
+        Axis(X1,X2,X3,Y1,Y2,Y3:Real)-
+
+             This initializes the CRT and plotter buffer,  draws the axis 
+        and  sets the required scale factors for later plotting.   For  a 
+        linear X-axis,  X1 is the start value,  X2 is the stop value, and 
+        X3  is  the incremental value to be added at  each  tic.   For  a 
+        Logarithmic X-axis,  X1 is the starting decade,  x2 is the number 
+        of decades and x3=0.  The same is true for the Y axis.   When the 
+        axis is drawn, if the values to be printed require an exponential 
+        format,  they  are  scaled with the multiplication factor  placed 
+        close by in a box near the axis.   Not included in the  parameter 
+        list  but used as a global variable is Alpha[n],  where n  ranges 
+        from 1 to 9.   These are the strings to be printed.   Alpha[1] is 
+        the x-axis label,  Alpha[2] is the Y-axis label and the remainder 
+        constitute the heading.
+
+
+
+        ReOrg-
+
+             This  resets  the origin flag so that the next point  to  be 
+        plotted will become the starting point for the next curve.   This 
+        allows  multiple curves to be plotted.   This is used only in the
+        axis plotting mode.
+
+
+
+        Interpolate(Var I1,I2: Integer;  I3,I4: Integer)-
+
+             When  a program asks the plotter to plot out of  the  active
+        window, the plotter will stop plotting at the boundarys.  HIPLOT2
+        simply   stops  placing  pixels  but  acts  as  if  the  plot  is
+
+
+                                        7
+
+
+
+        continuing.   Because only integers are passed to HIPLOT2,  it is
+        possible for overflow to place the point at the other side of the
+        active   window.    Interpolate   helps   calculate   the   point
+        corresponding  to  the edge of the window to allow  limiting  the
+        line drawn to the boundary to avoid the problem.   The routine is
+        intended for internal use only.
+
+        Hplot(X,Y:real)-
+
+             The  values  of  X,Y are plotted after  being  scaled.   The
+        scaling  is based on the values selected by the user in the  call
+        to Axis.   There is no separate windowing or whatever as in  more
+        sophisticated  plotter packages.   This is used only in the  axis
+        mode.  For non-axis mode, use Hdraw.
+
+
+
+        Insert(X,Y:Real, I:Integer)-
+
+             This places the single digit integer,  I,  at a location  on
+        the plot specified by X and Y.   X and Y are real quantities.   I
+        ranges from 1 through 9.
+
+
+
+        FINAL COMMENTS:
+
+             That's  it.   The plotter package is meant to be easy to use
+        at the expense of some flexibility.  This is the first version to
+        be  released although I have used various versions in my own work
+        for several years in Turbo-Pascal,  FORTRAN and BASIC.   I  would
+        like  to  revisit this software in detail in a few months  and  I
+        would  appreciate  any comments and suggested  modifications.   I
+        have not released the source for HIPLOT2 yet since I plan to make
+        some significant changes.  One of these may be a search algorithm
+        to  place the routine at an available interrupt in case  the  one
+        currently used has already been taken.   Another will be to allow
+        drawing a high resolution curve on the enhanced graphics adapter.
+        Please send comments and  suggestions  to  me.   Please  describe
+        your  machine.    I  would  like to know if there are clones that
+        have  problems  with this software.
+
+
+                                 Roger Coleman
+                                 2011 Bradway St NE
+                                 Palm Bay, Fl
+                                      32905
+                                 (305) 724-6873
+
+
+
+
+
+
+
+                                        8
+
+```
+{% endraw %}
+
+## README.DOC
+
+{% raw %}
+```
+                          A Final Note:
+
+Cursor speed constant:
+
+       The demonstration program was modified to allow direct
+entry of MinCount99 which sets the minimum count between any two
+keypresses of the same cursor control arrow.  This discriminates
+between two finger taps and holding the key down.  The latter
+means to move the cursor in bigger steps.  Unfortunately, this
+test makes the software processor speed sensitive.
+
+       In retrospect, I should have calculated time using the
+system clock rather than relying on processor speed because of
+the wide variety of machines in the world.  Alas, its too late
+now.   That will be left for the next version when I add mouse
+software.
+
+       DEMOPLOT was modified at the last moment to allow you to
+select the value for the speed constant.  If my suggestions do
+not work best for your machine, try doubling the constant by a
+factor of 2 to move the cursor quickly when the key is held down.
+Reduce the constant by a factor by 2 to allow the cursor to move
+in small steps on individual key presses.  You can fine tune the
+value if you want.  The number is typed as a constant.
+
+
+
+NEW HIPLOT2:
+    The current HIPLOT2 version is 10-08-86 8:40PM and it replaces
+    the version 2-23-86  12:08PM.  The only difference is to modify
+    hardcopy routine for faster output.  It now uses INT 17h rather
+    than the much slower INT 21h.
+
+
+OLD WARNING MESSAGE:
+    The documentation has a stiff warning to make the user pay
+    attention when he first tries it on his system.  After using
+    the software on a number of clones, it appears that the worst
+    thing that should happen is that HIPLOT2 will not load.  It looks
+    to see if the interrupt is occupied before installing itself.
+    If the vector is 0000:0000 then it assumes it to be available.
+    If not, it says that 64h is occupied and returns you to the
+    system.   The Pascal procedures have a function Vcheck which
+    looks for the 16 bit sequence A55Ah and a valid version number.
+    To keep the plotting routines as fast as possible, the check is
+    done only once.  If something changes the vector during a plot
+    than there could be a problem.  Just make sure to include
+    Vcheck in your software and avoid changing int 64h during a plot.
+
+
+COMPATIBILITIES:
+    I have found the software to work on:
+    o IBM PC
+    o IBM XT
+    o IBM AT
+    o PC Limited 8 Mhz AT
+    o Wells American 8 Mhz
+    o Wells American 10 Mhz
+    o Lanier C-2400 AT
+    o Radio Shack 3000
+
+    I have not kept a list of printers that it works on but I know
+    it has worked on a good number.  The only printer that did not work
+    well with it was a Star Radix-15 which does not work with 123
+    graphs either for the same reason.  The bit mapped graphics are
+    8 pixels high and a line feed should skip 8 pixels worth.  The
+    Star skips more and leaves a gap.   Just my luck that the printer
+    happens to belong to my fiance'.
+
+INCOMPATIBILITIES:
+    o Some network software use the same interrupt vector and Hiplot2
+    will not allow loading.  If you network, try not installing the
+    network software prior to plotting to your printer.
+
+    o As I said, the Star Radix-15 skips lines.
+
+
+
+
+       R. Coleman  1/18/87
+
+
+```
+{% endraw %}
+
 ## INDXCARD.BAS
 
 {% raw %}
@@ -5501,6 +6667,13 @@ INCOMPATIBILITIES:
     PMB15    BAK      3651   1-11-87   4:30p
     ITEMDATA DAT       158   1-11-87   4:02p
     PMB15    DOC      3651   1-11-87   4:34p
+    GRAPHICS     <DIR>    
+           34 file(s)     215591 bytes
+
+     Directory of A:\GRAPHICS
+
+    .            <DIR>    
+    ..           <DIR>    
     DEMOPLOT PAS      7829   9-19-86   8:32a
     HIPLOT2  EXE      3840  10-08-86   8:46p
     HIRESPLT PAS     34771   9-19-86   8:24a
@@ -5509,5 +6682,8 @@ INCOMPATIBILITIES:
     HIRESPLT ARC     32858   1-18-87  11:12a
     README   NOW      1011   1-19-87   7:38a
     README   BAK       728   1-19-87   7:32a
-           41 file(s)     319937 bytes
-                           21504 bytes free
+           10 file(s)     104346 bytes
+
+    Total files listed:
+           44 file(s)     319937 bytes
+                           20480 bytes free

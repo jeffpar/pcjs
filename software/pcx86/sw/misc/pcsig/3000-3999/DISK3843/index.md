@@ -246,6 +246,29 @@ GENESIS1 DOC     6095  10-26-91  12:45p
 ```
 {% endraw %}
 
+## INSTALL.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                 <<<<  PC-SIG Disk #3843 WINGREEK  >>>>                  ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║                                                                         ║
+║  Installation instructions are given in INSTALL.WRI.                    ║
+║                                                                         ║
+║  To View INSTALL.WRI, enter File Manager within Windows.                ║
+║  From File Manager, click on INSTALL.WRI in its directory.              ║
+║  Choose RUN in the FILE menu within File Manager.                       ║
+║                                                                         ║
+║  Follow installation instructions given to you by the author.           ║
+║                                                                         ║
+║                                                                         ║
+║ (C) Copyright 1993 PC-SIG Inc. 1030D East Duane Ave. Sunnyvale CA 94086 ║
+║     For inquiries call: (408) 730-9291  For orders call: (800) 245-6717 ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## PCSIG.TXT
 
 {% raw %}

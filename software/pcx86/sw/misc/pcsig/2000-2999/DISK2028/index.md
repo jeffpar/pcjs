@@ -141,6 +141,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║               <<<<  Disk #2028  LASER UTILITIES  >>>>                   ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To run Laserlabel type: LL  To run LaserEnvelope type: LE               ║
+║ To print documentation on Tile type: COPY README LPT1:                  ║
+║ To print documentation on SEND2LJ type: COPY READ.ME LPT1:              ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## TEST.TXT
 
 {% raw %}

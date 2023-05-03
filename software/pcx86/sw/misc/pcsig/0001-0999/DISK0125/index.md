@@ -113,6 +113,20 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║                    <<<<  Disk No 125 HOST III  >>>>                     ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To start the program, type HOST-III (press enter)                       ║
+║                                                                         ║
+║ To copy the documentation to your printer, type MANUAL (press enter)    ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 ## HOST-III.DOC
 
 {% raw %}

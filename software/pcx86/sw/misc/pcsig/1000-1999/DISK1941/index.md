@@ -85,6 +85,26 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║  <<<<  PC-SIG Disk #1941  ROOTDIRECTORY - TREES KNOWLEDGE BASE   >>>>   ║
+║                    Disk 1 of 3 (also #1942, 1943)                       ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To print the installation instructions, type:                           ║
+║                    COPY README PRN (press Enter)                        ║
+║                                                                         ║
+║ To rerun the program, type:  ROOTDIR (press Enter)                      ║
+║                                                                         ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1990, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #1941

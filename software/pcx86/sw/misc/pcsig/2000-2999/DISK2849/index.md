@@ -63,6 +63,28 @@ Sunnyvale  Ca. 94086
 ```
 {% endraw %}
 
+## GO.TXT
+
+{% raw %}
+```
+╔═════════════════════════════════════════════════════════════════════════╗
+║              <<<<  PC-SIG Disk #2849  THE BABYSITTER  >>>>              ║
+╠═════════════════════════════════════════════════════════════════════════╣
+║ To read/print the program documentation, type:  SITR-DOC     (Enter)    ║
+║                                                 TYPE README  (Enter)    ║
+║                                                                         ║
+║ To install the program to your hard drive, type:  HDINSTALL  (Enter)    ║
+║                                                                         ║
+║ To start THE BABYSITTER, type:  SITTER  (press Enter)                   ║
+║                                                                         ║
+║ To print the order form, type:  ORDER  (press Enter)                    ║
+║                                                                         ║
+║                                                                         ║
+║                                           Copyright 1992, PC-SIG, Inc.  ║
+╚═════════════════════════════════════════════════════════════════════════╝
+```
+{% endraw %}
+
 {% comment %}samples_end{% endcomment %}
 
 ### Directory of PC-SIG Library Disk #2849
