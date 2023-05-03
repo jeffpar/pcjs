@@ -585,8 +585,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "CHASM.ARC",
-        "--verbose"
+        "DISK0186.json",
+        "t.json"
       ],
       "cwd": "${workspaceFolder}/tmp",
       "stopOnEntry": false,

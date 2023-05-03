@@ -2278,10 +2278,10 @@ function readDisk(diskFile, forceBPB, sectorIDs, sectorErrors, suppData)
             }
         }
         if (di) {
-            let sDir = getFullPath(diskFile.replace(/\.[a-z]+$/, path.sep));
+            let sDir = getFullPath(diskFile.replace(/\.[a-z]+$/i, ""));
             let aDiskFiles = glob.sync(path.join(sDir, "**"));
             for (let i = 0; i < aDiskFiles.length; i++) {
-                addMetaData(di, sDir, aDiskFiles[i]);
+                addMetaData(di, sDir, aDiskFiles[i].slice(sDir.length));
             }
         }
     } catch(err) {
