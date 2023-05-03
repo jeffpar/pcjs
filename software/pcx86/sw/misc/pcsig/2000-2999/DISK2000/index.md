@@ -348,7 +348,7 @@ Sunnyvale  Ca. 94086
 
 ### Directory of PC-SIG Library Disk #2000
 
-     Volume in drive A is DISK2000
+     Volume in drive A has no label
      Directory of A:\
 
     ANIM     TRI      4925   7-27-89  10:13a

@@ -132,7 +132,7 @@ FILES_4  DOC        0   2-12-89  11:22a
 
 ### Directory of PC-SIG Library Disk #1980
 
-     Volume in drive A is DISK1980
+     Volume in drive A has no label
      Directory of A:\
 
     DCMOTFIX CHN      9178   1-01-80   1:32a

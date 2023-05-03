@@ -85,7 +85,7 @@ Sunnyvale Ca. 94086
 
 ### Directory of PC-SIG Library Disk #0758
 
-     Volume in drive A is DISK0758
+     Volume in drive A has no label
      Directory of A:\
 
     FILES758 TXT      1126  10-06-88   8:25a

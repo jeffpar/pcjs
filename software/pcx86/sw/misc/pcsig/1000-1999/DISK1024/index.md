@@ -68,7 +68,7 @@ Sunnyvale Ca. 94086
 
 ### Directory of PC-SIG Library Disk #1024
 
-     Volume in drive A is DISK1024
+     Volume in drive A has no label
      Directory of A:\
 
     CONFIG   FX         49   3-15-88   4:50p

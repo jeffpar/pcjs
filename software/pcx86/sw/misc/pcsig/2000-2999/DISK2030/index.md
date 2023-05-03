@@ -1044,7 +1044,7 @@ Sheet you cannot close the year.
 
 ### Directory of PC-SIG Library Disk #2030
 
-     Volume in drive A is DISK2030
+     Volume in drive A has no label
      Directory of A:\
 
     CONFIG   SYS        22   2-04-89   6:28p

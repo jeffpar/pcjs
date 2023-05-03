@@ -482,7 +482,7 @@ Sunnyvale  Ca. 94086
 
 ### Directory of PC-SIG Library Disk #1969
 
-     Volume in drive A is DISK1969
+     Volume in drive A has no label
      Directory of A:\
 
     FILE1969 TXT      2836   1-25-90   4:51p

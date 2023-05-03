@@ -335,7 +335,7 @@ ver,to see,saw
 
 ### Directory of PC-SIG Library Disk #1061
 
-     Volume in drive A is DISK1061
+     Volume in drive A has no label
      Directory of A:\
 
     ERRORS               1   2-13-88   2:22p

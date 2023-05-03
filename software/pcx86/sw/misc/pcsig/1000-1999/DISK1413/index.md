@@ -1436,7 +1436,7 @@ Page: 20                   REGISTRATION FORM
 
 ### Directory of PC-SIG Library Disk #1413
 
-     Volume in drive A is DISK1413
+     Volume in drive A has no label
      Directory of A:\
 
     ALBUMS   REC      6000   1-20-88  12:12p

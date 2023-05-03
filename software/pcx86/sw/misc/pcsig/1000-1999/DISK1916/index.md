@@ -331,7 +331,7 @@ Foreign customers add $10 (US) for postage and handling.
 
 ### Directory of PC-SIG Library Disk #1916
 
-     Volume in drive A is DISK1916
+     Volume in drive A has no label
      Directory of A:\
 
     FILE1916 TXT      1481  12-28-89   7:45p

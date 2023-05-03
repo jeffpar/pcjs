@@ -297,7 +297,7 @@ TRYING THE PROGRAM IS THE BEST WAY TO LEARN IT.
 
 ### Directory of PC-SIG Library Disk #1752
 
-     Volume in drive A is DISK1752
+     Volume in drive A has no label
      Directory of A:\
 
     DIAL123  EXE     43489   8-08-89   4:00p

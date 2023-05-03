@@ -83,7 +83,7 @@ Sunnyvale  Ca. 94086
 
 ### Directory of PC-SIG Library Disk #2063
 
-     Volume in drive A is DISK2063
+     Volume in drive A has no label
      Directory of A:\
 
     FILE2063 TXT      2887   2-21-90   3:06p

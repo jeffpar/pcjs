@@ -17,7 +17,7 @@ machines:
 
 ### Directory of PC-SIG Library Disk #1583
 
-     Volume in drive A is DISK1583
+     Volume in drive A has no label
      Directory of A:\
 
     ACCMENU  EXE    114319   3-10-89   9:23a

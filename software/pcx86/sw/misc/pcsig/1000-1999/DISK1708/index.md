@@ -51,7 +51,7 @@ machines:
 
 ### Directory of PC-SIG Library Disk #1708
 
-     Volume in drive A is DISK1708
+     Volume in drive A has no label
      Directory of A:\
 
     APPENDIX MAN      1234   8-01-88   6:35a

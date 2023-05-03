@@ -1965,7 +1965,7 @@ Sunnyvale  Ca. 94086
 
 ### Directory of PC-SIG Library Disk #1863
 
-     Volume in drive A is DISK1863
+     Volume in drive A has no label
      Directory of A:\
 
     BIGPOLY2 MPD      1947   5-01-89   6:30a

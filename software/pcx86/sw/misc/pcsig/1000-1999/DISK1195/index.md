@@ -109,7 +109,7 @@ Sunnyvale  Ca. 94086
 
 ### Directory of PC-SIG Library Disk #1195
 
-     Volume in drive A is DISK1195
+     Volume in drive A has no label
      Directory of A:\
 
     1        BAT       758   9-11-88  12:46p
@@ -118,7 +118,7 @@ Sunnyvale  Ca. 94086
     4        BAT        64   9-11-88  12:50p
     5        BAT        94   1-30-88   3:29p
     EMPTY    DBF      3584   9-11-88  12:57p
-    ESJOBS   DBF      3395
+    ESJOBS   DBF      3395   1-01-80
     FILE1195 TXT      1553  12-09-88  11:13a
     GO       BAT        38   1-18-88   1:38p
     GO       TXT       540  10-25-88   1:25p

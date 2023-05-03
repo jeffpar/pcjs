@@ -77,7 +77,7 @@ Sunnyvale  Ca. 94086
 
 ### Directory of PC-SIG Library Disk #0623
 
-     Volume in drive A is DISK0623
+     Volume in drive A has no label
      Directory of A:\
 
     ASSOC    EXE     62000  12-17-88  10:31a
