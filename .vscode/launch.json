@@ -975,7 +975,7 @@
       "name": "Node: diskettes.js --collection=pcsigdisks",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/misc/old/diskettes.js",
+      "program": "${workspaceFolder}/tools/old/diskettes.js",
       "args": [
         "--collection=pcsigdisks",
         "--overwrite"
@@ -991,10 +991,11 @@
       "name": "Node: diskettes.js /disks/pcsigdisks --folders=json",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/misc/old/diskettes.js",
+      "program": "${workspaceFolder}/tools/old/diskettes.js",
       "args": [
         "/disks/pcsigdisks",
         "--folders=json",
+        "--trim",
         "--overwrite"
       ],
       "cwd": "${workspaceFolder}",
@@ -1008,7 +1009,7 @@
       "name": "Node: diskettes.js /disks/private --folders",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/misc/old/diskettes.js",
+      "program": "${workspaceFolder}/tools/old/diskettes.js",
       "args": [
         "/disks/private",
         "--folders",
@@ -1026,7 +1027,7 @@
       "name": "Node: diskdump.js (deprecated)",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/misc/old/diskdump/bin/diskdump.js",
+      "program": "${workspaceFolder}/tools/old/diskdump/bin/diskdump.js",
       "args": [
         "--disk=gamedisks/pcx86/game/other/1984/kings_quest1/archive/disk1.psi",
         "--format=json",
@@ -1044,7 +1045,7 @@
       "name": "Node: filedump.js (deprecated)",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/misc/old/filedump/bin/filedump.js",
+      "program": "${workspaceFolder}/tools/old/filedump/bin/filedump.js",
       "args": [
         "--file=machines/palm/pilot/roms/pilot.rom",
         "--format=bytes",
@@ -1061,12 +1062,12 @@
       "name": "Node: pdfparse.js",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/tools/misc/old/textout/lib/pdfparse.js",
+      "program": "${workspaceFolder}/tools/old/textout/lib/pdfparse.js",
       "args": [
         "archive/Whats_In_Print_1984-OCR.pdf",
         "--debug"
       ],
-      "cwd": "${workspaceFolder}/tools/misc/old/textout",
+      "cwd": "${workspaceFolder}/tools/old/textout",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
