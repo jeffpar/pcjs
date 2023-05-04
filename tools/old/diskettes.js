@@ -536,7 +536,7 @@ function processFolders(sDir, argv)
                             }
                         }
 
-                        if (verifyJSON && !diskObj['@fileList']) {
+                        if (verifyJSON /* && !diskObj['@fileList'] */) {
                             let json = JSON.parse(fs.readFileSync(imgFile, {encoding: "utf8"}));
                             if (json && json.fileTable) {
                                 let sFileList = "";

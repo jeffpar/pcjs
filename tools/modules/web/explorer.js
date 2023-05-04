@@ -6,21 +6,24 @@
  *
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  *
- * TODO: Convert this code to a class and load it as a "module" instead of a "script".
+ * TODO: Convert this code to a class and load it as a "module" instead of as a "script".
  */
 
-function pcjsGetURLVars() {
+function pcjsGetURLVars()
+{
     var vars = {}, parts = window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
         vars[key] = value;
     });
     return vars;
 }
 
-function pcjsOnClick(element, event) {
+function pcjsOnClick(element, event)
+{
     element.href += window.location.search;
 }
 
-function pcjsExplorerClick(element, event) {
+function pcjsExplorerClick(element, event)
+{
     if (event) event.stopPropagation();
     if (element.classList.contains("pcjs-explorer-open")) {
         element.classList.add("pcjs-explorer-closed");
@@ -31,7 +34,8 @@ function pcjsExplorerClick(element, event) {
     }
 }
 
-function pcjsExplorerExpand(path, altPath, prefix) {
+function pcjsExplorerExpand(path, altPath, prefix)
+{
     var expansions = 0;
     if (!path && altPath) {
         path = altPath.replace(/^\/[^/]*\/([^/]*)\/.*$/, "/$1/");
@@ -64,19 +68,22 @@ function pcjsExplorerExpand(path, altPath, prefix) {
     return expansions;
 }
 
-function pcjsExplorerExpandAll(element, event, fExpand) {
+function pcjsExplorerExpandAll(element, event, fExpand)
+{
     if (event) event.preventDefault();
     var elements = document.querySelectorAll(fExpand ? ".pcjs-explorer-closed" : ".pcjs-explorer-open");
     elements.forEach((element) => { pcjsExplorerClick(element); });
 }
 
-function pcjsExplorerSurprise() {
+function pcjsExplorerSurprise()
+{
     var elements = document.querySelectorAll(".pcjs-explorer-item");
     var element = elements && elements[Math.random() * elements.length | 0];
     if (element && element.children) window.location.href = element.children[0].href;
 }
 
-function pcjsExplorerView(element, event) {
+function pcjsExplorerView(element, event)
+{
     event.preventDefault();
     var target = document.getElementById("pcjs-explorer-menu");
     if (target) {
@@ -86,7 +93,8 @@ function pcjsExplorerView(element, event) {
     }
 }
 
-function pcjsExplorerInit() {
+function pcjsExplorerInit()
+{
     let path = window.location.pathname;
     pcjsExplorerExpand(path + window.location.hash.substr(1));
     pcjsExplorerExpand(pcjsGetURLVars()['software'], path, "/software");

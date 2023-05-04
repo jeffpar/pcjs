@@ -1,0 +1,13 @@
+<form id="{{ include.form }}" class="pcjs-form">
+  <fieldset class="pcjs-fieldset">
+    {%- if include.label %}<label>{{ include.label }}:<br/>{%- endif %}
+      <input id="{{ include.form }}-file" type="file"><input id="{{ include.form }}-submit" type="submit" value="{{ include.action }}" disabled="">
+    {%- if include.label %}</label>{%- endif %}
+  </fieldset>
+</form>
+
+<div class="language-plaintext highlighter-rouge">
+  <div class="highlight">
+    <pre class="highlight"><code id="{{ include.output }}"></code></pre>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 /**
- * @fileoverview Node version of DataBuffer
+ * @fileoverview DataBuffer: A Buffer-Like Class for Node and Browsers
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2023 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -9,7 +9,7 @@
 
 /**
  * @class DataBuffer
- * @property {Buffer} buffer
+ * @property {boolean} node
  * @property {number} length
  */
 export default class DataBuffer {
@@ -27,6 +27,8 @@ export default class DataBuffer {
      *
      * The start and end parameters are only used with #3 (ie, when another DataBuffer is passed).
      *
+     * NOTE: You will NOT find all the methods of the Buffer class implemented here; only the ones we actually use.
+     *
      * @this {DataBuffer}
      * @param {Array|ArrayBuffer|Buffer|DataBuffer|number|string} [init]
      * @param {number} [start]
@@ -34,27 +36,52 @@ export default class DataBuffer {
      */
     constructor(init = 0, start, end)
     {
+        this.node = (typeof window == "undefined");
         if (typeof init == "number") {
             this.new(init);
         }
-        else if (init instanceof Buffer) {
-            this.buffer = init;
+        else if (this.node) {
+            if (init instanceof Buffer) {
+                this.buffer = init;
+            }
+            else if (init instanceof DataBuffer) {
+                this.buffer = init.buffer.slice(start, end);
+            }
+            else if (this.node) {
+                this.buffer = Buffer.from(init);
+            }
+            this.length = this.buffer.length;
         }
-        else if (init instanceof DataBuffer) {
-            this.buffer = init.buffer.slice(start, end);
-        } else {
-            this.buffer = Buffer.from(init);
+        else {
+            if (init instanceof ArrayBuffer) {
+                this.ab = init;
+                this.length = this.ab.byteLength;
+                this.dv = new DataView(this.ab, 0, this.length);
+            }
+            else if (init instanceof DataBuffer) {
+                this.ab = init.ab;
+                if (start == undefined) start = 0;
+                if (end == undefined) end = init.length;
+                this.length = end - start;
+                this.dv = new DataView(this.ab, start, this.length);
+            }
+            else {
+                if (typeof init == "string") {
+                    let enc = new TextEncoder("utf-8");
+                    init = enc.encode(init);
+                }
+                this.ab = new ArrayBuffer(init.length);
+                this.dv = new DataView(this.ab, 0, init.length);
+                for (let i = 0; i < init.length; i++) {
+                    this.dv.setUint8(i, init[i]);
+                }
+                this.length = init.length;
+            }
         }
-        this.length = this.buffer.length;
     }
 
     /**
      * compare(dbTarget)
-     *
-     * NOTE: This method isn't part of the Node Buffer class, but it's useful for creating comparing buffers without the client
-     * needing to known which DataBuffer class to import (eg, nodebuffer.js or webbuffer.js).
-     *
-     * The implementation here in nodebuffer.js is trivial, because there's a Node Buffer class method that compares two buffers.
      *
      * @this {DataBuffer}
      * @param {DataBuffer} dbTarget
@@ -62,7 +89,10 @@ export default class DataBuffer {
      */
     compare(dbTarget)
     {
-        return !Buffer.compare(this.buffer, dbTarget.buffer);
+        if (this.node) {
+            return !Buffer.compare(this.buffer, dbTarget.buffer);
+        }
+        return undefined;       // TODO
     }
 
     /**
@@ -76,7 +106,16 @@ export default class DataBuffer {
      */
     copy(dbTarget, offTarget, offSource, offSourceEnd)
     {
-        this.buffer.copy(dbTarget.buffer, offTarget, offSource, offSourceEnd);
+        if (this.node) {
+            this.buffer.copy(dbTarget.buffer, offTarget, offSource, offSourceEnd);
+        } else {
+            let offMax = this.length;
+            let cbMax = dbTarget.length - offTarget;
+            if (offMax > cbMax) offMax = cbMax;
+            for (let off = 0; off < offMax; off++) {
+                dbTarget.writeUInt8(this.readUInt8(off), offTarget + off);
+            }
+        }
     }
 
     /**
@@ -93,13 +132,13 @@ export default class DataBuffer {
      */
     fill(data, off = 0, end = this.length)
     {
-        if (typeof data == "number") {
+        if (this.node && typeof data == "number") {
             this.buffer.fill(data, off, end);
         } else {
             let i = 0;
             if (end > this.length) end = this.length;
             for (let o = off; o < end; o++) {
-                this.buffer[o] = data[i++];
+                this.writeUInt8(typeof data == "number"? data : data[i++], o);
             }
         }
     }
@@ -107,16 +146,19 @@ export default class DataBuffer {
     /**
      * new(size)
      *
-     * NOTE: This method isn't part of the Node Buffer class, but it's useful for creating new buffers without the client
-     * needing to known which DataBuffer class to import (eg, nodebuffer.js or webbuffer.js).
-     *
      * @this {DataBuffer}
      * @param {number} size
      */
     new(size)
     {
-        this.buffer = Buffer.alloc(size);
-        this.length = size;
+        if (this.node) {
+            this.buffer = Buffer.alloc(size);
+            this.length = size;
+        } else {
+            this.ab = new ArrayBuffer(size);
+            this.length = this.ab.byteLength;
+            this.dv = new DataView(this.ab, 0, this.length);
+        }
     }
 
     /**
@@ -142,7 +184,15 @@ export default class DataBuffer {
      */
     write(s, off, len)
     {
-        this.buffer.write(s, off, len);
+        if (this.node) {
+            this.buffer.write(s, off, len);
+        } else {
+            let i = 0;
+            while (off < this.length) {
+                this.dv.setUint8(off, s.charCodeAt(i++));
+                off++;
+            }
+        }
     }
 
     /**
@@ -154,7 +204,7 @@ export default class DataBuffer {
      */
     readUInt8(off)
     {
-        return this.buffer.readUInt8(off);
+        return this.node? this.buffer.readUInt8(off) : this.dv.getUint8(off);
     }
 
     /**
@@ -166,7 +216,7 @@ export default class DataBuffer {
      */
     writeUInt8(b, off)
     {
-        this.buffer.writeUInt8(b, off);
+        if (this.node) this.buffer.writeUInt8(b, off); else this.dv.setUint8(off, b);
     }
 
     /**
@@ -178,7 +228,7 @@ export default class DataBuffer {
      */
     readUInt16BE(off)
     {
-        return this.buffer.readUInt16BE(off);
+        return this.node? this.buffer.readUInt16BE(off) : this.dv.getUint16(off);
     }
 
     /**
@@ -190,7 +240,7 @@ export default class DataBuffer {
      */
     readUInt16LE(off)
     {
-        return this.buffer.readUInt16LE(off);
+        return this.node? this.buffer.readUInt16LE(off) : this.dv.getUint16(off, true);
     }
 
     /**
@@ -202,7 +252,7 @@ export default class DataBuffer {
      */
     writeUInt16LE(w, off)
     {
-        this.buffer.writeUInt16LE(w, off);
+        if (this.node) this.buffer.writeUInt16LE(w, off); else this.dv.setUint16(off, w, true);
     }
 
     /**
@@ -214,7 +264,7 @@ export default class DataBuffer {
      */
     readInt16BE(off)
     {
-        return this.buffer.readInt16BE(off);
+        return this.node? this.buffer.readInt16BE(off) : this.dv.getInt16(off);
     }
 
     /**
@@ -226,7 +276,7 @@ export default class DataBuffer {
      */
     readInt16LE(off)
     {
-        return this.buffer.readInt16LE(off);
+        return this.node? this.buffer.readInt16LE(off) : this.dv.getInt16(off, true);
     }
 
     /**
@@ -238,7 +288,7 @@ export default class DataBuffer {
      */
     readUInt32BE(off)
     {
-        return this.buffer.readUInt32BE(off);
+        return this.node? this.buffer.readUInt32BE(off) : this.dv.getUint32(off);
     }
 
     /**
@@ -250,7 +300,7 @@ export default class DataBuffer {
      */
     readUInt32LE(off)
     {
-        return this.buffer.readUInt32LE(off);
+        return this.node? this.buffer.readUInt32LE(off): this.dv.getUint32(off, true);
     }
 
     /**
@@ -262,7 +312,7 @@ export default class DataBuffer {
      */
     readInt32BE(off)
     {
-        return this.buffer.readInt32BE(off);
+        return this.node? this.buffer.readInt32BE(off) : this.dv.getInt32(off);
     }
 
     /**
@@ -274,7 +324,7 @@ export default class DataBuffer {
      */
     readInt32LE(off)
     {
-        return this.buffer.readInt32LE(off);
+        return this.node? this.buffer.readInt32LE(off) : this.dv.getInt32(off, true);
     }
 
     /**
@@ -286,11 +336,11 @@ export default class DataBuffer {
      */
     writeInt32LE(dw, off)
     {
-        this.buffer.writeInt32LE(dw, off);
+        if (this.node) this.buffer.writeInt32LE(dw, off); else this.dv.setInt32(off, dw, true);
     }
 
     /**
-     * toString(format)
+     * toString(format, start, end)
      *
      * @this {DataBuffer}
      * @param {string} [format]
@@ -298,8 +348,21 @@ export default class DataBuffer {
      * @param {number} [end]
      * @returns {string}
      */
-    toString(format, start, end)
+    toString(format, start = 0, end = this.length)
     {
-        return this.buffer.toString(format, start, end);
+        let s = "";
+        if (this.node) {
+            s = this.buffer.toString(format, start, end);
+        } else {
+            let a = new Uint8Array(this.ab, start, end - start);
+            if (format && "TextDecoder" in window) {
+                let dec = new TextDecoder(format);
+                s = dec.decode(a);
+            } else {
+                // s = String.fromCharCode(...a) fails for large arrays...
+                for (let i = 0; i < a.length; i++) s += String.fromCharCode(a[i]);
+            }
+        }
+        return s;
     }
 }

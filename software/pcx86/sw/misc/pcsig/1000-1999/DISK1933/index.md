@@ -4,9 +4,9 @@ title: "PC-SIG Diskette Library (Disk #1933)"
 permalink: /software/pcx86/sw/misc/pcsig/1000-1999/DISK1933/
 preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/1000-1999/DISK1933/DISK1933.jpg
 machines:
-  - id: ibm5150
+  - id: ibm5170
     type: pcx86
-    config: /machines/pcx86/ibm/5150/cga/256kb/machine.xml
+    config: /machines/pcx86/ibm/5170/cga/1024kb/rev3/machine.xml
     diskettes: /machines/pcx86/diskettes.json,/disks/pcsigdisks/pcx86/diskettes.json
     autoGen: true
     autoMount:
@@ -14,7 +14,7 @@ machines:
     autoType: $date\r$time\rB:\rDIR\r
 ---
 
-{% include machine.html id="ibm5150" %}
+{% include machine.html id="ibm5170" %}
 
 {% comment %}info_begin{% endcomment %}
 

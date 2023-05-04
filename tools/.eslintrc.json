@@ -5,6 +5,7 @@
   },
   "rules": {
     "sort-imports": "off",
-    "lines-between-class-members": "off"
+    "lines-between-class-members": "off",
+    "no-useless-constructor": "off"
   }
 }
