@@ -1,5 +1,5 @@
 /**
- * @fileoverview Disk Search UI
+ * @fileoverview Disk Search UI and Functions
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2023 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -66,6 +66,7 @@ export default class DiskSearch {
      *
      * Walk the JSON object tree, looking for the named elements, and return an array of those elements.
      *
+     * @this {DiskSearch}
      * @param {Object} json
      * @param {string} path
      * @param {string} name
@@ -98,6 +99,7 @@ export default class DiskSearch {
     /**
      * containsText(item, text)
      *
+     * @this {DiskSearch}
      * @param {string} item
      * @param {string} text
      * @returns {boolean}
@@ -110,6 +112,7 @@ export default class DiskSearch {
     /**
      * matchesFile(list, re)
      *
+     * @this {DiskSearch}
      * @param {string} list
      * @param {RegExp} re
      * @returns {boolean}
@@ -122,6 +125,7 @@ export default class DiskSearch {
     /**
      * matchesText(obj, props, re)
      *
+     * @this {DiskSearch}
      * @param {object} obj
      * @param {Array} props
      * @param {RegExp} re
@@ -138,6 +142,7 @@ export default class DiskSearch {
     /**
      * getMatches(text)
      *
+     * @this {DiskSearch}
      * @param {string} text
      * @returns {Array} of matching media indexes
      */
@@ -172,6 +177,7 @@ export default class DiskSearch {
      *
      * Called on input keypress events, to implement specific search actions.
      *
+     * @this {DiskSearch}
      * @param {KeyboardEvent} event
      */
     doSearch(event) {
@@ -218,6 +224,7 @@ export default class DiskSearch {
      *
      * Called on input field changes, to implement incremental search.
      *
+     * @this {DiskSearch}
      * @param {InputEvent} event
      */
     incSearch(event) {

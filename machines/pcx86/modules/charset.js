@@ -7,6 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import DataBuffer from "../../modules/databuffer.js";
+
 /**
  * @class CharSet
  */
@@ -34,7 +36,7 @@ export default class CharSet {
     /**
      * fromCP437(data, controlChars)
      *
-     * @param {string|Buffer} data
+     * @param {string|DataBuffer} data
      * @param {boolean} [controlChars] (true to include control characters)
      * @return {string}
      */
@@ -42,7 +44,7 @@ export default class CharSet {
     {
         let u = "";
         for (let i = 0; i < data.length; i++) {
-            let c = typeof data == "string"? data.charCodeAt(i) : data.readUint8(i);
+            let c = typeof data == "string"? data.charCodeAt(i) : data.readUInt8(i);
             if (c < CharSet.CP437.length && (c >= 32 || controlChars)) {
                 u += CharSet.CP437[c];
             } else {
@@ -81,6 +83,27 @@ export default class CharSet {
     static isCP437(c)
     {
         return CharSet.CP437.indexOf(c) >= 0;
+    }
+
+    /**
+     * isText(data)
+     *
+     * It can be hard to differentiate between a binary file and a text file that's using
+     * lots of IBM PC graphics characters.  Control characters are often red flags, but they
+     * can also be interpreted as graphics characters.
+     *
+     * @param {string} data
+     * @return {boolean} true if data is entirely non-NULL 7-bit ASCII and/or valid CP437 characters
+     */
+    static isText(data)
+    {
+        for (let i = 0; i < data.length; i++) {
+            let b = data.charCodeAt(i);
+            if (b == 0 || b >= 0x80 && !CharSet.isCP437(data[i])) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

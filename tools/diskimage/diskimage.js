@@ -13,11 +13,12 @@ import crypto     from "crypto";
 import glob       from "glob";
 import path       from "path";
 import got        from "got";
-import DataBuffer from "../modules/nodebuffer.js";
+import BASConvert from "../modules/bascon.js";
 import PCJSLib    from "../modules/pcjslib.js";
 import StreamZip  from "../modules/streamzip.js";
 // import StreamZip  from "node-stream-zip";
 import Device     from "../../machines/modules/device.js";
+import DataBuffer from "../../machines/modules/databuffer.js";
 import JSONLib    from "../../machines/modules/jsonlib.js";
 import DiskInfo   from "../../machines/pcx86/modules/diskinfo.js";
 import CharSet    from "../../machines/pcx86/modules/charset.js";
@@ -336,27 +337,6 @@ function getTargetValue(sTarget)
 }
 
 /**
- * isText(data)
- *
- * It can be hard to differentiate between a binary file and a text file that's using
- * lots of IBM PC graphics characters.  Control characters are often red flags, but they
- * can also be interpreted as graphics characters.
- *
- * @param {string} data
- * @return {boolean} true if sData is entirely non-NULL 7-bit ASCII and/or valid CP437 characters
- */
-function isText(data)
-{
-    for (let i = 0; i < data.length; i++) {
-        let b = data.charCodeAt(i);
-        if (b == 0 || b >= 0x80 && !CharSet.isCP437(data[i])) {
-            return false;
-        }
-    }
-    return true;
-}
-
-/**
  * isArchiveFile(sFile)
  *
  * @param {string} sFile
@@ -432,512 +412,17 @@ function makeDir(sDir, recursive = false, deleteFile = false)
 }
 
 /**
- * normalizeForHost(db, fAssumeText)
+ * convertBASICFile(db, fNormalize, sPath)
  *
- * If DataBuffer is text, "normalize" for the host.
- *
- * @param {DataBuffer} db
- * @param {boolean} [fAssumeText]
- * @return {DataBuffer}
- */
-function normalizeForHost(db, fAssumeText)
-{
-    /*
-     * Either the caller tells us the data is text, or we at least make sure the first 4 bytes look like text.
-     */
-    if (fAssumeText || isText(db.toString("utf8", 0, 4))) {
-        let s = CharSet.fromCP437(db.buffer, false);
-        s = s.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
-        let i = s.indexOf(String.fromCharCode(0x1A));
-        if (i >= 0) {
-            s = s.slice(0, i);
-        }
-        db = new DataBuffer(s);
-    }
-    return db;
-}
-
-/**
- * convertBASICFile(sPath, db, fNormalize)
- *
- * NOTE: The code in this function is based on https://github.com/rwtodd/bascat, which was a good start but had some issues.
- * I'm sure there are still some lingering issues here (perhaps some magic whitespace rules that I'm unaware of), but this code
- * seems to work pretty well now, and the new tokens dictionary is *much* more straightforward.
- *
- * @param {string} sPath (for informational purposes only, since we're working entirely with the DataBuffer)
  * @param {DataBuffer} db (the contents of the BASIC file)
  * @param {boolean} [fNormalize] (true if we should convert characters from CP437 to UTF-8, revert line-endings, and omit EOF)
+ * @param {string} [sPath] (for informational purposes only, since we're working entirely with the DataBuffer)
  * @returns {DataBuffer}
  */
-function convertBASICFile(sPath, db, fNormalize)
+function convertBASICFile(db, fNormalize, sPath)
 {
-    let i = 0, s = "", quote = false, comment = false, data = false, lineWarning = 0;
-
-    const tokens = {
-        0x11:   "0",
-        0x12:   "1",
-        0x13:   "2",
-        0x14:   "3",
-        0x15:   "4",
-        0x16:   "5",
-        0x17:   "6",
-        0x18:   "7",
-        0x19:   "8",
-        0x1A:   "9",
-        0x1B:   "10",
-        0x81:   "END",
-        0x82:   "FOR",
-        0x83:   "NEXT",
-        0x84:   "DATA",
-        0x85:   "INPUT",
-        0x86:   "DIM",
-        0x87:   "READ",
-        0x88:   "LET",
-        0x89:   "GOTO",
-        0x8A:   "RUN",
-        0x8B:   "IF",
-        0x8C:   "RESTORE",
-        0x8D:   "GOSUB",
-        0x8E:   "RETURN",
-        0x8F:   "REM",
-        0x90:   "STOP",
-        0x91:   "PRINT",
-        0x92:   "CLEAR",
-        0x93:   "LIST",
-        0x94:   "NEW",
-        0x95:   "ON",
-        0x96:   "WAIT",
-        0x97:   "DEF",
-        0x98:   "POKE",
-        0x99:   "CONT",
-        0x9C:   "OUT",
-        0x9D:   "LPRINT",
-        0x9E:   "LLIST",
-        0xA0:   "WIDTH",
-        0xA1:   "ELSE",
-        0xA2:   "TRON",
-        0xA3:   "TROFF",
-        0xA4:   "SWAP",
-        0xA5:   "ERASE",
-        0xA6:   "EDIT",
-        0xA7:   "ERROR",
-        0xA8:   "RESUME",
-        0xA9:   "DELETE",
-        0xAA:   "AUTO",
-        0xAB:   "RENUM",
-        0xAC:   "DEFSTR",
-        0xAD:   "DEFINT",
-        0xAE:   "DEFSNG",
-        0xAF:   "DEFDBL",
-        0xB0:   "LINE",
-        0xB1:   "WHILE",
-        0xB2:   "WEND",
-        0xB3:   "CALL",
-        0xB7:   "WRITE",
-        0xB8:   "OPTION",
-        0xB9:   "RANDOMIZE",
-        0xBA:   "OPEN",
-        0xBB:   "CLOSE",
-        0xBC:   "LOAD",
-        0xBD:   "MERGE",
-        0xBE:   "SAVE",
-        0xBF:   "COLOR",
-        0xC0:   "CLS",
-        0xC1:   "MOTOR",
-        0xC2:   "BSAVE",
-        0xC3:   "BLOAD",
-        0xC4:   "SOUND",
-        0xC5:   "BEEP",
-        0xC6:   "PSET",
-        0xC7:   "PRESET",
-        0xC8:   "SCREEN",
-        0xC9:   "KEY",
-        0xCA:   "LOCATE",
-        0xCC:   "TO",
-        0xCD:   "THEN",
-        0xCE:   "TAB(",
-        0xCF:   "STEP",
-        0xD0:   "USR",
-        0xD1:   "FN",
-        0xD2:   "SPC(",
-        0xD3:   "NOT",
-        0xD4:   "ERL",
-        0xD5:   "ERR",
-        0xD6:   "STRING$",
-        0xD7:   "USING",
-        0xD8:   "INSTR",
-        0xD9:   "'",
-        0xDA:   "VARPTR",
-        0xDB:   "CSRLIN",
-        0xDC:   "POINT",
-        0xDD:   "OFF",
-        0xDE:   "INKEY$",
-        0xE6:   ">",
-        0xE7:   "=",
-        0xE8:   "<",
-        0xE9:   "+",
-        0xEA:   "-",
-        0xEB:   "*",
-        0xEC:   "/",
-        0xED:   "^",
-        0xEE:   "AND",
-        0xEF:   "OR",
-        0xF0:   ">=",
-        0xF1:   "EQV",
-        0xF2:   "IMP",
-        0xF3:   "MOD",
-        0xF4:   "\\",
-        0xFD81: "CVI",
-        0xFD82: "CVS",
-        0xFD83: "CVD",
-        0xFD84: "MKI$",
-        0xFD85: "MKS$",
-        0xFD86: "MKD$",
-        0xFD8B: "EXTERR",
-        0xFE81: "FILES",
-        0xFE82: "FIELD",
-        0xFE83: "SYSTEM",
-        0xFE84: "NAME",
-        0xFE85: "LSET",
-        0xFE86: "RSET",
-        0xFE87: "KILL",
-        0xFE88: "PUT",
-        0xFE89: "GET",
-        0xFE8A: "RESET",
-        0xFE8B: "COMMON",
-        0xFE8C: "CHAIN",
-        0xFE8D: "DATE$",
-        0xFE8E: "TIME$",
-        0xFE8F: "PAINT",
-        0xFE90: "COM",
-        0xFE91: "CIRCLE",
-        0xFE92: "DRAW",
-        0xFE93: "PLAY",
-        0xFE94: "TIMER",
-        0xFE95: "ERDEV",
-        0xFE96: "IOCTL",
-        0xFE97: "CHDIR",
-        0xFE98: "MKDIR",
-        0xFE99: "RMDIR",
-        0xFE9A: "SHELL",
-        0xFE9B: "ENVIRON",
-        0xFE9C: "VIEW",
-        0xFE9D: "WINDOW",
-        0xFE9E: "PMAP",
-        0xFE9F: "PALETTE",
-        0xFEA0: "LCOPY",
-        0xFEA1: "CALLS",
-        0xFEA4: "NOISE",
-        0xFEA5: "PCOPY",
-        0xFEA6: "TERM",
-        0xFEA7: "LOCK",
-        0xFEA8: "UNLOCK",
-        0xFF81: "LEFT$",
-        0xFF82: "RIGHT$",
-        0xFF83: "MID$",
-        0xFF84: "SGN",
-        0xFF85: "INT",
-        0xFF86: "ABS",
-        0xFF87: "SQR",
-        0xFF88: "RND",
-        0xFF89: "SIN",
-        0xFF8A: "LOG",
-        0xFF8B: "EXP",
-        0xFF8C: "COS",
-        0xFF8D: "TAN",
-        0xFF8E: "ATN",
-        0xFF8F: "FRE",
-        0xFF90: "INP",
-        0xFF91: "POS",
-        0xFF92: "LEN",
-        0xFF93: "STR$",
-        0xFF94: "VAL",
-        0xFF95: "ASC",
-        0xFF96: "CHR$",
-        0xFF97: "PEEK",
-        0xFF98: "SPACE$",
-        0xFF99: "OCT$",
-        0xFF9A: "HEX$",
-        0xFF9B: "LPOS",
-        0xFF9C: "CINT",
-        0xFF9D: "CSNG",
-        0xFF9E: "CDBL",
-        0xFF9F: "FIX",
-        0xFFA0: "PEN",
-        0xFFA1: "STICK",
-        0xFFA2: "STRIG",
-        0xFFA3: "EOF",
-        0xFFA4: "LOC",
-        0xFFA5: "LOF"
-    };
-
-    let EOF = function() {
-        return i >= db.length;
-    };
-
-    let readU8 = function() {
-        return i < db.length? db.readUInt8(i++) : 0;
-    };
-
-    let peekU8 = function(v) {
-        return !EOF() && db.readUInt8(i) == v;
-    };
-
-    let peekU16 = function(v1, v2) {
-        return (i < db.length - 1) && (db.readUInt8(i) == v1) && (db.readUInt8(i+1) == v2);
-    };
-
-    let skip = function(off) {
-        i += off;
-    };
-
-    let readU16 = function() {
-        let v = (i < db.length - 1)? db.readUInt16LE(i) : 0;
-        i += 2;
-        return v;
-    };
-
-    let readS16 = function() {
-        let v = (i < db.length - 1)? db.readInt16LE(i) : 0;
-        i += 2;
-        return v;
-    };
-
-    let readMBF32 = function() {
-        let mbf = new Array(4);
-        for (let i = 0; i < mbf.length; i++) {
-            mbf[i] = readU8();
-        }
-        if (mbf[3] == 0) return 0.0;
-
-        let buf = new ArrayBuffer(mbf.length);
-        let view = new DataView(buf);
-        let sign = (mbf[2] & 0x80);
-        let exp = (mbf[3] - 2) & 0xff;
-
-        view.setUint8(3, sign | (exp >> 1));
-        view.setUint8(2, ((exp << 7) & 0x80) | (mbf[2] & 0x7f));
-        view.setUint8(1, mbf[1]);
-        view.setUint8(0, mbf[0]);
-
-        return view.getFloat32(0, true);
-    }
-
-    let readMBF64 = function() {
-        let mbf = new Array(8);
-        for (let i = 0; i < mbf.length; i++) {
-            mbf[i] = readU8();
-        }
-        if (mbf[7] == 0) return 0.0;
-
-        let sign = (mbf[6] & 0x80);
-        mbf[6] &= 0x7f;
-        let exp = (mbf[7] - 129 + 1023) & 0xffff;
-        for (let i = 0; i < 7; i++) {
-            mbf[i] = ((mbf[i] >> 3) | ((mbf[i + 1] << 5) & 0xff));
-        }
-        mbf[7] = (sign | ((exp >> 4) & 0x7f));
-        mbf[6] = ((mbf[6] & 0x0f) | ((exp & 0x0f) << 4));
-
-        let buf = new ArrayBuffer(mbf.length);
-        let view = new DataView(buf);
-        mbf.forEach(function (b, i) {
-            view.setUint8(i, b);
-        });
-        return view.getFloat64(0, true);
-    }
-
-    /**
-     * unprotect(db)
-     *
-     * From: https://slions.net/threads/deciphering-gw-basic-basica-protected-programs.50/:
-     *
-     *  "The American Cryptogram Association (ACA) publishes a bimonthly periodical journal called The Cryptogram.
-     *   In their Computer Supplement #19 of summer 1994, Paul C. Kocher published BASCRACK, a C program to decipher
-     *   GW-BASIC protected files."
-     *
-     * This is a JavaScript port of BASCRACK.
-     *
-     * @param {DataBuffer} db
-     * @returns {DataBuffer}
-     */
-    let unprotect = function(db) {
-        const key1 = [
-            0xA9, 0x84, 0x8D, 0xCD, 0x75, 0x83, 0x43, 0x63, 0x24, 0x83, 0x19, 0xF7, 0x9A
-        ];
-        const key2 = [
-            0x1E, 0x1D, 0xC4, 0x77, 0x26, 0x97, 0xE0, 0x74, 0x59, 0x88, 0x7C
-        ]
-        if (db.readUInt8(0) == 0xFE) {                  // 0xFE: protected GW-BASIC signature byte
-            let index = 0;
-            let dbNew = new DataBuffer(db.length);
-            let i = 0;
-            dbNew.writeUInt8(0xFF, i++);                // 0xFF: unprotected GW-BASIC signature byte
-            while (i < db.length) {
-                let b = db.readUInt8(i);
-                if (b != 0x1A || i < db.length - 1) {   // don't "decrypt" the final byte if it's 0x1A (EOF)
-                    b -= 11 - (index % 11);
-                    b ^= key1[index % 13];
-                    b ^= key2[index % 11];
-                    b += 13 - (index % 13);
-                    index = (index+1) % (13*11);
-                }
-                dbNew.writeUInt8(b & 0xFF, i++);
-            }
-            db = dbNew;
-        }
-        return db;
-    }
-
-    let getToken = function(line) {
-        let token = null;                               // null will signal end of tokens for the line
-        let v = readU8();
-        if (v) {
-            /*
-             * The original code failed to account for programs that include IBM PC drawing characters
-             * inside strings or comments or DATA statements, and those characters can be (almost) any 8-bit
-             * value, which is why we must track the "quote" and "comment" and "data" states of the text
-             * stream and decode accordingly.
-             *
-             * I say "almost" because there are a few control characters (below 0x20) that you can't embed
-             * inside strings.  But many can be.  For example, you can use the IBM PC's "Alt Num Keypad"
-             * trick to enter decimal character 16 and a "►" will appear.
-             *
-             * For text that's not quoted or commented, we still have to handle 0x3A (colon) elsewhere,
-             * because it's a weird one; see the 'default' case below.
-             */
-            if ((comment || quote || data && v != 0x3A) && v < 0xFF || v >= 0x20 && v <= 0x7E && v != 0x3A) {
-                token = String.fromCharCode(v);
-                if (fNormalize && v != 0x09) {          // normalize all characters except TAB
-                    token = CharSet.fromCP437(token, true);
-                }
-                if (v == 0x22 && !comment) quote = !quote;
-            }
-            else {
-                if (v >= 0xFD) {
-                    v = (v << 8) | readU8();
-                }
-                switch (v) {
-                case 0x0B:
-                    token = "&O" + readU16().toString(8);
-                    break;
-                case 0x0C:
-                    token = "&H" + readU16().toString(16).toUpperCase();
-                    break;
-                case 0x0E:
-                    token = readU16().toString();
-                    break;
-                case 0x0F:
-                    token = readU8().toString();
-                    break;
-                case 0x1C:
-                    token = readS16().toString();
-                    break;
-                case 0x1D:
-                    token = readMBF32().toPrecision(7).replace(/0+$/, "");
-                    break;
-                case 0x1F:
-                    token = readMBF64().toPrecision(15).replace(/0+$/, "") + '#';
-                    break;
-                default:
-                    if (v == 0x3A) {
-                        if (peekU8(0xA1)) {
-                            token = "ELSE";
-                            skip(1);
-                            break;
-                        }
-                        if (peekU16(0x8F, 0xD9)) {
-                            token = "'";
-                            comment = true;
-                            skip(2);
-                            break;
-                        }
-                        token = String.fromCharCode(v);
-                        data = false;                   // unlike REM, other colon-separated statements CAN appear after a DATA statement
-                        break;
-                    }
-                    if (v == 0xB1 && peekU8(0xE9)) {
-                        token = "WHILE";
-                        skip(1);
-                        break;
-                    }
-                    token = tokens[v];
-                    if (token == "REM") {
-                        comment = true;
-                    }
-                    else if (token == "DATA") {
-                        data = true;
-                    }
-                    break;
-                }
-                if (!token) {
-                    if (v == 0x09) {                    // we'll pass TABs through
-                        token = String.fromCharCode(v);
-                    } else if (v == 0x0A) {
-                        token = "";                     // and we'll ignore embedded LFs
-                    } else {
-                        /*
-                         * I've seen DATA statements with embedded non-ASCII characters, so at this point,
-                         * we pretty much have to encode anything else as raw text.  But first, we must un-read
-                         * any extra byte we fetched above.
-                         */
-                        let u = v;
-                        if (v >= 0xFD00) {
-                            i--;                        // un-read the extra byte
-                            v >>= 8;                    // and shift the value back to 8 bits
-                        }
-                        token = String.fromCharCode(v);
-                        if (fNormalize) {
-                            token = CharSet.fromCP437(token, true);
-                        }
-                        if (lineWarning != line) {
-                            printf("warning: %s contained unusual bytes (eg, %#x on line %d)\n", sPath, u, line);
-                            lineWarning = line;         // one such warning per line is enough...
-                        }
-                    }
-                }
-            }
-        }
-        return token;
-    }
-
-    db = unprotect(db);
-
-    let b = readU8();
-    if (b == 0xFF) {
-        while (!EOF()) {
-            /*
-             * Every line in the file begins with two 16-bit values: the offset of the *next* line,
-             * and the line number of the *current* line.  The offset can be used as a sanity check
-             * (eg, for file integrity) but we're not going to bother; all we check for here is
-             * an offset of ZERO, which effectively means end-of-program, and it's normally followed
-             * by an EOF byte (0x1A) (and which we'll pass along, *unless* we're "normalizing" the text).
-             */
-            let off = readU16();
-            if (!off) {
-                if (peekU8(0x1A)) {
-                    if (!fNormalize) s += String.fromCharCode(0x1A);
-                } else if (!EOF()) {
-                    printf("warning: %s contains non-EOF at offset %#x (%#x)\n", sPath, i, readU8());
-                }
-                break;
-            }
-            let t;
-            let line = readU16();
-            s += line + " ";        // BASIC defaults to one space between line number and first token
-            while ((t = getToken(line)) !== null) {
-                s += t;
-            }
-            s += (fNormalize? "\n" : "\r\n");
-            quote = false;          // if you end a line with an open quote, BASIC automatically "closes" it
-            comment = data = false; // ditto for comments and DATA statements
-        }
-        db = new DataBuffer(s);
-    }
-    else if (fNormalize) {
-        db = normalizeForHost(db);
-    }
-    return db;
+    let converter = new BASConvert(db, fNormalize, sPath, printf);
+    return converter.convert();
 }
 
 /**
@@ -1039,8 +524,8 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
         if (argv['normalize']) {
             /*
              * BASIC files are dealt with separately, because there are 3 kinds: ASCII (for which we just
-             * call normalizeForHost()), tokenized (which we convert to ASCII and automatically normalize in
-             * the process), and protected (which we decrypt and then de-tokenize).
+             * call normify()), tokenized (which we convert to ASCII and automatically normalize in the process),
+             * and protected (which we decrypt and then de-tokenize).
              */
             if (isBASICFile(sPath)) {
                 /*
@@ -1048,10 +533,10 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
                  * to true, to convert characters from CP437 to UTF-8, revert line-endings, and omit EOF.  We're
                  * currently combining both features as part of the "normalize" process.
                  */
-                db = convertBASICFile(sPath, db, true);
+                db = convertBASICFile(db, true, sPath);
             }
             else if (isTextFile(sPath)) {
-                db = normalizeForHost(db, true);
+                db = BASConvert.normify(db, true);
             }
         }
         fSuccess = writeFile(getFullPath(sPath), db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);
@@ -1613,7 +1098,7 @@ function processDisk(di, diskFile, argv, diskette)
             for (let sampleFile of sampleFiles) {
                 let sample = readFile(sampleFile);
                 if (sample) {
-                    if (isText(sample)) {
+                    if (CharSet.isText(sample)) {
                         let fileType = sampleFile.endsWith(".BAS")? "bas" : "";
                         if (sample[sample.length-1] != '\n') sample += '\n';
                         sample = "{% raw %}\n```" + fileType + "\n" + sample /* .replace(/([^\n]*\n)/g, '    $1\n') */ + "```\n{% endraw %}\n";
@@ -2006,7 +1491,7 @@ function readDirFiles(sDir, sLabel, fNormalize = false, iLevel = 0)
                 printf("file data length (%d) does not match file size (%d)\n", data.length, stats.size);
             }
             if (fText) {
-                if (isText(data)) {
+                if (CharSet.isText(data)) {
                     let dataNew = CharSet.toCP437(data).replace(/\n/g, "\r\n").replace(/\r+/g, "\r");
                     if (dataNew != data) printf("replaced line endings in %s (size changed from %d to %d bytes)\n", sName, data.length, dataNew.length);
                     data = dataNew;
