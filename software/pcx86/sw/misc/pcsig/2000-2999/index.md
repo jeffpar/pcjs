@@ -299,7 +299,7 @@ Below is a list of diskettes 2000-2999 from [PC-SIG Diskette Library: The (Almos
   - [PC-SIG Library Disk #2289 - TECHSTAFF TOOLS #2 (2288 ALSO)](/software/pcx86/sw/misc/pcsig/2000-2999/DISK2289/)
   - [PC-SIG Library Disk #2290 - NG_MAKER PROGRAMMER'S TOOL](/software/pcx86/sw/misc/pcsig/2000-2999/DISK2290/)
   - [PC-SIG Library Disk #2291 - FAMILY HISTORY 3 OF 3 (ALSO 361, 632)](/software/pcx86/sw/misc/pcsig/2000-2999/DISK2291/)
-  - [PC-SIG Library Disk #2292 - |STAT 4 OF 4 (ALSO 990, 991, 992)](/software/pcx86/sw/misc/pcsig/2000-2999/DISK2292/)
+  - [PC-SIG Library Disk #2292 - STAT 4 OF 4 (ALSO 990, 991, 992)](/software/pcx86/sw/misc/pcsig/2000-2999/DISK2292/)
   - [PC-SIG Library Disk #2293 - POWER LABEL](/software/pcx86/sw/misc/pcsig/2000-2999/DISK2293/)
   - [PC-SIG Library Disk #2294 - UNCLAIMED FUNDS DATABASE](/software/pcx86/sw/misc/pcsig/2000-2999/DISK2294/)
   - [PC-SIG Library Disk #2295 - PRINTER ART 2 & YAMP, TMAC](/software/pcx86/sw/misc/pcsig/2000-2999/DISK2295/)

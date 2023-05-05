@@ -177,3 +177,27 @@ Here's just one example of the use of non-ASCII characters inside strings and co
 ```
 
 In short, the collection of PC-SIG `.ZIP` and `.BAS` files provided an excellent set of test cases for ZIP decompression and BASIC de-tokenization, and the PCjs [DiskImage](https://github.com/jeffpar/pcjs/tree/master/tools/diskimage) utility now has some handy new capabilities.
+
+### New PCjs Libraries
+
+I started with [node-stream-zip](https://www.npmjs.com/package/node-stream-zip), added support for the ARC file format, and then extended its decompression support; like most modern ZIP utilities, it uses `zlib`, which supports only *Deflate* compression.
+
+Here's a list of the new JavaScript modules:
+
+  - [StreamZip.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/streamzip.js), an improved version of the [node-stream-zip](https://www.npmjs.com/package/node-stream-zip) package
+  - [Structure.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/structure.js), a helper class that provides methods for defining and reading on-disk structures
+  - [LegacyZip.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/legacyzip.js), a decompression library used by `StreamZip` that adds support for:
+      - Packed files (ARC compression format #3)
+      - Squeezed files (ARC compression format #4)
+      - Crunched files (ARC compression formats #5, #6, and #7)
+      - Crushed files (ARC compression format #8)
+      - Squashed files (ARC compression format #9)
+      - Shrinked files (ZIP compression format #1)
+      - Reduced files (ZIP compression formats #2, #3, #4, and #5)
+      - Imploded files (ZIP compression format #6)
+      - Deflated files (ZIP compression format #8)
+  - [BASConvert.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/bascon.js), a BASIC de-tokenizer and character conversion library, which also uses [CharSet.js](https://github.com/jeffpar/pcjs/tree/master/machines/pcx86/modules/charset.js)
+
+The combination of `StreamZip` with `LegacyZip` should be able to decompress *any* old ARC or ZIP archive, so test it out with the new `--arc` and `--zip` options in the [DiskImage](https://github.com/jeffpar/pcjs/tree/master/tools/diskimage) utility, and if you find one that doesn't work, [let me know](mailto:Jeff@pcjs.org).
+
+Last but not least, I've also added a [BASIC Conversion Utility](/tools/bascon/) page that loads [BASConvert](https://github.com/jeffpar/pcjs/tree/master/tools/modules/bascon.js) in your web browser.  It should be able to convert any old IBM PC BASIC file to plain text, but again, if you run into any interesting discrepancies, [let me know](mailto:Jeff@pcjs.org).
