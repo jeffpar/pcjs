@@ -8,7 +8,7 @@
 	<ram id="ramExt" addr="0x100000" size="0x160000" comment=""/>
 	<rom id="romBIOS" addr="0xf0000" size="0x10000" alias="0xff0000" file="/machines/pcx86/ibm/5170/rom/bios/1985-11-15/ATBIOS-REV3.json5"/>
 	<video ref="/machines/pcx86/ibm/video/ega/1984-09-13/ibm-ega-5154-128k-lockfs.xml"/>
-	<fdc ref="/machines/pcx86/ibm/fdc/library.xml" autoMount='{A:{name:"PC DOS 3.30 (Disk 1)"}, B:{name:"PC DOS 3.30 (Disk 2)"}}'/>
+	<fdc ref="/machines/pcx86/ibm/fdc/library.xml" autoMount='{A:{name:"PC DOS 3.20 (Disk 1)"}, B:{name:"PC DOS 3.20 (Disk 2)"}}'/>
 	<hdc ref="/machines/pcx86/ibm/hdc/20mb/pcdos330-empty-at2.xml"/>
 	<keyboard ref="/machines/pcx86/ibm/keyboard/us84-softkeys.xml"/>
 	<chipset id="chipset" model="5170" floppies="[1440,1200]"/>
