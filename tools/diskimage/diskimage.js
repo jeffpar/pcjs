@@ -523,8 +523,8 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
          */
         if (argv['normalize']) {
             /*
-             * BASIC files are dealt with separately, because there are 3 kinds: ASCII (for which we just
-             * call normify()), tokenized (which we convert to ASCII and automatically normalize in the process),
+             * BASIC files are dealt with separately, because there are 3 kinds: ASCII (for which we call
+             * modernize()), tokenized (which we convert to ASCII and automatically normalize in the process),
              * and protected (which we decrypt and then de-tokenize).
              */
             if (isBASICFile(sPath)) {
@@ -536,7 +536,7 @@ function extractFile(sDir, subDir, sPath, attr, date, db, argv, noExpand, files)
                 db = convertBASICFile(db, true, sPath);
             }
             else if (isTextFile(sPath)) {
-                db = BASConvert.normify(db, true);
+                db = BASConvert.modernize(db, true);
             }
         }
         fSuccess = writeFile(getFullPath(sPath), db, true, argv['overwrite'], !!(attr & DiskInfo.ATTR.READONLY), argv['quiet']);

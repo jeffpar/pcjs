@@ -1,5 +1,5 @@
 /**
- * @fileoverview Character set support
+ * @fileoverview PC character set support
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2023 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -10,6 +10,10 @@
 import DataBuffer from "../../modules/databuffer.js";
 
 /**
+ * This class is primarily concerned with converting characters between CP437 and UTF-8, when
+ * extracting files from PC media or recreating files onto PC media, which is why it is located
+ * in the "pcx86" section of the project.
+ *
  * @class CharSet
  */
 export default class CharSet {
