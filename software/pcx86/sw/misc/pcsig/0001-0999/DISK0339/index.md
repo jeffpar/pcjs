@@ -125,7 +125,7 @@ machines:
 530 IF EX$<>"Y" THEN 510
 540 IF RS-EX<1 THEN A=A+1:GOTO 560
 550 PRINT"All right. You have";RS-EX;"spaces left in your record.":A=A+1:GOTO 490
-560 LN=LN+10:PRINT #1,LN;"'SET UP FIELDS IN THE DATA RECORD":A=A-1:SL=LN:OF$="GOSUB 36000":FOR I=1 TO A:PRINT #1,36000.+I;"F%(";MID$(STR$(I),2);")=";F$(I):NEXT
+560 LN=LN+10:PRINT #1,LN;"'SET UP FIELDS IN THE DATA RECORD":A=A-1:SL=LN:OF$="GOSUB 36000":FOR I=1 TO A:PRINT #1,36000!+I;"F%(";MID$(STR$(I),2);")=";F$(I):NEXT
 570 PRINT #1,"36800 CD%=0":PRINT #1,"55 DIM F%(";A;")":PRINT #1,"36810 FOR ZZ=1 TO";A
 580 LN=LN+10:PRINT #1,LN;"FOR I=1 TO";A;":G$(I)=";Q$;Q$;":NEXT:FC=0:CLS:UF=0:G$=";Q$;Q$;":";OF$:LN=LN+10:PRINT #1,LN;"PRINT TAB(28);";Q$;"PRODUCED BY THE CREATOR";Q$
 590 LN=LN+10:PRINT #1,LN;"PRINT TAB(";(80-LEN(TI$))\2;")";Q$;TI$;Q$
@@ -258,8 +258,8 @@ machines:
 1840 LINE INPUT #2,A$
 1850 IF S3%<1 AND VAL(A$)>29999 AND VAL(A$)<30999 THEN 1830
 1860 IF S4%<1 AND VAL(A$)>30998 AND VAL(A$)<31900 THEN 1830
-1870 IF S1%<1 AND VAL(A$)>=40000. AND VAL(A$)<40500. THEN 1830
-1880 IF S2%<1 AND VAL(A$)>=40500. AND VAL(A$)<41000. THEN 1830
+1870 IF S1%<1 AND VAL(A$)>=40000! AND VAL(A$)<40500! THEN 1830
+1880 IF S2%<1 AND VAL(A$)>=40500! AND VAL(A$)<41000! THEN 1830
 1890 PRINT #1,A$:GOTO 1830
 1900 CLOSE
 1910 CLS:PRINT"Your program has been written and saved on the specified drive.":PRINT"You may now load it and run it, if you wish. Remember, your data file does NOT":PRINT"exist until you initialize it!":PRINT:PRINT"Thanks for running the CREATOR!"
@@ -907,7 +907,7 @@ REKEY    BAS  Utility program for maintaining Creator key
 2300 IF INSTR(CF$(I),"#") THEN MID$(M$,I,1)="M":ELSE MID$(M$,I,1)="S"
 2301 NEXT
 2305 RETURN
-2310 FOR I=1 TO B:PRINT #1,40000.+I;"CF$(";MID$(STR$(I),2);")=";Q$;CF$(I);Q$:NEXT
+2310 FOR I=1 TO B:PRINT #1,40000!+I;"CF$(";MID$(STR$(I),2);")=";Q$;CF$(I);Q$:NEXT
 2320 PRINT #1,"56 M$=";Q$;M$;Q$;":'FIELD TYPES - S = STRING, M = MULTIPLE PRECISION"
 2322 CLS
 2325 PRINT"How many columns wide is the paper or screen on which the report will most":PRINT"commonly be printed? ";:INPUT FX:IF FX<1 OR FX>255 THEN PRINT"ILLEGAL!":BEEP:GOTO 2325

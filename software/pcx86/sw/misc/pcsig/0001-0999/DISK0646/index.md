@@ -62,7 +62,7 @@ machines:
 130 '
 140 '         Poke subroutine ALOAD into memory.
 150 '
-160 DEF SEG : ALOAD= 48000.
+160 DEF SEG : ALOAD= 48000!
 170 FOR IB=0 TO  95 : READ BYTE : POKE ALOAD+IB,BYTE : NEXT IB
 180 DATA &H55, &H8B, &HEC, &H8B, &H5E, &H0A, &H8A, &H0F, &HB5, &H00, &H8B, &H77
 190 DATA &H01, &H8B, &H5E, &H08, &H8B, &H07, &H8E, &HC0, &HBF, &H00, &H00, &HA4
@@ -896,7 +896,7 @@ machines:
 150 '
 160 '         Poke subroutine ALOAD into memory.
 170 '
-180 DEF SEG : ALOAD= 48000.
+180 DEF SEG : ALOAD= 48000!
 190 FOR IB=0 TO  95 : READ BYTE : POKE ALOAD+IB,BYTE : NEXT IB
 200 DATA &H55, &H8B, &HEC, &H8B, &H5E, &H0A, &H8A, &H0F, &HB5, &H00, &H8B, &H77
 210 DATA &H01, &H8B, &H5E, &H08, &H8B, &H07, &H8E, &HC0, &HBF, &H00, &H00, &HA4
@@ -999,7 +999,7 @@ machines:
 20 '
 30 '     BEARY FUN ABC'S will help associate each picture with the
 40 '     letter and the keyboard key.  It displays the picture then
-50 '     waits for the entry of the proper key.  If the key isn't 
+50 '     waits for the entry of the proper key.  If the key isn't
 60 '     pressed in 3 seconds, the letter will also be displayed on
 70 '     the screen.  Each time the right key is pressed, a bear
 80 '     is placed on the screen.
@@ -1016,7 +1016,7 @@ machines:
 190 '
 200 '         Poke subroutine ALOAD into memory.
 210 '
-220 DEF SEG : ALOAD= 48000.
+220 DEF SEG : ALOAD= 48000!
 230 FOR IB=0 TO  95 : READ BYTE : POKE ALOAD+IB,BYTE : NEXT IB
 240 DATA &H55, &H8B, &HEC, &H8B, &H5E, &H0A, &H8A, &H0F, &HB5, &H00, &H8B, &H77
 250 DATA &H01, &H8B, &H5E, &H08, &H8B, &H07, &H8E, &HC0, &HBF, &H00, &H00, &HA4
@@ -1221,7 +1221,7 @@ machines:
 150 '
 160 '         Poke subroutine ALOAD into memory.
 170 '
-180 DEF SEG : ALOAD= 48000.
+180 DEF SEG : ALOAD= 48000!
 190 FOR IB=0 TO  95 : READ BYTE : POKE ALOAD+IB,BYTE : NEXT IB
 200 DATA &H55, &H8B, &HEC, &H8B, &H5E, &H0A, &H8A, &H0F, &HB5, &H00, &H8B, &H77
 210 DATA &H01, &H8B, &H5E, &H08, &H8B, &H07, &H8E, &HC0, &HBF, &H00, &H00, &HA4
@@ -1519,7 +1519,7 @@ Sunnyvale Ca. 94086
 200 '
 210 '         Poke subroutine ALOAD into memory.
 220 '
-230 DEF SEG : ALOAD!= 48000.
+230 DEF SEG : ALOAD!= 48000!
 240 FOR IB=0 TO  95 : READ BYTE : POKE ALOAD!+IB,BYTE : NEXT IB
 250 DATA &H55, &H8B, &HEC, &H8B, &H5E, &H0A, &H8A, &H0F, &HB5, &H00, &H8B, &H77
 260 DATA &H01, &H8B, &H5E, &H08, &H8B, &H07, &H8E, &HC0, &HBF, &H00, &H00, &HA4
@@ -1708,14 +1708,14 @@ Sunnyvale Ca. 94086
 90 '
 100 '    Converted for IBM-PC Screen 1
 110 '
-120 CLEAR ,48000. : SCREEN 1 : COLOR 0,1 : KEY OFF : CLS
+120 CLEAR ,48000! : SCREEN 1 : COLOR 0,1 : KEY OFF : CLS
 130 LOCATE 22,12 : PRINT "AMY'S FIRST PRIMER  1.2"
 140 LOCATE 24,1 : PRINT "  copyright 1985, Computing Specialties";
 150 '
 160 '
 170 '         Poke subroutine ALOAD into memory.
 180 '
-190 DEF SEG : ALOAD= 48000.
+190 DEF SEG : ALOAD= 48000!
 200 FOR IB=0 TO  95 : READ BYTE : POKE ALOAD+IB,BYTE : NEXT IB
 210 DATA &H55, &H8B, &HEC, &H8B, &H5E, &H0A, &H8A, &H0F, &HB5, &H00, &H8B, &H77
 220 DATA &H01, &H8B, &H5E, &H08, &H8B, &H07, &H8E, &HC0, &HBF, &H00, &H00, &HA4
@@ -1837,7 +1837,7 @@ Sunnyvale Ca. 94086
 40 '    and following orders.  Stock piles of shapes are stored on the
 50 '    left side of the screen, with a loader in the middle and a
 60 '    truck trailer at the bottom left.  A deisel tractor is at the
-70 '    bottom right.  An order form at the top left of the screen 
+70 '    bottom right.  An order form at the top left of the screen
 80 '    indicates which shapes are needed on the trailer.  The child
 90 '    must use the loader to fill the trailer with the same pattern
 100 '   that is on the order form.  When the order is filled properly,
@@ -1854,7 +1854,7 @@ Sunnyvale Ca. 94086
 210 '
 220 '         Poke subroutine ALOAD into memory.
 230 '
-240 DEF SEG : ALOAD= 48000.
+240 DEF SEG : ALOAD= 48000!
 250 FOR IB=0 TO  95 : READ BYTE : POKE ALOAD+IB,BYTE : NEXT IB
 260 DATA &H55, &H8B, &HEC, &H8B, &H5E, &H0A, &H8A, &H0F, &HB5, &H00, &H8B, &H77
 270 DATA &H01, &H8B, &H5E, &H08, &H8B, &H07, &H8E, &HC0, &HBF, &H00, &H00, &HA4

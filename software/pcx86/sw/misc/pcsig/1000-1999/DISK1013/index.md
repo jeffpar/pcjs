@@ -1178,7 +1178,7 @@ Sunnyvale Ca. 94086
 800 LOCATE 15,3:PRINT "maximum value of the function or when you are more interested in the curve"
 810 LOCATE 16,3:PRINT "shape than specific values at certain points. In the auto-scale mode,"
 820 LOCATE 17,3:PRINT "the Y-axis label will be equal to the largest (or smallest) value of Y"
-830 LOCATE 18,3:PRINT "encountered over the specified range of X.":COLOR 3.
+830 LOCATE 18,3:PRINT "encountered over the specified range of X.":COLOR 3!
 840 LOCATE 22,3:PRINT "For auto-scaling, press <ENTER> with no entry."
 850 LOCATE 21,3:INPUT "Enter maximum Y-axis label (positive number):  ",YB$
 860 YB=VAL(YB$)

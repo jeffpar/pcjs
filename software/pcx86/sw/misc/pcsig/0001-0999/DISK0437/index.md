@@ -282,10 +282,10 @@ Sunnyvale, CA 94086
 2250 LET N=(G+L)/2
 2260 LET P=(G-L)/2
 2270 LET Q=(K/2)*PI/180
-2280 IF N=0 THEN LET N=N+1.000000e-2
-2290 IF P=0 THEN LET P=P+1.000000e-2
-2300 IF Q=0 THEN LET Q=Q+1.000000e-2
-2310 IF S=0 THEN LET S=S+1.000000e-2
+2280 IF N=0 THEN LET N=N+1.000000e-20
+2290 IF P=0 THEN LET P=P+1.000000e-20
+2300 IF Q=0 THEN LET Q=Q+1.000000e-20
+2310 IF S=0 THEN LET S=S+1.000000e-20
 2320 LET R=ATN (((COS (Q)/SIN (Q))*(COS (P))/COS (N)))
 2330 LET S=ATN ((COS (Q)/SIN (Q))*SIN (P)/SIN (N))
 2340 LET T=ATN ((SIN (P)/COS (P))*SIN (R)/SIN (S))
@@ -354,15 +354,15 @@ Sunnyvale, CA 94086
 
 {% raw %}
 ```bas
-10 CLS 
-20 PRINT :PRINT :PRINT :PRINT :PRINT 
+10 CLS
+20 PRINT :PRINT :PRINT :PRINT :PRINT
 30 PRINT "INTERMOD PROGRAM FOR UP TO REQUESTED NUMBER OF FREQUENCIES"
-40 PRINT 
+40 PRINT
 50 PRINT "       A MINIMUM OF 3 FREQUENCIES MUST BE ENTERED"
-60 PRINT 
+60 PRINT
 70 INPUT "          HOW MANY FREQUENCIES DO YOU WANT";N
-80 CLS 
-90 PRINT :PRINT :PRINT :PRINT 
+80 CLS
+90 PRINT :PRINT :PRINT :PRINT
 100 DIM A(100)
 110 DIM B(100),C(100),D(100)
 120 FOR I=1 TO N
@@ -390,7 +390,7 @@ Sunnyvale, CA 94086
 340 K1=A(C)+(2*A(D))+(2*A(B))
 350 L1=A(D)+(2*A(B))+(2*A(C)):M1=A(D)+(2*A(C))+(2*A(B))
 360 M=A(I+2)+(2*A(I+1))-(2*A(I))
-370 CLS 
+370 CLS
 380 GOSUB 470
 390 INPUT "PRESS 'ENTER' TO CONTINUE";V$
 400 IF V$="" GOTO 410
@@ -412,7 +412,7 @@ Sunnyvale, CA 94086
 560 PRINT "3 - SIGNAL, 3RD ORDER PRODUCT OF";A(B);",";A(C);"AND";A(D)
 570 PRINT "(-)     ",E,F,G
 580 PRINT "(+)     ",E1,F1,G1
-590 PRINT 
+590 PRINT
 600 PRINT "3 - SIGNAL, 5TH ORDER PRODUCT OF";A(B);",";A(C);"AND";A(D)
 610 PRINT "(-)     "H;I1;J;K;L;M
 620 PRINT "(+)     "H1;I2;J1;K1;L1;M1
@@ -447,11 +447,11 @@ Sunnyvale, CA 94086
 1001 '
 1002 ' Origional: "Verify Network Frequency Response With This
 1003 '             Simple BASIC Program", Werner Schnider, EDN
-1004 '		   magazine, Oct. 5, 1977 (HP 9830 implementation).  
+1004 '		   magazine, Oct. 5, 1977 (HP 9830 implementation).
 1005 '
 1010 ' Next:      "Basic Program Performs Circuit Analysis", Richard
 1011 ' 		   Steincross, EDN magazine, Sept. 1, 1982 (Apple ][
-1012 ' 		   implementation with inductive elements added)	
+1012 ' 		   implementation with inductive elements added)
 1013 '
 1020 ' Now:	  Converted for the IBM PC/XT and compatibles by
 1021 '		  Bruce A. Trolli, Cleveland, Oh., 2/16/85
@@ -466,13 +466,13 @@ Sunnyvale, CA 94086
 1200 Y=40                               ' Allocate memory for circuit
 1220 'Note: If you have less than 64K in your system, you must decrease Y
 1240 DIM A(Y,Y),B(Y,Y),P(Y,Y),Q(Y,Y),B1(Y,Y),Q1(Y,Y)
-1300 N=0:PI=3.141592:LGTEN=8.685889	' Initialize constants	
+1300 N=0:PI=3.141592:LGTEN=8.685889	' Initialize constants
 1340 INPUT"What file for input? [Hit CR for list.] ",F$
 1360 IF F$="" THEN FILES"*.net":GOTO 1340 	' Show possible input files
 1380 FOR I=1 TO LEN(F$)				' Check for extension
 1400 IF MID$(F$,I,1)="." THEN J=I
 1420 NEXT I
-1440 IF J<>0 THEN F$=MID$(F$,1,J-1)		' Add .NET if missing	
+1440 IF J<>0 THEN F$=MID$(F$,1,J-1)		' Add .NET if missing
 1460 F$=F$+".net"
 1500 OPEN F$ FOR INPUT AS #1
 1510 PRINT
@@ -506,7 +506,7 @@ Sunnyvale, CA 94086
 1880 V=1/V:GOSUB 3900:GOTO 1540
 1900 INPUT #1,I,J,V 					' capacitor
 1901 PRINT I,J,V
-1920 V=V/1
+1920 V=V/1000000!
 1940 GOSUB 4120:GOTO 1540
 1960 INPUT #1,I,J,V 					' inductor
 1961 PRINT I,J,V

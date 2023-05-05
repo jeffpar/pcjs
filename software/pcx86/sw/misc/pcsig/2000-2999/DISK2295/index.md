@@ -230,7 +230,7 @@ machines:
 60 CLS:'PRINT " DARTH.BAS -- a gift from ICE to the public domain":FOR I=1 TO 1000:NEXT
 70  ' SCALE -5,30,5,33
 80 CLS:SCREEN 2
-90  REM 
+90  REM
 100  FOR I=1 TO 409
 110  READ Y,X,P
 120     X=(X+5)*640/35

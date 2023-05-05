@@ -5505,7 +5505,7 @@ Sunnyvale Ca. 94086
 2310  T5$ = M5$  'Marriage-date as dd mmm yyyy
 2320  IF T5$ = "           " THEN MD! = 0 : GOTO 2490
 2330  REM convert Marriage Date
-2340  MD! = VAL(RIGHT$(T5$,4))*10000.
+2340  MD! = VAL(RIGHT$(T5$,4))*10000!
 2350  MO$ = MID$(T5$,4,3)
 2360  IF MO$ = "Jan" THEN MD! = MD! +  100 : GOTO 2480
 2370  IF MO$ = "Feb" THEN MD! = MD! +  200 : GOTO 2480
@@ -5708,7 +5708,7 @@ Sunnyvale Ca. 94086
 2320  T8$ = F8$  'Birthdate as dd mmm yyyy
 2330  IF T8$ = "           " THEN BD! = 0 : GOTO 2500
 2340  REM convert Birthdate
-2350  BD! = VAL(RIGHT$(T8$,4))*10000.
+2350  BD! = VAL(RIGHT$(T8$,4))*10000!
 2360  MO$ = MID$(T8$,4,3)
 2370  IF MO$ = "Jan" THEN BD! = BD! +  100 : GOTO 2490
 2380  IF MO$ = "Feb" THEN BD! = BD! +  200 : GOTO 2490

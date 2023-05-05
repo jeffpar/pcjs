@@ -1798,7 +1798,7 @@ INSTRUCTIONS: Just start your system with BASICA, and type RUN"EGGS <cr>
 2720 X1=0
 2730    FOR I1=1 TO P1
 2740 X1=X1+S(X,I1)
-2750    NEXT 
+2750    NEXT
 2760 PRINT TAB(53);" $";INT(10*((S(X,I)/X1)*S1(X)))
 2770   NEXT I
 2780   FOR I=1 TO P1

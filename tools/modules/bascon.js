@@ -376,13 +376,13 @@ export default class BASConvert {
     }
 
     /**
-     * getToken(line)
+     * getToken(lineNum)
      *
      * @this {BASConvert}
-     * @param {number} line
+     * @param {number} lineNum
      * @returns {string|null}
      */
-    getToken(line)
+    getToken(lineNum)
     {
         let token = null;                               // null will signal end of tokens for the line
         let v = this.readU8();
@@ -492,9 +492,9 @@ export default class BASConvert {
                         if (this.normalize) {
                             token = CharSet.fromCP437(token, true);
                         }
-                        if (this.lineWarning != line) {
-                            this.print("warning: " + this.name + " contained unusual bytes (eg, " + u + "  on line " + line + ")");
-                            this.lineWarning = line;    // one such warning per line is enough...
+                        if (this.lineWarning != lineNum) {
+                            this.print("warning: " + this.name + " contained unusual bytes (eg, " + u + "  on line " + lineNum + ")\n");
+                            this.lineWarning = lineNum; // one such warning per line is enough...
                         }
                     }
                 }
@@ -624,7 +624,7 @@ export default class BASConvert {
                     if (this.peekU8(0x1A)) {
                         if (!this.normalize) s += String.fromCharCode(0x1A);
                     } else if (!this.eof()) {
-                        this.print("warning: " + this.name + " contains non-EOF at offset " + this.off + " (" + this.readU8() + ")");
+                        this.print("warning: " + this.name + " contains non-EOF at offset " + this.off + " (" + this.readU8() + ")\n");
                     }
                     break;
                 }
@@ -632,7 +632,7 @@ export default class BASConvert {
                 let line = lineNum + " ";       // BASIC defaults to one space between line number and first token
                 this.prevToken = 0x20;
                 let t;
-                while ((t = this.getToken(line)) !== null) {
+                while ((t = this.getToken(lineNum)) !== null) {
                     line += t;
                 }
                 s += line.trim() + (this.normalize? "\n" : "\r\n");

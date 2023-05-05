@@ -1624,7 +1624,7 @@ Variable.............................................................1.04, 1.05
 53 GOSUB 85
 54 GOSUB 93
 55 GOSUB 101
-56 GOSUB 109      
+56 GOSUB 109
 57 GOSUB 118
 58 GOSUB 127
 59 GOSUB 136
@@ -1712,7 +1712,7 @@ Variable.............................................................1.04, 1.05
 141 C5=C3:C6=C4:GOSUB 145
 142 A$=INKEY$:IF A$="8" THEN GOSUB 197
 143 IF LEN(A$)=2 THEN IF ASC(RIGHT$(A$,1))=72 THEN C5=C1:C6=C2:GOTO 145
-144 GOTO 142            
+144 GOTO 142
 145 COLOR C5,C6:LOCATE 6,55:PRINT TOPKEY1$:LOCATE 7,55:PRINT MIDKEY1$:LOCATE 8,55:PRINT MIDKEY1$:LOCATE 9,55:PRINT BOTKEY1$
 146 LOCATE 7,58:PRINT "8":LOCATE 8,57:PRINT CHR$(24):COLOR C1,C2:RETURN
 147 ' ====> cursor down key
@@ -1813,7 +1813,7 @@ Variable.............................................................1.04, 1.05
 23 GOSUB 54
 24 GOSUB 62
 25 GOSUB 70
-26 GOSUB 78      
+26 GOSUB 78
 27 GOSUB 87
 28 GOSUB 96
 29 GOSUB 105

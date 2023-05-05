@@ -633,7 +633,7 @@ If this sounds interesting, contact Dave Beiter, ½ Fast Farm, Ritner, KY  42639
 3260 FOR I% = 1 TO NN% - 1
 3270 A = A + (NS(I%) + NS(I% - 1)) * (ES(I%) - ES(I% - 1))
 3280 NEXT
-3290 A = ABS( A / 87120.)
+3290 A = ABS( A / 87120!)
 3300 PRINT"The area enclosed by this loop is ";: PRINT USING "####.##";A;: PRINT " acres.
 3310 IF IN$ <> "Y" THEN PRINT "But I'm not sure either.
 3320 GOSUB 480: RETURN
@@ -648,7 +648,7 @@ If this sounds interesting, contact Dave Beiter, ½ Fast Farm, Ritner, KY  42639
 3410 PRINT"F = Feet [May be feet/inches]◙M = Meters◙P = Poles or rods [May be poles/links]◙C = Gunter Chains [May be chains/links]◙Q = Pace [User defined]
 3420 IF TZ = 1 THEN A$ = "F" ELSE IF TZ = MTR THEN A$ = "M" ELSE IF TZ = POLE THEN A$ = "P" ELSE IF TZ = GUNTER THEN A$ = "C" ELSE A$ = "Q"
 3430 PRINT"And how do you measure your distance? ";A$;: GOSUB 520
-3440 IF IN$="F"THEN TZ=1ELSE IF IN$="M"THEN TZ=MTR ELSE IF IN$="P" THEN TZ=POLE ELSE IF IN$="C" THEN TZ=GUNTHER ELSE IF IN$ = "Q" THEN INPUT "Length of pace, in feet -> "; TZ ELSE IF ASC(IN$)<>13 THEN PRINT IN$;" is not a choice!": BEEP:GOTO 3410
+3440 IF IN$="F"THEN TZ=1 ELSE IF IN$="M"THEN TZ=MTR ELSE IF IN$="P" THEN TZ=POLE ELSE IF IN$="C" THEN TZ=GUNTHER ELSE IF IN$ = "Q" THEN INPUT "Length of pace, in feet -> "; TZ ELSE IF ASC(IN$)<>13 THEN PRINT IN$;" is not a choice!": BEEP:GOTO 3410
 3450 IF IZ THEN A$ = "Y" ELSE A$ = "N"
 3460 PRINT"Using clinometer? "; A$;: GOSUB 520
 3470 IF ASC(IN$) = 13 THEN IN$ = A$

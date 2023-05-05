@@ -1715,7 +1715,7 @@ Sunnyvale, Ca 94086
 100 ' tasks, TASKPLAN solves for each period's incremental cost and the
 110 ' cumulative cost.
 120 '
-130 CLEAR ,60864.,1000 : OPTION BASE 1 : SCREEN 0,0 : WIDTH 80 : CLOSE : KEY OFF : COLOR 0,6,6 : CLS
+130 CLEAR ,60864!,1000 : OPTION BASE 1 : SCREEN 0,0 : WIDTH 80 : CLOSE : KEY OFF : COLOR 0,6,6 : CLS
 140 DEFINT A,I,J,N,P,R,S,X,F
 150 DEFDBL C,T,Y
 160 DEFSTR H,G
@@ -1726,9 +1726,9 @@ Sunnyvale, Ca 94086
 210 DIM BT(IT), ET(IT), CT(IT), CM1(IT), CM2(IT), TT$(IT), Y(IT,JP)
 220 DIM X(JP), TK(JP), CI(JP), CC(JP), CTM(IT)
 230 DIM H(79,13)
-240 GPN = "" : RM$ = "" : CM$ = "" : CM11 = 1. : CM2 = 1. : CM1N$ = ""
+240 GPN = "" : RM$ = "" : CM$ = "" : CM11 = 1! : CM2 = 1! : CM1N$ = ""
 250 FOR I = 1 TO IT
-260 TT$(I) = "" :BT(I) = 0. :ET(I) = 1. :CT(I) = 0. :CM1(I) = 1.
+260 TT$(I) = "" :BT(I) = 0! :ET(I) = 1! :CT(I) = 0! :CM1(I) = 1!
 270 NEXT I
 280 LOCATE 2,1,0
 290 PRINT SPC(20) "              TASKPLAN" : PRINT : PRINT
@@ -1872,10 +1872,10 @@ Sunnyvale, Ca 94086
 1670 G = BTT$ : GOSUB 7030
 1680 IF G = "0" THEN BT(I) = 0 : GOTO 1770
 1690 BT(I) = VAL(BTT$)
-1700 IF BT(I) > 0. AND BT(I) <= NP GOTO 1770
+1700 IF BT(I) > 0! AND BT(I) <= NP GOTO 1770
 1710 IF BT(I)=0 GOTO 1760
 1720 LOCATE 24,1,0
-1730 IF BT(I) < 0. THEN PRINT "Pardon me, but Start Time must be > 0.0"; : GOTO 1750
+1730 IF BT(I) < 0! THEN PRINT "Pardon me, but Start Time must be > 0.0"; : GOTO 1750
 1740 IF BT(I) > NP THEN PRINT "Pardon me, but Start Time must be <"; NP;
 1750 FOR IP = 1 TO 3000 : NEXT IP
 1760 BTT$ = "" : LOCATE ITLN,32 : PRINT STRING$(7,32); : GOTO 1640
@@ -1989,9 +1989,9 @@ Sunnyvale, Ca 94086
 2840 CTM(I) = CTM(I)/(ET(I) - BT(I))
 2850 NEXT I
 2860 FOR J = 1 TO NP
-2870 TK(J) = 0.
+2870 TK(J) = 0!
 2880 FOR I = 1 TO NT
-2890 IF J < BT(I) OR J >= (ET(I) + 1) THEN Y(I,J) = 0. : GOTO 2930
+2890 IF J < BT(I) OR J >= (ET(I) + 1) THEN Y(I,J) = 0! : GOTO 2930
 2900 IF J < (BT(I) + 1) THEN Y(I,J) = CTM(I)*(J - BT(I)) : GOTO 2930
 2910 IF J >= (BT(I) + 1) AND J <= ET(I) THEN Y(I,J) = CTM(I) : GOTO 2930
 2920 Y(I,J) = CTM(I)*(ET(I) - J + 1)
@@ -2035,9 +2035,9 @@ Sunnyvale, Ca 94086
 3300 FOR J = JLO TO JHI
 3310 LOCATE JLN,4,0  : PRINT USING "##"; J;
 3320 LOCATE JLN,15,0 : PRINT USING "##############,."; CI(J);
-3330 IF CI(J) > 0. THEN PRINT ".";
+3330 IF CI(J) > 0! THEN PRINT ".";
 3340 LOCATE JLN,42,0 : PRINT USING "##############,."; CC(J);
-3350 IF CC(J) > 0. THEN PRINT ".";
+3350 IF CC(J) > 0! THEN PRINT ".";
 3360 JLN = JLN + 2 - (J MOD 2)
 3370 NEXT J
 3380 FOR JB = JLN TO 24
@@ -2150,17 +2150,17 @@ Sunnyvale, Ca 94086
 4450 FOR J = 1 TO JHI
 4460 LPRINT TAB(2)  : LPRINT USING "##"; J;
 4470 LPRINT TAB(6)  : LPRINT USING "##############,."; CI(J);
-4480 IF CI(J) > 0. THEN LPRINT ".";
+4480 IF CI(J) > 0! THEN LPRINT ".";
 4490 LPRINT TAB(23) : LPRINT USING "##############,."; CC(J);
-4500 IF CC(J) > 0. THEN LPRINT ".";
+4500 IF CC(J) > 0! THEN LPRINT ".";
 4510 LPRINT GT5;
 4520 IF NP < 41 THEN LPRINT " " : GOTO 4590
 4530 IF (J + 40) > NP THEN LPRINT " " : GOTO 4590
 4540 LPRINT TAB(43) : LPRINT USING "##"; J+40;
 4550 LPRINT TAB(47) : LPRINT USING "##############,."; CI(J+40);
-4560 IF CI(J+40) > 0. THEN LPRINT ".";
+4560 IF CI(J+40) > 0! THEN LPRINT ".";
 4570 LPRINT TAB(64) : LPRINT USING "##############,."; CC(J+40);
-4580 IF CC(J+40) > 0. THEN LPRINT "." ELSE LPRINT " "
+4580 IF CC(J+40) > 0! THEN LPRINT "." ELSE LPRINT " "
 4590 IF J MOD 10 = 0 THEN LPRINT GT4
 4600 NEXT J
 4610 LPRINT CHR$(12);
@@ -2342,9 +2342,9 @@ Sunnyvale, Ca 94086
 6370 IF G = "0" THEN BT(ITR) = 0 : RETURN 2460
 6380 BT(ITR) = VAL(BTT$)
 6390 IF BT(ITR) = 0 GOTO 6320
-6400 IF BT(ITR) < ET(ITR) AND BT(ITR) >= 0. THEN RETURN 2460
+6400 IF BT(ITR) < ET(ITR) AND BT(ITR) >= 0! THEN RETURN 2460
 6410 LOCATE 24,1,0 : BEEP
-6420 IF BT(ITR) < 0. THEN PRINT "Pardon me, but Start Time must be >= 0.0 ."; : GOTO 6440
+6420 IF BT(ITR) < 0! THEN PRINT "Pardon me, but Start Time must be >= 0.0 ."; : GOTO 6440
 6430 IF BT(ITR) >= ET(ITR) THEN PRINT "Pardon me, but Start Time must be <"; ET(ITR); " for Task"; ITR; ".";
 6440 FOR I = 1 TO 3000 : NEXT I
 6450 GOTO 6320

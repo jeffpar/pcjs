@@ -838,12 +838,11 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--all='/disks/pcsigdisks/pcx86/sw/misc/pcsig/*/DISK*/archive/DISK*.ZIP'",
+        "--collection=pcsigdisks",
         "--extract",
         "--expand",
         "--normalize",
-        "--overwrite",
-        "--extdir=%d"
+        "--overwrite"
       ],
       "cwd": "${workspaceFolder}",
       "stopOnEntry": false,

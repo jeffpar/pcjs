@@ -366,7 +366,7 @@ Sunnyvale, CA 94086
 250 PRINT
 260 FOR J=1 TO M
 270 PRINT "Period ";J;": ? ";
-280 LINE INPUT;F$:F(J)=VAL(F$):IF F(J) > 0.  THEN 290
+280 LINE INPUT;F$:F(J)=VAL(F$):IF F(J) > 0!  THEN 290
 282 Y=CSRLIN:SOUND 40,20:LOCATE 25,1:PRINT "Sorry, you must enter a numeric value > 0";:LOCATE Y,1:PRINT SPC(30);:LOCATE Y,1:GOTO 270
 290 PRINT :NEXT J
 299 REM .. perform exponential regression
@@ -1210,9 +1210,9 @@ Sunnyvale, CA 94086
 11090 '* Assignments: H = p(1)  W = p(2) P = p(3)    pos = vobs(i,1)      *
 11100 '********************************************************************
 11110 '
-11130 WSQ2 = 1.# / (P(2) * P(2))
+11130 WSQ2 = 1# / (P(2) * P(2))
 11160 FOR I = 1 TO NOBS
-11170    FCALC(I) =  P(1) / (WSQ2 * (VOBS(I,1) - P(3))^2 + 1.#)
+11170    FCALC(I) =  P(1) / (WSQ2 * (VOBS(I,1) - P(3))^2 + 1#)
 11230    NEXT I
 11240 RETURN
 12000 '***********************************************************************
@@ -1293,7 +1293,7 @@ Sunnyvale, CA 94086
 14110 FOR IW = 1 TO NVAR
 14120    FOR JW = 1 TO NOBS
 14130       IFLAG(JW) = 0
-14140       IF ABS(VOBS(JW,IW)) < 1.00000000000000e-2#                                                           THEN VOBS(JW,IW) = 0.0005# : IFLAG(JW) = 1                                       ELSE VOBS(JW,IW) = VOBS(JW,IW) * 1.0005#
+14140       IF ABS(VOBS(JW,IW)) < 1.00000000000000e-20#                                                           THEN VOBS(JW,IW) = 0.0005# : IFLAG(JW) = 1                                       ELSE VOBS(JW,IW) = VOBS(JW,IW) * 1.0005#
 14150 PRINT "modified var:" ;VOBS(JW,IW)
 14160       NEXT JW
 14170    GOSUB 11000    'call function(fcalc)
@@ -1315,11 +1315,11 @@ Sunnyvale, CA 94086
 14580 IF IT = 1 THEN RETURN  'skip weighting on first iteration
 14590 GOSUB 14000 'subroutine vslope
 14600 FOR IW = 1 TO NOBS
-14610    SUM = 0.#
+14610    SUM = 0#
 14620    FOR JW = 1 TO NVAR
 14630       SUM = SUM + DFDV(IW,JW)*DFDV(IW,JW)/VARWT(IW,JW)
 14640       NEXT JW
-14650    OBSWT(IW) = 1.# / SUM
+14650    OBSWT(IW) = 1# / SUM
 14660    NEXT IW
 14670 PRINT "new function weights:"
 14680 FOR IW = 1 TO NOBS
@@ -1336,13 +1336,13 @@ Sunnyvale, CA 94086
 15070 'Now set up matrices
 15080     FOR I = 1 TO NP
 15090        'Set up right hand side element
-15100        RHS(I) = 0.#
+15100        RHS(I) = 0#
 15110        FOR J = 1 TO NOBS
 15120           RHS(I) = RHS(I) + DFDP(J,I) * DLAMBDA(J)
 15130           NEXT J
 15140        'Set up left hand side elements
 15150        FOR J = 1 TO NP
-15160           B(I,J) = 0.#
+15160           B(I,J) = 0#
 15170           FOR K = 1 TO NOBS
 15180              B(I,J) = B(I,J) + DFDP(K,I) * DFDP(K,J) * OBSWT(K)
 15190              NEXT K
@@ -1358,13 +1358,13 @@ Sunnyvale, CA 94086
 16060 '* for good results b# and rhs# must be dbl precision*
 16070 '* ref: J.M. McCormick "Numerical Methods in FORTRAN"*
 16080 '*****************************************************
-16090 DETERM = 1.#
+16090 DETERM = 1#
 16100 FOR I = 1 TO NP
 16110    INDEX(I,3) = 0
 16120    NEXT I
 16130 FOR I = 1 TO NP  'MAIN LOOP
 16140    'search for pivot element
-16150    MAX# = 0.#
+16150    MAX# = 0#
 16160    FOR J = 1 TO NP
 16170       IF INDEX(J,3) = 1 THEN 16260
 16180       FOR K = 1 TO NP
@@ -1381,7 +1381,7 @@ Sunnyvale, CA 94086
 16290   INDEX(I,2) = ICOL
 16300   'interchange rows to put pivot on diagonal
 16310   IF IROW = ICOL THEN 16380  'ALREADY THERE
-16320   DETERM = -1.# * DETERM
+16320   DETERM = -1# * DETERM
 16330   FOR J = 1 TO NP
 16340      SWAP B(IROW,J),B(ICOL,J)
 16350      NEXT J
@@ -1389,7 +1389,7 @@ Sunnyvale, CA 94086
 16370   'divide pivot row by pivot element
 16380   PIVOT = B(ICOL,ICOL)
 16390   DETERM = DETERM * PIVOT
-16400   B(ICOL,ICOL) = 1.#
+16400   B(ICOL,ICOL) = 1#
 16410   FOR J = 1 TO NP
 16420      B(ICOL,J) = B(ICOL,J)/PIVOT
 16430      NEXT J
@@ -1398,7 +1398,7 @@ Sunnyvale, CA 94086
 16460   FOR J = 1 TO NP
 16470      IF J = ICOL THEN 16540
 16480      T = B(J,ICOL)
-16490      B(J,ICOL) = 0.#
+16490      B(J,ICOL) = 0#
 16500      FOR K = 1 TO NP
 16510         B(J,K) = B(J,K) - B(ICOL,K)*T
 16520         NEXT K
@@ -1442,10 +1442,10 @@ Sunnyvale, CA 94086
 17600    NEXT IS
 17610 FOR IS = 1 TO NP
 17620    TP = P(IS)
-17630    IF TP < 1.00000000000000e-2#                                                                      THEN P(IS) = TP + 0.0005#                                                        ELSE P(IS) = TP * 1.0005#
+17630    IF TP < 1.00000000000000e-20#                                                                      THEN P(IS) = TP + 0.0005#                                                        ELSE P(IS) = TP * 1.0005#
 17640    GOSUB 11000          'call function( fcalc )
 17650    FOR JS = 1 TO NOBS
-17660       IF TP < 1.00000000000000e-2#                                                                      THEN DFDP(JS,IS) = (FCALC(JS) - FTEMP(JS)) / 0.0005#                             ELSE DFDP(JS,IS) = (FCALC(JS) - FTEMP(JS)) / (0.0005# * TP)
+17660       IF TP < 1.00000000000000e-20#                                                                      THEN DFDP(JS,IS) = (FCALC(JS) - FTEMP(JS)) / 0.0005#                             ELSE DFDP(JS,IS) = (FCALC(JS) - FTEMP(JS)) / (0.0005# * TP)
 17670       NEXT JS
 17680    P(IS) = TP
 17690    NEXT IS
@@ -1470,16 +1470,16 @@ Sunnyvale, CA 94086
 18170 INPUT#1, FRACT    'fraction of calculated param. change to apply
 18180 FOR I = 1 TO NOBS
 18190    INPUT#1,FOBS(I)
-18200    IF IUSERWT = 1                                                                     THEN INPUT#1,OBSWT(I)                                                           ELSE OBSWT(I) = 1.#
+18200    IF IUSERWT = 1                                                                     THEN INPUT#1,OBSWT(I)                                                           ELSE OBSWT(I) = 1#
 18210    FOR J = 1 TO NVAR
 18220       INPUT#1,VOBS(I,J)
-18230       IF IUSERWT = 1                                                                     THEN INPUT#1,VARWT(I,J)                                                         ELSE VARWT(I,J) = 1.#
+18230       IF IUSERWT = 1                                                                     THEN INPUT#1,VARWT(I,J)                                                         ELSE VARWT(I,J) = 1#
 18240       NEXT J
 18250    NEXT I
 18260 FOR I = 1 TO NP
 18270    INPUT#1,PNAME$(I), P(I)
 18280    NEXT I
-18290 DEVSQ1 = 1.00000000000000e+2# : DEVSQ2 = 1.00000000000000e+2# 'dummy devsqs for non-converge test
+18290 DEVSQ1 = 1.00000000000000e+20# : DEVSQ2 = 1.00000000000000e+20# 'dummy devsqs for non-converge test
 18300 TIME$ = "00:00:00"
 18310 RETURN
 19000 '**********************************************************************
@@ -1499,7 +1499,7 @@ Sunnyvale, CA 94086
 19150 LPRINT "DATA FILE:";IFILE$
 19160 LPRINT : LPRINT"   Function Values"
 19170 LPRINT CHR$(27);"X" "Observed û Calculated"; : LPRINT CHR$(27);"Y"
-19180 DEVSQ = 0.#
+19180 DEVSQ = 0#
 19190 FOR I = 1 TO NOBS
 19200     LPRINT USING"####.##\   \####.##";FOBS(I);"  û  ";FCALC(I)
 19210     DEVSQ = DEVSQ + (FOBS(I) - FCALC(I))^2 * OBSWT(I)
@@ -1522,7 +1522,7 @@ Sunnyvale, CA 94086
 19550 '* variance estimate.                                                 *
 19560 '**********************************************************************
 19570 'estimate unit variance
-19580  IF NOBS <= NP                                                                       THEN VAR = 0.#  'should never trust parameters if nobs < np anyways!             ELSE VAR = DEVSQ / (NOBS - NP)
+19580  IF NOBS <= NP                                                                       THEN VAR = 0#  'should never trust parameters if nobs < np anyways!             ELSE VAR = DEVSQ / (NOBS - NP)
 19590 'convert B to covariance matrix
 19600 FOR I = 1 TO NP
 19610   FOR J = 1 TO NP
@@ -2445,7 +2445,7 @@ Sunnyvale, CA 94086
 1100 RETURN
 39998 '    PLOTTING SUBROUTINE (EQAPLOT)
 39999 '    SHIFT DATA TO NON-NEGATIVE
-40000 B=10000000.#
+40000 B=10000000#
 40001 '    FIND MINIMUM DATA VALUE
 40002 FOR I=1 TO N
 40003 IF B>D(I) THEN B=D(I)
@@ -2508,7 +2508,7 @@ Sunnyvale, CA 94086
 40060 RETURN
 40098 '    TWO DIMENSIONAL DATA PLOTTING SUBROUTINE (DATAPLOT)
 40099 '    SHIFT DATA TO NON-NEGATIVE
-40100 B=10000000.#
+40100 B=10000000#
 40101 '    FIND MINIMUM DATA VALUE
 40102 FOR I=1 TO N
 40103 IF B>D(I) THEN B=D(I)
@@ -2823,7 +2823,7 @@ Sunnyvale, CA 94086
 41954 NEXT I
 41955 RETURN
 41998 '    DIAGONAL MATRIX CREATION SUBROUTINE (MATDIAG)
-41999 '    MATRIX B(I,J) IS THE IDENTITY MATRIX TIMES 
+41999 '    MATRIX B(I,J) IS THE IDENTITY MATRIX TIMES
 42000 FOR I=1 TO N
 42001 FOR J=1 TO N
 42002 B(I,J)=0
@@ -3449,7 +3449,7 @@ Sunnyvale, CA 94086
 43304 A(3)=-0.000198412715551283#
 43305 A(4)=0.0000027557589750762#
 43306 A(5)=-2.50705987620700e-8#
-43307 A(6)=1.64105986683000e-1#
+43307 A(6)=1.64105986683000e-10#
 43308 RETURN
 43309 '   COSINE SERIES COEFFICIENTS (COSDATA)
 43310 N=6
@@ -3597,7 +3597,7 @@ Sunnyvale, CA 94086
 1295 '
 1296 '
 1297 '
-1298 '  
+1298 '
 ```
 {% endraw %}
 

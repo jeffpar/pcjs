@@ -642,7 +642,7 @@ form feed.
 250 PRINT
 260 FOR J=1 TO M
 270 PRINT "Period ";J;": ? ";
-280 LINE INPUT;F$:F(J)=VAL(F$):IF F(J) > 0.  THEN 290
+280 LINE INPUT;F$:F(J)=VAL(F$):IF F(J) > 0!  THEN 290
 282 Y=CSRLIN:SOUND 40,20:LOCATE 25,1:PRINT "Sorry, you must enter a numeric value > 0";:LOCATE Y,1:PRINT SPC(30);:LOCATE Y,1:GOTO 270
 290 PRINT :NEXT J
 299 REM .. perform exponential regression
@@ -1371,7 +1371,7 @@ up with the correct time and date!  GOOD LUCK with yours.
 10 REM  RUNOFF - A simple text formatter      February, 1982
 20 REM
 30 REM  COPYRIGHT 1982 John M. Nevison Associates, Concord, Mass.
-32 REM  
+32 REM
 34 REM  Timothy J. Stein
 36 REM  John M. Nevison Associates
 38 REM  Concord, Mass. 01742
@@ -1391,7 +1391,7 @@ up with the correct time and date!  GOOD LUCK with yours.
 66 REM          .NOCENTER or .NC        Don't center any more
 68 REM          .INCLUDE file or
 70 REM            .I file               Read text from file specified
-72 REM  
+72 REM
 73 REM  A few notes:
 74 REM  1. The program does not reassemble lines. If a line is longer
 75 REM     than the distance from LM to RM it will be truncated.
@@ -1446,7 +1446,7 @@ up with the correct time and date!  GOOD LUCK with yours.
 595 V.CC$ = "."                 'command character
 597 V.PAGESIZE = 50             'page length
 600 '
-605 DATA 9 
+605 DATA 9
 606                             'number of commands (DIM if greater than 10)
 610 DATA PAGE, P
 620 DATA SPACING, S
@@ -1731,7 +1731,7 @@ up with the correct time and date!  GOOD LUCK with yours.
 8400 RETURN
 8490 'PAGE
 8495 '-----------------------------------------------------------------------
-8500 'SUB: Center 
+8500 'SUB: Center
 8501 '     IN: l$ - line to center
 8502 '         v.col - column width
 8503 '    OUT: l$ - line center

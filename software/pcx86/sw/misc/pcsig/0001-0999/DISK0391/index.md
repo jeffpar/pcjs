@@ -383,7 +383,7 @@ machines:
 4410 H2=1.000000e-8
 4420 C5=0.57721566#
 4430 P7=3.1415927#
-4440 P8=2./P7
+4440 P8=2!/P7
 4450 IF X>12 THEN 4910
 4460 Z5=0.5*X
 4470 X2=Z5*Z5
@@ -394,9 +394,9 @@ machines:
 4520 J=0
 4530 IF ABS(T4)<=H2 THEN 4600
 4540 J=J+1
-4550 IF J<>1 THEN S6=S6+1./(J-1)
+4550 IF J<>1 THEN S6=S6+1!/(J-1)
 4560 Z6=T-S6
-4570 T4=-X2*T4/(J*J)*(1.-1./(J*Z6))
+4570 T4=-X2*T4/(J*J)*(1!-1!/(J*Z6))
 4580 YO=YO+T4
 4590 GOTO 4530
 4600 YO=P8*YO
@@ -407,7 +407,7 @@ machines:
 4650 J=1
 4660 IF(ABS(T4)<=H2) THEN 4740
 4670 J=J+1
-4680 S6=S6+1./(J-1)
+4680 S6=S6+1!/(J-1)
 4690 Z6=T-S6
 4700 T2=-X2*T4/(J*(J-1))
 4710 T4=T2*((Z6-0.5/J)/(Z6+0.5/(J-1)))
@@ -612,9 +612,9 @@ machines:
 1260 FOR I=1 TO 4
 1270 FOR J=1 TO 4
 1280 ST(I,J)=A(I,J)
-1290 AI(I,J)=0.
+1290 AI(I,J)=0!
 1300 NEXT J
-1310 AI(I,I)=1.
+1310 AI(I,I)=1!
 1320 NEXT I
 1330 FOR I=1 TO 4
 1340 TE=ST(I,I)
@@ -855,12 +855,12 @@ machines:
 80 FOR I=1 TO 3000:NEXT I
 90 CLS:PRINT"  This program uses a formula given in  J. E. Kiefer and D. J. Wilson, Separ.   Sci. Technol., 15, 57-74 (1980), to     calculate the differential capacitance"
 100 PRINT"of a non-ideal electric double layer."
-110 PI=3.14159:E=4.803000e-1:KB=1.380500e-16
+110 PI=3.14159:E=4.803000e-10:KB=1.380500e-16
 115 PRINT:PRINT"  Touch <return> to go on, please."
 116 W$=INKEY$:IF W$="" THEN 116
 120 D0=78.54:D1=-0.361187:D2=0.000689621
 130 T0=273.15:T25=298.15
-135 SOLCONV=6.023000e+2:VCONV=1/300000.
+135 SOLCONV=6.023000e+20:VCONV=1/300000!
 140 CLS
 150 PRINT"What is the temperature (deg C) of the  solution?  ";
 160 INPUT"",T
@@ -1905,8 +1905,8 @@ Sunnyvale, CA 94086
 2030 PRINT:PRINT"What is the strength (Tesla) of the     constant magnetic field in this sim-    ulation?"
 2040 INPUT"Bz (Teslas) = ";B0
 2050 PRINT:PRINT"The frequency of the precession is"
-2060 PRINT Y*B0/(P2*1);" Mhz."
-2070 W=Y*B0/1
+2060 PRINT Y*B0/(P2*1000000!);" Mhz."
+2070 W=Y*B0/1000000!
 2080 PRINT"Touch <return> for a simulation of the  behavior of the magnetization of the    nuclei."
 2090 W$=INKEY$:IF W$="" THEN 2090
 2100 CLS
@@ -1933,7 +1933,7 @@ Sunnyvale, CA 94086
 3030 INPUT"[1/(T*sec)] ",Y
 3040 PRINT"What is the magnetic field strength?    (Teslas) ";
 3050 INPUT"",B0
-3055 W=Y*B0/(P2*1)
+3055 W=Y*B0/(P2*1000000!)
 3057 WP=W/2000
 3060 PRINT"What is T1 (sec)? (default = 3) ";
 3065 INPUT"",T1
@@ -1984,7 +1984,7 @@ Sunnyvale, CA 94086
 4020 PRINT"What is the strength of Bz?  (Tesla)"
 4021 INPUT"",B0
 4022 W=Y*B0:REM frequency
-4023 W=W/(P2*1):WP=W/2000
+4023 W=W/(P2*1000000!):WP=W/2000
 4024 PRINT:PRINT"  The Larmor frequency of the free pre-":PRINT"cession is ";W;" Mhz."
 4030 PRINT"Let us examine the case where B1 << Bz."
 4035 PRINT"We therefore require that B1/Bz be <=   .05"
@@ -2036,7 +2036,7 @@ Sunnyvale, CA 94086
 5007 PRINT"What is the strength of Bz?  (Tesla)"
 5008 INPUT"",B0
 5009 W=Y*B0:REM frequency
-5010 W=W/(P2*1):WP=W/2000
+5010 W=W/(P2*1000000!):WP=W/2000
 5011 PRINT:PRINT"  The Larmor frequency of the free pre-":PRINT"cession is ";W;" Mhz."
 5012 PRINT"Let us examine the case where B1 << Bz."
 5013 PRINT"We therefore require that B1/Bz be <=   .05"
@@ -2094,7 +2094,7 @@ Sunnyvale, CA 94086
 6030 PRINT"What is the strength of Bz?  (Tesla)"
 6035 INPUT"",B0
 6040 W=Y*B0:REM frequency
-6045 W=W/(P2*1):WP=W/2000
+6045 W=W/(P2*1000000!):WP=W/2000
 6050 PRINT:PRINT"  The Larmor frequency of the free pre-":PRINT"cession is ";W;" Mhz."
 6055 PRINT"In pulsed NMR experiments B1 can be     quite large."
 6060 PRINT"We require that B1/Bz be <=   .25."
@@ -2583,7 +2583,7 @@ Sunnyvale, CA 94086
 140 NEXT I
 150 FOR K=1 TO M
 160 FOR J=1 TO M
-170 A(J,K)=0.
+170 A(J,K)=0!
 180 FOR I=1 TO N
 190 A(J,K)=A(J,K)+W(I)*AA(I,J)*AA(I,K)
 200 NEXT I
@@ -2603,10 +2603,10 @@ Sunnyvale, CA 94086
 330 Y(K)=Y(K)+W(I)*B(I)*AA(I,K)
 340 NEXT I
 350 NEXT K
-355 D=0.
-360 LA=100.
+355 D=0!
+360 LA=100!
 370 FOR L=1 TO M
-380 T=0.
+380 T=0!
 390 FOR J=1 TO M
 395 D=D+AI(J,L)
 400 T=T+AI(J,L)
@@ -2616,7 +2616,7 @@ Sunnyvale, CA 94086
 440 NEXT L
 450 LA=LA/D
 460 FOR J=1 TO M
-470 X(J)=0.
+470 X(J)=0!
 480 FOR L=1 TO M
 490 X(J)=X(J)+AI(J,L)*(Y(L)+LA)
 500 NEXT L
@@ -2638,7 +2638,7 @@ Sunnyvale, CA 94086
 7070 NEXT J
 7080 NEXT I
 7090 FOR I=1 TO N
-7100 AI(I,I)=1.
+7100 AI(I,I)=1!
 7110 NEXT I
 7120 FOR I=1 TO N
 7125 D=ST(I,I)
@@ -2751,7 +2751,7 @@ Sunnyvale, CA 94086
 7070 NEXT J
 7080 NEXT I
 7090 FOR I=1 TO N
-7100 AI(I,I)=1.
+7100 AI(I,I)=1!
 7110 NEXT I
 7120 FOR I=1 TO N
 7125 D=ST(I,I)
@@ -2978,8 +2978,8 @@ Sunnyvale, CA 94086
 2030 PRINT:PRINT"What is the strength (Tesla) of the     constant magnetic field in this sim-    ulation?"
 2040 INPUT"Bz (Teslas) = ";B0
 2050 PRINT:PRINT"The frequency of the precession is"
-2060 PRINT Y*B0/(P2*1);" Mhz."
-2070 W=Y*B0/1
+2060 PRINT Y*B0/(P2*1000000!);" Mhz."
+2070 W=Y*B0/1000000!
 2080 PRINT"Touch <return> for a simulation of the  behavior of the magnetization of the    nuclei."
 2090 W$=INKEY$:IF W$="" THEN 2090
 2100 CLS
@@ -3006,7 +3006,7 @@ Sunnyvale, CA 94086
 3030 INPUT"[1/(T*sec)] ",Y
 3040 PRINT"What is the magnetic field strength?    (Teslas) ";
 3050 INPUT"",B0
-3055 W=Y*B0/(P2*1)
+3055 W=Y*B0/(P2*1000000!)
 3057 WP=W/2000
 3060 PRINT"What is T1 (sec)? (default = 3) ";
 3065 INPUT"",T1
@@ -3057,7 +3057,7 @@ Sunnyvale, CA 94086
 4020 PRINT"What is the strength of Bz?  (Tesla)"
 4021 INPUT"",B0
 4022 W=Y*B0:REM frequency
-4023 W=W/(P2*1):WP=W/2000
+4023 W=W/(P2*1000000!):WP=W/2000
 4024 PRINT:PRINT"  The Larmor frequency of the free pre-":PRINT"cession is ";W;" Mhz."
 4030 PRINT"Let us examine the case where B1 << Bz."
 4035 PRINT"We therefore require that B1/Bz be <=   .05"
@@ -3109,7 +3109,7 @@ Sunnyvale, CA 94086
 5007 PRINT"What is the strength of Bz?  (Tesla)"
 5008 INPUT"",B0
 5009 W=Y*B0:REM frequency
-5010 W=W/(P2*1):WP=W/2000
+5010 W=W/(P2*1000000!):WP=W/2000
 5011 PRINT:PRINT"  The Larmor frequency of the free pre-":PRINT"cession is ";W;" Mhz."
 5012 PRINT"Let us examine the case where B1 << Bz."
 5013 PRINT"We therefore require that B1/Bz be <=   .05"
@@ -3167,7 +3167,7 @@ Sunnyvale, CA 94086
 6030 PRINT"What is the strength of Bz?  (Tesla)"
 6035 INPUT"",B0
 6040 W=Y*B0:REM frequency
-6045 W=W/(P2*1):WP=W/2000
+6045 W=W/(P2*1000000!):WP=W/2000
 6050 PRINT:PRINT"  The Larmor frequency of the free pre-":PRINT"cession is ";W;" Mhz."
 6055 PRINT"In pulsed NMR experiments B1 can be     quite large."
 6060 PRINT"We require that B1/Bz be <=   .25."
@@ -4115,7 +4115,7 @@ Sunnyvale, CA 94086
 410 PRINT:PRINT"  Touch <return> to go on, please."
 420 W$=INKEY$:IF W$="" THEN 420
 430 CLS
-440 TH=5.*(-0.5+RND(1))
+440 TH=5!*(-0.5+RND(1))
 450 GOSUB 2000:REM display spectrum
 460 LOCATE 22,1:PRINT"'I'ncrease or 'D'ecrease theta?"
 470 LOCATE 23,1:PRINT"'R'ecord the newly phased spectrum?"
@@ -4722,7 +4722,7 @@ Sunnyvale, CA 94086
 125 K=K+1
 130 PRINT"A(";K;") = ";
 135 INPUT"";TP
-140 IF TP=99999. THEN K=K-1:GOTO 150
+140 IF TP=99999! THEN K=K-1:GOTO 150
 145 A(K)=TP:GOTO 125
 150 N=K
 180 GOSUB 500
