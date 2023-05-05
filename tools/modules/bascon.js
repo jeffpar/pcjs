@@ -428,10 +428,18 @@ export default class BASConvert {
                     token = this.readS16().toString();
                     break;
                 case 0x1D:
-                    token = this.readMBF32().toPrecision(7).replace(/0+$/, "");
+                    /*
+                     * BASICA likes to display "0.1" simply as ".1"; I'm not sure that's worth worrying about.
+                     *
+                     * At the moment, all we do is trim trailing zeros and trailing decimal points.  It also seems
+                     * that BASICA eschews '!' for 32-bit floating point numbers unless it's a whole number, presumably
+                     * to prevent it being confused with an integer and running the risk of integer overflow (eg, 65536!).
+                     */
+                    token = this.readMBF32().toPrecision(7).replace(/(\.[0-9]*?)0*$/, "$1").replace(/\.$/, "");
+                    if (token.indexOf('.') < 0) token += '!';
                     break;
                 case 0x1F:
-                    token = this.readMBF64().toPrecision(15).replace(/0+$/, "") + '#';
+                    token = this.readMBF64().toPrecision(15).replace(/(\.[0-9]*?)0*$/, "$1").replace(/\.$/, "") + '#';
                     break;
                 default:
                     if (v == 0x3A) {
