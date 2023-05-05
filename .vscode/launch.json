@@ -821,7 +821,7 @@
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
         "../disks/pcsigdisks/pcx86/sw/misc/pcsig/0001-0999/DISK0001/DISK0001.json",
-        "--extract",
+        "--extract=YAHTZEE.BAS",
         "--normalize",
         "--overwrite"
       ],

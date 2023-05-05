@@ -490,19 +490,33 @@ export default class BASConvert {
                         }
                     }
                 }
+                /*
+                 * There are some additional whitespace "rules" that BASIC appears to follow, such as an implied space
+                 * between PRINT (0x91) and other non-quote/non-colon tokens (otherwise statements like "PRINT CHR$(29)"
+                 * become "PRINTCHR$(29)") and an implied space between number tokens and alphabetic tokens.
+                 */
+                if (this.prevToken == 0x91 && v != 0x22 && v != 0x3A ||
+                    this.prevToken <= 0x1F && token[0] >= 'A' && token[0] <= 'Z') {
+                    token = ' ' + token;
+                }
             }
         }
+        this.prevToken = v;
         return token;
     }
 
     /**
-     * normify(db, assumeText)
+     * modernize(db, assumeText)
+     *
+     * In the context of old BASIC programs, normalization means modernizing the character set
+     * (ie, from CP437 to UTF-8).  For tokenized programs, normalization was performed as tokens
+     * were processed; for plain-text files, we use this function.
      *
      * @param {DataBuffer} db
      * @param {boolean} [assumeText]
      * @returns {DataBuffer}
      */
-    static normify(db, assumeText)
+    static modernize(db, assumeText)
     {
         /*
          * Either the caller tells us the data is text, or we make sure the first 4 bytes look like text.
@@ -579,8 +593,12 @@ export default class BASConvert {
         this.db = BASConvert.unprotect(this.db);
 
         if (this.readU8() != 0xFF) {
+            /*
+             * This does not appear to be a tokenized BASIC program, so there's nothing to do UNLESS
+             * normalization was requested, too.
+             */
             if (this.normalize) {
-                this.db = BASConvert.normify(this.db);
+                this.db = BASConvert.modernize(this.db);
             }
         }
         else {
@@ -602,16 +620,17 @@ export default class BASConvert {
                     }
                     break;
                 }
+                let lineNum = this.readU16();
+                let line = lineNum + " ";       // BASIC defaults to one space between line number and first token
+                this.prevToken = 0x20;
                 let t;
-                let line = this.readU16();
-                s += line + " ";        // BASIC defaults to one space between line number and first token
                 while ((t = this.getToken(line)) !== null) {
-                    s += t;
+                    line += t;
                 }
-                s += (this.normalize? "\n" : "\r\n");
-                this.quote = false;     // if you end a line with an open quote, BASIC automatically "closes" it
-                this.comment = false;   // ditto for comments
-                this.data = false;      // ditto for DATA statements
+                s += line.trim() + (this.normalize? "\n" : "\r\n");
+                this.quote = false;             // if you end a line with an open quote, BASIC automatically "closes" it
+                this.comment = false;           // ditto for comments
+                this.data = false;              // ditto for DATA statements
             }
             this.db = new DataBuffer(s);
         }
