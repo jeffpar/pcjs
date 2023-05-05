@@ -4523,7 +4523,7 @@ Instructions: Contained in the program body.
 {% raw %}
 ```bas
 10 DEFINT A-W : DEFSTR X-Z
-20 XON=CHR$(2) : XOFF=CHR$(1)                                             
+20 XON=CHR$(2) : XOFF=CHR$(1)
 50 DIM ARRAY(31,31)
 60 FOR I=0 TO 23:FOR J=0 TO 17:ARRAY(I,J)=0:NEXT :NEXT
 100 FOR I=0 TO 23

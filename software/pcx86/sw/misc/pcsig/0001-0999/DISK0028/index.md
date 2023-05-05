@@ -2053,7 +2053,7 @@ PALLETTE.BAS displays the colors possible in 160 by 200 color graphics
 1510 CUR.SEG$="&H"+SEGMENT$: CUR.OFF$="&H"+OFFSET$
 1520 HEXVAL$="0123456789ABCDEF01234567890ABCDE": HEXHEADING=VAL("&H"+RIGHT$(OFFSET$,1))+1
 1530 LINECOUNT=1:ADDR.FMT$="\  \ =":BYTE.FMT$="\\ "
-1540 FOR LOOP=VAL(CUR.OFF$) TO 65336. STEP 16:DEF SEG=VAL(CUR.SEG$)
+1540 FOR LOOP=VAL(CUR.OFF$) TO 65336! STEP 16:DEF SEG=VAL(CUR.SEG$)
 1550 IF LINECOUNT =1 THEN CLS:DIVIDER=3:PRINT TAB(25);"SEGMENT STARTS AT :  "CUR.SEG$ ELSE 1620
 1560 PRINT "offset";TAB(28)"hexidecimal values";TAB(69)"ASCII code";
 1570 COLOR 0,7:PRINT "hex   ";
@@ -2128,7 +2128,7 @@ PALLETTE.BAS displays the colors possible in 160 by 200 color graphics
 400 '
 500 'This program will read in an unmodified COMMAND.COM (Release 1.1)
 600 '     and produce an output file called COMMAND.CMD.. which can be
-700 '     renamed to COMMAND.COM.. This output file will contain all of 
+700 '     renamed to COMMAND.COM.. This output file will contain all of
 800 '     the modifications to COMMAND.COM currently available from the
 900 '     author. See COMMAND.DOC for complete list and limitations.
 910 '

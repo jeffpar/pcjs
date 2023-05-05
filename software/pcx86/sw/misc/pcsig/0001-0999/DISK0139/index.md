@@ -1130,7 +1130,7 @@ Sunnyvale, CA 94086
 58 Z = Y - X   ' top of memory - BASIC segment = total available.
 60 Z = Z - 152 ' LORES is about 151 paragraphs long. 2406 bytes.
 62 Z = Z*16    ' memory available for BASIC in bytes.
-64 IF Z < 65536. THEN CLEAR ,Z,4096 ELSE CLEAR ,,4096
+64 IF Z < 65536! THEN CLEAR ,Z,4096 ELSE CLEAR ,,4096
 66 DEFINT A-Z ' after CLEAR X,Y,Z are zero
 68 DEF SEG=0 : X = PEEK(&H510) + 256*PEEK(&H511)
 70 Y=(PEEK(&H413) + 256*PEEK(&H414)) * 64
@@ -3327,13 +3327,13 @@ cseg	ends
 58 Z = Y - X   ' top of memory - BASIC segment = total available.
 60 Z = Z - 152 ' LORES is about 151 paragraphs long.
 62 Z = Z*16    ' memory available for BASIC in bytes.
-64 IF Z < 65536. THEN CLEAR ,Z,4096 ELSE CLEAR ,,4096
+64 IF Z < 65536! THEN CLEAR ,Z,4096 ELSE CLEAR ,,4096
 66 DEFINT A-Z ' after CLEAR and DEFINT X,Y,Z are definitely zero
 68 DEF SEG=0 : X! = PEEK(&H510) + 256*PEEK(&H511)
 70 Y!=(PEEK(&H413) + 256*PEEK(&H414)) * 64 ' now have to specify single
 72 Z! = Y! - X! : FS$="lores.usr"
 76 IF Z! < 4096 THEN L! = X! + Z! - 151 ELSE L! = X! + 4097
-78 IF L! > 32767. THEN LOSEG = L! - 65536. ELSE LOSEG = L!
+78 IF L! > 32767! THEN LOSEG = L! - 65536! ELSE LOSEG = L!
 80 ON ERROR GOTO 84
 82 DEF SEG=LOSEG :BLOAD FS$,0 :DEF SEG :ON ERROR GOTO 0 :GOTO 90
 84 PRINT "This demo requires the file LORES.USR to work."

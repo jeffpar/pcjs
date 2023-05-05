@@ -354,7 +354,7 @@ Sunnyvale, CA 94086
 1500 DEF SEG=SEG
 1600 BRIGHT=10:DULL=2
 1700 FALSE=0:TRUE=NOT FALSE
-1800 Z=0               
+1800 Z=0
 1900 IF Z>10 THEN Z=10
 1950 DEF SEG=SEG
 2000 FOR LVL=1 TO 6
@@ -400,7 +400,7 @@ Sunnyvale, CA 94086
 6000    LOCATE X,YLIM(1,6):PRINT STRING$(18," ");
 6100    LOCATE X,YLIM(2,2):PRINT STRING$(18," ");
 6200 NEXT
-6300 FOR Y=YC-2 TO YC+2                                          
+6300 FOR Y=YC-2 TO YC+2
 6400    FOR X=XLIM(1,6) TO XLIM(1,2)
 6500       LOCATE X,Y:PRINT " ";
 6600       LOCATE X+12,Y:PRINT " ";
@@ -477,7 +477,7 @@ Sunnyvale, CA 94086
 13500 LOCATE XC,YC-Z/2-1
 13600 PRINT "Oops";
 13700 FOR I=250 TO 50 STEP -5:SOUND I,1:NEXT
-13800 LOCATE 10,30                            
+13800 LOCATE 10,30
 13850 SCO=(TOTPTS-PTSREM)/TOTPTS*100+(INT(Z/2))*100
 13900 PRINT USING "Your score was ####" ;SCO
 14000 FOR I=1 TO 5:LOCATE RACX,RACY:PRINT CHR$(8);:FOR WT=1 TO 500:NEXT:LOCATE RACX,RACY:PRINT " ";:FOR WT=1 TO 500:NEXT:NEXT
@@ -1454,7 +1454,7 @@ Sunnyvale, CA 94086
 1195  GOTO  1135
 1200  IF  RND (0) > 0.09999999 THEN 1204
 1201  GOSUB  7200: GOSUB  11020 : PRINT"Space Storm sends Enterprise off course!": GOSUB  11000
-1202 C1 = (8.899999 + C1) / 2:W1 = 8. *  RND (0)
+1202 C1 = (8.899999 + C1) / 2:W1 = 8! *  RND (0)
 1204  IF K3 <  = 0 THEN 1225
 1205  GOSUB  2830
 1210  IF K3 <  = 0 THEN 1225
@@ -1493,7 +1493,7 @@ Sunnyvale, CA 94086
 1459  GOSUB  11010 : GOSUB  7200
 1460  PRINT "Warp engines shut down at sector ": PRINT  TAB( 1);S1;",";S2;" due to bad navigation."
 1461  GOSUB  11000
-1465 H =  INT (100. *  RND (1) +5)
+1465 H =  INT (100! *  RND (1) +5)
 1470  PRINT "Stop uses ";H;" energy units."
 1475 E = E - H
 1480  IF E < 0 THEN 3045
@@ -1577,7 +1577,7 @@ Sunnyvale, CA 94086
 1944  PRINT "Enterprise makes ";H;" unit hit on Klingon at ";K(I,1);",";K(I,2)
 1945  PRINT "  (";K(I,3);" power left)"
 1947 GOSUB 14000
-1955  IF F4 < 0. OR F3 = 0 THEN 1990
+1955  IF F4 < 0! OR F3 = 0 THEN 1990
 1965 H =  INT (((0.25 * F4 / K3) / FN F(0)) * (2 +  RND (1)))
 1970 K(I,3) = K(I,3) - H
 1971  GOSUB  7000
@@ -1605,7 +1605,7 @@ Sunnyvale, CA 94086
 2060  INPUT "Torpedo course:";C9
 2062  IF  RND (1) > 0.1 THEN 2066
 2063  GOSUB  11010 : GOSUB  7200: PRINT "***Torpedo Misfires***!!!": GOSUB  11000
-2064 C9 = 1. + 8. *  RND (1):C7 = 1: GOTO  2069
+2064 C9 = 1! + 8! *  RND (1):C7 = 1: GOTO  2069
 2066  INPUT "Number of Torpedoes:";C7
 2068  IF P < C7 THEN 2066
 2069  FOR I7 = 1 TO C7
@@ -1676,8 +1676,8 @@ Sunnyvale, CA 94086
 2875  PRINT "     (";S;" shield strength left)"
 2877 GOSUB 14000
 2880 P5 = 0.05
-2885  IF H > 100. THEN P5 = 0.2
-2890  IF H > 200. THEN P5 = 0.5
+2885  IF H > 100! THEN P5 = 0.2
+2890  IF H > 200! THEN P5 = 0.5
 2895  IF  RND (1) > P5 THEN 2920
 2900 R1 =  INT ( RND (1) * 8 + 1)
 2905 D(R1) = D(R1) - ( RND (1) + 0.25)
@@ -1698,7 +1698,7 @@ Sunnyvale, CA 94086
 2980  NEXT  I
 2985  RETURN
 2990  PRINT "The Enterprise is dead in Space."
-2995  FOR I = 1 TO 5: GOSUB  7200: NEXT 
+2995  FOR I = 1 TO 5: GOSUB  7200: NEXT
 3000  IF K3 <  = 0 THEN 3050
 3005  GOSUB  2830
 3010  IF E < 0 OR S < 0 THEN 3045: GOTO  3000
@@ -1754,7 +1754,7 @@ Sunnyvale, CA 94086
 3300  IF K3 = 0 THEN 3355
 3305  IF F3 = 1 THEN 3355
 3310  IF  RND (1) *  SQR (K3) < 0.9 THEN 3353
-3315 F3 = 1:F4 =  INT (2000. *  RND(1))
+3315 F3 = 1:F4 =  INT (2000! *  RND(1))
 3325  GOSUB  3900
 3330 A$ = "<F>":F1 = R1:F2 = R2: GOSUB  3940
 3350  PRINT "A friendly star Cruiser has entered the quadrant."
@@ -1974,11 +1974,11 @@ Sunnyvale, CA 94086
 4980 F4 =  INT (F4 *  RND (1))
 4985  RETURN
 4990  REM  * KELVIN DOOMSDAY MACHINE *
-4991  PRINT : FOR M = 1 TO 5: GOSUB 7200: NEXT 
+4991  PRINT : FOR M = 1 TO 5: GOSUB 7200: NEXT
 4995  GOSUB  11020 : PRINT "All hands alert for Kelvin Doomsday Machine!!!": GOSUB  11000
 5000  PRINT "Doomsday Machine track...."
 5005 C1 = 4.5 +  RND (1)
-5010 X =  INT (3. + 6. *  RND (1))
+5010 X =  INT (3! + 6! *  RND (1))
 5015 Y = 8
 5020 X1 = FNX1(C1)
 5025 X2 = FNX2(C1)
@@ -2000,10 +2000,10 @@ Sunnyvale, CA 94086
 5096  GOSUB  11000
 5100 A3 = 0:R(5) = R(5) + 1: GOTO  5310
 5115  IF S1 <  >  INT (X + 0.5) OR S2<  >  INT (Y + 0.5) THEN 5135
-5120  GOSUB  11010 : FOR I = 1 TO 10: GOSUB 7200: NEXT 
+5120  GOSUB  11010 : FOR I = 1 TO 10: GOSUB 7200: NEXT
 5125  PRINT "*** Munch Chomp Burp ... no more Enterprise ***!!!"
 5126  GOSUB  11000
-5127  FOR I = 1 TO 500: NEXT 
+5127  FOR I = 1 TO 500: NEXT
 5130  GOTO  3040
 5131  REM  * DAMAGE ASSESSMENT *
 5135 A$ = "   ":A9 = 0:Z1 =  INT (X + 0.5):Z2 =  INT (Y + 0.5)
@@ -2039,7 +2039,7 @@ Sunnyvale, CA 94086
 5269  IF  RND (1) > 0.5 THEN 5273
 5270  PRINT "Death Planet Nitron Ray damages ship."
 5271  GOSUB  7200
-5273  IF D8 < 7. *  RND (1) THEN RETURN
+5273  IF D8 < 7! *  RND (1) THEN RETURN
 5274  GOSUB  11010 : GOSUB  7200: PRINT "Death Planet destroyed.": GOSUB  11000
 5275 D9 = 0:R(4) = R(4) + 1:D8 = 0: GOTO  5310
 5290  IF T$ <  > ">B<" THEN 5035
@@ -2053,7 +2053,7 @@ Sunnyvale, CA 94086
 5304 S =  INT (0.1 * S)
 5305  IF B3 = 0 THEN 5309
 5306  GOSUB  11010 : GOSUB  7200: PRINT "Remaining Base sends signal": PRINT "DISABLINGNES!": GOSUB  11000
-5307 D(1) = D(1) - 5. *  RND (1) - 0.1
+5307 D(1) = D(1) - 5! *  RND (1) - 0.1
 5309  GOTO  5235
 5310 A$ = "   "
 5315  GOSUB  3940
@@ -2504,7 +2504,7 @@ Sunnyvale, CA 94086
 3190  IF NT < 1 OR NT > 30 THEN 3180
 3200 ND =  INT (ND):NT =  INT (NT)
 3205 INPUT "Speed of game (0-255), 255 is very fast: ";PDL
-3206 PB =  PDL/1800.:PL = (2 *  PDL) / 1000.
+3206 PB =  PDL/1800!:PL = (2 *  PDL) / 1000!
 3210  PRINT "SYSGEN complete": FOR I = 1 TO 1000: NEXT I: RETURN
 3220  REM  * TOKENIZE LINE K *
 3230  REM  INPUT IN S$, OUTPUT IN

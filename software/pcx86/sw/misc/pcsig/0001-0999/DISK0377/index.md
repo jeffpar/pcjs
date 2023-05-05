@@ -1084,7 +1084,7 @@ Sunnyvale, CA 94086
 220    NEXT I
 240    FOR JF=14 TO 33  'Plot 20 traces with JF dots/cycle.
 260    'Compute 1 cycle of trace, amplitude range = 1 to 7.
-280       FOR I=1 TO JF:J=(SIN(I*TUPI/JF)+1)*3.+1:IT(I)=M(J):NEXT I
+280       FOR I=1 TO JF:J=(SIN(I*TUPI/JF)+1)*3!+1:IT(I)=M(J):NEXT I
 300       FOR I=JF+1 TO 1200:IT(I)=IT(I-JF):NEXT I  'Propagate sine-wave.
 320    LPRINT E$;"S1200";  'Set-up NEC to plot 1200 graphic samples.
 360       FOR I=1 TO 1200:LPRINT CHR$(IT(I));:NEXT I  'Plot a trace.

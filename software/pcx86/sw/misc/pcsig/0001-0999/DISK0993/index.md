@@ -1086,7 +1086,7 @@ use the MS-DOS command TYPE with the MORE piping filter.
 2620 NEXT :LOCATE CSRLIN,POS(C)-1:PRINT CHR$(188);
 2630 COLOR 2,0:LOCATE 20,51:FOR I=1 TO 5
 2640 PRINT I;"   ";
-2650 NEXT                                                  
+2650 NEXT
 2660 GOSUB 3940
 2670 LOCATE 6,50
 2680 PRINT "F10-Quit";

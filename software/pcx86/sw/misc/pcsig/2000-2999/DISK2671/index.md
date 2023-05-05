@@ -287,14 +287,14 @@ machines:
 517 C=INT(C)/10^KT:R=(B-C)/H:KT=0:Q=Q+2:GOTO 514
 518 F=INT(R):IF F<>R THEN F=F+1
 519 IF R<P5 THEN F=F-P5
-520 F=F/10^KT:IF Q<>4THEN IF(B-S)/(H*F)<=0.8THEN KT=1:Q=2:GOTO 513
-521 S=C:D=F*INT(C/F):IF D<0AND D<>C THEN D=D-F
+520 F=F/10^KT:IF Q<>4 THEN IF(B-S)/(H*F)<=0.8 THEN KT=1:Q=2:GOTO 513
+521 S=C:D=F*INT(C/F):IF D<0 AND D<>C THEN D=D-F
 522 IF D+H*F>=B THEN S=D
 523 IF L=J THEN X=S:U=F:L=K:GOTO 506 ELSE Y=S:V=F
 524 NX=41:LX=5:NY=16:A=10/U:B=10/V:IF PR=0 THEN GOSUB 160:CLS
 525 '◙--- Show Scattergram ---
 526 PRINT #2,SC$" #"MID$(STR$(G),2);:PRINT #2,USING"    Skew(X)=+##.##    Skew(Y)=+##.##    SE(Skew)=##.##";SK(G);SL(G);EK(G):PRINT #2,
-527 O=0:FOR KN=1TO LX:XP(KN)=X+O*U:O=O+1:NEXT KN:FOR I=1TO NY:Q=I-1:IL=NY-Q:FOR I2=1TO NX:O$(I2)=" ":NEXT I2
+527 O=0:FOR KN=1 TO LX:XP(KN)=X+O*U:O=O+1:NEXT KN:FOR I=1 TO NY:Q=I-1:IL=NY-Q:FOR I2=1 TO NX:O$(I2)=" ":NEXT I2
 528 FOR L=1+KN(G-1) TO KN(G):IX=((X(L,J)-X)*A)+1:IF IX<1 OR IX>NX THEN 532 ELSE IY=((X(L,K)-Y)*B)+1:IF IY<>IL THEN 532 ELSE IF O$(IX)=" " THEN O$(IX)="*":GOTO 532
 529 IF O$(IX)="#" THEN 532
 530 FOR KK=1 TO 35:IF O$(IX)=MID$(C$,KK,1) THEN O$(IX)=MID$(C$,KK+1,1):KK=35
@@ -302,7 +302,7 @@ machines:
 532 NEXT L
 533 FOR L=41 TO 1 STEP -1:IF O$(L)=" "THEN NEXT L:LN=1 ELSE LN=L
 534 IF Q MOD 5<>0 THEN 537
-535 GG=Q:O=H-GG/10:D=Y+O*V:IF D<100000. THEN PRINT #2,USING"##########.#";D;:PRINT #2,"+ ";:FOR L=1 TO LN:PRINT #2,O$(L);:NEXT L:GOTO 539
+535 GG=Q:O=H-GG/10:D=Y+O*V:IF D<100000! THEN PRINT #2,USING"##########.#";D;:PRINT #2,"+ ";:FOR L=1 TO LN:PRINT #2,O$(L);:NEXT L:GOTO 539
 536 IY=INT(D+P5):PRINT #2,USING"############";IY;:PRINT #2,"+ ";:FOR L=1 TO LN:PRINT #2,O$(L);:NEXT L:GOTO 539
 537 IF I<>3 THEN PRINT #2,S12$; ELSE PRINT #2,USING"\        \  ";VN$(K);
 538 PRINT #2,"! ";:FOR L=1 TO LN:PRINT #2,O$(L);:NEXT L
@@ -785,7 +785,7 @@ machines:
 339 '◙--- Date ---
 340 DAT$=MID$(DATE$,4,2)+" "+MID$("JanFebMarAprMayJunJulAugSepOctNovDec",-2+3*VAL(LEFT$(DATE$,2)),3)+" "+RIGHT$(DATE$,4):RETURN
 349 '◙--- Number Sorter ---◙Convert numbers to sortable strings, then sort string array by:◙      DEF SEG: STRSORT=VARPTR(STRSORT%(0)):CALL STRSORT(n,x$(0))◙where n = no. of elements, & x$(0) = 1st element of string array (J. Dorner).
-350 PRINT:INPUT"Maximum number of decimal places in your data (0-5)";NDP:IF NDP<0 OR NDP>5 THEN 350 ELSE I=NDP-(NDP>0)+(NDP=5):DP#=10.#^I    'DP enhanced if NDP=1-4 to ensure accurate estimates of medians
+350 PRINT:INPUT"Maximum number of decimal places in your data (0-5)";NDP:IF NDP<0 OR NDP>5 THEN 350 ELSE I=NDP-(NDP>0)+(NDP=5):DP#=10#^I    'DP enhanced if NDP=1-4 to ensure accurate estimates of medians
 351 DEF FNNUM2STR$(X#,DP#,MXDIG%)=MID$("-0",(X#<0)+2,1)+RIGHT$(STRING$(MXDIG%,"0")+MID$(STR$(INT(X#*DP#)),2),MXDIG%)'◙    X=number, DP=dec factor, MXDIG=max digits/number (L. Rosenfelder)
 352 DEC=10^(NDP+1):DEF FNROUND(X)=INT(X*DEC+0.5)/DEC  'Rounds to 1 dec more than in data entered.
 353 DIM STRSORT%(33):RESTORE 354:FOR I=0 TO 33:READ STRSORT%(I):NEXT I:DEF SEG:STRSORT=VARPTR(STRSORT%(0)):RETURN
@@ -849,7 +849,7 @@ machines:
 542 I=N+1:N=0:GOSUB 73:N(Q)=N-KN(Q-1):KN(Q)=N:GOTO 527
 543 IF Q<NS THEN Q=Q+1:GOTO 524
 544 '◙--- Calc ---
-545 GOSUB 350:CLS:GOSUB 43:CONST#=0.#:IF NEG=0 THEN 547 ELSE FOR I=1 TO N:IF X(I,1)<CONST# THEN CONST#=VAL(STR$(X(I,1))) 'If neg, find smallest value (CONST)
+545 GOSUB 350:CLS:GOSUB 43:CONST#=0#:IF NEG=0 THEN 547 ELSE FOR I=1 TO N:IF X(I,1)<CONST# THEN CONST#=VAL(STR$(X(I,1))) 'If neg, find smallest value (CONST)
 546 NEXT I' Next subtract CONST to make all data >= 0, so when converted to strings they will always sort correctly.  Add it back later to medians.
 547 FOR I=1 TO N:X#=VAL(STR$(X(I,1)))-CONST#:Z$(I-1)=FNNUM2STR$(X#,DP#,8):NEXT I
 548 DEF SEG:STRSORT=VARPTR(STRSORT%(0)):CALL STRSORT(N,Z$(0))
@@ -914,7 +914,7 @@ machines:
 635 IF N=MXR THEN PRINT"No, you have maximum rows already.":GOTO 627
 636 PRINT"How many extra rows (1-"MID$(STR$(MXR-N),2)")";:INPUT NN:IF NN<1 THEN 627 ELSE IF NN>MXR-N THEN BEEP:GOTO 636 ELSE PRINT"Ok, enter"NN"extra rows in Free Format.":Q=N+1:N=N+NN:GOTO 622
 637 '◙--- Row Medians & Col Ranks ---
-638 GOSUB 350:CLS:COLOR 23,0:GOSUB 43:COLOR 7,0:Q=0:CONST#=0.#:IF NEG=0 THEN 640 ELSE FOR I=1 TO N:FOR J=1 TO M:IF X(I,J)<CONST# THEN CONST#=VAL(STR$(X(I,J)))
+638 GOSUB 350:CLS:COLOR 23,0:GOSUB 43:COLOR 7,0:Q=0:CONST#=0#:IF NEG=0 THEN 640 ELSE FOR I=1 TO N:FOR J=1 TO M:IF X(I,J)<CONST# THEN CONST#=VAL(STR$(X(I,J)))
 639 NEXT J:NEXT I
 640 FOR I=1 TO N
 641 FOR J=1 TO M:X(J,Q)=X(I,J)-CONST#:Z$(J-1)=FNNUM2STR$(X(I,J),DP#,8):RAV(I)=RAV(I)+X(I,J):NEXT J:RAV(I)=RAV(I)/M
@@ -1219,9 +1219,9 @@ machines:
 503 IF Z$="Y" THEN GOSUB 250:IF T%<10 THEN DO$="re-view or print that transformed data":GOSUB 20:IF Z$="Y" THEN CLS:PRINT"TRANSFORMED DATA:":GOTO 448
 504 '◙--- Calc (A = # cols,  B = # rows) ---
 505 QB=4:CLOSE:GOSUB 43:FOR I=1 TO AB:FOR K=1 TO N(I):C(I)=C(I)+X(I,K):V(I)=V(I)+X(I,K)*X(I,K):NEXT K:CM(I)=C(I)/N(I):S2=S2+V(I):V(I)=(V(I)-C(I)*C(I)/N(I))/(N(I)-1):S5=S5+C(I)*C(I)/N(I):NEXT I
-506 FOR I=1TO A:FOR J=I TO AB STEP A:A(I)=A(I)+C(J):NI(I)=NI(I)+N(J):NEXT J:NEXT I
-507 K=0:FOR J=1TO B:FOR I=1TO A:B(J)=B(J)+C(I+K):NJ(J)=NJ(J)+N(I+K):NEXT I:K=K+A:NEXT J
-508 FOR I=1TO A:T=T+A(I):AM(I)=A(I)/NI(I):S3=S3+A(I)*A(I)/NI(I):NEXT I:FOR J=1TO B:BM(J)=B(J)/NJ(J):S4=S4+B(J)*B(J)/NJ(J):NEXT J:TM=T/N:S1=T*T/N
+506 FOR I=1 TO A:FOR J=I TO AB STEP A:A(I)=A(I)+C(J):NI(I)=NI(I)+N(J):NEXT J:NEXT I
+507 K=0:FOR J=1 TO B:FOR I=1 TO A:B(J)=B(J)+C(I+K):NJ(J)=NJ(J)+N(I+K):NEXT I:K=K+A:NEXT J
+508 FOR I=1 TO A:T=T+A(I):AM(I)=A(I)/NI(I):S3=S3+A(I)*A(I)/NI(I):NEXT I:FOR J=1 TO B:BM(J)=B(J)/NJ(J):S4=S4+B(J)*B(J)/NJ(J):NEXT J:TM=T/N:S1=T*T/N
 509 DA=A-1:DB=B-1:DI=(A-1)*(B-1):DT=N-1:DE=DT-DA-DB-DI:IF OP=3 THEN 544
 510 SA=S3-S1:SB=S4-S1:SE=S2-S5:ST=S2-S1:SI=ST-SA-SB-SE:VA=SA/DA:VB=SB/DB:VI=SI/DI:VE=SE/DE:VT=ST/DT
 511 E1=(SA-DA*VE)/(SA+SE):E2=-(E1>0)*SQR(ABS(E1)):E1=-(E1>0)*E1:E3=(SB-DB*VE)/(SB+SE):E4=-(E3>0)*SQR(ABS(E3)):E3=-(E3>0)*E3:E5=(SI-DI*VE)/(SI+SE):E6=-(E5>0)*SQR(ABS(E5)):E5=-(E5>0)*E5
@@ -1259,7 +1259,7 @@ machines:
 543 '◙--- Unweighted Means ---
 544 FOR I=1 TO AB:HM=HM+1/N(I):NEXT I:HM=AB/HM:FOR J=1 TO B:FOR I=1 TO A:S6=S6+CM((J-1)*A+I)*CM((J-1)*A+I):AP(I)=AP(I)+CM((J-1)*A+I):BP(J)=BP(J)+CM((J-1)*A+I):NEXT I:TP=TP+BP(J):NEXT J
 545 S3=0:FOR I=1 TO A:AM(I)=AP(I)/B:S3=S3+AP(I)*AP(I):NEXT I:S3=S3/B:S4=0:FOR J=1 TO B:BM(J)=BP(J)/A:S4=S4+BP(J)*BP(J):NEXT J
-546 S4=S4/A:TM=TP/AB:S1=TP*TP/AB:SE=S2-S5:SA=HM*(S3-S1):SB=HM*(S4-S1):SI=HM*(S6-S3-S4+S1):IF SI<0THEN SI=0
+546 S4=S4/A:TM=TP/AB:S1=TP*TP/AB:SE=S2-S5:SA=HM*(S3-S1):SB=HM*(S4-S1):SI=HM*(S6-S3-S4+S1):IF SI<0 THEN SI=0
 547 VA=SA/DA:VB=SB/DB:VI=SI/DI:VE=SE/DE:GOTO 513
 548 'end
 ```
@@ -1995,7 +1995,7 @@ machines:
 339 '◙--- Date ---
 340 DAT$=MID$(DATE$,4,2)+" "+MID$("JanFebMarAprMayJunJulAugSepOctNovDec",-2+3*VAL(LEFT$(DATE$,2)),3)+" "+RIGHT$(DATE$,4):RETURN
 349 '◙--- Number Sorter ---◙Convert numbers to sortable strings, then sort string array by:◙      DEF SEG: STRSORT=VARPTR(STRSORT%(0)):CALL STRSORT(n,x$(0))◙where n = no. of elements, & x$(0) = 1st element of string array (J. Dorner).
-350 PRINT:INPUT"Maximum number of decimal places in your data (0-5)";NDP:IF NDP<0 OR NDP>5 THEN 350 ELSE I=NDP-(NDP>0)+(NDP=5):DP#=10.#^I    'DP enhanced if NDP=1-4 to ensure accurate estimates of medians
+350 PRINT:INPUT"Maximum number of decimal places in your data (0-5)";NDP:IF NDP<0 OR NDP>5 THEN 350 ELSE I=NDP-(NDP>0)+(NDP=5):DP#=10#^I    'DP enhanced if NDP=1-4 to ensure accurate estimates of medians
 351 DEF FNNUM2STR$(X#,DP#,MXDIG%)=MID$("-0",(X#<0)+2,1)+RIGHT$(STRING$(MXDIG%,"0")+MID$(STR$(INT(X#*DP#)),2),MXDIG%)'◙    X=number, DP=dec factor, MXDIG=max digits/number (L. Rosenfelder)
 352 DEC=10^(NDP+1):DEF FNROUND(X)=INT(X*DEC+0.5)/DEC  'Rounds to 1 dec more than in data entered.
 353 DIM STRSORT%(33):RESTORE 354:FOR I=0 TO 33:READ STRSORT%(I):NEXT I:DEF SEG:STRSORT=VARPTR(STRSORT%(0)):RETURN
@@ -2012,7 +2012,7 @@ machines:
 364 X=X(1,B):FOR I=2 TO N:IF X(I,B)>X THEN I=N ELSE IF X(I,B)<X THEN X=X(I,B):I=N
 365 NEXT I:NB=0:FOR I=1 TO N:IF X(I,B)=X THEN X(I,B)=0 ELSE X(I,B)=1:NB=NB+1
 366 NEXT I:RETURN'◙◙--- Pearson r ---
-370 A=0:B=0:C=0:D=0:E=0:FOR I=1 TO N:A=A+X(I,1):B=B+X(I,1)*X(I,1):C=C+X(I,2):D=D+X(I,2)*X(I,2):E=E+X(I,1)*X(I,2):NEXT I:B=B-A*A/N:D=D-C*C/N:E=E-A*C/N:R=E/SQR(B*D):DF=N-2:RQ=1-R*R:IF RQ>0 THEN T=R*SQR(DF/RQ):RETURN ELSE T=100000.:RETURN
+370 A=0:B=0:C=0:D=0:E=0:FOR I=1 TO N:A=A+X(I,1):B=B+X(I,1)*X(I,1):C=C+X(I,2):D=D+X(I,2)*X(I,2):E=E+X(I,1)*X(I,2):NEXT I:B=B-A*A/N:D=D-C*C/N:E=E-A*C/N:R=E/SQR(B*D):DF=N-2:RQ=1-R*R:IF RQ>0 THEN T=R*SQR(DF/RQ):RETURN ELSE T=100000!:RETURN
 374 '◙--- Z for given P (Hastings p 191) ---
 375 ET=SQR(LOG(1/P^2)):Z=ET-((2.30753+ET*0.27061)/(1+ET*(0.99229+ET*0.04481))):H=2.718282^(Z*Z/-2)/2.506628:RETURN'◙◙--- Fisher's z ---
 380 FZ=LOG((1+R)/(1-R))/2:SEZ=1/SQR(W):RETURN
@@ -2102,8 +2102,8 @@ machines:
 559 DF=N-2:ZN=N*N*N-N:TC=TX+TY:IF TC>0.1 THEN 562
 560 R=1-SUMDSQ/ZN*6:RQ=1-R*R:IF RQ>0 AND N>13 THEN T=R*SQR(DF/RQ)
 561 GOTO 565
-562 SSX=ZN/12-TX:SSY=ZN/12-TY:R=(SSX+SSY-SUMDSQ)/2/SQR(SSX*SSY):RQ=1-R*R:IF RQ>0 AND N>13 THEN T=R*SQR(DF/RQ) ELSE T=100000.
-563 R2=1-(SUMDSQ+TC)/ZN*6:RQ=1-R2*R2:IF RQ>0 AND N>13 THEN T2=R2*SQR(DF/RQ) ELSE T2=100000.
+562 SSX=ZN/12-TX:SSY=ZN/12-TY:R=(SSX+SSY-SUMDSQ)/2/SQR(SSX*SSY):RQ=1-R*R:IF RQ>0 AND N>13 THEN T=R*SQR(DF/RQ) ELSE T=100000!
+563 R2=1-(SUMDSQ+TC)/ZN*6:RQ=1-R2*R2:IF RQ>0 AND N>13 THEN T2=R2*SQR(DF/RQ) ELSE T2=100000!
 564 '◙--- Spearman Answers ---
 565 PS$="  (Langley, `PRAC STATS', p 204)"
 566 GOSUB 395:FOR I=1 TO 3:X(I,1)=X(I,1)+CONST:X(I,2)=X(I,2)+CONST:NEXT I
@@ -2111,9 +2111,9 @@ machines:
 568 PRINT #2,CHR$(10)"No ties."STRING$(2,10)"    Sum D Squared ="SUMDSQ;PS$
 569 PRINT #2,TAB(4);USING T$(2)+" ="+F$;R:IF N>13 AND RQ>0 THEN PRINT #2,TAB(5)USING STDF$;T;:PRINT #2,DF:GOTO 574 ELSE PRINT #2,:GOTO 574
 570 PRINT #2,CHR$(10)"Ties present, so for AGREEMENT between "VN$(1)" & "VN$(2)":":PRINT #2,"    Sum D Squared ="SUMDSQ;PS$
-571 PRINT #2,TAB(4)T$(2)" =";USING F$;R;:IF N>13 AND T<>100000. THEN PRINT #2,TAB(5)USING STDF$;T;:PRINT #2,DF ELSE PRINT #2,
+571 PRINT #2,TAB(4)T$(2)" =";USING F$;R;:IF N>13 AND T<>100000! THEN PRINT #2,TAB(5)USING STDF$;T;:PRINT #2,DF ELSE PRINT #2,
 572 PRINT #2,CHR$(10)"or....for ACCURACY of "VN$(1)" or "VN$(2)":":PRINT #2,"    Sum D Squared + Tie Correction ="SUMDSQ+TC;PS$
-573 PRINT #2,TAB(4);USING T$(2)+" ="+F$;R2;:IF N>13 AND T2<>100000. THEN PRINT #2,TAB(5)USING STDF$;T2;:PRINT #2,DF ELSE PRINT #2,
+573 PRINT #2,TAB(4);USING T$(2)+" ="+F$;R2;:IF N>13 AND T2<>100000! THEN PRINT #2,TAB(5)USING STDF$;T2;:PRINT #2,DF ELSE PRINT #2,
 574 IF PR THEN J=1:K=2:GOSUB 190 ELSE GOSUB 161:IF PR THEN GOSUB 165:GOTO 567
 575 GOTO 10
 599 '◙--- Point Biserial ---
@@ -2458,7 +2458,7 @@ machines:
 493 GOSUB 162:GOSUB 165:GOTO 492
 494 UT=N:N=M:L=M:GOSUB 140:N=UT:GOTO 490
 495 '◙--- RMAT ---
-496 FOR I=1 TO M:FOR J=I TO M:IF I=J THEN Z(I,I)=1 ELSE D=S(I)*S(J):IF D<1.000000e-1 THEN Z(I,J)=0 ELSE Z(I,J)=Z(I,J)/D
+496 FOR I=1 TO M:FOR J=I TO M:IF I=J THEN Z(I,I)=1 ELSE D=S(I)*S(J):IF D<1.000000e-10 THEN Z(I,J)=0 ELSE Z(I,J)=Z(I,J)/D
 497 Z(J,I)=Z(I,J):NEXT J:NEXT I:O4$=CHR$(10)+E$+"D  =  Data Printout":R$="D, E) "
 498 QO=4:GOSUB 160:CLS:PRINT SPACE$(18);C$:PRINT #2,O1$;O2$;O3$;"Correlation Matrix";O4$;O5$
 499 GOSUB 350:CLS:ON I GOTO 500,501,502,506,10
@@ -3249,7 +3249,7 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 320 NEXT L'◙  Print a line
 321 FOR L=41 TO 1 STEP -1:IF O$(L)=" " THEN NEXT L:LN=1 ELSE LN=L
 322 IF Q MOD 5 <>0 THEN 325
-323 O=H-Q/10:D=Y+O*V:IF D<100000. THEN PRINT #2,USING"##########.#";D;:PRINT #2,"+ ";:FOR L=1 TO LN:PRINT #2,O$(L);:NEXT L:GOTO 327
+323 O=H-Q/10:D=Y+O*V:IF D<100000! THEN PRINT #2,USING"##########.#";D;:PRINT #2,"+ ";:FOR L=1 TO LN:PRINT #2,O$(L);:NEXT L:GOTO 327
 324 IY=INT(D+P5):PRINT #2,USING"############";IY;:PRINT #2,"+ ";:FOR L=1 TO LN:PRINT #2,O$(L);:NEXT L:GOTO 327
 325 IF I<>3 THEN PRINT #2,S12$; ELSE PRINT #2,USING"\        \  ";VN$(K);
 326 PRINT #2,"| ";:FOR L=1 TO LN:PRINT #2,O$(L);:NEXT L
@@ -3654,7 +3654,7 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 515 PRINT:PRINT "First enter the X and Y COORDINATES of 2 known points which surround the":PRINT"required interpolate:":PRINT
 520 INPUT;"X(1) ";X1:PRINT SPACE$(6);:INPUT "Y(1) ";Y1:INPUT;"X(2) ";X2:PRINT SPACE$(6);:INPUT "Y(2) ";Y2:PRINT
 525 INPUT"What INTERPOLATE, X ";X
-530 IF X2>1 THEN P=(X-X1)/X ELSE P=(X1-X)*X2/(X1-X2)/X
+530 IF X2>1000000! THEN P=(X-X1)/X ELSE P=(X1-X)*X2/(X1-X2)/X
 535 Y=Y1+P*(Y2-Y1):Y=INT(Y*1000+0.5)/1000
 540 LOCATE CSRLIN-1,40:PRINT "Y = ";Y
 545 PRINT:PRINT"Another point on this line";:GOSUB 115:IF YN$="Y" THEN LOCATE CSRLIN-1,1:PRINT SPACE$(50);:LOCATE ,1:GOTO 525
@@ -3687,7 +3687,7 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 680 PRINT"* ("BB"^ X )":PRINT:PRINT "Estimates based on this equation:"
 685 FOR I=1 TO N:Z(I)=K!+A*B^X(I):NEXT I:PRINT SPACE$(13)"X      EST Y":FOR I=1 TO N:PRINT USING F1$;I;X(I);Z(I):IF INT(I/15)=I/15 THEN GOSUB 120
 690 NEXT I:PRINT
-695 PRINT"Do you want more estimates based on this equation";:GOSUB 115:IF YN$="N" THEN 720ELSE PRINT"Ok, use a slash '/' to signal end."
+695 PRINT"Do you want more estimates based on this equation";:GOSUB 115:IF YN$="N" THEN 720 ELSE PRINT"Ok, use a slash '/' to signal end."
 700 FOR I=N+1 TO 100:INPUT"X ";X$:IF X$="/"THEN NN=I-1:I=100 ELSE X(I)=VAL(X$):Z(I)=K!+A*B^X(I):Z(I)=INT(Z(I)*1000+0.5)/1000:LOCATE CSRLIN-1,15:PRINT "Y ="Z(I)
 705 NEXT I:PRINT
 710 '
@@ -3702,7 +3702,7 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 755 LPRINT"FUNCTION: Y ="K!;:IF A>0 THEN LPRINT"+"AA;ELSE LPRINT AA;
 760 LPRINT"* ("BB"^ X )":LPRINT " ":IF NN>N THEN LPRINT"ALSO         X      EST Y"
 765 FOR I=N+1 TO NN:LPRINT USING"       ######.# ######.###";X(I);Z(I):NEXT I:LPRINT " ":LPRINT " "
-770 PRINT"Do you want another Exponential Curve";:GOSUB 115:IF YN$="Y" THEN 630ELSE 55
+770 PRINT"Do you want another Exponential Curve";:GOSUB 115:IF YN$="Y" THEN 630 ELSE 55
 775 '
 780 '  -- POLYSOLVER (after B. P. Douglass)
 785 '
@@ -3711,15 +3711,15 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 800 INPUT"A ";A(0):FOR I=1 TO N:PRINT"B("MID$(STR$(I),2)") ";:INPUT A(I):NEXT I:FOR I=0 TO N:D(I)=A(I):NEXT I
 805 PRINT:PRINT"Approx roots will first be found using NEWTON & HORNER'S method.":PRINT"Enter trial value for each root in turn:":FOR J=1 TO NN:K=0
 810 PRINT"Trial Root #"J;:INPUT X:PRINT W$;:LOCATE ,1
-815 GOSUB 860:IF ABS(B(0))<0.000001 THEN 825ELSE IF C(1)=0 THEN C(1)=0.0001
-820 IF K>29 THEN 850ELSE K=K+1:X=X-B(0)/C(1):GOTO 815
+815 GOSUB 860:IF ABS(B(0))<0.000001 THEN 825 ELSE IF C(1)=0 THEN C(1)=0.0001
+820 IF K>29 THEN 850 ELSE K=K+1:X=X-B(0)/C(1):GOTO 815
 825 X(J)=X:FOR I=1 TO N:A(I-1)=B(I):NEXT I:N=N-1:PRINT"Rough Root #"J"= "CSNG(X)"  after "K" iterations.":NEXT J
 830 PRINT:PRINT"Improved ANSWERS obtained by re-solving with above approx roots:":N=NN:FOR I=0 TO N:A(I)=D(I):NEXT I:FOR J=1 TO N:PRINT "WORKING";:LOCATE ,1:X=X(J)
-835 GOSUB 860:IF ABS(B(0))<1.000000e-7 THEN 845ELSE IF C(1)=0 THEN C(1)=0.00001
+835 GOSUB 860:IF ABS(B(0))<1.000000e-7 THEN 845 ELSE IF C(1)=0 THEN C(1)=0.00001
 840 X=X-B(0)/C(1):GOTO 835
 845 X(J)=X:PRINT"Root #"J"= "CSNG(X):NEXT:GOSUB 120:GOTO 9
 850 PRINT"Incomplete convergence after 30 iterations.":PRINT"Rough Root = "X"  but differences still = "B(0)
-855 PRINT"Is this acceptable";:GOSUB 115:IF YN$="Y"THEN 825ELSE K=0:GOTO 810
+855 PRINT"Is this acceptable";:GOSUB 115:IF YN$="Y"THEN 825 ELSE K=0:GOTO 810
 860 B(N)=A(N):FOR I=N-1 TO 0 STEP -1:B(I)=A(I)+B(I+1)*X:NEXT I:C(N)=B(N):FOR I=N-1 TO 1 STEP -1:C(I)=B(I)+C(I+1)*X:NEXT I:RETURN
 865 '
 870 ' -- DERIVATIVES
@@ -3727,14 +3727,14 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 880 CLS:Z$="DERIVATIVE OF ANY FUNCTION":GOSUB 110:GOSUB 220:PRINT
 885 INPUT"At what value of X do you want the derivative ";XD:D=0.001*XD:IF D=0 THEN D=0.000001 ELSE IF ABS(D)<0.000001 THEN D=0.000001*SGN(D)
 890 X=XD+D:GOSUB 15:YD=Y:X=XD-D:GOSUB 15:PRINT"At X = "STR$(XD)", the derivative f'(X) = "(YD-Y)/2/D
-895 PRINT:PRINT"Another derivative of this function";:GOSUB 115:IF YN$="Y"THEN LOCATE CSRLIN-1,1:GOTO 885ELSE 55
+895 PRINT:PRINT"Another derivative of this function";:GOSUB 115:IF YN$="Y"THEN LOCATE CSRLIN-1,1:GOTO 885 ELSE 55
 900 '
 905 '  -- INTEGRATION by SIMPSON'S RULE
 910 '
 915 CLS:Z$="I N T E G R A T I O N":GOSUB 110:PRINT
 920 INPUT"Simpson's rule or Romberg's algorithm (S/R) ";Z$:IF Z$="" THEN BEEP:GOTO 920 ELSE Z$=CHR$(ASC(Z$) AND 95):IF Z$="S"THEN PRINT ELSE IF Z$="R"THEN 1020 ELSE BEEP:GOTO 920
 925 PRINT"Will you enter a FORMULA, or equally spaced Y VALUES (F/V) ";
-930 INPUT KIND$:IF KIND$=""THEN BEEP:GOTO 925ELSE KIND$=CHR$(ASC(KIND$) AND 95):IF KIND$="F"THEN GOSUB 220 ELSE IF KIND$<>"V"THEN BEEP:GOTO 925
+930 INPUT KIND$:IF KIND$=""THEN BEEP:GOTO 925 ELSE KIND$=CHR$(ASC(KIND$) AND 95):IF KIND$="F"THEN GOSUB 220 ELSE IF KIND$<>"V"THEN BEEP:GOTO 925
 935 INPUT"Start integrating at what X value ";X0:INPUT"End integrating at what X value ";XN:IF XN<=X0 THEN PRINT"SILLY":GOTO 935
 940 YE=0:YO=0:IF KIND$="V" THEN 970
 945 INPUT"Enter an Even Number of X Intervals (2-100) ";N:IF N<2 OR N/2<>INT(N/2)THEN PRINT"That's not an even number.":BEEP:GOTO 945
@@ -3748,7 +3748,7 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 985 IF I=0 OR I=N THEN 990 ELSE IF I/2=INT(I/2)THEN YE=YE+Y(I) ELSE YO=YO+Y(I)
 990 NEXT I:PRINT
 995 PRINT"INTEGRAL AREA = ";W/3*(Y(0)+2*YE+4*YO+Y(N))"  (SIMPSON)":PRINT
-1000 PRINT"Another Integral of this function";:GOSUB 115:IF YN$="Y" THEN 935ELSE 55
+1000 PRINT"Another Integral of this function";:GOSUB 115:IF YN$="Y" THEN 935 ELSE 55
 1005 '
 1010 ' -- INTEGRATION by ROMBERG'S ALGORITHM (after B. P. Douglass)
 1015 '
@@ -3852,7 +3852,7 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 1505 '
 1510 ' -- FACTORIALS etc.
 1515 '
-1520 CLS:DEFDBL L,M,N:N1=1.#:NT=10000000000.#:T=10:LN=2.302585093#:LG=0.4342944819#
+1520 CLS:DEFDBL L,M,N:N1=1#:NT=10000000000#:T=10:LN=2.302585093#:LG=0.4342944819#
 1525 Z$="FACTORIALS, PERMUTATIONS, & COMBINATIONS":GOSUB 110:PRINT:PRINT
 1530 PRINT TAB(10)"This program computes Double Precision  n!,  nPx,  or  nCx,":PRINT TAB(10)"using a separate exponent which enables products to greatly":PRINT TAB(10)"exceed the normal upper limit of 1E38.":PRINT
 1535 INPUT"Factorial, Permutation, Combination, or Menu (F/P/C/M)";X$:IF X$="" THEN 9 ELSE X$=CHR$(ASC(X$) AND 95):IF X$="M" THEN 9 ELSE IF INSTR("FPC",X$)=0 THEN BEEP:GOTO 1535
@@ -3861,11 +3861,11 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 1550 INPUT"x";X:IF X<0 OR X>N THEN BEEP:PRINT"x must be > 0 and < n.":GOTO 1550 ELSE GOSUB 185
 1555 IF X$="P" THEN PRINT"nPx = ";:GOTO 1565' nPx
 1560 PRINT"nCx = ";:MM=M:EE=E:N=VAL(STR$(X)):GOSUB 185:M=MM/M:E=EE-E' nCx = nPx/xPx
-1565 FOR J=1 TO 12:IF E=0 OR M>100000000000.# THEN J=12 ELSE M=M*10.#:E=E-1
+1565 FOR J=1 TO 12:IF E=0 OR M>100000000000# THEN J=12 ELSE M=M*10#:E=E-1
 1570 NEXT J
 1575 M=INT(M+0.5#):PRINT USING"###,###,###,###";M;:PRINT" E+";RIGHT$(STR$(E),LEN(STR$(E))-1)
-1580 PRINT USING"LOG(E)  =#####.######";INT((LOG(M)+LN*E)*1000000.#+0.5#)/1000000.#
-1585 PRINT USING"LOG(10) =#####.######";INT((E+LG*LOG(M))*1000000.#+0.5#)/1000000.#
+1580 PRINT USING"LOG(E)  =#####.######";INT((LOG(M)+LN*E)*1000000#+0.5#)/1000000#
+1585 PRINT USING"LOG(10) =#####.######";INT((E+LG*LOG(M))*1000000#+0.5#)/1000000#
 1590 PRINT:GOTO 1535
 1595 '
 1600 ' -- ERRORS & END
@@ -4213,7 +4213,7 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 597 GOSUB 570:IF PR=1 THEN 495 ELSE 483
 598 '◙---  Sub HOW - (Householder, Ortega & Wilkinson, after W W Cooley & P R Lohnes)◙        Input = C(I,J), M, MD, NV, EMIN.   Output = V(I,J), E(I), NV.
 599 FOR I=1 TO M:FOR J=1 TO M:R(I+(J-1)*MD)=C(I,J):NEXT J:NEXT I  'Equates uni-dimensional R(I) with C(I,J).
-600 IF EMIN<2 THEN EIG=EMIN ELSE EIG= -1.00000010000000e+2#
+600 IF EMIN<2 THEN EIG=EMIN ELSE EIG= -1.00000010000000e+20#
 601 '◙      Tri-diagonalize.
 602 M1=M-1:M2=M1*MD+M:M3=M2-MD:M4=MD+1:L=0:FOR I=1 TO M2 STEP M4:L=L+1:AA(L)=R(I):NEXT I:BB(1)=0:IF M=2 THEN 614 ELSE KK=0
 603 FOR K=2 TO M1:KL=KK+K:KU=KK+M:KJ=K+1:SUM=0
@@ -4255,7 +4255,7 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 639 IF M1>1 THEN 635 ELSE E(K)=CC(1):IF NV>=0 THEN FOR I=1 TO M:CC(I)=E(I):NEXT I:J=M:FOR I=1 TO M:E(I)=CC(J):IF E(I)>=EIG THEN J=J-1 ELSE NV=I-1:I=M
 640 NEXT I
 641 '◙       Eigenvectors.
-642 EM10=1.000000e-1:IF NV=0 THEN 658 ELSE KX=ABS(NV):J=1
+642 EM10=1.000000e-10:IF NV=0 THEN 658 ELSE KX=ABS(NV):J=1
 643 FOR IV=1 TO KX:X=AA(1)-E(IV):Y=BB(2):M1=M-1
 644 FOR I=1 TO M1:IJ=I+J-1:ON SGN(ABS(X)-ABS(BB(I+1)))+2 GOTO 645,646,647
 645 CC(I)=BB(I+1):DD(I)=AA(I+1)-E(IV):VV(IJ)=BB(I+2):Z=-X/CC(I):X=Z*DD(I)+Y:IF M1=I THEN 648 ELSE Y=Z*VV(IJ):GOTO 648
@@ -4264,7 +4264,7 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 648 NEXT I:MJ=M+J-1:IF X=0 THEN 651 ELSE VV(MJ)=1/X
 649 I=M1:IJ=I+J-1:VV(IJ)=(1-DD(I)*VV(MJ))/CC(I):X=VV(MJ)*VV(MJ)+VV(IJ)*VV(IJ)
 650 I=I-1:IJ=I+J-1:IF I=0 THEN 652 ELSE VV(IJ)=(1-(DD(I)*VV(IJ+1)+VV(IJ)*VV(IJ+2)))/CC(I):X=X+VV(IJ)*VV(IJ):GOTO 650
-651 VV(MJ)=1.000000e+1:GOTO 649
+651 VV(MJ)=1.000000e+10:GOTO 649
 652 X=SQR(X):FOR I=1 TO M:IJ=I+J-1:VV(IJ)=VV(IJ)/X:NEXT I:J1=M1*MD-MD:K=M:GOTO 654
 653 K=K-1:J1=J1-MD:Y=0:FOR I=K TO M:IJ=I+J-1:L=J1+I:Y=Y+VV(IJ)*R(L):NEXT I:FOR I=K TO M:IJ=I+J-1:L=J1+I:VV(IJ)=VV(IJ)-Y*R(L):NEXT I
 654 IF J1 THEN 653 ELSE NPLUS=0:NMIN=0:FOR I=1 TO M:IJ=I+J-1:IF VV(IJ)<0 THEN NMIN=NMIN+1 ELSE NPLUS=NPLUS+1
@@ -4347,11 +4347,11 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 ```bas
 1 '          PROBABILITIES  ---  PROBS.BAS   by  Dr Russell Langley
 9 GOTO 400' ◙◙--- Sub Y=DLOGE(X)
-10 IF X>=10THEN X=X/10:KT=KT+1:GOTO 10
-11 IF X<0.1THEN X=X*10:KT=KT-1:GOTO 11
+10 IF X>=10 THEN X=X/10:KT=KT+1:GOTO 10
+11 IF X<0.1 THEN X=X*10:KT=KT-1:GOTO 11
 12 X2=(X-1)/(X+1):X3=X2:Y=X2:I=3
 13 PRINT"LOG "Y;:LOCATE ,1:X1=Y:X3=X3*X2*X2:Y=Y+X3/I:I=I+2:IF Y-X1 THEN 13 ELSE Y=2*Y
-14 IF KT>0THEN Y=Y+EL:KT=KT-1:GOTO 14
+14 IF KT>0 THEN Y=Y+EL:KT=KT-1:GOTO 14
 15 IF KT<0 THEN Y=Y-EL:KT=KT+1:GOTO 15
 16 PRINT SPACE$(30);:LOCATE ,POS(0)-30:RETURN' ◙◙--- Sub Y=DEXP(X)
 20 X2=X:X=ABS(X):X3=1:Y=1:I=0
@@ -4412,7 +4412,7 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 425 '◙--- Prob of t ---
 426 INPUT "Student's t value (or null for menu again) ";X$:IF X$="" THEN 400 ELSE ST=ABS(VAL(X$))
 427 INPUT "What df ";DF:ND=DF:IF ND<=0 THEN BEEP:PRINT"Degrees of freedom must be positive!":GOTO 427
-428 IF ST<1.00000000000000e-8# THEN P=1 ELSE F=ST*ST:D1=1.#:D2=DF:GOSUB 60
+428 IF ST<1.00000000000000e-8# THEN P=1 ELSE F=ST*ST:D1=1#:D2=DF:GOSUB 60
 429 PRINT USING"2-Tail Prob (STUDENT'S t with##### df >###.####) = #.#####"+E$;ND;ST;P;P
 430 GOSUB 110:IF YN$="Y" THEN LPRINT USING"2-Tail Prob (STUDENT'S t with##### df >####.####) = #.#####"+E$;ND;ST;P;P:LPRINT:GOTO 426 ELSE 426
 431 '◙--- Prob of F ---
@@ -4440,7 +4440,7 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 453 LPRINT"INDEPENDENT PROBABILITIES":FOR J=1 TO KK:LPRINT " # ";USING"##  #.#####";J;PRB(J):NEXT J
 454 LPRINT"COMBINED PROBABILITIES:  ";:LPRINT USING F$;P1$;P;:LPRINT USING"   "+F$;P2$;P*2:LPRINT:LPRINT:GOTO 400
 455 '◙--- Binomial Probs ---
-456 DEFDBL M,N:DIM A(100),C(100):F=2.302585093#:N1=1.#:NT=10000000000.#:T=10:T1=24:T2=40
+456 DEFDBL M,N:DIM A(100),C(100):F=2.302585093#:N1=1#:NT=10000000000#:T=10:T1=24:T2=40
 457 IF JOB=7 GOTO 481
 458 PRINT:PRINT TAB(17)"B I N O M I A L   P R O B A B I L I T I E S":PRINT TAB(17)STRING$(43,"~")
 459 INPUT "Population Proportion (%) ";X$:IF INSTR(X$,"%") THEN BEEP:PRINT"Please re-do with any % sign.":GOTO 459 ELSE PP=VAL(X$):IF PP<=0 OR PP>=100 THEN BEEP:PRINT"This must be a figure between 0 and 100.":GOTO 459
@@ -4680,7 +4680,7 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 320 NEXT L'   Print a line
 321 FOR L = 41 TO 1 STEP -1: IF O$(L) > " " THEN LN = L: L = 1
 322 NEXT L: IF Q MOD 5 <> 0 THEN 325
-323 O = H - Q / 10: D = Y + O * V: IF D < 100000. THEN PRINT #2, USING "##########.#"; D; : PRINT #2, "+ "; : FOR L = 1 TO LN: PRINT #2, O$(L); : NEXT L: GOTO 327
+323 O = H - Q / 10: D = Y + O * V: IF D < 100000! THEN PRINT #2, USING "##########.#"; D; : PRINT #2, "+ "; : FOR L = 1 TO LN: PRINT #2, O$(L); : NEXT L: GOTO 327
 324 IY = INT(D + P5): PRINT #2, USING "############"; IY; : PRINT #2, "+ "; : FOR L = 1 TO LN: PRINT #2, O$(L); : NEXT L: GOTO 327
 325 IF I <> 3 THEN PRINT #2, S12$;  ELSE PRINT #2, USING "\        \  "; VN$(K);
 326 PRINT #2, "| "; : FOR L = 1 TO LN: PRINT #2, O$(L); : NEXT L
@@ -5922,7 +5922,7 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 339 '◙--- Date ---
 340 DAT$=MID$(DATE$,4,2)+" "+MID$("JanFebMarAprMayJunJulAugSepOctNovDec",-2+3*VAL(LEFT$(DATE$,2)),3)+" "+RIGHT$(DATE$,4):RETURN
 349 '◙--- Number Sorter ---◙Convert numbers to sortable strings, then sort string array by:◙      DEF SEG: STRSORT=VARPTR(STRSORT%(0)):CALL STRSORT(n,x$(0))◙where n = no. of elements, & x$(0) = 1st element of string array (J. Dorner).
-350 PRINT:INPUT"Maximum number of decimal places in your data (0-5)";NDP:IF NDP<0 OR NDP>5 THEN 350 ELSE I=NDP-(NDP>0)+(NDP=5):DP#=10.#^I    'DP enhanced if NDP=1-4 to ensure accurate estimates of medians
+350 PRINT:INPUT"Maximum number of decimal places in your data (0-5)";NDP:IF NDP<0 OR NDP>5 THEN 350 ELSE I=NDP-(NDP>0)+(NDP=5):DP#=10#^I    'DP enhanced if NDP=1-4 to ensure accurate estimates of medians
 351 DEF FNNUM2STR$(X#,DP#,MXDIG%)=MID$("-0",(X#<0)+2,1)+RIGHT$(STRING$(MXDIG%,"0")+MID$(STR$(INT(X#*DP#)),2),MXDIG%)'◙    X=number, DP=dec factor, MXDIG=max digits/number (L. Rosenfelder)
 352 DEC=10^(NDP+1):DEF FNROUND(X)=INT(X*DEC+0.5)/DEC  'Rounds to 1 dec more than in data entered.
 353 DIM STRSORT%(33):RESTORE 354:FOR I=0 TO 33:READ STRSORT%(I):NEXT I:DEF SEG:STRSORT=VARPTR(STRSORT%(0)):RETURN
@@ -5984,7 +5984,7 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 540 I=N+1:N=0:GOSUB 73:N(Q)=N-KN(Q-1):KN(Q)=N:GOTO 525
 541 IF Q<NS THEN Q=Q+1:GOTO 522
 542 '◙--- Calc ---
-543 GOSUB 350:CLS:GOSUB 43:CONST#=0.#:IF NEG=0 THEN 545 ELSE FOR J=1 TO NS:FOR I=1 TO N(J):IF X(I+KN(J-1),1)<CONST# THEN CONST#=VAL(STR$(X(I+KN(J-1),1))) 'If neg, find smallest value (CONST)
+543 GOSUB 350:CLS:GOSUB 43:CONST#=0#:IF NEG=0 THEN 545 ELSE FOR J=1 TO NS:FOR I=1 TO N(J):IF X(I+KN(J-1),1)<CONST# THEN CONST#=VAL(STR$(X(I+KN(J-1),1))) 'If neg, find smallest value (CONST)
 544 NEXT I:NEXT J 'Next subtract CONST to make all data >= 0, so when converted to strings they will always sort correctly.  Add it back later to medians.
 545 FOR J=1 TO NS:AV(J)=0:FOR I=1 TO N(J):AV(J)=AV(J)+X(I+KN(J-1),1):X#=VAL(STR$(X(I+KN(J-1),1)))-CONST#:Z$(I-1)=FNNUM2STR$(X#,DP#,8):NEXT I:AV(J)=FNROUND(AV(J)/N(J))
 546 DEF SEG:STRSORT=VARPTR(STRSORT%(0)):CALL STRSORT(N(J),Z$(0))
@@ -6037,11 +6037,11 @@ mustn't trust a conclusion hanging on 1 suspicious value). [Ref: Kruskal 1960]
 631 IF N=MXR THEN PRINT"No, you have maximum rows already.":GOTO 622
 632 PRINT"Ok, you can add up to"MXR-N"extra rows in Free Format.":I=N+1:N=0:Q=1:GOSUB 72:GOTO 619
 633 '◙--- Calc ---
-634 GOSUB 350:CLS:COLOR 23,0:GOSUB 43:COLOR 7,0:Q=0:CONST#=0.#:IF NEG=0 THEN 637 ELSE FOR I=1 TO N:IF X(I,1)<CONST# THEN CONST#=VAL(STR$(X(I,1)))
+634 GOSUB 350:CLS:COLOR 23,0:GOSUB 43:COLOR 7,0:Q=0:CONST#=0#:IF NEG=0 THEN 637 ELSE FOR I=1 TO N:IF X(I,1)<CONST# THEN CONST#=VAL(STR$(X(I,1)))
 635 IF X(I,2)<CONST# THEN CONST#=VAL(STR$(X(I,2)))
 636 NEXT I
 637 NNZD=N:FOR I=1 TO N
-638 AX=AX+X(I,1):AY=AY+X(I,2):X(I,0)=X(I,1)-X(I,2):LAB(I)=SGN(X(I,0)):IF LAB(I)=0 THEN X(I,0)=1.000000e+3:NNZD=NNZD-1 ELSE X(I,0)=ABS(X(I,0))' X(I,0) holds abs diffs.
+638 AX=AX+X(I,1):AY=AY+X(I,2):X(I,0)=X(I,1)-X(I,2):LAB(I)=SGN(X(I,0)):IF LAB(I)=0 THEN X(I,0)=1.000000e+30:NNZD=NNZD-1 ELSE X(I,0)=ABS(X(I,0))' X(I,0) holds abs diffs.
 639 NEXT I:AX=FNROUND(AX/N):AY=FNROUND(AY/N)
 640 FOR J=0 TO 2
 641 FOR I=1 TO N:X#=VAL(STR$(X(I,J)))-CONST#:Z$(I-1)=FNNUM2STR$(X#,DP#,8):NEXT I

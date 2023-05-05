@@ -1348,13 +1348,13 @@ machines:
 770 D$=INKEY$:IF D$="" THEN 770 ELSE 400
 780 FOR I=1 TO P
 790   FOR J=1 TO P
-800     C(I,J)=0.#
+800     C(I,J)=0#
 810   NEXT J
-820   D(I)=0.#
+820   D(I)=0#
 830 NEXT I
 840 FOR I=1 TO N
 850   FOR J=1 TO P
-860     X(I,J)=0.#
+860     X(I,J)=0#
 870     PRINT "Enter X(";I",";J")=";:INPUT X(I,J)
 880   NEXT J
 890   PRINT USING "Enter Y(##)     =";I;:
@@ -1364,7 +1364,7 @@ machines:
 930 REM******--  Calculate moments                                     --******
 940 REM************************************************************************
 950 FOR I=1 TO P
-960  X1(I)=0.#
+960  X1(I)=0#
 970  FOR I1=1 TO N
 980   X1(I)=X1(I)+X(I1,I)
 990  NEXT I1
@@ -1423,7 +1423,7 @@ machines:
 1520 REM***********************************************************************
 1530 GOSUB 2300 `MATRIX INVERSION
 1540 GOSUB 2560  `MATRIX MULTIPLICATION
-1550 H1 = 0.#
+1550 H1 = 0#
 1560 FOR I=1 TO P
 1570   H1=H1+X5(I)*X1(I)
 1580 NEXT I
@@ -1459,7 +1459,7 @@ machines:
 1880 PRINT USING "  | About regression       |   #.###^^^^  |   ###    | #.###^^^^  |";C2,K,C7
 1890 PRINT USING "  |  Total                 |   #.###^^^^  |   ###    | #.###^^^^  |";C9,L,C6
 1900 PRINT "  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
-1910 Z1=SQR(1.#-(C2/C9))
+1910 Z1=SQR(1#-(C2/C9))
 1920 PRINT :PRINT
 1930 PRINT USING "  Coefficient of multiple regression R  = ##.### ";Z1
 1940 PRINT USING "                                    R^2 = ##.### ";Z1^2
@@ -1469,30 +1469,30 @@ machines:
 1980 REM*****--  Statistical routines directly from:                    --*****
 1990 REM*****--          Madron,D.W.                                    --*****
 2000 REM***********************************************************************
-2010 RP=1.#
+2010 RP=1#
 2020 P2=N-P-1
-2030 IF P*P2*F = 0.# THEN 2250
-2040 IF F<1.# THEN 2090
+2030 IF P*P2*F = 0# THEN 2250
+2040 IF F<1# THEN 2090
 2050 A=P
 2060 B=P2
 2070 F1=F
 2080 GOTO 2120
 2090 A=P2
 2100 B=P
-2110 F1=1.#/F
-2120 A1=2.#/(9.#*A)
-2130 B1=2.#/(9.#*B)
-2140 X=((1.#-B1)*F1^0.3333333#-1.#+A1)
+2110 F1=1#/F
+2120 A1=2#/(9#*A)
+2130 B1=2#/(9#*B)
+2140 X=((1#-B1)*F1^0.3333333#-1#+A1)
 2150 Y=SQR(B1*F1^0.666666667#+A1)
 2160 Z=ABS(X/Y)
-2170 IF B<4.# THEN 2190
+2170 IF B<4# THEN 2190
 2180 GOTO 2200
-2190 Z=Z*(1.#+0.08#*Z^4.#/B^3.#)
+2190 Z=Z*(1#+0.08#*Z^4#/B^3#)
 2200 Z1=(0.115194#+Z*(0.000344#+Z*0.019527#))
-2210 RP=0.5#/(1.#+Z*(0.196854#+Z*Z1))^4.#
-2220 IF F<1.# THEN 2240
+2210 RP=0.5#/(1#+Z*(0.196854#+Z*Z1))^4#
+2220 IF F<1# THEN 2240
 2230 GOTO 2250
-2240 RP=1.#-RP
+2240 RP=1#-RP
 2250 RP=RP
 2260 PRINT USING " The P statistic is                   P = ##.#### ";RP
 2270 PRINT USING " For ## observations of ## independent variables";N,P
@@ -1531,7 +1531,7 @@ machines:
 2600 REM*****--   In this case the multiplication is                  --******
 2610 REM*****--   C X D = B                                           --******
 2620 REM**********************************************************************
-2630  B(I)=0.#
+2630  B(I)=0#
 2640 FOR I = 1 TO P
 2650   FOR J= 1 TO P
 2660    X5(I)=X5(I)+C(I,J)*D(J)

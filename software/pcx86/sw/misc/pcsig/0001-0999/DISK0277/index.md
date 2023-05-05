@@ -126,7 +126,7 @@ machines:
 3 REM For more information, write to P.O. Box 661, Lincoln, MA, 01773
 4 REM $Title:'FFILE: find file in tree structure.': rem $Subtitle:' Version 1.0'
 5 DEFINT A-Z: DIM FILNAM$(3000), EXT$(3000), PATH$(3000):TRUE=-1: FALSE=0: CR$=CHR$(13): LF$=CHR$(10)
-6 PRINT "On-Disk Software: Public Domain Program FFILE: Donation $5.00 for use."; 
+6 PRINT "On-Disk Software: Public Domain Program FFILE: Donation $5.00 for use.";
 7 PRINT "Box 661, Lincoln, MA 01773, USA          To order disk: $15.00";
 8 OPEN "$$tree" FOR INPUT AS #1:I=VARPTR(#1):A1=PEEK(21+I):A2=PEEK(22+I):DA=A1 MOD 32:MO=A1\32+(A2 MOD 2)*8:YR=1980+A2\2
 9 PRINT:PRINT "$$TREE file was created on " STR$(MO) STR$(-DA) STR$(-YR) ". Today is " DATE$
@@ -182,7 +182,7 @@ machines:
 3 REM For more information, write to P.O. Box 661, Lincoln, MA, 01773
 4 REM $Title:'FFILE: find file in tree structure.': rem $Subtitle:' Version 1.0'
 5 DEFINT A-Z: TRUE=-1: FALSE=0: CR$=CHR$(13): LF$=CHR$(10)
-6 PRINT "On-Disk Software: Public Domain Program FFILE: Donation $5.00 for use."; 
+6 PRINT "On-Disk Software: Public Domain Program FFILE: Donation $5.00 for use.";
 7 PRINT "Box 661, Lincoln, MA 01773, USA          To order disk: $15.00";
 8 OPEN "$$tree" FOR INPUT AS #1:I=VARPTR(#1):A1=PEEK(21+I):A2=PEEK(22+I):DA=A1 MOD 32:MO=A1\32+(A2 MOD 2)*8:YR=1980+A2\2
 9 PRINT:PRINT "$$TREE file was created on " STR$(MO) STR$(-DA) STR$(-YR) ". Today is " DATE$

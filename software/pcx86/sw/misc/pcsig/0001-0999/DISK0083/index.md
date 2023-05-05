@@ -1464,7 +1464,7 @@ KB_LNTH EQU     (OFFSET KB_END-OFFSET KB)
 100    IF X>6 THEN RC(X)=(5-RC(X))MOD 3 +1   'reverses after equator which
 110 NEXT                                     'is brown or white(palette 0 or 1)
 120 PI=3.14159265#
-130 CF=PI/180.#
+130 CF=PI/180#
 140 PRINT
 150 INPUT "Want to see a sample run (y/n)";S$
 160 S$=LEFT$(S$,1)

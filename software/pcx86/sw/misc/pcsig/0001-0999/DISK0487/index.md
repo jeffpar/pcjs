@@ -111,7 +111,7 @@ Disk No  487  PROBLEMS and COMMENTS                             v1 DS2
 20 A$=INKEY$
 21 IF A$=" " THEN 30
 28 KEY OFF
-29 GOTO 20         
+29 GOTO 20
 30 CLS
 40 PRINT"------------={REFLEX POINT}=------------";
 50 PRINT:PRINT"    In around the year 2070 a race of "

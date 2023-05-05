@@ -169,7 +169,7 @@ INSTRUCTIONS: From DOS, type DISRTN<cr>
 ```bas
 1 CLS:PRINT "THIS basic PROGRAM WAS AUTOMATICALLY CREATED BY CONVERT.BAS"
 2 PRINT"Copyright 1982 ,Rich Schinnell Rockville,MD. Not for Sale."
-3 PRINT "This program will automatically generate you a .COM program named DM.COM":PRINT 
+3 PRINT "This program will automatically generate you a .COM program named DM.COM":PRINT
 4 ON ERROR GOTO 5000
 6 INPUT "PLACE the disk to write the file in Drive A: and then Strike any key "; SCHINNELL$
 9 PRINT:PRINT " Now reading the data statements, wait!"
@@ -177,7 +177,7 @@ INSTRUCTIONS: From DOS, type DISRTN<cr>
 20 READ TOT# :IF TOT#<>X# THEN 5000
 22 CLS:LOCATE 12,5:PRINT "Now writing file NAMED DM.COM standby please "
 30 RESTORE
-40 OPEN "R", #1,"DM.COM",1 
+40 OPEN "R", #1,"DM.COM",1
 50 FIELD #1, 1 AS N$
 60 READ N
 70 FOR I = 1 TO N
@@ -1100,7 +1100,7 @@ name of you original file, the new file to be created, etc.
 ```bas
 1 CLS:PRINT "THIS basic PROGRAM WAS AUTOMATICALLY CREATED BY CONVERT.BAS"
 2 PRINT"Copyright 1982 ,Rich Schinnell Rockville,MD. Not for Sale."
-3 PRINT "This program will automatically generate you a .COM program named LQ.COM":PRINT 
+3 PRINT "This program will automatically generate you a .COM program named LQ.COM":PRINT
 4 ON ERROR GOTO 5000
 6 INPUT "PLACE the disk to write the file in Drive A: and then Strike any key "; SCHINNELL$
 9 PRINT:PRINT " Now reading the data statements, wait!"
@@ -1108,7 +1108,7 @@ name of you original file, the new file to be created, etc.
 20 READ TOT# :IF TOT#<>X# THEN 5000
 22 CLS:LOCATE 12,5:PRINT "Now writing file NAMED LQ.COM standby please "
 30 RESTORE
-40 OPEN "R", #1,"LQ.COM",1 
+40 OPEN "R", #1,"LQ.COM",1
 50 FIELD #1, 1 AS N$
 60 READ N
 70 FOR I = 1 TO N
@@ -1211,12 +1211,12 @@ name of you original file, the new file to be created, etc.
 1694 DEF SEG=&HB800: BSAVE DRIVE$+":"+NAMEF$+".pic",0,&H4000:GOTO 1040
 1700 LOCATE 1,1: PRINT "Unable to save picture ";: GOSUB 1010: PUT (0,0),HOLD,PSET: GOSUB 1040: RESUME 5020
 1710 GET (0,0)-(319,7),HOLD
-1720 LOCATE 1,1: PRINTSPACE$(39);: LOCATE 1,1
+1720 LOCATE 1,1: PRINT SPACE$(39);: LOCATE 1,1
 1730 PRINT"Name of picture to be ";TYPE$;
 1740 LINE INPUT ": ";NAMEF$
 1750 IF NAMEF$="" GOTO 1810
 1760 NAMEF$=LEFT$(NAMEF$,8)
-1770 LOCATE 1,1: PRINTSPACE$(39);: LOCATE 1,1
+1770 LOCATE 1,1: PRINT SPACE$(39);: LOCATE 1,1
 1780 LINE INPUT;" Drive picture is on (default=A): ";DRIVE$
 1790 IF DRIVE$="" THEN DRIVE$="A"
 1800 IF DRIVE$="a" OR DRIVE$="A" OR DRIVE$="b" OR DRIVE$="B" GOTO 1810 ELSE GOTO 1770
@@ -1473,7 +1473,7 @@ GRAPHICS INFO FROM J. G. MODROW
 210 ' Because BASIC changes this vector to service light pen and joystick
 220 ' interfaces, this program will disable those features.  Programs that
 230 ' do not use joysticks or light pens will not be affected.
-240 ' Repeat!!, only run this program from BASIC AFTER one of the spoolers 
+240 ' Repeat!!, only run this program from BASIC AFTER one of the spoolers
 250 ' have been executed.
 260 DEF SEG = 0
 270 POKE 112,128

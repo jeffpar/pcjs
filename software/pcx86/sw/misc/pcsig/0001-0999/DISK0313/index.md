@@ -1115,7 +1115,7 @@ The keys to use the Note Pad function are:
 1050 FOR I=1 TO M%
 1060 A(I,6)=(A(I,3)+4*A(I,4)+A(I,5))/6
 1070 IF A(I,1)=1 THEN A(I,7)=0:A(I,8)=A(I,6):GOTO 1110
-1080 MAX = 0.
+1080 MAX = 0!
 1090 FOR J= 1 TO M%
 1092 IF A(J,2)<> A(I,1) THEN 1098
 1094 IF A(J,8)> MAX THEN MAX = A (J,8)
@@ -1124,14 +1124,14 @@ The keys to use the Note Pad function are:
 1100 A(I,8)=A(I,7)+A(I,6)
 1110 NEXT I
 1120 ' Backward pass?
-1130 XM = 0.
+1130 XM = 0!
 1140 FOR I= M% TO 1 STEP -1
 1150 IF A(I,2)<>EE THEN 1170
 1160 IF XM<A(I,8) THEN XM = A(I,8)
 1170 NEXT I
 1180 FOR I=M% TO 1 STEP -1
 1190 IF A(I,2)= EE THEN A(I,10)= XM: GOTO 1260
-1200 MIM =999999.
+1200 MIM =999999!
 1210 FOR J= M% TO 1 STEP -1
 1220 IF A(I,2)<>A(J,1) THEN 1250
 1230 IF A(J,9)<MIM THEN MIM =A(J,9)
@@ -1179,7 +1179,7 @@ The keys to use the Note Pad function are:
 1610 CLS:LOCATE 5,30:COLOR 14,1,1:PRINT "CRITICAL PATH":PRINT PATH$:PRINT
 1620 PRINT "Time of Critical Path  ":PRINT USING C6$;CO:INPUT "Scheduled Project Time (use same time units as data)   ";ST:Z=(ST-CO)/SI:XX=0
 1630 BB$="Probability of being completed on time ": IF Z<0 THEN 1670
-1640 A=0.4361836:B=-0.1201676:C=0.937298: D=(2.7182818#^(-Z^2/2))*(2*3.1415926#)^            (-0.5):E=(1+0.3326*Z)^(-1):P=1.#-D*(A*E+B*E^2+C*E^3):IF XX>0 THEN 1660
+1640 A=0.4361836:B=-0.1201676:C=0.937298: D=(2.7182818#^(-Z^2/2))*(2*3.1415926#)^            (-0.5):E=(1+0.3326*Z)^(-1):P=1#-D*(A*E+B*E^2+C*E^3):IF XX>0 THEN 1660
 1650 COLOR 14,1,1:PRINT USING "Z= ##.###    ";Z;:PRINT BB$;:PRINT USING "##.#%";P*100:              GOTO 1680
 1660 PRINT USING "Z= ##.### ";-Z;:PRINT BB$;:PRINT USING "##.#%";(1-P)*100:           GOTO 1680
 1670 XX=99: Z=-Z:GOTO 1640

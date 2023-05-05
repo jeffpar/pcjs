@@ -355,7 +355,7 @@ machines:
 2610 IF CSZ$="ok" GOTO 2620 ELSE GOTO 2630
 2620 LSET V$=V$: GOTO 2640
 2630 LSET V$=CSZ$
-2640 PUT 1.#,CODE%: PUT #2, CODE%
+2640 PUT 1#,CODE%: PUT #2, CODE%
 2650 CLS: GOTO 2010
 2660 REM **********************************************************************
 2670 REM ****** THIS IS THE MASTER MENU SECTION *********

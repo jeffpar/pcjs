@@ -618,7 +618,7 @@ Sunnyvale, CA 94086
 830 INPUT"Storage device [A/B]? ",B$:IF B$<>"A" AND B$<>"B" THEN 830
 840 PRINT "Storing file..."
 850 A$=B$+":"+A$:OPEN A$ FOR OUTPUT AS #1:LS=4+INT(((XMAX-XMIN-1)*2+7)/8)*(YMAX-YMIN-1):LS=INT((LS+1)/2):I=0
-860 PRINT #1,50000.+I;" DATA ";F(I);",";F(I+1);",";F(I+2);",";F(I+3);",";F(I+4);",";F(I+5);",";F(I+6);",";F(I+7);",";F(I+8);",";F(I+9):I=I+10:IF I<LS THEN 860
+860 PRINT #1,50000!+I;" DATA ";F(I);",";F(I+1);",";F(I+2);",";F(I+3);",";F(I+4);",";F(I+5);",";F(I+6);",";F(I+7);",";F(I+8);",";F(I+9):I=I+10:IF I<LS THEN 860
 870 PRINT #1,"50135 DIM FI%(";LS-1;"):RESTORE 50000:FOR I=0 TO ";LS-1;":READ FI%(I):NEXT I:RETURN"
 880 CLOSE
 890 PRINT "DATA statements are stored as lines":PRINT "50000-50135.":PRINT "You can add it to a program":PRINT "by CHAIN MERGE ";A$

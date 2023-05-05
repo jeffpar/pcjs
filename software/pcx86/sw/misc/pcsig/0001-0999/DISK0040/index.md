@@ -539,7 +539,7 @@ Sunnyvale, CA 94086
 28650 GOSUB 34150' skipdays
 28700 ON C GOTO 28800,28800,30950,34700,30950'
 28750 '----------------------------------------------------C = 1 or 2--------
-28800 MAXHIGH=0:MINLOW=65000.:SUMCLSE=0:DAYS=0
+28800 MAXHIGH=0:MINLOW=65000!:SUMCLSE=0:DAYS=0
 28850 PRINT:PRINT "--- DESCRIPTION OF THE PLOT TO FOLLOW --- ":PRINT
 28900 PRINT:PRINT "The baseline, indicated by "CHR$(34)"A"CHR$(34)" is the average of the closing prices"
 28950 PRINT "The daily high and low are indicated by "CHR$(34)"H"CHR$(34)" and "CHR$(34)"L"CHR$(34)" respectively."
@@ -583,7 +583,7 @@ Sunnyvale, CA 94086
 30850 IF EOF(1) THEN FOR N=1 TO 79:PRINT GRAPH$(N);:NEXT:GOTO 29900
 30900 FOR N=1 TO 80:PRINT GRAPH$(N);:NEXT:GOTO 29900
 30950 '----------------------------------------------------C = 3 or 5--------
-31000 MINBID=65000.:MAXASK=0:SUMBID=0:DAYS=0
+31000 MINBID=65000!:MAXASK=0:SUMBID=0:DAYS=0
 31050 PRINT:PRINT "In the plot to follow the average bid or net asset value over the range of"
 31100 PRINT "days plotted forms the baseline, with values increasing to the right."
 31150 IF EOF(1) THEN CLOSE #1:GOTO 31550' ------------determine scale-----------
@@ -658,7 +658,7 @@ Sunnyvale, CA 94086
 34600 NEXT SK
 34650 RETURN'    ----------------------------------------skipdays end---------
 34700 '----------------------------------OPTIONS----------- C = 4 ------------
-34750 MAXCAL=0:MAXPTT=0:MAXL=0:MINCAL=65000.:MINPTT=65000.:MINL=65000.
+34750 MAXCAL=0:MAXPTT=0:MAXL=0:MINCAL=65000!:MINPTT=65000!:MINL=65000!
 34800 PRINT:PRINT "The following definitions apply to the plot that follows:":PRINT
 34850 PRINT "P = PUT price":PRINT "C = CALL price":PRINT "U = closing price of the underlying stock":PRINT "L = U - C":PRINT "T = U + P":PRINT "S = strike price":PRINT
 34900 IF EOF(1) THEN CLOSE #1:GOTO 35550' -----------determine scale--------
@@ -1224,7 +1224,7 @@ through the user groups that distribute this program.
 21500 IF B=3 OR B=4 THEN GOSUB 40500' skipdays
 21600 ON C GOTO 21800,21800,28100,41600,28100'
 21700 '----------------------------------------------------C = 1 or 2--------
-21800 MAXHIGH=0:MINLOW=65000.:SUMCLSE=0:DAYS=0
+21800 MAXHIGH=0:MINLOW=65000!:SUMCLSE=0:DAYS=0
 21900 IF EOF(1) THEN CLOSE #1:GOTO 22800' ------------determine scale-----------
 22000 INPUT #1,ENDDATE$,VOLUME,HIGH,LOW,CLSE
 22100 IF HIGH=0 THEN 22300
@@ -1288,7 +1288,7 @@ through the user groups that distribute this program.
 27900 IF DD=3 THEN 34700
 28000 IF AA>2 THEN 50600 ELSE KEY ON:END
 28100 '----------------------------------------------------C = 3 or 5--------
-28200 MINBID=65000.:MAXASK=0:SUMBID=0:DAYS=0
+28200 MINBID=65000!:MAXASK=0:SUMBID=0:DAYS=0
 28300 IF EOF(1) THEN CLOSE #1:GOTO 29100' ------------determine scale-----------
 28400 INPUT #1,ENDDATE$,VOLUME,BID,ASK,DUMP
 28500 IF ASK=0 THEN 28700
@@ -1423,7 +1423,7 @@ through the user groups that distribute this program.
 41400 NEXT SK
 41500 RETURN'    ----------------------------------------skipdays end---------
 41600 '----------------------------------OPTIONS----------- C = 4 ------------
-41700 MAXCAL=0:MAXPTT=0:MAXL=0:MINCAL=65000.:MINPTT=65000.:MINL=65000.
+41700 MAXCAL=0:MAXPTT=0:MAXL=0:MINCAL=65000!:MINPTT=65000!:MINL=65000!
 41800 IF EOF(1) THEN CLOSE #1:GOTO 43100' -----------determine scale--------
 41900 INPUT #1,ENDDATE$,DUMP,CAL,PTT,CLSE
 42000 IF CAL=0 THEN 42300
@@ -1830,7 +1830,7 @@ Programmers' Club and through exchange with other users groups as long as
 130 '
 140 FIRSTBREAK=3000
 150 SECONDBREAK=7000
-160 THIRDBREAK=56000.
+160 THIRDBREAK=56000!
 170 FIRSTFIXED=18
 180 SECONDFIXED=36
 190 THIRDFIXED=57
@@ -1872,7 +1872,7 @@ Programmers' Club and through exchange with other users groups as long as
 1100 MINCOMMISSION=NUMBEROFSHARES*FIRSTMINCHARGE
 1110 GOTO 2000
 1200 MINCOMMISSION=MINBREAK*FIRSTMINCHARGE+(NUMBEROFSHARES-MINBREAK)*SECONDMINCHARGE
-2000 IF NUMBEROFSHARES>=MAXBREAK THEN MAXCOMMISSION=NUMBEROFSHARES*MAXCHARGE ELSE MAXCOMMISSION=65000.
+2000 IF NUMBEROFSHARES>=MAXBREAK THEN MAXCOMMISSION=NUMBEROFSHARES*MAXCHARGE ELSE MAXCOMMISSION=65000!
 3000 IF BASECOMMISSION>MINCOMMISSION THEN COMMISSION=BASECOMMISSION ELSE COMMISSION=MINCOMMISSION:PRINT:PRINT "This is based on the minimum commission rate."
 3010 IF BASECOMMISSION>MAXCOMMISSION THEN COMMISSION=MAXCOMMISSION:PRINT:PRINT "This is based on the maximum commission rate."
 4000 PRINT:PRINT "The principal amount is $"TRANSACTION".

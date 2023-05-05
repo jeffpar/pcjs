@@ -1431,7 +1431,7 @@ be up to twice the size of the input file.
 180    BYTE.% = BYTE.!
 190    CHECK.%(1+(I.% - 1)\8)=CHECK.%(1+(I.% - 1)\8) >= BYTE.%:GOTO 230
 200 '
-210    PRINT:PRINT "Line";1010 + 10 *((I.% - 1)\8)0.;"may have a missing comma."
+210    PRINT:PRINT "Line";1010 + 10 *((I.% - 1)\8)0!;"may have a missing comma."
 220    PRINT"Writing stopped.":GOTO 480
 230    IF(I.% MOD 8 =1) THEN PRINT".";
 240 NEXT I.%

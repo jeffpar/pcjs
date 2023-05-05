@@ -2939,7 +2939,7 @@ Woodbridge, CT 06525   203-393-3913
 100 CHAYNBAK$="YES"
 110 CLS: KEY OFF
 120 PRINT :PRINT "DEAR FRIENDS
-130 PRINT :PRINT "Thank you for TRYING --PEOPLE SYSTEMS, LTD.  SOFTWARE FOR IBM-PC  
+130 PRINT :PRINT "Thank you for TRYING --PEOPLE SYSTEMS, LTD.  SOFTWARE FOR IBM-PC
 140 PRINT :PRINT "We hope you will be a regular user of PEOPLE SYSTEM'S, LTD. WARMWARE.           It is a new concept. If you haven't already done so, RUN ~TALKPAGE~             and~PEPLSYST~ to learn more of our philosophy.
 150 PRINT :PRINT "As you can easily see we are working hard to produce a unique and               useful product, one that is ahead of it's time, low priced, but with            full service and support.
 160 PRINT :PRINT "We believe that PEOPLE SYSTEMS, LTD. has a LOCK on the better interface         to WARMWARE without FLASH or FANFARE.

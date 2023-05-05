@@ -898,7 +898,7 @@ CROSSREF
 9050 SAVE "B:"+ZPROG$+".S",A
 9060 RETURN
 9090 REM Memory Display
-9100 CLS:LOCATE 10,1,0:PRINT TAB(32);"Memory Statistics":PRINT:PRINT TAB(27);"Remaining Memory:  ";FRE(0):PRINT:PRINT TAB(27);"Program Length:    ";61529.-FRE(0):RETURN
+9100 CLS:LOCATE 10,1,0:PRINT TAB(32);"Memory Statistics":PRINT:PRINT TAB(27);"Remaining Memory:  ";FRE(0):PRINT:PRINT TAB(27);"Program Length:    ";61529!-FRE(0):RETURN
 10000 REM Begin Program Here
 ```
 {% endraw %}

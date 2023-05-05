@@ -47,7 +47,7 @@ machines:
 40 '    ABC will help a pre-schooler learn the alphabet, by
 50 '    matching pictures with the letters as it plays the ABC song.
 60 '
-70 CLEAR ,,,32768. : SCREEN 5 : COLOR 7,0 : CLS
+70 CLEAR ,,,32768! : SCREEN 5 : COLOR 7,0 : CLS
 80 COLOR 4,0 : LOCATE 7,2 : PRINT "A B C" : LOCATE 12,1 : PRINT "S O N G"
 90 LOCATE 24,1 : COLOR 4,0 : PRINT "  copyright 1985, Computing Specialties";
 100 COLOR 10,0
@@ -55,7 +55,7 @@ machines:
 120 '
 130 '         Poke subroutine ALOAD into memory.
 140 '
-150 DEF SEG : ALOAD= 48000.
+150 DEF SEG : ALOAD= 48000!
 160 FOR IB=0 TO  95 : READ BYTE : POKE ALOAD+IB,BYTE : NEXT IB
 170 DATA &H55, &H8B, &HEC, &H8B, &H5E, &H0A, &H8A, &H0F, &HB5, &H00, &H8B, &H77
 180 DATA &H01, &H8B, &H5E, &H08, &H8B, &H07, &H8E, &HC0, &HBF, &H00, &H00, &HA4
@@ -937,7 +937,7 @@ machines:
 60 ' a bear face is placed on the border of the screen
 70 ' The game continues until the border is filled with bears.
 80 '
-90 CLEAR ,,,32768. : SCREEN 5 : CLS : SOUND OFF
+90 CLEAR ,,,32768! : SCREEN 5 : CLS : SOUND OFF
 100 LOCATE 6,10 : COLOR 6,0 : PRINT "BEARY FUN COUNTING";
 110 LOCATE 24,1 : COLOR 4,0 : PRINT "  copyright 1985, Computing Specialties";
 120 COLOR 6,0
@@ -945,7 +945,7 @@ machines:
 140 '
 150 '         Poke subroutine ALOAD into memory.
 160 '
-170 DEF SEG : ALOAD= 48000.
+170 DEF SEG : ALOAD= 48000!
 180 FOR IB=0 TO  95 : READ BYTE : POKE ALOAD+IB,BYTE : NEXT IB
 190 DATA &H55, &H8B, &HEC, &H8B, &H5E, &H0A, &H8A, &H0F, &HB5, &H00, &H8B, &H77
 200 DATA &H01, &H8B, &H5E, &H08, &H8B, &H07, &H8E, &HC0, &HBF, &H00, &H00, &HA4
@@ -1049,7 +1049,7 @@ machines:
 20 '
 30 '     BEARY FUN ABC'S will help associate each picture with the
 40 '     letter and the keyboard key.  It displays the picture then
-50 '     waits for the entry of the proper key.  If the key isn't 
+50 '     waits for the entry of the proper key.  If the key isn't
 60 '     pressed in 3 seconds, the letter will also be displayed on
 70 '     the screen.  Each time the right key is pressed, a bear
 80 '     is placed on the screen.
@@ -1057,7 +1057,7 @@ machines:
 100 '
 110 '    Initialize all variables and arrays.
 120 '
-130 CLEAR ,,,32768. : SCREEN 5 : COLOR 7,0 : CLS
+130 CLEAR ,,,32768! : SCREEN 5 : COLOR 7,0 : CLS
 140 COLOR 6,0 : LOCATE 6,1 : PRINT "Beary";
 150 LOCATE 7,2 : PRINT "Fun"; : LOCATE 12,1 : PRINT "Letters";
 160 LOCATE 24,1 : COLOR 4,0 : PRINT "  copyright 1985, Computing Specialties";
@@ -1066,7 +1066,7 @@ machines:
 190 '
 200 '         Poke subroutine ALOAD into memory.
 210 '
-220 DEF SEG : ALOAD= 48000.
+220 DEF SEG : ALOAD= 48000!
 230 FOR IB=0 TO  95 : READ BYTE : POKE ALOAD+IB,BYTE : NEXT IB
 240 DATA &H55, &H8B, &HEC, &H8B, &H5E, &H0A, &H8A, &H0F, &HB5, &H00, &H8B, &H77
 250 DATA &H01, &H8B, &H5E, &H08, &H8B, &H07, &H8E, &HC0, &HBF, &H00, &H00, &HA4
@@ -1264,7 +1264,7 @@ machines:
 70 '
 80 '    Initialize all variables and arrays.
 90 '
-100 CLEAR ,,,32768. : SCREEN 5 : COLOR 7,0 : CLS
+100 CLEAR ,,,32768! : SCREEN 5 : COLOR 7,0 : CLS
 110 COLOR 11,0 : LOCATE 7,2 : PRINT "Bunny"; : LOCATE 12,1 : PRINT "Letters";
 120 COLOR 4,0 : LOCATE 24,1 : PRINT "  copyright 1985, Computing Specialties";
 130 COLOR 12,0
@@ -1272,7 +1272,7 @@ machines:
 150 '
 160 '         Poke subroutine ALOAD into memory.
 170 '
-180 DEF SEG : ALOAD= 48000.
+180 DEF SEG : ALOAD= 48000!
 190 FOR IB=0 TO  95 : READ BYTE : POKE ALOAD+IB,BYTE : NEXT IB
 200 DATA &H55, &H8B, &HEC, &H8B, &H5E, &H0A, &H8A, &H0F, &HB5, &H00, &H8B, &H77
 210 DATA &H01, &H8B, &H5E, &H08, &H8B, &H07, &H8E, &HC0, &HBF, &H00, &H00, &HA4
@@ -1567,7 +1567,7 @@ Sunnyvale Ca. 94086
 110 '    Initialize all variables.
 120 '
 130 DEFINT A-R,T-Z
-140 CLEAR,,,32768. : SCREEN 5 : COLOR 2,1 : CLS : SOUND OFF
+140 CLEAR,,,32768! : SCREEN 5 : COLOR 2,1 : CLS : SOUND OFF
 150 COLOR 4,1 : LOCATE 2,13 : PRINT "HELP THE FROGGY"
 160 LOCATE 24,1 : PRINT "  copyright 1985, Computing Specialties";
 170 COLOR 2,1
@@ -1575,7 +1575,7 @@ Sunnyvale Ca. 94086
 190 '
 200 '         Poke subroutine ALOAD into memory.
 210 '
-220 DEF SEG : ALOAD= 48000.
+220 DEF SEG : ALOAD= 48000!
 230 FOR IB=0 TO  95 : READ BYTE : POKE ALOAD+IB,BYTE : NEXT IB
 240 DATA &H55, &H8B, &HEC, &H8B, &H5E, &H0A, &H8A, &H0F, &HB5, &H00, &H8B, &H77
 250 DATA &H01, &H8B, &H5E, &H08, &H8B, &H07, &H8E, &HC0, &HBF, &H00, &H00, &HA4
@@ -1764,14 +1764,14 @@ Sunnyvale Ca. 94086
 80 '   program with the arrow pointing to it will be run.
 90 '
 100 '
-110 CLEAR ,48000.,,32768. : SCREEN 5 : COLOR 14,0 : KEY OFF : CLS
+110 CLEAR ,48000!,,32768! : SCREEN 5 : COLOR 14,0 : KEY OFF : CLS
 120 LOCATE 22,12 : PRINT "AMY'S FIRST PRIMER  V1.3"
 130 LOCATE 24,1 : COLOR 4,0 : PRINT "  copyright 1985, Computing Specialties";
 140 '
 150 '
 160 '         Poke subroutine ALOAD into memory.
 170 '
-180 DEF SEG : ALOAD= 48000.
+180 DEF SEG : ALOAD= 48000!
 190 FOR IB=0 TO  95 : READ BYTE : POKE ALOAD+IB,BYTE : NEXT IB
 200 DATA &H55, &H8B, &HEC, &H8B, &H5E, &H0A, &H8A, &H0F, &HB5, &H00, &H8B, &H77
 210 DATA &H01, &H8B, &H5E, &H08, &H8B, &H07, &H8E, &HC0, &HBF, &H00, &H00, &HA4
@@ -1852,7 +1852,7 @@ Sunnyvale Ca. 94086
 20 '
 30 '    START displays the copyright message for Amy's First Primer.
 40 '
-50 CLEAR ,,,32768. : SCREEN 5 : DEF SEG : KEY OFF : CLS
+50 CLEAR ,,,32768! : SCREEN 5 : DEF SEG : KEY OFF : CLS
 60 LOCATE 1,12 : COLOR 9,0 : PRINT "AMY'S FIRST PRIMER"
 70 COLOR 5,0 : LOCATE 3,1
 80 PRINT "This disk is dedicated to Amy, whose "
@@ -1895,14 +1895,14 @@ Sunnyvale Ca. 94086
 40 '    and following orders.  Stock piles of shapes are stored on the
 50 '    left side of the screen, with a loader in the middle and a
 60 '    truck trailer at the bottom left.  A deisel tractor is at the
-70 '    bottom right.  An order form at the top left of the screen 
+70 '    bottom right.  An order form at the top left of the screen
 80 '    indicates which shapes are needed on the trailer.  The child
 90 '    must use the loader to fill the trailer with the same pattern
 100 '   that is on the order form.  When the order is filled properly,
 110 '   and the loader is out of the way, the tractor will back up
 120 '   and haul the load away.
 130 '
-140 CLEAR,,,32768. : SCREEN 5 : KEY OFF : CLS              
+140 CLEAR,,,32768! : SCREEN 5 : KEY OFF : CLS
 150 COLOR 9,0 : LOCATE 25,7
 160 PRINT "L O A D   T H E   T R U C K"
 170 COLOR 4,0 : LOCATE 24,1 : PRINT "  copyright 1985, Computing Specialties";
@@ -1910,7 +1910,7 @@ Sunnyvale Ca. 94086
 190 '
 200 '         Poke subroutine ALOAD into memory.
 210 '
-220 DEF SEG : ALOAD= 48000.
+220 DEF SEG : ALOAD= 48000!
 230 FOR IB=0 TO  95 : READ BYTE : POKE ALOAD+IB,BYTE : NEXT IB
 240 DATA &H55, &H8B, &HEC, &H8B, &H5E, &H0A, &H8A, &H0F, &HB5, &H00, &H8B, &H77
 250 DATA &H01, &H8B, &H5E, &H08, &H8B, &H07, &H8E, &HC0, &HBF, &H00, &H00, &HA4

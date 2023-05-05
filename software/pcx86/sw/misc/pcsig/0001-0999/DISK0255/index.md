@@ -530,7 +530,7 @@ prompt) will return the number shown on page G-7.
 1028 PRINT "P.O. Box 441000 Aurora Colorado 80044."
 1030 PRINT ""
 1032 PRINT "Please copy this program and give it to as many people as you want."
-1034 PRINT 
+1034 PRINT
 1036 PRINT "N)ext page, P)revious page, or C)ancel ";
 1038 A$=INKEY$:IF A$="" THEN  1038
 1040 IF A$="C" OR A$="c" THEN CLS:SYSTEM
@@ -550,7 +550,7 @@ prompt) will return the number shown on page G-7.
 1068 PRINT "special control characters single or double quotation marks a semicolons"
 1070 PRINT "or commas! If you must have commas or special punctuation in the help"
 1072 PRINT "screen add it after DocuFile has created the help screen program."
-1074 PRINT 
+1074 PRINT
 1076 PRINT "N)ext page, P)revious page, or C)ancel ";
 1078 A$=INKEY$:IF A$="" THEN  1078
 1080 IF A$="C" OR A$="c" THEN CLS:SYSTEM
@@ -573,7 +573,7 @@ prompt) will return the number shown on page G-7.
 1114 PRINT "the entire subroutine to facilitate use with other programs and appli-"
 1116 PRINT "cations without modifications. If you need to run the help screen as a free"
 1118 PRINT "standing program simply replace all RETURN statements with SYSTEM statements."
-1120 PRINT 
+1120 PRINT
 1122 PRINT "N)ext page, P)revious page, or C)ancel ";
 1124 A$=INKEY$:IF A$="" THEN  1124
 1126 IF A$="C" OR A$="c" THEN CLS:SYSTEM
@@ -596,7 +596,7 @@ prompt) will return the number shown on page G-7.
 1160 PRINT ""
 1162 PRINT "AutoPage will RETURN program control to where it was called from with the"
 1164 PRINT "RETURN statement."
-1166 PRINT 
+1166 PRINT
 1168 PRINT "N)ext page, P)revious page, or C)ancel ";
 1170 A$=INKEY$:IF A$="" THEN  1170
 1172 IF A$="C" OR A$="c" THEN CLS:SYSTEM
@@ -642,10 +642,10 @@ prompt) will return the number shown on page G-7.
 350 TEXT$=STR$(L)+" return"
 360 L=L+2
 370 PRINT #2,TEXT$
-380 CLS                 
+380 CLS
 390 SYSTEM
 400 ' page break subr...
-420 TEXT$=STR$(L)+" print "         
+420 TEXT$=STR$(L)+" print "
 422 L=L+2
 430 PRINT #2,TEXT$
 440 TEXT$=STR$(L)+" print "+CHR$(34)+"N)ext page, P)revious page, or C)ancel "+CHR$(34)+";"

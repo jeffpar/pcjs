@@ -332,8 +332,8 @@ Sunnyvale, CA 94086
 130 REM CALCULATE USING RECURSIVE ALGORITHM
 140 FOR I=2 TO N
 150 F=F*I
-160 IF F<1.000000e+1 THEN 190
-170 F=F/1.000000e+1
+160 IF F<1.000000e+10 THEN 190
+170 F=F/1.000000e+10
 180 J=J+10
 190 NEXT I
 200 GOTO 370
@@ -342,13 +342,13 @@ Sunnyvale, CA 94086
 230 I=I+5
 240 IF I>K*5 THEN 350
 250 F=F*N*N*N*N*N/EXP(5)
-260 IF F>1.000000e+3 THEN 290
-270 IF F>1.000000e+2 THEN 320
+260 IF F>1.000000e+30 THEN 290
+270 IF F>1.000000e+20 THEN 320
 280 GOTO 230
-290 F=F/1.000000e+3
+290 F=F/1.000000e+30
 300 J=J+30
 310 GOTO 260
-320 F=F/1.000000e+2
+320 F=F/1.000000e+20
 330 J=J+20
 340 GOTO 260
 350 X=SQR(N*6.28318530718#)
@@ -727,12 +727,12 @@ Sunnyvale, CA 94086
 100   SOUND 30000,1
 110   SOUND 300,2
 120   SOUND 30000,1
-130   SOUND 300,2 
+130   SOUND 300,2
 140 KEY OFF: LOCATE 25,1: PRINT "                                                                            "
 150 LOCATE 2,35
-160   COLOR 0,15 
-170   PRINT " PunyCalc! " 
-180   COLOR 7,0  
+160   COLOR 0,15
+170   PRINT " PunyCalc! "
+180   COLOR 7,0
 190   LOCATE 3,35
 200   PRINT "Version 1.1"
 210 LOCATE 4,23
@@ -743,8 +743,8 @@ Sunnyvale, CA 94086
 260   PRINT "NOTICE:"
 270                   'go get first screen
 280                 GOSUB 3900
-290 LOCATE 22,16 
-300   COLOR 0,7 
+290 LOCATE 22,16
+300   COLOR 0,7
 310   PRINT " Type I for instructions, any other key to start ";
 320   COLOR 7,0
 330           'send for instructions
@@ -757,14 +757,14 @@ Sunnyvale, CA 94086
 400 DEFDBL F,M,N,T: DEFINT A,B,C,E,I,J,K,L,O,P,Q
 410 N=0:M=0  ' a possibly unnecessary declaration, but let it stand
 420           ' send for the decimal format and printer on module
-430 GOSUB 2060  
+430 GOSUB 2060
 440                 ' initialize and format
 450 DIM N(1000), V$(20), S$(1000) 'dimension the arrays
 460      CLS
 470 C=0:T=0:OVER=0  'initialize values
 480 COLOR 1,0
 490   PRINT "Entries:";
-500   COLOR 7,0 
+500   COLOR 7,0
 510   PRINT TAB(33);
 520   COLOR 1,0
 530   PRINT "Running Total:";
@@ -809,7 +809,7 @@ Sunnyvale, CA 94086
 920   FOR P=1 TO I
 930   F$=MID$(N$,P,1)
 940 IF F$<>"." THEN NEXT P ELSE GOTO 1200
-950      'add character$s if # or decimal, trap all else but M and signs 
+950      'add character$s if # or decimal, trap all else but M and signs
 960 IF A<58 AND A>47 OR A = 46 THEN N$=N$+V$(I) ELSE IF V$(I)="M" OR V$(I)="m" THEN GOTO 990 ELSE GOTO 1200 'adds character$s
 970 PRINT V$(I);:GOTO 680  'types out entry on screen if # or decimal point
 980      'deal with memory function -- only admissible char. left is M
@@ -837,14 +837,14 @@ Sunnyvale, CA 94086
 1200 IF V$(I)="+" OR V$(I)="-" OR V$(I)="*" OR V$(I)="/" OR V$(I)="=" THEN C=C+1 ELSE GOTO 1250
 1210   S$(C)=V$(I)
 1220   N(C)=VAL(N$)
-1230   GOTO 1290  
+1230   GOTO 1290
 1240    ' if inadmissible entry, then beep, null, and go back for a new one
 1250 BEEP
 1260 V$(I)=""
 1270 IF EMTRAP=1 THEN GOTO 700
 1280          IF EMCTR>0 THEN GOTO 680 ELSE GOTO 700
 1290 EMCTR=0: EMTRAP=0
-1300            ' send you to the right operation  
+1300            ' send you to the right operation
 1310 IF S$(C-1)="+" THEN GOTO 1320 ELSE IF S$(C-1)="-" THEN GOTO 1350 ELSE IF S$(C-1)="*" THEN GOTO 1380 ELSE IF S$(C-1)="/" THEN GOTO 1420 ELSE IF S$(C-1)="" THEN GOTO 1320    'sends you to correct module for operation
 1320                    'addition module
 1330 T=T+N(C)
@@ -1002,13 +1002,13 @@ Sunnyvale, CA 94086
 2790 Y$=INKEY$: IF Y$="" THEN 2790
 2800 COLOR 0,7
 2810   CLS
-2820 LOCATE 2,32 
+2820 LOCATE 2,32
 2830   PRINT "MEMORY FUNCTION:"
-2840 LOCATE 5,5 
+2840 LOCATE 5,5
 2850   PRINT "One number may be stored in PunyCalc's memory."
-2860 LOCATE 7,5 
+2860 LOCATE 7,5
 2870   PRINT "To do this, simply type M AFTER entering a number, "
-2880 LOCATE 8,7 
+2880 LOCATE 8,7
 2890   PRINT "and just BEFORE entering an operator sign."
 2900 LOCATE 10,5
 2910   PRINT "To call it up, just type M immediately AFTER typing an operator sign."
@@ -1088,7 +1088,7 @@ Sunnyvale, CA 94086
 3630                   'selecting the print format for printer
 3640 IF K$="0" THEN GOTO 3670 ELSE IF K$="1" THEN GOTO 3680 ELSE IF K$="2" THEN GOTO 3690 ELSE IF K$="3" THEN GOTO 3700 ELSE IF K$="4" THEN GOTO 3710 ELSE IF K$="5" THEN GOTO 3720
 3650 IF K$="6" THEN GOTO 3730 ELSE IF K$="7" THEN GOTO 3740 ELSE IF K$="8" THEN GOTO 3750
-3660 	          'printing the running total to printer	
+3660 	          'printing the running total to printer
 3670 LPRINT USING "############.";T: RETURN
 3680 LPRINT USING "############.#";T: RETURN
 3690 LPRINT USING "############.##";T: RETURN
@@ -1115,7 +1115,7 @@ Sunnyvale, CA 94086
 3865 CLS
 3880    RESUME 460
 3890                'opening module
-3900 LOCATE 9,1 
+3900 LOCATE 9,1
 3910   PRINT "A limited license is granted to all users of this program to make and"
 3920 LOCATE 10,1
 3930   PRINT "distribute copies of this program to other users, on condition that: "
@@ -1320,7 +1320,7 @@ COMMENT* THIS SUBROUTINE IS A 'FAR' PROCEDURE FOR USE WITH BASIC PROGRAMS. THE
 250 Q$=INKEY$: IF Q$="" THEN 250 ELSE IF Q$=CHR$(27) THEN KEY ON: END
 260 IF Q$<>CHR$(32) THEN 250
 270 '
-280 CLEAR ,38900.         'FOR 96K OR MORE CHANGE THIS TO  CLEAR ,65535!
+280 CLEAR ,38900!         'FOR 96K OR MORE CHANGE THIS TO  CLEAR ,65535!
 290 DEFINT A-Z: NDIM=INT(FRE(0)/2400)*100       '**PICK YOUR OWN VALUE FOR NDIM
 300 DIM PTR(NDIM),PTRD(NDIM)                    '**IF YOU WANT MORE STRINGS
 310 CLS: KEY OFF: FALSE=0: TRUE=NOT FALSE
@@ -1331,7 +1331,7 @@ COMMENT* THIS SUBROUTINE IS A 'FAR' PROCEDURE FOR USE WITH BASIC PROGRAMS. THE
 360 GOTO 760
 370 '      ------------ elapsed time subroutine ---------
 380 TSEC!=FNSEC!(TIME$)
-390 TELP!=TSEC!-TSTRT!:IF TELP!<0. THEN TELP!=TSEC!+(86400.-TSTRT!)
+390 TELP!=TSEC!-TSTRT!:IF TELP!<0! THEN TELP!=TSEC!+(86400!-TSTRT!)
 400 RETURN
 410 '      -------- end elapsed time subroutine ---------
 420 '
