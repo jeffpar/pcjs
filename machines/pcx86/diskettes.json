@@ -5274,6 +5274,36 @@
 					],
 					"@author": "Strategic Simulations, Inc."
 				},
+				"1989/heros_quest": {
+					"@title": "Hero's Quest (1989)",
+					"@media": [
+						{
+							"@title": "Hero's Quest (1989) Disk 1",
+							"@diskette": "HEROS-QUEST-1989-DISK1.json",
+							"@archive": ".img",
+							"@format": "PC720K"
+						},
+						{
+							"@title": "Hero's Quest (1989) Disk 2",
+							"@diskette": "HEROS-QUEST-1989-DISK2.json",
+							"@archive": ".img",
+							"@format": "PC720K"
+						},
+						{
+							"@title": "Hero's Quest (1989) Disk 3",
+							"@diskette": "HEROS-QUEST-1989-DISK3.json",
+							"@archive": ".img",
+							"@format": "PC720K"
+						},
+						{
+							"@title": "Hero's Quest (1989) Disk 4",
+							"@diskette": "HEROS-QUEST-1989-DISK4.json",
+							"@archive": ".img",
+							"@format": "PC720K"
+						}
+					],
+					"@source": "https://archive.org/details/000757-HerosQuestSoYouWantToBeAHero"
+				},
 				"2019/invaders": {
 					"@title": "Invaders Boot Sector (2019)",
 					"@bootable": true,
