@@ -2,6 +2,7 @@
 layout: page
 title: "PC-SIG Diskette Library (Disk #2233)"
 permalink: /software/pcx86/sw/misc/pcsig/2000-2999/DISK2233/
+preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/2000-2999/DISK2233/DISK2233.jpg
 machines:
   - id: ibm5170
     type: pcx86
@@ -717,28 +718,21 @@ Sunnyvale  Ca. 94086
 
 ### Directory of PC-SIG Library Disk #2233
 
-     Volume in drive A has no label
+     Volume in drive A is #2233 S2.1
      Directory of A:\
 
-    ECB      EXE     98304   1-10-90   5:12p
-    ECBMAN   DOC     29266   1-10-90   5:36p
+    ECB      EXE    168414   5-08-91   7:49p
+    ECB      DOC     52875   5-06-91  12:38p
+    ECBORDER FRM      3345   4-28-91   9:42a
+    ECBTP21S GXL     37949   5-05-91   9:37p
     ECBFONT  000      2625   8-09-89   8:42p
     ECBCOLOR DAT      8880  10-23-89   9:40p
-    ECBPALC1 DAT     18059  12-12-89  11:42p
-    ECBPALC2 DAT     18059  12-12-89  11:43p
-    ECBPALC3 DAT     18059  12-12-89  11:43p
-    ECBPALC4 DAT     18059  12-12-89  11:43p
-    ECBPALC5 DAT     18059  12-12-89  11:43p
-    ECBPALT  DAT      4363  12-12-89  11:42p
-    ECBTITLE 002       762  12-15-89  12:41a
-    ECBTITLE 001     15884   1-08-90  12:29a
-    SEASHORE PIC      7185  12-28-89  11:52p
-    JUNGLE   PIC      9608  12-28-89   9:54a
-    DUCKPOND PIC     11737  12-28-89  10:01a
-    UNDERSEA PIC     13218  12-28-89  10:09a
-    SHIP     PIC      7422  12-28-89  10:22a
-    FILE2233 TXT      1703   6-20-90   4:56p
-    GO       BAT        38   1-01-80   1:37a
-    GO       TXT       540   1-01-80   9:48a
-           20 file(s)     301830 bytes
-                           11264 bytes free
+    ECBIMAGE GXL     32301   3-26-91  10:14p
+    ECBSETUP DAT        77   4-14-91   9:20a
+    GO       BAT        97   6-14-91   1:47a
+    PREVIEW  EXE      7347   4-18-91   1:15p
+    FILE2233 TXT      1629   6-20-91   2:20p
+           11 file(s)     315539 bytes
+                           39936 bytes free
+
+![PC-SIG Library Disk #2233]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/2000-2999/DISK2233/DISK2233.jpg)

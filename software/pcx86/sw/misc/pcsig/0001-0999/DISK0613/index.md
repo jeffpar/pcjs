@@ -2,6 +2,7 @@
 layout: page
 title: "PC-SIG Diskette Library (Disk #613)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0613/
+preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/0001-0999/DISK0613/DISK0613.jpg
 machines:
   - id: ibm5150
     type: pcx86
@@ -1801,8 +1802,6 @@ package.
     DATESINM BAS      2323   8-08-86   9:19p
     DAYOFWEE BAS      1653   8-08-86   9:19p
     DEPGROWS BAS      2945   8-08-86   9:19p
-    FILES613 TXT      3457  10-16-86   2:32a
-    GO       BAT       565   9-16-86   9:49p
     INTRATE  BAS       855   8-08-86   9:19p
     INVHISTO BAS      1778   8-08-86   9:19p
     INVINCOM BAS      1038   8-08-86   9:19p
@@ -1815,7 +1814,6 @@ package.
     LOANTERM BAS      1408   8-08-86   9:19p
     MNTHINCM BAS      3191   8-08-86   9:19p
     MONTHLYO BAS       653   8-08-86   9:19p
-    NOTES613 TXT      1647  10-15-86  12:51p
     NUMDAYS  BAS      1766   8-08-86   9:23p
     PAYBACK  BAS       986   8-08-86   9:23p
     PERBALAN BAS      2064   8-08-86   9:23p
@@ -1828,5 +1826,10 @@ package.
     SAVHISTO BAS      1411   8-08-86   9:32p
     SIMPINV  BAS      1570   8-08-86   9:24p
     TERMDEPO BAS      2537   8-08-86   9:24p
+    FILES613 TXT      3457  10-16-86   2:32a
+    NOTES613 TXT      1647  10-15-86  12:51p
+    GO       BAT       565   9-16-86   9:49p
            37 file(s)      67370 bytes
-                           82944 bytes free
+                          275456 bytes free
+
+![PC-SIG Library Disk #0613]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/0001-0999/DISK0613/DISK0613.jpg)

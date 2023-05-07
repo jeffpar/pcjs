@@ -2,6 +2,7 @@
 layout: page
 title: "PC-SIG Diskette Library (Disk #1800)"
 permalink: /software/pcx86/sw/misc/pcsig/1000-1999/DISK1800/
+preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/1000-1999/DISK1800/DISK1800.jpg
 machines:
   - id: ibm5170
     type: pcx86
@@ -967,16 +968,23 @@ Mail to:  Ron West
 
 ### Directory of PC-SIG Library Disk #1800
 
-     Volume in drive A has no label
+     Volume in drive A is #1800 S1.1
      Directory of A:\
 
-    FILE1800 TXT      2369  12-20-89   4:10p
+    BRUN45   EXE     77440   9-28-88   1:43a
+    SMTANALY EXE     23892   3-21-90   7:53a
+    SMTCHANG EXE     14736   5-15-89  12:11p
+    SMTEARNS EXE      7444   5-15-89  12:12p
+    SMTLOWPE EXE      7530   5-15-89  12:13p
+    SMTPORTF EXE      7854   5-15-89  12:14p
+    SMTPRINT EXE     17302   3-21-90   7:51a
+    SMTMENU  EXE      7250   5-15-89  12:15p
+    READ     ME       2238   5-15-89  12:51p
+    MARKET   DOC     30802   3-20-90   2:30p
     GO       BAT        38   1-01-80   1:37a
     GO       TXT       540   1-01-80   7:39a
-    MARKET   DOC     29976   3-13-89   9:37a
-    QUICK    DAT      1856   1-28-89   6:40p
-    SMTANALY EXE     70630   3-04-89   2:16p
-    SMTCHANG EXE     49206   2-15-89   6:27a
-    SMTMENU  EXE     36110   2-13-89  10:33a
-            8 file(s)     190725 bytes
-                          126976 bytes free
+    FILE1800 TXT      2369   4-23-90   2:42p
+           13 file(s)     199435 bytes
+                          154624 bytes free
+
+![PC-SIG Library Disk #1800]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/1000-1999/DISK1800/DISK1800.jpg)

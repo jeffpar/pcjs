@@ -2,6 +2,7 @@
 layout: page
 title: "PC-SIG Diskette Library (Disk #966)"
 permalink: /software/pcx86/sw/misc/pcsig/0001-0999/DISK0966/
+preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/0001-0999/DISK0966/DISK0966.jpg
 machines:
   - id: ibm5170
     type: pcx86
@@ -672,7 +673,7 @@ a chart to file.
 
 ### Directory of PC-SIG Library Disk #0966
 
-     Volume in drive A has no label
+     Volume in drive A is #0966 S1.7
      Directory of A:\
 
     README   DOC      3200   6-05-90  11:04a
@@ -692,5 +693,8 @@ a chart to file.
     GO       TXT       498   7-09-90  12:44a
     GO       BAT        38  10-19-87   3:56p
     FILE0966 TXT      2443   7-09-90   6:03p
-           17 file(s)     345782 bytes
+    CHART    AST         0
+           18 file(s)     345782 bytes
                             8192 bytes free
+
+![PC-SIG Library Disk #0966]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/0001-0999/DISK0966/DISK0966.jpg)

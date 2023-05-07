@@ -2,6 +2,7 @@
 layout: page
 title: "PC-SIG Diskette Library (Disk #1496)"
 permalink: /software/pcx86/sw/misc/pcsig/1000-1999/DISK1496/
+preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/1000-1999/DISK1496/DISK1496.jpg
 machines:
   - id: ibm5170
     type: pcx86
@@ -127,34 +128,35 @@ Sunnyvale  Ca. 94086
 
 ### Directory of PC-SIG Library Disk #1496
 
-     Volume in drive A has no label
+     Volume in drive A is #1496  S2.0
      Directory of A:\
 
     CIRCUIT  CU       4357  10-02-85   6:44p
     COMBINE  CU      15452  10-04-85  12:06p
-    CU       DOC     38046   1-01-80   1:47a
-    CU       EXE     94208   1-03-80   8:26a
-    CU       PIC     16392   7-10-85  12:43a
+    CU       EXE     93100   7-20-91   7:34p
+    CU       PIC     16392  12-27-90   3:55p
     CU       SYM      2048   9-29-85  11:33a
-    DRIVERS  EXE      2816   1-02-80  12:37p
+    DRIVERS  EXE      2882   7-28-91  10:41p
     EMPTY    OBJ      8513   9-29-85  11:33a
-    FILE1496 TXT      1967   9-13-89  10:20a
     FLORPLAN CU       3859  10-04-85  12:08p
     FLOWCHAR CU       2459  10-02-85   6:44p
-    GO       BAT        38   7-14-89   8:01a
-    GO       TXT       848   7-31-89   3:48p
     GRAPH    CU       1337  10-02-85   6:44p
     HELP     HLP     16251   1-01-80  12:56p
     HOUSE    CU       1696  10-02-85   6:45p
-    MANUAL   BAT       147   7-31-89   3:49p
     OBJECTS  HLP       712  11-14-85   7:39a
     ORGCHART CU       1517  10-02-85   6:43p
-    PAGE     COM       325   1-06-87   4:21p
-    PRINT    BUF     18783  10-10-85  12:40a
-    READ     ME        801   1-03-80   8:36a
+    PRINT    BUF     18783   7-27-91  10:43p
     SYMBOLS  HLP      1001   8-25-85  12:16a
     USER     OBJ      8513   9-29-85  11:33a
     USER     SYM      2048  12-03-88   3:19p
-    VIEW     BAT        38   7-31-89   3:49p
-           26 file(s)     244172 bytes
-                           65536 bytes free
+    CU       CFG       184   8-22-91   7:56p
+    ADDENDUM CU       4028   7-27-91  10:42p
+    README             227   7-25-91  10:21a
+    CU       DOC     32825  10-06-91   6:26p
+    GO       BAT        87  12-18-91   9:27a
+    FILE1496 TXT      1530  12-18-91  12:07p
+    PREVIEW  EXE      7347   4-18-91   1:15p
+           25 file(s)     247148 bytes
+                          102400 bytes free
+
+![PC-SIG Library Disk #1496]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/1000-1999/DISK1496/DISK1496.jpg)

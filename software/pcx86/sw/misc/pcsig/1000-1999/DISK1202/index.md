@@ -2,6 +2,7 @@
 layout: page
 title: "PC-SIG Diskette Library (Disk #1202)"
 permalink: /software/pcx86/sw/misc/pcsig/1000-1999/DISK1202/
+preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/1000-1999/DISK1202/DISK1202.jpg
 machines:
   - id: ibm5170
     type: pcx86
@@ -133,27 +134,23 @@ Sunnyvale  Ca. 94086
 
 ### Directory of PC-SIG Library Disk #1202
 
-     Volume in drive A has no label
+     Volume in drive A is #1202  S3.0
      Directory of A:\
 
-    !EZX!!!!          1574   9-17-90   1:53p
-    EZFL     EXE    201036   9-13-90   1:36p
-    EZXINFO  EXE     16011   9-17-90   1:52p
-    EZFLHELP EXE     48048   8-30-90  10:58a
-    SUPPORT  EXE      6779   9-17-90   1:53p
-    !                 1574   9-17-90   1:53p
-    README   EXE      6443   8-30-90  10:56a
-    MATHDEMO FRM      3072   2-03-90  12:48p
-    MATHINFO FRM      3492   2-02-90   6:08p
-    MATHINVC FRM      2295  11-15-87   1:20p
-    ORDEREZX FRM      2833   8-30-90  11:06a
-    INVC-EZI FRM      2899   2-16-90  11:16a
-    PRT-TEST FRM      1336   2-04-90   3:57p
-    DIAGRAM  FRM      2444   2-04-90   3:57p
-    TIMETEST FRM      1396   2-04-90   3:56p
-    SOFTPERF FRM      2046   8-30-90  11:08a
-    COMMANDS FRM      3509   8-30-90  11:02a
-    SALESORD FRM      1928  11-01-87  10:46a
-    FILE1202 TXT      4219  11-14-90   8:44a
-           19 file(s)     312934 bytes
-                            1024 bytes free
+    README   EXE      8219   3-21-91  12:29p
+    !                 1335   3-18-91  11:28a
+    !EZX!!!!          1335   3-18-91  11:28a
+    EZFPTD   EXE    123023   3-17-91   2:40p
+    EZFPHELP EXE     45319   3-17-91   1:59p
+    SUPPORT  EXE      6827   3-16-91   4:20p
+    EZXINFO  EXE     17851   3-16-91   4:16p
+    INVOICE2 EZX      5248   3-16-91   3:37p
+    INVOICE1 EZX      5248   3-16-91   3:36p
+    INVOICE  EZX      5248   3-16-91   3:36p
+    EZFP     DOC     62050   3-03-91  11:24a
+    FILE1202 TXT      4219   5-03-91  11:09a
+    MATHDEMO FRM      3072   2-24-91   8:53p
+           13 file(s)     288994 bytes
+                           64512 bytes free
+
+![PC-SIG Library Disk #1202]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/1000-1999/DISK1202/DISK1202.jpg)
