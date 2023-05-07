@@ -2,6 +2,7 @@
 layout: page
 title: "PC-SIG Diskette Library (Disk #2837)"
 permalink: /software/pcx86/sw/misc/pcsig/2000-2999/DISK2837/
+preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/2000-2999/DISK2837/DISK2837.jpg
 machines:
   - id: ibm5170
     type: pcx86
@@ -58,7 +59,7 @@ Sunnyvale  Ca. 94086
 
 ### Directory of PC-SIG Library Disk #2837
 
-     Volume in drive A has no label
+     Volume in drive A is #2837  S1.2
      Directory of A:\
 
     PKUNZIP  EXE     21440   7-21-89   1:01a
@@ -70,4 +71,6 @@ Sunnyvale  Ca. 94086
     GO       BAT         9   9-12-91   3:27a
     FILE2837 TXT      1400  12-18-91   2:42p
             8 file(s)     151495 bytes
-                            6656 bytes free
+                          205824 bytes free
+
+![PC-SIG Library Disk #2837]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/2000-2999/DISK2837/DISK2837.jpg)

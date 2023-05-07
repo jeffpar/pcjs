@@ -2,6 +2,7 @@
 layout: page
 title: "PC-SIG Diskette Library (Disk #1704)"
 permalink: /software/pcx86/sw/misc/pcsig/1000-1999/DISK1704/
+preview: https://pcsigdisks.pcjs.org/pcx86/sw/misc/pcsig/1000-1999/DISK1704/DISK1704.jpg
 machines:
   - id: ibm5170
     type: pcx86
@@ -597,7 +598,7 @@ Use just as you would use GRAPHICS.COM for the Epson
 
 ### Directory of PC-SIG Library Disk #1704
 
-     Volume in drive A has no label
+     Volume in drive A is #1704 S1.1
      Directory of A:\
 
     CHART2   ZIP    135223   5-12-90
@@ -612,3 +613,5 @@ Use just as you would use GRAPHICS.COM for the Epson
     FILE1704 TXT      2221   5-30-90   2:43p
            10 file(s)     331541 bytes
                            24576 bytes free
+
+![PC-SIG Library Disk #1704]({{ site.software.pcsigdisks.server }}/pcx86/sw/misc/pcsig/1000-1999/DISK1704/DISK1704.jpg)
