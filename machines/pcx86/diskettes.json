@@ -8594,11 +8594,6 @@
 			"jeffpar": {
 				"@media": [
 					{
-						"@title": "Jeff's Misc Disk #1",
-						"@diskette": "JEFFPAR-MISCDISK1.json",
-						"@format": "PC1200K"
-					},
-					{
 						"@title": "Jeff's Misc Disk #2",
 						"@diskette": "JEFFPAR-MISCDISK2.json",
 						"@format": "PC360K"
