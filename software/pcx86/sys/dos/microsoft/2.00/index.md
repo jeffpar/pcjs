@@ -87,8 +87,7 @@ applying a DST adjustment to any timestamps that were either inside or outside o
 the *current* date is inside or outside of DST, which makes the alteration even more insidious.  And not all regions around
 the world observe DST, even within the United States.
 
-As I blogged back in 2017, Daylight Savings Time is a serious obstacle to accurate date and time preservation.  And arbitrarily
-renaming files with unexplained suffixes, or more convenient file extensions, doesn't help either.
+As a result, Daylight Savings Time is a serious obstacle to accurate date and time preservation.  And arbitrarily renaming files with unexplained suffixes, or more convenient file extensions, doesn't help either.
 
 I have attempted to correct all the file names and timestamps on the five disks below.  Whether the rest of the (2.11) files in
 CHM's original archive suffer from similar timestamp alterations is hard to say without more information.
