@@ -8594,14 +8594,29 @@
 			"jeffpar": {
 				"@media": [
 					{
+						"@title": "Jeff's Misc Disk #1",
+						"@diskette": "JEFFPAR-MISCDISK1.json",
+						"@format": "PC1200K"
+					},
+					{
+						"@title": "Jeff's Misc Disk #2",
+						"@diskette": "JEFFPAR-MISCDISK2.json",
+						"@format": "PC360K"
+					},
+					{
+						"@title": "Jeff's Misc Disk #3",
+						"@diskette": "JEFFPAR-MISCDISK3.json",
+						"@format": "PC360K"
+					},
+					{
 						"@title": "Jeff's MS-DOS 3.20 Tools",
-						"@diskette": "JEFFPAR1-MSDOS320-TOOLS.json",
+						"@diskette": "JEFFPAR-MSDOS320-TOOLS.json",
 						"@format": "PC360K"
 					},
 					{
 						"@title": "Jeff's PC DOS 1.00 with MASM",
-						"@diskette": "JEFFPAR2-PCDOS100-MASM100-160K.img",
-						"@link": "/software/pcjs/JEFFPAR2-PCDOS100-MASM100-160K.img",
+						"@diskette": "JEFFPAR-PCDOS100-MASM100-160K.img",
+						"@link": "/software/pcjs/JEFFPAR-PCDOS100-MASM100-160K.img",
 						"@localonly": true,
 						"@format": "PC160K"
 					}
@@ -10550,6 +10565,113 @@
 				"pcsig08": {
 					"@title": "PC-SIG CD-ROM (8th Edition)",
 					"@hidden": true
+				},
+				"pcug": {
+					"@title": "PC User Groups",
+					"@media": [
+						{
+							"@title": "PC User Group Disk #1001",
+							"@diskette": "PCUG1001.json",
+							"@format": "PC360K",
+							"@source": "Phil Mayes"
+						},
+						{
+							"@title": "PC User Group Disk #1002",
+							"@diskette": "PCUG1002.json",
+							"@format": "PC360K",
+							"@source": "Phil Mayes"
+						},
+						{
+							"@title": "PC User Group Disk #1003",
+							"@diskette": "PCUG1003.json",
+							"@format": "PC360K",
+							"@source": "Phil Mayes"
+						},
+						{
+							"@title": "PC User Group Disk #2001",
+							"@diskette": "PCUG2001.json",
+							"@format": "PC360K",
+							"@source": "Phil Mayes"
+						},
+						{
+							"@title": "PC User Group Disk #2002",
+							"@diskette": "PCUG2002.json",
+							"@format": "PC360K",
+							"@source": "Phil Mayes"
+						},
+						{
+							"@title": "PC User Group Disk #2003",
+							"@diskette": "PCUG2003.json",
+							"@format": "PC360K",
+							"@source": "Phil Mayes"
+						},
+						{
+							"@title": "PC User Group Disk #2501",
+							"@diskette": "PCUG2501.json",
+							"@format": "PC360K",
+							"@source": "Phil Mayes"
+						},
+						{
+							"@title": "PC User Group Disk #2502",
+							"@diskette": "PCUG2502.json",
+							"@format": "PC360K",
+							"@source": "Phil Mayes"
+						},
+						{
+							"@title": "PC User Group Disk #3001",
+							"@diskette": "PCUG3001.json",
+							"@format": "PC360K",
+							"@source": "Phil Mayes"
+						},
+						{
+							"@title": "PC User Group Disk #3002",
+							"@diskette": "PCUG3002.json",
+							"@format": "PC360K",
+							"@source": "Phil Mayes"
+						},
+						{
+							"@title": "PC User Group Disk #3003",
+							"@diskette": "PCUG3003.json",
+							"@format": "PC360K",
+							"@source": "Phil Mayes"
+						},
+						{
+							"@title": "PC User Group Disk #3007",
+							"@diskette": "PCUG3007.json",
+							"@format": "PC360K",
+							"@source": "Phil Mayes"
+						},
+						{
+							"@title": "PC User Group Disk #4001",
+							"@diskette": "PCUG4001.json",
+							"@format": "PC360K",
+							"@source": "Phil Mayes"
+						},
+						{
+							"@title": "PC User Group Disk #5001",
+							"@diskette": "PCUG5001.json",
+							"@format": "PC360K",
+							"@source": "Phil Mayes"
+						},
+						{
+							"@title": "PC User Group Disk #5801",
+							"@diskette": "PCUG5801.json",
+							"@format": "PC360K",
+							"@source": "Phil Mayes"
+						},
+						{
+							"@title": "PC User Group Disk #5802",
+							"@diskette": "PCUG5802.json",
+							"@format": "PC360K",
+							"@source": "Phil Mayes"
+						},
+						{
+							"@title": "PC User Group Disk #6001",
+							"@diskette": "PCUG6001.json",
+							"@format": "PC360K",
+							"@source": "Phil Mayes"
+						}
+					]
 				},
 				"scbc": {
 					"@title": "Small Computer Book Club",
