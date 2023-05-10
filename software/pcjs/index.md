@@ -72,6 +72,31 @@ RESTORE.EXE, SHARE.EXE, TREE.EXE, and XCOPY.EXE), updated DEBUG.EXE, added MASM.
 a few files of my own (eg, PCPAL.EXE and HDISK.ASM).  FYI, this particular copy of PCPAL.EXE was saved with **Alt-Esc**
 configured as the activation key sequence. *--[Jeff]({{ site.author_url }})*
 
+### Directory of Jeff's Misc Disk #1
+
+     Volume in drive A is JEFF 1
+     Directory of A:\
+    
+    HOME              1536   5-09-91  11:10a
+    HOME     C        2048   5-09-91  11:10a
+    HOME     H        4096   5-09-91  11:10a
+    HOMEKBD  C        1536   5-09-91  11:10a
+    HOMELOC  C        5120   5-09-91  11:10a
+    HOMEPARS C        1024   5-09-91  11:10a
+    HOMESCRN C        7168   5-09-91  11:10a
+    HOMEVERB C        2560   5-09-91  11:10a
+    MBROT             1536   5-09-91  11:10a
+    MBROT    C       54272   5-09-91  11:10a
+    MBROT    EXE     40448   5-09-91  11:10a
+    MBROT    TXT       512   5-09-91  11:10a
+    MBROT1   MEM     30720   5-09-91  11:10a
+    MBROT2   MEM     53248   5-09-91  11:10a
+    MBROT3   MEM    242688   5-09-91  11:10a
+    MBROT4   MEM    180736   5-09-91  11:10a
+    MBROT5   MEM     82944   5-09-91  11:10a
+           17 file(s)     712192 bytes
+                          501760 bytes free
+
 ### Directory of Jeff's Misc Disk #2
 
      Volume in drive A is JEFF 2
