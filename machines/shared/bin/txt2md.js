@@ -57,7 +57,7 @@ function processFile(sInputFile, sOutputFile)
 }
 
 if (process.argv.length <= 2) {
-    console.log("usage: node txt2md.js [input filename] [output filename]");
+    console.log("usage: txt2md.js [input filename] [output filename]");
     process.exit();
 }
 

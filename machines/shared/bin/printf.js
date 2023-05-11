@@ -23,7 +23,7 @@ var Str = require("../lib/strlib");
  */
 function printf(format, ...args)
 {
-    console.log("printf(" + format + "): '" + Str.sprintf(format, ...args) + "'");
+    console.log("printf(" + format + "): \"" + Str.sprintf(format, ...args) + "\"");
     return true;
 }
 

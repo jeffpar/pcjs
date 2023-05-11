@@ -3,6 +3,10 @@ if [ -z "$1" ]; then
     echo "usage: dumpiso.sh [ISO file]"
     exit 1
 fi
+if [ ! -f "$1" ]; then
+    echo "missing ISO: $1"
+    exit 1
+fi
 diskName=$(basename "$1" .iso)
 echo Dumping $1
 if [ -f padding ]; then
