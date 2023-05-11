@@ -119,7 +119,7 @@ export default class DiskSearch {
      */
     matchesFile(list, re)
     {
-        return !!(list && list.match(re));
+        return !!(list && re && list.match(re));
     }
 
     /**
@@ -165,8 +165,9 @@ export default class DiskSearch {
                 matches.push(i);
                 continue;
             }
-            if (!diskName && this.matchesText(media, ['@diskTitle', '@diskSummary'], reText)) {
+            if (!diskName && this.matchesText(media, ['@diskTitle', '@diskSummary', '@fileList'], reText)) {
                 matches.push(i);
+                continue;
             }
         }
         return matches;
