@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import BASConvert from "../bascon.js";
+import BASConvert from "./bascon.js";
 
 /**
  * @class BASConvertUI

@@ -3,7 +3,7 @@ layout: page
 title: BASIC Conversion Utility
 permalink: /tools/bascon/
 modules_init:
-  - import BASConvertUI from "/tools/modules/web/basconui.js";
+  - import BASConvertUI from "/tools/bascon/basconui.js";
   - new BASConvertUI("convertBAS", "displayBAS");
 ---
 

@@ -142,7 +142,7 @@ function convertBinToISO(sInput, sOutput, fDebug, fOverwrite, fVerbose, nSkip)
 }
 
 if (args.argc < 2) {
-    printf("usage: node bin2iso.js [input file] [output file] [options]\n");
+    printf("usage: bin2iso.js [input file] [output file] [options]\n");
 } else {
     let argv = args.argv;
     convertBinToISO(argv[1], argv[2], argv['debug'], argv['overwrite'], argv['verbose'], argv['skip']);
