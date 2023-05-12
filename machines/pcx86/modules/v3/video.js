@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Monitor from "../../modules/monitor.js";
+import Monitor from "../../../modules/monitor.js";
 
 /**
  * @typedef {MonitorConfig} PCx86VideoConfig

@@ -1,5 +1,5 @@
 /**
- * @fileoverview JSON library
+ * @fileoverview JSON Library
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2023 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
