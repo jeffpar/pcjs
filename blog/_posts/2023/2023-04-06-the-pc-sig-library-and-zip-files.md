@@ -196,8 +196,8 @@ Here's a list of the new JavaScript modules:
       - Reduced files (ZIP compression formats #2, #3, #4, and #5)
       - Imploded files (ZIP compression format #6)
       - Deflated files (ZIP compression format #8)
-  - [BASConvert.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/bascon.js), a BASIC de-tokenizer and character conversion library, which also uses [CharSet.js](https://github.com/jeffpar/pcjs/tree/master/machines/pcx86/modules/charset.js)
+  - [BASConvert.js](https://github.com/jeffpar/pcjs/tree/master/tools/bascon/bascon.js), a BASIC de-tokenizer and character conversion library, which also uses [CharSet.js](https://github.com/jeffpar/pcjs/tree/master/machines/pcx86/modules/charset.js)
 
 The combination of `StreamZip` with `LegacyZip` should be able to decompress *any* old ARC or ZIP archive, so test it out with the new `--arc` and `--zip` options in the [DiskImage](https://github.com/jeffpar/pcjs/tree/master/tools/diskimage) utility, and if you find one that doesn't work, [let me know](mailto:Jeff@pcjs.org).
 
-Last but not least, I've also added a [BASIC Conversion Utility](/tools/bascon/) page that loads [BASConvert](https://github.com/jeffpar/pcjs/tree/master/tools/modules/bascon.js) in your web browser.  It should be able to convert any old IBM PC BASIC file to plain text, but again, if you run into any interesting discrepancies, [let me know](mailto:Jeff@pcjs.org).
+Last but not least, I've also added a [BASIC Conversion Utility](/tools/bascon/) page that loads [BASConvert](https://github.com/jeffpar/pcjs/tree/master/tools/bascon/bascon.js) in your web browser.  It should be able to convert any old IBM PC BASIC file to plain text, but again, if you run into any interesting discrepancies, [let me know](mailto:Jeff@pcjs.org).

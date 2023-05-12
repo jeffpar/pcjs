@@ -13,7 +13,7 @@ import crypto     from "crypto";
 import glob       from "glob";
 import path       from "path";
 import got        from "got";
-import BASConvert from "../modules/bascon.js";
+import BASConvert from "../bascon/bascon.js";
 import PCJSLib    from "../modules/pcjslib.js";
 import StreamZip  from "../modules/streamzip.js";
 // import StreamZip  from "node-stream-zip";
