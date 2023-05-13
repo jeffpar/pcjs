@@ -753,7 +753,7 @@ function processDisk(di, diskFile, argv, diskette)
             let extractFolder = (typeof argv['extract'] != "string")? di.getName() : "";
             if (extractFolder || name == argv['extract']) {
                 let fSuccess = false;
-                if (argv['collection']) {
+                if (argv['collection'] && !extractDir) {
                     extractFolder = getFullPath(path.join(path.dirname(diskFile), "archive", extractFolder));
                     if (diskFile.indexOf("/private") == 0 && diskFile.indexOf("/disks") > 0) {
                         extractFolder = extractFolder.replace("/disks/archive", "/archive");
