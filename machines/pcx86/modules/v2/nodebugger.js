@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Defines from "./defines.js";
+import PCx86 from "./pcx86.js";
 
 /*
  * WARNING: DEBUGGER needs to accurately reflect whether or not the Debugger component is (or will be) loaded.
@@ -27,4 +27,4 @@ import Defines from "./defines.js";
  * (see the calls to Web.getURLParm()), we can modify globals directly, because this file is not compiled by the
  * Closure Compiler; it is dynamically added to pages by the Node web server only as needed.
  */
-Defines.disableDebugger();
+PCx86.disableDebugger();

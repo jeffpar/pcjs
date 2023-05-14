@@ -8,7 +8,6 @@
  */
 
 import Interrupts from "./interrupts.js";
-import KbdX86 from "./keyboard.js";
 import Messages from "./messages.js";
 import X86 from "./x86.js";
 
@@ -18,8 +17,7 @@ import Str from "../../../modules/v2/strlib.js";
 import Usr from "../../../modules/v2/usrlib.js";
 import Web from "../../../modules/v2/weblib.js";
 
-import { APPCLASS, BACKTRACK, COMPILED, CSSCLASS, DEBUGGER, DESKPRO386 } from "./defines.js";
-import { DEBUG, MAXDEBUG } from "../../../modules/v2/defines.js";
+import { APPCLASS, BACKTRACK, COMPILED, CSSCLASS, DEBUG, DEBUGGER, DESKPRO386, MAXDEBUG } from "./pcx86.js";
 
 /**
  * @typedef {Object} Timer

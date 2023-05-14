@@ -18,8 +18,7 @@ import UserAPI from "../../../modules/v2/userapi.js";
 import Usr from "../../../modules/v2/usrlib.js";
 import Web from "../../../modules/v2/weblib.js";
 
-import { APPCLASS, APPNAME, PREFETCH, TYPEDARRAYS } from "./defines.js";
-import { APPVERSION, DEBUG, COPYRIGHT, LICENSE } from "../../../modules/v2/defines.js";
+import { APPCLASS, APPNAME, APPVERSION, DEBUG, COPYRIGHT, LICENSE, PREFETCH, TYPEDARRAYS } from "./pcx86.js";
 
 /**
  * class Computer
