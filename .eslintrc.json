@@ -4,6 +4,7 @@
     "commonjs": true,
     "es6": true
   },
+  "ignorePatterns": ["_site/**/*.js", "disks/**/*.js", "documents/**/*.js"],
   "extends": "eslint:recommended",
   "globals": {
     "Buffer": true,
