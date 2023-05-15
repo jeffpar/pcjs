@@ -1,7 +1,7 @@
 "use strict";
 
 /**
- * @copyright https://www.pcjs.org/modules/defs.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/defs.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -67,7 +67,6 @@ const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
  * @class {Defs}
  */
 class Defs {}
-
 
 Defs.COMMAND    = COMMAND;
 Defs.COMPILED   = COMPILED;
@@ -153,7 +152,7 @@ Defs.CLASSES = {};
 Defs.CLASSES["Defs"] = Defs;
 
 /**
- * @copyright https://www.pcjs.org/modules/numio.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/numio.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -754,7 +753,7 @@ NumIO.TWO_POW32 = Math.pow(2, 32);
 NumIO.CLASSES["NumIO"] = NumIO;
 
 /**
- * @copyright https://www.pcjs.org/modules/stdio.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/stdio.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {Function} */

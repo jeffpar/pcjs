@@ -204,7 +204,8 @@ class ROMx86 extends Component {
                 let width = rom['width'];
                 let values = rom['values'];
                 let littleEndian = (rom['littleEndian'] !== false);
-                if (!width) {
+                if (!width || !values) {
+                    width = 0;
                     if ((values = rom['bytes'])) {
                         width = 8;
                     }

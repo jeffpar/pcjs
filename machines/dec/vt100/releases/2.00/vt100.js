@@ -1,7 +1,7 @@
 (function(){/*
- https://www.pcjs.org/modules/defs.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/numio.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/stdio.js (C) 2012-2023 Jeff Parsons
+ https://www.pcjs.org/modules/v3/defs.js (C) 2012-2023 Jeff Parsons
+ https://www.pcjs.org/modules/v3/numio.js (C) 2012-2023 Jeff Parsons
+ https://www.pcjs.org/modules/v3/stdio.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v3/webio.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v3/device.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v3/input.js (C) 2012-2023 Jeff Parsons

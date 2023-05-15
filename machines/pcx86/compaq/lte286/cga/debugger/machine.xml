@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet type="text/xsl" href="/machines/pcx86/xsl/machine.xsl"?>
-<machine id="compaq-lte286-640k" type="pcx86" border="1" pos="center" background="default">
+<machine id="compaq-lte286-640k" type="pcx86" border="1" pos="center" uncompiled="true" background="default">
 	<name pos="center">COMPAQ LTE/286, 640Kb RAM</name>
 	<computer id="compaq-lte286-640k" name="COMPAQ LTE/286" buswidth="24"/>
 	<cpu id="cpu286" model="80286" cycles="12000000"/>

@@ -15,6 +15,8 @@ machines:
 
 The LTE/286 came standard with the 12Mhz 80C286 cpu, 640Kb internal RAM and a 1.44 Mb floppy drive. The three basic configurations were: Model 1: no internal hard drive, Model 20: w/internal Type 54 20Mb hard drive, and Model 40: w/internal Type 53 40Mb hard drive.  Options included a 80C287 FPU, 1/2/4 Mb expandable memory and various external storage and peripherals. Supported operating systems are Compaq MS-DOS 3 and 4.
 
+{% include machine.html id="compaq-lte286-640k" %}
+
 [Link to Overclockers Review](https://www.overclockers.com/compaq-lte-286-model-40/)
 
 Emulated Configurations ([ROM REV B.1](/machines/pcx86/compaq/lte286/rom/)):
