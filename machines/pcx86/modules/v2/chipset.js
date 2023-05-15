@@ -10,13 +10,11 @@
 import Interrupts from "./interrupts.js";
 import Messages from "./messages.js";
 import X86 from "./x86.js";
-
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Usr from "../../../modules/v2/usrlib.js";
 import Web from "../../../modules/v2/weblib.js";
-
 import { APPCLASS, BACKTRACK, COMPILED, CSSCLASS, DEBUG, DEBUGGER, DESKPRO386, MAXDEBUG } from "./pcx86.js";
 
 /**

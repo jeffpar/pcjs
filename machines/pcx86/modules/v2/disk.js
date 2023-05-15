@@ -8,13 +8,11 @@
  */
 
 import Messages from "./messages.js";
-
 import Component from "../../../modules/v2/component.js";
 import DiskAPI from "../../../modules/v2/diskapi.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-
 import { BACKTRACK, DEBUG, SYMBOLS } from "./pcx86.js";
 
 /*

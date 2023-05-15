@@ -12,12 +12,10 @@ import MemoryX86 from "./memory.js";
 import Messages from "./messages.js";
 import SegX86 from "./segx86.js";
 import X86 from "./x86.js";
-
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-
 import { APPCLASS, BACKTRACK, BUGS_8086, DEBUG, DEBUGGER, I386, MAXDEBUG, PAGEBLOCKS, PREFETCH } from "./pcx86.js";
 
 /**

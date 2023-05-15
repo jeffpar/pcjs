@@ -10,14 +10,12 @@
 import BusX86 from "./bus.js";
 import FPUx86 from "./fpux86.js";
 import Messages from "./messages.js";
-
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import UserAPI from "../../../modules/v2/userapi.js";
 import Usr from "../../../modules/v2/usrlib.js";
 import Web from "../../../modules/v2/weblib.js";
-
 import { APPCLASS, APPNAME, APPVERSION, DEBUG, COPYRIGHT, LICENSE, PREFETCH, TYPEDARRAYS } from "./pcx86.js";
 
 /**

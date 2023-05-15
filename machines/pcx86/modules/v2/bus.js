@@ -9,12 +9,10 @@
 
 import MemoryX86 from "./memory.js";
 import Messages from "./messages.js";
-
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Usr from "../../../modules/v2/usrlib.js";
-
 import { BACKTRACK, DEBUGGER, MAXDEBUG, PAGEBLOCKS } from "./pcx86.js";
 
 /**

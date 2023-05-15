@@ -8,10 +8,8 @@
  */
 
 import Messages from "./messages.js";
-
-import Str from "../../../modules/v2/strlib.js";
 import Component from "../../../modules/v2/component.js";
-
+import Str from "../../../modules/v2/strlib.js";
 import { DEBUG, DEBUGGER, MAXDEBUG } from "./pcx86.js";
 
 /**

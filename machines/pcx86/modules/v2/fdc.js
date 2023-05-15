@@ -11,15 +11,12 @@ import ChipSet from "./chipset.js";
 import Disk from "./disk.js";
 import Messages from "./messages.js";
 import Panel from "./panel.js";
-
+import JSONLib from "../../modules/jsonlib.js";
 import Component from "../../../modules/v2/component.js";
 import DiskAPI from "../../../modules/v2/diskapi.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-
-import JSONLib from "../../modules/jsonlib.js";
-
 import { APPCLASS, DEBUG, MAXDEBUG } from "./pcx86.js";
 
 /*
