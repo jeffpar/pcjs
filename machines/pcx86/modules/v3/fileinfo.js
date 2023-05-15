@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Device from "../../modules/device.js";
+import Device from "../../../modules/v3/device.js";
 import DiskInfo from "./diskinfo.js";
 
 /**

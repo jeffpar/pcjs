@@ -30,24 +30,24 @@ export default class DataBuffer {
      * NOTE: You will NOT find all the methods of the Buffer class implemented here; only the ones we actually use.
      *
      * @this {DataBuffer}
-     * @param {Array|ArrayBuffer|Buffer|DataBuffer|number|string} [init]
+     * @param {*} [init]
      * @param {number} [start]
      * @param {number} [end]
      */
     constructor(init = 0, start, end)
     {
-        this.node = (typeof window == "undefined");
+        this.node = (typeof Buffer != "undefined");
         if (typeof init == "number") {
             this.new(init);
         }
         else if (this.node) {
-            if (init instanceof Buffer) {
+            if (init.isBuffer()) {
                 this.buffer = init;
             }
             else if (init instanceof DataBuffer) {
                 this.buffer = init.buffer.slice(start, end);
             }
-            else if (this.node) {
+            else {
                 this.buffer = Buffer.from(init);
             }
             this.length = this.buffer.length;
@@ -92,7 +92,7 @@ export default class DataBuffer {
         if (this.node) {
             return !Buffer.compare(this.buffer, dbTarget.buffer);
         }
-        return undefined;       // TODO
+        return false;   // TODO
     }
 
     /**
@@ -151,7 +151,7 @@ export default class DataBuffer {
      */
     new(size)
     {
-        if (this.node) {
+        if (this.node && Buffer.alloc) {
             this.buffer = Buffer.alloc(size);
             this.length = size;
         } else {

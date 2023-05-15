@@ -8,7 +8,7 @@
  */
 
 import Web from "../../../modules/v2/weblib.js";
-import Defines from "../../../modules/v2/defines.js";
+import { APPVERSION, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, LICENSE, MAXDEBUG, PRIVATE, RS232, SITEURL } from "../../../modules/v2/defines.js";
 
 /**
  * @define {string}
@@ -19,8 +19,6 @@ const APPCLASS = "pcx86";               // this @define is the default applicati
  * @define {string}
  */
 const APPNAME = "PCx86";                // this @define is the default application name (eg, "PCx86", "C1Pjs")
-
-const APPVERSION = Defines.APPVERSION;
 
 /**
  * BACKTRACK enables backtracking: a mechanism that allows us to tag every byte of incoming data and follow the
@@ -34,7 +32,7 @@ const APPVERSION = Defines.APPVERSION;
  *
  * @define {boolean}
  */
-var BACKTRACK = Defines.DEBUG && DEBUGGER;
+var BACKTRACK = DEBUG && DEBUGGER;
 
 /**
  * BUGS_8086 enables support for known 8086 bugs.  It's turned off by default, because 1) it adds overhead, and
@@ -59,36 +57,6 @@ const BUGS_8086 = false;
  */
 const BYTEARRAYS = false;
 
-const COMPILED = Defines.COMPILED;
-
-const COPYRIGHT = Defines.COPYRIGHT;
-
-const CSSCLASS = Defines.CSSCLASS;
-
-const DEBUG = Defines.DEBUG;
-
-/**
- * WARNING: DEBUGGER needs to accurately reflect whether or not the Debugger component is (or will be) loaded.
- * In the compiled case, we rely on the Closure Compiler to override DEBUGGER as appropriate.  When it's *false*,
- * nearly all of debugger.js will be conditionally removed by the compiler, reducing it to little more than a
- * "type skeleton", which also solves some type-related warnings we would otherwise have if we tried to remove
- * debugger.js from the compilation process altogether.
- *
- * However, when we're in "development mode" and running uncompiled code in debugger-less configurations,
- * I would like to skip loading debugger.js altogether.  When doing that, we must ALSO arrange for an additional file
- * (nodebugger.js) to be loaded immediately after this file, which *explicitly* overrides DEBUGGER with *false*.
- *
- * @define {boolean}
- */
-var DEBUGGER = Defines.DEBUGGER;        // this @define is overridden by the Closure Compiler to remove Debugger-related support
-
-/**
- * DESKPRO386 enables COMPAQ DeskPro 386 support.  Requires I386 support as well (duh).
- *
- * @define {boolean}
- */
-const DESKPRO386 = I386;
-
 /**
  * I386 enables 80386 support.  My preference continues to be one "binary" that supports all implemented CPUs, but
  * I'm providing this to enable a slimmed-down binary, at least until 80386 support is actually finished; at the
@@ -98,9 +66,12 @@ const DESKPRO386 = I386;
  */
 const I386 = true;
 
-const LICENSE = Defines.LICENSE;
-
-const MAXDEBUG = Defines.MAXDEBUG;
+/**
+ * DESKPRO386 enables COMPAQ DeskPro 386 support.  Requires I386 support as well (duh).
+ *
+ * @define {boolean}
+ */
+const DESKPRO386 = I386;
 
 /**
  * PAGEBLOCKS enables 80386 paging support with assistance from the Bus component.  This affects how the Bus component
@@ -125,12 +96,6 @@ const PAGEBLOCKS = I386;
  */
 const PREFETCH = false;
 
-const PRIVATE = Defines.PRIVATE;
-
-const RS232 = Defines.RS232;
-
-const SITEURL = Defines.SITEURL;
-
 /**
  * SYMBOLS enables automatic symbol generation from known DLL, EXE and VXD file formats.  It's currently
  * enabled whenever DEBUGGER support is enabled.
@@ -147,7 +112,7 @@ var SYMBOLS = DEBUGGER;
  *
  * @define {boolean}
  */
-const TYPEDARRAYS = (typeof ArrayBuffer !== 'undefined');
+const TYPEDARRAYS = true; // (typeof ArrayBuffer !== 'undefined');
 
 /*
  * If this is DEBUG (eg, un-COMPILED) code, then allow the user to override BACKTRACK with a "backtrack=false" embedded in
@@ -158,22 +123,12 @@ const TYPEDARRAYS = (typeof ArrayBuffer !== 'undefined');
  *
  * Deal with Web.getURLParm("debug") in /modules/shared/lib/weblib.js at the same time.
  */
-if (DEBUG && window) {
-    let sBackTrack = Web.getURLParm("backtrack");
-    if (sBackTrack == "false") {
-        BACKTRACK = false;
-    }
-}
 
-/**
- * @class {PCx86}
- */
-export default class PCx86 {
-
-    disableDebugger()
-    {
-        DEBUGGER = BACKTRACK = SYMBOLS = false;
-    }
-}
+// if (DEBUG && window) {
+//     let sBackTrack = Web.getURLParm("backtrack");
+//     if (sBackTrack == "false") {
+//         // BACKTRACK = false;
+//     }
+// }
 
 export { APPCLASS, APPNAME, APPVERSION, BACKTRACK, BUGS_8086, BYTEARRAYS, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, DESKPRO386, I386, LICENSE, MAXDEBUG, PAGEBLOCKS, PREFETCH, PRIVATE, RS232, SITEURL, SYMBOLS, TYPEDARRAYS }

@@ -9,7 +9,7 @@
 
 import CPUx86 from "./cpux86.js";
 import CharSet from "./charset.js";
-import Device from "../../modules/device.js";
+import Device from "../../../modules/v3/device.js";
 import FileInfo from "./fileinfo.js";
 
 /**

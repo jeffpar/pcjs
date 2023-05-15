@@ -1,5 +1,5 @@
 /**
- * @fileoverview PCjs Browser Keyboard Constants
+ * @fileoverview Defines browser keyboard constants
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2023 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -7,8 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-export default class Keys {
-
+const Keys = {
     /*
      * Keys and/or key combinations that generate common ASCII codes.
      *
@@ -20,7 +19,7 @@ export default class Keys {
      * would be to add mnemonics for all of them, not just the non-printable ones (eg, SPACE instead
      * of ' ', AMP instead of '&', etc.)
      */
-    static ASCII = {
+    ASCII: {
           BREAK:  0, CTRL_A:  1, CTRL_B:  2, CTRL_C:  3, CTRL_D:  4, CTRL_E:  5, CTRL_F:  6, CTRL_G:  7,
          CTRL_H:  8, CTRL_I:  9, CTRL_J: 10, CTRL_K: 11, CTRL_L: 12, CTRL_M: 13, CTRL_N: 14, CTRL_O: 15,
          CTRL_P: 16, CTRL_Q: 17, CTRL_R: 18, CTRL_S: 19, CTRL_T: 20, CTRL_U: 21, CTRL_V: 22, CTRL_W: 23,
@@ -37,8 +36,7 @@ export default class Keys {
              h:  104,    i: 105,     j: 106,     k: 107,     l: 108,     m: 109,     n: 110,     o: 111,
              p:  112,    q: 113,     r: 114,     s: 115,     t: 116,     u: 117,     v: 118,     w: 119,
              x:  120,    y: 121,     z: 122,    '{':123,    '|':124,    '}':125,    '~':126,   DEL: 127
-    };
-
+    },
     /*
      * Browser keyCodes we must pay particular attention to.  For the most part, these are non-alphanumeric
      * or function keys, some which may require special treatment (eg, preventDefault() if returning false on
@@ -49,7 +47,7 @@ export default class Keys {
      * Most of these represent non-ASCII keys (eg, the LEFT arrow key), yet for some reason, browsers defined
      * them using ASCII codes (eg, the LEFT arrow key uses the ASCII code for '%' or 37).
      */
-    static KEYCODE = {
+    KEYCODE: {
         /* 0x08 */ BS:          8,          // BACKSPACE        (ASCII.CTRL_H)
         /* 0x09 */ TAB:         9,          // TAB              (ASCII.CTRL_I)
         /* 0x0A */ LF:          10,         // LINE-FEED        (ASCII.CTRL_J) (Some Windows-based browsers used to generate this via CTRL-ENTER)
@@ -165,94 +163,94 @@ export default class Keys {
         // The actual values are for internal use only and merely need to be unique and used consistently.
         //
         FAKE:                   4000
-    };
-
+    },
     /*
      * The set of values that a browser may store in the 'location' property of a keyboard event object
      * which we also support.
      */
-    static LOCATION = {
+    LOCATION: {
         LEFT:                   1,
         RIGHT:                  2,
         NUMPAD:                 3
-    };
+    }
+};
 
-    /*
-    * Table to map new browser keyboard event "code" property values to their old KEYCODE values.
-    */
-    static CODEKEY = {
-        "Comma":            Keys.KEYCODE.COMMA,
-        "Period":           Keys.KEYCODE.PERIOD,
-        "Semicolon":        Keys.KEYCODE.SEMI,
-        "Quote":            Keys.KEYCODE.QUOTE,
-        "BracketLeft":      Keys.KEYCODE.LBRACK,
-        "BracketRight":     Keys.KEYCODE.RBRACK,
-        "Backquote":        Keys.KEYCODE.BQUOTE,
-        "Backslash":        Keys.KEYCODE.BSLASH,
-        "Minus":            Keys.KEYCODE.DASH,
-        "Equal":            Keys.KEYCODE.EQUALS,
-        "AltLeft":          Keys.KEYCODE.ALT,
-        "AltRight":         Keys.KEYCODE.ALT,
-        "CapsLock":         Keys.KEYCODE.CAPS_LOCK,
-        "ControlLeft":      Keys.KEYCODE.CTRL,
-        "ControlRight":     Keys.KEYCODE.CTRL,
-        "OSLeft":           Keys.KEYCODE.CMD,
-        "OSRight":          Keys.KEYCODE.RCMD,
-        "ShiftLeft":        Keys.KEYCODE.SHIFT,
-        "ShiftRight":       Keys.KEYCODE.SHIFT,
-        "Enter":            Keys.KEYCODE.CR,
-        "Space":            Keys.KEYCODE.SPACE,
-        "Tab":              Keys.KEYCODE.TAB,
-        "Delete":           Keys.KEYCODE.DEL,
-        "End":              Keys.KEYCODE.END,
-        "Home":             Keys.KEYCODE.HOME,
-        "Insert":           Keys.KEYCODE.INS,
-        "PageDown":         Keys.KEYCODE.PGDN,
-        "PageUp":           Keys.KEYCODE.PGUP,
-        "ArrowDown":        Keys.KEYCODE.DOWN,
-        "ArrowLeft":        Keys.KEYCODE.LEFT,
-        "ArrowRight":       Keys.KEYCODE.RIGHT,
-        "ArrowUp":          Keys.KEYCODE.UP,
-        "Escape":           Keys.KEYCODE.ESC,
-        "PrintScreen":      Keys.KEYCODE.PRTSC,
-        "ScrollLock":       Keys.KEYCODE.SCROLL_LOCK,
-        "Pause":            Keys.KEYCODE.PAUSE,
-        "F1":               Keys.KEYCODE.F1,
-        "F2":               Keys.KEYCODE.F2,
-        "F3":               Keys.KEYCODE.F3,
-        "F4":               Keys.KEYCODE.F4,
-        "F5":               Keys.KEYCODE.F5,
-        "F6":               Keys.KEYCODE.F6,
-        "F7":               Keys.KEYCODE.F7,
-        "F8":               Keys.KEYCODE.F8,
-        "F9":               Keys.KEYCODE.F9,
-        "F10":              Keys.KEYCODE.F10,
-        "F11":              Keys.KEYCODE.F11,
-        "F12":              Keys.KEYCODE.F12,
-        "NumLock":          Keys.KEYCODE.NUM_LOCK,
-        "Numpad0":          Keys.KEYCODE.NUM_0,
-        "Numpad1":          Keys.KEYCODE.NUM_1,
-        "Numpad2":          Keys.KEYCODE.NUM_2,
-        "Numpad3":          Keys.KEYCODE.NUM_3,
-        "Numpad4":          Keys.KEYCODE.NUM_4,
-        "Numpad5":          Keys.KEYCODE.NUM_5,
-        "Numpad6":          Keys.KEYCODE.NUM_6,
-        "Numpad7":          Keys.KEYCODE.NUM_7,
-        "Numpad8":          Keys.KEYCODE.NUM_8,
-        "Numpad9":          Keys.KEYCODE.NUM_9,
-        "NumpadAdd":        Keys.KEYCODE.NUM_ADD,
-        "NumpadSubtract":   Keys.KEYCODE.NUM_SUB,
-        "NumpadMultiply":   Keys.KEYCODE.NUM_MUL,
-        "NumpadDivide":     Keys.KEYCODE.NUM_DIV,
-        "NumpadDecimal":    Keys.KEYCODE.NUM_DEL,
-        "NumpadEnter":      Keys.KEYCODE.NUM_CR
-    };
-}
+/*
+ * Table to map new browser keyboard event "code" property values to their old KEYCODE values.
+ */
+Keys.CODEKEY = {
+    "Comma":            Keys.KEYCODE.COMMA,
+    "Period":           Keys.KEYCODE.PERIOD,
+    "Semicolon":        Keys.KEYCODE.SEMI,
+    "Quote":            Keys.KEYCODE.QUOTE,
+    "BracketLeft":      Keys.KEYCODE.LBRACK,
+    "BracketRight":     Keys.KEYCODE.RBRACK,
+    "Backquote":        Keys.KEYCODE.BQUOTE,
+    "Backslash":        Keys.KEYCODE.BSLASH,
+    "Minus":            Keys.KEYCODE.DASH,
+    "Equal":            Keys.KEYCODE.EQUALS,
+    "AltLeft":          Keys.KEYCODE.ALT,
+    "AltRight":         Keys.KEYCODE.ALT,
+    "CapsLock":         Keys.KEYCODE.CAPS_LOCK,
+    "ControlLeft":      Keys.KEYCODE.CTRL,
+    "ControlRight":     Keys.KEYCODE.CTRL,
+    "OSLeft":           Keys.KEYCODE.CMD,
+    "OSRight":          Keys.KEYCODE.RCMD,
+    "ShiftLeft":        Keys.KEYCODE.SHIFT,
+    "ShiftRight":       Keys.KEYCODE.SHIFT,
+    "Enter":            Keys.KEYCODE.CR,
+    "Space":            Keys.KEYCODE.SPACE,
+    "Tab":              Keys.KEYCODE.TAB,
+    "Delete":           Keys.KEYCODE.DEL,
+    "End":              Keys.KEYCODE.END,
+    "Home":             Keys.KEYCODE.HOME,
+    "Insert":           Keys.KEYCODE.INS,
+    "PageDown":         Keys.KEYCODE.PGDN,
+    "PageUp":           Keys.KEYCODE.PGUP,
+    "ArrowDown":        Keys.KEYCODE.DOWN,
+    "ArrowLeft":        Keys.KEYCODE.LEFT,
+    "ArrowRight":       Keys.KEYCODE.RIGHT,
+    "ArrowUp":          Keys.KEYCODE.UP,
+    "Escape":           Keys.KEYCODE.ESC,
+    "PrintScreen":      Keys.KEYCODE.PRTSC,
+    "ScrollLock":       Keys.KEYCODE.SCROLL_LOCK,
+    "Pause":            Keys.KEYCODE.PAUSE,
+    "F1":               Keys.KEYCODE.F1,
+    "F2":               Keys.KEYCODE.F2,
+    "F3":               Keys.KEYCODE.F3,
+    "F4":               Keys.KEYCODE.F4,
+    "F5":               Keys.KEYCODE.F5,
+    "F6":               Keys.KEYCODE.F6,
+    "F7":               Keys.KEYCODE.F7,
+    "F8":               Keys.KEYCODE.F8,
+    "F9":               Keys.KEYCODE.F9,
+    "F10":              Keys.KEYCODE.F10,
+    "F11":              Keys.KEYCODE.F11,
+    "F12":              Keys.KEYCODE.F12,
+    "NumLock":          Keys.KEYCODE.NUM_LOCK,
+    "Numpad0":          Keys.KEYCODE.NUM_0,
+    "Numpad1":          Keys.KEYCODE.NUM_1,
+    "Numpad2":          Keys.KEYCODE.NUM_2,
+    "Numpad3":          Keys.KEYCODE.NUM_3,
+    "Numpad4":          Keys.KEYCODE.NUM_4,
+    "Numpad5":          Keys.KEYCODE.NUM_5,
+    "Numpad6":          Keys.KEYCODE.NUM_6,
+    "Numpad7":          Keys.KEYCODE.NUM_7,
+    "Numpad8":          Keys.KEYCODE.NUM_8,
+    "Numpad9":          Keys.KEYCODE.NUM_9,
+    "NumpadAdd":        Keys.KEYCODE.NUM_ADD,
+    "NumpadSubtract":   Keys.KEYCODE.NUM_SUB,
+    "NumpadMultiply":   Keys.KEYCODE.NUM_MUL,
+    "NumpadDivide":     Keys.KEYCODE.NUM_DIV,
+    "NumpadDecimal":    Keys.KEYCODE.NUM_DEL,
+    "NumpadEnter":      Keys.KEYCODE.NUM_CR
+};
 
 /*
  * Check the event object's 'location' property for a non-zero value for the following ONRIGHT keys.
  */
 Keys.KEYCODE.NUM_CR = Keys.KEYCODE.CR + Keys.KEYCODE.ONRIGHT;
+
 
 /*
  * Maps Firefox keyCodes to their more common keyCode counterparts; a number of entries in this table
@@ -261,62 +259,64 @@ Keys.KEYCODE.NUM_CR = Keys.KEYCODE.CR + Keys.KEYCODE.ONRIGHT;
  * browser-specific checks, it's not safe to perform all the mappings shown below.
  */
 Keys.FF_KEYCODES = {};
-Keys.FF_KEYCODES[Keys.KEYCODE.FF_SEMI]          = Keys.KEYCODE.SEMI;    //  59 -> 186
-Keys.FF_KEYCODES[Keys.KEYCODE.FF_EQUALS]        = Keys.KEYCODE.EQUALS;  //  61 -> 187
-Keys.FF_KEYCODES[Keys.KEYCODE.FF_DASH]          = Keys.KEYCODE.DASH;    // 173 -> 189
-Keys.FF_KEYCODES[Keys.KEYCODE.FF_CMD]           = Keys.KEYCODE.CMD;     // 224 -> 91
-// Keys.FF_KEYCODES[Keys.KEYCODE.FF_COMMA]      = Keys.KEYCODE.COMMA;   //  44 -> 188
-// Keys.FF_KEYCODES[Keys.KEYCODE.FF_PERIOD]     = Keys.KEYCODE.PERIOD;  //  46 -> 190
-// Keys.FF_KEYCODES[Keys.KEYCODE.FF_SLASH]      = Keys.KEYCODE.SLASH;   //  47 -> 191
-// Keys.FF_KEYCODES[Keys.KEYCODE.FF_BQUOTE]     = Keys.KEYCODE.BQUOTE;  //  96 -> 192
-// Keys.FF_KEYCODES[Keys.KEYCODE.FF_LBRACK      = Keys.KEYCODE.LBRACK;  //  91 -> 219
-// Keys.FF_KEYCODES[Keys.KEYCODE.FF_BSLASH]     = Keys.KEYCODE.BSLASH;  //  92 -> 220
-// Keys.FF_KEYCODES[Keys.KEYCODE.FF_RBRACK]     = Keys.KEYCODE.RBRACK;  //  93 -> 221
-// Keys.FF_KEYCODES[Keys.KEYCODE.FF_QUOTE]      = Keys.KEYCODE.QUOTE;   //  39 -> 222
+Keys.FF_KEYCODES[Keys.KEYCODE.FF_SEMI]   = Keys.KEYCODE.SEMI;           //  59 -> 186
+Keys.FF_KEYCODES[Keys.KEYCODE.FF_EQUALS] = Keys.KEYCODE.EQUALS;         //  61 -> 187
+Keys.FF_KEYCODES[Keys.KEYCODE.FF_DASH]   = Keys.KEYCODE.DASH;           // 173 -> 189
+Keys.FF_KEYCODES[Keys.KEYCODE.FF_CMD]    = Keys.KEYCODE.CMD;            // 224 -> 91
+// Keys.FF_KEYCODES[Keys.KEYCODE.FF_COMMA]  = Keys.KEYCODE.COMMA;       //  44 -> 188
+// Keys.FF_KEYCODES[Keys.KEYCODE.FF_PERIOD] = Keys.KEYCODE.PERIOD;      //  46 -> 190
+// Keys.FF_KEYCODES[Keys.KEYCODE.FF_SLASH]  = Keys.KEYCODE.SLASH;       //  47 -> 191
+// Keys.FF_KEYCODES[Keys.KEYCODE.FF_BQUOTE] = Keys.KEYCODE.BQUOTE;      //  96 -> 192
+// Keys.FF_KEYCODES[Keys.KEYCODE.FF_LBRACK  = Keys.KEYCODE.LBRACK;      //  91 -> 219
+// Keys.FF_KEYCODES[Keys.KEYCODE.FF_BSLASH] = Keys.KEYCODE.BSLASH;      //  92 -> 220
+// Keys.FF_KEYCODES[Keys.KEYCODE.FF_RBRACK] = Keys.KEYCODE.RBRACK;      //  93 -> 221
+// Keys.FF_KEYCODES[Keys.KEYCODE.FF_QUOTE]  = Keys.KEYCODE.QUOTE;       //  39 -> 222
 
 /*
  * Maps non-ASCII keyCodes to their ASCII counterparts
  */
 Keys.NONASCII_KEYCODES = {};
-Keys.NONASCII_KEYCODES[Keys.KEYCODE.FF_DASH]    = Keys.ASCII['-'];      // 173 -> 45
-Keys.NONASCII_KEYCODES[Keys.KEYCODE.SEMI]       = Keys.ASCII[';'];      // 186 -> 59
-Keys.NONASCII_KEYCODES[Keys.KEYCODE.EQUALS]     = Keys.ASCII['='];      // 187 -> 61
-Keys.NONASCII_KEYCODES[Keys.KEYCODE.DASH]       = Keys.ASCII['-'];      // 189 -> 45
-Keys.NONASCII_KEYCODES[Keys.KEYCODE.COMMA]      = Keys.ASCII[','];      // 188 -> 44
-Keys.NONASCII_KEYCODES[Keys.KEYCODE.PERIOD]     = Keys.ASCII['.'];      // 190 -> 46
-Keys.NONASCII_KEYCODES[Keys.KEYCODE.SLASH]      = Keys.ASCII['/'];      // 191 -> 47
-Keys.NONASCII_KEYCODES[Keys.KEYCODE.BQUOTE]     = Keys.ASCII['`'];      // 192 -> 96
-Keys.NONASCII_KEYCODES[Keys.KEYCODE.LBRACK]     = Keys.ASCII['['];      // 219 -> 91
-Keys.NONASCII_KEYCODES[Keys.KEYCODE.BSLASH]     = Keys.ASCII['\\'];     // 220 -> 92
-Keys.NONASCII_KEYCODES[Keys.KEYCODE.RBRACK]     = Keys.ASCII[']'];      // 221 -> 93
-Keys.NONASCII_KEYCODES[Keys.KEYCODE.QUOTE]      = Keys.ASCII["'"];      // 222 -> 39
+Keys.NONASCII_KEYCODES[Keys.KEYCODE.FF_DASH] = Keys.ASCII['-'];         // 173 -> 45
+Keys.NONASCII_KEYCODES[Keys.KEYCODE.SEMI]    = Keys.ASCII[';'];         // 186 -> 59
+Keys.NONASCII_KEYCODES[Keys.KEYCODE.EQUALS]  = Keys.ASCII['='];         // 187 -> 61
+Keys.NONASCII_KEYCODES[Keys.KEYCODE.DASH]    = Keys.ASCII['-'];         // 189 -> 45
+Keys.NONASCII_KEYCODES[Keys.KEYCODE.COMMA]   = Keys.ASCII[','];         // 188 -> 44
+Keys.NONASCII_KEYCODES[Keys.KEYCODE.PERIOD]  = Keys.ASCII['.'];         // 190 -> 46
+Keys.NONASCII_KEYCODES[Keys.KEYCODE.SLASH]   = Keys.ASCII['/'];         // 191 -> 47
+Keys.NONASCII_KEYCODES[Keys.KEYCODE.BQUOTE]  = Keys.ASCII['`'];         // 192 -> 96
+Keys.NONASCII_KEYCODES[Keys.KEYCODE.LBRACK]  = Keys.ASCII['['];         // 219 -> 91
+Keys.NONASCII_KEYCODES[Keys.KEYCODE.BSLASH]  = Keys.ASCII['\\'];        // 220 -> 92
+Keys.NONASCII_KEYCODES[Keys.KEYCODE.RBRACK]  = Keys.ASCII[']'];         // 221 -> 93
+Keys.NONASCII_KEYCODES[Keys.KEYCODE.QUOTE]   = Keys.ASCII["'"];         // 222 -> 39
 
 /*
  * Maps unshifted keyCodes to their shifted counterparts; to be used when a shift-key is down.
  * Alphabetic characters are handled in code, since they must also take CAPS_LOCK into consideration.
  */
 Keys.SHIFTED_KEYCODES = {};
-Keys.SHIFTED_KEYCODES[Keys.ASCII['1']]          = Keys.ASCII['!'];
-Keys.SHIFTED_KEYCODES[Keys.ASCII['2']]          = Keys.ASCII['@'];
-Keys.SHIFTED_KEYCODES[Keys.ASCII['3']]          = Keys.ASCII['#'];
-Keys.SHIFTED_KEYCODES[Keys.ASCII['4']]          = Keys.ASCII['$'];
-Keys.SHIFTED_KEYCODES[Keys.ASCII['5']]          = Keys.ASCII['%'];
-Keys.SHIFTED_KEYCODES[Keys.ASCII['6']]          = Keys.ASCII['^'];
-Keys.SHIFTED_KEYCODES[Keys.ASCII['7']]          = Keys.ASCII['&'];
-Keys.SHIFTED_KEYCODES[Keys.ASCII['8']]          = Keys.ASCII['*'];
-Keys.SHIFTED_KEYCODES[Keys.ASCII['9']]          = Keys.ASCII['('];
-Keys.SHIFTED_KEYCODES[Keys.ASCII['0']]          = Keys.ASCII[')'];
-Keys.SHIFTED_KEYCODES[Keys.KEYCODE.SEMI]        = Keys.ASCII[':'];
-Keys.SHIFTED_KEYCODES[Keys.KEYCODE.EQUALS]      = Keys.ASCII['+'];
-Keys.SHIFTED_KEYCODES[Keys.KEYCODE.COMMA]       = Keys.ASCII['<'];
-Keys.SHIFTED_KEYCODES[Keys.KEYCODE.DASH]        = Keys.ASCII['_'];
-Keys.SHIFTED_KEYCODES[Keys.KEYCODE.PERIOD]      = Keys.ASCII['>'];
-Keys.SHIFTED_KEYCODES[Keys.KEYCODE.SLASH]       = Keys.ASCII['?'];
-Keys.SHIFTED_KEYCODES[Keys.KEYCODE.BQUOTE]      = Keys.ASCII['~'];
-Keys.SHIFTED_KEYCODES[Keys.KEYCODE.LBRACK]      = Keys.ASCII['{'];
-Keys.SHIFTED_KEYCODES[Keys.KEYCODE.BSLASH]      = Keys.ASCII['|'];
-Keys.SHIFTED_KEYCODES[Keys.KEYCODE.RBRACK]      = Keys.ASCII['}'];
-Keys.SHIFTED_KEYCODES[Keys.KEYCODE.QUOTE]       = Keys.ASCII['"'];
-Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_DASH]     = Keys.ASCII['_'];
-Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_EQUALS]   = Keys.ASCII['+'];
-Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_SEMI]     = Keys.ASCII[':'];
+Keys.SHIFTED_KEYCODES[Keys.ASCII['1']]     = Keys.ASCII['!'];
+Keys.SHIFTED_KEYCODES[Keys.ASCII['2']]     = Keys.ASCII['@'];
+Keys.SHIFTED_KEYCODES[Keys.ASCII['3']]     = Keys.ASCII['#'];
+Keys.SHIFTED_KEYCODES[Keys.ASCII['4']]     = Keys.ASCII['$'];
+Keys.SHIFTED_KEYCODES[Keys.ASCII['5']]     = Keys.ASCII['%'];
+Keys.SHIFTED_KEYCODES[Keys.ASCII['6']]     = Keys.ASCII['^'];
+Keys.SHIFTED_KEYCODES[Keys.ASCII['7']]     = Keys.ASCII['&'];
+Keys.SHIFTED_KEYCODES[Keys.ASCII['8']]     = Keys.ASCII['*'];
+Keys.SHIFTED_KEYCODES[Keys.ASCII['9']]     = Keys.ASCII['('];
+Keys.SHIFTED_KEYCODES[Keys.ASCII['0']]     = Keys.ASCII[')'];
+Keys.SHIFTED_KEYCODES[Keys.KEYCODE.SEMI]   = Keys.ASCII[':'];
+Keys.SHIFTED_KEYCODES[Keys.KEYCODE.EQUALS] = Keys.ASCII['+'];
+Keys.SHIFTED_KEYCODES[Keys.KEYCODE.COMMA]  = Keys.ASCII['<'];
+Keys.SHIFTED_KEYCODES[Keys.KEYCODE.DASH]   = Keys.ASCII['_'];
+Keys.SHIFTED_KEYCODES[Keys.KEYCODE.PERIOD] = Keys.ASCII['>'];
+Keys.SHIFTED_KEYCODES[Keys.KEYCODE.SLASH]  = Keys.ASCII['?'];
+Keys.SHIFTED_KEYCODES[Keys.KEYCODE.BQUOTE] = Keys.ASCII['~'];
+Keys.SHIFTED_KEYCODES[Keys.KEYCODE.LBRACK] = Keys.ASCII['{'];
+Keys.SHIFTED_KEYCODES[Keys.KEYCODE.BSLASH] = Keys.ASCII['|'];
+Keys.SHIFTED_KEYCODES[Keys.KEYCODE.RBRACK] = Keys.ASCII['}'];
+Keys.SHIFTED_KEYCODES[Keys.KEYCODE.QUOTE]  = Keys.ASCII['"'];
+Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_DASH]   = Keys.ASCII['_'];
+Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_EQUALS] = Keys.ASCII['+'];
+Keys.SHIFTED_KEYCODES[Keys.KEYCODE.FF_SEMI]   = Keys.ASCII[':'];
+
+export default Keys;

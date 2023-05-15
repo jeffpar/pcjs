@@ -11,9 +11,9 @@ import fs         from "fs";
 import os         from "os";
 import path       from "path";
 import PCJSLib    from "../modules/pcjslib.js";
-import Device     from "../../machines/modules/device.js";
-import net        from "../../machines/modules/netio.js";
-import str        from "../../machines/shared/lib/strlib.js"
+import Device     from "../../machines/modules/v3/device.js";
+import net        from "../../machines/modules/v3/netio.js";
+import str        from "../../machines/modules/v2/strlib.js"
 
 let device = new Device("node");
 let printf = device.printf.bind(device);

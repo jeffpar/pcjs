@@ -27,4 +27,5 @@ import PCx86 from "./pcx86.js";
  * (see the calls to Web.getURLParm()), we can modify globals directly, because this file is not compiled by the
  * Closure Compiler; it is dynamically added to pages by the Node web server only as needed.
  */
-PCx86.disableDebugger();
+
+// PCx86.disableDebugger();

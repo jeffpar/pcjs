@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import CPU from "../../../modules/cpu.js";
+import CPU from "../../../modules/v3/cpu.js";
 
 /**
  * CPUx86
