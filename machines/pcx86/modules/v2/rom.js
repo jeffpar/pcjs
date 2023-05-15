@@ -15,10 +15,10 @@ import Web from "../../../modules/v2/weblib.js";
 import { APPCLASS, BACKTRACK, DEBUG } from "./pcx86.js";
 
 /**
- * class ROMx86
+ * @class ROMx86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class ROMx86 extends Component {
+export default class ROMx86 extends Component {
     /**
      * ROMx86(parmsROM)
      *
@@ -672,5 +672,3 @@ ROMx86.BIOS = {
  * Initialize all the ROM modules on the page.
  */
 Web.onInit(ROMx86.init);
-
-if (typeof module !== "undefined") module.exports = ROMx86;

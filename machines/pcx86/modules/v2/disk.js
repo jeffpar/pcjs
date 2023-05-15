@@ -228,10 +228,10 @@ import { BACKTRACK, DEBUG, SYMBOLS } from "./pcx86.js";
  */
 
 /**
- * class Disk
+ * @class Disk
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class Disk extends Component {
+export default class Disk extends Component {
     /**
      * Disk(controller, drive, mode)
      *
@@ -2250,5 +2250,3 @@ class FileInfo {
         return sSymbol || this.name + '+' + Str.toHex(off, 0, true);
     }
 }
-
-if (typeof module !== "undefined") module.exports = Disk;

@@ -16,10 +16,10 @@ import Web from "../../../modules/v2/weblib.js";
 import { APPCLASS, COMPILED, DEBUGGER, DESKPRO386, MAXDEBUG, RS232 } from "./pcx86.js";
 
 /**
- * class Mouse
+ * @class Mouse
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class Mouse extends Component {
+export default class Mouse extends Component {
     /**
      * Mouse(parmsMouse)
      *
@@ -963,5 +963,3 @@ Mouse.SERIAL = {
  * Initialize every Mouse module on the page.
  */
 Web.onInit(Mouse.init);
-
-if (typeof module !== "undefined") module.exports = Mouse;

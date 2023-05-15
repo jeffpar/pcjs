@@ -117,7 +117,7 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "IBM PC with MDA [Debugger]",
+      "name": "IBM PC with MDA [Debugger] (Unbundled)",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/debugger/",

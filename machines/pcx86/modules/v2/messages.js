@@ -117,3 +117,5 @@ Messages.CATEGORIES = {
     "halt":     Messages.HALT,
     "buffer":   Messages.BUFFER
 };
+
+export default Messages;

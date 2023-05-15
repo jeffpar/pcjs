@@ -19,7 +19,7 @@ import { BACKTRACK, DEBUGGER, MAXDEBUG, PAGEBLOCKS } from "./pcx86.js";
  * Think of this Controller class definition as an interface definition, implemented by the Video Card
  * class and the RAM CompaqController class.
  *
- * class Controller
+ * @class Controller
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 export class Controller {
@@ -48,10 +48,10 @@ export class Controller {
 }
 
 /**
- * class Bus
+ * @class Bus
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-export class BusX86 extends Component {
+export default class BusX86 extends Component {
     /**
      * BusX86(cpu, dbg)
      *

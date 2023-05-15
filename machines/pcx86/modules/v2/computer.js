@@ -19,10 +19,10 @@ import Web from "../../../modules/v2/weblib.js";
 import { APPCLASS, APPNAME, APPVERSION, DEBUG, COPYRIGHT, LICENSE, PREFETCH, TYPEDARRAYS } from "./pcx86.js";
 
 /**
- * class Computer
+ * @class Computer
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class Computer extends Component {
+export default class Computer extends Component {
     /**
      * Computer(parmsComputer, parmsMachine, fSuspended)
      *
@@ -1935,5 +1935,3 @@ Computer.UPDATES_PER_SECOND = 2;
 Web.onInit(Computer.init);
 Web.onShow(Computer.show);
 Web.onExit(Computer.exit);
-
-if (typeof module !== "undefined") module.exports = Computer;

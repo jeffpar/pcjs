@@ -15,13 +15,7 @@ import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
 import { APPCLASS, COMPILED, DESKPRO386, MAXDEBUG } from "./pcx86.js";
 
-/*
- * class ParallelPort
- * property {number} iAdapter
- * property {number} portBase
- * property {number} nIRQ
- * property {Object} controlBuffer is a DOM element bound to the port (for rudimentary output; see transmitByte())
- *
+/**
  * NOTE: This class declaration started as a way of informing the code inspector of the controlBuffer property,
  * which remained undefined until a setBinding() call set it later, but I've since decided that explicitly
  * initializing such properties in the constructor is a better way to go -- even though it's more code -- because
@@ -30,13 +24,15 @@ import { APPCLASS, COMPILED, DESKPRO386, MAXDEBUG } from "./pcx86.js";
  * Besides, I'm not sure I want to get into documenting every property this way, for this or any/every other class,
  * let alone getting into which ones should be considered private or protected, because PCjs isn't really a library
  * for third-party apps.
- */
-
-/**
- * class ParallelPort
+ *
+ * @class ParallelPort
+ * @property {number} iAdapter
+ * @property {number} portBase
+ * @property {number} nIRQ
+ * @property {Object} controlBuffer is a DOM element bound to the port (for rudimentary output; see transmitByte())
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class ParallelPort extends Component {
+export default class ParallelPort extends Component {
     /**
      * ParallelPort(parmsParallel)
      *
@@ -533,5 +529,3 @@ ParallelPort.aPortOutput = {
  * Initialize every ParallelPort module on the page.
  */
 Web.onInit(ParallelPort.init);
-
-if (typeof module !== "undefined") module.exports = ParallelPort;

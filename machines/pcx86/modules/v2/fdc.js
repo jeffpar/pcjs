@@ -11,7 +11,7 @@ import ChipSet from "./chipset.js";
 import Disk from "./disk.js";
 import Messages from "./messages.js";
 import Panel from "./panel.js";
-import JSONLib from "../../modules/jsonlib.js";
+import JSONLib from "../../../modules/v3/jsonlib.js";
 import Component from "../../../modules/v2/component.js";
 import DiskAPI from "../../../modules/v2/diskapi.js";
 import State from "../../../modules/v2/state.js";
@@ -119,7 +119,7 @@ import { APPCLASS, DEBUG, MAXDEBUG } from "./pcx86.js";
  * @property {Array.<DriveType>|null} aDriveTypes
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class FDC extends Component {
+export default class FDC extends Component {
     /**
      * FDC(parmsFDC)
      *
@@ -3335,5 +3335,3 @@ FDC.aPortOutput = {
  * Initialize every Floppy Drive Controller (FDC) module on the page.
  */
 Web.onInit(FDC.init);
-
-if (typeof module !== "undefined") module.exports = FDC;

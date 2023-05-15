@@ -56,7 +56,7 @@ import { COMPILED, DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
  *
  * @unrestricted
  */
-class Component {
+export default class Component {
     /**
      * Component(type, parms, bitsMessage)
      *

@@ -45,7 +45,7 @@ import { APPNAME, APPVERSION, DEBUG } from "./pcx86.js";
  * @property {function(string,...)} printf
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class TestMonitor {
+export default class TestMonitor {
     /**
      * TestMonitor()
      *
@@ -457,5 +457,3 @@ TestMonitor.COMMANDS = [
     TestMonitor.COMMAND.PRINTF,
     TestMonitor.COMMAND.WAIT
 ];
-
-if (typeof module !== "undefined") module.exports = TestMonitor;

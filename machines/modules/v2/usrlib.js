@@ -19,7 +19,7 @@ import Str from "./strlib.js";
  * @typedef {Object.<BitField>} BitFields
  */
 
-class Usr {
+export default class Usr {
     /**
      * binarySearch(a, v, fnCompare)
      *

@@ -8,12 +8,12 @@
  */
 
 import ChipSet from "./chipset.js";
-import Controller from "./bus.js";
+import { Controller } from "./bus.js";
 import KbdX86 from "./keyboard.js";
 import MemoryX86 from "./memory.js";
 import Messages from "./messages.js";
 import Mouse from "./mouse.js";
-import CharSet from "../../../modules/charset.js";
+import CharSet from "../v3/charset.js";
 import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
 import State from "../../../modules/v2/state.js";
@@ -336,7 +336,7 @@ import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG } from "./pcx86.js";
  * @property {DebuggerX86} dbg
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class Card extends Controller {
+export class Card extends Controller {
     /**
      * Card(video, nCard, data, cbMemory)
      *
@@ -2305,7 +2305,7 @@ Card.ACCESS.afn[Card.ACCESS.WRITE.PAIRS] = Card.ACCESS.writeBytePairs;
  * @property {number} msUpdatePrev
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class VideoX86 extends Component {
+export default class VideoX86 extends Component {
     /**
      * VideoX86(parmsVideo, canvas, context, textarea, container, aDiagElements)
      *
@@ -8634,5 +8634,3 @@ VideoX86.aVGAPortOutput = {
  * Initialize every Video module on the page.
  */
 Web.onInit(VideoX86.init);
-
-if (typeof module !== "undefined") module.exports = VideoX86;

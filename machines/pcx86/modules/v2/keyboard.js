@@ -19,10 +19,10 @@ import Web from "../../../modules/v2/weblib.js";
 import { APPCLASS, COMPILED, DESKPRO386, MAXDEBUG } from "./pcx86.js";
 
 /**
- * class KbdX86
+ * @class KbdX86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class KbdX86 extends Component {
+export default class KbdX86 extends Component {
     /**
      * KbdX86(parmsKbd)
      *
@@ -3229,5 +3229,3 @@ KbdX86.INJECTION = {
  * Initialize every Keyboard module on the page.
  */
 Web.onInit(KbdX86.init);
-
-if (typeof module !== "undefined") module.exports = KbdX86;

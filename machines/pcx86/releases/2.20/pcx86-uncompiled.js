@@ -6469,6 +6469,7 @@ X86.PS_SAHF = (X86.PS.CF | X86.PS.PF | X86.PS.AF | X86.PS.ZF | X86.PS.SF);
  */
 X86.OPFLAG_PREFIXES = (X86.OPFLAG.SEG | X86.OPFLAG.LOCK | X86.OPFLAG.REPZ | X86.OPFLAG.REPNZ | X86.OPFLAG.DATASIZE | X86.OPFLAG.ADDRSIZE);
 
+
 /**
  * @copyright https://www.pcjs.org/modules/v3/charset.js (C) 2012-2023 Jeff Parsons
  */
@@ -8700,6 +8701,7 @@ Interrupts.FUNCS[Interrupts.WINDBG.VECTOR] = {
  *            entries for 16 segments.
  */
 
+
 /**
  * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
  */
@@ -8814,6 +8816,7 @@ Messages.CATEGORIES = {
     "halt":     Messages.HALT,
     "buffer":   Messages.BUFFER
 };
+
 
 /**
  * @copyright https://www.pcjs.org/modules/v2/panel.js (C) 2012-2023 Jeff Parsons
@@ -9010,7 +9013,7 @@ class HTMLLED {
 }
 
 /**
- * class Panel
+ * @class Panel
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class Panel extends Component {
@@ -9895,7 +9898,6 @@ Panel.UPDATES_PER_SECOND = 10;
  */
 Web.onInit(Panel.init);
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/bus.js (C) 2012-2023 Jeff Parsons
  */
@@ -9904,7 +9906,7 @@ Web.onInit(Panel.init);
  * Think of this Controller class definition as an interface definition, implemented by the Video Card
  * class and the RAM CompaqController class.
  *
- * class Controller
+ * @class Controller
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class Controller {
@@ -9933,7 +9935,7 @@ class Controller {
 }
 
 /**
- * class Bus
+ * @class Bus
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class BusX86 extends Component {
@@ -11636,7 +11638,7 @@ var littleEndian = (TYPEDARRAYS? (function() {
 })() : false);
 
 /**
- * class MemoryX86
+ * @class MemoryX86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class MemoryX86 {
@@ -13370,7 +13372,6 @@ if (TYPEDARRAYS) {
     ];
 }
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/cpu.js (C) 2012-2023 Jeff Parsons
  */
@@ -13379,7 +13380,7 @@ if (TYPEDARRAYS) {
 let TimeLog;
 
 /**
- * class CPULib
+ * @class CPULib
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class CPULib extends Component {
@@ -14799,7 +14800,7 @@ CPULib.BUTTONS = ["power", "reset"];
  */
 
 /**
- * class CPUx86
+ * @class CPUx86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class CPUx86 extends CPULib {
@@ -22716,7 +22717,6 @@ FPUx86.afnPreserveExceptions = [
  */
 Web.onInit(FPUx86.init);
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/segx86.js (C) 2012-2023 Jeff Parsons
  */
@@ -22736,7 +22736,7 @@ Web.onInit(FPUx86.init);
  */
 
 /**
- * class SegX86
+ * @class SegX86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class SegX86 {
@@ -24387,7 +24387,6 @@ SegX86.ID = {
 };
 
 SegX86.CALLBREAK_SEL = 0x0001;
-
 
 /**
  * @copyright https://www.pcjs.org/modules/v2/x86func.js (C) 2012-2023 Jeff Parsons
@@ -39179,7 +39178,7 @@ X86.aOpGrp8 = [
 let Timer;
 
 /**
- * class ChipSet
+ * @class ChipSet
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class ChipSet extends Component {
@@ -45428,13 +45427,12 @@ if (DESKPRO386) {
  */
 Web.onInit(ChipSet.init);
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/rom.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
- * class ROMx86
+ * @class ROMx86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class ROMx86 extends Component {
@@ -46092,13 +46090,12 @@ ROMx86.BIOS = {
  */
 Web.onInit(ROMx86.init);
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/ram.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
- * class RAMx86
+ * @class RAMx86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class RAMx86 extends Component {
@@ -46735,13 +46732,12 @@ CompaqController.ACCESS = [CompaqController.readByte, CompaqController.writeByte
  */
 Web.onInit(RAMx86.init);
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/keyboard.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
- * class KbdX86
+ * @class KbdX86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class KbdX86 extends Component {
@@ -49951,7 +49947,6 @@ KbdX86.INJECTION = {
  * Initialize every Keyboard module on the page.
  */
 Web.onInit(KbdX86.init);
-
 
 /**
  * @copyright https://www.pcjs.org/modules/v2/video.js (C) 2012-2023 Jeff Parsons
@@ -58557,18 +58552,11 @@ VideoX86.aVGAPortOutput = {
  */
 Web.onInit(VideoX86.init);
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/parallel.js (C) 2012-2023 Jeff Parsons
  */
 
-/*
- * class ParallelPort
- * property {number} iAdapter
- * property {number} portBase
- * property {number} nIRQ
- * property {Object} controlBuffer is a DOM element bound to the port (for rudimentary output; see transmitByte())
- *
+/**
  * NOTE: This class declaration started as a way of informing the code inspector of the controlBuffer property,
  * which remained undefined until a setBinding() call set it later, but I've since decided that explicitly
  * initializing such properties in the constructor is a better way to go -- even though it's more code -- because
@@ -58577,10 +58565,12 @@ Web.onInit(VideoX86.init);
  * Besides, I'm not sure I want to get into documenting every property this way, for this or any/every other class,
  * let alone getting into which ones should be considered private or protected, because PCjs isn't really a library
  * for third-party apps.
- */
-
-/**
- * class ParallelPort
+ *
+ * @class ParallelPort
+ * @property {number} iAdapter
+ * @property {number} portBase
+ * @property {number} nIRQ
+ * @property {Object} controlBuffer is a DOM element bound to the port (for rudimentary output; see transmitByte())
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class ParallelPort extends Component {
@@ -59080,7 +59070,6 @@ ParallelPort.aPortOutput = {
  * Initialize every ParallelPort module on the page.
  */
 Web.onInit(ParallelPort.init);
-
 
 /**
  * @copyright https://www.pcjs.org/modules/v2/serial.js (C) 2012-2023 Jeff Parsons
@@ -60243,7 +60232,6 @@ SerialPort.aPortOutput = {
  */
 Web.onInit(SerialPort.init);
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/testctl.js (C) 2012-2023 Jeff Parsons
  */
@@ -60559,7 +60547,6 @@ class TestController extends Component {
  * Initialize every TestController module on the page.
  */
 Web.onInit(TestController.init);
-
 
 /**
  * @copyright https://www.pcjs.org/modules/v2/testmon.js (C) 2012-2023 Jeff Parsons
@@ -61012,13 +60999,12 @@ TestMonitor.COMMANDS = [
     TestMonitor.COMMAND.WAIT
 ];
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/mouse.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
- * class Mouse
+ * @class Mouse
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class Mouse extends Component {
@@ -61966,7 +61952,6 @@ Mouse.SERIAL = {
  */
 Web.onInit(Mouse.init);
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/disk.js (C) 2012-2023 Jeff Parsons
  */
@@ -62113,7 +62098,7 @@ let FileSegment;
 let FileOrdinal;
 
 /**
- * class Disk
+ * @class Disk
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class Disk extends Component {
@@ -64135,7 +64120,6 @@ class FileInfo {
         return sSymbol || this.name + '+' + Str.toHex(off, 0, true);
     }
 }
-
 
 /**
  * @copyright https://www.pcjs.org/modules/v2/fdc.js (C) 2012-2023 Jeff Parsons
@@ -67428,7 +67412,6 @@ FDC.aPortOutput = {
  * Initialize every Floppy Drive Controller (FDC) module on the page.
  */
 Web.onInit(FDC.init);
-
 
 /**
  * @copyright https://www.pcjs.org/modules/v2/hdc.js (C) 2012-2023 Jeff Parsons
@@ -71318,7 +71301,6 @@ HDC.aATCPortOutputSecondary = {
  */
 Web.onInit(HDC.init);
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/debugger.js (C) 2012-2023 Jeff Parsons
  */
@@ -72678,7 +72660,7 @@ let DbgAddrX86;
  */
 
 /**
- * class DebuggerX86
+ * @class DebuggerX86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class DebuggerX86 extends DbgLib {
@@ -80564,13 +80546,12 @@ if (DEBUGGER) {
 
 }   // endif DEBUGGER
 
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/computer.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
- * class Computer
+ * @class Computer
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
 class Computer extends Component {
@@ -82486,7 +82467,6 @@ Computer.UPDATES_PER_SECOND = 2;
 Web.onInit(Computer.init);
 Web.onShow(Computer.show);
 Web.onExit(Computer.exit);
-
 
 /**
  * @copyright https://www.pcjs.org/modules/v2/state.js (C) 2012-2023 Jeff Parsons

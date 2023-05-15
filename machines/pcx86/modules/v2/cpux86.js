@@ -19,10 +19,10 @@ import Web from "../../../modules/v2/weblib.js";
 import { APPCLASS, BACKTRACK, BUGS_8086, DEBUG, DEBUGGER, I386, MAXDEBUG, PAGEBLOCKS, PREFETCH } from "./pcx86.js";
 
 /**
- * class CPUx86
+ * @class CPUx86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class CPUx86 extends CPULib {
+export default class CPUx86 extends CPULib {
     /**
      * CPUx86(parmsCPU)
      *

@@ -30,10 +30,10 @@ var littleEndian = (TYPEDARRAYS? (function() {
 })() : false);
 
 /**
- * class MemoryX86
+ * @class MemoryX86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class MemoryX86 {
+export default class MemoryX86 {
     /**
      * Memory(addr, used, size, type, controller)
      *
@@ -1763,5 +1763,3 @@ if (TYPEDARRAYS) {
         MemoryX86.prototype.writeLongPLE
     ];
 }
-
-if (typeof module !== "undefined") module.exports = MemoryX86;

@@ -213,10 +213,10 @@ class HTMLLED {
 }
 
 /**
- * class Panel
+ * @class Panel
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class Panel extends Component {
+export default class Panel extends Component {
     /**
      * Panel(parmsPanel)
      *
@@ -1097,5 +1097,3 @@ Panel.UPDATES_PER_SECOND = 10;
  * Initialize every Panel module on the page.
  */
 Web.onInit(Panel.init);
-
-if (typeof module !== "undefined") module.exports = Panel;

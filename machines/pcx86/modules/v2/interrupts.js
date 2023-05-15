@@ -2108,3 +2108,5 @@ Interrupts.FUNCS[Interrupts.WINDBG.VECTOR] = {
  *            and a relocation table containing a word count and relocation
  *            entries for 16 segments.
  */
+
+export default Interrupts;

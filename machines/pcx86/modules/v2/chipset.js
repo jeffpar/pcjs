@@ -37,10 +37,10 @@ import { APPCLASS, BACKTRACK, COMPILED, CSSCLASS, DEBUG, DEBUGGER, DESKPRO386, M
  */
 
 /**
- * class ChipSet
+ * @class ChipSet
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class ChipSet extends Component {
+export default class ChipSet extends Component {
     /**
      * ChipSet(parmsChipSet)
      *
@@ -6285,5 +6285,3 @@ if (DESKPRO386) {
  * Initialize every ChipSet module on the page.
  */
 Web.onInit(ChipSet.init);
-
-if (typeof module !== "undefined") module.exports = ChipSet;

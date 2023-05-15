@@ -46,7 +46,7 @@ import { APPCLASS, DEBUG } from "./pcx86.js";
  * @class FPUx86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class FPUx86 extends Component {
+export default class FPUx86 extends Component {
     /**
      * FPUx86(parmsFPU)
      *
@@ -3346,5 +3346,3 @@ FPUx86.afnPreserveExceptions = [
  * Initialize every FPU module on the page
  */
 Web.onInit(FPUx86.init);
-
-if (typeof module !== "undefined") module.exports = FPUx86;

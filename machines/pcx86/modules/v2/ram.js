@@ -11,17 +11,17 @@ import ChipSet from "./chipset.js";
 import Controller from "./bus.js";
 import MemoryX86 from "./memory.js";
 import ROMx86 from "./rom.js";
-import Component from "../../../modules/v2/component.";
-import State from "../../../modules/v2/state.";
-import Str from "../../../modules/v2/strlib.";
-import Web from "../../../modules/v2/weblib.";
+import Component from "../../../modules/v2/component.js";
+import State from "../../../modules/v2/state.js";
+import Str from "../../../modules/v2/strlib.js";
+import Web from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DESKPRO386, MAXDEBUG } from "./pcx86.js";
 
 /**
- * class RAMx86
+ * @class RAMx86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class RAMx86 extends Component {
+export default class RAMx86 extends Component {
     /**
      * RAMx86(parmsRAM)
      *
@@ -654,5 +654,3 @@ CompaqController.ACCESS = [CompaqController.readByte, CompaqController.writeByte
  * Initialize all the RAM modules on the page.
  */
 Web.onInit(RAMx86.init);
-
-if (typeof module !== "undefined") module.exports = RAMx86;

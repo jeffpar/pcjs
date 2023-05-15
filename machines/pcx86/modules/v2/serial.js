@@ -35,7 +35,7 @@ import { APPCLASS, RS232 } from "./pcx86.js";
  * @property {HTMLTextAreaElement} controlBuffer (DOM element bound to the port for rudimentary output; see transmitByte())
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class SerialPort extends Component {
+export default class SerialPort extends Component {
     /**
      * SerialPort(parms)
      *
@@ -1171,5 +1171,3 @@ SerialPort.aPortOutput = {
  * Initialize every SerialPort module on the page.
  */
 Web.onInit(SerialPort.init);
-
-if (typeof module !== "undefined") module.exports = SerialPort;

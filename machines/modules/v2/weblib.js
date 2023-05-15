@@ -95,7 +95,7 @@ import { COMPILED, DEBUG, MAXDEBUG, SITEURL } from "./defines.js";
  * stop()               Stops the window from loading
  */
 
-class Web {
+export default class Web {
     /**
      * log(s, type)
      *

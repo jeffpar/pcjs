@@ -48,7 +48,7 @@ import { DEBUGGER, MAXDEBUG } from "./defines.js";
  *
  * @unrestricted
  */
-class DbgLib extends Component {
+export default class DbgLib extends Component {
     /**
      * DbgLib(parmsDbg)
      *

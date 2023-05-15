@@ -28,10 +28,10 @@ import { DEBUG, DEBUGGER, MAXDEBUG } from "./pcx86.js";
  */
 
 /**
- * class CPULib
+ * @class CPULib
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class CPULib extends Component {
+export default class CPULib extends Component {
     /**
      * CPULib(parmsCPU, nCyclesDefault)
      *

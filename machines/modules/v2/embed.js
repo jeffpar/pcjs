@@ -11,7 +11,7 @@ import Str from "./strlib.js";
 import Web from "./weblib.js";
 import Component from "./component.js";
 import { APPVERSION, PRIVATE } from "./defines.js";
-import { APPNAME } from "../../pcx86/modules/v2/defines.js";
+import { APPNAME } from "../../pcx86/modules/v2/pcx86.js";
 
 /*
  * We now support asynchronous XML and XSL file loads; simply set fAsync (below) to true.

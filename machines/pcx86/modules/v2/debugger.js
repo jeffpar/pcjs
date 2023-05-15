@@ -73,10 +73,10 @@ import { APPCLASS, APPNAME, APPVERSION, BACKTRACK, BYTEARRAYS, COMPILED, DEBUG, 
  */
 
 /**
- * class DebuggerX86
+ * @class DebuggerX86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class DebuggerX86 extends DbgLib {
+export default class DebuggerX86 extends DbgLib {
     /**
      * DebuggerX86(parmsDbg)
      *
@@ -7958,5 +7958,3 @@ if (DEBUGGER) {
     Web.onInit(DebuggerX86.init);
 
 }   // endif DEBUGGER
-
-if (typeof module !== "undefined") module.exports = DebuggerX86;

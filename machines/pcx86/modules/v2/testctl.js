@@ -32,7 +32,7 @@ import { APPCLASS, DEBUG } from "./pcx86.js";
  * @property {function(Object)|null} deliverTests
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class TestController extends Component {
+export default class TestController extends Component {
     /**
      * TestController(parms)
      *
@@ -323,5 +323,3 @@ class TestController extends Component {
  * Initialize every TestController module on the page.
  */
 Web.onInit(TestController.init);
-
-if (typeof module !== "undefined") module.exports = TestController;

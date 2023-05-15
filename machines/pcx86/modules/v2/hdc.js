@@ -64,7 +64,7 @@ import { APPCLASS, BACKTRACK, DEBUG, MAXDEBUG } from "./pcx86.js";
  * @property {Array.<DriveConfig>} aDriveConfigs
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class HDC extends Component {
+export default class HDC extends Component {
     /**
      * HDC(parmsHDC)
      *
@@ -3936,5 +3936,3 @@ HDC.aATCPortOutputSecondary = {
  * Initialize every Hard Drive Controller (HDC) module on the page.
  */
 Web.onInit(HDC.init);
-
-if (typeof module !== "undefined") module.exports = HDC;

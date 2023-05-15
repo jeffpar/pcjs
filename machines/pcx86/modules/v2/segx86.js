@@ -27,10 +27,10 @@ import { DEBUG, DEBUGGER, I386 } from "./pcx86.js";
  */
 
 /**
- * class SegX86
+ * @class SegX86
  * @unrestricted (allows the class to define properties, both dot and named, outside of the constructor)
  */
-class SegX86 {
+export default class SegX86 {
     /**
      * SegX86(cpu, sName)
      *
@@ -1678,5 +1678,3 @@ SegX86.ID = {
 };
 
 SegX86.CALLBREAK_SEL = 0x0001;
-
-if (typeof module !== "undefined") module.exports = SegX86;
