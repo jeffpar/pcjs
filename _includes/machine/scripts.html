@@ -242,10 +242,14 @@ template doesn't add them to the Computer component anymore, since we started su
     {%- capture machine_template -%}{{ site.baseurl }}/machines/{{ machine_folder }}/xsl/components.xsl{%- endcapture -%}
   {%- endif -%}
   {%- if machine_factory contains "embed" %}
+    {%- if machine.unbundled %}
     <script type="module">
       import { {{ machine_factory }} } from "/machines/modules/v2/embed.js";
       {{ machine_factory }}('{{ machine_id }}','{{ machine_config }}','{{ machine_template }}','{{ machine_parms }}'{{ machine_class }});
     </script>
+    {%- else %}
+    <script>{{ machine_factory }}('{{ machine_id }}','{{ machine_config }}','{{ machine_template }}','{{ machine_parms }}'{{ machine_class }});</script>
+    {%- endif %}
   {%- elsif machine.unbundled %}
     <script type="module">PCjsMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
   {%- elsif site.pcjs.uncompiled or machine.uncompiled %}
