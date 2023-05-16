@@ -4975,7 +4975,7 @@ class DataBuffer {
             this.new(init);
         }
         else if (this.node) {
-            if (init.isBuffer()) {
+            if (Buffer.isBuffer(init)) {
                 this.buffer = init;
             }
             else if (init instanceof DataBuffer) {
@@ -5085,7 +5085,7 @@ class DataBuffer {
      */
     new(size)
     {
-        if (this.node && Buffer.alloc) {
+        if (this.node && Buffer.alloc) {        // TODO: Determine why the Closure Compiler requires checking for 'alloc'
             this.buffer = Buffer.alloc(size);
             this.length = size;
         } else {

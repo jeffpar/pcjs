@@ -660,8 +660,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--dir=tmp/posts",
-        "--output=tmp/posts.json",
+        "--dir=tmp/DISK4313",
+        "--output=tmp/DISK4313.json",
         "--overwrite"
       ],
       "cwd": "${workspaceFolder}",
