@@ -789,6 +789,7 @@
     "JMPS",
     "JNBE",
     "JNLE",
+    "jsonify",
     "jsonlib",
     "kasm",
     "Katz",
