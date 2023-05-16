@@ -13,7 +13,7 @@ import DiskAPI from "../../../modules/v2/diskapi.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { BACKTRACK, DEBUG, SYMBOLS } from "./pcx86.js";
+import { BACKTRACK, DEBUG, SYMBOLS } from "./defines.js";
 
 /*
  *  The Disk component provides methods for:

@@ -9,7 +9,7 @@
 
 import X86 from "./x86.js";
 import Str from "../../../modules/v2/strlib.js";
-import { BACKTRACK } from "./pcx86.js";
+import { BACKTRACK } from "./defines.js";
 
 /*
  * Before 80386 support was added to PCx86, the approach to decoding ModRegRM bytes (which I usually

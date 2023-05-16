@@ -10,8 +10,8 @@
 	<fdc ref="/machines/pcx86/ibm/fdc/library.xml" autoMount='{A: {name: "SystemPro EISA Configuration 1.15"}}'/>
 	<!-- TODO: <hdc ref="/machines/pcx86/ibm/hdc/20mb/unformatted-at2.xml"/> -->
 	<keyboard ref="/machines/pcx86/ibm/keyboard/us84-softkeys.xml"/>
-        <debugger id="debugger" messages="" commands=""/>
-        <panel ref="/machines/pcx86/panel/wide286.xml"/>
+	<debugger id="debugger" messages="" commands=""/>
+	<panel ref="/machines/pcx86/panel/wide286.xml"/>
 	<chipset id="chipset" model="deskpro386" floppies="[1440]" monitor="cga"/>
 	<parallel id="lpt1" adapter="2"/>
 	<serial id="com1" adapter="1"/>

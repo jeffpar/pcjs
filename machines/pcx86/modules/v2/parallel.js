@@ -13,7 +13,7 @@ import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, COMPILED, DESKPRO386, MAXDEBUG } from "./pcx86.js";
+import { APPCLASS, COMPILED, DESKPRO386, MAXDEBUG } from "./defines.js";
 
 /**
  * NOTE: This class declaration started as a way of informing the code inspector of the controlBuffer property,

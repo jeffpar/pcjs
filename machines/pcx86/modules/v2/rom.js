@@ -12,7 +12,7 @@ import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, BACKTRACK, DEBUG } from "./pcx86.js";
+import { APPCLASS, BACKTRACK, DEBUG } from "./defines.js";
 
 /**
  * @class ROMx86

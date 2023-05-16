@@ -10,7 +10,7 @@
 import Messages from "./messages.js";
 import Component from "../../../modules/v2/component.js";
 import Str from "../../../modules/v2/strlib.js";
-import { DEBUG, DEBUGGER, MAXDEBUG } from "./pcx86.js";
+import { DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
 
 /**
  * TimeLog objects record the duration of "work" and "idle" intervals, which normally alternate.

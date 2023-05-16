@@ -207,6 +207,7 @@ template doesn't add them to the Computer component anymore, since we started su
   {%- if site.pcjs.uncompiled or machine.unbundled -%}
     {%- if machine.unbundled -%}
       {%- for script in machine_data.scripts -%}
+        {%- if script contains "/embed.js" -%}{% continue %}{%- endif -%}
         {%- capture page_script %}
     <script type="module" src="{{ site.baseurl }}/{{ script | replace: './','' }}"></script>
         {%- endcapture -%}
@@ -241,7 +242,10 @@ template doesn't add them to the Computer component anymore, since we started su
     {%- capture machine_template -%}{{ site.baseurl }}/machines/{{ machine_folder }}/xsl/components.xsl{%- endcapture -%}
   {%- endif -%}
   {%- if machine_factory contains "embed" %}
-    <script>{{ machine_factory }}('{{ machine_id }}','{{ machine_config }}','{{ machine_template }}','{{ machine_parms }}'{{ machine_class }});</script>
+    <script type="module">
+      import { {{ machine_factory }} } from "/machines/modules/v2/embed.js";
+      {{ machine_factory }}('{{ machine_id }}','{{ machine_config }}','{{ machine_template }}','{{ machine_parms }}'{{ machine_class }});
+    </script>
   {%- elsif machine.unbundled %}
     <script type="module">PCjsMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
   {%- elsif site.pcjs.uncompiled or machine.uncompiled %}

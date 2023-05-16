@@ -9,7 +9,7 @@
 
 import Keys from "../../../modules/v2/keys.js";
 import Str from "../../../modules/v2/strlib.js";
-import { APPNAME, APPVERSION, DEBUG } from "./pcx86.js";
+import { APPNAME, APPVERSION, DEBUG } from "./defines.js";
 
 /*
  * Overview

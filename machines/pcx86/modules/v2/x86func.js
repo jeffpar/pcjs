@@ -8,7 +8,7 @@
  */
 
 import X86 from "./x86.js";
-import { DEBUG, I386, MAXDEBUG } from "./pcx86.js";
+import { DEBUG, I386, MAXDEBUG } from "./defines.js";
 
 /**
  * fnADCb(dst, src)

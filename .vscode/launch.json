@@ -26,6 +26,20 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "COMPAQ LTE/286 with CGA",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/pcx86/compaq/lte286/cga/machine.xml",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "COMPAQ LTE/286 with CGA [Debugger] (Uncompiled)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/pcx86/compaq/lte286/cga/debugger/machine.xml",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "COMPAQ DeskPro 386, 2Mb RAM, IBM EGA [Debugger]",
       "type": "chrome",
       "request": "launch",
@@ -833,25 +847,6 @@
       ]
     },
     {
-      "name": "Node: diskimage.js --extract --expand --normalize",
-      "type": "node",
-      "request": "launch",
-      "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
-      "args": [
-        "--collection=pcsigdisks",
-        "--extract",
-        "--expand",
-        "--normalize",
-        "--overwrite"
-      ],
-      "cwd": "${workspaceFolder}",
-      "stopOnEntry": false,
-      "console": "integratedTerminal",
-      "outFiles": [
-        "${workspaceFolder}/none/**/*.js"
-      ]
-    },
-    {
       "name": "Node: diskimage.js --collection --checkdisk",
       "type": "node",
       "request": "launch",
@@ -875,7 +870,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--collection=pcsig/1000-1999/DISK1535",
+        "--collection=pcsigdisks",
         "--extract",
         "--expand",
         "--normalize",

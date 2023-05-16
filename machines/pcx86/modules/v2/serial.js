@@ -13,7 +13,7 @@ import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, RS232 } from "./pcx86.js";
+import { APPCLASS, RS232 } from "./defines.js";
 
 /**
  * SerialPort class

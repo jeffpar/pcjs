@@ -16,7 +16,7 @@ import TestMonitor from "./testmon.js";
 import Component from "../../../modules/v2/component.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, DEBUG } from "./pcx86.js";
+import { APPCLASS, DEBUG } from "./defines.js";
 
 /**
  * TestController class

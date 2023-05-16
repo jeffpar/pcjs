@@ -19,7 +19,7 @@ import DumpAPI from "../../../modules/v2/dumpapi.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG } from "./pcx86.js";
+import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
 
 /*
  * MDA/CGA Support

@@ -15,7 +15,7 @@ import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, DEBUG, DESKPRO386, MAXDEBUG } from "./pcx86.js";
+import { APPCLASS, DEBUG, DESKPRO386, MAXDEBUG } from "./defines.js";
 
 /**
  * @class RAMx86

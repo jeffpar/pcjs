@@ -10,7 +10,7 @@
 import Messages from "./messages.js";
 import X86 from "./x86.js";
 import Str from "../../../modules/v2/strlib.js";
-import { COMPILED, DEBUGGER, I386 } from "./pcx86.js";
+import { COMPILED, DEBUGGER, I386 } from "./defines.js";
 
 /**
  * helpAdd64(r64Dst, r64Src)

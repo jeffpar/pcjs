@@ -13,7 +13,7 @@ import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Usr from "../../../modules/v2/usrlib.js";
-import { BACKTRACK, DEBUGGER, MAXDEBUG, PAGEBLOCKS } from "./pcx86.js";
+import { BACKTRACK, DEBUGGER, MAXDEBUG, PAGEBLOCKS } from "./defines.js";
 
 /**
  * Think of this Controller class definition as an interface definition, implemented by the Video Card

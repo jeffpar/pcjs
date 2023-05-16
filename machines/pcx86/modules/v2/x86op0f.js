@@ -8,7 +8,7 @@
  */
 
 import X86 from "./x86.js";
-import { DEBUG, DEBUGGER, I386 } from "./pcx86.js";
+import { DEBUG, DEBUGGER, I386 } from "./defines.js";
 
 /**
  * op=0x0F,0x00 (GRP6 mem/reg)

@@ -121,14 +121,14 @@ const TYPEDARRAYS = true; // (typeof ArrayBuffer !== 'undefined');
  *
  * TODO: Consider yet another embedXXX() parameter that would also allow BACKTRACK to be turned off on a page-by-page basis.
  *
- * Deal with Web.getURLParm("debug") in /modules/shared/lib/weblib.js at the same time.
+ * Deal with Web.getURLParm("debug") in /machines/modules/v2/weblib.js at the same time.
  */
 
-// if (DEBUG && window) {
-//     let sBackTrack = Web.getURLParm("backtrack");
-//     if (sBackTrack == "false") {
-//         // BACKTRACK = false;
-//     }
-// }
+if (DEBUG && window) {
+    let backTrack = Web.getURLParm("backtrack");
+    if (backTrack == "false") {
+        window['BACKTRACK'] = false;
+    }
+}
 
 export { APPCLASS, APPNAME, APPVERSION, BACKTRACK, BUGS_8086, BYTEARRAYS, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, DESKPRO386, I386, LICENSE, MAXDEBUG, PAGEBLOCKS, PREFETCH, PRIVATE, RS232, SITEURL, SYMBOLS, TYPEDARRAYS }

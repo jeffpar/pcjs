@@ -10,7 +10,7 @@
 import Messages from "./messages.js";
 import X86 from "./x86.js";
 import Str from "../../../modules/v2/strlib.js";
-import { BACKTRACK, DEBUG, DEBUGGER, I386 } from "./pcx86.js";
+import { BACKTRACK, DEBUG, DEBUGGER, I386 } from "./defines.js";
 
 /**
  * op=0x00 (ADD byte,reg)

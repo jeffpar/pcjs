@@ -14,7 +14,7 @@ import Component from "../../../modules/v2/component.js";
 import Str from "../../../modules/v2/strlib.js";
 import Usr from "../../../modules/v2/usrlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG } from "./pcx86.js";
+import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
 
 /**
  * Region object definition

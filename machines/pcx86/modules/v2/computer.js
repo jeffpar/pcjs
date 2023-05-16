@@ -16,7 +16,7 @@ import Str from "../../../modules/v2/strlib.js";
 import UserAPI from "../../../modules/v2/userapi.js";
 import Usr from "../../../modules/v2/usrlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, APPNAME, APPVERSION, DEBUG, COPYRIGHT, LICENSE, PREFETCH, TYPEDARRAYS } from "./pcx86.js";
+import { APPCLASS, APPNAME, APPVERSION, DEBUG, COPYRIGHT, LICENSE, PREFETCH, TYPEDARRAYS } from "./defines.js";
 
 /**
  * @class Computer

@@ -13,7 +13,7 @@ import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, COMPILED, DEBUGGER, DESKPRO386, MAXDEBUG, RS232 } from "./pcx86.js";
+import { APPCLASS, COMPILED, DEBUGGER, DESKPRO386, MAXDEBUG, RS232 } from "./defines.js";
 
 /**
  * @class Mouse

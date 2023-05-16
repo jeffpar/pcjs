@@ -3354,11 +3354,11 @@ Web.onPageEvent(Web.isUserAgent("iOS")? 'onpagehide' : (Web.isUserAgent("Opera")
  * it's low priority, because it would only affect machines that explicitly request un-COMPILED code, and there are very
  * few such machines (eg, /_posts/2015-01-17-pcjs-uncompiled.md).
  *
- * Deal with Web.getURLParm("backtrack") in /modules/pcx86/lib/defines.js at the same time.
+ * Deal with Web.getURLParm("backtrack") in /machines/pcx86/modules/v2/defines.js at the same time.
  */
 if (DEBUG && window) {
-    let sDebug = Web.getURLParm("debug");
-    if (sDebug == "false") {
+    let debug = Web.getURLParm("debug");
+    if (debug == "false") {
         window['DEBUG'] = false;
     }
 }
@@ -5471,7 +5471,7 @@ class JSONLib {
 }
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/pcx86.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -5585,15 +5585,15 @@ const TYPEDARRAYS = true; // (typeof ArrayBuffer !== 'undefined');
  *
  * TODO: Consider yet another embedXXX() parameter that would also allow BACKTRACK to be turned off on a page-by-page basis.
  *
- * Deal with Web.getURLParm("debug") in /modules/shared/lib/weblib.js at the same time.
+ * Deal with Web.getURLParm("debug") in /machines/modules/v2/weblib.js at the same time.
  */
 
-// if (DEBUG && window) {
-//     let sBackTrack = Web.getURLParm("backtrack");
-//     if (sBackTrack == "false") {
-//         // BACKTRACK = false;
-//     }
-// }
+if (DEBUG && window) {
+    let backTrack = Web.getURLParm("backtrack");
+    if (backTrack == "false") {
+        window['BACKTRACK'] = false;
+    }
+}
 
 
 
@@ -83564,29 +83564,19 @@ function commandMachine(control, fSingle, idMachine, sComponent, sCommand, sValu
 
 /**
  * Prevent the Closure Compiler from renaming functions we want to export, by adding them as global properties.
- *
- * TODO: Consider making all these functions properties on a single global object (eg, 'PCjs'), to minimize global
- * pollution and risk of name collision.
  */
-if (APPNAME == "C1Pjs") {
-    window['embedC1P']    = embedC1P;
-}
-if (APPNAME == "PCx86") {
-    window['embedPC']     = embedPCx86;         // WARNING: embedPC() deprecated as of v1.23.0
-    window['embedPCx86']  = embedPCx86;
-}
-if (APPNAME == "PCx80") {
-    window['embedPCx80'] = embedPCx80;
-}
-if (APPNAME == "PDPjs") {
-    window['embedPDP10']  = embedPDP10;
-    window['embedPDP11']  = embedPDP11;
-}
+window['embedC1P']    = embedC1P;
+window['embedPC']     = embedPCx86;         // WARNING: embedPC() deprecated as of v1.23.0
+window['embedPCx86']  = embedPCx86;
+window['embedPCx80']  = embedPCx80;
+window['embedPDP10']  = embedPDP10;
+window['embedPDP11']  = embedPDP11;
 
 window['commandMachine'] = commandMachine;
 
 window['enableEvents'] = Web.enablePageEvents;
 window['sendEvent']    = Web.sendPageEvent;
+
 
 /**
  * @copyright https://www.pcjs.org/modules/v2/save.js (C) 2012-2023 Jeff Parsons

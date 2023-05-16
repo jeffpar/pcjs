@@ -46,7 +46,7 @@
       "./machines/modules/v2/component.js",
       "./machines/modules/v3/databuffer.js",
       "./machines/modules/v3/jsonlib.js",
-      "./machines/pcx86/modules/v2/pcx86.js",
+      "./machines/pcx86/modules/v2/defines.js",
       "./machines/pcx86/modules/v2/x86.js",
       "./machines/pcx86/modules/v3/charset.js",
       "./machines/pcx86/modules/v2/interrupts.js",

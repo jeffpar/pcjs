@@ -1,5 +1,5 @@
 /**
- * @fileoverview C1Pjs and PCjs embedding functionality
+ * @fileoverview PCjs embedding functionality
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2023 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -11,7 +11,6 @@ import Str from "./strlib.js";
 import Web from "./weblib.js";
 import Component from "./component.js";
 import { APPVERSION, PRIVATE } from "./defines.js";
-import { APPNAME } from "../../pcx86/modules/v2/pcx86.js";
 
 /*
  * We now support asynchronous XML and XSL file loads; simply set fAsync (below) to true.
@@ -742,26 +741,17 @@ function commandMachine(control, fSingle, idMachine, sComponent, sCommand, sValu
 
 /**
  * Prevent the Closure Compiler from renaming functions we want to export, by adding them as global properties.
- *
- * TODO: Consider making all these functions properties on a single global object (eg, 'PCjs'), to minimize global
- * pollution and risk of name collision.
  */
-if (APPNAME == "C1Pjs") {
-    window['embedC1P']    = embedC1P;
-}
-if (APPNAME == "PCx86") {
-    window['embedPC']     = embedPCx86;         // WARNING: embedPC() deprecated as of v1.23.0
-    window['embedPCx86']  = embedPCx86;
-}
-if (APPNAME == "PCx80") {
-    window['embedPCx80'] = embedPCx80;
-}
-if (APPNAME == "PDPjs") {
-    window['embedPDP10']  = embedPDP10;
-    window['embedPDP11']  = embedPDP11;
-}
+window['embedC1P']    = embedC1P;
+window['embedPC']     = embedPCx86;         // WARNING: embedPC() deprecated as of v1.23.0
+window['embedPCx86']  = embedPCx86;
+window['embedPCx80']  = embedPCx80;
+window['embedPDP10']  = embedPDP10;
+window['embedPDP11']  = embedPDP11;
 
 window['commandMachine'] = commandMachine;
 
 window['enableEvents'] = Web.enablePageEvents;
 window['sendEvent']    = Web.sendPageEvent;
+
+export { embedC1P, embedPCx86, embedPCx80, embedPDP10, embedPDP11, commandMachine };

@@ -1175,11 +1175,11 @@ Web.onPageEvent(Web.isUserAgent("iOS")? 'onpagehide' : (Web.isUserAgent("Opera")
  * it's low priority, because it would only affect machines that explicitly request un-COMPILED code, and there are very
  * few such machines (eg, /_posts/2015-01-17-pcjs-uncompiled.md).
  *
- * Deal with Web.getURLParm("backtrack") in /modules/pcx86/lib/defines.js at the same time.
+ * Deal with Web.getURLParm("backtrack") in /machines/pcx86/modules/v2/defines.js at the same time.
  */
 if (DEBUG && window) {
-    let sDebug = Web.getURLParm("debug");
-    if (sDebug == "false") {
+    let debug = Web.getURLParm("debug");
+    if (debug == "false") {
         window['DEBUG'] = false;
     }
 }

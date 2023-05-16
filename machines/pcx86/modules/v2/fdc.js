@@ -17,7 +17,7 @@ import DiskAPI from "../../../modules/v2/diskapi.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, DEBUG, MAXDEBUG } from "./pcx86.js";
+import { APPCLASS, DEBUG, MAXDEBUG } from "./defines.js";
 
 /*
  * FDC Terms (see FDC.TERMS)

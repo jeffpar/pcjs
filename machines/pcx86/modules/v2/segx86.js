@@ -10,7 +10,7 @@
 import Messages from "./messages.js";
 import X86 from "./x86.js";
 import Str from "../../../modules/v2/strlib.js";
-import { DEBUG, DEBUGGER, I386 } from "./pcx86.js";
+import { DEBUG, DEBUGGER, I386 } from "./defines.js";
 
 /*
  * NOTE: The protected-mode support in this module was initially added for 80286 support, and is
