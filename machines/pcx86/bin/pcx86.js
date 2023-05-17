@@ -104,7 +104,7 @@ function loadComponents(asFiles)
                 if (sSuperClass) {
                     for (let j = 0; j < aComponents.length; j++) {
                         if (aComponents[j].path.indexOf(sSuperClass) >= 0) {
-                            if (fDebug) console.log("updating superclass " + aComponents[j].path + " with subclass " + sFile);
+                            if (fDebug) console.log("updating component superclass " + aComponents[j].name + " (" + aComponents[j].path + ") with subclass " + sName + " (" + sFile + ")");
                             aComponents[j].Create = fn;
                             sName = null;
                             break;
@@ -117,6 +117,7 @@ function loadComponents(asFiles)
                     };      // jshint ignore:line
                 }
                 if (sName) {
+                    if (fDebug) console.log("adding component class " + sName + " (" + sFile + ")");
                     aComponents.push({name: sName, path: sFile, Create: fn, objects: []});
                 }
             }
