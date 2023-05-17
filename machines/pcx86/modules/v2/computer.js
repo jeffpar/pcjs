@@ -16,7 +16,7 @@ import Str from "../../../modules/v2/strlib.js";
 import UserAPI from "../../../modules/v2/userapi.js";
 import Usr from "../../../modules/v2/usrlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, APPNAME, APPVERSION, DEBUG, COPYRIGHT, LICENSE, PREFETCH, TYPEDARRAYS } from "./defines.js";
+import { APPCLASS, APPNAME, APPVERSION, DEBUG, COPYRIGHT, LICENSE, PREFETCH, TYPEDARRAYS, globals } from "./defines.js";
 
 /**
  * @class Computer
@@ -490,7 +490,7 @@ export default class Computer extends Component {
     setMachineParms(parmsMachine)
     {
         if (!parmsMachine) {
-            let sParms, resMachine, resources = window['resources'];
+            let sParms, resMachine, resources = globals.window['resources'];
             if (typeof resources == 'object' && (sParms = resources['parms']) || (resMachine = Component.getMachineResources(this.idMachine)) && (sParms = resMachine['parms'])) {
                 try {
                     parmsMachine = /** @type {Object} */ (eval("(" + sParms + ")"));    // jshint ignore:line
@@ -589,7 +589,7 @@ export default class Computer extends Component {
         if (value === undefined && parmsComponent) {
             value = parmsComponent[sParm];
         }
-        let resources = window['resources'];
+        let resources = globals.window['resources'];
         if (!value && typeof resources == 'object') {
             if (resources[sParm]) {
                 value = sParm;

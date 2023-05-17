@@ -9,7 +9,7 @@
 
 import Component from "./component.js";
 import ReportAPI from "./reportapi.js";
-import { COMPILED, DEBUG, MAXDEBUG, SITEURL } from "./defines.js";
+import { COMPILED, DEBUG, MAXDEBUG, SITEURL, globals } from "./defines.js";
 
 /*
  * According to http://www.w3schools.com/jsref/jsref_obj_global.asp, these are the *global* properties
@@ -131,8 +131,8 @@ export default class Web {
      */
     static alertUser(sMessage)
     {
-        if (window) {
-            window.alert(sMessage);
+        if (globals.window) {
+            globals.window.alert(sMessage);
         } else {
             Web.log(sMessage);
         }
@@ -159,13 +159,13 @@ export default class Web {
      * @param {boolean} [fAsync] is true for an asynchronous request; false otherwise (MUST be set for IE)
      * @param {function(string,string,number)|function(string,ArrayBuffer,number)} [done]
      * @param {function(number)} [progress]
-     * @return {Array|null} Array containing [resource, nErrorCode], or null if no response available (yet)
+     * @returns {Array|null} Array containing [resource, nErrorCode], or null if no response available (yet)
      */
     static getResource(sURL, type = "text", fAsync = false, done, progress)
     {
         let nErrorCode = 0, resource = null, response = null;
 
-        let resources = window['resources'];
+        let resources = globals.window['resources'];
         if (typeof resources == 'object' && (resource = resources[sURL])) {
             if (done) done(sURL, resource, nErrorCode);
             return [resource, nErrorCode];
@@ -194,7 +194,7 @@ export default class Web {
             return Net.getResource(sURL, type, fAsync, done);
         }
 
-        let request = (window.XMLHttpRequest? new window.XMLHttpRequest() : new window.ActiveXObject("Microsoft.XMLHTTP"));
+        let request = (globals.window.XMLHttpRequest? new globals.window.XMLHttpRequest() : new globals.window.ActiveXObject("Microsoft.XMLHTTP"));
         let fArrayBuffer = false, fXHR2 = (typeof request.responseType === 'string');
 
         let callback = function() {
@@ -315,7 +315,7 @@ export default class Web {
      *
      * @param {string} sURL
      * @param {string} sData
-     * @return {Object|null} (resource)
+     * @returns {Object|null} (resource)
      */
     static parseMemoryResource(sURL, sData)
     {
@@ -461,7 +461,7 @@ export default class Web {
      * should be using any of these deprecated paths anymore.
      *
      * @param {string} sPath
-     * @return {string}
+     * @returns {string}
      */
     static redirectResource(sPath)
     {
@@ -509,21 +509,21 @@ export default class Web {
      *
      * This is like getHostName() but with the port number, if any.
      *
-     * @return {string}
+     * @returns {string}
      */
     static getHost()
     {
-        return (window? window.location.host : "localhost");
+        return globals.window.location? globals.window.location.host : "localhost";
     }
 
     /**
      * getHostName()
      *
-     * @return {string}
+     * @returns {string}
      */
     static getHostName()
     {
-        return (window? window.location.hostname : "localhost");
+        return globals.window.location? globals.window.location.hostname : "localhost";
     }
 
     /**
@@ -531,41 +531,41 @@ export default class Web {
      *
      * This could also be implemented with window.location.origin, but that wasn't originally available in all browsers.
      *
-     * @return {string}
+     * @returns {string}
      */
     static getHostOrigin()
     {
-        return (window? window.location.protocol + "//" + window.location.host : SITEURL);
+        return globals.window.location? globals.window.location.protocol + "//" + globals.window.location.host : SITEURL;
     }
 
     /**
      * getHostProtocol()
      *
-     * @return {string}
+     * @returns {string}
      */
     static getHostProtocol()
     {
-        return (window? window.location.protocol : "file:");
+        return globals.window.location? globals.window.location.protocol : "file:";
     }
 
     /**
      * getHostURL()
      *
-     * @return {string|null}
+     * @returns {string|null}
      */
     static getHostURL()
     {
-        return (window? window.location.href : null);
+        return globals.window.location? globals.window.location.href : null;
     }
 
     /**
      * getUserAgent()
      *
-     * @return {string}
+     * @returns {string}
      */
     static getUserAgent()
     {
-        return (window? window.navigator.userAgent : "");
+        return globals.window.navigator? globals.window.navigator.userAgent : "";
     }
 
     /**
@@ -573,17 +573,17 @@ export default class Web {
      *
      * true if localStorage support exists, is enabled, and works; false otherwise
      *
-     * @return {boolean}
+     * @returns {boolean}
      */
     static hasLocalStorage()
     {
         if (Web.fLocalStorage == null) {
             let f = false;
-            if (window) {
+            if (globals.window.localStorage) {
                 try {
-                    window.localStorage.setItem(Web.sLocalStorageTest, Web.sLocalStorageTest);
-                    f = (window.localStorage.getItem(Web.sLocalStorageTest) == Web.sLocalStorageTest);
-                    window.localStorage.removeItem(Web.sLocalStorageTest);
+                    globals.window.localStorage.setItem(Web.sLocalStorageTest, Web.sLocalStorageTest);
+                    f = (globals.window.localStorage.getItem(Web.sLocalStorageTest) == Web.sLocalStorageTest);
+                    globals.window.localStorage.removeItem(Web.sLocalStorageTest);
                 } catch (e) {
                     Web.logLocalStorageError(e);
                     f = false;
@@ -610,14 +610,14 @@ export default class Web {
      * Returns the requested key value, or null if the key does not exist, or undefined if localStorage is not available
      *
      * @param {string} sKey
-     * @return {string|null|undefined} sValue
+     * @returns {string|null|undefined} sValue
      */
     static getLocalStorageItem(sKey)
     {
         let sValue;
-        if (window) {
+        if (Web.hasLocalStorage()) {
             try {
-                sValue = window.localStorage.getItem(sKey);
+                sValue = globals.window.localStorage.getItem(sKey);
             } catch (e) {
                 Web.logLocalStorageError(e);
             }
@@ -630,15 +630,17 @@ export default class Web {
      *
      * @param {string} sKey
      * @param {string} sValue
-     * @return {boolean} true if localStorage is available, false if not
+     * @returns {boolean} true if localStorage is available, false if not
      */
     static setLocalStorageItem(sKey, sValue)
     {
-        try {
-            window.localStorage.setItem(sKey, sValue);
-            return true;
-        } catch (e) {
-            Web.logLocalStorageError(e);
+        if (Web.hasLocalStorage()) {
+            try {
+                globals.window.localStorage.setItem(sKey, sValue);
+                return true;
+            } catch (e) {
+                Web.logLocalStorageError(e);
+            }
         }
         return false;
     }
@@ -650,27 +652,31 @@ export default class Web {
      */
     static removeLocalStorageItem(sKey)
     {
-        try {
-            window.localStorage.removeItem(sKey);
-        } catch (e) {
-            Web.logLocalStorageError(e);
+        if (Web.hasLocalStorage()) {
+            try {
+                globals.window.localStorage.removeItem(sKey);
+            } catch (e) {
+                Web.logLocalStorageError(e);
+            }
         }
     }
 
     /**
      * getLocalStorageKeys()
      *
-     * @return {Array}
+     * @returns {Array}
      */
     static getLocalStorageKeys()
     {
         let a = [];
-        try {
-            for (let i = 0, c = window.localStorage.length; i < c; i++) {
-                a.push(window.localStorage.key(i));
+        if (Web.hasLocalStorage()) {
+            try {
+                for (let i = 0, c = globals.window.localStorage.length; i < c; i++) {
+                    a.push(globals.window.localStorage.key(i));
+                }
+            } catch (e) {
+                Web.logLocalStorageError(e);
             }
-        } catch (e) {
-            Web.logLocalStorageError(e);
         }
         return a;
     }
@@ -680,7 +686,7 @@ export default class Web {
      */
     static reloadPage()
     {
-        if (window) window.location.reload();
+        if (globals.window.location) globals.window.location.reload();
     }
 
     /**
@@ -712,11 +718,11 @@ export default class Web {
      * difference (eg, when there's only a soft keyboard as opposed to a dedicated keyboard).  See monitor.js for details.
      *
      * @param {string} s is a substring to search for in the user-agent; as noted above, "iOS" and "MSIE" are special values
-     * @return {boolean} is true if the string was found, false if not
+     * @returns {boolean} is true if the string was found, false if not
      */
     static isUserAgent(s)
     {
-        if (window) {
+        if (globals.window.navigator) {
             let userAgent = Web.getUserAgent();
             /*
              * Here's one case where we have to be careful with Component, because when isUserAgent() is called by
@@ -727,7 +733,7 @@ export default class Web {
              * And yes, it would be pointless to use the conditional (?) operator below, if not for the Google Closure
              * Compiler (v20130823) failing to detect the entire expression as a boolean.
              */
-            return s == "iOS" && (!!userAgent.match(/(iPod|iPhone|iPad)/) || (window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1)) || s == "MSIE" && !!userAgent.match(/(MSIE|Trident)/) || (userAgent.indexOf(s) >= 0);
+            return s == "iOS" && (!!userAgent.match(/(iPod|iPhone|iPad)/) || (globals.window.navigator.platform === 'MacIntel' && globals.window.navigator.maxTouchPoints > 1)) || s == "MSIE" && !!userAgent.match(/(MSIE|Trident)/) || (userAgent.indexOf(s) >= 0);
         }
         return false;
     }
@@ -741,7 +747,7 @@ export default class Web {
      *      https://developer.mozilla.org/en-US/docs/Browser_detection_using_the_user_agent
      *
      * @param {string} [sDevice] (eg, "iPad" to check for iPad, or "!iPad" to specifically exclude it)
-     * @return {boolean} is true if the browser appears to be a mobile (ie, non-desktop) web browser, false if not
+     * @returns {boolean} is true if the browser appears to be a mobile (ie, non-desktop) web browser, false if not
      */
     static isMobile(sDevice)
     {
@@ -770,7 +776,7 @@ export default class Web {
      * @param {Object|null|undefined} obj
      * @param {string} sProp
      * @param {string} [sSuffix]
-     * @return {string|null}
+     * @returns {string|null}
      */
     static findProperty(obj, sProp, sSuffix)
     {
@@ -801,7 +807,7 @@ export default class Web {
      * First looks for sParm exactly as specified, then looks for the lower-case version.
      *
      * @param {string} sParm
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     static getURLParm(sParm)
     {
@@ -815,18 +821,18 @@ export default class Web {
      * parseURLParms(sParms)
      *
      * @param {string} [sParms] containing the parameter portion of a URL (ie, after the '?')
-     * @return {Object} containing properties for each parameter found
+     * @returns {Object} containing properties for each parameter found
      */
     static parseURLParms(sParms)
     {
         let aParms = {};
-        if (window) {       // an alternative to "if (typeof module === 'undefined')" if require("defines") was used
+        if (globals.window.location) {
             if (!sParms) {
                 /*
                  * Note that window.location.href returns the entire URL, whereas window.location.search
                  * returns only the parameters, if any (starting with the '?', which we skip over with a substr() call).
                  */
-                sParms = window.location.search.substr(1);
+                sParms = globals.window.location.search.substr(1);
             }
             let match;
             let pl = /\+/g; // RegExp for replacing addition symbol with a space
@@ -886,8 +892,8 @@ export default class Web {
                 //     sAlert += '\n\nAnd for the record, there is nothing malicious on the PCjs website.';
                 // }
             }
-            else {
-                window.open(sURI);
+            else if (globals.window.open) {
+                globals.window.open(sURI);
                 sAlert = 'Check your browser for a new window/tab containing the requested data' + (sFileName? (' (' + sFileName + ')') : '') + '.';
             }
         }
@@ -1008,21 +1014,19 @@ export default class Web {
      */
     static onPageEvent(sFunc, fn)
     {
-        if (window) {
-            let fnPrev = window[sFunc];
-            if (typeof fnPrev !== 'function') {
-                window[sFunc] = fn;
-            } else {
-                /*
-                 * TODO: Determine whether there's any value in receiving/sending the Event object that the
-                 * browser provides when it generates the original event.
-                 */
-                window[sFunc] = function onWindowEvent()
-                {
-                    if (fnPrev) fnPrev();
-                    fn();
-                };
-            }
+        let fnPrev = globals.window[sFunc];
+        if (typeof fnPrev !== 'function') {
+            globals.window[sFunc] = fn;
+        } else {
+            /*
+                * TODO: Determine whether there's any value in receiving/sending the Event object that the
+                * browser provides when it generates the original event.
+                */
+            globals.window[sFunc] = function doPageEvent()
+            {
+                if (fnPrev) fnPrev();
+                fn();
+            };
         }
     }
 
@@ -1124,9 +1128,9 @@ export default class Web {
 Web.parmsURL = null;            // initialized on first call to parseURLParms()
 
 Web.aPageEventHandlers = {
-    'init': [],                 // list of window 'onload' handlers
-    'show': [],                 // list of window 'onpageshow' handlers
-    'exit': []                  // list of window 'onunload' handlers (although we prefer to use 'onbeforeunload' if possible)
+    'init': [],                 // list of 'onload' handlers
+    'show': [],                 // list of 'onpageshow' handlers
+    'exit': []                  // list of 'onunload' handlers (although we prefer to use 'onbeforeunload' if possible)
 };
 
 Web.asBrowserPrefixes = ['', 'moz', 'ms', 'webkit'];
@@ -1177,9 +1181,9 @@ Web.onPageEvent(Web.isUserAgent("iOS")? 'onpagehide' : (Web.isUserAgent("Opera")
  *
  * Deal with Web.getURLParm("backtrack") in /machines/pcx86/modules/v2/defines.js at the same time.
  */
-if (DEBUG && window) {
+if (DEBUG) {
     let debug = Web.getURLParm("debug");
     if (debug == "false") {
-        window['DEBUG'] = false;
+        globals.window['DEBUG'] = false;
     }
 }

@@ -10,7 +10,7 @@
 import Str from "./strlib.js";
 import Web from "./weblib.js";
 import Component from "./component.js";
-import { APPVERSION, DEBUG } from "./defines.js";
+import { APPVERSION, DEBUG, globals } from "./defines.js";
 
 /**
  * savePC(idMachine, sPCJSFile, callback)
@@ -220,4 +220,4 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
  * Prevent the Closure Compiler from renaming functions we want to export, by adding them
  * as (named) properties of a global object.
  */
-window['savePC'] = savePC;
+globals.window['savePC'] = savePC;

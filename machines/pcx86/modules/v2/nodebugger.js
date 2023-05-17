@@ -7,6 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import { globals } from "./defines.js";
+
 /*
  * WARNING: DEBUGGER needs to accurately reflect whether or not the Debugger component is (or will be) loaded.
  * In the compiled case, we rely on the Closure Compiler to override DEBUGGER as appropriate.  When it's *false*,
@@ -27,7 +29,4 @@
  * linting errors, we again use the "window" syntax.
  */
 
-if (window) {
-    // DEBUGGER = BACKTRACK = SYMBOLS = false;
-    window['DEBUGGER'] = window['BACKTRACK'] = window['SYMBOLS'] = false;
-}
+globals.window['DEBUGGER'] = globals.window['BACKTRACK'] = globals.window['SYMBOLS'] = false;

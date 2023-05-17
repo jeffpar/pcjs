@@ -12,10 +12,19 @@
  */
 const APPVERSION = "0.00";              // this @define is overridden by the Closure Compiler with the version in machines.json
 
+/**
+ * @define {string}
+ */
 const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
 
+/**
+ * @define {string}
+ */
 const LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
 
+/**
+ * @define {string}
+ */
 const CSSCLASS = "pcjs";
 
 /**
@@ -113,4 +122,14 @@ const RS232 = {
     }
 };
 
-export { APPVERSION, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, LICENSE, MAXDEBUG, PRIVATE, RS232, SITEURL }
+/*
+ * This is my initial effort to isolate the use of global variables in a way that is environment-agnostic.
+ */
+let globals = {
+    pcjs: {machines: {}, components: [], commands: {}},
+    node: (typeof window == "undefined")? global : {},
+    window: (typeof window == "undefined")? global : window,
+    document: (typeof document == "undefined")? global : document
+};
+
+export { APPVERSION, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, LICENSE, MAXDEBUG, PRIVATE, RS232, SITEURL, globals }

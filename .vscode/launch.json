@@ -1060,6 +1060,21 @@
       ]
     },
     {
+      "name": "Node: pcx86.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/machines/pcx86/bin/pcx86.js",
+      "args": [
+        "--debug"
+      ],
+      "cwd": "${workspaceFolder}/machines/pcx86/bin",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
       "name": "Node: pdfparse.js",
       "type": "node",
       "request": "launch",

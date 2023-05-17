@@ -8,7 +8,7 @@
  */
 
 import Web from "../../../modules/v2/weblib.js";
-import { APPVERSION, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, LICENSE, MAXDEBUG, PRIVATE, RS232, SITEURL } from "../../../modules/v2/defines.js";
+import { APPVERSION, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, LICENSE, MAXDEBUG, PRIVATE, RS232, SITEURL, globals } from "../../../modules/v2/defines.js";
 
 /**
  * @define {string}
@@ -124,11 +124,11 @@ const TYPEDARRAYS = true; // (typeof ArrayBuffer !== 'undefined');
  * Deal with Web.getURLParm("debug") in /machines/modules/v2/weblib.js at the same time.
  */
 
-if (DEBUG && window) {
+if (DEBUG) {
     let backTrack = Web.getURLParm("backtrack");
     if (backTrack == "false") {
-        window['BACKTRACK'] = false;
+        globals['BACKTRACK'] = false;
     }
 }
 
-export { APPCLASS, APPNAME, APPVERSION, BACKTRACK, BUGS_8086, BYTEARRAYS, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, DESKPRO386, I386, LICENSE, MAXDEBUG, PAGEBLOCKS, PREFETCH, PRIVATE, RS232, SITEURL, SYMBOLS, TYPEDARRAYS }
+export { APPCLASS, APPNAME, APPVERSION, BACKTRACK, BUGS_8086, BYTEARRAYS, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, DESKPRO386, I386, LICENSE, MAXDEBUG, PAGEBLOCKS, PREFETCH, PRIVATE, RS232, SITEURL, SYMBOLS, TYPEDARRAYS, globals }

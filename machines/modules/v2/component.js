@@ -29,7 +29,7 @@
  */
 
 import Str from "./strlib.js";
-import { COMPILED, DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
+import { COMPILED, DEBUG, DEBUGGER, MAXDEBUG, globals } from "./defines.js";
 
 /**
  * Since the Closure Compiler treats ES6 classes as @struct rather than @dict by default,
@@ -156,7 +156,7 @@ export default class Component {
          *
          *      if (DEBUG) Component.log("Component.add(" + component.type + "," + component.id + ")");
          */
-        Component.components.push(component);
+        globals.pcjs.components.push(component);
     }
 
     /**
@@ -166,17 +166,17 @@ export default class Component {
      */
     static addMachine(idMachine)
     {
-        Component.machines[idMachine] = {};
+        globals.pcjs.machines[idMachine] = {};
     }
 
     /**
      * Component.getMachines()
      *
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     static getMachines()
     {
-        return Object.keys(Component.machines);
+        return Object.keys(globals.pcjs.machines);
     }
 
     /**
@@ -189,11 +189,11 @@ export default class Component {
     static addMachineResource(idMachine, sName, data)
     {
         /*
-         * I used to assert(Component.machines[idMachine]), but when we're running as a Node app, embed.js is not used,
+         * I used to assert(globals.pcjs.machines[idMachine]), but when we're running as a Node app, embed.js is not used,
          * so addMachine() is never called, so resources do not need to be recorded.
          */
-        if (Component.machines[idMachine] && sName) {
-            Component.machines[idMachine][sName] = data;
+        if (globals.pcjs.machines[idMachine] && sName) {
+            globals.pcjs.machines[idMachine][sName] = data;
         }
     }
 
@@ -201,17 +201,17 @@ export default class Component {
      * Component.getMachineResources(idMachine)
      *
      * @param {string} idMachine
-     * @return {Object|undefined}
+     * @returns {Object|undefined}
      */
     static getMachineResources(idMachine)
     {
-        return Component.machines[idMachine];
+        return globals.pcjs.machines[idMachine];
     }
 
     /**
      * Component.getTime()
      *
-     * @return {number} the current time, in milliseconds
+     * @returns {number} the current time, in milliseconds
      */
     static getTime()
     {
@@ -238,7 +238,7 @@ export default class Component {
                     sElapsed = (Component.getTime() - Component.msStart) + "ms: ";
                 }
                 sMsg = sMsg.replace(/\r/g, '\\r').replace(/\n/g, ' ');
-                if (window && window.console) console.log(sElapsed + sMsg);
+                console.log(sElapsed + sMsg);
             }
         }
     }
@@ -315,7 +315,7 @@ export default class Component {
      * @param {string} s is the message text
      * @param {boolean} [fPrintOnly]
      * @param {string} [id] is the caller's ID, if any
-     * @return {boolean}
+     * @returns {boolean}
      */
     static notice(s, fPrintOnly, id)
     {
@@ -512,7 +512,7 @@ export default class Component {
      * this linear lookup into a property lookup, but some components may have no ID.
      *
      * @param {string} [idRelated] of related component
-     * @return {Array} of components
+     * @returns {Array} of components
      */
     static getComponents(idRelated)
     {
@@ -531,8 +531,9 @@ export default class Component {
             else
                 idRelated = "";
         }
-        for (i = 0; i < Component.components.length; i++) {
-            let component = Component.components[i];
+        let components = globals.pcjs.components;
+        for (i = 0; i < components.length; i++) {
+            let component = components[i];
             if (!idRelated || !component.id.indexOf(idRelated)) {
                 aComponents.push(component);
             }
@@ -548,7 +549,7 @@ export default class Component {
      *
      * @param {string} id of the desired component
      * @param {string} [idRelated] of related component
-     * @return {Component|null}
+     * @returns {Component|null}
      */
     static getComponentByID(id, idRelated)
     {
@@ -562,12 +563,13 @@ export default class Component {
             if (idRelated && (i = idRelated.indexOf('.')) > 0) {
                 id = idRelated.substr(0, i + 1) + id;
             }
-            for (i = 0; i < Component.components.length; i++) {
-                if (Component.components[i]['id'] === id) {
-                    return Component.components[i];
+            let components = globals.pcjs.components;
+            for (i = 0; i < components.length; i++) {
+                if (components[i]['id'] === id) {
+                    return components[i];
                 }
             }
-            if (Component.components.length) {
+            if (components.length) {
                 Component.log("Component ID '" + id + "' not found", "warning");
             }
         }
@@ -580,7 +582,7 @@ export default class Component {
      * @param {string} sType of the desired component
      * @param {string} [idRelated] of related component
      * @param {Component|null} [componentPrev] of previously returned component, if any
-     * @return {Component|null}
+     * @returns {Component|null}
      */
     static getComponentByType(sType, idRelated, componentPrev)
     {
@@ -598,13 +600,14 @@ export default class Component {
                     idRelated = "";
                 }
             }
-            for (i = 0; i < Component.components.length; i++) {
+            let components = globals.pcjs.components;
+            for (i = 0; i < components.length; i++) {
                 if (componentPrev) {
-                    if (componentPrev == Component.components[i]) componentPrev = null;
+                    if (componentPrev == components[i]) componentPrev = null;
                     continue;
                 }
-                if (sType == Component.components[i].type && (!idRelated || !Component.components[i].id.indexOf(idRelated))) {
-                    return Component.components[i];
+                if (sType == components[i].type && (!idRelated || !components[i].id.indexOf(idRelated))) {
+                    return components[i];
                 }
             }
             Component.log("Component type '" + sType + "' not found", "warning");
@@ -616,6 +619,7 @@ export default class Component {
      * Component.getComponentParms(element)
      *
      * @param {HTMLElement} element from the DOM
+     * @returns {Object|null}
      */
     static getComponentParms(element)
     {
@@ -623,7 +627,7 @@ export default class Component {
         let sParms = element.getAttribute("data-value");
         if (sParms) {
             try {
-                parms = eval('(' + sParms + ')');   // jshint ignore:line
+                parms = /** @type {Object} */ (eval('(' + sParms + ')'));
                 /*
                  * We can no longer invoke removeAttribute() because some components (eg, Panel) need
                  * to run their initXXX() code more than once, to avoid initialization-order dependencies.
@@ -647,10 +651,10 @@ export default class Component {
      * TODO: This should probably be moved into weblib.js at some point, along with the control binding functions above,
      * to keep all the browser-related code together.
      *
-     * @param {HTMLDocument|HTMLElement|Node} element from the DOM
+     * @param {HTMLElement|Node} element from the DOM
      * @param {string} sClass
      * @param {string} [sObjClass]
-     * @return {Array|NodeList}
+     * @returns {Array|NodeList}
      */
     static getElementsByClass(element, sClass, sObjClass)
     {
@@ -700,12 +704,12 @@ export default class Component {
      * is the ASCII code in hex.  For ESC, that would be \x1B.
      *
      * @param {string} sScript
-     * @return {Array}
+     * @returns {Array}
      */
     static getScriptCommands(sScript)
     {
         let cch = sScript.length;
-        let aCommands = [], aTokens = [], sToken = "", chQuote = null;
+        let commands = [], aTokens = [], sToken = "", chQuote = null;
         for (let i = 0; i < cch; i++) {
             let ch = sScript[i];
             if (ch == '"' || ch == "'") {
@@ -734,7 +738,7 @@ export default class Component {
                         sToken = "";
                     }
                     if (ch == ';' && aTokens.length) {
-                        aCommands.push(aTokens);
+                        commands.push(aTokens);
                         aTokens = [];
                     }
                     continue;
@@ -746,9 +750,9 @@ export default class Component {
             aTokens.push(sToken);
         }
         if (aTokens.length) {
-            aCommands.push(aTokens);
+            commands.push(aTokens);
         }
-        return aCommands;
+        return commands;
     }
 
     /**
@@ -756,19 +760,20 @@ export default class Component {
      *
      * @param {string} idMachine
      * @param {string} [sScript]
-     * @return {boolean}
+     * @returns {boolean}
      */
     static processScript(idMachine, sScript)
     {
         let fSuccess = false;
+        let commands = globals.pcjs.commands;
         idMachine += ".machine";
         if (!sScript) {
-            delete Component.commands[idMachine];
+            delete commands[idMachine];
             fSuccess = true;
         }
-        else if (typeof sScript == "string" && !Component.commands[idMachine]) {
+        else if (typeof sScript == "string" && !commands[idMachine]) {
             fSuccess = true;
-            Component.commands[idMachine] = Component.getScriptCommands(sScript);
+            commands[idMachine] = Component.getScriptCommands(sScript);
             if (!Component.processCommands(idMachine)) {
                 fSuccess = false;
             }
@@ -780,18 +785,18 @@ export default class Component {
      * Component.processCommands(idMachine)
      *
      * @param {string} idMachine
-     * @return {boolean}
+     * @returns {boolean}
      */
     static processCommands(idMachine)
     {
         let fSuccess = true;
-        let aCommands = Component.commands[idMachine];
+        let commands = globals.pcjs.commands[idMachine];
 
      // let dbg = Component.getComponentByType("Debugger", idMachine);
 
-        while (aCommands && aCommands.length) {
+        while (commands && commands.length) {
 
-            let aTokens = aCommands.splice(0, 1)[0];
+            let aTokens = commands.splice(0, 1)[0];
             let sCommand = aTokens[0];
 
             /*
@@ -849,8 +854,8 @@ export default class Component {
             }
         }
 
-        if (aCommands && !aCommands.length) {
-            delete Component.commands[idMachine];
+        if (commands && !commands.length) {
+            delete commands[idMachine];
         }
 
         return fSuccess;
@@ -860,7 +865,7 @@ export default class Component {
      * Component.scriptAlert(sMessage)
      *
      * @param {string} sMessage
-     * @return {boolean}
+     * @returns {boolean}
      */
     static scriptAlert(sMessage)
     {
@@ -874,7 +879,7 @@ export default class Component {
      * @param {Component} component
      * @param {string} sBinding
      * @param {string} sValue
-     * @return {boolean}
+     * @returns {boolean}
      */
     static scriptSelect(component, sBinding, sValue)
     {
@@ -900,7 +905,7 @@ export default class Component {
      *
      * @param {function()} fnCallback
      * @param {string} sDelay (in milliseconds)
-     * @return {boolean}
+     * @returns {boolean}
      */
     static scriptSleep(fnCallback, sDelay)
     {
@@ -912,7 +917,7 @@ export default class Component {
      * toString()
      *
      * @this {Component}
-     * @return {string}
+     * @returns {string}
      */
     toString()
     {
@@ -923,7 +928,7 @@ export default class Component {
      * getMachineNum()
      *
      * @this {Component}
-     * @return {number} unique machine number
+     * @returns {number} unique machine number
      */
     getMachineNum()
     {
@@ -946,7 +951,7 @@ export default class Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, 'print')
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -974,7 +979,7 @@ export default class Component {
                  *
                  * @this {Component}
                  * @param {string} s
-                 * @return {boolean}
+                 * @returns {boolean}
                  */
                 this.notice = function noticeControl(s /*, fPrintOnly, id*/) {
                     this.println(s, this.type);
@@ -998,7 +1003,7 @@ export default class Component {
                         } else {
                             Component.replaceControl(control, s, s + '.');
                         }
-                        if (!COMPILED && window && window.console) Component.println(s, type, id);
+                        if (!COMPILED) Component.println(s, type, id);
                     };
                 }(this, controlTextArea);
             }
@@ -1135,7 +1140,7 @@ export default class Component {
      * @param {string} s is the message text
      * @param {boolean} [fPrintOnly]
      * @param {string} [id] is the caller's ID, if any
-     * @return {boolean}
+     * @returns {boolean}
      */
     notice(s, fPrintOnly, id)
     {
@@ -1184,7 +1189,7 @@ export default class Component {
      * Report any fatal error condition
      *
      * @this {Component}
-     * @return {boolean} true if a fatal error condition exists, false if not
+     * @returns {boolean} true if a fatal error condition exists, false if not
      */
     isError()
     {
@@ -1206,7 +1211,7 @@ export default class Component {
      *
      * @this {Component}
      * @param {function()} [fnReady]
-     * @return {boolean} true if the component is in a "ready" state, false if not
+     * @returns {boolean} true if the component is in a "ready" state, false if not
      */
     isReady(fnReady)
     {
@@ -1249,7 +1254,7 @@ export default class Component {
      *
      * @this {Component}
      * @param {boolean} [fCancel] is set to true to cancel a "busy" state
-     * @return {boolean} true if "busy", false if not
+     * @returns {boolean} true if "busy", false if not
      */
     isBusy(fCancel)
     {
@@ -1270,7 +1275,7 @@ export default class Component {
      *
      * @this {Component}
      * @param {boolean} fBusy
-     * @return {boolean}
+     * @returns {boolean}
      */
     setBusy(fBusy)
     {
@@ -1293,7 +1298,7 @@ export default class Component {
      * @this {Component}
      * @param {Object|null} data
      * @param {boolean} [fRepower] is true if this is "repower" notification
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -1307,7 +1312,7 @@ export default class Component {
      * @this {Component}
      * @param {boolean} fSave
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -1322,7 +1327,7 @@ export default class Component {
      *
      * @param {number} num
      * @param {number} bits
-     * @return {number}
+     * @returns {number}
      */
     clearBits(num, bits)
     {
@@ -1339,7 +1344,7 @@ export default class Component {
      *
      * @param {number} num
      * @param {number} bits
-     * @return {number}
+     * @returns {number}
      */
     setBits(num, bits)
     {
@@ -1356,7 +1361,7 @@ export default class Component {
      *
      * @param {number} num
      * @param {number} bits
-     * @return {boolean}
+     * @returns {boolean}
      */
     testBits(num, bits)
     {
@@ -1374,7 +1379,7 @@ export default class Component {
      *
      * @this {Component}
      * @param {number} [bitsMessage] is zero or more Message flags
-     * @return {boolean} true if all specified message enabled, false if not
+     * @returns {boolean} true if all specified message enabled, false if not
      */
     messageEnabled(bitsMessage = 0)
     {
@@ -1499,20 +1504,7 @@ Component.PRINT = {
  *
  * Every machine on the page are now recorded as well, by their machine ID.  We then record the
  * various resources used by that machine.
- *
- * Includes a fallback for non-browser-based environments (ie, Node).  TODO: This will need to be
- * tailored to Node, probably using the global object instead of the window object, if we ever want
- * to support multi-machine configs in that environment.
  */
-if (window) {
-    if (!window['PCjs']) window['PCjs'] = {};
-    if (!window['PCjs']['Machines']) window['PCjs']['Machines'] = {};
-    if (!window['PCjs']['Components']) window['PCjs']['Components'] = [];
-    if (!window['PCjs']['Commands']) window['PCjs']['Commands'] = {};
-}
-Component.machines = window? window['PCjs']['Machines'] : {};
-Component.components = window? window['PCjs']['Components'] : [];
-Component.commands = window? window['PCjs']['Commands'] : {};
 
 Component.asyncCommands = [
     'hold', 'sleep', 'wait'

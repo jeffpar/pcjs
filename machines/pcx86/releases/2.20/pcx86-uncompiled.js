@@ -9,10 +9,19 @@
  */
 const APPVERSION = "2.20";              // this @define is overridden by the Closure Compiler with the version in machines.json
 
+/**
+ * @define {string}
+ */
 const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
 
+/**
+ * @define {string}
+ */
 const LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
 
+/**
+ * @define {string}
+ */
 const CSSCLASS = "pcjs";
 
 /**
@@ -108,6 +117,16 @@ const RS232 = {
         PIN:  22,
         MASK: 0x00400000
     }
+};
+
+/*
+ * This is my initial effort to isolate the use of global variables in a way that is environment-agnostic.
+ */
+let globals = {
+    pcjs: {machines: {}, components: [], commands: {}},
+    node: (typeof window == "undefined")? global : {},
+    window: (typeof window == "undefined")? global : window,
+    document: (typeof document == "undefined")? global : document
 };
 
 
@@ -2320,8 +2339,8 @@ class Web {
      */
     static alertUser(sMessage)
     {
-        if (window) {
-            window.alert(sMessage);
+        if (globals.window) {
+            globals.window.alert(sMessage);
         } else {
             Web.log(sMessage);
         }
@@ -2348,13 +2367,13 @@ class Web {
      * @param {boolean} [fAsync] is true for an asynchronous request; false otherwise (MUST be set for IE)
      * @param {function(string,string,number)|function(string,ArrayBuffer,number)} [done]
      * @param {function(number)} [progress]
-     * @return {Array|null} Array containing [resource, nErrorCode], or null if no response available (yet)
+     * @returns {Array|null} Array containing [resource, nErrorCode], or null if no response available (yet)
      */
     static getResource(sURL, type = "text", fAsync = false, done, progress)
     {
         let nErrorCode = 0, resource = null, response = null;
 
-        let resources = window['resources'];
+        let resources = globals.window['resources'];
         if (typeof resources == 'object' && (resource = resources[sURL])) {
             if (done) done(sURL, resource, nErrorCode);
             return [resource, nErrorCode];
@@ -2373,7 +2392,7 @@ class Web {
         }
 
 
-        let request = (window.XMLHttpRequest? new window.XMLHttpRequest() : new window.ActiveXObject("Microsoft.XMLHTTP"));
+        let request = (globals.window.XMLHttpRequest? new globals.window.XMLHttpRequest() : new globals.window.ActiveXObject("Microsoft.XMLHTTP"));
         let fArrayBuffer = false, fXHR2 = (typeof request.responseType === 'string');
 
         let callback = function() {
@@ -2494,7 +2513,7 @@ class Web {
      *
      * @param {string} sURL
      * @param {string} sData
-     * @return {Object|null} (resource)
+     * @returns {Object|null} (resource)
      */
     static parseMemoryResource(sURL, sData)
     {
@@ -2640,7 +2659,7 @@ class Web {
      * should be using any of these deprecated paths anymore.
      *
      * @param {string} sPath
-     * @return {string}
+     * @returns {string}
      */
     static redirectResource(sPath)
     {
@@ -2688,21 +2707,21 @@ class Web {
      *
      * This is like getHostName() but with the port number, if any.
      *
-     * @return {string}
+     * @returns {string}
      */
     static getHost()
     {
-        return (window? window.location.host : "localhost");
+        return globals.window.location? globals.window.location.host : "localhost";
     }
 
     /**
      * getHostName()
      *
-     * @return {string}
+     * @returns {string}
      */
     static getHostName()
     {
-        return (window? window.location.hostname : "localhost");
+        return globals.window.location? globals.window.location.hostname : "localhost";
     }
 
     /**
@@ -2710,41 +2729,41 @@ class Web {
      *
      * This could also be implemented with window.location.origin, but that wasn't originally available in all browsers.
      *
-     * @return {string}
+     * @returns {string}
      */
     static getHostOrigin()
     {
-        return (window? window.location.protocol + "//" + window.location.host : SITEURL);
+        return globals.window.location? globals.window.location.protocol + "//" + globals.window.location.host : SITEURL;
     }
 
     /**
      * getHostProtocol()
      *
-     * @return {string}
+     * @returns {string}
      */
     static getHostProtocol()
     {
-        return (window? window.location.protocol : "file:");
+        return globals.window.location? globals.window.location.protocol : "file:";
     }
 
     /**
      * getHostURL()
      *
-     * @return {string|null}
+     * @returns {string|null}
      */
     static getHostURL()
     {
-        return (window? window.location.href : null);
+        return globals.window.location? globals.window.location.href : null;
     }
 
     /**
      * getUserAgent()
      *
-     * @return {string}
+     * @returns {string}
      */
     static getUserAgent()
     {
-        return (window? window.navigator.userAgent : "");
+        return globals.window.navigator? globals.window.navigator.userAgent : "";
     }
 
     /**
@@ -2752,17 +2771,17 @@ class Web {
      *
      * true if localStorage support exists, is enabled, and works; false otherwise
      *
-     * @return {boolean}
+     * @returns {boolean}
      */
     static hasLocalStorage()
     {
         if (Web.fLocalStorage == null) {
             let f = false;
-            if (window) {
+            if (globals.window.localStorage) {
                 try {
-                    window.localStorage.setItem(Web.sLocalStorageTest, Web.sLocalStorageTest);
-                    f = (window.localStorage.getItem(Web.sLocalStorageTest) == Web.sLocalStorageTest);
-                    window.localStorage.removeItem(Web.sLocalStorageTest);
+                    globals.window.localStorage.setItem(Web.sLocalStorageTest, Web.sLocalStorageTest);
+                    f = (globals.window.localStorage.getItem(Web.sLocalStorageTest) == Web.sLocalStorageTest);
+                    globals.window.localStorage.removeItem(Web.sLocalStorageTest);
                 } catch (e) {
                     Web.logLocalStorageError(e);
                     f = false;
@@ -2789,14 +2808,14 @@ class Web {
      * Returns the requested key value, or null if the key does not exist, or undefined if localStorage is not available
      *
      * @param {string} sKey
-     * @return {string|null|undefined} sValue
+     * @returns {string|null|undefined} sValue
      */
     static getLocalStorageItem(sKey)
     {
         let sValue;
-        if (window) {
+        if (Web.hasLocalStorage()) {
             try {
-                sValue = window.localStorage.getItem(sKey);
+                sValue = globals.window.localStorage.getItem(sKey);
             } catch (e) {
                 Web.logLocalStorageError(e);
             }
@@ -2809,15 +2828,17 @@ class Web {
      *
      * @param {string} sKey
      * @param {string} sValue
-     * @return {boolean} true if localStorage is available, false if not
+     * @returns {boolean} true if localStorage is available, false if not
      */
     static setLocalStorageItem(sKey, sValue)
     {
-        try {
-            window.localStorage.setItem(sKey, sValue);
-            return true;
-        } catch (e) {
-            Web.logLocalStorageError(e);
+        if (Web.hasLocalStorage()) {
+            try {
+                globals.window.localStorage.setItem(sKey, sValue);
+                return true;
+            } catch (e) {
+                Web.logLocalStorageError(e);
+            }
         }
         return false;
     }
@@ -2829,27 +2850,31 @@ class Web {
      */
     static removeLocalStorageItem(sKey)
     {
-        try {
-            window.localStorage.removeItem(sKey);
-        } catch (e) {
-            Web.logLocalStorageError(e);
+        if (Web.hasLocalStorage()) {
+            try {
+                globals.window.localStorage.removeItem(sKey);
+            } catch (e) {
+                Web.logLocalStorageError(e);
+            }
         }
     }
 
     /**
      * getLocalStorageKeys()
      *
-     * @return {Array}
+     * @returns {Array}
      */
     static getLocalStorageKeys()
     {
         let a = [];
-        try {
-            for (let i = 0, c = window.localStorage.length; i < c; i++) {
-                a.push(window.localStorage.key(i));
+        if (Web.hasLocalStorage()) {
+            try {
+                for (let i = 0, c = globals.window.localStorage.length; i < c; i++) {
+                    a.push(globals.window.localStorage.key(i));
+                }
+            } catch (e) {
+                Web.logLocalStorageError(e);
             }
-        } catch (e) {
-            Web.logLocalStorageError(e);
         }
         return a;
     }
@@ -2859,7 +2884,7 @@ class Web {
      */
     static reloadPage()
     {
-        if (window) window.location.reload();
+        if (globals.window.location) globals.window.location.reload();
     }
 
     /**
@@ -2891,11 +2916,11 @@ class Web {
      * difference (eg, when there's only a soft keyboard as opposed to a dedicated keyboard).  See monitor.js for details.
      *
      * @param {string} s is a substring to search for in the user-agent; as noted above, "iOS" and "MSIE" are special values
-     * @return {boolean} is true if the string was found, false if not
+     * @returns {boolean} is true if the string was found, false if not
      */
     static isUserAgent(s)
     {
-        if (window) {
+        if (globals.window.navigator) {
             let userAgent = Web.getUserAgent();
             /*
              * Here's one case where we have to be careful with Component, because when isUserAgent() is called by
@@ -2906,7 +2931,7 @@ class Web {
              * And yes, it would be pointless to use the conditional (?) operator below, if not for the Google Closure
              * Compiler (v20130823) failing to detect the entire expression as a boolean.
              */
-            return s == "iOS" && (!!userAgent.match(/(iPod|iPhone|iPad)/) || (window.navigator.platform === 'MacIntel' && window.navigator.maxTouchPoints > 1)) || s == "MSIE" && !!userAgent.match(/(MSIE|Trident)/) || (userAgent.indexOf(s) >= 0);
+            return s == "iOS" && (!!userAgent.match(/(iPod|iPhone|iPad)/) || (globals.window.navigator.platform === 'MacIntel' && globals.window.navigator.maxTouchPoints > 1)) || s == "MSIE" && !!userAgent.match(/(MSIE|Trident)/) || (userAgent.indexOf(s) >= 0);
         }
         return false;
     }
@@ -2920,7 +2945,7 @@ class Web {
      *      https://developer.mozilla.org/en-US/docs/Browser_detection_using_the_user_agent
      *
      * @param {string} [sDevice] (eg, "iPad" to check for iPad, or "!iPad" to specifically exclude it)
-     * @return {boolean} is true if the browser appears to be a mobile (ie, non-desktop) web browser, false if not
+     * @returns {boolean} is true if the browser appears to be a mobile (ie, non-desktop) web browser, false if not
      */
     static isMobile(sDevice)
     {
@@ -2949,7 +2974,7 @@ class Web {
      * @param {Object|null|undefined} obj
      * @param {string} sProp
      * @param {string} [sSuffix]
-     * @return {string|null}
+     * @returns {string|null}
      */
     static findProperty(obj, sProp, sSuffix)
     {
@@ -2980,7 +3005,7 @@ class Web {
      * First looks for sParm exactly as specified, then looks for the lower-case version.
      *
      * @param {string} sParm
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     static getURLParm(sParm)
     {
@@ -2994,18 +3019,18 @@ class Web {
      * parseURLParms(sParms)
      *
      * @param {string} [sParms] containing the parameter portion of a URL (ie, after the '?')
-     * @return {Object} containing properties for each parameter found
+     * @returns {Object} containing properties for each parameter found
      */
     static parseURLParms(sParms)
     {
         let aParms = {};
-        if (window) {       // an alternative to "if (typeof module === 'undefined')" if require("defines") was used
+        if (globals.window.location) {
             if (!sParms) {
                 /*
                  * Note that window.location.href returns the entire URL, whereas window.location.search
                  * returns only the parameters, if any (starting with the '?', which we skip over with a substr() call).
                  */
-                sParms = window.location.search.substr(1);
+                sParms = globals.window.location.search.substr(1);
             }
             let match;
             let pl = /\+/g; // RegExp for replacing addition symbol with a space
@@ -3065,8 +3090,8 @@ class Web {
                 //     sAlert += '\n\nAnd for the record, there is nothing malicious on the PCjs website.';
                 // }
             }
-            else {
-                window.open(sURI);
+            else if (globals.window.open) {
+                globals.window.open(sURI);
                 sAlert = 'Check your browser for a new window/tab containing the requested data' + (sFileName? (' (' + sFileName + ')') : '') + '.';
             }
         }
@@ -3187,21 +3212,19 @@ class Web {
      */
     static onPageEvent(sFunc, fn)
     {
-        if (window) {
-            let fnPrev = window[sFunc];
-            if (typeof fnPrev !== 'function') {
-                window[sFunc] = fn;
-            } else {
-                /*
-                 * TODO: Determine whether there's any value in receiving/sending the Event object that the
-                 * browser provides when it generates the original event.
-                 */
-                window[sFunc] = function onWindowEvent()
-                {
-                    if (fnPrev) fnPrev();
-                    fn();
-                };
-            }
+        let fnPrev = globals.window[sFunc];
+        if (typeof fnPrev !== 'function') {
+            globals.window[sFunc] = fn;
+        } else {
+            /*
+                * TODO: Determine whether there's any value in receiving/sending the Event object that the
+                * browser provides when it generates the original event.
+                */
+            globals.window[sFunc] = function doPageEvent()
+            {
+                if (fnPrev) fnPrev();
+                fn();
+            };
         }
     }
 
@@ -3303,9 +3326,9 @@ class Web {
 Web.parmsURL = null;            // initialized on first call to parseURLParms()
 
 Web.aPageEventHandlers = {
-    'init': [],                 // list of window 'onload' handlers
-    'show': [],                 // list of window 'onpageshow' handlers
-    'exit': []                  // list of window 'onunload' handlers (although we prefer to use 'onbeforeunload' if possible)
+    'init': [],                 // list of 'onload' handlers
+    'show': [],                 // list of 'onpageshow' handlers
+    'exit': []                  // list of 'onunload' handlers (although we prefer to use 'onbeforeunload' if possible)
 };
 
 Web.asBrowserPrefixes = ['', 'moz', 'ms', 'webkit'];
@@ -3356,10 +3379,10 @@ Web.onPageEvent(Web.isUserAgent("iOS")? 'onpagehide' : (Web.isUserAgent("Opera")
  *
  * Deal with Web.getURLParm("backtrack") in /machines/pcx86/modules/v2/defines.js at the same time.
  */
-if (DEBUG && window) {
+if (DEBUG) {
     let debug = Web.getURLParm("debug");
     if (debug == "false") {
-        window['DEBUG'] = false;
+        globals.window['DEBUG'] = false;
     }
 }
 
@@ -3514,7 +3537,7 @@ class Component {
          *
          *      if (DEBUG) Component.log("Component.add(" + component.type + "," + component.id + ")");
          */
-        Component.components.push(component);
+        globals.pcjs.components.push(component);
     }
 
     /**
@@ -3524,17 +3547,17 @@ class Component {
      */
     static addMachine(idMachine)
     {
-        Component.machines[idMachine] = {};
+        globals.pcjs.machines[idMachine] = {};
     }
 
     /**
      * Component.getMachines()
      *
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     static getMachines()
     {
-        return Object.keys(Component.machines);
+        return Object.keys(globals.pcjs.machines);
     }
 
     /**
@@ -3547,11 +3570,11 @@ class Component {
     static addMachineResource(idMachine, sName, data)
     {
         /*
-         * I used to assert(Component.machines[idMachine]), but when we're running as a Node app, embed.js is not used,
+         * I used to assert(globals.pcjs.machines[idMachine]), but when we're running as a Node app, embed.js is not used,
          * so addMachine() is never called, so resources do not need to be recorded.
          */
-        if (Component.machines[idMachine] && sName) {
-            Component.machines[idMachine][sName] = data;
+        if (globals.pcjs.machines[idMachine] && sName) {
+            globals.pcjs.machines[idMachine][sName] = data;
         }
     }
 
@@ -3559,17 +3582,17 @@ class Component {
      * Component.getMachineResources(idMachine)
      *
      * @param {string} idMachine
-     * @return {Object|undefined}
+     * @returns {Object|undefined}
      */
     static getMachineResources(idMachine)
     {
-        return Component.machines[idMachine];
+        return globals.pcjs.machines[idMachine];
     }
 
     /**
      * Component.getTime()
      *
-     * @return {number} the current time, in milliseconds
+     * @returns {number} the current time, in milliseconds
      */
     static getTime()
     {
@@ -3596,7 +3619,7 @@ class Component {
                     sElapsed = (Component.getTime() - Component.msStart) + "ms: ";
                 }
                 sMsg = sMsg.replace(/\r/g, '\\r').replace(/\n/g, ' ');
-                if (window && window.console) console.log(sElapsed + sMsg);
+                console.log(sElapsed + sMsg);
             }
         }
     }
@@ -3673,7 +3696,7 @@ class Component {
      * @param {string} s is the message text
      * @param {boolean} [fPrintOnly]
      * @param {string} [id] is the caller's ID, if any
-     * @return {boolean}
+     * @returns {boolean}
      */
     static notice(s, fPrintOnly, id)
     {
@@ -3870,7 +3893,7 @@ class Component {
      * this linear lookup into a property lookup, but some components may have no ID.
      *
      * @param {string} [idRelated] of related component
-     * @return {Array} of components
+     * @returns {Array} of components
      */
     static getComponents(idRelated)
     {
@@ -3889,8 +3912,9 @@ class Component {
             else
                 idRelated = "";
         }
-        for (i = 0; i < Component.components.length; i++) {
-            let component = Component.components[i];
+        let components = globals.pcjs.components;
+        for (i = 0; i < components.length; i++) {
+            let component = components[i];
             if (!idRelated || !component.id.indexOf(idRelated)) {
                 aComponents.push(component);
             }
@@ -3906,7 +3930,7 @@ class Component {
      *
      * @param {string} id of the desired component
      * @param {string} [idRelated] of related component
-     * @return {Component|null}
+     * @returns {Component|null}
      */
     static getComponentByID(id, idRelated)
     {
@@ -3920,12 +3944,13 @@ class Component {
             if (idRelated && (i = idRelated.indexOf('.')) > 0) {
                 id = idRelated.substr(0, i + 1) + id;
             }
-            for (i = 0; i < Component.components.length; i++) {
-                if (Component.components[i]['id'] === id) {
-                    return Component.components[i];
+            let components = globals.pcjs.components;
+            for (i = 0; i < components.length; i++) {
+                if (components[i]['id'] === id) {
+                    return components[i];
                 }
             }
-            if (Component.components.length) {
+            if (components.length) {
                 Component.log("Component ID '" + id + "' not found", "warning");
             }
         }
@@ -3938,7 +3963,7 @@ class Component {
      * @param {string} sType of the desired component
      * @param {string} [idRelated] of related component
      * @param {Component|null} [componentPrev] of previously returned component, if any
-     * @return {Component|null}
+     * @returns {Component|null}
      */
     static getComponentByType(sType, idRelated, componentPrev)
     {
@@ -3956,13 +3981,14 @@ class Component {
                     idRelated = "";
                 }
             }
-            for (i = 0; i < Component.components.length; i++) {
+            let components = globals.pcjs.components;
+            for (i = 0; i < components.length; i++) {
                 if (componentPrev) {
-                    if (componentPrev == Component.components[i]) componentPrev = null;
+                    if (componentPrev == components[i]) componentPrev = null;
                     continue;
                 }
-                if (sType == Component.components[i].type && (!idRelated || !Component.components[i].id.indexOf(idRelated))) {
-                    return Component.components[i];
+                if (sType == components[i].type && (!idRelated || !components[i].id.indexOf(idRelated))) {
+                    return components[i];
                 }
             }
             Component.log("Component type '" + sType + "' not found", "warning");
@@ -3974,6 +4000,7 @@ class Component {
      * Component.getComponentParms(element)
      *
      * @param {HTMLElement} element from the DOM
+     * @returns {Object|null}
      */
     static getComponentParms(element)
     {
@@ -3981,7 +4008,7 @@ class Component {
         let sParms = element.getAttribute("data-value");
         if (sParms) {
             try {
-                parms = eval('(' + sParms + ')');   // jshint ignore:line
+                parms = /** @type {Object} */ (eval('(' + sParms + ')'));
                 /*
                  * We can no longer invoke removeAttribute() because some components (eg, Panel) need
                  * to run their initXXX() code more than once, to avoid initialization-order dependencies.
@@ -4005,10 +4032,10 @@ class Component {
      * TODO: This should probably be moved into weblib.js at some point, along with the control binding functions above,
      * to keep all the browser-related code together.
      *
-     * @param {HTMLDocument|HTMLElement|Node} element from the DOM
+     * @param {HTMLElement|Node} element from the DOM
      * @param {string} sClass
      * @param {string} [sObjClass]
-     * @return {Array|NodeList}
+     * @returns {Array|NodeList}
      */
     static getElementsByClass(element, sClass, sObjClass)
     {
@@ -4058,12 +4085,12 @@ class Component {
      * is the ASCII code in hex.  For ESC, that would be \x1B.
      *
      * @param {string} sScript
-     * @return {Array}
+     * @returns {Array}
      */
     static getScriptCommands(sScript)
     {
         let cch = sScript.length;
-        let aCommands = [], aTokens = [], sToken = "", chQuote = null;
+        let commands = [], aTokens = [], sToken = "", chQuote = null;
         for (let i = 0; i < cch; i++) {
             let ch = sScript[i];
             if (ch == '"' || ch == "'") {
@@ -4092,7 +4119,7 @@ class Component {
                         sToken = "";
                     }
                     if (ch == ';' && aTokens.length) {
-                        aCommands.push(aTokens);
+                        commands.push(aTokens);
                         aTokens = [];
                     }
                     continue;
@@ -4104,9 +4131,9 @@ class Component {
             aTokens.push(sToken);
         }
         if (aTokens.length) {
-            aCommands.push(aTokens);
+            commands.push(aTokens);
         }
-        return aCommands;
+        return commands;
     }
 
     /**
@@ -4114,19 +4141,20 @@ class Component {
      *
      * @param {string} idMachine
      * @param {string} [sScript]
-     * @return {boolean}
+     * @returns {boolean}
      */
     static processScript(idMachine, sScript)
     {
         let fSuccess = false;
+        let commands = globals.pcjs.commands;
         idMachine += ".machine";
         if (!sScript) {
-            delete Component.commands[idMachine];
+            delete commands[idMachine];
             fSuccess = true;
         }
-        else if (typeof sScript == "string" && !Component.commands[idMachine]) {
+        else if (typeof sScript == "string" && !commands[idMachine]) {
             fSuccess = true;
-            Component.commands[idMachine] = Component.getScriptCommands(sScript);
+            commands[idMachine] = Component.getScriptCommands(sScript);
             if (!Component.processCommands(idMachine)) {
                 fSuccess = false;
             }
@@ -4138,18 +4166,18 @@ class Component {
      * Component.processCommands(idMachine)
      *
      * @param {string} idMachine
-     * @return {boolean}
+     * @returns {boolean}
      */
     static processCommands(idMachine)
     {
         let fSuccess = true;
-        let aCommands = Component.commands[idMachine];
+        let commands = globals.pcjs.commands[idMachine];
 
      // let dbg = Component.getComponentByType("Debugger", idMachine);
 
-        while (aCommands && aCommands.length) {
+        while (commands && commands.length) {
 
-            let aTokens = aCommands.splice(0, 1)[0];
+            let aTokens = commands.splice(0, 1)[0];
             let sCommand = aTokens[0];
 
             /*
@@ -4207,8 +4235,8 @@ class Component {
             }
         }
 
-        if (aCommands && !aCommands.length) {
-            delete Component.commands[idMachine];
+        if (commands && !commands.length) {
+            delete commands[idMachine];
         }
 
         return fSuccess;
@@ -4218,7 +4246,7 @@ class Component {
      * Component.scriptAlert(sMessage)
      *
      * @param {string} sMessage
-     * @return {boolean}
+     * @returns {boolean}
      */
     static scriptAlert(sMessage)
     {
@@ -4232,7 +4260,7 @@ class Component {
      * @param {Component} component
      * @param {string} sBinding
      * @param {string} sValue
-     * @return {boolean}
+     * @returns {boolean}
      */
     static scriptSelect(component, sBinding, sValue)
     {
@@ -4258,7 +4286,7 @@ class Component {
      *
      * @param {function()} fnCallback
      * @param {string} sDelay (in milliseconds)
-     * @return {boolean}
+     * @returns {boolean}
      */
     static scriptSleep(fnCallback, sDelay)
     {
@@ -4270,7 +4298,7 @@ class Component {
      * toString()
      *
      * @this {Component}
-     * @return {string}
+     * @returns {string}
      */
     toString()
     {
@@ -4281,7 +4309,7 @@ class Component {
      * getMachineNum()
      *
      * @this {Component}
-     * @return {number} unique machine number
+     * @returns {number} unique machine number
      */
     getMachineNum()
     {
@@ -4304,7 +4332,7 @@ class Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, 'print')
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -4332,7 +4360,7 @@ class Component {
                  *
                  * @this {Component}
                  * @param {string} s
-                 * @return {boolean}
+                 * @returns {boolean}
                  */
                 this.notice = function noticeControl(s /*, fPrintOnly, id*/) {
                     this.println(s, this.type);
@@ -4356,7 +4384,7 @@ class Component {
                         } else {
                             Component.replaceControl(control, s, s + '.');
                         }
-                        if (!COMPILED && window && window.console) Component.println(s, type, id);
+                        if (!COMPILED) Component.println(s, type, id);
                     };
                 }(this, controlTextArea);
             }
@@ -4493,7 +4521,7 @@ class Component {
      * @param {string} s is the message text
      * @param {boolean} [fPrintOnly]
      * @param {string} [id] is the caller's ID, if any
-     * @return {boolean}
+     * @returns {boolean}
      */
     notice(s, fPrintOnly, id)
     {
@@ -4542,7 +4570,7 @@ class Component {
      * Report any fatal error condition
      *
      * @this {Component}
-     * @return {boolean} true if a fatal error condition exists, false if not
+     * @returns {boolean} true if a fatal error condition exists, false if not
      */
     isError()
     {
@@ -4564,7 +4592,7 @@ class Component {
      *
      * @this {Component}
      * @param {function()} [fnReady]
-     * @return {boolean} true if the component is in a "ready" state, false if not
+     * @returns {boolean} true if the component is in a "ready" state, false if not
      */
     isReady(fnReady)
     {
@@ -4607,7 +4635,7 @@ class Component {
      *
      * @this {Component}
      * @param {boolean} [fCancel] is set to true to cancel a "busy" state
-     * @return {boolean} true if "busy", false if not
+     * @returns {boolean} true if "busy", false if not
      */
     isBusy(fCancel)
     {
@@ -4628,7 +4656,7 @@ class Component {
      *
      * @this {Component}
      * @param {boolean} fBusy
-     * @return {boolean}
+     * @returns {boolean}
      */
     setBusy(fBusy)
     {
@@ -4651,7 +4679,7 @@ class Component {
      * @this {Component}
      * @param {Object|null} data
      * @param {boolean} [fRepower] is true if this is "repower" notification
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -4665,7 +4693,7 @@ class Component {
      * @this {Component}
      * @param {boolean} fSave
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -4680,7 +4708,7 @@ class Component {
      *
      * @param {number} num
      * @param {number} bits
-     * @return {number}
+     * @returns {number}
      */
     clearBits(num, bits)
     {
@@ -4697,7 +4725,7 @@ class Component {
      *
      * @param {number} num
      * @param {number} bits
-     * @return {number}
+     * @returns {number}
      */
     setBits(num, bits)
     {
@@ -4714,7 +4742,7 @@ class Component {
      *
      * @param {number} num
      * @param {number} bits
-     * @return {boolean}
+     * @returns {boolean}
      */
     testBits(num, bits)
     {
@@ -4732,7 +4760,7 @@ class Component {
      *
      * @this {Component}
      * @param {number} [bitsMessage] is zero or more Message flags
-     * @return {boolean} true if all specified message enabled, false if not
+     * @returns {boolean} true if all specified message enabled, false if not
      */
     messageEnabled(bitsMessage = 0)
     {
@@ -4857,20 +4885,7 @@ Component.PRINT = {
  *
  * Every machine on the page are now recorded as well, by their machine ID.  We then record the
  * various resources used by that machine.
- *
- * Includes a fallback for non-browser-based environments (ie, Node).  TODO: This will need to be
- * tailored to Node, probably using the global object instead of the window object, if we ever want
- * to support multi-machine configs in that environment.
  */
-if (window) {
-    if (!window['PCjs']) window['PCjs'] = {};
-    if (!window['PCjs']['Machines']) window['PCjs']['Machines'] = {};
-    if (!window['PCjs']['Components']) window['PCjs']['Components'] = [];
-    if (!window['PCjs']['Commands']) window['PCjs']['Commands'] = {};
-}
-Component.machines = window? window['PCjs']['Machines'] : {};
-Component.components = window? window['PCjs']['Components'] : [];
-Component.commands = window? window['PCjs']['Commands'] : {};
 
 Component.asyncCommands = [
     'hold', 'sleep', 'wait'
@@ -5588,10 +5603,10 @@ const TYPEDARRAYS = true; // (typeof ArrayBuffer !== 'undefined');
  * Deal with Web.getURLParm("debug") in /machines/modules/v2/weblib.js at the same time.
  */
 
-if (DEBUG && window) {
+if (DEBUG) {
     let backTrack = Web.getURLParm("backtrack");
     if (backTrack == "false") {
-        window['BACKTRACK'] = false;
+        globals['BACKTRACK'] = false;
     }
 }
 
@@ -39292,9 +39307,7 @@ class ChipSet extends Component {
         if (sound) {
             this.volumeInit = (typeof sound != "number" || sound < 0 || sound > 1)? 0.5 : sound;
             this.classAudio = this.contextAudio = null;
-            if (window) {
-                this.classAudio = window['AudioContext'] || window['webkitAudioContext'];
-            }
+            this.classAudio = globals.window['AudioContext'] || globals.window['webkitAudioContext'];
             if (this.classAudio) {
                 this.contextAudio = new this.classAudio();
             } else {
@@ -57872,7 +57885,7 @@ class VideoX86 extends Component {
                         eChild.style.height = ((eParent.clientWidth / aspectRatio)|0) + "px";
                     };
                 }(element, canvas, aspect));
-                window['onresize']();
+                globals.window['onresize']();
             }
 
             /*
@@ -72775,14 +72788,8 @@ class DebuggerX86 extends DbgLib {
              *      ...
              */
             let dbg = this;
-            if (window) {
-                if (window[APPCLASS] === undefined) {
-                    window[APPCLASS] = function(s) { return dbg.doCommands(s); };
-                }
-            } else {
-                if (global[APPCLASS] === undefined) {
-                    global[APPCLASS] = function(s) { return dbg.doCommands(s); };
-                }
+            if (globals.window[APPCLASS] === undefined) {
+                globals.window[APPCLASS] = function(s) { return dbg.doCommands(s); };
             }
 
         }   // endif DEBUGGER
@@ -81022,7 +81029,7 @@ class Computer extends Component {
     setMachineParms(parmsMachine)
     {
         if (!parmsMachine) {
-            let sParms, resMachine, resources = window['resources'];
+            let sParms, resMachine, resources = globals.window['resources'];
             if (typeof resources == 'object' && (sParms = resources['parms']) || (resMachine = Component.getMachineResources(this.idMachine)) && (sParms = resMachine['parms'])) {
                 try {
                     parmsMachine = /** @type {Object} */ (eval("(" + sParms + ")"));    // jshint ignore:line
@@ -81121,7 +81128,7 @@ class Computer extends Component {
         if (value === undefined && parmsComponent) {
             value = parmsComponent[sParm];
         }
-        let resources = window['resources'];
+        let resources = globals.window['resources'];
         if (!value && typeof resources == 'object') {
             if (resources[sParm]) {
                 value = sParm;
@@ -83251,7 +83258,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
              * If we have a 'css' resource, add it to the page first.
              */
             let css;
-            let resources = window['resources'];
+            let resources = globals.window['resources'];
             if (typeof resources == "object" && (css = resources['css'])) {
                 let head = document.head || document.getElementsByTagName('head')[0];
                 let style = document.createElement('style');
@@ -83562,20 +83569,8 @@ function commandMachine(control, fSingle, idMachine, sComponent, sCommand, sValu
     return false;
 }
 
-/**
- * Prevent the Closure Compiler from renaming functions we want to export, by adding them as global properties.
- */
-window['embedC1P']    = embedC1P;
-window['embedPC']     = embedPCx86;         // WARNING: embedPC() deprecated as of v1.23.0
-window['embedPCx86']  = embedPCx86;
-window['embedPCx80']  = embedPCx80;
-window['embedPDP10']  = embedPDP10;
-window['embedPDP11']  = embedPDP11;
-
-window['commandMachine'] = commandMachine;
-
-window['enableEvents'] = Web.enablePageEvents;
-window['sendEvent']    = Web.sendPageEvent;
+globals['enableEvents'] = Web.enablePageEvents;
+globals['sendEvent']    = Web.sendPageEvent;
 
 
 /**
@@ -83790,4 +83785,4 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
  * Prevent the Closure Compiler from renaming functions we want to export, by adding them
  * as (named) properties of a global object.
  */
-window['savePC'] = savePC;
+globals.window['savePC'] = savePC;

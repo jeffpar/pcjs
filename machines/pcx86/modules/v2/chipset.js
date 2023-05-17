@@ -15,7 +15,7 @@ import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Usr from "../../../modules/v2/usrlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, BACKTRACK, COMPILED, CSSCLASS, DEBUG, DEBUGGER, DESKPRO386, MAXDEBUG } from "./defines.js";
+import { APPCLASS, BACKTRACK, COMPILED, CSSCLASS, DEBUG, DEBUGGER, DESKPRO386, MAXDEBUG, globals } from "./defines.js";
 
 /**
  * @typedef {Object} Timer
@@ -151,9 +151,7 @@ export default class ChipSet extends Component {
         if (sound) {
             this.volumeInit = (typeof sound != "number" || sound < 0 || sound > 1)? 0.5 : sound;
             this.classAudio = this.contextAudio = null;
-            if (window) {
-                this.classAudio = window['AudioContext'] || window['webkitAudioContext'];
-            }
+            this.classAudio = globals.window['AudioContext'] || globals.window['webkitAudioContext'];
             if (this.classAudio) {
                 this.contextAudio = new this.classAudio();
             } else {

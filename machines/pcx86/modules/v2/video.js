@@ -19,7 +19,7 @@ import DumpAPI from "../../../modules/v2/dumpapi.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
+import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG, globals } from "./defines.js";
 
 /*
  * MDA/CGA Support
@@ -7941,7 +7941,7 @@ export default class VideoX86 extends Component {
                         eChild.style.height = ((eParent.clientWidth / aspectRatio)|0) + "px";
                     };
                 }(element, canvas, aspect));
-                window['onresize']();
+                globals.window['onresize']();
             }
 
             /*

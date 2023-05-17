@@ -19,7 +19,7 @@ import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Usr from "../../../modules/v2/usrlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, APPNAME, APPVERSION, BACKTRACK, BYTEARRAYS, COMPILED, DEBUG, DEBUGGER, I386, MAXDEBUG, PREFETCH, SYMBOLS, TYPEDARRAYS } from "./defines.js";
+import { APPCLASS, APPNAME, APPVERSION, BACKTRACK, BYTEARRAYS, COMPILED, DEBUG, DEBUGGER, I386, MAXDEBUG, PREFETCH, SYMBOLS, TYPEDARRAYS, globals } from "./defines.js";
 
 /**
  * @typedef {Object}    DbgAddrX86
@@ -188,14 +188,8 @@ export default class DebuggerX86 extends DbgLib {
              *      ...
              */
             let dbg = this;
-            if (window) {
-                if (window[APPCLASS] === undefined) {
-                    window[APPCLASS] = function(s) { return dbg.doCommands(s); };
-                }
-            } else {
-                if (global[APPCLASS] === undefined) {
-                    global[APPCLASS] = function(s) { return dbg.doCommands(s); };
-                }
+            if (globals.window[APPCLASS] === undefined) {
+                globals.window[APPCLASS] = function(s) { return dbg.doCommands(s); };
             }
 
         }   // endif DEBUGGER

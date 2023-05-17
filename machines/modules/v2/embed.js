@@ -10,7 +10,7 @@
 import Str from "./strlib.js";
 import Web from "./weblib.js";
 import Component from "./component.js";
-import { APPVERSION, PRIVATE } from "./defines.js";
+import { APPVERSION, PRIVATE, globals } from "./defines.js";
 
 /*
  * We now support asynchronous XML and XSL file loads; simply set fAsync (below) to true.
@@ -428,7 +428,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
              * If we have a 'css' resource, add it to the page first.
              */
             let css;
-            let resources = window['resources'];
+            let resources = globals.window['resources'];
             if (typeof resources == "object" && (css = resources['css'])) {
                 let head = document.head || document.getElementsByTagName('head')[0];
                 let style = document.createElement('style');
@@ -739,19 +739,7 @@ function commandMachine(control, fSingle, idMachine, sComponent, sCommand, sValu
     return false;
 }
 
-/**
- * Prevent the Closure Compiler from renaming functions we want to export, by adding them as global properties.
- */
-window['embedC1P']    = embedC1P;
-window['embedPC']     = embedPCx86;         // WARNING: embedPC() deprecated as of v1.23.0
-window['embedPCx86']  = embedPCx86;
-window['embedPCx80']  = embedPCx80;
-window['embedPDP10']  = embedPDP10;
-window['embedPDP11']  = embedPDP11;
-
-window['commandMachine'] = commandMachine;
-
-window['enableEvents'] = Web.enablePageEvents;
-window['sendEvent']    = Web.sendPageEvent;
+globals['enableEvents'] = Web.enablePageEvents;
+globals['sendEvent']    = Web.sendPageEvent;
 
 export { embedC1P, embedPCx86, embedPCx80, embedPDP10, embedPDP11, commandMachine };
