@@ -8,29 +8,75 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import fs from "fs";
+import path from "path";
+import repl from "repl";
 
-var path = require("path");
-var fs = require("fs");
-var repl = require("repl");
-var Defines = require("../../shared/lib/defines");
-var Str = require("../../shared/lib/strlib");
-var Proc = require("../../shared/lib/proclib");
+import Str from "../../modules/v2/strlib.js";
+import Proc from "../../modules/v2/proclib.js";
 
-var fConsole = false;
-var fDebug = false;
-var fGlobalsSet = false;
-var args = Proc.getArgs();
-var argv = args.argv;
-var sCmdPrev = "";
-if (argv['console'] !== undefined) fConsole = argv['console'];
-if (argv['debug'] !== undefined) fDebug = argv['debug'];
+//
+// The following list of imports should be a strict subset of the scripts listed in machines.json for 'pcx86'.
+//
+import "../../modules/v2/usrlib.js";
+import "../../modules/v2/weblib.js";
+import "../../modules/v2/component.js";
+import "../../modules/v3/databuffer.js";
+import "../../modules/v3/jsonlib.js";
+import "../../pcx86/modules/v2/defines.js";
+import "../../pcx86/modules/v2/x86.js";
+import "../../pcx86/modules/v3/charset.js";
+import "../../pcx86/modules/v2/interrupts.js";
+import "../../pcx86/modules/v2/messages.js";
+import "../../pcx86/modules/v2/bus.js";
+import "../../pcx86/modules/v2/memory.js";
+import "../../pcx86/modules/v2/cpu.js";
+import "../../pcx86/modules/v2/cpux86.js";
+import "../../pcx86/modules/v2/fpux86.js";
+import "../../pcx86/modules/v2/segx86.js";
+import "../../pcx86/modules/v2/x86func.js";
+import "../../pcx86/modules/v2/x86help.js";
+import "../../pcx86/modules/v2/x86mods.js";
+import "../../pcx86/modules/v2/x86ops.js";
+import "../../pcx86/modules/v2/x86op0f.js";
+import "../../pcx86/modules/v2/chipset.js";
+import "../../pcx86/modules/v2/rom.js";
+import "../../pcx86/modules/v2/ram.js";
+import "../../pcx86/modules/v2/keyboard.js";
+import "../../pcx86/modules/v2/video.js";
+import "../../pcx86/modules/v2/parallel.js";
+import "../../pcx86/modules/v2/serial.js";
+import "../../pcx86/modules/v2/testctl.js";
+import "../../pcx86/modules/v2/testmon.js";
+import "../../pcx86/modules/v2/mouse.js";
+import "../../pcx86/modules/v2/disk.js";
+import "../../pcx86/modules/v2/fdc.js";
+import "../../pcx86/modules/v2/hdc.js";
+import "../../modules/v2/debugger.js";
+import "../../pcx86/modules/v2/debugger.js";
+import "../../pcx86/modules/v2/computer.js";
 
-var lib = path.join(path.dirname(fs.realpathSync(__filename)), "../lib/");
+//
+// Import assertions aren't supported by eslint (yet)
+//
+// import machines from "../../machines.json" assert {
+//     type: 'json'
+// };
+
+const machines = JSON.parse(fs.readFileSync("../../machines.json"));
+
+let args = Proc.getArgs();
+let argv = args.argv;
+
+let fConsole = (argv['console'] || false);
+let fDebug = (argv['debug'] || false);
+let fGlobalsSet = false;
+let sCmdPrev = "";
+
+let lib = "../modules/v2/", scriptsPCx86;
 
 try {
-    var machines = require(lib + "../../../machines/machines.json");
-    var scriptsPCx86 = /** @type {Array.<string>} */ (machines['pcx86'].scripts);
+    scriptsPCx86 = /** @type {Array.<string>} */ (machines['pcx86'].scripts);
 } catch(err) {
     console.log(err.message);
 }
@@ -55,7 +101,6 @@ try {
 var Component;
 var dbg;
 var aComponents = [];
-var asComponentsIgnore = ["panel", "embed", "save"];
 
 /*
  * A few of the components are subclasses of other classes (eg, "cpux86" is a subclass
@@ -64,8 +109,8 @@ var asComponentsIgnore = ["panel", "embed", "save"];
  * machine initialization.
  */
 var aSubClasses = {
-    "pcx86/lib/cpux86": "pcx86/lib/cpu",
-    "pcx86/lib/debugger": "shared/lib/debugger"
+    "pcx86/modules/v2/cpux86": "pcx86/modules/v2/cpu",
+    "pcx86/modules/v2/debugger": "modules/v2/debugger"
 };
 
 /**
