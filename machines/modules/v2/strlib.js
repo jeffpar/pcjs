@@ -175,7 +175,7 @@ export default class Str {
     {
         /*
          * We can't rely entirely on isNaN(), because isNaN(null) returns false, and we can't rely
-         * entirely on typeof either, because typeof Nan returns "number".  Sigh.
+         * entirely on typeof either, because typeof NaN returns "number".  Sigh.
          *
          * Alternatively, we could mask and shift n regardless of whether it's null/undefined/NaN,
          * since JavaScript coerces such operands to zero, but I think there's "value" in seeing those
@@ -827,7 +827,7 @@ export default class Str {
             switch(type) {
             case 'b':
                 /*
-                 * This is a non-standard format specifier that seems handy.
+                 * This non-standard "boolean" format specifier seems handy.
                  */
                 buffer += (arg? "true" : "false");
                 break;
@@ -970,8 +970,21 @@ export default class Str {
                 }
                 width -= prefix.length;
                 do {
-                    let d = arg & (radix - 1);
-                    arg >>>= (radix == 16? 4 : 3);
+                    let d = 16;         // digit index corresponding to '?'
+                    /*
+                     * We default to '?' if isNaN(); since we always call Math.trunc() for integer args, if the original
+                     * arg was undefined, or a string containing a non-number, or anything else that couldn't be converted
+                     * to a number, the resulting arg should be NaN.
+                     */
+                    if (!Number.isNaN(arg)) {
+                        d = arg & (radix - 1);
+                        /*
+                         * We divide by the base (8 or 16) and truncate, instead of the more traditional bit-wise shift,
+                         * because, like the decimal integer case, this allows us to support values > 32 bits (up to 53 bits).
+                         */
+                        arg = Math.trunc(arg / radix);
+                        // arg >>>= (radix == 16? 4 : 3);
+                    }
                     if (zeroPad || !s || d || arg) {
                         s = ach[d] + s;
                     } else {
@@ -1158,7 +1171,7 @@ Str.TYPES = {
     ARRAY:      8
 };
 
-Str.HexLowerCase = "0123456789abcdef";
-Str.HexUpperCase = "0123456789ABCDEF";
+Str.HexLowerCase = "0123456789abcdef?";
+Str.HexUpperCase = "0123456789ABCDEF?";
 Str.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 Str.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];

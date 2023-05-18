@@ -574,7 +574,7 @@ export default class DebuggerX86 extends DbgLib {
                  * AX == 0 means handle fault normally, 1 means issue TRAPFAULT
                  */
                 cpu.regEAX = (cpu.regEAX & ~0xffff) | (this.fIgnoreNextCheckFault? 0 : 1);
-                if (DEBUG) this.println("INT 0x41 CHECKFAULT: fault=" + Str.toHexWord(BX) + " type=" + Str.toHexWord(CX) + " trap=" + !this.fIgnoreNextCheckFault);
+                if (DEBUG) this.printf("INT 0x41 CHECKFAULT: fault=%#04x type=%#04x trap=%b\n", BX, CX, !this.fIgnoreNextCheckFault);
             }
             break;
 
@@ -591,11 +591,11 @@ export default class DebuggerX86 extends DbgLib {
             if (this.fWinDbg) {
                 dbgAddr = this.newAddr(cpu.regEDX, CX);
                 if (!this.cTrapFaults++) {
-                    this.println("INT 0x41 TRAPFAULT: fault=" + Str.toHexWord(BX) + " error=" + Str.toHexLong(cpu.regESI) + " addr=" + this.toHexAddr(dbgAddr));
+                    this.printf("INT 0x41 TRAPFAULT: fault=%#04x error=%#08x addr=%s\n", BX, cpu.regESI, this.toHexAddr(dbgAddr));
                     this.addBreakpoint(this.aBreakExec, dbgAddr, true);
                     this.historyInit(true);         // temporary breakpoints don't normally trigger history, but in this case, we want it to
                 } else {
-                    this.println("TRAPFAULT failed");
+                    this.printf("TRAPFAULT failed\n");
                     this.findBreakpoint(this.aBreakExec, dbgAddr, true, true, true);
                     this.cTrapFaults = 0;
                     this.stopCPU();
@@ -639,7 +639,7 @@ export default class DebuggerX86 extends DbgLib {
              * I've changed this code from DEBUG to MAXDEBUG for now. TODO: Investigate who/what is triggering this later.
              */
             if (MAXDEBUG && this.fWinDbg) {
-                this.println("INT 0x41: " + Str.toHexWord(AX));
+                this.printf("INT 0x41: %#04x\n", AX);
             }
             break;
         }
@@ -683,14 +683,14 @@ export default class DebuggerX86 extends DbgLib {
                  * where the IFSHLP device driver header is located.
                  */
                 if (cpu.getLong((cpu.segCS.sel << 4) + 0x0A) == 0x24534649) {
-                    if (DEBUG) this.println("Ignoring INT 0x68 from IFSHLP.SYS");
+                    if (DEBUG) this.printf("Ignoring INT 0x68 from IFSHLP.SYS\n");
                     return true;
                 }
                 /*
                  * Ditto for WDEB386 itself, which presumably wants to avoid loading on top of itself.
                  */
                 if (cpu.getLong((cpu.segCS.sel << 4) + 0x5F) == 0x42454457) {
-                    if (DEBUG) this.println("Ignoring INT 0x68 from WDEB386.EXE");
+                    if (DEBUG) this.printf("Ignoring INT 0x68 from WDEB386.EXE\n");
                     return true;
                 }
                 /*
@@ -794,7 +794,7 @@ export default class DebuggerX86 extends DbgLib {
 
         default:
             if (DEBUG && this.fWinDbgRM) {
-                this.println("INT 0x68: " + Str.toHexByte(AH));
+                this.printf("INT 0x68: %#02x\n", AH);
             }
             break;
         }
@@ -850,7 +850,7 @@ export default class DebuggerX86 extends DbgLib {
     {
         let cpu = this.cpu;
         let AL = cpu.regEAX & 0xff;
-        if (MAXDEBUG) this.println("INT 0x68 callback: " + Str.toHexByte(AL));
+        if (MAXDEBUG) this.printf("INT 0x68 callback: %#02x\n", AL);
         if (AL == 5) {
             cpu.regECX = cpu.regESI = 0;                // our in-machine debugger footprint is zero
             cpu.regEAX = (cpu.regEAX & ~0xff) | 0x01;   // TODO: Returning a "don't call" response sounds good, but what does it REALLY mean?
@@ -1437,7 +1437,7 @@ export default class DebuggerX86 extends DbgLib {
         if (off != undefined) {
             dbgAddr = this.newAddr(off, sel, addr, type);
             if (!fNoChecks && !this.checkLimit(dbgAddr, true)) {
-                this.println("invalid offset: " + this.toHexAddr(dbgAddr));
+                this.printf("invalid offset: %s\n", this.toHexAddr(dbgAddr));
                 dbgAddr = undefined;
             }
         }
@@ -1612,15 +1612,15 @@ export default class DebuggerX86 extends DbgLib {
         if (sAddr) {
             addr = this.getAddr(this.parseAddr(sAddr));
             if (addr === X86.ADDR_INVALID) {
-                this.println("invalid address: " + sAddr);
+                this.println("invalid address: %s\n", sAddr);
                 return;
             }
             i = addr >>> this.cpu.nBlockShift;
             n = 1;
         }
 
-        this.println("blockid   " + (fLinear? "linear  " : "physical") + "   blockaddr   used    size    type");
-        this.println("--------  ---------  ----------  ------  ------  ----");
+        this.printf("blockid   %s   blockaddr   used    size    type\n", fLinear? "linear  " : "physical");
+        this.printf("--------  ---------  ----------  ------  ------  ----\n");
 
         let typePrev = -1, cPrev = 0;
         while (n--) {
@@ -1640,7 +1640,7 @@ export default class DebuggerX86 extends DbgLib {
                 block = this.cpu.mapPageBlock(addr, false, true);
             }
             if (block.type == typePrev) {
-                if (!cPrev++) this.println("...");
+                if (!cPrev++) this.printf("...\n");
             } else {
                 typePrev = block.type;
                 let sType = MemoryX86.TYPE.NAMES[typePrev];
@@ -1650,7 +1650,7 @@ export default class DebuggerX86 extends DbgLib {
                     sType += " -> " + MemoryX86.TYPE.NAMES[block.type];
                 }
                 if (block) {
-                    this.println(Str.toHex(block.id, 8) + "  %" + Str.toHex(i << this.cpu.nBlockShift, 8) + "  %%" + Str.toHex(block.addr, 8) + "  " + Str.toHexWord(block.used) + "  " + Str.toHexWord(block.size) + "  " + sType);
+                    this.printf("%08x  %%%08x  %%%%%08x  %#06x  %#06x  %s\n", block.id, i << this.cpu.nBlockShift, block.addr, block.used, block.size, sType);
                 }
                 if (typePrev != MemoryX86.TYPE.NONE && typePrev != MemoryX86.TYPE.UNPAGED) typePrev = -1;
                 cPrev = 0;

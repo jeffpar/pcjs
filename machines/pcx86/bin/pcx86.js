@@ -9,7 +9,6 @@
  */
 
 import fs from "fs";
-import path from "path";
 import repl from "repl";
 import File from "../../modules/v2/filelib.js";
 import Proc from "../../modules/v2/proclib.js";
@@ -93,12 +92,6 @@ function loadMachine(sFile)
         machine = eval('(' + sMachine + ')');
         if (machine) {
             /*
-             * Since we have a machine object, we now mimic the initialization sequence that occurs in
-             * the browser, by walking the list of PCx86 components we loaded above and looking for matches.
-             */
-            let idMachine = "";
-
-            /*
              * 'machine' is a pseudo-component that is only used to define an ID for the entire machine;
              * if it exists, then that ID is prepended to every component ID, just as our XSLT code would
              * do for a machine XML file.  This relieves the JSON file from having to manually prepend
@@ -107,6 +100,7 @@ function loadMachine(sFile)
              * This doesn't mean I anticipate a Node environment running multiple machines, as we do in
              * a browser; it only means that I'm trying to make both environments operate similarly.
              */
+            let idMachine = "";
             if (machine['machine']) {
                 idMachine = machine['machine']['id'];
             }
@@ -114,6 +108,11 @@ function loadMachine(sFile)
             embedPCx86(idMachine, null, null, sMachine);
             Web.doPageInit();
             dbg = Component.getComponentByType("Debugger");
+            if (dbg) {
+                dbg.log = dbg.println = function(s, type) {
+                    console.log((type !== undefined? (type + ": ") : "") + (s || ""));
+                };
+            }
 
             /*
              * Return the original machine object only in DEBUG mode
