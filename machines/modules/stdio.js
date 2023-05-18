@@ -68,7 +68,7 @@ export default class StdIO extends NumIO {
          * current Debugger preferences.
          */
         this.formatters = {};
-        let predefinedTypes = "ACDFHGMNSTWYbdfjcsoXx%";
+        let predefinedTypes = "ACDFGHMNSTWYbdfjcsoXx%";
         for (let i = 0; i < predefinedTypes.length; i++) {
             this.formatters[predefinedTypes[i]] = null;
         }
@@ -385,7 +385,7 @@ export default class StdIO extends NumIO {
              * because unlike the C runtime, we reuse the final parameter once the format string has exhausted all parameters.
              */
             let ch;
-            let date = /** @type {Date} */ ("ACDFHGMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
+            let date = /** @type {Date} */ ("ACDFGHMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
 
             switch(type) {
             case 'C':
@@ -609,8 +609,21 @@ export default class StdIO extends NumIO {
                 }
                 width -= prefix.length;
                 do {
-                    let d = arg & (radix - 1);
-                    arg >>>= (radix == 16? 4 : 3);
+                    let d = 16;         // digit index corresponding to '?'
+                    /*
+                     * We default to '?' if isNaN(); since we always call Math.trunc() for integer args, if the original
+                     * arg was undefined, or a string containing a non-number, or anything else that couldn't be converted
+                     * to a number, the resulting arg should be NaN.
+                     */
+                    if (!Number.isNaN(arg)) {
+                        d = arg & (radix - 1);
+                        /*
+                         * We divide by the base (8 or 16) and truncate, instead of the more traditional bit-wise shift,
+                         * because, like the decimal integer case, this allows us to support values > 32 bits (up to 53 bits).
+                         */
+                        arg = Math.trunc(arg / radix);
+                        // arg >>>= (radix == 16? 4 : 3);
+                    }
                     if (zeroPad || !s || d || arg) {
                         s = ach[d] + s;
                     } else {
@@ -671,8 +684,8 @@ StdIO.PrintTime = null;
 /**
  * Global constants
  */
-StdIO.HexLowerCase = "0123456789abcdef";
-StdIO.HexUpperCase = "0123456789ABCDEF";
+StdIO.HexLowerCase = "0123456789abcdef?";
+StdIO.HexUpperCase = "0123456789ABCDEF?";
 StdIO.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 StdIO.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
