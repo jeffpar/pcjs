@@ -493,7 +493,7 @@ export default class Computer extends Component {
             let sParms, resMachine, resources = globals.window['resources'];
             if (typeof resources == 'object' && (sParms = resources['parms']) || (resMachine = Component.getMachineResources(this.idMachine)) && (sParms = resMachine['parms'])) {
                 try {
-                    parmsMachine = /** @type {Object} */ (eval("(" + sParms + ")"));    // jshint ignore:line
+                    parmsMachine = /** @type {Object} */ (eval('(' + sParms + ')'));
                 } catch(err) {
                     Component.error(err.message + " (" + sParms + ")");
                 }
@@ -1710,7 +1710,7 @@ export default class Computer extends Component {
              * is to ensure that keyboard input is fielded properly.
              */
             let x = 0, y = 0;
-            if (!fScroll && window) {
+            if (!fScroll && globals.browser) {
                 x = window.scrollX;
                 y = window.scrollY;
             }
@@ -1720,7 +1720,7 @@ export default class Computer extends Component {
              */
             this.aVideo[0].setFocus(fScroll);
 
-            if (!fScroll && window) {
+            if (!fScroll && globals.window.scrollTo) {
                 window.scrollTo(x, y);
             }
         }
@@ -1781,14 +1781,14 @@ export default class Computer extends Component {
      */
     static init()
     {
-        let aeMachines = Component.getElementsByClass(document, APPCLASS + "-machine");
+        let aeMachines = Component.getElementsByClass(APPCLASS, "machine");
 
         for (let iMachine = 0; iMachine < aeMachines.length; iMachine++) {
 
             let eMachine = aeMachines[iMachine];
             let parmsMachine = Component.getComponentParms(eMachine);
 
-            let aeComputers = Component.getElementsByClass(eMachine, APPCLASS, "computer");
+            let aeComputers = Component.getElementsByClass(APPCLASS, "computer", eMachine);
 
             for (let iComputer = 0; iComputer < aeComputers.length; iComputer++) {
 
@@ -1829,7 +1829,7 @@ export default class Computer extends Component {
      */
     static show()
     {
-        let aeComputers = Component.getElementsByClass(document, APPCLASS, "computer");
+        let aeComputers = Component.getElementsByClass(APPCLASS, "computer");
         for (let iComputer = 0; iComputer < aeComputers.length; iComputer++) {
             let eComputer = aeComputers[iComputer];
             let parmsComputer = Component.getComponentParms(eComputer);
@@ -1881,7 +1881,7 @@ export default class Computer extends Component {
      */
     static exit()
     {
-        let aeComputers = Component.getElementsByClass(document, APPCLASS, "computer");
+        let aeComputers = Component.getElementsByClass(APPCLASS, "computer");
         for (let iComputer = 0; iComputer < aeComputers.length; iComputer++) {
             let eComputer = aeComputers[iComputer];
             let parmsComputer = Component.getComponentParms(eComputer);

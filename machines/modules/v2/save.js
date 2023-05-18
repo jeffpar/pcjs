@@ -130,9 +130,9 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
         }
     }
 
-    let resOld = Component.getMachineResources(idMachine), resNew = {}, sName;
-    for (sName in resOld) {
-        let data = resOld[sName];
+    let res = Component.getMachineResources(idMachine), resNew = {}, sName;
+    for (sName in res) {
+        let data = res[sName];
         let sExt = Str.getExtension(sName);
         if (sExt == "xml") {
             /*
@@ -140,10 +140,10 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
              * other machine resources, and remove those entries.
              */
             let matchDisk, reDisk = /[ \t]*<disk [^>]*path=(['"])(.*?)\1.*?<\/disk>\n?/g;
-            while ((matchDisk = reDisk.exec(resOld[sName]))) {
+            while ((matchDisk = reDisk.exec(res[sName]))) {
                 let path = matchDisk[2];
                 if (path) {
-                    if (resOld[path]) {
+                    if (res[path]) {
                         Component.log("recording disk: '" + path + "'");
                     } else {
                         data = data.replace(matchDisk[0], "");

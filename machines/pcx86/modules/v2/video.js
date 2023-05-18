@@ -4213,7 +4213,7 @@ export default class VideoX86 extends Component {
          * There's no point building fonts unless we're in a windowed (non-command-line) environment, we're
          * in a font-based mode (nCardFont is set), and font data has been supplied (or can be extracted from RAM).
          */
-        if (window && this.nCardFont) {
+        if (globals.browser && this.nCardFont) {
 
             /*
              * Build whatever font(s) we need for the current card.  In the case of the EGA/VGA, that can mean up to
@@ -7859,7 +7859,7 @@ export default class VideoX86 extends Component {
      */
     static init()
     {
-        let aElement = Component.getElementsByClass(document, APPCLASS, "video");
+        let aElement = Component.getElementsByClass(APPCLASS, "video");
         for (let iVideo = 0; iVideo < aElement.length; iVideo++) {
 
             let element = aElement[iVideo];
@@ -7870,10 +7870,10 @@ export default class VideoX86 extends Component {
              * the page is as fully-formed as possible, keeping disruption of page layout to a minimum.
              */
             let canvas;
-            let aCanvas = Component.getElementsByClass(element, "pcjs-canvas");
+            let aCanvas = Component.getElementsByClass("pcjs-canvas", "", element);
             if (aCanvas && aCanvas.length) {
                 canvas = /** @type {HTMLCanvasElement} */ (aCanvas[0]);
-            } else {
+            } else if (globals.browser) {
                 canvas = /** @type {HTMLCanvasElement} */ (document.createElement("canvas"));
                 if (canvas) {
                     canvas.setAttribute("class", "pcjs-canvas");
@@ -7882,9 +7882,12 @@ export default class VideoX86 extends Component {
                     element.appendChild(canvas);
                 }
             }
-            if (!canvas || !canvas.getContext) {
+
+            let context;
+            if (canvas && canvas.getContext) {
+                context = /** @type {CanvasRenderingContext2D} */ (canvas.getContext("2d"));
+            } else {
                 element.innerHTML = "<br>Missing &lt;canvas&gt; support. Please try a newer web browser.";
-                return;
             }
 
             /*
@@ -7973,10 +7976,10 @@ export default class VideoX86 extends Component {
              * See this Chromium issue for more information: https://code.google.com/p/chromium/issues/detail?id=118639
              */
             let textarea;
-            let aTextArea = Component.getElementsByClass(element, "pcjs-overlay");
+            let aTextArea = Component.getElementsByClass("pcjs-overlay", "", element);
             if (aTextArea && aTextArea.length) {
                 textarea = /** @type {HTMLTextAreaElement} */ (aTextArea[0]);
-            } else {
+            } else if (globals.browser) {
                 textarea = /** @type {HTMLTextAreaElement} */ (document.createElement("textarea"));
                 textarea.setAttribute("class", "pcjs-overlay");
                 element.appendChild(textarea);
@@ -7994,41 +7997,43 @@ export default class VideoX86 extends Component {
              * Unfortunately, in my limited testing, none of these seemed to have any effect on the way Chrome/webkit
              * converts "compose" key sequences (eg, "Alt-E") into dead keys (keyCode 229).
              */
-            textarea.setAttribute("autocapitalize", "off");
-            textarea.setAttribute("autocorrect", "off");
-
-            /*
-             * Another problem on iOS devices was that after a soft-key control was clicked, we needed to give
-             * focus back to the above textarea, usually by calling cmp.updateFocus(), but in doing so, iOS could
-             * also "zoom" the page rather jarringly.  While it was a simple matter to completely disable zooming,
-             * by fiddling with the page's viewport, that prevented the user from intentionally zooming.  A bit of
-             * Googling reveals that another way to prevent those jarring unintentional zooms was to simply set
-             * the font-size of the text control to 16px.  So that's what we do.
-             *
-             * NOTE: Not sure if this is still necessary, but changing the code (and then doing a bunch of testing)
-             * doesn't sound very appealing right now.
-             *
-             * UPDATE: Instead of hard-coding the textarea overlay font size to "16px", we now scale it dynamically,
-             * so that when the overlay is visible (eg, for machine startup messages), the size of the text is
-             * proportional to the overall size of the virtual display.
-             */
-            // textarea.style.fontSize = "16px";
-            let onResizeTextArea = function() {
-                textarea.style.fontSize = ((textarea.clientWidth * 0.01875)|0) + "px";
-            };
-            onResizeTextArea();
-            Web.onPageEvent('onresize', onResizeTextArea);
+            if (textarea) {
+                textarea.setAttribute("autocapitalize", "off");
+                textarea.setAttribute("autocorrect", "off");
+                /*
+                * Another problem on iOS devices was that after a soft-key control was clicked, we needed to give
+                * focus back to the above textarea, usually by calling cmp.updateFocus(), but in doing so, iOS could
+                * also "zoom" the page rather jarringly.  While it was a simple matter to completely disable zooming,
+                * by fiddling with the page's viewport, that prevented the user from intentionally zooming.  A bit of
+                * Googling reveals that another way to prevent those jarring unintentional zooms was to simply set
+                * the font-size of the text control to 16px.  So that's what we do.
+                *
+                * NOTE: Not sure if this is still necessary, but changing the code (and then doing a bunch of testing)
+                * doesn't sound very appealing right now.
+                *
+                * UPDATE: Instead of hard-coding the textarea overlay font size to "16px", we now scale it dynamically,
+                * so that when the overlay is visible (eg, for machine startup messages), the size of the text is
+                * proportional to the overall size of the virtual display.
+                */
+                // textarea.style.fontSize = "16px";
+                let onResizeTextArea = function() {
+                    textarea.style.fontSize = ((textarea.clientWidth * 0.01875)|0) + "px";
+                };
+                onResizeTextArea();
+                Web.onPageEvent('onresize', onResizeTextArea);
+            }
 
             /*
              * See if there are any "diagnostic" elements we should pass along, too.
              */
-            let aDiagElements = /** @type {Array.<HTMLElement>} */ (Component.getElementsByClass(document, APPCLASS + "-video-diagnostic"));
+            let aDiagElements = /** @type {Array.<HTMLElement>} */ (Component.getElementsByClass(APPCLASS + "-video-diagnostic"));
 
             /*
              * Now we can create the Video object, record it, and wire it up to the associated document elements.
              */
-            let context = /** @type {CanvasRenderingContext2D} */ (canvas.getContext("2d"));
-            let video = new VideoX86(parmsVideo, canvas, context, textarea /* || input */, element, aDiagElements);
+            let container;
+            if (element.style) container = element;
+            let video = new VideoX86(parmsVideo, canvas, context, textarea /* || input */, container, aDiagElements);
 
             /*
              * Bind any video-specific controls (eg, the Refresh button). There are no essential controls, however;

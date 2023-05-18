@@ -1530,7 +1530,7 @@ export default class FPUx86 extends Component {
      */
     static init()
     {
-        let aeFPUs = Component.getElementsByClass(document, APPCLASS, "fpu");
+        let aeFPUs = Component.getElementsByClass(APPCLASS, "fpu");
         for (let iFPU = 0; iFPU < aeFPUs.length; iFPU++) {
             let eFPU = aeFPUs[iFPU];
             let parmsFPU = Component.getComponentParms(eFPU);

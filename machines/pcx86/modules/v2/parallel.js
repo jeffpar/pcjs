@@ -434,7 +434,7 @@ export default class ParallelPort extends Component {
      */
     static init()
     {
-        let aeParallel = Component.getElementsByClass(document, APPCLASS, "parallel");
+        let aeParallel = Component.getElementsByClass(APPCLASS, "parallel");
         for (let iParallel = 0; iParallel < aeParallel.length; iParallel++) {
             let eParallel = aeParallel[iParallel];
             let parmsParallel = Component.getComponentParms(eParallel);

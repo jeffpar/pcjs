@@ -2290,7 +2290,7 @@ export default class KbdX86 extends Component {
      */
     static init()
     {
-        let aeKbd = Component.getElementsByClass(document, APPCLASS, "keyboard");
+        let aeKbd = Component.getElementsByClass(APPCLASS, "keyboard");
         for (let iKbd = 0; iKbd < aeKbd.length; iKbd++) {
             let eKbd = aeKbd[iKbd];
             let parmsKbd = Component.getComponentParms(eKbd);

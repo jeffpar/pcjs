@@ -183,15 +183,10 @@ export default class Web {
             sURL = sURL.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "/disks/$1/").replace(/^\/discs\/([^/]*)\//, "/disks/cdroms/$1/");
         }
 
-        if (typeof module !== "undefined") {
-            /*
-             * We don't even need to load Component, because we can't use any of the code below
-             * within Node anyway.  Instead, we must hand this request off to our network library.
-             *
-             *      if (!Component) Component = require("./component");
-             */
-            let Net = require("../../shared/lib/netlib");
-            return Net.getResource(sURL, type, fAsync, done);
+        if (globals.node.readFileSync) {
+            resource = globals.node.readFileSync(sURL);
+            if (done) done(sURL, resource, nErrorCode);
+            return response;
         }
 
         let request = (globals.window.XMLHttpRequest? new globals.window.XMLHttpRequest() : new globals.window.ActiveXObject("Microsoft.XMLHTTP"));
@@ -210,8 +205,7 @@ export default class Web {
              * happening are mis-notifications rather than redundant notifications.
              *
              *      request.onreadystatechange = undefined;
-             */
-            /*
+             *
              * If the request failed due to, say, a CORS policy denial; eg:
              *
              *      Failed to load http://www.allbootdisks.com/downloads/Disks/Windows_95_Boot_Disk_Download48/Diskette%20Images/Windows95a.img:
@@ -1156,19 +1150,23 @@ Web.fLocalStorage = null;
  */
 Web.sLocalStorageTest = "PCjs.localStorage";
 
-Web.onPageEvent('onload', function onPageLoad() {
+Web.doPageInit = function doPageInit() {
     Web.fPageLoaded = true;
     Web.doPageEvent(Web.aPageEventHandlers['init']);
-});
+};
 
-Web.onPageEvent('onpageshow', function onPageShow() {
+Web.doPageShow = function doPageShow() {
     Web.fPageShowed = true;
     Web.doPageEvent(Web.aPageEventHandlers['show']);
-});
+};
 
-Web.onPageEvent(Web.isUserAgent("iOS")? 'onpagehide' : (Web.isUserAgent("Opera")? 'onunload' : 'onbeforeunload'), function onPageUnload() {
+Web.doPageExit = function doPageExit() {
     Web.doPageEvent(Web.aPageEventHandlers['exit']);
-});
+};
+
+Web.onPageEvent('onload', Web.doPageInit);
+Web.onPageEvent('onpageshow', Web.doPageShow);
+Web.onPageEvent(Web.isUserAgent("iOS")? 'onpagehide' : (Web.isUserAgent("Opera")? 'onunload' : 'onbeforeunload'), Web.doPageExit);
 
 /*
  * If this is DEBUG (eg, un-COMPILED) code, then allow the user to override DEBUG with a "debug=false" embedded in

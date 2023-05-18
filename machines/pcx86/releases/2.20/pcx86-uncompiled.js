@@ -123,10 +123,11 @@ const RS232 = {
  * This is my initial effort to isolate the use of global variables in a way that is environment-agnostic.
  */
 let globals = {
+    browser: (typeof window != "undefined")? {} : null,
     pcjs: {machines: {}, components: [], commands: {}},
     node: (typeof window == "undefined")? global : {},
     window: (typeof window == "undefined")? global : window,
-    document: (typeof document == "undefined")? global : document
+    document: (typeof document == "undefined")? {} : document
 };
 
 
@@ -2391,6 +2392,11 @@ class Web {
             sURL = sURL.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "/disks/$1/").replace(/^\/discs\/([^/]*)\//, "/disks/cdroms/$1/");
         }
 
+        if (globals.node.readFileSync) {
+            resource = globals.node.readFileSync(sURL);
+            if (done) done(sURL, resource, nErrorCode);
+            return response;
+        }
 
         let request = (globals.window.XMLHttpRequest? new globals.window.XMLHttpRequest() : new globals.window.ActiveXObject("Microsoft.XMLHTTP"));
         let fArrayBuffer = false, fXHR2 = (typeof request.responseType === 'string');
@@ -2408,8 +2414,7 @@ class Web {
              * happening are mis-notifications rather than redundant notifications.
              *
              *      request.onreadystatechange = undefined;
-             */
-            /*
+             *
              * If the request failed due to, say, a CORS policy denial; eg:
              *
              *      Failed to load http://www.allbootdisks.com/downloads/Disks/Windows_95_Boot_Disk_Download48/Diskette%20Images/Windows95a.img:
@@ -3354,19 +3359,23 @@ Web.fLocalStorage = null;
  */
 Web.sLocalStorageTest = "PCjs.localStorage";
 
-Web.onPageEvent('onload', function onPageLoad() {
+Web.doPageInit = function doPageInit() {
     Web.fPageLoaded = true;
     Web.doPageEvent(Web.aPageEventHandlers['init']);
-});
+};
 
-Web.onPageEvent('onpageshow', function onPageShow() {
+Web.doPageShow = function doPageShow() {
     Web.fPageShowed = true;
     Web.doPageEvent(Web.aPageEventHandlers['show']);
-});
+};
 
-Web.onPageEvent(Web.isUserAgent("iOS")? 'onpagehide' : (Web.isUserAgent("Opera")? 'onunload' : 'onbeforeunload'), function onPageUnload() {
+Web.doPageExit = function doPageExit() {
     Web.doPageEvent(Web.aPageEventHandlers['exit']);
-});
+};
+
+Web.onPageEvent('onload', Web.doPageInit);
+Web.onPageEvent('onpageshow', Web.doPageShow);
+Web.onPageEvent(Web.isUserAgent("iOS")? 'onpagehide' : (Web.isUserAgent("Opera")? 'onunload' : 'onbeforeunload'), Web.doPageExit);
 
 /*
  * If this is DEBUG (eg, un-COMPILED) code, then allow the user to override DEBUG with a "debug=false" embedded in
@@ -3570,11 +3579,14 @@ class Component {
     static addMachineResource(idMachine, sName, data)
     {
         /*
-         * I used to assert(globals.pcjs.machines[idMachine]), but when we're running as a Node app, embed.js is not used,
+         * I used to assert(machines[idMachine]), but when we're running as a Node app, embed.js is not used,
          * so addMachine() is never called, so resources do not need to be recorded.
          */
         if (globals.pcjs.machines[idMachine] && sName) {
             globals.pcjs.machines[idMachine][sName] = data;
+            if (sName == 'parms' && typeof data == "string") {
+                globals.pcjs.machines[idMachine]['config'] = JSON.parse(data);
+            }
         }
     }
 
@@ -3609,7 +3621,7 @@ class Component {
      */
     static log(s, type)
     {
-        if (!COMPILED) {
+        if (!COMPILED && (type != Component.PRINT.DEBUG || MAXDEBUG)) {
             if (s) {
                 let sElapsed = "", sMsg = (type? (type + ": ") : "") + s;
                 if (typeof Usr != "undefined") {
@@ -3845,12 +3857,12 @@ class Component {
      * Component.bindComponentControls(component, element, sAppClass)
      *
      * @param {Component} component
-     * @param {HTMLElement} element from the DOM
+     * @param {HTMLElement} element (from the DOM)
      * @param {string} sAppClass
      */
     static bindComponentControls(component, element, sAppClass)
     {
-        let aeControls = Component.getElementsByClass(element.parentNode, sAppClass + "-control");
+        let aeControls = Component.getElementsByClass(sAppClass + "-control", "", element.parentNode);
 
         for (let iControl = 0; iControl < aeControls.length; iControl++) {
 
@@ -3873,12 +3885,12 @@ class Component {
                             if (parms && parms['binding'] !== undefined) {
                                 component.setBinding(parms['type'], parms['binding'], /** @type {HTMLElement} */(control), parms['value']);
                             } else if (!parms || parms['type'] != "description") {
-                                Component.log("Component '" + component.toString() + "' missing binding" + (parms? " for " + parms['type'] : ""), "warning");
+                                Component.log("Component '" + component.toString() + "' missing binding" + (parms? " for " + parms['type'] : ""), Component.PRINT.WARNING);
                             }
                             iClass = aClasses.length;
                             break;
                         default:
-                            // if (DEBUG) Component.log("Component.bindComponentControls(" + component.toString() + "): unrecognized control class \"" + sClass + "\"", "warning");
+                            // if (DEBUG) Component.log("Component.bindComponentControls(" + component.toString() + "): unrecognized control class \"" + sClass + "\"", Component.PRINT.WARNING);
                             break;
                     }
                 }
@@ -3951,7 +3963,7 @@ class Component {
                 }
             }
             if (components.length) {
-                Component.log("Component ID '" + id + "' not found", "warning");
+                Component.log("Component ID '" + id + "' not found", Component.PRINT.WARNING);
             }
         }
         return null;
@@ -3991,7 +4003,7 @@ class Component {
                     return components[i];
                 }
             }
-            Component.log("Component type '" + sType + "' not found", "warning");
+            Component.log("Component type '" + sType + "' not found", Component.PRINT.DEBUG);
         }
         return null;
     }
@@ -3999,64 +4011,99 @@ class Component {
     /**
      * Component.getComponentParms(element)
      *
-     * @param {HTMLElement} element from the DOM
+     * @param {HTMLElement} element (from the DOM)
      * @returns {Object|null}
      */
     static getComponentParms(element)
     {
         let parms = null;
-        let sParms = element.getAttribute("data-value");
-        if (sParms) {
-            try {
-                parms = /** @type {Object} */ (eval('(' + sParms + ')'));
-                /*
-                 * We can no longer invoke removeAttribute() because some components (eg, Panel) need
-                 * to run their initXXX() code more than once, to avoid initialization-order dependencies.
-                 *
-                 *      if (!DEBUG) {
-                 *          element.removeAttribute("data-value");
-                 *      }
-                 */
-            } catch(e) {
-                Component.error(e.message + " (" + sParms + ")");
+        if (element.getAttribute) {
+            let sParms = element.getAttribute("data-value");
+            if (sParms) {
+                try {
+                    parms = /** @type {Object} */ (eval('(' + sParms + ')'));
+                    /*
+                    * We can no longer invoke removeAttribute() because some components (eg, Panel) need
+                    * to run their initXXX() code more than once, to avoid initialization-order dependencies.
+                    *
+                    *      if (!DEBUG) {
+                    *          element.removeAttribute("data-value");
+                    *      }
+                    */
+                } catch(e) {
+                    Component.error(e.message + " (" + sParms + ")");
+                }
+            }
+        } else {
+            parms = element['config'] || null;
+            if (parms) {
+                let idMachine = element['id'], idComponent = parms['id'];
+                if (idMachine && idComponent && idComponent.indexOf('.') < 0) parms['id'] = idMachine + '.' + idComponent;
             }
         }
         return parms;
     }
 
     /**
-     * Component.getElementsByClass(element, sClass, sObjClass)
+     * Component.getElementsByClass(sClass, sComponent, element)
      *
      * This is a cross-browser helper function, since not all browser's support getElementsByClassName()
      *
      * TODO: This should probably be moved into weblib.js at some point, along with the control binding functions above,
      * to keep all the browser-related code together.
      *
-     * @param {HTMLElement|Node} element from the DOM
      * @param {string} sClass
-     * @param {string} [sObjClass]
+     * @param {string} [sComponent]
+     * @param {HTMLElement|Object} [element] (from the DOM; default is document)
      * @returns {Array|NodeList}
      */
-    static getElementsByClass(element, sClass, sObjClass)
+    static getElementsByClass(sClass, sComponent = "", element = globals.document)
     {
-        if (sObjClass) sClass += '-' + sObjClass + "-object";
+        let ae = [];
+        if (sComponent) {
+            sClass += '-' + sComponent;
+            if (sComponent != "machine") sClass += "-object";
+        }
         /*
          * Use the browser's built-in getElementsByClassName() if it appears to be available
          * (for example, it's not available in IE8, but it should be available in IE9 and up)
          */
         if (element.getElementsByClassName) {
-            return element.getElementsByClassName(sClass);
+            ae = element.getElementsByClassName(sClass);
         }
-        let i, j, ae = [];
-        let aeAll = element.getElementsByTagName("*");
-        let re = new RegExp('(^| )' + sClass + '( |$)');
-        for (i = 0, j = aeAll.length; i < j; i++) {
-            if (re.test(aeAll[i].className)) {
-                ae.push(aeAll[i]);
+        else if (element.getElementsByTagName) {
+            let i, j;
+            let aeAll = element.getElementsByTagName("*");
+            let re = new RegExp('(^| )' + sClass + '( |$)');
+            for (i = 0, j = aeAll.length; i < j; i++) {
+                if (re.test(aeAll[i].className)) {
+                    ae.push(aeAll[i]);
+                }
+            }
+        } else {
+            let machineIDs = Object.keys(globals.pcjs.machines);
+            for (let iMachine = 0; iMachine < machineIDs.length; iMachine++) {
+                let idMachine = machineIDs[iMachine];
+                let configMachine = globals.pcjs.machines[idMachine]['config'];
+                if (configMachine) {
+                    let configComponent = configMachine[sComponent];
+                    if (configComponent) {
+                        if (!Array.isArray(configComponent)) {
+                            configComponent = [configComponent];
+                        }
+                        for (let component of configComponent) {
+                            let fakeElement = {
+                                'id': idMachine,
+                                'config': component
+                            };
+                            ae.push(fakeElement);
+                        }
+                    }
+                }
             }
         }
         if (!ae.length) {
-            Component.log('No elements of class "' + sClass + '" found');
+            Component.log('No elements of class "' + sClass + '" found', Component.PRINT.DEBUG);
         }
         return ae;
     }
@@ -4871,6 +4918,7 @@ Component.TYPE = {
  * messages may also be merged with earlier similar messages to keep the output buffer under control.
  */
 Component.PRINT = {
+    DEBUG:      "debug",
     ERROR:      "error",
     NOTICE:     "notice",
     PROGRESS:   "progress",
@@ -4976,7 +5024,7 @@ class DataBuffer {
      *
      * The start and end parameters are only used with #3 (ie, when another DataBuffer is passed).
      *
-     * NOTE: You will NOT find all the methods of the Buffer class implemented here; only the ones we actually use.
+     * NOTE: You will NOT find all the methods of the Buffer class implemented here (only the ones we actually use).
      *
      * @this {DataBuffer}
      * @param {*} [init]
@@ -9820,7 +9868,7 @@ class Panel extends Component {
     static init()
     {
         let fReady = false;
-        let aePanels = Component.getElementsByClass(document, APPCLASS, "panel");
+        let aePanels = Component.getElementsByClass(APPCLASS, "panel");
         for (let iPanel=0; iPanel < aePanels.length; iPanel++) {
             let ePanel = aePanels[iPanel];
             let parmsPanel = Component.getComponentParms(ePanel);
@@ -19364,7 +19412,7 @@ class CPUx86 extends CPULib {
      */
     static init()
     {
-        let aeCPUs = Component.getElementsByClass(document, APPCLASS, "cpu");
+        let aeCPUs = Component.getElementsByClass(APPCLASS, "cpu");
         for (let iCPU = 0; iCPU < aeCPUs.length; iCPU++) {
             let eCPU = aeCPUs[iCPU];
             let parmsCPU = Component.getComponentParms(eCPU);
@@ -20915,7 +20963,7 @@ class FPUx86 extends Component {
      */
     static init()
     {
-        let aeFPUs = Component.getElementsByClass(document, APPCLASS, "fpu");
+        let aeFPUs = Component.getElementsByClass(APPCLASS, "fpu");
         for (let iFPU = 0; iFPU < aeFPUs.length; iFPU++) {
             let eFPU = aeFPUs[iFPU];
             let parmsFPU = Component.getComponentParms(eFPU);
@@ -40921,7 +40969,7 @@ class ChipSet extends Component {
             } else {
                 v = this.aDIPSwitches[iDIP][1] = this.aDIPSwitches[iDIP][0];
             }
-            let aeCells = Component.getElementsByClass(control, this.sCellClass);
+            let aeCells = Component.getElementsByClass(this.sCellClass, "", control);
             for (let i = 0; i < aeCells.length; i++) {
                 let switchGroup = this.findDIPSwitch(iDIP, i);
                 let sLabel = switchGroup && switchGroup.LABEL || "Reserved";
@@ -44122,7 +44170,7 @@ class ChipSet extends Component {
      */
     static init()
     {
-        let aeChipSet = Component.getElementsByClass(document, APPCLASS, "chipset");
+        let aeChipSet = Component.getElementsByClass(APPCLASS, "chipset");
         for (let iChip = 0; iChip < aeChipSet.length; iChip++) {
             let eChipSet = aeChipSet[iChip];
             let parmsChipSet = Component.getComponentParms(eChipSet);
@@ -45831,7 +45879,7 @@ class ROMx86 extends Component {
      */
     static init()
     {
-        let aeROM = Component.getElementsByClass(document, APPCLASS, "rom");
+        let aeROM = Component.getElementsByClass(APPCLASS, "rom");
         for (let iROM = 0; iROM < aeROM.length; iROM++) {
             let eROM = aeROM[iROM];
             let parmsROM = Component.getComponentParms(eROM);
@@ -46412,7 +46460,7 @@ class RAMx86 extends Component {
      */
     static init()
     {
-        let aeRAM = Component.getElementsByClass(document, APPCLASS, "ram");
+        let aeRAM = Component.getElementsByClass(APPCLASS, "ram");
         for (let iRAM = 0; iRAM < aeRAM.length; iRAM++) {
             let eRAM = aeRAM[iRAM];
             let parmsRAM = Component.getComponentParms(eRAM);
@@ -49021,7 +49069,7 @@ class KbdX86 extends Component {
      */
     static init()
     {
-        let aeKbd = Component.getElementsByClass(document, APPCLASS, "keyboard");
+        let aeKbd = Component.getElementsByClass(APPCLASS, "keyboard");
         for (let iKbd = 0; iKbd < aeKbd.length; iKbd++) {
             let eKbd = aeKbd[iKbd];
             let parmsKbd = Component.getComponentParms(eKbd);
@@ -54157,7 +54205,7 @@ class VideoX86 extends Component {
          * There's no point building fonts unless we're in a windowed (non-command-line) environment, we're
          * in a font-based mode (nCardFont is set), and font data has been supplied (or can be extracted from RAM).
          */
-        if (window && this.nCardFont) {
+        if (globals.browser && this.nCardFont) {
 
             /*
              * Build whatever font(s) we need for the current card.  In the case of the EGA/VGA, that can mean up to
@@ -57803,7 +57851,7 @@ class VideoX86 extends Component {
      */
     static init()
     {
-        let aElement = Component.getElementsByClass(document, APPCLASS, "video");
+        let aElement = Component.getElementsByClass(APPCLASS, "video");
         for (let iVideo = 0; iVideo < aElement.length; iVideo++) {
 
             let element = aElement[iVideo];
@@ -57814,10 +57862,10 @@ class VideoX86 extends Component {
              * the page is as fully-formed as possible, keeping disruption of page layout to a minimum.
              */
             let canvas;
-            let aCanvas = Component.getElementsByClass(element, "pcjs-canvas");
+            let aCanvas = Component.getElementsByClass("pcjs-canvas", "", element);
             if (aCanvas && aCanvas.length) {
                 canvas = /** @type {HTMLCanvasElement} */ (aCanvas[0]);
-            } else {
+            } else if (globals.browser) {
                 canvas = /** @type {HTMLCanvasElement} */ (document.createElement("canvas"));
                 if (canvas) {
                     canvas.setAttribute("class", "pcjs-canvas");
@@ -57826,9 +57874,12 @@ class VideoX86 extends Component {
                     element.appendChild(canvas);
                 }
             }
-            if (!canvas || !canvas.getContext) {
+
+            let context;
+            if (canvas && canvas.getContext) {
+                context = /** @type {CanvasRenderingContext2D} */ (canvas.getContext("2d"));
+            } else {
                 element.innerHTML = "<br>Missing &lt;canvas&gt; support. Please try a newer web browser.";
-                return;
             }
 
             /*
@@ -57917,10 +57968,10 @@ class VideoX86 extends Component {
              * See this Chromium issue for more information: https://code.google.com/p/chromium/issues/detail?id=118639
              */
             let textarea;
-            let aTextArea = Component.getElementsByClass(element, "pcjs-overlay");
+            let aTextArea = Component.getElementsByClass("pcjs-overlay", "", element);
             if (aTextArea && aTextArea.length) {
                 textarea = /** @type {HTMLTextAreaElement} */ (aTextArea[0]);
-            } else {
+            } else if (globals.browser) {
                 textarea = /** @type {HTMLTextAreaElement} */ (document.createElement("textarea"));
                 textarea.setAttribute("class", "pcjs-overlay");
                 element.appendChild(textarea);
@@ -57938,41 +57989,43 @@ class VideoX86 extends Component {
              * Unfortunately, in my limited testing, none of these seemed to have any effect on the way Chrome/webkit
              * converts "compose" key sequences (eg, "Alt-E") into dead keys (keyCode 229).
              */
-            textarea.setAttribute("autocapitalize", "off");
-            textarea.setAttribute("autocorrect", "off");
-
-            /*
-             * Another problem on iOS devices was that after a soft-key control was clicked, we needed to give
-             * focus back to the above textarea, usually by calling cmp.updateFocus(), but in doing so, iOS could
-             * also "zoom" the page rather jarringly.  While it was a simple matter to completely disable zooming,
-             * by fiddling with the page's viewport, that prevented the user from intentionally zooming.  A bit of
-             * Googling reveals that another way to prevent those jarring unintentional zooms was to simply set
-             * the font-size of the text control to 16px.  So that's what we do.
-             *
-             * NOTE: Not sure if this is still necessary, but changing the code (and then doing a bunch of testing)
-             * doesn't sound very appealing right now.
-             *
-             * UPDATE: Instead of hard-coding the textarea overlay font size to "16px", we now scale it dynamically,
-             * so that when the overlay is visible (eg, for machine startup messages), the size of the text is
-             * proportional to the overall size of the virtual display.
-             */
-            // textarea.style.fontSize = "16px";
-            let onResizeTextArea = function() {
-                textarea.style.fontSize = ((textarea.clientWidth * 0.01875)|0) + "px";
-            };
-            onResizeTextArea();
-            Web.onPageEvent('onresize', onResizeTextArea);
+            if (textarea) {
+                textarea.setAttribute("autocapitalize", "off");
+                textarea.setAttribute("autocorrect", "off");
+                /*
+                * Another problem on iOS devices was that after a soft-key control was clicked, we needed to give
+                * focus back to the above textarea, usually by calling cmp.updateFocus(), but in doing so, iOS could
+                * also "zoom" the page rather jarringly.  While it was a simple matter to completely disable zooming,
+                * by fiddling with the page's viewport, that prevented the user from intentionally zooming.  A bit of
+                * Googling reveals that another way to prevent those jarring unintentional zooms was to simply set
+                * the font-size of the text control to 16px.  So that's what we do.
+                *
+                * NOTE: Not sure if this is still necessary, but changing the code (and then doing a bunch of testing)
+                * doesn't sound very appealing right now.
+                *
+                * UPDATE: Instead of hard-coding the textarea overlay font size to "16px", we now scale it dynamically,
+                * so that when the overlay is visible (eg, for machine startup messages), the size of the text is
+                * proportional to the overall size of the virtual display.
+                */
+                // textarea.style.fontSize = "16px";
+                let onResizeTextArea = function() {
+                    textarea.style.fontSize = ((textarea.clientWidth * 0.01875)|0) + "px";
+                };
+                onResizeTextArea();
+                Web.onPageEvent('onresize', onResizeTextArea);
+            }
 
             /*
              * See if there are any "diagnostic" elements we should pass along, too.
              */
-            let aDiagElements = /** @type {Array.<HTMLElement>} */ (Component.getElementsByClass(document, APPCLASS + "-video-diagnostic"));
+            let aDiagElements = /** @type {Array.<HTMLElement>} */ (Component.getElementsByClass(APPCLASS + "-video-diagnostic"));
 
             /*
              * Now we can create the Video object, record it, and wire it up to the associated document elements.
              */
-            let context = /** @type {CanvasRenderingContext2D} */ (canvas.getContext("2d"));
-            let video = new VideoX86(parmsVideo, canvas, context, textarea /* || input */, element, aDiagElements);
+            let container;
+            if (element.style) container = element;
+            let video = new VideoX86(parmsVideo, canvas, context, textarea /* || input */, container, aDiagElements);
 
             /*
              * Bind any video-specific controls (eg, the Refresh button). There are no essential controls, however;
@@ -58988,7 +59041,7 @@ class ParallelPort extends Component {
      */
     static init()
     {
-        let aeParallel = Component.getElementsByClass(document, APPCLASS, "parallel");
+        let aeParallel = Component.getElementsByClass(APPCLASS, "parallel");
         for (let iParallel = 0; iParallel < aeParallel.length; iParallel++) {
             let eParallel = aeParallel[iParallel];
             let parmsParallel = Component.getComponentParms(eParallel);
@@ -60071,7 +60124,7 @@ class SerialPort extends Component {
      */
     static init()
     {
-        let aeSerial = Component.getElementsByClass(document, APPCLASS, "serial");
+        let aeSerial = Component.getElementsByClass(APPCLASS, "serial");
         for (let iSerial = 0; iSerial < aeSerial.length; iSerial++) {
             let eSerial = aeSerial[iSerial];
             let parms = Component.getComponentParms(eSerial);
@@ -60546,7 +60599,7 @@ class TestController extends Component {
      */
     static init()
     {
-        let aeTest = Component.getElementsByClass(document, APPCLASS, "testctl");
+        let aeTest = Component.getElementsByClass(APPCLASS, "testctl");
         for (let iTest = 0; iTest < aeTest.length; iTest++) {
             let eTest = aeTest[iTest];
             let parms = Component.getComponentParms(eTest);
@@ -61755,7 +61808,7 @@ class Mouse extends Component {
      */
     static init()
     {
-        let aeMouse = Component.getElementsByClass(document, APPCLASS, "mouse");
+        let aeMouse = Component.getElementsByClass(APPCLASS, "mouse");
         for (let iMouse = 0; iMouse < aeMouse.length; iMouse++) {
             let eMouse = aeMouse[iMouse];
             let parmsMouse = Component.getComponentParms(eMouse);
@@ -64303,7 +64356,7 @@ class FDC extends Component {
          * when this flag is set, setBinding() allows local disk bindings and informs initBus() to update the
          * "listDisks" binding accordingly.
          */
-        this.fLocalDisks = (!Web.isMobile() && window && 'FileReader' in window);
+        this.fLocalDisks = (!Web.isMobile() && 'FileReader' in globals.window);
 
         /*
          * If the HDC component is configured for removable discs (ie, if it's configured as a CD-ROM drive),
@@ -65393,7 +65446,10 @@ class FDC extends Component {
              * to the save/restore data.
              */
             if (sDiskPath == "??") {
-                sDiskPath = window.prompt("Enter the URL of a remote disk image.", "") || "";
+                sDiskPath = "";
+                if (globals.window.prompt) {
+                    sDiskPath = globals.window.prompt("Enter the URL of a remote disk image.", "") || "";
+                }
                 if (!sDiskPath) return false;
                 sDiskName = Str.getBaseName(sDiskPath);
                 if (DEBUG) this.println("Attempting to load " + sDiskPath + " as \"" + sDiskName + "\"");
@@ -65403,7 +65459,7 @@ class FDC extends Component {
                 /*
                  * I got tired of the "reload" warning when running locally, so I've disabled it there.
                  */
-                if (Web.getHostName() != "localhost" && !window.confirm("Click OK to reload the original disk and discard any changes.")) {
+                if (Web.getHostName() != "localhost" && (!globals.window.confirm || !globals.window.confirm("Click OK to reload the original disk and discard any changes."))) {
                     if (DEBUG) this.println("load cancelled");
                     return false;
                 }
@@ -67161,7 +67217,7 @@ class FDC extends Component {
      */
     static init()
     {
-        let aeFDC = Component.getElementsByClass(document, APPCLASS, "fdc");
+        let aeFDC = Component.getElementsByClass(APPCLASS, "fdc");
         for (let iFDC = 0; iFDC < aeFDC.length; iFDC++) {
             let eFDC = aeFDC[iFDC];
             let parmsFDC = Component.getComponentParms(eFDC);
@@ -70564,7 +70620,7 @@ class HDC extends Component {
      */
     static init()
     {
-        let aeHDC = Component.getElementsByClass(document, APPCLASS, "hdc");
+        let aeHDC = Component.getElementsByClass(APPCLASS, "hdc");
         for (let iHDC = 0; iHDC < aeHDC.length; iHDC++) {
             let eHDC = aeHDC[iHDC];
             let parmsHDC = Component.getComponentParms(eHDC);
@@ -79344,7 +79400,7 @@ class DebuggerX86 extends DbgLib {
      */
     static init()
     {
-        let aeDbg = Component.getElementsByClass(document, APPCLASS, "debugger");
+        let aeDbg = Component.getElementsByClass(APPCLASS, "debugger");
         for (let iDbg = 0; iDbg < aeDbg.length; iDbg++) {
             let eDbg = aeDbg[iDbg];
             let parmsDbg = Component.getComponentParms(eDbg);
@@ -81032,7 +81088,7 @@ class Computer extends Component {
             let sParms, resMachine, resources = globals.window['resources'];
             if (typeof resources == 'object' && (sParms = resources['parms']) || (resMachine = Component.getMachineResources(this.idMachine)) && (sParms = resMachine['parms'])) {
                 try {
-                    parmsMachine = /** @type {Object} */ (eval("(" + sParms + ")"));    // jshint ignore:line
+                    parmsMachine = /** @type {Object} */ (eval('(' + sParms + ')'));
                 } catch(err) {
                     Component.error(err.message + " (" + sParms + ")");
                 }
@@ -82249,7 +82305,7 @@ class Computer extends Component {
              * is to ensure that keyboard input is fielded properly.
              */
             let x = 0, y = 0;
-            if (!fScroll && window) {
+            if (!fScroll && globals.browser) {
                 x = window.scrollX;
                 y = window.scrollY;
             }
@@ -82259,7 +82315,7 @@ class Computer extends Component {
              */
             this.aVideo[0].setFocus(fScroll);
 
-            if (!fScroll && window) {
+            if (!fScroll && globals.window.scrollTo) {
                 window.scrollTo(x, y);
             }
         }
@@ -82320,14 +82376,14 @@ class Computer extends Component {
      */
     static init()
     {
-        let aeMachines = Component.getElementsByClass(document, APPCLASS + "-machine");
+        let aeMachines = Component.getElementsByClass(APPCLASS, "machine");
 
         for (let iMachine = 0; iMachine < aeMachines.length; iMachine++) {
 
             let eMachine = aeMachines[iMachine];
             let parmsMachine = Component.getComponentParms(eMachine);
 
-            let aeComputers = Component.getElementsByClass(eMachine, APPCLASS, "computer");
+            let aeComputers = Component.getElementsByClass(APPCLASS, "computer", eMachine);
 
             for (let iComputer = 0; iComputer < aeComputers.length; iComputer++) {
 
@@ -82368,7 +82424,7 @@ class Computer extends Component {
      */
     static show()
     {
-        let aeComputers = Component.getElementsByClass(document, APPCLASS, "computer");
+        let aeComputers = Component.getElementsByClass(APPCLASS, "computer");
         for (let iComputer = 0; iComputer < aeComputers.length; iComputer++) {
             let eComputer = aeComputers[iComputer];
             let parmsComputer = Component.getComponentParms(eComputer);
@@ -82420,7 +82476,7 @@ class Computer extends Component {
      */
     static exit()
     {
-        let aeComputers = Component.getElementsByClass(document, APPCLASS, "computer");
+        let aeComputers = Component.getElementsByClass(APPCLASS, "computer");
         for (let iComputer = 0; iComputer < aeComputers.length; iComputer++) {
             let eComputer = aeComputers[iComputer];
             let parmsComputer = Component.getComponentParms(eComputer);
@@ -83200,7 +83256,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
          * layout, but this is more expedient.
          */
         if (sParms) {
-            Component.addMachineResource(idMachine, "parms", sParms);
+            Component.addMachineResource(idMachine, 'parms', sParms);
         }
         /*
          * We used to replace a missing XML configuration file with a default path, but since we now support JSON-based configs,
@@ -83244,7 +83300,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
              * Note that it is the HTMLOut module (in processMachines()) that ultimately decides which scripts to
              * include and then generates the embedXXX() call.
              */
-            let aeWarning = (eMachine && Component.getElementsByClass(eMachine, "machine-warning"));
+            let aeWarning = (eMachine && Component.getElementsByClass("machine-warning", "", eMachine));
             eWarning = (aeWarning && aeWarning[0]) || eMachine;
         }
         if (eWarning) eWarning.innerHTML = Str.escapeHTML(sMessage);
@@ -83569,8 +83625,16 @@ function commandMachine(control, fSingle, idMachine, sComponent, sCommand, sValu
     return false;
 }
 
-globals['enableEvents'] = Web.enablePageEvents;
-globals['sendEvent']    = Web.sendPageEvent;
+globals.window['embedC1P']    = embedC1P;
+globals.window['embedPC']     = embedPCx86;     // WARNING: embedPC() deprecated as of v1.23.0
+globals.window['embedPCx86']  = embedPCx86;
+globals.window['embedPCx80']  = embedPCx80;
+globals.window['embedPDP10']  = embedPDP10;
+globals.window['embedPDP11']  = embedPDP11;
+globals.window['commandMachine'] = commandMachine;
+
+globals.window['enableEvents'] = Web.enablePageEvents;
+globals.window['sendEvent']    = Web.sendPageEvent;
 
 
 /**
@@ -83695,9 +83759,9 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
         }
     }
 
-    let resOld = Component.getMachineResources(idMachine), resNew = {}, sName;
-    for (sName in resOld) {
-        let data = resOld[sName];
+    let res = Component.getMachineResources(idMachine), resNew = {}, sName;
+    for (sName in res) {
+        let data = res[sName];
         let sExt = Str.getExtension(sName);
         if (sExt == "xml") {
             /*
@@ -83705,10 +83769,10 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
              * other machine resources, and remove those entries.
              */
             let matchDisk, reDisk = /[ \t]*<disk [^>]*path=(['"])(.*?)\1.*?<\/disk>\n?/g;
-            while ((matchDisk = reDisk.exec(resOld[sName]))) {
+            while ((matchDisk = reDisk.exec(res[sName]))) {
                 let path = matchDisk[2];
                 if (path) {
-                    if (resOld[path]) {
+                    if (res[path]) {
                         Component.log("recording disk: '" + path + "'");
                     } else {
                         data = data.replace(matchDisk[0], "");

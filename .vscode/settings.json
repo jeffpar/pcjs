@@ -576,6 +576,7 @@
     "FILEHIDE",
     "fileimage",
     "fileinfo",
+    "filelib",
     "filelist",
     "fileoverview",
     "FILESIZE",

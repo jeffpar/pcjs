@@ -27,7 +27,7 @@ export default class DataBuffer {
      *
      * The start and end parameters are only used with #3 (ie, when another DataBuffer is passed).
      *
-     * NOTE: You will NOT find all the methods of the Buffer class implemented here; only the ones we actually use.
+     * NOTE: You will NOT find all the methods of the Buffer class implemented here (only the ones we actually use).
      *
      * @this {DataBuffer}
      * @param {*} [init]

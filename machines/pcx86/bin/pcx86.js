@@ -11,14 +11,15 @@
 import fs from "fs";
 import path from "path";
 import repl from "repl";
+import File from "../../modules/v2/filelib.js";
 import Proc from "../../modules/v2/proclib.js";
 
 //
 // The following list of imports should be a strict subset of the scripts listed in machines.json for 'pcx86'.
 //
-import "../../modules/v2/usrlib.js";
-import "../../modules/v2/weblib.js";
-import "../../modules/v2/component.js";
+import Usr from "../../modules/v2/usrlib.js";
+import Web from "../../modules/v2/weblib.js";
+import Component from "../../modules/v2/component.js";
 import "../../modules/v3/databuffer.js";
 import "../../modules/v3/jsonlib.js";
 import "../modules/v2/defines.js";
@@ -58,6 +59,7 @@ import { embedPCx86 } from "../../modules/v2/embed.js";
 let args = Proc.getArgs();
 let argv = args.argv;
 
+let dbg;
 let fConsole = (argv['console'] || false);
 let fDebug = (argv['debug'] || false);
 let sCmdPrev = "";
@@ -87,9 +89,8 @@ function loadMachine(sFile)
          *      let machine = require(lib + "../bin/" +sFile);
          */
         let sMachine = /** @type {string} */ (fs.readFileSync(sFile, {encoding: "utf8"}));
-        sMachine = '(' + sMachine + ')';
         if (fDebug) console.log(sMachine);
-        machine = eval(sMachine);       // jshint ignore:line
+        machine = eval('(' + sMachine + ')');
         if (machine) {
             /*
              * Since we have a machine object, we now mimic the initialization sequence that occurs in
@@ -111,6 +112,8 @@ function loadMachine(sFile)
             }
 
             embedPCx86(idMachine, null, null, sMachine);
+            Web.doPageInit();
+            dbg = Component.getComponentByType("Debugger");
 
             /*
              * Return the original machine object only in DEBUG mode
@@ -153,15 +156,15 @@ function doCommand(sCmd)
         break;
     default:
         if (sCmd) {
-            // try {
-            //     console.log("doCommand(" + sCmd + "): " + dbg);
-            //     if (dbg && !dbg.doCommands(sCmd, true)) {
-            //         sCmd = '(' + sCmd + ')';
-            //         result = eval(sCmd);        // jshint ignore:line
-            //     }
-            // } catch(err) {
-            //     console.log(err.message);
-            // }
+            try {
+                console.log("doCommand(" + sCmd + "): " + dbg);
+                if (dbg && !dbg.doCommands(sCmd, true)) {
+                    sCmd = '(' + sCmd + ')';
+                    result = eval(sCmd);
+                }
+            } catch(err) {
+                console.log(err.message);
+            }
         }
         break;
     }

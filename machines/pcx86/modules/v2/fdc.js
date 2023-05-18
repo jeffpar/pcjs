@@ -17,7 +17,7 @@ import DiskAPI from "../../../modules/v2/diskapi.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, DEBUG, MAXDEBUG } from "./defines.js";
+import { APPCLASS, DEBUG, MAXDEBUG, globals } from "./defines.js";
 
 /*
  * FDC Terms (see FDC.TERMS)
@@ -213,7 +213,7 @@ export default class FDC extends Component {
          * when this flag is set, setBinding() allows local disk bindings and informs initBus() to update the
          * "listDisks" binding accordingly.
          */
-        this.fLocalDisks = (!Web.isMobile() && window && 'FileReader' in window);
+        this.fLocalDisks = (!Web.isMobile() && 'FileReader' in globals.window);
 
         /*
          * If the HDC component is configured for removable discs (ie, if it's configured as a CD-ROM drive),
@@ -1303,7 +1303,10 @@ export default class FDC extends Component {
              * to the save/restore data.
              */
             if (sDiskPath == "??") {
-                sDiskPath = window.prompt("Enter the URL of a remote disk image.", "") || "";
+                sDiskPath = "";
+                if (globals.window.prompt) {
+                    sDiskPath = globals.window.prompt("Enter the URL of a remote disk image.", "") || "";
+                }
                 if (!sDiskPath) return false;
                 sDiskName = Str.getBaseName(sDiskPath);
                 if (DEBUG) this.println("Attempting to load " + sDiskPath + " as \"" + sDiskName + "\"");
@@ -1313,7 +1316,7 @@ export default class FDC extends Component {
                 /*
                  * I got tired of the "reload" warning when running locally, so I've disabled it there.
                  */
-                if (Web.getHostName() != "localhost" && !window.confirm("Click OK to reload the original disk and discard any changes.")) {
+                if (Web.getHostName() != "localhost" && (!globals.window.confirm || !globals.window.confirm("Click OK to reload the original disk and discard any changes."))) {
                     if (DEBUG) this.println("load cancelled");
                     return false;
                 }
@@ -3071,7 +3074,7 @@ export default class FDC extends Component {
      */
     static init()
     {
-        let aeFDC = Component.getElementsByClass(document, APPCLASS, "fdc");
+        let aeFDC = Component.getElementsByClass(APPCLASS, "fdc");
         for (let iFDC = 0; iFDC < aeFDC.length; iFDC++) {
             let eFDC = aeFDC[iFDC];
             let parmsFDC = Component.getComponentParms(eFDC);

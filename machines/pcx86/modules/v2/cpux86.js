@@ -4568,7 +4568,7 @@ export default class CPUx86 extends CPULib {
      */
     static init()
     {
-        let aeCPUs = Component.getElementsByClass(document, APPCLASS, "cpu");
+        let aeCPUs = Component.getElementsByClass(APPCLASS, "cpu");
         for (let iCPU = 0; iCPU < aeCPUs.length; iCPU++) {
             let eCPU = aeCPUs[iCPU];
             let parmsCPU = Component.getComponentParms(eCPU);

@@ -1065,6 +1065,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/machines/pcx86/bin/pcx86.js",
       "args": [
+        "--cmd=load ibm5150.json",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/machines/pcx86/bin",

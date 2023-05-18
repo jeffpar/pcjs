@@ -414,7 +414,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
              * Note that it is the HTMLOut module (in processMachines()) that ultimately decides which scripts to
              * include and then generates the embedXXX() call.
              */
-            let aeWarning = (eMachine && Component.getElementsByClass(eMachine, "machine-warning"));
+            let aeWarning = (eMachine && Component.getElementsByClass("machine-warning", "", eMachine));
             eWarning = (aeWarning && aeWarning[0]) || eMachine;
         }
         if (eWarning) eWarning.innerHTML = Str.escapeHTML(sMessage);
@@ -739,7 +739,15 @@ function commandMachine(control, fSingle, idMachine, sComponent, sCommand, sValu
     return false;
 }
 
-globals['enableEvents'] = Web.enablePageEvents;
-globals['sendEvent']    = Web.sendPageEvent;
+globals.window['embedC1P']    = embedC1P;
+globals.window['embedPC']     = embedPCx86;     // WARNING: embedPC() deprecated as of v1.23.0
+globals.window['embedPCx86']  = embedPCx86;
+globals.window['embedPCx80']  = embedPCx80;
+globals.window['embedPDP10']  = embedPDP10;
+globals.window['embedPDP11']  = embedPDP11;
+globals.window['commandMachine'] = commandMachine;
+
+globals.window['enableEvents'] = Web.enablePageEvents;
+globals.window['sendEvent']    = Web.sendPageEvent;
 
 export { embedC1P, embedPCx86, embedPCx80, embedPDP10, embedPDP11, commandMachine };

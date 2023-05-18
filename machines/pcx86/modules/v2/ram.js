@@ -322,7 +322,7 @@ export default class RAMx86 extends Component {
      */
     static init()
     {
-        let aeRAM = Component.getElementsByClass(document, APPCLASS, "ram");
+        let aeRAM = Component.getElementsByClass(APPCLASS, "ram");
         for (let iRAM = 0; iRAM < aeRAM.length; iRAM++) {
             let eRAM = aeRAM[iRAM];
             let parmsRAM = Component.getComponentParms(eRAM);

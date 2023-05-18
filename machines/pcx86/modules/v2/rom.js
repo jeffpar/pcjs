@@ -401,7 +401,7 @@ export default class ROMx86 extends Component {
      */
     static init()
     {
-        let aeROM = Component.getElementsByClass(document, APPCLASS, "rom");
+        let aeROM = Component.getElementsByClass(APPCLASS, "rom");
         for (let iROM = 0; iROM < aeROM.length; iROM++) {
             let eROM = aeROM[iROM];
             let parmsROM = Component.getComponentParms(eROM);

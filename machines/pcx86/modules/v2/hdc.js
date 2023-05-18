@@ -3187,7 +3187,7 @@ export default class HDC extends Component {
      */
     static init()
     {
-        let aeHDC = Component.getElementsByClass(document, APPCLASS, "hdc");
+        let aeHDC = Component.getElementsByClass(APPCLASS, "hdc");
         for (let iHDC = 0; iHDC < aeHDC.length; iHDC++) {
             let eHDC = aeHDC[iHDC];
             let parmsHDC = Component.getComponentParms(eHDC);

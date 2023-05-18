@@ -998,7 +998,7 @@ export default class SerialPort extends Component {
      */
     static init()
     {
-        let aeSerial = Component.getElementsByClass(document, APPCLASS, "serial");
+        let aeSerial = Component.getElementsByClass(APPCLASS, "serial");
         for (let iSerial = 0; iSerial < aeSerial.length; iSerial++) {
             let eSerial = aeSerial[iSerial];
             let parms = Component.getComponentParms(eSerial);

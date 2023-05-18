@@ -126,10 +126,11 @@ const RS232 = {
  * This is my initial effort to isolate the use of global variables in a way that is environment-agnostic.
  */
 let globals = {
+    browser: (typeof window != "undefined")? {} : null,
     pcjs: {machines: {}, components: [], commands: {}},
     node: (typeof window == "undefined")? global : {},
     window: (typeof window == "undefined")? global : window,
-    document: (typeof document == "undefined")? global : document
+    document: (typeof document == "undefined")? {} : document
 };
 
 export { APPVERSION, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, LICENSE, MAXDEBUG, PRIVATE, RS232, SITEURL, globals }

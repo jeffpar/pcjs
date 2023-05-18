@@ -301,8 +301,8 @@ function getDiskServer(diskFile)
 function getServerPath(sFile)
 {
     /*
-     * In addition to disk server paths, we had to add /machines (for diskette config files) and /software (for Markdown files
-     * containing supplementary copy-protection disk data).
+     * In addition to disk server paths, we had to add /machines (for diskette config files) and /software
+     * (for Markdown files containing supplementary copy-protection disk data).
      */
     let match = sFile.match(/^\/(disks\/|)(machines|software|diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|cdroms|private)(\/.*)$/);
     if (match) {

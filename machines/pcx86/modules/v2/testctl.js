@@ -309,7 +309,7 @@ export default class TestController extends Component {
      */
     static init()
     {
-        let aeTest = Component.getElementsByClass(document, APPCLASS, "testctl");
+        let aeTest = Component.getElementsByClass(APPCLASS, "testctl");
         for (let iTest = 0; iTest < aeTest.length; iTest++) {
             let eTest = aeTest[iTest];
             let parms = Component.getComponentParms(eTest);

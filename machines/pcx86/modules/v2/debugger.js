@@ -6744,7 +6744,7 @@ export default class DebuggerX86 extends DbgLib {
      */
     static init()
     {
-        let aeDbg = Component.getElementsByClass(document, APPCLASS, "debugger");
+        let aeDbg = Component.getElementsByClass(APPCLASS, "debugger");
         for (let iDbg = 0; iDbg < aeDbg.length; iDbg++) {
             let eDbg = aeDbg[iDbg];
             let parmsDbg = Component.getComponentParms(eDbg);

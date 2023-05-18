@@ -189,11 +189,14 @@ export default class Component {
     static addMachineResource(idMachine, sName, data)
     {
         /*
-         * I used to assert(globals.pcjs.machines[idMachine]), but when we're running as a Node app, embed.js is not used,
+         * I used to assert(machines[idMachine]), but when we're running as a Node app, embed.js is not used,
          * so addMachine() is never called, so resources do not need to be recorded.
          */
         if (globals.pcjs.machines[idMachine] && sName) {
             globals.pcjs.machines[idMachine][sName] = data;
+            if (sName == 'parms' && typeof data == "string") {
+                globals.pcjs.machines[idMachine]['config'] = JSON.parse(data);
+            }
         }
     }
 
@@ -228,7 +231,7 @@ export default class Component {
      */
     static log(s, type)
     {
-        if (!COMPILED) {
+        if (!COMPILED && (type != Component.PRINT.DEBUG || MAXDEBUG)) {
             if (s) {
                 let sElapsed = "", sMsg = (type? (type + ": ") : "") + s;
                 if (typeof Usr != "undefined") {
@@ -464,12 +467,12 @@ export default class Component {
      * Component.bindComponentControls(component, element, sAppClass)
      *
      * @param {Component} component
-     * @param {HTMLElement} element from the DOM
+     * @param {HTMLElement} element (from the DOM)
      * @param {string} sAppClass
      */
     static bindComponentControls(component, element, sAppClass)
     {
-        let aeControls = Component.getElementsByClass(element.parentNode, sAppClass + "-control");
+        let aeControls = Component.getElementsByClass(sAppClass + "-control", "", element.parentNode);
 
         for (let iControl = 0; iControl < aeControls.length; iControl++) {
 
@@ -492,12 +495,12 @@ export default class Component {
                             if (parms && parms['binding'] !== undefined) {
                                 component.setBinding(parms['type'], parms['binding'], /** @type {HTMLElement} */(control), parms['value']);
                             } else if (!parms || parms['type'] != "description") {
-                                Component.log("Component '" + component.toString() + "' missing binding" + (parms? " for " + parms['type'] : ""), "warning");
+                                Component.log("Component '" + component.toString() + "' missing binding" + (parms? " for " + parms['type'] : ""), Component.PRINT.WARNING);
                             }
                             iClass = aClasses.length;
                             break;
                         default:
-                            // if (DEBUG) Component.log("Component.bindComponentControls(" + component.toString() + "): unrecognized control class \"" + sClass + "\"", "warning");
+                            // if (DEBUG) Component.log("Component.bindComponentControls(" + component.toString() + "): unrecognized control class \"" + sClass + "\"", Component.PRINT.WARNING);
                             break;
                     }
                 }
@@ -570,7 +573,7 @@ export default class Component {
                 }
             }
             if (components.length) {
-                Component.log("Component ID '" + id + "' not found", "warning");
+                Component.log("Component ID '" + id + "' not found", Component.PRINT.WARNING);
             }
         }
         return null;
@@ -610,7 +613,7 @@ export default class Component {
                     return components[i];
                 }
             }
-            Component.log("Component type '" + sType + "' not found", "warning");
+            Component.log("Component type '" + sType + "' not found", Component.PRINT.DEBUG);
         }
         return null;
     }
@@ -618,64 +621,99 @@ export default class Component {
     /**
      * Component.getComponentParms(element)
      *
-     * @param {HTMLElement} element from the DOM
+     * @param {HTMLElement} element (from the DOM)
      * @returns {Object|null}
      */
     static getComponentParms(element)
     {
         let parms = null;
-        let sParms = element.getAttribute("data-value");
-        if (sParms) {
-            try {
-                parms = /** @type {Object} */ (eval('(' + sParms + ')'));
-                /*
-                 * We can no longer invoke removeAttribute() because some components (eg, Panel) need
-                 * to run their initXXX() code more than once, to avoid initialization-order dependencies.
-                 *
-                 *      if (!DEBUG) {
-                 *          element.removeAttribute("data-value");
-                 *      }
-                 */
-            } catch(e) {
-                Component.error(e.message + " (" + sParms + ")");
+        if (element.getAttribute) {
+            let sParms = element.getAttribute("data-value");
+            if (sParms) {
+                try {
+                    parms = /** @type {Object} */ (eval('(' + sParms + ')'));
+                    /*
+                    * We can no longer invoke removeAttribute() because some components (eg, Panel) need
+                    * to run their initXXX() code more than once, to avoid initialization-order dependencies.
+                    *
+                    *      if (!DEBUG) {
+                    *          element.removeAttribute("data-value");
+                    *      }
+                    */
+                } catch(e) {
+                    Component.error(e.message + " (" + sParms + ")");
+                }
+            }
+        } else {
+            parms = element['config'] || null;
+            if (parms) {
+                let idMachine = element['id'], idComponent = parms['id'];
+                if (idMachine && idComponent && idComponent.indexOf('.') < 0) parms['id'] = idMachine + '.' + idComponent;
             }
         }
         return parms;
     }
 
     /**
-     * Component.getElementsByClass(element, sClass, sObjClass)
+     * Component.getElementsByClass(sClass, sComponent, element)
      *
      * This is a cross-browser helper function, since not all browser's support getElementsByClassName()
      *
      * TODO: This should probably be moved into weblib.js at some point, along with the control binding functions above,
      * to keep all the browser-related code together.
      *
-     * @param {HTMLElement|Node} element from the DOM
      * @param {string} sClass
-     * @param {string} [sObjClass]
+     * @param {string} [sComponent]
+     * @param {HTMLElement|Object} [element] (from the DOM; default is document)
      * @returns {Array|NodeList}
      */
-    static getElementsByClass(element, sClass, sObjClass)
+    static getElementsByClass(sClass, sComponent = "", element = globals.document)
     {
-        if (sObjClass) sClass += '-' + sObjClass + "-object";
+        let ae = [];
+        if (sComponent) {
+            sClass += '-' + sComponent;
+            if (sComponent != "machine") sClass += "-object";
+        }
         /*
          * Use the browser's built-in getElementsByClassName() if it appears to be available
          * (for example, it's not available in IE8, but it should be available in IE9 and up)
          */
         if (element.getElementsByClassName) {
-            return element.getElementsByClassName(sClass);
+            ae = element.getElementsByClassName(sClass);
         }
-        let i, j, ae = [];
-        let aeAll = element.getElementsByTagName("*");
-        let re = new RegExp('(^| )' + sClass + '( |$)');
-        for (i = 0, j = aeAll.length; i < j; i++) {
-            if (re.test(aeAll[i].className)) {
-                ae.push(aeAll[i]);
+        else if (element.getElementsByTagName) {
+            let i, j;
+            let aeAll = element.getElementsByTagName("*");
+            let re = new RegExp('(^| )' + sClass + '( |$)');
+            for (i = 0, j = aeAll.length; i < j; i++) {
+                if (re.test(aeAll[i].className)) {
+                    ae.push(aeAll[i]);
+                }
+            }
+        } else {
+            let machineIDs = Object.keys(globals.pcjs.machines);
+            for (let iMachine = 0; iMachine < machineIDs.length; iMachine++) {
+                let idMachine = machineIDs[iMachine];
+                let configMachine = globals.pcjs.machines[idMachine]['config'];
+                if (configMachine) {
+                    let configComponent = configMachine[sComponent];
+                    if (configComponent) {
+                        if (!Array.isArray(configComponent)) {
+                            configComponent = [configComponent];
+                        }
+                        for (let component of configComponent) {
+                            let fakeElement = {
+                                'id': idMachine,
+                                'config': component
+                            };
+                            ae.push(fakeElement);
+                        }
+                    }
+                }
             }
         }
         if (!ae.length) {
-            Component.log('No elements of class "' + sClass + '" found');
+            Component.log('No elements of class "' + sClass + '" found', Component.PRINT.DEBUG);
         }
         return ae;
     }
@@ -1490,6 +1528,7 @@ Component.TYPE = {
  * messages may also be merged with earlier similar messages to keep the output buffer under control.
  */
 Component.PRINT = {
+    DEBUG:      "debug",
     ERROR:      "error",
     NOTICE:     "notice",
     PROGRESS:   "progress",

@@ -754,7 +754,7 @@ export default class Mouse extends Component {
      */
     static init()
     {
-        let aeMouse = Component.getElementsByClass(document, APPCLASS, "mouse");
+        let aeMouse = Component.getElementsByClass(APPCLASS, "mouse");
         for (let iMouse = 0; iMouse < aeMouse.length; iMouse++) {
             let eMouse = aeMouse[iMouse];
             let parmsMouse = Component.getComponentParms(eMouse);

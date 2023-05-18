@@ -1765,7 +1765,7 @@ export default class ChipSet extends Component {
             } else {
                 v = this.aDIPSwitches[iDIP][1] = this.aDIPSwitches[iDIP][0];
             }
-            let aeCells = Component.getElementsByClass(control, this.sCellClass);
+            let aeCells = Component.getElementsByClass(this.sCellClass, "", control);
             for (let i = 0; i < aeCells.length; i++) {
                 let switchGroup = this.findDIPSwitch(iDIP, i);
                 let sLabel = switchGroup && switchGroup.LABEL || "Reserved";
@@ -4966,7 +4966,7 @@ export default class ChipSet extends Component {
      */
     static init()
     {
-        let aeChipSet = Component.getElementsByClass(document, APPCLASS, "chipset");
+        let aeChipSet = Component.getElementsByClass(APPCLASS, "chipset");
         for (let iChip = 0; iChip < aeChipSet.length; iChip++) {
             let eChipSet = aeChipSet[iChip];
             let parmsChipSet = Component.getComponentParms(eChipSet);
