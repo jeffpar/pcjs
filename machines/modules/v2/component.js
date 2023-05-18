@@ -195,7 +195,7 @@ export default class Component {
         if (globals.pcjs.machines[idMachine] && sName) {
             globals.pcjs.machines[idMachine][sName] = data;
             if (sName == 'parms' && typeof data == "string") {
-                globals.pcjs.machines[idMachine]['config'] = JSON.parse(data);
+                globals.pcjs.machines[idMachine]['config'] = eval('(' + data + ')');
             }
         }
     }

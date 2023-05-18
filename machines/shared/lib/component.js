@@ -626,7 +626,7 @@ class Component {
         let sParms = element.getAttribute("data-value");
         if (sParms) {
             try {
-                parms = eval('(' + sParms + ')');   // jshint ignore:line
+                parms = eval('(' + sParms + ')');
                 /*
                  * We can no longer invoke removeAttribute() because some components (eg, Panel) need
                  * to run their initXXX() code more than once, to avoid initialization-order dependencies.

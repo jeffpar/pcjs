@@ -120,7 +120,7 @@ function loadComponents(asFiles)
                 if (sName == "component") {
                     fn.log = fn.println = function(s, type) {
                         console.log((type !== undefined? (type + ": ") : "") + (s || ""));
-                    };      // jshint ignore:line
+                    };
                 }
                 if (sName) {
                     aComponents.push({name: sName, path: sFile, Create: fn, objects: []});
@@ -384,7 +384,7 @@ function doCommand(sCmd)
             try {
                 if (dbg && !dbg.doCommands(sCmd, true)) {
                     sCmd = '(' + sCmd + ')';
-                    result = eval(sCmd);        // jshint ignore:line
+                    result = eval(sCmd);
                 }
             } catch(err) {
                 console.log(err.message);

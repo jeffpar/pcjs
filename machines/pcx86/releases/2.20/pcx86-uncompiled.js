@@ -3585,7 +3585,7 @@ class Component {
         if (globals.pcjs.machines[idMachine] && sName) {
             globals.pcjs.machines[idMachine][sName] = data;
             if (sName == 'parms' && typeof data == "string") {
-                globals.pcjs.machines[idMachine]['config'] = JSON.parse(data);
+                globals.pcjs.machines[idMachine]['config'] = eval('(' + data + ')');
             }
         }
     }
@@ -13566,7 +13566,7 @@ class CPULib extends Component {
             if (this.aTimeLogs.length > 2) {
                 let prevLog = this.aTimeLogs[this.aTimeLogs.length-1];
                 let msEndPrev = prevLog.msBegin + prevLog.msDuration;
-
+                //
                 msLag = msBegin - msEndPrev;
             }
             this.aTimeLogs.push({nCycles, msDuration, msLag, msBegin});
@@ -78210,7 +78210,7 @@ class DebuggerX86 extends DbgLib {
                 let fEnabled = this.testBits(this.bitsMessage, bitsMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
-                if (!(++n % 10)) sCategories += "\n\t";     // jshint ignore:line
+                if (!(++n % 10)) sCategories += "\n\t";
                 sCategories += m;
             }
         }
@@ -81172,7 +81172,7 @@ class Computer extends Component {
                  * double-quotes are escaped, so that we can safely double-quote the entire string.
                  */
                 value = value.replace(/([^\\])"/g, '$1\\"');
-                value = /** @type {string} */ (eval('"' + value + '"'));    // jshint ignore:line
+                value = /** @type {string} */ (eval('"' + value + '"'));
             } catch(err) {
                 Component.error(err.message + " (" + value + ")");
                 value = undefined;
@@ -82068,7 +82068,7 @@ class Computer extends Component {
         let sResponse = response[1];
         if (!nErrorCode && sResponse) {
             try {
-                response = eval("(" + sResponse + ")"); // jshint ignore:line
+                response = eval("(" + sResponse + ")");
                 if (response.code && response.code == UserAPI.CODE.OK) {
                     Web.setLocalStorageItem(Computer.STATE_USERID, response.data);
                     if (DEBUG) this.printf("%s updated: %s\n" + Computer.STATE_USERID, response.data);
@@ -83256,7 +83256,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
          * layout, but this is more expedient.
          */
         if (sParms) {
-            Component.addMachineResource(idMachine, 'parms', sParms);
+            Component.addMachineResource(idMachine, "parms", sParms);
         }
         /*
          * We used to replace a missing XML configuration file with a default path, but since we now support JSON-based configs,

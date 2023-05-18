@@ -5554,7 +5554,7 @@ export default class DebuggerX86 extends DbgLib {
                 let fEnabled = this.testBits(this.bitsMessage, bitsMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
-                if (!(++n % 10)) sCategories += "\n\t";     // jshint ignore:line
+                if (!(++n % 10)) sCategories += "\n\t";
                 sCategories += m;
             }
         }

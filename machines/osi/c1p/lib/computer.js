@@ -182,7 +182,7 @@ class C1PComputer extends Component {
                         return function() {
                             C1PComputer.power(computer);
                         };
-                    }(computer));   // jshint ignore:line
+                    }(computer));
                     return;
                 }
                 /*

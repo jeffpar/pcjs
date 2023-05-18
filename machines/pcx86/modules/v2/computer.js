@@ -577,7 +577,7 @@ export default class Computer extends Component {
                  * double-quotes are escaped, so that we can safely double-quote the entire string.
                  */
                 value = value.replace(/([^\\])"/g, '$1\\"');
-                value = /** @type {string} */ (eval('"' + value + '"'));    // jshint ignore:line
+                value = /** @type {string} */ (eval('"' + value + '"'));
             } catch(err) {
                 Component.error(err.message + " (" + value + ")");
                 value = undefined;
@@ -1473,7 +1473,7 @@ export default class Computer extends Component {
         let sResponse = response[1];
         if (!nErrorCode && sResponse) {
             try {
-                response = eval("(" + sResponse + ")"); // jshint ignore:line
+                response = eval("(" + sResponse + ")");
                 if (response.code && response.code == UserAPI.CODE.OK) {
                     Web.setLocalStorageItem(Computer.STATE_USERID, response.data);
                     if (DEBUG) this.printf("%s updated: %s\n" + Computer.STATE_USERID, response.data);

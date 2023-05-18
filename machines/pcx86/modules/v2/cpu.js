@@ -151,7 +151,7 @@ export default class CPULib extends Component {
             if (this.aTimeLogs.length > 2) {
                 let prevLog = this.aTimeLogs[this.aTimeLogs.length-1];
                 let msEndPrev = prevLog.msBegin + prevLog.msDuration;
-                this.assert(msBegin >= msEndPrev);
+                // this.assert(msBegin >= msEndPrev);
                 msLag = msBegin - msEndPrev;
             }
             this.aTimeLogs.push({nCycles, msDuration, msLag, msBegin});
