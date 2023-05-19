@@ -54,6 +54,7 @@ import { COMPILED, DEBUG, DEBUGGER, MAXDEBUG, globals } from "./defines.js";
  * The upside, however, may be that since the structure of the class is completely defined by
  * the constructor, JavaScript engines may be able to optimize and run more efficiently.
  *
+ * @class Component
  * @unrestricted
  */
 export default class Component {

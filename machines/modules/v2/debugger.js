@@ -46,6 +46,7 @@ import { DEBUGGER, MAXDEBUG } from "./defines.js";
  * The upside, however, may be that since the structure of the class is completely defined by
  * the constructor, JavaScript engines may be able to optimize and run more efficiently.
  *
+ * @class DbgLib
  * @unrestricted
  */
 export default class DbgLib extends Component {

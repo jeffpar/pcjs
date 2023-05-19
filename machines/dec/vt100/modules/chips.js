@@ -455,7 +455,7 @@ export default class VT100Chips extends Device {
  * WARNING: The choice of clock speed has an effect on other simulated VT100 circuits; see the DC011 Timing Chip
  * discussion below, along with the getLBA() function.
  *
- * For reference, here is a list of all the VT100 I/O ports, from /devices/pc8080/machine/vt100/debugger/README.md,
+ * For reference, here is a list of all the VT100 I/O ports, from /machines/dec/vt100/debugger/index.md,
  * which in turn comes from p. 4-17 of the VT100 Technical Manual (July 1982):
  *
  *      READ OR WRITE

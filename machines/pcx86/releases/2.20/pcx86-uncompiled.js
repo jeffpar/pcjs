@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
  */
@@ -985,7 +983,7 @@ class Str {
     {
         /*
          * We can't rely entirely on isNaN(), because isNaN(null) returns false, and we can't rely
-         * entirely on typeof either, because typeof Nan returns "number".  Sigh.
+         * entirely on typeof either, because typeof NaN returns "number".  Sigh.
          *
          * Alternatively, we could mask and shift n regardless of whether it's null/undefined/NaN,
          * since JavaScript coerces such operands to zero, but I think there's "value" in seeing those
@@ -1637,7 +1635,7 @@ class Str {
             switch(type) {
             case 'b':
                 /*
-                 * This is a non-standard format specifier that seems handy.
+                 * This non-standard "boolean" format specifier seems handy.
                  */
                 buffer += (arg? "true" : "false");
                 break;
@@ -1780,8 +1778,21 @@ class Str {
                 }
                 width -= prefix.length;
                 do {
-                    let d = arg & (radix - 1);
-                    arg >>>= (radix == 16? 4 : 3);
+                    let d = 16;         // digit index corresponding to '?'
+                    /*
+                     * We default to '?' if isNaN(); since we always call Math.trunc() for integer args, if the original
+                     * arg was undefined, or a string containing a non-number, or anything else that couldn't be converted
+                     * to a number, the resulting arg should be NaN.
+                     */
+                    if (!Number.isNaN(arg)) {
+                        d = arg & (radix - 1);
+                        /*
+                         * We divide by the base (8 or 16) and truncate, instead of the more traditional bit-wise shift,
+                         * because, like the decimal integer case, this allows us to support values > 32 bits (up to 53 bits).
+                         */
+                        arg = Math.trunc(arg / radix);
+                        // arg >>>= (radix == 16? 4 : 3);
+                    }
                     if (zeroPad || !s || d || arg) {
                         s = ach[d] + s;
                     } else {
@@ -1968,8 +1979,8 @@ Str.TYPES = {
     ARRAY:      8
 };
 
-Str.HexLowerCase = "0123456789abcdef";
-Str.HexUpperCase = "0123456789ABCDEF";
+Str.HexLowerCase = "0123456789abcdef?";
+Str.HexUpperCase = "0123456789ABCDEF?";
 Str.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 Str.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -3444,6 +3455,7 @@ if (DEBUG) {
  * The upside, however, may be that since the structure of the class is completely defined by
  * the constructor, JavaScript engines may be able to optimize and run more efficiently.
  *
+ * @class Component
  * @unrestricted
  */
 class Component {
@@ -71400,6 +71412,7 @@ let DbgAddr;
  * The upside, however, may be that since the structure of the class is completely defined by
  * the constructor, JavaScript engines may be able to optimize and run more efficiently.
  *
+ * @class DbgLib
  * @unrestricted
  */
 class DbgLib extends Component {
@@ -73230,7 +73243,7 @@ class DebuggerX86 extends DbgLib {
                  * AX == 0 means handle fault normally, 1 means issue TRAPFAULT
                  */
                 cpu.regEAX = (cpu.regEAX & ~0xffff) | (this.fIgnoreNextCheckFault? 0 : 1);
-                if (DEBUG) this.println("INT 0x41 CHECKFAULT: fault=" + Str.toHexWord(BX) + " type=" + Str.toHexWord(CX) + " trap=" + !this.fIgnoreNextCheckFault);
+                if (DEBUG) this.printf("INT 0x41 CHECKFAULT: fault=%#04x type=%#04x trap=%b\n", BX, CX, !this.fIgnoreNextCheckFault);
             }
             break;
 
@@ -73247,11 +73260,11 @@ class DebuggerX86 extends DbgLib {
             if (this.fWinDbg) {
                 dbgAddr = this.newAddr(cpu.regEDX, CX);
                 if (!this.cTrapFaults++) {
-                    this.println("INT 0x41 TRAPFAULT: fault=" + Str.toHexWord(BX) + " error=" + Str.toHexLong(cpu.regESI) + " addr=" + this.toHexAddr(dbgAddr));
+                    this.printf("INT 0x41 TRAPFAULT: fault=%#04x error=%#08x addr=%s\n", BX, cpu.regESI, this.toHexAddr(dbgAddr));
                     this.addBreakpoint(this.aBreakExec, dbgAddr, true);
                     this.historyInit(true);         // temporary breakpoints don't normally trigger history, but in this case, we want it to
                 } else {
-                    this.println("TRAPFAULT failed");
+                    this.printf("TRAPFAULT failed\n");
                     this.findBreakpoint(this.aBreakExec, dbgAddr, true, true, true);
                     this.cTrapFaults = 0;
                     this.stopCPU();
@@ -73295,7 +73308,7 @@ class DebuggerX86 extends DbgLib {
              * I've changed this code from DEBUG to MAXDEBUG for now. TODO: Investigate who/what is triggering this later.
              */
             if (MAXDEBUG && this.fWinDbg) {
-                this.println("INT 0x41: " + Str.toHexWord(AX));
+                this.printf("INT 0x41: %#04x\n", AX);
             }
             break;
         }
@@ -73339,14 +73352,14 @@ class DebuggerX86 extends DbgLib {
                  * where the IFSHLP device driver header is located.
                  */
                 if (cpu.getLong((cpu.segCS.sel << 4) + 0x0A) == 0x24534649) {
-                    if (DEBUG) this.println("Ignoring INT 0x68 from IFSHLP.SYS");
+                    if (DEBUG) this.printf("Ignoring INT 0x68 from IFSHLP.SYS\n");
                     return true;
                 }
                 /*
                  * Ditto for WDEB386 itself, which presumably wants to avoid loading on top of itself.
                  */
                 if (cpu.getLong((cpu.segCS.sel << 4) + 0x5F) == 0x42454457) {
-                    if (DEBUG) this.println("Ignoring INT 0x68 from WDEB386.EXE");
+                    if (DEBUG) this.printf("Ignoring INT 0x68 from WDEB386.EXE\n");
                     return true;
                 }
                 /*
@@ -73450,7 +73463,7 @@ class DebuggerX86 extends DbgLib {
 
         default:
             if (DEBUG && this.fWinDbgRM) {
-                this.println("INT 0x68: " + Str.toHexByte(AH));
+                this.printf("INT 0x68: %#02x\n", AH);
             }
             break;
         }
@@ -73506,7 +73519,7 @@ class DebuggerX86 extends DbgLib {
     {
         let cpu = this.cpu;
         let AL = cpu.regEAX & 0xff;
-        if (MAXDEBUG) this.println("INT 0x68 callback: " + Str.toHexByte(AL));
+        if (MAXDEBUG) this.printf("INT 0x68 callback: %#02x\n", AL);
         if (AL == 5) {
             cpu.regECX = cpu.regESI = 0;                // our in-machine debugger footprint is zero
             cpu.regEAX = (cpu.regEAX & ~0xff) | 0x01;   // TODO: Returning a "don't call" response sounds good, but what does it REALLY mean?
@@ -74093,7 +74106,7 @@ class DebuggerX86 extends DbgLib {
         if (off != undefined) {
             dbgAddr = this.newAddr(off, sel, addr, type);
             if (!fNoChecks && !this.checkLimit(dbgAddr, true)) {
-                this.println("invalid offset: " + this.toHexAddr(dbgAddr));
+                this.printf("invalid offset: %s\n", this.toHexAddr(dbgAddr));
                 dbgAddr = undefined;
             }
         }
@@ -74268,15 +74281,15 @@ class DebuggerX86 extends DbgLib {
         if (sAddr) {
             addr = this.getAddr(this.parseAddr(sAddr));
             if (addr === X86.ADDR_INVALID) {
-                this.println("invalid address: " + sAddr);
+                this.println("invalid address: %s\n", sAddr);
                 return;
             }
             i = addr >>> this.cpu.nBlockShift;
             n = 1;
         }
 
-        this.println("blockid   " + (fLinear? "linear  " : "physical") + "   blockaddr   used    size    type");
-        this.println("--------  ---------  ----------  ------  ------  ----");
+        this.printf("blockid   %s   blockaddr   used    size    type\n", fLinear? "linear  " : "physical");
+        this.printf("--------  ---------  ----------  ------  ------  ----\n");
 
         let typePrev = -1, cPrev = 0;
         while (n--) {
@@ -74296,7 +74309,7 @@ class DebuggerX86 extends DbgLib {
                 block = this.cpu.mapPageBlock(addr, false, true);
             }
             if (block.type == typePrev) {
-                if (!cPrev++) this.println("...");
+                if (!cPrev++) this.printf("...\n");
             } else {
                 typePrev = block.type;
                 let sType = MemoryX86.TYPE.NAMES[typePrev];
@@ -74306,7 +74319,7 @@ class DebuggerX86 extends DbgLib {
                     sType += " -> " + MemoryX86.TYPE.NAMES[block.type];
                 }
                 if (block) {
-                    this.println(Str.toHex(block.id, 8) + "  %" + Str.toHex(i << this.cpu.nBlockShift, 8) + "  %%" + Str.toHex(block.addr, 8) + "  " + Str.toHexWord(block.used) + "  " + Str.toHexWord(block.size) + "  " + sType);
+                    this.printf("%08x  %%%08x  %%%%%08x  %#06x  %#06x  %s\n", block.id, i << this.cpu.nBlockShift, block.addr, block.used, block.size, sType);
                 }
                 if (typePrev != MemoryX86.TYPE.NONE && typePrev != MemoryX86.TYPE.UNPAGED) typePrev = -1;
                 cPrev = 0;
@@ -81992,7 +82005,7 @@ class Computer extends Component {
                  *      let sState = computer.powerOff(true);
                  *      if (sState) {
                  *          sState = "data:text/json;charset=utf-8," + encodeURIComponent(sState);
-                 *          window.open(sState);
+                 *          globals.window.open(sState);
                  *      }
                  *
                  * Perhaps if I embedded the data in a link on the current page instead; eg:
@@ -82306,8 +82319,8 @@ class Computer extends Component {
              */
             let x = 0, y = 0;
             if (!fScroll && globals.browser) {
-                x = window.scrollX;
-                y = window.scrollY;
+                x = globals.window.scrollX;
+                y = globals.window.scrollY;
             }
 
             /*
@@ -82316,7 +82329,7 @@ class Computer extends Component {
             this.aVideo[0].setFocus(fScroll);
 
             if (!fScroll && globals.window.scrollTo) {
-                window.scrollTo(x, y);
+                globals.window.scrollTo(x, y);
             }
         }
     }

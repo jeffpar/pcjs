@@ -7,7 +7,7 @@ machines:
   - id: vt100
     type: pcx80
     debugger: true
-    config: /machines/pcx80/machine/vt100/debugger/machine.xml
+    config: /machines/pcx80/vt100/debugger/machine.xml
 ---
 
 The [PCx80]({{ site.github.pages }}/machines/pcx80/) machine below is configured to simulate a

@@ -8,11 +8,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
-
-var fs = require("fs");
-var Defines = require("../../../modules/shared/lib/defines");
-var Str = require("../../../modules/shared/lib/strlib");
+import fs from "fs";
+import Str from "../../../modules/v2/strlib.js";
 
 /**
  * processFile(sFileIn, sFileOut, wordSize, valueSize, littleEndian)

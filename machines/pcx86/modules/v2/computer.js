@@ -1397,7 +1397,7 @@ export default class Computer extends Component {
                  *      let sState = computer.powerOff(true);
                  *      if (sState) {
                  *          sState = "data:text/json;charset=utf-8," + encodeURIComponent(sState);
-                 *          window.open(sState);
+                 *          globals.window.open(sState);
                  *      }
                  *
                  * Perhaps if I embedded the data in a link on the current page instead; eg:
@@ -1711,8 +1711,8 @@ export default class Computer extends Component {
              */
             let x = 0, y = 0;
             if (!fScroll && globals.browser) {
-                x = window.scrollX;
-                y = window.scrollY;
+                x = globals.window.scrollX;
+                y = globals.window.scrollY;
             }
 
             /*
@@ -1721,7 +1721,7 @@ export default class Computer extends Component {
             this.aVideo[0].setFocus(fScroll);
 
             if (!fScroll && globals.window.scrollTo) {
-                window.scrollTo(x, y);
+                globals.window.scrollTo(x, y);
             }
         }
     }

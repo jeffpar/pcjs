@@ -1,5 +1,6 @@
 {
   "name": "pcjs",
+  "type": "module",
   "version": "2.00.0",
   "year": 2023,
   "description": "PCjs",
