@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Debugger from "../../modules/debugger.js";
+import Debugger from "../../../modules/v3/debugger.js";
 
 /**
  * Debugger for the 8080 CPU

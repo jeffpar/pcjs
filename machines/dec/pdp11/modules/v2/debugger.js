@@ -15,8 +15,8 @@ import DbgLib from "../../../../modules/v2/debugger.js";
 import Keys from "../../../../modules/v2/keys.js";
 import State from "../../../../modules/v2/state.js";
 import Str from "../../../../modules/v2/strlib.js";
-import Usr from "../../../../modules/v2//usrlib.js";
-import Web from "../../../../modules/v2//weblib.js";
+import Usr from "../../../../modules/v2/usrlib.js";
+import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, APPNAME, APPVERSION, COMPILED, DEBUG, DEBUGGER, PDP11, globals } from "./defines.js";
 
 /**

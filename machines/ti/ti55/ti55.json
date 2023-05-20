@@ -3,7 +3,7 @@
     "class": "Machine",
     "type": "Calculator",
     "name": "TI-55 Emulator",
-    "version": 2.00,
+    "version": 3.00,
     "bindings": {
       "power": "powerTI55",
       "reset": "resetTI55",

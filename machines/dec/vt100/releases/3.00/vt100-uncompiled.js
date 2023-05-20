@@ -49,7 +49,7 @@ const MAXDEBUG = false;
  *
  * @define {string}
  */
-const VERSION = "2.11";
+const VERSION = "3.00";
 
 /**
  * REPOSITORY is the primary location (eg, URL) where all PCjs-related resources can be found; it is not
@@ -17597,7 +17597,7 @@ Dbgx80.aaOpDescs = [
 Dbgx80.CLASSES["Dbgx80"] = Dbgx80;
 
 /**
- * @copyright https://www.pcjs.org/modules/chips.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/chips.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -18259,7 +18259,7 @@ VT100Chips.IOTABLE = {
 VT100Chips.CLASSES["VT100Chips"] = VT100Chips;
 
 /**
- * @copyright https://www.pcjs.org/modules/keyboard.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/keyboard.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ model: number }} */
@@ -18814,7 +18814,7 @@ VT100Keyboard.IOTABLE = {
 VT100Keyboard.CLASSES["VT100Keyboard"] = VT100Keyboard;
 
 /**
- * @copyright https://www.pcjs.org/modules/serial.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/serial.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -19399,7 +19399,7 @@ VT100Serial.IOTABLE = {
 VT100Serial.CLASSES["VT100Serial"] = VT100Serial;
 
 /**
- * @copyright https://www.pcjs.org/modules/video.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/video.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ bufferWidth: number, bufferHeight: number, bufferAddr: number, bufferBits: number, bufferLeft: number, interruptRate: number }} */

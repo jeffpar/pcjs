@@ -49,7 +49,7 @@ const MAXDEBUG = false;
  *
  * @define {string}
  */
-const VERSION = "2.11";
+const VERSION = "3.00";
 
 /**
  * REPOSITORY is the primary location (eg, URL) where all PCjs-related resources can be found; it is not
@@ -9561,7 +9561,7 @@ class CPU extends Device {
 // CPU.CLASSES["CPU"] = CPU;
 
 /**
- * @copyright https://www.pcjs.org/modules/cpu1500.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/cpu1500.js (C) 2012-2023 Jeff Parsons
  */
 
 /**

@@ -7,9 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import CPU    from "../../modules/cpu.js";
-import Device from "../../modules/device.js";
-import LED    from "../../modules/led.js";
+import CPU    from "../../../modules/v3/cpu.js";
+import Device from "../../../modules/v3/device.js";
+import LED    from "../../../modules/v3/led.js";
 
 /**
  * 64-bit Register

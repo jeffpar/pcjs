@@ -6,12 +6,14 @@ redirect_from: /devices/pdp11/machine/1170/vt100/
 machines:
   - id: test1170
     type: pdp11
+    unbundled: true
     config: /machines/dec/pdp11/1170/vt100/machine.xml
     connection: dl11->vt100.serialPort
     resume: 1
   - id: vt100
     type: vt100
     name: DEC VT100
+    unbundled: true
     config: /machines/dec/vt100/vt100.json
     layout: /_includes/vt100/vt100.html
     connection: serialPort->test1170.dl11

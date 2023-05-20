@@ -49,7 +49,7 @@ const MAXDEBUG = false;
  *
  * @define {string}
  */
-const VERSION = "2.11";
+const VERSION = "3.00";
 
 /**
  * REPOSITORY is the primary location (eg, URL) where all PCjs-related resources can be found; it is not
@@ -12799,7 +12799,7 @@ Debugger.DECOP_PRECEDENCE = {
 // Debugger.CLASSES["Debugger"] = Debugger;
 
 /**
- * @copyright https://www.pcjs.org/modules/cpu68k.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/cpu68k.js (C) 2012-2023 Jeff Parsons
  */
 
 /* eslint-disable no-labels */
@@ -15811,7 +15811,7 @@ CPU68K.FLAGS_T1           = 0x8000;             // 1 == trace on any instruction
 CPU68K.CLASSES["CPU68K"] = CPU68K;
 
 /**
- * @copyright https://www.pcjs.org/modules/dbg68k.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/dbg68k.js (C) 2012-2023 Jeff Parsons
  */
 
 /* eslint-disable no-labels */
@@ -17840,7 +17840,7 @@ Dbg68K.DATAACCESS_UNINIT   = 3;
 Dbg68K.CLASSES["Dbg68K"] = Dbg68K;
 
 /**
- * @copyright https://www.pcjs.org/modules/eamodes.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/eamodes.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -19309,7 +19309,7 @@ class EAModeImmediateLong extends EAMode {
 }
 
 /**
- * @copyright https://www.pcjs.org/modules/ioregs.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/ioregs.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number }} */
@@ -19827,7 +19827,7 @@ PilotIO.alRegsInit = {
 PilotIO.CLASSES["PilotIO"] = PilotIO;
 
 /**
- * @copyright https://www.pcjs.org/modules/video.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/video.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ bufferWidth: number, bufferHeight: number, bufferAddr: number, bufferRAM: boolean, bufferBits: number, bufferLeft: number, bufferRotate: number, interruptRate: number }} */

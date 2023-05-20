@@ -12,9 +12,9 @@
 /* eslint-disable sort-imports */
 /* eslint-disable no-duplicate-imports */
 
-import CPU                  from "../../../modules/cpu.js";
+import CPU                  from "../../../../modules/v3/cpu.js";
 import Dbg68K               from "./dbg68k.js";
-import Debugger             from "../../../modules/debugger.js";
+import Debugger             from "../../../../modules/v3/debugger.js";
 import EAModeDRegByte       from "./eamodes.js";
 import EAModeDRegWord       from "./eamodes.js";
 import EAModeDRegLong       from "./eamodes.js";

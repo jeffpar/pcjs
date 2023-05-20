@@ -54,7 +54,7 @@ const MAXDEBUG = false;
  *
  * @define {string}
  */
-const VERSION = "2.11";
+const VERSION = "3.00";
 
 /**
  * REPOSITORY is the primary location (eg, URL) where all PCjs-related resources can be found; it is not

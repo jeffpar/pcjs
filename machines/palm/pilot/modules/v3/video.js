@@ -1,5 +1,5 @@
 /**
- * @fileoverview Implements Space Invaders video hardware
+ * @fileoverview Implements Palm Pilot video hardware
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2023 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -7,30 +7,31 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Memory  from "../../../modules/memory.js";
-import Monitor from "../../../modules/monitor.js";
+import Memory  from "../../../../modules/v3/memory.js";
+import Monitor from "../../../../modules/v3/monitor.js";
 
 /**
- * @typedef {MonitorConfig} InvadersVideoConfig
+ * @typedef {MonitorConfig} PilotVideoConfig
  * @property {number} bufferWidth
  * @property {number} bufferHeight
- * @property {number} bufferRotate
  * @property {number} bufferAddr
+ * @property {boolean} bufferRAM
  * @property {number} bufferBits
  * @property {number} bufferLeft
+ * @property {number} bufferRotate
  * @property {number} interruptRate
  */
 
 /**
- * @class {InvadersVideo}
+ * @class {PilotVideo}
  * @unrestricted
- * @property {InvadersVideoConfig} config
+ * @property {PilotVideoConfig} config
  */
-export default class InvadersVideo extends Monitor {
+export default class PilotVideo extends Monitor {
     /**
-     * InvadersVideo(idMachine, idDevice, config)
+     * PilotVideo(idMachine, idDevice, config)
      *
-     * The InvadersVideo component can be configured with the following config properties:
+     * The PilotVideo component can be configured with the following config properties:
      *
      *      bufferWidth: the width of a single frame buffer row, in pixels (eg, 256)
      *      bufferHeight: the number of frame buffer rows (eg, 224)
@@ -47,7 +48,7 @@ export default class InvadersVideo extends Monitor {
      * appropriate "cell" size (ie, the number of pixels that updateMonitor() will fetch and process at once),
      * and then allocate our cell cache.
      *
-     * Why interruptRate in addition to refreshRate?  A higher interrupt rate is required for Space Invaders,
+     * Why interruptRate in addition to refreshRate?  A higher interrupt rate is required for Space Pilot,
      * because even though the CRT refreshes at 60Hz, the CRT controller interrupts the CPU *twice* per
      * refresh (once after the top half of the image has been redrawn, and again after the bottom half has
      * been redrawn), so we need an interrupt rate of 120Hz.  We pass the higher rate on to the CPU, so that
@@ -58,7 +59,7 @@ export default class InvadersVideo extends Monitor {
      * transformation methods (translate(), rotate(), and scale()), while bufferRotate inverts the dimensions
      * of the off-screen buffer and then relies on setPixel() to "rotate" the data into the proper location.
      *
-     * @this {InvadersVideo}
+     * @this {PilotVideo}
      * @param {string} idMachine
      * @param {string} idDevice
      * @param {ROMConfig} [config]
@@ -98,7 +99,7 @@ export default class InvadersVideo extends Monitor {
         this.busMemory = /** @type {Bus} */ (this.findDevice(this.config['bus']));
         this.initBuffers();
 
-        this.cpu = /** @type {CPUx80} */ (this.findDeviceByClass("CPU"));
+        this.cpu = /** @type {CPU68K} */ (this.findDeviceByClass("CPU"));
         this.time = /** @type {Time} */ (this.findDeviceByClass("Time"));
         this.timerUpdateNext = this.time.addTimer(this.idDevice, this.updateMonitor.bind(this));
         this.time.addUpdate(this);
@@ -118,7 +119,7 @@ export default class InvadersVideo extends Monitor {
      * some code, or editing the frame buffer directly, or something else).  Since we have no way of knowing, we
      * must force an update.
      *
-     * @this {InvadersVideo}
+     * @this {PilotVideo}
      * @param {boolean} [fTransition]
      */
     onUpdate(fTransition)
@@ -129,7 +130,7 @@ export default class InvadersVideo extends Monitor {
     /**
      * initBuffers()
      *
-     * @this {InvadersVideo}
+     * @this {PilotVideo}
      * @returns {boolean}
      */
     initBuffers()
@@ -188,7 +189,7 @@ export default class InvadersVideo extends Monitor {
     /**
      * getRefreshTime()
      *
-     * @this {InvadersVideo}
+     * @this {PilotVideo}
      * @returns {number} (number of milliseconds per refresh)
      */
     getRefreshTime()
@@ -201,7 +202,7 @@ export default class InvadersVideo extends Monitor {
      *
      * Initializes the contents of our internal cell cache.
      *
-     * @this {InvadersVideo}
+     * @this {PilotVideo}
      * @param {number} [nCells]
      */
     initCache(nCells)
@@ -220,26 +221,26 @@ export default class InvadersVideo extends Monitor {
      *
      * This creates an array of nColors, with additional OVERLAY_TOTAL colors tacked on to the end of the array.
      *
-     * @this {InvadersVideo}
+     * @this {PilotVideo}
      */
     initColors()
     {
         let rgbBlack  = [0x00, 0x00, 0x00, 0xff];
         let rgbWhite  = [0xff, 0xff, 0xff, 0xff];
         this.nColors = (1 << this.nBitsPerPixel);
-        this.aRGB = new Array(this.nColors + InvadersVideo.COLORS.OVERLAY_TOTAL);
+        this.aRGB = new Array(this.nColors + PilotVideo.COLORS.OVERLAY_TOTAL);
         this.aRGB[0] = rgbBlack;
         this.aRGB[1] = rgbWhite;
         let rgbGreen  = [0x00, 0xff, 0x00, 0xff];
         let rgbYellow = [0xff, 0xff, 0x00, 0xff];
-        this.aRGB[this.nColors + InvadersVideo.COLORS.OVERLAY_TOP] = rgbYellow;
-        this.aRGB[this.nColors + InvadersVideo.COLORS.OVERLAY_BOTTOM] = rgbGreen;
+        this.aRGB[this.nColors + PilotVideo.COLORS.OVERLAY_TOP] = rgbYellow;
+        this.aRGB[this.nColors + PilotVideo.COLORS.OVERLAY_BOTTOM] = rgbGreen;
     }
 
     /**
      * setPixel(image, x, y, bPixel)
      *
-     * @this {InvadersVideo}
+     * @this {PilotVideo}
      * @param {Object} image
      * @param {number} x
      * @param {number} y
@@ -255,10 +256,10 @@ export default class InvadersVideo extends Monitor {
         }
         if (bPixel) {
             if (x >= 208 && x < 236) {
-                bPixel = this.nColors + InvadersVideo.COLORS.OVERLAY_TOP;
+                bPixel = this.nColors + PilotVideo.COLORS.OVERLAY_TOP;
             }
             else if (x >= 28 && x < 72) {
-                bPixel = this.nColors + InvadersVideo.COLORS.OVERLAY_BOTTOM;
+                bPixel = this.nColors + PilotVideo.COLORS.OVERLAY_BOTTOM;
             }
         }
         let rgb = this.aRGB[bPixel];
@@ -275,7 +276,7 @@ export default class InvadersVideo extends Monitor {
      * Forced updates are generally internal updates triggered by an I/O operation or other state change,
      * while non-forced updates are periodic "refresh" updates.
      *
-     * @this {InvadersVideo}
+     * @this {PilotVideo}
      * @param {boolean} [fForced]
      */
     updateMonitor(fForced)
@@ -288,7 +289,7 @@ export default class InvadersVideo extends Monitor {
                  */
                 if (this.rateInterrupt == 120) {
                     /**
-                     * According to http://www.computerarcheology.com/Arcade/SpaceInvaders/Hardware.html:
+                     * According to http://www.computerarcheology.com/Arcade/SpacePilot/Hardware.html:
                      *
                      *      The CPU's INT line is asserted via a D flip-flop at E3.
                      *      The flip-flop is clocked by the expression (!(64V | !128V) | VBLANK).
@@ -311,14 +312,14 @@ export default class InvadersVideo extends Monitor {
                         /**
                          * On even updates, call cpu.requestINTR(1), and also update our copy of the image.
                          */
-                        this.cpu.requestINTR(1);
+                        // this.cpu.requestINTR(1);
                     } else {
                         /**
                          * On odd updates, call cpu.requestINTR(2), but do NOT update our copy of the image, because
                          * the machine has presumably only updated the top half of the frame buffer at this point; it will
                          * update the bottom half of the frame buffer after acknowledging this interrupt.
                          */
-                        this.cpu.requestINTR(2);
+                        // this.cpu.requestINTR(2);
                         fUpdate = false;
                     }
                 }
@@ -349,7 +350,7 @@ export default class InvadersVideo extends Monitor {
      * and then update the cell cache to match.  Since initCache() sets every cell in the cell cache to an
      * invalid value, we're assured that the next call to updateScreen() will redraw the entire (visible) video buffer.
      *
-     * @this {InvadersVideo}
+     * @this {PilotVideo}
      */
     updateScreen()
     {
@@ -430,10 +431,10 @@ export default class InvadersVideo extends Monitor {
     }
 }
 
-InvadersVideo.COLORS = {
+PilotVideo.COLORS = {
     OVERLAY_TOP:    0,
     OVERLAY_BOTTOM: 1,
     OVERLAY_TOTAL:  2
 };
 
-InvadersVideo.CLASSES["InvadersVideo"] = InvadersVideo;
+PilotVideo.CLASSES["PilotVideo"] = PilotVideo;

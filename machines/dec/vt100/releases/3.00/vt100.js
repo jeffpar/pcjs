@@ -17,10 +17,10 @@
  https://www.pcjs.org/modules/v3/debugger.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v3/cpux80.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v3/dbgx80.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/chips.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/keyboard.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/serial.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/video.js (C) 2012-2023 Jeff Parsons
+ https://www.pcjs.org/modules/v3/chips.js (C) 2012-2023 Jeff Parsons
+ https://www.pcjs.org/modules/v3/keyboard.js (C) 2012-2023 Jeff Parsons
+ https://www.pcjs.org/modules/v3/serial.js (C) 2012-2023 Jeff Parsons
+ https://www.pcjs.org/modules/v3/video.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v3/machine.js (C) 2012-2023 Jeff Parsons
 */
 var f;function aa(a){var b=0;return function(){return b<a.length?{done:!1,value:a[b++]}:{done:!0}}}function ba(a){if(!(a instanceof Array)){var b="undefined"!=typeof Symbol&&Symbol.iterator&&a[Symbol.iterator];a=b?b.call(a):{next:aa(a)};for(var c=[];!(b=a.next()).done;)c.push(b.value);a=c}return a}

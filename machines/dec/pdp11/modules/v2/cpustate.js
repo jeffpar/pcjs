@@ -17,7 +17,7 @@ import MessagesPDP11 from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
 import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2//weblib.js";
+import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER, PDP11 } from "./defines.js";
 
 /*

@@ -7,8 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Input from "../../../modules/input.js";
-import Memory from "../../../modules/memory.js";
+import Input from "../../../../modules/v3/input.js";
+import Memory from "../../../../modules/v3/memory.js";
 
 /**
  * @typedef {IOConfig} PilotIOConfig

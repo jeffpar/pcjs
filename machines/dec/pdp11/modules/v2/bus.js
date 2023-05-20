@@ -13,7 +13,7 @@
 import MemoryPDP11 from "./memory.js";
 import MessagesPDP11 from "./messages.js";
 import Str from "../../../../modules/v2/strlib.js";
-import Usr from "../../../../modules/v2//usrlib.js";
+import Usr from "../../../../modules/v2/usrlib.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
 import { DEBUGGER, MAXDEBUG, PDP11, WORDBUS } from "./defines.js";

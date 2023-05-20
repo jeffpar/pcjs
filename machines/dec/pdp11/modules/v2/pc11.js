@@ -12,7 +12,7 @@ import Component from "../../../../modules/v2/component.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
 import State from "../../../../modules/v2/state.js";
 import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2//weblib.js";
+import Web from "../../../../modules/v2/weblib.js";
 import { CSSCLASS, DEBUG, PDP11 } from "./defines.js";
 
 export default class PC11 extends Component {

@@ -12,7 +12,7 @@ import Component from "../../../../modules/v2/component.js";
 import DiskAPI from "../../../../modules/v2/diskapi.js";
 import State from "../../../../modules/v2/state.js";
 import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2//weblib.js";
+import Web from "../../../../modules/v2/weblib.js";
 import { DEBUG, MAXDEBUG, globals } from "./defines.js";
 
 /**

@@ -110,6 +110,13 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "DEC PDP-11/70 with VT100 Terminal (Unbundled)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/dec/pdp11/1170/vt100/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "IBM PC with CGA",
       "type": "chrome",
       "request": "launch",
@@ -1069,6 +1076,20 @@
         "--debug"
       ],
       "cwd": "${workspaceFolder}/machines/pcx86/bin",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
+      "name": "Node: pdp11.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/machines/dec/pdp11/bin/pdp11.js",
+      "args": [
+      ],
+      "cwd": "${workspaceFolder}/machines/dec/pdp11/bin",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

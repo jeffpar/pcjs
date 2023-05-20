@@ -20,7 +20,7 @@ import RX11 from "./rx11.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
 import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2//weblib.js";
+import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUGGER, PDP11 } from "./defines.js";
 
 export default class DevicePDP11 extends Component {

@@ -11,7 +11,7 @@
 /* eslint-disable no-extra-label */
 
 import CPU68K from "./cpu68k.js";
-import Debugger from "../../../modules/debugger.js";
+import Debugger from "../../../../modules/v3/debugger.js";
 
 /**
  * 68K Debugger

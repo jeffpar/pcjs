@@ -12,9 +12,9 @@ import MessagesPDP11 from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
 import Str from "../../../../modules/v2/strlib.js";
-import UserAPI from "../../../../modules/v2//userapi.js";
-import Usr from "../../../../modules/v2//usrlib.js";
-import Web from "../../../../modules/v2//weblib.js";
+import UserAPI from "../../../../modules/v2/userapi.js";
+import Usr from "../../../../modules/v2/usrlib.js";
+import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, APPNAME, APPVERSION, COPYRIGHT, DEBUG, LICENSE, TYPEDARRAYS, globals } from "./defines.js";
 
 export default class ComputerPDP11 extends Component {

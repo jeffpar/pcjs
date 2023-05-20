@@ -3,7 +3,7 @@
     "class": "Machine",
     "type": "Calculator",
     "name": "TI-42 Emulator",
-    "version": 2.00,
+    "version": 3.00,
     "bindings": {
       "power": "powerTI42",
       "reset": "resetTI42",

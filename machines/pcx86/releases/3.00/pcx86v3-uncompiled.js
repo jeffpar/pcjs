@@ -1,5 +1,3 @@
-"use strict";
-
 /**
  * @copyright https://www.pcjs.org/modules/v3/defs.js (C) 2012-2023 Jeff Parsons
  */
@@ -51,7 +49,7 @@ const MAXDEBUG = false;
  *
  * @define {string}
  */
-const VERSION = "2.11";
+const VERSION = "3.00";
 
 /**
  * REPOSITORY is the primary location (eg, URL) where all PCjs-related resources can be found; it is not

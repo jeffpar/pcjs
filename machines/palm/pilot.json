@@ -3,7 +3,7 @@
     "class": "Machine",
     "type": "PDA",
     "name": "Palm Pilot",
-    "version": 2.00,
+    "version": 3.00,
     "autoSave": true,
     "autoStart": false,
     "bindings": {

@@ -15,7 +15,7 @@ import Component from "../../../../modules/v2/component.js";
 import Keys from "../../../../modules/v2/keys.js";
 import State from "../../../../modules/v2/state.js";
 import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2//weblib.js";
+import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, MAXDEBUG, PDP11, RS232 } from "./defines.js";
 
 /**

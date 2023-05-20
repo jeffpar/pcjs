@@ -380,20 +380,22 @@ function startInput()
 {
     var stdin = process.stdin;
     if (!stdin.setRawMode) return false;
-    console.log("console connected to machine (alt-r for REPL prompt, alt-x to exit)");
+    console.log("console connected to machine (ctrl-d to exit, ctrl-r for REPL prompt)");
     stdin.setRawMode(true);
     stdin.resume();
     stdin.on('data', function(buf){
-        if (buf[0] == 0x1b && (buf[1] == 0x72 || buf[1] == 0x78)) {
+        // if (buf[0] == 0x1b && (buf[1] == 0x72 || buf[1] == 0x78)) {
+        if (buf[0] == 0x04 || buf[0] == 0x12) {
             stdin.removeAllListeners('data');
             stdin.setRawMode(false);
             stdin.pause();
-            if (buf[1] == 0x72) {
-                console.log("alt-r detected, starting REPL...");
+            if (buf[0] == 0x04) {
+                console.log("ctrl-d detected, exiting...");
+                process.exit();
+            } else if (buf[0] == 0x12) {
+                console.log("ctrl-r detected, starting REPL...");
                 startREPL();
             } else {
-                console.log("alt-x detected, exiting...");
-                process.exit();
             }
             return;
         }

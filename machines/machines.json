@@ -357,7 +357,7 @@
       "./machines/modules/v3/memory.js",
       "./machines/modules/v3/rom.js",
       "./machines/modules/v3/cpu.js",
-      "./machines/ti/modules/cpu1500.js",
+      "./machines/ti/modules/v3/cpu1500.js",
       "./machines/modules/v3/machine.js"
     ]
   },
@@ -401,8 +401,8 @@
       "./machines/modules/v3/debugger.js",
       "./machines/pcx80/modules/v3/cpux80.js",
       "./machines/pcx80/modules/v3/dbgx80.js",
-      "./machines/arcade/invaders/modules/ports.js",
-      "./machines/arcade/invaders/modules/video.js",
+      "./machines/arcade/invaders/modules/v3/ports.js",
+      "./machines/arcade/invaders/modules/v3/video.js",
       "./machines/modules/v3/machine.js"
     ]
   },
@@ -456,11 +456,11 @@
       "./machines/modules/v3/rom.js",
       "./machines/modules/v3/cpu.js",
       "./machines/modules/v3/debugger.js",
-      "./machines/motorola/68k/modules/cpu68k.js",
-      "./machines/motorola/68k/modules/dbg68k.js",
-      "./machines/motorola/68k/modules/eamodes.js",
-      "./machines/palm/pilot/modules/ioregs.js",
-      "./machines/palm/pilot/modules/video.js",
+      "./machines/motorola/68k/modules/v3/cpu68k.js",
+      "./machines/motorola/68k/modules/v3/dbg68k.js",
+      "./machines/motorola/68k/modules/v3/eamodes.js",
+      "./machines/palm/pilot/modules/v3/ioregs.js",
+      "./machines/palm/pilot/modules/v3/video.js",
       "./machines/modules/v3/machine.js"
     ]
   },
@@ -492,10 +492,10 @@
       "./machines/modules/v3/debugger.js",
       "./machines/pcx80/modules/v3/cpux80.js",
       "./machines/pcx80/modules/v3/dbgx80.js",
-      "./machines/dec/vt100/modules/chips.js",
-      "./machines/dec/vt100/modules/keyboard.js",
-      "./machines/dec/vt100/modules/serial.js",
-      "./machines/dec/vt100/modules/video.js",
+      "./machines/dec/vt100/modules/v3/chips.js",
+      "./machines/dec/vt100/modules/v3/keyboard.js",
+      "./machines/dec/vt100/modules/v3/serial.js",
+      "./machines/dec/vt100/modules/v3/video.js",
       "./machines/modules/v3/machine.js"
     ]
   },

@@ -49,7 +49,7 @@ const MAXDEBUG = false;
  *
  * @define {string}
  */
-const VERSION = "2.11";
+const VERSION = "3.00";
 
 /**
  * REPOSITORY is the primary location (eg, URL) where all PCjs-related resources can be found; it is not
@@ -17597,7 +17597,7 @@ Dbgx80.aaOpDescs = [
 Dbgx80.CLASSES["Dbgx80"] = Dbgx80;
 
 /**
- * @copyright https://www.pcjs.org/modules/ports.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/ports.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, switches: Object }} */
@@ -17970,7 +17970,7 @@ InvadersPorts.IOTABLE = {
 InvadersPorts.CLASSES["InvadersPorts"] = InvadersPorts;
 
 /**
- * @copyright https://www.pcjs.org/modules/video.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/video.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ bufferWidth: number, bufferHeight: number, bufferRotate: number, bufferAddr: number, bufferBits: number, bufferLeft: number, interruptRate: number }} */

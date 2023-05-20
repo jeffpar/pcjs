@@ -11,7 +11,7 @@
  https://www.pcjs.org/modules/v3/memory.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v3/rom.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v3/cpu.js (C) 2012-2023 Jeff Parsons
- https://www.pcjs.org/modules/cpu1500.js (C) 2012-2023 Jeff Parsons
+ https://www.pcjs.org/modules/v3/cpu1500.js (C) 2012-2023 Jeff Parsons
  https://www.pcjs.org/modules/v3/machine.js (C) 2012-2023 Jeff Parsons
 */
 var p;function aa(a){var b=0;return function(){return b<a.length?{done:!1,value:a[b++]}:{done:!0}}}function r(a){if(!(a instanceof Array)){var b="undefined"!=typeof Symbol&&Symbol.iterator&&a[Symbol.iterator];a=b?b.call(a):{next:aa(a)};for(var c=[];!(b=a.next()).done;)c.push(b.value);a=c}return a}
