@@ -1412,7 +1412,7 @@ export default class VideoX80 extends Component {
              * constraints of 0.3 <= aspect <= 3.33, to prevent any useless (or worse, browser-blowing) results.
              */
             if (aspect && aspect >= 0.3 && aspect <= 3.33) {
-                Web.onPageEvent('onresize', function(eParent, eChild, aspectRatio) {
+                Web.addPageEvent('onresize', function(eParent, eChild, aspectRatio) {
                     return function onResizeWindow() {
                         /*
                          * Since aspectRatio is the target width/height, we have:

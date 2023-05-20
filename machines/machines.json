@@ -106,7 +106,7 @@
     ],
     "factory": "PCx86v3",
     "scripts": [
-      "./machines/modules/v3/defs.js",
+      "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
@@ -345,7 +345,7 @@
     ],
     "factory": "TMS1500",
     "scripts": [
-      "./machines/modules/v3/defs.js",
+      "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
@@ -383,7 +383,7 @@
     ],
     "factory": "Invaders",
     "scripts": [
-      "./machines/modules/v3/defs.js",
+      "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
@@ -415,7 +415,7 @@
     ],
     "factory": "LEDs",
     "scripts": [
-      "./machines/modules/v3/defs.js",
+      "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
@@ -441,7 +441,7 @@
     ],
     "factory": "Pilot",
     "scripts": [
-      "./machines/modules/v3/defs.js",
+      "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
@@ -474,7 +474,7 @@
     ],
     "factory": "VT100",
     "scripts": [
-      "./machines/modules/v3/defs.js",
+      "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
@@ -509,7 +509,7 @@
     ],
     "factory": "PDP11v3",
     "scripts": [
-      "./machines/modules/v3/defs.js",
+      "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",

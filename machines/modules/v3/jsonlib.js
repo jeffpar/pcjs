@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import { COMPILED } from "./defs.js";
+import { COMPILED } from "./defines.js";
 
 /**
  * @class {JSONLib}

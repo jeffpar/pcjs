@@ -10,7 +10,7 @@
 /**
  * @define {string}
  */
-const APPVERSION = "0.00";              // this @define is overridden by the Closure Compiler with the version in machines.json
+const APPVERSION = "2.00";              // this @define is overridden by the Closure Compiler with the version in machines.json
 
 /**
  * @define {string}
@@ -127,10 +127,20 @@ const RS232 = {
  */
 let globals = {
     browser: (typeof window != "undefined")? {} : null,
-    pcjs: {machines: {}, components: [], commands: {}},
     node: (typeof window == "undefined")? global : {},
     window: (typeof window == "undefined")? global : window,
     document: (typeof document == "undefined")? {} : document
 };
+
+globals.pcjs = globals.window['PCjs'];
+if (!globals.pcjs) {
+    globals.pcjs = globals.window['PCjs'] = {};
+    globals.pcjs['Machines'] = {};
+    globals.pcjs['Components'] = [];
+    globals.pcjs['Commands'] = {};
+}
+globals.pcjs.machines = globals.pcjs['Machines'];
+globals.pcjs.components = globals.pcjs['Components'];
+globals.pcjs.commands = globals.pcjs['Commands'];
 
 export { APPVERSION, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, LICENSE, MAXDEBUG, PRIVATE, RS232, SITEURL, globals }

@@ -8,6 +8,11 @@
  */
 
 /**
+ * @class {Defines}
+ */
+export default class Defines {}
+
+/**
  * COMMAND is the default name of the global command handler we will define, to provide
  * the same convenient access to all the WebIO COMMAND handlers that the Debugger enjoys.
  *
@@ -67,27 +72,12 @@ const REPOSITORY = "pcjs.org";
 const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
 
 /**
- * @class {Defs}
- */
-export default class Defs {}
-export { COMPILED };
-
-Defs.COMMAND    = COMMAND;
-Defs.COMPILED   = COMPILED;
-Defs.COPYRIGHT  = COPYRIGHT;
-Defs.DEBUG      = DEBUG;
-Defs.FACTORY    = FACTORY;
-Defs.MAXDEBUG   = MAXDEBUG;
-Defs.REPOSITORY = REPOSITORY;
-Defs.VERSION    = VERSION;
-
-/**
  * The following globals CANNOT be overridden.
  *
  * LITTLE_ENDIAN is true if the browser's ArrayBuffer storage is little-endian.  If LITTLE_ENDIAN matches
  * the endian-ness of a machine being emulated, then that machine can use ArrayBuffers for Memory buffers as-is.
  */
-Defs.LITTLE_ENDIAN = function() {
+const LITTLE_ENDIAN = function() {
     let buffer = new ArrayBuffer(2);
     new DataView(buffer).setUint16(0, 256, true);
     return new Uint16Array(buffer)[0] === 256;
@@ -100,7 +90,7 @@ Defs.LITTLE_ENDIAN = function() {
  *
  * NOTE: To support more than 32 message groups, be sure to use "+", not "|", when concatenating.
  */
-Defs.MESSAGE = {
+const MESSAGE = {
     ALL:        0xffffffffffff,
     NONE:       0x000000000000,
     DEFAULT:    0x000000000000,
@@ -125,7 +115,7 @@ Defs.MESSAGE = {
  *
  * TODO: Move these definitions to a more appropriate shared file at some point.
  */
-Defs.RS232 = {
+const RS232 = {
     RTS: {
         PIN:  4,
         MASK: 0x00000010
@@ -152,5 +142,39 @@ Defs.RS232 = {
     }
 };
 
-Defs.CLASSES = {};
-Defs.CLASSES["Defs"] = Defs;
+Defines.COMMAND         = COMMAND;
+Defines.COMPILED        = COMPILED;
+Defines.COPYRIGHT       = COPYRIGHT;
+Defines.DEBUG           = DEBUG;
+Defines.FACTORY         = FACTORY;
+Defines.LITTLE_ENDIAN   = LITTLE_ENDIAN;
+Defines.MAXDEBUG        = MAXDEBUG;
+Defines.MESSAGE         = MESSAGE;
+Defines.REPOSITORY      = REPOSITORY;
+Defines.RS232           = RS232;
+Defines.VERSION         = VERSION;
+
+if (typeof window != "undefined") {
+    if (!window['PCjs']) window['PCjs'] = {};
+    if (!window['PCjs']['Machines']) window['PCjs']['Machines'] = {};
+    if (!window['PCjs']['Components']) window['PCjs']['Components'] = [];
+}
+
+/**
+ * Machines is a global object whose properties are machine IDs and whose values are arrays of Devices.
+ *
+ * @type {Object}
+ */
+Defines.Machines = typeof window != "undefined"? window['PCjs']['Machines'] : {};
+
+/**
+ * Components is maintained for backward-compatibility with older PCjs machines, to facilitate machine connections.
+ *
+ * @type {Array}
+ */
+Defines.Components = typeof window != "undefined"? window['PCjs']['Components'] : [];
+
+Defines.CLASSES = {};
+Defines.CLASSES["Defines"] = Defines;
+
+export { COMMAND, COMPILED, COPYRIGHT, DEBUG, FACTORY, LITTLE_ENDIAN, MAXDEBUG, MESSAGE, REPOSITORY, RS232, VERSION };

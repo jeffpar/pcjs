@@ -457,7 +457,7 @@ export default class Device extends WebIO {
     /**
      * notifyMessage(messages)
      *
-     * Overidden by other devices (eg, Debugger) to receive notifications of messages, along with the messages bits.
+     * Overridden by other devices (eg, Debugger) to receive notifications of messages, along with the messages bits.
      *
      * @this {Device}
      * @param {number} messages
@@ -539,26 +539,6 @@ export default class Device extends WebIO {
         return false;
     }
 }
-
-if (typeof window != "undefined") {
-    if (!window['PCjs']) window['PCjs'] = {};
-    if (!window['PCjs']['Machines']) window['PCjs']['Machines'] = {};
-    if (!window['PCjs']['Components']) window['PCjs']['Components'] = [];
-}
-
-/**
- * Machines is a global object whose properties are machine IDs and whose values are arrays of Devices.
- *
- * @type {Object}
- */
-Device.Machines = typeof window != "undefined"? window['PCjs']['Machines'] : {};
-
-/**
- * Components is maintained for backward-compatibility with older PCjs machines, to facilitate machine connections.
- *
- * @type {Array}
- */
-Device.Components = typeof window != "undefined"? window['PCjs']['Components'] : [];
 
 /**
  * List of additional message groups, extending the base set defined in lib/webio.js.
