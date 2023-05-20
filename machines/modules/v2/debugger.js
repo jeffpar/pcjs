@@ -288,7 +288,7 @@ export default class DbgLib extends Component {
     /**
      * evalAND(dst, src)
      *
-     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.AND().
+     * Adapted from /machines/dec/pdp10/modules/v2/cpuops.js:PDP10.AND().
      *
      * Performs the bitwise "and" (AND) of two operands > 32 bits.
      *
@@ -322,7 +322,7 @@ export default class DbgLib extends Component {
     /**
      * evalIOR(dst, src)
      *
-     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.IOR().
+     * Adapted from /machines/dec/pdp10/modules/v2/cpuops.js:PDP10.IOR().
      *
      * Performs the logical "inclusive-or" (OR) of two operands > 32 bits.
      *
@@ -356,7 +356,7 @@ export default class DbgLib extends Component {
     /**
      * evalXOR(dst, src)
      *
-     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.XOR().
+     * Adapted from /machines/dec/pdp10/modules/v2/cpuops.js:PDP10.XOR().
      *
      * Performs the logical "exclusive-or" (XOR) of two operands > 32 bits.
      *
@@ -390,7 +390,7 @@ export default class DbgLib extends Component {
     /**
      * evalMUL(dst, src)
      *
-     * I could have adapted the code from /machines/dec/pdp10/lib/cpuops.js:PDP10.doMUL(), but it was simpler to
+     * I could have adapted the code from /machines/dec/pdp10/modules/v2/cpuops.js:PDP10.doMUL(), but it was simpler to
      * write this base method and let the PDP-10 Debugger override it with a call to the *actual* doMUL() method.
      *
      * @this {DbgLib}

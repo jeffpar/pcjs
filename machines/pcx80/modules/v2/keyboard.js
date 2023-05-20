@@ -1064,7 +1064,7 @@ export default class KeyboardX80 extends Component {
 
 /*
  * Now that we want to keep track of the physical (and simulated) state of modifier keys, I've
- * grabbed a copy of the same bit definitions used by /modules/pcx86/lib/keyboard.js, since it's
+ * grabbed a copy of the same bit definitions used by /modules/pcx86/modules/v2/keyboard.js, since it's
  * only important that we have a set of unique values; what the values are isn't critical.
  */
 KeyboardX80.STATE = {

@@ -25,7 +25,7 @@ followed by some [VT100 Technical Manual](/machines/dec/vt100/#documents) excerp
 
 ### VT100 Keys
 
-The VT100 KEYMAP table in [keyboard.js](/machines/pcx80/lib/keyboard.js)
+The VT100 KEYMAP table in [keyboard.js](/machines/pcx80/modules/v2/keyboard.js)
 maps modern keys to VT100 key addresses, and most of the mappings are 1-1.  Function keys are mapped as follows:
 
 - F1: PF1

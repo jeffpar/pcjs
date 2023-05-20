@@ -18,7 +18,7 @@ When I first started working on PCjs, JavaScript features like
 available.  Over the next 8 or so years, things changed a lot, I learned a lot, and PCjs slowly grew to support more machines.
 
 Unfortunately, that growth resulted in a lot of duplicated code, along with some out-dated and kludgy code.  While
-I did try to factor out common chunks of logic into a set of [PCjs shared modules]({{ site.github.pages }}/machines/shared/lib/) modules,
+I did try to factor out common chunks of logic into a set of [PCjs shared modules]({{ site.github.pages }}/machines/modules/v2/) modules,
 those efforts were limited, partly to save time, but also to minimize the risk of breaking old machines while creating new ones.
 Getting a new emulator up and running is time-consuming enough without constantly testing and fixing all the others.
 
@@ -44,7 +44,7 @@ device that extends a standard [Ports](/machines/modules/ports.js) class, which 
 class, which implements as many buses as a machine needs (eg, memory and I/O).
 
 And of course, beating at the heart of every machine is the CPU, and for Space Invaders, the
-[8080 CPU](/machines/pcx80/modules/cpux80.js) was a straight-forward port of the [original](/machines/pcx80/lib/cpuops.js)
+[8080 CPU](/machines/pcx80/modules/cpux80.js) was a straight-forward port of the [original](/machines/pcx80/modules/v2/cpuops.js)
 PCjs emulation.
 
 One significant change in this new architecture is that every internal device is an instance of the [Device](/machines/modules/device.js)

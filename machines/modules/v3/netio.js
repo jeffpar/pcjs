@@ -1,5 +1,5 @@
 /**
- * @fileoverview Net-related functions (ported from /shared/lib/netlib.js)
+ * @fileoverview Net-related functions (ported from /machines/modules/v2/netlib.js)
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2023 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>

@@ -17,7 +17,7 @@ The symbol information in the MAP file will be automatically converted and appen
 
 ### IBM EGA Font Information
 
-As noted in [video.js](/machines/pcx86/lib/video.js), the Video component needs to know where the card's font data is located:
+As noted in [video.js](/machines/pcx86/modules/v2/video.js), the Video component needs to know where the card's font data is located:
 
 	For EGA cards, in the absence of any parameters, we assume that we're receiving the original
 	IBM EGA ROM, which stores its 8x14 font data at 0x2230 as one continuous sequence; the total size

@@ -22,7 +22,7 @@ falls into these categories:
 Floating-point is the biggest chunk of work, which I'm going to save for last, with the hope that most PDP-10 software
 didn't use floating-point.  However, if all PDP-10 systems included floating-point hardware (which I haven't been able to
 confirm yet), I may have no choice.  Floating-point emulation in JavaScript isn't hard -- PCjs already includes
-[8087 Coprocessor Emulation](/machines/pcx86/lib/fpux86.js) -- but getting all the details right is time-consuming.
+[8087 Coprocessor Emulation](/machines/pcx86/modules/v2/fpux86.js) -- but getting all the details right is time-consuming.
 
 The PDP-10 has a lot of instructions, and I quickly had far more instructions than I was willing or able to write tests for.
 Besides, any tests I wrote would be based on the same potentially-flawed understandings that I had gleaned from DEC's
@@ -43,7 +43,7 @@ best.
 ### Introducing the MACRO-10 "Mini-Assembler"
 
 I decided that the shortest turn-around from *assembly* phase to *run* phase (aka *crash-and-burn* phase) would be to
-assemble the files in PDPjs itself.  So the PDPjs [MACRO-10 "Mini-Assembler"](/machines/dec/pdp10/lib/macro10.js) was born.
+assemble the files in PDPjs itself.  So the PDPjs [MACRO-10 "Mini-Assembler"](/machines/dec/pdp10/modules/v2/macro10.js) was born.
 Any machine that includes the PDPjs Debugger (like the machine below) now includes MACRO-10 support as well.
 
 {% include machine.html id="testka10" %}

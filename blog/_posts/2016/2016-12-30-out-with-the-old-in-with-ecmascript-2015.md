@@ -85,22 +85,22 @@ the default is `@struct`.  Needless to say, when it came time to convert the nex
 all my classes with `@unrestricted`.
 
 One downside of switching to ES6 one machine at a time is that I had to temporarily fork the shared modules into
-separate ES5 and ES6 folders.  For example, one of the shared modules, [Component](/machines/shared/lib/component.js),
-is the base class underlying most other machine components; ES5 objects *subclass* [Component](/machines/shared/lib/component.js),
-whereas ES6 classes *extend* [Component](/machines/shared/lib/component.js).  Not all the shared modules needed to be forked,
+separate ES5 and ES6 folders.  For example, one of the shared modules, [Component](/machines/modules/v2/component.js),
+is the base class underlying most other machine components; ES5 objects *subclass* [Component](/machines/modules/v2/component.js),
+whereas ES6 classes *extend* [Component](/machines/modules/v2/component.js).  Not all the shared modules needed to be forked,
 but creating a new shared folder was the simplest solution.  Once all the machines have been converted to use ES6 classes,
 the new shared modules will become the default, and the old ones will fade away.
 
 A final challenge was deciding how each component should reference its dependencies.  For example, the PDP-11
-[Panel](/machines/dec/pdp11/lib/panel.js) component originally included these lines at the top of the script:
+[Panel](/machines/dec/pdp11/modules/v2/panel.js) component originally included these lines at the top of the script:
 
 ```javascript
 if (NODE) {
-    var str = require("../../shared/lib/strlib");
-    var web = require("../../shared/lib/weblib");
-    var DumpAPI = require("../../shared/lib/dumpapi");
-    var Component = require("../../shared/lib/component");
-    var State = require("../../shared/lib/state");
+    var str = require("../../../../modules/v2/strlib");
+    var web = require("../../../../modules/v2/weblib");
+    var DumpAPI = require("../../../../modules/v2/dumpapi");
+    var Component = require("../../../../modules/v2/component");
+    var State = require("../../../../modules/v2/state");
     var PDP11 = require("./defines");
     var MessagesPDP11 = require("./messages");
 }
@@ -113,13 +113,13 @@ Going forward, I thought I should adopt the ES6 solution for declaring imports a
 for example:
 
 ```javascript
-import str from "../../shared/lib/strlib";
-import web from "../../shared/lib/weblib";
-import DumpAPI from "../../shared/lib/dumpapi";
-import Component from "../../shared/lib/component";
-import State from "../../shared/lib/state";
-import PDP11 from "./defines";
-import MessagesPDP11 from "./messages";
+import BusPDP11 from "./bus.js";
+import MessagesPDP11 from "./messages.js";
+import Component from "../../../../modules/v2/component.js";
+import State from "../../../../modules/v2/state.js";
+import Str from "../../../../modules/v2/strlib.js";
+import Web from "../../../../modules/v2/weblib.js";
+import { APPCLASS, DEBUG, DEBUGGER, PDP11 } from "./defines.js";
 ```
 
 but any attempt to load that code into a browser caused an immediate exception, and Node support wasn't any better

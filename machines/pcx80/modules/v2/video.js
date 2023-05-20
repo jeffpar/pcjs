@@ -1326,8 +1326,8 @@ export default class VideoX80 extends Component {
             }
             this.contextBuffer.putImageData(this.imageBuffer, 0, 0, xDirty, yDirty, cxDirty, cyDirty);
             /*
-             * As originally noted in /modules/pcx86/lib/video.js, I would prefer to draw only the dirty portion of
-             * canvasBuffer, but there usually isn't a 1-1 pixel mapping between canvasBuffer and contextScreen, so
+             * As originally noted in /machines/pcx86/modules/v2/video.js, I would prefer to draw only the dirty portion
+             * of canvasBuffer, but there usually isn't a 1-1 pixel mapping between canvasBuffer and contextScreen, so
              * if we draw interior rectangles, we can end up with subpixel artifacts along the edges of those rectangles.
              */
             this.contextScreen.drawImage(this.canvasBuffer, 0, 0, this.canvasBuffer.width, this.canvasBuffer.height, 0, 0, this.cxScreen, this.cyScreen);

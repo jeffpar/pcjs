@@ -104,7 +104,7 @@ And I had several failures running [Diagnostic #4 (MAINDEC-10-DAKAD)](/software/
 In this case, both AC3 and memory location 34462 contained 400000000000, so the CAME ("Compare AC with Memory
 and Skip if Equal") instruction should have "skipped" the HALT, but it didn't.
 
-Thus was due to a bug in the [cpuops.js](/machines/dec/pdp10/lib/cpuops.js) *CMP()* function:
+Thus was due to a bug in the [cpuops.js](/machines/dec/pdp10/modules/v2/cpuops.js) *CMP()* function:
 
 ```javascript
 /**

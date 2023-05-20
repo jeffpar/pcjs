@@ -2193,7 +2193,7 @@ export default class DebuggerPDP11 extends DbgLib {
     /**
      * parseInstruction(sOp, sOperand, addr)
      *
-     * TODO: Unimplemented.  See parseInstruction() in modules/c1pjs/lib/debugger.js for a sample implementation.
+     * TODO: Unimplemented.  See parseInstruction() in /machines/osi/c1p/modules/v2/debugger.js for a sample implementation.
      *
      * @this {DebuggerPDP11}
      * @param {string} sOp

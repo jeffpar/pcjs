@@ -541,7 +541,7 @@ export default class Device extends WebIO {
 }
 
 /**
- * List of additional message groups, extending the base set defined in lib/webio.js.
+ * List of additional message groups, extending the base set defined in webio.js.
  *
  * NOTE: To support more than 32 message groups, be sure to use "+", not "|", when concatenating.
  */

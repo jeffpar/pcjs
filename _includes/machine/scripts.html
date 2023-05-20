@@ -258,7 +258,7 @@ template doesn't add them to the Computer component anymore, since we started su
     <script>{{ machine_factory }}('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
   {%- endif %}
   {%- if machine.sticky == "top" %}
-    <script src="{{ site.baseurl }}/machines/shared/lib/sticky.js"></script>
+    <script src="{{ site.baseurl }}/machines/modules/v2/sticky.js"></script>
     <script>addStickyMachine('{{ machine_id }}');</script>
   {%- endif -%}
 {%- endfor %}

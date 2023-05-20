@@ -11,7 +11,7 @@ disk cartridges.
 RK03 disks are single-platter cartridges with 203 tracks per side, 12 sectors per track, and a sector size of 256 words
 (512 bytes), for a total capacity of 2.38Mb (2,494,464 bytes).  
 
-Machines containing the [RK11 Component](/machines/dec/pdp11/lib/rk11.js) include:
+Machines containing the [RK11 Component](/machines/dec/pdp11/modules/v2/rk11.js) include:
 
 - [PDP-11/70 with Front Panel](/machines/dec/pdp11/1170/panel/) (with [Debugger](/machines/dec/pdp11/1170/panel/debugger/))
 - [PDP-11/70 with VT100 Terminal](/machines/dec/pdp11/1170/vt100/) (with [Debugger](/machines/dec/pdp11/1170/vt100/debugger/))

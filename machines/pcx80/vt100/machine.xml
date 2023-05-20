@@ -3,10 +3,10 @@
 <machine id="vt100" type="pcx80" border="1" pos="center" background="default">
 	<name pos="center">VT100 Terminal</name>
 	<computer id="computer" busWidth="16"/>
-	<rom id="rom" addr="0x0000" size="0x2000" file="/machines/dec/vt100/rom/VT100.json"/>
+	<rom id="rom" addr="0x0000" size="0x2000" file="/machines/dec/vt100/rom/VT100.json5"/>
 	<ram id="ram" addr="0x2000" size="0x0C00"/>
 	<video id="video" screenWidth="1600" screenHeight="960" interruptRate="60"
-		   fontROM="/machines/dec/vt100/rom/23-018E2.json" fontColor="white" cellWidth="10" cellHeight="10"
+		   fontROM="/machines/dec/vt100/rom/23-018E2.json5" fontColor="white" cellWidth="10" cellHeight="10"
 		   bufferAddr="0x2000" bufferRAM="true" bufferFormat="vt100" bufferCols="80" bufferRows="24" padding="8px">
 		<menu>
 			<title>VT100 Screen</title>

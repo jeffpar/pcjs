@@ -16,14 +16,14 @@ machines:
     autoType: CTTY COM2\r
 ---
 
-I recently added a new PCjs [TestMonitor](/machines/pcx86/lib/testmon.js) component that is able to deliver user-defined
+I recently added a new PCjs [TestMonitor](/machines/pcx86/modules/v2/testmon.js) component that is able to deliver user-defined
 commands to a PCjs machine via a serial port.  TestMonitor is built into PCx86, and there is also a
 [TestMonitor Utility](/software/pcx86/test/testmon/testmon.js) that can issue commands to a *physical* machine, making it easy to
 compare operations between simulated and actual hardware.
 
 More information on [Controlling Physical PCs](#controlling-physical-pcs) is available below.
 
-You can test it with the PCjs machine below, which has been configured with a [TestMonitor](/machines/pcx86/lib/testctl.js)
+You can test it with the PCjs machine below, which has been configured with a [TestMonitor](/machines/pcx86/modules/v2/testctl.js)
 window, as well as a hard disk with [MS-DOS 3.20](/software/pcx86/sys/dos/microsoft/3.20/) and [SYMDEB 4.00](/blog/2018/02/25/)
 pre-installed.  After the "CTTY COM2" DOS command is entered, all further DOS input/output is redirected to COM2, which is
 connected to the TestMonitor window.

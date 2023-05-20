@@ -852,16 +852,16 @@ export default class BusX86 extends Component {
                  *  I hit the following error after running in a machine with lots of disk activity:
                  *
                  *      Error: assertion failure in deskpro386.bus
-                 *      at BusX86.Component.assert (http://pcjs:8088/modules/shared/lib/component.js:732:31)
-                 *      at BusX86.addBackTrackObject (http://pcjs:8088/modules/pcx86/lib/bus.js:980:18)
-                 *      at onATCReadData (http://pcjs:8088/modules/pcx86/lib/hdc.js:1410:35)
-                 *      at HDC.readData (http://pcjs:8088/modules/pcx86/lib/hdc.js:2573:23)
-                 *      at HDC.inATCByte (http://pcjs:8088/modules/pcx86/lib/hdc.js:1398:20)
-                 *      at HDC.inATCData (http://pcjs:8088/modules/pcx86/lib/hdc.js:1487:17)
-                 *      at BusX86.checkPortInputNotify (http://pcjs:8088/modules/pcx86/lib/bus.js:1457:38)
-                 *      at CPUx86.INSw (http://pcjs:8088/modules/pcx86/lib/x86ops.js:1640:26)
-                 *      at CPUx86.stepCPU (http://pcjs:8088/modules/pcx86/lib/cpux86.js:4637:37)
-                 *      at CPUx86.CPU.runCPU (http://pcjs:8088/modules/pcx86/lib/cpu.js:1014:22)
+                 *      at BusX86.Component.assert (http://localhost:8088/machines/modules/v2/component.js:732:31)
+                 *      at BusX86.addBackTrackObject (http://localhost:8088/machines/pcx86/modules/v2/bus.js:980:18)
+                 *      at onATCReadData (http://localhost:8088/machines/pcx86/modules/v2/hdc.js:1410:35)
+                 *      at HDC.readData (http://localhost:8088/machines/pcx86/modules/v2/hdc.js:2573:23)
+                 *      at HDC.inATCByte (http://localhost:8088/machines/pcx86/modules/v2/hdc.js:1398:20)
+                 *      at HDC.inATCData (http://localhost:8088/machines/pcx86/modules/v2/hdc.js:1487:17)
+                 *      at BusX86.checkPortInputNotify (http://localhost:8088/machines/pcx86/modules/v2/bus.js:1457:38)
+                 *      at CPUx86.INSw (http://localhost:8088/machines/pcx86/modules/v2/x86ops.js:1640:26)
+                 *      at CPUx86.stepCPU (http://localhost:8088/machines/pcx86/modules/v2/cpux86.js:4637:37)
+                 *      at CPUx86.CPU.runCPU (http://localhost:8088/machines/pcx86/modules/v2/cpu.js:1014:22)
                  *
                  * TODO: Investigate.  For now, disable BACKTRACK if you run into this or other problems.
                  */

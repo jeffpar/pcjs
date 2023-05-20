@@ -114,7 +114,7 @@ you'll see the effect of the VT100's Dot Stretcher.  Here's how DEC illustrates 
 	 8  . . . . . . . . . . . 1 1 . . . . . . .
 	 9  . . . . . . . . . . . 1 1 . . . . . . .
 
-The [PCx80 Video](/machines/pcx80/lib/video.js) *createFontVariation()* function takes both the "dot replication" and "dot stretching"
+The [PCx80 Video](/machines/pcx80/modules/v2/video.js) *createFontVariation()* function takes both the "dot replication" and "dot stretching"
 features into account (along with underlining and reverse video parameters) when converting the character generator ROM data into fonts.   
 
 ### Disassembling the 8080 Firmware

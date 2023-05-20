@@ -392,7 +392,7 @@ disk to disk, since the midpoint of that range (0xEF) comes from a word at DS:01
     ...
 
 So, to simulate failure at just the "write" point, I added the following hard-coded logic to the *writeData()* function
-in [fdc.js](/machines/pcx86/lib/fdc.js):
+in [fdc.js](/machines/pcx86/modules/v2/fdc.js):
 
 ```js
     if (drive.sector['dataError'] && drive.iByte >= 266) {

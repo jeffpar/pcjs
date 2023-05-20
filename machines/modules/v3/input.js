@@ -1440,7 +1440,7 @@ Input.TYPE = {                  // types for addListener()
 
 /**
  * To keep track of the state of modifier keys, I've grabbed a copy of the same bit definitions
- * used by /modules/pcx86/lib/keyboard.js, since it's only important that we have a set of unique
+ * used by /modules/pcx86/modules/v2/keyboard.js, since it's only important that we have a set of unique
  * values; what the values are isn't critical.
  *
  * Note that all the "right-hand" modifiers are right-shifted versions of the "left-hand" modifiers.

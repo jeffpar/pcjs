@@ -1292,7 +1292,7 @@ export default class C1PDebugger extends Component {
      * against the aOpCodes[] and aOpModes[] arrays, respectively; however, the regular expression built from
      * aOpModes and stored in regexOpModes does relax the matching criteria slightly; ie, a 4-digit hex value
      * ("nnnn") will be satisfied with either 3 or 4 digits, and similarly, a 2-digit hex address (nn) will
-     * be satisified with either 1 or 2 digits.
+     * be satisfied with either 1 or 2 digits.
      *
      * Note that this function does not actually store the instruction into memory, even though it requires
      * a target address (addr); that parameter is currently needed ONLY for "branch" instructions, because in

@@ -2009,7 +2009,7 @@ export default class DebuggerX80 extends DbgLib {
     /**
      * parseInstruction(sOp, sOperand, addr)
      *
-     * TODO: Unimplemented.  See parseInstruction() in modules/c1pjs/lib/debugger.js for a working implementation.
+     * TODO: Unimplemented.  See parseInstruction() in /machines/osi/c1p/modules/v2/debugger.js for a working implementation.
      *
      * @this {DebuggerX80}
      * @param {string} sOp

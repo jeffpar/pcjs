@@ -6,7 +6,7 @@ category: Releases
 permalink: /blog/2014/10/28/
 ---
 
-[PCjs v1.15.7](https://github.com/jeffpar/pcjs/releases/tag/v1.15.7) adds support for the
+[PCjs v1.15.7](https://github.com/jeffpar/pcjs.v1/releases/tag/v1.15.7) adds support for the
 [XDF Diskette Format](http://www.os2museum.com/wp/the-xdf-diskette-format/), which was used in
 [PC DOS 7.00](/software/pcx86/sys/dos/ibm/7.00/).
 
