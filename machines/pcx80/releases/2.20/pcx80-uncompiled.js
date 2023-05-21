@@ -122,21 +122,17 @@ const RS232 = {
  */
 let globals = {
     browser: (typeof window != "undefined")? {} : null,
-    node: (typeof window == "undefined")? global : {},
-    window: (typeof window == "undefined")? global : window,
-    document: (typeof document == "undefined")? {} : document
+    node: (typeof window != "undefined")? {} : global,
+    window: (typeof window != "undefined")? window : global,
+    document: (typeof document != "undefined")? document : {}
 };
 
+if (!globals.window['PCjs']) globals.window['PCjs'] = {};
+
 globals.pcjs = globals.window['PCjs'];
-if (!globals.pcjs) {
-    globals.pcjs = globals.window['PCjs'] = {};
-    globals.pcjs['Machines'] = {};
-    globals.pcjs['Components'] = [];
-    globals.pcjs['Commands'] = {};
-}
-globals.pcjs.machines = globals.pcjs['Machines'];
-globals.pcjs.components = globals.pcjs['Components'];
-globals.pcjs.commands = globals.pcjs['Commands'];
+if (!globals.pcjs['machines']) globals.pcjs['machines'] = {};
+if (!globals.pcjs['components']) globals.pcjs['components'] = [];
+if (!globals.pcjs['commands']) globals.pcjs['commands'] = {};
 
 
 
@@ -3317,7 +3313,7 @@ class Component {
          *
          *      if (DEBUG) Component.log("Component.add(" + component.type + "," + component.id + ")");
          */
-        globals.pcjs.components.push(component);
+        globals.pcjs['components'].push(component);
     }
 
     /**
@@ -3327,7 +3323,7 @@ class Component {
      */
     static addMachine(idMachine)
     {
-        globals.pcjs.machines[idMachine] = {};
+        globals.pcjs['machines'][idMachine] = {};
     }
 
     /**
@@ -3337,7 +3333,7 @@ class Component {
      */
     static getMachines()
     {
-        return Object.keys(globals.pcjs.machines);
+        return Object.keys(globals.pcjs['machines']);
     }
 
     /**
@@ -3353,10 +3349,10 @@ class Component {
          * I used to assert(machines[idMachine]), but when we're running as a Node app, embed.js is not used,
          * so addMachine() is never called, so resources do not need to be recorded.
          */
-        if (globals.pcjs.machines[idMachine] && sName) {
-            globals.pcjs.machines[idMachine][sName] = data;
+        if (globals.pcjs['machines'][idMachine] && sName) {
+            globals.pcjs['machines'][idMachine][sName] = data;
             if (sName == 'parms' && typeof data == "string") {
-                globals.pcjs.machines[idMachine]['config'] = eval('(' + data + ')');
+                globals.pcjs['machines'][idMachine]['config'] = eval('(' + data + ')');
             }
         }
     }
@@ -3369,7 +3365,7 @@ class Component {
      */
     static getMachineResources(idMachine)
     {
-        return globals.pcjs.machines[idMachine];
+        return globals.pcjs['machines'][idMachine];
     }
 
     /**
@@ -3695,7 +3691,7 @@ class Component {
             else
                 idRelated = "";
         }
-        let components = globals.pcjs.components;
+        let components = globals.pcjs['components'];
         for (i = 0; i < components.length; i++) {
             let component = components[i];
             if (!idRelated || !component.id.indexOf(idRelated)) {
@@ -3727,7 +3723,7 @@ class Component {
             if (idRelated && (i = idRelated.indexOf('.')) > 0) {
                 id = idRelated.substr(0, i + 1) + id;
             }
-            let components = globals.pcjs.components;
+            let components = globals.pcjs['components'];
             for (i = 0; i < components.length; i++) {
                 if (components[i]['id'] === id) {
                     return components[i];
@@ -3764,7 +3760,7 @@ class Component {
                     idRelated = "";
                 }
             }
-            let components = globals.pcjs.components;
+            let components = globals.pcjs['components'];
             for (i = 0; i < components.length; i++) {
                 if (componentPrev) {
                     if (componentPrev == components[i]) componentPrev = null;
@@ -3852,10 +3848,10 @@ class Component {
                 }
             }
         } else {
-            let machineIDs = Object.keys(globals.pcjs.machines);
+            let machineIDs = Object.keys(globals.pcjs['machines']);
             for (let iMachine = 0; iMachine < machineIDs.length; iMachine++) {
                 let idMachine = machineIDs[iMachine];
-                let configMachine = globals.pcjs.machines[idMachine]['config'];
+                let configMachine = globals.pcjs['machines'][idMachine]['config'];
                 if (configMachine) {
                     let configComponent = configMachine[sComponent];
                     if (configComponent) {
@@ -3964,7 +3960,7 @@ class Component {
     static processScript(idMachine, sScript)
     {
         let fSuccess = false;
-        let commands = globals.pcjs.commands;
+        let commands = globals.pcjs['commands'];
         idMachine += ".machine";
         if (!sScript) {
             delete commands[idMachine];
@@ -3989,7 +3985,7 @@ class Component {
     static processCommands(idMachine)
     {
         let fSuccess = true;
-        let commands = globals.pcjs.commands[idMachine];
+        let commands = globals.pcjs['commands'][idMachine];
 
      // let dbg = Component.getComponentByType("Debugger", idMachine);
 
@@ -15210,7 +15206,7 @@ class KeyboardX80 extends Component {
 
 /*
  * Now that we want to keep track of the physical (and simulated) state of modifier keys, I've
- * grabbed a copy of the same bit definitions used by /modules/pcx86/lib/keyboard.js, since it's
+ * grabbed a copy of the same bit definitions used by /modules/pcx86/modules/v2/keyboard.js, since it's
  * only important that we have a set of unique values; what the values are isn't critical.
  */
 KeyboardX80.STATE = {
@@ -16905,8 +16901,8 @@ class VideoX80 extends Component {
             }
             this.contextBuffer.putImageData(this.imageBuffer, 0, 0, xDirty, yDirty, cxDirty, cyDirty);
             /*
-             * As originally noted in /modules/pcx86/lib/video.js, I would prefer to draw only the dirty portion of
-             * canvasBuffer, but there usually isn't a 1-1 pixel mapping between canvasBuffer and contextScreen, so
+             * As originally noted in /machines/pcx86/modules/v2/video.js, I would prefer to draw only the dirty portion
+             * of canvasBuffer, but there usually isn't a 1-1 pixel mapping between canvasBuffer and contextScreen, so
              * if we draw interior rectangles, we can end up with subpixel artifacts along the edges of those rectangles.
              */
             this.contextScreen.drawImage(this.canvasBuffer, 0, 0, this.canvasBuffer.width, this.canvasBuffer.height, 0, 0, this.cxScreen, this.cyScreen);
@@ -18317,7 +18313,7 @@ class DbgLib extends Component {
     /**
      * evalAND(dst, src)
      *
-     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.AND().
+     * Adapted from /machines/dec/pdp10/modules/v2/cpuops.js:PDP10.AND().
      *
      * Performs the bitwise "and" (AND) of two operands > 32 bits.
      *
@@ -18351,7 +18347,7 @@ class DbgLib extends Component {
     /**
      * evalIOR(dst, src)
      *
-     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.IOR().
+     * Adapted from /machines/dec/pdp10/modules/v2/cpuops.js:PDP10.IOR().
      *
      * Performs the logical "inclusive-or" (OR) of two operands > 32 bits.
      *
@@ -18385,7 +18381,7 @@ class DbgLib extends Component {
     /**
      * evalXOR(dst, src)
      *
-     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.XOR().
+     * Adapted from /machines/dec/pdp10/modules/v2/cpuops.js:PDP10.XOR().
      *
      * Performs the logical "exclusive-or" (XOR) of two operands > 32 bits.
      *
@@ -18419,7 +18415,7 @@ class DbgLib extends Component {
     /**
      * evalMUL(dst, src)
      *
-     * I could have adapted the code from /machines/dec/pdp10/lib/cpuops.js:PDP10.doMUL(), but it was simpler to
+     * I could have adapted the code from /machines/dec/pdp10/modules/v2/cpuops.js:PDP10.doMUL(), but it was simpler to
      * write this base method and let the PDP-10 Debugger override it with a call to the *actual* doMUL() method.
      *
      * @this {DbgLib}
@@ -21360,7 +21356,7 @@ class DebuggerX80 extends DbgLib {
     /**
      * parseInstruction(sOp, sOperand, addr)
      *
-     * TODO: Unimplemented.  See parseInstruction() in modules/c1pjs/lib/debugger.js for a working implementation.
+     * TODO: Unimplemented.  See parseInstruction() in /machines/osi/c1p/modules/v2/debugger.js for a working implementation.
      *
      * @this {DebuggerX80}
      * @param {string} sOp

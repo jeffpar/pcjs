@@ -127,20 +127,16 @@ const RS232 = {
  */
 let globals = {
     browser: (typeof window != "undefined")? {} : null,
-    node: (typeof window == "undefined")? global : {},
-    window: (typeof window == "undefined")? global : window,
-    document: (typeof document == "undefined")? {} : document
+    node: (typeof window != "undefined")? {} : global,
+    window: (typeof window != "undefined")? window : global,
+    document: (typeof document != "undefined")? document : {}
 };
 
+if (!globals.window['PCjs']) globals.window['PCjs'] = {};
+
 globals.pcjs = globals.window['PCjs'];
-if (!globals.pcjs) {
-    globals.pcjs = globals.window['PCjs'] = {};
-    globals.pcjs['Machines'] = {};
-    globals.pcjs['Components'] = [];
-    globals.pcjs['Commands'] = {};
-}
-globals.pcjs.machines = globals.pcjs['Machines'];
-globals.pcjs.components = globals.pcjs['Components'];
-globals.pcjs.commands = globals.pcjs['Commands'];
+if (!globals.pcjs['machines']) globals.pcjs['machines'] = {};
+if (!globals.pcjs['components']) globals.pcjs['components'] = [];
+if (!globals.pcjs['commands']) globals.pcjs['commands'] = {};
 
 export { APPVERSION, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, LICENSE, MAXDEBUG, PRIVATE, RS232, SITEURL, globals }

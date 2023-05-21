@@ -151,8 +151,8 @@ Defines.VERSION         = VERSION;
 
 if (typeof window != "undefined") {
     if (!window['PCjs']) window['PCjs'] = {};
-    if (!window['PCjs']['Machines']) window['PCjs']['Machines'] = {};
-    if (!window['PCjs']['Components']) window['PCjs']['Components'] = [];
+    if (!window['PCjs']['machines']) window['PCjs']['machines'] = {};
+    if (!window['PCjs']['components']) window['PCjs']['components'] = [];
 }
 
 /**
@@ -160,14 +160,14 @@ if (typeof window != "undefined") {
  *
  * @type {Object}
  */
-Defines.Machines = typeof window != "undefined"? window['PCjs']['Machines'] : {};
+Defines.Machines = typeof window != "undefined"? window['PCjs']['machines'] : {};
 
 /**
  * Components is maintained for backward-compatibility with older PCjs machines, to facilitate machine connections.
  *
  * @type {Array}
  */
-Defines.Components = typeof window != "undefined"? window['PCjs']['Components'] : [];
+Defines.Components = typeof window != "undefined"? window['PCjs']['components'] : [];
 
 Defines.CLASSES = {};
 Defines.CLASSES["Defines"] = Defines;
@@ -3621,7 +3621,7 @@ class Device extends WebIO {
 }
 
 /**
- * List of additional message groups, extending the base set defined in lib/webio.js.
+ * List of additional message groups, extending the base set defined in webio.js.
  *
  * NOTE: To support more than 32 message groups, be sure to use "+", not "|", when concatenating.
  */
@@ -7210,7 +7210,7 @@ Input.TYPE = {                  // types for addListener()
 
 /**
  * To keep track of the state of modifier keys, I've grabbed a copy of the same bit definitions
- * used by /modules/pcx86/lib/keyboard.js, since it's only important that we have a set of unique
+ * used by /modules/pcx86/modules/v2/keyboard.js, since it's only important that we have a set of unique
  * values; what the values are isn't critical.
  *
  * Note that all the "right-hand" modifiers are right-shifted versions of the "left-hand" modifiers.

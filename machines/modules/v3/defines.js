@@ -156,8 +156,8 @@ Defines.VERSION         = VERSION;
 
 if (typeof window != "undefined") {
     if (!window['PCjs']) window['PCjs'] = {};
-    if (!window['PCjs']['Machines']) window['PCjs']['Machines'] = {};
-    if (!window['PCjs']['Components']) window['PCjs']['Components'] = [];
+    if (!window['PCjs']['machines']) window['PCjs']['machines'] = {};
+    if (!window['PCjs']['components']) window['PCjs']['components'] = [];
 }
 
 /**
@@ -165,14 +165,14 @@ if (typeof window != "undefined") {
  *
  * @type {Object}
  */
-Defines.Machines = typeof window != "undefined"? window['PCjs']['Machines'] : {};
+Defines.Machines = typeof window != "undefined"? window['PCjs']['machines'] : {};
 
 /**
  * Components is maintained for backward-compatibility with older PCjs machines, to facilitate machine connections.
  *
  * @type {Array}
  */
-Defines.Components = typeof window != "undefined"? window['PCjs']['Components'] : [];
+Defines.Components = typeof window != "undefined"? window['PCjs']['components'] : [];
 
 Defines.CLASSES = {};
 Defines.CLASSES["Defines"] = Defines;

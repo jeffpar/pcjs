@@ -127,7 +127,7 @@ const TYPEDARRAYS = true; // (typeof ArrayBuffer !== 'undefined');
 if (DEBUG) {
     let backTrack = Web.getURLParm("backtrack");
     if (backTrack == "false") {
-        globals['BACKTRACK'] = false;
+        globals.window['BACKTRACK'] = false;
     }
 }
 

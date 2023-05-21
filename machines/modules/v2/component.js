@@ -157,7 +157,7 @@ export default class Component {
          *
          *      if (DEBUG) Component.log("Component.add(" + component.type + "," + component.id + ")");
          */
-        globals.pcjs.components.push(component);
+        globals.pcjs['components'].push(component);
     }
 
     /**
@@ -167,7 +167,7 @@ export default class Component {
      */
     static addMachine(idMachine)
     {
-        globals.pcjs.machines[idMachine] = {};
+        globals.pcjs['machines'][idMachine] = {};
     }
 
     /**
@@ -177,7 +177,7 @@ export default class Component {
      */
     static getMachines()
     {
-        return Object.keys(globals.pcjs.machines);
+        return Object.keys(globals.pcjs['machines']);
     }
 
     /**
@@ -193,10 +193,10 @@ export default class Component {
          * I used to assert(machines[idMachine]), but when we're running as a Node app, embed.js is not used,
          * so addMachine() is never called, so resources do not need to be recorded.
          */
-        if (globals.pcjs.machines[idMachine] && sName) {
-            globals.pcjs.machines[idMachine][sName] = data;
+        if (globals.pcjs['machines'][idMachine] && sName) {
+            globals.pcjs['machines'][idMachine][sName] = data;
             if (sName == 'parms' && typeof data == "string") {
-                globals.pcjs.machines[idMachine]['config'] = eval('(' + data + ')');
+                globals.pcjs['machines'][idMachine]['config'] = eval('(' + data + ')');
             }
         }
     }
@@ -209,7 +209,7 @@ export default class Component {
      */
     static getMachineResources(idMachine)
     {
-        return globals.pcjs.machines[idMachine];
+        return globals.pcjs['machines'][idMachine];
     }
 
     /**
@@ -535,7 +535,7 @@ export default class Component {
             else
                 idRelated = "";
         }
-        let components = globals.pcjs.components;
+        let components = globals.pcjs['components'];
         for (i = 0; i < components.length; i++) {
             let component = components[i];
             if (!idRelated || !component.id.indexOf(idRelated)) {
@@ -567,7 +567,7 @@ export default class Component {
             if (idRelated && (i = idRelated.indexOf('.')) > 0) {
                 id = idRelated.substr(0, i + 1) + id;
             }
-            let components = globals.pcjs.components;
+            let components = globals.pcjs['components'];
             for (i = 0; i < components.length; i++) {
                 if (components[i]['id'] === id) {
                     return components[i];
@@ -604,7 +604,7 @@ export default class Component {
                     idRelated = "";
                 }
             }
-            let components = globals.pcjs.components;
+            let components = globals.pcjs['components'];
             for (i = 0; i < components.length; i++) {
                 if (componentPrev) {
                     if (componentPrev == components[i]) componentPrev = null;
@@ -692,10 +692,10 @@ export default class Component {
                 }
             }
         } else {
-            let machineIDs = Object.keys(globals.pcjs.machines);
+            let machineIDs = Object.keys(globals.pcjs['machines']);
             for (let iMachine = 0; iMachine < machineIDs.length; iMachine++) {
                 let idMachine = machineIDs[iMachine];
-                let configMachine = globals.pcjs.machines[idMachine]['config'];
+                let configMachine = globals.pcjs['machines'][idMachine]['config'];
                 if (configMachine) {
                     let configComponent = configMachine[sComponent];
                     if (configComponent) {
@@ -804,7 +804,7 @@ export default class Component {
     static processScript(idMachine, sScript)
     {
         let fSuccess = false;
-        let commands = globals.pcjs.commands;
+        let commands = globals.pcjs['commands'];
         idMachine += ".machine";
         if (!sScript) {
             delete commands[idMachine];
@@ -829,7 +829,7 @@ export default class Component {
     static processCommands(idMachine)
     {
         let fSuccess = true;
-        let commands = globals.pcjs.commands[idMachine];
+        let commands = globals.pcjs['commands'][idMachine];
 
      // let dbg = Component.getComponentByType("Debugger", idMachine);
 

@@ -122,21 +122,17 @@ const RS232 = {
  */
 let globals = {
     browser: (typeof window != "undefined")? {} : null,
-    node: (typeof window == "undefined")? global : {},
-    window: (typeof window == "undefined")? global : window,
-    document: (typeof document == "undefined")? {} : document
+    node: (typeof window != "undefined")? {} : global,
+    window: (typeof window != "undefined")? window : global,
+    document: (typeof document != "undefined")? document : {}
 };
 
+if (!globals.window['PCjs']) globals.window['PCjs'] = {};
+
 globals.pcjs = globals.window['PCjs'];
-if (!globals.pcjs) {
-    globals.pcjs = globals.window['PCjs'] = {};
-    globals.pcjs['Machines'] = {};
-    globals.pcjs['Components'] = [];
-    globals.pcjs['Commands'] = {};
-}
-globals.pcjs.machines = globals.pcjs['Machines'];
-globals.pcjs.components = globals.pcjs['Components'];
-globals.pcjs.commands = globals.pcjs['Commands'];
+if (!globals.pcjs['machines']) globals.pcjs['machines'] = {};
+if (!globals.pcjs['components']) globals.pcjs['components'] = [];
+if (!globals.pcjs['commands']) globals.pcjs['commands'] = {};
 
 
 
@@ -2958,7 +2954,7 @@ class Component {
          *
          *      if (DEBUG) Component.log("Component.add(" + component.type + "," + component.id + ")");
          */
-        globals.pcjs.components.push(component);
+        globals.pcjs['components'].push(component);
     }
 
     /**
@@ -2968,7 +2964,7 @@ class Component {
      */
     static addMachine(idMachine)
     {
-        globals.pcjs.machines[idMachine] = {};
+        globals.pcjs['machines'][idMachine] = {};
     }
 
     /**
@@ -2978,7 +2974,7 @@ class Component {
      */
     static getMachines()
     {
-        return Object.keys(globals.pcjs.machines);
+        return Object.keys(globals.pcjs['machines']);
     }
 
     /**
@@ -2994,10 +2990,10 @@ class Component {
          * I used to assert(machines[idMachine]), but when we're running as a Node app, embed.js is not used,
          * so addMachine() is never called, so resources do not need to be recorded.
          */
-        if (globals.pcjs.machines[idMachine] && sName) {
-            globals.pcjs.machines[idMachine][sName] = data;
+        if (globals.pcjs['machines'][idMachine] && sName) {
+            globals.pcjs['machines'][idMachine][sName] = data;
             if (sName == 'parms' && typeof data == "string") {
-                globals.pcjs.machines[idMachine]['config'] = eval('(' + data + ')');
+                globals.pcjs['machines'][idMachine]['config'] = eval('(' + data + ')');
             }
         }
     }
@@ -3010,7 +3006,7 @@ class Component {
      */
     static getMachineResources(idMachine)
     {
-        return globals.pcjs.machines[idMachine];
+        return globals.pcjs['machines'][idMachine];
     }
 
     /**
@@ -3336,7 +3332,7 @@ class Component {
             else
                 idRelated = "";
         }
-        let components = globals.pcjs.components;
+        let components = globals.pcjs['components'];
         for (i = 0; i < components.length; i++) {
             let component = components[i];
             if (!idRelated || !component.id.indexOf(idRelated)) {
@@ -3368,7 +3364,7 @@ class Component {
             if (idRelated && (i = idRelated.indexOf('.')) > 0) {
                 id = idRelated.substr(0, i + 1) + id;
             }
-            let components = globals.pcjs.components;
+            let components = globals.pcjs['components'];
             for (i = 0; i < components.length; i++) {
                 if (components[i]['id'] === id) {
                     return components[i];
@@ -3405,7 +3401,7 @@ class Component {
                     idRelated = "";
                 }
             }
-            let components = globals.pcjs.components;
+            let components = globals.pcjs['components'];
             for (i = 0; i < components.length; i++) {
                 if (componentPrev) {
                     if (componentPrev == components[i]) componentPrev = null;
@@ -3493,10 +3489,10 @@ class Component {
                 }
             }
         } else {
-            let machineIDs = Object.keys(globals.pcjs.machines);
+            let machineIDs = Object.keys(globals.pcjs['machines']);
             for (let iMachine = 0; iMachine < machineIDs.length; iMachine++) {
                 let idMachine = machineIDs[iMachine];
-                let configMachine = globals.pcjs.machines[idMachine]['config'];
+                let configMachine = globals.pcjs['machines'][idMachine]['config'];
                 if (configMachine) {
                     let configComponent = configMachine[sComponent];
                     if (configComponent) {
@@ -3605,7 +3601,7 @@ class Component {
     static processScript(idMachine, sScript)
     {
         let fSuccess = false;
-        let commands = globals.pcjs.commands;
+        let commands = globals.pcjs['commands'];
         idMachine += ".machine";
         if (!sScript) {
             delete commands[idMachine];
@@ -3630,7 +3626,7 @@ class Component {
     static processCommands(idMachine)
     {
         let fSuccess = true;
-        let commands = globals.pcjs.commands[idMachine];
+        let commands = globals.pcjs['commands'][idMachine];
 
      // let dbg = Component.getComponentByType("Debugger", idMachine);
 
@@ -13394,7 +13390,7 @@ class C1PDebugger extends Component {
      * against the aOpCodes[] and aOpModes[] arrays, respectively; however, the regular expression built from
      * aOpModes and stored in regexOpModes does relax the matching criteria slightly; ie, a 4-digit hex value
      * ("nnnn") will be satisfied with either 3 or 4 digits, and similarly, a 2-digit hex address (nn) will
-     * be satisified with either 1 or 2 digits.
+     * be satisfied with either 1 or 2 digits.
      *
      * Note that this function does not actually store the instruction into memory, even though it requires
      * a target address (addr); that parameter is currently needed ONLY for "branch" instructions, because in
