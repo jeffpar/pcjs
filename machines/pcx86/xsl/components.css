@@ -112,7 +112,7 @@
 }
 .pcjs-block-button {
   display: block;
-  user-select: none;
+  -webkit-user-select: none;
 }
 .pcjs-control {
   float: left;
@@ -138,7 +138,7 @@
   text-align: center;
   line-height: 19px;
   border-color: gray;
-  user-select: none;
+  -webkit-user-select: none;
 }
 .pcjs-dip-switch-on {
   color: white;
@@ -165,7 +165,7 @@
   font-size: x-small;
 }
 .pcjs-button {
-  user-select: none;
+  -webkit-user-select: none;
 }
 .pcjs-panel {
   clear: both;
@@ -189,7 +189,7 @@
   line-height: 20px;
   vertical-align: middle;
   width: 8px;
-  user-select: none;
+  -webkit-user-select: none;
 }
 .pcjs-progress {
   height: 20px;
@@ -223,11 +223,11 @@
   vertical-align: middle;
   border: 1px solid black;
   width: 40px;
-  user-select: none;
+  -webkit-user-select: none;
 }
 .pcjs-switches {
   float: left;
-  user-select: none;
+  -webkit-user-select: none;
 }
 .pcjs-bitBucket {
   float: left;
@@ -254,7 +254,7 @@
 .pcjs-description, .pcjs-status {
   font-size: x-small;
   line-height: 2.0em;
-  user-select: none;
+  -webkit-user-select: none;
 }
 .pcjs-soft-keyboard {
   clear: both;
@@ -284,7 +284,7 @@
   background-color: #ffffff;
   overflow: hidden;
   width:100%;
-  user-select: none;
+  -webkit-user-select: none;
 }
 .pcjs-panel-group {
   color: #ffffff;

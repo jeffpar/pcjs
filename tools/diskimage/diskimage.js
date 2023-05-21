@@ -17,11 +17,11 @@ import BASConvert from "../bascon/bascon.js";
 import PCJSLib    from "../modules/pcjslib.js";
 import StreamZip  from "../modules/streamzip.js";
 // import StreamZip  from "node-stream-zip";
-import Device     from "../../machines/modules/device.js";
-import DataBuffer from "../../machines/modules/databuffer.js";
-import JSONLib    from "../../machines/modules/jsonlib.js";
-import DiskInfo   from "../../machines/pcx86/modules/diskinfo.js";
-import CharSet    from "../../machines/pcx86/modules/charset.js";
+import Device     from "../../machines/modules/v3/device.js";
+import DataBuffer from "../../machines/modules/v3/databuffer.js";
+import JSONLib    from "../../machines/modules/v3/jsonlib.js";
+import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
+import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
 
 let device = new Device("node");
 let printf = device.printf.bind(device);
@@ -301,8 +301,8 @@ function getDiskServer(diskFile)
 function getServerPath(sFile)
 {
     /*
-     * In addition to disk server paths, we had to add /machines (for diskette config files) and /software (for Markdown files
-     * containing supplementary copy-protection disk data).
+     * In addition to disk server paths, we had to add /machines (for diskette config files) and /software
+     * (for Markdown files containing supplementary copy-protection disk data).
      */
     let match = sFile.match(/^\/(disks\/|)(machines|software|diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|cdroms|private)(\/.*)$/);
     if (match) {

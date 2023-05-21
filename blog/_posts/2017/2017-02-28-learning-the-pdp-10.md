@@ -43,7 +43,7 @@ One of the challenges in creating a JavaScript-based [PDP-10 Emulator](/machines
 JavaScript bit-wise operators maintain only 32 bits.  Extreme care must be taken to use only *arithmetic* operators whenever
 accessing and/or preserving the 4 most-significant bits in any 36-bit value.
 
-So, before I started this project, I wrote a proof-of-concept [Int36 Class](/machines/shared/lib/int36.js) that supports 36-bit
+So, before I started this project, I wrote a proof-of-concept [Int36 Class](/machines/modules/v2/int36.js) that supports 36-bit
 addition, subtraction, multiplication, and division, as well as a number of helper functions (e.g., *toString()*).  Further
 adaptation will be required, however, because **Int36** multiplication produces 72-bit results and **Int36** division uses 72-bit
 dividends, whereas the PDP-10 uses "double length fixed point" values that contain only 70 bits of magnitude with two matching

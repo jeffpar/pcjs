@@ -8,9 +8,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
-
-var fs = require("fs");
+import fs from "fs";
 
 /**
  * toHex(n, cch)

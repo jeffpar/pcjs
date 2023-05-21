@@ -4,73 +4,73 @@ PCx86 is the emulation module powering all our IBM PCs and compatibles.
 
 This module divides PC functionality into variety of logical and visual components.
 In general, each JavaScript file is responsible for a single component or set of related components (eg,
-[chipset.js](lib/chipset.js)).  Most components represent familiar PC devices, such as video cards, disk drive
+[chipset.js](modules/v2/chipset.js)).  Most components represent familiar PC devices, such as video cards, disk drive
 controllers, etc.
 
 *Component* is an overloaded term, since **Component** is also the name of the shared base class in
-[component.js](../shared/lib/component.js) used by most machine components.  A few low-level components
+[component.js](../modules/v2/component.js) used by most machine components.  A few low-level components
 (eg, the **Memory** and **State** components, the Card class of the **Video** component, the Color and Rectangle
 classes of the **Panel** component, etc) do not extend **Component**, so don't assume that every PCx86 object has
-access to [component.js](../shared/lib/component.js) methods.
+access to [component.js](../modules/v2/component.js) methods.
 
-Examples of non-device components include visual components like [panel.js](lib/panel.js) and
-[debugger.js](lib/debugger.js), and sub-components like [x86ops.js](lib/x86ops.js) and [x86func.js](lib/x86func.js),
-which separate the CPU functionality of [x86.js](lib/x86.js) into more manageable pieces.
+Examples of non-device components include visual components like [panel.js](modules/v2/panel.js) and
+[debugger.js](modules/v2/debugger.js), and sub-components like [x86ops.js](modules/v2/x86ops.js) and [x86func.js](modules/v2/x86func.js),
+which separate the CPU functionality of [x86.js](modules/v2/x86.js) into more manageable pieces.
 
 These components should always be loaded or compiled in the order listed by the *pcx86.scripts* property in
 [machines.json](https://github.com/jeffpar/pcjs/blob/master/machines/machines.json), which includes all the necessary
-[shared components](../shared/lib/) as well.
+[shared components](../modules/v2/) as well.
 
 At the time of this writing, the recommended order is:
 
-  - [shared/defines.js](../shared/lib/defines.js)
-  - [shared/diskapi.js](../shared/lib/diskapi.js)
-  - [shared/dumpapi.js](../shared/lib/dumpapi.js)
-  - [shared/reportapi.js](../shared/lib/reportapi.js)
-  - [shared/userapi.js](../shared/lib/userapi.js)
-  - [shared/strlib.js](../shared/lib/strlib.js)
-  - [shared/usrlib.js](../shared/lib/usrlib.js)
-  - [shared/weblib.js](../shared/lib/weblib.js)
-  - [shared/component.js](../shared/lib/component.js)
-  - [pcx86/defines.js](lib/defines.js)
-  - [pcx86/x86.js](lib/x86.js)
-  - [pcx86/interrupts.js](lib/interrupts.js)
-  - [pcx86/messages.js](lib/messages.js)
-  - [pcx86/panel.js](lib/panel.js)
-  - [pcx86/bus.js](lib/bus.js)
-  - [pcx86/memory.js](lib/memory.js)
-  - [pcx86/cpu.js](lib/cpu.js)
-  - [pcx86/cpux86.js](lib/cpux86.js)
-  - [pcx86/fpux86.js](lib/fpux86.js)
-  - [pcx86/segx86.js](lib/segx86.js)
-  - [pcx86/x86func.js](lib/x86func.js)
-  - [pcx86/x86help.js](lib/x86help.js)
-  - [pcx86/x86mods.js](lib/x86mods.js)
-  - [pcx86/x86ops.js](lib/x86ops.js)
-  - [pcx86/x86op0f.js](lib/x86op0f.js)
-  - [pcx86/chipset.js](lib/chipset.js)
-  - [pcx86/rom.js](lib/rom.js)
-  - [pcx86/ram.js](lib/ram.js)
-  - [pcx86/keyboard.js](lib/keyboard.js)
-  - [pcx86/video.js](lib/video.js)
-  - [pcx86/parallel.js](lib/parallel.js)
-  - [pcx86/serial.js](lib/serial.js)
-  - [pcx86/mouse.js](lib/mouse.js)
-  - [pcx86/disk.js](lib/disk.js)
-  - [pcx86/fdc.js](lib/fdc.js)
-  - [pcx86/hdc.js](lib/hdc.js)
-  - [pcx86/debugger.js](lib/debugger.js)
-  - [pcx86/computer.js](lib/computer.js)
-  - [shared/state.js](../shared/lib/state.js)
-  - [shared/embed.js](../shared/lib/embed.js)
-  - [shared/save.js](../shared/lib/save.js)
+  - [shared/defines.js](../modules/v2/defines.js)
+  - [shared/diskapi.js](../modules/v2/diskapi.js)
+  - [shared/dumpapi.js](../modules/v2/dumpapi.js)
+  - [shared/reportapi.js](../modules/v2/reportapi.js)
+  - [shared/userapi.js](../modules/v2/userapi.js)
+  - [shared/strlib.js](../modules/v2/strlib.js)
+  - [shared/usrlib.js](../modules/v2/usrlib.js)
+  - [shared/weblib.js](../modules/v2/weblib.js)
+  - [shared/component.js](../modules/v2/component.js)
+  - [pcx86/defines.js](modules/v2/defines.js)
+  - [pcx86/x86.js](modules/v2/x86.js)
+  - [pcx86/interrupts.js](modules/v2/interrupts.js)
+  - [pcx86/messages.js](modules/v2/messages.js)
+  - [pcx86/panel.js](modules/v2/panel.js)
+  - [pcx86/bus.js](modules/v2/bus.js)
+  - [pcx86/memory.js](modules/v2/memory.js)
+  - [pcx86/cpu.js](modules/v2/cpu.js)
+  - [pcx86/cpux86.js](modules/v2/cpux86.js)
+  - [pcx86/fpux86.js](modules/v2/fpux86.js)
+  - [pcx86/segx86.js](modules/v2/segx86.js)
+  - [pcx86/x86func.js](modules/v2/x86func.js)
+  - [pcx86/x86help.js](modules/v2/x86help.js)
+  - [pcx86/x86mods.js](modules/v2/x86mods.js)
+  - [pcx86/x86ops.js](modules/v2/x86ops.js)
+  - [pcx86/x86op0f.js](modules/v2/x86op0f.js)
+  - [pcx86/chipset.js](modules/v2/chipset.js)
+  - [pcx86/rom.js](modules/v2/rom.js)
+  - [pcx86/ram.js](modules/v2/ram.js)
+  - [pcx86/keyboard.js](modules/v2/keyboard.js)
+  - [pcx86/video.js](modules/v2/video.js)
+  - [pcx86/parallel.js](modules/v2/parallel.js)
+  - [pcx86/serial.js](modules/v2/serial.js)
+  - [pcx86/mouse.js](modules/v2/mouse.js)
+  - [pcx86/disk.js](modules/v2/disk.js)
+  - [pcx86/fdc.js](modules/v2/fdc.js)
+  - [pcx86/hdc.js](modules/v2/hdc.js)
+  - [pcx86/debugger.js](modules/v2/debugger.js)
+  - [pcx86/computer.js](modules/v2/computer.js)
+  - [shared/state.js](../modules/v2/state.js)
+  - [shared/embed.js](../modules/v2/embed.js)
+  - [shared/save.js](../modules/v2/save.js)
 
-Some of the components *can* be reordered or even omitted (eg, [debugger.js](lib/debugger.js) or
-[embed.js](../shared/lib/embed.js)), but you should observe the following:
+Some of the components *can* be reordered or even omitted (eg, [debugger.js](modules/v2/debugger.js) or
+[embed.js](../modules/v2/embed.js)), but you should observe the following:
 
-  - [component.js](../shared/lib/component.js) must be listed before any component that extends **Component**
-  - [panel.js](lib/panel.js) should be loaded early to initialize the Debugger controls (if any) as soon as possible
-  - [computer.js](lib/computer.js) should be the last device component, as it supervises and notifies all the other device components
+  - [component.js](../modules/v2/component.js) must be listed before any component that extends **Component**
+  - [panel.js](modules/v2/panel.js) should be loaded early to initialize the Debugger controls (if any) as soon as possible
+  - [computer.js](modules/v2/computer.js) should be the last device component, as it supervises and notifies all the other device components
 
 To minimize ordering requirements, the init() handlers and constructors of all components should avoid
 referencing other components.  Device components should define an initBus() notification handler, which the
@@ -108,7 +108,7 @@ adding that object to the global BackTrack object array, and then associating th
 the first byte of RAM where the sector was loaded.  Subsequent bytes of RAM containing the rest of the sector will refer
 to the same BackTrack object, using BackTrack indexes containing offsets 1-511.
 
-**WARNING**: BackTrack support is controlled by a global define (**BACKTRACK** in [defines.js](lib/defines.js)) which is
+**WARNING**: BackTrack support is controlled by a global define (**BACKTRACK** in [defines.js](modules/v2/defines.js)) which is
 *false* in the compiled version of PCx86, because it imposes a huge performance penalty.  The only way to use the feature
 is with a [machine](https://www.pcjs.org/blog/2015/01/17/) explicitly configured to use "uncompiled" source *and* with the PCjs Debugger
 enabled (since, without the debugger, the feature is more or less useless).

@@ -63,7 +63,7 @@ the PDF (p. 199 of the source code listing):
 	;*      NEXM TRAP.  IF THIS IS A KB11-E/EM THEN THIS FEATURE IS TESTED.
 	;;***************************************************************
 
-As noted in the *mapVirtualToPhysical()* function in [cpustate.js](/machines/dec/pdp11/lib/cpustate.js), this test
+As noted in the *mapVirtualToPhysical()* function in [cpustate.js](/machines/dec/pdp11/modules/v2/cpustate.js), this test
 begins at PC 076060, which is exactly 0100 bytes lower than the address shown in the source code listing (076160).
 
 You can run the diagnostic in one of our [PDP-11/70](/machines/dec/pdp11/1170/panel/debugger/xxdp/) configurations.

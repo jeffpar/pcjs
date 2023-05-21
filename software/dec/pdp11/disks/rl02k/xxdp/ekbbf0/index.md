@@ -170,7 +170,7 @@ PDPjs was failing to trigger a RED stack violation on this instruction:
 	020632: 005016                 CLR   @SP                    ;cycles=7
 
 so execution fell into `ERROR 241`.  This was resolved by updating the *checkStackLimit1145()* function
-in [cpustate.js](/machines/dec/pdp11/lib/cpustate.js) to include stack addresses >= 177776 in the RED stack
+in [cpustate.js](/machines/dec/pdp11/modules/v2/cpustate.js) to include stack addresses >= 177776 in the RED stack
 overflow range test.
 
 The next test that PDPjs failed was TEST 63, which also matches the source code listing in the above microfiche,

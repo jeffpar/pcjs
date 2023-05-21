@@ -6,7 +6,7 @@ category: Releases
 permalink: /blog/2014/10/23/
 ---
 
-[PCjs v1.15.6](https://github.com/jeffpar/pcjs/releases/tag/v1.15.6) is a fairly minor update that fixes a few
+[PCjs v1.15.6](https://github.com/jeffpar/pcjs.v1/releases/tag/v1.15.6) is a fairly minor update that fixes a few
 Floppy Drive Controller (FDC) issues and one CPU emulation bug that prevented [PC DOS 7.00](/software/pcx86/sys/dos/ibm/7.00/)
 from working properly.
 

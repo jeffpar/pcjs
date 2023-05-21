@@ -11,7 +11,7 @@ The Absolute Loader is a special tape image that must be loaded in order to load
 that use what we'll call the "Absolute Format."  To see the Absolute Loader in action, try the
 [PDP-11/20 Bootstrap Loader Demo](/machines/dec/pdp11/1120/bootstrap/debugger/).
 
-The *loadImage()* interface of the [PDPjs RAM Component](/machines/dec/pdp11/lib/ram.js) explains what
+The *loadImage()* interface of the [PDPjs RAM Component](/machines/dec/pdp11/modules/v2/ram.js) explains what
 we know about the "Absolute Format":
 
 	Data on tapes in the "Absolute Format" is organized into blocks; each block begins with

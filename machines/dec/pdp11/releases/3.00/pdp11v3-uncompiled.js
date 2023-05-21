@@ -1,8 +1,11 @@
-"use strict";
+/**
+ * @copyright https://www.pcjs.org/modules/v3/defines.js (C) 2012-2023 Jeff Parsons
+ */
 
 /**
- * @copyright https://www.pcjs.org/modules/defs.js (C) 2012-2023 Jeff Parsons
+ * @class {Defines}
  */
+class Defines {}
 
 /**
  * COMMAND is the default name of the global command handler we will define, to provide
@@ -51,7 +54,7 @@ const MAXDEBUG = false;
  *
  * @define {string}
  */
-const VERSION = "2.11";
+const VERSION = "3.00";
 
 /**
  * REPOSITORY is the primary location (eg, URL) where all PCjs-related resources can be found; it is not
@@ -64,27 +67,12 @@ const REPOSITORY = "pcjs.org";
 const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
 
 /**
- * @class {Defs}
- */
-class Defs {}
-
-
-Defs.COMMAND    = COMMAND;
-Defs.COMPILED   = COMPILED;
-Defs.COPYRIGHT  = COPYRIGHT;
-Defs.DEBUG      = DEBUG;
-Defs.FACTORY    = FACTORY;
-Defs.MAXDEBUG   = MAXDEBUG;
-Defs.REPOSITORY = REPOSITORY;
-Defs.VERSION    = VERSION;
-
-/**
  * The following globals CANNOT be overridden.
  *
  * LITTLE_ENDIAN is true if the browser's ArrayBuffer storage is little-endian.  If LITTLE_ENDIAN matches
  * the endian-ness of a machine being emulated, then that machine can use ArrayBuffers for Memory buffers as-is.
  */
-Defs.LITTLE_ENDIAN = function() {
+const LITTLE_ENDIAN = function() {
     let buffer = new ArrayBuffer(2);
     new DataView(buffer).setUint16(0, 256, true);
     return new Uint16Array(buffer)[0] === 256;
@@ -97,7 +85,7 @@ Defs.LITTLE_ENDIAN = function() {
  *
  * NOTE: To support more than 32 message groups, be sure to use "+", not "|", when concatenating.
  */
-Defs.MESSAGE = {
+const MESSAGE = {
     ALL:        0xffffffffffff,
     NONE:       0x000000000000,
     DEFAULT:    0x000000000000,
@@ -122,7 +110,7 @@ Defs.MESSAGE = {
  *
  * TODO: Move these definitions to a more appropriate shared file at some point.
  */
-Defs.RS232 = {
+const RS232 = {
     RTS: {
         PIN:  4,
         MASK: 0x00000010
@@ -149,18 +137,51 @@ Defs.RS232 = {
     }
 };
 
-Defs.CLASSES = {};
-Defs.CLASSES["Defs"] = Defs;
+Defines.COMMAND         = COMMAND;
+Defines.COMPILED        = COMPILED;
+Defines.COPYRIGHT       = COPYRIGHT;
+Defines.DEBUG           = DEBUG;
+Defines.FACTORY         = FACTORY;
+Defines.LITTLE_ENDIAN   = LITTLE_ENDIAN;
+Defines.MAXDEBUG        = MAXDEBUG;
+Defines.MESSAGE         = MESSAGE;
+Defines.REPOSITORY      = REPOSITORY;
+Defines.RS232           = RS232;
+Defines.VERSION         = VERSION;
+
+if (typeof window != "undefined") {
+    if (!window['PCjs']) window['PCjs'] = {};
+    if (!window['PCjs']['machines']) window['PCjs']['machines'] = {};
+    if (!window['PCjs']['components']) window['PCjs']['components'] = [];
+}
 
 /**
- * @copyright https://www.pcjs.org/modules/numio.js (C) 2012-2023 Jeff Parsons
+ * Machines is a global object whose properties are machine IDs and whose values are arrays of Devices.
+ *
+ * @type {Object}
+ */
+Defines.Machines = typeof window != "undefined"? window['PCjs']['machines'] : {};
+
+/**
+ * Components is maintained for backward-compatibility with older PCjs machines, to facilitate machine connections.
+ *
+ * @type {Array}
+ */
+Defines.Components = typeof window != "undefined"? window['PCjs']['components'] : [];
+
+Defines.CLASSES = {};
+Defines.CLASSES["Defines"] = Defines;
+
+
+/**
+ * @copyright https://www.pcjs.org/modules/v3/numio.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
  * @class {NumIO}
  * @unrestricted
  */
-class NumIO extends Defs {
+class NumIO extends Defines {
     /**
      * NumIO()
      *
@@ -754,7 +775,7 @@ NumIO.TWO_POW32 = Math.pow(2, 32);
 NumIO.CLASSES["NumIO"] = NumIO;
 
 /**
- * @copyright https://www.pcjs.org/modules/stdio.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/stdio.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {Function} */
@@ -807,7 +828,7 @@ class StdIO extends NumIO {
          * current Debugger preferences.
          */
         this.formatters = {};
-        let predefinedTypes = "ACDFHGMNSTWYbdfjcsoXx%";
+        let predefinedTypes = "ACDFGHMNSTWYbdfjcsoXx%";
         for (let i = 0; i < predefinedTypes.length; i++) {
             this.formatters[predefinedTypes[i]] = null;
         }
@@ -1124,7 +1145,7 @@ class StdIO extends NumIO {
              * because unlike the C runtime, we reuse the final parameter once the format string has exhausted all parameters.
              */
             let ch;
-            let date = /** @type {Date} */ ("ACDFHGMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
+            let date = /** @type {Date} */ ("ACDFGHMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
 
             switch(type) {
             case 'C':
@@ -1348,8 +1369,21 @@ class StdIO extends NumIO {
                 }
                 width -= prefix.length;
                 do {
-                    let d = arg & (radix - 1);
-                    arg >>>= (radix == 16? 4 : 3);
+                    let d = 16;         // digit index corresponding to '?'
+                    /*
+                     * We default to '?' if isNaN(); since we always call Math.trunc() for integer args, if the original
+                     * arg was undefined, or a string containing a non-number, or anything else that couldn't be converted
+                     * to a number, the resulting arg should be NaN.
+                     */
+                    if (!Number.isNaN(arg)) {
+                        d = arg & (radix - 1);
+                        /*
+                         * We divide by the base (8 or 16) and truncate, instead of the more traditional bit-wise shift,
+                         * because, like the decimal integer case, this allows us to support values > 32 bits (up to 53 bits).
+                         */
+                        arg = Math.trunc(arg / radix);
+                        // arg >>>= (radix == 16? 4 : 3);
+                    }
                     if (zeroPad || !s || d || arg) {
                         s = ach[d] + s;
                     } else {
@@ -1410,15 +1444,15 @@ StdIO.PrintTime = null;
 /**
  * Global constants
  */
-StdIO.HexLowerCase = "0123456789abcdef";
-StdIO.HexUpperCase = "0123456789ABCDEF";
+StdIO.HexLowerCase = "0123456789abcdef?";
+StdIO.HexUpperCase = "0123456789ABCDEF?";
 StdIO.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 StdIO.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 StdIO.CLASSES["StdIO"] = StdIO;
 
 /**
- * @copyright https://www.pcjs.org/modules/webio.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/webio.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ name: string, path: string }} */
@@ -3070,7 +3104,7 @@ WebIO.LocalStorage = {
 WebIO.CLASSES["WebIO"] = WebIO;
 
 /**
- * @copyright https://www.pcjs.org/modules/device.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/device.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ get: function(), set: (function(number)|null) }} */
@@ -3516,7 +3550,7 @@ class Device extends WebIO {
     /**
      * notifyMessage(messages)
      *
-     * Overidden by other devices (eg, Debugger) to receive notifications of messages, along with the messages bits.
+     * Overridden by other devices (eg, Debugger) to receive notifications of messages, along with the messages bits.
      *
      * @this {Device}
      * @param {number} messages
@@ -3599,28 +3633,8 @@ class Device extends WebIO {
     }
 }
 
-if (typeof window != "undefined") {
-    if (!window['PCjs']) window['PCjs'] = {};
-    if (!window['PCjs']['Machines']) window['PCjs']['Machines'] = {};
-    if (!window['PCjs']['Components']) window['PCjs']['Components'] = [];
-}
-
 /**
- * Machines is a global object whose properties are machine IDs and whose values are arrays of Devices.
- *
- * @type {Object}
- */
-Device.Machines = typeof window != "undefined"? window['PCjs']['Machines'] : {};
-
-/**
- * Components is maintained for backward-compatibility with older PCjs machines, to facilitate machine connections.
- *
- * @type {Array}
- */
-Device.Components = typeof window != "undefined"? window['PCjs']['Components'] : [];
-
-/**
- * List of additional message groups, extending the base set defined in lib/webio.js.
+ * List of additional message groups, extending the base set defined in webio.js.
  *
  * NOTE: To support more than 32 message groups, be sure to use "+", not "|", when concatenating.
  */
@@ -3688,7 +3702,7 @@ Device.MESSAGE_NAMES["halt"]    = Device.MESSAGE.HALT;
 Device.CLASSES["Device"] = Device;
 
 /**
- * @copyright https://www.pcjs.org/modules/input.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/input.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), location: Array.<number>, map: (Array.<Array.<number>>|Object|undefined), drag: (boolean|undefined), scroll: (boolean|undefined), hexagonal: (boolean|undefined), releaseDelay: (number|undefined) }} */
@@ -5076,7 +5090,7 @@ Input.TYPE = {                  // types for addListener()
 
 /**
  * To keep track of the state of modifier keys, I've grabbed a copy of the same bit definitions
- * used by /modules/pcx86/lib/keyboard.js, since it's only important that we have a set of unique
+ * used by /modules/pcx86/modules/v2/keyboard.js, since it's only important that we have a set of unique
  * values; what the values are isn't critical.
  *
  * Note that all the "right-hand" modifiers are right-shifted versions of the "left-hand" modifiers.
@@ -5117,7 +5131,7 @@ Input.KEYCODEMOD = {
 Input.CLASSES["Input"] = Input;
 
 /**
- * @copyright https://www.pcjs.org/modules/led.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/led.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ class: string, bindings: (Object|undefined), version: (number|undefined), overrides: (Array.<string>|undefined), type: number, width: (number|undefined), height: (number|undefined), cols: (number|undefined), colsExtra: (number|undefined), rows: (number|undefined), rowsExtra: (number|undefined), color: (string|undefined), backgroundColor: (string|undefined), fixed: (boolean|undefined), hexagonal: (boolean|undefined), highlight: (boolean|undefined), persistent: (boolean|undefined) }} */
@@ -6236,7 +6250,7 @@ LED.SYMBOL_SEGMENTS = {
 LED.CLASSES["LED"] = LED;
 
 /**
- * @copyright https://www.pcjs.org/modules/time.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/time.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ id: string, callBack: function(), msAuto: number, nCyclesLeft: number }} */
@@ -7277,7 +7291,7 @@ Time.BINDING = {
 Time.CLASSES["Time"] = Time;
 
 /**
- * @copyright https://www.pcjs.org/modules/bus.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/bus.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ type: string, addrWidth: number, dataWidth: number, blockSize: (number|undefined), littleEndian: (boolean|undefined) }} */
@@ -8127,7 +8141,7 @@ Bus.TYPE = {
 Bus.CLASSES["Bus"] = Bus;
 
 /**
- * @copyright https://www.pcjs.org/modules/memory.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/memory.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), size: number, type: (number|undefined), littleEndian: (boolean|undefined), values: (Array.<number>|string|undefined) }} */
@@ -9184,7 +9198,7 @@ Memory.TYPE = {
 Memory.CLASSES["Memory"] = Memory;
 
 /**
- * @copyright https://www.pcjs.org/modules/ports.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/ports.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ addr: (number|undefined), size: number }} */
@@ -9381,7 +9395,7 @@ class Ports extends Memory {
 Ports.CLASSES["Ports"] = Ports;
 
 /**
- * @copyright https://www.pcjs.org/modules/ram.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/ram.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, type: (number|undefined) }} */
@@ -9426,7 +9440,7 @@ class RAM extends Memory {
 RAM.CLASSES["RAM"] = RAM;
 
 /**
- * @copyright https://www.pcjs.org/modules/rom.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/rom.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ addr: number, size: number, values: Array.<number>, file: string, reference: string, chipID: string, revision: (number|undefined), colorROM: (string|undefined), backgroundColorROM: (string|undefined) }} */
@@ -9652,7 +9666,7 @@ ROM.BINDING = {
 ROM.CLASSES["ROM"] = ROM;
 
 /**
- * @copyright https://www.pcjs.org/modules/cpu.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/cpu.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ addrReset: number }} */
@@ -9806,7 +9820,7 @@ class CPU extends Device {
 // CPU.CLASSES["CPU"] = CPU;
 
 /**
- * @copyright https://www.pcjs.org/modules/debugger.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/debugger.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ defaultRadix: (number|undefined) }} */
@@ -10504,7 +10518,7 @@ class Debugger extends Device {
     /**
      * evalAND(dst, src)
      *
-     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.AND().
+     * Adapted from /machines/dec/pdp10/modules/v2/cpuops.js:PDP10.AND().
      *
      * Performs the bitwise "and" (AND) of two operands > 32 bits.
      *
@@ -10538,7 +10552,7 @@ class Debugger extends Device {
     /**
      * evalMUL(dst, src)
      *
-     * I could have adapted the code from /machines/dec/pdp10/lib/cpuops.js:PDP10.doMUL(), but it was simpler to
+     * I could have adapted the code from /machines/dec/pdp10/modules/v2/cpuops.js:PDP10.doMUL(), but it was simpler to
      * write this base method and let the PDP-10 Debugger override it with a call to the *actual* doMUL() method.
      *
      * @this {Debugger}
@@ -10554,7 +10568,7 @@ class Debugger extends Device {
     /**
      * evalIOR(dst, src)
      *
-     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.IOR().
+     * Adapted from /machines/dec/pdp10/modules/v2/cpuops.js:PDP10.IOR().
      *
      * Performs the logical "inclusive-or" (OR) of two operands > 32 bits.
      *
@@ -10588,7 +10602,7 @@ class Debugger extends Device {
     /**
      * evalXOR(dst, src)
      *
-     * Adapted from /machines/dec/pdp10/lib/cpuops.js:PDP10.XOR().
+     * Adapted from /machines/dec/pdp10/modules/v2/cpuops.js:PDP10.XOR().
      *
      * Performs the logical "exclusive-or" (XOR) of two operands > 32 bits.
      *
@@ -12535,7 +12549,7 @@ Debugger.DECOP_PRECEDENCE = {
 // Debugger.CLASSES["Debugger"] = Debugger;
 
 /**
- * @copyright https://www.pcjs.org/modules/pdp11ops.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/pdp11ops.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -15065,7 +15079,7 @@ PDP11Ops.aOp8DXn_1140 = [
 ];
 
 /**
- * @copyright https://www.pcjs.org/modules/pdp11.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/pdp11.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {{ vector: number, priority: number, message: number, next: (IRQ|null) }} */
@@ -18734,7 +18748,7 @@ PDP11.MASK_22BIT        = 0x3FFFFF;     // 017777777
 PDP11.CLASSES["PDP11"] = PDP11;
 
 /**
- * @copyright https://www.pcjs.org/modules/pdp11dbg.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/pdp11dbg.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -19308,7 +19322,7 @@ PDP11Dbg.OP1145 = [
 PDP11Dbg.CLASSES["PDP11Dbg"] = PDP11Dbg;
 
 /**
- * @copyright https://www.pcjs.org/modules/iopage.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/iopage.js (C) 2012-2023 Jeff Parsons
  */
 
 /**
@@ -19491,7 +19505,7 @@ IOPage.IOTABLE = {
 IOPage.CLASSES["IOPage"] = IOPage;
 
 /**
- * @copyright https://www.pcjs.org/modules/dl11.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/dl11.js (C) 2012-2023 Jeff Parsons
  */
 
 Device.MESSAGE.DL11             = 0x000100000000;
@@ -19991,7 +20005,7 @@ DL11.IOTABLE = {
 DL11.CLASSES["DL11"] = DL11;
 
 /**
- * @copyright https://www.pcjs.org/modules/pc11.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/pc11.js (C) 2012-2023 Jeff Parsons
  */
 
 Device.MESSAGE.PC11             = 0x000200000000;
@@ -20845,7 +20859,7 @@ PC11.IOTABLE = {
 PC11.CLASSES["PC11"] = PC11;
 
 /**
- * @copyright https://www.pcjs.org/modules/machine.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v3/machine.js (C) 2012-2023 Jeff Parsons
  */
 
 /**

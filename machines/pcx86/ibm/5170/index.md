@@ -69,7 +69,7 @@ First and foremost, there is a **Display Switch** near the battery connector tha
 front of your system unit" if you have a CGA that is your only (or primary) display adapter, or "toward the
 back of your system unit" if you're using an MDA as your only (or primary) display.
 
-In PCjs, the 5170 **Display Switch** is configured with the [ChipSet](/machines/pcx86/lib/chipset.js) *monitor*
+In PCjs, the 5170 **Display Switch** is configured with the [ChipSet](/machines/pcx86/modules/v2/chipset.js) *monitor*
 property, which you can set to either "mono" (aka "mda") or "color" (aka "cga").  Unlike the Model 5150/5160 DIP
 switches, there is no UI for this switch, so once the machine has been created, it cannot be changed by the user.
 
@@ -81,7 +81,7 @@ in the ROM; it defaults to UNINSTALLED and stays UNINSTALLED, since no UI or con
 provided.
 
 The rest of a 5170 machine's configuration is normally handled through CMOS settings, such as the number and type
-of floppy diskette drives, which can be configured with the [ChipSet](/machines/pcx86/lib/chipset.js) *floppies*
+of floppy diskette drives, which can be configured with the [ChipSet](/machines/pcx86/modules/v2/chipset.js) *floppies*
 property; e.g.:
 
 ```xml

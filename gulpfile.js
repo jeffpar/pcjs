@@ -55,26 +55,24 @@
  *      compiled code is up-to-date.
  */
 
- "use strict";
+import fs from "fs";
+import path from "path";
+import gulp from "gulp";
+import gulpNewer from "gulp-newer";
+import gulpChmod from "gulp-chmod";
+import gulpConcat from "gulp-concat";
+import gulpMergeJSON from "gulp-merge-json";
+import gulpForEach from "gulp-foreach";
+import gulpHeader from "gulp-header";
+import gulpReplace from "gulp-replace";
+import closureCompiler from "google-closure-compiler";
+import Proc from "./machines/modules/v2/proclib.js";
+import gulpSourceMaps from "gulp-sourcemaps";
 
-var gulp = require("gulp");
-var gulpNewer = require("gulp-newer");
-var gulpChmod = require("gulp-chmod");
-var gulpConcat = require("gulp-concat");
-var gulpMergeJSON = require("gulp-merge-json");
-var gulpForEach = require("gulp-foreach");
-var gulpHeader = require("gulp-header");
-var gulpReplace = require("gulp-replace");
-var gulpClosureCompiler = require('google-closure-compiler').gulp();
-var gulpSourceMaps = require('gulp-sourcemaps');
-
-var fs = require("fs");
-var path = require("path");
-var pkg = require("./package.json");
-
-var proc = require("./machines/shared/lib/proclib.js");
-var args = proc.getArgs();
+var args = Proc.getArgs();
 var argv = args.argv;
+var gulpClosureCompiler = closureCompiler.gulp();
+var pkg = JSON.parse(fs.readFileSync("./package.json", "utf8"));
 
 /**
  * Every machine must necessarily have a unique machine type ID (eg, "ti57").
@@ -99,7 +97,8 @@ var argv = args.argv;
 /**
  * @type {Object.<string,Machine>}
  */
-var machines = require("./machines/machines.json");
+var machines = JSON.parse(fs.readFileSync("./machines/machines.json", "utf8"));
+if (!machines.shared) machines.shared = {};
 var siteHost = "https://www.pcjs.org";
 
 /*
@@ -133,7 +132,8 @@ var aMachines = Object.keys(machines);
 var aConcatTasks = [], aCompileTasks = [];
 var aWatchedFiles = aSrcDiskCollections.slice();
 
-aMachines.forEach(function(machineID) {
+aMachines.forEach(function(machineID)
+{
     if (machineID[0] == '@' || machineID == "shared") return;
 
     /**
@@ -154,7 +154,7 @@ aMachines.forEach(function(machineID) {
     }
 
     let machineDefines = [];
-    let machineVersion = Machine.version || machines.shared.version;
+    let machineVersion = Machine.version || machines.shared.version || "0.00";
     let machineReleaseDir = "./machines/" + machineFolder + "/releases/" + machineVersion;
     let machineReleaseFile  = machineID + ".js";
     let machineUncompiledFile  = machineID + "-uncompiled.js";
@@ -201,8 +201,8 @@ aMachines.forEach(function(machineID) {
         }
     }
 
-    let machineFiles = Machine.css || machines.shared.css;
-    machineFiles = machineFiles.concat(Machine.xsl || machines.shared.xsl);
+    let machineFiles = Machine.css || machines.shared.css || [];
+    machineFiles = machineFiles.concat(Machine.xsl || machines.shared.xsl || []);
 
     /*
      * The gulpNewer() plugin doesn't seem to work properly with the closureCompiler() plugin;
@@ -239,8 +239,8 @@ aMachines.forEach(function(machineID) {
                     .pipe(gulpReplace(/APPVERSION = "0.00"/g, 'APPVERSION = "' + machineVersion + '"'))
                     .pipe(gulpReplace(/(var\s+VERSION\s*=\s*)"[0-9.]*"/g, '$1"' + machineVersion + '"'))
                     .pipe(gulpReplace(/(^|\n)[ \t]*(['"])use strict\2;?/g, ""))
-                    .pipe(gulpReplace(/^(import)[ \t]+[^\n]*\n/gm, ""))
-                    .pipe(gulpReplace(/^export[ \t]+(default[ \t]+|\{.*?\};|)/gm, ""))
+                    .pipe(gulpReplace(/^import[ \t]+[^\n]*\n/gm, ""))
+                    .pipe(gulpReplace(/^export[ \t]+(.*?;\n|default[ \t]+|\{.*?\}|)/gm, ""))
                     .pipe(gulpReplace(/^[ \t]*var\s+\S+\s*=\s*require\((['"]).*?\1\)[^;]*;/gm, ""))
                     .pipe(gulpReplace(/^[ \t]*(if\s+\(NODE\)\s*|)module\.exports\s*=\s*[^;]*;/gm, ""))
                     .pipe(gulpReplace(/\/\*\*\s*\*\s*@fileoverview[\s\S]*?\*\/\s*/g, ""))
@@ -264,7 +264,7 @@ aMachines.forEach(function(machineID) {
                     .pipe(gulpReplace(/[ \t]*(if *\(DEBUG\) *|)[A-Za-z_][A-Za-z0-9_.]*\.assert\([^\n]*\);[^\n]*/g, ""))
                 }))
             .pipe(gulpConcat(machineUncompiledFile))
-            .pipe(gulpHeader('"use strict";\n\n'))
+        //  .pipe(gulpHeader('"use strict";\n\n'))
             .pipe(gulp.dest(machineReleaseDir));
     });
 

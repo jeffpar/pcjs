@@ -10,7 +10,7 @@
 
 import fs         from "fs";
 import PCJSLib    from "../modules/pcjslib.js";
-import Device     from "../../machines/modules/device.js";
+import Device     from "../../machines/modules/v3/device.js";
 
 let device = new Device("node");
 let printf = device.printf.bind(device);

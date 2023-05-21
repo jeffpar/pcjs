@@ -1,1 +1,1 @@
-TODO: Placeholder for documentation on PCjs Device classes.
+TODO: Placeholder for documentation on PCjs machine modules.

@@ -36,7 +36,7 @@ be used in our PC AT machines, but they must be configured as AT drive type 1 in
 ### IBM PC AT Drive Types
 
 The IBM PC AT introduced a new drive controller and defined many new drive types.  You can find a listing of them
-in the PCjs [HDC](/machines/pcx86/lib/hdc.js) component (see **aDriveTypes**).
+in the PCjs [HDC](/machines/pcx86/modules/v2/hdc.js) component (see **aDriveTypes**).
 
 Generally, our PC AT machines use four common sizes, which correspond to the following AT drive types:
 
