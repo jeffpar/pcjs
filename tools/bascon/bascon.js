@@ -7,8 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import DataBuffer from "../../machines/modules/databuffer.js";
-import CharSet    from "../../machines/pcx86/modules/charset.js";
+import DataBuffer from "../../machines/modules/v3/databuffer.js";
+import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
 
 /**
  * BASIC File Conversion Functions

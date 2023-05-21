@@ -64,7 +64,7 @@ PCx86 (1.50.3) does at least try to minimize the likelihood of the Alt key getti
 Alt-key combination that your browser or operating system consumes should be ignored by the machine, and conversely,
 any combination that the browser or operating system ignores should still be passed through to the machine.
 
-At the same time, I made some changes to the PCjs [Keyboard](/machines/pcx86/lib/keyboard.js) and [Chipset](/machines/pcx86/lib/chipset.js)
+At the same time, I made some changes to the PCjs [Keyboard](/machines/pcx86/modules/v2/keyboard.js) and [Chipset](/machines/pcx86/modules/v2/chipset.js)
 components to fix some long-standing problems with dropped keys and keyboard lock-ups when running [Windows 95](/software/pcx86/sys/windows/win95/4.00.950/).
 
 As of this writing, Windows 95 seems to run pretty well.  However, the machine used to run Windows 95, a
@@ -72,7 +72,7 @@ As of this writing, Windows 95 seems to run pretty well.  However, the machine u
 reboot the machine, it's likely that the COMPAQ ROM will be corrupt.  I'm guessing this is a side-effect of how COMPAQ
 copies its ROM to write-protected RAM, but I've not looked into the problem yet.
 
-And finally, although I think I mentioned this before in some old [Release Notes](https://github.com/jeffpar/pcjs/releases),
+And finally, although I think I mentioned this before in some old [Release Notes](https://github.com/jeffpar/pcjs.v1/releases),
 in any machine that "captures" your mouse, including any machine that supports "Full Screen" mode, PCjs will temporarily
 remap the `tilde` key to the `esc`  key.  This is because most (all?) web browsers intercept `esc` as a way of returning
 control of your mouse and/or screen.  So if you're running software *inside* a PCjs machine that uses the `esc` key,

@@ -16,7 +16,7 @@ it was limited to a maximum of 56Kb of RAM (or as DEC would say, 28K words), sin
 of its 16-bit address space was reserved for UNIBUS devices.
 
 The first PDPjs test of a PDP-11/20 machine was running [PDP-11 BASIC](/software/dec/pdp11/tapes/basic/), by loading
-it directly into memory from the original paper tape image.  This required changes to the [RAM](/machines/dec/pdp11/lib/ram.js)
+it directly into memory from the original paper tape image.  This required changes to the [RAM](/machines/dec/pdp11/modules/v2/ram.js)
 component, including a new *loadImage()* interface that understands DEC's paper tape format.
 
 To provide a more "authentic" experience, there is also a new [PC11 Paper Tape](/machines/dec/pdp11/pc11/) component,

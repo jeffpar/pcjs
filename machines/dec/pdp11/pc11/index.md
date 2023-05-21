@@ -5,7 +5,7 @@ permalink: /machines/dec/pdp11/pc11/
 redirect_from: /devices/pdp11/pc11/
 ---
 
-Machines containing the [PC11 Component](/machines/dec/pdp11/lib/pc11.js) include:
+Machines containing the [PC11 Component](/machines/dec/pdp11/modules/v2/pc11.js) include:
 
 - [PDP-11/20 Bootstrap Loader Demo](/machines/dec/pdp11/1120/bootstrap/) (with [Debugger](/machines/dec/pdp11/1120/bootstrap/debugger/))
 - [PDP-11/20 BASIC Demo](/machines/dec/pdp11/1120/basic/) (with [Debugger](/machines/dec/pdp11/1120/basic/debugger/))

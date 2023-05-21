@@ -27,7 +27,7 @@ The only apparent oddity was the last (8th) sector on track 11: normally, the 8t
 but instead it contained a sector ID of 61.
 
 Fortunately, PCjs uses JSON-encoded disk images, which makes it trivial to annotate sectors with additional information.
-As PCx86's [disk.js](/machines/pcx86/lib/disk.js) explains, every JSON disk image is an array of Cylinder objects, where each
+As PCx86's [disk.js](/machines/pcx86/modules/v2/disk.js) explains, every JSON disk image is an array of Cylinder objects, where each
 Cylinder is an array of Track objects (one per head), and each Track is an array of Sector objects, each of which contains
 the following *minimum* set of properties:
 

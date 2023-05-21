@@ -14,7 +14,7 @@ using the PCjs [FileImage](/tools/fileimage/) utility:
 
 ### Font Information
 
-As noted in [video.js](/machines/pcx86/lib/video.js), the Video component needs to know where the card's
+As noted in [video.js](/machines/pcx86/modules/v2/video.js), the Video component needs to know where the card's
 font data is located:
 
 	For EGA cards, in the absence of any parameters, we assume that we're receiving the original

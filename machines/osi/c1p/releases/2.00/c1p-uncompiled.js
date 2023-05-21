@@ -3362,7 +3362,7 @@ class Component {
         let sParms = element.getAttribute("data-value");
         if (sParms) {
             try {
-                parms = eval('(' + sParms + ')');   // jshint ignore:line
+                parms = eval('(' + sParms + ')');
                 /*
                  * We can no longer invoke removeAttribute() because some components (eg, Panel) need
                  * to run their initXXX() code more than once, to avoid initialization-order dependencies.
@@ -11395,7 +11395,7 @@ class C1PDiskController extends Component {
         };
         if (DEBUG) {
             this.regDDA.sName = "DDA",
-            this.regDDA.aBitIDs = {0x80:"DD7",0x40:"DD6",0x20:"DD5",0x10:"DD4",0x08:"DD3",0x04:"DD2",0x02:"DD1",0x01:"DD0"};    // jshint ignore:line
+            this.regDDA.aBitIDs = {0x80:"DD7",0x40:"DD6",0x20:"DD5",0x10:"DD4",0x08:"DD3",0x04:"DD2",0x02:"DD1",0x01:"DD0"};
             this.regPDA.sName = "PDA";
             this.regPDA.aBitIDs = {0x80:"IHD",0x40:"SD2",0x20:"WP",0x10:"RDY2",0x08:"SHD",0x04:"FD",0x02:"TZD",0x01:"RDY1"};
             this.regCRA.sName = "CRA";
@@ -11553,7 +11553,7 @@ class C1PDiskController extends Component {
              * The most likely source of any exception will be right here, where we're parsing
              * the JSON-encoded disk data.
              */
-            aHeads = eval("(" + sDiskData + ")");   // jshint ignore:line
+            aHeads = eval("(" + sDiskData + ")");
             if (!aHeads.length) {
                 this.println("no data: " + sDiskName);
                 return;
@@ -14411,7 +14411,7 @@ class C1PComputer extends Component {
                         return function() {
                             C1PComputer.power(computer);
                         };
-                    }(computer));   // jshint ignore:line
+                    }(computer));
                     return;
                 }
                 /*

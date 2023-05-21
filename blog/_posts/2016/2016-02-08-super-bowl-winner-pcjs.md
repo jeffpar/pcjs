@@ -10,9 +10,9 @@ two annoying problems with the [OS/2 FOOTBALL Boot Disk](/software/pcx86/sys/os2
 and blank screens.
 
 A hard-error popup would occur when FOOTBALL tried to initialize a non-existent PRN device.  To resolve that, PCjs
-now provides basic parallel port emulation, in the form of a [ParallelPort](/machines/pcx86/lib/parallel.js) component
+now provides basic parallel port emulation, in the form of a [ParallelPort](/machines/pcx86/modules/v2/parallel.js) component
 that you include in a machine XML file with the &lt;parallel&gt; element, in much the same way you include the
-[SerialPort](/machines/pcx86/lib/serial.js) component with the &lt;serial&gt; element.  This [Compaq DeskPro 386]
+[SerialPort](/machines/pcx86/modules/v2/serial.js) component with the &lt;serial&gt; element.  This [Compaq DeskPro 386]
 (/devices/pcx86/machine/compaq/deskpro386/ega/4096kb/debugger/) machine used to run FOOTBALL has now been updated to
 include one parallel port.
 

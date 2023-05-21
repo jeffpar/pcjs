@@ -14,7 +14,7 @@ machines:
     type: pcx80
     debugger: true
     resume: 1
-    config: /machines/pcx80/machine/vt100/debugger/machine.xml
+    config: /machines/pcx80/vt100/debugger/machine.xml
     connection: serialPort->test1170.dl11
 ---
 

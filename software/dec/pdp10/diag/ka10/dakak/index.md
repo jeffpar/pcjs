@@ -30,7 +30,7 @@ Information regarding this diagnostic includes:
 {% include machine.html id="testka10" %}
 
 The Debugger's assemble ("a") command can be used to test the new built-in
-[MACRO-10 Mini-Assembler](/machines/dec/pdp10/lib/macro10.js), which supports a subset
+[MACRO-10 Mini-Assembler](/machines/dec/pdp10/modules/v2/macro10.js), which supports a subset
 of the [MACRO-10](https://1drv.ms/b/s!ArcO_mFRe1Z9gp1mkis_mCVuT1x1pQ) assembly language.
 
 This command:
@@ -60,7 +60,7 @@ JavaScript parameters; e.g.:
 Issues
 ------
 
-As noted in [cpuops.js](/machines/dec/pdp10/lib/cpuops.js), in the *doMUL()* function:
+As noted in [cpuops.js](/machines/dec/pdp10/modules/v2/cpuops.js), in the *doMUL()* function:
 
 > The DAKAK diagnostic contains the following code:
  

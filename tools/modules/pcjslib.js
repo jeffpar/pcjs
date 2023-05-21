@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import StdIO from "../../machines/modules/stdio.js";
+import StdIO from "../../machines/modules/v3/stdio.js";
 
 /**
  * @class PCJSLib

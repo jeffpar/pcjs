@@ -7,9 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
-
-var fs = require("fs");
+import fs from "fs";
 
 try {
     var sText = fs.readFileSync(process.argv[2], "utf-8");

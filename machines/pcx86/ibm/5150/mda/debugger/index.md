@@ -6,6 +6,7 @@ redirect_from: /devices/pcx86/machine/5150/mda/64kb/debugger/
 machines:
   - id: ibm5150-mda
     type: pcx86
+    unbundled: true
     config: /machines/pcx86/ibm/5150/mda/64kb/debugger/machine.json
 ---
 

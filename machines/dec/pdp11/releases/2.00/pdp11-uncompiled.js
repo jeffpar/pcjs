@@ -3960,7 +3960,7 @@ class Component {
         let sParms = element.getAttribute("data-value");
         if (sParms) {
             try {
-                parms = eval('(' + sParms + ')');   // jshint ignore:line
+                parms = eval('(' + sParms + ')');
                 /*
                  * We can no longer invoke removeAttribute() because some components (eg, Panel) need
                  * to run their initXXX() code more than once, to avoid initialization-order dependencies.
@@ -29072,7 +29072,7 @@ class DebuggerPDP11 extends DbgLib {
                 var fEnabled = !!(this.bitsMessage & bitMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
-                if (!(++n % 10)) sCategories += "\n\t";     // jshint ignore:line
+                if (!(++n % 10)) sCategories += "\n\t";
                 /*
                  * Internally, we use "key" instead of "keys", since the latter is a method on JavasScript objects,
                  * but externally, we allow the user to specify "keys".

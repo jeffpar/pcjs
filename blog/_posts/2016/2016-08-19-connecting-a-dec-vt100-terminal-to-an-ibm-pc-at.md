@@ -22,8 +22,8 @@ begin connecting PCs to terminals.
 
 Below you'll find a [DEC VT100 Terminal connected to IBM PC AT](/machines/dec/vt100/5170/) via the PC's **COM2** serial port.
 
-At this point, the connection is *very* thin.  The [PCx86]({{ site.github.pages }}/machines/pcx86/) [SerialPort](/machines/pcx86/lib/serial.js)
-and [PCx80]({{ site.github.pages }}/machines/pcx80/) [SerialPort](/machines/pcx80/lib/serial.js) each export exactly two methods:
+At this point, the connection is *very* thin.  The [PCx86]({{ site.github.pages }}/machines/pcx86/) [SerialPort](/machines/pcx86/modules/v2/serial.js)
+and [PCx80]({{ site.github.pages }}/machines/pcx80/) [SerialPort](/machines/pcx80/modules/v2/serial.js) each export exactly two methods:
 
 - *initConnection()*
 - *receiveData()*

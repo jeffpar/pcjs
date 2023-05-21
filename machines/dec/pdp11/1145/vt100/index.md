@@ -10,7 +10,7 @@ machines:
     connection: dl11->vt100.serialPort
   - id: vt100
     type: pcx80
-    config: /machines/pcx80/machine/vt100/machine.xml
+    config: /machines/pcx80/vt100/machine.xml
     connection: serialPort->test1145.dl11
 ---
 

@@ -8,35 +8,59 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import path from "path";
+import fs from "fs";
+import repl from "repl";
+import xml2js from "xml2js";
+import File from "../../../modules/v2/filelib.js";
+import Proc from "../../../modules/v2/proclib.js";
+import Str from "../../../modules/v2/strlib.js";
 
-var path = require("path");
-var fs = require("fs");
-var repl = require("repl");
-var xml2js = require("xml2js");
-var Defines = require("../../shared/lib/defines");
-var Str = require("../../shared/lib/strlib");
-var Proc = require("../../shared/lib/proclib");
+//
+// The following list of imports should be a strict subset of the scripts listed in machines.json for 'pdp11'.
+//
+import "../../../modules/v2/defines.js";
+import "../../../modules/v2/diskapi.js";
+import "../../../modules/v2/dumpapi.js";
+import "../../../modules/v2/reportapi.js";
+import "../../../modules/v2/userapi.js";
+import "../../../modules/v2/keys.js";
+import "../../../modules/v2/strlib.js";
+import "../../../modules/v2/usrlib.js";
+import "../../../modules/v2/weblib.js";
+import "../../../modules/v2/component.js";
+import "../modules/v2/defines.js";
+import "../modules/v2/messages.js";
+import "../modules/v2/panel.js";
+import "../modules/v2/bus.js";
+import "../modules/v2/device.js";
+import "../modules/v2/memory.js";
+import "../modules/v2/cpu.js";
+import "../modules/v2/cpustate.js";
+import "../modules/v2/cpuops.js";
+import "../modules/v2/rom.js";
+import "../modules/v2/ram.js";
+import "../modules/v2/keyboard.js";
+import "../modules/v2/serial.js";
+import "../modules/v2/pc11.js";
+import "../modules/v2/disk.js";
+import "../modules/v2/drive.js";
+import "../modules/v2/rk11.js";
+import "../modules/v2/rl11.js";
+import "../modules/v2/rx11.js";
+import "../../../modules/v2/debugger.js";
+import "../modules/v2/debugger.js";
+import "../modules/v2/computer.js";
+import "../../../modules/v2/state.js";
+import "../../../modules/v2/embed.js";
 
 var replServer = null;
 var idAttrs = '@';
-var fConsole = false;
-var fDebug = false;
-var fGlobalsSet = false;
 var args = Proc.getArgs();
 var argv = args.argv;
 var sCmdPrev = "";
-if (argv['console'] !== undefined) fConsole = argv['console'];
-if (argv['debug'] !== undefined) fDebug = argv['debug'];
-
-var lib = path.join(path.dirname(fs.realpathSync(__filename)), "../lib/");
-
-try {
-    var machines = require(lib + "../../../_data/machines.json");
-    var scriptsPDP11 = /** @type {Array.<string>} */ (machines['pdp11'].scripts);
-} catch(err) {
-    console.log(err.message);
-}
+var fConsole = (argv['console'] || false);
+var fDebug = (argv['debug'] || false);
 
 /*
  * We will build an array of components whose names will match the component names
@@ -59,125 +83,7 @@ try {
  *
  * TODO: Update the list of ignored (ie, ignorable) components.
  */
-var Component;
 var dbg, serial, fnSendData;
-var aComponents = [];
-var asComponentsIgnore = ["embed", "save"];
-
-/*
- * A few of the components are subclasses of other classes (eg, "cpustate" subclasses "cpu").
- * In those situations, we "hoist" the subclass constructor into the corresponding superclass,
- * because it is the name of the superclass that we rely on during machine initialization.
- */
-var aSubClasses = {
-    "pdp11/lib/cpustate": "pdp11/lib/cpu",
-    "pdp11/lib/debugger": "shared/lib/debugger"
-};
-
-/**
- * loadComponents(asFiles)
- *
- * @param {Array.<string>} asFiles
- */
-function loadComponents(asFiles)
-{
-    for (var i = 0; i < asFiles.length; i++) {
-        var sFile = asFiles[i];
-        if (Str.getExtension(sFile) != "js") continue;
-        var sName = Str.getBaseName(sFile, true);
-        if (asComponentsIgnore.indexOf(sName) >= 0) continue;
-        if (fDebug) console.log(sFile);
-        try {
-            /*
-             * We COULD load ("require") all the files on-demand, because it's only the browser initialization
-             * sequence we want to mimic in loadMachine(), but this is simpler, and it also gives us direct references
-             * to certain components we'll want to access later (eg, "component" in getComponentByType()).
-             */
-            let props = 0;
-            let exports = require(lib + "../../../" + sFile);
-            let afn = (typeof exports == "function"? [exports] : exports);
-            for (let f in afn) {
-                props++;
-                let fn = afn[f];
-                if (typeof fn != "function") continue;
-                let sSuperClass = null;
-                for (let s in aSubClasses) {
-                    if (sFile.indexOf(s) >= 0) {
-                        sSuperClass = aSubClasses[s];
-                        break;
-                    }
-                }
-                if (sSuperClass) {
-                    for (let j = 0; j < aComponents.length; j++) {
-                        if (aComponents[j].path.indexOf(sSuperClass) >= 0) {
-                            if (fDebug) console.log("updating superclass " + aComponents[j].path + " with subclass " + sFile);
-                            aComponents[j].Create = fn;
-                            sName = null;
-                            break;
-                        }
-                    }
-                }
-                if (sName == "component") {
-                    fn.log = fn.println = function(s, type) {
-                        console.log((type !== undefined? (type + ": ") : "") + (s || ""));
-                    };      // jshint ignore:line
-                }
-                if (sName) {
-                    aComponents.push({name: sName, path: sFile, Create: fn, objects: []});
-                }
-            }
-            /*
-             * The "defines.js" module that defines all PCjs globals (as opposed to machine-specific globals)
-             * doesn't export anything, so exports is an empty object, hence props is zero.  However, that isn't
-             * the ONLY module that doesn't export anything, so we also check for whether DEBUG has been set yet.
-             */
-            if (!props && !fGlobalsSet) {
-                if (global.DEBUG !== undefined) {
-                    global.DEBUG = fDebug;
-                    global.APPVERSION = machines['shared']['version'];
-                    fGlobalsSet = true;
-                }
-            }
-        } catch(err) {
-            console.log(err.message);
-        }
-    }
-}
-
-/**
- * getComponentByName(sName)
- *
- * @param sName
- * @return {*}
- */
-function getComponentByName(sName)
-{
-    for (var i = 0; i < aComponents.length; i++) {
-        if (aComponents[i].name == sName) {
-            return aComponents[i].Create;
-        }
-    }
-    return null;
-}
-
-/**
- * getComponentByType(sType)
- *
- * @param sType
- * @return {*}
- */
-function getComponentByType(sType)
-{
-    var component = null;
-
-    if (!Component) {
-        Component = getComponentByName("component");
-    }
-    if (Component) {
-        component = Component.getComponentByType(sType);
-    }
-    return component;
-}
 
 /**
  * initMachine(xml)
@@ -384,7 +290,7 @@ function doCommand(sCmd)
             try {
                 if (dbg && !dbg.doCommands(sCmd, true)) {
                     sCmd = '(' + sCmd + ')';
-                    result = eval(sCmd);        // jshint ignore:line
+                    result = eval(sCmd);
                 }
             } catch(err) {
                 console.log(err.message);
@@ -474,20 +380,22 @@ function startInput()
 {
     var stdin = process.stdin;
     if (!stdin.setRawMode) return false;
-    console.log("console connected to machine (alt-r for REPL prompt, alt-x to exit)");
+    console.log("console connected to machine (ctrl-d to exit, ctrl-r for REPL prompt)");
     stdin.setRawMode(true);
     stdin.resume();
     stdin.on('data', function(buf){
-        if (buf[0] == 0x1b && (buf[1] == 0x72 || buf[1] == 0x78)) {
+        // if (buf[0] == 0x1b && (buf[1] == 0x72 || buf[1] == 0x78)) {
+        if (buf[0] == 0x04 || buf[0] == 0x12) {
             stdin.removeAllListeners('data');
             stdin.setRawMode(false);
             stdin.pause();
-            if (buf[1] == 0x72) {
-                console.log("alt-r detected, starting REPL...");
+            if (buf[0] == 0x04) {
+                console.log("ctrl-d detected, exiting...");
+                process.exit();
+            } else if (buf[0] == 0x12) {
+                console.log("ctrl-r detected, starting REPL...");
                 startREPL();
             } else {
-                console.log("alt-x detected, exiting...");
-                process.exit();
             }
             return;
         }
@@ -510,10 +418,6 @@ function startREPL()
     replServer.on('exit', () => {
         startInput();
     });
-}
-
-if (scriptsPDP11) {
-    loadComponents(scriptsPDP11);
 }
 
 /*

@@ -10,7 +10,7 @@ redirect_from: /devices/pcx86/video/ibm/mda/
 There is only one known MDA Character ROM ([IBM-MDA](IBM-MDA.json5)), and it is identical to the CGA Character ROM,
 because the ROM contains both the 8x14 MDA and 8x8 CGA fonts.
 
-As documented in [video.js](/machines/pcx86/lib/video.js):
+As documented in [video.js](/machines/pcx86/modules/v2/video.js):
 
 	[T]here are TWO CGA fonts in the ROM: a thin 5x7 "single dot" font located at offset 0x1000, and a thick 7x7
 	"double dot" font at offset 0x1800.  The latter is the default font, unless overridden by a jumper setting on

@@ -19,7 +19,7 @@ within the computer industry at the time.  DEC's own processor handbooks, for ex
 in an effort to redefine the "K" in "Kilobyte" (Kb) as 1000, but that doesn't change what the term commonly meant prior
 to 1998.
 
-Machines containing the [RX11 Component](/machines/dec/pdp11/lib/rx11.js) include:
+Machines containing the [RX11 Component](/machines/dec/pdp11/modules/v2/rx11.js) include:
 
 - [PDP-11/70 with Front Panel](/machines/dec/pdp11/1170/panel/) (with [Debugger](/machines/dec/pdp11/1170/panel/debugger/))
 - [PDP-11/70 with VT100 Terminal](/machines/dec/pdp11/1170/vt100/) (with [Debugger](/machines/dec/pdp11/1170/vt100/debugger/))

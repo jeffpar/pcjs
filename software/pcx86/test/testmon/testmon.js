@@ -7,25 +7,23 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import fs from "fs";
+import path from "path";
+import { SerialPort } from "serialport";
 
-var fs = require("fs");
-var path = require("path");
-var SerialPort = require("serialport");
+import Keys from "../../../../machines/modules/v2/keys.js";
+import Str from "../../../../machines/modules/v2/strlib.js";
+import Proc from "../../../../machines/modules/v2/proclib.js";
+import TestMonitor from "../../../../machines/pcx86/modules/v2/testmon.js";
 
-var Defines = require("../../../modules/shared/lib/defines");
-var Keys = require("../../../modules/shared/lib/keys");
-var Str = require("../../../modules/shared/lib/strlib");
-var Proc = require("../../../modules/shared/lib/proclib");
-var TestMonitor = require("../../../modules/pcx86/lib/testmon.js");
-var Machines = require("../../../_data/machines.json");
+var Machines = JSON.parse(fs.readFileSync("../../../../machines/machines.json", "utf8"));
 
 var fDebug = false;
 var args = Proc.getArgs();
 var argv = args.argv;
 
 var baudRate = 2400;
-var rtscts = true;
+var rts_cts = true;
 
 if (argv['debug'] !== undefined) {
     fDebug = argv['debug'];
@@ -100,7 +98,7 @@ class PortController {
         this.aFileBlock = [];
         this.cbBlockSize = 1024;
 
-        this.tests = require("./tests.json");
+        this.tests = JSON.parse(fs.readFileSync("./tests.json", "utf8"));
         this.deliverData = this.deliverInput = this.deliverTests = null;
 
         let monitor = new TestMonitor();
@@ -469,4 +467,4 @@ class PortController {
     }
 }
 
-let controller = new PortController("/dev/tty.KeySerial1", {baudRate, rtscts});
+let controller = new PortController("/dev/tty.KeySerial1", {baudRate, rts_cts});

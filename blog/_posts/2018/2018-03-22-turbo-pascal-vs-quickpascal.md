@@ -52,7 +52,7 @@ Here's an example of "injecting" Ctrl-F4, followed by a 1/10 second delay, follo
 
     autoType: $ctrl$f4$1$altf
 
-Any of the keys listed in the [PCx86 Keyboard's](/machines/pcx86/lib/keyboard.js) **SOFTCODES** table can be
+Any of the keys listed in the [PCx86 Keyboard's](/machines/pcx86/modules/v2/keyboard.js) **SOFTCODES** table can be
 injected by preceding them with a `$`, such as:
 
 - `$esc`

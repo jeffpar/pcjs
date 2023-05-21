@@ -3,7 +3,7 @@
     "class": "Machine",
     "type": "Terminal",
     "name": "VT100",
-    "version": 2.00,
+    "version": 3.00,
     "autoSave": false,
     "bindings": {
       "power": "powerVT100b",

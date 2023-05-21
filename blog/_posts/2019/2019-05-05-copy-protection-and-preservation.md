@@ -66,7 +66,7 @@ last read, it expects to see new data *only* up to that point.
 For an emulator, duplicating such an error is fairly straightforward, and in PCjs, it's almost trivial.
 All I had to do was add a new *dataError* property to the damaged sector of the JSON-encoded disk image.  The
 value of this new property specifies the maximum number of bytes that can be written; any bytes written
-beyond that point are now ignored by the PCjs [Floppy Disk Controller](/machines/pcx86/lib/fdc.js).
+beyond that point are now ignored by the PCjs [Floppy Disk Controller](/machines/pcx86/modules/v2/fdc.js).
 
 This mimics what happens with a real PROLok disk.  For example, some 200+ bytes may be successfully written
 to a damaged 512-byte sector, and those 200+ bytes will be returned on a subsequent read, but the rest of the bytes

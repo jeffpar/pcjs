@@ -33,11 +33,11 @@ switch statement, and every opcode is implemented with a discrete function.  Oth
 interrupt management, and device management.
 
 Most of the work remaining is in device management.  Like other PCjs emulators, PDPjs has a Bus component,
-[bus.js](/machines/dec/pdp11/lib/bus.js), that allows separate device components to register I/O handlers for specific
+[bus.js](/machines/dec/pdp11/modules/v2/bus.js), that allows separate device components to register I/O handlers for specific
 UNIBUS addresses.  During the initial port, I moved all of Paul's original device management code into one "catch-all"
-component, [device.js](/machines/dec/pdp11/lib/device.js), which has now been converted to the new I/O registration model.
+component, [device.js](/machines/dec/pdp11/modules/v2/device.js), which has now been converted to the new I/O registration model.
 
-The first new device component is [serial.js](/machines/dec/pdp11/lib/serial.js), which is currently the
+The first new device component is [serial.js](/machines/dec/pdp11/modules/v2/serial.js), which is currently the
 only means PDPjs has of communicating with the outside world.  So you can try
 [PDPjs connected to a VT100 Terminal](/machines/dec/pdp11/1170/vt100/), by clicking the **Run** button on the
 test machine.  The test machine is running a custom [Boot Monitor](/software/dec/pdp11/boot/monitor/) included with

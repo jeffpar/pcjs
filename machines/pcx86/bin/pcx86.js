@@ -8,171 +8,60 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import fs from "fs";
+import repl from "repl";
+import File from "../../modules/v2/filelib.js";
+import Proc from "../../modules/v2/proclib.js";
 
-var path = require("path");
-var fs = require("fs");
-var repl = require("repl");
-var Defines = require("../../shared/lib/defines");
-var Str = require("../../shared/lib/strlib");
-var Proc = require("../../shared/lib/proclib");
+//
+// The following list of imports should be a strict subset of the scripts listed in machines.json for 'pcx86'.
+//
+import Usr from "../../modules/v2/usrlib.js";
+import Web from "../../modules/v2/weblib.js";
+import Component from "../../modules/v2/component.js";
+import "../../modules/v3/databuffer.js";
+import "../../modules/v3/jsonlib.js";
+import "../modules/v2/defines.js";
+import "../modules/v2/x86.js";
+import "../modules/v3/charset.js";
+import "../modules/v2/interrupts.js";
+import "../modules/v2/messages.js";
+import "../modules/v2/bus.js";
+import "../modules/v2/memory.js";
+import "../modules/v2/cpu.js";
+import "../modules/v2/cpux86.js";
+import "../modules/v2/fpux86.js";
+import "../modules/v2/segx86.js";
+import "../modules/v2/x86func.js";
+import "../modules/v2/x86help.js";
+import "../modules/v2/x86mods.js";
+import "../modules/v2/x86ops.js";
+import "../modules/v2/x86op0f.js";
+import "../modules/v2/chipset.js";
+import "../modules/v2/rom.js";
+import "../modules/v2/ram.js";
+import "../modules/v2/keyboard.js";
+import "../modules/v2/video.js";
+import "../modules/v2/parallel.js";
+import "../modules/v2/serial.js";
+import "../modules/v2/testctl.js";
+import "../modules/v2/testmon.js";
+import "../modules/v2/mouse.js";
+import "../modules/v2/disk.js";
+import "../modules/v2/fdc.js";
+import "../modules/v2/hdc.js";
+import "../../modules/v2/debugger.js";
+import "../modules/v2/debugger.js";
+import "../modules/v2/computer.js";
+import { embedPCx86 } from "../../modules/v2/embed.js";
 
-var fConsole = false;
-var fDebug = false;
-var fGlobalsSet = false;
-var args = Proc.getArgs();
-var argv = args.argv;
-var sCmdPrev = "";
-if (argv['console'] !== undefined) fConsole = argv['console'];
-if (argv['debug'] !== undefined) fDebug = argv['debug'];
+let args = Proc.getArgs();
+let argv = args.argv;
 
-var lib = path.join(path.dirname(fs.realpathSync(__filename)), "../lib/");
-
-try {
-    var machines = require(lib + "../../../machines/machines.json");
-    var scriptsPCx86 = /** @type {Array.<string>} */ (machines['pcx86'].scripts);
-} catch(err) {
-    console.log(err.message);
-}
-
-/*
- * We will build an array of components whose names will match the component names
- * used in a JSON machine definition file; eg:
- *
- *  [
- *      {name: "chipset":
- *       Create: ChipSet,
- *       objects: []
- *      },
- *      ...
- *  ]
- *
- * Every component name comes from the component filename, minus the ".js" extension;
- * Create is the constructor returned by require().
- *
- * TODO: Update the list of ignored (ie, ignorable) components.
- */
-var Component;
-var dbg;
-var aComponents = [];
-var asComponentsIgnore = ["panel", "embed", "save"];
-
-/*
- * A few of the components are subclasses of other classes (eg, "cpux86" is a subclass
- * of "cpu").  In those situations, we "hoist" the subclass constructor into the
- * corresponding superclass, because it is the name of the superclass that we rely on during
- * machine initialization.
- */
-var aSubClasses = {
-    "pcx86/lib/cpux86": "pcx86/lib/cpu",
-    "pcx86/lib/debugger": "shared/lib/debugger"
-};
-
-/**
- * loadComponents(asFiles)
- *
- * @param {Array.<string>} asFiles
- */
-function loadComponents(asFiles)
-{
-    for (let i = 0; i < asFiles.length; i++) {
-        let sFile = asFiles[i];
-        if (Str.getExtension(sFile) != "js") continue;
-        let sName = Str.getBaseName(sFile, true);
-        if (asComponentsIgnore.indexOf(sName) >= 0) continue;
-        if (fDebug) console.log(sFile);
-        try {
-            /*
-             * We COULD load ("require") all the files on-demand, because it's only the browser initialization
-             * sequence we want to mimic in loadMachine(), but this is simpler, and it also gives us direct references
-             * to certain components we'll want to access later (eg, "component" in getComponentByType()).
-             */
-            let props = 0;
-            let exports = require(lib + "../../../" + sFile);
-            let afn = (typeof exports == "function"? [exports] : exports);
-            for (let f in afn) {
-                props++;
-                let fn = afn[f];
-                if (typeof fn != "function") continue;
-                let sSuperClass = null;
-                for (let s in aSubClasses) {
-                    if (sFile.indexOf(s) >= 0) {
-                        sSuperClass = aSubClasses[s];
-                        break;
-                    }
-                }
-                if (sSuperClass) {
-                    for (let j = 0; j < aComponents.length; j++) {
-                        if (aComponents[j].path.indexOf(sSuperClass) >= 0) {
-                            if (fDebug) console.log("updating component superclass " + aComponents[j].name + " (" + aComponents[j].path + ") with subclass " + sName + " (" + sFile + ")");
-                            aComponents[j].Create = fn;
-                            sName = null;
-                            break;
-                        }
-                    }
-                }
-                if (sName == "component") {
-                    fn.log = fn.println = function(s, type) {
-                        console.log((type !== undefined? (type + ": ") : "") + (s || ""));
-                    };      // jshint ignore:line
-                }
-                if (sName) {
-                    if (fDebug) console.log("adding component class " + sName + " (" + sFile + ")");
-                    aComponents.push({name: sName, path: sFile, Create: fn, objects: []});
-                }
-            }
-            /*
-             * The "defines.js" module that defines all PCjs globals (as opposed to machine-specific globals)
-             * doesn't export anything, so exports is an empty object, hence props is zero.  However, that isn't
-             * the ONLY module that doesn't export anything, so we also check for whether DEBUG has been set yet.
-             */
-            if (!props && !fGlobalsSet) {
-                if (global.DEBUG !== undefined) {
-                    global.DEBUG = fDebug;
-                    global.APPVERSION = machines['shared']['version'];
-                    fGlobalsSet = true;
-                }
-            }
-        } catch(err) {
-            console.log(err.message);
-        }
-    }
-}
-
-/**
- * getComponentByName(sName)
- *
- * @param sName
- * @return {*}
- */
-function getComponentByName(sName)
-{
-    for (let i = 0; i < aComponents.length; i++) {
-        if (aComponents[i].name == sName) {
-            return aComponents[i].Create;
-        }
-    }
-    return null;
-}
-
-/**
- * getComponentByType(sType)
- *
- * @param sType
- * @return {*}
- */
-function getComponentByType(sType)
-{
-    let component = null;
-
-    if (!Component) {
-        Component = getComponentByName("component");
-    }
-    if (Component) {
-        component = Component.getComponentByType(sType);
-    }
-    return component;
-}
+let dbg;
+let fConsole = (argv['console'] || false);
+let fDebug = (argv['debug'] || false);
+let sCmdPrev = "";
 
 /**
  * loadMachine(sFile)
@@ -183,15 +72,6 @@ function getComponentByType(sType)
 function loadMachine(sFile)
 {
     if (fDebug) console.log('loadMachine("' + sFile + '")');
-
-    /*
-     * Clear any/all saved objects from any previous machine
-     */
-    let i, j;
-    Component = dbg = null;
-    for (i = 0; i < aComponents.length; i++) {
-        aComponents[i].objects = [];
-    }
 
     let machine;
     try {
@@ -208,16 +88,9 @@ function loadMachine(sFile)
          *      let machine = require(lib + "../bin/" +sFile);
          */
         let sMachine = /** @type {string} */ (fs.readFileSync(sFile, {encoding: "utf8"}));
-        sMachine = '(' + sMachine + ')';
         if (fDebug) console.log(sMachine);
-        machine = eval(sMachine);       // jshint ignore:line
+        machine = eval('(' + sMachine + ')');
         if (machine) {
-            /*
-             * Since we have a machine object, we now mimic the initialization sequence that occurs in
-             * the browser, by walking the list of PCx86 components we loaded above and looking for matches.
-             */
-            let idMachine = "";
-
             /*
              * 'machine' is a pseudo-component that is only used to define an ID for the entire machine;
              * if it exists, then that ID is prepended to every component ID, just as our XSLT code would
@@ -227,52 +100,20 @@ function loadMachine(sFile)
              * This doesn't mean I anticipate a Node environment running multiple machines, as we do in
              * a browser; it only means that I'm trying to make both environments operate similarly.
              */
+            let idMachine = "";
             if (machine['machine']) {
                 idMachine = machine['machine']['id'];
             }
 
-            for (i = 0; i < aComponents.length; i++) {
-
-                let component = aComponents[i];
-                let parms = machine[component.name];
-                /*
-                 * If parms is undefined, it means there is no component with that name defined in the
-                 * machine object (NOT that the component has no parms), and therefore we should skip it.
-                 */
-                if (parms === undefined) continue;
-                /*
-                 * If parms is an Array, then we must create an object for each parms element; and yes,
-                 * I'm relying on the fact that none of my parm objects use a "length" property, as a quick
-                 * and dirty way of differentiating objects from arrays.
-                 */
-                let aParms = parms.length !== undefined? parms : [parms];
-                for (j = 0; j < aParms.length; j++) {
-
-                    let obj;
-                    let parmsObj = aParms[j];
-                    if (idMachine) parmsObj['id'] = idMachine + '.' + parmsObj['id'];
-
-                    if (fDebug) {
-                        console.log("creating " + component.name + "...");
-                        console.log(parmsObj);
-                    }
-
-                    if (component.name == "cpu") {
-                        parmsObj['autoStart'] = false;
-                    }
-
-                    try {
-                        obj = new component.Create(parmsObj);
-                    } catch(err) {
-                        console.log("error creating " + component.name + ": " + err.message);
-                        continue;
-                    }
-
-                    console.log(obj['id'] + " object created");
-                    component.objects.push(obj);
-                    if (obj.type == "Debugger") dbg = obj;
-                }
+            embedPCx86(idMachine, null, null, sMachine);
+            Web.doPageInit();
+            dbg = Component.getComponentByType("Debugger");
+            if (dbg) {
+                dbg.log = dbg.println = function(s, type) {
+                    console.log((type !== undefined? (type + ": ") : "") + (s || ""));
+                };
             }
+
             /*
              * Return the original machine object only in DEBUG mode
              */
@@ -318,7 +159,7 @@ function doCommand(sCmd)
                 console.log("doCommand(" + sCmd + "): " + dbg);
                 if (dbg && !dbg.doCommands(sCmd, true)) {
                     sCmd = '(' + sCmd + ')';
-                    result = eval(sCmd);        // jshint ignore:line
+                    result = eval(sCmd);
                 }
             } catch(err) {
                 console.log(err.message);
@@ -365,10 +206,6 @@ var onCommand = function (cmd, context, filename, callback)
     if (match) result = doCommand(match[1]);
     callback(null, result);
 };
-
-if (scriptsPCx86) {
-    loadComponents(scriptsPCx86);
-}
 
 /*
  * Before falling into the REPL, process any command-line (--cmd) commands -- which should eventually include batch files.

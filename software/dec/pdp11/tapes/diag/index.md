@@ -8,7 +8,7 @@ redirect_from: /apps/pdp11/tapes/diags/
 Thanks to the [iamvirtual.ca](http://iamvirtual.ca/collection/systems/mediadoc/mediadoc.html#papertape)
 website, we have been able to archive the PDP-11 diagnostics shown below.  The tapes have been added to the
 [Default PC11 Configuration](/machines/dec/pdp11/pc11/), so that you can easily load them into any machine with a
-[PC11](/machines/dec/pdp11/lib/pc11.js), such as this [PDP-11/20 with Front Panel and Debugger](/machines/dec/pdp11/1120/panel/debugger/).
+[PC11](/machines/dec/pdp11/modules/v2/pc11.js), such as this [PDP-11/20 with Front Panel and Debugger](/machines/dec/pdp11/1120/panel/debugger/).
 
 As noted for other [DEC PDP-11 Tape Images](/software/dec/pdp11/tapes/), these "Absolute Format" tapes can be read directly
 into RAM using the machine's **Read** button instead of **Load**, allowing you to bypass the usual multi-step process of

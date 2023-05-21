@@ -9,11 +9,11 @@ machines:
     config: /machines/pcx86/ibm/5170/ega/640kb/rev1/debugger/machine.xml
 ---
 
-A few PCjs machines, such as the one below, have enabled [TestMonitor](/machines/pcx86/lib/testmon.js) support,
+A few PCjs machines, such as the one below, have enabled [TestMonitor](/machines/pcx86/modules/v2/testmon.js) support,
 allowing you to use one of the machine's serial ports (usually COM2) to control and issue commands to the machine.
 
 After the machine finishes booting to a DOS prompt, type the DOS command `CTTY COM2`, and then you can interact with
-the machine via the [TestMonitor](/machines/pcx86/lib/testctl.js) window.
+the machine via the [TestMonitor](/machines/pcx86/modules/v2/testctl.js) window.
 
 Typing `Ctrl-T` in that window toggles it between "terminal mode" and "prompt mode".  After the initial `CTTY` command,
 the TestMonitor should detect the DOS prompt and enter "dos mode", at which point you can type the command `debug` to

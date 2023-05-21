@@ -3,7 +3,7 @@
     "class": "Machine",
     "type": "Arcade",
     "name": "Space Invaders",
-    "version": 2.00,
+    "version": 3.00,
     "autoSave": true,
     "autoStart": true,
     "bindings": {

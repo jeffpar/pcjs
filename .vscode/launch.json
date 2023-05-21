@@ -110,6 +110,13 @@
       "webRoot": "${workspaceFolder}"
     },
     {
+      "name": "DEC PDP-11/70 with VT100 Terminal (Unbundled)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/dec/pdp11/1170/vt100/",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
       "name": "IBM PC with CGA",
       "type": "chrome",
       "request": "launch",
@@ -131,7 +138,7 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "IBM PC with MDA [Debugger]",
+      "name": "IBM PC with MDA [Debugger] (Unbundled)",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/debugger/",
@@ -660,8 +667,8 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/diskimage/diskimage.js",
       "args": [
-        "--dir=tmp/posts",
-        "--output=tmp/posts.json",
+        "--dir=tmp/DISK4313",
+        "--output=tmp/DISK4313.json",
         "--overwrite"
       ],
       "cwd": "${workspaceFolder}",
@@ -1053,6 +1060,36 @@
         "--decimal"
       ],
       "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
+      "name": "Node: pcx86.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/machines/pcx86/bin/pcx86.js",
+      "args": [
+        "--cmd=load ibm5150.json",
+        "--debug"
+      ],
+      "cwd": "${workspaceFolder}/machines/pcx86/bin",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
+    },
+    {
+      "name": "Node: pdp11.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/machines/dec/pdp11/bin/pdp11.js",
+      "args": [
+      ],
+      "cwd": "${workspaceFolder}/machines/dec/pdp11/bin",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [

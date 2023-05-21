@@ -17,7 +17,7 @@ implementation that focused primarily on four components:
 There was no support for a serial port, parallel port, mouse, hard disk, numeric coprocessor, EGA or VGA, or
 newer x86 processors like the 80286 and 80386.  All those things came later.
 
-Of those first four components, the most complicated was the [Video](/machines/pcx86/lib/video.js) component, and
+Of those first four components, the most complicated was the [Video](/machines/pcx86/modules/v2/video.js) component, and
 what added to the complexity was my desire to faithfully emulate (as best I could with my limited JavaScript experience)
 all the major features of the MDA and CGA video cards, including:
 

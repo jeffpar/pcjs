@@ -12,7 +12,7 @@ machines:
   - id: vt100
     type: pcx80
     debugger: true
-    config: /machines/pcx80/machine/vt100/debugger/machine.xml
+    config: /machines/pcx80/vt100/debugger/machine.xml
     connection: serialPort->test1145.dl11
 ---
 
