@@ -21,7 +21,7 @@ I'm happy to report that PCjs can also emulate the [TI-55 Programmable Calculato
 You can see both in operation [below](/blog/2017/11/29/#pcjs-ti-55-and-ti-57-emulators).
 
 Both calculators used the same basic chip.  In the TI-57, the chip was designated "TMC1501", and in the TI-55,
-it was "TMC1503", but both were [TMS-1500](/machines/ti/modules/cpu1500.js)-compatible.  The primary difference between
+it was "TMC1503", but both were [TMS-1500](/machines/ti/modules/v3/cpu1500.js)-compatible.  The primary difference between
 the chips was the contents of their ROMs.  And I'm not sure the [TI-55 ROM](/machines/ti/ti55/rom/) was available anywhere
 previously, until now, thanks to [Sean Riddle](http://seanriddle.com/tms1500.html).
 

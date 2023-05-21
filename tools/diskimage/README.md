@@ -5,7 +5,7 @@ permalink: /tools/diskimage/
 ---
 
 [DiskImage](diskimage.js) is a Node command-line application that reads/writes PCjs v2 disk images,
-using the [DiskInfo](../../machines/pcx86/modules/diskinfo.js) PCx86 machine module to parse the data, and it supersedes
+using the [DiskInfo](../../machines/pcx86/modules/v3/diskinfo.js) PCx86 machine module to parse the data, and it supersedes
 the older PCjs [DiskDump](../old/diskdump/) utility.
 
 ### PCjs Disk Images
