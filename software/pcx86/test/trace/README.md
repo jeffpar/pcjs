@@ -38,7 +38,7 @@ To load TRACE.COM and TRACE.TXT onto a virtual disk image that PCjs can access, 
 
 To create the necessary TRACE disk image, using our built-in DiskImage utility:
 
-	node tools/modules/diskimage.js --dir=software/pcx86/test/trace --output=software/pcx86/test/TRACE.json
+	node tools/diskimage/diskimage.js --dir=software/pcx86/test/trace --output=software/pcx86/test/TRACE.json
 
 OS X users can also create an ISO image like so:
 

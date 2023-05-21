@@ -23,8 +23,8 @@ those efforts were limited, partly to save time, but also to minimize the risk o
 Getting a new emulator up and running is time-consuming enough without constantly testing and fixing all the others.
 
 I decided to make a break with that code base a couple years ago, when I wrote a web-based emulation of the
-[TI-57 Calculator](/machines/ti/ti57/).  I created a new set of [Machine library modules]({{ site.github.pages }}/machines/modules/) hierarchy,
-including a new time management class to "clock" all the internal devices, which could be driven either by *setTimeout()*
+[TI-57 Calculator](/machines/ti/ti57/).  I created a new set of [Machine library modules]({{ site.github.pages }}/machines/modules/v3/)
+hierarchy, including a new time management class to "clock" all the internal devices, which could be driven either by *setTimeout()*
 or *requestAnimationFrame()*, and I used simple JSON and HTML markup to define the machine configuration and layout,
 instead of the older XML-based PCjs configuration scheme, which had become increasingly clunky and difficult to maintain.
 
@@ -34,20 +34,20 @@ A few months ago, I decided to continue the evolution of those new classes, star
 that I had previously emulated: the 8080-based arcade machine Space Invaders.
 
 First, since I always like to start with an operational debugger, I took the most useful features common to
-all the PCjs debuggers and packed them into a new [Debugger](/machines/modules/debugger.js) base class, which provides
-most of the commands that the new [8080 Debugger](/machines/pcx80/modules/dbgx80.js) needs.
+all the PCjs debuggers and packed them into a new [Debugger](/machines/modules/v3/debugger.js) base class, which provides
+most of the commands that the new [8080 Debugger](/machines/pcx80/modules/v3/dbgx80.js) needs.
 
-Then I separated management of the browser display elements into a new [Monitor](/machines/modules/monitor.js)
-base class, so that the Space Invaders [Video](/machines/arcade/invaders/modules/video.js) device could focus on the graphics
-hardware.  And the handful of machine I/O ports are implemented by a [Ports](/machines/arcade/invaders/modules/ports.js)
-device that extends a standard [Ports](/machines/modules/ports.js) class, which plugs into the new [Bus](/machines/modules/bus.js)
+Then I separated management of the browser display elements into a new [Monitor](/machines/modules/v3/monitor.js)
+base class, so that the Space Invaders [Video](/machines/arcade/invaders/modules/v3/video.js) device could focus on the graphics
+hardware.  And the handful of machine I/O ports are implemented by a [Ports](/machines/arcade/invaders/modules/v3/ports.js)
+device that extends a standard [Ports](/machines/modules/v3/ports.js) class, which plugs into the new [Bus](/machines/modules/v3/bus.js)
 class, which implements as many buses as a machine needs (eg, memory and I/O).
 
 And of course, beating at the heart of every machine is the CPU, and for Space Invaders, the
-[8080 CPU](/machines/pcx80/modules/cpux80.js) was a straight-forward port of the [original](/machines/pcx80/modules/v2/cpuops.js)
+[8080 CPU](/machines/pcx80/modules/v3/cpux80.js) was a straight-forward port of the [original](/machines/pcx80/modules/v2/cpuops.js)
 PCjs emulation.
 
-One significant change in this new architecture is that every internal device is an instance of the [Device](/machines/modules/device.js)
+One significant change in this new architecture is that every internal device is an instance of the [Device](/machines/modules/v3/device.js)
 class, which in turn builds upon a simple inheritance chain that includes all the functionality that any device might need.
 If a device wants to call *printf()*, for example, it can do so by simply invoking *this.printf()*, rather than having
 to first "include" (ie, *import* or *require*) the class that contains *printf()*.
@@ -68,7 +68,7 @@ Now, as much as I love Space Invaders -- it was the first arcade game I became a
 wasn't really to make yet another clone of Space Invaders.  I just wanted to make it easier to build more web-based emulators,
 fix some things that have long bugged me, make the animation smoother, improve debugging and machine configuration, and so on.
 
-The new Space Invaders emulation should be running below.  Keys are mapped by the [Input](/machines/modules/input.js) device
+The new Space Invaders emulation should be running below.  Keys are mapped by the [Input](/machines/modules/v3/input.js) device
 to the machine's buttons using "map" data provided in the machine [configuration file](/machines/arcade/invaders/invaders.json).
 Here's a summary:
 

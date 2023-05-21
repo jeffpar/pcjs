@@ -107,22 +107,22 @@ As my [TI-57 ROM](/machines/ti/ti57/rom/) page explains, I found 4 bits that dif
 Sean, and then decided to go with this new transcribed ROM as the basis for my own emulator.
 
 What you see below is the current state of the PCjs TI-57 emulator.  Just today, I finished "wiring" up the
-[LED](/machines/modules/led.js) and [Keyboard](/machines/modules/input.js) devices to the
-[TMS-1500 Chip](/machines/ti/modules/cpu1500.js) device, and so far, basic arithmetic operations look good.  I've not
+[LED](/machines/modules/v3/led.js) and [Keyboard](/machines/modules/v3/input.js) devices to the
+[TMS-1500 Chip](/machines/ti/modules/v3/cpu1500.js) device, and so far, basic arithmetic operations look good.  I've not
 exercised it much beyond that, because I'm not ready to go down more debugging rabbit holes just yet.  But if it does
 crash, there's a handy "Diagnostics" window attached to it that should display useful information about what went wrong,
 and it even includes a "mini-debugger".
 
 With the PCjs [TI-57](/machines/ti/ti57/) emulator, I also decided to take a fresh approach.  Instead of using
-the same old ES5-based [PCjs shared modules](/machines/shared/lib), the TI-57 emulator is built with a new set of
-ES6-based [Machine library modules]({{ site.github.pages }}/machines/modules/), including:
+the same old ES5-based [PCjs shared modules]({{ site.github.pages }}/machines/modules/v2/), the TI-57 emulator is built
+with a new set of ES6-based [Machine library modules]({{ site.github.pages }}/machines/modules/v3/), including:
 
-  - [Device](/machines/modules/device.js)
-  - [Input](/machines/modules/input.js)
-  - [LED](/machines/modules/led.js)
-  - [ROM](/machines/modules/rom.js)
-  - [Time](/machines/modules/time.js)
-  - [Machine](/machines/modules/machine.js)
+  - [Device](/machines/modules/v3/device.js)
+  - [Input](/machines/modules/v3/input.js)
+  - [LED](/machines/modules/v3/led.js)
+  - [ROM](/machines/modules/v3/rom.js)
+  - [Time](/machines/modules/v3/time.js)
+  - [Machine](/machines/modules/v3/machine.js)
 
 Since I'm not currently "compiling/transpiling" any of that code to ES5 (as I've done with every other PCjs machine
 to date), you have to be running a modern web browser.  I'll probably add an ES5 fall-back mechanism eventually, but
