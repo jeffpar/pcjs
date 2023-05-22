@@ -7,15 +7,12 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
-
-var fs      = require("fs");
-var path    = require("path");
-var mkdirp  = require("mkdirp");
-var defines = require("../../../../machines/shared/lib/defines");
-var net     = require("../../../../machines/shared/lib/netlib");
-var proc    = require("../../../../machines/shared/lib/proclib");
-var str     = require("../../../../machines/shared/lib/strlib");
+import fs from "fs";
+import path from "path";
+import mkdirp from "mkdirp";
+import net from "../../../../machines/modules/v2/netlib.js";
+import proc from "../../../../machines/modules/v2/proclib.js";
+import str from "../../../../machines/modules/v2/strlib.js";
 
 /**
  * TextOut()
@@ -537,4 +534,6 @@ TextOut.prototype.outputText = function(sOutputFile, fOverwrite)
     }
 };
 
-module.exports = TextOut;
+// module.exports = TextOut;
+
+export default TextOut;

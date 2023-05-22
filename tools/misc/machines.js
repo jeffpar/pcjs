@@ -8,18 +8,16 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict"
+import fs from "fs";
+import glob from "glob";
+import path from "path";
+import xml2js from "xml2js";
+import strlib from "../../machines/modules/v2/strlib.js";
+import proclib from "../../machines/modules/v2/proclib.js";
 
-var fs = require("fs");
-var glob = require("glob");
-var path = require("path");
-var xml2js = require("xml2js");
-let strlib = require("../../machines/shared/lib/strlib");
-var proclib = require("../../machines/shared/lib/proclib");
-var args = proclib.getArgs();
-
-var idAttrs = '@';
-var sRootDir = "../..";
+let args = proclib.getArgs();
+let idAttrs = '@';
+let sRootDir = "../..";
 
 /**
  * @typedef {Object} Machine
@@ -278,12 +276,12 @@ function processYAML(obj, aProps, iProp, sIndent)
  */
 function readXML(xml, sNode, sFile, aTags, iTag, done, fDebug)
 {
-    var fLoading = false;
+    let fLoading = false;
     try {
         xml._resolving++;
         if (fDebug) printf("loading %s...\n", sFile);
-        var sXML = fs.readFileSync(sFile, {encoding: "utf8"});
-        var parser = new xml2js.Parser({attrkey: idAttrs});
+        let sXML = fs.readFileSync(sFile, {encoding: "utf8"});
+        let parser = new xml2js.Parser({attrkey: idAttrs});
         parser.parseString(sXML, function(err, xmlNode) {
             if (!aTags) {
                 xml[sNode] = xmlNode[sNode];
@@ -295,15 +293,15 @@ function readXML(xml, sNode, sFile, aTags, iTag, done, fDebug)
                 return;
             }
             if (xmlNode && xmlNode[sNode]) {
-                for (var sTag in xmlNode[sNode]) {
-                    var aTagsXML = xmlNode[sNode][sTag];
-                    for (var iTagXML = 0; iTagXML < aTagsXML.length; iTagXML++) {
-                        var tag = aTagsXML[iTagXML];
-                        var attrs = tag[idAttrs];
+                for (let sTag in xmlNode[sNode]) {
+                    let aTagsXML = xmlNode[sNode][sTag];
+                    for (let iTagXML = 0; iTagXML < aTagsXML.length; iTagXML++) {
+                        let tag = aTagsXML[iTagXML];
+                        let attrs = tag[idAttrs];
                         if (attrs) {
-                            for (var attr in attrs) {
+                            for (let attr in attrs) {
                                 if (attr == "ref") {
-                                    var sFileXML = sRootDir + attrs[attr];
+                                    let sFileXML = sRootDir + attrs[attr];
                                     readXML(xml, sTag, sFileXML, aTagsXML, iTagXML, done, fDebug);
                                 }
                             }

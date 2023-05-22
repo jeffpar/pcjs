@@ -8,14 +8,12 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import fs from "fs";
+import path from "path";
+import crypto from "crypto";
+import Str from "../../machines/modules/v2/strlib.js";
+import Proc from "../../machines/modules/v2/proclib.js";
 
-var fs = require("fs");
-var path = require("path");
-var crypto = require('crypto');
-
-var Str = require("../../../../machines/shared/lib/strlib");
-var Proc = require("../../../../machines/shared/lib/proclib");
 var args = Proc.getArgs();
 
 /**

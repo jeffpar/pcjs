@@ -8,18 +8,15 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict"
+import fs from "fs";
+import glob from "glob";
+import os from "os";
+import path from "path";
+import strlib from "../../machines/modules/v2/strlib.js";
+import proclib from "../../machines/modules/v2/proclib.js";
 
-let fs = require("fs");
-let glob = require("glob");
-let os = require("os");
-let path = require("path");
-let strlib = require("../../machines/shared/lib/strlib");
-let proclib = require("../../machines/shared/lib/proclib");
 let args = proclib.getArgs();
-
 let sRootDir = "../..";
-
 let remappings = {
     "/tests/pcx86/testmon": "/software/pcx86/test/testmon"
 };

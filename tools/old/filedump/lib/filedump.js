@@ -7,16 +7,14 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
-
-var fs      = require("fs");
-var path    = require("path");
-var mkdirp  = require("mkdirp");
-var defines = require("../../../../machines/shared/lib/defines.js");
-var net     = require("../../../../machines/shared/lib/netlib");
-var proc    = require("../../../../machines/shared/lib/proclib");
-var str     = require("../../../../machines/shared/lib/strlib");
-var DumpAPI = require("../../../../machines/shared/lib/dumpapi");
+import fs from "fs";
+import path from "path";
+import mkdirp from "mkdirp";
+import net from "../../../../machines/modules/v2/netlib.js";
+import proc from "../../../../machines/modules/v2/proclib.js";
+import str from "../../../../machines/modules/v2/strlib.js";
+import DumpAPI from "../../../../machines/modules/v2/dumpapi.js";
+import { COPYRIGHT } from "../../../../machines/modules/v2/defines.js";
 
 /**
  * FileDump()
@@ -934,4 +932,6 @@ FileDump.prototype.outputFile = function(sOutputFile, fOverwrite)
     }
 };
 
-module.exports = FileDump;
+// module.exports = FileDump;
+
+export default FileDump;

@@ -11,32 +11,28 @@
  * See http://en.wikipedia.org/wiki/Design_of_the_FAT_file_system for more information.
  */
 
-"use strict";
+import fs from "fs";
+import path from "path";
+import glob from "glob";
+import mkdirp from "mkdirp";
+import crypto from "crypto";
+import net from "../../../../machines/modules/v2/netlib.js";
+import proc from "../../../../machines/modules/v2/proclib.js";
+import str from "../../../../machines/modules/v2/strlib.js";
+import web from "../../../../machines/modules/v2/weblib.js";
+import DiskAPI from "../../../../machines/modules/v2/diskapi.js";
+import DumpAPI from "../../../../machines/modules/v2/dumpapi.js";
+import X86 from "../../../../machines/pcx86/modules/v2/x86.js";
+import { COPYRIGHT } from "../../../../machines/modules/v2/defines.js";
 
-if (typeof module != "undefined") {     // we can't simply test for NODE, since defines.js hasn't been loaded yet
-    var NODE    = true;
-    var fs      = require("fs");
-    var path    = require("path");
-    var glob    = require("glob");
-    var http    = require("http");
-    var mkdirp  = require("mkdirp");
-    var crypto  = require("crypto");
-    var defines = require("../../../../machines/shared/lib/defines");
-    var net     = require("../../../../machines/shared/lib/netlib");
-    var proc    = require("../../../../machines/shared/lib/proclib");
-    var str     = require("../../../../machines/shared/lib/strlib");
-    var usr     = require("../../../../machines/shared/lib/usrlib");
-    var web     = require("../../../../machines/shared/lib/weblib");
-    var DiskAPI = require("../../../../machines/shared/lib/diskapi");
-    var DumpAPI = require("../../../../machines/shared/lib/dumpapi");
-    var X86     = require("../../../../machines/pcx86/lib/x86");
-    /**
-     * @class exports
-     * @property {string} name
-     * @property {string} version
-     */
-    var pkg = require("../../../../package.json");
-}
+var NODE = true;
+
+/**
+ * @class exports
+ * @property {string} name
+ * @property {string} version
+ */
+var pkg = JSON.parse(fs.readFileSync("../../../../package.json", "utf8"));
 
 /*
  * fConsole controls console messages; it is false by default but is enable by the CLI interface.
@@ -3879,9 +3875,7 @@ DiskDump.prototype.encodeAsBase64 = function(buf)
 
 };
 
-if (NODE) {
-    module.exports = DiskDump;
-} else {
-    let aParms = web.parseURLParms();
-    DiskDump.API(aParms);
-}
+// let aParms = web.parseURLParms();
+// DiskDump.API(aParms);
+
+export default DiskDump;

@@ -8,12 +8,11 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
+import fs from "fs";
+import pdf from "pdf-parse";
+import strlib from "../../machines/modules/v2/strlib.js";
+import proclib from "../../machines/modules/v2/proclib.js";
 
-const fs = require("fs");
-const pdf = require("pdf-parse");
-const strlib = require("../../../../machines/shared/lib/strlib");
-const proclib = require("../../../../machines/shared/lib/proclib");
 const args = proclib.getArgs();
 
 let dataBuffer;

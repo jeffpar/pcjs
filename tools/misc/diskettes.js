@@ -8,18 +8,16 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict"
+import fs from "fs";
+import glob from "glob";
+import mkdirp from "mkdirp";
+import os from "os";
+import path from "path";
+import xml2js from "xml2js";
+import strlib from "../../machines/modules/v2/strlib.js";
+import proclib from "../../machines/modules/v2/proclib.js";
 
-let fs = require("fs");
-let glob = require("glob");
-let mkdirp = require("mkdirp");
-let os = require("os");
-let path = require("path");
-let xml2js = require("xml2js");
-let strlib = require("../../machines/shared/lib/strlib");
-let proclib = require("../../machines/shared/lib/proclib");
 let args = proclib.getArgs();
-
 let idAttrs = '@';
 let moduleDir, rootDir, rootRelative = "../..";
 

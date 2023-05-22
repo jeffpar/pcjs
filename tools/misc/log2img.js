@@ -2,9 +2,7 @@
  * Quick and dirty conversion of the LOG file produced by the DISK2COM app to an IMG file.
  */
 
-"use strict";
-
-let fs = require('fs');
+import fs from "fs";
 
 let hex = function(s) {
     return parseInt(s, 16);

@@ -75,20 +75,12 @@ function loadMachine(sFile)
 
     let machine;
     try {
-        /*
-         * Since our JSON files may contain comments, hex values, and/or other tokens deemed unacceptable
-         * by the JSON Overlords, we can't use require() to load it, as we're able to do with "package.json".
-         * Also note that require() assumes the same path as that of the requiring file, whereas fs.readFileSync()
-         * assumes the path reported by process.cwd().
-         *
-         * TODO: I've since removed the comments from my sample "ibm5150.json" file, so we could try to reinstate
-         * this code; however, there are still hex constants, which I find *much* preferable to the decimal equivalents.
-         * JSON's restrictions continue to irritate me.
-         *
-         *      let machine = require(lib + "../bin/" +sFile);
-         */
         let sMachine = /** @type {string} */ (fs.readFileSync(sFile, {encoding: "utf8"}));
         if (fDebug) console.log(sMachine);
+        /*
+         * Since our JSON files may contain comments, hex values, and other tokens deemed unacceptable
+         * by the JSON Overlords, we must use eval() instead of JSON.parse().
+         */
         machine = eval('(' + sMachine + ')');
         if (machine) {
             /*
