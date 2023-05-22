@@ -11,6 +11,7 @@
 import fs from "fs";
 import mkdirp from "mkdirp";
 import Str from "../v2/strlib.js";
+import CharSet from "../../pcx86/modules/v3/charset.js";
 
 var aIDs = [];
 var tmpDir = "tmp/";
@@ -110,7 +111,7 @@ function processText(sID, sTitle, sProductID, sProductName, sProductVersions, sO
                 // 0x7F was used as a hyperlinking character; we simply remove it for now.  Ditto for 0x1E.
                 //
                 if (chCode == 0x7F || chCode == 0x1E) continue;
-                let chNew = Str.CP437ToUnicode[chCode];
+                let chNew = CharSet.CP437[chCode];
                 if (chCode == 0x09 || chNew === undefined) {
                     throw new Error("line " + l + ", pos " + i + ": unrecognized character (" + chCode + ")");
                 }
