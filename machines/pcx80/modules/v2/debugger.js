@@ -184,7 +184,7 @@ export default class DebuggerX80 extends DbgLib {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "debugInput")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -284,7 +284,7 @@ export default class DebuggerX80 extends DbgLib {
      * @param {DbgAddrX80|null|undefined} dbgAddr
      * @param {boolean} [fWrite]
      * @param {number} [nb] number of bytes to check (1 or 2); default is 1
-     * @return {number} is the corresponding linear address, or CPUDefX80.ADDR_INVALID
+     * @returns {number} is the corresponding linear address, or CPUDefX80.ADDR_INVALID
      */
     getAddr(dbgAddr, fWrite, nb)
     {
@@ -303,7 +303,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {DbgAddrX80} dbgAddr
      * @param {number} [inc]
-     * @return {number}
+     * @returns {number}
      */
     getByte(dbgAddr, inc)
     {
@@ -322,7 +322,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {DbgAddrX80} dbgAddr
      * @param {boolean} [fAdvance]
-     * @return {number}
+     * @returns {number}
      */
     getWord(dbgAddr, fAdvance)
     {
@@ -335,7 +335,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {DbgAddrX80} dbgAddr
      * @param {number} [inc]
-     * @return {number}
+     * @returns {number}
      */
     getShort(dbgAddr, inc)
     {
@@ -391,7 +391,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {number} [addr]
-     * @return {DbgAddrX80}
+     * @returns {DbgAddrX80}
      */
     newAddr(addr)
     {
@@ -406,7 +406,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {DbgAddrX80} dbgAddr
      * @param {number} addr
-     * @return {DbgAddrX80}
+     * @returns {DbgAddrX80}
      */
     setAddr(dbgAddr, addr)
     {
@@ -422,7 +422,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {DbgAddrX80} dbgAddr
-     * @return {Array}
+     * @returns {Array}
      */
     packAddr(dbgAddr)
     {
@@ -436,7 +436,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {Array} aAddr
-     * @return {DbgAddrX80}
+     * @returns {DbgAddrX80}
      */
     unpackAddr(aAddr)
     {
@@ -457,7 +457,7 @@ export default class DebuggerX80 extends DbgLib {
      * @param {string|undefined} sAddr
      * @param {boolean} [fCode] (true if target is code, false if target is data)
      * @param {boolean} [fNoChecks] (true when setting breakpoints that may not be valid now, but will be later)
-     * @return {DbgAddrX80|null|undefined}
+     * @returns {DbgAddrX80|null|undefined}
      */
     parseAddr(sAddr, fCode, fNoChecks)
     {
@@ -512,7 +512,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {number|null|undefined} [off]
-     * @return {string} the hex representation of off
+     * @returns {string} the hex representation of off
      */
     toHexOffset(off)
     {
@@ -524,7 +524,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {DbgAddrX80} dbgAddr
-     * @return {string} the hex representation of the address
+     * @returns {string} the hex representation of the address
      */
     toHexAddr(dbgAddr)
     {
@@ -541,7 +541,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {DbgAddrX80} dbgAddr
      * @param {number} [cchMax] (default is 256)
-     * @return {string} (and dbgAddr advanced past the terminating zero)
+     * @returns {string} (and dbgAddr advanced past the terminating zero)
      */
     getSZ(dbgAddr, cchMax)
     {
@@ -764,7 +764,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {number} bitMessage is one Messages category flag
      * @param {function(Array.<string>)} fnDumper is a function the Debugger can use to dump data for that category
-     * @return {boolean} true if successfully registered, false if not
+     * @returns {boolean} true if successfully registered, false if not
      */
     messageDump(bitMessage, fnDumper)
     {
@@ -783,7 +783,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {string} sReg
      * @param {number} [off] optional offset into sReg
-     * @return {number} register index, or -1 if not found
+     * @returns {number} register index, or -1 if not found
      */
     getRegIndex(sReg, off)
     {
@@ -803,7 +803,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {number} iReg
-     * @return {string}
+     * @returns {string}
      */
     getRegString(iReg)
     {
@@ -840,7 +840,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {number} iReg
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getRegValue(iReg)
     {
@@ -905,7 +905,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     replaceRegs(s)
     {
@@ -1106,7 +1106,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {boolean} [fUpdateFocus] is true to update focus
-     * @return {boolean} true if run request successful, false if not
+     * @returns {boolean} true if run request successful, false if not
      */
     runCPU(fUpdateFocus)
     {
@@ -1122,7 +1122,7 @@ export default class DebuggerX80 extends DbgLib {
      * @param {number} nCycles (0 for one instruction without checking breakpoints)
      * @param {boolean} [fRegs] is true to display registers after step (default is false)
      * @param {boolean} [fUpdateCPU] is false to disable calls to updateCPU() (default is true)
-     * @return {boolean}
+     * @returns {boolean}
      */
     stepCPU(nCycles, fRegs, fUpdateCPU)
     {
@@ -1206,7 +1206,7 @@ export default class DebuggerX80 extends DbgLib {
      * Make sure the CPU is ready (finished initializing), not busy (already running), and not in an error state.
      *
      * @this {DebuggerX80}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isCPUAvail()
     {
@@ -1227,7 +1227,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -1254,7 +1254,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean}
+     * @returns {Object|boolean}
      */
     powerDown(fSave, fShutdown)
     {
@@ -1293,7 +1293,7 @@ export default class DebuggerX80 extends DbgLib {
      * This implements (very rudimentary) save support for the Debugger component.
      *
      * @this {DebuggerX80}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -1312,7 +1312,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -1407,7 +1407,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {boolean} [fRelease] is true for release criteria only; default is false (any criteria)
-     * @return {boolean} true if every instruction needs to pass through checkInstruction(), false if not
+     * @returns {boolean} true if every instruction needs to pass through checkInstruction(), false if not
      */
     checksEnabled(fRelease)
     {
@@ -1423,7 +1423,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {number} addr
      * @param {number} nState is < 0 if stepping, 0 if starting, or > 0 if running
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkInstruction(addr, nState)
     {
@@ -1472,7 +1472,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkMemoryRead(addr, nb)
     {
@@ -1497,7 +1497,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkMemoryWrite(addr, nb)
     {
@@ -1517,7 +1517,7 @@ export default class DebuggerX80 extends DbgLib {
      * @param {number} port
      * @param {number} size
      * @param {number} data
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkPortInput(port, size, data)
     {
@@ -1538,7 +1538,7 @@ export default class DebuggerX80 extends DbgLib {
      * @param {number} port
      * @param {number} size
      * @param {number} data
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkPortOutput(port, size, data)
     {
@@ -1606,7 +1606,7 @@ export default class DebuggerX80 extends DbgLib {
      * @param {Array} aBreak
      * @param {DbgAddrX80} dbgAddr
      * @param {boolean} [fTemporary]
-     * @return {boolean} true if breakpoint added, false if already exists
+     * @returns {boolean} true if breakpoint added, false if already exists
      */
     addBreakpoint(aBreak, dbgAddr, fTemporary)
     {
@@ -1661,7 +1661,7 @@ export default class DebuggerX80 extends DbgLib {
      * @param {boolean} [fRemove]
      * @param {boolean} [fTemporary]
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if found, false if not
+     * @returns {boolean} true if found, false if not
      */
     findBreakpoint(aBreak, dbgAddr, fRemove, fTemporary, fQuiet)
     {
@@ -1702,7 +1702,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {Array} aBreak
-     * @return {number} of breakpoints listed, 0 if none
+     * @returns {number} of breakpoints listed, 0 if none
      */
     listBreakpoints(aBreak)
     {
@@ -1767,7 +1767,7 @@ export default class DebuggerX80 extends DbgLib {
      * @param {number} nb (# of bytes)
      * @param {Array} aBreak
      * @param {boolean} [fTemporary]
-     * @return {boolean} true if breakpoint has been hit, false if not
+     * @returns {boolean} true if breakpoint has been hit, false if not
      */
     checkBreakpoint(addr, nb, aBreak, fTemporary)
     {
@@ -1861,7 +1861,7 @@ export default class DebuggerX80 extends DbgLib {
      * @param {DbgAddrX80} dbgAddr
      * @param {string} [sComment] is an associated comment
      * @param {number|null} [nSequence] is an associated sequence number, undefined if none
-     * @return {string} (and dbgAddr is updated to the next instruction)
+     * @returns {string} (and dbgAddr is updated to the next instruction)
      */
     getInstruction(dbgAddr, sComment, nSequence)
     {
@@ -1952,7 +1952,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {number} type
      * @param {DbgAddrX80} dbgAddr
-     * @return {string} operand
+     * @returns {string} operand
      */
     getImmOperand(type, dbgAddr)
     {
@@ -1987,7 +1987,7 @@ export default class DebuggerX80 extends DbgLib {
      * @param {number} iReg
      * @param {number} type
      * @param {DbgAddrX80} dbgAddr
-     * @return {string} operand
+     * @returns {string} operand
      */
     getRegOperand(iReg, type, dbgAddr)
     {
@@ -2015,7 +2015,7 @@ export default class DebuggerX80 extends DbgLib {
      * @param {string} sOp
      * @param {string|undefined} sOperand
      * @param {DbgAddrX80} dbgAddr of memory where this instruction is being assembled
-     * @return {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
+     * @returns {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
      */
     parseInstruction(sOp, sOperand, dbgAddr)
     {
@@ -2029,7 +2029,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {string} sFlag
-     * @return {string} value of flag
+     * @returns {string} value of flag
      */
     getFlagOutput(sFlag)
     {
@@ -2065,7 +2065,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {number} iReg
-     * @return {string}
+     * @returns {string}
      */
     getRegOutput(iReg)
     {
@@ -2082,7 +2082,7 @@ export default class DebuggerX80 extends DbgLib {
      *      0000 00         NOP
      *
      * @this {DebuggerX80}
-     * @return {string}
+     * @returns {string}
      */
     getRegDump()
     {
@@ -2103,7 +2103,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {number|string|Array|Object} p1
      * @param {number|string|Array|Object} p2
-     * @return {number}
+     * @returns {number}
      */
     comparePairs(p1, p2)
     {
@@ -2248,7 +2248,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {DbgAddrX80} dbgAddr
      * @param {boolean} [fNearest]
-     * @return {Array} where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment
+     * @returns {Array} where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment
      */
     findSymbol(dbgAddr, fNearest)
     {
@@ -2282,7 +2282,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {string} sSymbol
-     * @return {DbgAddrX80|undefined}
+     * @returns {DbgAddrX80|undefined}
      */
     findSymbolAddr(sSymbol)
     {
@@ -2795,7 +2795,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if expression is non-zero, false if zero (or undefined due to a parse error)
+     * @returns {boolean} true if expression is non-zero, false if zero (or undefined due to a parse error)
      */
     doIf(sCmd, fQuiet)
     {
@@ -2813,7 +2813,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {Array.<string>} asArgs
-     * @return {boolean} true only if the instruction info command ("n") is supported
+     * @returns {boolean} true only if the instruction info command ("n") is supported
      */
     doInfo(asArgs)
     {
@@ -2861,7 +2861,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {string} sLevel
-     * @return {boolean} true if success, false if error
+     * @returns {boolean} true if success, false if error
      */
     doInt(sLevel)
     {
@@ -2888,7 +2888,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {string} sCmd
-     * @return {boolean} true if valid "var" assignment, false if not
+     * @returns {boolean} true if valid "var" assignment, false if not
      */
     doVar(sCmd)
     {
@@ -2922,7 +2922,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {string} sAddr
      * @param {boolean} [fPrint]
-     * @return {string|null}
+     * @returns {string|null}
      */
     doList(sAddr, fPrint)
     {
@@ -3369,7 +3369,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {DbgAddrX80} dbgAddr
-     * @return {string|null} CALL instruction at or near dbgAddr, or null if none
+     * @returns {string|null} CALL instruction at or near dbgAddr, or null if none
      */
     getCall(dbgAddr)
     {
@@ -3577,7 +3577,7 @@ export default class DebuggerX80 extends DbgLib {
      * @param {string|undefined} sCmd
      * @param {boolean} [fSave] is true to save the command, false if not
      * @param {string} [chSep] is the command separator character (default is ';')
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     parseCommand(sCmd, fSave, chSep)
     {
@@ -3654,7 +3654,7 @@ export default class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {Array.<string>} asArgs
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     shiftArgs(asArgs)
     {
@@ -3679,7 +3679,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if command processed, false if unrecognized
+     * @returns {boolean} true if command processed, false if unrecognized
      */
     doCommand(sCmd, fQuiet)
     {
@@ -3846,7 +3846,7 @@ export default class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {string} sCmds
      * @param {boolean} [fSave]
-     * @return {boolean} true if all commands processed, false if not
+     * @returns {boolean} true if all commands processed, false if not
      */
     doCommands(sCmds, fSave)
     {

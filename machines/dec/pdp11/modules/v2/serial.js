@@ -172,7 +172,7 @@ export default class SerialPortPDP11 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "buffer")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -391,7 +391,7 @@ export default class SerialPortPDP11 extends Component {
      * @this {SerialPortPDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -420,7 +420,7 @@ export default class SerialPortPDP11 extends Component {
      * @this {SerialPortPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -443,7 +443,7 @@ export default class SerialPortPDP11 extends Component {
      * This implements save support for the SerialPort component.
      *
      * @this {SerialPortPDP11}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -459,7 +459,7 @@ export default class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -471,7 +471,7 @@ export default class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {Array} [a]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initState(a)
     {
@@ -499,7 +499,7 @@ export default class SerialPortPDP11 extends Component {
      * Basically, the inverse of initState().
      *
      * @this {SerialPortPDP11}
-     * @return {Array}
+     * @returns {Array}
      */
     saveRegisters()
     {
@@ -518,7 +518,7 @@ export default class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number} nBaud
-     * @return {number} (number of milliseconds per byte)
+     * @returns {number} (number of milliseconds per byte)
      */
     getBaudTimeout(nBaud)
     {
@@ -539,7 +539,7 @@ export default class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number|string|Array} data
-     * @return {boolean} true if received, false if not
+     * @returns {boolean} true if received, false if not
      */
     receiveData(data)
     {
@@ -576,7 +576,7 @@ export default class SerialPortPDP11 extends Component {
      * receiveByte()
      *
      * @this {SerialPortPDP11}
-     * @return {number} (0x00-0xff if byte available, -1 if not)
+     * @returns {number} (0x00-0xff if byte available, -1 if not)
      */
     receiveByte()
     {
@@ -633,7 +633,7 @@ export default class SerialPortPDP11 extends Component {
      * @this {SerialPortPDP11}
      * @param {Object|null} component
      * @param {function(number)} fn
-     * @return {boolean}
+     * @returns {boolean}
      */
     setConnection(component, fn)
     {
@@ -650,7 +650,7 @@ export default class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number} b
-     * @return {boolean} true if transmitted, false if not
+     * @returns {boolean} true if transmitted, false if not
      */
     transmitByte(b)
     {
@@ -729,7 +729,7 @@ export default class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.RCSR or 177560)
-     * @return {number}
+     * @returns {number}
      */
     readRCSR(addr)
     {
@@ -772,7 +772,7 @@ export default class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.RBUF or 177562)
-     * @return {number}
+     * @returns {number}
      */
     readRBUF(addr)
     {
@@ -796,7 +796,7 @@ export default class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.XCSR or 177564)
-     * @return {number}
+     * @returns {number}
      */
     readXCSR(addr)
     {
@@ -836,7 +836,7 @@ export default class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.XBUF or 177566)
-     * @return {number}
+     * @returns {number}
      */
     readXBUF(addr)
     {

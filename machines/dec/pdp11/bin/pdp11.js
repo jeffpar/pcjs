@@ -195,7 +195,7 @@ function initMachine(xml)
  * loadMachine(sFile)
  *
  * @param {string} sFile
- * @return {boolean}
+ * @returns {boolean}
  */
 function loadMachine(sFile)
 {
@@ -213,7 +213,7 @@ function loadMachine(sFile)
  * @param {Array|null} aTags
  * @param {number} iTag
  * @param {function(Object)} done
- * @return {boolean}
+ * @returns {boolean}
  */
 function readXML(xml, sNode, sFile, aTags, iTag, done)
 {
@@ -261,7 +261,7 @@ function readXML(xml, sNode, sFile, aTags, iTag, done)
  * doCommand(sCmd)
  *
  * @param {string} sCmd
- * @return {*}
+ * @returns {*}
  */
 function doCommand(sCmd)
 {
@@ -374,7 +374,7 @@ function sendData(b)
 /**
  * startInput()
  *
- * @return {boolean}
+ * @returns {boolean}
  */
 function startInput()
 {

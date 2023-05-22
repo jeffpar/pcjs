@@ -340,7 +340,7 @@ function getTargetValue(sTarget)
  * isArchiveFile(sFile)
  *
  * @param {string} sFile
- * @return {number} StreamZip TYPE value, or 0 if not an archive file
+ * @returns {number} StreamZip TYPE value, or 0 if not an archive file
  */
 function isArchiveFile(sFile)
 {
@@ -352,7 +352,7 @@ function isArchiveFile(sFile)
  * isBASICFile(sFile)
  *
  * @param {string} sFile
- * @return {boolean} true if the filename has a ".BAS" extension
+ * @returns {boolean} true if the filename has a ".BAS" extension
  */
 function isBASICFile(sFile)
 {
@@ -364,7 +364,7 @@ function isBASICFile(sFile)
  * isTextFile(sFile)
  *
  * @param {string} sFile
- * @return {boolean} true if the filename contains a known text file extension, false if unknown
+ * @returns {boolean} true if the filename contains a known text file extension, false if unknown
  */
 function isTextFile(sFile)
 {

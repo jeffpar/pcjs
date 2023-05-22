@@ -21,7 +21,7 @@ var tmpDir = "tmp/";
  *
  * @param {string} format
  * @param {...} args
- * @return {number}
+ * @returns {number}
  */
 function printf(format, ...args)
 {

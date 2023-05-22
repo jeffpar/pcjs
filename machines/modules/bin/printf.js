@@ -18,7 +18,7 @@ import Str from "../v2/strlib.js";
  *
  * @param {string} format
  * @param {...} args
- * @return {boolean}
+ * @returns {boolean}
  */
 function printf(format, ...args)
 {

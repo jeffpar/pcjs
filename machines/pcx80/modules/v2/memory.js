@@ -214,7 +214,7 @@ export default class MemoryX80 {
      * of the controller component.
      *
      * @this {MemoryX80}
-     * @return {Array|Int32Array|null}
+     * @returns {Array|Int32Array|null}
      */
     save()
     {
@@ -259,7 +259,7 @@ export default class MemoryX80 {
      *
      * @this {MemoryX80}
      * @param {Array|null} adw
-     * @return {boolean} true if successful, false if block size mismatch
+     * @returns {boolean} true if successful, false if block size mismatch
      */
     restore(adw)
     {
@@ -475,7 +475,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readNone(off, addr)
     {
@@ -506,7 +506,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortDefault(off, addr)
     {
@@ -533,7 +533,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteMemory(off, addr)
     {
@@ -549,7 +549,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortMemory(off, addr)
     {
@@ -621,7 +621,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteChecked(off, addr)
     {
@@ -637,7 +637,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortChecked(off, addr)
     {
@@ -685,7 +685,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteBE(off, addr)
     {
@@ -698,7 +698,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteLE(off, addr)
     {
@@ -711,7 +711,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortBE(off, addr)
     {
@@ -724,7 +724,7 @@ export default class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortLE(off, addr)
     {
@@ -804,7 +804,7 @@ export default class MemoryX80 {
      * adjustEndian(dw)
      *
      * @param {number} dw
-     * @return {number}
+     * @returns {number}
      */
     static adjustEndian(dw)
     {

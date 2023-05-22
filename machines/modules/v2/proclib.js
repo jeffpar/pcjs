@@ -21,7 +21,7 @@ export default class Proc {
      * of single-character arguments, each set to true, and any of these arguments
      * appearing more than once is discarded.
      *
-     * @return {{argc:number, argv:{}}}
+     * @returns {{argc:number, argv:{}}}
      */
     static getArgs()
     {

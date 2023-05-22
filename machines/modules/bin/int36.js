@@ -18,7 +18,7 @@ var i36Reg = new Int36();
  * dumpInt36(i36)
  *
  * @param {Int36} i36
- * @return {string}
+ * @returns {string}
  */
 function dumpInt36(i36)
 {
@@ -30,7 +30,7 @@ function dumpInt36(i36)
  *
  * @param {string} sCmd
  * @param {boolean} [fREPL]
- * @return {*}
+ * @returns {*}
  */
 function test(sCmd, fREPL)
 {

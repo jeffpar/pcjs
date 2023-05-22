@@ -179,7 +179,7 @@ export default class PanelPDP10 extends Component {
      * getAR()
      *
      * @this {PanelPDP10}
-     * @return {number} (current ADDRESS register)
+     * @returns {number} (current ADDRESS register)
      */
     getAR()
     {
@@ -201,7 +201,7 @@ export default class PanelPDP10 extends Component {
      * getDR()
      *
      * @this {PanelPDP10}
-     * @return {number} (current DISPLAY register)
+     * @returns {number} (current DISPLAY register)
      */
     getDR()
     {
@@ -213,7 +213,7 @@ export default class PanelPDP10 extends Component {
      *
      * @this {PanelPDP10}
      * @param {number} value (new DISPLAY register)
-     * @return {number}
+     * @returns {number}
      */
     setDR(value)
     {
@@ -224,7 +224,7 @@ export default class PanelPDP10 extends Component {
      * getSR()
      *
      * @this {PanelPDP10}
-     * @return {number} (current SWITCH register)
+     * @returns {number} (current SWITCH register)
      */
     getSR()
     {
@@ -247,7 +247,7 @@ export default class PanelPDP10 extends Component {
      *
      * @this {PanelPDP10}
      * @param {string} name
-     * @return {number|undefined} 0 if switch is off ("down"), 1 if on ("up"), or undefined if unrecognized
+     * @returns {number|undefined} 0 if switch is off ("down"), 1 if on ("up"), or undefined if unrecognized
      */
     getSwitch(name)
     {
@@ -286,7 +286,7 @@ export default class PanelPDP10 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -388,7 +388,7 @@ export default class PanelPDP10 extends Component {
      * @this {PanelPDP10}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -415,7 +415,7 @@ export default class PanelPDP10 extends Component {
      * @this {PanelPDP10}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -428,7 +428,7 @@ export default class PanelPDP10 extends Component {
      * This implements save support for the PanelPDP10 component.
      *
      * @this {PanelPDP10}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -448,7 +448,7 @@ export default class PanelPDP10 extends Component {
      *
      * @this {PanelPDP10}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -465,7 +465,7 @@ export default class PanelPDP10 extends Component {
      * resetSwitches()
      *
      * @this {PanelPDP10}
-     * @return {boolean}
+     * @returns {boolean}
      */
     resetSwitches()
     {
@@ -575,7 +575,7 @@ export default class PanelPDP10 extends Component {
      * @param {function()|null} fnCallback
      * @param {string} sBinding
      * @param {string} [sDelay]
-     * @return {boolean} false if wait required, true otherwise
+     * @returns {boolean} false if wait required, true otherwise
      */
     holdSwitch(fnCallback, sBinding, sDelay)
     {
@@ -600,7 +600,7 @@ export default class PanelPDP10 extends Component {
      * @this {PanelPDP10}
      * @param {string} sBinding
      * @param {string} sValue
-     * @return {boolean}
+     * @returns {boolean}
      */
     setSwitch(sBinding, sValue)
     {
@@ -621,7 +621,7 @@ export default class PanelPDP10 extends Component {
      *
      * @this {PanelPDP10}
      * @param {string} sBinding
-     * @return {boolean}
+     * @returns {boolean}
      */
     toggleSwitch(sBinding)
     {
@@ -637,7 +637,7 @@ export default class PanelPDP10 extends Component {
      *
      * @this {PanelPDP10}
      * @param {string} sBinding
-     * @return {boolean}
+     * @returns {boolean}
      */
     pressSwitch(sBinding)
     {
@@ -676,7 +676,7 @@ export default class PanelPDP10 extends Component {
      *
      * @this {PanelPDP10}
      * @param {string} sBinding
-     * @return {boolean}
+     * @returns {boolean}
      */
     releaseSwitch(sBinding)
     {
@@ -979,7 +979,7 @@ export default class PanelPDP10 extends Component {
      * from 177676.
      *
      * @this {PanelPDP10}
-     * @return {number}
+     * @returns {number}
      */
     advanceAddr()
     {
@@ -994,7 +994,7 @@ export default class PanelPDP10 extends Component {
      *
      * @this {PanelPDP10}
      * @param {number} value
-     * @return {number}
+     * @returns {number}
      */
     updateAddr(value)
     {
@@ -1011,7 +1011,7 @@ export default class PanelPDP10 extends Component {
      *
      * @this {PanelPDP10}
      * @param {number} value
-     * @return {number}
+     * @returns {number}
      */
     updateData(value)
     {
@@ -1029,7 +1029,7 @@ export default class PanelPDP10 extends Component {
      * @this {PanelPDP10}
      * @param {string} sBinding
      * @param {number} value
-     * @return {number}
+     * @returns {number}
      */
     updateLED(sBinding, value)
     {
@@ -1059,7 +1059,7 @@ export default class PanelPDP10 extends Component {
      *
      * @this {PanelPDP10}
      * @param {number|undefined} value
-     * @return {boolean}
+     * @returns {boolean}
      */
     setSRSwitches(value)
     {

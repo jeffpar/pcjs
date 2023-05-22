@@ -28,7 +28,7 @@ import StdIO from "./stdio.js";
  */
 
 /**
- * @class {WebIO}
+ * @class WebIO
  * @unrestricted
  * @property {Object} bindings
  * @property {number} messages

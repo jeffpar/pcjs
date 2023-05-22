@@ -10,7 +10,7 @@
 import Defines from "./defines.js";
 
 /**
- * @class {NumIO}
+ * @class NumIO
  * @unrestricted
  */
 export default class NumIO extends Defines {

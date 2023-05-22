@@ -101,7 +101,7 @@ export default class RAMx80 extends Component {
      * @this {RAMx80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -120,7 +120,7 @@ export default class RAMx80 extends Component {
      * @this {RAMx80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -241,7 +241,7 @@ export default class RAMx80 extends Component {
      *
      * @this {RAMx80}
      * @param {number} addr (of the HLT opcode)
-     * @return {boolean} true if special processing performed, false if not
+     * @returns {boolean} true if special processing performed, false if not
      */
     checkCPMVector(addr)
     {
@@ -282,7 +282,7 @@ export default class RAMx80 extends Component {
      *
      * @this {RAMx80}
      * @param {number} ch
-     * @return {string}
+     * @returns {string}
      */
     getCPMChar(ch)
     {
@@ -295,7 +295,7 @@ export default class RAMx80 extends Component {
      * @this {RAMx80}
      * @param {number} addr (of a string)
      * @param {string|number} [chEnd] (terminating character, default is 0)
-     * @return {string}
+     * @returns {string}
      */
     getCPMString(addr, chEnd)
     {

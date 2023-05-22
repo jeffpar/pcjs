@@ -49,7 +49,7 @@ import Memory   from "../../../../modules/v3/memory.js";
 /**
  * Emulation of the PDP-11 CPU
  *
- * @class {PDP11}
+ * @class PDP11
  * @unrestricted
  * @property {Bus} bus
  * @property {Input} input

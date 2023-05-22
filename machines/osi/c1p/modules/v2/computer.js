@@ -128,7 +128,7 @@ export default class C1PComputer extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -154,7 +154,7 @@ export default class C1PComputer extends Component {
      * @param {string} sType
      * @param {string} [idRelated] of related component
      * @param {Component|null} [componentPrev] of previously returned component, if any
-     * @return {Component|null}
+     * @returns {Component|null}
      */
     getComponentByType(sType, idRelated, componentPrev)
     {

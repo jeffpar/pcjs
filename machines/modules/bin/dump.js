@@ -21,7 +21,7 @@ var cchOffset = 6;
  *
  * @param {string} format
  * @param {...} args
- * @return {number}
+ * @returns {number}
  */
 function printf(format, ...args)
 {
@@ -45,7 +45,7 @@ function validate(v, message, value)
 /**
  * closeFile()
  *
- * @return {boolean}
+ * @returns {boolean}
  */
 function closeFile()
 {
@@ -63,7 +63,7 @@ function closeFile()
  * @param {number} [length]
  * @param {number} [size]
  * @param {string} [comment]
- * @return {number}
+ * @returns {number}
  */
 function dumpFile(offset, length, size = 1, comment = "")
 {
@@ -100,7 +100,7 @@ function dumpFile(offset, length, size = 1, comment = "")
  * openFile(sPath)
  *
  * @param {string} sPath
- * @return {boolean}
+ * @returns {boolean}
  */
 function openFile(sPath)
 {
@@ -112,7 +112,7 @@ function openFile(sPath)
  * searchFile(values)
  *
  * @param {Array.<string>} values
- * @return {number}
+ * @returns {number}
  */
 function searchFile(values)
 {
@@ -142,7 +142,7 @@ function searchFile(values)
  *
  * @param {Array.<string>} values
  * @param {number} [maxSpread]
- * @return {number}
+ * @returns {number}
  */
 function searchDeltas(values, maxSpread = 8)
 {

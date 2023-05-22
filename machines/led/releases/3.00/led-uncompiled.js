@@ -3,7 +3,7 @@
  */
 
 /**
- * @class {Defines}
+ * @class Defines
  */
 class Defines {}
 
@@ -178,7 +178,7 @@ Defines.CLASSES["Defines"] = Defines;
  */
 
 /**
- * @class {NumIO}
+ * @class NumIO
  * @unrestricted
  */
 class NumIO extends Defines {
@@ -782,7 +782,7 @@ NumIO.CLASSES["NumIO"] = NumIO;
 let Formatter;
 
 /**
- * @class {StdIO}
+ * @class StdIO
  * @unrestricted
  * @property {Object.<string,(Formatter|null)>}>} formatters
  */
@@ -1462,7 +1462,7 @@ let Media;
 let Config;
 
 /**
- * @class {WebIO}
+ * @class WebIO
  * @unrestricted
  * @property {Object} bindings
  * @property {number} messages
@@ -3128,7 +3128,7 @@ let Register;
  *
  * Besides CPUs, other devices may have internal registers or ports that are useful to access by name, too.
  *
- * @class {Device}
+ * @class Device
  * @unrestricted
  * @property {string} idMachine
  * @property {string} idDevice
@@ -3709,7 +3709,7 @@ Device.CLASSES["Device"] = Device;
 let BusConfig;
 
 /**
- * @class {Bus}
+ * @class Bus
  * @unrestricted
  * @property {BusConfig} config
  * @property {number} type (Bus.TYPE value, converted from config['type'])
@@ -4559,7 +4559,7 @@ Bus.CLASSES["Bus"] = Bus;
 let MemoryConfig;
 
 /**
- * @class {Memory}
+ * @class Memory
  * @unrestricted
  * @property {number} [addr]
  * @property {number} size
@@ -5616,7 +5616,7 @@ Memory.CLASSES["Memory"] = Memory;
 let ROMConfig;
 
 /**
- * @class {ROM}
+ * @class ROM
  * @unrestricted
  * @property {ROMConfig} config
  */
@@ -5854,7 +5854,7 @@ let SurfaceListener;
 let SurfaceState;
 
 /**
- * @class {Input}
+ * @class Input
  * @unrestricted
  * @property {InputConfig} config
  * @property {Array.<number>} location
@@ -7301,7 +7301,7 @@ let LEDConfig;
  * simple for this device, but also simulates how the display goes blank for short periods of time while
  * the CPU is busy performing calculations.
  *
- * @class {LED}
+ * @class LED
  * @unrestricted
  * @property {LEDConfig} config
  * @property {number} type (one of the LED.TYPE values)
@@ -8393,7 +8393,7 @@ let Timer;
 let TimeConfig;
 
 /**
- * @class {Time}
+ * @class Time
  * @unrestricted
  * @property {TimeConfig} config
  * @property {number} nCyclesMinimum
@@ -9431,7 +9431,7 @@ Time.CLASSES["Time"] = Time;
 let CPUConfig;
 
 /**
- * @class {CPU}
+ * @class CPU
  * @unrestricted
  * @property {Time} time
  * @property {Debugger} dbg
@@ -9590,7 +9590,7 @@ let Debugger;
 /**
  * LED Controller
  *
- * @class {LEDCtrl}
+ * @class LEDCtrl
  * @unrestricted
  * @property {boolean} fWrap
  * @property {string} sFont
@@ -11331,7 +11331,7 @@ LEDCtrl.CLASSES["LEDCtrl"] = LEDCtrl;
  */
 
 /**
- * @class {Machine}
+ * @class Machine
  * @unrestricted
  * @property {CPU} cpu
  * @property {string} sConfigFile

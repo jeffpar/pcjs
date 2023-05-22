@@ -18,7 +18,7 @@ import { APPVERSION, DEBUG, globals } from "./defines.js";
  * @param {string} idMachine
  * @param {string} sPCJSFile
  * @param {function(Object)} [callback]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function savePC(idMachine, sPCJSFile, callback)
 {

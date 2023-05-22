@@ -71,7 +71,7 @@ export default class FileInfo {
      * @this {FileInfo}
      * @param {number} offset
      * @param {number} [length] (1, 2 or 4 bytes; default is 2)
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     loadValue(offset, length)
     {
@@ -106,7 +106,7 @@ export default class FileInfo {
      * @this {FileInfo}
      * @param {number} offset
      * @param {number} [length] (if omitted, then string must be zero-terminated)
-     * @return {string}
+     * @returns {string}
      */
     loadString(offset, length)
     {
@@ -126,7 +126,7 @@ export default class FileInfo {
      * @this {FileInfo}
      * @param {Array.<number>} aField
      * @param {number} [offset] (0 if not specified)
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     loadField(aField, offset)
     {
@@ -431,7 +431,7 @@ export default class FileInfo {
      * @this {FileInfo}
      * @param {number} off (offset relative to start of file)
      * @param {boolean} [fNearest] (true to return nearest symbol if a segment with symbols is found)
-     * @return {string} symbol corresponding to file offset (of the file name + offset if no symbol found)
+     * @returns {string} symbol corresponding to file offset (of the file name + offset if no symbol found)
      */
     getSymbol(off, fNearest)
     {

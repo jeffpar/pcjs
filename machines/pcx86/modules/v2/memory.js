@@ -193,7 +193,7 @@ export default class MemoryX86 {
      *
      * @this {MemoryX86}
      * @param {boolean} [fScrub]
-     * @return {boolean} (true if block is not dirty, false otherwise)
+     * @returns {boolean} (true if block is not dirty, false otherwise)
      */
     clean(fScrub)
     {
@@ -210,7 +210,7 @@ export default class MemoryX86 {
      * modified()
      *
      * @this {MemoryX86}
-     * @return {boolean} (true if block is dirty and/or modified, false otherwise)
+     * @returns {boolean} (true if block is dirty and/or modified, false otherwise)
      */
     modified()
     {
@@ -270,7 +270,7 @@ export default class MemoryX86 {
      * of the controller component.
      *
      * @this {MemoryX86}
-     * @return {Array|Int32Array|null}
+     * @returns {Array|Int32Array|null}
      */
     save()
     {
@@ -317,7 +317,7 @@ export default class MemoryX86 {
      *
      * @this {MemoryX86}
      * @param {Array} adw
-     * @return {boolean} true if successful, false if block size mismatch
+     * @returns {boolean} true if successful, false if block size mismatch
      */
     restore(adw)
     {
@@ -489,7 +489,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} addr
      * @param {boolean} fWrite (true if called for a write, false if for a read)
-     * @return {MemoryX86}
+     * @returns {MemoryX86}
      */
     getPageBlock(addr, fWrite)
     {
@@ -651,7 +651,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readNone(off, addr)
     {
@@ -682,7 +682,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortDefault(off, addr)
     {
@@ -695,7 +695,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readLongDefault(off, addr)
     {
@@ -738,7 +738,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteMemory(off, addr)
     {
@@ -754,7 +754,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortMemory(off, addr)
     {
@@ -779,7 +779,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readLongMemory(off, addr)
     {
@@ -883,7 +883,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteChecked(off, addr)
     {
@@ -899,7 +899,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortChecked(off, addr)
     {
@@ -915,7 +915,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readLongChecked(off, addr)
     {
@@ -979,7 +979,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readBytePaged(off, addr)
     {
@@ -994,7 +994,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortPaged(off, addr)
     {
@@ -1009,7 +1009,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readLongPaged(off, addr)
     {
@@ -1069,7 +1069,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteUnpaged(off, addr)
     {
@@ -1082,7 +1082,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortUnpaged(off, addr)
     {
@@ -1095,7 +1095,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readLongUnpaged(off, addr)
     {
@@ -1147,7 +1147,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteBE(off, addr)
     {
@@ -1160,7 +1160,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteLE(off, addr)
     {
@@ -1173,7 +1173,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readBytePLE(off, addr)
     {
@@ -1198,7 +1198,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortBE(off, addr)
     {
@@ -1211,7 +1211,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortLE(off, addr)
     {
@@ -1228,7 +1228,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortPLE(off, addr)
     {
@@ -1257,7 +1257,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readLongBE(off, addr)
     {
@@ -1270,7 +1270,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readLongLE(off, addr)
     {
@@ -1287,7 +1287,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readLongPLE(off, addr)
     {
@@ -1536,7 +1536,7 @@ export default class MemoryX86 {
      *
      * @this {MemoryX86}
      * @param {number} off
-     * @return {number}
+     * @returns {number}
      */
     readBackTrackNone(off)
     {
@@ -1570,7 +1570,7 @@ export default class MemoryX86 {
      *
      * @this {MemoryX86}
      * @param {number} off
-     * @return {number}
+     * @returns {number}
      */
     readBackTrackIndex(off)
     {
@@ -1583,7 +1583,7 @@ export default class MemoryX86 {
      * @this {MemoryX86}
      * @param {number} off
      * @param {number} bti
-     * @return {number} previous bti (0 if none)
+     * @returns {number} previous bti (0 if none)
      */
     writeBackTrackIndex(off, bti)
     {
@@ -1598,7 +1598,7 @@ export default class MemoryX86 {
      *
      * @this {MemoryX86}
      * @param {boolean} fMod
-     * @return {boolean} previous value
+     * @returns {boolean} previous value
      */
     modBackTrackIndex(fMod)
     {
@@ -1611,7 +1611,7 @@ export default class MemoryX86 {
      * adjustEndian(dw)
      *
      * @param {number} dw
-     * @return {number}
+     * @returns {number}
      */
     static adjustEndian(dw)
     {

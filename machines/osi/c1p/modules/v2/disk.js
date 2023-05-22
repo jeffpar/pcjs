@@ -648,7 +648,7 @@ export default class C1PDiskController extends Component {
     * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "listDisk")
     * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
     * @param {string} [sValue] optional data value
-    * @return {boolean} true if binding was successful, false if unrecognized binding request
+    * @returns {boolean} true if binding was successful, false if unrecognized binding request
     */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -905,7 +905,7 @@ export default class C1PDiskController extends Component {
     * @this {C1PDiskController}
     * @param {number} port address (0x0000-0x00FF) relative to addrController (0xC000)
     * @param {boolean} fWrite is true if port write, false if port read
-    * @return {Object} reg will always be a valid register object, but it may be the "unknown" register if we don't recognize the port.
+    * @returns {Object} reg will always be a valid register object, but it may be the "unknown" register if we don't recognize the port.
     */
     getReg(port, fWrite)
     {
@@ -1043,7 +1043,7 @@ export default class C1PDiskController extends Component {
 
     /**
      * @this {C1PDiskController}
-     * @return {number} current byte of data from the currently selected drive, or null if no (more) data available
+     * @returns {number} current byte of data from the currently selected drive, or null if no (more) data available
      */
     advanceDriveData()
     {
@@ -1074,7 +1074,7 @@ export default class C1PDiskController extends Component {
      *
      * @this {C1PDiskController}
      * @param {number|undefined} bPDA
-     * @return {number} updated bits for PDA
+     * @returns {number} updated bits for PDA
      */
     updatePDA(bPDA)
     {
@@ -1133,7 +1133,7 @@ export default class C1PDiskController extends Component {
      *
      * @this {C1PDiskController}
      * @param {number|undefined} bPDB
-     * @return {number} updated bits for PDB
+     * @returns {number} updated bits for PDB
      */
     updatePDB(bPDB)
     {
@@ -1187,7 +1187,7 @@ export default class C1PDiskController extends Component {
      *
      * @this {C1PDiskController}
      * @param {number|undefined} bSTAT
-     * @return {number} updated bits for STAT
+     * @returns {number} updated bits for STAT
      */
     updateSTAT(bSTAT)
     {
@@ -1212,7 +1212,7 @@ export default class C1PDiskController extends Component {
     /**
      * @this {C1PDiskController}
      * @param {boolean} fLoaded is true if the selected drive must be loaded, false if don't care
-     * @return {Object} drive reference to the selected drive, or null if no drive is selected or it doesn't meet the fLoaded requirement
+     * @returns {Object} drive reference to the selected drive, or null if no drive is selected or it doesn't meet the fLoaded requirement
      *
      getSelectedDrive(fLoaded)
      {

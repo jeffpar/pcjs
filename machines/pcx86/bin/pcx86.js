@@ -67,7 +67,7 @@ let sCmdPrev = "";
  * loadMachine(sFile)
  *
  * @param {string} sFile
- * @return {Object} representing the machine whose component objects have been loaded into aComponents
+ * @returns {Object} representing the machine whose component objects have been loaded into aComponents
  */
 function loadMachine(sFile)
 {
@@ -121,7 +121,7 @@ function loadMachine(sFile)
  * doCommand(sCmd)
  *
  * @param {string} sCmd
- * @return {*}
+ * @returns {*}
  */
 function doCommand(sCmd)
 {

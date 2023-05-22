@@ -88,7 +88,7 @@ export default class PC11 extends Component {
      *
      * @this {PC11}
      * @param {*} config
-     * @return {*}
+     * @returns {*}
      */
     parseConfig(config)
     {
@@ -115,7 +115,7 @@ export default class PC11 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "listTapes")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -283,7 +283,7 @@ export default class PC11 extends Component {
      * @this {PC11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -303,7 +303,7 @@ export default class PC11 extends Component {
      * @this {PC11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -329,7 +329,7 @@ export default class PC11 extends Component {
      *
      * @this {PC11}
      * @param {boolean} [fRemount] is true if we're remounting all auto-mounted tapes
-     * @return {boolean} true if one or more tape images are being auto-mounted, false if none
+     * @returns {boolean} true if one or more tape images are being auto-mounted, false if none
      */
     autoMount(fRemount)
     {
@@ -411,7 +411,7 @@ export default class PC11 extends Component {
      * @param {number} nTapeTarget
      * @param {boolean} [fAutoMount]
      * @param {File} [file] is set if there's an associated File object
-     * @return {number} 1 if tape loaded, 0 if queued up (or busy), -1 if already loaded
+     * @returns {number} 1 if tape loaded, 0 if queued up (or busy), -1 if already loaded
      */
     loadTape(sTapeName, sTapePath, nTapeTarget, fAutoMount, file)
     {
@@ -458,7 +458,7 @@ export default class PC11 extends Component {
      * @param {string} sTapePath
      * @param {number} nTapeTarget
      * @param {File} [file] is set if there's an associated File object
-     * @return {boolean} true if load completed (successfully or not), false if queued
+     * @returns {boolean} true if load completed (successfully or not), false if queued
      */
     load(sTapeName, sTapePath, nTapeTarget, file)
     {
@@ -600,7 +600,7 @@ export default class PC11 extends Component {
      *
      * @this {PC11}
      * @param {string} sPath
-     * @return {string|null}
+     * @returns {string|null}
      */
     findTape(sPath)
     {
@@ -746,7 +746,7 @@ export default class PC11 extends Component {
      * This implements save support for the PC11 component.
      *
      * @this {PC11}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -761,7 +761,7 @@ export default class PC11 extends Component {
      *
      * @this {PC11}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -775,7 +775,7 @@ export default class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} nBaud
-     * @return {number} (number of milliseconds per byte)
+     * @returns {number} (number of milliseconds per byte)
      */
     getBaudTimeout(nBaud)
     {
@@ -834,7 +834,7 @@ export default class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} addr (eg, PDP11.UNIBUS.PRS or 177550)
-     * @return {number}
+     * @returns {number}
      */
     readPRS(addr)
     {
@@ -883,7 +883,7 @@ export default class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} addr (eg, PDP11.UNIBUS.PRB or 177552)
-     * @return {number}
+     * @returns {number}
      */
     readPRB(addr)
     {
@@ -912,7 +912,7 @@ export default class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} addr (eg, PDP11.UNIBUS.PPS or 177554)
-     * @return {number}
+     * @returns {number}
      */
     readPPS(addr)
     {
@@ -945,7 +945,7 @@ export default class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} addr (eg, PDP11.UNIBUS.PPB or 177556)
-     * @return {number}
+     * @returns {number}
      */
     readPPB(addr)
     {

@@ -49,7 +49,7 @@ export default class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {Array} [aRegs]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(aRegs)
     {
@@ -79,7 +79,7 @@ export default class RL11 extends DriveController {
      * Basically, the inverse of initController().
      *
      * @this {RL11}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -199,7 +199,7 @@ export default class RL11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     readData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -284,7 +284,7 @@ export default class RL11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     writeData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -365,7 +365,7 @@ export default class RL11 extends DriveController {
      * @param {number} iSector
      * @param {number} nWords
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     doneReadWrite(nError, iCylinder, iHead, iSector, nWords, addr)
     {
@@ -386,7 +386,7 @@ export default class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLCS or 174400)
-     * @return {number}
+     * @returns {number}
      */
     readRLCS(addr)
     {
@@ -412,7 +412,7 @@ export default class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLBA or 174402)
-     * @return {number}
+     * @returns {number}
      */
     readRLBA(addr)
     {
@@ -436,7 +436,7 @@ export default class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLDA or 174404)
-     * @return {number}
+     * @returns {number}
      */
     readRLDA(addr)
     {
@@ -460,7 +460,7 @@ export default class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLMP or 174406)
-     * @return {number}
+     * @returns {number}
      */
     readRLMP(addr)
     {
@@ -484,7 +484,7 @@ export default class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLBE or 174410)
-     * @return {number}
+     * @returns {number}
      */
     readRLBE(addr)
     {

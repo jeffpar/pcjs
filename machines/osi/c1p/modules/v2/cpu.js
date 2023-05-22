@@ -501,7 +501,7 @@ export default class C1PCPU extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "run")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -654,7 +654,7 @@ export default class C1PCPU extends Component {
      * @param {number} end address
      * @param {Component} component
      * @param {function(number,number)} fn of previously added handler
-     * @return {boolean} true if remove was successful, false if the handler was not found
+     * @returns {boolean} true if remove was successful, false if the handler was not found
      */
     removeReadNotify(start, end, component, fn)
     {
@@ -713,7 +713,7 @@ export default class C1PCPU extends Component {
      * @param {number} end address
      * @param {Component} component
      * @param {function(number,number)} fn of previously added handler
-     * @return {boolean} true if remove was successful, false if the handler was not found
+     * @returns {boolean} true if remove was successful, false if the handler was not found
      */
     removeWriteNotify(start, end, component, fn)
     {
@@ -736,7 +736,7 @@ export default class C1PCPU extends Component {
      * @param {number} end address
      * @param {Component} component
      * @param {function(number,number)} fn of previously added handler
-     * @return {number} index of the matching handler, or -1 if not found
+     * @returns {number} index of the matching handler, or -1 if not found
      */
     findNotify(aNotify, start, end, component, fn)
     {
@@ -757,7 +757,7 @@ export default class C1PCPU extends Component {
      * @param {number} end address
      * @param {Component} component
      * @param {function(number,number)} fn of previously added handler
-     * @return {Array} bounds of previous handler ([0] and [1]) and new lower and upper address bounds ([2] and [3])
+     * @returns {Array} bounds of previous handler ([0] and [1]) and new lower and upper address bounds ([2] and [3])
      */
     removeNotify(aNotify, start, end, component, fn)
     {
@@ -872,7 +872,7 @@ export default class C1PCPU extends Component {
 
     /**
      * @this {C1PCPU}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isRunning()
     {
@@ -949,7 +949,7 @@ export default class C1PCPU extends Component {
 
     /**
      * @this {C1PCPU}
-     * @return {number}
+     * @returns {number}
      */
     calcRemainingTime()
     {
@@ -1118,7 +1118,7 @@ export default class C1PCPU extends Component {
     /**
      * @this {C1PCPU}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {boolean|undefined} undefined indicates that the last instruction was not executed (eg,
+     * @returns {boolean|undefined} undefined indicates that the last instruction was not executed (eg,
      * we hit an execution breakpoint), false implies a post-execution condition was triggered (eg, a write
      * breakpoint), and true indicates successful completion of all requested cycles.
      */
@@ -1295,7 +1295,7 @@ export default class C1PCPU extends Component {
      * updateMemory() function).
      *
      * @this {C1PCPU}
-     * @return {number}
+     * @returns {number}
      */
     getCycles()
     {
@@ -1305,7 +1305,7 @@ export default class C1PCPU extends Component {
     /**
      * @this {C1PCPU}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      *
      * Unlike the Debugger versions of these functions, these presume that addr is always valid,
      * since it's internally generated, not user-supplied. Of course, we could still have internal
@@ -1327,7 +1327,7 @@ export default class C1PCPU extends Component {
     /**
      * @this {C1PCPU}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     getWord(addr)
     {
@@ -1351,7 +1351,7 @@ export default class C1PCPU extends Component {
 
     /**
      * @this {C1PCPU}
-     * @return {number}
+     * @returns {number}
      */
     getRegP()
     {
@@ -1508,7 +1508,7 @@ export default class C1PCPU extends Component {
      * @this {C1PCPU}
      * @param {number} reg
      * @param {number} mem
-     * @return {number}
+     * @returns {number}
      *
      * Refer to http://www.6502.org/tutorials/decimal_mode.html for 6502-specific details.
      * Refer to http://homepage.cs.uiowa.edu/~jones/bcd/bcd.html for optimization tips.
@@ -1573,7 +1573,7 @@ export default class C1PCPU extends Component {
      * @this {C1PCPU}
      * @param {number} reg
      * @param {number} mem
-     * @return {number}
+     * @returns {number}
      *
      * Refer to http://www.6502.org/tutorials/decimal_mode.html for 6502-specific details.
      * Refer to http://homepage.cs.uiowa.edu/~jones/bcd/bcd.html for optimization tips.

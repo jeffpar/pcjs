@@ -41,7 +41,7 @@ Device.MESSAGE_NAMES["pc11"]    = Device.MESSAGE.PC11;
  */
 
 /**
- * @class {PC11}
+ * @class PC11
  * @unrestricted
  */
 export default class PC11 extends Device {

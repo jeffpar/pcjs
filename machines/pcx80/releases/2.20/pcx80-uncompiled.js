@@ -594,7 +594,7 @@ class Str {
      *
      * @param {string} s is the string representation of some number
      * @param {number} [base] is the radix to use (default is 10); only 2, 8, 10 and 16 are supported
-     * @return {boolean} true if valid, false if invalid (or the specified base isn't supported)
+     * @returns {boolean} true if valid, false if invalid (or the specified base isn't supported)
      */
     static isValidInt(s, base)
     {
@@ -627,7 +627,7 @@ class Str {
      *
      * @param {string} s is the string representation of some number
      * @param {number} [base] is the radix to use (default is 10); can be overridden by prefixes/suffixes
-     * @return {number|undefined} corresponding value, or undefined if invalid
+     * @returns {number|undefined} corresponding value, or undefined if invalid
      */
     static parseInt(s, base)
     {
@@ -744,7 +744,7 @@ class Str {
      * @param {number} cch (the desired number of digits)
      * @param {string} [sPrefix] (default is none)
      * @param {number} [nGrouping]
-     * @return {string}
+     * @returns {string}
      */
     static toBase(n, radix, cch, sPrefix = "", nGrouping = 0)
     {
@@ -805,7 +805,7 @@ class Str {
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of binary digits (0 or undefined for default of either 8, 18, or 36)
      * @param {number} [nGrouping]
-     * @return {string} the binary representation of n
+     * @returns {string} the binary representation of n
      */
     static toBin(n, cch, nGrouping)
     {
@@ -831,7 +831,7 @@ class Str {
      * @param {number|null|undefined} n (interpreted as a 32-bit value)
      * @param {number} [cb] is the desired number of binary bytes (4 is both the default and the maximum)
      * @param {boolean} [fPrefix]
-     * @return {string} the binary representation of n
+     * @returns {string} the binary representation of n
      */
     static toBinBytes(n, cb, fPrefix)
     {
@@ -857,7 +857,7 @@ class Str {
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of octal digits (0 or undefined for default of either 6, 8, or 12)
      * @param {boolean} [fPrefix]
-     * @return {string} the octal representation of n
+     * @returns {string} the octal representation of n
      */
     static toOct(n, cch, fPrefix)
     {
@@ -886,7 +886,7 @@ class Str {
      *
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of decimal digits (0 or undefined for default of either 5 or 11)
-     * @return {string} the decimal representation of n
+     * @returns {string} the decimal representation of n
      */
     static toDec(n, cch)
     {
@@ -922,7 +922,7 @@ class Str {
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of hex digits (0 or undefined for default of either 4, 8, or 9)
      * @param {boolean} [fPrefix]
-     * @return {string} the hex representation of n
+     * @returns {string} the hex representation of n
      */
     static toHex(n, cch, fPrefix)
     {
@@ -946,7 +946,7 @@ class Str {
      * Alias for Str.toHex(b, 2, true)
      *
      * @param {number|null|undefined} b is a byte value
-     * @return {string} the hex representation of b
+     * @returns {string} the hex representation of b
      */
     static toHexByte(b)
     {
@@ -959,7 +959,7 @@ class Str {
      * Alias for Str.toHex(w, 4, true)
      *
      * @param {number|null|undefined} w is a word (16-bit) value
-     * @return {string} the hex representation of w
+     * @returns {string} the hex representation of w
      */
     static toHexWord(w)
     {
@@ -972,7 +972,7 @@ class Str {
      * Alias for Str.toHex(l, 8, true)
      *
      * @param {number|null|undefined} l is a dword (32-bit) value
-     * @return {string} the hex representation of w
+     * @returns {string} the hex representation of w
      */
     static toHexLong(l)
     {
@@ -989,7 +989,7 @@ class Str {
      *
      * @param {string} sFileName
      * @param {boolean} [fStripExt]
-     * @return {string}
+     * @returns {string}
      */
     static getBaseName(sFileName, fStripExt)
     {
@@ -1021,7 +1021,7 @@ class Str {
      * Note that we EXCLUDE the period from the returned extension, whereas path.extname() includes it.
      *
      * @param {string} sFileName
-     * @return {string} the filename's extension (in lower-case and EXCLUDING the "."), or an empty string
+     * @returns {string} the filename's extension (in lower-case and EXCLUDING the "."), or an empty string
      */
     static getExtension(sFileName)
     {
@@ -1039,7 +1039,7 @@ class Str {
      *
      * @param {string} s
      * @param {string} sSuffix
-     * @return {boolean} true if s ends with sSuffix, false if not
+     * @returns {boolean} true if s ends with sSuffix, false if not
      */
     static endsWith(s, sSuffix)
     {
@@ -1050,7 +1050,7 @@ class Str {
      * escapeHTML(sHTML)
      *
      * @param {string} sHTML
-     * @return {string} with special characters "escaped" as HTML entities, similar to PHP's htmlspecialchars()
+     * @returns {string} with special characters "escaped" as HTML entities, similar to PHP's htmlspecialchars()
      */
     static escapeHTML(sHTML)
     {
@@ -1088,7 +1088,7 @@ class Str {
      * @param {string} sSearch
      * @param {string} sReplace
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static replace(sSearch, sReplace, s)
     {
@@ -1105,7 +1105,7 @@ class Str {
      * @param {string} sSearch
      * @param {string} sReplace
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static replaceAll(sSearch, sReplace, s)
     {
@@ -1119,7 +1119,7 @@ class Str {
      *
      * @param {Object} a
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static replaceArray(a, s)
     {
@@ -1151,7 +1151,7 @@ class Str {
      * @param {string} s is a string
      * @param {number} cch is desired length
      * @param {boolean} [fPadLeft] (default is padding on the right)
-     * @return {string} the original string (s) with spaces padding it to the specified length
+     * @returns {string} the original string (s) with spaces padding it to the specified length
      */
     static pad(s, cch, fPadLeft)
     {
@@ -1175,7 +1175,7 @@ class Str {
      * local time.
      *
      * @param {...} args
-     * @return {Date} (UTC unless a time string with a non-GMT timezone is explicitly provided)
+     * @returns {Date} (UTC unless a time string with a non-GMT timezone is explicitly provided)
      */
     static parseDate(...args)
     {
@@ -1198,7 +1198,7 @@ class Str {
      * isValidDate(date)
      *
      * @param {Date} date
-     * @return {boolean}
+     * @returns {boolean}
      */
     static isValidDate(date)
     {
@@ -1218,7 +1218,7 @@ class Str {
      *
      * @param {string} format
      * @param {...} args
-     * @return {string}
+     * @returns {string}
      */
     static sprintf(format, ...args)
     {
@@ -1592,7 +1592,7 @@ class Str {
      *
      * @param {string} s
      * @param {boolean} [fPad]
-     * @return {string}
+     * @returns {string}
      */
     static stripLeadingZeros(s, fPad)
     {
@@ -1606,7 +1606,7 @@ class Str {
      * trim(s)
      *
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static trim(s)
     {
@@ -1620,7 +1620,7 @@ class Str {
      * toASCIICode(b)
      *
      * @param {number} b
-     * @return {string}
+     * @returns {string}
      */
     static toASCIICode(b)
     {
@@ -1730,7 +1730,7 @@ class Usr {
      * @param {Array} a is an array
      * @param {number|string|Array|Object} v
      * @param {function((number|string|Array|Object), (number|string|Array|Object))} [fnCompare]
-     * @return {number} the index of matching entry if non-negative, otherwise the index of the insertion point
+     * @returns {number} the index of matching entry if non-negative, otherwise the index of the insertion point
      */
     static binarySearch(a, v, fnCompare)
     {
@@ -1778,7 +1778,7 @@ class Usr {
     /**
      * getTimestamp()
      *
-     * @return {string} timestamp containing the current date and time ("yyyy-mm-dd hh:mm:ss")
+     * @returns {string} timestamp containing the current date and time ("yyyy-mm-dd hh:mm:ss")
      */
     static getTimestamp()
     {
@@ -1801,7 +1801,7 @@ class Usr {
      *
      * @param {number} nMonth (1-12)
      * @param {number} nYear (normally a 4-digit year, but it may also be mod 100)
-     * @return {number} the maximum (1-based) day allowed for the specified month and year
+     * @returns {number} the maximum (1-based) day allowed for the specified month and year
      */
     static getMonthDays(nMonth, nYear)
     {
@@ -1838,7 +1838,7 @@ class Usr {
      *
      * @param {Date} date
      * @param {number} days (+/-)
-     * @return {Date}
+     * @returns {Date}
      */
     static adjustDays(date, days)
     {
@@ -1850,7 +1850,7 @@ class Usr {
      *
      * @param {Date|string} date1
      * @param {Date|string} date2
-     * @return {number} (date1 - date2, returned as a signed integer number of days)
+     * @returns {number} (date1 - date2, returned as a signed integer number of days)
      */
     static subtractDays(date1, date2)
     {
@@ -1873,7 +1873,7 @@ class Usr {
      * The above set bit field "bfs.num" in numeric variable "n" to the value 1.
      *
      * @param {Object} bfs
-     * @return {BitFields}
+     * @returns {BitFields}
      */
     static defineBitFields(bfs)
     {
@@ -1892,7 +1892,7 @@ class Usr {
      *
      * @param {BitFields} bfs
      * @param {...number} var_args
-     * @return {number} a value containing all supplied bit fields
+     * @returns {number} a value containing all supplied bit fields
      */
     static initBitFields(bfs, var_args)
     {
@@ -1909,7 +1909,7 @@ class Usr {
      *
      * @param {BitField} bf
      * @param {number} v is a value containing bit fields
-     * @return {number} the value of the bit field in v defined by bf
+     * @returns {number} the value of the bit field in v defined by bf
      */
     static getBitField(bf, v)
     {
@@ -1922,7 +1922,7 @@ class Usr {
      * @param {BitField} bf
      * @param {number} v is a value containing bit fields
      * @param {number} n is a value to store in v in the bit field defined by bf
-     * @return {number} updated v
+     * @returns {number} updated v
      */
     static setBitField(bf, v, n)
     {
@@ -4972,7 +4972,7 @@ class PanelX80 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -5007,7 +5007,7 @@ class PanelX80 extends Component {
      * @this {PanelX80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -5021,7 +5021,7 @@ class PanelX80 extends Component {
      * @this {PanelX80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -5245,7 +5245,7 @@ class BusX80 extends Component {
      * @this {BusX80}
      * @param {Object|null} data (always null because we supply no powerDown() handler)
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -5280,7 +5280,7 @@ class BusX80 extends Component {
      * @param {number} addr is the starting physical address of the request
      * @param {number} size of the request, in bytes
      * @param {number} type is one of the MemoryX80.TYPE constants
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     addMemory(addr, size, type)
     {
@@ -5343,7 +5343,7 @@ class BusX80 extends Component {
      * @this {BusX80}
      * @param {number} addr
      * @param {number} size
-     * @return {boolean} true if all blocks were clean, false if dirty; all blocks are cleaned in the process
+     * @returns {boolean} true if all blocks were clean, false if dirty; all blocks are cleaned in the process
      */
     cleanMemory(addr, size)
     {
@@ -5371,7 +5371,7 @@ class BusX80 extends Component {
      * @param {Object} [info] previous BusInfoX80, if any
      * @param {number} [addr] starting address of range (0 if none provided)
      * @param {number} [size] size of range, in bytes (up to end of address space if none provided)
-     * @return {Object} updated info (or new info if no previous info provided)
+     * @returns {Object} updated info (or new info if no previous info provided)
      */
     scanMemory(info, addr, size)
     {
@@ -5400,7 +5400,7 @@ class BusX80 extends Component {
      * getWidth()
      *
      * @this {BusX80}
-     * @return {number}
+     * @returns {number}
      */
     getWidth()
     {
@@ -5417,7 +5417,7 @@ class BusX80 extends Component {
      * @this {BusX80}
      * @param {number} addr
      * @param {number} size
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     removeMemory(addr, size)
     {
@@ -5442,7 +5442,7 @@ class BusX80 extends Component {
      * @this {BusX80}
      * @param {number} addr is the starting physical address
      * @param {number} size of the request, in bytes
-     * @return {Array} of Memory blocks
+     * @returns {Array} of Memory blocks
      */
     getMemoryBlocks(addr, size)
     {
@@ -5493,7 +5493,7 @@ class BusX80 extends Component {
      *
      * @this {BusX80}
      * @param {number} addr is a physical address
-     * @return {number} byte (8-bit) value at that address
+     * @returns {number} byte (8-bit) value at that address
      */
     getByte(addr)
     {
@@ -5507,7 +5507,7 @@ class BusX80 extends Component {
      *
      * @this {BusX80}
      * @param {number} addr is a physical address
-     * @return {number} byte (8-bit) value at that address
+     * @returns {number} byte (8-bit) value at that address
      */
     getByteDirect(addr)
     {
@@ -5519,7 +5519,7 @@ class BusX80 extends Component {
      *
      * @this {BusX80}
      * @param {number} addr is a physical address
-     * @return {number} word (16-bit) value at that address
+     * @returns {number} word (16-bit) value at that address
      */
     getShort(addr)
     {
@@ -5538,7 +5538,7 @@ class BusX80 extends Component {
      *
      * @this {BusX80}
      * @param {number} addr is a physical address
-     * @return {number} word (16-bit) value at that address
+     * @returns {number} word (16-bit) value at that address
      */
     getShortDirect(addr)
     {
@@ -5675,7 +5675,7 @@ class BusX80 extends Component {
      *
      * @this {BusX80}
      * @param {boolean} [fAll] (true to save all non-ROM memory blocks, regardless of their dirty flags)
-     * @return {Array} a
+     * @returns {Array} a
      */
     saveMemory(fAll)
     {
@@ -5713,7 +5713,7 @@ class BusX80 extends Component {
      *
      * @this {BusX80}
      * @param {Array} a
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     restoreMemory(a)
     {
@@ -5743,7 +5743,7 @@ class BusX80 extends Component {
      *
      * @this {BusX80}
      * @param {number} [port]
-     * @return {boolean} true if break on port input enabled, false if disabled
+     * @returns {boolean} true if break on port input enabled, false if disabled
      */
     addPortInputBreak(port)
     {
@@ -5823,7 +5823,7 @@ class BusX80 extends Component {
      * @param {number} port
      * @param {number} size (1, 2 or 4)
      * @param {number} [addrIP] is the IP value at the time of the input
-     * @return {number} simulated port data
+     * @returns {number} simulated port data
      *
      * NOTE: It seems that parts of the ROM BIOS (like the RS-232 probes around F000:E5D7 in the 5150 BIOS)
      * assume that ports for non-existent hardware return 0xff rather than 0x00, hence my new default (0xff) below.
@@ -5883,7 +5883,7 @@ class BusX80 extends Component {
      *
      * @this {BusX80}
      * @param {number} [port]
-     * @return {boolean} true if break on port output enabled, false if disabled
+     * @returns {boolean} true if break on port output enabled, false if disabled
      */
     addPortOutputBreak(port)
     {
@@ -6053,7 +6053,7 @@ class BusX80 extends Component {
      * @param {number} addr
      * @param {number} size
      * @param {boolean} [fQuiet] (true if any error should be quietly logged)
-     * @return {boolean} false
+     * @returns {boolean} false
      */
     reportError(op, addr, size, fQuiet)
     {
@@ -6319,7 +6319,7 @@ class MemoryX80 {
      * of the controller component.
      *
      * @this {MemoryX80}
-     * @return {Array|Int32Array|null}
+     * @returns {Array|Int32Array|null}
      */
     save()
     {
@@ -6364,7 +6364,7 @@ class MemoryX80 {
      *
      * @this {MemoryX80}
      * @param {Array|null} adw
-     * @return {boolean} true if successful, false if block size mismatch
+     * @returns {boolean} true if successful, false if block size mismatch
      */
     restore(adw)
     {
@@ -6580,7 +6580,7 @@ class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readNone(off, addr)
     {
@@ -6611,7 +6611,7 @@ class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortDefault(off, addr)
     {
@@ -6638,7 +6638,7 @@ class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteMemory(off, addr)
     {
@@ -6654,7 +6654,7 @@ class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortMemory(off, addr)
     {
@@ -6726,7 +6726,7 @@ class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteChecked(off, addr)
     {
@@ -6742,7 +6742,7 @@ class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortChecked(off, addr)
     {
@@ -6790,7 +6790,7 @@ class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteBE(off, addr)
     {
@@ -6803,7 +6803,7 @@ class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteLE(off, addr)
     {
@@ -6816,7 +6816,7 @@ class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortBE(off, addr)
     {
@@ -6829,7 +6829,7 @@ class MemoryX80 {
      * @this {MemoryX80}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readShortLE(off, addr)
     {
@@ -6909,7 +6909,7 @@ class MemoryX80 {
      * adjustEndian(dw)
      *
      * @param {number} dw
-     * @return {number}
+     * @returns {number}
      */
     static adjustEndian(dw)
     {
@@ -7156,7 +7156,7 @@ class CPUx80 extends Component {
      * This is a placeholder for save support (overridden by the CPUStateX80 component).
      *
      * @this {CPUx80}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -7170,7 +7170,7 @@ class CPUx80 extends Component {
      *
      * @this {CPUx80}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -7183,7 +7183,7 @@ class CPUx80 extends Component {
      * @this {CPUx80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -7220,7 +7220,7 @@ class CPUx80 extends Component {
      * @this {CPUx80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -7237,7 +7237,7 @@ class CPUx80 extends Component {
      * autoStart()
      *
      * @this {CPUx80}
-     * @return {boolean} true if started, false if not
+     * @returns {boolean} true if started, false if not
      */
     autoStart()
     {
@@ -7260,7 +7260,7 @@ class CPUx80 extends Component {
      * isPowered()
      *
      * @this {CPUx80}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isPowered()
     {
@@ -7275,7 +7275,7 @@ class CPUx80 extends Component {
      * isRunning()
      *
      * @this {CPUx80}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isRunning()
     {
@@ -7288,7 +7288,7 @@ class CPUx80 extends Component {
      * This will be implemented by the CPUStateX80 component.
      *
      * @this {CPUx80}
-     * @return {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
+     * @returns {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
      */
     getChecksum()
     {
@@ -7303,7 +7303,7 @@ class CPUx80 extends Component {
      * the CPU is reset or restored.
      *
      * @this {CPUx80}
-     * @return {boolean} true if checksum generation enabled, false if not
+     * @returns {boolean} true if checksum generation enabled, false if not
      */
     resetChecksum()
     {
@@ -7415,7 +7415,7 @@ class CPUx80 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "run")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -7483,7 +7483,7 @@ class CPUx80 extends Component {
      *
      * @this {CPUx80}
      * @param {number} nCycles is the target number of cycles to drop the current burst to
-     * @return {boolean}
+     * @returns {boolean}
      */
     setBurstCycles(nCycles)
     {
@@ -7574,7 +7574,7 @@ class CPUx80 extends Component {
      *
      * @this {CPUx80}
      * @param {boolean} [fScaled] is true if the caller wants a cycle count relative to a multiplier of 1
-     * @return {number}
+     * @returns {number}
      */
     getCycles(fScaled)
     {
@@ -7609,7 +7609,7 @@ class CPUx80 extends Component {
      * This returns the CPU's "base" speed (ie, the original cycles per second defined for the machine)
      *
      * @this {CPUx80}
-     * @return {number}
+     * @returns {number}
      */
     getCyclesPerSecond()
     {
@@ -7638,7 +7638,7 @@ class CPUx80 extends Component {
      * getSpeed()
      *
      * @this {CPUx80}
-     * @return {number} the current speed multiplier
+     * @returns {number} the current speed multiplier
      */
     getSpeed()
     {
@@ -7649,7 +7649,7 @@ class CPUx80 extends Component {
      * getSpeedCurrent()
      *
      * @this {CPUx80}
-     * @return {string} the current speed, in mhz, as a string formatted to two decimal places
+     * @returns {string} the current speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedCurrent()
     {
@@ -7663,7 +7663,7 @@ class CPUx80 extends Component {
      * getSpeedTarget()
      *
      * @this {CPUx80}
-     * @return {string} the target speed, in mhz, as a string formatted to two decimal places
+     * @returns {string} the target speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedTarget()
     {
@@ -7685,7 +7685,7 @@ class CPUx80 extends Component {
      * @this {CPUx80}
      * @param {number} [nMultiplier] is the new proposed multiplier (reverts to 1 if the target was too high)
      * @param {boolean} [fUpdateFocus] is true to update Computer focus
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     setSpeed(nMultiplier, fUpdateFocus)
     {
@@ -7796,7 +7796,7 @@ class CPUx80 extends Component {
      * calcRemainingTime()
      *
      * @this {CPUx80}
-     * @return {number}
+     * @returns {number}
      */
     calcRemainingTime()
     {
@@ -7895,7 +7895,7 @@ class CPUx80 extends Component {
      * @param {string} id
      * @param {function()} callBack
      * @param {number} [ms] (if set, enables automatic setTimer calls)
-     * @return {number} timer index
+     * @returns {number} timer index
      */
     addTimer(id, callBack, ms = -1)
     {
@@ -7910,7 +7910,7 @@ class CPUx80 extends Component {
      *
      * @this {CPUx80}
      * @param {string} id
-     * @return {Array|null}
+     * @returns {Array|null}
      */
     findTimer(id)
     {
@@ -7940,7 +7940,7 @@ class CPUx80 extends Component {
      * @param {number} iTimer
      * @param {number} ms (converted into a cycle countdown internally)
      * @param {boolean} [fReset] (true if the timer should be reset even if already armed)
-     * @return {number} (number of cycles used to arm timer, or -1 if error)
+     * @returns {number} (number of cycles used to arm timer, or -1 if error)
      */
     setTimer(iTimer, ms, fReset)
     {
@@ -7969,7 +7969,7 @@ class CPUx80 extends Component {
      *
      * @this {CPUx80}
      * @param {number} ms
-     * @return {number} number of corresponding cycles
+     * @returns {number} number of corresponding cycles
      */
     getMSCycles(ms)
     {
@@ -7983,7 +7983,7 @@ class CPUx80 extends Component {
      *
      * @this {CPUx80}
      * @param {number} nCycles (number of cycles about to execute)
-     * @return {number} (either nCycles or less if a timer needs to fire)
+     * @returns {number} (either nCycles or less if a timer needs to fire)
      */
     getBurstCycles(nCycles)
     {
@@ -8036,7 +8036,7 @@ class CPUx80 extends Component {
      *
      * @this {CPUx80}
      * @param {boolean} [fReset]
-     * @return {number} (number of cycles executed in the most recent burst)
+     * @returns {number} (number of cycles executed in the most recent burst)
      */
     endBurst(fReset)
     {
@@ -8159,7 +8159,7 @@ class CPUx80 extends Component {
      *
      * @this {CPUx80}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {number} of cycles executed; 0 indicates that the last instruction was not executed
+     * @returns {number} of cycles executed; 0 indicates that the last instruction was not executed
      */
     stepCPU(nMinCycles)
     {
@@ -8417,7 +8417,7 @@ class CPUStateX80 extends CPUx80 {
      * getChecksum()
      *
      * @this {CPUStateX80}
-     * @return {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
+     * @returns {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
      */
     getChecksum()
     {
@@ -8432,7 +8432,7 @@ class CPUStateX80 extends CPUx80 {
      * This implements save support for the CPUStateX80 component.
      *
      * @this {CPUStateX80}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -8450,7 +8450,7 @@ class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -8480,7 +8480,7 @@ class CPUStateX80 extends CPUx80 {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "AX")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -8520,7 +8520,7 @@ class CPUStateX80 extends CPUx80 {
      * getBC()
      *
      * @this {CPUStateX80}
-     * @return {number}
+     * @returns {number}
      */
     getBC()
     {
@@ -8543,7 +8543,7 @@ class CPUStateX80 extends CPUx80 {
      * getDE()
      *
      * @this {CPUStateX80}
-     * @return {number}
+     * @returns {number}
      */
     getDE()
     {
@@ -8566,7 +8566,7 @@ class CPUStateX80 extends CPUx80 {
      * getHL()
      *
      * @this {CPUStateX80}
-     * @return {number}
+     * @returns {number}
      */
     getHL()
     {
@@ -8589,7 +8589,7 @@ class CPUStateX80 extends CPUx80 {
      * getSP()
      *
      * @this {CPUStateX80}
-     * @return {number}
+     * @returns {number}
      */
     getSP()
     {
@@ -8611,7 +8611,7 @@ class CPUStateX80 extends CPUx80 {
      * getPC()
      *
      * @this {CPUStateX80}
-     * @return {number}
+     * @returns {number}
      */
     getPC()
     {
@@ -8623,7 +8623,7 @@ class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} off
-     * @return {number}
+     * @returns {number}
      */
     offPC(off)
     {
@@ -8655,7 +8655,7 @@ class CPUStateX80 extends CPUx80 {
      * getCF()
      *
      * @this {CPUStateX80}
-     * @return {number} 0 or 1 (CPUDefX80.PS.CF)
+     * @returns {number} 0 or 1 (CPUDefX80.PS.CF)
      */
     getCF()
     {
@@ -8697,7 +8697,7 @@ class CPUStateX80 extends CPUx80 {
      * getPF()
      *
      * @this {CPUStateX80}
-     * @return {number} 0 or CPUDefX80.PS.PF
+     * @returns {number} 0 or CPUDefX80.PS.PF
      */
     getPF()
     {
@@ -8728,7 +8728,7 @@ class CPUStateX80 extends CPUx80 {
      * getAF()
      *
      * @this {CPUStateX80}
-     * @return {number} 0 or CPUDefX80.PS.AF
+     * @returns {number} 0 or CPUDefX80.PS.AF
      */
     getAF()
     {
@@ -8759,7 +8759,7 @@ class CPUStateX80 extends CPUx80 {
      * getZF()
      *
      * @this {CPUStateX80}
-     * @return {number} 0 or CPUDefX80.PS.ZF
+     * @returns {number} 0 or CPUDefX80.PS.ZF
      */
     getZF()
     {
@@ -8790,7 +8790,7 @@ class CPUStateX80 extends CPUx80 {
      * getSF()
      *
      * @this {CPUStateX80}
-     * @return {number} 0 or CPUDefX80.PS.SF
+     * @returns {number} 0 or CPUDefX80.PS.SF
      */
     getSF()
     {
@@ -8821,7 +8821,7 @@ class CPUStateX80 extends CPUx80 {
      * getIF()
      *
      * @this {CPUStateX80}
-     * @return {number} 0 or CPUDefX80.PS.IF
+     * @returns {number} 0 or CPUDefX80.PS.IF
      */
     getIF()
     {
@@ -8842,7 +8842,7 @@ class CPUStateX80 extends CPUx80 {
      * getPS()
      *
      * @this {CPUStateX80}
-     * @return {number}
+     * @returns {number}
      */
     getPS()
     {
@@ -8871,7 +8871,7 @@ class CPUStateX80 extends CPUx80 {
      * getPSW()
      *
      * @this {CPUStateX80}
-     * @return {number}
+     * @returns {number}
      */
     getPSW()
     {
@@ -8895,7 +8895,7 @@ class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} src
-     * @return {number} regA + src
+     * @returns {number} regA + src
      */
     addByte(src)
     {
@@ -8908,7 +8908,7 @@ class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} src
-     * @return {number} regA + src + carry
+     * @returns {number} regA + src + carry
      */
     addByteCarry(src)
     {
@@ -8924,7 +8924,7 @@ class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} src
-     * @return {number} regA & src
+     * @returns {number} regA & src
      */
     andByte(src)
     {
@@ -8941,7 +8941,7 @@ class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} b
-     * @return {number}
+     * @returns {number}
      */
     decByte(b)
     {
@@ -8956,7 +8956,7 @@ class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} b
-     * @return {number}
+     * @returns {number}
      */
     incByte(b)
     {
@@ -8971,7 +8971,7 @@ class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} src
-     * @return {number} regA | src
+     * @returns {number} regA | src
      */
     orByte(src)
     {
@@ -9010,7 +9010,7 @@ class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} src
-     * @return {number} regA - src
+     * @returns {number} regA - src
      */
     subByte(src)
     {
@@ -9031,7 +9031,7 @@ class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} src
-     * @return {number} regA - src - carry
+     * @returns {number} regA - src - carry
      */
     subByteBorrow(src)
     {
@@ -9045,7 +9045,7 @@ class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} src
-     * @return {number} regA ^ src
+     * @returns {number} regA ^ src
      */
     xorByte(src)
     {
@@ -9057,7 +9057,7 @@ class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} addr is a linear address
-     * @return {number} byte (8-bit) value at that address
+     * @returns {number} byte (8-bit) value at that address
      */
     getByte(addr)
     {
@@ -9069,7 +9069,7 @@ class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} addr is a linear address
-     * @return {number} word (16-bit) value at that address
+     * @returns {number} word (16-bit) value at that address
      */
     getWord(addr)
     {
@@ -9104,7 +9104,7 @@ class CPUStateX80 extends CPUx80 {
      * getPCByte()
      *
      * @this {CPUStateX80}
-     * @return {number} byte at the current PC; PC advanced by 1
+     * @returns {number} byte at the current PC; PC advanced by 1
      */
     getPCByte()
     {
@@ -9117,7 +9117,7 @@ class CPUStateX80 extends CPUx80 {
      * getPCWord()
      *
      * @this {CPUStateX80}
-     * @return {number} word at the current PC; PC advanced by 2
+     * @returns {number} word at the current PC; PC advanced by 2
      */
     getPCWord()
     {
@@ -9130,7 +9130,7 @@ class CPUStateX80 extends CPUx80 {
      * popWord()
      *
      * @this {CPUStateX80}
-     * @return {number} word popped from the current SP; SP increased by 2
+     * @returns {number} word popped from the current SP; SP increased by 2
      */
     popWord()
     {
@@ -9155,7 +9155,7 @@ class CPUStateX80 extends CPUx80 {
      * checkINTR()
      *
      * @this {CPUStateX80}
-     * @return {boolean} true if execution may proceed, false if not
+     * @returns {boolean} true if execution may proceed, false if not
      */
     checkINTR()
     {
@@ -9307,7 +9307,7 @@ class CPUStateX80 extends CPUx80 {
      *
      * @this {CPUStateX80}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {number} of cycles executed; 0 indicates a pre-execution condition (ie, an execution breakpoint
+     * @returns {number} of cycles executed; 0 indicates a pre-execution condition (ie, an execution breakpoint
      * was hit), -1 indicates a post-execution condition (eg, a read or write breakpoint was hit), and a positive
      * number indicates successful completion of that many cycles (which should always be >= nMinCycles).
      */
@@ -12376,7 +12376,7 @@ class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {string} sBits describing switch settings
      * @param {number} [bDefault]
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     parseDIPSwitches(sBits, bDefault)
     {
@@ -12403,7 +12403,7 @@ class ChipSetX80 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "sw1")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -12447,7 +12447,7 @@ class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -12467,7 +12467,7 @@ class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -12511,7 +12511,7 @@ class ChipSetX80 extends Component {
      * This implements save support for the ChipSet component.
      *
      * @this {ChipSetX80}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -12537,7 +12537,7 @@ class ChipSetX80 extends Component {
      *
      * @this {ChipSetX80}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -12649,7 +12649,7 @@ class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {number} port (0x00)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inSIStatus0(port, addrFrom)
     {
@@ -12664,7 +12664,7 @@ class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {number} port (0x01)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inSIStatus1(port, addrFrom)
     {
@@ -12679,7 +12679,7 @@ class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {number} port (0x02)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inSIStatus2(port, addrFrom)
     {
@@ -12694,7 +12694,7 @@ class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {number} port (0x03)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inSIShiftResult(port, addrFrom)
     {
@@ -12783,7 +12783,7 @@ class ChipSetX80 extends Component {
      * overall performance.
      *
      * @param {number} iBit
-     * @return {number}
+     * @returns {number}
      */
     getVT100LBA(iBit)
     {
@@ -12793,7 +12793,7 @@ class ChipSetX80 extends Component {
     /**
      * getNVRAddr()
      *
-     * @return {number}
+     * @returns {number}
      */
     getNVRAddr()
     {
@@ -12878,7 +12878,7 @@ class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {number} port (0x42)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inVT100Flags(port, addrFrom)
     {
@@ -13502,7 +13502,7 @@ class ROMx80 extends Component {
      * @this {ROMx80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -13530,7 +13530,7 @@ class ROMx80 extends Component {
      * @this {ROMx80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -13680,7 +13680,7 @@ class ROMx80 extends Component {
      *
      * @this {ROMx80}
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     addROM(addr)
     {
@@ -13846,7 +13846,7 @@ class RAMx80 extends Component {
      * @this {RAMx80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -13865,7 +13865,7 @@ class RAMx80 extends Component {
      * @this {RAMx80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -13986,7 +13986,7 @@ class RAMx80 extends Component {
      *
      * @this {RAMx80}
      * @param {number} addr (of the HLT opcode)
-     * @return {boolean} true if special processing performed, false if not
+     * @returns {boolean} true if special processing performed, false if not
      */
     checkCPMVector(addr)
     {
@@ -14027,7 +14027,7 @@ class RAMx80 extends Component {
      *
      * @this {RAMx80}
      * @param {number} ch
-     * @return {string}
+     * @returns {string}
      */
     getCPMChar(ch)
     {
@@ -14040,7 +14040,7 @@ class RAMx80 extends Component {
      * @this {RAMx80}
      * @param {number} addr (of a string)
      * @param {string|number} [chEnd] (terminating character, default is 0)
-     * @return {string}
+     * @returns {string}
      */
     getCPMString(addr, chEnd)
     {
@@ -14164,7 +14164,7 @@ class KeyboardX80 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "esc")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -14371,7 +14371,7 @@ class KeyboardX80 extends Component {
      * @this {KeyboardX80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -14391,7 +14391,7 @@ class KeyboardX80 extends Component {
      * @this {KeyboardX80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -14435,7 +14435,7 @@ class KeyboardX80 extends Component {
      * This implements save support for the Keyboard component.
      *
      * @this {KeyboardX80}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -14457,7 +14457,7 @@ class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -14535,7 +14535,7 @@ class KeyboardX80 extends Component {
      * @param {number} keyCode (ie, either a keycode or string ID)
      * @param {boolean} fDown (true if key going down, false if key going up)
      * @param {boolean} [fRight] (true if key is on the right, false if not or unknown or n/a)
-     * @return {boolean} (fDown updated as needed for CAPS-LOCK weirdness)
+     * @returns {boolean} (fDown updated as needed for CAPS-LOCK weirdness)
      */
     checkModifierKeys(keyCode, fDown, fRight)
     {
@@ -14583,7 +14583,7 @@ class KeyboardX80 extends Component {
      * Returns a number if the keyCode exists in the KEYMAP, or a string if the keyCode has a string ID.
      *
      * @this {KeyboardX80}
-     * @return {string|number|null}
+     * @returns {string|number|null}
      */
     getSoftCode(keyCode)
     {
@@ -14605,7 +14605,7 @@ class KeyboardX80 extends Component {
      * @this {KeyboardX80}
      * @param {Object} event
      * @param {boolean} fDown is true for a keyDown event, false for up
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     onKeyDown(event, fDown)
     {
@@ -14705,7 +14705,7 @@ class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {Object} event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     onKeyPress(event)
     {
@@ -14748,7 +14748,7 @@ class KeyboardX80 extends Component {
      * @this {KeyboardX80}
      * @param {Object} event
      * @param {boolean} fDown is true for a keyDown event, false for up
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     oniOSKeyDown(event, fDown)
     {
@@ -14787,7 +14787,7 @@ class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {Object} event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     oniOSKeyPress(event)
     {
@@ -14837,7 +14837,7 @@ class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {Object} event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     onPaste(event)
     {
@@ -14871,7 +14871,7 @@ class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {number} bMapping
-     * @return {number}
+     * @returns {number}
      */
     indexOfKeyMap(bMapping)
     {
@@ -14886,7 +14886,7 @@ class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {number} bMapping
-     * @return {number}
+     * @returns {number}
      */
     indexOfCharMap(bMapping)
     {
@@ -14901,7 +14901,7 @@ class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {number|string} softCode
-     * @return {number} index of softCode in aKeysActive, or -1 if not found
+     * @returns {number} index of softCode in aKeysActive, or -1 if not found
      */
     indexOfSoftKey(softCode)
     {
@@ -14918,7 +14918,7 @@ class KeyboardX80 extends Component {
      * @param {number|string} softCode
      * @param {boolean} fDown is true for a down event, false for up
      * @param {boolean} [fAutoRelease] is true only if we know we want the key to auto-release
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     onSoftKeyDown(softCode, fDown, fAutoRelease)
     {
@@ -15060,7 +15060,7 @@ class KeyboardX80 extends Component {
      * I'm going with solution #1 because it's less overhead.
      *
      * @this {KeyboardX80}
-     * @return {boolean} (true if ready, false if not)
+     * @returns {boolean} (true if ready, false if not)
      */
     isVT100TransmitterReady()
     {
@@ -15088,7 +15088,7 @@ class KeyboardX80 extends Component {
      * @this {KeyboardX80}
      * @param {number} port (0x82)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to write the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inVT100UARTAddress(port, addrFrom)
     {
@@ -15754,7 +15754,7 @@ class VideoX80 extends Component {
      * initBuffers()
      *
      * @this {VideoX80}
-     * @return {boolean}
+     * @returns {boolean}
      */
     initBuffers()
     {
@@ -15868,7 +15868,7 @@ class VideoX80 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "refresh")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -16012,7 +16012,7 @@ class VideoX80 extends Component {
      * createFonts()
      *
      * @this {VideoX80}
-     * @return {boolean}
+     * @returns {boolean}
      */
     createFonts()
     {
@@ -16052,7 +16052,7 @@ class VideoX80 extends Component {
      * @param {number} cxCell is the target width of each character in the grid
      * @param {number} cyCell is the target height of each character in the grid
      * @param {boolean} [fUnderline] (null for unmodified font, false for reverse video, true for underline)
-     * @return {Object}
+     * @returns {Object}
      */
     createFontVariation(cxCell, cyCell, fUnderline)
     {
@@ -16124,7 +16124,7 @@ class VideoX80 extends Component {
      * @this {VideoX80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -16210,7 +16210,7 @@ class VideoX80 extends Component {
      * @this {VideoX80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -16223,7 +16223,7 @@ class VideoX80 extends Component {
      * This implements save support for the VideoX80 component.
      *
      * @this {VideoX80}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -16239,7 +16239,7 @@ class VideoX80 extends Component {
      *
      * @this {VideoX80}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -16327,7 +16327,7 @@ class VideoX80 extends Component {
      * doFullScreen()
      *
      * @this {VideoX80}
-     * @return {boolean} true if request successful, false if not (eg, failed OR not supported)
+     * @returns {boolean} true if request successful, false if not (eg, failed OR not supported)
      */
     doFullScreen()
     {
@@ -16424,7 +16424,7 @@ class VideoX80 extends Component {
      * getRefreshTime()
      *
      * @this {VideoX80}
-     * @return {number} (number of milliseconds per refresh)
+     * @returns {number} (number of milliseconds per refresh)
      */
     getRefreshTime()
     {
@@ -17225,7 +17225,7 @@ class SerialPortX80 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "buffer")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -17334,7 +17334,7 @@ class SerialPortX80 extends Component {
      *
      * @this {SerialPortX80}
      * @param {number} b
-     * @return {boolean} true if echo, false if not
+     * @returns {boolean} true if echo, false if not
      */
     echoByte(b)
     {
@@ -17475,7 +17475,7 @@ class SerialPortX80 extends Component {
      * @this {SerialPortX80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -17504,7 +17504,7 @@ class SerialPortX80 extends Component {
      * @this {SerialPortX80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -17527,7 +17527,7 @@ class SerialPortX80 extends Component {
      * This implements save support for the SerialPortX80 component.
      *
      * @this {SerialPortX80}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -17543,7 +17543,7 @@ class SerialPortX80 extends Component {
      *
      * @this {SerialPortX80}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -17555,7 +17555,7 @@ class SerialPortX80 extends Component {
      *
      * @this {SerialPortX80}
      * @param {Array} [data]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initState(data)
     {
@@ -17577,7 +17577,7 @@ class SerialPortX80 extends Component {
      * saveRegisters()
      *
      * @this {SerialPortX80}
-     * @return {Array}
+     * @returns {Array}
      */
     saveRegisters()
     {
@@ -17598,7 +17598,7 @@ class SerialPortX80 extends Component {
      *
      * @this {SerialPortX80}
      * @param {number} maskRate (either SerialPortX80.UART8251.BAUDRATES.RECV_RATE or SerialPortX80.UART8251.BAUDRATES.XMIT_RATE)
-     * @return {number} (number of milliseconds per byte)
+     * @returns {number} (number of milliseconds per byte)
      */
     getBaudTimeout(maskRate)
     {
@@ -17617,7 +17617,7 @@ class SerialPortX80 extends Component {
      *
      * @this {SerialPortX80}
      * @param {number} b
-     * @return {boolean}
+     * @returns {boolean}
      */
     receiveByte(b)
     {
@@ -17643,7 +17643,7 @@ class SerialPortX80 extends Component {
      *
      * @this {SerialPortX80}
      * @param {number|string|undefined} [data]
-     * @return {boolean} true if received, false if not
+     * @returns {boolean} true if received, false if not
      */
     receiveData(data)
     {
@@ -17686,7 +17686,7 @@ class SerialPortX80 extends Component {
      *
      * @this {SerialPortX80}
      * @param {number} b
-     * @return {boolean} true if transmitted, false if not
+     * @returns {boolean} true if transmitted, false if not
      */
     transmitByte(b)
     {
@@ -17730,7 +17730,7 @@ class SerialPortX80 extends Component {
      *
      * @this {SerialPortX80}
      * @param {string} [sData]
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     transmitData(sData)
     {
@@ -17747,7 +17747,7 @@ class SerialPortX80 extends Component {
      * Called whenever a ChipSet circuit needs the SerialPortX80 UART's transmitter status.
      *
      * @this {SerialPortX80}
-     * @return {boolean} (true if ready, false if not)
+     * @returns {boolean} (true if ready, false if not)
      */
     isTransmitterReady()
     {
@@ -17760,7 +17760,7 @@ class SerialPortX80 extends Component {
      * @this {SerialPortX80}
      * @param {number} port (0x0)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inData(port, addrFrom)
     {
@@ -17776,7 +17776,7 @@ class SerialPortX80 extends Component {
      * @this {SerialPortX80}
      * @param {number} port (0x1)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inControl(port, addrFrom)
     {
@@ -18124,7 +18124,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string} sReg
      * @param {number} [off] optional offset into sReg
-     * @return {number} register index, or -1 if not found
+     * @returns {number} register index, or -1 if not found
      */
     getRegIndex(sReg, off)
     {
@@ -18138,7 +18138,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {number} iReg
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getRegValue(iReg)
     {
@@ -18155,7 +18155,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string} s
      * @param {string} sAddr
-     * @return {string}
+     * @returns {string}
      */
     parseAddrReference(s, sAddr)
     {
@@ -18166,7 +18166,7 @@ class DbgLib extends Component {
      * getNextCommand()
      *
      * @this {DbgLib}
-     * @return {string}
+     * @returns {string}
      */
     getNextCommand()
     {
@@ -18184,7 +18184,7 @@ class DbgLib extends Component {
      * getPrevCommand()
      *
      * @this {DbgLib}
-     * @return {string|null}
+     * @returns {string|null}
      */
     getPrevCommand()
     {
@@ -18202,7 +18202,7 @@ class DbgLib extends Component {
      * @param {string|undefined} sCmd
      * @param {boolean} [fSave] is true to save the command, false if not
      * @param {string} [chSep] is the command separator character (default is ';')
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     parseCommand(sCmd, fSave, chSep)
     {
@@ -18282,7 +18282,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst & src)
+     * @returns {number} (dst & src)
      */
     evalAND(dst, src)
     {
@@ -18316,7 +18316,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst | src)
+     * @returns {number} (dst | src)
      */
     evalIOR(dst, src)
     {
@@ -18350,7 +18350,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst ^ src)
+     * @returns {number} (dst ^ src)
      */
     evalXOR(dst, src)
     {
@@ -18383,7 +18383,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst * src)
+     * @returns {number} (dst * src)
      */
     evalMUL(dst, src)
     {
@@ -18397,7 +18397,7 @@ class DbgLib extends Component {
      * @param {number} v
      * @param {number} [nBits]
      * @param {boolean} [fUnsigned]
-     * @return {number}
+     * @returns {number}
      */
     truncate(v, nBits, fUnsigned)
     {
@@ -18471,7 +18471,7 @@ class DbgLib extends Component {
      * @param {Array.<number>} aVals
      * @param {Array.<string>} aOps
      * @param {number} [cOps] (default is -1 for all)
-     * @return {boolean} true if successful, false if error
+     * @returns {boolean} true if successful, false if error
      */
     evalOps(aVals, aOps, cOps = -1)
     {
@@ -18595,7 +18595,7 @@ class DbgLib extends Component {
      * @param {number} iLimit
      * @param {number} nBase
      * @param {Array|undefined} [aUndefined]
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     parseArray(asValues, iValue, iLimit, nBase, aUndefined)
     {
@@ -18753,7 +18753,7 @@ class DbgLib extends Component {
      * @param {string} chDelim
      * @param {number} nBits
      * @param {number} cchMax
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     parseASCII(sExp, chDelim, nBits, cchMax)
     {
@@ -18815,7 +18815,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string|undefined} sExp
      * @param {Array|undefined|boolean} [fQuiet]
-     * @return {number|undefined} numeric value, or undefined if sExp contains any undefined or invalid values
+     * @returns {number|undefined} numeric value, or undefined if sExp contains any undefined or invalid values
      */
     parseExpression(sExp, fQuiet)
     {
@@ -18905,7 +18905,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} s
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     parseReference(s)
     {
@@ -18954,7 +18954,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     parseSysVars(s)
     {
@@ -18988,7 +18988,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} value
      * @param {number} nUnary
-     * @return {number}
+     * @returns {number}
      */
     parseUnary(value, nUnary)
     {
@@ -19020,7 +19020,7 @@ class DbgLib extends Component {
      * @param {string} [sName] is the name of the value, if any
      * @param {Array|boolean} [fQuiet]
      * @param {number} [nUnary] (0 for none, 1 for negate, 2 for complement, 3 for leading zeros)
-     * @return {number|undefined} numeric value, or undefined if sValue is either undefined or invalid
+     * @returns {number|undefined} numeric value, or undefined if sValue is either undefined or invalid
      */
     parseValue(sValue, sName, fQuiet, nUnary = 0)
     {
@@ -19078,7 +19078,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string|null|*} sVar
      * @param {number|undefined} value
-     * @return {boolean} true if value defined, false if not
+     * @returns {boolean} true if value defined, false if not
      */
     printValue(sVar, value)
     {
@@ -19104,7 +19104,7 @@ class DbgLib extends Component {
      * resetVariables()
      *
      * @this {DbgLib}
-     * @return {Object}
+     * @returns {Object}
      */
     resetVariables()
     {
@@ -19129,7 +19129,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} [sVar]
-     * @return {boolean} true if all value(s) defined, false if not
+     * @returns {boolean} true if all value(s) defined, false if not
      */
     printVariable(sVar)
     {
@@ -19164,7 +19164,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} sVar
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getVariable(sVar)
     {
@@ -19180,7 +19180,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} sVar
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     getVariableFixup(sVar)
     {
@@ -19192,7 +19192,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} sVar
-     * @return {boolean}
+     * @returns {boolean}
      */
     isVariable(sVar)
     {
@@ -19222,7 +19222,7 @@ class DbgLib extends Component {
      * @param {number} [nBits] (-1 to strip leading zeros, 0 to allow a variable number of digits)
      * @param {number} [nBase]
      * @param {number} [nGrouping] (if nBase is 2, this is a grouping; otherwise, it's a prefix condition)
-     * @return {string}
+     * @returns {string}
      */
     toStrBase(n, nBits = 0, nBase = 0, nGrouping = 0)
     {
@@ -19493,7 +19493,7 @@ class DebuggerX80 extends DbgLib {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "debugInput")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -19593,7 +19593,7 @@ class DebuggerX80 extends DbgLib {
      * @param {DbgAddrX80|null|undefined} dbgAddr
      * @param {boolean} [fWrite]
      * @param {number} [nb] number of bytes to check (1 or 2); default is 1
-     * @return {number} is the corresponding linear address, or CPUDefX80.ADDR_INVALID
+     * @returns {number} is the corresponding linear address, or CPUDefX80.ADDR_INVALID
      */
     getAddr(dbgAddr, fWrite, nb)
     {
@@ -19612,7 +19612,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {DbgAddrX80} dbgAddr
      * @param {number} [inc]
-     * @return {number}
+     * @returns {number}
      */
     getByte(dbgAddr, inc)
     {
@@ -19631,7 +19631,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {DbgAddrX80} dbgAddr
      * @param {boolean} [fAdvance]
-     * @return {number}
+     * @returns {number}
      */
     getWord(dbgAddr, fAdvance)
     {
@@ -19644,7 +19644,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {DbgAddrX80} dbgAddr
      * @param {number} [inc]
-     * @return {number}
+     * @returns {number}
      */
     getShort(dbgAddr, inc)
     {
@@ -19700,7 +19700,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {number} [addr]
-     * @return {DbgAddrX80}
+     * @returns {DbgAddrX80}
      */
     newAddr(addr)
     {
@@ -19715,7 +19715,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {DbgAddrX80} dbgAddr
      * @param {number} addr
-     * @return {DbgAddrX80}
+     * @returns {DbgAddrX80}
      */
     setAddr(dbgAddr, addr)
     {
@@ -19731,7 +19731,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {DbgAddrX80} dbgAddr
-     * @return {Array}
+     * @returns {Array}
      */
     packAddr(dbgAddr)
     {
@@ -19745,7 +19745,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {Array} aAddr
-     * @return {DbgAddrX80}
+     * @returns {DbgAddrX80}
      */
     unpackAddr(aAddr)
     {
@@ -19766,7 +19766,7 @@ class DebuggerX80 extends DbgLib {
      * @param {string|undefined} sAddr
      * @param {boolean} [fCode] (true if target is code, false if target is data)
      * @param {boolean} [fNoChecks] (true when setting breakpoints that may not be valid now, but will be later)
-     * @return {DbgAddrX80|null|undefined}
+     * @returns {DbgAddrX80|null|undefined}
      */
     parseAddr(sAddr, fCode, fNoChecks)
     {
@@ -19821,7 +19821,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {number|null|undefined} [off]
-     * @return {string} the hex representation of off
+     * @returns {string} the hex representation of off
      */
     toHexOffset(off)
     {
@@ -19833,7 +19833,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {DbgAddrX80} dbgAddr
-     * @return {string} the hex representation of the address
+     * @returns {string} the hex representation of the address
      */
     toHexAddr(dbgAddr)
     {
@@ -19850,7 +19850,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {DbgAddrX80} dbgAddr
      * @param {number} [cchMax] (default is 256)
-     * @return {string} (and dbgAddr advanced past the terminating zero)
+     * @returns {string} (and dbgAddr advanced past the terminating zero)
      */
     getSZ(dbgAddr, cchMax)
     {
@@ -20073,7 +20073,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {number} bitMessage is one Messages category flag
      * @param {function(Array.<string>)} fnDumper is a function the Debugger can use to dump data for that category
-     * @return {boolean} true if successfully registered, false if not
+     * @returns {boolean} true if successfully registered, false if not
      */
     messageDump(bitMessage, fnDumper)
     {
@@ -20092,7 +20092,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {string} sReg
      * @param {number} [off] optional offset into sReg
-     * @return {number} register index, or -1 if not found
+     * @returns {number} register index, or -1 if not found
      */
     getRegIndex(sReg, off)
     {
@@ -20112,7 +20112,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {number} iReg
-     * @return {string}
+     * @returns {string}
      */
     getRegString(iReg)
     {
@@ -20149,7 +20149,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {number} iReg
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getRegValue(iReg)
     {
@@ -20214,7 +20214,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     replaceRegs(s)
     {
@@ -20415,7 +20415,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {boolean} [fUpdateFocus] is true to update focus
-     * @return {boolean} true if run request successful, false if not
+     * @returns {boolean} true if run request successful, false if not
      */
     runCPU(fUpdateFocus)
     {
@@ -20431,7 +20431,7 @@ class DebuggerX80 extends DbgLib {
      * @param {number} nCycles (0 for one instruction without checking breakpoints)
      * @param {boolean} [fRegs] is true to display registers after step (default is false)
      * @param {boolean} [fUpdateCPU] is false to disable calls to updateCPU() (default is true)
-     * @return {boolean}
+     * @returns {boolean}
      */
     stepCPU(nCycles, fRegs, fUpdateCPU)
     {
@@ -20515,7 +20515,7 @@ class DebuggerX80 extends DbgLib {
      * Make sure the CPU is ready (finished initializing), not busy (already running), and not in an error state.
      *
      * @this {DebuggerX80}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isCPUAvail()
     {
@@ -20536,7 +20536,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -20563,7 +20563,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean}
+     * @returns {Object|boolean}
      */
     powerDown(fSave, fShutdown)
     {
@@ -20602,7 +20602,7 @@ class DebuggerX80 extends DbgLib {
      * This implements (very rudimentary) save support for the Debugger component.
      *
      * @this {DebuggerX80}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -20621,7 +20621,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -20716,7 +20716,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {boolean} [fRelease] is true for release criteria only; default is false (any criteria)
-     * @return {boolean} true if every instruction needs to pass through checkInstruction(), false if not
+     * @returns {boolean} true if every instruction needs to pass through checkInstruction(), false if not
      */
     checksEnabled(fRelease)
     {
@@ -20732,7 +20732,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {number} addr
      * @param {number} nState is < 0 if stepping, 0 if starting, or > 0 if running
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkInstruction(addr, nState)
     {
@@ -20781,7 +20781,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkMemoryRead(addr, nb)
     {
@@ -20806,7 +20806,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkMemoryWrite(addr, nb)
     {
@@ -20826,7 +20826,7 @@ class DebuggerX80 extends DbgLib {
      * @param {number} port
      * @param {number} size
      * @param {number} data
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkPortInput(port, size, data)
     {
@@ -20847,7 +20847,7 @@ class DebuggerX80 extends DbgLib {
      * @param {number} port
      * @param {number} size
      * @param {number} data
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkPortOutput(port, size, data)
     {
@@ -20915,7 +20915,7 @@ class DebuggerX80 extends DbgLib {
      * @param {Array} aBreak
      * @param {DbgAddrX80} dbgAddr
      * @param {boolean} [fTemporary]
-     * @return {boolean} true if breakpoint added, false if already exists
+     * @returns {boolean} true if breakpoint added, false if already exists
      */
     addBreakpoint(aBreak, dbgAddr, fTemporary)
     {
@@ -20970,7 +20970,7 @@ class DebuggerX80 extends DbgLib {
      * @param {boolean} [fRemove]
      * @param {boolean} [fTemporary]
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if found, false if not
+     * @returns {boolean} true if found, false if not
      */
     findBreakpoint(aBreak, dbgAddr, fRemove, fTemporary, fQuiet)
     {
@@ -21011,7 +21011,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {Array} aBreak
-     * @return {number} of breakpoints listed, 0 if none
+     * @returns {number} of breakpoints listed, 0 if none
      */
     listBreakpoints(aBreak)
     {
@@ -21076,7 +21076,7 @@ class DebuggerX80 extends DbgLib {
      * @param {number} nb (# of bytes)
      * @param {Array} aBreak
      * @param {boolean} [fTemporary]
-     * @return {boolean} true if breakpoint has been hit, false if not
+     * @returns {boolean} true if breakpoint has been hit, false if not
      */
     checkBreakpoint(addr, nb, aBreak, fTemporary)
     {
@@ -21170,7 +21170,7 @@ class DebuggerX80 extends DbgLib {
      * @param {DbgAddrX80} dbgAddr
      * @param {string} [sComment] is an associated comment
      * @param {number|null} [nSequence] is an associated sequence number, undefined if none
-     * @return {string} (and dbgAddr is updated to the next instruction)
+     * @returns {string} (and dbgAddr is updated to the next instruction)
      */
     getInstruction(dbgAddr, sComment, nSequence)
     {
@@ -21261,7 +21261,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {number} type
      * @param {DbgAddrX80} dbgAddr
-     * @return {string} operand
+     * @returns {string} operand
      */
     getImmOperand(type, dbgAddr)
     {
@@ -21296,7 +21296,7 @@ class DebuggerX80 extends DbgLib {
      * @param {number} iReg
      * @param {number} type
      * @param {DbgAddrX80} dbgAddr
-     * @return {string} operand
+     * @returns {string} operand
      */
     getRegOperand(iReg, type, dbgAddr)
     {
@@ -21324,7 +21324,7 @@ class DebuggerX80 extends DbgLib {
      * @param {string} sOp
      * @param {string|undefined} sOperand
      * @param {DbgAddrX80} dbgAddr of memory where this instruction is being assembled
-     * @return {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
+     * @returns {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
      */
     parseInstruction(sOp, sOperand, dbgAddr)
     {
@@ -21338,7 +21338,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {string} sFlag
-     * @return {string} value of flag
+     * @returns {string} value of flag
      */
     getFlagOutput(sFlag)
     {
@@ -21374,7 +21374,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {number} iReg
-     * @return {string}
+     * @returns {string}
      */
     getRegOutput(iReg)
     {
@@ -21391,7 +21391,7 @@ class DebuggerX80 extends DbgLib {
      *      0000 00         NOP
      *
      * @this {DebuggerX80}
-     * @return {string}
+     * @returns {string}
      */
     getRegDump()
     {
@@ -21412,7 +21412,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {number|string|Array|Object} p1
      * @param {number|string|Array|Object} p2
-     * @return {number}
+     * @returns {number}
      */
     comparePairs(p1, p2)
     {
@@ -21557,7 +21557,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {DbgAddrX80} dbgAddr
      * @param {boolean} [fNearest]
-     * @return {Array} where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment
+     * @returns {Array} where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment
      */
     findSymbol(dbgAddr, fNearest)
     {
@@ -21591,7 +21591,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {string} sSymbol
-     * @return {DbgAddrX80|undefined}
+     * @returns {DbgAddrX80|undefined}
      */
     findSymbolAddr(sSymbol)
     {
@@ -22104,7 +22104,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if expression is non-zero, false if zero (or undefined due to a parse error)
+     * @returns {boolean} true if expression is non-zero, false if zero (or undefined due to a parse error)
      */
     doIf(sCmd, fQuiet)
     {
@@ -22122,7 +22122,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {Array.<string>} asArgs
-     * @return {boolean} true only if the instruction info command ("n") is supported
+     * @returns {boolean} true only if the instruction info command ("n") is supported
      */
     doInfo(asArgs)
     {
@@ -22170,7 +22170,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {string} sLevel
-     * @return {boolean} true if success, false if error
+     * @returns {boolean} true if success, false if error
      */
     doInt(sLevel)
     {
@@ -22197,7 +22197,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {string} sCmd
-     * @return {boolean} true if valid "var" assignment, false if not
+     * @returns {boolean} true if valid "var" assignment, false if not
      */
     doVar(sCmd)
     {
@@ -22231,7 +22231,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {string} sAddr
      * @param {boolean} [fPrint]
-     * @return {string|null}
+     * @returns {string|null}
      */
     doList(sAddr, fPrint)
     {
@@ -22678,7 +22678,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {DbgAddrX80} dbgAddr
-     * @return {string|null} CALL instruction at or near dbgAddr, or null if none
+     * @returns {string|null} CALL instruction at or near dbgAddr, or null if none
      */
     getCall(dbgAddr)
     {
@@ -22886,7 +22886,7 @@ class DebuggerX80 extends DbgLib {
      * @param {string|undefined} sCmd
      * @param {boolean} [fSave] is true to save the command, false if not
      * @param {string} [chSep] is the command separator character (default is ';')
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     parseCommand(sCmd, fSave, chSep)
     {
@@ -22963,7 +22963,7 @@ class DebuggerX80 extends DbgLib {
      *
      * @this {DebuggerX80}
      * @param {Array.<string>} asArgs
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     shiftArgs(asArgs)
     {
@@ -22988,7 +22988,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if command processed, false if unrecognized
+     * @returns {boolean} true if command processed, false if unrecognized
      */
     doCommand(sCmd, fQuiet)
     {
@@ -23155,7 +23155,7 @@ class DebuggerX80 extends DbgLib {
      * @this {DebuggerX80}
      * @param {string} sCmds
      * @param {boolean} [fSave]
-     * @return {boolean} true if all commands processed, false if not
+     * @returns {boolean} true if all commands processed, false if not
      */
     doCommands(sCmds, fSave)
     {
@@ -23909,7 +23909,7 @@ class ComputerX80 extends Component {
      * getMachineID()
      *
      * @this {ComputerX80}
-     * @return {string}
+     * @returns {string}
      */
     getMachineID()
     {
@@ -23953,7 +23953,7 @@ class ComputerX80 extends Component {
      * @this {ComputerX80}
      * @param {string} sParm
      * @param {Object} [parmsComponent]
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     getMachineParm(sParm, parmsComponent)
     {
@@ -23983,7 +23983,7 @@ class ComputerX80 extends Component {
      * saveMachineParms()
      *
      * @this {ComputerX80}
-     * @return {string|null}
+     * @returns {string|null}
      */
     saveMachineParms()
     {
@@ -23994,7 +23994,7 @@ class ComputerX80 extends Component {
      * getUserID()
      *
      * @this {ComputerX80}
-     * @return {string}
+     * @returns {string}
      */
     getUserID()
     {
@@ -24067,7 +24067,7 @@ class ComputerX80 extends Component {
      *
      * @this {ComputerX80}
      * @param {State|null} [stateComputer]
-     * @return {boolean} true if state passes validation, false if not
+     * @returns {boolean} true if state passes validation, false if not
      */
     validateState(stateComputer)
     {
@@ -24238,7 +24238,7 @@ class ComputerX80 extends Component {
      * @param {State} stateComputer
      * @param {boolean} fRepower
      * @param {boolean} fRestore
-     * @return {boolean} true if restore should continue, false if not
+     * @returns {boolean} true if restore should continue, false if not
      */
     powerRestore(component, stateComputer, fRepower, fRestore)
     {
@@ -24391,7 +24391,7 @@ class ComputerX80 extends Component {
      * checkPower()
      *
      * @this {ComputerX80}
-     * @return {boolean} true if the computer is fully powered, false otherwise
+     * @returns {boolean} true if the computer is fully powered, false otherwise
      */
     checkPower()
     {
@@ -24463,7 +24463,7 @@ class ComputerX80 extends Component {
      * @this {ComputerX80}
      * @param {boolean} [fSave] is true to request a saved state
      * @param {boolean} [fShutdown] is true if the machine is being shut down
-     * @return {string|null} string representing the saved state (or null if error)
+     * @returns {string|null} string representing the saved state (or null if error)
      */
     powerOff(fSave, fShutdown)
     {
@@ -24662,7 +24662,7 @@ class ComputerX80 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -24793,7 +24793,7 @@ class ComputerX80 extends Component {
      *
      * @this {ComputerX80}
      * @param {string} sUserID
-     * @return {string} validated user ID, or null if error
+     * @returns {string} validated user ID, or null if error
      */
     verifyUserID(sUserID)
     {
@@ -24827,7 +24827,7 @@ class ComputerX80 extends Component {
      * getServerStatePath()
      *
      * @this {ComputerX80}
-     * @return {string|null} sStatePath (null if no localStorage or no USERID stored in localStorage)
+     * @returns {string|null} sStatePath (null if no localStorage or no USERID stored in localStorage)
      */
     getServerStatePath()
     {
@@ -24890,7 +24890,7 @@ class ComputerX80 extends Component {
      * @param {string} sUserID
      * @param {string} sState
      * @param {boolean} [fSync] is true if we're powering down and should perform a synchronous request (default is async)
-     * @return {*} server response if fSync is true and a response was received; otherwise null
+     * @returns {*} server response if fSync is true and a response was received; otherwise null
      */
     storeServerState(sUserID, sState, fSync)
     {
@@ -25006,7 +25006,7 @@ class ComputerX80 extends Component {
      * @this {ComputerX80}
      * @param {string} sType
      * @param {Component|null} [componentPrev] of previously returned component, if any
-     * @return {Component|null}
+     * @returns {Component|null}
      */
     getMachineComponent(sType, componentPrev)
     {
@@ -25341,7 +25341,7 @@ class State {
      *
      * @this {State}
      * @param {number|string} id
-     * @return {Object|string|null}
+     * @returns {Object|string|null}
      */
     get(id)
     {
@@ -25352,7 +25352,7 @@ class State {
      * data()
      *
      * @this {State}
-     * @return {Object}
+     * @returns {Object}
      */
     data()
     {
@@ -25367,7 +25367,7 @@ class State {
      *
      * @this {State}
      * @param {string|null} [json]
-     * @return {boolean} true if state exists in localStorage, false if not
+     * @returns {boolean} true if state exists in localStorage, false if not
      */
     load(json)
     {
@@ -25403,7 +25403,7 @@ class State {
      * Otherwise, load() could have just as easily done this, too.
      *
      * @this {State}
-     * @return {boolean} true if successful, false if error
+     * @returns {boolean} true if successful, false if error
      */
     parse()
     {
@@ -25424,7 +25424,7 @@ class State {
      * store()
      *
      * @this {State}
-     * @return {boolean} true if successful, false if error
+     * @returns {boolean} true if successful, false if error
      */
     store()
     {
@@ -25451,7 +25451,7 @@ class State {
      * toString()
      *
      * @this {State}
-     * @return {string} JSON-encoded state
+     * @returns {string} JSON-encoded state
      */
     toString()
     {
@@ -25508,7 +25508,7 @@ class State {
      * @param {Component} component
      * @param {string} [sVersion] is used to append a major version number to the key
      * @param {string} [sSuffix] is used to append any additional suffixes to the key
-     * @return {string} key
+     * @returns {string} key
      */
     static getKey(component, sVersion, sSuffix)
     {
@@ -25527,7 +25527,7 @@ class State {
      * State.compress(aSrc)
      *
      * @param {Array.<number>|null} aSrc
-     * @return {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
+     * @returns {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
      */
     static compress(aSrc)
     {
@@ -25554,7 +25554,7 @@ class State {
      *
      * @param {Array.<number>} aComp
      * @param {number} [nLength] (expected length of decompressed data)
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     static decompress(aComp, nLength)
     {
@@ -25583,7 +25583,7 @@ class State {
      * and return an uninitialized array.
      *
      * @param {Array.<number>|null} aSrc
-     * @return {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
+     * @returns {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
      */
     static compressEvenOdd(aSrc)
     {
@@ -25616,7 +25616,7 @@ class State {
      *
      * @param {Array.<number>} aComp
      * @param {number} nLength is expected length of decompressed data
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     static decompressEvenOdd(aComp, nLength)
     {
@@ -25979,7 +25979,7 @@ function resolveXML(sURL, sXML, display, done)
  * @param {string} [sXSLFile]
  * @param {string} [sParms] (machine parameters, if any)
  * @param {string} [sClass] (an optional machine class name used to style the machine)
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -26246,7 +26246,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -26262,7 +26262,7 @@ function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -26278,7 +26278,7 @@ function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -26294,7 +26294,7 @@ function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -26310,7 +26310,7 @@ function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -26323,7 +26323,7 @@ function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  *
  * @param {string} idMachine
  * @param {string} sType
- * @return {Component|null}
+ * @returns {Component|null}
  */
 function findMachineComponent(idMachine, sType)
 {
@@ -26343,7 +26343,7 @@ function findMachineComponent(idMachine, sType)
  * @param {string} sComponent
  * @param {string} sCommand
  * @param {string} [sValue]
- * @return {boolean}
+ * @returns {boolean}
  */
 function commandMachine(control, fSingle, idMachine, sComponent, sCommand, sValue)
 {

@@ -21,7 +21,7 @@ import Monitor from "../../../../modules/v3/monitor.js";
  */
 
 /**
- * @class {VT100Video}
+ * @class VT100Video
  * @unrestricted
  * @property {VT100VideoConfig} config
  */

@@ -242,7 +242,7 @@ function processXML(aMachines, sNameCSV, fDebug)
  * @param {Array.<string>} aProps (array of property strings)
  * @param {number} iProp (index within aProps to process)
  * @param {string} sIndent (some quantity of spaces, initially none)
- * @return {number} (updated iProp)
+ * @returns {number} (updated iProp)
  */
 function processYAML(obj, aProps, iProp, sIndent)
 {
@@ -272,7 +272,7 @@ function processYAML(obj, aProps, iProp, sIndent)
  * @param {number} iTag
  * @param {function(Error)} done
  * @param {boolean} [fDebug]
- * @return {boolean}
+ * @returns {boolean}
  */
 function readXML(xml, sNode, sFile, aTags, iTag, done, fDebug)
 {

@@ -14,7 +14,7 @@ import PDP11 from "./pdp11.js";
 import CPU from "../../../../modules/v3/cpu.js";
 
 /**
- * @class {PDP11Ops}
+ * @class PDP11Ops
  * @unrestricted
  */
 export default class PDP11Ops extends CPU {

@@ -163,7 +163,7 @@ export default class HDC extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (e.g., "listDisks")
      * @param {HTMLElement} control is the HTML control DOM object (e.g., HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -333,7 +333,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -360,7 +360,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean}
+     * @returns {Object|boolean}
      */
     powerDown(fSave, fShutdown)
     {
@@ -370,7 +370,7 @@ export default class HDC extends Component {
     /**
      * getMachineID()
      *
-     * @return {string}
+     * @returns {string}
      */
     getMachineID()
     {
@@ -380,7 +380,7 @@ export default class HDC extends Component {
     /**
      * getUserID()
      *
-     * @return {string}
+     * @returns {string}
      */
     getUserID()
     {
@@ -407,7 +407,7 @@ export default class HDC extends Component {
      * This implements save support for the HDC component.
      *
      * @this {HDC}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -423,7 +423,7 @@ export default class HDC extends Component {
      *
      * @this {HDC}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -436,7 +436,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {Array} [data]
      * @param {boolean} [fHard] true if a machine reset (not just a controller reset)
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(data, fHard)
     {
@@ -549,7 +549,7 @@ export default class HDC extends Component {
      * saveController()
      *
      * @this {HDC}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -610,7 +610,7 @@ export default class HDC extends Component {
      * @param {DriveConfig} driveConfig
      * @param {Array} [data]
      * @param {boolean} [fHard] true if a machine reset (not just a controller reset)
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initDrive(iDrive, drive, driveConfig, data, fHard)
     {
@@ -723,7 +723,7 @@ export default class HDC extends Component {
      * saveDrives()
      *
      * @this {HDC}
-     * @return {Array}
+     * @returns {Array}
      */
     saveDrives()
     {
@@ -739,7 +739,7 @@ export default class HDC extends Component {
      * saveDrive(drive)
      *
      * @this {HDC}
-     * @return {Array}
+     * @returns {Array}
      */
     saveDrive(drive)
     {
@@ -766,7 +766,7 @@ export default class HDC extends Component {
      *
      * @this {HDC}
      * @param {number} iDrive
-     * @return {Object|undefined} (undefined if the requested drive does not exist)
+     * @returns {Object|undefined} (undefined if the requested drive does not exist)
      */
     copyDrive(iDrive)
     {
@@ -859,7 +859,7 @@ export default class HDC extends Component {
      * @param {Drive} drive
      * @param {number} iSector (a "logical" sector number, relative to the entire disk, NOT a physical sector number)
      * @param {number} nSectors
-     * @return {boolean} true if successful, false if invalid position request
+     * @returns {boolean} true if successful, false if invalid position request
      */
     seekDrive(drive, iSector, nSectors)
     {
@@ -907,7 +907,7 @@ export default class HDC extends Component {
      *
      * @this {HDC}
      * @param {boolean} [fRemount] is true if we're remounting all auto-mounted disks
-     * @return {boolean} true if one or more disk images are being auto-mounted, false if none
+     * @returns {boolean} true if one or more disk images are being auto-mounted, false if none
      */
     autoMount(fRemount)
     {
@@ -944,7 +944,7 @@ export default class HDC extends Component {
      * @param {string} sDiskName
      * @param {string} sDiskPath
      * @param {boolean} fAutoMount
-     * @return {boolean} true if disk (already) loaded, false if queued up (or busy)
+     * @returns {boolean} true if disk (already) loaded, false if queued up (or busy)
      */
     loadDisk(iDrive, sDiskName, sDiskPath, fAutoMount)
     {
@@ -1027,7 +1027,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x320)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inXTCData(port, addrFrom)
     {
@@ -1086,7 +1086,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x321)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inXTCStatus(port, addrFrom)
     {
@@ -1128,7 +1128,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x322)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inXTCConfig(port, addrFrom)
     {
@@ -1196,7 +1196,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x1F0)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inATCByte(port, addrFrom)
     {
@@ -1314,7 +1314,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x1F0,0x170)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port data
+     * @returns {number} simulated port data
      */
     inATCData(port, addrFrom)
     {
@@ -1413,7 +1413,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x1F1,0x171)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inATCError(port, addrFrom)
     {
@@ -1442,7 +1442,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x1F2,0x172)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inATCSecCnt(port, addrFrom)
     {
@@ -1471,7 +1471,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x1F3,0x173)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inATCSecNum(port, addrFrom)
     {
@@ -1500,7 +1500,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x1F4,0x174)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inATCCylLo(port, addrFrom)
     {
@@ -1529,7 +1529,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x1F5,0x175)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inATCCylHi(port, addrFrom)
     {
@@ -1558,7 +1558,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x1F6,0x176)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inATCDrvHd(port, addrFrom)
     {
@@ -1612,7 +1612,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {number} port (0x1F7,0x177)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inATCStatus(port, addrFrom)
     {
@@ -2084,7 +2084,7 @@ export default class HDC extends Component {
      * popCmd()
      *
      * @this {HDC}
-     * @return {number}
+     * @returns {number}
      */
     popCmd()
     {
@@ -2159,7 +2159,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {Drive} drive
      * @param {number} b
-     * @return {number}
+     * @returns {number}
      */
     doDMAWrite(drive, b)
     {
@@ -2178,7 +2178,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {Drive} drive
      * @param {number} b
-     * @return {number}
+     * @returns {number}
      */
     doDMAWriteBuffer(drive, b)
     {
@@ -2367,7 +2367,7 @@ export default class HDC extends Component {
      * @param {Drive} drive
      * @param {function(number,boolean,Object,number)} [done] (number is next available byte from drive, or -1 if no more bytes available)
      * @param {boolean} [fAutoInc] (default is true to auto-increment)
-     * @return {number} the requested byte, or -1 if unavailable
+     * @returns {number} the requested byte, or -1 if unavailable
      */
     readData(drive, done, fAutoInc)
     {
@@ -2455,7 +2455,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {Drive} drive
      * @param {number} b containing next byte to write
-     * @return {number} (b unchanged; return -1 if command should be terminated)
+     * @returns {number} (b unchanged; return -1 if command should be terminated)
      */
     writeData(drive, b)
     {
@@ -2546,7 +2546,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {Drive} drive
      * @param {number} b containing next byte to write
-     * @return {number} (b unchanged; return -1 if command should be terminated)
+     * @returns {number} (b unchanged; return -1 if command should be terminated)
      */
     writeBuffer(drive, b)
     {
@@ -2568,7 +2568,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {Drive} drive
      * @param {number} b containing a format command byte
-     * @return {number} (b if successful, -1 if command should be terminated)
+     * @returns {number} (b if successful, -1 if command should be terminated)
      */
     writeFormat(drive, b)
     {
@@ -2604,7 +2604,7 @@ export default class HDC extends Component {
      * @this {HDC}
      * @param {Drive} drive
      * @param {number} bCmd
-     * @return {boolean} (true if processed, false otherwise)
+     * @returns {boolean} (true if processed, false otherwise)
      */
     processIdentify(drive, bCmd)
     {
@@ -3005,7 +3005,7 @@ export default class HDC extends Component {
      *
      * @this {HDC}
      * @param {Drive} drive
-     * @return {boolean}
+     * @returns {boolean}
      */
     processReset(drive)
     {
@@ -3053,7 +3053,7 @@ export default class HDC extends Component {
      *
      * @this {HDC}
      * @param {number} addr
-     * @return {boolean} true to proceed with the INT 0x13 software interrupt, false to skip
+     * @returns {boolean} true to proceed with the INT 0x13 software interrupt, false to skip
      */
     intBIOSDisk(addr)
     {
@@ -3090,7 +3090,7 @@ export default class HDC extends Component {
      *
      * @this {HDC}
      * @param {number} addr
-     * @return {boolean} true to proceed with the INT 0x40 software interrupt, false to skip
+     * @returns {boolean} true to proceed with the INT 0x40 software interrupt, false to skip
      */
     intBIOSDiskette(addr)
     {

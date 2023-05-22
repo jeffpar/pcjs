@@ -13,7 +13,7 @@ import Debugger from "../../../modules/v3/debugger.js";
 /**
  * Emulation of the 8080 CPU
  *
- * @class {CPUx80}
+ * @class CPUx80
  * @unrestricted
  * @property {Bus} busIO
  * @property {Bus} busMemory

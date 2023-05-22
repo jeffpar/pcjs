@@ -14,7 +14,7 @@ import PDP11 from "./pdp11.js";
 import Ports from "../../../../modules/v3/ports.js";
 
 /**
- * @class {IOPage}
+ * @class IOPage
  * @unrestricted
  */
 export default class IOPage extends Ports {

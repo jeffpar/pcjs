@@ -1202,7 +1202,7 @@ function genEAFunc(sFuncName, sFuncBody) {
     if (sEAFuncs.indexOf(sFuncName) < 0) {
         sEAFuncs += "    /**\n";
         sEAFuncs += "     * @this {X86CPU}\n";
-        sEAFuncs += "     * @return {number}\n";
+        sEAFuncs += "     * @returns {number}\n";
         sEAFuncs += "     */\n";
         sEAFuncs += "    " + sFuncName + ": function() {\n";
         sEAFuncs += "        return (" + sFuncBody + ");\n";

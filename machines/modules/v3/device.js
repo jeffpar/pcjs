@@ -35,7 +35,7 @@ import WebIO from "./webio.js";
  *
  * Besides CPUs, other devices may have internal registers or ports that are useful to access by name, too.
  *
- * @class {Device}
+ * @class Device
  * @unrestricted
  * @property {string} idMachine
  * @property {string} idDevice

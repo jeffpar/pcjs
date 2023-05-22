@@ -473,7 +473,7 @@ export default class C1PDebugger extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -756,7 +756,7 @@ export default class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {boolean}
+     * @returns {boolean}
      */
     run()
     {
@@ -768,7 +768,7 @@ export default class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} n (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {boolean}
+     * @returns {boolean}
      */
     step(n)
     {
@@ -806,7 +806,7 @@ export default class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {boolean}
+     * @returns {boolean}
      *
      * Make sure the CPU is ready (finished initializing), not busy (already running), and not in an error state.
      */
@@ -903,7 +903,7 @@ export default class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {number} bOpCode
-     * @return {boolean} true to proceed, false to halt
+     * @returns {boolean} true to proceed, false to halt
      *
      * This is a check function, called by the CPU, to inform us about the next instruction to be executed, giving
      * us an opportunity to look for "exec" breakpoints and update opcode frequencies and instruction history.
@@ -926,7 +926,7 @@ export default class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {boolean} true to proceed, false to halt
+     * @returns {boolean} true to proceed, false to halt
      *
      * This is a check function, called by the CPU, to inform us that a memory read occurred, giving us an
      * opportunity to track the read if we want, and look for a matching "read" breakpoint, if any.
@@ -944,7 +944,7 @@ export default class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {number} value written
-     * @return {boolean} true to proceed, false to halt
+     * @returns {boolean} true to proceed, false to halt
      *
      * This is a check function, called by the CPU, to inform us that a memory write occurred, giving us an
      * opportunity to track the write if we want, and look for a matching "write" breakpoint, if any.
@@ -974,7 +974,7 @@ export default class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {number} b
-     * @return {number}
+     * @returns {number}
      */
     addSignedByte(addr, b)
     {
@@ -988,7 +988,7 @@ export default class C1PDebugger extends Component {
      *
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getByte(addr)
     {
@@ -1040,7 +1040,7 @@ export default class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     addExecBreakpoint(addr)
     {
@@ -1053,7 +1053,7 @@ export default class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     addReadBreakpoint(addr)
     {
@@ -1066,7 +1066,7 @@ export default class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     addWriteBreakpoint(addr)
     {
@@ -1078,7 +1078,7 @@ export default class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {Array}
+     * @returns {Array}
      */
     getExecBreakpoints()
     {
@@ -1087,7 +1087,7 @@ export default class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {Array}
+     * @returns {Array}
      */
     getReadBreakpoints()
     {
@@ -1096,7 +1096,7 @@ export default class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {Array}
+     * @returns {Array}
      */
     getWriteBreakpoints()
     {
@@ -1108,7 +1108,7 @@ export default class C1PDebugger extends Component {
      * @param {Array} aBreak
      * @param {number} addr
      * @param {boolean} [fRemove]
-     * @return {boolean}
+     * @returns {boolean}
      */
     findBreakpoint(aBreak, addr, fRemove)
     {
@@ -1129,7 +1129,7 @@ export default class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {boolean} [fRemove]
-     * @return {boolean}
+     * @returns {boolean}
      */
     findExecBreakpoint(addr, fRemove)
     {
@@ -1140,7 +1140,7 @@ export default class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {boolean} [fRemove]
-     * @return {boolean}
+     * @returns {boolean}
      */
     findReadBreakpoint(addr, fRemove)
     {
@@ -1151,7 +1151,7 @@ export default class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {boolean} [fRemove]
-     * @return {boolean}
+     * @returns {boolean}
      */
     findWriteBreakpoint(addr, fRemove)
     {
@@ -1195,7 +1195,7 @@ export default class C1PDebugger extends Component {
      * @param {number} addr
      * @param {Array} aBreakpoints
      * @param {string} sType (ie, "exec" or "write")
-     * @return {boolean} true if breakpoint has been hit, false if not
+     * @returns {boolean} true if breakpoint has been hit, false if not
      */
     checkBreakpoint(addr, aBreakpoints, sType)
     {
@@ -1219,7 +1219,7 @@ export default class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {number} [nIns] is an associated instruction number, or 0 (or undefined) if none
-     * @return {string}
+     * @returns {string}
      */
     getInstruction(addr, nIns)
     {
@@ -1329,7 +1329,7 @@ export default class C1PDebugger extends Component {
      * @param {string} sCode
      * @param {string|undefined} sOperand
      * @param {number} addr of memory where this instruction is being assembled
-     * @return {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
+     * @returns {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
      */
     parseInstruction(sCode, sOperand, addr)
     {
@@ -1474,7 +1474,7 @@ export default class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {string}
+     * @returns {string}
      */
     getRegs()
     {
@@ -1489,7 +1489,7 @@ export default class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {string|undefined} [sAddr]
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getUserAddr(sAddr)
     {
@@ -1818,7 +1818,7 @@ export default class C1PDebugger extends Component {
      * Prints the contents of the Debugger's "info" buffer (filled by calls like cpu.dbg.info())
      * @this {C1PDebugger}
      * @param {string|undefined} sCount
-     * @return {boolean|undefined} true only if the "info" command is supported
+     * @returns {boolean|undefined} true only if the "info" command is supported
      */
     doInfo(sCount)
     {

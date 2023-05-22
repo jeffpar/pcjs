@@ -319,7 +319,7 @@ export default class Disk extends Component {
      * isRemote()
      *
      * @this {Disk}
-     * @return {boolean} true if remote disk, false if not
+     * @returns {boolean} true if remote disk, false if not
      */
     isRemote()
     {
@@ -343,7 +343,7 @@ export default class Disk extends Component {
      * @this {Disk}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -388,7 +388,7 @@ export default class Disk extends Component {
      * @this {Disk}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean}
+     * @returns {Object|boolean}
      */
     powerDown(fSave, fShutdown)
     {
@@ -503,7 +503,7 @@ export default class Disk extends Component {
      * @param {File} [file] is set if there's an associated File object
      * @param {function(...)} [fnNotify]
      * @param {Component} [controller]
-     * @return {boolean} true if load completed (successfully or not), false if queued
+     * @returns {boolean} true if load completed (successfully or not), false if queued
      */
     load(sDiskName, sDiskPath, file, fnNotify, controller)
     {
@@ -1026,7 +1026,7 @@ export default class Disk extends Component {
      * @this {Disk}
      * @param {string} sModule
      * @param {number} nSegment
-     * @return {Object}
+     * @returns {Object}
      */
     getModuleInfo(sModule, nSegment)
     {
@@ -1066,7 +1066,7 @@ export default class Disk extends Component {
      *
      * @this {Disk}
      * @param {string} sSymbol
-     * @return {Array}
+     * @returns {Array}
      */
     getSymbolInfo(sSymbol)
     {
@@ -1100,7 +1100,7 @@ export default class Disk extends Component {
      *
      * @this {Disk}
      * @param {number} lba (logical block address)
-     * @return {Sector|null} sector
+     * @returns {Sector|null} sector
      */
     getSector(lba)
     {
@@ -1131,7 +1131,7 @@ export default class Disk extends Component {
      * @param {Sector} sector
      * @param {number} off (byte offset)
      * @param {number} len (1 to 4 bytes)
-     * @return {number}
+     * @returns {number}
      */
     getSectorData(sector, off, len)
     {
@@ -1169,7 +1169,7 @@ export default class Disk extends Component {
      * @param {number} idSector
      * @param {number} cbSector
      * @param {number|null} dwPattern
-     * @return {Sector}
+     * @returns {Sector}
      */
     initSector(sector, iCylinder, iHead, idSector, cbSector, dwPattern)
     {
@@ -1202,7 +1202,7 @@ export default class Disk extends Component {
      *
      * @this {Disk}
      * @param {string} sDiskPath
-     * @return {string} is the URL connection string required to connect to sDiskPath
+     * @returns {string} is the URL connection string required to connect to sDiskPath
      */
     connectRemoteDisk(sDiskPath)
     {
@@ -1324,7 +1324,7 @@ export default class Disk extends Component {
      * @param {number} nSectors (to write)
      * @param {Array.<number>} abSectors
      * @param {boolean} fAsync
-     * @return {boolean|Array}
+     * @returns {boolean|Array}
      */
     writeRemoteSectors(iCylinder, iHead, iSector, nSectors, abSectors, fAsync)
     {
@@ -1424,7 +1424,7 @@ export default class Disk extends Component {
      * @this {Disk}
      * @param {Sector} sector
      * @param {boolean} fAsync (true to update write timer, false to not)
-     * @return {boolean} true if write timer set, false if not
+     * @returns {boolean} true if write timer set, false if not
      */
     queueDirtySector(sector, fAsync)
     {
@@ -1452,7 +1452,7 @@ export default class Disk extends Component {
      * >= the timestamp of the next dirty sector + REMOTE_WRITE_DELAY); if not, cancel the timer and start a new one.
      *
      * @this {Disk}
-     * @return {boolean} true if write timer set, false if not
+     * @returns {boolean} true if write timer set, false if not
      */
     updateWriteTimer()
     {
@@ -1492,7 +1492,7 @@ export default class Disk extends Component {
      *
      * @this {Disk}
      * @param {boolean} fAsync is true if this function is being called asynchronously, false otherwise
-     * @return {boolean|Array} false if no dirty sectors, otherwise true (or a response array if not fAsync)
+     * @returns {boolean|Array} false if no dirty sectors, otherwise true (or a response array if not fAsync)
      */
     findDirtySectors(fAsync)
     {
@@ -1531,7 +1531,7 @@ export default class Disk extends Component {
      * info()
      *
      * @this {Disk}
-     * @return {Array} containing: [nCylinders, nHeads, nSectorsPerTrack, nBytesPerSector]
+     * @returns {Array} containing: [nCylinders, nHeads, nSectorsPerTrack, nBytesPerSector]
      */
     info()
     {
@@ -1560,7 +1560,7 @@ export default class Disk extends Component {
      * @param {Sector|null} [sectorPrev]
      * @param {boolean} [fWrite]
      * @param {function(Sector,boolean)} [done]
-     * @return {Sector|null} is the requested sector, or null if not found (or not available yet)
+     * @returns {Sector|null} is the requested sector, or null if not found (or not available yet)
      */
     seek(iCylinder, iHead, iSector, sectorPrev, fWrite, done)
     {
@@ -1694,7 +1694,7 @@ export default class Disk extends Component {
      *
      * @this {Disk}
      * @param {Sector} sector
-     * @return {Array.<number>} is an array of bytes
+     * @returns {Array.<number>} is an array of bytes
      */
     toBytes(sector)
     {
@@ -1721,7 +1721,7 @@ export default class Disk extends Component {
      * @param {Sector} sector (returned from a previous seek)
      * @param {number} iByte (byte index within the given sector)
      * @param {boolean} [fCompare] is true if this write-compare read
-     * @return {number} the specified (unsigned) byte, or -1 if no more data in the sector
+     * @returns {number} the specified (unsigned) byte, or -1 if no more data in the sector
      */
     read(sector, iByte, fCompare)
     {
@@ -1747,7 +1747,7 @@ export default class Disk extends Component {
      * @param {Sector} sector (returned from a previous seek)
      * @param {number} iByte (byte index within the given sector)
      * @param {number} b the byte value to write
-     * @return {boolean|null} true if write successful, false if write-protected, null if out of bounds
+     * @returns {boolean|null} true if write successful, false if write-protected, null if out of bounds
      */
     write(sector, iByte, b)
     {
@@ -1792,7 +1792,7 @@ export default class Disk extends Component {
      * encodeAsBase64()
      *
      * @this {Disk}
-     * @return {string}
+     * @returns {string}
      */
     encodeAsBase64()
     {
@@ -1812,7 +1812,7 @@ export default class Disk extends Component {
      * encodeAsBinary()
      *
      * @this {Disk}
-     * @return {Uint8Array}
+     * @returns {Uint8Array}
      */
     encodeAsBinary() {
         let s = [], lba = 0, sector;
@@ -1838,7 +1838,7 @@ export default class Disk extends Component {
      * where [...] is an array of modified dword(s) in the corresponding sector.
      *
      * @this {Disk}
-     * @return {Array} of modified sectors
+     * @returns {Array} of modified sectors
      */
     save()
     {
@@ -1884,7 +1884,7 @@ export default class Disk extends Component {
      *
      * @this {Disk}
      * @param {Array} deltas
-     * @return {number} 0 if no changes applied, -1 if an error occurred, otherwise the number of sectors modified
+     * @returns {number} 0 if no changes applied, -1 if an error occurred, otherwise the number of sectors modified
      */
     restore(deltas)
     {
@@ -2028,7 +2028,7 @@ export default class Disk extends Component {
      *
      * @this {Disk}
      * @param {boolean} [fFormatted]
-     * @return {string} containing the entire disk image as JSON-encoded data
+     * @returns {string} containing the entire disk image as JSON-encoded data
      */
     convertToJSON(fFormatted)
     {
@@ -2111,7 +2111,7 @@ export default class Disk extends Component {
      * @param {Sector|null} sector (returned from a previous seek)
      * @param {number} [lba]
      * @param {string} [sDesc]
-     * @return {string}
+     * @returns {string}
      */
     dumpSector(sector, lba, sDesc)
     {
@@ -2210,7 +2210,7 @@ class FileInfo {
      * @this {FileInfo}
      * @param {number} off (offset relative to start of file)
      * @param {boolean} [fNearest] (true to return nearest symbol if a segment with symbols is found)
-     * @return {string} symbol corresponding to file offset (of the file name + offset if no symbol found)
+     * @returns {string} symbol corresponding to file offset (of the file name + offset if no symbol found)
      */
     getSymbol(off, fNearest)
     {

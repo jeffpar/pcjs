@@ -107,7 +107,7 @@ export default class ROMPDP11 extends Component {
      * @this {ROMPDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -135,7 +135,7 @@ export default class ROMPDP11 extends Component {
      * @this {ROMPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -237,7 +237,7 @@ export default class ROMPDP11 extends Component {
      *
      * @this {ROMPDP11}
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     addROM(addr)
     {
@@ -301,7 +301,7 @@ export default class ROMPDP11 extends Component {
      *
      * @this {ROMPDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readROMByte(addr)
     {

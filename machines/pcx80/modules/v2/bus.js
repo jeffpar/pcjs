@@ -170,7 +170,7 @@ export default class BusX80 extends Component {
      * @this {BusX80}
      * @param {Object|null} data (always null because we supply no powerDown() handler)
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -205,7 +205,7 @@ export default class BusX80 extends Component {
      * @param {number} addr is the starting physical address of the request
      * @param {number} size of the request, in bytes
      * @param {number} type is one of the MemoryX80.TYPE constants
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     addMemory(addr, size, type)
     {
@@ -268,7 +268,7 @@ export default class BusX80 extends Component {
      * @this {BusX80}
      * @param {number} addr
      * @param {number} size
-     * @return {boolean} true if all blocks were clean, false if dirty; all blocks are cleaned in the process
+     * @returns {boolean} true if all blocks were clean, false if dirty; all blocks are cleaned in the process
      */
     cleanMemory(addr, size)
     {
@@ -296,7 +296,7 @@ export default class BusX80 extends Component {
      * @param {Object} [info] previous BusInfoX80, if any
      * @param {number} [addr] starting address of range (0 if none provided)
      * @param {number} [size] size of range, in bytes (up to end of address space if none provided)
-     * @return {Object} updated info (or new info if no previous info provided)
+     * @returns {Object} updated info (or new info if no previous info provided)
      */
     scanMemory(info, addr, size)
     {
@@ -325,7 +325,7 @@ export default class BusX80 extends Component {
      * getWidth()
      *
      * @this {BusX80}
-     * @return {number}
+     * @returns {number}
      */
     getWidth()
     {
@@ -342,7 +342,7 @@ export default class BusX80 extends Component {
      * @this {BusX80}
      * @param {number} addr
      * @param {number} size
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     removeMemory(addr, size)
     {
@@ -367,7 +367,7 @@ export default class BusX80 extends Component {
      * @this {BusX80}
      * @param {number} addr is the starting physical address
      * @param {number} size of the request, in bytes
-     * @return {Array} of Memory blocks
+     * @returns {Array} of Memory blocks
      */
     getMemoryBlocks(addr, size)
     {
@@ -418,7 +418,7 @@ export default class BusX80 extends Component {
      *
      * @this {BusX80}
      * @param {number} addr is a physical address
-     * @return {number} byte (8-bit) value at that address
+     * @returns {number} byte (8-bit) value at that address
      */
     getByte(addr)
     {
@@ -432,7 +432,7 @@ export default class BusX80 extends Component {
      *
      * @this {BusX80}
      * @param {number} addr is a physical address
-     * @return {number} byte (8-bit) value at that address
+     * @returns {number} byte (8-bit) value at that address
      */
     getByteDirect(addr)
     {
@@ -444,7 +444,7 @@ export default class BusX80 extends Component {
      *
      * @this {BusX80}
      * @param {number} addr is a physical address
-     * @return {number} word (16-bit) value at that address
+     * @returns {number} word (16-bit) value at that address
      */
     getShort(addr)
     {
@@ -463,7 +463,7 @@ export default class BusX80 extends Component {
      *
      * @this {BusX80}
      * @param {number} addr is a physical address
-     * @return {number} word (16-bit) value at that address
+     * @returns {number} word (16-bit) value at that address
      */
     getShortDirect(addr)
     {
@@ -600,7 +600,7 @@ export default class BusX80 extends Component {
      *
      * @this {BusX80}
      * @param {boolean} [fAll] (true to save all non-ROM memory blocks, regardless of their dirty flags)
-     * @return {Array} a
+     * @returns {Array} a
      */
     saveMemory(fAll)
     {
@@ -638,7 +638,7 @@ export default class BusX80 extends Component {
      *
      * @this {BusX80}
      * @param {Array} a
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     restoreMemory(a)
     {
@@ -668,7 +668,7 @@ export default class BusX80 extends Component {
      *
      * @this {BusX80}
      * @param {number} [port]
-     * @return {boolean} true if break on port input enabled, false if disabled
+     * @returns {boolean} true if break on port input enabled, false if disabled
      */
     addPortInputBreak(port)
     {
@@ -748,7 +748,7 @@ export default class BusX80 extends Component {
      * @param {number} port
      * @param {number} size (1, 2 or 4)
      * @param {number} [addrIP] is the IP value at the time of the input
-     * @return {number} simulated port data
+     * @returns {number} simulated port data
      *
      * NOTE: It seems that parts of the ROM BIOS (like the RS-232 probes around F000:E5D7 in the 5150 BIOS)
      * assume that ports for non-existent hardware return 0xff rather than 0x00, hence my new default (0xff) below.
@@ -808,7 +808,7 @@ export default class BusX80 extends Component {
      *
      * @this {BusX80}
      * @param {number} [port]
-     * @return {boolean} true if break on port output enabled, false if disabled
+     * @returns {boolean} true if break on port output enabled, false if disabled
      */
     addPortOutputBreak(port)
     {
@@ -978,7 +978,7 @@ export default class BusX80 extends Component {
      * @param {number} addr
      * @param {number} size
      * @param {boolean} [fQuiet] (true if any error should be quietly logged)
-     * @return {boolean} false
+     * @returns {boolean} false
      */
     reportError(op, addr, size, fQuiet)
     {

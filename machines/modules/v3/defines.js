@@ -8,7 +8,7 @@
  */
 
 /**
- * @class {Defines}
+ * @class Defines
  */
 export default class Defines {}
 

@@ -22,7 +22,7 @@ import Monitor from "../../../../modules/v3/monitor.js";
  */
 
 /**
- * @class {InvadersVideo}
+ * @class InvadersVideo
  * @unrestricted
  * @property {InvadersVideoConfig} config
  */

@@ -16,7 +16,7 @@ import Str from "../../../modules/v2/strlib.js";
  *
  * @param {string} format
  * @param {...} args
- * @return {number}
+ * @returns {number}
  */
 function printf(format, ...args)
 {

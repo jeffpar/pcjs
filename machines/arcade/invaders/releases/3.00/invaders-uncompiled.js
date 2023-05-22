@@ -3,7 +3,7 @@
  */
 
 /**
- * @class {Defines}
+ * @class Defines
  */
 class Defines {}
 
@@ -178,7 +178,7 @@ Defines.CLASSES["Defines"] = Defines;
  */
 
 /**
- * @class {NumIO}
+ * @class NumIO
  * @unrestricted
  */
 class NumIO extends Defines {
@@ -782,7 +782,7 @@ NumIO.CLASSES["NumIO"] = NumIO;
 let Formatter;
 
 /**
- * @class {StdIO}
+ * @class StdIO
  * @unrestricted
  * @property {Object.<string,(Formatter|null)>}>} formatters
  */
@@ -1462,7 +1462,7 @@ let Media;
 let Config;
 
 /**
- * @class {WebIO}
+ * @class WebIO
  * @unrestricted
  * @property {Object} bindings
  * @property {number} messages
@@ -3128,7 +3128,7 @@ let Register;
  *
  * Besides CPUs, other devices may have internal registers or ports that are useful to access by name, too.
  *
- * @class {Device}
+ * @class Device
  * @unrestricted
  * @property {string} idMachine
  * @property {string} idDevice
@@ -3721,7 +3721,7 @@ let SurfaceListener;
 let SurfaceState;
 
 /**
- * @class {Input}
+ * @class Input
  * @unrestricted
  * @property {InputConfig} config
  * @property {Array.<number>} location
@@ -5168,7 +5168,7 @@ let LEDConfig;
  * simple for this device, but also simulates how the display goes blank for short periods of time while
  * the CPU is busy performing calculations.
  *
- * @class {LED}
+ * @class LED
  * @unrestricted
  * @property {LEDConfig} config
  * @property {number} type (one of the LED.TYPE values)
@@ -6257,7 +6257,7 @@ LED.CLASSES["LED"] = LED;
 let MonitorConfig;
 
 /**
- * @class {Monitor}
+ * @class Monitor
  * @unrestricted
  * @property {MonitorConfig} config
  */
@@ -6724,7 +6724,7 @@ let Timer;
 let TimeConfig;
 
 /**
- * @class {Time}
+ * @class Time
  * @unrestricted
  * @property {TimeConfig} config
  * @property {number} nCyclesMinimum
@@ -7762,7 +7762,7 @@ Time.CLASSES["Time"] = Time;
 let BusConfig;
 
 /**
- * @class {Bus}
+ * @class Bus
  * @unrestricted
  * @property {BusConfig} config
  * @property {number} type (Bus.TYPE value, converted from config['type'])
@@ -8612,7 +8612,7 @@ Bus.CLASSES["Bus"] = Bus;
 let MemoryConfig;
 
 /**
- * @class {Memory}
+ * @class Memory
  * @unrestricted
  * @property {number} [addr]
  * @property {number} size
@@ -9669,7 +9669,7 @@ Memory.CLASSES["Memory"] = Memory;
 let PortsConfig;
 
 /**
- * @class {Ports}
+ * @class Ports
  * @unrestricted
  * @property {PortsConfig} config
  * @property {number} addr
@@ -9866,7 +9866,7 @@ Ports.CLASSES["Ports"] = Ports;
 let RAMConfig;
 
 /**
- * @class {RAM}
+ * @class RAM
  * @unrestricted
  * @property {RAMConfig} config
  * @property {number} addr
@@ -9911,7 +9911,7 @@ RAM.CLASSES["RAM"] = RAM;
 let ROMConfig;
 
 /**
- * @class {ROM}
+ * @class ROM
  * @unrestricted
  * @property {ROMConfig} config
  */
@@ -10137,7 +10137,7 @@ ROM.CLASSES["ROM"] = ROM;
 let CPUConfig;
 
 /**
- * @class {CPU}
+ * @class CPU
  * @unrestricted
  * @property {Time} time
  * @property {Debugger} dbg
@@ -10302,7 +10302,7 @@ let Dumper;
 /**
  * Debugger Services
  *
- * @class {Debugger}
+ * @class Debugger
  * @unrestricted
  * @property {Array.<Array.<Address>>} aaBreakAddress
  */
@@ -13019,7 +13019,7 @@ Debugger.DECOP_PRECEDENCE = {
 /**
  * Emulation of the 8080 CPU
  *
- * @class {CPUx80}
+ * @class CPUx80
  * @unrestricted
  * @property {Bus} busIO
  * @property {Bus} busMemory
@@ -17031,7 +17031,7 @@ CPUx80.CLASSES["CPUx80"] = CPUx80;
 /**
  * Debugger for the 8080 CPU
  *
- * @class {Dbgx80}
+ * @class Dbgx80
  * @unrestricted
  */
 class Dbgx80 extends Debugger {
@@ -17621,7 +17621,7 @@ Dbgx80.CLASSES["Dbgx80"] = Dbgx80;
 let InvadersPortsConfig;
 
 /**
- * @class {InvadersPorts}
+ * @class InvadersPorts
  * @unrestricted
  * @property {InvadersPortsConfig} config
  */
@@ -17994,7 +17994,7 @@ InvadersPorts.CLASSES["InvadersPorts"] = InvadersPorts;
 let InvadersVideoConfig;
 
 /**
- * @class {InvadersVideo}
+ * @class InvadersVideo
  * @unrestricted
  * @property {InvadersVideoConfig} config
  */
@@ -18415,7 +18415,7 @@ InvadersVideo.CLASSES["InvadersVideo"] = InvadersVideo;
  */
 
 /**
- * @class {Machine}
+ * @class Machine
  * @unrestricted
  * @property {CPU} cpu
  * @property {string} sConfigFile

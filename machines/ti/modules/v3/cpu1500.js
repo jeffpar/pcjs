@@ -14,7 +14,7 @@ import LED    from "../../../modules/v3/led.js";
 /**
  * 64-bit Register
  *
- * @class {Reg64}
+ * @class Reg64
  * @unrestricted
  * @property {CPU1500} cpu
  * @property {Array.<number>} digits
@@ -311,7 +311,7 @@ class Reg64 extends Device {
  * the Machine class guarantees that the CPU class is initialized after the ROM class, we can look it up in
  * the constructor.
  *
- * @class {CPU1500}
+ * @class CPU1500
  * @unrestricted
  * @property {Array.<Reg64>} regsO (operational registers A-D)
  * @property {Reg64} regA (alias for regsO[0])

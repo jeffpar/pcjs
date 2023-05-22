@@ -22,7 +22,7 @@ import NumIO from "./numio.js";
  */
 
 /**
- * @class {StdIO}
+ * @class StdIO
  * @unrestricted
  * @property {Object.<string,(Formatter|null)>}>} formatters
  */

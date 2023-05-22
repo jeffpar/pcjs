@@ -16,7 +16,7 @@ import Device from "./device.js";
  */
 
 /**
- * @class {Monitor}
+ * @class Monitor
  * @unrestricted
  * @property {MonitorConfig} config
  */

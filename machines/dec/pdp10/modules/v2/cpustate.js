@@ -250,7 +250,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      * TODO: Implement
      *
      * @this {CPUStatePDP10}
-     * @return {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
+     * @returns {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
      */
     getChecksum()
     {
@@ -261,7 +261,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      * save()
      *
      * @this {CPUStatePDP10}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -292,7 +292,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      *
      * @this {CPUStatePDP10}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -331,7 +331,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      * Gets the processor state flags in the format required by various program control operations (eg, JSP).
      *
      * @this {CPUStatePDP10}
-     * @return {number}
+     * @returns {number}
      */
     getPS()
     {
@@ -375,7 +375,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      * Used to implement the ""CONI APR," instruction; see opCONI().
      *
      * @this {CPUStatePDP10}
-     * @return {number}
+     * @returns {number}
      */
     readFlags()
     {
@@ -410,7 +410,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      * we take care of that first.
      *
      * @this {CPUStatePDP10}
-     * @return {number} (-1 if the reference address in regRA has not yet been fully decoded)
+     * @returns {number} (-1 if the reference address in regRA has not yet been fully decoded)
      */
     getOpcode()
     {
@@ -455,7 +455,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      *
      * @this {CPUStatePDP10}
      * @param {number} off
-     * @return {number} (original PC)
+     * @returns {number} (original PC)
      */
     advancePC(off)
     {
@@ -470,7 +470,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      * NOTE: This function is nothing more than a convenience, and we fully expect it to be inlined at runtime.
      *
      * @this {CPUStatePDP10}
-     * @return {number}
+     * @returns {number}
      */
     getPC()
     {
@@ -483,7 +483,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      * NOTE: This function is nothing more than a convenience, and we fully expect it to be inlined at runtime.
      *
      * @this {CPUStatePDP10}
-     * @return {number}
+     * @returns {number}
      */
     getXC()
     {
@@ -494,7 +494,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      * getLastAddr()
      *
      * @this {CPUStatePDP10}
-     * @return {number}
+     * @returns {number}
      */
     getLastAddr()
     {
@@ -505,7 +505,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      * getLastPC()
      *
      * @this {CPUStatePDP10}
-     * @return {number}
+     * @returns {number}
      */
     getLastPC()
     {
@@ -535,7 +535,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      * @param {number} vector (-1 for floating vector)
      * @param {number} priority
      * @param {number} [message]
-     * @return {IRQ}
+     * @returns {IRQ}
      */
     addIRQ(vector, priority, message)
     {
@@ -645,7 +645,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      *
      * @this {CPUStatePDP10}
      * @param {number} vector
-     * @return {IRQ|null}
+     * @returns {IRQ|null}
      */
     findIRQ(vector)
     {
@@ -661,7 +661,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      *
      * @this {CPUStatePDP10}
      * @param {number} priority
-     * @return {IRQ|null}
+     * @returns {IRQ|null}
      */
     checkIRQs(priority)
     {
@@ -682,7 +682,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      * saveIRQs()
      *
      * @this {CPUStatePDP10}
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     saveIRQs()
     {
@@ -717,7 +717,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      * checkInterrupts()
      *
      * @this {CPUStatePDP10}
-     * @return {boolean} true if an interrupt was dispatched, false if not
+     * @returns {boolean} true if an interrupt was dispatched, false if not
      */
     checkInterrupts()
     {
@@ -762,7 +762,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      * @this {CPUStatePDP10}
      * @param {number} vector
      * @param {number} priority
-     * @return {boolean} (true if dispatched, false if not)
+     * @returns {boolean} (true if dispatched, false if not)
      */
     dispatchInterrupt(vector, priority)
     {
@@ -773,7 +773,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      * isWaiting()
      *
      * @this {CPUStatePDP10}
-     * @return {boolean} (true if OPFLAG.WAIT is set, false otherwise)
+     * @returns {boolean} (true if OPFLAG.WAIT is set, false otherwise)
      */
     isWaiting()
     {
@@ -787,7 +787,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      *
      * @this {CPUStatePDP10}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordFromPhysical(addr)
     {
@@ -802,7 +802,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      * @this {CPUStatePDP10}
      * @param {number} addr
      * @param {number} data
-     * @return {number} (we return the data back to the caller to permit nested writes)
+     * @returns {number} (we return the data back to the caller to permit nested writes)
      */
     writeWordToPhysical(addr, data)
     {
@@ -835,7 +835,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      *
      * @this {CPUStatePDP10}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {number} of cycles executed; 0 indicates a pre-execution condition (ie, an execution breakpoint
+     * @returns {number} of cycles executed; 0 indicates a pre-execution condition (ie, an execution breakpoint
      * was hit), -1 indicates a post-execution condition (eg, a read or write breakpoint was hit), and a positive
      * number indicates successful completion of that many cycles (which should always be >= nMinCycles).
      */

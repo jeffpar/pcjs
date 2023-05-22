@@ -152,7 +152,7 @@ export default class MemoryPDP10 {
      * which in turn is called by CPUState.save().
      *
      * @this {MemoryPDP10}
-     * @return {Array.<number>|null}
+     * @returns {Array.<number>|null}
      */
     save()
     {
@@ -168,7 +168,7 @@ export default class MemoryPDP10 {
      *
      * @this {MemoryPDP10}
      * @param {Array.<number>|null} aw
-     * @return {boolean} true if successful, false if block size mismatch
+     * @returns {boolean} true if successful, false if block size mismatch
      */
     restore(aw)
     {
@@ -381,7 +381,7 @@ export default class MemoryPDP10 {
      * @this {MemoryPDP10}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readNone(off, addr)
     {
@@ -414,7 +414,7 @@ export default class MemoryPDP10 {
      * @this {MemoryPDP10}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordMemory(off, addr)
     {
@@ -446,7 +446,7 @@ export default class MemoryPDP10 {
      * @this {MemoryPDP10}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordChecked(off, addr)
     {

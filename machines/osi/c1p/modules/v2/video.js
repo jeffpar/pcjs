@@ -199,7 +199,7 @@ export default class C1PVideo extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "refresh")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -456,7 +456,7 @@ export default class C1PVideo extends Component {
      * updateScreen() updates the screen buffer from the video buffer and updates the window with any changes.
      *
      * @this {C1PVideo}
-     * @return {boolean}
+     * @returns {boolean}
      *
      * For every byte in the video buffer, this renders it if it differs from the byte stored in the screen buffer,
      * and then updates the screen buffer to match.  Since initScreen() sets every byte in the screen buffer
@@ -485,7 +485,7 @@ export default class C1PVideo extends Component {
      * @this {C1PVideo}
      * @param {number} offset
      * @param {number} b
-     * @return {boolean}
+     * @returns {boolean}
      */
     writeByte(offset, b)
     {
@@ -503,7 +503,7 @@ export default class C1PVideo extends Component {
      * @param {number} col
      * @param {number} row
      * @param {number} b
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      *
      * I originally used (screenWidth,screenHeight) == (512,448) and (cols,rows) == (32,32) and (cxChar,cyChar) == (16,16),
      * and I simply copied the source cells 1-to-1 to the destination (16,16), knowing that we would never try to display

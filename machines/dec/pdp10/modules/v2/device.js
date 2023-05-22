@@ -52,7 +52,7 @@ export default class DevicePDP10 extends Component {
      * @this {DevicePDP10}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -72,7 +72,7 @@ export default class DevicePDP10 extends Component {
      * @this {DevicePDP10}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -94,7 +94,7 @@ export default class DevicePDP10 extends Component {
      * This implements save support for the DevicePDP10 component.
      *
      * @this {DevicePDP10}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -109,7 +109,7 @@ export default class DevicePDP10 extends Component {
      *
      * @this {DevicePDP10}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {

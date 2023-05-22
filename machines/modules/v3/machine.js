@@ -10,7 +10,7 @@
 import Device from "./device.js";
 
 /**
- * @class {Machine}
+ * @class Machine
  * @unrestricted
  * @property {CPU} cpu
  * @property {string} sConfigFile

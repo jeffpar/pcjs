@@ -245,7 +245,7 @@ export default class FDC extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "listDisks")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -495,7 +495,7 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {Object|string|undefined} config
      * @param {Object} [configMerge]
-     * @return {Object}
+     * @returns {Object}
      */
     parseMount(config, configMerge)
     {
@@ -539,7 +539,7 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -568,7 +568,7 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -663,7 +663,7 @@ export default class FDC extends Component {
      * This implements save support for the FDC component.
      *
      * @this {FDC}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -679,7 +679,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -691,7 +691,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {Array} [data]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(data)
     {
@@ -816,7 +816,7 @@ export default class FDC extends Component {
      * saveController()
      *
      * @this {FDC}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -849,7 +849,7 @@ export default class FDC extends Component {
      * @param {DriveType|null} driveType
      * @param {Array|undefined} data
      * @param {boolean} fInit
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initDrive(drive, iDrive, driveType, data, fInit)
     {
@@ -1041,7 +1041,7 @@ export default class FDC extends Component {
      * getDriveLimits()
      *
      * @this {FDC}
-     * @return {Array} ([0] is max heads, and [1] is max cylinders)
+     * @returns {Array} ([0] is max heads, and [1] is max cylinders)
      */
     getDriveLimits()
     {
@@ -1063,7 +1063,7 @@ export default class FDC extends Component {
      * saveDrives()
      *
      * @this {FDC}
-     * @return {Array}
+     * @returns {Array}
      */
     saveDrives()
     {
@@ -1080,7 +1080,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {Object} drive
-     * @return {Array}
+     * @returns {Array}
      */
     saveDrive(drive)
     {
@@ -1130,7 +1130,7 @@ export default class FDC extends Component {
      * disk image(s), so we call updateHistory() for all those disks, and then aDiskHistory is ready to be saved.
      *
      * @this {FDC}
-     * @return {Array}
+     * @returns {Array}
      */
     saveDeltas()
     {
@@ -1148,7 +1148,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {number} iDrive
-     * @return {Object|undefined} drive (which may be undefined if the requested drive does not exist)
+     * @returns {Object|undefined} drive (which may be undefined if the requested drive does not exist)
      */
     copyDrive(iDrive)
     {
@@ -1181,7 +1181,7 @@ export default class FDC extends Component {
      * @param {Object} drive
      * @param {number} iSector (a "logical" sector number, relative to the entire disk, NOT a physical sector number)
      * @param {number} nSectors
-     * @return {boolean} true if successful, false if invalid position request
+     * @returns {boolean} true if successful, false if invalid position request
      */
     seekDrive(drive, iSector, nSectors)
     {
@@ -1219,7 +1219,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {boolean} [fRemount] is true if we're remounting all auto-mounted diskettes
-     * @return {boolean} true if one or more diskette images are being auto-mounted, false if none
+     * @returns {boolean} true if one or more diskette images are being auto-mounted, false if none
      */
     autoMount(fRemount)
     {
@@ -1254,7 +1254,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {...} args
-     * @return {boolean}
+     * @returns {boolean}
      */
     loadSelectedDisk(...args)
     {
@@ -1275,7 +1275,7 @@ export default class FDC extends Component {
      * @param {string} sDiskName
      * @param {string} sDiskPath
      * @param {File} [file] is set if there's an associated File object
-     * @return {boolean}
+     * @returns {boolean}
      */
     loadSelectedDrive(sDiskName, sDiskPath, file)
     {
@@ -1365,7 +1365,7 @@ export default class FDC extends Component {
      * @param {string} sDiskPath
      * @param {boolean} [fAutoMount]
      * @param {File} [file] is set if there's an associated File object
-     * @return {number} 1 if diskette loaded, 0 if queued up (or busy), -1 if already loaded
+     * @returns {number} 1 if diskette loaded, 0 if queued up (or busy), -1 if already loaded
      */
     loadDrive(iDrive, sDiskName, sDiskPath, fAutoMount, file)
     {
@@ -1623,7 +1623,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {string} sPath
-     * @return {string|null}
+     * @returns {string|null}
      */
     findDisketteByPath(sPath)
     {
@@ -1645,7 +1645,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {string|undefined} sName
-     * @return {string}
+     * @returns {string}
      */
     findDisketteByName(sName)
     {
@@ -1688,7 +1688,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {number} iDrive
-     * @return {HTMLSelectElement|undefined}
+     * @returns {HTMLSelectElement|undefined}
      */
     getDiskList(iDrive)
     {
@@ -1852,7 +1852,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {function()|null} fnCallReady
-     * @return {boolean} false if wait required, true otherwise
+     * @returns {boolean} false if wait required, true otherwise
      */
     waitDrives(fnCallReady)
     {
@@ -2114,7 +2114,7 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {number} port (0x3F1, input only)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inFDCDiagnostic(port, addrFrom)
     {
@@ -2129,7 +2129,7 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {number} port (0x3F4, input only)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inFDCStatus(port, addrFrom)
     {
@@ -2143,7 +2143,7 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {number} port (0x3F5, input/output)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inFDCData(port, addrFrom)
     {
@@ -2207,7 +2207,7 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {number} port (0x3F7, input only, MODEL_5170 only)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inFDCInput(port, addrFrom)
     {
@@ -2567,7 +2567,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {string|undefined} [name]
-     * @return {number}
+     * @returns {number}
      */
     popCmd(name)
     {
@@ -2721,7 +2721,7 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {Object} drive
      * @param {number} b
-     * @return {number}
+     * @returns {number}
      */
     doDMAWrite(drive, b)
     {
@@ -2758,7 +2758,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {Object} drive
-     * @return {boolean}
+     * @returns {boolean}
      */
     doRead(drive)
     {
@@ -2800,7 +2800,7 @@ export default class FDC extends Component {
      *
      * @this {FDC}
      * @param {Object} drive
-     * @return {boolean}
+     * @returns {boolean}
      */
     doWrite(drive)
     {
@@ -2971,7 +2971,7 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {Object} drive
      * @param {number} b containing next byte to write
-     * @return {number} (b unchanged; return -1 if command should be terminated)
+     * @returns {number} (b unchanged; return -1 if command should be terminated)
      */
     writeData(drive, b)
     {
@@ -3037,7 +3037,7 @@ export default class FDC extends Component {
      * @this {FDC}
      * @param {Object} drive
      * @param {number} b containing a format command byte
-     * @return {number} (b if successful, -1 if command should be terminated)
+     * @returns {number} (b if successful, -1 if command should be terminated)
      */
     writeFormat(drive, b)
     {

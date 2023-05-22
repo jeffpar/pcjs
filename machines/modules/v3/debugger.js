@@ -55,7 +55,7 @@ import Memory from "./memory.js";
 /**
  * Debugger Services
  *
- * @class {Debugger}
+ * @class Debugger
  * @unrestricted
  * @property {Array.<Array.<Address>>} aaBreakAddress
  */

@@ -151,7 +151,7 @@ export default class DevicePDP11 extends Component {
      * @this {DevicePDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -171,7 +171,7 @@ export default class DevicePDP11 extends Component {
      * @this {DevicePDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -195,7 +195,7 @@ export default class DevicePDP11 extends Component {
      * This implements save support for the DevicePDP11 component.
      *
      * @this {DevicePDP11}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -213,7 +213,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -253,7 +253,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.LKS or 177546)
-     * @return {number}
+     * @returns {number}
      */
     readLKS(addr)
     {
@@ -288,7 +288,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MMR0 or 177572)
-     * @return {number}
+     * @returns {number}
      */
     readMMR0(addr)
     {
@@ -312,7 +312,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MMR1 or 177574)
-     * @return {number}
+     * @returns {number}
      */
     readMMR1(addr)
     {
@@ -324,7 +324,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MMR2 or 177576)
-     * @return {number}
+     * @returns {number}
      */
     readMMR2(addr)
     {
@@ -336,7 +336,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MMR3 or 172516)
-     * @return {number}
+     * @returns {number}
      */
     readMMR3(addr)
     {
@@ -362,7 +362,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UNIMAP)
-     * @return {number}
+     * @returns {number}
      */
     readUNIMAP(addr)
     {
@@ -395,7 +395,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SIPDR0--SIPDR7 or 172200--172216)
-     * @return {number}
+     * @returns {number}
      */
     readSIPDR(addr)
     {
@@ -421,7 +421,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SDPDR0--SDPDR7 or 172220--172236)
-     * @return {number}
+     * @returns {number}
      */
     readSDPDR(addr)
     {
@@ -447,7 +447,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SIPAR0--SIPAR7 or 172240--172256)
-     * @return {number}
+     * @returns {number}
      */
     readSIPAR(addr)
     {
@@ -475,7 +475,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SDPAR0--SDPAR7 or 172260--172276)
-     * @return {number}
+     * @returns {number}
      */
     readSDPAR(addr)
     {
@@ -502,7 +502,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.KIPDR0--KIPDR7 or 172300--172316)
-     * @return {number}
+     * @returns {number}
      */
     readKIPDR(addr)
     {
@@ -528,7 +528,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.KDPDR0--KDPDR7 or 172320--172336)
-     * @return {number}
+     * @returns {number}
      */
     readKDPDR(addr)
     {
@@ -554,7 +554,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.KIPAR0--KIPAR7 or 172340--172356)
-     * @return {number}
+     * @returns {number}
      */
     readKIPAR(addr)
     {
@@ -582,7 +582,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.KDPAR0--KDPAR7 or 172360--172376)
-     * @return {number}
+     * @returns {number}
      */
     readKDPAR(addr)
     {
@@ -609,7 +609,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UIPDR0--UIPDR7 or 177600--177616)
-     * @return {number}
+     * @returns {number}
      */
     readUIPDR(addr)
     {
@@ -635,7 +635,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UDPDR0--UDPDR7 or 177620--177636)
-     * @return {number}
+     * @returns {number}
      */
     readUDPDR(addr)
     {
@@ -661,7 +661,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UIPAR0--UIPAR7 or 177640--177656)
-     * @return {number}
+     * @returns {number}
      */
     readUIPAR(addr)
     {
@@ -689,7 +689,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UDPAR0--UDPAR7 or 177660--177676)
-     * @return {number}
+     * @returns {number}
      */
     readUDPAR(addr)
     {
@@ -716,7 +716,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R0SET0--R5SET0 or 177700--177705)
-     * @return {number}
+     * @returns {number}
      */
     readRSET0(addr)
     {
@@ -752,7 +752,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R6KERNEL or 177706)
-     * @return {number}
+     * @returns {number}
      */
     readR6KERNEL(addr)
     {
@@ -786,7 +786,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R7KERNEL or 177707)
-     * @return {number}
+     * @returns {number}
      */
     readR7KERNEL(addr)
     {
@@ -810,7 +810,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R0SET1--R5SET1 or 177710--177715)
-     * @return {number}
+     * @returns {number}
      */
     readRSET1(addr)
     {
@@ -846,7 +846,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R6SUPER or 177716)
-     * @return {number}
+     * @returns {number}
      */
     readR6SUPER(addr)
     {
@@ -880,7 +880,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R6USER or 177717)
-     * @return {number}
+     * @returns {number}
      */
     readR6USER(addr)
     {
@@ -914,7 +914,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.LAERR--UNDEF2 or 177740--177756)
-     * @return {number}
+     * @returns {number}
      */
     readCTRL(addr)
     {
@@ -951,7 +951,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.LSIZE--HSIZE or 177760--177762)
-     * @return {number}
+     * @returns {number}
      */
     readSIZE(addr)
     {
@@ -976,7 +976,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SYSID or 177764)
-     * @return {number}
+     * @returns {number}
      */
     readSYSID(addr)
     {
@@ -1001,7 +1001,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.CPUERR or 177766)
-     * @return {number}
+     * @returns {number}
      */
     readCPUERR(addr)
     {
@@ -1025,7 +1025,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MB or 177770)
-     * @return {number}
+     * @returns {number}
      */
     readMBR(addr)
     {
@@ -1053,7 +1053,7 @@ export default class DevicePDP11 extends Component {
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.PIR or 177772)
      * @param {boolean} [fPreWrite]
-     * @return {number}
+     * @returns {number}
      */
     readPIR(addr, fPreWrite)
     {
@@ -1079,7 +1079,7 @@ export default class DevicePDP11 extends Component {
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SL or 177774)
      * @param {boolean} [fPreWrite]
-     * @return {number}
+     * @returns {number}
      */
     readSLR(addr, fPreWrite)
     {
@@ -1104,7 +1104,7 @@ export default class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.PSW or 177776)
-     * @return {number}
+     * @returns {number}
      */
     readPSW(addr)
     {

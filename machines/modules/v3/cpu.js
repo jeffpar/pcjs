@@ -15,7 +15,7 @@ import Device from "./device.js";
  */
 
 /**
- * @class {CPU}
+ * @class CPU
  * @unrestricted
  * @property {Time} time
  * @property {Debugger} dbg

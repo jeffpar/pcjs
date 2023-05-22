@@ -833,7 +833,7 @@ class Str {
      *
      * @param {string} s is the string representation of some number
      * @param {number} [base] is the radix to use (default is 10); only 2, 8, 10 and 16 are supported
-     * @return {boolean} true if valid, false if invalid (or the specified base isn't supported)
+     * @returns {boolean} true if valid, false if invalid (or the specified base isn't supported)
      */
     static isValidInt(s, base)
     {
@@ -866,7 +866,7 @@ class Str {
      *
      * @param {string} s is the string representation of some number
      * @param {number} [base] is the radix to use (default is 10); can be overridden by prefixes/suffixes
-     * @return {number|undefined} corresponding value, or undefined if invalid
+     * @returns {number|undefined} corresponding value, or undefined if invalid
      */
     static parseInt(s, base)
     {
@@ -983,7 +983,7 @@ class Str {
      * @param {number} cch (the desired number of digits)
      * @param {string} [sPrefix] (default is none)
      * @param {number} [nGrouping]
-     * @return {string}
+     * @returns {string}
      */
     static toBase(n, radix, cch, sPrefix = "", nGrouping = 0)
     {
@@ -1044,7 +1044,7 @@ class Str {
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of binary digits (0 or undefined for default of either 8, 18, or 36)
      * @param {number} [nGrouping]
-     * @return {string} the binary representation of n
+     * @returns {string} the binary representation of n
      */
     static toBin(n, cch, nGrouping)
     {
@@ -1070,7 +1070,7 @@ class Str {
      * @param {number|null|undefined} n (interpreted as a 32-bit value)
      * @param {number} [cb] is the desired number of binary bytes (4 is both the default and the maximum)
      * @param {boolean} [fPrefix]
-     * @return {string} the binary representation of n
+     * @returns {string} the binary representation of n
      */
     static toBinBytes(n, cb, fPrefix)
     {
@@ -1096,7 +1096,7 @@ class Str {
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of octal digits (0 or undefined for default of either 6, 8, or 12)
      * @param {boolean} [fPrefix]
-     * @return {string} the octal representation of n
+     * @returns {string} the octal representation of n
      */
     static toOct(n, cch, fPrefix)
     {
@@ -1125,7 +1125,7 @@ class Str {
      *
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of decimal digits (0 or undefined for default of either 5 or 11)
-     * @return {string} the decimal representation of n
+     * @returns {string} the decimal representation of n
      */
     static toDec(n, cch)
     {
@@ -1161,7 +1161,7 @@ class Str {
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of hex digits (0 or undefined for default of either 4, 8, or 9)
      * @param {boolean} [fPrefix]
-     * @return {string} the hex representation of n
+     * @returns {string} the hex representation of n
      */
     static toHex(n, cch, fPrefix)
     {
@@ -1185,7 +1185,7 @@ class Str {
      * Alias for Str.toHex(b, 2, true)
      *
      * @param {number|null|undefined} b is a byte value
-     * @return {string} the hex representation of b
+     * @returns {string} the hex representation of b
      */
     static toHexByte(b)
     {
@@ -1198,7 +1198,7 @@ class Str {
      * Alias for Str.toHex(w, 4, true)
      *
      * @param {number|null|undefined} w is a word (16-bit) value
-     * @return {string} the hex representation of w
+     * @returns {string} the hex representation of w
      */
     static toHexWord(w)
     {
@@ -1211,7 +1211,7 @@ class Str {
      * Alias for Str.toHex(l, 8, true)
      *
      * @param {number|null|undefined} l is a dword (32-bit) value
-     * @return {string} the hex representation of w
+     * @returns {string} the hex representation of w
      */
     static toHexLong(l)
     {
@@ -1228,7 +1228,7 @@ class Str {
      *
      * @param {string} sFileName
      * @param {boolean} [fStripExt]
-     * @return {string}
+     * @returns {string}
      */
     static getBaseName(sFileName, fStripExt)
     {
@@ -1260,7 +1260,7 @@ class Str {
      * Note that we EXCLUDE the period from the returned extension, whereas path.extname() includes it.
      *
      * @param {string} sFileName
-     * @return {string} the filename's extension (in lower-case and EXCLUDING the "."), or an empty string
+     * @returns {string} the filename's extension (in lower-case and EXCLUDING the "."), or an empty string
      */
     static getExtension(sFileName)
     {
@@ -1278,7 +1278,7 @@ class Str {
      *
      * @param {string} s
      * @param {string} sSuffix
-     * @return {boolean} true if s ends with sSuffix, false if not
+     * @returns {boolean} true if s ends with sSuffix, false if not
      */
     static endsWith(s, sSuffix)
     {
@@ -1289,7 +1289,7 @@ class Str {
      * escapeHTML(sHTML)
      *
      * @param {string} sHTML
-     * @return {string} with special characters "escaped" as HTML entities, similar to PHP's htmlspecialchars()
+     * @returns {string} with special characters "escaped" as HTML entities, similar to PHP's htmlspecialchars()
      */
     static escapeHTML(sHTML)
     {
@@ -1327,7 +1327,7 @@ class Str {
      * @param {string} sSearch
      * @param {string} sReplace
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static replace(sSearch, sReplace, s)
     {
@@ -1344,7 +1344,7 @@ class Str {
      * @param {string} sSearch
      * @param {string} sReplace
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static replaceAll(sSearch, sReplace, s)
     {
@@ -1358,7 +1358,7 @@ class Str {
      *
      * @param {Object} a
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static replaceArray(a, s)
     {
@@ -1390,7 +1390,7 @@ class Str {
      * @param {string} s is a string
      * @param {number} cch is desired length
      * @param {boolean} [fPadLeft] (default is padding on the right)
-     * @return {string} the original string (s) with spaces padding it to the specified length
+     * @returns {string} the original string (s) with spaces padding it to the specified length
      */
     static pad(s, cch, fPadLeft)
     {
@@ -1414,7 +1414,7 @@ class Str {
      * local time.
      *
      * @param {...} args
-     * @return {Date} (UTC unless a time string with a non-GMT timezone is explicitly provided)
+     * @returns {Date} (UTC unless a time string with a non-GMT timezone is explicitly provided)
      */
     static parseDate(...args)
     {
@@ -1437,7 +1437,7 @@ class Str {
      * isValidDate(date)
      *
      * @param {Date} date
-     * @return {boolean}
+     * @returns {boolean}
      */
     static isValidDate(date)
     {
@@ -1457,7 +1457,7 @@ class Str {
      *
      * @param {string} format
      * @param {...} args
-     * @return {string}
+     * @returns {string}
      */
     static sprintf(format, ...args)
     {
@@ -1831,7 +1831,7 @@ class Str {
      *
      * @param {string} s
      * @param {boolean} [fPad]
-     * @return {string}
+     * @returns {string}
      */
     static stripLeadingZeros(s, fPad)
     {
@@ -1845,7 +1845,7 @@ class Str {
      * trim(s)
      *
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static trim(s)
     {
@@ -1859,7 +1859,7 @@ class Str {
      * toASCIICode(b)
      *
      * @param {number} b
-     * @return {string}
+     * @returns {string}
      */
     static toASCIICode(b)
     {
@@ -1969,7 +1969,7 @@ class Usr {
      * @param {Array} a is an array
      * @param {number|string|Array|Object} v
      * @param {function((number|string|Array|Object), (number|string|Array|Object))} [fnCompare]
-     * @return {number} the index of matching entry if non-negative, otherwise the index of the insertion point
+     * @returns {number} the index of matching entry if non-negative, otherwise the index of the insertion point
      */
     static binarySearch(a, v, fnCompare)
     {
@@ -2017,7 +2017,7 @@ class Usr {
     /**
      * getTimestamp()
      *
-     * @return {string} timestamp containing the current date and time ("yyyy-mm-dd hh:mm:ss")
+     * @returns {string} timestamp containing the current date and time ("yyyy-mm-dd hh:mm:ss")
      */
     static getTimestamp()
     {
@@ -2040,7 +2040,7 @@ class Usr {
      *
      * @param {number} nMonth (1-12)
      * @param {number} nYear (normally a 4-digit year, but it may also be mod 100)
-     * @return {number} the maximum (1-based) day allowed for the specified month and year
+     * @returns {number} the maximum (1-based) day allowed for the specified month and year
      */
     static getMonthDays(nMonth, nYear)
     {
@@ -2077,7 +2077,7 @@ class Usr {
      *
      * @param {Date} date
      * @param {number} days (+/-)
-     * @return {Date}
+     * @returns {Date}
      */
     static adjustDays(date, days)
     {
@@ -2089,7 +2089,7 @@ class Usr {
      *
      * @param {Date|string} date1
      * @param {Date|string} date2
-     * @return {number} (date1 - date2, returned as a signed integer number of days)
+     * @returns {number} (date1 - date2, returned as a signed integer number of days)
      */
     static subtractDays(date1, date2)
     {
@@ -2112,7 +2112,7 @@ class Usr {
      * The above set bit field "bfs.num" in numeric variable "n" to the value 1.
      *
      * @param {Object} bfs
-     * @return {BitFields}
+     * @returns {BitFields}
      */
     static defineBitFields(bfs)
     {
@@ -2131,7 +2131,7 @@ class Usr {
      *
      * @param {BitFields} bfs
      * @param {...number} var_args
-     * @return {number} a value containing all supplied bit fields
+     * @returns {number} a value containing all supplied bit fields
      */
     static initBitFields(bfs, var_args)
     {
@@ -2148,7 +2148,7 @@ class Usr {
      *
      * @param {BitField} bf
      * @param {number} v is a value containing bit fields
-     * @return {number} the value of the bit field in v defined by bf
+     * @returns {number} the value of the bit field in v defined by bf
      */
     static getBitField(bf, v)
     {
@@ -2161,7 +2161,7 @@ class Usr {
      * @param {BitField} bf
      * @param {number} v is a value containing bit fields
      * @param {number} n is a value to store in v in the bit field defined by bf
-     * @return {number} updated v
+     * @returns {number} updated v
      */
     static setBitField(bf, v, n)
     {
@@ -6149,7 +6149,7 @@ class PanelPDP11 extends Component {
      * getAR()
      *
      * @this {PanelPDP11}
-     * @return {number} (current ADDRESS register)
+     * @returns {number} (current ADDRESS register)
      */
     getAR()
     {
@@ -6171,7 +6171,7 @@ class PanelPDP11 extends Component {
      * getDR()
      *
      * @this {PanelPDP11}
-     * @return {number} (current DISPLAY register)
+     * @returns {number} (current DISPLAY register)
      */
     getDR()
     {
@@ -6183,7 +6183,7 @@ class PanelPDP11 extends Component {
      *
      * @this {PanelPDP11}
      * @param {number} value (new DISPLAY register)
-     * @return {number}
+     * @returns {number}
      */
     setDR(value)
     {
@@ -6194,7 +6194,7 @@ class PanelPDP11 extends Component {
      * getSR()
      *
      * @this {PanelPDP11}
-     * @return {number} (current SWITCH register)
+     * @returns {number} (current SWITCH register)
      */
     getSR()
     {
@@ -6217,7 +6217,7 @@ class PanelPDP11 extends Component {
      *
      * @this {PanelPDP11}
      * @param {string} name
-     * @return {number|undefined} 0 if switch is off ("down"), 1 if on ("up"), or undefined if unrecognized
+     * @returns {number|undefined} 0 if switch is off ("down"), 1 if on ("up"), or undefined if unrecognized
      */
     getSwitch(name)
     {
@@ -6256,7 +6256,7 @@ class PanelPDP11 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -6373,7 +6373,7 @@ class PanelPDP11 extends Component {
      * @this {PanelPDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -6400,7 +6400,7 @@ class PanelPDP11 extends Component {
      * @this {PanelPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -6413,7 +6413,7 @@ class PanelPDP11 extends Component {
      * This implements save support for the PanelPDP11 component.
      *
      * @this {PanelPDP11}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -6433,7 +6433,7 @@ class PanelPDP11 extends Component {
      *
      * @this {PanelPDP11}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -6450,7 +6450,7 @@ class PanelPDP11 extends Component {
      * resetSwitches()
      *
      * @this {PanelPDP11}
-     * @return {boolean}
+     * @returns {boolean}
      */
     resetSwitches()
     {
@@ -6560,7 +6560,7 @@ class PanelPDP11 extends Component {
      * @param {function()|null} fnCallback
      * @param {string} sBinding
      * @param {string} [sDelay]
-     * @return {boolean} false if wait required, true otherwise
+     * @returns {boolean} false if wait required, true otherwise
      */
     holdSwitch(fnCallback, sBinding, sDelay)
     {
@@ -6585,7 +6585,7 @@ class PanelPDP11 extends Component {
      * @this {PanelPDP11}
      * @param {string} sBinding
      * @param {string} sValue
-     * @return {boolean}
+     * @returns {boolean}
      */
     setSwitch(sBinding, sValue)
     {
@@ -6606,7 +6606,7 @@ class PanelPDP11 extends Component {
      *
      * @this {PanelPDP11}
      * @param {string} sBinding
-     * @return {boolean}
+     * @returns {boolean}
      */
     toggleSwitch(sBinding)
     {
@@ -6622,7 +6622,7 @@ class PanelPDP11 extends Component {
      *
      * @this {PanelPDP11}
      * @param {string} sBinding
-     * @return {boolean}
+     * @returns {boolean}
      */
     pressSwitch(sBinding)
     {
@@ -6660,7 +6660,7 @@ class PanelPDP11 extends Component {
      *
      * @this {PanelPDP11}
      * @param {string} sBinding
-     * @return {boolean}
+     * @returns {boolean}
      */
     releaseSwitch(sBinding)
     {
@@ -6972,7 +6972,7 @@ class PanelPDP11 extends Component {
      * from 177676.
      *
      * @this {PanelPDP11}
-     * @return {number}
+     * @returns {number}
      */
     advanceAddr()
     {
@@ -6989,7 +6989,7 @@ class PanelPDP11 extends Component {
      *
      * @this {PanelPDP11}
      * @param {number} value
-     * @return {number}
+     * @returns {number}
      */
     updateAddr(value)
     {
@@ -7006,7 +7006,7 @@ class PanelPDP11 extends Component {
      *
      * @this {PanelPDP11}
      * @param {number} value
-     * @return {number}
+     * @returns {number}
      */
     updateData(value)
     {
@@ -7024,7 +7024,7 @@ class PanelPDP11 extends Component {
      * @this {PanelPDP11}
      * @param {string} sBinding
      * @param {number} value
-     * @return {number}
+     * @returns {number}
      */
     updateLED(sBinding, value)
     {
@@ -7054,7 +7054,7 @@ class PanelPDP11 extends Component {
      *
      * @this {PanelPDP11}
      * @param {number|undefined} value
-     * @return {boolean}
+     * @returns {boolean}
      */
     setSRSwitches(value)
     {
@@ -7189,7 +7189,7 @@ class PanelPDP11 extends Component {
      * @this {PanelPDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.CNSW or 177570)
      * @param {boolean} [fPreWrite]
-     * @return {number}
+     * @returns {number}
      */
     readCNSW(addr, fPreWrite)
     {
@@ -7496,7 +7496,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {number} addr
-     * @return {Array} containing the buffer (and the offset within that buffer that corresponds to the requested block)
+     * @returns {Array} containing the buffer (and the offset within that buffer that corresponds to the requested block)
      */
     getControllerBuffer(addr)
     {
@@ -7512,7 +7512,7 @@ class BusPDP11 extends Component {
      * Our Bus component also acts as custom memory controller for the IOPAGE, so it must also provide this function.
      *
      * @this {BusPDP11}
-     * @return {Array.<function()>}
+     * @returns {Array.<function()>}
      */
     getControllerAccess()
     {
@@ -7523,7 +7523,7 @@ class BusPDP11 extends Component {
      * getWidth()
      *
      * @this {BusPDP11}
-     * @return {number}
+     * @returns {number}
      */
     getWidth()
     {
@@ -7551,7 +7551,7 @@ class BusPDP11 extends Component {
      * @this {BusPDP11}
      * @param {Object|null} data (always null because we supply no powerDown() handler)
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -7571,7 +7571,7 @@ class BusPDP11 extends Component {
      * @this {BusPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -7582,7 +7582,7 @@ class BusPDP11 extends Component {
      * save()
      *
      * @this {BusPDP11}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -7596,7 +7596,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -7631,7 +7631,7 @@ class BusPDP11 extends Component {
      * @param {number} size of the request, in bytes
      * @param {number} type is one of the MemoryPDP11.TYPE constants
      * @param {Object} [controller] is an optional memory controller component
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     addMemory(addr, size, type, controller)
     {
@@ -7699,7 +7699,7 @@ class BusPDP11 extends Component {
      * @this {BusPDP11}
      * @param {number} addr
      * @param {number} size
-     * @return {boolean} true if all blocks were clean, false if dirty; all blocks are cleaned in the process
+     * @returns {boolean} true if all blocks were clean, false if dirty; all blocks are cleaned in the process
      */
     cleanMemory(addr, size)
     {
@@ -7747,7 +7747,7 @@ class BusPDP11 extends Component {
      * @param {BusInfo} [info] previous BusInfo, if any
      * @param {number} [addr] starting address of range (0 if none provided)
      * @param {number} [size] size of range, in bytes (up to end of address space if none provided)
-     * @return {BusInfo} updated info (or new info if no previous info provided)
+     * @returns {BusInfo} updated info (or new info if no previous info provided)
      */
     scanMemory(info, addr, size)
     {
@@ -7782,7 +7782,7 @@ class BusPDP11 extends Component {
      * @this {BusPDP11}
      * @param {number} addr
      * @param {number} size
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     removeMemory(addr, size)
     {
@@ -7807,7 +7807,7 @@ class BusPDP11 extends Component {
      * @this {BusPDP11}
      * @param {number} addr is the starting physical address
      * @param {number} size of the request, in bytes
-     * @return {Array} of Memory blocks
+     * @returns {Array} of Memory blocks
      */
     getMemoryBlocks(addr, size)
     {
@@ -7832,7 +7832,7 @@ class BusPDP11 extends Component {
      * @param {number} size
      * @param {Array.<function()>} [afn]
      * @param {boolean} [fQuiet] (true if any error should be quietly logged)
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     setMemoryAccess(addr, size, afn, fQuiet)
     {
@@ -7890,7 +7890,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {number} addr is a physical address
-     * @return {number} byte (8-bit) value at that address
+     * @returns {number} byte (8-bit) value at that address
      */
     getByte(addr)
     {
@@ -7902,7 +7902,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {number} addr is a physical address
-     * @return {number} word (16-bit) value at that address
+     * @returns {number} word (16-bit) value at that address
      */
     getWord(addr)
     {
@@ -7951,7 +7951,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {number} addr is a physical address
-     * @return {MemoryPDP11}
+     * @returns {MemoryPDP11}
      */
     getBlockDirect(addr)
     {
@@ -7965,7 +7965,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {number} addr is a physical address
-     * @return {number} byte (8-bit) value at that address
+     * @returns {number} byte (8-bit) value at that address
      */
     getByteDirect(addr)
     {
@@ -7983,7 +7983,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {number} addr is a physical address
-     * @return {number} word (16-bit) value at that address
+     * @returns {number} word (16-bit) value at that address
      */
     getWordDirect(addr)
     {
@@ -8099,7 +8099,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {boolean} [fAll] (true to save all non-ROM memory blocks, regardless of their dirty flags)
-     * @return {Array} a
+     * @returns {Array} a
      */
     saveMemory(fAll)
     {
@@ -8137,7 +8137,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {Array} a
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     restoreMemory(a)
     {
@@ -8167,7 +8167,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {number} type is one of the MemoryPDP11.TYPE constants
-     * @return {number} (the limiting address of the specified memory type, zero if none)
+     * @returns {number} (the limiting address of the specified memory type, zero if none)
      */
     getMemoryLimit(type)
     {
@@ -8204,7 +8204,7 @@ class BusPDP11 extends Component {
      * @param {function(number,number)|null|undefined} fnWriteWord
      * @param {number} [message]
      * @param {string} [sName]
-     * @return {boolean} (true if entire range successfully registered, false if any conflicts)
+     * @returns {boolean} (true if entire range successfully registered, false if any conflicts)
      */
     addIOHandlers(start, end, fnReadByte, fnWriteByte, fnReadWord, fnWriteWord, message, sName)
     {
@@ -8232,7 +8232,7 @@ class BusPDP11 extends Component {
      * @param {Component} component
      * @param {Object} table
      * @param {number} [offReg] (optional offset to add to all register addresses)
-     * @return {boolean} (true if entire range successfully registered, false if any conflicts)
+     * @returns {boolean} (true if entire range successfully registered, false if any conflicts)
      */
     addIOTable(component, table, offReg)
     {
@@ -8292,7 +8292,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {number} addr (physical)
-     * @return {string|null}
+     * @returns {string|null}
      */
     getAddrInfo(addr)
     {
@@ -8312,7 +8312,7 @@ class BusPDP11 extends Component {
      *
      * @this {BusPDP11}
      * @param {string} sName
-     * @return {number|null}
+     * @returns {number|null}
      */
     getAddrByName(sName)
     {
@@ -8366,7 +8366,7 @@ class BusPDP11 extends Component {
      * This also serves as a clearFault() function.
      *
      * @this {BusPDP11}
-     * @return {boolean}
+     * @returns {boolean}
      */
     checkFault()
     {
@@ -8383,7 +8383,7 @@ class BusPDP11 extends Component {
      * @param {number} addr
      * @param {number} size
      * @param {boolean} [fQuiet] (true if any error should be quietly logged)
-     * @return {boolean} false
+     * @returns {boolean} false
      */
     reportError(errNum, addr, size, fQuiet)
     {
@@ -8475,7 +8475,7 @@ BusPDP11.IOController = {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByte: function(off, addr)
     {
@@ -8613,7 +8613,7 @@ BusPDP11.IOController = {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWord: function(off, addr)
     {
@@ -8823,7 +8823,7 @@ class DevicePDP11 extends Component {
      * @this {DevicePDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -8843,7 +8843,7 @@ class DevicePDP11 extends Component {
      * @this {DevicePDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -8867,7 +8867,7 @@ class DevicePDP11 extends Component {
      * This implements save support for the DevicePDP11 component.
      *
      * @this {DevicePDP11}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -8885,7 +8885,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -8925,7 +8925,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.LKS or 177546)
-     * @return {number}
+     * @returns {number}
      */
     readLKS(addr)
     {
@@ -8960,7 +8960,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MMR0 or 177572)
-     * @return {number}
+     * @returns {number}
      */
     readMMR0(addr)
     {
@@ -8984,7 +8984,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MMR1 or 177574)
-     * @return {number}
+     * @returns {number}
      */
     readMMR1(addr)
     {
@@ -8996,7 +8996,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MMR2 or 177576)
-     * @return {number}
+     * @returns {number}
      */
     readMMR2(addr)
     {
@@ -9008,7 +9008,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MMR3 or 172516)
-     * @return {number}
+     * @returns {number}
      */
     readMMR3(addr)
     {
@@ -9034,7 +9034,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UNIMAP)
-     * @return {number}
+     * @returns {number}
      */
     readUNIMAP(addr)
     {
@@ -9067,7 +9067,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SIPDR0--SIPDR7 or 172200--172216)
-     * @return {number}
+     * @returns {number}
      */
     readSIPDR(addr)
     {
@@ -9093,7 +9093,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SDPDR0--SDPDR7 or 172220--172236)
-     * @return {number}
+     * @returns {number}
      */
     readSDPDR(addr)
     {
@@ -9119,7 +9119,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SIPAR0--SIPAR7 or 172240--172256)
-     * @return {number}
+     * @returns {number}
      */
     readSIPAR(addr)
     {
@@ -9147,7 +9147,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SDPAR0--SDPAR7 or 172260--172276)
-     * @return {number}
+     * @returns {number}
      */
     readSDPAR(addr)
     {
@@ -9174,7 +9174,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.KIPDR0--KIPDR7 or 172300--172316)
-     * @return {number}
+     * @returns {number}
      */
     readKIPDR(addr)
     {
@@ -9200,7 +9200,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.KDPDR0--KDPDR7 or 172320--172336)
-     * @return {number}
+     * @returns {number}
      */
     readKDPDR(addr)
     {
@@ -9226,7 +9226,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.KIPAR0--KIPAR7 or 172340--172356)
-     * @return {number}
+     * @returns {number}
      */
     readKIPAR(addr)
     {
@@ -9254,7 +9254,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.KDPAR0--KDPAR7 or 172360--172376)
-     * @return {number}
+     * @returns {number}
      */
     readKDPAR(addr)
     {
@@ -9281,7 +9281,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UIPDR0--UIPDR7 or 177600--177616)
-     * @return {number}
+     * @returns {number}
      */
     readUIPDR(addr)
     {
@@ -9307,7 +9307,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UDPDR0--UDPDR7 or 177620--177636)
-     * @return {number}
+     * @returns {number}
      */
     readUDPDR(addr)
     {
@@ -9333,7 +9333,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UIPAR0--UIPAR7 or 177640--177656)
-     * @return {number}
+     * @returns {number}
      */
     readUIPAR(addr)
     {
@@ -9361,7 +9361,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.UDPAR0--UDPAR7 or 177660--177676)
-     * @return {number}
+     * @returns {number}
      */
     readUDPAR(addr)
     {
@@ -9388,7 +9388,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R0SET0--R5SET0 or 177700--177705)
-     * @return {number}
+     * @returns {number}
      */
     readRSET0(addr)
     {
@@ -9424,7 +9424,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R6KERNEL or 177706)
-     * @return {number}
+     * @returns {number}
      */
     readR6KERNEL(addr)
     {
@@ -9458,7 +9458,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R7KERNEL or 177707)
-     * @return {number}
+     * @returns {number}
      */
     readR7KERNEL(addr)
     {
@@ -9482,7 +9482,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R0SET1--R5SET1 or 177710--177715)
-     * @return {number}
+     * @returns {number}
      */
     readRSET1(addr)
     {
@@ -9518,7 +9518,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R6SUPER or 177716)
-     * @return {number}
+     * @returns {number}
      */
     readR6SUPER(addr)
     {
@@ -9552,7 +9552,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.R6USER or 177717)
-     * @return {number}
+     * @returns {number}
      */
     readR6USER(addr)
     {
@@ -9586,7 +9586,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.LAERR--UNDEF2 or 177740--177756)
-     * @return {number}
+     * @returns {number}
      */
     readCTRL(addr)
     {
@@ -9623,7 +9623,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.LSIZE--HSIZE or 177760--177762)
-     * @return {number}
+     * @returns {number}
      */
     readSIZE(addr)
     {
@@ -9648,7 +9648,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SYSID or 177764)
-     * @return {number}
+     * @returns {number}
      */
     readSYSID(addr)
     {
@@ -9673,7 +9673,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.CPUERR or 177766)
-     * @return {number}
+     * @returns {number}
      */
     readCPUERR(addr)
     {
@@ -9697,7 +9697,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.MB or 177770)
-     * @return {number}
+     * @returns {number}
      */
     readMBR(addr)
     {
@@ -9725,7 +9725,7 @@ class DevicePDP11 extends Component {
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.PIR or 177772)
      * @param {boolean} [fPreWrite]
-     * @return {number}
+     * @returns {number}
      */
     readPIR(addr, fPreWrite)
     {
@@ -9751,7 +9751,7 @@ class DevicePDP11 extends Component {
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.SL or 177774)
      * @param {boolean} [fPreWrite]
-     * @return {number}
+     * @returns {number}
      */
     readSLR(addr, fPreWrite)
     {
@@ -9776,7 +9776,7 @@ class DevicePDP11 extends Component {
      *
      * @this {DevicePDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.PSW or 177776)
-     * @return {number}
+     * @returns {number}
      */
     readPSW(addr)
     {
@@ -10139,7 +10139,7 @@ class MemoryPDP11 {
      * of the controller component.
      *
      * @this {MemoryPDP11}
-     * @return {Array|Int32Array|null}
+     * @returns {Array|Int32Array|null}
      */
     save()
     {
@@ -10187,7 +10187,7 @@ class MemoryPDP11 {
      *
      * @this {MemoryPDP11}
      * @param {Array|null} adw
-     * @return {boolean} true if successful, false if block size mismatch
+     * @returns {boolean} true if successful, false if block size mismatch
      */
     restore(adw)
     {
@@ -10449,7 +10449,7 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readNone(off, addr)
     {
@@ -10482,7 +10482,7 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordDefault(off, addr)
     {
@@ -10509,7 +10509,7 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteMemory(off, addr)
     {
@@ -10525,7 +10525,7 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordMemory(off, addr)
     {
@@ -10603,7 +10603,7 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteChecked(off, addr)
     {
@@ -10619,7 +10619,7 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordChecked(off, addr)
     {
@@ -10667,7 +10667,7 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteBE(off, addr)
     {
@@ -10680,7 +10680,7 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteLE(off, addr)
     {
@@ -10697,7 +10697,7 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordBE(off, addr)
     {
@@ -10713,7 +10713,7 @@ class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordLE(off, addr)
     {
@@ -11038,7 +11038,7 @@ class CPUPDP11 extends Component {
      * Stub for save support (overridden by the CPUStatePDP11 component).
      *
      * @this {CPUPDP11}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -11052,7 +11052,7 @@ class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -11065,7 +11065,7 @@ class CPUPDP11 extends Component {
      * @this {CPUPDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -11119,7 +11119,7 @@ class CPUPDP11 extends Component {
      * @this {CPUPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -11130,7 +11130,7 @@ class CPUPDP11 extends Component {
      * autoStart()
      *
      * @this {CPUPDP11}
-     * @return {boolean} true if started, false if not
+     * @returns {boolean} true if started, false if not
      */
     autoStart()
     {
@@ -11152,7 +11152,7 @@ class CPUPDP11 extends Component {
      * isPowered()
      *
      * @this {CPUPDP11}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isPowered()
     {
@@ -11167,7 +11167,7 @@ class CPUPDP11 extends Component {
      * isRunning()
      *
      * @this {CPUPDP11}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isRunning()
     {
@@ -11180,7 +11180,7 @@ class CPUPDP11 extends Component {
      * This will be implemented by the CPUStatePDP11 component.
      *
      * @this {CPUPDP11}
-     * @return {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
+     * @returns {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
      */
     getChecksum()
     {
@@ -11195,7 +11195,7 @@ class CPUPDP11 extends Component {
      * the CPU is reset or restored.
      *
      * @this {CPUPDP11}
-     * @return {boolean} true if checksum generation enabled, false if not
+     * @returns {boolean} true if checksum generation enabled, false if not
      */
     resetChecksum()
     {
@@ -11273,7 +11273,7 @@ class CPUPDP11 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "run")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -11424,7 +11424,7 @@ class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {boolean} [fScaled] is true if the caller wants a cycle count relative to a multiplier of 1
-     * @return {number}
+     * @returns {number}
      */
     getCycles(fScaled)
     {
@@ -11459,7 +11459,7 @@ class CPUPDP11 extends Component {
      * This returns the CPU's "base" speed (ie, the original cycles per second defined for the machine)
      *
      * @this {CPUPDP11}
-     * @return {number}
+     * @returns {number}
      */
     getCyclesPerSecond()
     {
@@ -11488,7 +11488,7 @@ class CPUPDP11 extends Component {
      * getSpeed()
      *
      * @this {CPUPDP11}
-     * @return {number} the current speed multiplier
+     * @returns {number} the current speed multiplier
      */
     getSpeed()
     {
@@ -11499,7 +11499,7 @@ class CPUPDP11 extends Component {
      * getSpeedCurrent()
      *
      * @this {CPUPDP11}
-     * @return {string} the current speed, in mhz, as a string formatted to two decimal places
+     * @returns {string} the current speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedCurrent()
     {
@@ -11513,7 +11513,7 @@ class CPUPDP11 extends Component {
      * getSpeedTarget()
      *
      * @this {CPUPDP11}
-     * @return {string} the target speed, in mhz, as a string formatted to two decimal places
+     * @returns {string} the target speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedTarget()
     {
@@ -11535,7 +11535,7 @@ class CPUPDP11 extends Component {
      * @this {CPUPDP11}
      * @param {number} [nMultiplier] is the new proposed multiplier (reverts to 1 if the target was too high)
      * @param {boolean} [fUpdateFocus] is true to update Computer focus
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     setSpeed(nMultiplier, fUpdateFocus)
     {
@@ -11646,7 +11646,7 @@ class CPUPDP11 extends Component {
      * calcRemainingTime()
      *
      * @this {CPUPDP11}
-     * @return {number}
+     * @returns {number}
      */
     calcRemainingTime()
     {
@@ -11741,7 +11741,7 @@ class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {function()} callBack
-     * @return {number} timer index
+     * @returns {number} timer index
      */
     addTimer(callBack)
     {
@@ -11769,7 +11769,7 @@ class CPUPDP11 extends Component {
      * @param {number} iTimer
      * @param {number} ms (converted into a cycle countdown internally)
      * @param {boolean} [fReset] (true if the timer should be reset even if already armed)
-     * @return {number} (number of cycles used to arm timer, or -1 if error)
+     * @returns {number} (number of cycles used to arm timer, or -1 if error)
      */
     setTimer(iTimer, ms, fReset)
     {
@@ -11797,7 +11797,7 @@ class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {number} ms
-     * @return {number} number of corresponding cycles
+     * @returns {number} number of corresponding cycles
      */
     getMSCycles(ms)
     {
@@ -11811,7 +11811,7 @@ class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {number} nCycles (number of cycles about to execute)
-     * @return {number} (either nCycles or less if a timer needs to fire)
+     * @returns {number} (either nCycles or less if a timer needs to fire)
      */
     getBurstCycles(nCycles)
     {
@@ -11830,7 +11830,7 @@ class CPUPDP11 extends Component {
      * saveTimers()
      *
      * @this {CPUPDP11}
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     saveTimers()
     {
@@ -11886,7 +11886,7 @@ class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {boolean} [fReset]
-     * @return {number} (number of cycles executed in the most recent burst)
+     * @returns {number} (number of cycles executed in the most recent burst)
      */
     endBurst(fReset)
     {
@@ -11985,7 +11985,7 @@ class CPUPDP11 extends Component {
      * For use by any component that wants to start the CPU.
      *
      * @param {boolean} [fUpdateFocus]
-     * @return {boolean}
+     * @returns {boolean}
      */
     startCPU(fUpdateFocus)
     {
@@ -12023,7 +12023,7 @@ class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {number} of cycles executed; 0 indicates that the last instruction was not executed
+     * @returns {number} of cycles executed; 0 indicates that the last instruction was not executed
      */
     stepCPU(nMinCycles)
     {
@@ -12040,7 +12040,7 @@ class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {boolean} [fComplete]
-     * @return {boolean} true if the CPU was stopped, false if it was already stopped
+     * @returns {boolean} true if the CPU was stopped, false if it was already stopped
      */
     stopCPU(fComplete)
     {
@@ -12301,7 +12301,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * @this {CPUStatePDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -12461,7 +12461,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * Returns bit 0 set if 22-bit, bit 1 set if 18-bit, or bit 2 set if 16-bit; used by the Panel component.
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getMMUState()
     {
@@ -12527,7 +12527,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * nonr leng read trap unus unus ena mnt cmp  -mode- i/d  --page--   enable
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getMMR0()
     {
@@ -12581,7 +12581,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getMMR1()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getMMR1()
     {
@@ -12608,7 +12608,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getMMR2()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getMMR2()
     {
@@ -12631,7 +12631,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getMMR3()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getMMR3()
     {
@@ -12717,7 +12717,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * TODO: Implement
      *
      * @this {CPUStatePDP11}
-     * @return {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
+     * @returns {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
      */
     getChecksum()
     {
@@ -12728,7 +12728,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * save()
      *
      * @this {CPUStatePDP11}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -12767,7 +12767,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -12829,7 +12829,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getCF()
      *
      * @this {CPUStatePDP11}
-     * @return {number} 0 or PDP11.PSW.CF
+     * @returns {number} 0 or PDP11.PSW.CF
      */
     getCF()
     {
@@ -12860,7 +12860,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getVF()
      *
      * @this {CPUStatePDP11}
-     * @return {number} 0 or PDP11.PSW.VF
+     * @returns {number} 0 or PDP11.PSW.VF
      */
     getVF()
     {
@@ -12891,7 +12891,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getZF()
      *
      * @this {CPUStatePDP11}
-     * @return {number} 0 or PDP11.PSW.ZF
+     * @returns {number} 0 or PDP11.PSW.ZF
      */
     getZF()
     {
@@ -12922,7 +12922,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getNF()
      *
      * @this {CPUStatePDP11}
-     * @return {number} 0 or PDP11.PSW.NF
+     * @returns {number} 0 or PDP11.PSW.NF
      */
     getNF()
     {
@@ -12943,7 +12943,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getOpcode()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getOpcode()
     {
@@ -12965,7 +12965,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} off
-     * @return {number} (original PC)
+     * @returns {number} (original PC)
      */
     advancePC(off)
     {
@@ -13000,7 +13000,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * NOTE: This function is nothing more than a convenience, and we fully expect it to be inlined at runtime.
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getPC()
     {
@@ -13011,7 +13011,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getLastAddr()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getLastAddr()
     {
@@ -13022,7 +13022,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getLastPC()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getLastPC()
     {
@@ -13050,7 +13050,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * NOTE: This function is nothing more than a convenience, and we fully expect it to be inlined at runtime.
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getSP()
     {
@@ -13079,7 +13079,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * @param {number} vector (-1 for floating vector)
      * @param {number} priority
      * @param {number} [message]
-     * @return {IRQ}
+     * @returns {IRQ}
      */
     addIRQ(vector, priority, message)
     {
@@ -13189,7 +13189,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} vector
-     * @return {IRQ|null}
+     * @returns {IRQ|null}
      */
     findIRQ(vector)
     {
@@ -13205,7 +13205,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} priority
-     * @return {IRQ|null}
+     * @returns {IRQ|null}
      */
     checkIRQs(priority)
     {
@@ -13226,7 +13226,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * saveIRQs()
      *
      * @this {CPUStatePDP11}
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     saveIRQs()
     {
@@ -13261,7 +13261,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * checkInterrupts()
      *
      * @this {CPUStatePDP11}
-     * @return {boolean} true if an interrupt was dispatched, false if not
+     * @returns {boolean} true if an interrupt was dispatched, false if not
      */
     checkInterrupts()
     {
@@ -13306,7 +13306,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * @this {CPUStatePDP11}
      * @param {number} vector
      * @param {number} priority
-     * @return {boolean} (true if dispatched, false if not)
+     * @returns {boolean} (true if dispatched, false if not)
      */
     dispatchInterrupt(vector, priority)
     {
@@ -13362,7 +13362,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * TODO: Based on the above notes, we should probably be halting the CPU when a bus error occurs during a trap.
      *
      * @this {CPUStatePDP11}
-     * @return {boolean} (true if dispatched, false if not)
+     * @returns {boolean} (true if dispatched, false if not)
      */
     checkTraps()
     {
@@ -13385,7 +13385,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * isWaiting()
      *
      * @this {CPUStatePDP11}
-     * @return {boolean} (true if OPFLAG.WAIT is set, false otherwise)
+     * @returns {boolean} (true if OPFLAG.WAIT is set, false otherwise)
      */
     isWaiting()
     {
@@ -13396,7 +13396,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getPSW()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getPSW()
     {
@@ -13459,7 +13459,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getSLR()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getSLR()
     {
@@ -13481,7 +13481,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getPIR()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getPIR()
     {
@@ -13803,7 +13803,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * getTrapStatus()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     getTrapStatus()
     {
@@ -13843,7 +13843,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     mapUnibus(addr)
     {
@@ -13878,7 +13878,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * @this {CPUStatePDP11}
      * @param {number} addr
      * @param {boolean} [fPhysical]
-     * @return {Array}
+     * @returns {Array}
      */
     getAddrInfo(addr, fPhysical)
     {
@@ -13969,7 +13969,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * @this {CPUStatePDP11}
      * @param {number} addrVirtual
      * @param {number} access
-     * @return {number}
+     * @returns {number}
      */
     mapVirtualToPhysical(addrVirtual, access)
     {
@@ -14121,7 +14121,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * popWord()
      *
      * @this {CPUStatePDP11}
-     * @return {number}
+     * @returns {number}
      */
     popWord()
     {
@@ -14189,7 +14189,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * @param {number} mode
      * @param {number} reg
      * @param {number} access
-     * @return {number}
+     * @returns {number}
      */
     getAddrByMode(mode, reg, access)
     {
@@ -14376,7 +14376,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     getByteChecked(addr)
     {
@@ -14394,7 +14394,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     getWordChecked(addr)
     {
@@ -14447,7 +14447,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     getByteSafe(addr)
     {
@@ -14464,7 +14464,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     getWordSafe(addr)
     {
@@ -14547,7 +14547,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * @param {number} mode
      * @param {number} reg
      * @param {number} access
-     * @return {number}
+     * @returns {number}
      */
     getPhysicalAddrByMode(mode, reg, access)
     {
@@ -14563,7 +14563,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * @param {number} mode
      * @param {number} reg
      * @param {number} access
-     * @return {number}
+     * @returns {number}
      */
     getVirtualAddrByMode(mode, reg, access)
     {
@@ -14577,7 +14577,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordFromPhysical(addr)
     {
@@ -14591,7 +14591,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordFromPhysicalChecked(addr)
     {
@@ -14608,7 +14608,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addrVirtual (input address is 17 bit (I&D))
-     * @return {number}
+     * @returns {number}
      */
     readWordFromVirtual(addrVirtual)
     {
@@ -14622,7 +14622,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} addrVirtual (input address is 17 bit (I&D))
-     * @return {number}
+     * @returns {number}
      */
     readWordFromVirtualChecked(addrVirtual)
     {
@@ -14700,7 +14700,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      * @this {CPUStatePDP11}
      * @param {number} opCode
      * @param {number} access (really just PDP11.ACCESS.DSPACE or PDP11.ACCESS.ISPACE)
-     * @return {number}
+     * @returns {number}
      */
     readWordFromPrevSpace(opCode, access)
     {
@@ -14770,7 +14770,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} opCode
-     * @return {number}
+     * @returns {number}
      */
     readSrcByte(opCode)
     {
@@ -14812,7 +14812,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} opCode
-     * @return {number}
+     * @returns {number}
      */
     readSrcWord(opCode)
     {
@@ -14833,7 +14833,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} opCode
-     * @return {number}
+     * @returns {number}
      */
     readDstAddr(opCode)
     {
@@ -14847,7 +14847,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} opCode
-     * @return {number}
+     * @returns {number}
      */
     readDstByte(opCode)
     {
@@ -14867,7 +14867,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} opCode
-     * @return {number}
+     * @returns {number}
      */
     readDstWord(opCode)
     {
@@ -15010,7 +15010,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      *
      * @this {CPUStatePDP11}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {number} of cycles executed; 0 indicates a pre-execution condition (ie, an execution breakpoint
+     * @returns {number} of cycles executed; 0 indicates a pre-execution condition (ie, an execution breakpoint
      * was hit), -1 indicates a post-execution condition (eg, a read or write breakpoint was hit), and a positive
      * number indicates successful completion of that many cycles (which should always be >= nMinCycles).
      */
@@ -15189,7 +15189,7 @@ Web.onInit(CPUStatePDP11.init);
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst + src)
+ * @returns {number} (dst + src)
  */
 PDP11.fnADD = function(src, dst)
 {
@@ -15204,7 +15204,7 @@ PDP11.fnADD = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst + src)
+ * @returns {number} (dst + src)
  */
 PDP11.fnADDB = function(src, dst)
 {
@@ -15219,7 +15219,7 @@ PDP11.fnADDB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst << 1)
+ * @returns {number} (dst << 1)
  */
 PDP11.fnASL = function(src, dst)
 {
@@ -15234,7 +15234,7 @@ PDP11.fnASL = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst << 1)
+ * @returns {number} (dst << 1)
  */
 PDP11.fnASLB = function(src, dst)
 {
@@ -15249,7 +15249,7 @@ PDP11.fnASLB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst >> 1)
+ * @returns {number} (dst >> 1)
  */
 PDP11.fnASR = function(src, dst)
 {
@@ -15264,7 +15264,7 @@ PDP11.fnASR = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst >> 1)
+ * @returns {number} (dst >> 1)
  */
 PDP11.fnASRB = function(src, dst)
 {
@@ -15279,7 +15279,7 @@ PDP11.fnASRB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (~src & dst)
+ * @returns {number} (~src & dst)
  */
 PDP11.fnBIC = function(src, dst)
 {
@@ -15294,7 +15294,7 @@ PDP11.fnBIC = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (~src & dst)
+ * @returns {number} (~src & dst)
  */
 PDP11.fnBICB = function(src, dst)
 {
@@ -15309,7 +15309,7 @@ PDP11.fnBICB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst | src)
+ * @returns {number} (dst | src)
  */
 PDP11.fnBIS = function(src, dst)
 {
@@ -15324,7 +15324,7 @@ PDP11.fnBIS = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst | src)
+ * @returns {number} (dst | src)
  */
 PDP11.fnBISB = function(src, dst)
 {
@@ -15339,7 +15339,7 @@ PDP11.fnBISB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (~dst)
+ * @returns {number} (~dst)
  */
 PDP11.fnCOM = function(src, dst)
 {
@@ -15354,7 +15354,7 @@ PDP11.fnCOM = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (~dst)
+ * @returns {number} (~dst)
  */
 PDP11.fnCOMB = function(src, dst)
 {
@@ -15369,7 +15369,7 @@ PDP11.fnCOMB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ie, 1)
  * @param {number} dst
- * @return {number} (dst - src)
+ * @returns {number} (dst - src)
  */
 PDP11.fnDEC = function(src, dst)
 {
@@ -15384,7 +15384,7 @@ PDP11.fnDEC = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ie, 1)
  * @param {number} dst
- * @return {number} (dst - src)
+ * @returns {number} (dst - src)
  */
 PDP11.fnDECB = function(src, dst)
 {
@@ -15399,7 +15399,7 @@ PDP11.fnDECB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ie, 1)
  * @param {number} dst
- * @return {number} (dst + src)
+ * @returns {number} (dst + src)
  */
 PDP11.fnINC = function(src, dst)
 {
@@ -15414,7 +15414,7 @@ PDP11.fnINC = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ie, 1)
  * @param {number} dst
- * @return {number} (dst + src)
+ * @returns {number} (dst + src)
  */
 PDP11.fnINCB = function(src, dst)
 {
@@ -15429,7 +15429,7 @@ PDP11.fnINCB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (-dst)
+ * @returns {number} (-dst)
  */
 PDP11.fnNEG = function(src, dst)
 {
@@ -15447,7 +15447,7 @@ PDP11.fnNEG = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (-dst)
+ * @returns {number} (-dst)
  */
 PDP11.fnNEGB = function(src, dst)
 {
@@ -15465,7 +15465,7 @@ PDP11.fnNEGB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst >> 1)
+ * @returns {number} (dst >> 1)
  */
 PDP11.fnROL = function(src, dst)
 {
@@ -15480,7 +15480,7 @@ PDP11.fnROL = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst >> 1)
+ * @returns {number} (dst >> 1)
  */
 PDP11.fnROLB = function(src, dst)
 {
@@ -15495,7 +15495,7 @@ PDP11.fnROLB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst >> 1)
+ * @returns {number} (dst >> 1)
  */
 PDP11.fnROR = function(src, dst)
 {
@@ -15510,7 +15510,7 @@ PDP11.fnROR = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst >> 1)
+ * @returns {number} (dst >> 1)
  */
 PDP11.fnRORB = function(src, dst)
 {
@@ -15525,7 +15525,7 @@ PDP11.fnRORB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst - src)
+ * @returns {number} (dst - src)
  */
 PDP11.fnSUB = function(src, dst)
 {
@@ -15540,7 +15540,7 @@ PDP11.fnSUB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst - src)
+ * @returns {number} (dst - src)
  */
 PDP11.fnSUBB = function(src, dst)
 {
@@ -15555,7 +15555,7 @@ PDP11.fnSUBB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst with bytes swapped)
+ * @returns {number} (dst with bytes swapped)
  */
 PDP11.fnSWAB = function(src, dst)
 {
@@ -15573,7 +15573,7 @@ PDP11.fnSWAB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst ^ src)
+ * @returns {number} (dst ^ src)
  */
 PDP11.fnXOR = function(src, dst)
 {
@@ -17758,7 +17758,7 @@ class ROMPDP11 extends Component {
      * @this {ROMPDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -17786,7 +17786,7 @@ class ROMPDP11 extends Component {
      * @this {ROMPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -17888,7 +17888,7 @@ class ROMPDP11 extends Component {
      *
      * @this {ROMPDP11}
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     addROM(addr)
     {
@@ -17952,7 +17952,7 @@ class ROMPDP11 extends Component {
      *
      * @this {ROMPDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readROMByte(addr)
     {
@@ -18104,7 +18104,7 @@ class RAMPDP11 extends Component {
      * @this {RAMPDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -18135,7 +18135,7 @@ class RAMPDP11 extends Component {
      * @this {RAMPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -18257,7 +18257,7 @@ class RAMPDP11 extends Component {
      * @param {number|null} [addrExec] (this CAN override any starting address INSIDE the image)
      * @param {number|null} [addrInit]
      * @param {boolean} [fStart]
-     * @return {boolean} (true if loaded, false if not)
+     * @returns {boolean} (true if loaded, false if not)
      */
     loadImage(aBytes, addrLoad, addrExec, addrInit, fStart)
     {
@@ -18423,7 +18423,7 @@ class KeyboardPDP11 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "esc")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -18631,7 +18631,7 @@ class SerialPortPDP11 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "buffer")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -18850,7 +18850,7 @@ class SerialPortPDP11 extends Component {
      * @this {SerialPortPDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -18879,7 +18879,7 @@ class SerialPortPDP11 extends Component {
      * @this {SerialPortPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -18902,7 +18902,7 @@ class SerialPortPDP11 extends Component {
      * This implements save support for the SerialPort component.
      *
      * @this {SerialPortPDP11}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -18918,7 +18918,7 @@ class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -18930,7 +18930,7 @@ class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {Array} [a]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initState(a)
     {
@@ -18958,7 +18958,7 @@ class SerialPortPDP11 extends Component {
      * Basically, the inverse of initState().
      *
      * @this {SerialPortPDP11}
-     * @return {Array}
+     * @returns {Array}
      */
     saveRegisters()
     {
@@ -18977,7 +18977,7 @@ class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number} nBaud
-     * @return {number} (number of milliseconds per byte)
+     * @returns {number} (number of milliseconds per byte)
      */
     getBaudTimeout(nBaud)
     {
@@ -18998,7 +18998,7 @@ class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number|string|Array} data
-     * @return {boolean} true if received, false if not
+     * @returns {boolean} true if received, false if not
      */
     receiveData(data)
     {
@@ -19035,7 +19035,7 @@ class SerialPortPDP11 extends Component {
      * receiveByte()
      *
      * @this {SerialPortPDP11}
-     * @return {number} (0x00-0xff if byte available, -1 if not)
+     * @returns {number} (0x00-0xff if byte available, -1 if not)
      */
     receiveByte()
     {
@@ -19092,7 +19092,7 @@ class SerialPortPDP11 extends Component {
      * @this {SerialPortPDP11}
      * @param {Object|null} component
      * @param {function(number)} fn
-     * @return {boolean}
+     * @returns {boolean}
      */
     setConnection(component, fn)
     {
@@ -19109,7 +19109,7 @@ class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number} b
-     * @return {boolean} true if transmitted, false if not
+     * @returns {boolean} true if transmitted, false if not
      */
     transmitByte(b)
     {
@@ -19188,7 +19188,7 @@ class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.RCSR or 177560)
-     * @return {number}
+     * @returns {number}
      */
     readRCSR(addr)
     {
@@ -19231,7 +19231,7 @@ class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.RBUF or 177562)
-     * @return {number}
+     * @returns {number}
      */
     readRBUF(addr)
     {
@@ -19255,7 +19255,7 @@ class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.XCSR or 177564)
-     * @return {number}
+     * @returns {number}
      */
     readXCSR(addr)
     {
@@ -19295,7 +19295,7 @@ class SerialPortPDP11 extends Component {
      *
      * @this {SerialPortPDP11}
      * @param {number} addr (eg, PDP11.UNIBUS.XBUF or 177566)
-     * @return {number}
+     * @returns {number}
      */
     readXBUF(addr)
     {
@@ -19427,7 +19427,7 @@ class PC11 extends Component {
      *
      * @this {PC11}
      * @param {*} config
-     * @return {*}
+     * @returns {*}
      */
     parseConfig(config)
     {
@@ -19454,7 +19454,7 @@ class PC11 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "listTapes")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -19622,7 +19622,7 @@ class PC11 extends Component {
      * @this {PC11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -19642,7 +19642,7 @@ class PC11 extends Component {
      * @this {PC11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -19668,7 +19668,7 @@ class PC11 extends Component {
      *
      * @this {PC11}
      * @param {boolean} [fRemount] is true if we're remounting all auto-mounted tapes
-     * @return {boolean} true if one or more tape images are being auto-mounted, false if none
+     * @returns {boolean} true if one or more tape images are being auto-mounted, false if none
      */
     autoMount(fRemount)
     {
@@ -19750,7 +19750,7 @@ class PC11 extends Component {
      * @param {number} nTapeTarget
      * @param {boolean} [fAutoMount]
      * @param {File} [file] is set if there's an associated File object
-     * @return {number} 1 if tape loaded, 0 if queued up (or busy), -1 if already loaded
+     * @returns {number} 1 if tape loaded, 0 if queued up (or busy), -1 if already loaded
      */
     loadTape(sTapeName, sTapePath, nTapeTarget, fAutoMount, file)
     {
@@ -19797,7 +19797,7 @@ class PC11 extends Component {
      * @param {string} sTapePath
      * @param {number} nTapeTarget
      * @param {File} [file] is set if there's an associated File object
-     * @return {boolean} true if load completed (successfully or not), false if queued
+     * @returns {boolean} true if load completed (successfully or not), false if queued
      */
     load(sTapeName, sTapePath, nTapeTarget, file)
     {
@@ -19939,7 +19939,7 @@ class PC11 extends Component {
      *
      * @this {PC11}
      * @param {string} sPath
-     * @return {string|null}
+     * @returns {string|null}
      */
     findTape(sPath)
     {
@@ -20085,7 +20085,7 @@ class PC11 extends Component {
      * This implements save support for the PC11 component.
      *
      * @this {PC11}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -20100,7 +20100,7 @@ class PC11 extends Component {
      *
      * @this {PC11}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -20114,7 +20114,7 @@ class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} nBaud
-     * @return {number} (number of milliseconds per byte)
+     * @returns {number} (number of milliseconds per byte)
      */
     getBaudTimeout(nBaud)
     {
@@ -20173,7 +20173,7 @@ class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} addr (eg, PDP11.UNIBUS.PRS or 177550)
-     * @return {number}
+     * @returns {number}
      */
     readPRS(addr)
     {
@@ -20222,7 +20222,7 @@ class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} addr (eg, PDP11.UNIBUS.PRB or 177552)
-     * @return {number}
+     * @returns {number}
      */
     readPRB(addr)
     {
@@ -20251,7 +20251,7 @@ class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} addr (eg, PDP11.UNIBUS.PPS or 177554)
-     * @return {number}
+     * @returns {number}
      */
     readPPS(addr)
     {
@@ -20284,7 +20284,7 @@ class PC11 extends Component {
      *
      * @this {PC11}
      * @param {number} addr (eg, PDP11.UNIBUS.PPB or 177556)
-     * @return {number}
+     * @returns {number}
      */
     readPPB(addr)
     {
@@ -20539,7 +20539,7 @@ class DiskPDP11 extends Component {
      * @param {File} [file] is set if there's an associated File object
      * @param {function(...)} [fnNotify]
      * @param {Component} [controller]
-     * @return {boolean} true if load completed (successfully or not), false if queued
+     * @returns {boolean} true if load completed (successfully or not), false if queued
      */
     load(sDiskName, sDiskPath, file, fnNotify, controller)
     {
@@ -20909,7 +20909,7 @@ class DiskPDP11 extends Component {
      * @param {Object} sector
      * @param {number} off (byte offset)
      * @param {number} len (use -1 to read a null-terminated string)
-     * @return {string}
+     * @returns {string}
      */
     getSectorString(sector, off, len)
     {
@@ -20946,7 +20946,7 @@ class DiskPDP11 extends Component {
      * @param {number} [iSector]
      * @param {number} [cbSector]
      * @param {number|null} [dwPattern]
-     * @return {Object}
+     * @returns {Object}
      */
     initSector(sector, iCylinder, iHead, iSector, cbSector, dwPattern)
     {
@@ -20967,7 +20967,7 @@ class DiskPDP11 extends Component {
      * properties of the Disk object directly.
      *
      * @this {DiskPDP11}
-     * @return {Array} containing: [nCylinders, nHeads, nSectorsPerTrack, nBytesPerSector]
+     * @returns {Array} containing: [nCylinders, nHeads, nSectorsPerTrack, nBytesPerSector]
      */
     info()
     {
@@ -20995,7 +20995,7 @@ class DiskPDP11 extends Component {
      * @param {number} iSector
      * @param {boolean} [fWrite]
      * @param {function(Object,boolean)} [done]
-     * @return {Object|null} is the requested sector, or null if not found (or not available yet)
+     * @returns {Object|null} is the requested sector, or null if not found (or not available yet)
      */
     seek(iCylinder, iHead, iSector, fWrite, done)
     {
@@ -21066,7 +21066,7 @@ class DiskPDP11 extends Component {
      *
      * @this {DiskPDP11}
      * @param {Object} sector
-     * @return {Array.<number>} is an array of bytes
+     * @returns {Array.<number>} is an array of bytes
      */
     toBytes(sector)
     {
@@ -21093,7 +21093,7 @@ class DiskPDP11 extends Component {
      * @param {Object} sector (returned from a previous seek)
      * @param {number} ibSector a byte index within the given sector
      * @param {boolean} [fCompare] is true if this write-compare read
-     * @return {number} the specified (unsigned) byte, or -1 if no more data in the sector
+     * @returns {number} the specified (unsigned) byte, or -1 if no more data in the sector
      */
     read(sector, ibSector, fCompare)
     {
@@ -21119,7 +21119,7 @@ class DiskPDP11 extends Component {
      * @param {Object} sector (returned from a previous seek)
      * @param {number} ibSector a byte index within the given sector
      * @param {number} b the byte value to write
-     * @return {boolean|null} true if write successful, false if write-protected, null if out of bounds
+     * @returns {boolean|null} true if write successful, false if write-protected, null if out of bounds
      */
     write(sector, ibSector, b)
     {
@@ -21163,7 +21163,7 @@ class DiskPDP11 extends Component {
      *
      * @this {DiskPDP11}
      * @param {number} pba (physical block address)
-     * @return {Object|null} sector
+     * @returns {Object|null} sector
      */
     getSector(pba)
     {
@@ -21194,7 +21194,7 @@ class DiskPDP11 extends Component {
      * @param {Object} sector
      * @param {number} off (byte offset)
      * @param {number} len (1 to 4 bytes)
-     * @return {number}
+     * @returns {number}
      */
     getSectorData(sector, off, len)
     {
@@ -21216,7 +21216,7 @@ class DiskPDP11 extends Component {
      * encodeAsBase64()
      *
      * @this {DiskPDP11}
-     * @return {string}
+     * @returns {string}
      */
     encodeAsBase64()
     {
@@ -21246,7 +21246,7 @@ class DiskPDP11 extends Component {
      * where [...] is an array of modified dword(s) in the corresponding sector.
      *
      * @this {DiskPDP11}
-     * @return {Array} of modified sectors
+     * @returns {Array} of modified sectors
      */
     save()
     {
@@ -21292,7 +21292,7 @@ class DiskPDP11 extends Component {
      *
      * @this {DiskPDP11}
      * @param {Array} deltas
-     * @return {number} 0 if no changes applied, -1 if an error occurred, otherwise the number of sectors modified
+     * @returns {number} 0 if no changes applied, -1 if an error occurred, otherwise the number of sectors modified
      */
     restore(deltas)
     {
@@ -21427,7 +21427,7 @@ class DiskPDP11 extends Component {
      *
      * @this {DiskPDP11}
      * @param {boolean} [fFormatted]
-     * @return {string} containing the entire disk image as JSON-encoded data
+     * @returns {string} containing the entire disk image as JSON-encoded data
      */
     convertToJSON(fFormatted)
     {
@@ -21510,7 +21510,7 @@ class DiskPDP11 extends Component {
      * @param {Object} sector (returned from a previous seek)
      * @param {number} [pba]
      * @param {string} [sDesc]
-     * @return {string}
+     * @returns {string}
      */
     dumpSector(sector, pba, sDesc)
     {
@@ -21648,7 +21648,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {*} config
-     * @return {*}
+     * @returns {*}
      */
     parseConfig(config)
     {
@@ -21675,7 +21675,7 @@ class DriveController extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "listDisks")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -21866,7 +21866,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {number} iDrive
-     * @return {string}
+     * @returns {string}
      */
     getDriveName(iDrive)
     {
@@ -21879,7 +21879,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {string} sDrive
-     * @return {number} (0-3, or -1 if error)
+     * @returns {number} (0-3, or -1 if error)
      */
     getDriveNumber(sDrive)
     {
@@ -21897,7 +21897,7 @@ class DriveController extends Component {
      * @this {DriveController}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -21945,7 +21945,7 @@ class DriveController extends Component {
      * @this {DriveController}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -21969,7 +21969,7 @@ class DriveController extends Component {
      * This implements save support for the DriveController component.
      *
      * @this {DriveController}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -21987,7 +21987,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -22005,7 +22005,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {Array} [aRegs]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(aRegs)
     {
@@ -22018,7 +22018,7 @@ class DriveController extends Component {
      * Placeholder for subclasses.
      *
      * @this {DriveController}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -22033,7 +22033,7 @@ class DriveController extends Component {
      * @param {number} iDrive
      * @param {Array} configDrive
      * @param {Array} [configDisk]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initDrive(drive, iDrive, configDrive, configDisk)
     {
@@ -22119,7 +22119,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {Array} [aConfigDisks]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initDrives(aConfigDisks)
     {
@@ -22142,7 +22142,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {Object} drive
-     * @return {Array}
+     * @returns {Array}
      */
     saveDrive(drive)
     {
@@ -22157,7 +22157,7 @@ class DriveController extends Component {
      * saveDrives()
      *
      * @this {DriveController}
-     * @return {Array}
+     * @returns {Array}
      */
     saveDrives()
     {
@@ -22173,7 +22173,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {Array} [aHistory]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initHistory(aHistory)
     {
@@ -22197,7 +22197,7 @@ class DriveController extends Component {
      * disk image(s), so we call updateHistory() for all those disks, and then aDiskHistory is ready to be saved.
      *
      * @this {DriveController}
-     * @return {Array}
+     * @returns {Array}
      */
     saveHistory()
     {
@@ -22215,7 +22215,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {boolean} [fRemount] is true if we're remounting all auto-mounted disks
-     * @return {boolean} true if one or more disk images are being auto-mounted, false if none
+     * @returns {boolean} true if one or more disk images are being auto-mounted, false if none
      */
     autoMount(fRemount)
     {
@@ -22245,7 +22245,7 @@ class DriveController extends Component {
      * @param {string} [sDiskName]
      * @param {string} [sDiskPath]
      * @param {File} [file] is set if there's an associated File object
-     * @return {boolean}
+     * @returns {boolean}
      */
     loadSelectedDisk(sDiskName, sDiskPath, file)
     {
@@ -22303,7 +22303,7 @@ class DriveController extends Component {
      * bootSelectedDisk()
      *
      * @this {DriveController}
-     * @return {boolean}
+     * @returns {boolean}
      */
     bootSelectedDisk()
     {
@@ -22366,7 +22366,7 @@ class DriveController extends Component {
      * @param {string} sDiskPath
      * @param {boolean} [fAutoMount]
      * @param {File} [file] is set if there's an associated File object
-     * @return {number} 1 if disk loaded, 0 if queued up (or busy), -1 if already loaded
+     * @returns {number} 1 if disk loaded, 0 if queued up (or busy), -1 if already loaded
      */
     loadDrive(iDrive, sDiskName, sDiskPath, fAutoMount, file)
     {
@@ -22513,7 +22513,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {string} sPath
-     * @return {string|null}
+     * @returns {string|null}
      */
     findDisk(sPath)
     {
@@ -22536,7 +22536,7 @@ class DriveController extends Component {
      * @this {DriveController}
      * @param {number} iDrive (unvalidated)
      * @param {boolean} [fUpdateDrive] is true to update the drive list to match the specified drive (eg, the auto-mount case)
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     displayDisk(iDrive, fUpdateDrive)
     {
@@ -22597,7 +22597,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {number} sDrive
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     selectDrive(sDrive)
     {
@@ -22649,7 +22649,7 @@ class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {function()|null} fnCallReady
-     * @return {boolean} false if wait required, true otherwise
+     * @returns {boolean} false if wait required, true otherwise
      */
     waitDrives(fnCallReady)
     {
@@ -22835,7 +22835,7 @@ class DriveController extends Component {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     readData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -22857,7 +22857,7 @@ class DriveController extends Component {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     writeData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -22912,7 +22912,7 @@ class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {Array} [aRegs]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(aRegs)
     {
@@ -22943,7 +22943,7 @@ class RK11 extends DriveController {
      * Basically, the inverse of initController().
      *
      * @this {RK11}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -23065,7 +23065,7 @@ class RK11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     readData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -23140,7 +23140,7 @@ class RK11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     writeData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -23221,7 +23221,7 @@ class RK11 extends DriveController {
      * @param {number} iSector
      * @param {number} nWords
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     doneReadWrite(nError, iCylinder, iHead, iSector, nWords, addr)
     {
@@ -23267,7 +23267,7 @@ class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKDS or 177400)
-     * @return {number}
+     * @returns {number}
      */
     readRKDS(addr)
     {
@@ -23293,7 +23293,7 @@ class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKER or 177402)
-     * @return {number}
+     * @returns {number}
      */
     readRKER(addr)
     {
@@ -23319,7 +23319,7 @@ class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKCS or 177404)
-     * @return {number}
+     * @returns {number}
      */
     readRKCS(addr)
     {
@@ -23345,7 +23345,7 @@ class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKWC or 177406)
-     * @return {number}
+     * @returns {number}
      */
     readRKWC(addr)
     {
@@ -23369,7 +23369,7 @@ class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKBA or 177410)
-     * @return {number}
+     * @returns {number}
      */
     readRKBA(addr)
     {
@@ -23393,7 +23393,7 @@ class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKDA or 177412)
-     * @return {number}
+     * @returns {number}
      */
     readRKDA(addr)
     {
@@ -23417,7 +23417,7 @@ class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKDB or 177416)
-     * @return {number}
+     * @returns {number}
      */
     readRKDB(addr)
     {
@@ -23497,7 +23497,7 @@ class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {Array} [aRegs]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(aRegs)
     {
@@ -23527,7 +23527,7 @@ class RL11 extends DriveController {
      * Basically, the inverse of initController().
      *
      * @this {RL11}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -23647,7 +23647,7 @@ class RL11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     readData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -23732,7 +23732,7 @@ class RL11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     writeData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -23813,7 +23813,7 @@ class RL11 extends DriveController {
      * @param {number} iSector
      * @param {number} nWords
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     doneReadWrite(nError, iCylinder, iHead, iSector, nWords, addr)
     {
@@ -23834,7 +23834,7 @@ class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLCS or 174400)
-     * @return {number}
+     * @returns {number}
      */
     readRLCS(addr)
     {
@@ -23860,7 +23860,7 @@ class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLBA or 174402)
-     * @return {number}
+     * @returns {number}
      */
     readRLBA(addr)
     {
@@ -23884,7 +23884,7 @@ class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLDA or 174404)
-     * @return {number}
+     * @returns {number}
      */
     readRLDA(addr)
     {
@@ -23908,7 +23908,7 @@ class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLMP or 174406)
-     * @return {number}
+     * @returns {number}
      */
     readRLMP(addr)
     {
@@ -23932,7 +23932,7 @@ class RL11 extends DriveController {
      *
      * @this {RL11}
      * @param {number} addr (eg, PDP11.UNIBUS.RLBE or 174410)
-     * @return {number}
+     * @returns {number}
      */
     readRLBE(addr)
     {
@@ -24030,7 +24030,7 @@ class RX11 extends DriveController {
      *
      * @this {RX11}
      * @param {Array} [aRegs]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(aRegs)
     {
@@ -24072,7 +24072,7 @@ class RX11 extends DriveController {
      * Basically, the inverse of initController().
      *
      * @this {RX11}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -24197,7 +24197,7 @@ class RX11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     readData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -24371,7 +24371,7 @@ class RX11 extends DriveController {
      * @this {RX11}
      * @param {number} addr (eg, PDP11.UNIBUS.RXCS or 177170)
      * @param {boolean} [fPreWrite]
-     * @return {number}
+     * @returns {number}
      */
     readRXCS(addr, fPreWrite)
     {
@@ -24436,7 +24436,7 @@ class RX11 extends DriveController {
      * @this {RX11}
      * @param {number} addr (eg, PDP11.UNIBUS.RXDB or 177172)
      * @param {boolean} [fPreWrite]
-     * @return {number}
+     * @returns {number}
      */
     readRXDB(addr, fPreWrite)
     {
@@ -24657,7 +24657,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string} sReg
      * @param {number} [off] optional offset into sReg
-     * @return {number} register index, or -1 if not found
+     * @returns {number} register index, or -1 if not found
      */
     getRegIndex(sReg, off)
     {
@@ -24671,7 +24671,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {number} iReg
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getRegValue(iReg)
     {
@@ -24688,7 +24688,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string} s
      * @param {string} sAddr
-     * @return {string}
+     * @returns {string}
      */
     parseAddrReference(s, sAddr)
     {
@@ -24699,7 +24699,7 @@ class DbgLib extends Component {
      * getNextCommand()
      *
      * @this {DbgLib}
-     * @return {string}
+     * @returns {string}
      */
     getNextCommand()
     {
@@ -24717,7 +24717,7 @@ class DbgLib extends Component {
      * getPrevCommand()
      *
      * @this {DbgLib}
-     * @return {string|null}
+     * @returns {string|null}
      */
     getPrevCommand()
     {
@@ -24735,7 +24735,7 @@ class DbgLib extends Component {
      * @param {string|undefined} sCmd
      * @param {boolean} [fSave] is true to save the command, false if not
      * @param {string} [chSep] is the command separator character (default is ';')
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     parseCommand(sCmd, fSave, chSep)
     {
@@ -24815,7 +24815,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst & src)
+     * @returns {number} (dst & src)
      */
     evalAND(dst, src)
     {
@@ -24849,7 +24849,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst | src)
+     * @returns {number} (dst | src)
      */
     evalIOR(dst, src)
     {
@@ -24883,7 +24883,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst ^ src)
+     * @returns {number} (dst ^ src)
      */
     evalXOR(dst, src)
     {
@@ -24916,7 +24916,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst * src)
+     * @returns {number} (dst * src)
      */
     evalMUL(dst, src)
     {
@@ -24930,7 +24930,7 @@ class DbgLib extends Component {
      * @param {number} v
      * @param {number} [nBits]
      * @param {boolean} [fUnsigned]
-     * @return {number}
+     * @returns {number}
      */
     truncate(v, nBits, fUnsigned)
     {
@@ -25004,7 +25004,7 @@ class DbgLib extends Component {
      * @param {Array.<number>} aVals
      * @param {Array.<string>} aOps
      * @param {number} [cOps] (default is -1 for all)
-     * @return {boolean} true if successful, false if error
+     * @returns {boolean} true if successful, false if error
      */
     evalOps(aVals, aOps, cOps = -1)
     {
@@ -25128,7 +25128,7 @@ class DbgLib extends Component {
      * @param {number} iLimit
      * @param {number} nBase
      * @param {Array|undefined} [aUndefined]
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     parseArray(asValues, iValue, iLimit, nBase, aUndefined)
     {
@@ -25286,7 +25286,7 @@ class DbgLib extends Component {
      * @param {string} chDelim
      * @param {number} nBits
      * @param {number} cchMax
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     parseASCII(sExp, chDelim, nBits, cchMax)
     {
@@ -25348,7 +25348,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string|undefined} sExp
      * @param {Array|undefined|boolean} [fQuiet]
-     * @return {number|undefined} numeric value, or undefined if sExp contains any undefined or invalid values
+     * @returns {number|undefined} numeric value, or undefined if sExp contains any undefined or invalid values
      */
     parseExpression(sExp, fQuiet)
     {
@@ -25438,7 +25438,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} s
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     parseReference(s)
     {
@@ -25487,7 +25487,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     parseSysVars(s)
     {
@@ -25521,7 +25521,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} value
      * @param {number} nUnary
-     * @return {number}
+     * @returns {number}
      */
     parseUnary(value, nUnary)
     {
@@ -25553,7 +25553,7 @@ class DbgLib extends Component {
      * @param {string} [sName] is the name of the value, if any
      * @param {Array|boolean} [fQuiet]
      * @param {number} [nUnary] (0 for none, 1 for negate, 2 for complement, 3 for leading zeros)
-     * @return {number|undefined} numeric value, or undefined if sValue is either undefined or invalid
+     * @returns {number|undefined} numeric value, or undefined if sValue is either undefined or invalid
      */
     parseValue(sValue, sName, fQuiet, nUnary = 0)
     {
@@ -25611,7 +25611,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string|null|*} sVar
      * @param {number|undefined} value
-     * @return {boolean} true if value defined, false if not
+     * @returns {boolean} true if value defined, false if not
      */
     printValue(sVar, value)
     {
@@ -25637,7 +25637,7 @@ class DbgLib extends Component {
      * resetVariables()
      *
      * @this {DbgLib}
-     * @return {Object}
+     * @returns {Object}
      */
     resetVariables()
     {
@@ -25662,7 +25662,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} [sVar]
-     * @return {boolean} true if all value(s) defined, false if not
+     * @returns {boolean} true if all value(s) defined, false if not
      */
     printVariable(sVar)
     {
@@ -25697,7 +25697,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} sVar
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getVariable(sVar)
     {
@@ -25713,7 +25713,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} sVar
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     getVariableFixup(sVar)
     {
@@ -25725,7 +25725,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} sVar
-     * @return {boolean}
+     * @returns {boolean}
      */
     isVariable(sVar)
     {
@@ -25755,7 +25755,7 @@ class DbgLib extends Component {
      * @param {number} [nBits] (-1 to strip leading zeros, 0 to allow a variable number of digits)
      * @param {number} [nBase]
      * @param {number} [nGrouping] (if nBase is 2, this is a grouping; otherwise, it's a prefix condition)
-     * @return {string}
+     * @returns {string}
      */
     toStrBase(n, nBits = 0, nBase = 0, nGrouping = 0)
     {
@@ -26019,7 +26019,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {DbgAddrPDP11|null} [dbgAddr]
      * @param {boolean} [fWrite]
      * @param {number} [nb] number of bytes to check (1 or 2); default is 1
-     * @return {number} is the corresponding linear address, or PDP11.ADDR_INVALID
+     * @returns {number} is the corresponding linear address, or PDP11.ADDR_INVALID
      */
     getAddr(dbgAddr, fWrite, nb)
     {
@@ -26037,7 +26037,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {number|null} [addr]
      * @param {boolean} [fPhysical]
      * @param {number} [nBase]
-     * @return {DbgAddrPDP11}
+     * @returns {DbgAddrPDP11}
      */
     newAddr(addr = null, fPhysical = false, nBase)
     {
@@ -26052,7 +26052,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {DbgAddrPDP11} dbgAddr
      * @param {number} addr
-     * @return {DbgAddrPDP11}
+     * @returns {DbgAddrPDP11}
      */
     setAddr(dbgAddr, addr)
     {
@@ -26069,7 +26069,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {DbgAddrPDP11} dbgAddr
-     * @return {Array}
+     * @returns {Array}
      */
     packAddr(dbgAddr)
     {
@@ -26083,7 +26083,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {Array} aAddr
-     * @return {DbgAddrPDP11}
+     * @returns {DbgAddrPDP11}
      */
     unpackAddr(aAddr)
     {
@@ -26137,7 +26137,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "debugInput")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -26253,7 +26253,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     mapUnibus(addr)
     {
@@ -26268,7 +26268,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {DbgAddrPDP11} dbgAddr
      * @param {number} [inc]
-     * @return {number}
+     * @returns {number}
      */
     getByte(dbgAddr, inc)
     {
@@ -26287,7 +26287,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {DbgAddrPDP11} dbgAddr
      * @param {number} [inc]
-     * @return {number}
+     * @returns {number}
      */
     getWord(dbgAddr, inc)
     {
@@ -26358,7 +26358,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {string|undefined} sAddr
      * @param {boolean} [fCode] (true if target is code, false if target is data)
      * @param {boolean} [fNoChecks] (true when setting breakpoints that may not be valid now, but will be later)
-     * @return {DbgAddrPDP11|null|undefined}
+     * @returns {DbgAddrPDP11|null|undefined}
      */
     parseAddr(sAddr, fCode, fNoChecks)
     {
@@ -26426,7 +26426,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {number|null|undefined} [off]
-     * @return {string} the hex representation of off
+     * @returns {string} the hex representation of off
      */
     toStrOffset(off)
     {
@@ -26438,7 +26438,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {DbgAddrPDP11} dbgAddr
-     * @return {string} the hex representation of the address
+     * @returns {string} the hex representation of the address
      */
     toStrAddr(dbgAddr)
     {
@@ -26455,7 +26455,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {DbgAddrPDP11} dbgAddr
      * @param {number} [cchMax] (default is 256)
-     * @return {string} (and dbgAddr advanced past the terminating zero)
+     * @returns {string} (and dbgAddr advanced past the terminating zero)
      */
     getSZ(dbgAddr, cchMax)
     {
@@ -26682,7 +26682,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {number} bitMessage is one Messages category flag
      * @param {function(Array.<string>)} fnDumper is a function the Debugger can use to dump data for that category
-     * @return {boolean} true if successfully registered, false if not
+     * @returns {boolean} true if successfully registered, false if not
      */
     messageDump(bitMessage, fnDumper)
     {
@@ -26701,7 +26701,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {string} sReg
      * @param {number} [off] optional offset into sReg
-     * @return {number} register index, or -1 if not found
+     * @returns {number} register index, or -1 if not found
      */
     getRegIndex(sReg, off)
     {
@@ -26722,7 +26722,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {number} iReg (0-7; not used for other registers)
-     * @return {string}
+     * @returns {string}
      */
     getRegName(iReg)
     {
@@ -26739,7 +26739,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {number} iReg
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getRegValue(iReg)
     {
@@ -26804,7 +26804,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     replaceRegs(s)
     {
@@ -26916,7 +26916,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {boolean} [fUpdateFocus] is true to update focus
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if run request successful, false if not
+     * @returns {boolean} true if run request successful, false if not
      */
     startCPU(fUpdateFocus, fQuiet)
     {
@@ -26932,7 +26932,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {number} nCycles (0 for one instruction without checking breakpoints)
      * @param {boolean|null} [fRegs] is true to display registers after step (default is false; use null for previous setting)
      * @param {boolean} [fUpdateDisplays] is false to disable Computer display updates (default is true)
-     * @return {boolean}
+     * @returns {boolean}
      */
     stepCPU(nCycles, fRegs, fUpdateDisplays)
     {
@@ -27049,7 +27049,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {boolean} [fQuiet]
-     * @return {boolean}
+     * @returns {boolean}
      */
     checkCPU(fQuiet)
     {
@@ -27066,7 +27066,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -27093,7 +27093,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean}
+     * @returns {Object|boolean}
      */
     powerDown(fSave, fShutdown)
     {
@@ -27132,7 +27132,7 @@ class DebuggerPDP11 extends DbgLib {
      * This implements (very rudimentary) save support for the Debugger component.
      *
      * @this {DebuggerPDP11}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -27151,7 +27151,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -27247,7 +27247,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {boolean} [fRelease] is true for release criteria only; default is false (any criteria)
-     * @return {boolean} true if every instruction needs to pass through checkInstruction(), false if not
+     * @returns {boolean} true if every instruction needs to pass through checkInstruction(), false if not
      */
     checksEnabled(fRelease)
     {
@@ -27263,7 +27263,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {number} addr
      * @param {number} nState is < 0 if stepping, 0 if starting, or > 0 if running
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkInstruction(addr, nState)
     {
@@ -27349,7 +27349,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {string} [sMessage]
-     * @return {boolean} true if stopping is enabled, false if not
+     * @returns {boolean} true if stopping is enabled, false if not
      */
     stopInstruction(sMessage)
     {
@@ -27373,7 +27373,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {number} opCode
-     * @return {boolean} true if stopping is enabled, false if not
+     * @returns {boolean} true if stopping is enabled, false if not
      */
     undefinedInstruction(opCode)
     {
@@ -27398,7 +27398,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkMemoryRead(addr, nb)
     {
@@ -27423,7 +27423,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkMemoryWrite(addr, nb)
     {
@@ -27500,7 +27500,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {Array} aBreak
      * @param {DbgAddrPDP11} dbgAddr
      * @param {boolean} [fTemporary]
-     * @return {boolean} true if breakpoint added, false if already exists
+     * @returns {boolean} true if breakpoint added, false if already exists
      */
     addBreakpoint(aBreak, dbgAddr, fTemporary)
     {
@@ -27565,7 +27565,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {boolean} [fRemove]
      * @param {boolean} [fTemporary]
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if found, false if not
+     * @returns {boolean} true if found, false if not
      */
     findBreakpoint(aBreak, dbgAddr, fRemove, fTemporary, fQuiet)
     {
@@ -27611,7 +27611,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {Array} aBreak
-     * @return {number} of breakpoints listed, 0 if none
+     * @returns {number} of breakpoints listed, 0 if none
      */
     listBreakpoints(aBreak)
     {
@@ -27676,7 +27676,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {number} nb (# of bytes)
      * @param {Array} aBreak
      * @param {boolean} [fTemporary]
-     * @return {boolean} true if breakpoint has been hit, false if not
+     * @returns {boolean} true if breakpoint has been hit, false if not
      */
     checkBreakpoint(addr, nb, aBreak, fTemporary)
     {
@@ -27767,7 +27767,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {DbgAddrPDP11} dbgAddr
      * @param {string} [sComment] is an associated comment
      * @param {number|null} [nSequence] is an associated sequence number, undefined if none
-     * @return {string} (and dbgAddr is updated to the next instruction)
+     * @returns {string} (and dbgAddr is updated to the next instruction)
      */
     getInstruction(dbgAddr, sComment, nSequence)
     {
@@ -27865,7 +27865,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {number} opCode
      * @param {number} opType
      * @param {DbgAddrPDP11} dbgAddr
-     * @return {string|Array.<string>}
+     * @returns {string|Array.<string>}
      */
     getOperand(opCode, opType, dbgAddr)
     {
@@ -28019,7 +28019,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {number} addr
-     * @return {string|null}
+     * @returns {string|null}
      */
     getTarget(addr)
     {
@@ -28041,7 +28041,7 @@ class DebuggerPDP11 extends DbgLib {
      * @param {string} sOp
      * @param {string|undefined} sOperand
      * @param {DbgAddrPDP11} dbgAddr of memory where this instruction is being assembled
-     * @return {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
+     * @returns {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
      */
     parseInstruction(sOp, sOperand, dbgAddr)
     {
@@ -28055,7 +28055,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {string} sFlag
-     * @return {string} value of flag
+     * @returns {string} value of flag
      */
     getFlagOutput(sFlag)
     {
@@ -28085,7 +28085,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {number} iReg
-     * @return {string}
+     * @returns {string}
      */
     getRegOutput(iReg)
     {
@@ -28104,7 +28104,7 @@ class DebuggerPDP11 extends DbgLib {
      *      M0=xxxxxx M1=xxxxxx M2=xxxxxx M3=xxxxxx ER=xxxxxx
      *
      * @this {DebuggerPDP11}
-     * @return {string}
+     * @returns {string}
      */
     getMiscDump()
     {
@@ -28126,7 +28126,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {boolean} [fMisc] (true to include misc registers)
-     * @return {string}
+     * @returns {string}
      */
     getRegDump(fMisc)
     {
@@ -28149,7 +28149,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {number|string|Array|Object} p1
      * @param {number|string|Array|Object} p2
-     * @return {number}
+     * @returns {number}
      */
     comparePairs(p1, p2)
     {
@@ -28294,7 +28294,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {DbgAddrPDP11} dbgAddr
      * @param {boolean} [fNearest]
-     * @return {Array} where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment
+     * @returns {Array} where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment
      */
     findSymbol(dbgAddr, fNearest)
     {
@@ -28328,7 +28328,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {string} sSymbol
-     * @return {DbgAddrPDP11|undefined}
+     * @returns {DbgAddrPDP11|undefined}
      */
     findSymbolAddr(sSymbol)
     {
@@ -28854,7 +28854,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if expression is non-zero, false if zero (or undefined due to a parse error)
+     * @returns {boolean} true if expression is non-zero, false if zero (or undefined due to a parse error)
      */
     doIf(sCmd, fQuiet)
     {
@@ -28872,7 +28872,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {Array.<string>} asArgs
-     * @return {boolean} true only if the instruction info command ("n") is supported
+     * @returns {boolean} true only if the instruction info command ("n") is supported
      */
     doInfo(asArgs)
     {
@@ -28896,7 +28896,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {string} sCmd
-     * @return {boolean} true if valid "var" assignment, false if not
+     * @returns {boolean} true if valid "var" assignment, false if not
      */
     doVar(sCmd)
     {
@@ -28930,7 +28930,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {string} sAddr
      * @param {boolean} [fPrint]
-     * @return {string|null}
+     * @returns {string|null}
      */
     doList(sAddr, fPrint)
     {
@@ -29373,7 +29373,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {DbgAddrPDP11} dbgAddr
-     * @return {string|null} CALL instruction at or near dbgAddr, or null if none
+     * @returns {string|null} CALL instruction at or near dbgAddr, or null if none
      */
     getCall(dbgAddr)
     {
@@ -29609,7 +29609,7 @@ class DebuggerPDP11 extends DbgLib {
      *
      * @this {DebuggerPDP11}
      * @param {string} sCmd
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     splitArgs(sCmd)
     {
@@ -29636,7 +29636,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if command processed, false if unrecognized
+     * @returns {boolean} true if command processed, false if unrecognized
      */
     doCommand(sCmd, fQuiet)
     {
@@ -29799,7 +29799,7 @@ class DebuggerPDP11 extends DbgLib {
      * @this {DebuggerPDP11}
      * @param {string} sCmds
      * @param {boolean} [fSave]
-     * @return {boolean} true if all commands processed, false if not
+     * @returns {boolean} true if all commands processed, false if not
      */
     doCommands(sCmds, fSave)
     {
@@ -30401,7 +30401,7 @@ class ComputerPDP11 extends Component {
      * getMachineID()
      *
      * @this {ComputerPDP11}
-     * @return {string}
+     * @returns {string}
      */
     getMachineID()
     {
@@ -30450,7 +30450,7 @@ class ComputerPDP11 extends Component {
      * @param {Object|null} [parmsComponent]
      * @param {number} [type] (from Str.TYPES)
      * @param {*} [defaultValue]
-     * @return {*}
+     * @returns {*}
      */
     getMachineParm(sParm, parmsComponent, type, defaultValue)
     {
@@ -30485,7 +30485,7 @@ class ComputerPDP11 extends Component {
      * saveMachineParms()
      *
      * @this {ComputerPDP11}
-     * @return {string|null}
+     * @returns {string|null}
      */
     saveMachineParms()
     {
@@ -30496,7 +30496,7 @@ class ComputerPDP11 extends Component {
      * getUserID()
      *
      * @this {ComputerPDP11}
-     * @return {string}
+     * @returns {string}
      */
     getUserID()
     {
@@ -30569,7 +30569,7 @@ class ComputerPDP11 extends Component {
      *
      * @this {ComputerPDP11}
      * @param {State|null} [stateComputer]
-     * @return {boolean} true if state passes validation, false if not
+     * @returns {boolean} true if state passes validation, false if not
      */
     validateState(stateComputer)
     {
@@ -30740,7 +30740,7 @@ class ComputerPDP11 extends Component {
      * @param {State} stateComputer
      * @param {boolean} fRepower
      * @param {boolean} fRestore
-     * @return {boolean} true if restore should continue, false if not
+     * @returns {boolean} true if restore should continue, false if not
      */
     powerRestore(component, stateComputer, fRepower, fRestore)
     {
@@ -30901,7 +30901,7 @@ class ComputerPDP11 extends Component {
      * checkPower()
      *
      * @this {ComputerPDP11}
-     * @return {boolean} true if the computer is fully powered, false otherwise
+     * @returns {boolean} true if the computer is fully powered, false otherwise
      */
     checkPower()
     {
@@ -30973,7 +30973,7 @@ class ComputerPDP11 extends Component {
      * @this {ComputerPDP11}
      * @param {boolean} [fSave] is true to request a saved state
      * @param {boolean} [fShutdown] is true if the machine is being shut down
-     * @return {string|null} string representing the saved state (or null if error)
+     * @returns {string|null} string representing the saved state (or null if error)
      */
     powerOff(fSave, fShutdown)
     {
@@ -31222,7 +31222,7 @@ class ComputerPDP11 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -31356,7 +31356,7 @@ class ComputerPDP11 extends Component {
      *
      * @this {ComputerPDP11}
      * @param {string} sUserID
-     * @return {string} validated user ID, or null if error
+     * @returns {string} validated user ID, or null if error
      */
     verifyUserID(sUserID)
     {
@@ -31390,7 +31390,7 @@ class ComputerPDP11 extends Component {
      * getServerStatePath()
      *
      * @this {ComputerPDP11}
-     * @return {string|null} sStatePath (null if no localStorage or no USERID stored in localStorage)
+     * @returns {string|null} sStatePath (null if no localStorage or no USERID stored in localStorage)
      */
     getServerStatePath()
     {
@@ -31454,7 +31454,7 @@ class ComputerPDP11 extends Component {
      * @param {string} sUserID
      * @param {string} sState
      * @param {boolean} [fSync] is true if we're powering down and should perform a synchronous request (default is async)
-     * @return {*} server response if fSync is true and a response was received; otherwise null
+     * @returns {*} server response if fSync is true and a response was received; otherwise null
      */
     storeServerState(sUserID, sState, fSync)
     {
@@ -31570,7 +31570,7 @@ class ComputerPDP11 extends Component {
      * @this {ComputerPDP11}
      * @param {string} sType
      * @param {Component|null} [componentPrev] of previously returned component, if any
-     * @return {Component|null}
+     * @returns {Component|null}
      */
     getMachineComponent(sType, componentPrev)
     {
@@ -31852,7 +31852,7 @@ class State {
      *
      * @this {State}
      * @param {number|string} id
-     * @return {Object|string|null}
+     * @returns {Object|string|null}
      */
     get(id)
     {
@@ -31863,7 +31863,7 @@ class State {
      * data()
      *
      * @this {State}
-     * @return {Object}
+     * @returns {Object}
      */
     data()
     {
@@ -31878,7 +31878,7 @@ class State {
      *
      * @this {State}
      * @param {string|null} [json]
-     * @return {boolean} true if state exists in localStorage, false if not
+     * @returns {boolean} true if state exists in localStorage, false if not
      */
     load(json)
     {
@@ -31914,7 +31914,7 @@ class State {
      * Otherwise, load() could have just as easily done this, too.
      *
      * @this {State}
-     * @return {boolean} true if successful, false if error
+     * @returns {boolean} true if successful, false if error
      */
     parse()
     {
@@ -31935,7 +31935,7 @@ class State {
      * store()
      *
      * @this {State}
-     * @return {boolean} true if successful, false if error
+     * @returns {boolean} true if successful, false if error
      */
     store()
     {
@@ -31962,7 +31962,7 @@ class State {
      * toString()
      *
      * @this {State}
-     * @return {string} JSON-encoded state
+     * @returns {string} JSON-encoded state
      */
     toString()
     {
@@ -32019,7 +32019,7 @@ class State {
      * @param {Component} component
      * @param {string} [sVersion] is used to append a major version number to the key
      * @param {string} [sSuffix] is used to append any additional suffixes to the key
-     * @return {string} key
+     * @returns {string} key
      */
     static getKey(component, sVersion, sSuffix)
     {
@@ -32038,7 +32038,7 @@ class State {
      * State.compress(aSrc)
      *
      * @param {Array.<number>|null} aSrc
-     * @return {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
+     * @returns {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
      */
     static compress(aSrc)
     {
@@ -32065,7 +32065,7 @@ class State {
      *
      * @param {Array.<number>} aComp
      * @param {number} [nLength] (expected length of decompressed data)
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     static decompress(aComp, nLength)
     {
@@ -32094,7 +32094,7 @@ class State {
      * and return an uninitialized array.
      *
      * @param {Array.<number>|null} aSrc
-     * @return {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
+     * @returns {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
      */
     static compressEvenOdd(aSrc)
     {
@@ -32127,7 +32127,7 @@ class State {
      *
      * @param {Array.<number>} aComp
      * @param {number} nLength is expected length of decompressed data
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     static decompressEvenOdd(aComp, nLength)
     {
@@ -32490,7 +32490,7 @@ function resolveXML(sURL, sXML, display, done)
  * @param {string} [sXSLFile]
  * @param {string} [sParms] (machine parameters, if any)
  * @param {string} [sClass] (an optional machine class name used to style the machine)
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -32757,7 +32757,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -32773,7 +32773,7 @@ function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -32789,7 +32789,7 @@ function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -32805,7 +32805,7 @@ function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -32821,7 +32821,7 @@ function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -32834,7 +32834,7 @@ function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  *
  * @param {string} idMachine
  * @param {string} sType
- * @return {Component|null}
+ * @returns {Component|null}
  */
 function findMachineComponent(idMachine, sType)
 {
@@ -32854,7 +32854,7 @@ function findMachineComponent(idMachine, sType)
  * @param {string} sComponent
  * @param {string} sCommand
  * @param {string} [sValue]
- * @return {boolean}
+ * @returns {boolean}
  */
 function commandMachine(control, fSingle, idMachine, sComponent, sCommand, sValue)
 {

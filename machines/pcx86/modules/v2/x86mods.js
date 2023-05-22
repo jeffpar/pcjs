@@ -3966,7 +3966,7 @@ X86.modGrpLong32 = function(afnGrp, fnSrc)
  *
  * @this {CPUx86}
  * @param {number} mod
- * @return {number}
+ * @returns {number}
  */
 X86.modSIB = function(mod)
 {

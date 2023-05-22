@@ -230,7 +230,7 @@ export default class MemoryPDP11 {
      * of the controller component.
      *
      * @this {MemoryPDP11}
-     * @return {Array|Int32Array|null}
+     * @returns {Array|Int32Array|null}
      */
     save()
     {
@@ -278,7 +278,7 @@ export default class MemoryPDP11 {
      *
      * @this {MemoryPDP11}
      * @param {Array|null} adw
-     * @return {boolean} true if successful, false if block size mismatch
+     * @returns {boolean} true if successful, false if block size mismatch
      */
     restore(adw)
     {
@@ -540,7 +540,7 @@ export default class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readNone(off, addr)
     {
@@ -573,7 +573,7 @@ export default class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordDefault(off, addr)
     {
@@ -600,7 +600,7 @@ export default class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteMemory(off, addr)
     {
@@ -616,7 +616,7 @@ export default class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordMemory(off, addr)
     {
@@ -694,7 +694,7 @@ export default class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteChecked(off, addr)
     {
@@ -710,7 +710,7 @@ export default class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordChecked(off, addr)
     {
@@ -758,7 +758,7 @@ export default class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteBE(off, addr)
     {
@@ -771,7 +771,7 @@ export default class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readByteLE(off, addr)
     {
@@ -788,7 +788,7 @@ export default class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordBE(off, addr)
     {
@@ -804,7 +804,7 @@ export default class MemoryPDP11 {
      * @this {MemoryPDP11}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordLE(off, addr)
     {

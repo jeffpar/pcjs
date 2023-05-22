@@ -68,7 +68,7 @@ class Color {
      * toString()
      *
      * @this {Color}
-     * @return {string}
+     * @returns {string}
      */
     toString()
     {
@@ -101,7 +101,7 @@ class Rectangle {
      * @this {Rectangle}
      * @param {number} x
      * @param {number} y
-     * @return {boolean} true if (x,y) lies within the rectangle, false if not
+     * @returns {boolean} true if (x,y) lies within the rectangle, false if not
      */
     contains(x, y)
     {
@@ -120,7 +120,7 @@ class Rectangle {
      * @param {number} units
      * @param {number} unitsTotal
      * @param {boolean} [fHorizontal]
-     * @return {Rectangle}
+     * @returns {Rectangle}
      */
     subDivide(units, unitsTotal, fHorizontal)
     {
@@ -271,7 +271,7 @@ export default class Panel extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -398,7 +398,7 @@ export default class Panel extends Component {
      * @this {Panel}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -412,7 +412,7 @@ export default class Panel extends Component {
      * @this {Panel}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -515,7 +515,7 @@ export default class Panel extends Component {
      * @this {Panel}
      * @param {number} x
      * @param {number} y
-     * @return {number} address corresponding to (x,y) canvas coordinates, or ADDR_INVALID if none
+     * @returns {number} address corresponding to (x,y) canvas coordinates, or ADDR_INVALID if none
      */
     findAddress(x, y)
     {
@@ -658,7 +658,7 @@ export default class Panel extends Component {
      * It calls addRegion() for each discrete region (set of contiguous blocks with the same type) that it finds.
      *
      * @this {Panel}
-     * @return {boolean} true if current region checksum differed from previous checksum (ie, one or more regions changed)
+     * @returns {boolean} true if current region checksum differed from previous checksum (ie, one or more regions changed)
      */
     findRegions()
     {
@@ -699,7 +699,7 @@ export default class Panel extends Component {
      * @param {number} iBlock
      * @param {number} cBlocks
      * @param {number} type
-     * @return {number} bitfield containing the above values (used for checksum)
+     * @returns {number} bitfield containing the above values (used for checksum)
      */
     addRegion(addr, iBlock, cBlocks, type)
     {

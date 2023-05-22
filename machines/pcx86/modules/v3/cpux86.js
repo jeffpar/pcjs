@@ -12,7 +12,7 @@ import CPU from "../../../modules/v3/cpu.js";
 /**
  * CPUx86
  *
- * @class {CPUx86}
+ * @class CPUx86
  * @unrestricted
  */
 export default class CPUx86 extends CPU {

@@ -379,7 +379,7 @@ export default class Computer extends Component {
      *
      * @this {Computer}
      * @param {Array} aParms (array of parameters to pass to donePowerOn)
-     * @return {boolean} (true if diagnostics have been turned off, false if they remain enabled)
+     * @returns {boolean} (true if diagnostics have been turned off, false if they remain enabled)
      */
     doneDiagnostics(aParms)
     {
@@ -451,7 +451,7 @@ export default class Computer extends Component {
      * @this {Computer}
      * @param {Object} [event]
      * @param {boolean} [fDown] is true for a keyDown event, false for a keyUp event
-     * @return {boolean} (true if diagnostics disabled, false if enabled -- at the time of the call)
+     * @returns {boolean} (true if diagnostics disabled, false if enabled -- at the time of the call)
      */
     notifyKbdEvent(event, fDown)
     {
@@ -472,7 +472,7 @@ export default class Computer extends Component {
      * getMachineID()
      *
      * @this {Computer}
-     * @return {string}
+     * @returns {string}
      */
     getMachineID()
     {
@@ -510,7 +510,7 @@ export default class Computer extends Component {
      * @this {Computer}
      * @param {string} sParm
      * @param {boolean} fDefault
-     * @return {boolean}
+     * @returns {boolean}
      */
     getMachineBoolean(sParm, fDefault)
     {
@@ -540,7 +540,7 @@ export default class Computer extends Component {
      * @this {Computer}
      * @param {string} sParm
      * @param {Object} [parmsComponent] (eg, this.parms)
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     getMachineParm(sParm, parmsComponent)
     {
@@ -611,7 +611,7 @@ export default class Computer extends Component {
      * saveMachineParms()
      *
      * @this {Computer}
-     * @return {string|null}
+     * @returns {string|null}
      */
     saveMachineParms()
     {
@@ -622,7 +622,7 @@ export default class Computer extends Component {
      * getUserID()
      *
      * @this {Computer}
-     * @return {string}
+     * @returns {string}
      */
     getUserID()
     {
@@ -694,7 +694,7 @@ export default class Computer extends Component {
      *
      * @this {Computer}
      * @param {State|null} [stateComputer]
-     * @return {boolean} true if state passes validation, false if not
+     * @returns {boolean} true if state passes validation, false if not
      */
     validateState(stateComputer)
     {
@@ -865,7 +865,7 @@ export default class Computer extends Component {
      * @param {State} stateComputer
      * @param {boolean} fRepower
      * @param {boolean} fRestore
-     * @return {boolean} true if restore should continue, false if not
+     * @returns {boolean} true if restore should continue, false if not
      */
     powerRestore(component, stateComputer, fRepower, fRestore)
     {
@@ -1024,7 +1024,7 @@ export default class Computer extends Component {
      * checkPower()
      *
      * @this {Computer}
-     * @return {boolean} true if the computer is fully powered, false otherwise
+     * @returns {boolean} true if the computer is fully powered, false otherwise
      */
     checkPower()
     {
@@ -1087,7 +1087,7 @@ export default class Computer extends Component {
      *
      * @this {Computer}
      * @param {State} stateComputer
-     * @return {boolean}
+     * @returns {boolean}
      */
     powerReport(stateComputer)
     {
@@ -1135,7 +1135,7 @@ export default class Computer extends Component {
      * @this {Computer}
      * @param {boolean} [fSave] is true to request a saved state
      * @param {boolean} [fShutdown] is true if the machine is being shut down
-     * @return {string|null} string representing the saved state (or null if error)
+     * @returns {string|null} string representing the saved state (or null if error)
      */
     powerOff(fSave, fShutdown)
     {
@@ -1327,7 +1327,7 @@ export default class Computer extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -1429,7 +1429,7 @@ export default class Computer extends Component {
      *
      * @this {Computer}
      * @param {boolean} [fPrompt]
-     * @return {string|null|undefined}
+     * @returns {string|null|undefined}
      */
     queryUserID(fPrompt)
     {
@@ -1461,7 +1461,7 @@ export default class Computer extends Component {
      *
      * @this {Computer}
      * @param {string} sUserID
-     * @return {string} validated user ID, or null if error
+     * @returns {string} validated user ID, or null if error
      */
     verifyUserID(sUserID)
     {
@@ -1494,7 +1494,7 @@ export default class Computer extends Component {
      * getServerStatePath()
      *
      * @this {Computer}
-     * @return {string|null} sStatePath (null if no localStorage or no USERID stored in localStorage)
+     * @returns {string|null} sStatePath (null if no localStorage or no USERID stored in localStorage)
      */
     getServerStatePath()
     {
@@ -1550,7 +1550,7 @@ export default class Computer extends Component {
      * @param {string} sUserID
      * @param {string} sState
      * @param {boolean} [fSync] is true if we're powering down and should perform a synchronous request (default is async)
-     * @return {*} server response if fSync is true and a response was received; otherwise null
+     * @returns {*} server response if fSync is true and a response was received; otherwise null
      */
     storeServerState(sUserID, sState, fSync)
     {
@@ -1671,7 +1671,7 @@ export default class Computer extends Component {
      * @this {Computer}
      * @param {string} sType
      * @param {Component|null} [componentPrev] of previously returned component, if any
-     * @return {Component|null}
+     * @returns {Component|null}
      */
     getMachineComponent(sType, componentPrev)
     {

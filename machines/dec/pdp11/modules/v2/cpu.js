@@ -146,7 +146,7 @@ export default class CPUPDP11 extends Component {
      * Stub for save support (overridden by the CPUStatePDP11 component).
      *
      * @this {CPUPDP11}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -160,7 +160,7 @@ export default class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -173,7 +173,7 @@ export default class CPUPDP11 extends Component {
      * @this {CPUPDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -227,7 +227,7 @@ export default class CPUPDP11 extends Component {
      * @this {CPUPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -238,7 +238,7 @@ export default class CPUPDP11 extends Component {
      * autoStart()
      *
      * @this {CPUPDP11}
-     * @return {boolean} true if started, false if not
+     * @returns {boolean} true if started, false if not
      */
     autoStart()
     {
@@ -260,7 +260,7 @@ export default class CPUPDP11 extends Component {
      * isPowered()
      *
      * @this {CPUPDP11}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isPowered()
     {
@@ -275,7 +275,7 @@ export default class CPUPDP11 extends Component {
      * isRunning()
      *
      * @this {CPUPDP11}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isRunning()
     {
@@ -288,7 +288,7 @@ export default class CPUPDP11 extends Component {
      * This will be implemented by the CPUStatePDP11 component.
      *
      * @this {CPUPDP11}
-     * @return {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
+     * @returns {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
      */
     getChecksum()
     {
@@ -303,7 +303,7 @@ export default class CPUPDP11 extends Component {
      * the CPU is reset or restored.
      *
      * @this {CPUPDP11}
-     * @return {boolean} true if checksum generation enabled, false if not
+     * @returns {boolean} true if checksum generation enabled, false if not
      */
     resetChecksum()
     {
@@ -381,7 +381,7 @@ export default class CPUPDP11 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "run")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -532,7 +532,7 @@ export default class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {boolean} [fScaled] is true if the caller wants a cycle count relative to a multiplier of 1
-     * @return {number}
+     * @returns {number}
      */
     getCycles(fScaled)
     {
@@ -567,7 +567,7 @@ export default class CPUPDP11 extends Component {
      * This returns the CPU's "base" speed (ie, the original cycles per second defined for the machine)
      *
      * @this {CPUPDP11}
-     * @return {number}
+     * @returns {number}
      */
     getCyclesPerSecond()
     {
@@ -596,7 +596,7 @@ export default class CPUPDP11 extends Component {
      * getSpeed()
      *
      * @this {CPUPDP11}
-     * @return {number} the current speed multiplier
+     * @returns {number} the current speed multiplier
      */
     getSpeed()
     {
@@ -607,7 +607,7 @@ export default class CPUPDP11 extends Component {
      * getSpeedCurrent()
      *
      * @this {CPUPDP11}
-     * @return {string} the current speed, in mhz, as a string formatted to two decimal places
+     * @returns {string} the current speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedCurrent()
     {
@@ -621,7 +621,7 @@ export default class CPUPDP11 extends Component {
      * getSpeedTarget()
      *
      * @this {CPUPDP11}
-     * @return {string} the target speed, in mhz, as a string formatted to two decimal places
+     * @returns {string} the target speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedTarget()
     {
@@ -643,7 +643,7 @@ export default class CPUPDP11 extends Component {
      * @this {CPUPDP11}
      * @param {number} [nMultiplier] is the new proposed multiplier (reverts to 1 if the target was too high)
      * @param {boolean} [fUpdateFocus] is true to update Computer focus
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     setSpeed(nMultiplier, fUpdateFocus)
     {
@@ -754,7 +754,7 @@ export default class CPUPDP11 extends Component {
      * calcRemainingTime()
      *
      * @this {CPUPDP11}
-     * @return {number}
+     * @returns {number}
      */
     calcRemainingTime()
     {
@@ -849,7 +849,7 @@ export default class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {function()} callBack
-     * @return {number} timer index
+     * @returns {number} timer index
      */
     addTimer(callBack)
     {
@@ -877,7 +877,7 @@ export default class CPUPDP11 extends Component {
      * @param {number} iTimer
      * @param {number} ms (converted into a cycle countdown internally)
      * @param {boolean} [fReset] (true if the timer should be reset even if already armed)
-     * @return {number} (number of cycles used to arm timer, or -1 if error)
+     * @returns {number} (number of cycles used to arm timer, or -1 if error)
      */
     setTimer(iTimer, ms, fReset)
     {
@@ -905,7 +905,7 @@ export default class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {number} ms
-     * @return {number} number of corresponding cycles
+     * @returns {number} number of corresponding cycles
      */
     getMSCycles(ms)
     {
@@ -919,7 +919,7 @@ export default class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {number} nCycles (number of cycles about to execute)
-     * @return {number} (either nCycles or less if a timer needs to fire)
+     * @returns {number} (either nCycles or less if a timer needs to fire)
      */
     getBurstCycles(nCycles)
     {
@@ -938,7 +938,7 @@ export default class CPUPDP11 extends Component {
      * saveTimers()
      *
      * @this {CPUPDP11}
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     saveTimers()
     {
@@ -994,7 +994,7 @@ export default class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {boolean} [fReset]
-     * @return {number} (number of cycles executed in the most recent burst)
+     * @returns {number} (number of cycles executed in the most recent burst)
      */
     endBurst(fReset)
     {
@@ -1093,7 +1093,7 @@ export default class CPUPDP11 extends Component {
      * For use by any component that wants to start the CPU.
      *
      * @param {boolean} [fUpdateFocus]
-     * @return {boolean}
+     * @returns {boolean}
      */
     startCPU(fUpdateFocus)
     {
@@ -1131,7 +1131,7 @@ export default class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {number} of cycles executed; 0 indicates that the last instruction was not executed
+     * @returns {number} of cycles executed; 0 indicates that the last instruction was not executed
      */
     stepCPU(nMinCycles)
     {
@@ -1148,7 +1148,7 @@ export default class CPUPDP11 extends Component {
      *
      * @this {CPUPDP11}
      * @param {boolean} [fComplete]
-     * @return {boolean} true if the CPU was stopped, false if it was already stopped
+     * @returns {boolean} true if the CPU was stopped, false if it was already stopped
      */
     stopCPU(fComplete)
     {

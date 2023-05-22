@@ -20,7 +20,7 @@ import Device from "./device.js";
  */
 
 /**
- * @class {Memory}
+ * @class Memory
  * @unrestricted
  * @property {number} [addr]
  * @property {number} size

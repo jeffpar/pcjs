@@ -71,7 +71,7 @@ import Device from "./device.js";
  */
 
 /**
- * @class {Input}
+ * @class Input
  * @unrestricted
  * @property {InputConfig} config
  * @property {Array.<number>} location

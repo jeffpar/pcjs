@@ -46,7 +46,7 @@ import { DEBUGGER, PDP11 } from "./defines.js";
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst + src)
+ * @returns {number} (dst + src)
  */
 PDP11.fnADD = function(src, dst)
 {
@@ -61,7 +61,7 @@ PDP11.fnADD = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst + src)
+ * @returns {number} (dst + src)
  */
 PDP11.fnADDB = function(src, dst)
 {
@@ -76,7 +76,7 @@ PDP11.fnADDB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst << 1)
+ * @returns {number} (dst << 1)
  */
 PDP11.fnASL = function(src, dst)
 {
@@ -91,7 +91,7 @@ PDP11.fnASL = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst << 1)
+ * @returns {number} (dst << 1)
  */
 PDP11.fnASLB = function(src, dst)
 {
@@ -106,7 +106,7 @@ PDP11.fnASLB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst >> 1)
+ * @returns {number} (dst >> 1)
  */
 PDP11.fnASR = function(src, dst)
 {
@@ -121,7 +121,7 @@ PDP11.fnASR = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst >> 1)
+ * @returns {number} (dst >> 1)
  */
 PDP11.fnASRB = function(src, dst)
 {
@@ -136,7 +136,7 @@ PDP11.fnASRB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (~src & dst)
+ * @returns {number} (~src & dst)
  */
 PDP11.fnBIC = function(src, dst)
 {
@@ -151,7 +151,7 @@ PDP11.fnBIC = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (~src & dst)
+ * @returns {number} (~src & dst)
  */
 PDP11.fnBICB = function(src, dst)
 {
@@ -166,7 +166,7 @@ PDP11.fnBICB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst | src)
+ * @returns {number} (dst | src)
  */
 PDP11.fnBIS = function(src, dst)
 {
@@ -181,7 +181,7 @@ PDP11.fnBIS = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst | src)
+ * @returns {number} (dst | src)
  */
 PDP11.fnBISB = function(src, dst)
 {
@@ -196,7 +196,7 @@ PDP11.fnBISB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (~dst)
+ * @returns {number} (~dst)
  */
 PDP11.fnCOM = function(src, dst)
 {
@@ -211,7 +211,7 @@ PDP11.fnCOM = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (~dst)
+ * @returns {number} (~dst)
  */
 PDP11.fnCOMB = function(src, dst)
 {
@@ -226,7 +226,7 @@ PDP11.fnCOMB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ie, 1)
  * @param {number} dst
- * @return {number} (dst - src)
+ * @returns {number} (dst - src)
  */
 PDP11.fnDEC = function(src, dst)
 {
@@ -241,7 +241,7 @@ PDP11.fnDEC = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ie, 1)
  * @param {number} dst
- * @return {number} (dst - src)
+ * @returns {number} (dst - src)
  */
 PDP11.fnDECB = function(src, dst)
 {
@@ -256,7 +256,7 @@ PDP11.fnDECB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ie, 1)
  * @param {number} dst
- * @return {number} (dst + src)
+ * @returns {number} (dst + src)
  */
 PDP11.fnINC = function(src, dst)
 {
@@ -271,7 +271,7 @@ PDP11.fnINC = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ie, 1)
  * @param {number} dst
- * @return {number} (dst + src)
+ * @returns {number} (dst + src)
  */
 PDP11.fnINCB = function(src, dst)
 {
@@ -286,7 +286,7 @@ PDP11.fnINCB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (-dst)
+ * @returns {number} (-dst)
  */
 PDP11.fnNEG = function(src, dst)
 {
@@ -304,7 +304,7 @@ PDP11.fnNEG = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (-dst)
+ * @returns {number} (-dst)
  */
 PDP11.fnNEGB = function(src, dst)
 {
@@ -322,7 +322,7 @@ PDP11.fnNEGB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst >> 1)
+ * @returns {number} (dst >> 1)
  */
 PDP11.fnROL = function(src, dst)
 {
@@ -337,7 +337,7 @@ PDP11.fnROL = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst >> 1)
+ * @returns {number} (dst >> 1)
  */
 PDP11.fnROLB = function(src, dst)
 {
@@ -352,7 +352,7 @@ PDP11.fnROLB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst >> 1)
+ * @returns {number} (dst >> 1)
  */
 PDP11.fnROR = function(src, dst)
 {
@@ -367,7 +367,7 @@ PDP11.fnROR = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst >> 1)
+ * @returns {number} (dst >> 1)
  */
 PDP11.fnRORB = function(src, dst)
 {
@@ -382,7 +382,7 @@ PDP11.fnRORB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst - src)
+ * @returns {number} (dst - src)
  */
 PDP11.fnSUB = function(src, dst)
 {
@@ -397,7 +397,7 @@ PDP11.fnSUB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst - src)
+ * @returns {number} (dst - src)
  */
 PDP11.fnSUBB = function(src, dst)
 {
@@ -412,7 +412,7 @@ PDP11.fnSUBB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src (ignored)
  * @param {number} dst
- * @return {number} (dst with bytes swapped)
+ * @returns {number} (dst with bytes swapped)
  */
 PDP11.fnSWAB = function(src, dst)
 {
@@ -430,7 +430,7 @@ PDP11.fnSWAB = function(src, dst)
  * @this {CPUStatePDP11}
  * @param {number} src
  * @param {number} dst
- * @return {number} (dst ^ src)
+ * @returns {number} (dst ^ src)
  */
 PDP11.fnXOR = function(src, dst)
 {

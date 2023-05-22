@@ -27,7 +27,7 @@ export class Controller {
      * getMemoryAccess()
      *
      * @this {Controller}
-     * @return {Array.<function()>}
+     * @returns {Array.<function()>}
      */
     getMemoryAccess()
     {
@@ -39,7 +39,7 @@ export class Controller {
      *
      * @this {Controller}
      * @param {number} addr
-     * @return {Array} containing the buffer (and an offset within that buffer)
+     * @returns {Array} containing the buffer (and an offset within that buffer)
      */
     getMemoryBuffer(addr)
     {
@@ -238,7 +238,7 @@ export default class BusX86 extends Component {
      * @this {BusX86}
      * @param {Object|null} data (always null because we supply no powerDown() handler)
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -275,7 +275,7 @@ export default class BusX86 extends Component {
      * @param {number} size of the request, in bytes
      * @param {number} type is one of the MemoryX86.TYPE constants
      * @param {Controller} [controller] is an optional memory controller component
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     addMemory(addr, size, type, controller)
     {
@@ -351,7 +351,7 @@ export default class BusX86 extends Component {
      * @param {number} addr
      * @param {number} size
      * @param {boolean} [fScrub] (true to "scrub" blocks as well)
-     * @return {boolean} (true if all blocks were clean, false otherwise)
+     * @returns {boolean} (true if all blocks were clean, false otherwise)
      */
     cleanMemory(addr, size, fScrub)
     {
@@ -378,7 +378,7 @@ export default class BusX86 extends Component {
      * @param {Object} [info] previous BusInfo, if any
      * @param {number} [addr] starting address of range (0 if none provided)
      * @param {number} [size] size of range, in bytes (up to end of address space if none provided)
-     * @return {Object} updated info (or new info if no previous info provided)
+     * @returns {Object} updated info (or new info if no previous info provided)
      */
     scanMemory(info, addr, size)
     {
@@ -408,7 +408,7 @@ export default class BusX86 extends Component {
      * getA20()
      *
      * @this {BusX86}
-     * @return {boolean} true if enabled, false if disabled
+     * @returns {boolean} true if enabled, false if disabled
      */
     getA20()
     {
@@ -461,7 +461,7 @@ export default class BusX86 extends Component {
      * getWidth()
      *
      * @this {BusX86}
-     * @return {number}
+     * @returns {number}
      */
     getWidth()
     {
@@ -480,7 +480,7 @@ export default class BusX86 extends Component {
      * @param {number} size
      * @param {Array.<function()>} [afn]
      * @param {boolean} [fQuiet] (true if any error should be quietly logged)
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     setMemoryAccess(addr, size, afn, fQuiet)
     {
@@ -510,7 +510,7 @@ export default class BusX86 extends Component {
      * @this {BusX86}
      * @param {number} addr
      * @param {number} size
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     removeMemory(addr, size)
     {
@@ -545,7 +545,7 @@ export default class BusX86 extends Component {
      * @this {BusX86}
      * @param {number} addr is the starting physical address
      * @param {number} size of the request, in bytes
-     * @return {Array} of Memory blocks
+     * @returns {Array} of Memory blocks
      */
     getMemoryBlocks(addr, size)
     {
@@ -598,7 +598,7 @@ export default class BusX86 extends Component {
      *
      * @this {BusX86}
      * @param {number} addr is a physical address
-     * @return {number} byte (8-bit) value at that address
+     * @returns {number} byte (8-bit) value at that address
      */
     getByte(addr)
     {
@@ -612,7 +612,7 @@ export default class BusX86 extends Component {
      *
      * @this {BusX86}
      * @param {number} addr is a physical address
-     * @return {number} byte (8-bit) value at that address
+     * @returns {number} byte (8-bit) value at that address
      */
     getByteDirect(addr)
     {
@@ -626,7 +626,7 @@ export default class BusX86 extends Component {
      *
      * @this {BusX86}
      * @param {number} addr is a physical address
-     * @return {number} word (16-bit) value at that address
+     * @returns {number} word (16-bit) value at that address
      */
     getShort(addr)
     {
@@ -645,7 +645,7 @@ export default class BusX86 extends Component {
      *
      * @this {BusX86}
      * @param {number} addr is a physical address
-     * @return {number} word (16-bit) value at that address
+     * @returns {number} word (16-bit) value at that address
      */
     getShortDirect(addr)
     {
@@ -664,7 +664,7 @@ export default class BusX86 extends Component {
      *
      * @this {BusX86}
      * @param {number} addr is a physical address
-     * @return {number} long (32-bit) value at that address
+     * @returns {number} long (32-bit) value at that address
      */
     getLong(addr)
     {
@@ -812,7 +812,7 @@ export default class BusX86 extends Component {
      * @param {Object} obj
      * @param {BackTrack|null} bto
      * @param {number} off (the offset within obj that this wrapper object is relative to)
-     * @return {BackTrack|null}
+     * @returns {BackTrack|null}
      */
     addBackTrackObject(obj, bto, off)
     {
@@ -885,7 +885,7 @@ export default class BusX86 extends Component {
      * @this {BusX86}
      * @param {BackTrack|null} bto
      * @param {number} off
-     * @return {number}
+     * @returns {number}
      */
     getBackTrackIndex(bto, off)
     {
@@ -918,7 +918,7 @@ export default class BusX86 extends Component {
      *
      * @this {BusX86}
      * @param {number} addr is a physical address
-     * @return {number}
+     * @returns {number}
      */
     readBackTrack(addr)
     {
@@ -1050,7 +1050,7 @@ export default class BusX86 extends Component {
      *
      * @this {BusX86}
      * @param {number} bti
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     getBackTrackObject(bti)
     {
@@ -1068,7 +1068,7 @@ export default class BusX86 extends Component {
      * @param {number} bti
      * @param {boolean} [fSymbol] (true to return only symbol)
      * @param {boolean} [fNearest] (true to return nearest symbol)
-     * @return {string|null}
+     * @returns {string|null}
      */
     getBackTrackInfo(bti, fSymbol, fNearest)
     {
@@ -1097,7 +1097,7 @@ export default class BusX86 extends Component {
      * @this {BusX86}
      * @param {number} addr
      * @param {boolean} [fNearest] (true to return nearest symbol)
-     * @return {string|null}
+     * @returns {string|null}
      */
     getSymbol(addr, fNearest)
     {
@@ -1126,7 +1126,7 @@ export default class BusX86 extends Component {
      *
      * @this {BusX86}
      * @param {boolean} [fAll] (true to save all non-ROM memory blocks, regardless of their modified() state)
-     * @return {Array} a
+     * @returns {Array} a
      */
     saveMemory(fAll = true)
     {
@@ -1170,7 +1170,7 @@ export default class BusX86 extends Component {
      *
      * @this {BusX86}
      * @param {Array} a
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     restoreMemory(a)
     {
@@ -1223,7 +1223,7 @@ export default class BusX86 extends Component {
      *
      * @this {BusX86}
      * @param {number|null} [port]
-     * @return {boolean} true if break on port input enabled, false if disabled
+     * @returns {boolean} true if break on port input enabled, false if disabled
      */
     addPortInputBreak(port)
     {
@@ -1301,7 +1301,7 @@ export default class BusX86 extends Component {
      * @param {number} port
      * @param {number} size (1, 2 or 4)
      * @param {number} [addrLIP] is the LIP value at the time of the input
-     * @return {number} simulated port data
+     * @returns {number} simulated port data
      *
      * NOTE: It seems that parts of the ROM BIOS (like the RS-232 probes around F000:E5D7 in the 5150 BIOS)
      * assume that ports for non-existent hardware return 0xff rather than 0x00, hence my new default (0xff) below.
@@ -1365,7 +1365,7 @@ export default class BusX86 extends Component {
      *
      * @this {BusX86}
      * @param {number|null} [port]
-     * @return {boolean} true if break on port output enabled, false if disabled
+     * @returns {boolean} true if break on port output enabled, false if disabled
      */
     addPortOutputBreak(port)
     {
@@ -1495,7 +1495,7 @@ export default class BusX86 extends Component {
      * @param {number} addr
      * @param {number} size
      * @param {boolean} [fQuiet] (true if any error should be quietly logged)
-     * @return {boolean} false
+     * @returns {boolean} false
      */
     reportError(op, addr, size, fQuiet)
     {
@@ -1519,7 +1519,7 @@ export default class BusX86 extends Component {
      *
      * @this {BusX86}
      * @param {number} addr is a physical address
-     * @return {number} long (32-bit) value at that address
+     * @returns {number} long (32-bit) value at that address
      *
      getLongDirect(addr)
      {
@@ -1591,7 +1591,7 @@ export default class BusX86 extends Component {
      *
      * @this {BusX86}
      * @param {number} addr
-     * @return {Object|null}
+     * @returns {Object|null}
      *
      getBackTrackObjectFromAddr(addr)
      {
@@ -1604,7 +1604,7 @@ export default class BusX86 extends Component {
      *
      * @this {BusX86}
      * @param {number} addr
-     * @return {string|null}
+     * @returns {string|null}
      *
      getBackTrackInfoFromAddr(addr)
      {

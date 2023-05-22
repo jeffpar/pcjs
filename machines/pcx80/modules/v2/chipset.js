@@ -83,7 +83,7 @@ export default class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {string} sBits describing switch settings
      * @param {number} [bDefault]
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     parseDIPSwitches(sBits, bDefault)
     {
@@ -110,7 +110,7 @@ export default class ChipSetX80 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "sw1")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -154,7 +154,7 @@ export default class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -174,7 +174,7 @@ export default class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -218,7 +218,7 @@ export default class ChipSetX80 extends Component {
      * This implements save support for the ChipSet component.
      *
      * @this {ChipSetX80}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -244,7 +244,7 @@ export default class ChipSetX80 extends Component {
      *
      * @this {ChipSetX80}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -356,7 +356,7 @@ export default class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {number} port (0x00)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inSIStatus0(port, addrFrom)
     {
@@ -371,7 +371,7 @@ export default class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {number} port (0x01)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inSIStatus1(port, addrFrom)
     {
@@ -386,7 +386,7 @@ export default class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {number} port (0x02)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inSIStatus2(port, addrFrom)
     {
@@ -401,7 +401,7 @@ export default class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {number} port (0x03)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inSIShiftResult(port, addrFrom)
     {
@@ -490,7 +490,7 @@ export default class ChipSetX80 extends Component {
      * overall performance.
      *
      * @param {number} iBit
-     * @return {number}
+     * @returns {number}
      */
     getVT100LBA(iBit)
     {
@@ -500,7 +500,7 @@ export default class ChipSetX80 extends Component {
     /**
      * getNVRAddr()
      *
-     * @return {number}
+     * @returns {number}
      */
     getNVRAddr()
     {
@@ -585,7 +585,7 @@ export default class ChipSetX80 extends Component {
      * @this {ChipSetX80}
      * @param {number} port (0x42)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inVT100Flags(port, addrFrom)
     {

@@ -60,7 +60,7 @@ export default class RX11 extends DriveController {
      *
      * @this {RX11}
      * @param {Array} [aRegs]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(aRegs)
     {
@@ -102,7 +102,7 @@ export default class RX11 extends DriveController {
      * Basically, the inverse of initController().
      *
      * @this {RX11}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -227,7 +227,7 @@ export default class RX11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     readData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -401,7 +401,7 @@ export default class RX11 extends DriveController {
      * @this {RX11}
      * @param {number} addr (eg, PDP11.UNIBUS.RXCS or 177170)
      * @param {boolean} [fPreWrite]
-     * @return {number}
+     * @returns {number}
      */
     readRXCS(addr, fPreWrite)
     {
@@ -466,7 +466,7 @@ export default class RX11 extends DriveController {
      * @this {RX11}
      * @param {number} addr (eg, PDP11.UNIBUS.RXDB or 177172)
      * @param {boolean} [fPreWrite]
-     * @return {number}
+     * @returns {number}
      */
     readRXDB(addr, fPreWrite)
     {

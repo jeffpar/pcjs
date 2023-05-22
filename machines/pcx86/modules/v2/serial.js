@@ -197,7 +197,7 @@ export default class SerialPort extends Component {
      * @param {Component} connection
      * @param {function()} receiveData
      * @param {boolean} [fAutoFlow] (true to enable automatic flow control; default is false)
-     * @return {boolean}
+     * @returns {boolean}
      */
     bindConnection(connection, receiveData, fAutoFlow = false)
     {
@@ -217,7 +217,7 @@ export default class SerialPort extends Component {
      * @param {string} id
      * @param {Mouse} mouse
      * @param {function(number)} fnUpdate
-     * @return {Component|null}
+     * @returns {Component|null}
      */
     bindMouse(id, mouse, fnUpdate)
     {
@@ -239,7 +239,7 @@ export default class SerialPort extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "buffer")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -408,7 +408,7 @@ export default class SerialPort extends Component {
      * @this {SerialPort}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -436,7 +436,7 @@ export default class SerialPort extends Component {
      * @this {SerialPort}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -459,7 +459,7 @@ export default class SerialPort extends Component {
      * This implements save support for the SerialPort component.
      *
      * @this {SerialPort}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -475,7 +475,7 @@ export default class SerialPort extends Component {
      *
      * @this {SerialPort}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -487,7 +487,7 @@ export default class SerialPort extends Component {
      *
      * @this {SerialPort}
      * @param {Array} [data]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initState(data)
     {
@@ -528,7 +528,7 @@ export default class SerialPort extends Component {
      * saveRegisters()
      *
      * @this {SerialPort}
-     * @return {Array}
+     * @returns {Array}
      */
     saveRegisters()
     {
@@ -556,7 +556,7 @@ export default class SerialPort extends Component {
      * which means there should be a 1000ms/150 or 6.667ms delay between bytes delivered.
      *
      * @this {SerialPort}
-     * @return {number} (number of milliseconds per byte)
+     * @returns {number} (number of milliseconds per byte)
      */
     getBaudTimeout()
     {
@@ -574,7 +574,7 @@ export default class SerialPort extends Component {
      *
      * @this {SerialPort}
      * @param {number|string|Array} [data]
-     * @return {boolean} true if received, false if not
+     * @returns {boolean} true if received, false if not
      */
     receiveData(data)
     {
@@ -643,7 +643,7 @@ export default class SerialPort extends Component {
      * @this {SerialPort}
      * @param {number} port (eg, 0x3F8 or 0x2F8)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inRBR(port, addrFrom)
     {
@@ -660,7 +660,7 @@ export default class SerialPort extends Component {
      * @this {SerialPort}
      * @param {number} port (eg, 0x3F9 or 0x2F9)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inIER(port, addrFrom)
     {
@@ -675,7 +675,7 @@ export default class SerialPort extends Component {
      * @this {SerialPort}
      * @param {number} port (eg, 0x3FA or 0x2FA)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inIIR(port, addrFrom)
     {
@@ -696,7 +696,7 @@ export default class SerialPort extends Component {
      * @this {SerialPort}
      * @param {number} port (eg, 0x3FB or 0x2FB)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inLCR(port, addrFrom)
     {
@@ -711,7 +711,7 @@ export default class SerialPort extends Component {
      * @this {SerialPort}
      * @param {number} port (eg, 0x3FC or 0x2FC)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inMCR(port, addrFrom)
     {
@@ -726,7 +726,7 @@ export default class SerialPort extends Component {
      * @this {SerialPort}
      * @param {number} port (eg, 0x3FD or 0x2FD)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inLSR(port, addrFrom)
     {
@@ -741,7 +741,7 @@ export default class SerialPort extends Component {
      * @this {SerialPort}
      * @param {number} port (eg, 0x3FE or 0x2FE)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inMSR(port, addrFrom)
     {
@@ -912,7 +912,7 @@ export default class SerialPort extends Component {
      *
      * @this {SerialPort}
      * @param {number} b
-     * @return {boolean} true if transmitted, false if not
+     * @returns {boolean} true if transmitted, false if not
      */
     transmitByte(b)
     {

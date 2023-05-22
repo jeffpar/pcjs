@@ -55,7 +55,7 @@ import EAModeImmediateLong  from "./eamodes.js";
 /**
  * 68K Emulator
  *
- * @class {CPU68K}
+ * @class CPU68K
  * @unrestricted
  * @property {Bus} busMemory
  * @property {Input} input

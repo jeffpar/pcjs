@@ -26,7 +26,7 @@ export default class Usr {
      * @param {Array} a is an array
      * @param {number|string|Array|Object} v
      * @param {function((number|string|Array|Object), (number|string|Array|Object))} [fnCompare]
-     * @return {number} the index of matching entry if non-negative, otherwise the index of the insertion point
+     * @returns {number} the index of matching entry if non-negative, otherwise the index of the insertion point
      */
     static binarySearch(a, v, fnCompare)
     {
@@ -74,7 +74,7 @@ export default class Usr {
     /**
      * getTimestamp()
      *
-     * @return {string} timestamp containing the current date and time ("yyyy-mm-dd hh:mm:ss")
+     * @returns {string} timestamp containing the current date and time ("yyyy-mm-dd hh:mm:ss")
      */
     static getTimestamp()
     {
@@ -97,7 +97,7 @@ export default class Usr {
      *
      * @param {number} nMonth (1-12)
      * @param {number} nYear (normally a 4-digit year, but it may also be mod 100)
-     * @return {number} the maximum (1-based) day allowed for the specified month and year
+     * @returns {number} the maximum (1-based) day allowed for the specified month and year
      */
     static getMonthDays(nMonth, nYear)
     {
@@ -134,7 +134,7 @@ export default class Usr {
      *
      * @param {Date} date
      * @param {number} days (+/-)
-     * @return {Date}
+     * @returns {Date}
      */
     static adjustDays(date, days)
     {
@@ -146,7 +146,7 @@ export default class Usr {
      *
      * @param {Date|string} date1
      * @param {Date|string} date2
-     * @return {number} (date1 - date2, returned as a signed integer number of days)
+     * @returns {number} (date1 - date2, returned as a signed integer number of days)
      */
     static subtractDays(date1, date2)
     {
@@ -169,7 +169,7 @@ export default class Usr {
      * The above set bit field "bfs.num" in numeric variable "n" to the value 1.
      *
      * @param {Object} bfs
-     * @return {BitFields}
+     * @returns {BitFields}
      */
     static defineBitFields(bfs)
     {
@@ -188,7 +188,7 @@ export default class Usr {
      *
      * @param {BitFields} bfs
      * @param {...number} var_args
-     * @return {number} a value containing all supplied bit fields
+     * @returns {number} a value containing all supplied bit fields
      */
     static initBitFields(bfs, var_args)
     {
@@ -205,7 +205,7 @@ export default class Usr {
      *
      * @param {BitField} bf
      * @param {number} v is a value containing bit fields
-     * @return {number} the value of the bit field in v defined by bf
+     * @returns {number} the value of the bit field in v defined by bf
      */
     static getBitField(bf, v)
     {
@@ -218,7 +218,7 @@ export default class Usr {
      * @param {BitField} bf
      * @param {number} v is a value containing bit fields
      * @param {number} n is a value to store in v in the bit field defined by bf
-     * @return {number} updated v
+     * @returns {number} updated v
      */
     static setBitField(bf, v, n)
     {

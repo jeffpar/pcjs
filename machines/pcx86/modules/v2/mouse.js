@@ -112,7 +112,7 @@ export default class Mouse extends Component {
      * isActive()
      *
      * @this {Mouse}
-     * @return {boolean} true if active, false if not
+     * @returns {boolean} true if active, false if not
      */
     isActive()
     {
@@ -144,7 +144,7 @@ export default class Mouse extends Component {
      * @this {Mouse}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -201,7 +201,7 @@ export default class Mouse extends Component {
      * @this {Mouse}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -224,7 +224,7 @@ export default class Mouse extends Component {
      * This implements save support for the Mouse component.
      *
      * @this {Mouse}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -240,7 +240,7 @@ export default class Mouse extends Component {
      *
      * @this {Mouse}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -252,7 +252,7 @@ export default class Mouse extends Component {
      *
      * @this {Mouse}
      * @param {Array} [data]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initState(data)
     {
@@ -280,7 +280,7 @@ export default class Mouse extends Component {
      * saveState()
      *
      * @this {Mouse}
-     * @return {Array}
+     * @returns {Array}
      */
     saveState()
     {
@@ -344,7 +344,7 @@ export default class Mouse extends Component {
      *
      * @this {Mouse}
      * @param {HTMLElement} control from the HTML DOM (eg, the control for the simulated screen)
-     * @return {boolean} true if event handlers were actually added, false if not
+     * @returns {boolean} true if event handlers were actually added, false if not
      */
     captureMouse(control)
     {
@@ -397,7 +397,7 @@ export default class Mouse extends Component {
      *
      * @this {Mouse}
      * @param {HTMLElement} control from the HTML DOM
-     * @return {boolean} true if event handlers were actually released, false if not
+     * @returns {boolean} true if event handlers were actually released, false if not
      */
     releaseMouse(control)
     {
@@ -638,7 +638,7 @@ export default class Mouse extends Component {
      * @this {Mouse}
      * @param {number} port (eg, 0x23C)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inBusData(port, addrFrom)
     {
@@ -653,7 +653,7 @@ export default class Mouse extends Component {
      * @this {Mouse}
      * @param {number} port (eg, 0x23D)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inBusTPPI(port, addrFrom)
     {
@@ -668,7 +668,7 @@ export default class Mouse extends Component {
      * @this {Mouse}
      * @param {number} port (eg, 0x23E)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inBusCtrl(port, addrFrom)
     {
@@ -683,7 +683,7 @@ export default class Mouse extends Component {
      * @this {Mouse}
      * @param {number} port (eg, 0x23F)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inBusCPPI(port, addrFrom)
     {

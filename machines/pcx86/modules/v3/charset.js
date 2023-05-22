@@ -23,7 +23,7 @@ export default class CharSet {
      *
      * @param {string|DataBuffer} data
      * @param {boolean} [controlChars] (true to include control characters)
-     * @return {string}
+     * @returns {string}
      */
     static fromCP437(data, controlChars = false)
     {
@@ -43,7 +43,7 @@ export default class CharSet {
      * toCP437(u)
      *
      * @param {string} u
-     * @return {string}
+     * @returns {string}
      */
     static toCP437(u)
     {
@@ -63,7 +63,7 @@ export default class CharSet {
      * isCP437(c)
      *
      * @param {string} c
-     * @return {boolean} (true if UTF-8 character exists in CP437 character set)
+     * @returns {boolean} (true if UTF-8 character exists in CP437 character set)
      */
     static isCP437(c)
     {
@@ -78,7 +78,7 @@ export default class CharSet {
      * can also be interpreted as graphics characters.
      *
      * @param {string} data
-     * @return {boolean} true if data is entirely non-NULL 7-bit ASCII and/or valid CP437 characters
+     * @returns {boolean} true if data is entirely non-NULL 7-bit ASCII and/or valid CP437 characters
      */
     static isText(data)
     {
@@ -95,7 +95,7 @@ export default class CharSet {
      * toUpperCaseASCII(s)
      *
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static toUpperCaseASCII(s)
     {

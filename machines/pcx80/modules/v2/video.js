@@ -217,7 +217,7 @@ export default class VideoX80 extends Component {
      * initBuffers()
      *
      * @this {VideoX80}
-     * @return {boolean}
+     * @returns {boolean}
      */
     initBuffers()
     {
@@ -331,7 +331,7 @@ export default class VideoX80 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "refresh")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -475,7 +475,7 @@ export default class VideoX80 extends Component {
      * createFonts()
      *
      * @this {VideoX80}
-     * @return {boolean}
+     * @returns {boolean}
      */
     createFonts()
     {
@@ -515,7 +515,7 @@ export default class VideoX80 extends Component {
      * @param {number} cxCell is the target width of each character in the grid
      * @param {number} cyCell is the target height of each character in the grid
      * @param {boolean} [fUnderline] (null for unmodified font, false for reverse video, true for underline)
-     * @return {Object}
+     * @returns {Object}
      */
     createFontVariation(cxCell, cyCell, fUnderline)
     {
@@ -587,7 +587,7 @@ export default class VideoX80 extends Component {
      * @this {VideoX80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -673,7 +673,7 @@ export default class VideoX80 extends Component {
      * @this {VideoX80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -686,7 +686,7 @@ export default class VideoX80 extends Component {
      * This implements save support for the VideoX80 component.
      *
      * @this {VideoX80}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -702,7 +702,7 @@ export default class VideoX80 extends Component {
      *
      * @this {VideoX80}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -790,7 +790,7 @@ export default class VideoX80 extends Component {
      * doFullScreen()
      *
      * @this {VideoX80}
-     * @return {boolean} true if request successful, false if not (eg, failed OR not supported)
+     * @returns {boolean} true if request successful, false if not (eg, failed OR not supported)
      */
     doFullScreen()
     {
@@ -887,7 +887,7 @@ export default class VideoX80 extends Component {
      * getRefreshTime()
      *
      * @this {VideoX80}
-     * @return {number} (number of milliseconds per refresh)
+     * @returns {number} (number of milliseconds per refresh)
      */
     getRefreshTime()
     {

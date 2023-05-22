@@ -123,7 +123,7 @@ export default class ParallelPort extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "buffer")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -160,7 +160,7 @@ export default class ParallelPort extends Component {
      * @this {ParallelPort}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -180,7 +180,7 @@ export default class ParallelPort extends Component {
      * @this {ParallelPort}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -203,7 +203,7 @@ export default class ParallelPort extends Component {
      * This implements save support for the ParallelPort component.
      *
      * @this {ParallelPort}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -219,7 +219,7 @@ export default class ParallelPort extends Component {
      *
      * @this {ParallelPort}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -231,7 +231,7 @@ export default class ParallelPort extends Component {
      *
      * @this {ParallelPort}
      * @param {Array} [data]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initState(data)
     {
@@ -249,7 +249,7 @@ export default class ParallelPort extends Component {
      * saveRegisters()
      *
      * @this {ParallelPort}
-     * @return {Array}
+     * @returns {Array}
      */
     saveRegisters()
     {
@@ -267,7 +267,7 @@ export default class ParallelPort extends Component {
      * @this {ParallelPort}
      * @param {number} port (0x3BC, 0x378, or 0x278)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inData(port, addrFrom)
     {
@@ -282,7 +282,7 @@ export default class ParallelPort extends Component {
      * @this {ParallelPort}
      * @param {number} port (0x3BD, 0x379, or 0x279)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inStatus(port, addrFrom)
     {
@@ -299,7 +299,7 @@ export default class ParallelPort extends Component {
      * @this {ParallelPort}
      * @param {number} port (0x3BE, 0x37A, or 0x27A)
      * @param {number} [addrFrom] (not defined whenever the Debugger tries to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inControl(port, addrFrom)
     {
@@ -368,7 +368,7 @@ export default class ParallelPort extends Component {
      *
      * @this {ParallelPort}
      * @param {number} b
-     * @return {boolean} true if transmitted, false if not
+     * @returns {boolean} true if transmitted, false if not
      */
     transmitByte(b)
     {

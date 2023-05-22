@@ -49,7 +49,7 @@ export default class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {Array} [aRegs]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(aRegs)
     {
@@ -80,7 +80,7 @@ export default class RK11 extends DriveController {
      * Basically, the inverse of initController().
      *
      * @this {RK11}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -202,7 +202,7 @@ export default class RK11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     readData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -277,7 +277,7 @@ export default class RK11 extends DriveController {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     writeData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -358,7 +358,7 @@ export default class RK11 extends DriveController {
      * @param {number} iSector
      * @param {number} nWords
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     doneReadWrite(nError, iCylinder, iHead, iSector, nWords, addr)
     {
@@ -404,7 +404,7 @@ export default class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKDS or 177400)
-     * @return {number}
+     * @returns {number}
      */
     readRKDS(addr)
     {
@@ -430,7 +430,7 @@ export default class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKER or 177402)
-     * @return {number}
+     * @returns {number}
      */
     readRKER(addr)
     {
@@ -456,7 +456,7 @@ export default class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKCS or 177404)
-     * @return {number}
+     * @returns {number}
      */
     readRKCS(addr)
     {
@@ -482,7 +482,7 @@ export default class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKWC or 177406)
-     * @return {number}
+     * @returns {number}
      */
     readRKWC(addr)
     {
@@ -506,7 +506,7 @@ export default class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKBA or 177410)
-     * @return {number}
+     * @returns {number}
      */
     readRKBA(addr)
     {
@@ -530,7 +530,7 @@ export default class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKDA or 177412)
-     * @return {number}
+     * @returns {number}
      */
     readRKDA(addr)
     {
@@ -554,7 +554,7 @@ export default class RK11 extends DriveController {
      *
      * @this {RK11}
      * @param {number} addr (eg, PDP11.UNIBUS.RKDB or 177416)
-     * @return {number}
+     * @returns {number}
      */
     readRKDB(addr)
     {

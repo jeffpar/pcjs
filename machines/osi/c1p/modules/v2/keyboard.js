@@ -379,7 +379,7 @@ export default class C1PKeyboard extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "esc", "ctrl-c")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -536,7 +536,7 @@ export default class C1PKeyboard extends Component {
      *
      * @this {C1PKeyboard}
      * @param {boolean} fRepeat is true if a timeout had already been active for the current key
-     * @return {number}
+     * @returns {number}
      */
     calcReleaseDelay(fRepeat)
     {
@@ -621,7 +621,7 @@ export default class C1PKeyboard extends Component {
      * @this {C1PKeyboard}
      * @param {Object} event
      * @param {boolean} fDown is true if called for a keyDown event, false if called for a keyUp event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     keyEvent(event, fDown)
     {
@@ -756,7 +756,7 @@ export default class C1PKeyboard extends Component {
     /**
      * @this {C1PKeyboard}
      * @param {Object} event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      *
      * We've stopped relying on keyPress for keyboard emulation purposes, but it's still handy to hook and monitor
      * when debugging.
@@ -789,7 +789,7 @@ export default class C1PKeyboard extends Component {
     /**
      * @this {C1PKeyboard}
      * @param {number} charCode
-     * @return {boolean} true if successfully simulated, false if unrecognized/unsupported key
+     * @returns {boolean} true if successfully simulated, false if unrecognized/unsupported key
      */
     keyPressSimulate(charCode)
     {
@@ -872,7 +872,7 @@ export default class C1PKeyboard extends Component {
      * @param {number} charCode
      * @param {boolean} fDown
      * @param {number} simCode indicates the origin of the event
-     * @return {boolean} true if successfully simulated, false if unrecognized/unsupported key
+     * @returns {boolean} true if successfully simulated, false if unrecognized/unsupported key
      */
     keyEventSimulate(charCode, fDown, simCode)
     {
@@ -1057,7 +1057,7 @@ export default class C1PKeyboard extends Component {
      *
      * @this {C1PKeyboard}
      * @param {number} charCode
-     * @return {boolean}
+     * @returns {boolean}
      *
      isShift(charCode)
      {

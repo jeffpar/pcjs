@@ -146,7 +146,7 @@ export default class BusPDP10 extends Component {
      * getWidth()
      *
      * @this {BusPDP10}
-     * @return {number}
+     * @returns {number}
      */
     getWidth()
     {
@@ -159,7 +159,7 @@ export default class BusPDP10 extends Component {
      * @this {BusPDP10}
      * @param {Object|null} data (always null because we supply no powerDown() handler)
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -179,7 +179,7 @@ export default class BusPDP10 extends Component {
      * @this {BusPDP10}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -190,7 +190,7 @@ export default class BusPDP10 extends Component {
      * save()
      *
      * @this {BusPDP10}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -204,7 +204,7 @@ export default class BusPDP10 extends Component {
      *
      * @this {BusPDP10}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -238,7 +238,7 @@ export default class BusPDP10 extends Component {
      * @param {number} addr is the starting physical address of the request
      * @param {number} size of the request, in bytes
      * @param {number} type is one of the MemoryPDP10.TYPE constants
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     addMemory(addr, size, type)
     {
@@ -301,7 +301,7 @@ export default class BusPDP10 extends Component {
      * @this {BusPDP10}
      * @param {number} addr
      * @param {number} size
-     * @return {boolean} true if all blocks were clean, false if dirty; all blocks are cleaned in the process
+     * @returns {boolean} true if all blocks were clean, false if dirty; all blocks are cleaned in the process
      */
     cleanMemory(addr, size)
     {
@@ -349,7 +349,7 @@ export default class BusPDP10 extends Component {
      * @param {BusInfo} [info] previous BusInfo, if any
      * @param {number} [addr] starting address of range (0 if none provided)
      * @param {number} [size] size of range, in bytes (up to end of address space if none provided)
-     * @return {BusInfo} updated info (or new info if no previous info provided)
+     * @returns {BusInfo} updated info (or new info if no previous info provided)
      */
     scanMemory(info, addr, size)
     {
@@ -384,7 +384,7 @@ export default class BusPDP10 extends Component {
      * @this {BusPDP10}
      * @param {number} addr
      * @param {number} size
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     removeMemory(addr, size)
     {
@@ -409,7 +409,7 @@ export default class BusPDP10 extends Component {
      * @this {BusPDP10}
      * @param {number} addr is the starting physical address
      * @param {number} size of the request, in bytes
-     * @return {Array} of Memory blocks
+     * @returns {Array} of Memory blocks
      */
     getMemoryBlocks(addr, size)
     {
@@ -460,7 +460,7 @@ export default class BusPDP10 extends Component {
      *
      * @this {BusPDP10}
      * @param {number} addr is a physical address
-     * @return {number} word (36-bit) value at that address
+     * @returns {number} word (36-bit) value at that address
      */
     getWord(addr)
     {
@@ -488,7 +488,7 @@ export default class BusPDP10 extends Component {
      *
      * @this {BusPDP10}
      * @param {number} addr is a physical address
-     * @return {MemoryPDP10}
+     * @returns {MemoryPDP10}
      */
     getBlockDirect(addr)
     {
@@ -502,7 +502,7 @@ export default class BusPDP10 extends Component {
      *
      * @this {BusPDP10}
      * @param {number} addr is a physical address
-     * @return {number} word (36-bit) value at that address
+     * @returns {number} word (36-bit) value at that address
      */
     getWordDirect(addr)
     {
@@ -590,7 +590,7 @@ export default class BusPDP10 extends Component {
      *
      * @this {BusPDP10}
      * @param {boolean} [fAll] (true to save all non-ROM memory blocks, regardless of their dirty flags)
-     * @return {Array} a
+     * @returns {Array} a
      */
     saveMemory(fAll)
     {
@@ -628,7 +628,7 @@ export default class BusPDP10 extends Component {
      *
      * @this {BusPDP10}
      * @param {Array} a
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     restoreMemory(a)
     {
@@ -658,7 +658,7 @@ export default class BusPDP10 extends Component {
      *
      * @this {BusPDP10}
      * @param {number} type is one of the MemoryPDP10.TYPE constants
-     * @return {number} (the limiting address of the specified memory type, zero if none)
+     * @returns {number} (the limiting address of the specified memory type, zero if none)
      */
     getMemoryLimit(type)
     {
@@ -699,7 +699,7 @@ export default class BusPDP10 extends Component {
      * This also serves as a clearFault() function.
      *
      * @this {BusPDP10}
-     * @return {boolean}
+     * @returns {boolean}
      */
     checkFault()
     {
@@ -716,7 +716,7 @@ export default class BusPDP10 extends Component {
      * @param {number} addr
      * @param {number} size
      * @param {boolean} [fQuiet] (true if any error should be quietly logged)
-     * @return {boolean} false
+     * @returns {boolean} false
      */
     reportError(errNum, addr, size, fQuiet)
     {

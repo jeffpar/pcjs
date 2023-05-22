@@ -3,7 +3,7 @@
  */
 
 /**
- * @class {Defines}
+ * @class Defines
  */
 class Defines {}
 
@@ -178,7 +178,7 @@ Defines.CLASSES["Defines"] = Defines;
  */
 
 /**
- * @class {NumIO}
+ * @class NumIO
  * @unrestricted
  */
 class NumIO extends Defines {
@@ -782,7 +782,7 @@ NumIO.CLASSES["NumIO"] = NumIO;
 let Formatter;
 
 /**
- * @class {StdIO}
+ * @class StdIO
  * @unrestricted
  * @property {Object.<string,(Formatter|null)>}>} formatters
  */
@@ -1462,7 +1462,7 @@ let Media;
 let Config;
 
 /**
- * @class {WebIO}
+ * @class WebIO
  * @unrestricted
  * @property {Object} bindings
  * @property {number} messages
@@ -3128,7 +3128,7 @@ let Register;
  *
  * Besides CPUs, other devices may have internal registers or ports that are useful to access by name, too.
  *
- * @class {Device}
+ * @class Device
  * @unrestricted
  * @property {string} idMachine
  * @property {string} idDevice
@@ -3721,7 +3721,7 @@ let SurfaceListener;
 let SurfaceState;
 
 /**
- * @class {Input}
+ * @class Input
  * @unrestricted
  * @property {InputConfig} config
  * @property {Array.<number>} location
@@ -5168,7 +5168,7 @@ let LEDConfig;
  * simple for this device, but also simulates how the display goes blank for short periods of time while
  * the CPU is busy performing calculations.
  *
- * @class {LED}
+ * @class LED
  * @unrestricted
  * @property {LEDConfig} config
  * @property {number} type (one of the LED.TYPE values)
@@ -6260,7 +6260,7 @@ let Timer;
 let TimeConfig;
 
 /**
- * @class {Time}
+ * @class Time
  * @unrestricted
  * @property {TimeConfig} config
  * @property {number} nCyclesMinimum
@@ -7298,7 +7298,7 @@ Time.CLASSES["Time"] = Time;
 let BusConfig;
 
 /**
- * @class {Bus}
+ * @class Bus
  * @unrestricted
  * @property {BusConfig} config
  * @property {number} type (Bus.TYPE value, converted from config['type'])
@@ -8148,7 +8148,7 @@ Bus.CLASSES["Bus"] = Bus;
 let MemoryConfig;
 
 /**
- * @class {Memory}
+ * @class Memory
  * @unrestricted
  * @property {number} [addr]
  * @property {number} size
@@ -9205,7 +9205,7 @@ Memory.CLASSES["Memory"] = Memory;
 let PortsConfig;
 
 /**
- * @class {Ports}
+ * @class Ports
  * @unrestricted
  * @property {PortsConfig} config
  * @property {number} addr
@@ -9402,7 +9402,7 @@ Ports.CLASSES["Ports"] = Ports;
 let RAMConfig;
 
 /**
- * @class {RAM}
+ * @class RAM
  * @unrestricted
  * @property {RAMConfig} config
  * @property {number} addr
@@ -9447,7 +9447,7 @@ RAM.CLASSES["RAM"] = RAM;
 let ROMConfig;
 
 /**
- * @class {ROM}
+ * @class ROM
  * @unrestricted
  * @property {ROMConfig} config
  */
@@ -9673,7 +9673,7 @@ ROM.CLASSES["ROM"] = ROM;
 let CPUConfig;
 
 /**
- * @class {CPU}
+ * @class CPU
  * @unrestricted
  * @property {Time} time
  * @property {Debugger} dbg
@@ -9838,7 +9838,7 @@ let Dumper;
 /**
  * Debugger Services
  *
- * @class {Debugger}
+ * @class Debugger
  * @unrestricted
  * @property {Array.<Array.<Address>>} aaBreakAddress
  */
@@ -12553,7 +12553,7 @@ Debugger.DECOP_PRECEDENCE = {
  */
 
 /**
- * @class {PDP11Ops}
+ * @class PDP11Ops
  * @unrestricted
  */
 class PDP11Ops extends CPU {
@@ -15088,7 +15088,7 @@ let IRQ;
 /**
  * Emulation of the PDP-11 CPU
  *
- * @class {PDP11}
+ * @class PDP11
  * @unrestricted
  * @property {Bus} bus
  * @property {Input} input
@@ -18754,7 +18754,7 @@ PDP11.CLASSES["PDP11"] = PDP11;
 /**
  * Debugger for PDP-11 CPUs
  *
- * @class {PDP11Dbg}
+ * @class PDP11Dbg
  * @unrestricted
  */
 class PDP11Dbg extends Debugger {
@@ -19326,7 +19326,7 @@ PDP11Dbg.CLASSES["PDP11Dbg"] = PDP11Dbg;
  */
 
 /**
- * @class {IOPage}
+ * @class IOPage
  * @unrestricted
  */
 class IOPage extends Ports {
@@ -19512,7 +19512,7 @@ Device.MESSAGE.DL11             = 0x000100000000;
 Device.MESSAGE_NAMES["dl11"]    = Device.MESSAGE.DL11;
 
 /**
- * @class {DL11}
+ * @class DL11
  * @unrestricted
  */
 class DL11 extends Device {
@@ -20015,7 +20015,7 @@ Device.MESSAGE_NAMES["pc11"]    = Device.MESSAGE.PC11;
 let PC11Config;
 
 /**
- * @class {PC11}
+ * @class PC11
  * @unrestricted
  */
 class PC11 extends Device {
@@ -20863,7 +20863,7 @@ PC11.CLASSES["PC11"] = PC11;
  */
 
 /**
- * @class {Machine}
+ * @class Machine
  * @unrestricted
  * @property {CPU} cpu
  * @property {string} sConfigFile

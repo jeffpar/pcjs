@@ -36,7 +36,7 @@ import LED   from "./led.js";
 /**
  * LED Controller
  *
- * @class {LEDCtrl}
+ * @class LEDCtrl
  * @unrestricted
  * @property {boolean} fWrap
  * @property {string} sFont

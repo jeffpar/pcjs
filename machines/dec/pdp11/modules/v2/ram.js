@@ -100,7 +100,7 @@ export default class RAMPDP11 extends Component {
      * @this {RAMPDP11}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -131,7 +131,7 @@ export default class RAMPDP11 extends Component {
      * @this {RAMPDP11}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -253,7 +253,7 @@ export default class RAMPDP11 extends Component {
      * @param {number|null} [addrExec] (this CAN override any starting address INSIDE the image)
      * @param {number|null} [addrInit]
      * @param {boolean} [fStart]
-     * @return {boolean} (true if loaded, false if not)
+     * @returns {boolean} (true if loaded, false if not)
      */
     loadImage(aBytes, addrLoad, addrExec, addrInit, fStart)
     {

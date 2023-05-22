@@ -60,7 +60,7 @@ export default class KeyboardX80 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "esc")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -267,7 +267,7 @@ export default class KeyboardX80 extends Component {
      * @this {KeyboardX80}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -287,7 +287,7 @@ export default class KeyboardX80 extends Component {
      * @this {KeyboardX80}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -331,7 +331,7 @@ export default class KeyboardX80 extends Component {
      * This implements save support for the Keyboard component.
      *
      * @this {KeyboardX80}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -353,7 +353,7 @@ export default class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -431,7 +431,7 @@ export default class KeyboardX80 extends Component {
      * @param {number} keyCode (ie, either a keycode or string ID)
      * @param {boolean} fDown (true if key going down, false if key going up)
      * @param {boolean} [fRight] (true if key is on the right, false if not or unknown or n/a)
-     * @return {boolean} (fDown updated as needed for CAPS-LOCK weirdness)
+     * @returns {boolean} (fDown updated as needed for CAPS-LOCK weirdness)
      */
     checkModifierKeys(keyCode, fDown, fRight)
     {
@@ -479,7 +479,7 @@ export default class KeyboardX80 extends Component {
      * Returns a number if the keyCode exists in the KEYMAP, or a string if the keyCode has a string ID.
      *
      * @this {KeyboardX80}
-     * @return {string|number|null}
+     * @returns {string|number|null}
      */
     getSoftCode(keyCode)
     {
@@ -501,7 +501,7 @@ export default class KeyboardX80 extends Component {
      * @this {KeyboardX80}
      * @param {Object} event
      * @param {boolean} fDown is true for a keyDown event, false for up
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     onKeyDown(event, fDown)
     {
@@ -601,7 +601,7 @@ export default class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {Object} event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     onKeyPress(event)
     {
@@ -644,7 +644,7 @@ export default class KeyboardX80 extends Component {
      * @this {KeyboardX80}
      * @param {Object} event
      * @param {boolean} fDown is true for a keyDown event, false for up
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     oniOSKeyDown(event, fDown)
     {
@@ -683,7 +683,7 @@ export default class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {Object} event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     oniOSKeyPress(event)
     {
@@ -733,7 +733,7 @@ export default class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {Object} event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     onPaste(event)
     {
@@ -767,7 +767,7 @@ export default class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {number} bMapping
-     * @return {number}
+     * @returns {number}
      */
     indexOfKeyMap(bMapping)
     {
@@ -782,7 +782,7 @@ export default class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {number} bMapping
-     * @return {number}
+     * @returns {number}
      */
     indexOfCharMap(bMapping)
     {
@@ -797,7 +797,7 @@ export default class KeyboardX80 extends Component {
      *
      * @this {KeyboardX80}
      * @param {number|string} softCode
-     * @return {number} index of softCode in aKeysActive, or -1 if not found
+     * @returns {number} index of softCode in aKeysActive, or -1 if not found
      */
     indexOfSoftKey(softCode)
     {
@@ -814,7 +814,7 @@ export default class KeyboardX80 extends Component {
      * @param {number|string} softCode
      * @param {boolean} fDown is true for a down event, false for up
      * @param {boolean} [fAutoRelease] is true only if we know we want the key to auto-release
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     onSoftKeyDown(softCode, fDown, fAutoRelease)
     {
@@ -956,7 +956,7 @@ export default class KeyboardX80 extends Component {
      * I'm going with solution #1 because it's less overhead.
      *
      * @this {KeyboardX80}
-     * @return {boolean} (true if ready, false if not)
+     * @returns {boolean} (true if ready, false if not)
      */
     isVT100TransmitterReady()
     {
@@ -984,7 +984,7 @@ export default class KeyboardX80 extends Component {
      * @this {KeyboardX80}
      * @param {number} port (0x82)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to write the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inVT100UARTAddress(port, addrFrom)
     {

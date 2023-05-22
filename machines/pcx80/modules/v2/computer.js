@@ -276,7 +276,7 @@ export default class ComputerX80 extends Component {
      * getMachineID()
      *
      * @this {ComputerX80}
-     * @return {string}
+     * @returns {string}
      */
     getMachineID()
     {
@@ -320,7 +320,7 @@ export default class ComputerX80 extends Component {
      * @this {ComputerX80}
      * @param {string} sParm
      * @param {Object} [parmsComponent]
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     getMachineParm(sParm, parmsComponent)
     {
@@ -350,7 +350,7 @@ export default class ComputerX80 extends Component {
      * saveMachineParms()
      *
      * @this {ComputerX80}
-     * @return {string|null}
+     * @returns {string|null}
      */
     saveMachineParms()
     {
@@ -361,7 +361,7 @@ export default class ComputerX80 extends Component {
      * getUserID()
      *
      * @this {ComputerX80}
-     * @return {string}
+     * @returns {string}
      */
     getUserID()
     {
@@ -434,7 +434,7 @@ export default class ComputerX80 extends Component {
      *
      * @this {ComputerX80}
      * @param {State|null} [stateComputer]
-     * @return {boolean} true if state passes validation, false if not
+     * @returns {boolean} true if state passes validation, false if not
      */
     validateState(stateComputer)
     {
@@ -605,7 +605,7 @@ export default class ComputerX80 extends Component {
      * @param {State} stateComputer
      * @param {boolean} fRepower
      * @param {boolean} fRestore
-     * @return {boolean} true if restore should continue, false if not
+     * @returns {boolean} true if restore should continue, false if not
      */
     powerRestore(component, stateComputer, fRepower, fRestore)
     {
@@ -758,7 +758,7 @@ export default class ComputerX80 extends Component {
      * checkPower()
      *
      * @this {ComputerX80}
-     * @return {boolean} true if the computer is fully powered, false otherwise
+     * @returns {boolean} true if the computer is fully powered, false otherwise
      */
     checkPower()
     {
@@ -830,7 +830,7 @@ export default class ComputerX80 extends Component {
      * @this {ComputerX80}
      * @param {boolean} [fSave] is true to request a saved state
      * @param {boolean} [fShutdown] is true if the machine is being shut down
-     * @return {string|null} string representing the saved state (or null if error)
+     * @returns {string|null} string representing the saved state (or null if error)
      */
     powerOff(fSave, fShutdown)
     {
@@ -1029,7 +1029,7 @@ export default class ComputerX80 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -1160,7 +1160,7 @@ export default class ComputerX80 extends Component {
      *
      * @this {ComputerX80}
      * @param {string} sUserID
-     * @return {string} validated user ID, or null if error
+     * @returns {string} validated user ID, or null if error
      */
     verifyUserID(sUserID)
     {
@@ -1194,7 +1194,7 @@ export default class ComputerX80 extends Component {
      * getServerStatePath()
      *
      * @this {ComputerX80}
-     * @return {string|null} sStatePath (null if no localStorage or no USERID stored in localStorage)
+     * @returns {string|null} sStatePath (null if no localStorage or no USERID stored in localStorage)
      */
     getServerStatePath()
     {
@@ -1257,7 +1257,7 @@ export default class ComputerX80 extends Component {
      * @param {string} sUserID
      * @param {string} sState
      * @param {boolean} [fSync] is true if we're powering down and should perform a synchronous request (default is async)
-     * @return {*} server response if fSync is true and a response was received; otherwise null
+     * @returns {*} server response if fSync is true and a response was received; otherwise null
      */
     storeServerState(sUserID, sState, fSync)
     {
@@ -1373,7 +1373,7 @@ export default class ComputerX80 extends Component {
      * @this {ComputerX80}
      * @param {string} sType
      * @param {Component|null} [componentPrev] of previously returned component, if any
-     * @return {Component|null}
+     * @returns {Component|null}
      */
     getMachineComponent(sType, componentPrev)
     {

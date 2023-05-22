@@ -265,7 +265,7 @@ export default class ChipSet extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "sw1")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -300,7 +300,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -323,7 +323,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -548,7 +548,7 @@ export default class ChipSet extends Component {
      * getRTCByte(iRTC)
      *
      * @param {number} iRTC
-     * @return {number} b
+     * @returns {number} b
      */
     getRTCByte(iRTC)
     {
@@ -600,7 +600,7 @@ export default class ChipSet extends Component {
      *
      * @param {number} iRTC
      * @param {number} b proposed byte to write
-     * @return {number} actual byte to write
+     * @returns {number} actual byte to write
      */
     setRTCByte(iRTC, b)
     {
@@ -665,7 +665,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {number} nCycles desired
-     * @return {number} maximum number of cycles (<= nCycles)
+     * @returns {number} maximum number of cycles (<= nCycles)
      */
     getRTCCycleLimit(nCycles)
     {
@@ -880,7 +880,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} iCMOS
      * @param {number} b
-     * @return {boolean} true if successful, false if not (eg, CMOS not initialized yet, or no CMOS on this machine)
+     * @returns {boolean} true if successful, false if not (eg, CMOS not initialized yet, or no CMOS on this machine)
      */
     setCMOSByte(iCMOS, b)
     {
@@ -901,7 +901,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} addr (if 0, BASEMEM_LO/BASEMEM_HI is updated; if >= 0x100000, then EXTMEM_LO/EXTMEM_HI is updated)
      * @param {number} size (in bytes; we convert to Kb)
-     * @return {boolean} true if successful, false if not (eg, CMOS not initialized yet, or no CMOS on this machine)
+     * @returns {boolean} true if successful, false if not (eg, CMOS not initialized yet, or no CMOS on this machine)
      */
     addCMOSMemory(addr, size)
     {
@@ -931,7 +931,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} iDrive (0 or 1)
      * @param {number} bType (0 for none, 1-14 for original drive type, 16-255 for extended drive type; 15 reserved)
-     * @return {boolean} true if successful, false if not (eg, CMOS not initialized yet, or no CMOS on this machine)
+     * @returns {boolean} true if successful, false if not (eg, CMOS not initialized yet, or no CMOS on this machine)
      */
     setCMOSDriveType(iDrive, bType)
     {
@@ -982,7 +982,7 @@ export default class ChipSet extends Component {
      * This implements save support for the ChipSet component.
      *
      * @this {ChipSet}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -1007,7 +1007,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -1182,7 +1182,7 @@ export default class ChipSet extends Component {
      * @param {Component|string} [component]
      * @param {string} [sFunction]
      * @param {Object} [obj]
-     * @return {*}
+     * @returns {*}
      */
     initDMAFunction(channel, component, sFunction, obj)
     {
@@ -1204,7 +1204,7 @@ export default class ChipSet extends Component {
      * saveDMAControllers()
      *
      * @this {ChipSet}
-     * @return {Array}
+     * @returns {Array}
      */
     saveDMAControllers()
     {
@@ -1228,7 +1228,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {Object} controller
-     * @return {Array}
+     * @returns {Array}
      */
     saveDMAChannels(controller)
     {
@@ -1284,7 +1284,7 @@ export default class ChipSet extends Component {
      * savePICs()
      *
      * @this {ChipSet}
-     * @return {Array}
+     * @returns {Array}
      */
     savePICs()
     {
@@ -1346,7 +1346,7 @@ export default class ChipSet extends Component {
      * saveTimers()
      *
      * @this {ChipSet}
-     * @return {Array}
+     * @returns {Array}
      */
     saveTimers()
     {
@@ -1401,7 +1401,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} iDIP
      * @param {number} iSwitch
-     * @return {Object|null} DIPSW switchGroup containing the DIP switch's MASK, VALUES, and LABEL, or null if none
+     * @returns {Object|null} DIPSW switchGroup containing the DIP switch's MASK, VALUES, and LABEL, or null if none
      */
     findDIPSwitch(iDIP, iSwitch)
     {
@@ -1423,7 +1423,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {number} iDIP
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getDIPLegacyBits(iDIP)
     {
@@ -1444,7 +1444,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} iType
      * @param {boolean} [fInit] is true for initial switch value, current value otherwise
-     * @return {string|null}
+     * @returns {string|null}
      */
     getDIPSwitches(iType, fInit)
     {
@@ -1478,7 +1478,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {number} iType
-     * @return {Array.<number>} [minimum value, maximum value]
+     * @returns {Array.<number>} [minimum value, maximum value]
      */
     getDIPSwitchRange(iType)
     {
@@ -1504,7 +1504,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {boolean} [fInit] is true for init switch value(s) only, current value(s) otherwise
-     * @return {number} 1 if installed, 0 if not
+     * @returns {number} 1 if installed, 0 if not
      */
     getDIPCoprocessor(fInit)
     {
@@ -1516,7 +1516,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {boolean} [fInit] is true for init switch value(s) only, current value(s) otherwise
-     * @return {number} number of floppy drives specified by SW1 (range is 0 to 4)
+     * @returns {number} number of floppy drives specified by SW1 (range is 0 to 4)
      */
     getDIPFloppyDrives(fInit)
     {
@@ -1528,7 +1528,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {number} iDrive (0-based)
-     * @return {number} one of the ChipSet.CMOS.FDRIVE.FD* values (FD360, FD1200, etc)
+     * @returns {number} one of the ChipSet.CMOS.FDRIVE.FD* values (FD360, FD1200, etc)
      */
     getDIPFloppyDriveType(iDrive)
     {
@@ -1561,7 +1561,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {number} iDrive (0-based)
-     * @return {number} capacity of drive in Kb (eg, 360, 1200, 1440, etc), or 0 if none
+     * @returns {number} capacity of drive in Kb (eg, 360, 1200, 1440, etc), or 0 if none
      */
     getDIPFloppyDriveSize(iDrive)
     {
@@ -1582,7 +1582,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {boolean} [fInit] is true for init switch value(s) only, current value(s) otherwise
-     * @return {number} number of Kb of specified memory (NOT necessarily the same as installed memory; see RAM component)
+     * @returns {number} number of Kb of specified memory (NOT necessarily the same as installed memory; see RAM component)
      */
     getDIPMemorySize(fInit)
     {
@@ -1596,7 +1596,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {number} nKB
-     * @return {boolean} true if successful, false if out of range
+     * @returns {boolean} true if successful, false if out of range
      */
     setDIPMemorySize(nKB)
     {
@@ -1621,7 +1621,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {boolean} [fInit] is true for init switch value(s) only, current value(s) otherwise
-     * @return {number} one of ChipSet.MONITOR.*
+     * @returns {number} one of ChipSet.MONITOR.*
      */
     getDIPVideoMonitor(fInit)
     {
@@ -1634,7 +1634,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {string} sBits describing switch settings
      * @param {number} [bDefault]
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     parseDIPSwitches(sBits, bDefault)
     {
@@ -1660,7 +1660,7 @@ export default class ChipSet extends Component {
      * @param {number} iType
      * @param {*} value
      * @param {boolean} [fInit]
-     * @return {boolean} true if successful, false if unrecognized type and/or value
+     * @returns {boolean} true if successful, false if unrecognized type and/or value
      */
     setDIPSwitches(iType, value, fInit)
     {
@@ -1688,7 +1688,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {HTMLElement} control is an HTML control DOM object
-     * @return {boolean} true if the switch represented by e is "on", false if "off"
+     * @returns {boolean} true if the switch represented by e is "on", false if "off"
      */
     getDIPSwitchControl(control)
     {
@@ -1897,7 +1897,7 @@ export default class ChipSet extends Component {
      * @param {number} iChannel
      * @param {number} port (0x00, 0x02, 0x04, 0x06 for DMAC 0, 0xC0, 0xC4, 0xC8, 0xCC for DMAC 1)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inDMAChannelAddr(iDMAC, iChannel, port, addrFrom)
     {
@@ -1958,7 +1958,7 @@ export default class ChipSet extends Component {
      * @param {number} iChannel
      * @param {number} port (0x01, 0x03, 0x05, 0x07 for DMAC 0, 0xC2, 0xC6, 0xCA, 0xCE for DMAC 1)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inDMAChannelCount(iDMAC, iChannel, port, addrFrom)
     {
@@ -2037,7 +2037,7 @@ export default class ChipSet extends Component {
      * @param {number} iDMAC
      * @param {number} port (0x08 for DMAC 0, 0xD0 for DMAC 1)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inDMAStatus(iDMAC, port, addrFrom)
     {
@@ -2188,7 +2188,7 @@ export default class ChipSet extends Component {
      * @param {number} iDMAC
      * @param {number} port (0x0D for DMAC 0, 0xDA for DMAC 1)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inDMATemp(iDMAC, port, addrFrom)
     {
@@ -2233,7 +2233,7 @@ export default class ChipSet extends Component {
      * @param {number} iChannel
      * @param {number} port
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inDMAPageReg(iDMAC, iChannel, port, addrFrom)
     {
@@ -2269,7 +2269,7 @@ export default class ChipSet extends Component {
      * @param {number} iSpare
      * @param {number} port
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inDMAPageSpare(iSpare, port, addrFrom)
     {
@@ -2305,7 +2305,7 @@ export default class ChipSet extends Component {
      * getDMAState(iDMAChannel)
      *
      * @param {number} iDMAChannel
-     * @return {Array} (current transfer address at [0], current count at [1]; may be used by the FDC for bootstrapping tests)
+     * @returns {Array} (current transfer address at [0], current count at [1]; may be used by the FDC for bootstrapping tests)
      */
     getDMAState(iDMAChannel)
     {
@@ -2527,7 +2527,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {Object} channel
-     * @return {boolean} true if DMA operation complete, false if not
+     * @returns {boolean} true if DMA operation complete, false if not
      */
     updateDMA(channel)
     {
@@ -2590,7 +2590,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} iPIC
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inPICLo(iPIC, addrFrom)
     {
@@ -2758,7 +2758,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} iPIC
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inPICHi(iPIC, addrFrom)
     {
@@ -2815,7 +2815,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {number} nIRQ
-     * @return {boolean} true if the specified IRQ is masked, false if not
+     * @returns {boolean} true if the specified IRQ is masked, false if not
      */
     checkIMR(nIRQ)
     {
@@ -2938,7 +2938,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {number} [iPIC]
-     * @return {number} IDT vector # of the next highest-priority interrupt, -1 if none, or -2 for "please try your call again later"
+     * @returns {number} IDT vector # of the next highest-priority interrupt, -1 if none, or -2 for "please try your call again later"
      */
     getIRRVector(iPIC)
     {
@@ -3062,7 +3062,7 @@ export default class ChipSet extends Component {
      * @param {number} iPITTimer (0, 1, or 2)
      * @param {number} port (0x40, 0x41, 0x42, etc)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inTimer(iPIT, iPITTimer, port, addrFrom)
     {
@@ -3168,7 +3168,7 @@ export default class ChipSet extends Component {
      * @param {number} iPIT (0 or 1)
      * @param {number} port (0x43 or 0x4B)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number|null} simulated port value
+     * @returns {number|null} simulated port value
      */
     inTimerCtrl(iPIT, port, addrFrom)
     {
@@ -3296,7 +3296,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {number} iTimer
-     * @return {number} initial timer count
+     * @returns {number} initial timer count
      */
     getTimerInit(iTimer)
     {
@@ -3311,7 +3311,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {number} iTimer
-     * @return {number} starting timer count (from the initial timer count for the current countdown)
+     * @returns {number} starting timer count (from the initial timer count for the current countdown)
      */
     getTimerStart(iTimer)
     {
@@ -3330,7 +3330,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} iTimer
      * @param {number} nCycles desired
-     * @return {number} maximum number of cycles remaining for the specified timer (<= nCycles)
+     * @returns {number} maximum number of cycles remaining for the specified timer (<= nCycles)
      */
     getTimerCycleLimit(iTimer, nCycles)
     {
@@ -3452,7 +3452,7 @@ export default class ChipSet extends Component {
      *      1: DMA refresh
      *      2: Sound/Cassette
      * @param {boolean} [fCycleReset] is true if a cycle-count reset is about to occur
-     * @return {Timer}
+     * @returns {Timer}
      */
     updateTimer(iTimer, fCycleReset)
     {
@@ -3653,7 +3653,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} port (0x60)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inPPIA(port, addrFrom)
     {
@@ -3691,7 +3691,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} port (0x61)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inPPIB(port, addrFrom)
     {
@@ -3797,7 +3797,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} port (0x62)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inPPIC(port, addrFrom)
     {
@@ -3872,7 +3872,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} port (0x63)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inPPICtrl(port, addrFrom)
     {
@@ -3901,7 +3901,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} port (0x60)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     in8041Kbd(port, addrFrom)
     {
@@ -3931,7 +3931,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} port (0x61)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     in8041Ctrl(port, addrFrom)
     {
@@ -3960,7 +3960,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} port (0x64)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     in8041Status(port, addrFrom)
     {
@@ -3998,7 +3998,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} port (0x60)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     in8042OutBuff(port, addrFrom)
     {
@@ -4117,7 +4117,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} port (0x61)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     in8042RWReg(port, addrFrom)
     {
@@ -4174,7 +4174,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} port (0x64)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     in8042Status(port, addrFrom)
     {
@@ -4495,7 +4495,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {number} b
-     * @return {boolean} (true if data accepted, false if declined)
+     * @returns {boolean} (true if data accepted, false if declined)
      */
     receiveKbdData(b)
     {
@@ -4552,7 +4552,7 @@ export default class ChipSet extends Component {
      * @param {number} iDIP (0 or 1)
      * @param {number} port (0x66 or 0x67)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     in6300DIPSwitches(iDIP, port, addrFrom)
     {
@@ -4567,7 +4567,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} port (0x70)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inCMOSAddr(port, addrFrom)
     {
@@ -4596,7 +4596,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} port (0x71)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inCMOSData(port, addrFrom)
     {
@@ -4662,7 +4662,7 @@ export default class ChipSet extends Component {
      * @this {ChipSet}
      * @param {number} port (0xA0)
      * @param {number} [addrFrom] (not defined if the Debugger is trying to read the specified port)
-     * @return {number} simulated port value
+     * @returns {number} simulated port value
      */
     inNMI(port, addrFrom)
     {
@@ -4740,7 +4740,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {number} addr
-     * @return {boolean} true to proceed with the INT 0x1A software interrupt, false to skip
+     * @returns {boolean} true to proceed with the INT 0x1A software interrupt, false to skip
      */
     intBIOSTimer(addr)
     {
@@ -4839,7 +4839,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {Event} [event] object from a 'touch' event, if any
-     * @return {boolean}
+     * @returns {boolean}
      */
     startAudio(event)
     {
@@ -4886,7 +4886,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {number} [iChannel] if the message is associated with a particular IRQ #
-     * @return {number}
+     * @returns {number}
      */
     messageBitsDMA(iChannel)
     {
@@ -4907,7 +4907,7 @@ export default class ChipSet extends Component {
      *
      * @this {ChipSet}
      * @param {number|undefined} [nIRQ] if the message is associated with a particular IRQ #
-     * @return {number}
+     * @returns {number}
      */
     messageBitsIRQ(nIRQ)
     {
@@ -4937,7 +4937,7 @@ export default class ChipSet extends Component {
      *
      * Called by the CPU whenever INTR.DMA is set.
      *
-     * @return {boolean} true if one or more async DMA channels are still active (unmasked), false to reset INTR.DMA
+     * @returns {boolean} true if one or more async DMA channels are still active (unmasked), false to reset INTR.DMA
      *
      checkDMA()
      {

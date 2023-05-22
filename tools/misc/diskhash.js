@@ -32,7 +32,7 @@ function printf(format, ...args)
  *
  * @param {Buffer} buf
  * @param {string} name
- * @return {number} (offset of directory entry for file, or -1 if not found)
+ * @returns {number} (offset of directory entry for file, or -1 if not found)
  */
 function findFile(buf, name = "*")
 {

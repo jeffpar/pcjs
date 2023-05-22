@@ -71,7 +71,7 @@ import Device from "./device.js";
  */
 
 /**
- * @class {Time}
+ * @class Time
  * @unrestricted
  * @property {TimeConfig} config
  * @property {number} nCyclesMinimum

@@ -59,7 +59,7 @@ export default class RAMx86 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "size")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -98,7 +98,7 @@ export default class RAMx86 extends Component {
      * getRAMSetting()
      *
      * @this {RAMx86}
-     * @return {number} (user-selected RAM setting, 0 for default, or -1 if none)
+     * @returns {number} (user-selected RAM setting, 0 for default, or -1 if none)
      */
     getRAMSetting()
     {
@@ -140,7 +140,7 @@ export default class RAMx86 extends Component {
      * @this {RAMx86}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -167,7 +167,7 @@ export default class RAMx86 extends Component {
      * @this {RAMx86}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -288,7 +288,7 @@ export default class RAMx86 extends Component {
      * This implements save support for the RAM component.
      *
      * @this {RAMx86}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -304,7 +304,7 @@ export default class RAMx86 extends Component {
      *
      * @this {RAMx86}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -390,7 +390,7 @@ class CompaqController extends Controller {
      * This implements save support for the CompaqController component.
      *
      * @this {CompaqController}
-     * @return {Array}
+     * @returns {Array}
      */
     save()
     {
@@ -404,7 +404,7 @@ class CompaqController extends Controller {
      *
      * @this {CompaqController}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -418,7 +418,7 @@ class CompaqController extends Controller {
      *
      * @this {CompaqController}
      * @param {number} off
-     * @return {number}
+     * @returns {number}
      */
     getByte(off)
     {
@@ -486,7 +486,7 @@ class CompaqController extends Controller {
      * getMemoryAccess()
      *
      * @this {CompaqController}
-     * @return {Array.<function()>}
+     * @returns {Array.<function()>}
      */
     getMemoryAccess()
     {
@@ -498,7 +498,7 @@ class CompaqController extends Controller {
      *
      * @this {CompaqController}
      * @param {number} addr
-     * @return {Array} containing the buffer (and an offset within that buffer)
+     * @returns {Array} containing the buffer (and an offset within that buffer)
      */
     getMemoryBuffer(addr)
     {
@@ -517,7 +517,7 @@ class CompaqController extends Controller {
      * @this {MemoryX86}
      * @param {number} off (relative to 0x80C00000)
      * @param {number} [addr]
-     * @return {number}
+     * @returns {number}
      */
     static readByte(off, addr)
     {

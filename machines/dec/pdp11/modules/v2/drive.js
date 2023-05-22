@@ -112,7 +112,7 @@ export default class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {*} config
-     * @return {*}
+     * @returns {*}
      */
     parseConfig(config)
     {
@@ -139,7 +139,7 @@ export default class DriveController extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "listDisks")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -330,7 +330,7 @@ export default class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {number} iDrive
-     * @return {string}
+     * @returns {string}
      */
     getDriveName(iDrive)
     {
@@ -343,7 +343,7 @@ export default class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {string} sDrive
-     * @return {number} (0-3, or -1 if error)
+     * @returns {number} (0-3, or -1 if error)
      */
     getDriveNumber(sDrive)
     {
@@ -361,7 +361,7 @@ export default class DriveController extends Component {
      * @this {DriveController}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -409,7 +409,7 @@ export default class DriveController extends Component {
      * @this {DriveController}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -433,7 +433,7 @@ export default class DriveController extends Component {
      * This implements save support for the DriveController component.
      *
      * @this {DriveController}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -451,7 +451,7 @@ export default class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -469,7 +469,7 @@ export default class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {Array} [aRegs]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initController(aRegs)
     {
@@ -482,7 +482,7 @@ export default class DriveController extends Component {
      * Placeholder for subclasses.
      *
      * @this {DriveController}
-     * @return {Array}
+     * @returns {Array}
      */
     saveController()
     {
@@ -497,7 +497,7 @@ export default class DriveController extends Component {
      * @param {number} iDrive
      * @param {Array} configDrive
      * @param {Array} [configDisk]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initDrive(drive, iDrive, configDrive, configDisk)
     {
@@ -583,7 +583,7 @@ export default class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {Array} [aConfigDisks]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initDrives(aConfigDisks)
     {
@@ -606,7 +606,7 @@ export default class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {Object} drive
-     * @return {Array}
+     * @returns {Array}
      */
     saveDrive(drive)
     {
@@ -621,7 +621,7 @@ export default class DriveController extends Component {
      * saveDrives()
      *
      * @this {DriveController}
-     * @return {Array}
+     * @returns {Array}
      */
     saveDrives()
     {
@@ -637,7 +637,7 @@ export default class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {Array} [aHistory]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initHistory(aHistory)
     {
@@ -661,7 +661,7 @@ export default class DriveController extends Component {
      * disk image(s), so we call updateHistory() for all those disks, and then aDiskHistory is ready to be saved.
      *
      * @this {DriveController}
-     * @return {Array}
+     * @returns {Array}
      */
     saveHistory()
     {
@@ -679,7 +679,7 @@ export default class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {boolean} [fRemount] is true if we're remounting all auto-mounted disks
-     * @return {boolean} true if one or more disk images are being auto-mounted, false if none
+     * @returns {boolean} true if one or more disk images are being auto-mounted, false if none
      */
     autoMount(fRemount)
     {
@@ -709,7 +709,7 @@ export default class DriveController extends Component {
      * @param {string} [sDiskName]
      * @param {string} [sDiskPath]
      * @param {File} [file] is set if there's an associated File object
-     * @return {boolean}
+     * @returns {boolean}
      */
     loadSelectedDisk(sDiskName, sDiskPath, file)
     {
@@ -767,7 +767,7 @@ export default class DriveController extends Component {
      * bootSelectedDisk()
      *
      * @this {DriveController}
-     * @return {boolean}
+     * @returns {boolean}
      */
     bootSelectedDisk()
     {
@@ -830,7 +830,7 @@ export default class DriveController extends Component {
      * @param {string} sDiskPath
      * @param {boolean} [fAutoMount]
      * @param {File} [file] is set if there's an associated File object
-     * @return {number} 1 if disk loaded, 0 if queued up (or busy), -1 if already loaded
+     * @returns {number} 1 if disk loaded, 0 if queued up (or busy), -1 if already loaded
      */
     loadDrive(iDrive, sDiskName, sDiskPath, fAutoMount, file)
     {
@@ -977,7 +977,7 @@ export default class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {string} sPath
-     * @return {string|null}
+     * @returns {string|null}
      */
     findDisk(sPath)
     {
@@ -1000,7 +1000,7 @@ export default class DriveController extends Component {
      * @this {DriveController}
      * @param {number} iDrive (unvalidated)
      * @param {boolean} [fUpdateDrive] is true to update the drive list to match the specified drive (eg, the auto-mount case)
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     displayDisk(iDrive, fUpdateDrive)
     {
@@ -1061,7 +1061,7 @@ export default class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {number} sDrive
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     selectDrive(sDrive)
     {
@@ -1113,7 +1113,7 @@ export default class DriveController extends Component {
      *
      * @this {DriveController}
      * @param {function()|null} fnCallReady
-     * @return {boolean} false if wait required, true otherwise
+     * @returns {boolean} false if wait required, true otherwise
      */
     waitDrives(fnCallReady)
     {
@@ -1299,7 +1299,7 @@ export default class DriveController extends Component {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     readData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {
@@ -1321,7 +1321,7 @@ export default class DriveController extends Component {
      * @param {number} inc (normally 2, unless inhibited, in which case it's 0)
      * @param {boolean} [fCheck]
      * @param {function(...)} [done]
-     * @return {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
+     * @returns {boolean|number} true if complete, false if queued (or if no done() is supplied, the error code, if any)
      */
     writeData(drive, iCylinder, iHead, iSector, nWords, addr, inc, fCheck, done)
     {

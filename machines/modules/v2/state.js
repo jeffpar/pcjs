@@ -68,7 +68,7 @@ export default class State {
      *
      * @this {State}
      * @param {number|string} id
-     * @return {Object|string|null}
+     * @returns {Object|string|null}
      */
     get(id)
     {
@@ -79,7 +79,7 @@ export default class State {
      * data()
      *
      * @this {State}
-     * @return {Object}
+     * @returns {Object}
      */
     data()
     {
@@ -94,7 +94,7 @@ export default class State {
      *
      * @this {State}
      * @param {string|null} [json]
-     * @return {boolean} true if state exists in localStorage, false if not
+     * @returns {boolean} true if state exists in localStorage, false if not
      */
     load(json)
     {
@@ -130,7 +130,7 @@ export default class State {
      * Otherwise, load() could have just as easily done this, too.
      *
      * @this {State}
-     * @return {boolean} true if successful, false if error
+     * @returns {boolean} true if successful, false if error
      */
     parse()
     {
@@ -151,7 +151,7 @@ export default class State {
      * store()
      *
      * @this {State}
-     * @return {boolean} true if successful, false if error
+     * @returns {boolean} true if successful, false if error
      */
     store()
     {
@@ -178,7 +178,7 @@ export default class State {
      * toString()
      *
      * @this {State}
-     * @return {string} JSON-encoded state
+     * @returns {string} JSON-encoded state
      */
     toString()
     {
@@ -235,7 +235,7 @@ export default class State {
      * @param {Component} component
      * @param {string} [sVersion] is used to append a major version number to the key
      * @param {string} [sSuffix] is used to append any additional suffixes to the key
-     * @return {string} key
+     * @returns {string} key
      */
     static getKey(component, sVersion, sSuffix)
     {
@@ -254,7 +254,7 @@ export default class State {
      * State.compress(aSrc)
      *
      * @param {Array.<number>|null} aSrc
-     * @return {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
+     * @returns {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
      */
     static compress(aSrc)
     {
@@ -281,7 +281,7 @@ export default class State {
      *
      * @param {Array.<number>} aComp
      * @param {number} [nLength] (expected length of decompressed data)
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     static decompress(aComp, nLength)
     {
@@ -310,7 +310,7 @@ export default class State {
      * and return an uninitialized array.
      *
      * @param {Array.<number>|null} aSrc
-     * @return {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
+     * @returns {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
      */
     static compressEvenOdd(aSrc)
     {
@@ -343,7 +343,7 @@ export default class State {
      *
      * @param {Array.<number>} aComp
      * @param {number} nLength is expected length of decompressed data
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     static decompressEvenOdd(aComp, nLength)
     {

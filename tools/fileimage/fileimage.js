@@ -59,7 +59,7 @@ function getServerPath(sFile)
 }
 
 /**
- * @class {FileImage}
+ * @class FileImage
  */
 class FileImage {
     /*
@@ -99,7 +99,7 @@ class FileImage {
      * validateFormat(sFormat)
      *
      * @param {string} sFormat
-     * @return {null|string|boolean} the validated format, null if unspecified, or false if invalid
+     * @returns {null|string|boolean} the validated format, null if unspecified, or false if invalid
      */
     static validateFormat(sFormat)
     {
@@ -174,7 +174,7 @@ class FileImage {
      *
      * @this {FileImage}
      * @param {string} sListing
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     parseListing(sListing)
     {
@@ -299,7 +299,7 @@ class FileImage {
      * getData()
      *
      * @this {FileImage}
-     * @return {Buffer|null}
+     * @returns {Buffer|null}
      */
     getData()
     {
@@ -310,7 +310,7 @@ class FileImage {
      * getChecksum()
      *
      * @this {FileImage}
-     * @return {number|null}
+     * @returns {number|null}
      */
     getChecksum()
     {
@@ -329,7 +329,7 @@ class FileImage {
      * @param {number} [nIndent] is the relative number of characters to indent the given line (0 if none)
      * @param {string} [sLine] is the given line
      * @param {string} [sComment] is an optional comment to append to the line, if comment output is enabled
-     * @return {string} the indented/commented line
+     * @returns {string} the indented/commented line
      */
     dumpLine(nIndent, sLine, sComment)
     {
@@ -357,7 +357,7 @@ class FileImage {
      * @param {number} [offDump] is a relative offset (default is 0; see constructor)
      * @param {number} [lenDump] is a relative length (default is 0; see constructor)
      * @param {number} [nWidthDump] is an alternate width (default is 16; see constructor)
-     * @return {string} hex (or decimal) representation of the data
+     * @returns {string} hex (or decimal) representation of the data
      */
     dumpBuffer(sKey, buf, len, cbItem, offDump, lenDump, nWidthDump)
     {

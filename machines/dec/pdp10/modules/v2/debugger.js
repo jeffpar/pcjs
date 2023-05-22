@@ -186,7 +186,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {DbgAddrPDP10|null} [dbgAddr]
      * @param {boolean} [fWrite]
-     * @return {number} is the corresponding linear address, or PDP10.ADDR_INVALID
+     * @returns {number} is the corresponding linear address, or PDP10.ADDR_INVALID
      */
     getAddr(dbgAddr, fWrite)
     {
@@ -204,7 +204,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @param {number|null} [addr]
      * @param {boolean} [fPhysical]
      * @param {number} [nBase]
-     * @return {DbgAddrPDP10}
+     * @returns {DbgAddrPDP10}
      */
     newAddr(addr = null, fPhysical = false, nBase)
     {
@@ -219,7 +219,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {DbgAddrPDP10} dbgAddr
      * @param {DbgAddrPDP10} dbgCopy
-     * @return {DbgAddrPDP10}
+     * @returns {DbgAddrPDP10}
      */
     copyAddr(dbgAddr, dbgCopy)
     {
@@ -240,7 +240,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @param {number} addr
      * @param {boolean} [fPhysical]
      * @param {number} [nBase]
-     * @return {DbgAddrPDP10}
+     * @returns {DbgAddrPDP10}
      */
     setAddr(dbgAddr, addr, fPhysical, nBase)
     {
@@ -258,7 +258,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {DbgAddrPDP10} dbgAddr
-     * @return {Array}
+     * @returns {Array}
      */
     packAddr(dbgAddr)
     {
@@ -272,7 +272,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {Array} aAddr
-     * @return {DbgAddrPDP10}
+     * @returns {DbgAddrPDP10}
      */
     unpackAddr(aAddr)
     {
@@ -330,7 +330,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "debugInput")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -447,7 +447,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {DbgAddrPDP10} dbgAddr
      * @param {number} [inc]
-     * @return {number}
+     * @returns {number}
      */
     getWord(dbgAddr, inc)
     {
@@ -486,7 +486,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst * src)
+     * @returns {number} (dst * src)
      */
     evalMUL(dst, src)
     {
@@ -522,7 +522,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {string|undefined} sAddr
      * @param {DbgAddrPDP10} [dbgAddr]
-     * @return {DbgAddrPDP10}
+     * @returns {DbgAddrPDP10}
      */
     parseAddr(sAddr, dbgAddr)
     {
@@ -577,7 +577,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {number} w
      * @param {number} [bits]
-     * @return {number}
+     * @returns {number}
      */
     validateWord(w, bits = 36)
     {
@@ -615,7 +615,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {number|null|undefined} [off]
-     * @return {string} default base representation of off
+     * @returns {string} default base representation of off
      */
     toStrOffset(off)
     {
@@ -627,7 +627,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {DbgAddrPDP10} dbgAddr
-     * @return {string} default base representation of the address
+     * @returns {string} default base representation of the address
      */
     toStrAddr(dbgAddr)
     {
@@ -639,7 +639,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {number} w (up to, but not including, WORD_LIMIT)
-     * @return {string} octal representation of the 36-bit word, as two 18-bit values
+     * @returns {string} octal representation of the 36-bit word, as two 18-bit values
      */
     toStrWord(w)
     {
@@ -863,7 +863,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {number} bitMessage is one Messages category flag
      * @param {function(Array.<string>)} fnDumper is a function the Debugger can use to dump data for that category
-     * @return {boolean} true if successfully registered, false if not
+     * @returns {boolean} true if successfully registered, false if not
      */
     messageDump(bitMessage, fnDumper)
     {
@@ -882,7 +882,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {string} sReg
      * @param {number} [off] optional offset into sReg
-     * @return {number} register index, or -1 if not found
+     * @returns {number} register index, or -1 if not found
      */
     getRegIndex(sReg, off)
     {
@@ -894,7 +894,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {number} iReg (0-7; not used for other registers)
-     * @return {string}
+     * @returns {string}
      */
     getRegName(iReg)
     {
@@ -906,7 +906,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {number} iReg
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getRegValue(iReg)
     {
@@ -1002,7 +1002,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     replaceRegs(s)
     {
@@ -1114,7 +1114,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {boolean} [fUpdateFocus] is true to update focus
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if run request successful, false if not
+     * @returns {boolean} true if run request successful, false if not
      */
     startCPU(fUpdateFocus, fQuiet)
     {
@@ -1130,7 +1130,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @param {number} nCycles (0 for one instruction without checking breakpoints)
      * @param {boolean|null} [fRegs] is true to display registers after step (default is false; use null for previous setting)
      * @param {boolean} [fUpdateDisplays] is false to disable Computer display updates (default is true)
-     * @return {boolean}
+     * @returns {boolean}
      */
     stepCPU(nCycles, fRegs, fUpdateDisplays)
     {
@@ -1239,7 +1239,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {boolean} [fQuiet]
-     * @return {boolean}
+     * @returns {boolean}
      */
     checkCPU(fQuiet)
     {
@@ -1256,7 +1256,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -1283,7 +1283,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean}
+     * @returns {Object|boolean}
      */
     powerDown(fSave, fShutdown)
     {
@@ -1322,7 +1322,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * This implements (very rudimentary) save support for the Debugger component.
      *
      * @this {DebuggerPDP10}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -1342,7 +1342,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -1439,7 +1439,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {boolean} [fRelease] is true for release criteria only; default is false (any criteria)
-     * @return {boolean} true if every instruction needs to pass through checkInstruction(), false if not
+     * @returns {boolean} true if every instruction needs to pass through checkInstruction(), false if not
      */
     checksEnabled(fRelease)
     {
@@ -1455,7 +1455,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {number} addr
      * @param {number} nState is < 0 if stepping, 0 if starting, or > 0 if running
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkInstruction(addr, nState)
     {
@@ -1513,7 +1513,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {number} opCode
      * @param {boolean} [fOperands] (optional; default is true)
-     * @return {string}
+     * @returns {string}
      */
     findInstruction(opCode, fOperands = true)
     {
@@ -1596,7 +1596,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @param {DbgAddrPDP10} dbgAddr
      * @param {string} [sComment] is an associated comment
      * @param {number|null} [nSequence] is an associated sequence number, undefined if none
-     * @return {string} (and dbgAddr is updated to the next instruction)
+     * @returns {string} (and dbgAddr is updated to the next instruction)
      */
     getInstruction(dbgAddr, sComment, nSequence)
     {
@@ -1636,7 +1636,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @param {string} [sOperands]
      * @param {number} [addr] of memory where this instruction is being assembled
      * @param {Array} [aUndefined]
-     * @return {number} (opcode, or -1 if unrecognized instruction)
+     * @returns {number} (opcode, or -1 if unrecognized instruction)
      */
     parseInstruction(sOpcode, sOperands, addr, aUndefined)
     {
@@ -1860,7 +1860,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {string} [sMessage]
-     * @return {boolean} true if stopping is enabled, false if not
+     * @returns {boolean} true if stopping is enabled, false if not
      */
     stopInstruction(sMessage)
     {
@@ -1884,7 +1884,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {number} opCode
-     * @return {boolean} true if stopping is enabled, false if not
+     * @returns {boolean} true if stopping is enabled, false if not
      */
     undefinedInstruction(opCode)
     {
@@ -1909,7 +1909,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkMemoryRead(addr, nb)
     {
@@ -1934,7 +1934,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkMemoryWrite(addr, nb)
     {
@@ -2003,7 +2003,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @param {Array} aBreak
      * @param {DbgAddrPDP10} dbgAddr
      * @param {boolean} [fTemporary]
-     * @return {boolean} true if breakpoint added, false if already exists
+     * @returns {boolean} true if breakpoint added, false if already exists
      */
     addBreakpoint(aBreak, dbgAddr, fTemporary)
     {
@@ -2059,7 +2059,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @param {boolean} [fRemove]
      * @param {boolean} [fTemporary]
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if found, false if not
+     * @returns {boolean} true if found, false if not
      */
     findBreakpoint(aBreak, dbgAddr, fRemove, fTemporary, fQuiet)
     {
@@ -2101,7 +2101,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {Array} aBreak
-     * @return {number} of breakpoints listed, 0 if none
+     * @returns {number} of breakpoints listed, 0 if none
      */
     listBreakpoints(aBreak)
     {
@@ -2166,7 +2166,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @param {number} nb (# of bytes)
      * @param {Array} aBreak
      * @param {boolean} [fTemporary]
-     * @return {boolean} true if breakpoint has been hit, false if not
+     * @returns {boolean} true if breakpoint has been hit, false if not
      */
     checkBreakpoint(addr, nb, aBreak, fTemporary)
     {
@@ -2253,7 +2253,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {number} iAcc
-     * @return {string}
+     * @returns {string}
      */
     getAccOutput(iAcc)
     {
@@ -2268,7 +2268,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {number} iReg
-     * @return {string}
+     * @returns {string}
      */
     getRegOutput(iReg)
     {
@@ -2284,7 +2284,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * getMiscDump()
      *
      * @this {DebuggerPDP10}
-     * @return {string}
+     * @returns {string}
      */
     getMiscDump()
     {
@@ -2302,7 +2302,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {boolean|undefined} [fMisc] (true to include misc registers)
-     * @return {string}
+     * @returns {string}
      */
     getRegDump(fMisc = true)
     {
@@ -2321,7 +2321,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {number|string|Array|Object} p1
      * @param {number|string|Array|Object} p2
-     * @return {number}
+     * @returns {number}
      */
     comparePairs(p1, p2)
     {
@@ -2466,7 +2466,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {DbgAddrPDP10} dbgAddr
      * @param {boolean} [fNearest]
-     * @return {Array} where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment
+     * @returns {Array} where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment
      */
     findSymbol(dbgAddr, fNearest)
     {
@@ -2500,7 +2500,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {string} sSymbol
-     * @return {DbgAddrPDP10|undefined}
+     * @returns {DbgAddrPDP10|undefined}
      */
     findSymbolAddr(sSymbol)
     {
@@ -2646,7 +2646,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {Array.<string>} asArgs is the complete argument array, beginning with the "a" command in asArgs[0]
-     * @return {boolean}
+     * @returns {boolean}
      */
     doAssemble(asArgs)
     {
@@ -3033,7 +3033,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if expression is non-zero, false if zero (or undefined due to a parse error)
+     * @returns {boolean} true if expression is non-zero, false if zero (or undefined due to a parse error)
      */
     doIf(sCmd, fQuiet)
     {
@@ -3051,7 +3051,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {Array.<string>} asArgs
-     * @return {boolean} true only if the instruction info command ("n") is supported
+     * @returns {boolean} true only if the instruction info command ("n") is supported
      */
     doInfo(asArgs)
     {
@@ -3075,7 +3075,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {string} sCmd
-     * @return {boolean} true if valid "var" assignment, false if not
+     * @returns {boolean} true if valid "var" assignment, false if not
      */
     doVar(sCmd)
     {
@@ -3109,7 +3109,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {string} sAddr
      * @param {boolean} [fPrint]
-     * @return {string|null}
+     * @returns {string|null}
      */
     doList(sAddr, fPrint)
     {
@@ -3472,7 +3472,7 @@ export default class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {DbgAddrPDP10} dbgAddr
-     * @return {string|null} CALL instruction at or near dbgAddr, or null if none
+     * @returns {string|null} CALL instruction at or near dbgAddr, or null if none
      */
     getCall(dbgAddr)
     {
@@ -3703,7 +3703,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {string} sCmd
      * @param {string} [sDelim]
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     splitArgs(sCmd, sDelim = " ")
     {
@@ -3756,7 +3756,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if command processed, false if unrecognized
+     * @returns {boolean} true if command processed, false if unrecognized
      */
     doCommand(sCmd, fQuiet)
     {
@@ -3926,7 +3926,7 @@ export default class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {string} [sCmds]
      * @param {boolean} [fSave]
-     * @return {boolean} true if all commands processed, false if not
+     * @returns {boolean} true if all commands processed, false if not
      */
     doCommands(sCmds, fSave)
     {

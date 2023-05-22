@@ -3,7 +3,7 @@
  */
 
 /**
- * @class {Defines}
+ * @class Defines
  */
 class Defines {}
 
@@ -178,7 +178,7 @@ Defines.CLASSES["Defines"] = Defines;
  */
 
 /**
- * @class {NumIO}
+ * @class NumIO
  * @unrestricted
  */
 class NumIO extends Defines {
@@ -782,7 +782,7 @@ NumIO.CLASSES["NumIO"] = NumIO;
 let Formatter;
 
 /**
- * @class {StdIO}
+ * @class StdIO
  * @unrestricted
  * @property {Object.<string,(Formatter|null)>}>} formatters
  */
@@ -828,7 +828,7 @@ class StdIO extends NumIO {
          * current Debugger preferences.
          */
         this.formatters = {};
-        let predefinedTypes = "ACDFHGMNSTWYbdfjcsoXx%";
+        let predefinedTypes = "ACDFGHMNSTWYbdfjcsoXx%";
         for (let i = 0; i < predefinedTypes.length; i++) {
             this.formatters[predefinedTypes[i]] = null;
         }
@@ -1145,7 +1145,7 @@ class StdIO extends NumIO {
              * because unlike the C runtime, we reuse the final parameter once the format string has exhausted all parameters.
              */
             let ch;
-            let date = /** @type {Date} */ ("ACDFHGMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
+            let date = /** @type {Date} */ ("ACDFGHMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
 
             switch(type) {
             case 'C':
@@ -1369,8 +1369,21 @@ class StdIO extends NumIO {
                 }
                 width -= prefix.length;
                 do {
-                    let d = arg & (radix - 1);
-                    arg >>>= (radix == 16? 4 : 3);
+                    let d = 16;         // digit index corresponding to '?'
+                    /*
+                     * We default to '?' if isNaN(); since we always call Math.trunc() for integer args, if the original
+                     * arg was undefined, or a string containing a non-number, or anything else that couldn't be converted
+                     * to a number, the resulting arg should be NaN.
+                     */
+                    if (!Number.isNaN(arg)) {
+                        d = arg & (radix - 1);
+                        /*
+                         * We divide by the base (8 or 16) and truncate, instead of the more traditional bit-wise shift,
+                         * because, like the decimal integer case, this allows us to support values > 32 bits (up to 53 bits).
+                         */
+                        arg = Math.trunc(arg / radix);
+                        // arg >>>= (radix == 16? 4 : 3);
+                    }
                     if (zeroPad || !s || d || arg) {
                         s = ach[d] + s;
                     } else {
@@ -1431,8 +1444,8 @@ StdIO.PrintTime = null;
 /**
  * Global constants
  */
-StdIO.HexLowerCase = "0123456789abcdef";
-StdIO.HexUpperCase = "0123456789ABCDEF";
+StdIO.HexLowerCase = "0123456789abcdef?";
+StdIO.HexUpperCase = "0123456789ABCDEF?";
 StdIO.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 StdIO.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
@@ -1449,7 +1462,7 @@ let Media;
 let Config;
 
 /**
- * @class {WebIO}
+ * @class WebIO
  * @unrestricted
  * @property {Object} bindings
  * @property {number} messages
@@ -3115,7 +3128,7 @@ let Register;
  *
  * Besides CPUs, other devices may have internal registers or ports that are useful to access by name, too.
  *
- * @class {Device}
+ * @class Device
  * @unrestricted
  * @property {string} idMachine
  * @property {string} idDevice
@@ -3708,7 +3721,7 @@ let SurfaceListener;
 let SurfaceState;
 
 /**
- * @class {Input}
+ * @class Input
  * @unrestricted
  * @property {InputConfig} config
  * @property {Array.<number>} location
@@ -5155,7 +5168,7 @@ let LEDConfig;
  * simple for this device, but also simulates how the display goes blank for short periods of time while
  * the CPU is busy performing calculations.
  *
- * @class {LED}
+ * @class LED
  * @unrestricted
  * @property {LEDConfig} config
  * @property {number} type (one of the LED.TYPE values)
@@ -6244,7 +6257,7 @@ LED.CLASSES["LED"] = LED;
 let MonitorConfig;
 
 /**
- * @class {Monitor}
+ * @class Monitor
  * @unrestricted
  * @property {MonitorConfig} config
  */
@@ -6711,7 +6724,7 @@ let Timer;
 let TimeConfig;
 
 /**
- * @class {Time}
+ * @class Time
  * @unrestricted
  * @property {TimeConfig} config
  * @property {number} nCyclesMinimum
@@ -7749,7 +7762,7 @@ Time.CLASSES["Time"] = Time;
 let BusConfig;
 
 /**
- * @class {Bus}
+ * @class Bus
  * @unrestricted
  * @property {BusConfig} config
  * @property {number} type (Bus.TYPE value, converted from config['type'])
@@ -8599,7 +8612,7 @@ Bus.CLASSES["Bus"] = Bus;
 let MemoryConfig;
 
 /**
- * @class {Memory}
+ * @class Memory
  * @unrestricted
  * @property {number} [addr]
  * @property {number} size
@@ -9656,7 +9669,7 @@ Memory.CLASSES["Memory"] = Memory;
 let RAMConfig;
 
 /**
- * @class {RAM}
+ * @class RAM
  * @unrestricted
  * @property {RAMConfig} config
  * @property {number} addr
@@ -9701,7 +9714,7 @@ RAM.CLASSES["RAM"] = RAM;
 let ROMConfig;
 
 /**
- * @class {ROM}
+ * @class ROM
  * @unrestricted
  * @property {ROMConfig} config
  */
@@ -9927,7 +9940,7 @@ ROM.CLASSES["ROM"] = ROM;
 let CPUConfig;
 
 /**
- * @class {CPU}
+ * @class CPU
  * @unrestricted
  * @property {Time} time
  * @property {Debugger} dbg
@@ -10092,7 +10105,7 @@ let Dumper;
 /**
  * Debugger Services
  *
- * @class {Debugger}
+ * @class Debugger
  * @unrestricted
  * @property {Array.<Array.<Address>>} aaBreakAddress
  */
@@ -12809,7 +12822,7 @@ Debugger.DECOP_PRECEDENCE = {
 /**
  * CPUx86
  *
- * @class {CPUx86}
+ * @class CPUx86
  * @unrestricted
  */
 class CPUx86 extends CPU {
@@ -13710,7 +13723,7 @@ CPUx86.CLASSES["CPUx86"] = CPUx86;
 /**
  * Debugger for the x86 CPU
  *
- * @class {Dbgx86}
+ * @class Dbgx86
  * @unrestricted
  */
 class Dbgx86 extends Debugger {
@@ -13790,7 +13803,7 @@ Dbgx86.CLASSES["Dbgx86"] = Dbgx86;
 let PCx86VideoConfig;
 
 /**
- * @class {PCx86Video}
+ * @class PCx86Video
  * @unrestricted
  * @property {PCx86VideoConfig} config
  */
@@ -13952,7 +13965,7 @@ PCx86Video.CLASSES["PCx86Video"] = PCx86Video;
  */
 
 /**
- * @class {Machine}
+ * @class Machine
  * @unrestricted
  * @property {CPU} cpu
  * @property {string} sConfigFile

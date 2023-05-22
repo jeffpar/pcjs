@@ -213,7 +213,7 @@ export default class DiskPDP11 extends Component {
      * @param {File} [file] is set if there's an associated File object
      * @param {function(...)} [fnNotify]
      * @param {Component} [controller]
-     * @return {boolean} true if load completed (successfully or not), false if queued
+     * @returns {boolean} true if load completed (successfully or not), false if queued
      */
     load(sDiskName, sDiskPath, file, fnNotify, controller)
     {
@@ -583,7 +583,7 @@ export default class DiskPDP11 extends Component {
      * @param {Object} sector
      * @param {number} off (byte offset)
      * @param {number} len (use -1 to read a null-terminated string)
-     * @return {string}
+     * @returns {string}
      */
     getSectorString(sector, off, len)
     {
@@ -620,7 +620,7 @@ export default class DiskPDP11 extends Component {
      * @param {number} [iSector]
      * @param {number} [cbSector]
      * @param {number|null} [dwPattern]
-     * @return {Object}
+     * @returns {Object}
      */
     initSector(sector, iCylinder, iHead, iSector, cbSector, dwPattern)
     {
@@ -641,7 +641,7 @@ export default class DiskPDP11 extends Component {
      * properties of the Disk object directly.
      *
      * @this {DiskPDP11}
-     * @return {Array} containing: [nCylinders, nHeads, nSectorsPerTrack, nBytesPerSector]
+     * @returns {Array} containing: [nCylinders, nHeads, nSectorsPerTrack, nBytesPerSector]
      */
     info()
     {
@@ -669,7 +669,7 @@ export default class DiskPDP11 extends Component {
      * @param {number} iSector
      * @param {boolean} [fWrite]
      * @param {function(Object,boolean)} [done]
-     * @return {Object|null} is the requested sector, or null if not found (or not available yet)
+     * @returns {Object|null} is the requested sector, or null if not found (or not available yet)
      */
     seek(iCylinder, iHead, iSector, fWrite, done)
     {
@@ -740,7 +740,7 @@ export default class DiskPDP11 extends Component {
      *
      * @this {DiskPDP11}
      * @param {Object} sector
-     * @return {Array.<number>} is an array of bytes
+     * @returns {Array.<number>} is an array of bytes
      */
     toBytes(sector)
     {
@@ -767,7 +767,7 @@ export default class DiskPDP11 extends Component {
      * @param {Object} sector (returned from a previous seek)
      * @param {number} ibSector a byte index within the given sector
      * @param {boolean} [fCompare] is true if this write-compare read
-     * @return {number} the specified (unsigned) byte, or -1 if no more data in the sector
+     * @returns {number} the specified (unsigned) byte, or -1 if no more data in the sector
      */
     read(sector, ibSector, fCompare)
     {
@@ -793,7 +793,7 @@ export default class DiskPDP11 extends Component {
      * @param {Object} sector (returned from a previous seek)
      * @param {number} ibSector a byte index within the given sector
      * @param {number} b the byte value to write
-     * @return {boolean|null} true if write successful, false if write-protected, null if out of bounds
+     * @returns {boolean|null} true if write successful, false if write-protected, null if out of bounds
      */
     write(sector, ibSector, b)
     {
@@ -837,7 +837,7 @@ export default class DiskPDP11 extends Component {
      *
      * @this {DiskPDP11}
      * @param {number} pba (physical block address)
-     * @return {Object|null} sector
+     * @returns {Object|null} sector
      */
     getSector(pba)
     {
@@ -868,7 +868,7 @@ export default class DiskPDP11 extends Component {
      * @param {Object} sector
      * @param {number} off (byte offset)
      * @param {number} len (1 to 4 bytes)
-     * @return {number}
+     * @returns {number}
      */
     getSectorData(sector, off, len)
     {
@@ -890,7 +890,7 @@ export default class DiskPDP11 extends Component {
      * encodeAsBase64()
      *
      * @this {DiskPDP11}
-     * @return {string}
+     * @returns {string}
      */
     encodeAsBase64()
     {
@@ -920,7 +920,7 @@ export default class DiskPDP11 extends Component {
      * where [...] is an array of modified dword(s) in the corresponding sector.
      *
      * @this {DiskPDP11}
-     * @return {Array} of modified sectors
+     * @returns {Array} of modified sectors
      */
     save()
     {
@@ -966,7 +966,7 @@ export default class DiskPDP11 extends Component {
      *
      * @this {DiskPDP11}
      * @param {Array} deltas
-     * @return {number} 0 if no changes applied, -1 if an error occurred, otherwise the number of sectors modified
+     * @returns {number} 0 if no changes applied, -1 if an error occurred, otherwise the number of sectors modified
      */
     restore(deltas)
     {
@@ -1101,7 +1101,7 @@ export default class DiskPDP11 extends Component {
      *
      * @this {DiskPDP11}
      * @param {boolean} [fFormatted]
-     * @return {string} containing the entire disk image as JSON-encoded data
+     * @returns {string} containing the entire disk image as JSON-encoded data
      */
     convertToJSON(fFormatted)
     {
@@ -1184,7 +1184,7 @@ export default class DiskPDP11 extends Component {
      * @param {Object} sector (returned from a previous seek)
      * @param {number} [pba]
      * @param {string} [sDesc]
-     * @return {string}
+     * @returns {string}
      */
     dumpSector(sector, pba, sDesc)
     {

@@ -10,7 +10,7 @@
 import { COMPILED } from "./defines.js";
 
 /**
- * @class {JSONLib}
+ * @class JSONLib
  */
 export default class JSONLib {
     /**

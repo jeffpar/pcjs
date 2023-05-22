@@ -594,7 +594,7 @@ class Str {
      *
      * @param {string} s is the string representation of some number
      * @param {number} [base] is the radix to use (default is 10); only 2, 8, 10 and 16 are supported
-     * @return {boolean} true if valid, false if invalid (or the specified base isn't supported)
+     * @returns {boolean} true if valid, false if invalid (or the specified base isn't supported)
      */
     static isValidInt(s, base)
     {
@@ -627,7 +627,7 @@ class Str {
      *
      * @param {string} s is the string representation of some number
      * @param {number} [base] is the radix to use (default is 10); can be overridden by prefixes/suffixes
-     * @return {number|undefined} corresponding value, or undefined if invalid
+     * @returns {number|undefined} corresponding value, or undefined if invalid
      */
     static parseInt(s, base)
     {
@@ -744,7 +744,7 @@ class Str {
      * @param {number} cch (the desired number of digits)
      * @param {string} [sPrefix] (default is none)
      * @param {number} [nGrouping]
-     * @return {string}
+     * @returns {string}
      */
     static toBase(n, radix, cch, sPrefix = "", nGrouping = 0)
     {
@@ -805,7 +805,7 @@ class Str {
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of binary digits (0 or undefined for default of either 8, 18, or 36)
      * @param {number} [nGrouping]
-     * @return {string} the binary representation of n
+     * @returns {string} the binary representation of n
      */
     static toBin(n, cch, nGrouping)
     {
@@ -831,7 +831,7 @@ class Str {
      * @param {number|null|undefined} n (interpreted as a 32-bit value)
      * @param {number} [cb] is the desired number of binary bytes (4 is both the default and the maximum)
      * @param {boolean} [fPrefix]
-     * @return {string} the binary representation of n
+     * @returns {string} the binary representation of n
      */
     static toBinBytes(n, cb, fPrefix)
     {
@@ -857,7 +857,7 @@ class Str {
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of octal digits (0 or undefined for default of either 6, 8, or 12)
      * @param {boolean} [fPrefix]
-     * @return {string} the octal representation of n
+     * @returns {string} the octal representation of n
      */
     static toOct(n, cch, fPrefix)
     {
@@ -886,7 +886,7 @@ class Str {
      *
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of decimal digits (0 or undefined for default of either 5 or 11)
-     * @return {string} the decimal representation of n
+     * @returns {string} the decimal representation of n
      */
     static toDec(n, cch)
     {
@@ -922,7 +922,7 @@ class Str {
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of hex digits (0 or undefined for default of either 4, 8, or 9)
      * @param {boolean} [fPrefix]
-     * @return {string} the hex representation of n
+     * @returns {string} the hex representation of n
      */
     static toHex(n, cch, fPrefix)
     {
@@ -946,7 +946,7 @@ class Str {
      * Alias for Str.toHex(b, 2, true)
      *
      * @param {number|null|undefined} b is a byte value
-     * @return {string} the hex representation of b
+     * @returns {string} the hex representation of b
      */
     static toHexByte(b)
     {
@@ -959,7 +959,7 @@ class Str {
      * Alias for Str.toHex(w, 4, true)
      *
      * @param {number|null|undefined} w is a word (16-bit) value
-     * @return {string} the hex representation of w
+     * @returns {string} the hex representation of w
      */
     static toHexWord(w)
     {
@@ -972,7 +972,7 @@ class Str {
      * Alias for Str.toHex(l, 8, true)
      *
      * @param {number|null|undefined} l is a dword (32-bit) value
-     * @return {string} the hex representation of w
+     * @returns {string} the hex representation of w
      */
     static toHexLong(l)
     {
@@ -989,7 +989,7 @@ class Str {
      *
      * @param {string} sFileName
      * @param {boolean} [fStripExt]
-     * @return {string}
+     * @returns {string}
      */
     static getBaseName(sFileName, fStripExt)
     {
@@ -1021,7 +1021,7 @@ class Str {
      * Note that we EXCLUDE the period from the returned extension, whereas path.extname() includes it.
      *
      * @param {string} sFileName
-     * @return {string} the filename's extension (in lower-case and EXCLUDING the "."), or an empty string
+     * @returns {string} the filename's extension (in lower-case and EXCLUDING the "."), or an empty string
      */
     static getExtension(sFileName)
     {
@@ -1039,7 +1039,7 @@ class Str {
      *
      * @param {string} s
      * @param {string} sSuffix
-     * @return {boolean} true if s ends with sSuffix, false if not
+     * @returns {boolean} true if s ends with sSuffix, false if not
      */
     static endsWith(s, sSuffix)
     {
@@ -1050,7 +1050,7 @@ class Str {
      * escapeHTML(sHTML)
      *
      * @param {string} sHTML
-     * @return {string} with special characters "escaped" as HTML entities, similar to PHP's htmlspecialchars()
+     * @returns {string} with special characters "escaped" as HTML entities, similar to PHP's htmlspecialchars()
      */
     static escapeHTML(sHTML)
     {
@@ -1088,7 +1088,7 @@ class Str {
      * @param {string} sSearch
      * @param {string} sReplace
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static replace(sSearch, sReplace, s)
     {
@@ -1105,7 +1105,7 @@ class Str {
      * @param {string} sSearch
      * @param {string} sReplace
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static replaceAll(sSearch, sReplace, s)
     {
@@ -1119,7 +1119,7 @@ class Str {
      *
      * @param {Object} a
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static replaceArray(a, s)
     {
@@ -1151,7 +1151,7 @@ class Str {
      * @param {string} s is a string
      * @param {number} cch is desired length
      * @param {boolean} [fPadLeft] (default is padding on the right)
-     * @return {string} the original string (s) with spaces padding it to the specified length
+     * @returns {string} the original string (s) with spaces padding it to the specified length
      */
     static pad(s, cch, fPadLeft)
     {
@@ -1175,7 +1175,7 @@ class Str {
      * local time.
      *
      * @param {...} args
-     * @return {Date} (UTC unless a time string with a non-GMT timezone is explicitly provided)
+     * @returns {Date} (UTC unless a time string with a non-GMT timezone is explicitly provided)
      */
     static parseDate(...args)
     {
@@ -1198,7 +1198,7 @@ class Str {
      * isValidDate(date)
      *
      * @param {Date} date
-     * @return {boolean}
+     * @returns {boolean}
      */
     static isValidDate(date)
     {
@@ -1218,7 +1218,7 @@ class Str {
      *
      * @param {string} format
      * @param {...} args
-     * @return {string}
+     * @returns {string}
      */
     static sprintf(format, ...args)
     {
@@ -1592,7 +1592,7 @@ class Str {
      *
      * @param {string} s
      * @param {boolean} [fPad]
-     * @return {string}
+     * @returns {string}
      */
     static stripLeadingZeros(s, fPad)
     {
@@ -1606,7 +1606,7 @@ class Str {
      * trim(s)
      *
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static trim(s)
     {
@@ -1620,7 +1620,7 @@ class Str {
      * toASCIICode(b)
      *
      * @param {number} b
-     * @return {string}
+     * @returns {string}
      */
     static toASCIICode(b)
     {
@@ -1730,7 +1730,7 @@ class Usr {
      * @param {Array} a is an array
      * @param {number|string|Array|Object} v
      * @param {function((number|string|Array|Object), (number|string|Array|Object))} [fnCompare]
-     * @return {number} the index of matching entry if non-negative, otherwise the index of the insertion point
+     * @returns {number} the index of matching entry if non-negative, otherwise the index of the insertion point
      */
     static binarySearch(a, v, fnCompare)
     {
@@ -1778,7 +1778,7 @@ class Usr {
     /**
      * getTimestamp()
      *
-     * @return {string} timestamp containing the current date and time ("yyyy-mm-dd hh:mm:ss")
+     * @returns {string} timestamp containing the current date and time ("yyyy-mm-dd hh:mm:ss")
      */
     static getTimestamp()
     {
@@ -1801,7 +1801,7 @@ class Usr {
      *
      * @param {number} nMonth (1-12)
      * @param {number} nYear (normally a 4-digit year, but it may also be mod 100)
-     * @return {number} the maximum (1-based) day allowed for the specified month and year
+     * @returns {number} the maximum (1-based) day allowed for the specified month and year
      */
     static getMonthDays(nMonth, nYear)
     {
@@ -1838,7 +1838,7 @@ class Usr {
      *
      * @param {Date} date
      * @param {number} days (+/-)
-     * @return {Date}
+     * @returns {Date}
      */
     static adjustDays(date, days)
     {
@@ -1850,7 +1850,7 @@ class Usr {
      *
      * @param {Date|string} date1
      * @param {Date|string} date2
-     * @return {number} (date1 - date2, returned as a signed integer number of days)
+     * @returns {number} (date1 - date2, returned as a signed integer number of days)
      */
     static subtractDays(date1, date2)
     {
@@ -1873,7 +1873,7 @@ class Usr {
      * The above set bit field "bfs.num" in numeric variable "n" to the value 1.
      *
      * @param {Object} bfs
-     * @return {BitFields}
+     * @returns {BitFields}
      */
     static defineBitFields(bfs)
     {
@@ -1892,7 +1892,7 @@ class Usr {
      *
      * @param {BitFields} bfs
      * @param {...number} var_args
-     * @return {number} a value containing all supplied bit fields
+     * @returns {number} a value containing all supplied bit fields
      */
     static initBitFields(bfs, var_args)
     {
@@ -1909,7 +1909,7 @@ class Usr {
      *
      * @param {BitField} bf
      * @param {number} v is a value containing bit fields
-     * @return {number} the value of the bit field in v defined by bf
+     * @returns {number} the value of the bit field in v defined by bf
      */
     static getBitField(bf, v)
     {
@@ -1922,7 +1922,7 @@ class Usr {
      * @param {BitField} bf
      * @param {number} v is a value containing bit fields
      * @param {number} n is a value to store in v in the bit field defined by bf
-     * @return {number} updated v
+     * @returns {number} updated v
      */
     static setBitField(bf, v, n)
     {
@@ -5206,7 +5206,7 @@ class PanelPDP10 extends Component {
      * getAR()
      *
      * @this {PanelPDP10}
-     * @return {number} (current ADDRESS register)
+     * @returns {number} (current ADDRESS register)
      */
     getAR()
     {
@@ -5228,7 +5228,7 @@ class PanelPDP10 extends Component {
      * getDR()
      *
      * @this {PanelPDP10}
-     * @return {number} (current DISPLAY register)
+     * @returns {number} (current DISPLAY register)
      */
     getDR()
     {
@@ -5240,7 +5240,7 @@ class PanelPDP10 extends Component {
      *
      * @this {PanelPDP10}
      * @param {number} value (new DISPLAY register)
-     * @return {number}
+     * @returns {number}
      */
     setDR(value)
     {
@@ -5251,7 +5251,7 @@ class PanelPDP10 extends Component {
      * getSR()
      *
      * @this {PanelPDP10}
-     * @return {number} (current SWITCH register)
+     * @returns {number} (current SWITCH register)
      */
     getSR()
     {
@@ -5274,7 +5274,7 @@ class PanelPDP10 extends Component {
      *
      * @this {PanelPDP10}
      * @param {string} name
-     * @return {number|undefined} 0 if switch is off ("down"), 1 if on ("up"), or undefined if unrecognized
+     * @returns {number|undefined} 0 if switch is off ("down"), 1 if on ("up"), or undefined if unrecognized
      */
     getSwitch(name)
     {
@@ -5313,7 +5313,7 @@ class PanelPDP10 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -5415,7 +5415,7 @@ class PanelPDP10 extends Component {
      * @this {PanelPDP10}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -5442,7 +5442,7 @@ class PanelPDP10 extends Component {
      * @this {PanelPDP10}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -5455,7 +5455,7 @@ class PanelPDP10 extends Component {
      * This implements save support for the PanelPDP10 component.
      *
      * @this {PanelPDP10}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -5475,7 +5475,7 @@ class PanelPDP10 extends Component {
      *
      * @this {PanelPDP10}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -5492,7 +5492,7 @@ class PanelPDP10 extends Component {
      * resetSwitches()
      *
      * @this {PanelPDP10}
-     * @return {boolean}
+     * @returns {boolean}
      */
     resetSwitches()
     {
@@ -5602,7 +5602,7 @@ class PanelPDP10 extends Component {
      * @param {function()|null} fnCallback
      * @param {string} sBinding
      * @param {string} [sDelay]
-     * @return {boolean} false if wait required, true otherwise
+     * @returns {boolean} false if wait required, true otherwise
      */
     holdSwitch(fnCallback, sBinding, sDelay)
     {
@@ -5627,7 +5627,7 @@ class PanelPDP10 extends Component {
      * @this {PanelPDP10}
      * @param {string} sBinding
      * @param {string} sValue
-     * @return {boolean}
+     * @returns {boolean}
      */
     setSwitch(sBinding, sValue)
     {
@@ -5648,7 +5648,7 @@ class PanelPDP10 extends Component {
      *
      * @this {PanelPDP10}
      * @param {string} sBinding
-     * @return {boolean}
+     * @returns {boolean}
      */
     toggleSwitch(sBinding)
     {
@@ -5664,7 +5664,7 @@ class PanelPDP10 extends Component {
      *
      * @this {PanelPDP10}
      * @param {string} sBinding
-     * @return {boolean}
+     * @returns {boolean}
      */
     pressSwitch(sBinding)
     {
@@ -5703,7 +5703,7 @@ class PanelPDP10 extends Component {
      *
      * @this {PanelPDP10}
      * @param {string} sBinding
-     * @return {boolean}
+     * @returns {boolean}
      */
     releaseSwitch(sBinding)
     {
@@ -6006,7 +6006,7 @@ class PanelPDP10 extends Component {
      * from 177676.
      *
      * @this {PanelPDP10}
-     * @return {number}
+     * @returns {number}
      */
     advanceAddr()
     {
@@ -6021,7 +6021,7 @@ class PanelPDP10 extends Component {
      *
      * @this {PanelPDP10}
      * @param {number} value
-     * @return {number}
+     * @returns {number}
      */
     updateAddr(value)
     {
@@ -6038,7 +6038,7 @@ class PanelPDP10 extends Component {
      *
      * @this {PanelPDP10}
      * @param {number} value
-     * @return {number}
+     * @returns {number}
      */
     updateData(value)
     {
@@ -6056,7 +6056,7 @@ class PanelPDP10 extends Component {
      * @this {PanelPDP10}
      * @param {string} sBinding
      * @param {number} value
-     * @return {number}
+     * @returns {number}
      */
     updateLED(sBinding, value)
     {
@@ -6086,7 +6086,7 @@ class PanelPDP10 extends Component {
      *
      * @this {PanelPDP10}
      * @param {number|undefined} value
-     * @return {boolean}
+     * @returns {boolean}
      */
     setSRSwitches(value)
     {
@@ -6368,7 +6368,7 @@ class BusPDP10 extends Component {
      * getWidth()
      *
      * @this {BusPDP10}
-     * @return {number}
+     * @returns {number}
      */
     getWidth()
     {
@@ -6381,7 +6381,7 @@ class BusPDP10 extends Component {
      * @this {BusPDP10}
      * @param {Object|null} data (always null because we supply no powerDown() handler)
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -6401,7 +6401,7 @@ class BusPDP10 extends Component {
      * @this {BusPDP10}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -6412,7 +6412,7 @@ class BusPDP10 extends Component {
      * save()
      *
      * @this {BusPDP10}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -6426,7 +6426,7 @@ class BusPDP10 extends Component {
      *
      * @this {BusPDP10}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -6460,7 +6460,7 @@ class BusPDP10 extends Component {
      * @param {number} addr is the starting physical address of the request
      * @param {number} size of the request, in bytes
      * @param {number} type is one of the MemoryPDP10.TYPE constants
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     addMemory(addr, size, type)
     {
@@ -6523,7 +6523,7 @@ class BusPDP10 extends Component {
      * @this {BusPDP10}
      * @param {number} addr
      * @param {number} size
-     * @return {boolean} true if all blocks were clean, false if dirty; all blocks are cleaned in the process
+     * @returns {boolean} true if all blocks were clean, false if dirty; all blocks are cleaned in the process
      */
     cleanMemory(addr, size)
     {
@@ -6571,7 +6571,7 @@ class BusPDP10 extends Component {
      * @param {BusInfo} [info] previous BusInfo, if any
      * @param {number} [addr] starting address of range (0 if none provided)
      * @param {number} [size] size of range, in bytes (up to end of address space if none provided)
-     * @return {BusInfo} updated info (or new info if no previous info provided)
+     * @returns {BusInfo} updated info (or new info if no previous info provided)
      */
     scanMemory(info, addr, size)
     {
@@ -6606,7 +6606,7 @@ class BusPDP10 extends Component {
      * @this {BusPDP10}
      * @param {number} addr
      * @param {number} size
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     removeMemory(addr, size)
     {
@@ -6631,7 +6631,7 @@ class BusPDP10 extends Component {
      * @this {BusPDP10}
      * @param {number} addr is the starting physical address
      * @param {number} size of the request, in bytes
-     * @return {Array} of Memory blocks
+     * @returns {Array} of Memory blocks
      */
     getMemoryBlocks(addr, size)
     {
@@ -6682,7 +6682,7 @@ class BusPDP10 extends Component {
      *
      * @this {BusPDP10}
      * @param {number} addr is a physical address
-     * @return {number} word (36-bit) value at that address
+     * @returns {number} word (36-bit) value at that address
      */
     getWord(addr)
     {
@@ -6710,7 +6710,7 @@ class BusPDP10 extends Component {
      *
      * @this {BusPDP10}
      * @param {number} addr is a physical address
-     * @return {MemoryPDP10}
+     * @returns {MemoryPDP10}
      */
     getBlockDirect(addr)
     {
@@ -6724,7 +6724,7 @@ class BusPDP10 extends Component {
      *
      * @this {BusPDP10}
      * @param {number} addr is a physical address
-     * @return {number} word (36-bit) value at that address
+     * @returns {number} word (36-bit) value at that address
      */
     getWordDirect(addr)
     {
@@ -6812,7 +6812,7 @@ class BusPDP10 extends Component {
      *
      * @this {BusPDP10}
      * @param {boolean} [fAll] (true to save all non-ROM memory blocks, regardless of their dirty flags)
-     * @return {Array} a
+     * @returns {Array} a
      */
     saveMemory(fAll)
     {
@@ -6850,7 +6850,7 @@ class BusPDP10 extends Component {
      *
      * @this {BusPDP10}
      * @param {Array} a
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     restoreMemory(a)
     {
@@ -6880,7 +6880,7 @@ class BusPDP10 extends Component {
      *
      * @this {BusPDP10}
      * @param {number} type is one of the MemoryPDP10.TYPE constants
-     * @return {number} (the limiting address of the specified memory type, zero if none)
+     * @returns {number} (the limiting address of the specified memory type, zero if none)
      */
     getMemoryLimit(type)
     {
@@ -6921,7 +6921,7 @@ class BusPDP10 extends Component {
      * This also serves as a clearFault() function.
      *
      * @this {BusPDP10}
-     * @return {boolean}
+     * @returns {boolean}
      */
     checkFault()
     {
@@ -6938,7 +6938,7 @@ class BusPDP10 extends Component {
      * @param {number} addr
      * @param {number} size
      * @param {boolean} [fQuiet] (true if any error should be quietly logged)
-     * @return {boolean} false
+     * @returns {boolean} false
      */
     reportError(errNum, addr, size, fQuiet)
     {
@@ -7001,7 +7001,7 @@ class DevicePDP10 extends Component {
      * @this {DevicePDP10}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -7021,7 +7021,7 @@ class DevicePDP10 extends Component {
      * @this {DevicePDP10}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -7043,7 +7043,7 @@ class DevicePDP10 extends Component {
      * This implements save support for the DevicePDP10 component.
      *
      * @this {DevicePDP10}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -7058,7 +7058,7 @@ class DevicePDP10 extends Component {
      *
      * @this {DevicePDP10}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -7240,7 +7240,7 @@ class MemoryPDP10 {
      * which in turn is called by CPUState.save().
      *
      * @this {MemoryPDP10}
-     * @return {Array.<number>|null}
+     * @returns {Array.<number>|null}
      */
     save()
     {
@@ -7256,7 +7256,7 @@ class MemoryPDP10 {
      *
      * @this {MemoryPDP10}
      * @param {Array.<number>|null} aw
-     * @return {boolean} true if successful, false if block size mismatch
+     * @returns {boolean} true if successful, false if block size mismatch
      */
     restore(aw)
     {
@@ -7469,7 +7469,7 @@ class MemoryPDP10 {
      * @this {MemoryPDP10}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readNone(off, addr)
     {
@@ -7502,7 +7502,7 @@ class MemoryPDP10 {
      * @this {MemoryPDP10}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordMemory(off, addr)
     {
@@ -7534,7 +7534,7 @@ class MemoryPDP10 {
      * @this {MemoryPDP10}
      * @param {number} off
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordChecked(off, addr)
     {
@@ -7745,7 +7745,7 @@ class CPUPDP10 extends Component {
      * Stub for save support (overridden by the CPUStatePDP10 component).
      *
      * @this {CPUPDP10}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -7759,7 +7759,7 @@ class CPUPDP10 extends Component {
      *
      * @this {CPUPDP10}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -7772,7 +7772,7 @@ class CPUPDP10 extends Component {
      * @this {CPUPDP10}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -7826,7 +7826,7 @@ class CPUPDP10 extends Component {
      * @this {CPUPDP10}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -7837,7 +7837,7 @@ class CPUPDP10 extends Component {
      * autoStart()
      *
      * @this {CPUPDP10}
-     * @return {boolean} true if started, false if not
+     * @returns {boolean} true if started, false if not
      */
     autoStart()
     {
@@ -7860,7 +7860,7 @@ class CPUPDP10 extends Component {
      * isPowered()
      *
      * @this {CPUPDP10}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isPowered()
     {
@@ -7875,7 +7875,7 @@ class CPUPDP10 extends Component {
      * isRunning()
      *
      * @this {CPUPDP10}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isRunning()
     {
@@ -7888,7 +7888,7 @@ class CPUPDP10 extends Component {
      * This will be implemented by the CPUStatePDP10 component.
      *
      * @this {CPUPDP10}
-     * @return {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
+     * @returns {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
      */
     getChecksum()
     {
@@ -7903,7 +7903,7 @@ class CPUPDP10 extends Component {
      * the CPU is reset or restored.
      *
      * @this {CPUPDP10}
-     * @return {boolean} true if checksum generation enabled, false if not
+     * @returns {boolean} true if checksum generation enabled, false if not
      */
     resetChecksum()
     {
@@ -7981,7 +7981,7 @@ class CPUPDP10 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "run")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -8132,7 +8132,7 @@ class CPUPDP10 extends Component {
      *
      * @this {CPUPDP10}
      * @param {boolean} [fScaled] is true if the caller wants a cycle count relative to a multiplier of 1
-     * @return {number}
+     * @returns {number}
      */
     getCycles(fScaled)
     {
@@ -8167,7 +8167,7 @@ class CPUPDP10 extends Component {
      * This returns the CPU's "base" speed (ie, the original cycles per second defined for the machine)
      *
      * @this {CPUPDP10}
-     * @return {number}
+     * @returns {number}
      */
     getCyclesPerSecond()
     {
@@ -8196,7 +8196,7 @@ class CPUPDP10 extends Component {
      * getSpeed()
      *
      * @this {CPUPDP10}
-     * @return {number} the current speed multiplier
+     * @returns {number} the current speed multiplier
      */
     getSpeed()
     {
@@ -8207,7 +8207,7 @@ class CPUPDP10 extends Component {
      * getSpeedCurrent()
      *
      * @this {CPUPDP10}
-     * @return {string} the current speed, in mhz, as a string formatted to two decimal places
+     * @returns {string} the current speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedCurrent()
     {
@@ -8221,7 +8221,7 @@ class CPUPDP10 extends Component {
      * getSpeedTarget()
      *
      * @this {CPUPDP10}
-     * @return {string} the target speed, in mhz, as a string formatted to two decimal places
+     * @returns {string} the target speed, in mhz, as a string formatted to two decimal places
      */
     getSpeedTarget()
     {
@@ -8243,7 +8243,7 @@ class CPUPDP10 extends Component {
      * @this {CPUPDP10}
      * @param {number} [nMultiplier] is the new proposed multiplier (reverts to 1 if the target was too high)
      * @param {boolean} [fUpdateFocus] is true to update Computer focus
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      */
     setSpeed(nMultiplier, fUpdateFocus)
     {
@@ -8354,7 +8354,7 @@ class CPUPDP10 extends Component {
      * calcRemainingTime()
      *
      * @this {CPUPDP10}
-     * @return {number}
+     * @returns {number}
      */
     calcRemainingTime()
     {
@@ -8449,7 +8449,7 @@ class CPUPDP10 extends Component {
      *
      * @this {CPUPDP10}
      * @param {function()} callBack
-     * @return {number} timer index
+     * @returns {number} timer index
      */
     addTimer(callBack)
     {
@@ -8477,7 +8477,7 @@ class CPUPDP10 extends Component {
      * @param {number} iTimer
      * @param {number} ms (converted into a cycle countdown internally)
      * @param {boolean} [fReset] (true if the timer should be reset even if already armed)
-     * @return {number} (number of cycles used to arm timer, or -1 if error)
+     * @returns {number} (number of cycles used to arm timer, or -1 if error)
      */
     setTimer(iTimer, ms, fReset)
     {
@@ -8505,7 +8505,7 @@ class CPUPDP10 extends Component {
      *
      * @this {CPUPDP10}
      * @param {number} ms
-     * @return {number} number of corresponding cycles
+     * @returns {number} number of corresponding cycles
      */
     getMSCycles(ms)
     {
@@ -8519,7 +8519,7 @@ class CPUPDP10 extends Component {
      *
      * @this {CPUPDP10}
      * @param {number} nCycles (number of cycles about to execute)
-     * @return {number} (either nCycles or less if a timer needs to fire)
+     * @returns {number} (either nCycles or less if a timer needs to fire)
      */
     getBurstCycles(nCycles)
     {
@@ -8538,7 +8538,7 @@ class CPUPDP10 extends Component {
      * saveTimers()
      *
      * @this {CPUPDP10}
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     saveTimers()
     {
@@ -8594,7 +8594,7 @@ class CPUPDP10 extends Component {
      *
      * @this {CPUPDP10}
      * @param {boolean} [fReset]
-     * @return {number} (number of cycles executed in the most recent burst)
+     * @returns {number} (number of cycles executed in the most recent burst)
      */
     endBurst(fReset)
     {
@@ -8693,7 +8693,7 @@ class CPUPDP10 extends Component {
      * For use by any component that wants to start the CPU.
      *
      * @param {boolean} [fUpdateFocus]
-     * @return {boolean}
+     * @returns {boolean}
      */
     startCPU(fUpdateFocus)
     {
@@ -8731,7 +8731,7 @@ class CPUPDP10 extends Component {
      *
      * @this {CPUPDP10}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {number} of cycles executed; 0 indicates that the last instruction was not executed
+     * @returns {number} of cycles executed; 0 indicates that the last instruction was not executed
      */
     stepCPU(nMinCycles)
     {
@@ -8748,7 +8748,7 @@ class CPUPDP10 extends Component {
      *
      * @this {CPUPDP10}
      * @param {boolean} [fComplete]
-     * @return {boolean} true if the CPU was stopped, false if it was already stopped
+     * @returns {boolean} true if the CPU was stopped, false if it was already stopped
      */
     stopCPU(fComplete)
     {
@@ -9047,7 +9047,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      * TODO: Implement
      *
      * @this {CPUStatePDP10}
-     * @return {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
+     * @returns {number} a 32-bit summation of key elements of the current CPU state (used by the CPU checksum code)
      */
     getChecksum()
     {
@@ -9058,7 +9058,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      * save()
      *
      * @this {CPUStatePDP10}
-     * @return {Object|null}
+     * @returns {Object|null}
      */
     save()
     {
@@ -9089,7 +9089,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      *
      * @this {CPUStatePDP10}
      * @param {Object} data
-     * @return {boolean} true if restore successful, false if not
+     * @returns {boolean} true if restore successful, false if not
      */
     restore(data)
     {
@@ -9128,7 +9128,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      * Gets the processor state flags in the format required by various program control operations (eg, JSP).
      *
      * @this {CPUStatePDP10}
-     * @return {number}
+     * @returns {number}
      */
     getPS()
     {
@@ -9172,7 +9172,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      * Used to implement the ""CONI APR," instruction; see opCONI().
      *
      * @this {CPUStatePDP10}
-     * @return {number}
+     * @returns {number}
      */
     readFlags()
     {
@@ -9207,7 +9207,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      * we take care of that first.
      *
      * @this {CPUStatePDP10}
-     * @return {number} (-1 if the reference address in regRA has not yet been fully decoded)
+     * @returns {number} (-1 if the reference address in regRA has not yet been fully decoded)
      */
     getOpcode()
     {
@@ -9252,7 +9252,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      *
      * @this {CPUStatePDP10}
      * @param {number} off
-     * @return {number} (original PC)
+     * @returns {number} (original PC)
      */
     advancePC(off)
     {
@@ -9267,7 +9267,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      * NOTE: This function is nothing more than a convenience, and we fully expect it to be inlined at runtime.
      *
      * @this {CPUStatePDP10}
-     * @return {number}
+     * @returns {number}
      */
     getPC()
     {
@@ -9280,7 +9280,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      * NOTE: This function is nothing more than a convenience, and we fully expect it to be inlined at runtime.
      *
      * @this {CPUStatePDP10}
-     * @return {number}
+     * @returns {number}
      */
     getXC()
     {
@@ -9291,7 +9291,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      * getLastAddr()
      *
      * @this {CPUStatePDP10}
-     * @return {number}
+     * @returns {number}
      */
     getLastAddr()
     {
@@ -9302,7 +9302,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      * getLastPC()
      *
      * @this {CPUStatePDP10}
-     * @return {number}
+     * @returns {number}
      */
     getLastPC()
     {
@@ -9332,7 +9332,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      * @param {number} vector (-1 for floating vector)
      * @param {number} priority
      * @param {number} [message]
-     * @return {IRQ}
+     * @returns {IRQ}
      */
     addIRQ(vector, priority, message)
     {
@@ -9442,7 +9442,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      *
      * @this {CPUStatePDP10}
      * @param {number} vector
-     * @return {IRQ|null}
+     * @returns {IRQ|null}
      */
     findIRQ(vector)
     {
@@ -9458,7 +9458,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      *
      * @this {CPUStatePDP10}
      * @param {number} priority
-     * @return {IRQ|null}
+     * @returns {IRQ|null}
      */
     checkIRQs(priority)
     {
@@ -9479,7 +9479,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      * saveIRQs()
      *
      * @this {CPUStatePDP10}
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     saveIRQs()
     {
@@ -9514,7 +9514,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      * checkInterrupts()
      *
      * @this {CPUStatePDP10}
-     * @return {boolean} true if an interrupt was dispatched, false if not
+     * @returns {boolean} true if an interrupt was dispatched, false if not
      */
     checkInterrupts()
     {
@@ -9559,7 +9559,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      * @this {CPUStatePDP10}
      * @param {number} vector
      * @param {number} priority
-     * @return {boolean} (true if dispatched, false if not)
+     * @returns {boolean} (true if dispatched, false if not)
      */
     dispatchInterrupt(vector, priority)
     {
@@ -9570,7 +9570,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      * isWaiting()
      *
      * @this {CPUStatePDP10}
-     * @return {boolean} (true if OPFLAG.WAIT is set, false otherwise)
+     * @returns {boolean} (true if OPFLAG.WAIT is set, false otherwise)
      */
     isWaiting()
     {
@@ -9584,7 +9584,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      *
      * @this {CPUStatePDP10}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     readWordFromPhysical(addr)
     {
@@ -9599,7 +9599,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      * @this {CPUStatePDP10}
      * @param {number} addr
      * @param {number} data
-     * @return {number} (we return the data back to the caller to permit nested writes)
+     * @returns {number} (we return the data back to the caller to permit nested writes)
      */
     writeWordToPhysical(addr, data)
     {
@@ -9632,7 +9632,7 @@ class CPUStatePDP10 extends CPUPDP10 {
      *
      * @this {CPUStatePDP10}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {number} of cycles executed; 0 indicates a pre-execution condition (ie, an execution breakpoint
+     * @returns {number} of cycles executed; 0 indicates a pre-execution condition (ie, an execution breakpoint
      * was hit), -1 indicates a post-execution condition (eg, a read or write breakpoint was hit), and a positive
      * number indicates successful completion of that many cycles (which should always be >= nMinCycles).
      */
@@ -15934,7 +15934,7 @@ PDP10.opUndefined = function(op, ac)
  *
  * @this {CPUStatePDP10}
  * @param {number} src (36-bit)
- * @return {number} (absolute value of src)
+ * @returns {number} (absolute value of src)
  */
 PDP10.doABS = function(src)
 {
@@ -15956,7 +15956,7 @@ PDP10.doABS = function(src)
  * @this {CPUStatePDP10}
  * @param {number} dst (36-bit value)
  * @param {number} src (36-bit value)
- * @return {number} (dst + src)
+ * @returns {number} (dst + src)
  */
 PDP10.doADD = function(dst, src)
 {
@@ -15978,7 +15978,7 @@ PDP10.doADD = function(dst, src)
  * @param {number} src (36-bit divisor)
  * @param {number} dst (36-bit value)
  * @param {number} [ext] (36-bit value extension)
- * @return {number} (dst / src) (the remainder is stored in regEX); -1 if error (no division performed)
+ * @returns {number} (dst / src) (the remainder is stored in regEX); -1 if error (no division performed)
  */
 PDP10.doDIV = function(src, dst, ext)
 {
@@ -16120,7 +16120,7 @@ PDP10.doDIV = function(src, dst, ext)
  * @param {number} src (36-bit value)
  * @param {boolean} [fTruncate] (true to truncate the result to 36 bits; used by IMUL instructions)
  * @param {boolean} [fExternal] (true if external caller; avoids modifying the CPU state)
- * @return {number} (dst * src) (the high 36 bits of the result; the low 36 bits are stored in regEX)
+ * @returns {number} (dst * src) (the high 36 bits of the result; the low 36 bits are stored in regEX)
  */
 PDP10.doMUL = function(dst, src, fTruncate, fExternal)
 {
@@ -16216,7 +16216,7 @@ PDP10.doMUL = function(dst, src, fTruncate, fExternal)
  *
  * @this {CPUStatePDP10}
  * @param {number} src (36-bit)
- * @return {number} (src negated, but as an unsigned 36-bit result)
+ * @returns {number} (src negated, but as an unsigned 36-bit result)
  */
 PDP10.doNEG = function(src)
 {
@@ -16245,7 +16245,7 @@ PDP10.doNEG = function(src)
  * @this {CPUStatePDP10}
  * @param {number} dst (36-bit value)
  * @param {number} src (36-bit value)
- * @return {number} (dst - src)
+ * @returns {number} (dst - src)
  */
 PDP10.doSUB = function(dst, src)
 {
@@ -16271,7 +16271,7 @@ PDP10.doSUB = function(dst, src)
  * @this {CPUStatePDP10}
  * @param {number} dst (36-bit value)
  * @param {number} ext (36-bit value)
- * @return {number} (returns the lower 36 bits; the upper 36 bits  are stored in regEX)
+ * @returns {number} (returns the lower 36 bits; the upper 36 bits  are stored in regEX)
  */
 PDP10.merge72 = function(dst, ext)
 {
@@ -16299,7 +16299,7 @@ PDP10.merge72 = function(dst, ext)
  * @param {number} res (36-bit value)
  * @param {number} ext (36-bit value)
  * @param {boolean} [fExternal] (true if external caller; avoids modifying the CPU state)
- * @return {number} (returns the upper 36 bits; the lower 36 bits are stored in regEX)
+ * @returns {number} (returns the upper 36 bits; the lower 36 bits are stored in regEX)
  */
 PDP10.split72 = function(res, ext, fExternal)
 {
@@ -16402,7 +16402,7 @@ PDP10.setAddFlags = function(dst, src, res)
  *
  * @param {number} dst (36-bit value)
  * @param {number} src (36-bit value)
- * @return {number} (dst & src)
+ * @returns {number} (dst & src)
  */
 PDP10.AND = function(dst, src)
 {
@@ -16429,7 +16429,7 @@ PDP10.AND = function(dst, src)
  *
  * @param {number} dst (36-bit value)
  * @param {number} src (36-bit value)
- * @return {number} (dst & ~src)
+ * @returns {number} (dst & ~src)
  */
 PDP10.CLR = function(dst, src)
 {
@@ -16443,7 +16443,7 @@ PDP10.CLR = function(dst, src)
  *
  * @param {number} dst (36-bit value)
  * @param {number} src (36-bit value)
- * @return {number} (dst - src)
+ * @returns {number} (dst - src)
  */
 PDP10.CMP = function(dst, src)
 {
@@ -16457,7 +16457,7 @@ PDP10.CMP = function(dst, src)
  *
  * @param {number} dst (36-bit value)
  * @param {number} src (36-bit value)
- * @return {number} (~(dst ^ src))
+ * @returns {number} (~(dst ^ src))
  */
 PDP10.EQV = function(dst, src)
 {
@@ -16484,7 +16484,7 @@ PDP10.EQV = function(dst, src)
  *
  * @param {number} dst (36-bit value)
  * @param {number} src (36-bit value)
- * @return {number} (dst | src)
+ * @returns {number} (dst | src)
  */
 PDP10.IOR = function(dst, src)
 {
@@ -16510,7 +16510,7 @@ PDP10.IOR = function(dst, src)
  * Performs the one's complement (NOT) of a 36-bit operand.
  *
  * @param {number} src (36-bit value)
- * @return {number} (~src)
+ * @returns {number} (~src)
  */
 PDP10.NOT = function(src)
 {
@@ -16536,7 +16536,7 @@ PDP10.NOT = function(src)
  * Returns the signed form of the 36-bit operand; more efficient than doCMP(dst, 0).
  *
  * @param {number} dst (36-bit value)
- * @return {number}
+ * @returns {number}
  */
 PDP10.SIGN = function(dst)
 {
@@ -16550,7 +16550,7 @@ PDP10.SIGN = function(dst)
  *
  * @param {number} dst (36-bit value)
  * @param {number} src (36-bit value)
- * @return {number} (dst ^ src)
+ * @returns {number} (dst ^ src)
  */
 PDP10.XOR = function(dst, src)
 {
@@ -16578,7 +16578,7 @@ PDP10.XOR = function(dst, src)
  * NOTE: Since HALF_MASK is an 18-bit value, it's safe to use "&" with HALF_MASK (equivalent to "%" with HALF_SHIFT).
  *
  * @param {number} src
- * @return {number} (updated src)
+ * @returns {number} (updated src)
  */
 PDP10.SWAP = function(src)
 {
@@ -16593,7 +16593,7 @@ PDP10.SWAP = function(src)
  * @param {number} op
  * @param {number} dst (36-bit value whose 18-bit left half is either preserved or modified)
  * @param {number} src (18-bit value used to determine the sign extension, if any, for the left half of dst)
- * @return {number} (updated dst)
+ * @returns {number} (updated dst)
  */
 PDP10.GETHL = function(op, dst, src)
 {
@@ -16622,7 +16622,7 @@ PDP10.GETHL = function(op, dst, src)
  * @param {number} op
  * @param {number} dst (36-bit value whose 18-bit left half is either preserved or modified)
  * @param {number} src (18-bit value used to determine the sign extension, if any, for the left half of dst)
- * @return {number} (updated dst)
+ * @returns {number} (updated dst)
  */
 PDP10.SETHL = function(op, dst, src)
 {
@@ -16648,7 +16648,7 @@ PDP10.SETHL = function(op, dst, src)
  * @param {number} op
  * @param {number} dst (36-bit value whose 18-bit right half is either preserved or modified)
  * @param {number} src (36-bit value used to determine the sign extension, if any, for the right half of dst)
- * @return {number} (updated dst)
+ * @returns {number} (updated dst)
  */
 PDP10.GETHR = function(op, dst, src)
 {
@@ -16677,7 +16677,7 @@ PDP10.GETHR = function(op, dst, src)
  * @param {number} op
  * @param {number} dst (36-bit value whose 18-bit right half is either preserved or modified)
  * @param {number} src (36-bit value used to determine the sign extension, if any, for the right half of dst)
- * @return {number} (updated dst)
+ * @returns {number} (updated dst)
  */
 PDP10.SETHR = function(op, dst, src)
 {
@@ -16720,7 +16720,7 @@ PDP10.ADDD = function(dDst, dSrc)
  *
  * @param {Array.<number>} dDst
  * @param {Array.<number>} dSrc
- * @return {number} > 0 if dDst > dSrc, == 0 if dDst == dSrc, < 0 if dDst < dSrc
+ * @returns {number} > 0 if dDst > dSrc, == 0 if dDst == dSrc, < 0 if dDst < dSrc
  */
 PDP10.CMPD = function(dDst, dSrc)
 {
@@ -16784,7 +16784,7 @@ PDP10.SUBD = function(dDst, dSrc)
  * True if all bits in the double-length value (d) are zero, false otherwise.
  *
  * @param {Array.<number>} d
- * @return {boolean}
+ * @returns {boolean}
  */
 PDP10.ZEROD = function(d)
 {
@@ -17490,7 +17490,7 @@ class ROMPDP10 extends Component {
      * @this {ROMPDP10}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -17518,7 +17518,7 @@ class ROMPDP10 extends Component {
      * @this {ROMPDP10}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -17620,7 +17620,7 @@ class ROMPDP10 extends Component {
      *
      * @this {ROMPDP10}
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     addROM(addr)
     {
@@ -17780,7 +17780,7 @@ class RAMPDP10 extends Component {
      * @this {RAMPDP10}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -17811,7 +17811,7 @@ class RAMPDP10 extends Component {
      * @this {RAMPDP10}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -17933,7 +17933,7 @@ class RAMPDP10 extends Component {
      * @param {number|null} [addrExec] (this CAN override any starting address INSIDE the image)
      * @param {number|null} [addrInit]
      * @param {boolean} [fStart]
-     * @return {boolean} (true if loaded, false if not)
+     * @returns {boolean} (true if loaded, false if not)
      */
     loadImage(aData, addrLoad, addrExec, addrInit, fStart)
     {
@@ -18136,7 +18136,7 @@ class SerialPortPDP10 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "buffer")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -18324,7 +18324,7 @@ class SerialPortPDP10 extends Component {
      * @this {SerialPortPDP10}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -18353,7 +18353,7 @@ class SerialPortPDP10 extends Component {
      * @this {SerialPortPDP10}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -18376,7 +18376,7 @@ class SerialPortPDP10 extends Component {
      * This implements save support for the SerialPort component.
      *
      * @this {SerialPortPDP10}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -18392,7 +18392,7 @@ class SerialPortPDP10 extends Component {
      *
      * @this {SerialPortPDP10}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -18404,7 +18404,7 @@ class SerialPortPDP10 extends Component {
      *
      * @this {SerialPortPDP10}
      * @param {Array} [a]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     initState(a)
     {
@@ -18417,7 +18417,7 @@ class SerialPortPDP10 extends Component {
      * Basically, the inverse of initState().
      *
      * @this {SerialPortPDP10}
-     * @return {Array}
+     * @returns {Array}
      */
     saveRegisters()
     {
@@ -18433,7 +18433,7 @@ class SerialPortPDP10 extends Component {
      *
      * @this {SerialPortPDP10}
      * @param {number|string|Array} data
-     * @return {boolean} true if received, false if not
+     * @returns {boolean} true if received, false if not
      */
     receiveData(data)
     {
@@ -18468,7 +18468,7 @@ class SerialPortPDP10 extends Component {
      * receiveByte()
      *
      * @this {SerialPortPDP10}
-     * @return {number} (0x00-0xff if byte available, -1 if not)
+     * @returns {number} (0x00-0xff if byte available, -1 if not)
      */
     receiveByte()
     {
@@ -18510,7 +18510,7 @@ class SerialPortPDP10 extends Component {
      * @this {SerialPortPDP10}
      * @param {Object|null} component
      * @param {function(number)} fn
-     * @return {boolean}
+     * @returns {boolean}
      */
     setConnection(component, fn)
     {
@@ -18527,7 +18527,7 @@ class SerialPortPDP10 extends Component {
      *
      * @this {SerialPortPDP10}
      * @param {number} b
-     * @return {boolean} true if transmitted, false if not
+     * @returns {boolean} true if transmitted, false if not
      */
     transmitByte(b)
     {
@@ -18740,7 +18740,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string} sReg
      * @param {number} [off] optional offset into sReg
-     * @return {number} register index, or -1 if not found
+     * @returns {number} register index, or -1 if not found
      */
     getRegIndex(sReg, off)
     {
@@ -18754,7 +18754,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {number} iReg
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getRegValue(iReg)
     {
@@ -18771,7 +18771,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string} s
      * @param {string} sAddr
-     * @return {string}
+     * @returns {string}
      */
     parseAddrReference(s, sAddr)
     {
@@ -18782,7 +18782,7 @@ class DbgLib extends Component {
      * getNextCommand()
      *
      * @this {DbgLib}
-     * @return {string}
+     * @returns {string}
      */
     getNextCommand()
     {
@@ -18800,7 +18800,7 @@ class DbgLib extends Component {
      * getPrevCommand()
      *
      * @this {DbgLib}
-     * @return {string|null}
+     * @returns {string|null}
      */
     getPrevCommand()
     {
@@ -18818,7 +18818,7 @@ class DbgLib extends Component {
      * @param {string|undefined} sCmd
      * @param {boolean} [fSave] is true to save the command, false if not
      * @param {string} [chSep] is the command separator character (default is ';')
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     parseCommand(sCmd, fSave, chSep)
     {
@@ -18898,7 +18898,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst & src)
+     * @returns {number} (dst & src)
      */
     evalAND(dst, src)
     {
@@ -18932,7 +18932,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst | src)
+     * @returns {number} (dst | src)
      */
     evalIOR(dst, src)
     {
@@ -18966,7 +18966,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst ^ src)
+     * @returns {number} (dst ^ src)
      */
     evalXOR(dst, src)
     {
@@ -18999,7 +18999,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst * src)
+     * @returns {number} (dst * src)
      */
     evalMUL(dst, src)
     {
@@ -19013,7 +19013,7 @@ class DbgLib extends Component {
      * @param {number} v
      * @param {number} [nBits]
      * @param {boolean} [fUnsigned]
-     * @return {number}
+     * @returns {number}
      */
     truncate(v, nBits, fUnsigned)
     {
@@ -19087,7 +19087,7 @@ class DbgLib extends Component {
      * @param {Array.<number>} aVals
      * @param {Array.<string>} aOps
      * @param {number} [cOps] (default is -1 for all)
-     * @return {boolean} true if successful, false if error
+     * @returns {boolean} true if successful, false if error
      */
     evalOps(aVals, aOps, cOps = -1)
     {
@@ -19211,7 +19211,7 @@ class DbgLib extends Component {
      * @param {number} iLimit
      * @param {number} nBase
      * @param {Array|undefined} [aUndefined]
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     parseArray(asValues, iValue, iLimit, nBase, aUndefined)
     {
@@ -19369,7 +19369,7 @@ class DbgLib extends Component {
      * @param {string} chDelim
      * @param {number} nBits
      * @param {number} cchMax
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     parseASCII(sExp, chDelim, nBits, cchMax)
     {
@@ -19431,7 +19431,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string|undefined} sExp
      * @param {Array|undefined|boolean} [fQuiet]
-     * @return {number|undefined} numeric value, or undefined if sExp contains any undefined or invalid values
+     * @returns {number|undefined} numeric value, or undefined if sExp contains any undefined or invalid values
      */
     parseExpression(sExp, fQuiet)
     {
@@ -19521,7 +19521,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} s
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     parseReference(s)
     {
@@ -19570,7 +19570,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     parseSysVars(s)
     {
@@ -19604,7 +19604,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {number} value
      * @param {number} nUnary
-     * @return {number}
+     * @returns {number}
      */
     parseUnary(value, nUnary)
     {
@@ -19636,7 +19636,7 @@ class DbgLib extends Component {
      * @param {string} [sName] is the name of the value, if any
      * @param {Array|boolean} [fQuiet]
      * @param {number} [nUnary] (0 for none, 1 for negate, 2 for complement, 3 for leading zeros)
-     * @return {number|undefined} numeric value, or undefined if sValue is either undefined or invalid
+     * @returns {number|undefined} numeric value, or undefined if sValue is either undefined or invalid
      */
     parseValue(sValue, sName, fQuiet, nUnary = 0)
     {
@@ -19694,7 +19694,7 @@ class DbgLib extends Component {
      * @this {DbgLib}
      * @param {string|null|*} sVar
      * @param {number|undefined} value
-     * @return {boolean} true if value defined, false if not
+     * @returns {boolean} true if value defined, false if not
      */
     printValue(sVar, value)
     {
@@ -19720,7 +19720,7 @@ class DbgLib extends Component {
      * resetVariables()
      *
      * @this {DbgLib}
-     * @return {Object}
+     * @returns {Object}
      */
     resetVariables()
     {
@@ -19745,7 +19745,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} [sVar]
-     * @return {boolean} true if all value(s) defined, false if not
+     * @returns {boolean} true if all value(s) defined, false if not
      */
     printVariable(sVar)
     {
@@ -19780,7 +19780,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} sVar
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getVariable(sVar)
     {
@@ -19796,7 +19796,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} sVar
-     * @return {string|undefined}
+     * @returns {string|undefined}
      */
     getVariableFixup(sVar)
     {
@@ -19808,7 +19808,7 @@ class DbgLib extends Component {
      *
      * @this {DbgLib}
      * @param {string} sVar
-     * @return {boolean}
+     * @returns {boolean}
      */
     isVariable(sVar)
     {
@@ -19838,7 +19838,7 @@ class DbgLib extends Component {
      * @param {number} [nBits] (-1 to strip leading zeros, 0 to allow a variable number of digits)
      * @param {number} [nBase]
      * @param {number} [nGrouping] (if nBase is 2, this is a grouping; otherwise, it's a prefix condition)
-     * @return {string}
+     * @returns {string}
      */
     toStrBase(n, nBits = 0, nBase = 0, nGrouping = 0)
     {
@@ -20110,7 +20110,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {DbgAddrPDP10|null} [dbgAddr]
      * @param {boolean} [fWrite]
-     * @return {number} is the corresponding linear address, or PDP10.ADDR_INVALID
+     * @returns {number} is the corresponding linear address, or PDP10.ADDR_INVALID
      */
     getAddr(dbgAddr, fWrite)
     {
@@ -20128,7 +20128,7 @@ class DebuggerPDP10 extends DbgLib {
      * @param {number|null} [addr]
      * @param {boolean} [fPhysical]
      * @param {number} [nBase]
-     * @return {DbgAddrPDP10}
+     * @returns {DbgAddrPDP10}
      */
     newAddr(addr = null, fPhysical = false, nBase)
     {
@@ -20143,7 +20143,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {DbgAddrPDP10} dbgAddr
      * @param {DbgAddrPDP10} dbgCopy
-     * @return {DbgAddrPDP10}
+     * @returns {DbgAddrPDP10}
      */
     copyAddr(dbgAddr, dbgCopy)
     {
@@ -20164,7 +20164,7 @@ class DebuggerPDP10 extends DbgLib {
      * @param {number} addr
      * @param {boolean} [fPhysical]
      * @param {number} [nBase]
-     * @return {DbgAddrPDP10}
+     * @returns {DbgAddrPDP10}
      */
     setAddr(dbgAddr, addr, fPhysical, nBase)
     {
@@ -20182,7 +20182,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {DbgAddrPDP10} dbgAddr
-     * @return {Array}
+     * @returns {Array}
      */
     packAddr(dbgAddr)
     {
@@ -20196,7 +20196,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {Array} aAddr
-     * @return {DbgAddrPDP10}
+     * @returns {DbgAddrPDP10}
      */
     unpackAddr(aAddr)
     {
@@ -20254,7 +20254,7 @@ class DebuggerPDP10 extends DbgLib {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "debugInput")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -20371,7 +20371,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {DbgAddrPDP10} dbgAddr
      * @param {number} [inc]
-     * @return {number}
+     * @returns {number}
      */
     getWord(dbgAddr, inc)
     {
@@ -20410,7 +20410,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {number} dst
      * @param {number} src
-     * @return {number} (dst * src)
+     * @returns {number} (dst * src)
      */
     evalMUL(dst, src)
     {
@@ -20446,7 +20446,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {string|undefined} sAddr
      * @param {DbgAddrPDP10} [dbgAddr]
-     * @return {DbgAddrPDP10}
+     * @returns {DbgAddrPDP10}
      */
     parseAddr(sAddr, dbgAddr)
     {
@@ -20501,7 +20501,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {number} w
      * @param {number} [bits]
-     * @return {number}
+     * @returns {number}
      */
     validateWord(w, bits = 36)
     {
@@ -20539,7 +20539,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {number|null|undefined} [off]
-     * @return {string} default base representation of off
+     * @returns {string} default base representation of off
      */
     toStrOffset(off)
     {
@@ -20551,7 +20551,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {DbgAddrPDP10} dbgAddr
-     * @return {string} default base representation of the address
+     * @returns {string} default base representation of the address
      */
     toStrAddr(dbgAddr)
     {
@@ -20563,7 +20563,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {number} w (up to, but not including, WORD_LIMIT)
-     * @return {string} octal representation of the 36-bit word, as two 18-bit values
+     * @returns {string} octal representation of the 36-bit word, as two 18-bit values
      */
     toStrWord(w)
     {
@@ -20787,7 +20787,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {number} bitMessage is one Messages category flag
      * @param {function(Array.<string>)} fnDumper is a function the Debugger can use to dump data for that category
-     * @return {boolean} true if successfully registered, false if not
+     * @returns {boolean} true if successfully registered, false if not
      */
     messageDump(bitMessage, fnDumper)
     {
@@ -20806,7 +20806,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {string} sReg
      * @param {number} [off] optional offset into sReg
-     * @return {number} register index, or -1 if not found
+     * @returns {number} register index, or -1 if not found
      */
     getRegIndex(sReg, off)
     {
@@ -20818,7 +20818,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {number} iReg (0-7; not used for other registers)
-     * @return {string}
+     * @returns {string}
      */
     getRegName(iReg)
     {
@@ -20830,7 +20830,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {number} iReg
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getRegValue(iReg)
     {
@@ -20926,7 +20926,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     replaceRegs(s)
     {
@@ -21038,7 +21038,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {boolean} [fUpdateFocus] is true to update focus
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if run request successful, false if not
+     * @returns {boolean} true if run request successful, false if not
      */
     startCPU(fUpdateFocus, fQuiet)
     {
@@ -21054,7 +21054,7 @@ class DebuggerPDP10 extends DbgLib {
      * @param {number} nCycles (0 for one instruction without checking breakpoints)
      * @param {boolean|null} [fRegs] is true to display registers after step (default is false; use null for previous setting)
      * @param {boolean} [fUpdateDisplays] is false to disable Computer display updates (default is true)
-     * @return {boolean}
+     * @returns {boolean}
      */
     stepCPU(nCycles, fRegs, fUpdateDisplays)
     {
@@ -21163,7 +21163,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {boolean} [fQuiet]
-     * @return {boolean}
+     * @returns {boolean}
      */
     checkCPU(fQuiet)
     {
@@ -21180,7 +21180,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -21207,7 +21207,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean}
+     * @returns {Object|boolean}
      */
     powerDown(fSave, fShutdown)
     {
@@ -21246,7 +21246,7 @@ class DebuggerPDP10 extends DbgLib {
      * This implements (very rudimentary) save support for the Debugger component.
      *
      * @this {DebuggerPDP10}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -21266,7 +21266,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -21363,7 +21363,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {boolean} [fRelease] is true for release criteria only; default is false (any criteria)
-     * @return {boolean} true if every instruction needs to pass through checkInstruction(), false if not
+     * @returns {boolean} true if every instruction needs to pass through checkInstruction(), false if not
      */
     checksEnabled(fRelease)
     {
@@ -21379,7 +21379,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {number} addr
      * @param {number} nState is < 0 if stepping, 0 if starting, or > 0 if running
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkInstruction(addr, nState)
     {
@@ -21437,7 +21437,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {number} opCode
      * @param {boolean} [fOperands] (optional; default is true)
-     * @return {string}
+     * @returns {string}
      */
     findInstruction(opCode, fOperands = true)
     {
@@ -21520,7 +21520,7 @@ class DebuggerPDP10 extends DbgLib {
      * @param {DbgAddrPDP10} dbgAddr
      * @param {string} [sComment] is an associated comment
      * @param {number|null} [nSequence] is an associated sequence number, undefined if none
-     * @return {string} (and dbgAddr is updated to the next instruction)
+     * @returns {string} (and dbgAddr is updated to the next instruction)
      */
     getInstruction(dbgAddr, sComment, nSequence)
     {
@@ -21560,7 +21560,7 @@ class DebuggerPDP10 extends DbgLib {
      * @param {string} [sOperands]
      * @param {number} [addr] of memory where this instruction is being assembled
      * @param {Array} [aUndefined]
-     * @return {number} (opcode, or -1 if unrecognized instruction)
+     * @returns {number} (opcode, or -1 if unrecognized instruction)
      */
     parseInstruction(sOpcode, sOperands, addr, aUndefined)
     {
@@ -21784,7 +21784,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {string} [sMessage]
-     * @return {boolean} true if stopping is enabled, false if not
+     * @returns {boolean} true if stopping is enabled, false if not
      */
     stopInstruction(sMessage)
     {
@@ -21808,7 +21808,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {number} opCode
-     * @return {boolean} true if stopping is enabled, false if not
+     * @returns {boolean} true if stopping is enabled, false if not
      */
     undefinedInstruction(opCode)
     {
@@ -21833,7 +21833,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkMemoryRead(addr, nb)
     {
@@ -21858,7 +21858,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {number} addr
      * @param {number} [nb] (# of bytes; default is 1)
-     * @return {boolean} true if breakpoint hit, false if not
+     * @returns {boolean} true if breakpoint hit, false if not
      */
     checkMemoryWrite(addr, nb)
     {
@@ -21927,7 +21927,7 @@ class DebuggerPDP10 extends DbgLib {
      * @param {Array} aBreak
      * @param {DbgAddrPDP10} dbgAddr
      * @param {boolean} [fTemporary]
-     * @return {boolean} true if breakpoint added, false if already exists
+     * @returns {boolean} true if breakpoint added, false if already exists
      */
     addBreakpoint(aBreak, dbgAddr, fTemporary)
     {
@@ -21983,7 +21983,7 @@ class DebuggerPDP10 extends DbgLib {
      * @param {boolean} [fRemove]
      * @param {boolean} [fTemporary]
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if found, false if not
+     * @returns {boolean} true if found, false if not
      */
     findBreakpoint(aBreak, dbgAddr, fRemove, fTemporary, fQuiet)
     {
@@ -22025,7 +22025,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {Array} aBreak
-     * @return {number} of breakpoints listed, 0 if none
+     * @returns {number} of breakpoints listed, 0 if none
      */
     listBreakpoints(aBreak)
     {
@@ -22090,7 +22090,7 @@ class DebuggerPDP10 extends DbgLib {
      * @param {number} nb (# of bytes)
      * @param {Array} aBreak
      * @param {boolean} [fTemporary]
-     * @return {boolean} true if breakpoint has been hit, false if not
+     * @returns {boolean} true if breakpoint has been hit, false if not
      */
     checkBreakpoint(addr, nb, aBreak, fTemporary)
     {
@@ -22177,7 +22177,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {number} iAcc
-     * @return {string}
+     * @returns {string}
      */
     getAccOutput(iAcc)
     {
@@ -22192,7 +22192,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {number} iReg
-     * @return {string}
+     * @returns {string}
      */
     getRegOutput(iReg)
     {
@@ -22208,7 +22208,7 @@ class DebuggerPDP10 extends DbgLib {
      * getMiscDump()
      *
      * @this {DebuggerPDP10}
-     * @return {string}
+     * @returns {string}
      */
     getMiscDump()
     {
@@ -22226,7 +22226,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {boolean|undefined} [fMisc] (true to include misc registers)
-     * @return {string}
+     * @returns {string}
      */
     getRegDump(fMisc = true)
     {
@@ -22245,7 +22245,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {number|string|Array|Object} p1
      * @param {number|string|Array|Object} p2
-     * @return {number}
+     * @returns {number}
      */
     comparePairs(p1, p2)
     {
@@ -22390,7 +22390,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {DbgAddrPDP10} dbgAddr
      * @param {boolean} [fNearest]
-     * @return {Array} where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment
+     * @returns {Array} where [0] == symbol name, [1] == symbol value, [2] == any annotation, and [3] == any associated comment
      */
     findSymbol(dbgAddr, fNearest)
     {
@@ -22424,7 +22424,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {string} sSymbol
-     * @return {DbgAddrPDP10|undefined}
+     * @returns {DbgAddrPDP10|undefined}
      */
     findSymbolAddr(sSymbol)
     {
@@ -22570,7 +22570,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {Array.<string>} asArgs is the complete argument array, beginning with the "a" command in asArgs[0]
-     * @return {boolean}
+     * @returns {boolean}
      */
     doAssemble(asArgs)
     {
@@ -22957,7 +22957,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if expression is non-zero, false if zero (or undefined due to a parse error)
+     * @returns {boolean} true if expression is non-zero, false if zero (or undefined due to a parse error)
      */
     doIf(sCmd, fQuiet)
     {
@@ -22975,7 +22975,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {Array.<string>} asArgs
-     * @return {boolean} true only if the instruction info command ("n") is supported
+     * @returns {boolean} true only if the instruction info command ("n") is supported
      */
     doInfo(asArgs)
     {
@@ -22999,7 +22999,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {string} sCmd
-     * @return {boolean} true if valid "var" assignment, false if not
+     * @returns {boolean} true if valid "var" assignment, false if not
      */
     doVar(sCmd)
     {
@@ -23033,7 +23033,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {string} sAddr
      * @param {boolean} [fPrint]
-     * @return {string|null}
+     * @returns {string|null}
      */
     doList(sAddr, fPrint)
     {
@@ -23396,7 +23396,7 @@ class DebuggerPDP10 extends DbgLib {
      *
      * @this {DebuggerPDP10}
      * @param {DbgAddrPDP10} dbgAddr
-     * @return {string|null} CALL instruction at or near dbgAddr, or null if none
+     * @returns {string|null} CALL instruction at or near dbgAddr, or null if none
      */
     getCall(dbgAddr)
     {
@@ -23627,7 +23627,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {string} sCmd
      * @param {string} [sDelim]
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     splitArgs(sCmd, sDelim = " ")
     {
@@ -23680,7 +23680,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {string} sCmd
      * @param {boolean} [fQuiet]
-     * @return {boolean} true if command processed, false if unrecognized
+     * @returns {boolean} true if command processed, false if unrecognized
      */
     doCommand(sCmd, fQuiet)
     {
@@ -23850,7 +23850,7 @@ class DebuggerPDP10 extends DbgLib {
      * @this {DebuggerPDP10}
      * @param {string} [sCmds]
      * @param {boolean} [fSave]
-     * @return {boolean} true if all commands processed, false if not
+     * @returns {boolean} true if all commands processed, false if not
      */
     doCommands(sCmds, fSave)
     {
@@ -24529,7 +24529,7 @@ class Macro10 {
      * @param {number|null} [addrLoad] (the absolute address to assemble the code at, if any)
      * @param {string|undefined} [sOptions] (zero or more letter codes to control the assembly process)
      * @param {function(...)|undefined} [done]
-     * @return {number}
+     * @returns {number}
      */
     assembleString(sText, addrLoad, sOptions, done)
     {
@@ -24627,7 +24627,7 @@ class Macro10 {
      * Service for the Debugger to obtain the assembled data after a (hopefully) successful assembly process.
      *
      * @this {Macro10}
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     getImage()
     {
@@ -24640,7 +24640,7 @@ class Macro10 {
      * Service for the Debugger to obtain the starting address after a (hopefully) successful assembly process.
      *
      * @this {Macro10}
-     * @return {number|null|undefined}
+     * @returns {number|null|undefined}
      */
     getStart()
     {
@@ -24653,7 +24653,7 @@ class Macro10 {
      * Begin the assembly process.
      *
      * @this {Macro10}
-     * @return {number}
+     * @returns {number}
      */
     parseResources()
     {
@@ -24748,7 +24748,7 @@ class Macro10 {
      * @param {Array.<string>} [aParms]
      * @param {Array.<string>} [aValues]
      * @param {Array.<string>} [aDefaults]
-     * @return {boolean}
+     * @returns {boolean}
      */
     parseLine(sLine, aParms, aValues, aDefaults)
     {
@@ -24999,7 +24999,7 @@ class Macro10 {
      * @this {Macro10}
      * @param {string} name
      * @param {string} [sOperands]
-     * @return {boolean}
+     * @returns {boolean}
      */
     parseMacro(name, sOperands)
     {
@@ -25213,7 +25213,7 @@ class Macro10 {
      * @this {Macro10}
      * @param {string} sOperands
      * @param {string} [sDelim] (eg, comma, closing parenthesis)
-     * @return {string|null} (if the operands begin with an expression, return it)
+     * @returns {string|null} (if the operands begin with an expression, return it)
      */
     getExpression(sOperands, sDelim = ",")
     {
@@ -25263,7 +25263,7 @@ class Macro10 {
      * @param {Array|undefined} [aUndefined]
      * @param {number|undefined} [nLocation]
      * @param {number|undefined} [nLine]
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     parseExpression(sExp, aUndefined, nLocation, nLine)
     {
@@ -25324,7 +25324,7 @@ class Macro10 {
      *
      * @this {Macro10}
      * @param {string} sOperands
-     * @return {string} (if the operands contain a literal, return it)
+     * @returns {string} (if the operands contain a literal, return it)
      */
     getLiteral(sOperands)
     {
@@ -25359,7 +25359,7 @@ class Macro10 {
      *
      * @this {Macro10}
      * @param {Array.<string>} aParms
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     getDefaults(aParms)
     {
@@ -25381,7 +25381,7 @@ class Macro10 {
      *
      * @this {Macro10}
      * @param {number|undefined} [nLine]
-     * @return {string}
+     * @returns {string}
      */
     getLineRef(nLine = this.nLine)
     {
@@ -25404,7 +25404,7 @@ class Macro10 {
      *
      * @this {Macro10}
      * @param {string} sOperands
-     * @return {string|null} (if the operands contain a reserved symbol, return it)
+     * @returns {string|null} (if the operands contain a reserved symbol, return it)
      */
     getReserved(sOperands)
     {
@@ -25448,7 +25448,7 @@ class Macro10 {
      * @this {Macro10}
      * @param {string} sValue
      * @param {number} [nConversion]
-     * @return {string}
+     * @returns {string}
      */
     getString(sValue, nConversion = 0)
     {
@@ -25483,7 +25483,7 @@ class Macro10 {
      *
      * @this {Macro10}
      * @param {string} sOperands
-     * @return {string|null} (if the operands contain a symbol, return it)
+     * @returns {string|null} (if the operands contain a symbol, return it)
      */
     getSymbol(sOperands)
     {
@@ -25497,7 +25497,7 @@ class Macro10 {
      * @this {Macro10}
      * @param {string} sOperands
      * @param {boolean} [fParens] (true to strip any parens from around the entire operands)
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     getValues(sOperands, fParens)
     {
@@ -25531,7 +25531,7 @@ class Macro10 {
      *
      * @this {Macro10}
      * @param {string} sName
-     * @return {boolean}
+     * @returns {boolean}
      */
     isDefined(sName)
     {
@@ -25543,7 +25543,7 @@ class Macro10 {
      *
      * @this {Macro10}
      * @param {string} sName
-     * @return {boolean}
+     * @returns {boolean}
      */
     isMacro(sName)
     {
@@ -25555,7 +25555,7 @@ class Macro10 {
      *
      * @this {Macro10}
      * @param {string} sName
-     * @return {boolean}
+     * @returns {boolean}
      */
     isSymbol(sName)
     {
@@ -25567,7 +25567,7 @@ class Macro10 {
      *
      * @this {Macro10}
      * @param {string} ch
-     * @return {boolean}
+     * @returns {boolean}
      */
     isSymbolChar(ch)
     {
@@ -25579,7 +25579,7 @@ class Macro10 {
      *
      * @this {Macro10}
      * @param {string} sOperands
-     * @return {string} (returns whatever portion of the string was not part of an ASCII pseudo-op)
+     * @returns {string} (returns whatever portion of the string was not part of an ASCII pseudo-op)
      */
     defASCII(sOperands)
     {
@@ -25626,7 +25626,7 @@ class Macro10 {
      * @this {Macro10}
      * @param {string} sOperator
      * @param {string} sOperands
-     * @return {string}
+     * @returns {string}
      */
     defMacro(sOperator, sOperands)
     {
@@ -25786,7 +25786,7 @@ class Macro10 {
      *
      * @this {Macro10}
      * @param {string} sLine
-     * @return {string}
+     * @returns {string}
      */
     appendMacro(sLine)
     {
@@ -26181,7 +26181,7 @@ class Macro10 {
      * @this {Macro10}
      * @param {number} value
      * @param {number} [nLocation]
-     * @return {number}
+     * @returns {number}
      */
     truncate(value, nLocation = this.nLocation)
     {
@@ -26539,7 +26539,7 @@ class ComputerPDP10 extends Component {
      * getMachineID()
      *
      * @this {ComputerPDP10}
-     * @return {string}
+     * @returns {string}
      */
     getMachineID()
     {
@@ -26588,7 +26588,7 @@ class ComputerPDP10 extends Component {
      * @param {Object|null} [parmsComponent]
      * @param {number} [type] (from Str.TYPES)
      * @param {*} [defaultValue]
-     * @return {*}
+     * @returns {*}
      */
     getMachineParm(sParm, parmsComponent, type, defaultValue)
     {
@@ -26623,7 +26623,7 @@ class ComputerPDP10 extends Component {
      * saveMachineParms()
      *
      * @this {ComputerPDP10}
-     * @return {string|null}
+     * @returns {string|null}
      */
     saveMachineParms()
     {
@@ -26634,7 +26634,7 @@ class ComputerPDP10 extends Component {
      * getUserID()
      *
      * @this {ComputerPDP10}
-     * @return {string}
+     * @returns {string}
      */
     getUserID()
     {
@@ -26707,7 +26707,7 @@ class ComputerPDP10 extends Component {
      *
      * @this {ComputerPDP10}
      * @param {State|null} [stateComputer]
-     * @return {boolean} true if state passes validation, false if not
+     * @returns {boolean} true if state passes validation, false if not
      */
     validateState(stateComputer)
     {
@@ -26878,7 +26878,7 @@ class ComputerPDP10 extends Component {
      * @param {State} stateComputer
      * @param {boolean} fRepower
      * @param {boolean} fRestore
-     * @return {boolean} true if restore should continue, false if not
+     * @returns {boolean} true if restore should continue, false if not
      */
     powerRestore(component, stateComputer, fRepower, fRestore)
     {
@@ -27037,7 +27037,7 @@ class ComputerPDP10 extends Component {
      * checkPower()
      *
      * @this {ComputerPDP10}
-     * @return {boolean} true if the computer is fully powered, false otherwise
+     * @returns {boolean} true if the computer is fully powered, false otherwise
      */
     checkPower()
     {
@@ -27109,7 +27109,7 @@ class ComputerPDP10 extends Component {
      * @this {ComputerPDP10}
      * @param {boolean} [fSave] is true to request a saved state
      * @param {boolean} [fShutdown] is true if the machine is being shut down
-     * @return {string|null} string representing the saved state (or null if error)
+     * @returns {string|null} string representing the saved state (or null if error)
      */
     powerOff(fSave, fShutdown)
     {
@@ -27358,7 +27358,7 @@ class ComputerPDP10 extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -27492,7 +27492,7 @@ class ComputerPDP10 extends Component {
      *
      * @this {ComputerPDP10}
      * @param {string} sUserID
-     * @return {string} validated user ID, or null if error
+     * @returns {string} validated user ID, or null if error
      */
     verifyUserID(sUserID)
     {
@@ -27526,7 +27526,7 @@ class ComputerPDP10 extends Component {
      * getServerStatePath()
      *
      * @this {ComputerPDP10}
-     * @return {string|null} sStatePath (null if no localStorage or no USERID stored in localStorage)
+     * @returns {string|null} sStatePath (null if no localStorage or no USERID stored in localStorage)
      */
     getServerStatePath()
     {
@@ -27590,7 +27590,7 @@ class ComputerPDP10 extends Component {
      * @param {string} sUserID
      * @param {string} sState
      * @param {boolean} [fSync] is true if we're powering down and should perform a synchronous request (default is async)
-     * @return {*} server response if fSync is true and a response was received; otherwise null
+     * @returns {*} server response if fSync is true and a response was received; otherwise null
      */
     storeServerState(sUserID, sState, fSync)
     {
@@ -27706,7 +27706,7 @@ class ComputerPDP10 extends Component {
      * @this {ComputerPDP10}
      * @param {string} sType
      * @param {Component|null} [componentPrev] of previously returned component, if any
-     * @return {Component|null}
+     * @returns {Component|null}
      */
     getMachineComponent(sType, componentPrev)
     {
@@ -27988,7 +27988,7 @@ class State {
      *
      * @this {State}
      * @param {number|string} id
-     * @return {Object|string|null}
+     * @returns {Object|string|null}
      */
     get(id)
     {
@@ -27999,7 +27999,7 @@ class State {
      * data()
      *
      * @this {State}
-     * @return {Object}
+     * @returns {Object}
      */
     data()
     {
@@ -28014,7 +28014,7 @@ class State {
      *
      * @this {State}
      * @param {string|null} [json]
-     * @return {boolean} true if state exists in localStorage, false if not
+     * @returns {boolean} true if state exists in localStorage, false if not
      */
     load(json)
     {
@@ -28050,7 +28050,7 @@ class State {
      * Otherwise, load() could have just as easily done this, too.
      *
      * @this {State}
-     * @return {boolean} true if successful, false if error
+     * @returns {boolean} true if successful, false if error
      */
     parse()
     {
@@ -28071,7 +28071,7 @@ class State {
      * store()
      *
      * @this {State}
-     * @return {boolean} true if successful, false if error
+     * @returns {boolean} true if successful, false if error
      */
     store()
     {
@@ -28098,7 +28098,7 @@ class State {
      * toString()
      *
      * @this {State}
-     * @return {string} JSON-encoded state
+     * @returns {string} JSON-encoded state
      */
     toString()
     {
@@ -28155,7 +28155,7 @@ class State {
      * @param {Component} component
      * @param {string} [sVersion] is used to append a major version number to the key
      * @param {string} [sSuffix] is used to append any additional suffixes to the key
-     * @return {string} key
+     * @returns {string} key
      */
     static getKey(component, sVersion, sSuffix)
     {
@@ -28174,7 +28174,7 @@ class State {
      * State.compress(aSrc)
      *
      * @param {Array.<number>|null} aSrc
-     * @return {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
+     * @returns {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
      */
     static compress(aSrc)
     {
@@ -28201,7 +28201,7 @@ class State {
      *
      * @param {Array.<number>} aComp
      * @param {number} [nLength] (expected length of decompressed data)
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     static decompress(aComp, nLength)
     {
@@ -28230,7 +28230,7 @@ class State {
      * and return an uninitialized array.
      *
      * @param {Array.<number>|null} aSrc
-     * @return {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
+     * @returns {Array.<number>|null} is either the original array (aSrc), or a smaller array of "count, value" pairs (aComp)
      */
     static compressEvenOdd(aSrc)
     {
@@ -28263,7 +28263,7 @@ class State {
      *
      * @param {Array.<number>} aComp
      * @param {number} nLength is expected length of decompressed data
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     static decompressEvenOdd(aComp, nLength)
     {
@@ -28626,7 +28626,7 @@ function resolveXML(sURL, sXML, display, done)
  * @param {string} [sXSLFile]
  * @param {string} [sParms] (machine parameters, if any)
  * @param {string} [sClass] (an optional machine class name used to style the machine)
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -28893,7 +28893,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -28909,7 +28909,7 @@ function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -28925,7 +28925,7 @@ function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -28941,7 +28941,7 @@ function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -28957,7 +28957,7 @@ function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -28970,7 +28970,7 @@ function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  *
  * @param {string} idMachine
  * @param {string} sType
- * @return {Component|null}
+ * @returns {Component|null}
  */
 function findMachineComponent(idMachine, sType)
 {
@@ -28990,7 +28990,7 @@ function findMachineComponent(idMachine, sType)
  * @param {string} sComponent
  * @param {string} sCommand
  * @param {string} [sValue]
- * @return {boolean}
+ * @returns {boolean}
  */
 function commandMachine(control, fSingle, idMachine, sComponent, sCommand, sValue)
 {

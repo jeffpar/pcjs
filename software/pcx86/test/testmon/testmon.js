@@ -283,7 +283,7 @@ class PortController {
      *
      * @this {PortController}
      * @param {Date} dateMod contains the modification time of a file
-     * @return {number} the time (bits 0-15) and date (bits 16-31) in FAT format
+     * @returns {number} the time (bits 0-15) and date (bits 16-31) in FAT format
      */
     buildDateTime(dateMod)
     {
@@ -310,7 +310,7 @@ class PortController {
      *
      * @this {PortController}
      * @param {string} sFileName
-     * @return {string} containing a corresponding filename in FAT "8.3" format
+     * @returns {string} containing a corresponding filename in FAT "8.3" format
      */
     buildShortName(sFileName)
     {

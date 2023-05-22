@@ -13,7 +13,7 @@ import Debugger from "../../../../modules/v3/debugger.js";
 /**
  * Debugger for PDP-11 CPUs
  *
- * @class {PDP11Dbg}
+ * @class PDP11Dbg
  * @unrestricted
  */
 export default class PDP11Dbg extends Debugger {

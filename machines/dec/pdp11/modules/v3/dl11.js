@@ -17,7 +17,7 @@ Device.MESSAGE.DL11             = 0x000100000000;
 Device.MESSAGE_NAMES["dl11"]    = Device.MESSAGE.DL11;
 
 /**
- * @class {DL11}
+ * @class DL11
  * @unrestricted
  */
 export default class DL11 extends Device {

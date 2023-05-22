@@ -306,7 +306,7 @@ export default class Macro10 {
      * @param {number|null} [addrLoad] (the absolute address to assemble the code at, if any)
      * @param {string|undefined} [sOptions] (zero or more letter codes to control the assembly process)
      * @param {function(...)|undefined} [done]
-     * @return {number}
+     * @returns {number}
      */
     assembleString(sText, addrLoad, sOptions, done)
     {
@@ -404,7 +404,7 @@ export default class Macro10 {
      * Service for the Debugger to obtain the assembled data after a (hopefully) successful assembly process.
      *
      * @this {Macro10}
-     * @return {Array.<number>}
+     * @returns {Array.<number>}
      */
     getImage()
     {
@@ -417,7 +417,7 @@ export default class Macro10 {
      * Service for the Debugger to obtain the starting address after a (hopefully) successful assembly process.
      *
      * @this {Macro10}
-     * @return {number|null|undefined}
+     * @returns {number|null|undefined}
      */
     getStart()
     {
@@ -430,7 +430,7 @@ export default class Macro10 {
      * Begin the assembly process.
      *
      * @this {Macro10}
-     * @return {number}
+     * @returns {number}
      */
     parseResources()
     {
@@ -525,7 +525,7 @@ export default class Macro10 {
      * @param {Array.<string>} [aParms]
      * @param {Array.<string>} [aValues]
      * @param {Array.<string>} [aDefaults]
-     * @return {boolean}
+     * @returns {boolean}
      */
     parseLine(sLine, aParms, aValues, aDefaults)
     {
@@ -776,7 +776,7 @@ export default class Macro10 {
      * @this {Macro10}
      * @param {string} name
      * @param {string} [sOperands]
-     * @return {boolean}
+     * @returns {boolean}
      */
     parseMacro(name, sOperands)
     {
@@ -990,7 +990,7 @@ export default class Macro10 {
      * @this {Macro10}
      * @param {string} sOperands
      * @param {string} [sDelim] (eg, comma, closing parenthesis)
-     * @return {string|null} (if the operands begin with an expression, return it)
+     * @returns {string|null} (if the operands begin with an expression, return it)
      */
     getExpression(sOperands, sDelim = ",")
     {
@@ -1040,7 +1040,7 @@ export default class Macro10 {
      * @param {Array|undefined} [aUndefined]
      * @param {number|undefined} [nLocation]
      * @param {number|undefined} [nLine]
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     parseExpression(sExp, aUndefined, nLocation, nLine)
     {
@@ -1101,7 +1101,7 @@ export default class Macro10 {
      *
      * @this {Macro10}
      * @param {string} sOperands
-     * @return {string} (if the operands contain a literal, return it)
+     * @returns {string} (if the operands contain a literal, return it)
      */
     getLiteral(sOperands)
     {
@@ -1136,7 +1136,7 @@ export default class Macro10 {
      *
      * @this {Macro10}
      * @param {Array.<string>} aParms
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     getDefaults(aParms)
     {
@@ -1158,7 +1158,7 @@ export default class Macro10 {
      *
      * @this {Macro10}
      * @param {number|undefined} [nLine]
-     * @return {string}
+     * @returns {string}
      */
     getLineRef(nLine = this.nLine)
     {
@@ -1181,7 +1181,7 @@ export default class Macro10 {
      *
      * @this {Macro10}
      * @param {string} sOperands
-     * @return {string|null} (if the operands contain a reserved symbol, return it)
+     * @returns {string|null} (if the operands contain a reserved symbol, return it)
      */
     getReserved(sOperands)
     {
@@ -1225,7 +1225,7 @@ export default class Macro10 {
      * @this {Macro10}
      * @param {string} sValue
      * @param {number} [nConversion]
-     * @return {string}
+     * @returns {string}
      */
     getString(sValue, nConversion = 0)
     {
@@ -1260,7 +1260,7 @@ export default class Macro10 {
      *
      * @this {Macro10}
      * @param {string} sOperands
-     * @return {string|null} (if the operands contain a symbol, return it)
+     * @returns {string|null} (if the operands contain a symbol, return it)
      */
     getSymbol(sOperands)
     {
@@ -1274,7 +1274,7 @@ export default class Macro10 {
      * @this {Macro10}
      * @param {string} sOperands
      * @param {boolean} [fParens] (true to strip any parens from around the entire operands)
-     * @return {Array.<string>}
+     * @returns {Array.<string>}
      */
     getValues(sOperands, fParens)
     {
@@ -1308,7 +1308,7 @@ export default class Macro10 {
      *
      * @this {Macro10}
      * @param {string} sName
-     * @return {boolean}
+     * @returns {boolean}
      */
     isDefined(sName)
     {
@@ -1320,7 +1320,7 @@ export default class Macro10 {
      *
      * @this {Macro10}
      * @param {string} sName
-     * @return {boolean}
+     * @returns {boolean}
      */
     isMacro(sName)
     {
@@ -1332,7 +1332,7 @@ export default class Macro10 {
      *
      * @this {Macro10}
      * @param {string} sName
-     * @return {boolean}
+     * @returns {boolean}
      */
     isSymbol(sName)
     {
@@ -1344,7 +1344,7 @@ export default class Macro10 {
      *
      * @this {Macro10}
      * @param {string} ch
-     * @return {boolean}
+     * @returns {boolean}
      */
     isSymbolChar(ch)
     {
@@ -1356,7 +1356,7 @@ export default class Macro10 {
      *
      * @this {Macro10}
      * @param {string} sOperands
-     * @return {string} (returns whatever portion of the string was not part of an ASCII pseudo-op)
+     * @returns {string} (returns whatever portion of the string was not part of an ASCII pseudo-op)
      */
     defASCII(sOperands)
     {
@@ -1403,7 +1403,7 @@ export default class Macro10 {
      * @this {Macro10}
      * @param {string} sOperator
      * @param {string} sOperands
-     * @return {string}
+     * @returns {string}
      */
     defMacro(sOperator, sOperands)
     {
@@ -1563,7 +1563,7 @@ export default class Macro10 {
      *
      * @this {Macro10}
      * @param {string} sLine
-     * @return {string}
+     * @returns {string}
      */
     appendMacro(sLine)
     {
@@ -1958,7 +1958,7 @@ export default class Macro10 {
      * @this {Macro10}
      * @param {number} value
      * @param {number} [nLocation]
-     * @return {number}
+     * @returns {number}
      */
     truncate(value, nLocation = this.nLocation)
     {

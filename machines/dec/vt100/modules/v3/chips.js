@@ -10,7 +10,7 @@
 import Device from "../../../../modules/v3/device.js";
 
 /**
- * @class {VT100Chips}
+ * @class VT100Chips
  * @unrestricted
  */
 export default class VT100Chips extends Device {

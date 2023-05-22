@@ -235,7 +235,7 @@ class Str {
      *
      * @param {string} s is the string representation of some number
      * @param {number} [base] is the radix to use (default is 10); only 2, 8, 10 and 16 are supported
-     * @return {boolean} true if valid, false if invalid (or the specified base isn't supported)
+     * @returns {boolean} true if valid, false if invalid (or the specified base isn't supported)
      */
     static isValidInt(s, base)
     {
@@ -268,7 +268,7 @@ class Str {
      *
      * @param {string} s is the string representation of some number
      * @param {number} [base] is the radix to use (default is 10); can be overridden by prefixes/suffixes
-     * @return {number|undefined} corresponding value, or undefined if invalid
+     * @returns {number|undefined} corresponding value, or undefined if invalid
      */
     static parseInt(s, base)
     {
@@ -385,7 +385,7 @@ class Str {
      * @param {number} cch (the desired number of digits)
      * @param {string} [sPrefix] (default is none)
      * @param {number} [nGrouping]
-     * @return {string}
+     * @returns {string}
      */
     static toBase(n, radix, cch, sPrefix = "", nGrouping = 0)
     {
@@ -446,7 +446,7 @@ class Str {
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of binary digits (0 or undefined for default of either 8, 18, or 36)
      * @param {number} [nGrouping]
-     * @return {string} the binary representation of n
+     * @returns {string} the binary representation of n
      */
     static toBin(n, cch, nGrouping)
     {
@@ -472,7 +472,7 @@ class Str {
      * @param {number|null|undefined} n (interpreted as a 32-bit value)
      * @param {number} [cb] is the desired number of binary bytes (4 is both the default and the maximum)
      * @param {boolean} [fPrefix]
-     * @return {string} the binary representation of n
+     * @returns {string} the binary representation of n
      */
     static toBinBytes(n, cb, fPrefix)
     {
@@ -498,7 +498,7 @@ class Str {
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of octal digits (0 or undefined for default of either 6, 8, or 12)
      * @param {boolean} [fPrefix]
-     * @return {string} the octal representation of n
+     * @returns {string} the octal representation of n
      */
     static toOct(n, cch, fPrefix)
     {
@@ -527,7 +527,7 @@ class Str {
      *
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of decimal digits (0 or undefined for default of either 5 or 11)
-     * @return {string} the decimal representation of n
+     * @returns {string} the decimal representation of n
      */
     static toDec(n, cch)
     {
@@ -563,7 +563,7 @@ class Str {
      * @param {number|*} n (supports integers up to 36 bits now)
      * @param {number} [cch] is the desired number of hex digits (0 or undefined for default of either 4, 8, or 9)
      * @param {boolean} [fPrefix]
-     * @return {string} the hex representation of n
+     * @returns {string} the hex representation of n
      */
     static toHex(n, cch, fPrefix)
     {
@@ -587,7 +587,7 @@ class Str {
      * Alias for Str.toHex(b, 2, true)
      *
      * @param {number|null|undefined} b is a byte value
-     * @return {string} the hex representation of b
+     * @returns {string} the hex representation of b
      */
     static toHexByte(b)
     {
@@ -600,7 +600,7 @@ class Str {
      * Alias for Str.toHex(w, 4, true)
      *
      * @param {number|null|undefined} w is a word (16-bit) value
-     * @return {string} the hex representation of w
+     * @returns {string} the hex representation of w
      */
     static toHexWord(w)
     {
@@ -613,7 +613,7 @@ class Str {
      * Alias for Str.toHex(l, 8, true)
      *
      * @param {number|null|undefined} l is a dword (32-bit) value
-     * @return {string} the hex representation of w
+     * @returns {string} the hex representation of w
      */
     static toHexLong(l)
     {
@@ -630,7 +630,7 @@ class Str {
      *
      * @param {string} sFileName
      * @param {boolean} [fStripExt]
-     * @return {string}
+     * @returns {string}
      */
     static getBaseName(sFileName, fStripExt)
     {
@@ -662,7 +662,7 @@ class Str {
      * Note that we EXCLUDE the period from the returned extension, whereas path.extname() includes it.
      *
      * @param {string} sFileName
-     * @return {string} the filename's extension (in lower-case and EXCLUDING the "."), or an empty string
+     * @returns {string} the filename's extension (in lower-case and EXCLUDING the "."), or an empty string
      */
     static getExtension(sFileName)
     {
@@ -680,7 +680,7 @@ class Str {
      *
      * @param {string} s
      * @param {string} sSuffix
-     * @return {boolean} true if s ends with sSuffix, false if not
+     * @returns {boolean} true if s ends with sSuffix, false if not
      */
     static endsWith(s, sSuffix)
     {
@@ -691,7 +691,7 @@ class Str {
      * escapeHTML(sHTML)
      *
      * @param {string} sHTML
-     * @return {string} with special characters "escaped" as HTML entities, similar to PHP's htmlspecialchars()
+     * @returns {string} with special characters "escaped" as HTML entities, similar to PHP's htmlspecialchars()
      */
     static escapeHTML(sHTML)
     {
@@ -729,7 +729,7 @@ class Str {
      * @param {string} sSearch
      * @param {string} sReplace
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static replace(sSearch, sReplace, s)
     {
@@ -746,7 +746,7 @@ class Str {
      * @param {string} sSearch
      * @param {string} sReplace
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static replaceAll(sSearch, sReplace, s)
     {
@@ -760,7 +760,7 @@ class Str {
      *
      * @param {Object} a
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static replaceArray(a, s)
     {
@@ -792,7 +792,7 @@ class Str {
      * @param {string} s is a string
      * @param {number} cch is desired length
      * @param {boolean} [fPadLeft] (default is padding on the right)
-     * @return {string} the original string (s) with spaces padding it to the specified length
+     * @returns {string} the original string (s) with spaces padding it to the specified length
      */
     static pad(s, cch, fPadLeft)
     {
@@ -816,7 +816,7 @@ class Str {
      * local time.
      *
      * @param {...} args
-     * @return {Date} (UTC unless a time string with a non-GMT timezone is explicitly provided)
+     * @returns {Date} (UTC unless a time string with a non-GMT timezone is explicitly provided)
      */
     static parseDate(...args)
     {
@@ -839,7 +839,7 @@ class Str {
      * isValidDate(date)
      *
      * @param {Date} date
-     * @return {boolean}
+     * @returns {boolean}
      */
     static isValidDate(date)
     {
@@ -859,7 +859,7 @@ class Str {
      *
      * @param {string} format
      * @param {...} args
-     * @return {string}
+     * @returns {string}
      */
     static sprintf(format, ...args)
     {
@@ -1233,7 +1233,7 @@ class Str {
      *
      * @param {string} s
      * @param {boolean} [fPad]
-     * @return {string}
+     * @returns {string}
      */
     static stripLeadingZeros(s, fPad)
     {
@@ -1247,7 +1247,7 @@ class Str {
      * trim(s)
      *
      * @param {string} s
-     * @return {string}
+     * @returns {string}
      */
     static trim(s)
     {
@@ -1261,7 +1261,7 @@ class Str {
      * toASCIICode(b)
      *
      * @param {number} b
-     * @return {string}
+     * @returns {string}
      */
     static toASCIICode(b)
     {
@@ -1371,7 +1371,7 @@ class Usr {
      * @param {Array} a is an array
      * @param {number|string|Array|Object} v
      * @param {function((number|string|Array|Object), (number|string|Array|Object))} [fnCompare]
-     * @return {number} the index of matching entry if non-negative, otherwise the index of the insertion point
+     * @returns {number} the index of matching entry if non-negative, otherwise the index of the insertion point
      */
     static binarySearch(a, v, fnCompare)
     {
@@ -1419,7 +1419,7 @@ class Usr {
     /**
      * getTimestamp()
      *
-     * @return {string} timestamp containing the current date and time ("yyyy-mm-dd hh:mm:ss")
+     * @returns {string} timestamp containing the current date and time ("yyyy-mm-dd hh:mm:ss")
      */
     static getTimestamp()
     {
@@ -1442,7 +1442,7 @@ class Usr {
      *
      * @param {number} nMonth (1-12)
      * @param {number} nYear (normally a 4-digit year, but it may also be mod 100)
-     * @return {number} the maximum (1-based) day allowed for the specified month and year
+     * @returns {number} the maximum (1-based) day allowed for the specified month and year
      */
     static getMonthDays(nMonth, nYear)
     {
@@ -1479,7 +1479,7 @@ class Usr {
      *
      * @param {Date} date
      * @param {number} days (+/-)
-     * @return {Date}
+     * @returns {Date}
      */
     static adjustDays(date, days)
     {
@@ -1491,7 +1491,7 @@ class Usr {
      *
      * @param {Date|string} date1
      * @param {Date|string} date2
-     * @return {number} (date1 - date2, returned as a signed integer number of days)
+     * @returns {number} (date1 - date2, returned as a signed integer number of days)
      */
     static subtractDays(date1, date2)
     {
@@ -1514,7 +1514,7 @@ class Usr {
      * The above set bit field "bfs.num" in numeric variable "n" to the value 1.
      *
      * @param {Object} bfs
-     * @return {BitFields}
+     * @returns {BitFields}
      */
     static defineBitFields(bfs)
     {
@@ -1533,7 +1533,7 @@ class Usr {
      *
      * @param {BitFields} bfs
      * @param {...number} var_args
-     * @return {number} a value containing all supplied bit fields
+     * @returns {number} a value containing all supplied bit fields
      */
     static initBitFields(bfs, var_args)
     {
@@ -1550,7 +1550,7 @@ class Usr {
      *
      * @param {BitField} bf
      * @param {number} v is a value containing bit fields
-     * @return {number} the value of the bit field in v defined by bf
+     * @returns {number} the value of the bit field in v defined by bf
      */
     static getBitField(bf, v)
     {
@@ -1563,7 +1563,7 @@ class Usr {
      * @param {BitField} bf
      * @param {number} v is a value containing bit fields
      * @param {number} n is a value to store in v in the bit field defined by bf
-     * @return {number} updated v
+     * @returns {number} updated v
      */
     static setBitField(bf, v, n)
     {
@@ -4424,7 +4424,7 @@ class C1PPanel extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -4985,7 +4985,7 @@ class C1PCPU extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "run")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -5138,7 +5138,7 @@ class C1PCPU extends Component {
      * @param {number} end address
      * @param {Component} component
      * @param {function(number,number)} fn of previously added handler
-     * @return {boolean} true if remove was successful, false if the handler was not found
+     * @returns {boolean} true if remove was successful, false if the handler was not found
      */
     removeReadNotify(start, end, component, fn)
     {
@@ -5197,7 +5197,7 @@ class C1PCPU extends Component {
      * @param {number} end address
      * @param {Component} component
      * @param {function(number,number)} fn of previously added handler
-     * @return {boolean} true if remove was successful, false if the handler was not found
+     * @returns {boolean} true if remove was successful, false if the handler was not found
      */
     removeWriteNotify(start, end, component, fn)
     {
@@ -5220,7 +5220,7 @@ class C1PCPU extends Component {
      * @param {number} end address
      * @param {Component} component
      * @param {function(number,number)} fn of previously added handler
-     * @return {number} index of the matching handler, or -1 if not found
+     * @returns {number} index of the matching handler, or -1 if not found
      */
     findNotify(aNotify, start, end, component, fn)
     {
@@ -5241,7 +5241,7 @@ class C1PCPU extends Component {
      * @param {number} end address
      * @param {Component} component
      * @param {function(number,number)} fn of previously added handler
-     * @return {Array} bounds of previous handler ([0] and [1]) and new lower and upper address bounds ([2] and [3])
+     * @returns {Array} bounds of previous handler ([0] and [1]) and new lower and upper address bounds ([2] and [3])
      */
     removeNotify(aNotify, start, end, component, fn)
     {
@@ -5356,7 +5356,7 @@ class C1PCPU extends Component {
 
     /**
      * @this {C1PCPU}
-     * @return {boolean}
+     * @returns {boolean}
      */
     isRunning()
     {
@@ -5433,7 +5433,7 @@ class C1PCPU extends Component {
 
     /**
      * @this {C1PCPU}
-     * @return {number}
+     * @returns {number}
      */
     calcRemainingTime()
     {
@@ -5602,7 +5602,7 @@ class C1PCPU extends Component {
     /**
      * @this {C1PCPU}
      * @param {number} nMinCycles (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {boolean|undefined} undefined indicates that the last instruction was not executed (eg,
+     * @returns {boolean|undefined} undefined indicates that the last instruction was not executed (eg,
      * we hit an execution breakpoint), false implies a post-execution condition was triggered (eg, a write
      * breakpoint), and true indicates successful completion of all requested cycles.
      */
@@ -5779,7 +5779,7 @@ class C1PCPU extends Component {
      * updateMemory() function).
      *
      * @this {C1PCPU}
-     * @return {number}
+     * @returns {number}
      */
     getCycles()
     {
@@ -5789,7 +5789,7 @@ class C1PCPU extends Component {
     /**
      * @this {C1PCPU}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      *
      * Unlike the Debugger versions of these functions, these presume that addr is always valid,
      * since it's internally generated, not user-supplied. Of course, we could still have internal
@@ -5811,7 +5811,7 @@ class C1PCPU extends Component {
     /**
      * @this {C1PCPU}
      * @param {number} addr
-     * @return {number}
+     * @returns {number}
      */
     getWord(addr)
     {
@@ -5835,7 +5835,7 @@ class C1PCPU extends Component {
 
     /**
      * @this {C1PCPU}
-     * @return {number}
+     * @returns {number}
      */
     getRegP()
     {
@@ -5992,7 +5992,7 @@ class C1PCPU extends Component {
      * @this {C1PCPU}
      * @param {number} reg
      * @param {number} mem
-     * @return {number}
+     * @returns {number}
      *
      * Refer to http://www.6502.org/tutorials/decimal_mode.html for 6502-specific details.
      * Refer to http://homepage.cs.uiowa.edu/~jones/bcd/bcd.html for optimization tips.
@@ -6057,7 +6057,7 @@ class C1PCPU extends Component {
      * @this {C1PCPU}
      * @param {number} reg
      * @param {number} mem
-     * @return {number}
+     * @returns {number}
      *
      * Refer to http://www.6502.org/tutorials/decimal_mode.html for 6502-specific details.
      * Refer to http://homepage.cs.uiowa.edu/~jones/bcd/bcd.html for optimization tips.
@@ -9029,7 +9029,7 @@ class C1PKeyboard extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "esc", "ctrl-c")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -9186,7 +9186,7 @@ class C1PKeyboard extends Component {
      *
      * @this {C1PKeyboard}
      * @param {boolean} fRepeat is true if a timeout had already been active for the current key
-     * @return {number}
+     * @returns {number}
      */
     calcReleaseDelay(fRepeat)
     {
@@ -9271,7 +9271,7 @@ class C1PKeyboard extends Component {
      * @this {C1PKeyboard}
      * @param {Object} event
      * @param {boolean} fDown is true if called for a keyDown event, false if called for a keyUp event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      */
     keyEvent(event, fDown)
     {
@@ -9406,7 +9406,7 @@ class C1PKeyboard extends Component {
     /**
      * @this {C1PKeyboard}
      * @param {Object} event
-     * @return {boolean} true to pass the event along, false to consume it
+     * @returns {boolean} true to pass the event along, false to consume it
      *
      * We've stopped relying on keyPress for keyboard emulation purposes, but it's still handy to hook and monitor
      * when debugging.
@@ -9439,7 +9439,7 @@ class C1PKeyboard extends Component {
     /**
      * @this {C1PKeyboard}
      * @param {number} charCode
-     * @return {boolean} true if successfully simulated, false if unrecognized/unsupported key
+     * @returns {boolean} true if successfully simulated, false if unrecognized/unsupported key
      */
     keyPressSimulate(charCode)
     {
@@ -9522,7 +9522,7 @@ class C1PKeyboard extends Component {
      * @param {number} charCode
      * @param {boolean} fDown
      * @param {number} simCode indicates the origin of the event
-     * @return {boolean} true if successfully simulated, false if unrecognized/unsupported key
+     * @returns {boolean} true if successfully simulated, false if unrecognized/unsupported key
      */
     keyEventSimulate(charCode, fDown, simCode)
     {
@@ -9707,7 +9707,7 @@ class C1PKeyboard extends Component {
      *
      * @this {C1PKeyboard}
      * @param {number} charCode
-     * @return {boolean}
+     * @returns {boolean}
      *
      isShift(charCode)
      {
@@ -9932,7 +9932,7 @@ class C1PVideo extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "refresh")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -10189,7 +10189,7 @@ class C1PVideo extends Component {
      * updateScreen() updates the screen buffer from the video buffer and updates the window with any changes.
      *
      * @this {C1PVideo}
-     * @return {boolean}
+     * @returns {boolean}
      *
      * For every byte in the video buffer, this renders it if it differs from the byte stored in the screen buffer,
      * and then updates the screen buffer to match.  Since initScreen() sets every byte in the screen buffer
@@ -10218,7 +10218,7 @@ class C1PVideo extends Component {
      * @this {C1PVideo}
      * @param {number} offset
      * @param {number} b
-     * @return {boolean}
+     * @returns {boolean}
      */
     writeByte(offset, b)
     {
@@ -10236,7 +10236,7 @@ class C1PVideo extends Component {
      * @param {number} col
      * @param {number} row
      * @param {number} b
-     * @return {boolean} true if successful, false if not
+     * @returns {boolean} true if successful, false if not
      *
      * I originally used (screenWidth,screenHeight) == (512,448) and (cols,rows) == (32,32) and (cxChar,cyChar) == (16,16),
      * and I simply copied the source cells 1-to-1 to the destination (16,16), knowing that we would never try to display
@@ -10532,7 +10532,7 @@ class C1PSerialPort extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "listSerial")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -11464,7 +11464,7 @@ class C1PDiskController extends Component {
     * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "listDisk")
     * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
     * @param {string} [sValue] optional data value
-    * @return {boolean} true if binding was successful, false if unrecognized binding request
+    * @returns {boolean} true if binding was successful, false if unrecognized binding request
     */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -11721,7 +11721,7 @@ class C1PDiskController extends Component {
     * @this {C1PDiskController}
     * @param {number} port address (0x0000-0x00FF) relative to addrController (0xC000)
     * @param {boolean} fWrite is true if port write, false if port read
-    * @return {Object} reg will always be a valid register object, but it may be the "unknown" register if we don't recognize the port.
+    * @returns {Object} reg will always be a valid register object, but it may be the "unknown" register if we don't recognize the port.
     */
     getReg(port, fWrite)
     {
@@ -11859,7 +11859,7 @@ class C1PDiskController extends Component {
 
     /**
      * @this {C1PDiskController}
-     * @return {number} current byte of data from the currently selected drive, or null if no (more) data available
+     * @returns {number} current byte of data from the currently selected drive, or null if no (more) data available
      */
     advanceDriveData()
     {
@@ -11890,7 +11890,7 @@ class C1PDiskController extends Component {
      *
      * @this {C1PDiskController}
      * @param {number|undefined} bPDA
-     * @return {number} updated bits for PDA
+     * @returns {number} updated bits for PDA
      */
     updatePDA(bPDA)
     {
@@ -11949,7 +11949,7 @@ class C1PDiskController extends Component {
      *
      * @this {C1PDiskController}
      * @param {number|undefined} bPDB
-     * @return {number} updated bits for PDB
+     * @returns {number} updated bits for PDB
      */
     updatePDB(bPDB)
     {
@@ -12003,7 +12003,7 @@ class C1PDiskController extends Component {
      *
      * @this {C1PDiskController}
      * @param {number|undefined} bSTAT
-     * @return {number} updated bits for STAT
+     * @returns {number} updated bits for STAT
      */
     updateSTAT(bSTAT)
     {
@@ -12028,7 +12028,7 @@ class C1PDiskController extends Component {
     /**
      * @this {C1PDiskController}
      * @param {boolean} fLoaded is true if the selected drive must be loaded, false if don't care
-     * @return {Object} drive reference to the selected drive, or null if no drive is selected or it doesn't meet the fLoaded requirement
+     * @returns {Object} drive reference to the selected drive, or null if no drive is selected or it doesn't meet the fLoaded requirement
      *
      getSelectedDrive(fLoaded)
      {
@@ -12533,7 +12533,7 @@ class C1PDebugger extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -12816,7 +12816,7 @@ class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {boolean}
+     * @returns {boolean}
      */
     run()
     {
@@ -12828,7 +12828,7 @@ class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} n (0 implies a single-step, and therefore breakpoints should be ignored)
-     * @return {boolean}
+     * @returns {boolean}
      */
     step(n)
     {
@@ -12866,7 +12866,7 @@ class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {boolean}
+     * @returns {boolean}
      *
      * Make sure the CPU is ready (finished initializing), not busy (already running), and not in an error state.
      */
@@ -12963,7 +12963,7 @@ class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {number} bOpCode
-     * @return {boolean} true to proceed, false to halt
+     * @returns {boolean} true to proceed, false to halt
      *
      * This is a check function, called by the CPU, to inform us about the next instruction to be executed, giving
      * us an opportunity to look for "exec" breakpoints and update opcode frequencies and instruction history.
@@ -12986,7 +12986,7 @@ class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {boolean} true to proceed, false to halt
+     * @returns {boolean} true to proceed, false to halt
      *
      * This is a check function, called by the CPU, to inform us that a memory read occurred, giving us an
      * opportunity to track the read if we want, and look for a matching "read" breakpoint, if any.
@@ -13004,7 +13004,7 @@ class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {number} value written
-     * @return {boolean} true to proceed, false to halt
+     * @returns {boolean} true to proceed, false to halt
      *
      * This is a check function, called by the CPU, to inform us that a memory write occurred, giving us an
      * opportunity to track the write if we want, and look for a matching "write" breakpoint, if any.
@@ -13034,7 +13034,7 @@ class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {number} b
-     * @return {number}
+     * @returns {number}
      */
     addSignedByte(addr, b)
     {
@@ -13048,7 +13048,7 @@ class C1PDebugger extends Component {
      *
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getByte(addr)
     {
@@ -13100,7 +13100,7 @@ class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     addExecBreakpoint(addr)
     {
@@ -13113,7 +13113,7 @@ class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     addReadBreakpoint(addr)
     {
@@ -13126,7 +13126,7 @@ class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {number} addr
-     * @return {boolean}
+     * @returns {boolean}
      */
     addWriteBreakpoint(addr)
     {
@@ -13138,7 +13138,7 @@ class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {Array}
+     * @returns {Array}
      */
     getExecBreakpoints()
     {
@@ -13147,7 +13147,7 @@ class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {Array}
+     * @returns {Array}
      */
     getReadBreakpoints()
     {
@@ -13156,7 +13156,7 @@ class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {Array}
+     * @returns {Array}
      */
     getWriteBreakpoints()
     {
@@ -13168,7 +13168,7 @@ class C1PDebugger extends Component {
      * @param {Array} aBreak
      * @param {number} addr
      * @param {boolean} [fRemove]
-     * @return {boolean}
+     * @returns {boolean}
      */
     findBreakpoint(aBreak, addr, fRemove)
     {
@@ -13189,7 +13189,7 @@ class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {boolean} [fRemove]
-     * @return {boolean}
+     * @returns {boolean}
      */
     findExecBreakpoint(addr, fRemove)
     {
@@ -13200,7 +13200,7 @@ class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {boolean} [fRemove]
-     * @return {boolean}
+     * @returns {boolean}
      */
     findReadBreakpoint(addr, fRemove)
     {
@@ -13211,7 +13211,7 @@ class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {boolean} [fRemove]
-     * @return {boolean}
+     * @returns {boolean}
      */
     findWriteBreakpoint(addr, fRemove)
     {
@@ -13255,7 +13255,7 @@ class C1PDebugger extends Component {
      * @param {number} addr
      * @param {Array} aBreakpoints
      * @param {string} sType (ie, "exec" or "write")
-     * @return {boolean} true if breakpoint has been hit, false if not
+     * @returns {boolean} true if breakpoint has been hit, false if not
      */
     checkBreakpoint(addr, aBreakpoints, sType)
     {
@@ -13279,7 +13279,7 @@ class C1PDebugger extends Component {
      * @this {C1PDebugger}
      * @param {number} addr
      * @param {number} [nIns] is an associated instruction number, or 0 (or undefined) if none
-     * @return {string}
+     * @returns {string}
      */
     getInstruction(addr, nIns)
     {
@@ -13389,7 +13389,7 @@ class C1PDebugger extends Component {
      * @param {string} sCode
      * @param {string|undefined} sOperand
      * @param {number} addr of memory where this instruction is being assembled
-     * @return {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
+     * @returns {Array.<number>} of opcode bytes; if the instruction can't be parsed, the array will be empty
      */
     parseInstruction(sCode, sOperand, addr)
     {
@@ -13534,7 +13534,7 @@ class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
-     * @return {string}
+     * @returns {string}
      */
     getRegs()
     {
@@ -13549,7 +13549,7 @@ class C1PDebugger extends Component {
     /**
      * @this {C1PDebugger}
      * @param {string|undefined} [sAddr]
-     * @return {number|undefined}
+     * @returns {number|undefined}
      */
     getUserAddr(sAddr)
     {
@@ -13878,7 +13878,7 @@ class C1PDebugger extends Component {
      * Prints the contents of the Debugger's "info" buffer (filled by calls like cpu.dbg.info())
      * @this {C1PDebugger}
      * @param {string|undefined} sCount
-     * @return {boolean|undefined} true only if the "info" command is supported
+     * @returns {boolean|undefined} true only if the "info" command is supported
      */
     doInfo(sCount)
     {
@@ -14379,7 +14379,7 @@ class C1PComputer extends Component {
      * @param {string} sBinding is the value of the 'binding' parameter stored in the HTML control's "data-value" attribute (eg, "reset")
      * @param {HTMLElement} control is the HTML control DOM object (eg, HTMLButtonElement)
      * @param {string} [sValue] optional data value
-     * @return {boolean} true if binding was successful, false if unrecognized binding request
+     * @returns {boolean} true if binding was successful, false if unrecognized binding request
      */
     setBinding(sHTMLType, sBinding, control, sValue)
     {
@@ -14405,7 +14405,7 @@ class C1PComputer extends Component {
      * @param {string} sType
      * @param {string} [idRelated] of related component
      * @param {Component|null} [componentPrev] of previously returned component, if any
-     * @return {Component|null}
+     * @returns {Component|null}
      */
     getComponentByType(sType, idRelated, componentPrev)
     {
@@ -14917,7 +14917,7 @@ function resolveXML(sURL, sXML, display, done)
  * @param {string} [sXSLFile]
  * @param {string} [sParms] (machine parameters, if any)
  * @param {string} [sClass] (an optional machine class name used to style the machine)
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -15184,7 +15184,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -15200,7 +15200,7 @@ function embedC1P(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -15216,7 +15216,7 @@ function embedPCx86(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -15232,7 +15232,7 @@ function embedPCx80(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -15248,7 +15248,7 @@ function embedPDP10(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  * @param {string} [sXSLFile]
  * @param {string} [sParms]
  * @param {string} [sClass]
- * @return {boolean} true if successful, false if error
+ * @returns {boolean} true if successful, false if error
  */
 function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
 {
@@ -15261,7 +15261,7 @@ function embedPDP11(idMachine, sXMLFile, sXSLFile, sParms, sClass)
  *
  * @param {string} idMachine
  * @param {string} sType
- * @return {Component|null}
+ * @returns {Component|null}
  */
 function findMachineComponent(idMachine, sType)
 {
@@ -15281,7 +15281,7 @@ function findMachineComponent(idMachine, sType)
  * @param {string} sComponent
  * @param {string} sCommand
  * @param {string} [sValue]
- * @return {boolean}
+ * @returns {boolean}
  */
 function commandMachine(control, fSingle, idMachine, sComponent, sCommand, sValue)
 {

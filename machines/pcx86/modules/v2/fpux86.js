@@ -181,7 +181,7 @@ export default class FPUx86 extends Component {
      * @this {FPUx86}
      * @param {Object|null} data
      * @param {boolean} [fRepower]
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     powerUp(data, fRepower)
     {
@@ -201,7 +201,7 @@ export default class FPUx86 extends Component {
      * @this {FPUx86}
      * @param {boolean} [fSave]
      * @param {boolean} [fShutdown]
-     * @return {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
+     * @returns {Object|boolean} component state if fSave; otherwise, true if successful, false if failure
      */
     powerDown(fSave, fShutdown)
     {
@@ -214,7 +214,7 @@ export default class FPUx86 extends Component {
      * This implements save support for the FPUx86 component.
      *
      * @this {FPUx86}
-     * @return {Object}
+     * @returns {Object}
      */
     save()
     {
@@ -242,7 +242,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {Object} data
-     * @return {boolean} true if successful, false if failure
+     * @returns {boolean} true if successful, false if failure
      */
     restore(data)
     {
@@ -293,7 +293,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {number} model
-     * @return {boolean}
+     * @returns {boolean}
      */
     isModel(model)
     {
@@ -308,7 +308,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {number} model
-     * @return {boolean}
+     * @returns {boolean}
      */
     isAtLeastModel(model)
     {
@@ -326,7 +326,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {boolean} [fError]
-     * @return {boolean} (true if there was an error or the CPU was running, false if not)
+     * @returns {boolean} (true if there was an error or the CPU was running, false if not)
      */
     opStop(fError)
     {
@@ -384,7 +384,7 @@ export default class FPUx86 extends Component {
      * checkException()
      *
      * @this {FPUx86}
-     * @return {boolean} (true if unmasked exception exists, false if not)
+     * @returns {boolean} (true if unmasked exception exists, false if not)
      */
     checkException()
     {
@@ -427,7 +427,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {number} n (one or more of the above error status bits)
-     * @return {boolean} (true if unmasked exception exists, false if not)
+     * @returns {boolean} (true if unmasked exception exists, false if not)
      */
     setException(n)
     {
@@ -445,7 +445,7 @@ export default class FPUx86 extends Component {
      * getControl()
      *
      * @this {FPUx86}
-     * @return {number}
+     * @returns {number}
      */
     getControl()
     {
@@ -483,7 +483,7 @@ export default class FPUx86 extends Component {
      * getStatus()
      *
      * @this {FPUx86}
-     * @return {number} regStatus merged with iST
+     * @returns {number} regStatus merged with iST
      */
     getStatus()
     {
@@ -517,7 +517,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {number|null} v
-     * @return {boolean} (true if no exception, false otherwise)
+     * @returns {boolean} (true if no exception, false otherwise)
      */
     checkOperand(v)
     {
@@ -529,7 +529,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {number} v
-     * @return {boolean} (true if no exception, false otherwise)
+     * @returns {boolean} (true if no exception, false otherwise)
      */
     checkResult(v)
     {
@@ -542,7 +542,7 @@ export default class FPUx86 extends Component {
      * @this {FPUx86}
      * @param {number|null} operand1
      * @param {number|null} operand2
-     * @return {number|null}
+     * @returns {number|null}
      */
     doAdd(operand1, operand2)
     {
@@ -560,7 +560,7 @@ export default class FPUx86 extends Component {
      * @this {FPUx86}
      * @param {number|null} operand1
      * @param {number|null} operand2
-     * @return {number|null}
+     * @returns {number|null}
      */
     doSubtract(operand1, operand2)
     {
@@ -578,7 +578,7 @@ export default class FPUx86 extends Component {
      * @this {FPUx86}
      * @param {number|null} operand1
      * @param {number|null} operand2
-     * @return {number|null}
+     * @returns {number|null}
      */
     doMultiply(operand1, operand2)
     {
@@ -598,7 +598,7 @@ export default class FPUx86 extends Component {
      * @this {FPUx86}
      * @param {number|null} dividend
      * @param {number|null} divisor
-     * @return {number|null}
+     * @returns {number|null}
      */
     doDivide(dividend, divisor)
     {
@@ -618,7 +618,7 @@ export default class FPUx86 extends Component {
      * @this {FPUx86}
      * @param {number|null} operand1
      * @param {number|null} operand2
-     * @return {boolean}
+     * @returns {boolean}
      */
     doCompare(operand1, operand2)
     {
@@ -645,7 +645,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {number|null} operand
-     * @return {number|null}
+     * @returns {number|null}
      */
     doSquareRoot(operand)
     {
@@ -671,7 +671,7 @@ export default class FPUx86 extends Component {
      * @this {FPUx86}
      * @param {number|null} operand
      * @param {number} [max] (ie, 0x8000, 0x80000000, or 0x8000000000000000)
-     * @return {number|null} (rounded result, or null if there was an unmasked exception)
+     * @returns {number|null} (rounded result, or null if there was an unmasked exception)
      */
     roundValue(operand, max)
     {
@@ -713,7 +713,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {number} v
-     * @return {number}
+     * @returns {number}
      */
     truncateValue(v)
     {
@@ -725,7 +725,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {number} iReg (register index)
-     * @return {number} tag value for register
+     * @returns {number} tag value for register
      */
     getTag(iReg)
     {
@@ -748,7 +748,7 @@ export default class FPUx86 extends Component {
      * getTags()
      *
      * @this {FPUx86}
-     * @return {number} tag values for all registers
+     * @returns {number} tag values for all registers
      */
     getTags()
     {
@@ -801,7 +801,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {number} i (eg, 0 for top-of-stack)
-     * @return {boolean} true if intTmpLR was loaded, false if not
+     * @returns {boolean} true if intTmpLR was loaded, false if not
      */
     getWI(i)
     {
@@ -815,7 +815,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {number} i (eg, 0 for top-of-stack)
-     * @return {boolean} true if intTmpLR was loaded, false if not
+     * @returns {boolean} true if intTmpLR was loaded, false if not
      */
     getSI(i)
     {
@@ -829,7 +829,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {number} i (eg, 0 for top-of-stack)
-     * @return {boolean} true if intTmpLR was loaded, false if not
+     * @returns {boolean} true if intTmpLR was loaded, false if not
      */
     getLI(i)
     {
@@ -841,7 +841,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {number} i (eg, 0 for top-of-stack)
-     * @return {boolean} true if regTmpSR was loaded, false if not
+     * @returns {boolean} true if regTmpSR was loaded, false if not
      */
     getSR(i)
     {
@@ -861,7 +861,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {number} i (eg, 0 for top-of-stack)
-     * @return {boolean} true if regTmpLR was loaded, false if not
+     * @returns {boolean} true if regTmpLR was loaded, false if not
      */
     getLR(i)
     {
@@ -881,7 +881,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {number} i (eg, 0 for top-of-stack)
-     * @return {number|null} v
+     * @returns {number|null} v
      */
     getST(i)
     {
@@ -905,7 +905,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {number} i (eg, 0 for top-of-stack)
-     * @return {number}
+     * @returns {number}
      */
     getSTSign(i)
     {
@@ -919,7 +919,7 @@ export default class FPUx86 extends Component {
      * @this {FPUx86}
      * @param {number} i (eg, 0 for top-of-stack)
      * @param {number|null} v
-     * @return {boolean}
+     * @returns {boolean}
      */
     setST(i, v)
     {
@@ -938,7 +938,7 @@ export default class FPUx86 extends Component {
      * @this {FPUx86}
      * @param {number} i (stack index, 0-7)
      * @param {boolean} [fSafe] (true to ignore all exception criteria; used by FSAVE)
-     * @return {Array.<number>|null} ("temp-real" aka TR, as an array of three 32-bit integers)
+     * @returns {Array.<number>|null} ("temp-real" aka TR, as an array of three 32-bit integers)
      */
     getTR(i, fSafe)
     {
@@ -971,7 +971,7 @@ export default class FPUx86 extends Component {
      * Returns the (16-bit) "word-integer" value located at regEA.
      *
      * @this {FPUx86}
-     * @return {number} v
+     * @returns {number} v
      */
     getWIFromEA()
     {
@@ -985,7 +985,7 @@ export default class FPUx86 extends Component {
      * Returns the (32-bit) "short-integer" value located at regEA.
      *
      * @this {FPUx86}
-     * @return {number} v
+     * @returns {number} v
      */
     getSIFromEA()
     {
@@ -999,7 +999,7 @@ export default class FPUx86 extends Component {
      * Returns the (64-bit) "long-integer" value located at regEA.
      *
      * @this {FPUx86}
-     * @return {number} v
+     * @returns {number} v
      */
     getLIFromEA()
     {
@@ -1015,7 +1015,7 @@ export default class FPUx86 extends Component {
      * Sets the internal regTmpSR register to the (32-bit) "short-real" value located at regEA.
      *
      * @this {FPUx86}
-     * @return {number} v
+     * @returns {number} v
      */
     getSRFromEA()
     {
@@ -1030,7 +1030,7 @@ export default class FPUx86 extends Component {
      * Sets the internal regTmpLR register to the (64-bit) "long-real" value located at regEA.
      *
      * @this {FPUx86}
-     * @return {number} v
+     * @returns {number} v
      */
     getLRFromEA()
     {
@@ -1046,7 +1046,7 @@ export default class FPUx86 extends Component {
      * Sets the internal intTmpTR register to the (80-bit) "temp-real" value located at regEA.
      *
      * @this {FPUx86}
-     * @return {Array.<number>} intTmpTR
+     * @returns {Array.<number>} intTmpTR
      */
     getTRFromEA()
     {
@@ -1122,7 +1122,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {Array.<number>} a (eg, intTmpTR)
-     * @return {number} v
+     * @returns {number} v
      */
     getLRFromTR(a)
     {
@@ -1169,7 +1169,7 @@ export default class FPUx86 extends Component {
      * @this {FPUx86}
      * @param {number} loLR
      * @param {number} hiLR
-     * @return {Array.<number>} (intTmpTR)
+     * @returns {Array.<number>} (intTmpTR)
      */
     getTRFromLR(loLR, hiLR)
     {
@@ -1215,7 +1215,7 @@ export default class FPUx86 extends Component {
      * @this {FPUx86}
      * @param {number} i (32-bit integer containing n BCD digits)
      * @param {number} n (number of BCD digits to decode)
-     * @return {number} (binary value representing the specified number of BCD digits)
+     * @returns {number} (binary value representing the specified number of BCD digits)
      */
     decodeBCD(i, n)
     {
@@ -1237,7 +1237,7 @@ export default class FPUx86 extends Component {
      * @this {FPUx86}
      * @param {number} v (binary value from which to extract n BCD digits)
      * @param {number} n (number of BCD digits to extract)
-     * @return {number} (integer containing the requested number of BCD digits)
+     * @returns {number} (integer containing the requested number of BCD digits)
      */
     encodeBCD(v, n)
     {
@@ -1255,7 +1255,7 @@ export default class FPUx86 extends Component {
      * popValue()
      *
      * @this {FPUx86}
-     * @return {number|null} v
+     * @returns {number|null} v
      */
     popValue()
     {
@@ -1299,7 +1299,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {number} addr
-     * @return {number} updated addr
+     * @returns {number} updated addr
      */
     loadEnv(addr)
     {
@@ -1335,7 +1335,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {number} addr
-     * @return {number} updated addr
+     * @returns {number} updated addr
      */
     saveEnv(addr)
     {
@@ -1444,7 +1444,7 @@ export default class FPUx86 extends Component {
      * If we choose to do nothing, then we must return false, so that the CPU can charge a default number of cycles.
      *
      * @this {FPUx86}
-     * @return {boolean} true if implemented, false if not
+     * @returns {boolean} true if implemented, false if not
      */
     opWAIT()
     {
@@ -1473,7 +1473,7 @@ export default class FPUx86 extends Component {
      *
      * @this {FPUx86}
      * @param {number} i (stack index, relative to ST)
-     * @return {Array.<number>|null} (an array of information as described above, or null if invalid element)
+     * @returns {Array.<number>|null} (an array of information as described above, or null if invalid element)
      */
     readFPUStack(i)
     {
@@ -1507,7 +1507,7 @@ export default class FPUx86 extends Component {
      * @this {FPUx86}
      * @param {number} min (inclusive)
      * @param {number} max (inclusive)
-     * @return {number}
+     * @returns {number}
      *
      getRandomInt(min, max)
      {
