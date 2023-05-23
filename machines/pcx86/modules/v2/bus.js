@@ -947,12 +947,12 @@ export default class BusX86 extends Component {
                 if (btiPrev && slotPrev) {
                     let btoPrev = this.abtObjects[slotPrev-1];
                     if (!btoPrev) {
-                        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.WARN)) {
+                        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.WARNING)) {
                             this.dbg.message("writeBackTrack(%" + Str.toHex(addr) + ',' + Str.toHex(bti) + "): previous index (" + Str.toHex(btiPrev) + ") refers to empty slot (" + slotPrev + ")");
                         }
                     }
                     else if (btoPrev.refs <= 0) {
-                        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.WARN)) {
+                        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.WARNING)) {
                             this.dbg.message("writeBackTrack(%" + Str.toHex(addr) + ',' + Str.toHex(bti) + "): previous index (" + Str.toHex(btiPrev) + ") refers to object with bad ref count (" + btoPrev.refs + ")");
                         }
                     } else if (!--btoPrev.refs) {

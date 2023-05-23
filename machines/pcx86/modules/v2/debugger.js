@@ -2136,7 +2136,7 @@ export default class DebuggerX86 extends DbgLib {
     messageInit(sEnable)
     {
         this.dbg = this;
-        this.bitsMessage = Messages.WARN;
+        this.bitsMessage = Messages.WARNING;
         this.sMessagePrev = null;
         this.aMessageBuffer = [];
         let aEnable = this.parseCommand(sEnable, false, '|');
@@ -2616,7 +2616,7 @@ export default class DebuggerX86 extends DbgLib {
         /*
          * We don't want to see "unknown" I/O messages unless WARN is enabled.
          */
-        if (!name) bitsMessage = this.setBits(bitsMessage, Messages.WARN);
+        if (!name) bitsMessage = this.setBits(bitsMessage, Messages.WARNING);
 
         if (addrFrom == undefined || this.testBits(this.bitsMessage, bitsMessage)) {
             let sFrom = "";

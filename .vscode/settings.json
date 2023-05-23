@@ -415,6 +415,7 @@
     "DEVSYM",
     "diox",
     "DIRENTS",
+    "dirparse",
     "DIRSORT",
     "disassembler's",
     "discontiguous",

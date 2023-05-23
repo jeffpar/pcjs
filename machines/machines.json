@@ -35,6 +35,7 @@
     "factory": "embedPCx86",
     "scripts": [
       "./machines/modules/v2/defines.js",
+      "./machines/modules/v2/messages.js",
       "./machines/modules/v2/diskapi.js",
       "./machines/modules/v2/dumpapi.js",
       "./machines/modules/v2/reportapi.js",

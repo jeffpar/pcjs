@@ -1111,6 +1111,23 @@
       "outFiles": [
         "${workspaceFolder}/none/**/*.js"
       ]
+    },
+    {
+      "name": "Node: replace.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tools/misc/replace.js",
+      "args": [
+        "machines/pcx86/modules/v2/disk.js",
+        "printMessage",
+        "--verbose"
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ]
     }
   ]
 }

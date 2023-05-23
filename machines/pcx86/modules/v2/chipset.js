@@ -2514,7 +2514,7 @@ export default class ChipSet extends Component {
                     }(addr));
                 }
                 else {
-                    if (DEBUG) this.printf(Messages.DMA + Messages.WARN, "advanceDMA(%d) unsupported transfer type %#06X\n", iDMAChannel, channel.type);
+                    if (DEBUG) this.printf(Messages.DMA + Messages.WARNING, "advanceDMA(%d) unsupported transfer type %#06X\n", iDMAChannel, channel.type);
                     channel.fError = true;
                 }
             }
@@ -2715,7 +2715,7 @@ export default class ChipSet extends Component {
                     this.checkIRR();
                 } else {
                     if (DEBUG) {
-                        this.printf(Messages.PIC + Messages.WARN + Messages.ADDRESS, "outPIC%d(%#04X): unexpected EOI for IRQ %d\n", iPIC, pic.port, nIRQ);
+                        this.printf(Messages.PIC + Messages.WARNING + Messages.ADDRESS, "outPIC%d(%#04X): unexpected EOI for IRQ %d\n", iPIC, pic.port, nIRQ);
                         if (MAXDEBUG && this.dbg) this.dbg.stopCPU();
                     }
                 }
@@ -2723,7 +2723,7 @@ export default class ChipSet extends Component {
                  * TODO: Support EOI commands with automatic rotation (eg, ChipSet.PIC_LO.OCW2_EOI_ROT and ChipSet.PIC_LO.OCW2_EOI_ROTSPEC)
                  */
                 if (bOCW2 & ChipSet.PIC_LO.OCW2_SET_ROTAUTO) {
-                    this.printf(Messages.PIC + Messages.WARN + Messages.ADDRESS, "outPIC%d(%#04X): unsupported OCW2 rotate %#04X\n", iPIC, pic.port, bOut);
+                    this.printf(Messages.PIC + Messages.WARNING + Messages.ADDRESS, "outPIC%d(%#04X): unsupported OCW2 rotate %#04X\n", iPIC, pic.port, bOut);
                 }
             }
             else  if (bOCW2 == ChipSet.PIC_LO.OCW2_SET_PRI) {
@@ -2736,7 +2736,7 @@ export default class ChipSet extends Component {
                 /*
                  * TODO: Remaining commands to support: ChipSet.PIC_LO.OCW2_SET_ROTAUTO and ChipSet.PIC_LO.OCW2_CLR_ROTAUTO
                  */
-                this.printf(Messages.PIC + Messages.WARN + Messages.ADDRESS, "outPIC%d(%#04X): unsupported OCW2 automatic rotate %#04X\n", iPIC, pic.port, bOut);
+                this.printf(Messages.PIC + Messages.WARNING + Messages.ADDRESS, "outPIC%d(%#04X): unsupported OCW2 automatic rotate %#04X\n", iPIC, pic.port, bOut);
             }
         } else {
             /*
@@ -2746,7 +2746,7 @@ export default class ChipSet extends Component {
              * that's unfortunate, because I don't support them yet.
              */
             if (bOut & (ChipSet.PIC_LO.OCW3_POLL_CMD | ChipSet.PIC_LO.OCW3_SMM_CMD)) {
-                this.printf(Messages.PIC + Messages.WARN + Messages.ADDRESS, "outPIC%d(%#04X): unsupported OCW3 %#04X\n", iPIC, pic.port, bOut);
+                this.printf(Messages.PIC + Messages.WARNING + Messages.ADDRESS, "outPIC%d(%#04X): unsupported OCW3 %#04X\n", iPIC, pic.port, bOut);
             }
             pic.bOCW3 = bOut;
         }
@@ -3607,7 +3607,7 @@ export default class ChipSet extends Component {
                 }
             }
 
-            if (MAXDEBUG && this.messageEnabled(Messages.TIMER + Messages.WARN)) {
+            if (MAXDEBUG && this.messageEnabled(Messages.TIMER + Messages.WARNING)) {
                 this.log("TIMER" + iTimer + " count: " + count + ", ticks: " + ticksElapsed + ", fired: " + (fFired? "true" : "false"));
             }
 
@@ -4148,9 +4148,9 @@ export default class ChipSet extends Component {
         let b = this.bPPIB & ~(ChipSet.C8042.RWREG.NMI_ERROR | ChipSet.C8042.RWREG.REFRESH_BIT) | ((this.cpu.getCycles() & 0x40)? ChipSet.C8042.RWREG.REFRESH_BIT : 0);
         /*
          * Thanks to the WAITF function, this has become a very "busy" port, so if this generates too
-         * many messages, try adding Messages.WARN to the criteria.
+         * many messages, try adding Messages.WARNING to the criteria.
          */
-        this.printMessageIO(port, undefined, addrFrom, "8042_RWREG", b, Messages.C8042 + Messages.WARN);
+        this.printMessageIO(port, undefined, addrFrom, "8042_RWREG", b, Messages.C8042 + Messages.WARNING);
         return b;
     }
 
