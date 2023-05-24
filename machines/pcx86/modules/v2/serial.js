@@ -45,7 +45,7 @@ export default class SerialPort extends Component {
      *
      *      binding: name of a control (based on its "binding" attribute) to bind to this port's I/O;
      *      as a special case, it can be set to "console" to direct all output to the component's default
-     *      println() handler (eg, the Control Panel's "print" control, if any, or console.log() if using
+     *      print() handler (eg, the Control Panel's "print" control, if any, or console.log() if using
      *      a DEBUG or non-COMPILED machine)
      *
      *      tabSize: a non-zero number specifies the tab-stop multiple to use for automatic tab-to-space
@@ -963,7 +963,7 @@ export default class SerialPort extends Component {
         }
         else if (this.consoleBuffer != null) {
             if (b == 0x0A || this.consoleBuffer.length >= 1024) {
-                this.println(this.consoleBuffer);
+                this.print(this.consoleBuffer);
                 this.consoleBuffer = "";
             }
             if (b != 0x0A) {

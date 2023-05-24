@@ -921,7 +921,7 @@ export class Card extends Controller {
                 sDump += sData + "\n";
             }
 
-            if (sDump) this.dbg.printf("%s", sDump);
+            if (sDump) this.dbg.print(sDump);
             this.prevDump = idw;
         }
     }
@@ -974,8 +974,8 @@ export class Card extends Controller {
             let nReadAccess = nAccess & Card.ACCESS.READ.MASK;
             let fnReadByte = Card.ACCESS.afn[nReadAccess];
             if (!fnReadByte) {
-                if (DEBUG && this.dbg && this.dbg.messageEnabled(Messages.VIDEO)) {
-                    this.dbg.message("Card.setMemoryAccess(" + Str.toHexWord(nAccess) + "): missing readByte handler");
+                if (DEBUG && this.dbg) {
+                    this.dbg.printf(Messages.VIDEO, "Card.setMemoryAccess(%#06x): missing readByte handler", nAccess);
                     /*
                      * I've taken a look, and the cases I've seen so far stem from the order in which the IBM VGA BIOS
                      * reprograms registers during a mode change: it reprograms the Sequencer registers BEFORE the Graphics
@@ -999,8 +999,8 @@ export class Card extends Controller {
             let nWriteAccess = nAccess & Card.ACCESS.WRITE.MASK;
             let fnWriteByte = Card.ACCESS.afn[nWriteAccess];
             if (!fnWriteByte) {
-                if (DEBUG && this.dbg && this.dbg.messageEnabled(Messages.VIDEO)) {
-                    this.dbg.message("Card.setMemoryAccess(" + Str.toHexWord(nAccess) + "): missing writeByte handler");
+                if (DEBUG && this.dbg) {
+                    this.dbg.printf(Messages.VIDEO, "Card.setMemoryAccess(%#06x): missing writeByte handler", nAccess);
                     /*
                      * I've taken a look, and the cases I've seen so far stem from the order in which the IBM VGA BIOS
                      * reprograms registers during a mode change: it reprograms the Sequencer registers BEFORE the Graphics
@@ -2757,7 +2757,7 @@ export default class VideoX86 extends Component {
             Web.getResource(this.sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
                 video.doneLoad(sURL, sResponse, nErrorCode);
             }, function(nState) {
-                video.println(sProgress, Component.PRINT.PROGRESS);
+                video.printf(Messages.PROGRESS, "%s\n", sProgress);
             });
         }
     }

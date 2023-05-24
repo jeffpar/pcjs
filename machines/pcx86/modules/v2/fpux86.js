@@ -350,7 +350,7 @@ export default class FPUx86 extends Component {
      */
     opNone()
     {
-        if (DEBUG) this.println(this.idComponent + ".opNone(" + Str.toHexByte(this.cpu.bOpcode) + "," + Str.toHexByte(this.cpu.bModRM) + ")");
+        if (DEBUG) this.printf(Messages.ALL, "%s.opNone(%#04x,%#04x)\n", this.idComponent, this.cpu.bOpcode, this.cpu.bModRM);
         this.opStop(true);
     }
 
@@ -363,7 +363,7 @@ export default class FPUx86 extends Component {
      */
     opObsolete()
     {
-        if (DEBUG) this.println(this.idComponent + ".opObsolete(" + Str.toHexByte(this.cpu.bOpcode) + "," + Str.toHexByte(this.cpu.bModRM) + ")");
+        if (DEBUG) this.printf(Messages.ALL, "%s.opObsolete(%#04x,%#04x)\n", this.idComponent, this.cpu.bOpcode, this.cpu.bModRM);
         this.opStop(true);
     }
 
@@ -376,7 +376,7 @@ export default class FPUx86 extends Component {
      */
     opUnimplemented()
     {
-        if (DEBUG) this.println(this.idComponent + ".opUnimplemented(" + Str.toHexByte(this.cpu.bOpcode) + "," + Str.toHexByte(this.cpu.bModRM) + ")");
+        if (DEBUG) this.printf(Messages.ALL, "%s.opUnimplemented(%#04x,%#04x)\n", this.idComponent, this.cpu.bOpcode, this.cpu.bModRM);
         this.opStop(true);
     }
 
@@ -431,7 +431,7 @@ export default class FPUx86 extends Component {
      */
     setException(n)
     {
-        if (DEBUG) this.println(this.idComponent + ".setException(" + Str.toHexWord(n) + ")");
+        if (DEBUG) this.printf(Messages.ALL, "%s.setException(%#06x)\n", this.idComponent, n);
 
         if (!this.isAtLeastModel(X86.FPU.MODEL_80387)) {
             n &= ~X86.FPU.STATUS.SF;                // the SF bit didn't exist on pre-80387 coprocessors

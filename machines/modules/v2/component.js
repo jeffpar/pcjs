@@ -28,6 +28,7 @@
  * default parameters.
  */
 
+import Messages from "./messages.js";
 import Str from "./strlib.js";
 import { COMPILED, DEBUG, DEBUGGER, MAXDEBUG, globals } from "./defines.js";
 
@@ -1020,29 +1021,23 @@ export default class Component {
                  * @param {string} s
                  * @returns {boolean}
                  */
-                this.notice = function noticeControl(s /*, fPrintOnly, id*/) {
-                    this.println(s, this.type);
+                this.notice = function noticeControl(sMessage /*, fPrintOnly, id*/) {
+                    this.println(sMessage, this.type);
                     return true;
                 };
                 /*
                  * This was added for Firefox (Safari will clear the <textarea> on a page reload, but Firefox does not).
                  */
                 controlTextArea.value = "";
-                this.print = function(control) {
-                    return function printControl(s) {
-                        Component.appendControl(control, s);
-                    };
-                }(controlTextArea);
-                this.println = function(component, control) {
-                    return function printlnControl(s, type, id) {
-                        if (!s) s = "";
-                        if (type != Component.PRINT.PROGRESS || s.slice(-3) != "...") {
-                            if (type) s = type + ": " + s;
-                            Component.appendControl(control, s + '\n');
+                this.print = function(component, control) {
+                    return function printControl(sMessage, bitsMessage = 0) {
+                        if (!sMessage) sMessage = "";
+                        if (component.testBits(bitsMessage, Messages.PROGRESS) && sMessage.slice(-4) == "...\n") {
+                            Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
-                            Component.replaceControl(control, s, s + '.');
+                            Component.appendControl(control, sMessage);
                         }
-                        if (!COMPILED) Component.println(s, type, id);
+                        if (!COMPILED) Component.print(sMessage);
                     };
                 }(this, controlTextArea);
             }
@@ -1418,16 +1413,14 @@ export default class Component {
      *
      * @this {Component}
      * @param {number} [bitsMessage] is zero or more Message flags
-     * @returns {boolean} true if all specified message enabled, false if not
+     * @returns {boolean} true if the specified message(s) are enabled, false if not
      */
     messageEnabled(bitsMessage = 0)
     {
-        if (DEBUGGER && this.dbg) {
-            if (bitsMessage % 2) bitsMessage--;
-            bitsMessage = bitsMessage || this.bitsMessage;
-            if ((bitsMessage|1) == -1 || this.testBits(this.dbg.bitsMessage, bitsMessage)) {
-                return true;
-            }
+        if (bitsMessage % 2) bitsMessage--;
+        bitsMessage = bitsMessage || this.bitsMessage;
+        if ((bitsMessage|1) == -1 || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
+            return true;
         }
         return false;
     }
@@ -1435,8 +1428,7 @@ export default class Component {
     /**
      * printf(format, ...args)
      *
-     * If format is a number, then it's treated as one or more Messages flags, and the real format
-     * string is the first arg.
+     * If format is a number, it must be one or more Messages flags, and the real format string is the first arg.
      *
      * @this {Component}
      * @param {string|number} format
@@ -1444,22 +1436,24 @@ export default class Component {
      */
     printf(format, ...args)
     {
-        if (DEBUGGER && this.dbg) {
-            let bitsMessage = 0;
-            if (typeof format == "number") {
-                bitsMessage = format;
-                format = args.shift();
+        let bitsMessage = 0;
+        if (typeof format == "number") {
+            bitsMessage = format;
+            if (bitsMessage == Messages.PROGRESS) {
+                bitsMessage = Messages.ALL;
             }
-            if (this.messageEnabled(bitsMessage)) {
-                let s = Str.sprintf(format, ...args);
+            format = args.shift();
+        }
+        if (this.messageEnabled(bitsMessage)) {
+            let s = Str.sprintf(format, ...args);
+            if (this.dbg && this.dbg.message) {
                 /*
-                 * Since dbg.message() calls println(), we strip any ending linefeed.
-                 *
-                 * We could bypass the Debugger and go straight to this.print(), but we would lose
-                 * the benefits of debugger messages (eg, automatic buffering, halting, yielding, etc).
+                 * Fallback code for debuggers that still use message() instead of overriding printf().
                  */
                 if (s.slice(-1) == '\n') s = s.slice(0, -1);
                 this.dbg.message(s, !!(bitsMessage % 2));   // pass true for fAddress if Messages.ADDRESS is set
+            } else {
+                this.print(s, bitsMessage);
             }
         }
     }
@@ -1475,15 +1469,16 @@ export default class Component {
      * @param {number|boolean} [bitsMessage] is zero or more Messages flag(s)
      * @param {boolean} [fAddress] is true to display the current address
      */
-    printMessage(sMessage, bitsMessage, fAddress)
+    printMessage(sMessage, bitsMessage = 0, fAddress = false)
     {
         if (DEBUGGER && this.dbg) {
             if (typeof bitsMessage == "boolean") {
                 bitsMessage = bitsMessage? -1 : 0;
             }
-            if (this.messageEnabled(bitsMessage)) {
-                this.dbg.message(sMessage, fAddress);
+            if (fAddress) {
+                bitsMessage = this.setBits(bitsMessage, Messages.ADDRESS);
             }
+            this.dbg.printf(bitsMessage, "%s\n", sMessage);
         }
     }
 

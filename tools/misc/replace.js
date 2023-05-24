@@ -105,14 +105,14 @@ function replaceArgs(sArgs)
     for (let j = 0; j < aArgs.length; j++) {
         let arg = aArgs[j];
         if (arg[0] == '"' && arg[arg.length-1] == '"' || arg[0] == "'" && arg[arg.length-1] == "'") {
-            sFormat += arg.slice(1, -1);
+            sFormat += arg.slice(1, -1).replace(/"/g, '\\"');
         } else {
             let fmt = "", warning = false;
-            if (arg.match(/^([A-Za-z]+\.|)(i|ms|n)[A-Z]?/) || arg.startsWith("Math.") || arg.endsWith(".length") || arg.indexOf("Disk.SECTOR") >= 0) {
-                fmt = "%d";
-            }
-            else if (arg.match(/^([A-Za-z]+.|)(ch|s)[A-Z]?/) || arg.indexOf(".toStr") > 0) {
+            if (arg.match(/^([A-Za-z]+\.|)(ch|s|as)[^a-z]?/) || arg.startsWith("String.") || arg.indexOf(".toStr") > 0 || arg.indexOf(".toHexAddr") > 0 || arg.indexOf(".join") > 0 || arg.indexOf(".getSpeedTarget") > 0 || arg.indexOf(".model") > 0) {
                 fmt = "%s";
+            }
+            else if (arg.match(/^([A-Za-z]+\.|)(a|c|i|ms|n)[^a-z]?/) || arg.match(/\s(-|\+)\s/) || arg.indexOf("getCycles") > 0 || arg.startsWith("Math.") || arg.endsWith(".length") || arg.indexOf("Disk.SECTOR") >= 0) {
+                fmt = "%d";
             }
             else if (arg.match(/^date/)) {
                 fmt = "%T";
@@ -120,17 +120,26 @@ function replaceArgs(sArgs)
             else if (arg.match(/['"]/)) {
                 fmt = "%s";
             } else {
-                if (arg.endsWith(")")) fmt = "%d";
                 let funMatch = arg.match(/^Str\.(toOct|toHex)(Byte|Word|Long|)\((.*)\)$/);
                 if (funMatch) {
                     fmt = funMatch[1] == "toOct"? "%o" : "%x";
                     let funArgs = splitArgs(funMatch[3], ',');
                     arg = funArgs[0];
                     if (funArgs[1]) {
-                        fmt = fmt[0] + (funArgs[2] == "true"? "#" : "") + '0' + +funArgs[1] + fmt[1];
+                        let prefix = "";
+                        let digits = +funArgs[1];
+                        if (isNaN(digits)) {
+                            digits = "*";
+                            arg = funArgs[1] + ", " + arg;
+                        }
+                        if (funArgs[2] == "true") {
+                            prefix = "#";
+                            digits += 2;
+                        }
+                        fmt = fmt[0] + prefix + '0' + digits + fmt[1];
                     } else if (funMatch[2]) {
-                        let size = funMatch[2] == "Byte"? 2 : (funMatch[2] == "Word"? 4 : 8);
-                        fmt = fmt[0] + "#" + '0' + size + fmt[1];
+                        let digits = funMatch[2] == "Byte"? 2 : (funMatch[2] == "Word"? 4 : 8);
+                        fmt = fmt[0] + "#" + '0' + (digits + 2) + fmt[1];
                     }
                 }
             }
@@ -238,7 +247,7 @@ function replaceText(sText, sType, verbose)
                     /*
                      * We can remove the "if" completely...
                      */
-                    sNew = ".printf(" + sFormat + (sList? ", " + sList : "") + ");";
+                    sNew = "this.printf(" + sFormat + (sList? ", " + sList : "") + ");";
                 } else {
                     /*
                      * We can remove the "if" partially...

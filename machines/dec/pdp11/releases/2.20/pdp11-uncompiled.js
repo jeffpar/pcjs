@@ -4792,8 +4792,7 @@ class Component {
     /**
      * printf(format, ...args)
      *
-     * If format is a number, then it's treated as one or more Messages flags, and the real format
-     * string is the first arg.
+     * If format is a number, it must be one or more Messages flags, and the real format string is the first arg.
      *
      * @this {Component}
      * @param {string|number} format
@@ -4801,22 +4800,21 @@ class Component {
      */
     printf(format, ...args)
     {
-        if (DEBUGGER && this.dbg) {
-            let bitsMessage = 0;
-            if (typeof format == "number") {
-                bitsMessage = format;
-                format = args.shift();
-            }
-            if (this.messageEnabled(bitsMessage)) {
-                let s = Str.sprintf(format, ...args);
+        let bitsMessage = 0;
+        if (typeof format == "number") {
+            bitsMessage = format;
+            format = args.shift();
+        }
+        if (this.messageEnabled(bitsMessage)) {
+            let s = Str.sprintf(format, ...args);
+            if (this.dbg && this.dbg.message) {
                 /*
-                 * Since dbg.message() calls println(), we strip any ending linefeed.
-                 *
-                 * We could bypass the Debugger and go straight to this.print(), but we would lose
-                 * the benefits of debugger messages (eg, automatic buffering, halting, yielding, etc).
+                 * Fallback code for debuggers that still use message() instead of overriding printf().
                  */
                 if (s.slice(-1) == '\n') s = s.slice(0, -1);
                 this.dbg.message(s, !!(bitsMessage % 2));   // pass true for fAddress if Messages.ADDRESS is set
+            } else {
+                this.print(s);
             }
         }
     }
@@ -4839,7 +4837,7 @@ class Component {
                 bitsMessage = bitsMessage? -1 : 0;
             }
             if (this.messageEnabled(bitsMessage)) {
-                this.dbg.message(sMessage, fAddress);
+                this.dbg.print(sMessage, fAddress);
             }
         }
     }

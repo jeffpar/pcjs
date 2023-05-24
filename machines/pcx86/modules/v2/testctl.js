@@ -88,7 +88,7 @@ export default class TestController extends Component {
         Web.getResource(sURL, null, true, function(sURL, sResponse, nErrorCode) {
             controller.doneLoad(sURL, sResponse, nErrorCode);
         }, function(nState) {
-            controller.println(sProgress, Component.PRINT.PROGRESS);
+            controller.printf(Messages.PROGRESS, "%s\n", sProgress);
         });
 
     }

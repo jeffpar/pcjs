@@ -1165,8 +1165,8 @@ export default class SegX86 {
         }
 
         let addrNew = cpu.segTSS.base;
-        if (DEBUG && DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.TSS)) {
-            this.dbg.message((fNest? "Task switch" : "Task return") + ": TR " + Str.toHexWord(selOld) + " (%" + Str.toHex(addrOld, 6) + "), new TR " + Str.toHexWord(selNew) + " (%" + Str.toHex(addrNew, 6) + ")");
+        if (DEBUG && DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.TSS, "%s: TR %#06x (%#06x), new TR %#06x (%#06x)\n", fNest? "Task switch" : "Task return", selOld, addrOld, selNew, addrNew);
         }
 
         if (fNest !== false) {
@@ -1556,7 +1556,7 @@ export default class SegX86 {
                 let ch = (this.sName.length < 3? " " : "");
                 let sDPL = " dpl=" + this.dpl;
                 if (this.id == SegX86.ID.CODE) sDPL += " cpl=" + this.cpl;
-                this.dbg.message("loadSeg(" + this.sName + "):" + ch + "sel=" + Str.toHexWord(sel) + " base=" + Str.toHex(base) + " limit=" + Str.toHexWord(limit) + " type=" + Str.toHexWord(type) + sDPL, true);
+                this.dbg.printf(Messages.SEG, "loadSeg(%s):%ssel=%#06x base=%x limit=%#06x type=%#06x%s\n", this.sName, ch, sel, base, limit, type, sDPL);
             }
             /*
              * Unless I've got a bug that's causing descriptor corruption, it appears that Windows 3.0 may be setting the

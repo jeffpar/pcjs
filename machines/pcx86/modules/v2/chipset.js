@@ -201,7 +201,7 @@ export default class ChipSet extends Component {
             let volume = +sound || 0;
             this.volumeInit = (sound == "true" || volume < 0 || volume > 1? 0.5 : volume);
         }
-        if (!this.volumeInit) this.println("note: speaker disabled");
+        if (!this.volumeInit) this.printf(Messages.ALL, "note: speaker disabled\n");
 
         /*
          * This divisor is invariant, so we calculate it as soon as we're able to query the CPU's base speed.
@@ -516,9 +516,9 @@ export default class ChipSet extends Component {
          */
         if (Object.prototype.toString.call(date) !== "[object Date]" || isNaN(date.getTime())) {
             date = new Date();
-            this.println("CMOS date invalid (" + sDate + "), using " + date);
+            this.printf(Messages.ALL, "CMOS date invalid (%s), using %T\n", sDate, date);
         } else if (sDate) {
-            this.println("CMOS date: " + date);
+            this.printf(Messages.ALL, "CMOS date: %T\n", date);
         }
 
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] = date.getSeconds();
@@ -1835,8 +1835,8 @@ export default class ChipSet extends Component {
                     let b = pic.aICW[i];
                     sDump += " IC" + (i + 1) + '=' + Str.toHexByte(b);
                 }
-                sDump += " IMR=" + Str.toHexByte(pic.bIMR) + " IRR=" + Str.toHexByte(pic.bIRR) + " ISR=" + Str.toHexByte(pic.bISR) + " DELAY=" + pic.nDelay;
-                this.dbg.println(sDump);
+                sDump += " IMR=" + Str.toHexByte(pic.bIMR) + " IRR=" + Str.toHexByte(pic.bIRR) + " ISR=" + Str.toHexByte(pic.bISR) + " DELAY=" + pic.nDelay + "\n";
+                this.print(sDump);
             }
         }
     }
@@ -1865,8 +1865,8 @@ export default class ChipSet extends Component {
                         count |= (timer.countCurrent[i] << (i * 8));
                     }
                 }
-                sDump += " mode=" + (timer.mode >> 1) + " bytes=" + timer.countBytes + " count=" + Str.toHexWord(count);
-                this.dbg.println(sDump);
+                sDump += " mode=" + (timer.mode >> 1) + " bytes=" + timer.countBytes + " count=" + Str.toHexWord(count) + "\n";
+                this.print(sDump);
             }
         }
     }
@@ -1883,9 +1883,9 @@ export default class ChipSet extends Component {
             for (let iCMOS = 0; iCMOS < ChipSet.CMOS.ADDR.TOTAL; iCMOS++) {
                 let b = (iCMOS <= ChipSet.CMOS.ADDR.STATUSD? this.getRTCByte(iCMOS) : this.abCMOSData[iCMOS]);
                 if (sDump) sDump += '\n';
-                sDump += "CMOS[" + Str.toHexByte(iCMOS) + "]: " + Str.toHexByte(b);
+                sDump += "CMOS[" + Str.toHexByte(iCMOS) + "]: " + Str.toHexByte(b) + "\n";
             }
-            this.dbg.println(sDump);
+            this.print(sDump);
         }
     }
 

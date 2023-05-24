@@ -215,7 +215,7 @@ export default class HDC extends Component {
                         let i = sDiskName.lastIndexOf('.');
                         if (i >= 0) sDiskName = sDiskName.substr(0, i);
                         sDiskName += ".img";
-                        if (DEBUG) hdc.println("saving disk " + sDiskName + "...");
+                        if (DEBUG) hdc.printf(Messages.ALL, "saving disk %s...\n", sDiskName);
                         let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, sDiskName);
                         Component.alertUser(sAlert);
                     } else {
@@ -1240,7 +1240,7 @@ export default class HDC extends Component {
                 if (drive.iByte > 1) {          // in other words, if drive.iByte == drive.cbTransfer...
                     if (this.messageEnabled(Messages.DATA + Messages.HDC)) {
                         let sDump = drive.disk.dumpSector(drive.sector);
-                        if (sDump) this.dbg.message(sDump);
+                        if (sDump) this.print(sDump);
                     }
                     /*
                      * Now that we've supplied a full sector of data, see if the caller's expecting additional sectors;
@@ -1356,7 +1356,7 @@ export default class HDC extends Component {
                     if (drive.iByte > 1) {          // in other words, if drive.iByte == drive.cbTransfer...
                         if (this.messageEnabled(Messages.DATA + Messages.HDC)) {
                             let sDump = drive.disk.dumpSector(drive.sector);
-                            if (sDump) this.dbg.message(sDump);
+                            if (sDump) this.print(sDump);
                         }
                         drive.nBytes -= drive.cbTransfer;
                         this.regSecCnt = (this.regSecCnt - 1) & 0xff;

@@ -260,13 +260,12 @@ export default class Disk extends Component {
         this.controller = controller;
 
         /*
-         * Route all non-Debugger messages (eg, notice() and println() calls) through
-         * this.controller (eg, controller.notice() and controller.println()), because
-         * the Computer component is unaware of any Disk objects and therefore will not
-         * set up the usual overrides when a Control Panel is installed.
+         * Route all printing through this.controller (eg, controller.print() and controller.notice()),
+         * because the Computer component is unaware of any Disk objects and therefore will not set up the
+         * usual overrides when a Control Panel is installed.
          */
+        this.print = controller.print;
         this.notice = controller.notice;
-        this.println = controller.println;
 
         this.cmp = controller.cmp;
         this.dbg = controller.dbg;
@@ -509,17 +508,12 @@ export default class Disk extends Component {
     {
         let sDiskURL = sDiskPath;
 
-        /*
-         * We could use this.log() as well, but it wouldn't display which component initiated the load.
-         */
         if (DEBUG) {
-            let sMessage = 'load("' + sDiskName + '","' + sDiskPath + '")';
-            this.controller.log(sMessage);
-            this.printMessage(sMessage);
+            this.printf('load("%s","%s")\n', sDiskName, sDiskPath);
         }
 
         if (this.fnNotify) {
-            if (DEBUG) this.controller.log('too many load requests for "' + sDiskName + '" (' + sDiskPath + ')');
+            if (DEBUG) this.printf('too many load requests for "%s" (%s)\n', sDiskName, sDiskPath);
             return true;
         }
 
@@ -602,7 +596,7 @@ export default class Disk extends Component {
         return !!Web.getResource(sDiskURL, this.sFormat, true, function loadDone(sURL, sResponse, nErrorCode) {
             disk.doneLoad(sURL, sResponse, nErrorCode);
         }, function(nState) {
-            disk.println(sProgress, Component.PRINT.PROGRESS);
+            disk.printf(Messages.PROGRESS, "%s\n", sProgress);
         });
     }
 

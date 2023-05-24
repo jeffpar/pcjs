@@ -16,7 +16,7 @@ import Str from "../../../modules/v2/strlib.js";
 import UserAPI from "../../../modules/v2/userapi.js";
 import Usr from "../../../modules/v2/usrlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, APPNAME, APPVERSION, DEBUG, COPYRIGHT, LICENSE, PREFETCH, TYPEDARRAYS, globals } from "./defines.js";
+import { APPCLASS, APPNAME, APPVERSION, DEBUG, MAXDEBUG, COPYRIGHT, LICENSE, PREFETCH, TYPEDARRAYS, globals } from "./defines.js";
 
 /**
  * @class Computer
@@ -151,7 +151,7 @@ export default class Computer extends Component {
         this.bus = new BusX86({'id': this.idMachine + '.bus', 'busWidth': this.nBusWidth}, this.cpu, this.dbg);
 
         /*
-         * Iterate through all the components and override their notice() and println() methods
+         * Iterate through all the components and override their notice() and print() methods
          * so that their output can be rerouted to a Diagnostic Display or Control Panel, if any.
          */
         let iComponent, component;
@@ -160,27 +160,22 @@ export default class Computer extends Component {
         this.panel = /** @type {Panel} */ (Component.getComponentByType("Panel", this.id));
         this.controlPanel = this.panel && this.panel.bindings['print'];
 
-        this.noticeComputer = this.notice;
         this.printComputer = this.print;
-        this.printlnComputer = this.println;
+        this.noticeComputer = this.notice;
         if (this.controlPanel) {
-            this.noticeComputer = this.panel.notice;
             this.printComputer = this.panel.print;
-            this.printlnComputer = this.panel.println;
+            this.noticeComputer = this.panel.notice;
         }
 
         for (iComponent = 0; iComponent < aComponents.length; iComponent++) {
             component = aComponents[iComponent];
+            component.print = function printComputer(s, bitsMessage) {
+                cmp.outputDiagnostics(s, bitsMessage);
+                return cmp.printComputer.call(this, s, bitsMessage);
+            }.bind(component);
             component.notice = function noticeComputer(s, fPrintOnly, id) {
-                cmp.outputDiagnostics(s);
+                cmp.outputDiagnostics(s + "\n");
                 return cmp.noticeComputer.call(this, s, fPrintOnly, id);
-            }.bind(component);
-            component.print = function printComputer(s) {
-                return cmp.printComputer.call(this, s);
-            }.bind(component);
-            component.println = function printlnComputer(s, type, id) {
-                cmp.outputDiagnostics(s, type);
-                return cmp.printlnComputer.call(this, s, type, id);
             }.bind(component);
         }
 
@@ -189,9 +184,9 @@ export default class Computer extends Component {
             this.enableDiagnostics();
         }
 
-        this.println(APPNAME + " v" + APPVERSION + "\n" + COPYRIGHT + "\n" + LICENSE);
+        this.printf(Messages.ALL, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
-        if (DEBUG) this.printf("PREFETCH: %b, TYPEDARRAYS: %b\n", PREFETCH, TYPEDARRAYS);
+        if (MAXDEBUG) this.printf(Messages.DEBUG, "PREFETCH: %b, TYPEDARRAYS: %b\n", PREFETCH, TYPEDARRAYS);
 
         /*
          * Iterate through all the components again and call their initBus() handler, if any
@@ -276,7 +271,7 @@ export default class Computer extends Component {
             Web.getResource(this.sStateURL, null, true, function(sURL, sResource, nErrorCode) {
                 cmp.doneLoad(sURL, sResource, nErrorCode);
             }, function(nState) {
-                cmp.println(sProgress, Component.PRINT.PROGRESS);
+                cmp.printf(Messages.PROGRESS, "%s\n", sProgress);
             });
         }
 
@@ -396,11 +391,11 @@ export default class Computer extends Component {
                         cmp.notifyKbdEvent();
                     };
                 }(this), 2000);
-                this.println("Initialization complete");
+                this.printf(Messages.ALL, "Initialization complete\n");
             }
             if (this.nDiagnostics == 2) {
                 this.nDiagnostics += 2;
-                this.println("Initialization complete, press a key to continue...");
+                this.printf(Messages.ALL, "Initialization complete, press a key to continue...\n");
             }
             if (this.nDiagnostics == 3 || this.nDiagnostics == 4) {
                 /*
@@ -416,13 +411,13 @@ export default class Computer extends Component {
     }
 
     /**
-     * outputDiagnostics(sMessage, sType)
+     * outputDiagnostics(sMessage, bitsMessage)
      *
      * @this {Computer}
      * @param {string} sMessage
-     * @param {string} [sType]
+     * @param {number} [bitsMessage]
      */
-    outputDiagnostics(sMessage, sType)
+    outputDiagnostics(sMessage, bitsMessage = 0)
     {
         if (this.cDiagnosticScreens) {
             for (let i = 0; i < this.aVideo.length; i++) {
@@ -430,10 +425,10 @@ export default class Computer extends Component {
                 if (video) {
                     let control = video.getTextArea();
                     if (control) {
-                        if (sType != Component.PRINT.PROGRESS || sMessage.slice(-3) != "...") {
-                            Component.appendControl(control, sMessage + '\n');
+                        if (this.testBits(bitsMessage, Messages.PROGRESS) && sMessage.slice(-4) == "...\n") {
+                            Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
-                            Component.replaceControl(control, sMessage, sMessage + '.');
+                            Component.appendControl(control, sMessage);
                         }
                     }
                 }
@@ -458,7 +453,7 @@ export default class Computer extends Component {
         let nDiagnostics = this.nDiagnostics;
         if (event && event.keyCode == 16 && this.nDiagnostics == 3) {
             this.nDiagnostics++;        // if we're waiting for a timeout and a shift key was pressed, wait for another key
-            this.println("Machine paused, press another key to continue...");
+            this.printf(Messages.ALL, "Machine paused, press another key to continue...\n");
             event = null;
         }
         if (!event && this.nDiagnostics == 3 || event && fDown && this.nDiagnostics == 4) {
@@ -787,7 +782,7 @@ export default class Computer extends Component {
                                     this.notice("Error: " + sData);
                                     if (sData == UserAPI.FAIL.VERIFY) this.resetUserID();
                                 } else {
-                                    this.println(sCode + ": " + sData);
+                                    this.printf(Messages.ALL, "%s: %s\n", sCode, sData);
                                 }
                                 /*
                                  * Try falling back to the state that we should have saved in localStorage, as a backup to the

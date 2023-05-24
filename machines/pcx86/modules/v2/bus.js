@@ -947,15 +947,10 @@ export default class BusX86 extends Component {
                 if (btiPrev && slotPrev) {
                     let btoPrev = this.abtObjects[slotPrev-1];
                     if (!btoPrev) {
-                        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.WARNING)) {
-                            this.dbg.message("writeBackTrack(%" + Str.toHex(addr) + ',' + Str.toHex(bti) + "): previous index (" + Str.toHex(btiPrev) + ") refers to empty slot (" + slotPrev + ")");
-                        }
+                        this.printf(Messages.DEBUG + Messages.WARNING, "writeBackTrack(%%x,%x): previous index (%x) refers to empty slot (%d)\n", addr, bti, btiPrev, slotPrev);
                     }
                     else if (btoPrev.refs <= 0) {
-                        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.WARNING)) {
-                            this.dbg.message("writeBackTrack(%" + Str.toHex(addr) + ',' + Str.toHex(bti) + "): previous index (" + Str.toHex(btiPrev) + ") refers to object with bad ref count (" + btoPrev.refs + ")");
-                        }
-                    } else if (!--btoPrev.refs) {
+                        this.printf(Messages.DEBUG + Messages.WARNING, "writeBackTrack(%%x,%x): previous index (%x) refers to object with bad ref count (%d)\n", addr, bti, btiPrev, btoPrev.refs);
                         /*
                          * We used to just slam a null into the previous slot and consider it gone, but there may still
                          * be "weak references" to that slot (ie, it may still be associated with a register bti).
@@ -1499,16 +1494,7 @@ export default class BusX86 extends Component {
      */
     reportError(op, addr, size, fQuiet)
     {
-        let sError = "Memory block error (" + op + ": " + Str.toHex(addr) + "," + Str.toHex(size) + ")";
-        if (fQuiet) {
-            if (this.dbg) {
-                this.dbg.message(sError);
-            } else {
-                this.log(sError);
-            }
-        } else {
-            Component.error(sError);
-        }
+        this.printf(fQuiet? Messages.DEBUG : Messages.DEFAULT, "Memory block error (%d: %x,%x)\n", op, addr, size);
         return false;
     }
 

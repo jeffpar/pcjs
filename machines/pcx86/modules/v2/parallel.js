@@ -412,7 +412,7 @@ export default class ParallelPort extends Component {
         }
         else if (this.consoleBuffer != null) {
             if (b == 0x0A || this.consoleBuffer.length >= 1024) {
-                this.println(this.consoleBuffer);
+                this.print(this.consoleBuffer);
                 this.consoleBuffer = "";
             }
             if (b != 0x0A) {

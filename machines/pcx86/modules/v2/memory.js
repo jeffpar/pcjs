@@ -542,8 +542,8 @@ export default class MemoryX86 {
      */
     printAddr(sMessage)
     {
-        if (DEBUG && this.dbg && this.dbg.messageEnabled(Messages.MEM)) {
-            this.dbg.printMessage(sMessage + ' ' + (this.addr != null? ('%' + Str.toHex(this.addr)) : '#' + this.id), true);
+        if (DEBUG && this.dbg) {
+            this.dbg.printf(Messages.MEM, "%s %%x #%s\n", this.addr, this.id);
         }
     }
 
@@ -655,8 +655,8 @@ export default class MemoryX86 {
      */
     readNone(off, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.CPU + Messages.MEM) /* && !off */) {
-            this.dbg.message("attempt to read invalid block %" + Str.toHex(addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.CPU + Messages.MEM, "attempt to read invalid block %%x\n", addr);
         }
         return 0xff;
     }
@@ -671,8 +671,8 @@ export default class MemoryX86 {
      */
     writeNone(off, v, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.CPU + Messages.MEM) /* && !off */) {
-            this.dbg.message("attempt to write " + Str.toHexWord(v) + " to invalid block %" + Str.toHex(addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.CPU + Messages.MEM, "attempt to write %#06x to invalid block %%x\n", v, addr);
         }
     }
 

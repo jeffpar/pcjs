@@ -4456,7 +4456,7 @@ export default class CPUx86 extends CPULib {
                         if (!nMinCycles) {
                             this.assert(DEBUGGER);  // nMinCycles of zero should be generated ONLY by the Debugger
                             if (DEBUGGER) {
-                                this.println("interrupt dispatched");
+                                this.printf(Messages.ALL, "interrupt dispatched\n");
                                 this.opFlags = 0;
                                 break;
                             }
@@ -4524,7 +4524,7 @@ export default class CPUx86 extends CPULib {
                 // Make sure that every instruction is assessing a cycle cost, and that the cost is a net positive.
                 //
                 if (this.flags.complete && this.nStepCycles >= this.nSnapCycles && !(this.opFlags & X86.OPFLAG_PREFIXES)) {
-                    this.println("cycle miscount: " + (this.nSnapCycles - this.nStepCycles));
+                    this.printf("cycle miscount: %d\n", (this.nSnapCycles - this.nStepCycles));
                     this.setIP(this.opLIP - this.segCS.base);
                     this.stopCPU();
                     break;

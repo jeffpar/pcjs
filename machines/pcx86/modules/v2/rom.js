@@ -8,6 +8,7 @@
  */
 
 import MemoryX86 from "./memory.js";
+import Messages from "./messages.js";
 import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
 import Str from "../../../modules/v2/strlib.js";
@@ -116,11 +117,10 @@ export default class ROMx86 extends Component {
 
         if (this.sFileURL) {
             let rom = this;
-            let sProgress = "Loading " + this.sFileURL + "...";
             Web.getResource(this.sFileURL, null, true, function doneROMLoad(sURL, sResponse, nErrorCode) {
                 rom.doneLoad(sURL, sResponse, nErrorCode);
             }, function(nState) {
-                rom.println(sProgress, Component.PRINT.PROGRESS);
+                rom.printf(Messages.PROGRESS, "Loading %s...\n", rom.sFileURL);
             });
         }
     }
