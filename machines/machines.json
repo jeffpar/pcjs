@@ -140,6 +140,7 @@
     "factory": "embedC1P",
     "scripts": [
       "./machines/modules/v2/defines.js",
+      "./machines/modules/v2/messages.js",
       "./machines/modules/v2/dumpapi.js",
       "./machines/modules/v2/reportapi.js",
       "./machines/modules/v2/strlib.js",
@@ -183,6 +184,7 @@
     "factory": "embedPCx80",
     "scripts": [
       "./machines/modules/v2/defines.js",
+      "./machines/modules/v2/messages.js",
       "./machines/modules/v2/dumpapi.js",
       "./machines/modules/v2/reportapi.js",
       "./machines/modules/v2/userapi.js",
@@ -237,6 +239,7 @@
     "factory": "embedPDP10",
     "scripts": [
       "./machines/modules/v2/defines.js",
+      "./machines/modules/v2/messages.js",
       "./machines/modules/v2/dumpapi.js",
       "./machines/modules/v2/reportapi.js",
       "./machines/modules/v2/userapi.js",
@@ -289,6 +292,7 @@
     "factory": "embedPDP11",
     "scripts": [
       "./machines/modules/v2/defines.js",
+      "./machines/modules/v2/messages.js",
       "./machines/modules/v2/diskapi.js",
       "./machines/modules/v2/dumpapi.js",
       "./machines/modules/v2/reportapi.js",

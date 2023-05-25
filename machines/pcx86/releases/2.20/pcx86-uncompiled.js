@@ -151,8 +151,8 @@ const Messages = {
     DEFAULT:    0x000000000000,
     ADDRESS:    0x000000000001,
     LOG:        0x001000000000,         // to replace component.log()
-    NOTICE:     0x002000000000,         // to replace Component.PRINT.NOTICE
-    STATUS:     0x004000000000,         // to replace component.status()
+    STATUS:     0x002000000000,         // to replace component.status()
+    NOTICE:     0x004000000000,         // to replace Component.PRINT.NOTICE
     WARNING:    0x008000000000,         // to replace Component.PRINT.WARNING
     ERROR:      0x010000000000,         // to replace Component.PRINT.ERROR
     DEBUG:      0x020000000000,         // to replace Component.PRINT.DEBUG
@@ -4430,7 +4430,7 @@ class Component {
                  * Override this.notice() with a replacement function that eliminates the Component.alertUser() call.
                  *
                  * @this {Component}
-                 * @param {string} s
+                 * @param {string} sMessage
                  * @returns {boolean}
                  */
                 this.notice = function noticeControl(sMessage /*, fPrintOnly, id*/) {
@@ -4531,21 +4531,22 @@ class Component {
     }
 
     /**
-     * print(s)
+     * print(s, bitsMessage)
      *
      * Components using this.print() should wait until after their constructor has run to display any messages, because
      * if a Control Panel has been loaded, its override will not take effect until its own constructor has run.
      *
      * @this {Component}
      * @param {string} s
+     * @param {number} [bitsMessage] (optional)
      */
-    print(s)
+    print(s, bitsMessage = 0)
     {
         Component.print(s);
     }
 
     /**
-     * println(s, type, id) (DEPRECATED)
+     * println(s, type, id) [DEPRECATED]
      *
      * Components using this.println() should wait until after their constructor has run to display any messages, because
      * if a Control Panel has been loaded, its override will not take effect until its own constructor has run.
@@ -4562,12 +4563,10 @@ class Component {
     }
 
     /**
-     * status(format, ...args)
+     * status(format, ...args) [DEPRECATED: Use printf(Messages.STATUS, format, ...args) instead
      *
      * status() is a print function that also includes information about the component (ie, the component type),
      * which is why there is no corresponding Component.status() function.
-     *
-     * DEPRECATED: Use printf(Messages.STATUS, format, ...args) instead.
      *
      * @this {Component}
      * @param {string} format
@@ -4575,7 +4574,7 @@ class Component {
      */
     status(format, ...args)
     {
-        this.printf(Messages.STATUS, format + "\n", ...args);
+        this.printf(Messages.STATUS, format, ...args);
     }
 
     /**
@@ -4793,7 +4792,7 @@ class Component {
      *
      * @param {number} num
      * @param {number} bits
-     * @returns {boolean}
+     * @returns {number}
      */
     maskBits(num, bits)
     {
@@ -10337,7 +10336,7 @@ class BusX86 extends Component {
             if (!this.cpu.isRunning()) {        // allocation messages at "run time" are bit too much
                 let kb = (size / 1024)|0;
                 let sb = kb? (kb + "Kb") : (size + " bytes");
-                this.printf(Messages.STATUS, "%s %s at 0x%X", sb, MemoryX86.TYPE.NAMES[type], addr);
+                this.printf(Messages.STATUS, "%s %s at 0x%X\n", sb, MemoryX86.TYPE.NAMES[type], addr);
             }
             return true;
         }
@@ -14826,7 +14825,7 @@ class CPULib extends Component {
                 this.cmp.stop(Component.getTime(), this.getCycles());
                 this.cmp.updateStatus(true);
             }
-            if (!this.dbg) this.status("Stopped");
+            if (!this.dbg) this.printf(Messages.STATUS, "Stopped\n");
             fStopped = true;
         }
         this.flags.complete = fComplete;
@@ -46401,12 +46400,12 @@ class RAMx86 extends Component {
                 this.fAllocated = true;
 
                 /*
-                 * NOTE: I'm specifying MAXDEBUG for status() messages because I'm not yet sure I want these
+                 * NOTE: I'm specifying MAXDEBUG for STATUS messages because I'm not yet sure I want these
                  * messages buried in the app, since they're seen only when a Control Panel is active.  Another
                  * and perhaps better alternative is to add "comment" attributes to the XML configuration file
                  * for these components, which the Computer component will display as it "powers up" components.
                  */
-                if (MAXDEBUG && !this.addrRAM && this.fInstalled) this.status("specified size overrides SW1");
+                if (MAXDEBUG && !this.addrRAM && this.fInstalled) this.printf(Messages.STATUS, "specified size overrides SW1\n");
 
                 /*
                  * Memory with an ID of "ramCPQ" is reserved for built-in memory located just below the 16Mb
@@ -46440,7 +46439,7 @@ class RAMx86 extends Component {
                  * HACK: Set the word at 40:72 in the ROM BIOS Data Area (RBDA) to 0x1234 to bypass the ROM BIOS
                  * memory storage tests. See rom.js for more RBDA definitions.
                  */
-                if (MAXDEBUG) this.status("ROM BIOS memory test has been disabled");
+                if (MAXDEBUG) this.printf(Messages.STATUS, "ROM BIOS memory test has been disabled\n");
                 this.bus.setShortDirect(ROMx86.BIOS.RESET_FLAG.ADDR, ROMx86.BIOS.RESET_FLAG.WARMBOOT);
             }
             /*
@@ -59549,16 +59548,16 @@ class SerialPort extends Component {
                             if (this.sendData) {
                                 this.fNullModem = fNullModem;
                                 this.updateStatus = exports['receiveStatus'];
-                                this.status("Connected %s.%s to %s", this.idMachine, sSourceID, sTargetID);
+                                this.printf(Messages.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
                                 return;
                             }
                         }
                     }
                 }
                 /*
-                 * Changed from notice() to status() because sometimes a connection fails simply because one of us is a laggard.
+                 * Changed from NOTICE to STATUS because sometimes a connection fails simply because one of us is a laggard.
                  */
-                this.status("Unable to establish connection: %s", sConnection);
+                this.printf(Messages.STATUS, "Unable to establish connection: %s\n", sConnection);
             }
         }
     }
@@ -65038,8 +65037,8 @@ class FDC extends Component {
 
         if (fInit) {
             drive.fWritable = true;
-            if (nHeads) this.status("drive %d configured with %d head%s", iDrive, nHeads, nHeads > 1? 's' : '');
-            if (!drive.fBootable) this.status("drive %d configured as non-bootable", iDrive);
+            if (nHeads) this.printf(Messages.STATUS, "drive %d configured with %d head%s\n", iDrive, nHeads, nHeads > 1? 's' : '');
+            if (!drive.fBootable) this.printf(Messages.STATUS, "drive %d configured as non-bootable\n", iDrive);
         }
 
         if (data === undefined) {
@@ -81590,7 +81589,7 @@ class Computer extends Component {
             if (!fRepower && component.comment) {
                 let asComments = component.comment.split("|");
                 for (let i = 0; i < asComments.length; i++) {
-                    component.status(asComments[i]);
+                    component.printf(Messages.STATUS, "%s\n", asComments[i]);
                 }
             }
         }

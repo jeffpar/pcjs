@@ -1018,7 +1018,7 @@ export default class Component {
                  * Override this.notice() with a replacement function that eliminates the Component.alertUser() call.
                  *
                  * @this {Component}
-                 * @param {string} s
+                 * @param {string} sMessage
                  * @returns {boolean}
                  */
                 this.notice = function noticeControl(sMessage /*, fPrintOnly, id*/) {
@@ -1119,15 +1119,16 @@ export default class Component {
     }
 
     /**
-     * print(s)
+     * print(s, bitsMessage)
      *
      * Components using this.print() should wait until after their constructor has run to display any messages, because
      * if a Control Panel has been loaded, its override will not take effect until its own constructor has run.
      *
      * @this {Component}
      * @param {string} s
+     * @param {number} [bitsMessage] (optional)
      */
-    print(s)
+    print(s, bitsMessage = 0)
     {
         Component.print(s);
     }
@@ -1379,7 +1380,7 @@ export default class Component {
      *
      * @param {number} num
      * @param {number} bits
-     * @returns {boolean}
+     * @returns {number}
      */
     maskBits(num, bits)
     {
