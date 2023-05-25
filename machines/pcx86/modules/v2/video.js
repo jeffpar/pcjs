@@ -2994,7 +2994,7 @@ export default class VideoX86 extends Component {
                 this.canvasScreen.style.width = this.canvasScreen.style.height = "";
             }
         }
-        if (DEBUG) this.printf(Messages.ALL, "notifyFullScreen(%b)\n", fFullScreen);
+        if (DEBUG) this.printf("notifyFullScreen(%b)\n", fFullScreen);
         if (this.kbd) this.kbd.notifyEscape(fFullScreen == true);
     }
 

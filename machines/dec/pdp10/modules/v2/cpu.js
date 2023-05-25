@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import MessagesPDP10 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import Str from "../../../../modules/v2/strlib.js";
 import { DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
@@ -50,7 +50,7 @@ export default class CPUPDP10 extends Component {
      */
     constructor(parmsCPU, nCyclesDefault)
     {
-        super("CPU", parmsCPU, MessagesPDP10.CPU);
+        super("CPU", parmsCPU, Messages.CPU);
 
         var nCycles = +parmsCPU['cycles'] || nCyclesDefault;
 
@@ -210,7 +210,7 @@ export default class CPUPDP10 extends Component {
             if (DEBUGGER && this.dbg) {
                 this.dbg.init(this.flags.autoStart);
             } else {
-                this.status("No debugger detected");
+                this.printf(Messages.STATUS, "No debugger detected\n");
             }
             if (!this.flags.autoStart) {
                 this.println("CPU will not be auto-started " + (this.panel? "(click Run to start)" : "(type 'go' to start)"));
@@ -826,7 +826,7 @@ export default class CPUPDP10 extends Component {
          */
         this.nCyclesRecalc += this.nCyclesThisRun;
 
-        if (DEBUG && this.messageEnabled(MessagesPDP10.LOG) && msRemainsThisRun) {
+        if (DEBUG && this.messageEnabled(Messages.LOG) && msRemainsThisRun) {
             this.log("calcRemainingTime: " + msRemainsThisRun + "ms to sleep after " + this.msEndThisRun + "ms");
         }
 
@@ -1124,7 +1124,7 @@ export default class CPUPDP10 extends Component {
             if (fUpdateFocus) this.cmp.setFocus(true);
             this.cmp.start(this.msStartRun, this.getCycles());
         }
-        if (!this.dbg) this.status("Started");
+        if (!this.dbg) this.printf(Messages.STATUS, "Started\n");
         setTimeout(this.onRunTimeout, 0);
         return true;
     }
@@ -1169,7 +1169,7 @@ export default class CPUPDP10 extends Component {
                 this.cmp.stop(Component.getTime(), this.getCycles());
             }
             fStopped = true;
-            if (!this.dbg) this.status("Stopped");
+            if (!this.dbg) this.printf(Messages.STATUS, "Stopped\n");
         }
         this.flags.complete = fComplete;
         return fStopped;

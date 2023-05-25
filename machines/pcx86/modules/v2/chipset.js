@@ -201,7 +201,7 @@ export default class ChipSet extends Component {
             let volume = +sound || 0;
             this.volumeInit = (sound == "true" || volume < 0 || volume > 1? 0.5 : volume);
         }
-        if (!this.volumeInit) this.printf(Messages.ALL, "note: speaker disabled\n");
+        if (!this.volumeInit) this.printf(Messages.DEFAULT, "note: speaker disabled\n");
 
         /*
          * This divisor is invariant, so we calculate it as soon as we're able to query the CPU's base speed.
@@ -516,9 +516,9 @@ export default class ChipSet extends Component {
          */
         if (Object.prototype.toString.call(date) !== "[object Date]" || isNaN(date.getTime())) {
             date = new Date();
-            this.printf(Messages.ALL, "CMOS date invalid (%s), using %T\n", sDate, date);
+            this.printf(Messages.DEFAULT, "CMOS date invalid (%s), using %T\n", sDate, date);
         } else if (sDate) {
-            this.printf(Messages.ALL, "CMOS date: %T\n", date);
+            this.printf(Messages.DEFAULT, "CMOS date: %T\n", date);
         }
 
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] = date.getSeconds();
@@ -2428,7 +2428,7 @@ export default class ChipSet extends Component {
                 if (DEBUG && DEBUGGER && channel.sAddrDebug === null) {
                     channel.sAddrDebug = Str.toHex(addr >> 4, 4) + ":" + Str.toHex(addr & 0xf, 4);
                     if (channel.type != ChipSet.DMA_MODE.TYPE_WRITE && this.messageEnabled(this.messageBitsDMA(iDMAChannel))) {
-                        this.printf(Messages.ALL, "advanceDMA(%d) transferring %d bytes from %s\n", iDMAChannel, channel.cbDebug, channel.sAddrDebug);
+                        this.printf(Messages.DMA, "advanceDMA(%d) transferring %d bytes from %s\n", iDMAChannel, channel.cbDebug, channel.sAddrDebug);
                         this.dbg.doDump(["db", channel.sAddrDebug, "l" + channel.cbDebug]);
                     }
                 }
@@ -2568,7 +2568,7 @@ export default class ChipSet extends Component {
         }
 
         if (DEBUG && channel.type == ChipSet.DMA_MODE.TYPE_WRITE && channel.sAddrDebug && this.messageEnabled(this.messageBitsDMA(iDMAChannel))) {
-            this.printf(Messages.ALL, "updateDMA(%d) transferred %d bytes to %s\n", iDMAChannel, channel.cbDebug, channel.sAddrDebug);
+            this.printf(Messages.DMA, "updateDMA(%d) transferred %d bytes to %s\n", iDMAChannel, channel.cbDebug, channel.sAddrDebug);
             this.dbg.doDump(["db", channel.sAddrDebug, "l" + channel.cbDebug]);
         }
 
@@ -4316,7 +4316,7 @@ export default class ChipSet extends Component {
 
         default:
             if (!COMPILED) {
-                this.printf(Messages.ALL, "unrecognized 8042 command: %#04X\n", this.b8042InBuff);
+                this.printf(Messages.DEFAULT, "unrecognized 8042 command: %#04X\n", this.b8042InBuff);
                 // if (this.dbg) this.dbg.stopCPU();
             }
             break;
@@ -4411,7 +4411,7 @@ export default class ChipSet extends Component {
              * determine if that's what the caller intended.
              */
             if (!COMPILED) {
-                this.printf(Messages.ALL, "unexpected 8042 output port reset: %#04X\n", b);
+                this.printf(Messages.DEFAULT, "unexpected 8042 output port reset: %#04X\n", b);
                 if (this.dbg) this.dbg.stopCPU();
             }
             this.cpu.resetRegs();

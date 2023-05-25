@@ -28,7 +28,7 @@ const Messages = {
     TYPES:      0x0ff000000000,         // all the above message types; only one (at most) of these should be set
     HALT:       0x400000000000,
     BUFFER:     0x800000000000,
-    ALL:        0xffffffffffff
+    ALL:        0x000ffffffffe
 };
 
 /*

@@ -7,12 +7,12 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import MessagesPDP10 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import Keys from "../../../../modules/v2/keys.js";
 import State from "../../../../modules/v2/state.js";
 import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2//weblib.js";
+import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, MAXDEBUG } from "./defines.js";
 
 /**
@@ -64,7 +64,7 @@ export default class SerialPortPDP10 extends Component {
      */
     constructor(parmsSerial)
     {
-        super("SerialPort", parmsSerial, MessagesPDP10.SERIAL);
+        super("SerialPort", parmsSerial, Messages.SERIAL);
 
         this.iAdapter = +parmsSerial['adapter'];
         this.fUpperCase = parmsSerial['upperCase'];
@@ -322,16 +322,16 @@ export default class SerialPortPDP10 extends Component {
                             if (this.sendData) {
                                 this.fNullModem = fNullModem;
                                 this.updateStatus = exports['receiveStatus'];
-                                this.status("Connected %s.%s to %s", this.idMachine, sSourceID, sTargetID);
+                                this.printf(Messages.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
                                 return;
                             }
                         }
                     }
                 }
                 /*
-                 * Changed from notice() to status() because sometimes a connection fails simply because one of us is a laggard.
+                 * Changed from NOTICE to STATUS because sometimes a connection fails simply because one of us is a laggard.
                  */
-                this.status("Unable to establish connection: %s", sConnection);
+                this.printf(Messages.STATUS, "Unable to establish connection: %s\n", sConnection);
             }
         }
     }

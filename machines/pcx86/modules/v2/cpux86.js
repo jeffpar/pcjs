@@ -4456,7 +4456,7 @@ export default class CPUx86 extends CPULib {
                         if (!nMinCycles) {
                             this.assert(DEBUGGER);  // nMinCycles of zero should be generated ONLY by the Debugger
                             if (DEBUGGER) {
-                                this.printf(Messages.ALL, "interrupt dispatched\n");
+                                this.printf("interrupt dispatched\n");
                                 this.opFlags = 0;
                                 break;
                             }

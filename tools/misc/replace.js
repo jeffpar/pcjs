@@ -108,7 +108,7 @@ function replaceArgs(sArgs)
             sFormat += arg.slice(1, -1).replace(/"/g, '\\"');
         } else {
             let fmt = "", warning = false;
-            if (arg.match(/^([A-Za-z]+\.|)(ch|s|as)[^a-z]?/) || arg.startsWith("String.") || arg.indexOf(".toStr") > 0 || arg.indexOf(".toHexAddr") > 0 || arg.indexOf(".join") > 0 || arg.indexOf(".getSpeedTarget") > 0 || arg.indexOf(".model") > 0) {
+            if (arg.match(/^([A-Za-z]+\.|)(ch|s|as)[^a-z]?/) || arg.startsWith("String.") || arg.indexOf(".toStr") > 0 || arg.indexOf(".pad") > 0 || arg.indexOf(".toHexAddr") > 0 || arg.indexOf(".join") > 0 || arg.indexOf(".getSpeedTarget") > 0 || arg.indexOf(".model") > 0) {
                 fmt = "%s";
             }
             else if (arg.match(/^([A-Za-z]+\.|)(a|c|i|ms|n)[^a-z]?/) || arg.match(/\s(-|\+)\s/) || arg.indexOf("getCycles") > 0 || arg.startsWith("Math.") || arg.endsWith(".length") || arg.indexOf("Disk.SECTOR") >= 0) {

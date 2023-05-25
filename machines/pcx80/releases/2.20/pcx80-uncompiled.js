@@ -161,7 +161,7 @@ const Messages = {
     TYPES:      0x0ff000000000,         // all the above message types; only one (at most) of these should be set
     HALT:       0x400000000000,
     BUFFER:     0x800000000000,
-    ALL:        0xffffffffffff
+    ALL:        0x000ffffffffe
 };
 
 /*
@@ -4294,7 +4294,7 @@ class Component {
     /**
      * print(s, bitsMessage)
      *
-     * Components using this.print() should wait until after their constructor has run to display any messages, because
+     * Components using print() should wait until after their constructor has run to display any messages;
      * if a Control Panel has been loaded, its override will not take effect until its own constructor has run.
      *
      * @this {Component}
@@ -4309,7 +4309,7 @@ class Component {
     /**
      * println(s, type, id) [DEPRECATED]
      *
-     * Components using this.println() should wait until after their constructor has run to display any messages, because
+     * Components using println() should wait until after their constructor has run to display any messages;
      * if a Control Panel has been loaded, its override will not take effect until its own constructor has run.
      *
      * @this {Component}
@@ -4324,7 +4324,7 @@ class Component {
     }
 
     /**
-     * status(format, ...args) [DEPRECATED: Use printf(Messages.STATUS, format, ...args) instead
+     * status(format, ...args) [DEPRECATED: Use printf(Messages.STATUS, format, ...args) instead]
      *
      * status() is a print function that also includes information about the component (ie, the component type),
      * which is why there is no corresponding Component.status() function.
@@ -4403,7 +4403,7 @@ class Component {
     isError()
     {
         if (this.flags.error) {
-            this.println(this.toString() + " error");
+            this.print(this.toString() + " error\n");
             return true;
         }
         return false;
@@ -4471,7 +4471,7 @@ class Component {
             if (fCancel) {
                 this.flags.busyCancel = true;
             } else if (fCancel === undefined) {
-                this.println(this.toString() + " busy");
+                this.print(this.toString() + " busy\n");
             }
         }
         return this.flags.busy;
@@ -4494,7 +4494,7 @@ class Component {
             return false;
         }
         if (this.flags.error) {
-            this.println(this.toString() + " error");
+            this.print(this.toString() + " error\n");
             return false;
         }
         this.flags.busy = fBusy;
@@ -4600,8 +4600,7 @@ class Component {
     /**
      * messageEnabled(bitsMessage)
      *
-     * If bitsMessage is Messages.DEFAULT (0), then the component's Messages category is used,
-     * and if it's Messages.ALL (-1), then the message is always displayed, regardless what's enabled.
+     * If bitsMessage is Messages.DEFAULT (0), then the component's Messages category is used.
      *
      * @this {Component}
      * @param {number} [bitsMessage] is zero or more Message flags
@@ -4611,7 +4610,7 @@ class Component {
     {
         if (bitsMessage % 2) bitsMessage--;
         bitsMessage = bitsMessage || this.bitsMessage;
-        if ((bitsMessage|1) == -1 || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
+        if (this.testBits(bitsMessage, Messages.TYPES) || this.dbg && this.testBits(bitsMessage, this.dbg.bitsMessage)) {
             return true;
         }
         return false;
@@ -4630,7 +4629,7 @@ class Component {
     {
         let bitsMessage = 0;
         if (typeof format == "number") {
-            bitsMessage = format;
+            bitsMessage = format || Messages.PROGRESS;
             format = args.shift();
             let bitsTypes = this.maskBits(bitsMessage, Messages.TYPES);
             if (bitsTypes) {
@@ -4639,7 +4638,6 @@ class Component {
                     format = this.type + ": " + format;
                     break;
                 }
-                bitsMessage = Messages.ALL;
             }
         }
         if (this.messageEnabled(bitsMessage)) {

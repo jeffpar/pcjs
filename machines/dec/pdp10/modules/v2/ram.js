@@ -8,11 +8,11 @@
  */
 
 import MemoryPDP10 from "./memory.js";
-import MessagesPDP10 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
 import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2//weblib.js";
+import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, PDP10 } from "./defines.js";
 
 export default class RAMPDP10 extends Component {
@@ -199,9 +199,9 @@ export default class RAMPDP10 extends Component {
                 if (!this.aData) return;
 
                 if (this.loadImage(this.aData, this.addrLoad, this.addrExec, this.addrRAM)) {
-                    this.status('Loaded image "%s"', this.sFileName);
+                    this.printf(Messages.STATUS, 'Loaded image "%s"\n', this.sFileName);
                 } else {
-                    this.notice('Error loading image "' + this.sFileName + '"');
+                    this.printf(Messages.STATUS, 'Error loading image "%s"\n', this.sFileName);
                 }
 
                 /*

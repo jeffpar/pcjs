@@ -10,11 +10,11 @@
 import BusPDP10 from "./bus.js";
 import CPUPDP10 from "./cpu.js";
 import MemoryPDP10 from "./memory.js";
-import MessagesPDP10 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
 import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2//weblib.js";
+import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER, PDP10 } from "./defines.js";
 
 /*
@@ -99,7 +99,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
         super(parmsCPU, nCyclesDefault);
 
         this.model = model;
-        this.addrReset = +parmsCPU['addrReset'] || 0;
+        this.lastPC = this.addrReset = +parmsCPU['addrReset'] || 0;
 
         this.opDecode = PDP10.opKA10.bind(this);
         this.opUndefined = PDP10.opUndefined.bind(this);
@@ -136,7 +136,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
      */
     reset()
     {
-        this.status("Model " + this.model);
+        this.printf(Messages.STATUS, "Model %s\n", this.model);
         if (this.flags.running) this.stopCPU();
         this.initCPU();
         this.resetCycles();
@@ -618,7 +618,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
     {
         if (irq) {
             this.insertIRQ(irq);
-            if (irq.message && this.messageEnabled(irq.message | MessagesPDP10.INT)) {
+            if (irq.message && this.messageEnabled(irq.message | Messages.INT)) {
                 this.printMessage("setIRQ(vector=" + Str.toOct(irq.vector) + ",priority=" + irq.priority + ")", true, true);
             }
         }
@@ -634,7 +634,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
     {
         if (irq) {
             this.removeIRQ(irq);
-            if (irq.message && this.messageEnabled(irq.message | MessagesPDP10.INT)) {
+            if (irq.message && this.messageEnabled(irq.message | Messages.INT)) {
                 this.printMessage("clearIRQ(vector=" + Str.toOct(irq.vector) + ",priority=" + irq.priority + ")", true, true);
             }
         }

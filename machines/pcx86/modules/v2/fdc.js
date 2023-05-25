@@ -326,7 +326,7 @@ export default class FDC extends Component {
                          */
                         let disk = drive.disk;
                         if (disk) {
-                            if (DEBUG) fdc.printf(Messages.ALL, "saving diskette %s...\n", disk.sDiskPath);
+                            if (DEBUG) fdc.printf("saving diskette %s...\n", disk.sDiskPath);
                             let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
                             Component.alertUser(sAlert);
                         } else {
@@ -460,10 +460,10 @@ export default class FDC extends Component {
                                 JSONLib.parseDiskettes(fdc.aDiskettes, /** @type {Object} */ (JSON.parse(sResponse)), "/pcx86", fdc.sDisketteServer, hostName, limits);
                                 cSuccessful++;
                             } catch(err) {
-                                fdc.printf(Messages.ALL, "Unable to parse %s: %s\n", url, err.message);
+                                fdc.printf(Messages.DEFAULT, "Unable to parse %s: %s\n", url, err.message);
                             }
                         } else {
-                            fdc.printf(Messages.ALL, "Unable to open %s (%d)\n", url, nErrorCode);
+                            fdc.printf(Messages.DEFAULT, "Unable to open %s (%d)\n", url, nErrorCode);
                         }
                         if (++cLoaded == cRequested) fdc.addDiskettes(!cSuccessful);
                     }, function(nState) {
@@ -1309,7 +1309,7 @@ export default class FDC extends Component {
                 }
                 if (!sDiskPath) return false;
                 sDiskName = Str.getBaseName(sDiskPath);
-                if (DEBUG) this.printf(Messages.ALL, "Attempting to load %s as \"%s\"\n", sDiskPath, sDiskName);
+                if (DEBUG) this.printf(Messages.DEFAULT, "Attempting to load %s as \"%s\"\n", sDiskPath, sDiskName);
             }
 
             while (this.loadDrive(iDrive, sDiskName, sDiskPath, false, file) < 0) {
@@ -1317,7 +1317,7 @@ export default class FDC extends Component {
                  * I got tired of the "reload" warning when running locally, so I've disabled it there.
                  */
                 if (Web.getHostName() != "localhost" && (!globals.window.confirm || !globals.window.confirm("Click OK to reload the original disk and discard any changes."))) {
-                    if (DEBUG) this.printf(Messages.ALL, "load cancelled\n");
+                    if (DEBUG) this.printf(Messages.DEFAULT, "load cancelled\n");
                     return false;
                 }
                 /*

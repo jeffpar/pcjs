@@ -9,7 +9,7 @@
 
 import DebuggerPDP10 from "./debugger.js";
 import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2//weblib.js";
+import Web from "../../../../modules/v2/weblib.js";
 import { MAXDEBUG, PDP10 } from "./defines.js";
 
 /**

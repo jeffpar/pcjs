@@ -9,11 +9,11 @@
 
 import BusPDP10 from "./bus.js";
 import MemoryPDP10 from "./memory.js";
-import MessagesPDP10 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
 import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2//weblib.js";
+import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG } from "./defines.js";
 
 export default class ROMPDP10 extends Component {
@@ -37,7 +37,7 @@ export default class ROMPDP10 extends Component {
      */
     constructor(parmsROM)
     {
-        super("ROM", parmsROM, MessagesPDP10.ROM);
+        super("ROM", parmsROM, Messages.ROM);
 
         this.abInit = null;
         this.aSymbols = null;

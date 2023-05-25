@@ -270,7 +270,7 @@ export default class CPULib extends Component {
             if (DEBUGGER && this.dbg) {
                 this.dbg.init();
             } else {
-                this.printf(Messages.ALL, "No debugger detected\n");
+                this.printf(Messages.DEFAULT, "No debugger detected\n");
             }
         }
         /*
@@ -333,7 +333,7 @@ export default class CPULib extends Component {
     isPowered()
     {
         if (!this.flags.powered) {
-            this.printf(Messages.ALL, "%s not powered\n", this.toString());
+            this.printf(Messages.DEFAULT, "%s not powered\n", this.toString());
             return false;
         }
         return true;
@@ -438,7 +438,7 @@ export default class CPULib extends Component {
      */
     displayChecksum()
     {
-        this.printf(Messages.ALL, "%d cycles: checksum=%x\n", this.getCycles(), this.nChecksum);
+        this.printf("%d cycles: checksum=%x\n", this.getCycles(), this.nChecksum);
     }
 
     /**
@@ -760,7 +760,7 @@ export default class CPULib extends Component {
                 let sSpeed = this.getSpeedTarget();
                 let controlSpeed = this.bindings["setSpeed"];
                 if (controlSpeed) controlSpeed.textContent = sSpeed;
-                this.printf(Messages.ALL, "target speed: %s\n", sSpeed);
+                this.printf(Messages.DEFAULT, "target speed: %s\n", sSpeed);
             }
             if (fUpdateFocus && this.cmp) this.cmp.updateFocus();
         }
@@ -891,7 +891,7 @@ export default class CPULib extends Component {
         let msElapsed = this.msEndThisRun - this.msStartRun;
 
         if (MAXDEBUG && msRemainsThisRun < 0 && this.nTargetMultiplier > 1) {
-            this.printf(Messages.ALL, "warning: updates @%dms (prefer %dms)\n", msElapsedThisRun, Math.round(msYield));
+            this.printf("warning: updates @%dms (prefer %dms)\n", msElapsedThisRun, Math.round(msYield));
         }
 
         this.calcSpeed(nCycles, msElapsed);
@@ -1245,7 +1245,7 @@ export default class CPULib extends Component {
                 }
                 catch(exception) {
                     if (typeof exception != "number") throw exception;
-                    if (MAXDEBUG) this.printf(Messages.ALL, "CPU exception %#04x\n", exception);
+                    if (MAXDEBUG) this.printf("CPU exception %#04x\n", exception);
                     /*
                      * TODO: If we ever get into a situation where every single instruction is generating a fault
                      * (eg, if an 8088 executes opcode 0xFF 0xFF, which is incorrectly routed to helpFault() instead
@@ -1305,7 +1305,7 @@ export default class CPULib extends Component {
             return false;
         }
         if (this.flags.running) {
-            if (!fQuiet) this.printf(Messages.ALL, "%s busy\n", this.toString());
+            if (!fQuiet) this.printf(Messages.DEFAULT, "%s busy\n", this.toString());
             return false;
         }
         if (this.idRunTimeout) {

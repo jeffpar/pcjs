@@ -8,9 +8,9 @@
  */
 
 import MemoryPDP10 from "./memory.js";
-import MessagesPDP10 from "./messages.js";
+import Messages from "./messages.js";
 import Str from "../../../../modules/v2/strlib.js";
-import Usr from "../../../../modules/v2//usrlib.js";
+import Usr from "../../../../modules/v2/usrlib.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
 import { DEBUGGER, PDP10 } from "./defines.js";
@@ -71,7 +71,7 @@ export default class BusPDP10 extends Component {
      */
     constructor(parmsBus, cpu, dbg)
     {
-        super("Bus", parmsBus, MessagesPDP10.BUS);
+        super("Bus", parmsBus, Messages.BUS);
 
         this.cpu = cpu;
         this.dbg = dbg;
@@ -288,7 +288,7 @@ export default class BusPDP10 extends Component {
         }
 
         if (sizeLeft <= 0) {
-            this.status("Added %dKb %s at %o", (size >> 10), MemoryPDP10.TYPE_NAMES[type], addr);
+            this.printf(Messages.STATUS, "Added %dKb %s at %o\n", (size >> 10), MemoryPDP10.TYPE_NAMES[type], addr);
             return true;
         }
 
@@ -686,7 +686,7 @@ export default class BusPDP10 extends Component {
     {
         this.fFault = true;
         if (!this.nDisableFaults) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP10.FAULT)) {
+            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.FAULT)) {
                 this.dbg.printMessage("memory fault on " + this.dbg.toStrBase(addr), true, true);
             }
             this.cpu.haltCPU();

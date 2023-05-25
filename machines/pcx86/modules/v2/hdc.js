@@ -215,7 +215,7 @@ export default class HDC extends Component {
                         let i = sDiskName.lastIndexOf('.');
                         if (i >= 0) sDiskName = sDiskName.substr(0, i);
                         sDiskName += ".img";
-                        if (DEBUG) hdc.printf(Messages.ALL, "saving disk %s...\n", sDiskName);
+                        if (DEBUG) hdc.printf("saving disk %s...\n", sDiskName);
                         let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, sDiskName);
                         Component.alertUser(sAlert);
                     } else {
