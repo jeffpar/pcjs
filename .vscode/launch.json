@@ -138,13 +138,6 @@
       "webRoot": "${workspaceFolder}"
     },
     {
-      "name": "IBM PC with MDA",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/",
-      "webRoot": "${workspaceFolder}"
-    },
-    {
       "name": "IBM PC with MDA [Debugger]",
       "type": "chrome",
       "request": "launch",

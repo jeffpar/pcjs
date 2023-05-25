@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import MessagesPDP11 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
 import State from "../../../../modules/v2/state.js";
@@ -41,7 +41,7 @@ export default class PC11 extends Component {
      */
     constructor(parms)
     {
-        super("PC11", parms, MessagesPDP11.PC11);
+        super("PC11", parms, Messages.PC11);
 
         this.sDevice = "PTR";                   // TODO: Make the device name configurable
 
@@ -261,7 +261,7 @@ export default class PC11 extends Component {
             }
         }
 
-        this.irqReader = this.cpu.addIRQ(PDP11.PC11.RVEC, PDP11.PC11.PRI, MessagesPDP11.PC11);
+        this.irqReader = this.cpu.addIRQ(PDP11.PC11.RVEC, PDP11.PC11.PRI, Messages.PC11);
 
         this.timerReader = this.cpu.addTimer(function readyReader() {
             pc11.advanceReader();
@@ -390,7 +390,7 @@ export default class PC11 extends Component {
             sTapePath = window.prompt("Enter the URL of a remote tape image.", "") || "";
             if (!sTapePath) return;
             sTapeName = Str.getBaseName(sTapePath);
-            this.status('Attempting to load %s as "%s"', sTapePath, sTapeName);
+            this.printf(Messages.STATUS, 'Attempting to load %s as "%s"\n', sTapePath, sTapeName);
             this.sTapeSource = PC11.SOURCE.REMOTE;
         }
         else {
@@ -426,7 +426,7 @@ export default class PC11 extends Component {
                 this.notice("PC11 busy");
             }
             else {
-                // this.status("tape queued: %s", sTapeName);
+                // this.printf(Messages.STATUS, "tape queued: %s\n", sTapeName);
                 if (fAutoMount) {
                     this.cAutoMount++;
                     if (this.messageEnabled()) this.printMessage("auto-loading tape: " + sTapeName);
@@ -443,7 +443,7 @@ export default class PC11 extends Component {
              * Now that we're calling parseTape() again (so that the current tape can either be restarted on
              * the reader or reloaded into RAM), we can also rely on it to display an appropriate status message, too.
              *
-             *      this.status(this.nTapeTarget == PC11.TARGET.READER? "tape loaded" : "tape read");
+             *      this.printf(Messages.STATUS, "%s\n", this.nTapeTarget == PC11.TARGET.READER? "tape loaded" : "tape read");
              */
             this.parseTape(this.sTapeName, this.sTapePath, this.nTapeTarget, this.aBytes, this.addrLoad, this.addrExec);
         }
@@ -705,7 +705,7 @@ export default class PC11 extends Component {
                 this.notice('No valid memory address for tape "' + sTapeName + '"');
                 return;
             }
-            this.status('Read tape "%s"', sTapeName);
+            this.printf(Messages.STATUS, 'Read tape "%s"\n', sTapeName);
             return;
         }
 
@@ -713,7 +713,7 @@ export default class PC11 extends Component {
         this.aTapeData = aBytes;
         this.regPRS &= ~PDP11.PC11.PRS.ERROR;
 
-        this.status('Loaded tape "%s" (%d bytes)', sTapeName, aBytes.length);
+        this.printf(Messages.STATUS, 'Loaded tape "%s" (%d bytes)\n', sTapeName, aBytes.length);
         this.displayProgress(0);
     }
 
@@ -732,7 +732,7 @@ export default class PC11 extends Component {
              * Avoid any unnecessary hysteresis regarding the display if this unload is merely a prelude to another load.
              */
             if (!fLoading) {
-                if (this.nTapeTarget) this.status(this.nTapeTarget == PC11.TARGET.READER? "tape detached" : "tape unloaded");
+                if (this.nTapeTarget) this.printf(Messages.STATUS, "%s\n", this.nTapeTarget == PC11.TARGET.READER? "tape detached" : "tape unloaded");
                 this.sTapeSource = PC11.SOURCE.NONE;
                 this.nTapeTarget = PC11.TARGET.NONE;
                 this.displayTape();

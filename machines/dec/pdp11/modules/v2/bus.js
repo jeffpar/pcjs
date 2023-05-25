@@ -11,7 +11,7 @@
  */
 
 import MemoryPDP11 from "./memory.js";
-import MessagesPDP11 from "./messages.js";
+import Messages from "./messages.js";
 import Str from "../../../../modules/v2/strlib.js";
 import Usr from "../../../../modules/v2/usrlib.js";
 import Component from "../../../../modules/v2/component.js";
@@ -73,7 +73,7 @@ export default class BusPDP11 extends Component {
      */
     constructor(parmsBus, cpu, dbg)
     {
-        super("Bus", parmsBus, MessagesPDP11.BUS);
+        super("Bus", parmsBus, Messages.BUS);
 
         this.cpu = cpu;
         this.dbg = dbg;
@@ -434,7 +434,7 @@ export default class BusPDP11 extends Component {
         }
 
         if (sizeLeft <= 0) {
-            this.status("Added %dKb %s at %o", (size >> 10), MemoryPDP11.TYPE_NAMES[type], addr);
+            this.printf(Messages.STATUS, "Added %dKb %s at %o\n", (size >> 10), MemoryPDP11.TYPE_NAMES[type], addr);
             return true;
         }
 
@@ -965,7 +965,7 @@ export default class BusPDP11 extends Component {
             }
             var s = sName || "unknown";
             if (s && index >= 0) s += index++;
-            this.aIOHandlers[off] = [fnReadByte, fnWriteByte, fnReadWord, fnWriteWord, s, message || MessagesPDP11.BUS, false];
+            this.aIOHandlers[off] = [fnReadByte, fnWriteByte, fnReadWord, fnWriteWord, s, message || Messages.BUS, false];
             if (MAXDEBUG) this.log("addIOHandlers(" + Str.toHexLong(addr) + ")");
         }
         return true;
@@ -1100,7 +1100,7 @@ export default class BusPDP11 extends Component {
     {
         this.fFault = true;
         if (!this.nDisableFaults) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.FAULT)) {
+            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.FAULT)) {
                 this.dbg.printMessage("memory fault (" + access + ") on " + this.dbg.toStrBase(addr), true, true);
             }
             if (err) this.cpu.regErr |= err;
@@ -1263,14 +1263,14 @@ BusPDP11.IOController = {
             }
         }
         if (b >= 0) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
+            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
                 this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".readByte(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(b), true, !bus.nDisableFaults);
             }
             return b;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.READ_BYTE);
         b = 0xff;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS)) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS)) {
             this.dbg.printMessage("warning: unconverted read access to byte @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(b), true, !bus.nDisableFaults);
         }
         return b;
@@ -1344,13 +1344,13 @@ BusPDP11.IOController = {
             }
         }
         if (fWrite) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
+            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
                 this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".writeByte(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(b) + ")", true, !bus.nDisableFaults);
             }
             return;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.WRITE_BYTE);
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS)) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS)) {
             this.dbg.printMessage("warning: unconverted write access to byte @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(b), true, !bus.nDisableFaults);
         }
     },
@@ -1383,14 +1383,14 @@ BusPDP11.IOController = {
             }
         }
         if (w >= 0) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
+            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
                 this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".readWord(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(w), true, !bus.nDisableFaults);
             }
             return w;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.READ_WORD);
         w = 0xffff;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS)) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS)) {
             this.dbg.printMessage("warning: unconverted read access to word @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(w), true, !bus.nDisableFaults);
         }
         return w;
@@ -1427,13 +1427,13 @@ BusPDP11.IOController = {
             }
         }
         if (fWrite) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
+            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
                 this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".writeWord(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(w) + ")", true, !bus.nDisableFaults);
             }
             return;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.WRITE_WORD);
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS)) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS)) {
             this.dbg.printMessage("warning: unconverted write access to word @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(w), true, !bus.nDisableFaults);
         }
     }

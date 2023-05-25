@@ -25,7 +25,7 @@
  */
 
 import BusPDP11 from "./bus.js";
-import MessagesPDP11 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import DiskAPI from "../../../../modules/v2/diskapi.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
@@ -88,7 +88,7 @@ export default class DiskPDP11 extends Component {
      */
     constructor(controller, drive, mode)
     {
-        super("Disk", {'id': controller.idMachine + ".disk" + Str.toHex(++DiskPDP11.nDisks, 4)}, MessagesPDP11.DISK);
+        super("Disk", {'id': controller.idMachine + ".disk" + Str.toHex(++DiskPDP11.nDisks, 4)}, Messages.DISK);
 
         /*
          * Route all non-Debugger messages (eg, notice() and println() calls) through
@@ -480,7 +480,7 @@ export default class DiskPDP11 extends Component {
                  * conversion to a forward-compatible 'data' array.
                  */
                 else {
-                    if (DEBUG && this.messageEnabled(MessagesPDP11.DISK | MessagesPDP11.BUFFER)) {
+                    if (DEBUG && this.messageEnabled(Messages.DISK | Messages.BUFFER)) {
                         var sCylinders = aDiskData.length + " track" + (aDiskData.length > 1 ? "s" : "");
                         var nHeads = aDiskData[0].length;
                         var sHeads = nHeads + " head" + (nHeads > 1 ? "s" : "");

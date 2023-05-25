@@ -8,7 +8,7 @@
  */
 
 import BusPDP11 from "./bus.js";
-import MessagesPDP11 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
 import Str from "../../../../modules/v2/strlib.js";
@@ -81,7 +81,7 @@ export default class ComputerPDP11 extends Component {
      */
     constructor(parmsComputer, parmsMachine, fSuspended)
     {
-        super("Computer", parmsComputer, MessagesPDP11.COMPUTER);
+        super("Computer", parmsComputer, Messages.COMPUTER);
 
         this.flags.powered = false;
 
@@ -697,7 +697,7 @@ export default class ComputerPDP11 extends Component {
                 if (!fRepower && component.comment) {
                     var asComments = component.comment.split("|");
                     for (var i = 0; i < asComments.length; i++) {
-                        component.status(asComments[i]);
+                        component.printf(Messages.STATUS, "%s\n", asComments[i]);
                     }
                 }
             }

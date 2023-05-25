@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import MessagesPDP11 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS } from "./defines.js";
@@ -20,7 +20,7 @@ export default class KeyboardPDP11 extends Component {
      */
     constructor(parmsKbd)
     {
-        super("Keyboard", parmsKbd, MessagesPDP11.KEYBOARD);
+        super("Keyboard", parmsKbd, Messages.KEYBOARD);
 
         this.setReady();
     }

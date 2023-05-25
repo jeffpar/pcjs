@@ -13,7 +13,7 @@
 import BusPDP11 from "./bus.js";
 import CPUPDP11 from "./cpu.js";
 import MemoryPDP11 from "./memory.js";
-import MessagesPDP11 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import State from "../../../../modules/v2/state.js";
 import Str from "../../../../modules/v2/strlib.js";
@@ -237,7 +237,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
      */
     reset()
     {
-        this.status("Model %d", this.model);
+        this.printf(Messages.STATUS, "Model %d\n", this.model);
         if (this.flags.running) this.stopCPU();
         this.initCPU();
         this.resetCycles();
@@ -1076,7 +1076,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
     {
         if (irq) {
             this.insertIRQ(irq);
-            if (irq.message && this.messageEnabled(irq.message | MessagesPDP11.INT)) {
+            if (irq.message && this.messageEnabled(irq.message | Messages.INT)) {
                 this.printMessage("setIRQ(vector=" + Str.toOct(irq.vector) + ",priority=" + irq.priority + ")", true, true);
             }
         }
@@ -1092,7 +1092,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
     {
         if (irq) {
             this.removeIRQ(irq);
-            if (irq.message && this.messageEnabled(irq.message | MessagesPDP11.INT)) {
+            if (irq.message && this.messageEnabled(irq.message | Messages.INT)) {
                 this.printMessage("clearIRQ(vector=" + Str.toOct(irq.vector) + ",priority=" + irq.priority + ")", true, true);
             }
         }
@@ -1572,9 +1572,9 @@ export default class CPUStatePDP11 extends CPUPDP11 {
     trap(vector, flag, reason)
     {
         if (DEBUG && this.dbg) {
-            if (this.messageEnabled(MessagesPDP11.TRAP)) {
+            if (this.messageEnabled(Messages.TRAP)) {
                 var sReason = reason < 0? PDP11.REASONS[-reason] : this.dbg.toStrBase(reason);
-                this.printMessage("trap to vector " + this.dbg.toStrBase(vector, 8) + " (" + sReason + ")", MessagesPDP11.TRAP, true);
+                this.printMessage("trap to vector " + this.dbg.toStrBase(vector, 8) + " (" + sReason + ")", Messages.TRAP, true);
             }
         }
 

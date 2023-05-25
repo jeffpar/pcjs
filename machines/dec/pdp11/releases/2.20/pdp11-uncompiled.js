@@ -5968,41 +5968,32 @@ PDP11.PSW.FLAGS         = (PDP11.PSW.NF | PDP11.PSW.ZF | PDP11.PSW.VF | PDP11.PS
  * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
  */
 
-const MessagesPDP11 = {
-    NONE:       0x00000000,
-    DEFAULT:    0x00000000,
-    ADDRESS:    0x00000001,
-    CPU:        0x00000002,
-    TRAP:       0x00000004,
-    FAULT:      0x00000008,
-    INT:        0x00000010,
-    BUS:        0x00000020,
-    MEMORY:     0x00000040,
-    MMU:        0x00000080,
-    ROM:        0x00000100,
-    DEVICE:     0x00000200,
-    PANEL:      0x00000400,
-    KEYBOARD:   0x00000800,
-    KEYS:       0x00001000,
-    PC11:       0x00002000,
-    PAPER:      0x00004000,
-    DISK:       0x00008000,
-    READ:       0x00010000,
-    WRITE:      0x00020000,
-    RK11:       0x00040000,
-    RL11:       0x00080000,
-    RX11:       0x00100000,
-    DL11:       0x00200000,
-    SERIAL:     0x00400000,
-    KW11:       0x00800000,
-    TIMER:      0x01000000,
-    SPEAKER:    0x02000000,
-    COMPUTER:   0x04000000,
-    WARN:       0x10000000,
-    HALT:       0x20000000,
-    BUFFER:     0x40000000,
-    ALL:        0xffffffff|0
-};
+Messages.CPU         = 0x00000002;
+Messages.TRAP        = 0x00000004;
+Messages.FAULT       = 0x00000008;
+Messages.INT         = 0x00000010;
+Messages.BUS         = 0x00000020;
+Messages.MEMORY      = 0x00000040;
+Messages.MMU         = 0x00000080;
+Messages.ROM         = 0x00000100;
+Messages.DEVICE      = 0x00000200;
+Messages.PANEL       = 0x00000400;
+Messages.KEYBOARD    = 0x00000800;
+Messages.KEYS        = 0x00001000;
+Messages.PC11        = 0x00002000;
+Messages.PAPER       = 0x00004000;
+Messages.DISK        = 0x00008000;
+Messages.READ        = 0x00010000;
+Messages.WRITE       = 0x00020000;
+Messages.RK11        = 0x00040000;
+Messages.RL11        = 0x00080000;
+Messages.RX11        = 0x00100000;
+Messages.DL11        = 0x00200000;
+Messages.SERIAL      = 0x00400000;
+Messages.KW11        = 0x00800000;
+Messages.TIMER       = 0x01000000;
+Messages.SPEAKER     = 0x02000000;
+Messages.COMPUTER    = 0x04000000;
 
 /*
  * Message categories supported by the messageEnabled() function and other assorted message
@@ -6018,44 +6009,32 @@ const MessagesPDP11 = {
  * aware that changing the bit values could break saved Debugger states (not a huge concern, just
  * something to be aware of).
  */
-MessagesPDP11.CATEGORIES = {
-    "cpu":      MessagesPDP11.CPU,
-    "trap":     MessagesPDP11.TRAP,
-    "fault":    MessagesPDP11.FAULT,
-    "int":      MessagesPDP11.INT,
-    "bus":      MessagesPDP11.BUS,
-    "memory":   MessagesPDP11.MEMORY,
-    "mmu":      MessagesPDP11.MMU,
-    "rom":      MessagesPDP11.ROM,
-    "device":   MessagesPDP11.DEVICE,
-    "panel":    MessagesPDP11.PANEL,
-    "keyboard": MessagesPDP11.KEYBOARD, // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
-    "key":      MessagesPDP11.KEYS,     // using "key" instead of "keys", since the latter is a method on JavasScript objects
-    "pc11":     MessagesPDP11.PC11,
-    "paper":    MessagesPDP11.PAPER,
-    "disk":     MessagesPDP11.DISK,
-    "read":     MessagesPDP11.READ,
-    "write":    MessagesPDP11.WRITE,
-    "rk11":     MessagesPDP11.RK11,
-    "rl11":     MessagesPDP11.RL11,
-    "rx11":     MessagesPDP11.RX11,
-    "dl11":     MessagesPDP11.DL11,
-    "serial":   MessagesPDP11.SERIAL,
-    "kw11":     MessagesPDP11.KW11,
-    "timer":    MessagesPDP11.TIMER,
-    "speaker":  MessagesPDP11.SPEAKER,
-    "computer": MessagesPDP11.COMPUTER,
-    "warn":     MessagesPDP11.WARN,
-    /*
-     * Now we turn to message actions rather than message types; for example, setting "halt"
-     * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
-     *
-     * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
-     * until "m buffer off" is issued.
-     */
-    "halt":     MessagesPDP11.HALT,
-    "buffer":   MessagesPDP11.BUFFER
-};
+Messages.CATEGORIES["cpu"]       = Messages.CPU;
+Messages.CATEGORIES["trap"]      = Messages.TRAP;
+Messages.CATEGORIES["fault"]     = Messages.FAULT;
+Messages.CATEGORIES["int"]       = Messages.INT;
+Messages.CATEGORIES["bus"]       = Messages.BUS;
+Messages.CATEGORIES["memory"]    = Messages.MEMORY;
+Messages.CATEGORIES["mmu"]       = Messages.MMU;
+Messages.CATEGORIES["rom"]       = Messages.ROM;
+Messages.CATEGORIES["device"]    = Messages.DEVICE;
+Messages.CATEGORIES["panel"]     = Messages.PANEL;
+Messages.CATEGORIES["keyboard"]  = Messages.KEYBOARD;   // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
+Messages.CATEGORIES["key"]       = Messages.KEYS,       // using "key" instead of "keys"; since the latter is a method on JavasScript objects
+Messages.CATEGORIES["pc11"]      = Messages.PC11;
+Messages.CATEGORIES["paper"]     = Messages.PAPER;
+Messages.CATEGORIES["disk"]      = Messages.DISK;
+Messages.CATEGORIES["read"]      = Messages.READ;
+Messages.CATEGORIES["write"]     = Messages.WRITE;
+Messages.CATEGORIES["rk11"]      = Messages.RK11;
+Messages.CATEGORIES["rl11"]      = Messages.RL11;
+Messages.CATEGORIES["rx11"]      = Messages.RX11;
+Messages.CATEGORIES["dl11"]      = Messages.DL11;
+Messages.CATEGORIES["serial"]    = Messages.SERIAL;
+Messages.CATEGORIES["kw11"]      = Messages.KW11;
+Messages.CATEGORIES["timer"]     = Messages.TIMER;
+Messages.CATEGORIES["speaker"]   = Messages.SPEAKER;
+Messages.CATEGORIES["computer"]  = Messages.COMPUTER;
 
 
 /**
@@ -6098,7 +6077,7 @@ class PanelPDP11 extends Component {
      */
     constructor(parmsPanel, fBindings)
     {
-        super("Panel", parmsPanel, MessagesPDP11.PANEL);
+        super("Panel", parmsPanel, Messages.PANEL);
 
         /*
          * If there are any live registers, LEDs, etc, to display, this will provide a count.
@@ -7400,7 +7379,7 @@ class BusPDP11 extends Component {
      */
     constructor(parmsBus, cpu, dbg)
     {
-        super("Bus", parmsBus, MessagesPDP11.BUS);
+        super("Bus", parmsBus, Messages.BUS);
 
         this.cpu = cpu;
         this.dbg = dbg;
@@ -7761,7 +7740,7 @@ class BusPDP11 extends Component {
         }
 
         if (sizeLeft <= 0) {
-            this.status("Added %dKb %s at %o", (size >> 10), MemoryPDP11.TYPE_NAMES[type], addr);
+            this.printf(Messages.STATUS, "Added %dKb %s at %o\n", (size >> 10), MemoryPDP11.TYPE_NAMES[type], addr);
             return true;
         }
 
@@ -8292,7 +8271,7 @@ class BusPDP11 extends Component {
             }
             var s = sName || "unknown";
             if (s && index >= 0) s += index++;
-            this.aIOHandlers[off] = [fnReadByte, fnWriteByte, fnReadWord, fnWriteWord, s, message || MessagesPDP11.BUS, false];
+            this.aIOHandlers[off] = [fnReadByte, fnWriteByte, fnReadWord, fnWriteWord, s, message || Messages.BUS, false];
             if (MAXDEBUG) this.log("addIOHandlers(" + Str.toHexLong(addr) + ")");
         }
         return true;
@@ -8427,7 +8406,7 @@ class BusPDP11 extends Component {
     {
         this.fFault = true;
         if (!this.nDisableFaults) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.FAULT)) {
+            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.FAULT)) {
                 this.dbg.printMessage("memory fault (" + access + ") on " + this.dbg.toStrBase(addr), true, true);
             }
             if (err) this.cpu.regErr |= err;
@@ -8590,14 +8569,14 @@ BusPDP11.IOController = {
             }
         }
         if (b >= 0) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
+            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
                 this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".readByte(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(b), true, !bus.nDisableFaults);
             }
             return b;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.READ_BYTE);
         b = 0xff;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS)) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS)) {
             this.dbg.printMessage("warning: unconverted read access to byte @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(b), true, !bus.nDisableFaults);
         }
         return b;
@@ -8671,13 +8650,13 @@ BusPDP11.IOController = {
             }
         }
         if (fWrite) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
+            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
                 this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".writeByte(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(b) + ")", true, !bus.nDisableFaults);
             }
             return;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.WRITE_BYTE);
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS)) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS)) {
             this.dbg.printMessage("warning: unconverted write access to byte @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(b), true, !bus.nDisableFaults);
         }
     },
@@ -8710,14 +8689,14 @@ BusPDP11.IOController = {
             }
         }
         if (w >= 0) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
+            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
                 this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".readWord(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(w), true, !bus.nDisableFaults);
             }
             return w;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.READ_WORD);
         w = 0xffff;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS)) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS)) {
             this.dbg.printMessage("warning: unconverted read access to word @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(w), true, !bus.nDisableFaults);
         }
         return w;
@@ -8754,13 +8733,13 @@ BusPDP11.IOController = {
             }
         }
         if (fWrite) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
+            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
                 this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".writeWord(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(w) + ")", true, !bus.nDisableFaults);
             }
             return;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.WRITE_WORD);
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.BUS)) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS)) {
             this.dbg.printMessage("warning: unconverted write access to word @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(w), true, !bus.nDisableFaults);
         }
     }
@@ -8784,7 +8763,7 @@ class DevicePDP11 extends Component {
      */
     constructor(parmsDevice)
     {
-        super("Device", parmsDevice, MessagesPDP11.DEVICE);
+        super("Device", parmsDevice, Messages.DEVICE);
 
         this.kw11 = {               // KW11 registers
             lks:        PDP11.KW11.LKS.MON,
@@ -8813,13 +8792,13 @@ class DevicePDP11 extends Component {
             device.interruptKW11();
         });
 
-        this.kw11.irq = cpu.addIRQ(PDP11.KW11.VEC, PDP11.KW11.PRI, MessagesPDP11.KW11);
+        this.kw11.irq = cpu.addIRQ(PDP11.KW11.VEC, PDP11.KW11.PRI, Messages.KW11);
 
         bus.addIOTable(this, DevicePDP11.UNIBUS_IOTABLE);
         bus.addResetHandler(this.reset.bind(this));
 
         if (DEBUGGER && dbg) {
-            dbg.messageDump(MessagesPDP11.MMU, function onDumpMMU(asArgs) {
+            dbg.messageDump(Messages.MMU, function onDumpMMU(asArgs) {
                 device.dumpMMU(asArgs);
             });
         }
@@ -9942,23 +9921,23 @@ class DevicePDP11 extends Component {
  */
 DevicePDP11.UNIBUS_IOTABLE = {
     [PDP11.UNIBUS.UNIMAP]:  /* 170200 */    [null, null, DevicePDP11.prototype.readUNIMAP,  DevicePDP11.prototype.writeUNIMAP,  "UNIMAP",   64, PDP11.MODEL_1170],
-    [PDP11.UNIBUS.SIPDR0]:  /* 172200 */    [null, null, DevicePDP11.prototype.readSIPDR,   DevicePDP11.prototype.writeSIPDR,   "SIPDR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.SDPDR0]:  /* 172220 */    [null, null, DevicePDP11.prototype.readSDPDR,   DevicePDP11.prototype.writeSDPDR,   "SDPDR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.SIPAR0]:  /* 172240 */    [null, null, DevicePDP11.prototype.readSIPAR,   DevicePDP11.prototype.writeSIPAR,   "SIPAR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.SDPAR0]:  /* 172260 */    [null, null, DevicePDP11.prototype.readSDPAR,   DevicePDP11.prototype.writeSDPAR,   "SDPAR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.KIPDR0]:  /* 172300 */    [null, null, DevicePDP11.prototype.readKIPDR,   DevicePDP11.prototype.writeKIPDR,   "KIPDR",    8,  PDP11.MODEL_1140, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.KDPDR0]:  /* 172320 */    [null, null, DevicePDP11.prototype.readKDPDR,   DevicePDP11.prototype.writeKDPDR,   "KDPDR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.KIPAR0]:  /* 172340 */    [null, null, DevicePDP11.prototype.readKIPAR,   DevicePDP11.prototype.writeKIPAR,   "KIPAR",    8,  PDP11.MODEL_1140, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.KDPAR0]:  /* 172360 */    [null, null, DevicePDP11.prototype.readKDPAR,   DevicePDP11.prototype.writeKDPAR,   "KDPAR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.MMR3]:    /* 172516 */    [null, null, DevicePDP11.prototype.readMMR3,    DevicePDP11.prototype.writeMMR3,    "MMR3",     1,  PDP11.MODEL_1145, MessagesPDP11.MMU],
+    [PDP11.UNIBUS.SIPDR0]:  /* 172200 */    [null, null, DevicePDP11.prototype.readSIPDR,   DevicePDP11.prototype.writeSIPDR,   "SIPDR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.SDPDR0]:  /* 172220 */    [null, null, DevicePDP11.prototype.readSDPDR,   DevicePDP11.prototype.writeSDPDR,   "SDPDR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.SIPAR0]:  /* 172240 */    [null, null, DevicePDP11.prototype.readSIPAR,   DevicePDP11.prototype.writeSIPAR,   "SIPAR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.SDPAR0]:  /* 172260 */    [null, null, DevicePDP11.prototype.readSDPAR,   DevicePDP11.prototype.writeSDPAR,   "SDPAR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.KIPDR0]:  /* 172300 */    [null, null, DevicePDP11.prototype.readKIPDR,   DevicePDP11.prototype.writeKIPDR,   "KIPDR",    8,  PDP11.MODEL_1140, Messages.MMU],
+    [PDP11.UNIBUS.KDPDR0]:  /* 172320 */    [null, null, DevicePDP11.prototype.readKDPDR,   DevicePDP11.prototype.writeKDPDR,   "KDPDR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.KIPAR0]:  /* 172340 */    [null, null, DevicePDP11.prototype.readKIPAR,   DevicePDP11.prototype.writeKIPAR,   "KIPAR",    8,  PDP11.MODEL_1140, Messages.MMU],
+    [PDP11.UNIBUS.KDPAR0]:  /* 172360 */    [null, null, DevicePDP11.prototype.readKDPAR,   DevicePDP11.prototype.writeKDPAR,   "KDPAR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.MMR3]:    /* 172516 */    [null, null, DevicePDP11.prototype.readMMR3,    DevicePDP11.prototype.writeMMR3,    "MMR3",     1,  PDP11.MODEL_1145, Messages.MMU],
     [PDP11.UNIBUS.LKS]:     /* 177546 */    [null, null, DevicePDP11.prototype.readLKS,     DevicePDP11.prototype.writeLKS,     "LKS"],
-    [PDP11.UNIBUS.MMR0]:    /* 177572 */    [null, null, DevicePDP11.prototype.readMMR0,    DevicePDP11.prototype.writeMMR0,    "MMR0",     1,  PDP11.MODEL_1140, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.MMR1]:    /* 177574 */    [null, null, DevicePDP11.prototype.readMMR1,    DevicePDP11.prototype.writeIgnored, "MMR1",     1,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.MMR2]:    /* 177576 */    [null, null, DevicePDP11.prototype.readMMR2,    DevicePDP11.prototype.writeIgnored, "MMR2",     1,  PDP11.MODEL_1140, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.UIPDR0]:  /* 177600 */    [null, null, DevicePDP11.prototype.readUIPDR,   DevicePDP11.prototype.writeUIPDR,   "UIPDR",    8,  PDP11.MODEL_1140, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.UDPDR0]:  /* 177620 */    [null, null, DevicePDP11.prototype.readUDPDR,   DevicePDP11.prototype.writeUDPDR,   "UDPDR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.UIPAR0]:  /* 177640 */    [null, null, DevicePDP11.prototype.readUIPAR,   DevicePDP11.prototype.writeUIPAR,   "UIPAR",    8,  PDP11.MODEL_1140, MessagesPDP11.MMU],
-    [PDP11.UNIBUS.UDPAR0]:  /* 177660 */    [null, null, DevicePDP11.prototype.readUDPAR,   DevicePDP11.prototype.writeUDPAR,   "UDPAR",    8,  PDP11.MODEL_1145, MessagesPDP11.MMU],
+    [PDP11.UNIBUS.MMR0]:    /* 177572 */    [null, null, DevicePDP11.prototype.readMMR0,    DevicePDP11.prototype.writeMMR0,    "MMR0",     1,  PDP11.MODEL_1140, Messages.MMU],
+    [PDP11.UNIBUS.MMR1]:    /* 177574 */    [null, null, DevicePDP11.prototype.readMMR1,    DevicePDP11.prototype.writeIgnored, "MMR1",     1,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.MMR2]:    /* 177576 */    [null, null, DevicePDP11.prototype.readMMR2,    DevicePDP11.prototype.writeIgnored, "MMR2",     1,  PDP11.MODEL_1140, Messages.MMU],
+    [PDP11.UNIBUS.UIPDR0]:  /* 177600 */    [null, null, DevicePDP11.prototype.readUIPDR,   DevicePDP11.prototype.writeUIPDR,   "UIPDR",    8,  PDP11.MODEL_1140, Messages.MMU],
+    [PDP11.UNIBUS.UDPDR0]:  /* 177620 */    [null, null, DevicePDP11.prototype.readUDPDR,   DevicePDP11.prototype.writeUDPDR,   "UDPDR",    8,  PDP11.MODEL_1145, Messages.MMU],
+    [PDP11.UNIBUS.UIPAR0]:  /* 177640 */    [null, null, DevicePDP11.prototype.readUIPAR,   DevicePDP11.prototype.writeUIPAR,   "UIPAR",    8,  PDP11.MODEL_1140, Messages.MMU],
+    [PDP11.UNIBUS.UDPAR0]:  /* 177660 */    [null, null, DevicePDP11.prototype.readUDPAR,   DevicePDP11.prototype.writeUDPAR,   "UDPAR",    8,  PDP11.MODEL_1145, Messages.MMU],
     [PDP11.UNIBUS.R0SET0]:  /* 177700 */    [null, null, DevicePDP11.prototype.readRSET0,   DevicePDP11.prototype.writeRSET0,   "R0SET0"],
     [PDP11.UNIBUS.R1SET0]:  /* 177701 */    [null, null, DevicePDP11.prototype.readRSET0,   DevicePDP11.prototype.writeRSET0,   "R1SET0"],
     [PDP11.UNIBUS.R2SET0]:  /* 177702 */    [null, null, DevicePDP11.prototype.readRSET0,   DevicePDP11.prototype.writeRSET0,   "R2SET0"],
@@ -10430,7 +10409,7 @@ class MemoryPDP11 {
      */
     printAddr(sMessage)
     {
-        if (DEBUG && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY)) {
+        if (DEBUG && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
             this.dbg.printMessage(sMessage + ' ' + (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id), true);
         }
     }
@@ -10528,7 +10507,7 @@ class MemoryPDP11 {
      */
     readNone(off, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY) /* && !off */) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY) /* && !off */) {
             this.dbg.printMessage("attempt to read invalid address " + this.dbg.toStrBase(addr), true);
         }
         this.bus.fault(addr, PDP11.CPUERR.NOMEMORY, PDP11.ACCESS.READ);
@@ -10545,7 +10524,7 @@ class MemoryPDP11 {
      */
     writeNone(off, v, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY) /* && !off */) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY) /* && !off */) {
             this.dbg.printMessage("attempt to write " + this.dbg.toStrBase(v) + " to invalid addresses " + this.dbg.toStrBase(addr), true);
         }
         this.bus.fault(addr, PDP11.CPUERR.NOMEMORY, PDP11.ACCESS.WRITE);
@@ -10760,7 +10739,7 @@ class MemoryPDP11 {
     readByteLE(off, addr)
     {
         var b = this.ab[off];
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY)) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
             this.dbg.printMessage("Memory.readByte(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(b), true);
         }
         return b;
@@ -10805,7 +10784,7 @@ class MemoryPDP11 {
         } else {
             w = this.ab[off] | (this.ab[off+1] << 8);
         }
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY)) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
             this.dbg.printMessage("Memory.readWord(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(w), true);
         }
         return w;
@@ -10837,7 +10816,7 @@ class MemoryPDP11 {
     {
         this.ab[off] = b;
         this.fDirty = true;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY)) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
             this.dbg.printMessage("Memory.writeByte(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(b) + ")", true);
         }
     }
@@ -10883,7 +10862,7 @@ class MemoryPDP11 {
             this.ab[off+1] = w >> 8;
         }
         this.fDirty = true;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY)) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
             this.dbg.printMessage("Memory.writeWord(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(w) + ")", true);
         }
     }
@@ -11013,7 +10992,7 @@ class CPUPDP11 extends Component {
      */
     constructor(parmsCPU, nCyclesDefault)
     {
-        super("CPU", parmsCPU, MessagesPDP11.CPU);
+        super("CPU", parmsCPU, Messages.CPU);
 
         var nCycles = +parmsCPU['cycles'] || nCyclesDefault;
 
@@ -11173,7 +11152,7 @@ class CPUPDP11 extends Component {
             if (DEBUGGER && this.dbg) {
                 this.dbg.init(this.flags.autoStart);
             } else {
-                this.status("No debugger detected");
+                this.printf(Messages.STATUS, "No debugger detected\n");
             }
             if (!this.flags.autoStart) {
                 this.println("CPU will not be auto-started " + (this.panel? "(click Run to start)" : "(type 'go' to start)"));
@@ -11788,7 +11767,7 @@ class CPUPDP11 extends Component {
          */
         this.nCyclesRecalc += this.nCyclesThisRun;
 
-        if (DEBUG && this.messageEnabled(MessagesPDP11.BUFFER) && msRemainsThisRun) {
+        if (DEBUG && this.messageEnabled(Messages.BUFFER) && msRemainsThisRun) {
             this.log("calcRemainingTime: " + msRemainsThisRun + "ms to sleep after " + this.msEndThisRun + "ms");
         }
 
@@ -12086,7 +12065,7 @@ class CPUPDP11 extends Component {
             if (fUpdateFocus) this.cmp.setFocus(true);
             this.cmp.start(this.msStartRun, this.getCycles());
         }
-        if (!this.dbg) this.status("Started");
+        if (!this.dbg) this.printf(Messages.STATUS, "Started\n");
         setTimeout(this.onRunTimeout, 0);
         return true;
     }
@@ -12131,7 +12110,7 @@ class CPUPDP11 extends Component {
                 this.cmp.stop(Component.getTime(), this.getCycles());
             }
             fStopped = true;
-            if (!this.dbg) this.status("Stopped");
+            if (!this.dbg) this.printf(Messages.STATUS, "Stopped\n");
         }
         this.flags.complete = fComplete;
         return fStopped;
@@ -12398,7 +12377,7 @@ class CPUStatePDP11 extends CPUPDP11 {
      */
     reset()
     {
-        this.status("Model %d", this.model);
+        this.printf(Messages.STATUS, "Model %d\n", this.model);
         if (this.flags.running) this.stopCPU();
         this.initCPU();
         this.resetCycles();
@@ -13237,7 +13216,7 @@ class CPUStatePDP11 extends CPUPDP11 {
     {
         if (irq) {
             this.insertIRQ(irq);
-            if (irq.message && this.messageEnabled(irq.message | MessagesPDP11.INT)) {
+            if (irq.message && this.messageEnabled(irq.message | Messages.INT)) {
                 this.printMessage("setIRQ(vector=" + Str.toOct(irq.vector) + ",priority=" + irq.priority + ")", true, true);
             }
         }
@@ -13253,7 +13232,7 @@ class CPUStatePDP11 extends CPUPDP11 {
     {
         if (irq) {
             this.removeIRQ(irq);
-            if (irq.message && this.messageEnabled(irq.message | MessagesPDP11.INT)) {
+            if (irq.message && this.messageEnabled(irq.message | Messages.INT)) {
                 this.printMessage("clearIRQ(vector=" + Str.toOct(irq.vector) + ",priority=" + irq.priority + ")", true, true);
             }
         }
@@ -13733,9 +13712,9 @@ class CPUStatePDP11 extends CPUPDP11 {
     trap(vector, flag, reason)
     {
         if (DEBUG && this.dbg) {
-            if (this.messageEnabled(MessagesPDP11.TRAP)) {
+            if (this.messageEnabled(Messages.TRAP)) {
                 var sReason = reason < 0? PDP11.REASONS[-reason] : this.dbg.toStrBase(reason);
-                this.printMessage("trap to vector " + this.dbg.toStrBase(vector, 8) + " (" + sReason + ")", MessagesPDP11.TRAP, true);
+                this.printMessage("trap to vector " + this.dbg.toStrBase(vector, 8) + " (" + sReason + ")", Messages.TRAP, true);
             }
         }
 
@@ -17763,7 +17742,7 @@ class ROMPDP11 extends Component {
      */
     constructor(parmsROM)
     {
-        super("ROM", parmsROM, MessagesPDP11.ROM);
+        super("ROM", parmsROM, Messages.ROM);
 
         this.abInit = null;
         this.aSymbols = null;
@@ -17983,7 +17962,7 @@ class ROMPDP11 extends Component {
                 [addr]: [ROMPDP11.prototype.readROMByte, ROMPDP11.prototype.writeROMByte, null, null, null, this.sizeROM >> 1]
             };
             if (this.bus.addIOTable(this, IOTable)) {
-                this.status("Added %d-byte ROM at %o", this.sizeROM, addr);
+                this.printf(Messages.STATUS, "Added %d-byte ROM at %o\n", this.sizeROM, addr);
                 this.fRetainROM = true;
                 return true;
             }
@@ -18283,7 +18262,7 @@ class RAMPDP11 extends Component {
                 if (!this.abInit) return;
 
                 if (this.loadImage(this.abInit, this.addrLoad, this.addrExec, this.addrRAM)) {
-                    this.status('Loaded image "%s"', this.sFileName);
+                    this.printf(Messages.STATUS, 'Loaded image "%s"\n', this.sFileName);
                 } else {
                     this.notice('Error loading image "' + this.sFileName + '"');
                 }
@@ -18377,11 +18356,11 @@ class RAMPDP11 extends Component {
                 }
                 var offBlock = off;
                 if (w != 0x0001) {
-                    this.printMessage("invalid signature (" + Str.toHexWord(w) + ") at offset " + Str.toHexWord(offBlock), MessagesPDP11.PAPER);
+                    this.printMessage("invalid signature (" + Str.toHexWord(w) + ") at offset " + Str.toHexWord(offBlock), Messages.PAPER);
                     break;
                 }
                 if (off + 6 >= aBytes.length) {
-                    this.printMessage("invalid block at offset " + Str.toHexWord(offBlock), MessagesPDP11.PAPER);
+                    this.printMessage("invalid block at offset " + Str.toHexWord(offBlock), Messages.PAPER);
                     break;
                 }
                 off += 2;
@@ -18395,12 +18374,12 @@ class RAMPDP11 extends Component {
                     len--;
                 }
                 if (len != 0 || off >= aBytes.length) {
-                    this.printMessage("insufficient data for block at offset " + Str.toHexWord(offBlock), MessagesPDP11.PAPER);
+                    this.printMessage("insufficient data for block at offset " + Str.toHexWord(offBlock), Messages.PAPER);
                     break;
                 }
                 checksum += aBytes[off++] & 0xff;
                 if (checksum & 0xff) {
-                    this.printMessage("invalid checksum (" + Str.toHexByte(checksum) + ") for block at offset " + Str.toHexWord(offBlock), MessagesPDP11.PAPER);
+                    this.printMessage("invalid checksum (" + Str.toHexByte(checksum) + ") for block at offset " + Str.toHexWord(offBlock), Messages.PAPER);
                     break;
                 }
                 if (!cbData) {
@@ -18409,9 +18388,9 @@ class RAMPDP11 extends Component {
                     } else {
                         if (addrExec == null) addrExec = addr;
                     }
-                    if (addrExec != null) this.printMessage("starting address: " + Str.toHexWord(addrExec), MessagesPDP11.PAPER);
+                    if (addrExec != null) this.printMessage("starting address: " + Str.toHexWord(addrExec), Messages.PAPER);
                 } else {
-                    this.printMessage("loading " + Str.toHexWord(cbData) + " bytes at " + Str.toHexWord(addr) + "-" + Str.toHexWord(addr + cbData), MessagesPDP11.PAPER);
+                    this.printMessage("loading " + Str.toHexWord(cbData) + " bytes at " + Str.toHexWord(addr) + "-" + Str.toHexWord(addr + cbData), Messages.PAPER);
                     while (cbData--) {
                         this.bus.setByteDirect(addr++, aBytes[offData++] & 0xff);
                     }
@@ -18485,7 +18464,7 @@ class KeyboardPDP11 extends Component {
      */
     constructor(parmsKbd)
     {
-        super("Keyboard", parmsKbd, MessagesPDP11.KEYBOARD);
+        super("Keyboard", parmsKbd, Messages.KEYBOARD);
 
         this.setReady();
     }
@@ -18610,7 +18589,7 @@ class SerialPortPDP11 extends Component {
      */
     constructor(parmsSerial)
     {
-        super("SerialPort", parmsSerial, MessagesPDP11.SERIAL);
+        super("SerialPort", parmsSerial, Messages.SERIAL);
 
         this.iAdapter = +parmsSerial['adapter'];
         this.nBaudReceive = +parmsSerial['baudReceive'] || PDP11.DL11.RCSR.BAUD;
@@ -18831,7 +18810,7 @@ class SerialPortPDP11 extends Component {
 
         var serial = this;
 
-        this.irqReceiver = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.RVEC, PDP11.DL11.PRI, MessagesPDP11.DL11);
+        this.irqReceiver = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.RVEC, PDP11.DL11.PRI, Messages.DL11);
 
         this.timerReceiveInterrupt = this.cpu.addTimer(function readyReceiver() {
             var b = serial.receiveByte();
@@ -18848,7 +18827,7 @@ class SerialPortPDP11 extends Component {
             }
         });
 
-        this.irqTransmitter = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.XVEC, PDP11.DL11.PRI, MessagesPDP11.DL11);
+        this.irqTransmitter = this.cpu.addIRQ(this.iAdapter? -1 : PDP11.DL11.XVEC, PDP11.DL11.PRI, Messages.DL11);
 
         this.timerTransmitInterrupt = this.cpu.addTimer(function readyTransmitter() {
             serial.regXCSR |= PDP11.DL11.XCSR.READY;
@@ -18905,16 +18884,16 @@ class SerialPortPDP11 extends Component {
                             if (this.sendData) {
                                 this.fNullModem = fNullModem;
                                 this.updateStatus = exports['receiveStatus'];
-                                this.status("Connected %s.%s to %s", this.idMachine, sSourceID, sTargetID);
+                                this.printf(Messages.STATUS, "Connected %s.%s to %s\n", this.idMachine, sSourceID, sTargetID);
                                 return;
                             }
                         }
                     }
                 }
                 /*
-                 * Changed from notice() to status() because sometimes a connection fails simply because one of us is a laggard.
+                 * Changed from NOTICE to STATUS because sometimes a connection fails simply because one of us is a laggard.
                  */
-                this.status("Unable to establish connection: %s", sConnection);
+                this.printf(Messages.STATUS, "Unable to establish connection: %s\n", sConnection);
             }
         }
     }
@@ -19455,7 +19434,7 @@ class PC11 extends Component {
      */
     constructor(parms)
     {
-        super("PC11", parms, MessagesPDP11.PC11);
+        super("PC11", parms, Messages.PC11);
 
         this.sDevice = "PTR";                   // TODO: Make the device name configurable
 
@@ -19675,7 +19654,7 @@ class PC11 extends Component {
             }
         }
 
-        this.irqReader = this.cpu.addIRQ(PDP11.PC11.RVEC, PDP11.PC11.PRI, MessagesPDP11.PC11);
+        this.irqReader = this.cpu.addIRQ(PDP11.PC11.RVEC, PDP11.PC11.PRI, Messages.PC11);
 
         this.timerReader = this.cpu.addTimer(function readyReader() {
             pc11.advanceReader();
@@ -19804,7 +19783,7 @@ class PC11 extends Component {
             sTapePath = window.prompt("Enter the URL of a remote tape image.", "") || "";
             if (!sTapePath) return;
             sTapeName = Str.getBaseName(sTapePath);
-            this.status('Attempting to load %s as "%s"', sTapePath, sTapeName);
+            this.printf(Messages.STATUS, 'Attempting to load %s as "%s"\n', sTapePath, sTapeName);
             this.sTapeSource = PC11.SOURCE.REMOTE;
         }
         else {
@@ -19840,7 +19819,7 @@ class PC11 extends Component {
                 this.notice("PC11 busy");
             }
             else {
-                // this.status("tape queued: %s", sTapeName);
+                // this.printf(Messages.STATUS, "tape queued: %s\n", sTapeName);
                 if (fAutoMount) {
                     this.cAutoMount++;
                     if (this.messageEnabled()) this.printMessage("auto-loading tape: " + sTapeName);
@@ -19857,7 +19836,7 @@ class PC11 extends Component {
              * Now that we're calling parseTape() again (so that the current tape can either be restarted on
              * the reader or reloaded into RAM), we can also rely on it to display an appropriate status message, too.
              *
-             *      this.status(this.nTapeTarget == PC11.TARGET.READER? "tape loaded" : "tape read");
+             *      this.printf(Messages.STATUS, "%s\n", this.nTapeTarget == PC11.TARGET.READER? "tape loaded" : "tape read");
              */
             this.parseTape(this.sTapeName, this.sTapePath, this.nTapeTarget, this.aBytes, this.addrLoad, this.addrExec);
         }
@@ -20119,7 +20098,7 @@ class PC11 extends Component {
                 this.notice('No valid memory address for tape "' + sTapeName + '"');
                 return;
             }
-            this.status('Read tape "%s"', sTapeName);
+            this.printf(Messages.STATUS, 'Read tape "%s"\n', sTapeName);
             return;
         }
 
@@ -20127,7 +20106,7 @@ class PC11 extends Component {
         this.aTapeData = aBytes;
         this.regPRS &= ~PDP11.PC11.PRS.ERROR;
 
-        this.status('Loaded tape "%s" (%d bytes)', sTapeName, aBytes.length);
+        this.printf(Messages.STATUS, 'Loaded tape "%s" (%d bytes)\n', sTapeName, aBytes.length);
         this.displayProgress(0);
     }
 
@@ -20146,7 +20125,7 @@ class PC11 extends Component {
              * Avoid any unnecessary hysteresis regarding the display if this unload is merely a prelude to another load.
              */
             if (!fLoading) {
-                if (this.nTapeTarget) this.status(this.nTapeTarget == PC11.TARGET.READER? "tape detached" : "tape unloaded");
+                if (this.nTapeTarget) this.printf(Messages.STATUS, "%s\n", this.nTapeTarget == PC11.TARGET.READER? "tape detached" : "tape unloaded");
                 this.sTapeSource = PC11.SOURCE.NONE;
                 this.nTapeTarget = PC11.TARGET.NONE;
                 this.displayTape();
@@ -20489,7 +20468,7 @@ class DiskPDP11 extends Component {
      */
     constructor(controller, drive, mode)
     {
-        super("Disk", {'id': controller.idMachine + ".disk" + Str.toHex(++DiskPDP11.nDisks, 4)}, MessagesPDP11.DISK);
+        super("Disk", {'id': controller.idMachine + ".disk" + Str.toHex(++DiskPDP11.nDisks, 4)}, Messages.DISK);
 
         /*
          * Route all non-Debugger messages (eg, notice() and println() calls) through
@@ -20881,7 +20860,7 @@ class DiskPDP11 extends Component {
                  * conversion to a forward-compatible 'data' array.
                  */
                 else {
-                    if (DEBUG && this.messageEnabled(MessagesPDP11.DISK | MessagesPDP11.BUFFER)) {
+                    if (DEBUG && this.messageEnabled(Messages.DISK | Messages.BUFFER)) {
                         var sCylinders = aDiskData.length + " track" + (aDiskData.length > 1 ? "s" : "");
                         var nHeads = aDiskData[0].length;
                         var sHeads = nHeads + " head" + (nHeads > 1 ? "s" : "");
@@ -22363,7 +22342,7 @@ class DriveController extends Component {
             sDiskPath = globals.window.prompt("Enter the URL of a remote disk image.", "") || "";
             if (!sDiskPath) return false;
             sDiskName = Str.getBaseName(sDiskPath);
-            this.status('Attempting to load %s as "%s"', sDiskPath, sDiskName);
+            this.printf(Messages.STATUS, 'Attempting to load %s as "%s"\n', sDiskPath, sDiskName);
             this.sDiskSource = DriveController.SOURCE.REMOTE;
         }
         else {
@@ -22457,7 +22436,7 @@ class DriveController extends Component {
                 this.notice(this.type + " busy");
             }
             else {
-                // this.status("disk queued: %s", sDiskName);
+                // this.printf(Messages.STATUS, "disk queued: %s\n", sDiskName);
                 drive.fBusy = true;
                 if (fAutoMount) {
                     drive.fAutoMount = true;
@@ -22972,7 +22951,7 @@ class RK11 extends DriveController {
      */
     constructor(parms)
     {
-        super("RK11", parms, MessagesPDP11.RK11, PDP11.RK11, PDP11.RK11.RK05, RK11.UNIBUS_IOTABLE);
+        super("RK11", parms, Messages.RK11, PDP11.RK11, PDP11.RK11.RK05, RK11.UNIBUS_IOTABLE);
 
         /*
          * Define all the registers required for this controller.
@@ -23182,7 +23161,7 @@ class RK11 extends DriveController {
             if (!fCheck) {
                 var data = b0 | (b1 << 8);
                 this.bus.setWordDirect(this.cpu.mapUnibus(addr), data);
-                if (DEBUG && this.messageEnabled(MessagesPDP11.READ)) {
+                if (DEBUG && this.messageEnabled(Messages.READ)) {
                     if (!sWords) sWords = Str.toOct(addr) + ": ";
                     sWords += Str.toOct(data) + ' ';
                     if (sWords.length >= 64) {
@@ -23559,7 +23538,7 @@ class RL11 extends DriveController {
      */
     constructor(parms)
     {
-        super("RL11", parms, MessagesPDP11.RL11, PDP11.RL11, PDP11.RL11.RL02K, RL11.UNIBUS_IOTABLE);
+        super("RL11", parms, Messages.RL11, PDP11.RL11, PDP11.RL11.RL02K, RL11.UNIBUS_IOTABLE);
 
         /*
          * Define all the registers required for this controller.
@@ -23757,7 +23736,7 @@ class RL11 extends DriveController {
              * code, so let's review the documentation on this.
              */
             this.bus.setWordDirect(this.cpu.mapUnibus(addr), data = b0 | (b1 << 8));
-            if (DEBUG && this.messageEnabled(MessagesPDP11.READ)) {
+            if (DEBUG && this.messageEnabled(Messages.READ)) {
                 if (!sWords) sWords = Str.toOct(addr) + ": ";
                 sWords += Str.toOct(data) + ' ';
                 if (sWords.length >= 64) {
@@ -23787,7 +23766,7 @@ class RL11 extends DriveController {
             }
         }
 
-        if (DEBUG && this.messageEnabled(MessagesPDP11.READ)) {
+        if (DEBUG && this.messageEnabled(Messages.READ)) {
             console.log("checksum: " + (checksum|0));
         }
 
@@ -23833,7 +23812,7 @@ class RL11 extends DriveController {
                 nError = RL11.ERRC.NXM;
                 break;
             }
-            if (DEBUG && this.messageEnabled(MessagesPDP11.WRITE)) {
+            if (DEBUG && this.messageEnabled(Messages.WRITE)) {
                 if (!sWords) sWords = Str.toOct(addr) + ": ";
                 sWords += Str.toOct(data) + ' ';
                 if (sWords.length >= 64) {
@@ -23871,7 +23850,7 @@ class RL11 extends DriveController {
             }
         }
 
-        if (DEBUG && this.messageEnabled(MessagesPDP11.WRITE)) {
+        if (DEBUG && this.messageEnabled(Messages.WRITE)) {
             console.log("checksum: " + (checksum|0));
         }
 
@@ -24078,7 +24057,7 @@ class RX11 extends DriveController {
      */
     constructor(parms)
     {
-        super("RX11", parms, MessagesPDP11.RX11, PDP11.RX11, PDP11.RX11.RX01, RX11.UNIBUS_IOTABLE);
+        super("RX11", parms, Messages.RX11, PDP11.RX11, PDP11.RX11.RX01, RX11.UNIBUS_IOTABLE);
 
         /*
          * Define all the registers required for this controller.
@@ -24315,7 +24294,7 @@ class RX11 extends DriveController {
             }
             var data = b0 | (b1 << 8);
             this.bus.setWordDirect(this.cpu.mapUnibus(addr), data);
-            if (DEBUG && this.messageEnabled(MessagesPDP11.READ)) {
+            if (DEBUG && this.messageEnabled(Messages.READ)) {
                 if (!sWords) sWords = Str.toOct(addr) + ": ";
                 sWords += Str.toOct(data) + ' ';
                 if (sWords.length >= 64) {
@@ -26199,7 +26178,7 @@ class DebuggerPDP11 extends DbgLib {
             this.aOpReserved = this.aOpReserved.concat(DebuggerPDP11.OP1145);
         }
 
-        this.messageDump(MessagesPDP11.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
+        this.messageDump(Messages.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
 
         this.setReady();
     }
@@ -26733,7 +26712,7 @@ class DebuggerPDP11 extends DbgLib {
     messageInit(sEnable)
     {
         this.dbg = this;
-        this.bitsMessage = this.bitsWarning = MessagesPDP11.WARN;
+        this.bitsMessage = this.bitsWarning = Messages.WARNING;
         this.sMessagePrev = null;
         this.aMessageBuffer = [];
         /*
@@ -26742,9 +26721,9 @@ class DebuggerPDP11 extends DbgLib {
          */
         var aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, '|');
         if (aEnable.length) {
-            for (var m in MessagesPDP11.CATEGORIES) {
+            for (var m in Messages.CATEGORIES) {
                 if (Usr.indexOf(aEnable, m) >= 0) {
-                    this.bitsMessage |= MessagesPDP11.CATEGORIES[m];
+                    this.bitsMessage |= Messages.CATEGORIES[m];
                     this.println(m + " messages enabled");
                 }
             }
@@ -26761,8 +26740,8 @@ class DebuggerPDP11 extends DbgLib {
      */
     messageDump(bitMessage, fnDumper)
     {
-        for (var m in MessagesPDP11.CATEGORIES) {
-            if (bitMessage == MessagesPDP11.CATEGORIES[m]) {
+        for (var m in Messages.CATEGORIES) {
+            if (bitMessage == Messages.CATEGORIES[m]) {
                 this.afnDumpers[m] = fnDumper;
                 return true;
             }
@@ -26902,13 +26881,13 @@ class DebuggerPDP11 extends DbgLib {
         if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
         this.sMessagePrev = sMessage;
 
-        if (this.bitsMessage & MessagesPDP11.BUFFER) {
+        if (this.bitsMessage & Messages.BUFFER) {
             this.aMessageBuffer.push(sMessage);
             return;
         }
 
         var fRunning;
-        if ((this.bitsMessage & MessagesPDP11.HALT) && this.cpu && (fRunning = this.cpu.isRunning()) || this.isBusy(true)) {
+        if ((this.bitsMessage & Messages.HALT) && this.cpu && (fRunning = this.cpu.isRunning()) || this.isBusy(true)) {
             this.stopCPU();
             if (fRunning) sMessage += " (cpu halted)";
         }
@@ -27292,7 +27271,7 @@ class DebuggerPDP11 extends DbgLib {
                     }
                     sStopped += this.nCycles + " cycles, " + msTotal + " ms, " + nCyclesPerSecond + " hz)";
                 } else {
-                    if (this.messageEnabled(MessagesPDP11.HALT)) {
+                    if (this.messageEnabled(Messages.HALT)) {
                         /*
                          * It's possible the user is trying to 'g' past a fault that was blocked by helpCheckFault()
                          * for the Debugger's benefit; if so, it will continue to be blocked, so try displaying a helpful
@@ -27400,7 +27379,7 @@ class DebuggerPDP11 extends DbgLib {
          * The rest of the instruction tracking logic can only be performed if historyInit() has allocated the
          * necessary data structures.  Note that there is no explicit UI for enabling/disabling history, other than
          * adding/removing breakpoints, simply because it's breakpoints that trigger the call to checkInstruction();
-         * well, OK, and a few other things now, like enabling MessagesPDP11.INT messages.
+         * well, OK, and a few other things now, like enabling Messages.INT messages.
          */
         if (nState >= 0 && this.aInstructionHistory.length) {
             this.cInstructions++;
@@ -27452,7 +27431,7 @@ class DebuggerPDP11 extends DbgLib {
      */
     undefinedInstruction(opCode)
     {
-        if (this.messageEnabled(MessagesPDP11.CPU)) {
+        if (this.messageEnabled(Messages.CPU)) {
             this.printMessage("undefined opcode " + this.toStrBase(opCode), true, true);
             return this.stopInstruction();  // allow the caller to step over it if they really want a trap generated
         }
@@ -28661,7 +28640,7 @@ class DebuggerPDP11 extends DbgLib {
 
         if (sAddr == '?') {
             var sDumpers = "";
-            for (m in MessagesPDP11.CATEGORIES) {
+            for (m in Messages.CATEGORIES) {
                 if (this.afnDumpers[m]) {
                     if (sDumpers) sDumpers += ',';
                     sDumpers += m;
@@ -28708,7 +28687,7 @@ class DebuggerPDP11 extends DbgLib {
         }
 
         if (sCmd == "d") {
-            for (m in MessagesPDP11.CATEGORIES) {
+            for (m in Messages.CATEGORIES) {
                 if (asArgs[1] == m) {
                     var fnDumper = this.afnDumpers[m];
                     if (fnDumper) {
@@ -28893,7 +28872,7 @@ class DebuggerPDP11 extends DbgLib {
             if (vNew & ~mask) {
                 this.println("warning: " + Str.toHex(vNew) + " exceeds " + size + "-byte value");
             }
-            this.println("changing " + this.toStrAddr(dbgAddr) + (this.messageEnabled(MessagesPDP11.BUS)? "" : (" from " + this.toStrBase(fnGet.call(this, dbgAddr), size << 3))) + " to " + this.toStrBase(vNew, size << 3));
+            this.println("changing " + this.toStrAddr(dbgAddr) + (this.messageEnabled(Messages.BUS)? "" : (" from " + this.toStrBase(fnGet.call(this, dbgAddr), size << 3))) + " to " + this.toStrBase(vNew, size << 3));
             fnSet.call(this, dbgAddr, vNew, size);
         }
     }
@@ -29056,7 +29035,7 @@ class DebuggerPDP11 extends DbgLib {
         if (sCategory !== undefined) {
             var bitsMessage = 0;
             if (sCategory == "all") {
-                bitsMessage = (0xffffffff|0) & ~(MessagesPDP11.HALT | MessagesPDP11.KEYS | MessagesPDP11.BUFFER);
+                bitsMessage = (0xffffffff|0) & ~(Messages.HALT | Messages.KEYS | Messages.BUFFER);
                 sCategory = null;
             } else if (sCategory == "on") {
                 fCriteria = true;
@@ -29071,9 +29050,9 @@ class DebuggerPDP11 extends DbgLib {
                  */
                 if (sCategory == "keys") sCategory = "key";
                 if (sCategory == "kbd") sCategory = "keyboard";
-                for (m in MessagesPDP11.CATEGORIES) {
+                for (m in Messages.CATEGORIES) {
                     if (sCategory == m) {
-                        bitsMessage = MessagesPDP11.CATEGORIES[m];
+                        bitsMessage = Messages.CATEGORIES[m];
                         fCriteria = !!(this.bitsMessage & bitsMessage);
                         break;
                     }
@@ -29091,7 +29070,7 @@ class DebuggerPDP11 extends DbgLib {
                 else if (asArgs[2] == "off") {
                     this.bitsMessage &= ~bitsMessage;
                     fCriteria = false;
-                    if (bitsMessage == MessagesPDP11.BUFFER) {
+                    if (bitsMessage == Messages.BUFFER) {
                         var i = this.aMessageBuffer.length >= 1000? this.aMessageBuffer.length - 1000 : 0;
                         while (i < this.aMessageBuffer.length) {
                             this.println(this.aMessageBuffer[i++]);
@@ -29107,9 +29086,9 @@ class DebuggerPDP11 extends DbgLib {
          */
         var n = 0;
         var sCategories = "";
-        for (m in MessagesPDP11.CATEGORIES) {
+        for (m in Messages.CATEGORIES) {
             if (!sCategory || sCategory == m) {
-                var bitMessage = MessagesPDP11.CATEGORIES[m];
+                var bitMessage = Messages.CATEGORIES[m];
                 var fEnabled = !!(this.bitsMessage & bitMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
@@ -29129,7 +29108,7 @@ class DebuggerPDP11 extends DbgLib {
 
         this.println((fCriteria !== null? (fCriteria? "messages on:  " : "messages off: ") : "message categories:\n\t") + (sCategories || "none"));
 
-        this.historyInit();     // call this just in case MessagesPDP11.INT was turned on
+        this.historyInit();     // call this just in case Messages.INT was turned on
     }
 
     /**
@@ -30292,7 +30271,7 @@ class ComputerPDP11 extends Component {
      */
     constructor(parmsComputer, parmsMachine, fSuspended)
     {
-        super("Computer", parmsComputer, MessagesPDP11.COMPUTER);
+        super("Computer", parmsComputer, Messages.COMPUTER);
 
         this.flags.powered = false;
 
@@ -30908,7 +30887,7 @@ class ComputerPDP11 extends Component {
                 if (!fRepower && component.comment) {
                     var asComments = component.comment.split("|");
                     for (var i = 0; i < asComments.length; i++) {
-                        component.status(asComments[i]);
+                        component.printf(Messages.STATUS, "%s\n", asComments[i]);
                     }
                 }
             }

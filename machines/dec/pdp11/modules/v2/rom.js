@@ -9,7 +9,7 @@
 
 import BusPDP11 from "./bus.js";
 import MemoryPDP11 from "./memory.js";
-import MessagesPDP11 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import DumpAPI from "../../../../modules/v2/dumpapi.js";
 import Str from "../../../../modules/v2/strlib.js";
@@ -37,7 +37,7 @@ export default class ROMPDP11 extends Component {
      */
     constructor(parmsROM)
     {
-        super("ROM", parmsROM, MessagesPDP11.ROM);
+        super("ROM", parmsROM, Messages.ROM);
 
         this.abInit = null;
         this.aSymbols = null;
@@ -257,7 +257,7 @@ export default class ROMPDP11 extends Component {
                 [addr]: [ROMPDP11.prototype.readROMByte, ROMPDP11.prototype.writeROMByte, null, null, null, this.sizeROM >> 1]
             };
             if (this.bus.addIOTable(this, IOTable)) {
-                this.status("Added %d-byte ROM at %o", this.sizeROM, addr);
+                this.printf(Messages.STATUS, "Added %d-byte ROM at %o\n", this.sizeROM, addr);
                 this.fRetainROM = true;
                 return true;
             }

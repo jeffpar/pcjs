@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import MessagesPDP11 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import { BYTEARRAYS, DEBUG, DEBUGGER, MEMFAULT, PDP11, TYPEDARRAYS, WORDBUS } from "./defines.js";
 
@@ -446,7 +446,7 @@ export default class MemoryPDP11 {
      */
     printAddr(sMessage)
     {
-        if (DEBUG && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY)) {
+        if (DEBUG && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
             this.dbg.printMessage(sMessage + ' ' + (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id), true);
         }
     }
@@ -544,7 +544,7 @@ export default class MemoryPDP11 {
      */
     readNone(off, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY) /* && !off */) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY) /* && !off */) {
             this.dbg.printMessage("attempt to read invalid address " + this.dbg.toStrBase(addr), true);
         }
         this.bus.fault(addr, PDP11.CPUERR.NOMEMORY, PDP11.ACCESS.READ);
@@ -561,7 +561,7 @@ export default class MemoryPDP11 {
      */
     writeNone(off, v, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY) /* && !off */) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY) /* && !off */) {
             this.dbg.printMessage("attempt to write " + this.dbg.toStrBase(v) + " to invalid addresses " + this.dbg.toStrBase(addr), true);
         }
         this.bus.fault(addr, PDP11.CPUERR.NOMEMORY, PDP11.ACCESS.WRITE);
@@ -776,7 +776,7 @@ export default class MemoryPDP11 {
     readByteLE(off, addr)
     {
         var b = this.ab[off];
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY)) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
             this.dbg.printMessage("Memory.readByte(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(b), true);
         }
         return b;
@@ -821,7 +821,7 @@ export default class MemoryPDP11 {
         } else {
             w = this.ab[off] | (this.ab[off+1] << 8);
         }
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY)) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
             this.dbg.printMessage("Memory.readWord(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(w), true);
         }
         return w;
@@ -853,7 +853,7 @@ export default class MemoryPDP11 {
     {
         this.ab[off] = b;
         this.fDirty = true;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY)) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
             this.dbg.printMessage("Memory.writeByte(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(b) + ")", true);
         }
     }
@@ -899,7 +899,7 @@ export default class MemoryPDP11 {
             this.ab[off+1] = w >> 8;
         }
         this.fDirty = true;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesPDP11.MEMORY)) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
             this.dbg.printMessage("Memory.writeWord(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(w) + ")", true);
         }
     }

@@ -11,7 +11,7 @@
  */
 
 import DriveController from "./drive.js";
-import MessagesPDP11 from "./messages.js";
+import Messages from "./messages.js";
 import Str from "../../../../modules/v2/strlib.js";
 import { DEBUG, PDP11 } from "./defines.js";
 
@@ -33,7 +33,7 @@ export default class RX11 extends DriveController {
      */
     constructor(parms)
     {
-        super("RX11", parms, MessagesPDP11.RX11, PDP11.RX11, PDP11.RX11.RX01, RX11.UNIBUS_IOTABLE);
+        super("RX11", parms, Messages.RX11, PDP11.RX11, PDP11.RX11.RX01, RX11.UNIBUS_IOTABLE);
 
         /*
          * Define all the registers required for this controller.
@@ -270,7 +270,7 @@ export default class RX11 extends DriveController {
             }
             var data = b0 | (b1 << 8);
             this.bus.setWordDirect(this.cpu.mapUnibus(addr), data);
-            if (DEBUG && this.messageEnabled(MessagesPDP11.READ)) {
+            if (DEBUG && this.messageEnabled(Messages.READ)) {
                 if (!sWords) sWords = Str.toOct(addr) + ": ";
                 sWords += Str.toOct(data) + ' ';
                 if (sWords.length >= 64) {

@@ -11,7 +11,7 @@
  */
 
 import DriveController from "./drive.js";
-import MessagesPDP11 from "./messages.js";
+import Messages from "./messages.js";
 import Str from "../../../../modules/v2/strlib.js";
 import { DEBUG, PDP11 } from "./defines.js";
 
@@ -36,7 +36,7 @@ export default class RL11 extends DriveController {
      */
     constructor(parms)
     {
-        super("RL11", parms, MessagesPDP11.RL11, PDP11.RL11, PDP11.RL11.RL02K, RL11.UNIBUS_IOTABLE);
+        super("RL11", parms, Messages.RL11, PDP11.RL11, PDP11.RL11.RL02K, RL11.UNIBUS_IOTABLE);
 
         /*
          * Define all the registers required for this controller.
@@ -234,7 +234,7 @@ export default class RL11 extends DriveController {
              * code, so let's review the documentation on this.
              */
             this.bus.setWordDirect(this.cpu.mapUnibus(addr), data = b0 | (b1 << 8));
-            if (DEBUG && this.messageEnabled(MessagesPDP11.READ)) {
+            if (DEBUG && this.messageEnabled(Messages.READ)) {
                 if (!sWords) sWords = Str.toOct(addr) + ": ";
                 sWords += Str.toOct(data) + ' ';
                 if (sWords.length >= 64) {
@@ -264,7 +264,7 @@ export default class RL11 extends DriveController {
             }
         }
 
-        if (DEBUG && this.messageEnabled(MessagesPDP11.READ)) {
+        if (DEBUG && this.messageEnabled(Messages.READ)) {
             console.log("checksum: " + (checksum|0));
         }
 
@@ -310,7 +310,7 @@ export default class RL11 extends DriveController {
                 nError = RL11.ERRC.NXM;
                 break;
             }
-            if (DEBUG && this.messageEnabled(MessagesPDP11.WRITE)) {
+            if (DEBUG && this.messageEnabled(Messages.WRITE)) {
                 if (!sWords) sWords = Str.toOct(addr) + ": ";
                 sWords += Str.toOct(data) + ' ';
                 if (sWords.length >= 64) {
@@ -348,7 +348,7 @@ export default class RL11 extends DriveController {
             }
         }
 
-        if (DEBUG && this.messageEnabled(MessagesPDP11.WRITE)) {
+        if (DEBUG && this.messageEnabled(Messages.WRITE)) {
             console.log("checksum: " + (checksum|0));
         }
 
