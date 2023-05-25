@@ -17,7 +17,7 @@ var offsetPrev = 0;
 var cchOffset = 6;
 
 /**
- * printf(format, args)
+ * printf(format, ...args)
  *
  * @param {string} format
  * @param {...} args
@@ -25,7 +25,7 @@ var cchOffset = 6;
  */
 function printf(format, ...args)
 {
-    let s = Str.sprintf(format, args);
+    let s = Str.sprintf(format, ...args);
     console.log(s.replace(/\s*$/, ""));
     return s.length;
 }

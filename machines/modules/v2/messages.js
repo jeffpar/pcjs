@@ -17,15 +17,17 @@ const Messages = {
     NONE:       0x000000000000,
     DEFAULT:    0x000000000000,
     ADDRESS:    0x000000000001,
-    KEY:        0x000400000000,
-    DEBUG:      0x010000000000,         // to replace Component.PRINT.DEBUG
-    ERROR:      0x020000000000,         // to replace Component.PRINT.ERROR
-    NOTICE:     0x040000000000,         // to replace Component.PRINT.NOTICE
-    PROGRESS:   0x080000000000,         // to replace Component.PRINT.PROGRESS
-    WARNING:    0x100000000000,         // to replace Component.PRINT.WARNING
-    HALT:       0x200000000000,
-    BUFFER:     0x400000000000,
-    SCRIPT:     0x800000000000,         // to replace Component.PRINT.SCRIPT
+    LOG:        0x001000000000,         // to replace component.log()
+    STATUS:     0x002000000000,         // to replace component.status()
+    NOTICE:     0x004000000000,         // to replace Component.PRINT.NOTICE
+    WARNING:    0x008000000000,         // to replace Component.PRINT.WARNING
+    ERROR:      0x010000000000,         // to replace Component.PRINT.ERROR
+    DEBUG:      0x020000000000,         // to replace Component.PRINT.DEBUG
+    PROGRESS:   0x040000000000,         // to replace Component.PRINT.PROGRESS
+    SCRIPT:     0x080000000000,         // to replace Component.PRINT.SCRIPT
+    TYPES:      0x0ff000000000,         // all the above message types; only one (at most) of these should be set
+    HALT:       0x400000000000,
+    BUFFER:     0x800000000000,
     ALL:        0xffffffffffff
 };
 

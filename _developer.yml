@@ -8,7 +8,7 @@ url: "http://localhost:4000"
 # they're compiled and/or wrapped inside a function).
 #
 pcjs:
-  uncompiled: true
+  unbundled: true
   debug: false
   private: true
 

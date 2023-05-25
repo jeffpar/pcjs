@@ -1133,7 +1133,7 @@ export default class Component {
     }
 
     /**
-     * println(s, type, id)
+     * println(s, type, id) [DEPRECATED]
      *
      * Components using this.println() should wait until after their constructor has run to display any messages, because
      * if a Control Panel has been loaded, its override will not take effect until its own constructor has run.
@@ -1145,13 +1145,14 @@ export default class Component {
      */
     println(s, type, id)
     {
-        Component.println(s, type, id || this.id);
+        this.print(s + "\n");
+        // Component.println(s, type, id || this.id);
     }
 
     /**
-     * status(format, ...args)
+     * status(format, ...args) [DEPRECATED: Use printf(Messages.STATUS, format, ...args) instead
      *
-     * status() is like println() but it also includes information about the component (ie, the component type),
+     * status() is a print function that also includes information about the component (ie, the component type),
      * which is why there is no corresponding Component.status() function.
      *
      * @this {Component}
@@ -1160,7 +1161,7 @@ export default class Component {
      */
     status(format, ...args)
     {
-        this.println(this.type + ": " + Str.sprintf(format, ...args));
+        this.printf(Messages.STATUS, format, ...args);
     }
 
     /**
@@ -1372,6 +1373,23 @@ export default class Component {
     }
 
     /**
+     * maskBits(num, bits)
+     *
+     * Helper function for returning bits in numbers with more than 32 bits.
+     *
+     * @param {number} num
+     * @param {number} bits
+     * @returns {boolean}
+     */
+    maskBits(num, bits)
+    {
+        let shift = Math.pow(2, 32);
+        let numHi = (num / shift)|0;
+        let bitsHi = (bits / shift)|0;
+        return (num & bits) + (numHi & bitsHi) * shift
+    }
+
+    /**
      * setBits(num, bits)
      *
      * Helper function for setting bits in numbers with more than 32 bits.
@@ -1439,10 +1457,16 @@ export default class Component {
         let bitsMessage = 0;
         if (typeof format == "number") {
             bitsMessage = format;
-            if (bitsMessage == Messages.PROGRESS) {
+            format = args.shift();
+            let bitsTypes = this.maskBits(bitsMessage, Messages.TYPES);
+            if (bitsTypes) {
+                switch(bitsTypes) {
+                case Messages.STATUS:
+                    format = this.type + ": " + format;
+                    break;
+                }
                 bitsMessage = Messages.ALL;
             }
-            format = args.shift();
         }
         if (this.messageEnabled(bitsMessage)) {
             let s = Str.sprintf(format, ...args);

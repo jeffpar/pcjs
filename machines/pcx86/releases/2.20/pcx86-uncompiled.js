@@ -150,15 +150,17 @@ const Messages = {
     NONE:       0x000000000000,
     DEFAULT:    0x000000000000,
     ADDRESS:    0x000000000001,
-    KEY:        0x000400000000,
-    DEBUG:      0x010000000000,         // to replace Component.PRINT.DEBUG
-    ERROR:      0x020000000000,         // to replace Component.PRINT.ERROR
-    NOTICE:     0x040000000000,         // to replace Component.PRINT.NOTICE
-    PROGRESS:   0x080000000000,         // to replace Component.PRINT.PROGRESS
-    WARNING:    0x100000000000,         // to replace Component.PRINT.WARNING
-    HALT:       0x200000000000,
-    BUFFER:     0x400000000000,
-    SCRIPT:     0x800000000000,         // to replace Component.PRINT.SCRIPT
+    LOG:        0x001000000000,         // to replace component.log()
+    NOTICE:     0x002000000000,         // to replace Component.PRINT.NOTICE
+    STATUS:     0x004000000000,         // to replace component.status()
+    WARNING:    0x008000000000,         // to replace Component.PRINT.WARNING
+    ERROR:      0x010000000000,         // to replace Component.PRINT.ERROR
+    DEBUG:      0x020000000000,         // to replace Component.PRINT.DEBUG
+    PROGRESS:   0x040000000000,         // to replace Component.PRINT.PROGRESS
+    SCRIPT:     0x080000000000,         // to replace Component.PRINT.SCRIPT
+    TYPES:      0x0ff000000000,         // all the above message types; only one (at most) of these should be set
+    HALT:       0x400000000000,
+    BUFFER:     0x800000000000,
     ALL:        0xffffffffffff
 };
 
@@ -4431,29 +4433,23 @@ class Component {
                  * @param {string} s
                  * @returns {boolean}
                  */
-                this.notice = function noticeControl(s /*, fPrintOnly, id*/) {
-                    this.println(s, this.type);
+                this.notice = function noticeControl(sMessage /*, fPrintOnly, id*/) {
+                    this.println(sMessage, this.type);
                     return true;
                 };
                 /*
                  * This was added for Firefox (Safari will clear the <textarea> on a page reload, but Firefox does not).
                  */
                 controlTextArea.value = "";
-                this.print = function(control) {
-                    return function printControl(s) {
-                        Component.appendControl(control, s);
-                    };
-                }(controlTextArea);
-                this.println = function(component, control) {
-                    return function printlnControl(s, type, id) {
-                        if (!s) s = "";
-                        if (type != Component.PRINT.PROGRESS || s.slice(-3) != "...") {
-                            if (type) s = type + ": " + s;
-                            Component.appendControl(control, s + '\n');
+                this.print = function(component, control) {
+                    return function printControl(sMessage, bitsMessage = 0) {
+                        if (!sMessage) sMessage = "";
+                        if (component.testBits(bitsMessage, Messages.PROGRESS) && sMessage.slice(-4) == "...\n") {
+                            Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
-                            Component.replaceControl(control, s, s + '.');
+                            Component.appendControl(control, sMessage);
                         }
-                        if (!COMPILED) Component.println(s, type, id);
+                        if (!COMPILED) Component.print(sMessage);
                     };
                 }(this, controlTextArea);
             }
@@ -4549,7 +4545,7 @@ class Component {
     }
 
     /**
-     * println(s, type, id)
+     * println(s, type, id) (DEPRECATED)
      *
      * Components using this.println() should wait until after their constructor has run to display any messages, because
      * if a Control Panel has been loaded, its override will not take effect until its own constructor has run.
@@ -4561,14 +4557,17 @@ class Component {
      */
     println(s, type, id)
     {
-        Component.println(s, type, id || this.id);
+        this.print(s + "\n");
+        // Component.println(s, type, id || this.id);
     }
 
     /**
      * status(format, ...args)
      *
-     * status() is like println() but it also includes information about the component (ie, the component type),
+     * status() is a print function that also includes information about the component (ie, the component type),
      * which is why there is no corresponding Component.status() function.
+     *
+     * DEPRECATED: Use printf(Messages.STATUS, format, ...args) instead.
      *
      * @this {Component}
      * @param {string} format
@@ -4576,7 +4575,7 @@ class Component {
      */
     status(format, ...args)
     {
-        this.println(this.type + ": " + Str.sprintf(format, ...args));
+        this.printf(Messages.STATUS, format + "\n", ...args);
     }
 
     /**
@@ -4788,6 +4787,23 @@ class Component {
     }
 
     /**
+     * maskBits(num, bits)
+     *
+     * Helper function for returning bits in numbers with more than 32 bits.
+     *
+     * @param {number} num
+     * @param {number} bits
+     * @returns {boolean}
+     */
+    maskBits(num, bits)
+    {
+        let shift = Math.pow(2, 32);
+        let numHi = (num / shift)|0;
+        let bitsHi = (bits / shift)|0;
+        return (num & bits) + (numHi & bitsHi) * shift
+    }
+
+    /**
      * setBits(num, bits)
      *
      * Helper function for setting bits in numbers with more than 32 bits.
@@ -4829,16 +4845,14 @@ class Component {
      *
      * @this {Component}
      * @param {number} [bitsMessage] is zero or more Message flags
-     * @returns {boolean} true if all specified message enabled, false if not
+     * @returns {boolean} true if the specified message(s) are enabled, false if not
      */
     messageEnabled(bitsMessage = 0)
     {
-        if (DEBUGGER && this.dbg) {
-            if (bitsMessage % 2) bitsMessage--;
-            bitsMessage = bitsMessage || this.bitsMessage;
-            if ((bitsMessage|1) == -1 || this.testBits(this.dbg.bitsMessage, bitsMessage)) {
-                return true;
-            }
+        if (bitsMessage % 2) bitsMessage--;
+        bitsMessage = bitsMessage || this.bitsMessage;
+        if ((bitsMessage|1) == -1 || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
+            return true;
         }
         return false;
     }
@@ -4858,6 +4872,15 @@ class Component {
         if (typeof format == "number") {
             bitsMessage = format;
             format = args.shift();
+            let bitsTypes = this.maskBits(bitsMessage, Messages.TYPES);
+            if (bitsTypes) {
+                switch(bitsTypes) {
+                case Messages.STATUS:
+                    format = this.type + ": " + format;
+                    break;
+                }
+                bitsMessage = Messages.ALL;
+            }
         }
         if (this.messageEnabled(bitsMessage)) {
             let s = Str.sprintf(format, ...args);
@@ -4868,7 +4891,7 @@ class Component {
                 if (s.slice(-1) == '\n') s = s.slice(0, -1);
                 this.dbg.message(s, !!(bitsMessage % 2));   // pass true for fAddress if Messages.ADDRESS is set
             } else {
-                this.print(s);
+                this.print(s, bitsMessage);
             }
         }
     }
@@ -4884,15 +4907,16 @@ class Component {
      * @param {number|boolean} [bitsMessage] is zero or more Messages flag(s)
      * @param {boolean} [fAddress] is true to display the current address
      */
-    printMessage(sMessage, bitsMessage, fAddress)
+    printMessage(sMessage, bitsMessage = 0, fAddress = false)
     {
         if (DEBUGGER && this.dbg) {
             if (typeof bitsMessage == "boolean") {
                 bitsMessage = bitsMessage? -1 : 0;
             }
-            if (this.messageEnabled(bitsMessage)) {
-                this.dbg.print(sMessage, fAddress);
+            if (fAddress) {
+                bitsMessage = this.setBits(bitsMessage, Messages.ADDRESS);
             }
+            this.dbg.printf(bitsMessage, "%s\n", sMessage);
         }
     }
 
@@ -8869,6 +8893,7 @@ Messages.DATA        = 0x000080000000;
 Messages.DOS         = 0x000100000000;
 Messages.EVENT       = 0x000200000000;
 Messages.KEY         = 0x000400000000;
+Messages.RESERVED    = 0xfff000000000;
 
 Messages.CATEGORIES['cpu']       = Messages.CPU;
 Messages.CATEGORIES['seg']       = Messages.SEG;
@@ -10312,7 +10337,7 @@ class BusX86 extends Component {
             if (!this.cpu.isRunning()) {        // allocation messages at "run time" are bit too much
                 let kb = (size / 1024)|0;
                 let sb = kb? (kb + "Kb") : (size + " bytes");
-                this.status("%s %s at 0x%X", sb, MemoryX86.TYPE.NAMES[type], addr);
+                this.printf(Messages.STATUS, "%s %s at 0x%X", sb, MemoryX86.TYPE.NAMES[type], addr);
             }
             return true;
         }
@@ -13696,7 +13721,7 @@ class CPULib extends Component {
             if (DEBUGGER && this.dbg) {
                 this.dbg.init();
             } else {
-                this.printf("No debugger detected\n");
+                this.printf(Messages.ALL, "No debugger detected\n");
             }
         }
         /*
@@ -13759,7 +13784,7 @@ class CPULib extends Component {
     isPowered()
     {
         if (!this.flags.powered) {
-            this.printf("%s not powered\n", this.toString());
+            this.printf(Messages.ALL, "%s not powered\n", this.toString());
             return false;
         }
         return true;
@@ -13864,7 +13889,7 @@ class CPULib extends Component {
      */
     displayChecksum()
     {
-        this.printf("%d cycles: checksum=%x\n", this.getCycles(), this.nChecksum);
+        this.printf(Messages.ALL, "%d cycles: checksum=%x\n", this.getCycles(), this.nChecksum);
     }
 
     /**
@@ -14186,7 +14211,7 @@ class CPULib extends Component {
                 let sSpeed = this.getSpeedTarget();
                 let controlSpeed = this.bindings["setSpeed"];
                 if (controlSpeed) controlSpeed.textContent = sSpeed;
-                this.printf("target speed: %s\n", sSpeed);
+                this.printf(Messages.ALL, "target speed: %s\n", sSpeed);
             }
             if (fUpdateFocus && this.cmp) this.cmp.updateFocus();
         }
@@ -14317,7 +14342,7 @@ class CPULib extends Component {
         let msElapsed = this.msEndThisRun - this.msStartRun;
 
         if (MAXDEBUG && msRemainsThisRun < 0 && this.nTargetMultiplier > 1) {
-            this.printf("warning: updates @%dms (prefer %dms)\n", msElapsedThisRun, Math.round(msYield));
+            this.printf(Messages.ALL, "warning: updates @%dms (prefer %dms)\n", msElapsedThisRun, Math.round(msYield));
         }
 
         this.calcSpeed(nCycles, msElapsed);
@@ -14671,7 +14696,7 @@ class CPULib extends Component {
                 }
                 catch(exception) {
                     if (typeof exception != "number") throw exception;
-                    if (MAXDEBUG) this.printf("CPU exception %#04x\n", exception);
+                    if (MAXDEBUG) this.printf(Messages.ALL, "CPU exception %#04x\n", exception);
                     /*
                      * TODO: If we ever get into a situation where every single instruction is generating a fault
                      * (eg, if an 8088 executes opcode 0xFF 0xFF, which is incorrectly routed to helpFault() instead
@@ -14731,7 +14756,7 @@ class CPULib extends Component {
             return false;
         }
         if (this.flags.running) {
-            if (!fQuiet) this.printf("%s busy\n", this.toString());
+            if (!fQuiet) this.printf(Messages.ALL, "%s busy\n", this.toString());
             return false;
         }
         if (this.idRunTimeout) {
@@ -19311,7 +19336,7 @@ class CPUx86 extends CPULib {
                         if (!nMinCycles) {
 
                             if (DEBUGGER) {
-                                this.printf("interrupt dispatched\n");
+                                this.printf(Messages.ALL, "interrupt dispatched\n");
                                 this.opFlags = 0;
                                 break;
                             }
@@ -19794,7 +19819,7 @@ class FPUx86 extends Component {
      */
     opNone()
     {
-        if (DEBUG) this.printf("%s.opNone(%#04x,%#04x)\n", this.idComponent, this.cpu.bOpcode, this.cpu.bModRM);
+        if (DEBUG) this.printf(Messages.ALL, "%s.opNone(%#04x,%#04x)\n", this.idComponent, this.cpu.bOpcode, this.cpu.bModRM);
         this.opStop(true);
     }
 
@@ -19807,7 +19832,7 @@ class FPUx86 extends Component {
      */
     opObsolete()
     {
-        if (DEBUG) this.printf("%s.opObsolete(%#04x,%#04x)\n", this.idComponent, this.cpu.bOpcode, this.cpu.bModRM);
+        if (DEBUG) this.printf(Messages.ALL, "%s.opObsolete(%#04x,%#04x)\n", this.idComponent, this.cpu.bOpcode, this.cpu.bModRM);
         this.opStop(true);
     }
 
@@ -19820,7 +19845,7 @@ class FPUx86 extends Component {
      */
     opUnimplemented()
     {
-        if (DEBUG) this.printf("%s.opUnimplemented(%#04x,%#04x)\n", this.idComponent, this.cpu.bOpcode, this.cpu.bModRM);
+        if (DEBUG) this.printf(Messages.ALL, "%s.opUnimplemented(%#04x,%#04x)\n", this.idComponent, this.cpu.bOpcode, this.cpu.bModRM);
         this.opStop(true);
     }
 
@@ -19875,7 +19900,7 @@ class FPUx86 extends Component {
      */
     setException(n)
     {
-        if (DEBUG) this.printf("%s.setException(%#06x)\n", this.idComponent, n);
+        if (DEBUG) this.printf(Messages.ALL, "%s.setException(%#06x)\n", this.idComponent, n);
 
         if (!this.isAtLeastModel(X86.FPU.MODEL_80387)) {
             n &= ~X86.FPU.STATUS.SF;                // the SF bit didn't exist on pre-80387 coprocessors
@@ -24339,7 +24364,7 @@ class SegX86 {
                 let ch = (this.sName.length < 3? " " : "");
                 let sDPL = " dpl=" + this.dpl;
                 if (this.id == SegX86.ID.CODE) sDPL += " cpl=" + this.cpl;
-                this.dbg.printf("loadSeg(%s):%ssel=%#06x base=%x limit=%#06x type=%#06x%s\n", this.sName, ch, sel, base, limit, type, sDPL);
+                this.dbg.printf(Messages.SEG, "loadSeg(%s):%ssel=%#06x base=%x limit=%#06x type=%#06x%s\n", this.sName, ch, sel, base, limit, type, sDPL);
             }
             /*
              * Unless I've got a bug that's causing descriptor corruption, it appears that Windows 3.0 may be setting the
@@ -39416,7 +39441,7 @@ class ChipSet extends Component {
             let volume = +sound || 0;
             this.volumeInit = (sound == "true" || volume < 0 || volume > 1? 0.5 : volume);
         }
-        if (!this.volumeInit) this.printf("note: speaker disabled\n");
+        if (!this.volumeInit) this.printf(Messages.ALL, "note: speaker disabled\n");
 
         /*
          * This divisor is invariant, so we calculate it as soon as we're able to query the CPU's base speed.
@@ -39731,9 +39756,9 @@ class ChipSet extends Component {
          */
         if (Object.prototype.toString.call(date) !== "[object Date]" || isNaN(date.getTime())) {
             date = new Date();
-            this.printf("CMOS date invalid (%s), using %T\n", sDate, date);
+            this.printf(Messages.ALL, "CMOS date invalid (%s), using %T\n", sDate, date);
         } else if (sDate) {
-            this.printf("CMOS date: %T\n", date);
+            this.printf(Messages.ALL, "CMOS date: %T\n", date);
         }
 
         this.abCMOSData[ChipSet.CMOS.ADDR.RTC_SEC] = date.getSeconds();
@@ -41050,8 +41075,8 @@ class ChipSet extends Component {
                     let b = pic.aICW[i];
                     sDump += " IC" + (i + 1) + '=' + Str.toHexByte(b);
                 }
-                sDump += " IMR=" + Str.toHexByte(pic.bIMR) + " IRR=" + Str.toHexByte(pic.bIRR) + " ISR=" + Str.toHexByte(pic.bISR) + " DELAY=" + pic.nDelay;
-                this.dbg.printf("%s\n", sDump);
+                sDump += " IMR=" + Str.toHexByte(pic.bIMR) + " IRR=" + Str.toHexByte(pic.bIRR) + " ISR=" + Str.toHexByte(pic.bISR) + " DELAY=" + pic.nDelay + "\n";
+                this.print(sDump);
             }
         }
     }
@@ -41080,8 +41105,8 @@ class ChipSet extends Component {
                         count |= (timer.countCurrent[i] << (i * 8));
                     }
                 }
-                sDump += " mode=" + (timer.mode >> 1) + " bytes=" + timer.countBytes + " count=" + Str.toHexWord(count);
-                this.dbg.printf("%s\n", sDump);
+                sDump += " mode=" + (timer.mode >> 1) + " bytes=" + timer.countBytes + " count=" + Str.toHexWord(count) + "\n";
+                this.print(sDump);
             }
         }
     }
@@ -41098,9 +41123,9 @@ class ChipSet extends Component {
             for (let iCMOS = 0; iCMOS < ChipSet.CMOS.ADDR.TOTAL; iCMOS++) {
                 let b = (iCMOS <= ChipSet.CMOS.ADDR.STATUSD? this.getRTCByte(iCMOS) : this.abCMOSData[iCMOS]);
                 if (sDump) sDump += '\n';
-                sDump += "CMOS[" + Str.toHexByte(iCMOS) + "]: " + Str.toHexByte(b);
+                sDump += "CMOS[" + Str.toHexByte(iCMOS) + "]: " + Str.toHexByte(b) + "\n";
             }
-            this.dbg.printf("%s\n", sDump);
+            this.print(sDump);
         }
     }
 
@@ -45605,11 +45630,10 @@ class ROMx86 extends Component {
 
         if (this.sFileURL) {
             let rom = this;
-            let sProgress = "Loading " + this.sFileURL + "...";
             Web.getResource(this.sFileURL, null, true, function doneROMLoad(sURL, sResponse, nErrorCode) {
                 rom.doneLoad(sURL, sResponse, nErrorCode);
             }, function(nState) {
-                rom.printf(Messages.PROGRESS, "%s\n", sProgress);
+                rom.printf(Messages.PROGRESS, "Loading %s...\n", rom.sFileURL);
             });
         }
     }
@@ -50924,7 +50948,7 @@ class Card extends Controller {
                 sDump += sData + "\n";
             }
 
-            if (sDump) this.dbg.printf("%s", sDump);
+            if (sDump) this.dbg.print(sDump);
             this.prevDump = idw;
         }
     }
@@ -59030,7 +59054,7 @@ class ParallelPort extends Component {
         }
         else if (this.consoleBuffer != null) {
             if (b == 0x0A || this.consoleBuffer.length >= 1024) {
-                this.printf("%d\n", this.consoleBuffer);
+                this.print(this.consoleBuffer);
                 this.consoleBuffer = "";
             }
             if (b != 0x0A) {
@@ -60100,7 +60124,7 @@ class SerialPort extends Component {
         }
         else if (this.consoleBuffer != null) {
             if (b == 0x0A || this.consoleBuffer.length >= 1024) {
-                this.printf("%d\n", this.consoleBuffer);
+                this.print(this.consoleBuffer);
                 this.consoleBuffer = "";
             }
             if (b != 0x0A) {
@@ -62455,17 +62479,12 @@ class Disk extends Component {
     {
         let sDiskURL = sDiskPath;
 
-        /*
-         * We could use this.log() as well, but it wouldn't display which component initiated the load.
-         */
         if (DEBUG) {
-            let sMessage = 'load("' + sDiskName + '","' + sDiskPath + '")';
-            this.controller.log(sMessage);
-            this.printMessage(sMessage);
+            this.printf('load("%s","%s")\n', sDiskName, sDiskPath);
         }
 
         if (this.fnNotify) {
-            if (DEBUG) this.controller.log('too many load requests for "' + sDiskName + '" (' + sDiskPath + ')');
+            if (DEBUG) this.printf('too many load requests for "%s" (%s)\n', sDiskName, sDiskPath);
             return true;
         }
 
@@ -64479,7 +64498,7 @@ class FDC extends Component {
                          */
                         let disk = drive.disk;
                         if (disk) {
-                            if (DEBUG) fdc.printf("saving diskette %s...\n", disk.sDiskPath);
+                            if (DEBUG) fdc.printf(Messages.ALL, "saving diskette %s...\n", disk.sDiskPath);
                             let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
                             Component.alertUser(sAlert);
                         } else {
@@ -64613,10 +64632,10 @@ class FDC extends Component {
                                 JSONLib.parseDiskettes(fdc.aDiskettes, /** @type {Object} */ (JSON.parse(sResponse)), "/pcx86", fdc.sDisketteServer, hostName, limits);
                                 cSuccessful++;
                             } catch(err) {
-                                fdc.printf("Unable to parse %s: %s\n", url, err.message);
+                                fdc.printf(Messages.ALL, "Unable to parse %s: %s\n", url, err.message);
                             }
                         } else {
-                            fdc.printf("Unable to open %s (%d)\n", url, nErrorCode);
+                            fdc.printf(Messages.ALL, "Unable to open %s (%d)\n", url, nErrorCode);
                         }
                         if (++cLoaded == cRequested) fdc.addDiskettes(!cSuccessful);
                     }, function(nState) {
@@ -65462,7 +65481,7 @@ class FDC extends Component {
                 }
                 if (!sDiskPath) return false;
                 sDiskName = Str.getBaseName(sDiskPath);
-                if (DEBUG) this.printf("Attempting to load %s as \"%s\"\n", sDiskPath, sDiskName);
+                if (DEBUG) this.printf(Messages.ALL, "Attempting to load %s as \"%s\"\n", sDiskPath, sDiskName);
             }
 
             while (this.loadDrive(iDrive, sDiskName, sDiskPath, false, file) < 0) {
@@ -65470,7 +65489,7 @@ class FDC extends Component {
                  * I got tired of the "reload" warning when running locally, so I've disabled it there.
                  */
                 if (Web.getHostName() != "localhost" && (!globals.window.confirm || !globals.window.confirm("Click OK to reload the original disk and discard any changes."))) {
-                    if (DEBUG) this.printf("load cancelled\n");
+                    if (DEBUG) this.printf(Messages.ALL, "load cancelled\n");
                     return false;
                 }
                 /*
@@ -67658,7 +67677,7 @@ class HDC extends Component {
                         let i = sDiskName.lastIndexOf('.');
                         if (i >= 0) sDiskName = sDiskName.substr(0, i);
                         sDiskName += ".img";
-                        if (DEBUG) hdc.printf("saving disk %s...\n", sDiskName);
+                        if (DEBUG) hdc.printf(Messages.ALL, "saving disk %s...\n", sDiskName);
                         let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, sDiskName);
                         Component.alertUser(sAlert);
                     } else {
@@ -68683,7 +68702,7 @@ class HDC extends Component {
                 if (drive.iByte > 1) {          // in other words, if drive.iByte == drive.cbTransfer...
                     if (this.messageEnabled(Messages.DATA + Messages.HDC)) {
                         let sDump = drive.disk.dumpSector(drive.sector);
-                        if (sDump) this.dbg.printf("%s\n", sDump);
+                        if (sDump) this.print(sDump);
                     }
                     /*
                      * Now that we've supplied a full sector of data, see if the caller's expecting additional sectors;
@@ -68799,7 +68818,7 @@ class HDC extends Component {
                     if (drive.iByte > 1) {          // in other words, if drive.iByte == drive.cbTransfer...
                         if (this.messageEnabled(Messages.DATA + Messages.HDC)) {
                             let sDump = drive.disk.dumpSector(drive.sector);
-                            if (sDump) this.dbg.printf("%s\n", sDump);
+                            if (sDump) this.print(sDump);
                         }
                         drive.nBytes -= drive.cbTransfer;
                         this.regSecCnt = (this.regSecCnt - 1) & 0xff;
@@ -74767,7 +74786,7 @@ class DebuggerX86 extends DbgLib {
                 off += 2;
             }
         }
-        this.printf("%s\n", sDump);
+        this.print(sDump + "\n");
     }
 
     /**
@@ -74808,7 +74827,7 @@ class DebuggerX86 extends DbgLib {
         this.aMessageBuffer = [];
         let aEnable = this.parseCommand(sEnable, false, '|');
         if (aEnable.length) {
-            this.bitsMessage = Messages.NONE;       // when specific messages are being enabled, WARN must be explicitly set
+            this.bitsMessage = Messages.NONE;   // when specific messages are being enabled, WARN must be explicitly set
             for (let m in Messages.CATEGORIES) {
                 if (Usr.indexOf(aEnable, m) >= 0) {
                     this.bitsMessage += Messages.CATEGORIES[m];
@@ -74816,7 +74835,7 @@ class DebuggerX86 extends DbgLib {
                 }
             }
         }
-        this.historyInit();     // call this just in case Messages.INT was turned on
+        this.historyInit();                     // call this just in case Messages.INT was turned on
     }
 
     /**
@@ -77720,7 +77739,7 @@ class DebuggerX86 extends DbgLib {
                 sDump += sAddr + "  " + sData + Str.pad(sChars, sChars.length + i * 3 + 1, true);
             }
         }
-        if (sDump) this.printf("%s\n", sDump.replace(/\s*$/, ""));
+        if (sDump) this.print(sDump.replace(/\s*$/, "") + "\n");
         this.dbgAddrNextData = dbgAddr;
     }
 
@@ -80789,12 +80808,12 @@ class Computer extends Component {
 
         for (iComponent = 0; iComponent < aComponents.length; iComponent++) {
             component = aComponents[iComponent];
-            component.print = function printComputer(s) {
-                cmp.outputDiagnostics(s);
-                return cmp.printComputer.call(this, s);
+            component.print = function printComputer(s, bitsMessage) {
+                cmp.outputDiagnostics(s, bitsMessage);
+                return cmp.printComputer.call(this, s, bitsMessage);
             }.bind(component);
             component.notice = function noticeComputer(s, fPrintOnly, id) {
-                cmp.outputDiagnostics(s);
+                cmp.outputDiagnostics(s + "\n");
                 return cmp.noticeComputer.call(this, s, fPrintOnly, id);
             }.bind(component);
         }
@@ -80804,9 +80823,9 @@ class Computer extends Component {
             this.enableDiagnostics();
         }
 
-        this.printf("%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
+        this.printf(Messages.ALL, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
-        if (DEBUG) this.printf("PREFETCH: %b, TYPEDARRAYS: %b\n", PREFETCH, TYPEDARRAYS);
+        if (MAXDEBUG) this.printf(Messages.DEBUG, "PREFETCH: %b, TYPEDARRAYS: %b\n", PREFETCH, TYPEDARRAYS);
 
         /*
          * Iterate through all the components again and call their initBus() handler, if any
@@ -81011,11 +81030,11 @@ class Computer extends Component {
                         cmp.notifyKbdEvent();
                     };
                 }(this), 2000);
-                this.printf("Initialization complete\n");
+                this.printf(Messages.ALL, "Initialization complete\n");
             }
             if (this.nDiagnostics == 2) {
                 this.nDiagnostics += 2;
-                this.printf("Initialization complete, press a key to continue...\n");
+                this.printf(Messages.ALL, "Initialization complete, press a key to continue...\n");
             }
             if (this.nDiagnostics == 3 || this.nDiagnostics == 4) {
                 /*
@@ -81031,13 +81050,13 @@ class Computer extends Component {
     }
 
     /**
-     * outputDiagnostics(sMessage, sType)
+     * outputDiagnostics(sMessage, bitsMessage)
      *
      * @this {Computer}
      * @param {string} sMessage
-     * @param {string} [sType]
+     * @param {number} [bitsMessage]
      */
-    outputDiagnostics(sMessage, sType)
+    outputDiagnostics(sMessage, bitsMessage = 0)
     {
         if (this.cDiagnosticScreens) {
             for (let i = 0; i < this.aVideo.length; i++) {
@@ -81045,10 +81064,10 @@ class Computer extends Component {
                 if (video) {
                     let control = video.getTextArea();
                     if (control) {
-                        if (sType != Component.PRINT.PROGRESS || sMessage.slice(-3) != "...") {
-                            Component.appendControl(control, sMessage + '\n');
+                        if (this.testBits(bitsMessage, Messages.PROGRESS) && sMessage.slice(-4) == "...\n") {
+                            Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
-                            Component.replaceControl(control, sMessage, sMessage + '.');
+                            Component.appendControl(control, sMessage);
                         }
                     }
                 }
@@ -81073,7 +81092,7 @@ class Computer extends Component {
         let nDiagnostics = this.nDiagnostics;
         if (event && event.keyCode == 16 && this.nDiagnostics == 3) {
             this.nDiagnostics++;        // if we're waiting for a timeout and a shift key was pressed, wait for another key
-            this.printf("Machine paused, press another key to continue...\n");
+            this.printf(Messages.ALL, "Machine paused, press another key to continue...\n");
             event = null;
         }
         if (!event && this.nDiagnostics == 3 || event && fDown && this.nDiagnostics == 4) {
@@ -81402,7 +81421,7 @@ class Computer extends Component {
                                     this.notice("Error: " + sData);
                                     if (sData == UserAPI.FAIL.VERIFY) this.resetUserID();
                                 } else {
-                                    this.printf("%s: %s\n", sCode, sData);
+                                    this.printf(Messages.ALL, "%s: %s\n", sCode, sData);
                                 }
                                 /*
                                  * Try falling back to the state that we should have saved in localStorage, as a backup to the

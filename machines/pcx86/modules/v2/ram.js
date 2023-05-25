@@ -228,12 +228,12 @@ export default class RAMx86 extends Component {
                 this.fAllocated = true;
 
                 /*
-                 * NOTE: I'm specifying MAXDEBUG for status() messages because I'm not yet sure I want these
+                 * NOTE: I'm specifying MAXDEBUG for STATUS messages because I'm not yet sure I want these
                  * messages buried in the app, since they're seen only when a Control Panel is active.  Another
                  * and perhaps better alternative is to add "comment" attributes to the XML configuration file
                  * for these components, which the Computer component will display as it "powers up" components.
                  */
-                if (MAXDEBUG && !this.addrRAM && this.fInstalled) this.status("specified size overrides SW1");
+                if (MAXDEBUG && !this.addrRAM && this.fInstalled) this.printf(Messages.STATUS, "specified size overrides SW1\n");
 
                 /*
                  * Memory with an ID of "ramCPQ" is reserved for built-in memory located just below the 16Mb
@@ -267,7 +267,7 @@ export default class RAMx86 extends Component {
                  * HACK: Set the word at 40:72 in the ROM BIOS Data Area (RBDA) to 0x1234 to bypass the ROM BIOS
                  * memory storage tests. See rom.js for more RBDA definitions.
                  */
-                if (MAXDEBUG) this.status("ROM BIOS memory test has been disabled");
+                if (MAXDEBUG) this.printf(Messages.STATUS, "ROM BIOS memory test has been disabled\n");
                 this.bus.setShortDirect(ROMx86.BIOS.RESET_FLAG.ADDR, ROMx86.BIOS.RESET_FLAG.WARMBOOT);
             }
             /*

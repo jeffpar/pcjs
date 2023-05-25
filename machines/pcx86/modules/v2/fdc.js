@@ -866,8 +866,8 @@ export default class FDC extends Component {
 
         if (fInit) {
             drive.fWritable = true;
-            if (nHeads) this.status("drive %d configured with %d head%s", iDrive, nHeads, nHeads > 1? 's' : '');
-            if (!drive.fBootable) this.status("drive %d configured as non-bootable", iDrive);
+            if (nHeads) this.printf(Messages.STATUS, "drive %d configured with %d head%s\n", iDrive, nHeads, nHeads > 1? 's' : '');
+            if (!drive.fBootable) this.printf(Messages.STATUS, "drive %d configured as non-bootable\n", iDrive);
         }
 
         if (data === undefined) {

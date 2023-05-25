@@ -14,7 +14,7 @@ import repl from "repl";
 import Str from "../v2/strlib.js";
 
 /**
- * printf(format, args)
+ * printf(format, ...args)
  *
  * @param {string} format
  * @param {...} args

@@ -4138,29 +4138,23 @@ class Component {
                  * @param {string} s
                  * @returns {boolean}
                  */
-                this.notice = function noticeControl(s /*, fPrintOnly, id*/) {
-                    this.println(s, this.type);
+                this.notice = function noticeControl(sMessage /*, fPrintOnly, id*/) {
+                    this.println(sMessage, this.type);
                     return true;
                 };
                 /*
                  * This was added for Firefox (Safari will clear the <textarea> on a page reload, but Firefox does not).
                  */
                 controlTextArea.value = "";
-                this.print = function(control) {
-                    return function printControl(s) {
-                        Component.appendControl(control, s);
-                    };
-                }(controlTextArea);
-                this.println = function(component, control) {
-                    return function printlnControl(s, type, id) {
-                        if (!s) s = "";
-                        if (type != Component.PRINT.PROGRESS || s.slice(-3) != "...") {
-                            if (type) s = type + ": " + s;
-                            Component.appendControl(control, s + '\n');
+                this.print = function(component, control) {
+                    return function printControl(sMessage, bitsMessage = 0) {
+                        if (!sMessage) sMessage = "";
+                        if (component.testBits(bitsMessage, Messages.PROGRESS) && sMessage.slice(-4) == "...\n") {
+                            Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
-                            Component.replaceControl(control, s, s + '.');
+                            Component.appendControl(control, sMessage);
                         }
-                        if (!COMPILED) Component.println(s, type, id);
+                        if (!COMPILED) Component.print(sMessage);
                     };
                 }(this, controlTextArea);
             }
@@ -4256,7 +4250,7 @@ class Component {
     }
 
     /**
-     * println(s, type, id)
+     * println(s, type, id) (DEPRECATED)
      *
      * Components using this.println() should wait until after their constructor has run to display any messages, because
      * if a Control Panel has been loaded, its override will not take effect until its own constructor has run.
@@ -4268,14 +4262,17 @@ class Component {
      */
     println(s, type, id)
     {
-        Component.println(s, type, id || this.id);
+        this.print(s + "\n");
+        // Component.println(s, type, id || this.id);
     }
 
     /**
      * status(format, ...args)
      *
-     * status() is like println() but it also includes information about the component (ie, the component type),
+     * status() is a print function that also includes information about the component (ie, the component type),
      * which is why there is no corresponding Component.status() function.
+     *
+     * DEPRECATED: Use printf(Messages.STATUS, format, ...args) instead.
      *
      * @this {Component}
      * @param {string} format
@@ -4283,7 +4280,7 @@ class Component {
      */
     status(format, ...args)
     {
-        this.println(this.type + ": " + Str.sprintf(format, ...args));
+        this.printf(Messages.STATUS, format + "\n", ...args);
     }
 
     /**
@@ -4495,6 +4492,23 @@ class Component {
     }
 
     /**
+     * maskBits(num, bits)
+     *
+     * Helper function for returning bits in numbers with more than 32 bits.
+     *
+     * @param {number} num
+     * @param {number} bits
+     * @returns {boolean}
+     */
+    maskBits(num, bits)
+    {
+        let shift = Math.pow(2, 32);
+        let numHi = (num / shift)|0;
+        let bitsHi = (bits / shift)|0;
+        return (num & bits) + (numHi & bitsHi) * shift
+    }
+
+    /**
      * setBits(num, bits)
      *
      * Helper function for setting bits in numbers with more than 32 bits.
@@ -4536,16 +4550,14 @@ class Component {
      *
      * @this {Component}
      * @param {number} [bitsMessage] is zero or more Message flags
-     * @returns {boolean} true if all specified message enabled, false if not
+     * @returns {boolean} true if the specified message(s) are enabled, false if not
      */
     messageEnabled(bitsMessage = 0)
     {
-        if (DEBUGGER && this.dbg) {
-            if (bitsMessage % 2) bitsMessage--;
-            bitsMessage = bitsMessage || this.bitsMessage;
-            if ((bitsMessage|1) == -1 || this.testBits(this.dbg.bitsMessage, bitsMessage)) {
-                return true;
-            }
+        if (bitsMessage % 2) bitsMessage--;
+        bitsMessage = bitsMessage || this.bitsMessage;
+        if ((bitsMessage|1) == -1 || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
+            return true;
         }
         return false;
     }
@@ -4565,6 +4577,15 @@ class Component {
         if (typeof format == "number") {
             bitsMessage = format;
             format = args.shift();
+            let bitsTypes = this.maskBits(bitsMessage, Messages.TYPES);
+            if (bitsTypes) {
+                switch(bitsTypes) {
+                case Messages.STATUS:
+                    format = this.type + ": " + format;
+                    break;
+                }
+                bitsMessage = Messages.ALL;
+            }
         }
         if (this.messageEnabled(bitsMessage)) {
             let s = Str.sprintf(format, ...args);
@@ -4575,7 +4596,7 @@ class Component {
                 if (s.slice(-1) == '\n') s = s.slice(0, -1);
                 this.dbg.message(s, !!(bitsMessage % 2));   // pass true for fAddress if Messages.ADDRESS is set
             } else {
-                this.print(s);
+                this.print(s, bitsMessage);
             }
         }
     }
@@ -4591,15 +4612,16 @@ class Component {
      * @param {number|boolean} [bitsMessage] is zero or more Messages flag(s)
      * @param {boolean} [fAddress] is true to display the current address
      */
-    printMessage(sMessage, bitsMessage, fAddress)
+    printMessage(sMessage, bitsMessage = 0, fAddress = false)
     {
         if (DEBUGGER && this.dbg) {
             if (typeof bitsMessage == "boolean") {
                 bitsMessage = bitsMessage? -1 : 0;
             }
-            if (this.messageEnabled(bitsMessage)) {
-                this.dbg.print(sMessage, fAddress);
+            if (fAddress) {
+                bitsMessage = this.setBits(bitsMessage, Messages.ADDRESS);
             }
+            this.dbg.printf(bitsMessage, "%s\n", sMessage);
         }
     }
 
@@ -29029,3 +29051,4 @@ globals.window['commandMachine'] = commandMachine;
 
 globals.window['enableEvents'] = Web.enablePageEvents;
 globals.window['sendEvent']    = Web.doPageEvent;
+

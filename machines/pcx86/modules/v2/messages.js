@@ -49,6 +49,7 @@ Messages.DATA        = 0x000080000000;
 Messages.DOS         = 0x000100000000;
 Messages.EVENT       = 0x000200000000;
 Messages.KEY         = 0x000400000000;
+Messages.RESERVED    = 0xfff000000000;
 
 Messages.CATEGORIES['cpu']       = Messages.CPU;
 Messages.CATEGORIES['seg']       = Messages.SEG;

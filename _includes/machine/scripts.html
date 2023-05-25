@@ -204,8 +204,8 @@ template doesn't add them to the Computer component anymore, since we started su
   {%- endif -%}
   {%- capture machine_parms -%}{{ machine_autoMount }}{{ machine_autoScript }}{{ machine_autoStart }}{{ machine_autoType }}{{ machine_cdroms }}{{ machine_diskettes }}{{ machine_fdrives }}{{ machine_hdrives }}{{ machine_resume }}{{ machine_sound }}{{ machine_state }}{{ machine_flicker }}{{ machine_sizeRAM }}{{ machine_testRAM }}{{ machine_commands }}{{ machine_messages }}{{ machine_connection }}{%- endcapture -%}
   {%- if machine_parms != "" -%}{%- capture machine_parms -%}{{ site.left_brace }}{{ machine_parms | prepend: "@" | replace: "@,","" }}{{ site.right_brace }}{%- endcapture -%}{%- endif -%}
-  {%- if site.pcjs.uncompiled or machine.unbundled -%}
-    {%- if machine.unbundled -%}
+  {%- if site.pcjs.uncompiled or site.pcjs.unbundled or machine.unbundled -%}
+    {%- if site.pcjs.unbundled or machine.unbundled -%}
       {%- for script in machine_data.scripts -%}
         {%- if script contains "/embed.js" -%}{% continue %}{%- endif -%}
         {%- capture page_script %}
@@ -242,7 +242,7 @@ template doesn't add them to the Computer component anymore, since we started su
     {%- capture machine_template -%}{{ site.baseurl }}/machines/{{ machine_folder }}/xsl/components.xsl{%- endcapture -%}
   {%- endif -%}
   {%- if machine_factory contains "embed" %}
-    {%- if machine.unbundled %}
+    {%- if site.pcjs.unbundled or machine.unbundled %}
     <script type="module">
       import { {{ machine_factory }} } from "/machines/modules/v2/embed.js";
       {{ machine_factory }}('{{ machine_id }}','{{ machine_config }}','{{ machine_template }}','{{ machine_parms }}'{{ machine_class }});
@@ -250,7 +250,7 @@ template doesn't add them to the Computer component anymore, since we started su
     {%- else %}
     <script>{{ machine_factory }}('{{ machine_id }}','{{ machine_config }}','{{ machine_template }}','{{ machine_parms }}'{{ machine_class }});</script>
     {%- endif %}
-  {%- elsif machine.unbundled %}
+  {%- elsif site.pcjs.unbundled or machine.unbundled %}
     <script type="module">PCjsMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
   {%- elsif site.pcjs.uncompiled or machine.uncompiled %}
     <script>PCjsMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
