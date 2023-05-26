@@ -7,11 +7,11 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import MessagesX80 from "./messages.js";
-import Component from "../../../../modules/v2/component.js";
-import State from "../../../../modules/v2/state.js";
-import Str from "../../../../modules/v2/strlib.js";
-import Web from "../../../../modules/v2/weblib.js";
+import Messages from "./messages.js";
+import Component from "../../../modules/v2/component.js";
+import State from "../../../modules/v2/state.js";
+import Str from "../../../modules/v2/strlib.js";
+import Web from "../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG, RS232, globals } from "./defines.js";
 
 /**
@@ -58,7 +58,7 @@ export default class SerialPortX80 extends Component {
      */
     constructor(parmsSerial)
     {
-        super("SerialPort", parmsSerial, MessagesX80.SERIAL);
+        super("SerialPort", parmsSerial, Messages.SERIAL);
 
         this.iAdapter = +parmsSerial['adapter'];
 

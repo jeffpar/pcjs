@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import MessagesX80 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../modules/v2/component.js";
 import Str from "../../../modules/v2/strlib.js";
 import { DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
@@ -55,7 +55,7 @@ export default class CPUx80 extends Component {
      */
     constructor(parmsCPU, nCyclesDefault)
     {
-        super("CPU", parmsCPU, MessagesX80.CPU);
+        super("CPU", parmsCPU, Messages.CPU);
 
         var nCycles = parmsCPU['cycles'] || nCyclesDefault;
 
@@ -870,7 +870,7 @@ export default class CPUx80 extends Component {
          */
         this.nCyclesRecalc += this.nCyclesThisRun;
 
-        if (DEBUG && this.messageEnabled(MessagesX80.CPU) && msRemainsThisRun) {
+        if (DEBUG && this.messageEnabled(Messages.CPU) && msRemainsThisRun) {
             this.printMessage("calcRemainingTime: " + msRemainsThisRun + "ms to sleep after " + this.msEndThisRun + "ms");
         }
 
@@ -1023,14 +1023,14 @@ export default class CPUx80 extends Component {
             if (timer[1] < 0) continue;
             timer[1] -= nCycles;
             if (timer[1] <= 0) {
-                if (DEBUG && this.messageEnabled(MessagesX80.CPU)) {
+                if (DEBUG && this.messageEnabled(Messages.CPU)) {
                     this.printMessage("updateTimer(" + nCycles + "): firing " + timer[0] + " with only " + (timer[1] + nCycles) + " cycles left");
                 }
                 timer[1] = -1;      // zero is technically an "active" value, so ensure the timer is dormant now
                 timer[3]();         // safe to invoke the callback function now
                 if (timer[2] >= 0) {
                     this.setTimer(iTimer, timer[2]);
-                    if (DEBUG && this.messageEnabled(MessagesX80.CPU)) {
+                    if (DEBUG && this.messageEnabled(Messages.CPU)) {
                         this.printMessage("updateTimer(" + nCycles + "): rearming " + timer[0] + " for " + timer[2] + "ms (" + timer[1] + " cycles)");
                     }
                 }

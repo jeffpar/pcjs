@@ -8,7 +8,7 @@
  */
 
 import BusX80 from "./bus.js";
-import MessagesX80 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
@@ -89,7 +89,7 @@ export default class ComputerX80 extends Component {
      */
     constructor(parmsComputer, parmsMachine, fSuspended)
     {
-        super("Computer", parmsComputer, MessagesX80.COMPUTER);
+        super("Computer", parmsComputer, Messages.COMPUTER);
 
         this.flags.powered = false;
 

@@ -928,7 +928,7 @@ export default class Str {
 
             case 'o':
                 radix = 8;
-                if (hash) prefix = "0";
+                if (hash) prefix = "0o";
                 /* falls through */
 
             case 'X':

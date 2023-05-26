@@ -1559,7 +1559,7 @@ class Str {
 
             case 'o':
                 radix = 8;
-                if (hash) prefix = "0";
+                if (hash) prefix = "0o";
                 /* falls through */
 
             case 'X':
@@ -4610,7 +4610,7 @@ class Component {
     {
         if (bitsMessage % 2) bitsMessage--;
         bitsMessage = bitsMessage || this.bitsMessage;
-        if (this.testBits(bitsMessage, Messages.TYPES) || this.dbg && this.testBits(bitsMessage, this.dbg.bitsMessage)) {
+        if (this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
             return true;
         }
         return false;
@@ -4941,29 +4941,20 @@ CPUDefX80.PS.SET       =   (CPUDefX80.PS.BIT1);
  * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
  */
 
-const MessagesX80 = {
-    NONE:       0x00000000,
-    DEFAULT:    0x00000000,
-    ADDRESS:    0x00000001,
-    CPU:        0x00000002,
-    BUS:        0x00000004,
-    MEM:        0x00000008,
-    PORT:       0x00000010,
-    NVR:        0x00000020,
-    CHIPSET:    0x00000040,
-    KEYBOARD:   0x00000080,
-    KEYS:       0x00000100,
-    VIDEO:      0x00000200,
-    FDC:        0x00000400,
-    DISK:       0x00000800,
-    SERIAL:     0x00001000,
-    SPEAKER:    0x00002000,
-    COMPUTER:   0x00004000,
-    WARN:       0x10000000,
-    HALT:       0x20000000,
-    BUFFER:     0x40000000,
-    ALL:        0xffffffff|0
-};
+Messages.CPU        = 0x00000002;
+Messages.BUS        = 0x00000004;
+Messages.MEM        = 0x00000008;
+Messages.PORT       = 0x00000010;
+Messages.NVR        = 0x00000020;
+Messages.CHIPSET    = 0x00000040;
+Messages.KEYBOARD   = 0x00000080;
+Messages.KEYS       = 0x00000100;
+Messages.VIDEO      = 0x00000200;
+Messages.FDC        = 0x00000400;
+Messages.DISK       = 0x00000800;
+Messages.SERIAL     = 0x00001000;
+Messages.SPEAKER    = 0x00002000;
+Messages.COMPUTER   = 0x00004000;
 
 /*
  * Message categories supported by the messageEnabled() function and other assorted message
@@ -4979,32 +4970,20 @@ const MessagesX80 = {
  * aware that changing the bit values could break saved Debugger states (not a huge concern, just
  * something to be aware of).
  */
-MessagesX80.CATEGORIES = {
-    "cpu":      MessagesX80.CPU,
-    "bus":      MessagesX80.BUS,
-    "mem":      MessagesX80.MEM,
-    "port":     MessagesX80.PORT,
-    "nvr":      MessagesX80.NVR,
-    "chipset":  MessagesX80.CHIPSET,
-    "keyboard": MessagesX80.KEYBOARD,  // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
-    "key":      MessagesX80.KEYS,      // using "key" instead of "keys", since the latter is a method on JavasScript objects
-    "video":    MessagesX80.VIDEO,
-    "fdc":      MessagesX80.FDC,
-    "disk":     MessagesX80.DISK,
-    "serial":   MessagesX80.SERIAL,
-    "speaker":  MessagesX80.SPEAKER,
-    "computer": MessagesX80.COMPUTER,
-    "warn":     MessagesX80.WARN,
-    /*
-     * Now we turn to message actions rather than message types; for example, setting "halt"
-     * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
-     *
-     * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
-     * until "m buffer off" is issued.
-     */
-    "halt":     MessagesX80.HALT,
-    "buffer":   MessagesX80.BUFFER
-};
+Messages.CATEGORIES["cpu"]      = Messages.CPU;
+Messages.CATEGORIES["bus"]      = Messages.BUS;
+Messages.CATEGORIES["mem"]      = Messages.MEM;
+Messages.CATEGORIES["port"]     = Messages.PORT;
+Messages.CATEGORIES["nvr"]      = Messages.NVR;
+Messages.CATEGORIES["chipset"]  = Messages.CHIPSET;
+Messages.CATEGORIES["keyboard"] = Messages.KEYBOARD; // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
+Messages.CATEGORIES["key"]      = Messages.KEYS;     // using "key" instead of "keys", since the latter is a method on JavasScript objects
+Messages.CATEGORIES["video"]    = Messages.VIDEO;
+Messages.CATEGORIES["fdc"]      = Messages.FDC;
+Messages.CATEGORIES["disk"]     = Messages.DISK;
+Messages.CATEGORIES["serial"]   = Messages.SERIAL;
+Messages.CATEGORIES["speaker"]  = Messages.SPEAKER;
+Messages.CATEGORIES["computer"] = Messages.COMPUTER;
 
 
 /**
@@ -6561,7 +6540,7 @@ class MemoryX80 {
      */
     printAddr(sMessage)
     {
-        if (DEBUG && this.dbg && this.dbg.messageEnabled(MessagesX80.MEM)) {
+        if (DEBUG && this.dbg && this.dbg.messageEnabled(Messages.MEM)) {
             this.dbg.printMessage(sMessage + ' ' + (this.addr != null? ('%' + Str.toHex(this.addr)) : '#' + this.id), true);
         }
     }
@@ -6657,7 +6636,7 @@ class MemoryX80 {
      */
     readNone(off, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesX80.CPU | MessagesX80.MEM) /* && !off */) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.CPU | Messages.MEM) /* && !off */) {
             this.dbg.message("attempt to read invalid block %" + Str.toHex(this.addr), true);
         }
         return 0xff;
@@ -6673,7 +6652,7 @@ class MemoryX80 {
      */
     writeNone(off, v, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesX80.CPU | MessagesX80.MEM) /* && !off */) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.CPU | Messages.MEM) /* && !off */) {
             this.dbg.message("attempt to write " + Str.toHexWord(v) + " to invalid block %" + Str.toHex(this.addr), true);
         }
     }
@@ -7121,7 +7100,7 @@ class CPUx80 extends Component {
      */
     constructor(parmsCPU, nCyclesDefault)
     {
-        super("CPU", parmsCPU, MessagesX80.CPU);
+        super("CPU", parmsCPU, Messages.CPU);
 
         var nCycles = parmsCPU['cycles'] || nCyclesDefault;
 
@@ -7936,7 +7915,7 @@ class CPUx80 extends Component {
          */
         this.nCyclesRecalc += this.nCyclesThisRun;
 
-        if (DEBUG && this.messageEnabled(MessagesX80.CPU) && msRemainsThisRun) {
+        if (DEBUG && this.messageEnabled(Messages.CPU) && msRemainsThisRun) {
             this.printMessage("calcRemainingTime: " + msRemainsThisRun + "ms to sleep after " + this.msEndThisRun + "ms");
         }
 
@@ -8089,14 +8068,14 @@ class CPUx80 extends Component {
             if (timer[1] < 0) continue;
             timer[1] -= nCycles;
             if (timer[1] <= 0) {
-                if (DEBUG && this.messageEnabled(MessagesX80.CPU)) {
+                if (DEBUG && this.messageEnabled(Messages.CPU)) {
                     this.printMessage("updateTimer(" + nCycles + "): firing " + timer[0] + " with only " + (timer[1] + nCycles) + " cycles left");
                 }
                 timer[1] = -1;      // zero is technically an "active" value, so ensure the timer is dormant now
                 timer[3]();         // safe to invoke the callback function now
                 if (timer[2] >= 0) {
                     this.setTimer(iTimer, timer[2]);
-                    if (DEBUG && this.messageEnabled(MessagesX80.CPU)) {
+                    if (DEBUG && this.messageEnabled(Messages.CPU)) {
                         this.printMessage("updateTimer(" + nCycles + "): rearming " + timer[0] + " for " + timer[2] + "ms (" + timer[1] + " cycles)");
                     }
                 }
@@ -10746,7 +10725,7 @@ CPUDefX80.opHLT = function()
      * If a Debugger is present and the HALT message category is enabled, then we REALLY halt the CPU,
      * on the theory that whoever's using the Debugger would like to see HLTs.
      */
-    if (DEBUGGER && this.dbg && this.messageEnabled(MessagesX80.HALT)) {
+    if (DEBUGGER && this.dbg && this.messageEnabled(Messages.HALT)) {
         this.setPC(addr);               // this is purely for the Debugger's benefit, to show the HLT
         this.dbg.stopCPU();
         return;
@@ -12402,7 +12381,7 @@ class ChipSetX80 extends Component {
      */
     constructor(parmsChipSet)
     {
-        super("ChipSet", parmsChipSet, MessagesX80.CHIPSET);
+        super("ChipSet", parmsChipSet, Messages.CHIPSET);
 
         var model = parmsChipSet['model'];
 
@@ -12507,7 +12486,7 @@ class ChipSetX80 extends Component {
         if (DEBUGGER) {
             if (dbg) {
                 var chipset = this;
-                dbg.messageDump(MessagesX80.NVR, function onDumpNVR() {
+                dbg.messageDump(Messages.NVR, function onDumpNVR() {
                     chipset.dumpNVR();
                 });
             }
@@ -14214,7 +14193,7 @@ class KeyboardX80 extends Component {
      */
     constructor(parmsKbd)
     {
-        super("Keyboard", parmsKbd, MessagesX80.KEYBOARD);
+        super("Keyboard", parmsKbd, Messages.KEYBOARD);
 
         var model = parmsKbd['model'];
 
@@ -14685,7 +14664,7 @@ class KeyboardX80 extends Component {
         var fPass = true;
         var keyCode = event.keyCode;
 
-        if (!COMPILED && this.messageEnabled(MessagesX80.KEYS)) {
+        if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
             this.printMessage("onKey" + (fDown? "Down" : "Up") + "(" + keyCode + ")", true);
         }
 
@@ -14764,7 +14743,7 @@ class KeyboardX80 extends Component {
             }
         }
 
-        if (!COMPILED && this.messageEnabled(MessagesX80.KEYS)) {
+        if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
             this.printMessage("onKey" + (fDown? "Down" : "Up") + "(" + keyCode + "): softCode=" + softCode + ", pass=" + fPass, true);
         }
 
@@ -14808,7 +14787,7 @@ class KeyboardX80 extends Component {
             }
         }
 
-        if (!COMPILED && this.messageEnabled(MessagesX80.KEYS)) {
+        if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
             this.printMessage("onKeyPress(" + charCode + ")", true);
         }
 
@@ -14846,7 +14825,7 @@ class KeyboardX80 extends Component {
                 if (!this.indexOfCharMap(bMapping)) {
                     fPass = this.onSoftKeyDown(keyCode, fDown, true);
                     if (event.preventDefault) event.preventDefault();
-                    if (!COMPILED && this.messageEnabled(MessagesX80.KEYS)) {
+                    if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
                         this.printMessage("oniOSKey" + (fDown ? "Down" : "Up") + "(" + keyCode + "): pass=" + fPass, true);
                     }
                 }
@@ -14898,7 +14877,7 @@ class KeyboardX80 extends Component {
             }
         }
 
-        if (!COMPILED && this.messageEnabled(MessagesX80.KEYS)) {
+        if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
             this.printMessage("oniOSKeyPress(" + charCode + ")", true);
         }
 
@@ -15688,7 +15667,7 @@ class VideoX80 extends Component {
      */
     constructor(parmsVideo, canvas, context, textarea, container)
     {
-        super("Video", parmsVideo, MessagesX80.VIDEO);
+        super("Video", parmsVideo, Messages.VIDEO);
 
         var video = this, sProp, sEvent;
         this.fGecko = Web.isUserAgent("Gecko/");
@@ -17201,7 +17180,7 @@ class SerialPortX80 extends Component {
      */
     constructor(parmsSerial)
     {
-        super("SerialPort", parmsSerial, MessagesX80.SERIAL);
+        super("SerialPort", parmsSerial, Messages.SERIAL);
 
         this.iAdapter = +parmsSerial['adapter'];
 
@@ -19553,7 +19532,7 @@ class DebuggerX80 extends DbgLib {
 
         this.aaOpDescs = DebuggerX80.aaOpDescs;
 
-        this.messageDump(MessagesX80.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
+        this.messageDump(Messages.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
 
         this.setReady();
     }
@@ -20122,7 +20101,7 @@ class DebuggerX80 extends DbgLib {
     messageInit(sEnable)
     {
         this.dbg = this;
-        this.bitsMessage = this.bitsWarning = MessagesX80.WARN;
+        this.bitsMessage = this.bitsWarning = Messages.WARN;
         this.sMessagePrev = null;
         this.aMessageBuffer = [];
         /*
@@ -20131,9 +20110,9 @@ class DebuggerX80 extends DbgLib {
          */
         var aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, '|');
         if (aEnable.length) {
-            for (var m in MessagesX80.CATEGORIES) {
+            for (var m in Messages.CATEGORIES) {
                 if (Usr.indexOf(aEnable, m) >= 0) {
-                    this.bitsMessage |= MessagesX80.CATEGORIES[m];
+                    this.bitsMessage |= Messages.CATEGORIES[m];
                     this.println(m + " messages enabled");
                 }
             }
@@ -20150,8 +20129,8 @@ class DebuggerX80 extends DbgLib {
      */
     messageDump(bitMessage, fnDumper)
     {
-        for (var m in MessagesX80.CATEGORIES) {
-            if (bitMessage == MessagesX80.CATEGORIES[m]) {
+        for (var m in Messages.CATEGORIES) {
+            if (bitMessage == Messages.CATEGORIES[m]) {
                 this.afnDumpers[m] = fnDumper;
                 return true;
             }
@@ -20371,7 +20350,7 @@ class DebuggerX80 extends DbgLib {
             sMessage += " at " + this.toHexAddr(this.newAddr(this.cpu.getPC()));
         }
 
-        if (this.bitsMessage & MessagesX80.BUFFER) {
+        if (this.bitsMessage & Messages.BUFFER) {
             this.aMessageBuffer.push(sMessage);
             return;
         }
@@ -20379,7 +20358,7 @@ class DebuggerX80 extends DbgLib {
         if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
         this.sMessagePrev = sMessage;
 
-        if (this.bitsMessage & MessagesX80.HALT) {
+        if (this.bitsMessage & Messages.HALT) {
             this.stopCPU();
             sMessage += " (cpu halted)";
         }
@@ -20414,7 +20393,7 @@ class DebuggerX80 extends DbgLib {
      */
     messageIO(component, port, bOut, addrFrom, name, bIn, bitsMessage)
     {
-        bitsMessage |= MessagesX80.PORT;
+        bitsMessage |= Messages.PORT;
         if (name == null || (this.bitsMessage & bitsMessage) == bitsMessage) {
             this.message(component.idComponent + '.' + (bOut != null? "outPort" : "inPort") + '(' + Str.toHexWord(port) + ',' + (name? name : "unknown") + (bOut != null? ',' + Str.toHexByte(bOut) : "") + ')' + (bIn != null? (": " + Str.toHexByte(bIn)) : "") + (addrFrom != null? (" at " + this.toHexOffset(addrFrom)) : ""));
         }
@@ -20760,7 +20739,7 @@ class DebuggerX80 extends DbgLib {
                     }
                     sStopped += this.nCycles + " cycles, " + msTotal + " ms, " + nCyclesPerSecond + " hz)";
                 } else {
-                    if (this.messageEnabled(MessagesX80.HALT)) {
+                    if (this.messageEnabled(Messages.HALT)) {
                         /*
                          * It's possible the user is trying to 'g' past a fault that was blocked by helpCheckFault()
                          * for the Debugger's benefit; if so, it will continue to be blocked, so try displaying a helpful
@@ -20824,7 +20803,7 @@ class DebuggerX80 extends DbgLib {
          * The rest of the instruction tracking logic can only be performed if historyInit() has allocated the
          * necessary data structures.  Note that there is no explicit UI for enabling/disabling history, other than
          * adding/removing breakpoints, simply because it's breakpoints that trigger the call to checkInstruction();
-         * well, OK, and a few other things now, like enabling MessagesX80.INT messages.
+         * well, OK, and a few other things now, like enabling Messages.INT messages.
          */
         if (nState >= 0 && this.aaOpcodeCounts.length) {
             this.cOpcodes++;
@@ -21944,7 +21923,7 @@ class DebuggerX80 extends DbgLib {
 
         if (sAddr == '?') {
             var sDumpers = "";
-            for (m in MessagesX80.CATEGORIES) {
+            for (m in Messages.CATEGORIES) {
                 if (this.afnDumpers[m]) {
                     if (sDumpers) sDumpers += ',';
                     sDumpers = sDumpers + m;
@@ -21989,7 +21968,7 @@ class DebuggerX80 extends DbgLib {
         }
 
         if (sCmd == "d") {
-            for (m in MessagesX80.CATEGORIES) {
+            for (m in Messages.CATEGORIES) {
                 if (asArgs[1] == m) {
                     var fnDumper = this.afnDumpers[m];
                     if (fnDumper) {
@@ -22355,7 +22334,7 @@ class DebuggerX80 extends DbgLib {
         if (sCategory !== undefined) {
             var bitsMessage = 0;
             if (sCategory == "all") {
-                bitsMessage = (0xffffffff|0) & ~(MessagesX80.HALT | MessagesX80.KEYS | MessagesX80.BUFFER);
+                bitsMessage = (0xffffffff|0) & ~(Messages.HALT | Messages.KEYS | Messages.BUFFER);
                 sCategory = null;
             } else if (sCategory == "on") {
                 fCriteria = true;
@@ -22370,9 +22349,9 @@ class DebuggerX80 extends DbgLib {
                  */
                 if (sCategory == "keys") sCategory = "key";
                 if (sCategory == "kbd") sCategory = "keyboard";
-                for (m in MessagesX80.CATEGORIES) {
+                for (m in Messages.CATEGORIES) {
                     if (sCategory == m) {
-                        bitsMessage = MessagesX80.CATEGORIES[m];
+                        bitsMessage = Messages.CATEGORIES[m];
                         fCriteria = !!(this.bitsMessage & bitsMessage);
                         break;
                     }
@@ -22390,7 +22369,7 @@ class DebuggerX80 extends DbgLib {
                 else if (asArgs[2] == "off") {
                     this.bitsMessage &= ~bitsMessage;
                     fCriteria = false;
-                    if (bitsMessage == MessagesX80.BUFFER) {
+                    if (bitsMessage == Messages.BUFFER) {
                         for (var i = 0; i < this.aMessageBuffer.length; i++) {
                             this.println(this.aMessageBuffer[i]);
                         }
@@ -22405,9 +22384,9 @@ class DebuggerX80 extends DbgLib {
          */
         var n = 0;
         var sCategories = "";
-        for (m in MessagesX80.CATEGORIES) {
+        for (m in Messages.CATEGORIES) {
             if (!sCategory || sCategory == m) {
-                var bitMessage = MessagesX80.CATEGORIES[m];
+                var bitMessage = Messages.CATEGORIES[m];
                 var fEnabled = !!(this.bitsMessage & bitMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
@@ -22427,7 +22406,7 @@ class DebuggerX80 extends DbgLib {
 
         this.println((fCriteria !== null? (fCriteria? "messages on:  " : "messages off: ") : "message categories:\n\t") + (sCategories || "none"));
 
-        this.historyInit();     // call this just in case MessagesX80.INT was turned on
+        this.historyInit();     // call this just in case Messages.INT was turned on
     }
 
     /**
@@ -23795,7 +23774,7 @@ class ComputerX80 extends Component {
      */
     constructor(parmsComputer, parmsMachine, fSuspended)
     {
-        super("Computer", parmsComputer, MessagesX80.COMPUTER);
+        super("Computer", parmsComputer, Messages.COMPUTER);
 
         this.flags.powered = false;
 

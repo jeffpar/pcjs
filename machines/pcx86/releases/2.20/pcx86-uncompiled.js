@@ -1798,7 +1798,7 @@ class Str {
 
             case 'o':
                 radix = 8;
-                if (hash) prefix = "0";
+                if (hash) prefix = "0o";
                 /* falls through */
 
             case 'X':
@@ -4849,7 +4849,7 @@ class Component {
     {
         if (bitsMessage % 2) bitsMessage--;
         bitsMessage = bitsMessage || this.bitsMessage;
-        if (this.testBits(bitsMessage, Messages.TYPES) || this.dbg && this.testBits(bitsMessage, this.dbg.bitsMessage)) {
+        if (this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
             return true;
         }
         return false;
@@ -13886,7 +13886,7 @@ class CPULib extends Component {
      */
     displayChecksum()
     {
-        this.printf(Messages.DEFAULT, "%d cycles: checksum=%x\n", this.getCycles(), this.nChecksum);
+        this.printf("%d cycles: checksum=%x\n", this.getCycles(), this.nChecksum);
     }
 
     /**
@@ -14339,7 +14339,7 @@ class CPULib extends Component {
         let msElapsed = this.msEndThisRun - this.msStartRun;
 
         if (MAXDEBUG && msRemainsThisRun < 0 && this.nTargetMultiplier > 1) {
-            this.printf(Messages.DEFAULT, "warning: updates @%dms (prefer %dms)\n", msElapsedThisRun, Math.round(msYield));
+            this.printf("warning: updates @%dms (prefer %dms)\n", msElapsedThisRun, Math.round(msYield));
         }
 
         this.calcSpeed(nCycles, msElapsed);
@@ -14693,7 +14693,7 @@ class CPULib extends Component {
                 }
                 catch(exception) {
                     if (typeof exception != "number") throw exception;
-                    if (MAXDEBUG) this.printf(Messages.DEFAULT, "CPU exception %#04x\n", exception);
+                    if (MAXDEBUG) this.printf("CPU exception %#04x\n", exception);
                     /*
                      * TODO: If we ever get into a situation where every single instruction is generating a fault
                      * (eg, if an 8088 executes opcode 0xFF 0xFF, which is incorrectly routed to helpFault() instead
@@ -19333,7 +19333,7 @@ class CPUx86 extends CPULib {
                         if (!nMinCycles) {
 
                             if (DEBUGGER) {
-                                this.printf(Messages.DEFAULT, "interrupt dispatched\n");
+                                this.printf("interrupt dispatched\n");
                                 this.opFlags = 0;
                                 break;
                             }
@@ -19816,7 +19816,7 @@ class FPUx86 extends Component {
      */
     opNone()
     {
-        if (DEBUG) this.printf(Messages.DEBUG, "%s.opNone(%#04x,%#04x)\n", this.idComponent, this.cpu.bOpcode, this.cpu.bModRM);
+        if (DEBUG) this.printf("%s.opNone(%#04x,%#04x)\n", this.idComponent, this.cpu.bOpcode, this.cpu.bModRM);
         this.opStop(true);
     }
 
@@ -19829,7 +19829,7 @@ class FPUx86 extends Component {
      */
     opObsolete()
     {
-        if (DEBUG) this.printf(Messages.DEBUG, "%s.opObsolete(%#04x,%#04x)\n", this.idComponent, this.cpu.bOpcode, this.cpu.bModRM);
+        if (DEBUG) this.printf("%s.opObsolete(%#04x,%#04x)\n", this.idComponent, this.cpu.bOpcode, this.cpu.bModRM);
         this.opStop(true);
     }
 
@@ -19842,7 +19842,7 @@ class FPUx86 extends Component {
      */
     opUnimplemented()
     {
-        if (DEBUG) this.printf(Messages.DEBUG, "%s.opUnimplemented(%#04x,%#04x)\n", this.idComponent, this.cpu.bOpcode, this.cpu.bModRM);
+        if (DEBUG) this.printf("%s.opUnimplemented(%#04x,%#04x)\n", this.idComponent, this.cpu.bOpcode, this.cpu.bModRM);
         this.opStop(true);
     }
 
@@ -19897,7 +19897,7 @@ class FPUx86 extends Component {
      */
     setException(n)
     {
-        if (DEBUG) this.printf(Messages.DEBUG, "%s.setException(%#06x)\n", this.idComponent, n);
+        if (DEBUG) this.printf("%s.setException(%#06x)\n", this.idComponent, n);
 
         if (!this.isAtLeastModel(X86.FPU.MODEL_80387)) {
             n &= ~X86.FPU.STATUS.SF;                // the SF bit didn't exist on pre-80387 coprocessors
@@ -53018,7 +53018,7 @@ class VideoX86 extends Component {
                 this.canvasScreen.style.width = this.canvasScreen.style.height = "";
             }
         }
-        if (DEBUG) this.printf(Messages.DEBUG, "notifyFullScreen(%b)\n", fFullScreen);
+        if (DEBUG) this.printf("notifyFullScreen(%b)\n", fFullScreen);
         if (this.kbd) this.kbd.notifyEscape(fFullScreen == true);
     }
 
@@ -64495,7 +64495,7 @@ class FDC extends Component {
                          */
                         let disk = drive.disk;
                         if (disk) {
-                            if (DEBUG) fdc.printf(Messages.DEFAULT, "saving diskette %s...\n", disk.sDiskPath);
+                            if (DEBUG) fdc.printf("saving diskette %s...\n", disk.sDiskPath);
                             let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
                             Component.alertUser(sAlert);
                         } else {
@@ -67674,7 +67674,7 @@ class HDC extends Component {
                         let i = sDiskName.lastIndexOf('.');
                         if (i >= 0) sDiskName = sDiskName.substr(0, i);
                         sDiskName += ".img";
-                        if (DEBUG) hdc.printf(Messages.DEBUG, "saving disk %s...\n", sDiskName);
+                        if (DEBUG) hdc.printf("saving disk %s...\n", sDiskName);
                         let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, sDiskName);
                         Component.alertUser(sAlert);
                     } else {

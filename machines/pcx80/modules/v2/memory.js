@@ -7,10 +7,9 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import CPUDefX80 from "./cpudef.js";
-import MessagesX80 from "./messages.js";
-import Component from "../../../../modules/v2/component.js";
-import Str from "../../../../modules/v2/strlib.js";
+import Messages from "./messages.js";
+import Component from "../../../modules/v2/component.js";
+import Str from "../../../modules/v2/strlib.js";
 import { BYTEARRAYS, DEBUG, DEBUGGER, TYPEDARRAYS } from "./defines.js";
 
 /**
@@ -383,7 +382,7 @@ export default class MemoryX80 {
      */
     printAddr(sMessage)
     {
-        if (DEBUG && this.dbg && this.dbg.messageEnabled(MessagesX80.MEM)) {
+        if (DEBUG && this.dbg && this.dbg.messageEnabled(Messages.MEM)) {
             this.dbg.printMessage(sMessage + ' ' + (this.addr != null? ('%' + Str.toHex(this.addr)) : '#' + this.id), true);
         }
     }
@@ -479,7 +478,7 @@ export default class MemoryX80 {
      */
     readNone(off, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesX80.CPU | MessagesX80.MEM) /* && !off */) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.CPU | Messages.MEM) /* && !off */) {
             this.dbg.message("attempt to read invalid block %" + Str.toHex(this.addr), true);
         }
         return 0xff;
@@ -495,7 +494,7 @@ export default class MemoryX80 {
      */
     writeNone(off, v, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(MessagesX80.CPU | MessagesX80.MEM) /* && !off */) {
+        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.CPU | Messages.MEM) /* && !off */) {
             this.dbg.message("attempt to write " + Str.toHexWord(v) + " to invalid block %" + Str.toHex(this.addr), true);
         }
     }

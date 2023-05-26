@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import MessagesX80 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
@@ -36,7 +36,7 @@ export default class ChipSetX80 extends Component {
      */
     constructor(parmsChipSet)
     {
-        super("ChipSet", parmsChipSet, MessagesX80.CHIPSET);
+        super("ChipSet", parmsChipSet, Messages.CHIPSET);
 
         var model = parmsChipSet['model'];
 
@@ -141,7 +141,7 @@ export default class ChipSetX80 extends Component {
         if (DEBUGGER) {
             if (dbg) {
                 var chipset = this;
-                dbg.messageDump(MessagesX80.NVR, function onDumpNVR() {
+                dbg.messageDump(Messages.NVR, function onDumpNVR() {
                     chipset.dumpNVR();
                 });
             }

@@ -450,6 +450,7 @@ export default class StdIO extends NumIO {
                 arg = hash? date.getUTCFullYear() : date.getFullYear();
                 if (precision > 0) {
                     arg = arg % (Math.pow(10, precision));
+                    precision = -1;
                 }
                 type = 'd';
                 break;
@@ -560,7 +561,7 @@ export default class StdIO extends NumIO {
 
             case 'o':
                 radix = 8;
-                if (hash) prefix = "0";
+                if (hash) prefix = "0o";
                 /* falls through */
 
             case 'X':

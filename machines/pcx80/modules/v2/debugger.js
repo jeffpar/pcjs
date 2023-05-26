@@ -9,7 +9,7 @@
 
 import CPUDefX80 from "./cpudef.js";
 import MemoryX80 from "./memory.js";
-import MessagesX80 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../modules/v2/component.js";
 import DbgLib from "../../../modules/v2/debugger.js";
 import Keys from "../../../modules/v2/keys.js";
@@ -171,7 +171,7 @@ export default class DebuggerX80 extends DbgLib {
 
         this.aaOpDescs = DebuggerX80.aaOpDescs;
 
-        this.messageDump(MessagesX80.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
+        this.messageDump(Messages.BUS,  function onDumpBus(asArgs) { dbg.dumpBus(asArgs); });
 
         this.setReady();
     }
@@ -740,7 +740,7 @@ export default class DebuggerX80 extends DbgLib {
     messageInit(sEnable)
     {
         this.dbg = this;
-        this.bitsMessage = this.bitsWarning = MessagesX80.WARN;
+        this.bitsMessage = this.bitsWarning = Messages.WARN;
         this.sMessagePrev = null;
         this.aMessageBuffer = [];
         /*
@@ -749,9 +749,9 @@ export default class DebuggerX80 extends DbgLib {
          */
         var aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, '|');
         if (aEnable.length) {
-            for (var m in MessagesX80.CATEGORIES) {
+            for (var m in Messages.CATEGORIES) {
                 if (Usr.indexOf(aEnable, m) >= 0) {
-                    this.bitsMessage |= MessagesX80.CATEGORIES[m];
+                    this.bitsMessage |= Messages.CATEGORIES[m];
                     this.println(m + " messages enabled");
                 }
             }
@@ -768,8 +768,8 @@ export default class DebuggerX80 extends DbgLib {
      */
     messageDump(bitMessage, fnDumper)
     {
-        for (var m in MessagesX80.CATEGORIES) {
-            if (bitMessage == MessagesX80.CATEGORIES[m]) {
+        for (var m in Messages.CATEGORIES) {
+            if (bitMessage == Messages.CATEGORIES[m]) {
                 this.afnDumpers[m] = fnDumper;
                 return true;
             }
@@ -989,7 +989,7 @@ export default class DebuggerX80 extends DbgLib {
             sMessage += " at " + this.toHexAddr(this.newAddr(this.cpu.getPC()));
         }
 
-        if (this.bitsMessage & MessagesX80.BUFFER) {
+        if (this.bitsMessage & Messages.BUFFER) {
             this.aMessageBuffer.push(sMessage);
             return;
         }
@@ -997,7 +997,7 @@ export default class DebuggerX80 extends DbgLib {
         if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
         this.sMessagePrev = sMessage;
 
-        if (this.bitsMessage & MessagesX80.HALT) {
+        if (this.bitsMessage & Messages.HALT) {
             this.stopCPU();
             sMessage += " (cpu halted)";
         }
@@ -1032,7 +1032,7 @@ export default class DebuggerX80 extends DbgLib {
      */
     messageIO(component, port, bOut, addrFrom, name, bIn, bitsMessage)
     {
-        bitsMessage |= MessagesX80.PORT;
+        bitsMessage |= Messages.PORT;
         if (name == null || (this.bitsMessage & bitsMessage) == bitsMessage) {
             this.message(component.idComponent + '.' + (bOut != null? "outPort" : "inPort") + '(' + Str.toHexWord(port) + ',' + (name? name : "unknown") + (bOut != null? ',' + Str.toHexByte(bOut) : "") + ')' + (bIn != null? (": " + Str.toHexByte(bIn)) : "") + (addrFrom != null? (" at " + this.toHexOffset(addrFrom)) : ""));
         }
@@ -1378,7 +1378,7 @@ export default class DebuggerX80 extends DbgLib {
                     }
                     sStopped += this.nCycles + " cycles, " + msTotal + " ms, " + nCyclesPerSecond + " hz)";
                 } else {
-                    if (this.messageEnabled(MessagesX80.HALT)) {
+                    if (this.messageEnabled(Messages.HALT)) {
                         /*
                          * It's possible the user is trying to 'g' past a fault that was blocked by helpCheckFault()
                          * for the Debugger's benefit; if so, it will continue to be blocked, so try displaying a helpful
@@ -1442,7 +1442,7 @@ export default class DebuggerX80 extends DbgLib {
          * The rest of the instruction tracking logic can only be performed if historyInit() has allocated the
          * necessary data structures.  Note that there is no explicit UI for enabling/disabling history, other than
          * adding/removing breakpoints, simply because it's breakpoints that trigger the call to checkInstruction();
-         * well, OK, and a few other things now, like enabling MessagesX80.INT messages.
+         * well, OK, and a few other things now, like enabling Messages.INT messages.
          */
         if (nState >= 0 && this.aaOpcodeCounts.length) {
             this.cOpcodes++;
@@ -2562,7 +2562,7 @@ export default class DebuggerX80 extends DbgLib {
 
         if (sAddr == '?') {
             var sDumpers = "";
-            for (m in MessagesX80.CATEGORIES) {
+            for (m in Messages.CATEGORIES) {
                 if (this.afnDumpers[m]) {
                     if (sDumpers) sDumpers += ',';
                     sDumpers = sDumpers + m;
@@ -2607,7 +2607,7 @@ export default class DebuggerX80 extends DbgLib {
         }
 
         if (sCmd == "d") {
-            for (m in MessagesX80.CATEGORIES) {
+            for (m in Messages.CATEGORIES) {
                 if (asArgs[1] == m) {
                     var fnDumper = this.afnDumpers[m];
                     if (fnDumper) {
@@ -2973,7 +2973,7 @@ export default class DebuggerX80 extends DbgLib {
         if (sCategory !== undefined) {
             var bitsMessage = 0;
             if (sCategory == "all") {
-                bitsMessage = (0xffffffff|0) & ~(MessagesX80.HALT | MessagesX80.KEYS | MessagesX80.BUFFER);
+                bitsMessage = (0xffffffff|0) & ~(Messages.HALT | Messages.KEYS | Messages.BUFFER);
                 sCategory = null;
             } else if (sCategory == "on") {
                 fCriteria = true;
@@ -2988,9 +2988,9 @@ export default class DebuggerX80 extends DbgLib {
                  */
                 if (sCategory == "keys") sCategory = "key";
                 if (sCategory == "kbd") sCategory = "keyboard";
-                for (m in MessagesX80.CATEGORIES) {
+                for (m in Messages.CATEGORIES) {
                     if (sCategory == m) {
-                        bitsMessage = MessagesX80.CATEGORIES[m];
+                        bitsMessage = Messages.CATEGORIES[m];
                         fCriteria = !!(this.bitsMessage & bitsMessage);
                         break;
                     }
@@ -3008,7 +3008,7 @@ export default class DebuggerX80 extends DbgLib {
                 else if (asArgs[2] == "off") {
                     this.bitsMessage &= ~bitsMessage;
                     fCriteria = false;
-                    if (bitsMessage == MessagesX80.BUFFER) {
+                    if (bitsMessage == Messages.BUFFER) {
                         for (var i = 0; i < this.aMessageBuffer.length; i++) {
                             this.println(this.aMessageBuffer[i]);
                         }
@@ -3023,9 +3023,9 @@ export default class DebuggerX80 extends DbgLib {
          */
         var n = 0;
         var sCategories = "";
-        for (m in MessagesX80.CATEGORIES) {
+        for (m in Messages.CATEGORIES) {
             if (!sCategory || sCategory == m) {
-                var bitMessage = MessagesX80.CATEGORIES[m];
+                var bitMessage = Messages.CATEGORIES[m];
                 var fEnabled = !!(this.bitsMessage & bitMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
@@ -3045,7 +3045,7 @@ export default class DebuggerX80 extends DbgLib {
 
         this.println((fCriteria !== null? (fCriteria? "messages on:  " : "messages off: ") : "message categories:\n\t") + (sCategories || "none"));
 
-        this.historyInit();     // call this just in case MessagesX80.INT was turned on
+        this.historyInit();     // call this just in case Messages.INT was turned on
     }
 
     /**

@@ -1798,7 +1798,7 @@ class Str {
 
             case 'o':
                 radix = 8;
-                if (hash) prefix = "0";
+                if (hash) prefix = "0o";
                 /* falls through */
 
             case 'X':
@@ -4849,7 +4849,7 @@ class Component {
     {
         if (bitsMessage % 2) bitsMessage--;
         bitsMessage = bitsMessage || this.bitsMessage;
-        if (this.testBits(bitsMessage, Messages.TYPES) || this.dbg && this.testBits(bitsMessage, this.dbg.bitsMessage)) {
+        if (this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
             return true;
         }
         return false;

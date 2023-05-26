@@ -8,7 +8,7 @@
  */
 
 import MemoryX80 from "./memory.js";
-import MessagesX80 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
 import State from "../../../modules/v2/state.js";
@@ -78,7 +78,7 @@ export default class VideoX80 extends Component {
      */
     constructor(parmsVideo, canvas, context, textarea, container)
     {
-        super("Video", parmsVideo, MessagesX80.VIDEO);
+        super("Video", parmsVideo, Messages.VIDEO);
 
         var video = this, sProp, sEvent;
         this.fGecko = Web.isUserAgent("Gecko/");

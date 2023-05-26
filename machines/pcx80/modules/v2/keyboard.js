@@ -8,7 +8,7 @@
  */
 
 import ChipSetX80 from "./chipset.js";
-import MessagesX80 from "./messages.js";
+import Messages from "./messages.js";
 import Component from "../../../modules/v2/component.js";
 import Keys from "../../../modules/v2/keys.js";
 import State from "../../../modules/v2/state.js";
@@ -37,7 +37,7 @@ export default class KeyboardX80 extends Component {
      */
     constructor(parmsKbd)
     {
-        super("Keyboard", parmsKbd, MessagesX80.KEYBOARD);
+        super("Keyboard", parmsKbd, Messages.KEYBOARD);
 
         var model = parmsKbd['model'];
 
@@ -508,7 +508,7 @@ export default class KeyboardX80 extends Component {
         var fPass = true;
         var keyCode = event.keyCode;
 
-        if (!COMPILED && this.messageEnabled(MessagesX80.KEYS)) {
+        if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
             this.printMessage("onKey" + (fDown? "Down" : "Up") + "(" + keyCode + ")", true);
         }
 
@@ -587,7 +587,7 @@ export default class KeyboardX80 extends Component {
             }
         }
 
-        if (!COMPILED && this.messageEnabled(MessagesX80.KEYS)) {
+        if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
             this.printMessage("onKey" + (fDown? "Down" : "Up") + "(" + keyCode + "): softCode=" + softCode + ", pass=" + fPass, true);
         }
 
@@ -631,7 +631,7 @@ export default class KeyboardX80 extends Component {
             }
         }
 
-        if (!COMPILED && this.messageEnabled(MessagesX80.KEYS)) {
+        if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
             this.printMessage("onKeyPress(" + charCode + ")", true);
         }
 
@@ -669,7 +669,7 @@ export default class KeyboardX80 extends Component {
                 if (!this.indexOfCharMap(bMapping)) {
                     fPass = this.onSoftKeyDown(keyCode, fDown, true);
                     if (event.preventDefault) event.preventDefault();
-                    if (!COMPILED && this.messageEnabled(MessagesX80.KEYS)) {
+                    if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
                         this.printMessage("oniOSKey" + (fDown ? "Down" : "Up") + "(" + keyCode + "): pass=" + fPass, true);
                     }
                 }
@@ -721,7 +721,7 @@ export default class KeyboardX80 extends Component {
             }
         }
 
-        if (!COMPILED && this.messageEnabled(MessagesX80.KEYS)) {
+        if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
             this.printMessage("oniOSKeyPress(" + charCode + ")", true);
         }
 
