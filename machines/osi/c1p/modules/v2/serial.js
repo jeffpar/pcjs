@@ -82,7 +82,7 @@ export default class C1PSerialPort extends Component {
     loadFile(sFileName, sFileData, nResponse)
     {
         if (!sFileData) {
-            this.println("Error loading file \"" + sFileName + "\" (" + nResponse + ")");
+            this.printf("Error loading file \"%s\" (%d)\n", sFileName, nResponse);
             return;
         }
 
@@ -114,17 +114,17 @@ export default class C1PSerialPort extends Component {
                 this.sInput = s;
                 this.fConvertLF = false;
             } catch (e) {
-                this.println("Error processing file \"" + sFileName + "\": " + e.message);
+                this.printf("Error processing file \"%s\": %s\n", sFileName, e.message);
                 return;
             }
         }
 
         if (this.cmp && this.kbd && this.cpu.isRunning()) {
-            this.println("auto-loading " + sFileName);
+            this.printf("auto-loading %s\n", sFileName);
             if (!this.fDemo) this.startLoad(true);
         }
         else {
-            this.println(sFileName + " ready to load");
+            this.printf("%s ready to load\n", sFileName);
         }
     }
 
@@ -194,7 +194,7 @@ export default class C1PSerialPort extends Component {
             control.onclick = function onClickLoadSerial(event) {
                 if (serial.bindings["listSerial"]) {
                     var sFile = serial.bindings["listSerial"].value;
-                    // serial.println("loading " + sFile + "...");
+                    // serial.printf("loading %s...\n", sFile);
                     Web.getResource(sFile, null, true, function(sURL, sResponse, nErrorCode) {
                         serial.loadFile(sURL, sResponse, nErrorCode);
                     });
@@ -223,7 +223,7 @@ export default class C1PSerialPort extends Component {
 
                     var reader = new FileReader();
                     reader.onload = function() {
-                        // serial.println("mounting " + file.name + "...");
+                        // serial.printf("mounting %s...\n", file.name);
                         serial.loadFile(file.name, reader.result.toString(), 0);
                     };
                     reader.readAsText(file);

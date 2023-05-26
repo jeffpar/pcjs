@@ -2506,8 +2506,8 @@ export default class DebuggerX86 extends DbgLib {
             this.sMessagePrev = sMessage;
 
             if (this.testBits(this.bitsMessage, Messages.HALT)) {
-                this.stopCPU();
                 sMessage.replace(/(\n?)$/, " (cpu halted)$1");
+                this.stopCPU();
             }
 
             this.print(sMessage); // + " (" + this.cpu.getCycles() + " cycles)"

@@ -140,7 +140,7 @@ export default class C1PROM extends Component {
     convertImage(sImageName, sImageData, nErrorCode)
     {
         if (nErrorCode) {
-            this.println("Error loading ROM \"" + sImageName + "\" (" + nErrorCode + ")");
+            this.printf("Error loading ROM \"%s\" (%d)\n", sImageName, nErrorCode);
             return;
         }
         if (sImageData.charAt(0) == "[" || sImageData.charAt(0) == "{") {
@@ -156,7 +156,7 @@ export default class C1PROM extends Component {
                     this.abImage = rom;
                 }
             } catch (e) {
-                this.println("Error processing ROM \"" + sImageName + "\": " + e.message);
+                this.printf("Error processing ROM \"%s\": %s\n", sImageName, e.message);
                 return;
             }
         }

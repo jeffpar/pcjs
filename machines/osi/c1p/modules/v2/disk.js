@@ -681,7 +681,7 @@ export default class C1PDiskController extends Component {
                              */
                             sFileURL = "http://" + window.location.host + "/api/v1/dump?disk=" + sFilePath;
                         }
-                        controller.println("loading  " + Str.getBaseName(sFilePath) + "...");
+                        controller.printf("loading  %s...\n", Str.getBaseName(sFilePath));
                         Web.getResource(sFileURL, null, true, function(sURL, sResponse, nErrorCode) {
                             controller.loadDisk(sURL, sResponse, nErrorCode);
                         });
@@ -748,11 +748,11 @@ export default class C1PDiskController extends Component {
     loadDisk(sDiskName, sDiskData, nErrorCode)
     {
         if (nErrorCode) {
-            this.println("disk load error (" + nErrorCode + ")");
+            this.printf("disk load error (%d)\n", nErrorCode);
             return;
         }
         var aHeads = [];
-        this.println("mounting " + sDiskName + "...");
+        this.printf("mounting %s...\n", sDiskName);
         try {
             /*
              * The most likely source of any exception will be right here, where we're parsing
@@ -760,16 +760,16 @@ export default class C1PDiskController extends Component {
              */
             aHeads = eval("(" + sDiskData + ")");
             if (!aHeads.length) {
-                this.println("no data: " + sDiskName);
+                this.printf("no data: %s\n", sDiskName);
                 return;
             }
             if (!aHeads[0].length) {
-                this.println("no tracks: " + sDiskName);
+                this.printf("no tracks: %s\n", sDiskName);
                 return;
             }
             var aTracks = aHeads[0];
             if (aTracks[0]['trackNum'] === undefined) {
-                this.println("data error: " + aTracks[0]);
+                this.printf("data error: %d\n", aTracks[0]);
                 return;
             }
             /*
@@ -777,7 +777,7 @@ export default class C1PDiskController extends Component {
              * in the first place. Can we guarantee that and eliminate this test?
              */
             if (!this.aDrives[0]) {
-                this.println("no available drives");
+                this.printf("no available drives\n");
                 return;
             }
             /*
@@ -843,9 +843,9 @@ export default class C1PDiskController extends Component {
                 }
             }
             this.aDrives[0].aTracks = aTracks;
-            this.println("mount of " + sDiskName + " complete");
+            this.printf("mount of %s complete\n", sDiskName);
         } catch (e) {
-            this.println("disk data error: " + e.message);
+            this.printf("disk data error: %s\n", e.message);
         }
     }
 
@@ -1177,7 +1177,7 @@ export default class C1PDiskController extends Component {
             }
         }
         else if (DEBUG && this.iDriveSelect >= 0) {
-            this.println("updatePDB(" + Str.toHexByte(bPDB) + "): invalid drive: " + this.iDriveSelect);
+            this.printf("updatePDB(%#04x): invalid drive: %d\n", bPDB, this.iDriveSelect);
         }
         return bPDB;
     }

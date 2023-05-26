@@ -794,7 +794,7 @@ export default class C1PCPU extends Component {
             this.speed = speed;
             if (this.bindings["setSpeed"])
                 this.bindings["setSpeed"].innerHTML = this.aSpeeds[speed >= 2? 0 : speed+1];
-            this.println("running at " + this.aSpeeds[speed].toLowerCase() + " speed " + this.aSpeedDescs[speed]);
+            this.printf("running at %s speed %s\n", this.aSpeeds[speed].toLowerCase(), this.aSpeedDescs[speed]);
             if (fOnClick) this.setFocus();
         }
         this.nRunCycles = 0;
@@ -964,7 +964,7 @@ export default class C1PCPU extends Component {
              * and so applying that percentage to msPerYield should give us a better estimate of work vs. time.
              */
             msYield = Math.round(msYield * this.nCyclesThisRun / this.nCyclesPerYield);
-            // if (msYield < this.msPerYield) this.println("scaling msPerYield (" + this.msPerYield + ") to msYield (" + msYield + ")");
+            // if (msYield < this.msPerYield) this.printf("scaling msPerYield (%d) to msYield (%d)\n", this.msPerYield, msYield);
         }
 
         var msElapsedThisRun = msCurrent - this.msStartThisRun;
@@ -989,7 +989,7 @@ export default class C1PCPU extends Component {
         var msElapsed = msCurrent - this.msRunStart;
 
         if (DEBUG && msRemainsThisRun < 0 && this.speed == this.SPEED_FAST) {
-            this.println("warning: updates @" + msElapsedThisRun + "ms (prefer " + Math.round(msYield) + "ms)");
+            this.printf("warning: updates @%dms (prefer %dms)\n", msElapsedThisRun, Math.round(msYield));
         }
 
         this.calcSpeed(nCycles, msElapsed);
@@ -3768,7 +3768,7 @@ export default class C1PCPU extends Component {
         switch(bSimOp) {
 
             case this.SIMOP_HLT:
-                this.println("HALT");
+                this.printf("HALT\n");
                 this.halt();
                 break;
 
@@ -3788,7 +3788,7 @@ export default class C1PCPU extends Component {
                  *      eg: %A for this.regA, %X for this.regX, etc
                  */
                 s = s.replace(/%A/g, Str.toHex(this.regA, 2)).replace(/%X/g, Str.toHex(this.regX, 2)).replace(/%Y/g, Str.toHex(this.regY, 2));
-                this.println(s);
+                this.printf("%s\n", s);
                 /*
                  * To make printing "smoother", let's force a yield
                  */
@@ -3797,7 +3797,7 @@ export default class C1PCPU extends Component {
 
             default:
                 this.regPC -= 2;
-                this.println("undefined opSim: " + Str.toHexByte(bSimOp) + " at " + Str.toHexWord(this.regPC));
+                this.printf("undefined opSim: %#04x at %#06x\n", bSimOp, this.regPC);
                 this.halt();
         }
     }
@@ -3808,7 +3808,7 @@ export default class C1PCPU extends Component {
     opUndefined()
     {
         var b = this.abMem[--this.regPC];
-        this.println("undefined opcode: " + Str.toHexByte(b) + " at " + Str.toHexWord(this.regPC));
+        this.printf("undefined opcode: %#04x at %#06x\n", b, this.regPC);
         this.halt();
     }
 

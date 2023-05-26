@@ -740,7 +740,7 @@ export default class DebuggerX80 extends DbgLib {
     messageInit(sEnable)
     {
         this.dbg = this;
-        this.bitsMessage = this.bitsWarning = Messages.WARN;
+        this.bitsMessage = this.bitsWarning = Messages.WARNING;
         this.sMessagePrev = null;
         this.aMessageBuffer = [];
         /*

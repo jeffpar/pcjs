@@ -426,7 +426,7 @@ export default class C1PKeyboard extends Component {
                 this.bindings[sBinding] = control;
                 control.onclick = function(kbd) {
                     return function(event) {
-                        if (DEBUG) kbd.println("keyPressSimulate(break)");
+                        if (DEBUG) kbd.printf("keyPressSimulate(break)\n");
                         if (kbd.cmp) kbd.cmp.reset(true);
                     };
                 }(this);
@@ -436,7 +436,7 @@ export default class C1PKeyboard extends Component {
                     this.bindings[sBinding] = control;
                     control.onclick = function(kbd, sButton, charCode) {
                         return function(event) {
-                            if (DEBUG) kbd.println("keyPressSimulate(" + sButton + ")");
+                            if (DEBUG) kbd.printf("keyPressSimulate(%s)\n", sButton);
                             if (kbd.cpu) kbd.cpu.setFocus();
                             return !kbd.keyPressSimulate(charCode);
                         };
@@ -487,7 +487,7 @@ export default class C1PKeyboard extends Component {
              * No inversion for model 542
              */
             this.bInvert = 0x00;
-            this.println("updated keyboard model: " + this.nModel);
+            this.printf("updated keyboard model: %d\n", this.nModel);
         }
     }
 

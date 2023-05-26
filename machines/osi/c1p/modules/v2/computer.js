@@ -68,7 +68,7 @@ export default class C1PComputer extends Component {
             for (var i=0; i < this.modules[sType].length; i++) {
                 var component = this.modules[sType][i];
                 if (component && component.reset) {
-                    if (DEBUG) this.println("resetting " + sType);
+                    if (DEBUG) this.printf("resetting %s\n", sType);
                     component.reset();
                     if (sType == "cpu") cpu = component;
                 }
@@ -201,7 +201,7 @@ export default class C1PComputer extends Component {
          */
         computer.setReady();
 
-        computer.println(APPNAME + " v" + APPVERSION + "\n" + COPYRIGHT);
+        computer.printf("%s v%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT);
 
         /*
          * Once we get to this point, we're guaranteed that all components are ready, so it's safe to "power" the CPU;
@@ -305,9 +305,8 @@ export default class C1PComputer extends Component {
                     for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
                         component = aComponents[iComponent];
                         if (component == panel) continue;
-                        component.notice = panel.notice;
                         component.print = panel.print;
-                        component.println = panel.println;
+                        component.notice = panel.notice;
                     }
                 }
             }

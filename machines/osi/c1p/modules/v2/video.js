@@ -208,7 +208,7 @@ export default class C1PVideo extends Component {
             this.bindings[sBinding] = control;
             control.onclick = function(video) {
                 return function() {
-                    if (DEBUG) video.println("refreshScreen()");
+                    if (DEBUG) video.printf("refreshScreen()\n");
                     video.initScreen();
                     video.updateScreen();
                 };
@@ -312,7 +312,7 @@ export default class C1PVideo extends Component {
             }
         }
         else {
-            this.println("updated video model: " + this.nModel);
+            this.printf("updated video model: %d\n", this.nModel);
             this.setDimensions(64, 32);
         }
         this.initScreen();

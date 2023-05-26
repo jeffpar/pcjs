@@ -1437,7 +1437,7 @@ export default class Component {
     {
         if (bitsMessage % 2) bitsMessage--;
         bitsMessage = bitsMessage || this.bitsMessage;
-        if (this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
+        if (!bitsMessage || this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
             return true;
         }
         return false;
@@ -1446,7 +1446,13 @@ export default class Component {
     /**
      * printf(format, ...args)
      *
-     * If format is a number, it must be one or more Messages flags, and the real format string is the first arg.
+     * If format is a number, it's used as a message number, and the format string is the first arg; the call
+     * will be suppressed unless the corresponding message category has been enabled by the debugger.
+     *
+     * Most components provide a default message number to their constructor, so any printf() without an explicit
+     * message number will use that default.  If the caller wants a particular call to ALWAYS print, regardless
+     * of whether the debugger has enabled it, the caller can use printf(Messages.DEFAULT), and if the caller wants
+     * EVERY call to print, then simply omit the message number from the constructor AND all printf() calls.
      *
      * @this {Component}
      * @param {string|number} format
@@ -1458,13 +1464,8 @@ export default class Component {
         if (typeof format == "number") {
             bitsMessage = format || Messages.PROGRESS;
             format = args.shift();
-            let bitsTypes = this.maskBits(bitsMessage, Messages.TYPES);
-            if (bitsTypes) {
-                switch(bitsTypes) {
-                case Messages.STATUS:
-                    format = this.type + ": " + format;
-                    break;
-                }
+            if (bitsMessage == Messages.STATUS) {
+                format = this.type + ": " + format;
             }
         }
         if (this.messageEnabled(bitsMessage)) {
@@ -1473,8 +1474,7 @@ export default class Component {
                 /*
                  * Fallback code for debuggers that still use message() instead of overriding printf().
                  */
-                if (s.slice(-1) == '\n') s = s.slice(0, -1);
-                this.dbg.message(s, !!(bitsMessage % 2));   // pass true for fAddress if Messages.ADDRESS is set
+                this.dbg.message(s, (bitsMessage & Messages.ADDRESS) != 0);
             } else {
                 this.print(s, bitsMessage);
             }
@@ -1492,11 +1492,11 @@ export default class Component {
      * @param {number|boolean} [bitsMessage] is zero or more Messages flag(s)
      * @param {boolean} [fAddress] is true to display the current address
      */
-    printMessage(sMessage, bitsMessage = 0, fAddress = false)
+    printMessage(sMessage, bitsMessage = this.bitsMessage, fAddress = false)
     {
         if (DEBUGGER && this.dbg) {
             if (typeof bitsMessage == "boolean") {
-                bitsMessage = bitsMessage? -1 : 0;
+                bitsMessage = bitsMessage? Messages.PROGRESS : 0;
             }
             if (fAddress) {
                 bitsMessage = this.setBits(bitsMessage, Messages.ADDRESS);
@@ -1519,13 +1519,11 @@ export default class Component {
      * @param {number} [bIn] is the input value, if known, on an input operation
      * @param {number|boolean} [bitsMessage] is zero or more Messages flag(s)
      */
-    printMessageIO(port, bOut, addrFrom, name, bIn, bitsMessage)
+    printMessageIO(port, bOut, addrFrom, name, bIn, bitsMessage = this.bitsMessage)
     {
         if (DEBUGGER && this.dbg) {
             if (bitsMessage === true) {
                 bitsMessage = 0;
-            } else if (bitsMessage == undefined) {
-                bitsMessage = this.bitsMessage;
             }
             this.dbg.messageIO(this, port, bOut, addrFrom, name, bIn, bitsMessage);
         }
