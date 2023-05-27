@@ -1032,7 +1032,7 @@ export default class Component {
                 this.print = function(component, control) {
                     return function printControl(sMessage, bitsMessage = 0) {
                         if (!sMessage) sMessage = "";
-                        if (component.testBits(bitsMessage, Messages.PROGRESS) && sMessage.slice(-4) == "...\n") {
+                        if (bitsMessage == Messages.PROGRESS && sMessage.slice(-4) == "...\n") {
                             Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
                             Component.appendControl(control, sMessage);
@@ -1126,7 +1126,7 @@ export default class Component {
      *
      * @this {Component}
      * @param {string} s
-     * @param {number} [bitsMessage] (optional)
+     * @param {number} [bitsMessage] (optional; this method doesn't use it, but some overrides do)
      */
     print(s, bitsMessage = 0)
     {
@@ -1435,8 +1435,8 @@ export default class Component {
      */
     messageEnabled(bitsMessage = 0)
     {
-        if (bitsMessage % 2) bitsMessage--;
         bitsMessage = bitsMessage || this.bitsMessage;
+        if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
         if (!bitsMessage || this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
             return true;
         }
@@ -1469,14 +1469,14 @@ export default class Component {
             }
         }
         if (this.messageEnabled(bitsMessage)) {
-            let s = Str.sprintf(format, ...args);
+            let sMessage = Str.sprintf(format, ...args);
             if (this.dbg && this.dbg.message) {
-                /*
-                 * Fallback code for debuggers that still use message() instead of overriding printf().
-                 */
-                this.dbg.message(s, (bitsMessage & Messages.ADDRESS) != 0);
+                this.dbg.message(sMessage, bitsMessage);
             } else {
-                this.print(s, bitsMessage);
+                this.print(sMessage, bitsMessage);
+            }
+            if (bitsMessage == Messages.WARNING || bitsMessage == Messages.ERROR) {
+                Component.alertUser(sMessage.trim());
             }
         }
     }

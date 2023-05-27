@@ -10,7 +10,7 @@
 import Component from "../../../../modules/v2/component.js";
 import Str from "../../../../modules/v2/strlib.js";
 import Web from "../../../../modules/v2/weblib.js";
-import { APPCLASS, DEBUG, DEBUGGER } from "./defines.js";
+import { APPCLASS, DEBUG, DEBUGGER, MAXDEBUG } from "./defines.js";
 
 /**
  * @class C1PDebugger
@@ -720,6 +720,16 @@ export default class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
+     * @param {string} sMessage is any caller-defined message string
+     */
+    message(sMessage)
+    {
+        this.print(sMessage);
+        this.cpu.yieldCPU();    // these print() calls are at risk of being called with high frequency, so we need to yieldCPU() more
+    }
+
+    /**
+     * @this {C1PDebugger}
      * @param {Component} component
      * @param {number} addr
      * @param {number|undefined} addrFrom
@@ -731,18 +741,8 @@ export default class C1PDebugger extends Component {
     {
         if ((this.bitsMessage & bitsMessage) == bitsMessage) {
             var b = this.cpu.getByte(addr);
-            this.message(component.id + "." + (fWrite? "setByte":"getByte") + "(" + Str.toHexWord(addr) + ")" + (addrFrom !== undefined? (" @" + Str.toHexWord(addrFrom)) : "") + ": " + (name? (name + "=") : "") + Str.toHexByte(b));
+            this.printf("%s.%s(%#06x) @%#06x %s=%#04x\n", component.id, fWrite? "setByte" : "getByte", addr, addrFrom, name || "unknown", b);
         }
-    }
-
-    /**
-     * @this {C1PDebugger}
-     * @param {string} sMessage is any caller-defined message string
-     */
-    message(sMessage)
-    {
-        this.print(sMessage);
-        this.cpu.yieldCPU();    // these print() calls are at risk of being called with high frequency, so we need to yieldCPU() more
     }
 
     /**
@@ -867,7 +867,7 @@ export default class C1PDebugger extends Component {
                 var msTotal = Component.getTime();
                 msTotal -= msStart;
                 this.printf("%dms (%d cycles)\n", msTotal, nCycles);
-                if (DEBUG && msTotal > 0) {
+                if (MAXDEBUG && msTotal > 0) {
                     nCycles = nCycles * 1000 / msTotal;
                     this.printf("total cycles/second: %d\n", Math.round(nCycles));
                     var percent = Math.round((this.cIns? this.cReads / this.cIns : 0) * 1000) / 10;

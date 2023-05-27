@@ -4205,7 +4205,7 @@ class Component {
                 this.print = function(component, control) {
                     return function printControl(sMessage, bitsMessage = 0) {
                         if (!sMessage) sMessage = "";
-                        if (component.testBits(bitsMessage, Messages.PROGRESS) && sMessage.slice(-4) == "...\n") {
+                        if (bitsMessage == Messages.PROGRESS && sMessage.slice(-4) == "...\n") {
                             Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
                             Component.appendControl(control, sMessage);
@@ -4299,7 +4299,7 @@ class Component {
      *
      * @this {Component}
      * @param {string} s
-     * @param {number} [bitsMessage] (optional)
+     * @param {number} [bitsMessage] (optional; this method doesn't use it, but some overrides do)
      */
     print(s, bitsMessage = 0)
     {
@@ -4608,8 +4608,8 @@ class Component {
      */
     messageEnabled(bitsMessage = 0)
     {
-        if (bitsMessage % 2) bitsMessage--;
         bitsMessage = bitsMessage || this.bitsMessage;
+        if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
         if (!bitsMessage || this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
             return true;
         }
@@ -4619,13 +4619,13 @@ class Component {
     /**
      * printf(format, ...args)
      *
-     * If format is a number, it's used as message flags, and the real format string is the first arg; the
-     * string will then be printed ONLY if the corresponding message category has been enabled by the debugger.
+     * If format is a number, it's used as a message number, and the format string is the first arg; the call
+     * will be suppressed unless the corresponding message category has been enabled by the debugger.
      *
      * Most components provide a default message number to their constructor, so any printf() without an explicit
-     * message number will use that default.  If a component wants a particular call to ALWAYS print, it can use
-     * printf(Messages.DEFAULT), and if a component wants ALL calls to print, then it should omit any message
-     * number from the constructor and call printf() normally.
+     * message number will use that default.  If the caller wants a particular call to ALWAYS print, regardless
+     * of whether the debugger has enabled it, the caller can use printf(Messages.DEFAULT), and if the caller wants
+     * EVERY call to print, then simply omit the message number from the constructor AND all printf() calls.
      *
      * @this {Component}
      * @param {string|number} format
@@ -4642,14 +4642,14 @@ class Component {
             }
         }
         if (this.messageEnabled(bitsMessage)) {
-            let s = Str.sprintf(format, ...args);
+            let sMessage = Str.sprintf(format, ...args);
             if (this.dbg && this.dbg.message) {
-                /*
-                 * Fallback code for debuggers that still use message() instead of overriding printf().
-                 */
-                this.dbg.message(s, (bitsMessage & Messages.ADDRESS) != 0);
+                this.dbg.message(sMessage, bitsMessage);
             } else {
-                this.print(s, bitsMessage);
+                this.print(sMessage, bitsMessage);
+            }
+            if (bitsMessage == Messages.WARNING || bitsMessage == Messages.ERROR) {
+                Component.alertUser(sMessage.trim());
             }
         }
     }
@@ -6107,16 +6107,7 @@ class BusX80 extends Component {
      */
     reportError(op, addr, size, fQuiet)
     {
-        var sError = "Memory block error (" + op + ": " + Str.toHex(addr) + "," + Str.toHex(size) + ")";
-        if (fQuiet) {
-            if (this.dbg) {
-                this.dbg.message(sError);
-            } else {
-                this.log(sError);
-            }
-        } else {
-            Component.error(sError);
-        }
+        this.printf(fQuiet? Messages.DEFAULT : Messages.ERROR, "Memory block error (%d: %#x,%#x)\n", op, addr, size);
         return false;
     }
 }
@@ -6634,8 +6625,8 @@ class MemoryX80 {
      */
     readNone(off, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.CPU | Messages.MEM) /* && !off */) {
-            this.dbg.message("attempt to read invalid block %" + Str.toHex(this.addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.CPU + Messages.MEM + Messages.ADDRESS, "attempt to read invalid block %#x\n", this.addr);
         }
         return 0xff;
     }
@@ -6650,8 +6641,8 @@ class MemoryX80 {
      */
     writeNone(off, v, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.CPU | Messages.MEM) /* && !off */) {
-            this.dbg.message("attempt to write " + Str.toHexWord(v) + " to invalid block %" + Str.toHex(this.addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.CPU + Messages.MEM + Messages.ADDRESS, "attempt to write %#06x to invalid block %#x\n", v, this.addr);
         }
     }
 
@@ -20336,16 +20327,17 @@ class DebuggerX80 extends DbgLib {
     }
 
     /**
-     * message(sMessage, fAddress)
+     * message(sMessage, bitsAddress)
      *
      * @this {DebuggerX80}
-     * @param {string} sMessage is any caller-defined message string
-     * @param {boolean} [fAddress] is true to display the current CS:IP
+     * @param {string} sMessage
+     * @param {number} [bitsMessage]
      */
-    message(sMessage, fAddress)
+    message(sMessage, bitsMessage)
     {
-        if (fAddress) {
-            sMessage += " at " + this.toHexAddr(this.newAddr(this.cpu.getPC()));
+        if ((bitsMessage & Messages.ADDRESS) && this.cpu) {
+            let sAddress = " @" + this.toHexAddr(this.newAddr(this.cpu.getPC()));
+            sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
 
         if (this.bitsMessage & Messages.BUFFER) {
@@ -20357,11 +20349,11 @@ class DebuggerX80 extends DbgLib {
         this.sMessagePrev = sMessage;
 
         if (this.bitsMessage & Messages.HALT) {
+            sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
             this.stopCPU();
-            sMessage += " (cpu halted)";
         }
 
-        this.println(sMessage); // + " (" + this.cpu.getCycles() + " cycles)"
+        this.print(sMessage, bitsMessage); // + " (" + this.cpu.getCycles() + " cycles)"
 
         /*
          * We have no idea what the frequency of println() calls might be; all we know is that they easily
@@ -20393,7 +20385,7 @@ class DebuggerX80 extends DbgLib {
     {
         bitsMessage |= Messages.PORT;
         if (name == null || (this.bitsMessage & bitsMessage) == bitsMessage) {
-            this.message(component.idComponent + '.' + (bOut != null? "outPort" : "inPort") + '(' + Str.toHexWord(port) + ',' + (name? name : "unknown") + (bOut != null? ',' + Str.toHexByte(bOut) : "") + ')' + (bIn != null? (": " + Str.toHexByte(bIn)) : "") + (addrFrom != null? (" at " + this.toHexOffset(addrFrom)) : ""));
+            this.printf("%s.%s(%#06x,%s=%#04x): %#04x @%#06x\n", component.idComponent, bOut != null? "outPort" : "inPort", port, name || "unknown", bOut, bIn, addrFrom);
         }
     }
 

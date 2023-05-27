@@ -970,16 +970,18 @@ export default class DebuggerPDP11 extends DbgLib {
     }
 
     /**
-     * message(sMessage, fAddress)
+     * message(sMessage, bitsMessage)
      *
      * @this {DebuggerPDP11}
-     * @param {string} sMessage is any caller-defined message string
-     * @param {boolean} [fAddress] is true to display the current address
+     * @param {string} sMessage
+     * @param {number} [bitsMessage]
      */
-    message(sMessage, fAddress)
+    message(sMessage, bitsMessage)
     {
-        if (fAddress) {
-            sMessage += " @" + this.toStrAddr(this.newAddr(this.cpu.getLastPC()));
+        var sAddress, fRunning;
+        if ((bitsMessage & Messages.ADDRESS) && this.cpu) {
+            sAddress = " @" + this.toStrAddr(this.newAddr(this.cpu.getLastPC()));
+            sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
 
         if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
@@ -990,13 +992,12 @@ export default class DebuggerPDP11 extends DbgLib {
             return;
         }
 
-        var fRunning;
         if ((this.bitsMessage & Messages.HALT) && this.cpu && (fRunning = this.cpu.isRunning()) || this.isBusy(true)) {
+            if (fRunning) sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
             this.stopCPU();
-            if (fRunning) sMessage += " (cpu halted)";
         }
 
-        this.println(sMessage); // + " (" + this.cpu.getCycles() + " cycles)"
+        this.print(sMessage, bitsMessage); // + " (" + this.cpu.getCycles() + " cycles)"
 
         /*
          * We have no idea what the frequency of println() calls might be; all we know is that they easily

@@ -221,6 +221,18 @@
       }
     },
     {
+      "name": "DEC PDP-11/70 with VT100 Terminal [Debugger]",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/dec/pdp11/1170/vt100/debugger/",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "hardware",
+        "order": 10
+      }
+    },
+    {
       "name": "IBM PC with CGA",
       "type": "chrome",
       "request": "launch",

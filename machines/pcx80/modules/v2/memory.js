@@ -478,8 +478,8 @@ export default class MemoryX80 {
      */
     readNone(off, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.CPU | Messages.MEM) /* && !off */) {
-            this.dbg.message("attempt to read invalid block %" + Str.toHex(this.addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.CPU + Messages.MEM + Messages.ADDRESS, "attempt to read invalid block %#x\n", this.addr);
         }
         return 0xff;
     }
@@ -494,8 +494,8 @@ export default class MemoryX80 {
      */
     writeNone(off, v, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.CPU | Messages.MEM) /* && !off */) {
-            this.dbg.message("attempt to write " + Str.toHexWord(v) + " to invalid block %" + Str.toHex(this.addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.CPU + Messages.MEM + Messages.ADDRESS, "attempt to write %#06x to invalid block %#x\n", v, this.addr);
         }
     }
 

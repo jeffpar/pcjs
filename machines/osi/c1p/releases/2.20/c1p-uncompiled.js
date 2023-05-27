@@ -3846,7 +3846,7 @@ class Component {
                 this.print = function(component, control) {
                     return function printControl(sMessage, bitsMessage = 0) {
                         if (!sMessage) sMessage = "";
-                        if (component.testBits(bitsMessage, Messages.PROGRESS) && sMessage.slice(-4) == "...\n") {
+                        if (bitsMessage == Messages.PROGRESS && sMessage.slice(-4) == "...\n") {
                             Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
                             Component.appendControl(control, sMessage);
@@ -3940,7 +3940,7 @@ class Component {
      *
      * @this {Component}
      * @param {string} s
-     * @param {number} [bitsMessage] (optional)
+     * @param {number} [bitsMessage] (optional; this method doesn't use it, but some overrides do)
      */
     print(s, bitsMessage = 0)
     {
@@ -4249,8 +4249,8 @@ class Component {
      */
     messageEnabled(bitsMessage = 0)
     {
-        if (bitsMessage % 2) bitsMessage--;
         bitsMessage = bitsMessage || this.bitsMessage;
+        if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
         if (!bitsMessage || this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
             return true;
         }
@@ -4260,13 +4260,13 @@ class Component {
     /**
      * printf(format, ...args)
      *
-     * If format is a number, it's used as message flags, and the real format string is the first arg; the
-     * string will then be printed ONLY if the corresponding message category has been enabled by the debugger.
+     * If format is a number, it's used as a message number, and the format string is the first arg; the call
+     * will be suppressed unless the corresponding message category has been enabled by the debugger.
      *
      * Most components provide a default message number to their constructor, so any printf() without an explicit
-     * message number will use that default.  If a component wants a particular call to ALWAYS print, it can use
-     * printf(Messages.DEFAULT), and if a component wants ALL calls to print, then it should omit any message
-     * number from the constructor and call printf() normally.
+     * message number will use that default.  If the caller wants a particular call to ALWAYS print, regardless
+     * of whether the debugger has enabled it, the caller can use printf(Messages.DEFAULT), and if the caller wants
+     * EVERY call to print, then simply omit the message number from the constructor AND all printf() calls.
      *
      * @this {Component}
      * @param {string|number} format
@@ -4283,14 +4283,14 @@ class Component {
             }
         }
         if (this.messageEnabled(bitsMessage)) {
-            let s = Str.sprintf(format, ...args);
+            let sMessage = Str.sprintf(format, ...args);
             if (this.dbg && this.dbg.message) {
-                /*
-                 * Fallback code for debuggers that still use message() instead of overriding printf().
-                 */
-                this.dbg.message(s, (bitsMessage & Messages.ADDRESS) != 0);
+                this.dbg.message(sMessage, bitsMessage);
             } else {
-                this.print(s, bitsMessage);
+                this.print(sMessage, bitsMessage);
+            }
+            if (bitsMessage == Messages.WARNING || bitsMessage == Messages.ERROR) {
+                Component.alertUser(sMessage.trim());
             }
         }
     }
@@ -9240,7 +9240,7 @@ class C1PKeyboard extends Component {
         this.iOS = Web.isUserAgent("iOS");
         this.fMobile = (this.iOS || Web.isUserAgent("Android"));
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-            this.dbg.message("mobile keyboard support: " + (this.fMobile? "true" : "false") + " (" + window.navigator.userAgent + ")");
+            this.dbg.printf("mobile keyboard support: %b (%s)\n", this.fMobile, window.navigator.userAgent);
         }
         super.setReady();
     }
@@ -9286,7 +9286,7 @@ class C1PKeyboard extends Component {
     {
         if (this.prevCharDown && (notCharCode === undefined || notCharCode != this.prevCharDown)) {
             if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-                this.dbg.message("autoClear(" + Str.toHexByte(this.prevCharDown) + ")");
+                this.dbg.printf("autoClear(%#04x)\n", this.prevCharDown);
             }
 
             clearTimeout(this.aKeyTimers[this.prevCharDown]);
@@ -9469,7 +9469,7 @@ class C1PKeyboard extends Component {
         }
 
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-            this.dbg.message(/*(fDown?"\n":"") +*/ "key" + (fDown?"Down":"Up") + "(" + Str.toHexByte(keyCode) + "): " + (fPass? "pass" : "consume"));
+            this.dbg.printf("key%s(%#04x): %s\n", fDown? "Down" : "Up", keyCode, fPass? "pass" : "consume");
         }
         return fPass;
     }
@@ -9502,7 +9502,7 @@ class C1PKeyboard extends Component {
             fPass = !this.keyPressSimulate(charCode);
 
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-            this.dbg.message("keyPress(" + Str.toHexByte(charCode) + "): " + (fPass? "pass" : "consume"));
+            this.dbg.printf("keyPress(%#04x): %s\n", charCode, fPass? "pass" : "consume");
         }
         return fPass;
     }
@@ -9576,14 +9576,14 @@ class C1PKeyboard extends Component {
                     var msDelay = this.calcReleaseDelay(fRepeat);
                     this.aKeyTimers[this.prevCharDown = charCode] = setTimeout(function(kbd) { return function() {kbd.keyEventSimulate(charCode, false, kbd.SIMCODE_KEYTIMEOUT);}; }(this), msDelay);
                     if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-                        this.dbg.message("keyPressSimulate(" + Str.toHexByte(charCode) + "): setTimeout()");
+                        this.dbg.printf("keyPressSimulate(%#04x): setTimeout()\n", charCode);
                     }
                 }
                 fSimulated = true;
             }
         }
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-            this.dbg.message("keyPressSimulate(" + Str.toHexByte(charCode) + "): " + (fSimulated? "true" : "false"));
+            this.dbg.printf("keyPressSimulate(%#04x): %b\n", charCode, fSimulated);
         }
         return fSimulated;
     }
@@ -11726,7 +11726,7 @@ class C1PDiskController extends Component {
                  */
                 aTracks[iTrackNum].trackData = trackData;
                 if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_DISK)) {
-                    this.dbg.message("track " + iTrackNum + ": " + trackData.length + " bytes");
+                    this.dbg.printf("track %d: %d bytes\n", iTrackNum, trackData.length);
                 }
             }
             this.aDrives[0].aTracks = aTracks;
@@ -11874,7 +11874,7 @@ class C1PDiskController extends Component {
                     var bChanged = reg.bits ^ b;
                     while (bChanged && bTest) {
                         if (bChanged & bTest) {
-                            this.dbg.message("  changed " + reg.sName + "." + reg.aBitIDs[bTest] + " to " + ((b & bTest)? "1" : "0"));
+                            this.dbg.printf("  changed %s.%s to %s\n", reg.sName, reg.aBitIDs[bTest], (b & bTest)? "1" : "0");
                         }
                         bTest >>= 1;
                     }
@@ -12047,7 +12047,7 @@ class C1PDiskController extends Component {
                         drive.iTrackSelect++;
 
                     if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_DISK)) {
-                        this.dbg.message("stepping " + ((bPDB & this.PDB_STI)? "down" : "up") + " to track " + drive.iTrackSelect);
+                        this.dbg.printf("stepping %s to track %d\n", (bPDB & this.PDB_STI)? "down" : "up", drive.iTrackSelect);
                     }
 
                     if (drive.iTrackSelect >= drive.nTracks)
@@ -12851,6 +12851,16 @@ class C1PDebugger extends Component {
 
     /**
      * @this {C1PDebugger}
+     * @param {string} sMessage is any caller-defined message string
+     */
+    message(sMessage)
+    {
+        this.print(sMessage);
+        this.cpu.yieldCPU();    // these print() calls are at risk of being called with high frequency, so we need to yieldCPU() more
+    }
+
+    /**
+     * @this {C1PDebugger}
      * @param {Component} component
      * @param {number} addr
      * @param {number|undefined} addrFrom
@@ -12862,18 +12872,8 @@ class C1PDebugger extends Component {
     {
         if ((this.bitsMessage & bitsMessage) == bitsMessage) {
             var b = this.cpu.getByte(addr);
-            this.message(component.id + "." + (fWrite? "setByte":"getByte") + "(" + Str.toHexWord(addr) + ")" + (addrFrom !== undefined? (" @" + Str.toHexWord(addrFrom)) : "") + ": " + (name? (name + "=") : "") + Str.toHexByte(b));
+            this.printf("%s.%s(%#06x) @%#06x %s=%#04x\n", component.id, fWrite? "setByte" : "getByte", addr, addrFrom, name || "unknown", b);
         }
-    }
-
-    /**
-     * @this {C1PDebugger}
-     * @param {string} sMessage is any caller-defined message string
-     */
-    message(sMessage)
-    {
-        this.print(sMessage);
-        this.cpu.yieldCPU();    // these print() calls are at risk of being called with high frequency, so we need to yieldCPU() more
     }
 
     /**
@@ -12998,7 +12998,7 @@ class C1PDebugger extends Component {
                 var msTotal = Component.getTime();
                 msTotal -= msStart;
                 this.printf("%dms (%d cycles)\n", msTotal, nCycles);
-                if (DEBUG && msTotal > 0) {
+                if (MAXDEBUG && msTotal > 0) {
                     nCycles = nCycles * 1000 / msTotal;
                     this.printf("total cycles/second: %d\n", Math.round(nCycles));
                     var percent = Math.round((this.cIns? this.cReads / this.cIns : 0) * 1000) / 10;

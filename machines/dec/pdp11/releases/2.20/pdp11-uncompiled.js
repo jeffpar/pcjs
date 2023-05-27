@@ -4444,7 +4444,7 @@ class Component {
                 this.print = function(component, control) {
                     return function printControl(sMessage, bitsMessage = 0) {
                         if (!sMessage) sMessage = "";
-                        if (component.testBits(bitsMessage, Messages.PROGRESS) && sMessage.slice(-4) == "...\n") {
+                        if (bitsMessage == Messages.PROGRESS && sMessage.slice(-4) == "...\n") {
                             Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
                             Component.appendControl(control, sMessage);
@@ -4538,7 +4538,7 @@ class Component {
      *
      * @this {Component}
      * @param {string} s
-     * @param {number} [bitsMessage] (optional)
+     * @param {number} [bitsMessage] (optional; this method doesn't use it, but some overrides do)
      */
     print(s, bitsMessage = 0)
     {
@@ -4847,8 +4847,8 @@ class Component {
      */
     messageEnabled(bitsMessage = 0)
     {
-        if (bitsMessage % 2) bitsMessage--;
         bitsMessage = bitsMessage || this.bitsMessage;
+        if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
         if (!bitsMessage || this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
             return true;
         }
@@ -4881,14 +4881,14 @@ class Component {
             }
         }
         if (this.messageEnabled(bitsMessage)) {
-            let s = Str.sprintf(format, ...args);
+            let sMessage = Str.sprintf(format, ...args);
             if (this.dbg && this.dbg.message) {
-                /*
-                 * Fallback code for debuggers that still use message() instead of overriding printf().
-                 */
-                this.dbg.message(s, (bitsMessage & Messages.ADDRESS) != 0);
+                this.dbg.message(sMessage, bitsMessage);
             } else {
-                this.print(s, bitsMessage);
+                this.print(sMessage, bitsMessage);
+            }
+            if (bitsMessage == Messages.WARNING || bitsMessage == Messages.ERROR) {
+                Component.alertUser(sMessage.trim());
             }
         }
     }
@@ -8437,16 +8437,7 @@ class BusPDP11 extends Component {
      */
     reportError(errNum, addr, size, fQuiet)
     {
-        var sError = "Memory block error (" + errNum + ": " + Str.toHex(addr) + "," + Str.toHex(size) + ")";
-        if (fQuiet) {
-            if (this.dbg) {
-                this.dbg.message(sError);
-            } else {
-                this.log(sError);
-            }
-        } else {
-            Component.error(sError);
-        }
+        this.printf(fQuiet? Messages.DEFAULT : Messages.ERROR, "Memory block error (%d: %#x,%#x)\n", errNum, addr, size);
         return false;
     }
 }
@@ -26862,16 +26853,18 @@ class DebuggerPDP11 extends DbgLib {
     }
 
     /**
-     * message(sMessage, fAddress)
+     * message(sMessage, bitsMessage)
      *
      * @this {DebuggerPDP11}
-     * @param {string} sMessage is any caller-defined message string
-     * @param {boolean} [fAddress] is true to display the current address
+     * @param {string} sMessage
+     * @param {number} [bitsMessage]
      */
-    message(sMessage, fAddress)
+    message(sMessage, bitsMessage)
     {
-        if (fAddress) {
-            sMessage += " @" + this.toStrAddr(this.newAddr(this.cpu.getLastPC()));
+        var sAddress, fRunning;
+        if ((bitsMessage & Messages.ADDRESS) && this.cpu) {
+            sAddress = " @" + this.toStrAddr(this.newAddr(this.cpu.getLastPC()));
+            sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
 
         if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
@@ -26882,13 +26875,12 @@ class DebuggerPDP11 extends DbgLib {
             return;
         }
 
-        var fRunning;
         if ((this.bitsMessage & Messages.HALT) && this.cpu && (fRunning = this.cpu.isRunning()) || this.isBusy(true)) {
+            if (fRunning) sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
             this.stopCPU();
-            if (fRunning) sMessage += " (cpu halted)";
         }
 
-        this.println(sMessage); // + " (" + this.cpu.getCycles() + " cycles)"
+        this.print(sMessage, bitsMessage); // + " (" + this.cpu.getCycles() + " cycles)"
 
         /*
          * We have no idea what the frequency of println() calls might be; all we know is that they easily

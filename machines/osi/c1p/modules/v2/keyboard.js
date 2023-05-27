@@ -519,7 +519,7 @@ export default class C1PKeyboard extends Component {
         this.iOS = Web.isUserAgent("iOS");
         this.fMobile = (this.iOS || Web.isUserAgent("Android"));
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-            this.dbg.message("mobile keyboard support: " + (this.fMobile? "true" : "false") + " (" + window.navigator.userAgent + ")");
+            this.dbg.printf("mobile keyboard support: %b (%s)\n", this.fMobile, window.navigator.userAgent);
         }
         super.setReady();
     }
@@ -565,7 +565,7 @@ export default class C1PKeyboard extends Component {
     {
         if (this.prevCharDown && (notCharCode === undefined || notCharCode != this.prevCharDown)) {
             if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-                this.dbg.message("autoClear(" + Str.toHexByte(this.prevCharDown) + ")");
+                this.dbg.printf("autoClear(%#04x)\n", this.prevCharDown);
             }
             Component.assert(this.aKeyTimers[this.prevCharDown]);
             clearTimeout(this.aKeyTimers[this.prevCharDown]);
@@ -748,7 +748,7 @@ export default class C1PKeyboard extends Component {
         }
 
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-            this.dbg.message(/*(fDown?"\n":"") +*/ "key" + (fDown?"Down":"Up") + "(" + Str.toHexByte(keyCode) + "): " + (fPass? "pass" : "consume"));
+            this.dbg.printf("key%s(%#04x): %s\n", fDown? "Down" : "Up", keyCode, fPass? "pass" : "consume");
         }
         return fPass;
     }
@@ -781,7 +781,7 @@ export default class C1PKeyboard extends Component {
             fPass = !this.keyPressSimulate(charCode);
 
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-            this.dbg.message("keyPress(" + Str.toHexByte(charCode) + "): " + (fPass? "pass" : "consume"));
+            this.dbg.printf("keyPress(%#04x): %s\n", charCode, fPass? "pass" : "consume");
         }
         return fPass;
     }
@@ -855,14 +855,14 @@ export default class C1PKeyboard extends Component {
                     var msDelay = this.calcReleaseDelay(fRepeat);
                     this.aKeyTimers[this.prevCharDown = charCode] = setTimeout(function(kbd) { return function() {kbd.keyEventSimulate(charCode, false, kbd.SIMCODE_KEYTIMEOUT);}; }(this), msDelay);
                     if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-                        this.dbg.message("keyPressSimulate(" + Str.toHexByte(charCode) + "): setTimeout()");
+                        this.dbg.printf("keyPressSimulate(%#04x): setTimeout()\n", charCode);
                     }
                 }
                 fSimulated = true;
             }
         }
         if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_KBD)) {
-            this.dbg.message("keyPressSimulate(" + Str.toHexByte(charCode) + "): " + (fSimulated? "true" : "false"));
+            this.dbg.printf("keyPressSimulate(%#04x): %b\n", charCode, fSimulated);
         }
         return fSimulated;
     }

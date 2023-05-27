@@ -977,16 +977,17 @@ export default class DebuggerX80 extends DbgLib {
     }
 
     /**
-     * message(sMessage, fAddress)
+     * message(sMessage, bitsAddress)
      *
      * @this {DebuggerX80}
-     * @param {string} sMessage is any caller-defined message string
-     * @param {boolean} [fAddress] is true to display the current CS:IP
+     * @param {string} sMessage
+     * @param {number} [bitsMessage]
      */
-    message(sMessage, fAddress)
+    message(sMessage, bitsMessage)
     {
-        if (fAddress) {
-            sMessage += " at " + this.toHexAddr(this.newAddr(this.cpu.getPC()));
+        if ((bitsMessage & Messages.ADDRESS) && this.cpu) {
+            let sAddress = " @" + this.toHexAddr(this.newAddr(this.cpu.getPC()));
+            sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
 
         if (this.bitsMessage & Messages.BUFFER) {
@@ -998,11 +999,11 @@ export default class DebuggerX80 extends DbgLib {
         this.sMessagePrev = sMessage;
 
         if (this.bitsMessage & Messages.HALT) {
+            sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
             this.stopCPU();
-            sMessage += " (cpu halted)";
         }
 
-        this.println(sMessage); // + " (" + this.cpu.getCycles() + " cycles)"
+        this.print(sMessage, bitsMessage); // + " (" + this.cpu.getCycles() + " cycles)"
 
         /*
          * We have no idea what the frequency of println() calls might be; all we know is that they easily
@@ -1034,7 +1035,7 @@ export default class DebuggerX80 extends DbgLib {
     {
         bitsMessage |= Messages.PORT;
         if (name == null || (this.bitsMessage & bitsMessage) == bitsMessage) {
-            this.message(component.idComponent + '.' + (bOut != null? "outPort" : "inPort") + '(' + Str.toHexWord(port) + ',' + (name? name : "unknown") + (bOut != null? ',' + Str.toHexByte(bOut) : "") + ')' + (bIn != null? (": " + Str.toHexByte(bIn)) : "") + (addrFrom != null? (" at " + this.toHexOffset(addrFrom)) : ""));
+            this.printf("%s.%s(%#06x,%s=%#04x): %#04x @%#06x\n", component.idComponent, bOut != null? "outPort" : "inPort", port, name || "unknown", bOut, bIn, addrFrom);
         }
     }
 

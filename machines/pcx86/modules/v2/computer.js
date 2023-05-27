@@ -425,7 +425,7 @@ export default class Computer extends Component {
                 if (video) {
                     let control = video.getTextArea();
                     if (control) {
-                        if (this.testBits(bitsMessage, Messages.PROGRESS) && sMessage.slice(-4) == "...\n") {
+                        if (bitsMessage == Messages.PROGRESS && sMessage.slice(-4) == "...\n") {
                             Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
                             Component.appendControl(control, sMessage);

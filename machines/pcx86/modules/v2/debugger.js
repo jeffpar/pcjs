@@ -2472,56 +2472,43 @@ export default class DebuggerX86 extends DbgLib {
     }
 
     /**
-     * printf(format, ...args)
-     *
-     * Overrides the Component method of the same name, to add support for Debugger-specific Message flags.
-     *
-     * If format is a number, it must be one or more Messages flags, and the real format string is the first arg.
+     * message(sMessage, bitsMessage)
      *
      * @this {DebuggerX86}
-     * @param {string|number} format
-     * @param {...} args
+     * @param {string} sMessage
+     * @param {number} [bitsMessage]
      */
-    printf(format, ...args)
+    message(sMessage, bitsMessage = 0)
     {
-        let bitsMessage = 0;
-        if (typeof format == "number") {
-            bitsMessage = format;
-            format = args.shift();
+        if ((bitsMessage & Messages.ADDRESS) && this.cpu) {
+            let sAddress = Str.sprintf(" at %s (%%x)$1",  this.toHexAddr(this.newAddr(this.cpu.getIP(), this.cpu.getCS())), this.cpu.regLIP);
+            sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
-        if (this.messageEnabled(bitsMessage)) {
-            let sMessage = Str.sprintf(format, ...args);
 
-            if (bitsMessage & Messages.ADDRESS) {
-                let sAddress = Str.sprintf(" at %s (%%x)$1",  this.toHexAddr(this.newAddr(this.cpu.getIP(), this.cpu.getCS())), this.cpu.regLIP);
-                sMessage.replace(/(\n?)$/, sAddress);
-            }
-
-            if (this.testBits(this.bitsMessage, Messages.BUFFER)) {
-                this.aMessageBuffer.push(sMessage);
-                return;
-            }
-
-            if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
-            this.sMessagePrev = sMessage;
-
-            if (this.testBits(this.bitsMessage, Messages.HALT)) {
-                sMessage.replace(/(\n?)$/, " (cpu halted)$1");
-                this.stopCPU();
-            }
-
-            this.print(sMessage); // + " (" + this.cpu.getCycles() + " cycles)"
-
-            /*
-             * We have no idea what the frequency of print() calls might be; all we know is that they easily
-             * screw up the CPU's careful assumptions about cycles per burst.  So we call yieldCPU() after every
-             * message, to effectively end the current burst and start fresh.
-             *
-             * TODO: See CPU.calcStartTime() for a discussion of why we might want to call yieldCPU() *before*
-             * we display the message.
-             */
-            if (this.cpu) this.cpu.yieldCPU();
+        if (this.testBits(this.bitsMessage, Messages.BUFFER)) {
+            this.aMessageBuffer.push(sMessage);
+            return;
         }
+
+        if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
+        this.sMessagePrev = sMessage;
+
+        if (this.testBits(this.bitsMessage, Messages.HALT)) {
+            sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
+            this.stopCPU();
+        }
+
+        this.print(sMessage, bitsMessage); // + " (" + this.cpu.getCycles() + " cycles)"
+
+        /*
+            * We have no idea what the frequency of print() calls might be; all we know is that they easily
+            * screw up the CPU's careful assumptions about cycles per burst.  So we call yieldCPU() after every
+            * message, to effectively end the current burst and start fresh.
+            *
+            * TODO: See CPU.calcStartTime() for a discussion of why we might want to call yieldCPU() *before*
+            * we display the message.
+            */
+        if (this.cpu) this.cpu.yieldCPU();
     }
 
     /**

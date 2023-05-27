@@ -839,7 +839,7 @@ export default class C1PDiskController extends Component {
                  */
                 aTracks[iTrackNum].trackData = trackData;
                 if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_DISK)) {
-                    this.dbg.message("track " + iTrackNum + ": " + trackData.length + " bytes");
+                    this.dbg.printf("track %d: %d bytes\n", iTrackNum, trackData.length);
                 }
             }
             this.aDrives[0].aTracks = aTracks;
@@ -987,7 +987,7 @@ export default class C1PDiskController extends Component {
                     var bChanged = reg.bits ^ b;
                     while (bChanged && bTest) {
                         if (bChanged & bTest) {
-                            this.dbg.message("  changed " + reg.sName + "." + reg.aBitIDs[bTest] + " to " + ((b & bTest)? "1" : "0"));
+                            this.dbg.printf("  changed %s.%s to %s\n", reg.sName, reg.aBitIDs[bTest], (b & bTest)? "1" : "0");
                         }
                         bTest >>= 1;
                     }
@@ -1160,7 +1160,7 @@ export default class C1PDiskController extends Component {
                         drive.iTrackSelect++;
 
                     if (DEBUGGER && this.dbg && this.dbg.messageEnabled(this.dbg.MESSAGE_DISK)) {
-                        this.dbg.message("stepping " + ((bPDB & this.PDB_STI)? "down" : "up") + " to track " + drive.iTrackSelect);
+                        this.dbg.printf("stepping %s to track %d\n", (bPDB & this.PDB_STI)? "down" : "up", drive.iTrackSelect);
                     }
 
                     if (drive.iTrackSelect >= drive.nTracks)

@@ -982,16 +982,7 @@ export default class BusX80 extends Component {
      */
     reportError(op, addr, size, fQuiet)
     {
-        var sError = "Memory block error (" + op + ": " + Str.toHex(addr) + "," + Str.toHex(size) + ")";
-        if (fQuiet) {
-            if (this.dbg) {
-                this.dbg.message(sError);
-            } else {
-                this.log(sError);
-            }
-        } else {
-            Component.error(sError);
-        }
+        this.printf(fQuiet? Messages.DEFAULT : Messages.ERROR, "Memory block error (%d: %#x,%#x)\n", op, addr, size);
         return false;
     }
 }

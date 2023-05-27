@@ -4917,7 +4917,7 @@ export default class ChipSet extends Component {
         } else if (nIRQ == ChipSet.IRQ.KBD) {   // IRQ 1
             bitsMessage |= Messages.KBD;
         } else if (nIRQ == ChipSet.IRQ.SLAVE) { // IRQ 2
-            bitsMessage =  Messages.NONE;       // (we're not really interested in IRQ 2 itself, just the slaves)
+            bitsMessage |= Messages.NONE;       // (we're not really interested in IRQ 2 itself, just the slaves)
         } else if (nIRQ == ChipSet.IRQ.COM1 || nIRQ == ChipSet.IRQ.COM2) {
             bitsMessage |= Messages.SERIAL;
         } else if (nIRQ == ChipSet.IRQ.XTC) {   // IRQ 5 (MODEL_5160)

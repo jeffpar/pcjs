@@ -4444,7 +4444,7 @@ class Component {
                 this.print = function(component, control) {
                     return function printControl(sMessage, bitsMessage = 0) {
                         if (!sMessage) sMessage = "";
-                        if (component.testBits(bitsMessage, Messages.PROGRESS) && sMessage.slice(-4) == "...\n") {
+                        if (bitsMessage == Messages.PROGRESS && sMessage.slice(-4) == "...\n") {
                             Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
                             Component.appendControl(control, sMessage);
@@ -4538,7 +4538,7 @@ class Component {
      *
      * @this {Component}
      * @param {string} s
-     * @param {number} [bitsMessage] (optional)
+     * @param {number} [bitsMessage] (optional; this method doesn't use it, but some overrides do)
      */
     print(s, bitsMessage = 0)
     {
@@ -4847,8 +4847,8 @@ class Component {
      */
     messageEnabled(bitsMessage = 0)
     {
-        if (bitsMessage % 2) bitsMessage--;
         bitsMessage = bitsMessage || this.bitsMessage;
+        if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
         if (!bitsMessage || this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
             return true;
         }
@@ -4858,13 +4858,13 @@ class Component {
     /**
      * printf(format, ...args)
      *
-     * If format is a number, it's used as message flags, and the real format string is the first arg; the
-     * string will then be printed ONLY if the corresponding message category has been enabled by the debugger.
+     * If format is a number, it's used as a message number, and the format string is the first arg; the call
+     * will be suppressed unless the corresponding message category has been enabled by the debugger.
      *
      * Most components provide a default message number to their constructor, so any printf() without an explicit
-     * message number will use that default.  If a component wants a particular call to ALWAYS print, it can use
-     * printf(Messages.DEFAULT), and if a component wants ALL calls to print, then it should omit any message
-     * number from the constructor and call printf() normally.
+     * message number will use that default.  If the caller wants a particular call to ALWAYS print, regardless
+     * of whether the debugger has enabled it, the caller can use printf(Messages.DEFAULT), and if the caller wants
+     * EVERY call to print, then simply omit the message number from the constructor AND all printf() calls.
      *
      * @this {Component}
      * @param {string|number} format
@@ -4881,14 +4881,14 @@ class Component {
             }
         }
         if (this.messageEnabled(bitsMessage)) {
-            let s = Str.sprintf(format, ...args);
+            let sMessage = Str.sprintf(format, ...args);
             if (this.dbg && this.dbg.message) {
-                /*
-                 * Fallback code for debuggers that still use message() instead of overriding printf().
-                 */
-                this.dbg.message(s, (bitsMessage & Messages.ADDRESS) != 0);
+                this.dbg.message(sMessage, bitsMessage);
             } else {
-                this.print(s, bitsMessage);
+                this.print(sMessage, bitsMessage);
+            }
+            if (bitsMessage == Messages.WARNING || bitsMessage == Messages.ERROR) {
+                Component.alertUser(sMessage.trim());
             }
         }
     }
@@ -44152,7 +44152,7 @@ class ChipSet extends Component {
         } else if (nIRQ == ChipSet.IRQ.KBD) {   // IRQ 1
             bitsMessage |= Messages.KBD;
         } else if (nIRQ == ChipSet.IRQ.SLAVE) { // IRQ 2
-            bitsMessage =  Messages.NONE;       // (we're not really interested in IRQ 2 itself, just the slaves)
+            bitsMessage |= Messages.NONE;       // (we're not really interested in IRQ 2 itself, just the slaves)
         } else if (nIRQ == ChipSet.IRQ.COM1 || nIRQ == ChipSet.IRQ.COM2) {
             bitsMessage |= Messages.SERIAL;
         } else if (nIRQ == ChipSet.IRQ.XTC) {   // IRQ 5 (MODEL_5160)
@@ -75153,56 +75153,43 @@ class DebuggerX86 extends DbgLib {
     }
 
     /**
-     * printf(format, ...args)
-     *
-     * Overrides the Component method of the same name, to add support for Debugger-specific Message flags.
-     *
-     * If format is a number, it must be one or more Messages flags, and the real format string is the first arg.
+     * message(sMessage, bitsMessage)
      *
      * @this {DebuggerX86}
-     * @param {string|number} format
-     * @param {...} args
+     * @param {string} sMessage
+     * @param {number} [bitsMessage]
      */
-    printf(format, ...args)
+    message(sMessage, bitsMessage = 0)
     {
-        let bitsMessage = 0;
-        if (typeof format == "number") {
-            bitsMessage = format;
-            format = args.shift();
+        if ((bitsMessage & Messages.ADDRESS) && this.cpu) {
+            let sAddress = Str.sprintf(" at %s (%%x)$1",  this.toHexAddr(this.newAddr(this.cpu.getIP(), this.cpu.getCS())), this.cpu.regLIP);
+            sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
-        if (this.messageEnabled(bitsMessage)) {
-            let sMessage = Str.sprintf(format, ...args);
 
-            if (bitsMessage & Messages.ADDRESS) {
-                let sAddress = Str.sprintf(" at %s (%%x)$1",  this.toHexAddr(this.newAddr(this.cpu.getIP(), this.cpu.getCS())), this.cpu.regLIP);
-                sMessage.replace(/(\n?)$/, sAddress);
-            }
-
-            if (this.testBits(this.bitsMessage, Messages.BUFFER)) {
-                this.aMessageBuffer.push(sMessage);
-                return;
-            }
-
-            if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
-            this.sMessagePrev = sMessage;
-
-            if (this.testBits(this.bitsMessage, Messages.HALT)) {
-                sMessage.replace(/(\n?)$/, " (cpu halted)$1");
-                this.stopCPU();
-            }
-
-            this.print(sMessage); // + " (" + this.cpu.getCycles() + " cycles)"
-
-            /*
-             * We have no idea what the frequency of print() calls might be; all we know is that they easily
-             * screw up the CPU's careful assumptions about cycles per burst.  So we call yieldCPU() after every
-             * message, to effectively end the current burst and start fresh.
-             *
-             * TODO: See CPU.calcStartTime() for a discussion of why we might want to call yieldCPU() *before*
-             * we display the message.
-             */
-            if (this.cpu) this.cpu.yieldCPU();
+        if (this.testBits(this.bitsMessage, Messages.BUFFER)) {
+            this.aMessageBuffer.push(sMessage);
+            return;
         }
+
+        if (this.sMessagePrev && sMessage == this.sMessagePrev) return;
+        this.sMessagePrev = sMessage;
+
+        if (this.testBits(this.bitsMessage, Messages.HALT)) {
+            sMessage = sMessage.replace(/(\n?)$/, " (cpu halted)$1");
+            this.stopCPU();
+        }
+
+        this.print(sMessage, bitsMessage); // + " (" + this.cpu.getCycles() + " cycles)"
+
+        /*
+            * We have no idea what the frequency of print() calls might be; all we know is that they easily
+            * screw up the CPU's careful assumptions about cycles per burst.  So we call yieldCPU() after every
+            * message, to effectively end the current burst and start fresh.
+            *
+            * TODO: See CPU.calcStartTime() for a discussion of why we might want to call yieldCPU() *before*
+            * we display the message.
+            */
+        if (this.cpu) this.cpu.yieldCPU();
     }
 
     /**
@@ -81059,7 +81046,7 @@ class Computer extends Component {
                 if (video) {
                     let control = video.getTextArea();
                     if (control) {
-                        if (this.testBits(bitsMessage, Messages.PROGRESS) && sMessage.slice(-4) == "...\n") {
+                        if (bitsMessage == Messages.PROGRESS && sMessage.slice(-4) == "...\n") {
                             Component.replaceControl(control, sMessage.slice(0, -1), sMessage.slice(0, -1) + ".");
                         } else {
                             Component.appendControl(control, sMessage);
