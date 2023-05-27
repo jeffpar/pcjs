@@ -4858,13 +4858,13 @@ class Component {
     /**
      * printf(format, ...args)
      *
-     * If format is a number, it's used as message flags, and the real format string is the first arg; the
-     * string will then be printed ONLY if the corresponding message category has been enabled by the debugger.
+     * If format is a number, it's used as a message number, and the format string is the first arg; the call
+     * will be suppressed unless the corresponding message category has been enabled by the debugger.
      *
      * Most components provide a default message number to their constructor, so any printf() without an explicit
-     * message number will use that default.  If a component wants a particular call to ALWAYS print, it can use
-     * printf(Messages.DEFAULT), and if a component wants ALL calls to print, then it should omit any message
-     * number from the constructor and call printf() normally.
+     * message number will use that default.  If the caller wants a particular call to ALWAYS print, regardless
+     * of whether the debugger has enabled it, the caller can use printf(Messages.DEFAULT), and if the caller wants
+     * EVERY call to print, then simply omit the message number from the constructor AND all printf() calls.
      *
      * @this {Component}
      * @param {string|number} format
