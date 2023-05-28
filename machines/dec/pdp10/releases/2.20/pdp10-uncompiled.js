@@ -9168,7 +9168,7 @@ class CPUPDP10 extends Component {
                 this.printf(Messages.STATUS, "No debugger detected\n");
             }
             if (!this.flags.autoStart) {
-                this.println("CPU will not be auto-started " + (this.panel? "(click Run to start)" : "(type 'go' to start)"));
+                this.printf("CPU will not be auto-started %s\n", (this.panel? "(click Run to start)" : "(type 'go' to start)"));
             }
         }
         /*
@@ -9225,7 +9225,7 @@ class CPUPDP10 extends Component {
     isPowered()
     {
         if (!this.flags.powered) {
-            this.println(this.toString() + " not powered");
+            this.printf("%s not powered\n", this.toString());
             return false;
         }
         return true;
@@ -9330,7 +9330,7 @@ class CPUPDP10 extends Component {
      */
     displayChecksum()
     {
-        this.println(this.getCycles() + " cycles: " + "checksum=" + Str.toHex(this.nChecksum));
+        this.printf("%d cycles: checksum=%x\n", this.getCycles(), this.nChecksum);
     }
 
     /**
@@ -9624,7 +9624,7 @@ class CPUPDP10 extends Component {
                 var sSpeed = this.getSpeedTarget();
                 var controlSpeed = this.bindings["setSpeed"];
                 if (controlSpeed) controlSpeed.textContent = sSpeed;
-                this.println("target speed: " + sSpeed);
+                this.printf("target speed: %s\n", sSpeed);
             }
             if (fUpdateFocus && this.cmp) this.cmp.setFocus();
         }
@@ -9695,7 +9695,7 @@ class CPUPDP10 extends Component {
         if (this.msEndThisRun) {
             var msDelta = this.msStartThisRun - this.msEndThisRun;
             if (msDelta > this.msPerYield) {
-                if (MAXDEBUG) this.println("large time delay: " + msDelta + "ms");
+                if (MAXDEBUG) this.printf("large time delay: %dms\n", msDelta);
                 this.msStartRun += msDelta;
                 /*
                  * Bumping msStartRun forward should NEVER cause it to exceed msStartThisRun; however, just
@@ -9753,7 +9753,7 @@ class CPUPDP10 extends Component {
         var msElapsed = this.msEndThisRun - this.msStartRun;
 
         if (MAXDEBUG && msRemainsThisRun < 0 && this.nCyclesMultiplier > 1) {
-            this.println("warning: updates @" + msElapsedThisRun + "ms (prefer " + Math.round(msYield) + "ms)");
+            this.printf("warning: updates @%dms (prefer %dms)\n", msElapsedThisRun, Math.round(msYield));
         }
 
         this.calcSpeed(nCycles, msElapsed);
@@ -10061,7 +10061,7 @@ class CPUPDP10 extends Component {
             return false;
         }
         if (this.flags.running) {
-            this.println(this.toString() + " busy");
+            this.printf("%s busy\n", this.toString());
             return false;
         }
         /*
@@ -17282,7 +17282,7 @@ PDP10.opNOPM = function(op, ac)
  */
 PDP10.opUndefined = function(op, ac)
 {
-    this.println("undefined opcode: " + Str.toOct(op));
+    this.printf("undefined opcode: %o\n", op);
     this.advancePC(-1);
     this.stopCPU();
 };
@@ -22400,7 +22400,7 @@ class DebuggerPDP10 extends DbgLib {
                     /*
                      * Limiting the amount of disassembled code to 256 bytes in non-DEBUG builds is partly to
                      * prevent the user from wedging the browser by dumping too many lines, but also a recognition
-                     * that, in non-DEBUG builds, this.println() keeps print output buffer truncated to 8Kb anyway.
+                     * that, in non-DEBUG builds, this.printf() keeps print output buffer truncated to 8Kb anyway.
                      */
                     this.printf("range too large\n");
                     return;
@@ -24234,7 +24234,7 @@ class SerialPortPDP10 extends Component {
         }
         else if (this.consoleBuffer != null) {
             if (b == 0x0A || this.consoleBuffer.length >= 1024) {
-                this.println(this.consoleBuffer);
+                this.print(this.consoleBuffer);
                 this.consoleBuffer = "";
             }
             if (b != 0x0A) {
@@ -24348,7 +24348,7 @@ class Macro10 {
      * A "mini" version of DEC's MACRO-10 assembler, with just enough features to support the handful
      * of DEC diagnostic source code files that we choose to throw at it.
      *
-     * We rely on the calling component (dbg) to provide a variety of helper services (eg, println(),
+     * We rely on the calling component (dbg) to provide a variety of helper services (eg, printf(),
      * parseExpression(), etc).  This is NOT a subclass of Component, so Component services are not part
      * of this class.
      *
@@ -24407,7 +24407,7 @@ class Macro10 {
          */
         this.asLines = [];
 
-        if (MAXDEBUG) this.println("starting PCjs MACRO-10 Mini-Assembler...");
+        if (MAXDEBUG) this.dbg.printf("starting PCjs MACRO-10 Mini-Assembler...\n");
 
         /*
          * Initialize all the tables and other data structures that MACRO-10 uses.
@@ -24601,7 +24601,7 @@ class Macro10 {
         var macro10 = this;
         var sURL = this.aURLs[this.iURL];
 
-        this.println("loading " + Str.getBaseName(sURL));
+        this.dbg.printf("loading %s\n", Str.getBaseName(sURL));
 
         /*
          * We know that local resources ending with ".MAC" are actually stored with a ".txt" extension.
@@ -24703,7 +24703,7 @@ class Macro10 {
          * If the "preprocess" option is set, then print everything without assembling.
          */
         if (this.sOptions.indexOf('p') >= 0) {
-            this.println(this.asLines.join(""));
+            this.dbg.printf("%s\n", this.asLines.join(""));
             return 0;
         }
 
@@ -24724,7 +24724,7 @@ class Macro10 {
                  * If the "line" option is set, then print all the lines as they are parsed.
                  */
                 if (this.sOptions.indexOf('l') >= 0) {
-                    this.println(this.getLineRef() + ": " + this.asLines[i]);
+                    this.dbg.printf("%s: %s\n", this.getLineRef(), this.asLines[i]);
                 }
 
                 /*
@@ -24771,7 +24771,7 @@ class Macro10 {
             });
 
         } catch(err) {
-            this.println(err.message);
+            this.dbg.printf("%s\n", err.message);
             this.nError = -1;
         }
 
@@ -26254,22 +26254,7 @@ class Macro10 {
      */
     warning(sWarning, nLine)
     {
-        this.println("warning in " + this.getLineRef(nLine) + ": " + sWarning);
-    }
-
-    /**
-     * println(s)
-     *
-     * @this {Macro10}
-     * @param {string} s
-     */
-    println(s)
-    {
-        if (!this.dbg) {
-            console.log(s);
-        } else {
-            this.dbg.println(s);
-        }
+        this.dbg.printf("warning in %s: %s\n", this.getLineRef(nLine), sWarning);
     }
 }
 
@@ -26477,7 +26462,7 @@ class ComputerPDP10 extends Component {
             }
         }
 
-        this.println(APPNAME + " v" + APPVERSION + "\n" + COPYRIGHT + "\n" + LICENSE);
+        this.printf("%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
         /*
          * Iterate through all the components again and call their initBus() handler, if any
@@ -26844,7 +26829,7 @@ class ComputerPDP10 extends Component {
                                     this.notice("Error: " + sData);
                                     if (sData == UserAPI.FAIL.VERIFY) this.resetUserID();
                                 } else {
-                                    this.println(sCode + ": " + sData);
+                                    this.printf("%s: %s\n", sCode, sData);
                                 }
                                 /*
                                  * Try falling back to the state that we should have saved in localStorage, as a backup to the

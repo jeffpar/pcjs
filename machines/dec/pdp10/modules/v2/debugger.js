@@ -3661,7 +3661,7 @@ export default class DebuggerPDP10 extends DbgLib {
                     /*
                      * Limiting the amount of disassembled code to 256 bytes in non-DEBUG builds is partly to
                      * prevent the user from wedging the browser by dumping too many lines, but also a recognition
-                     * that, in non-DEBUG builds, this.println() keeps print output buffer truncated to 8Kb anyway.
+                     * that, in non-DEBUG builds, this.printf() keeps print output buffer truncated to 8Kb anyway.
                      */
                     this.printf("range too large\n");
                     return;

@@ -85,7 +85,7 @@ export default class Macro10 {
      * A "mini" version of DEC's MACRO-10 assembler, with just enough features to support the handful
      * of DEC diagnostic source code files that we choose to throw at it.
      *
-     * We rely on the calling component (dbg) to provide a variety of helper services (eg, println(),
+     * We rely on the calling component (dbg) to provide a variety of helper services (eg, printf(),
      * parseExpression(), etc).  This is NOT a subclass of Component, so Component services are not part
      * of this class.
      *
@@ -144,7 +144,7 @@ export default class Macro10 {
          */
         this.asLines = [];
 
-        if (MAXDEBUG) this.println("starting PCjs MACRO-10 Mini-Assembler...");
+        if (MAXDEBUG) this.dbg.printf("starting PCjs MACRO-10 Mini-Assembler...\n");
 
         /*
          * Initialize all the tables and other data structures that MACRO-10 uses.
@@ -338,7 +338,7 @@ export default class Macro10 {
         var macro10 = this;
         var sURL = this.aURLs[this.iURL];
 
-        this.println("loading " + Str.getBaseName(sURL));
+        this.dbg.printf("loading %s\n", Str.getBaseName(sURL));
 
         /*
          * We know that local resources ending with ".MAC" are actually stored with a ".txt" extension.
@@ -440,7 +440,7 @@ export default class Macro10 {
          * If the "preprocess" option is set, then print everything without assembling.
          */
         if (this.sOptions.indexOf('p') >= 0) {
-            this.println(this.asLines.join(""));
+            this.dbg.printf("%s\n", this.asLines.join(""));
             return 0;
         }
 
@@ -461,7 +461,7 @@ export default class Macro10 {
                  * If the "line" option is set, then print all the lines as they are parsed.
                  */
                 if (this.sOptions.indexOf('l') >= 0) {
-                    this.println(this.getLineRef() + ": " + this.asLines[i]);
+                    this.dbg.printf("%s: %s\n", this.getLineRef(), this.asLines[i]);
                 }
 
                 /*
@@ -508,7 +508,7 @@ export default class Macro10 {
             });
 
         } catch(err) {
-            this.println(err.message);
+            this.dbg.printf("%s\n", err.message);
             this.nError = -1;
         }
 
@@ -1991,22 +1991,7 @@ export default class Macro10 {
      */
     warning(sWarning, nLine)
     {
-        this.println("warning in " + this.getLineRef(nLine) + ": " + sWarning);
-    }
-
-    /**
-     * println(s)
-     *
-     * @this {Macro10}
-     * @param {string} s
-     */
-    println(s)
-    {
-        if (!this.dbg) {
-            console.log(s);
-        } else {
-            this.dbg.println(s);
-        }
+        this.dbg.printf("warning in %s: %s\n", this.getLineRef(nLine), sWarning);
     }
 }
 

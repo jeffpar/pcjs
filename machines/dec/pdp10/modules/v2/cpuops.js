@@ -6169,7 +6169,7 @@ PDP10.opNOPM = function(op, ac)
  */
 PDP10.opUndefined = function(op, ac)
 {
-    this.println("undefined opcode: " + Str.toOct(op));
+    this.printf("undefined opcode: %o\n", op);
     this.advancePC(-1);
     this.stopCPU();
 };

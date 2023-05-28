@@ -79,9 +79,12 @@ function getArg(s, delimiter)
 function splitArgs(s, delimiter)
 {
     let args = [];
+    if (delimiter == '+') {
+        s = s.replace(/\+\+/g, "__");
+    }
     while (s) {
         let [arg, r] = getArg(s, delimiter);
-        args.push(arg);
+        args.push(arg.replace(/__/g, "++"));
         s = r;
     }
     return args;
@@ -108,10 +111,10 @@ function replaceArgs(sArgs)
             sFormat += arg.slice(1, -1).replace(/"/g, '\\"');
         } else {
             let fmt = "", warning = false;
-            if (arg.match(/^([A-Za-z]+\.|)(a|ch|s|as)[^a-z]?/) ||
+            if ((arg.match(/^([A-Za-z]+\.|)(a|ch|s|as)[^a-z]?/) ||
                 arg.startsWith("String.") || arg.indexOf(".toStr") > 0 ||
                 arg.indexOf(".pad") > 0 || arg.indexOf(".toHexAddr") > 0 || arg.indexOf("erCase()") > 0 ||
-                arg.indexOf(".join") > 0 || arg.indexOf(".getSpeedTarget") > 0 || arg.indexOf(".model") > 0) {
+                arg.indexOf(".join") > 0 || arg.indexOf(".getSpeedTarget") > 0 || arg.indexOf(".model") > 0) && !arg.endsWith(".length")) {
                 fmt = "%s";
             }
             else if (arg.match(/^([A-Za-z]+\.|)(c|i|ms|n)[^a-z]?/) ||
