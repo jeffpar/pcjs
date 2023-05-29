@@ -166,8 +166,8 @@ export default class DiskPDP11 extends Component {
          * it wouldn't hurt to let create() do its thing, too, but it's a waste of time.
          */
         if (this.mode != DiskAPI.MODE.PRELOAD) {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("blank disk for \"" + this.sDiskName + "\": " + this.nCylinders + " cylinders, " + this.nHeads + " head(s)");
+            if (DEBUG) {
+                this.printf("blank disk for \"%s\": %d cylinders, %d head(s)\n", this.sDiskName, this.nCylinders, this.nHeads);
             }
             var aCylinders = new Array(this.nCylinders);
             for (var iCylinder = 0; iCylinder < aCylinders.length; iCylinder++) {
@@ -225,7 +225,7 @@ export default class DiskPDP11 extends Component {
         if (DEBUG) {
             var sMessage = 'load("' + sDiskName + '","' + sDiskPath + '")';
             this.controller.log(sMessage);
-            this.printMessage(sMessage);
+            this.printf("%s\n", sMessage);
         }
 
         if (this.fnNotify) {
@@ -383,8 +383,8 @@ export default class DiskPDP11 extends Component {
              */
             this.controller.notice("Unable to load disk \"" + this.sDiskName + "\" (error " + nErrorCode + ": " + sURL + ")", fPrintOnly);
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage('doneLoad("' + this.sDiskPath + '")');
+            if (DEBUG) {
+                this.printf("doneLoad(\"%s\")\n", this.sDiskPath);
             }
 
             Component.addMachineResource(this.controller.idMachine, sURL, sDiskData);
@@ -486,7 +486,7 @@ export default class DiskPDP11 extends Component {
                         var sHeads = nHeads + " head" + (nHeads > 1 ? "s" : "");
                         var nSectorsPerTrack = aDiskData[0][0].length;
                         var sSectorsPerTrack = nSectorsPerTrack + " sector" + (nSectorsPerTrack > 1 ? "s" : "") + "/track";
-                        this.printMessage(sCylinders + ", " + sHeads + ", " + sSectorsPerTrack);
+                        this.printf("%s, %s, %s\n", sCylinders, sHeads, sSectorsPerTrack);
                     }
                     /*
                      * Before the image is usable, we must "normalize" all the sectors.  In the past, this meant
@@ -779,8 +779,8 @@ export default class DiskPDP11 extends Component {
                 var dw = (idw < adw.length ? adw[idw] : sector['pattern']);
                 b = ((dw >> ((ibSector & 0x3) << 3)) & 0xff);
             }
-            if (DEBUG && !fCompare && this.messageEnabled()) {
-                this.printMessage('read("' + this.sDiskFile + '",CHS=' + sector.iCylinder + ':' + sector.iHead + ':' + sector['sector'] + ',index=' + ibSector + ',value=' + Str.toHexByte(b) + ')');
+            if (DEBUG && !fCompare) {
+                this.printf("read(\"%s\",CHS=%d:%d:%d,index=%d,value=%#04x)\n", this.sDiskFile, sector.iCylinder, sector.iHead, sector['sector'], ibSector, b);
             }
         }
         return b;
@@ -800,8 +800,8 @@ export default class DiskPDP11 extends Component {
         if (this.fWriteProtected)
             return false;
 
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage('write("' + this.sDiskFile + '",CHS=' + sector.iCylinder + ':' + sector.iHead + ':' + sector['sector'] + ',index=' + ibSector + ',value=' + Str.toHexByte(b) + ')');
+        if (DEBUG) {
+            this.printf("write(\"%s\",CHS=%d:%d:%d,index=%d,value=%#04x)\n", this.sDiskFile, sector.iCylinder, sector.iHead, sector['sector'], ibSector, b);
         }
 
         if (ibSector < sector['length']) {
@@ -945,8 +945,8 @@ export default class DiskPDP11 extends Component {
                 }
             }
         }
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage('save("' + this.sDiskName + '"): saved ' + (deltas.length - 1) + ' change(s)');
+        if (DEBUG) {
+            this.printf("save(\"%s\"): saved %d change(s)\n", this.sDiskName, (deltas.length - 1));
         }
         return deltas;
     }
@@ -1081,8 +1081,8 @@ export default class DiskPDP11 extends Component {
                 this.controller.notice("Unable to restore disk '" + this.sDiskName + ": " + sReason);
             }
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage('restore("' + this.sDiskName + '"): restored ' + nChanges + ' change(s)');
+            if (DEBUG) {
+                this.printf("restore(\"%s\"): restored %d change(s)\n", this.sDiskName, nChanges);
             }
         }
         return nChanges;

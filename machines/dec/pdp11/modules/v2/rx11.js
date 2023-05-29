@@ -158,7 +158,7 @@ export default class RX11 extends DriveController {
         this.regRXCS &= ~(RX11.RXCS.GO | RX11.RXCS.TR | RX11.RXCS.DONE | RX11.RXCS.ERR);
         this.cpu.clearIRQ(this.irq);
 
-        if (this.messageEnabled()) this.printMessage(this.type + ".processCommand(" + RX11.FUNCS[this.funCode >> 1]+ ")", true, true);
+        this.printf(Messages.ADDRESS, "%s.processCommand(%s)\n", this.type, RX11.FUNCS[this.funCode >> 1]);
 
         switch(this.funCode) {
 
@@ -235,7 +235,7 @@ export default class RX11 extends DriveController {
         var disk = drive.disk;
         var sector = null, ibSector;
 
-        if (this.messageEnabled()) this.printMessage(this.type + ".readData(" + iCylinder + ":" + iHead + ":" + iSector + ") " + Str.toOct(addr) + "--" + Str.toOct(addr + (nWords << 1)), true, true);
+        this.printf(Messages.ADDRESS, "%s.readData(%d:%d:%d) %o-%o\n", this.type, iCylinder, iHead, iSector, addr, addr + (nWords << 1));
 
         if (!disk) {
             nError = drive.iDrive?  RX11.ERROR.HOME1 : RX11.ERROR.HOME0;
@@ -303,7 +303,7 @@ export default class RX11 extends DriveController {
 
         if (disk) {
             this.regRXES |= RX11.RXES.DRDY;
-            if (this.messageEnabled()) this.printMessage(this.type + ".readSector(" + iCylinder + ":" + iHead + ":" + nSector + ")", true, true);
+            this.printf(Messages.ADDRESS, "%s.readSector(%d:%d:%d)\n", this.type, iCylinder, iHead, nSector);
             this.assert(nSector);       // RX sector numbers (unlike RK and RL) are supposed to be 1-based
             var sector = disk.seek(iCylinder, iHead, nSector, true);
             if (sector) {
@@ -344,7 +344,7 @@ export default class RX11 extends DriveController {
 
         if (disk) {
             this.regRXES |= RX11.RXES.DRDY;
-            if (this.messageEnabled()) this.printMessage(this.type + ".writeSector(" + iCylinder + ":" + iHead + ":" + nSector + ")", true, true);
+            this.printf(Messages.ADDRESS, "%s.writeSector(%d:%d:%d)\n", this.type, iCylinder, iHead, nSector);
             this.assert(nSector);       // RX sector numbers (unlike RK and RL) are supposed to be 1-based
             var sector = disk.seek(iCylinder, iHead, nSector, true);
             if (sector) {
@@ -478,7 +478,7 @@ export default class RX11 extends DriveController {
                     this.regRXCS &= ~RX11.RXCS.TR;
                     this.assert(this.iBuffer < this.abBuffer.length);
                     this.regRXDB = this.abBuffer[this.iBuffer] & 0xff;
-                    if (this.messageEnabled()) this.printMessage(this.type + ".readByte(" + this.iBuffer + "): " + Str.toHexByte(this.regRXDB), true, true);
+                    this.printf(Messages.ADDRESS, "%s.readByte(%d): %#04x\n", this.type, this.iBuffer, this.regRXDB);
                     if (++this.iBuffer >= this.abBuffer.length) {
                         this.doneCommand();
                     }
@@ -505,7 +505,7 @@ export default class RX11 extends DriveController {
                 this.regRXCS &= ~RX11.RXCS.TR;
                 this.assert(this.iBuffer < this.abBuffer.length);
                 this.abBuffer[this.iBuffer] = data & 0xff;
-                if (this.messageEnabled()) this.printMessage(this.type + ".writeByte(" + this.iBuffer + "," + Str.toHexByte(data) + ")", true, true);
+                this.printf(Messages.ADDRESS, "%s.writeByte(%d,%#04x)\n", this.type, this.iBuffer, data);
                 if (++this.iBuffer >= this.abBuffer.length) {
                     this.doneCommand();
                 }

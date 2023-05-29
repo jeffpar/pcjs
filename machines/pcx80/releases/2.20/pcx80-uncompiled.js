@@ -4284,7 +4284,7 @@ class Component {
     }
 
     /**
-     * status(format, ...args) [DEPRECATED: Use printf(Messages.STATUS, format, ...args) instead]
+     * status(format, ...args) [DEPRECATED: use printf(Messages.STATUS, format, ...args) instead]
      *
      * status() is a print function that also includes information about the component (ie, the component type),
      * which is why there is no corresponding Component.status() function.
@@ -4568,8 +4568,12 @@ class Component {
      */
     messageEnabled(bitsMessage = 0)
     {
-        bitsMessage = bitsMessage || this.bitsMessage;
+        /*
+         * It's important to subtract Messages.ADDRESS from bitsMessage before testing for Messages.DEFAULT, because
+         * if Messages.ADDRESS was the ONLY bit specified, we still want to default to the component's message category.
+         */
         if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
+        bitsMessage = bitsMessage || this.bitsMessage;
         if (!bitsMessage || this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
             return true;
         }
@@ -4615,7 +4619,7 @@ class Component {
     }
 
     /**
-     * printMessage(sMessage, bitsMessage, fAddress)
+     * printMessage(sMessage, bitsMessage, fAddress) [DEPRECATED: use printf(bitsMessage, ...) instead]
      *
      * If bitsMessage is not specified, the component's Messages category is used, and if bitsMessage is true,
      * the message is displayed regardless.
@@ -6488,8 +6492,8 @@ class MemoryX80 {
      */
     printAddr(sMessage)
     {
-        if (DEBUG && this.dbg && this.dbg.messageEnabled(Messages.MEM)) {
-            this.dbg.printMessage(sMessage + ' ' + (this.addr != null? ('%' + Str.toHex(this.addr)) : '#' + this.id), true);
+        if (DEBUG && this.dbg) {
+            this.dbg.printf(Messages.MEM, "%s %d\n", sMessage, (this.addr != null? ('%' + Str.toHex(this.addr)) : '#' + this.id));
         }
     }
 
@@ -7864,7 +7868,7 @@ class CPUx80 extends Component {
         this.nCyclesRecalc += this.nCyclesThisRun;
 
         if (DEBUG && this.messageEnabled(Messages.CPU) && msRemainsThisRun) {
-            this.printMessage("calcRemainingTime: " + msRemainsThisRun + "ms to sleep after " + this.msEndThisRun + "ms");
+            this.printf("calcRemainingTime: %dms to sleep after %dms\n", msRemainsThisRun, this.msEndThisRun);
         }
 
         this.msEndThisRun += msRemainsThisRun;
@@ -8016,15 +8020,15 @@ class CPUx80 extends Component {
             if (timer[1] < 0) continue;
             timer[1] -= nCycles;
             if (timer[1] <= 0) {
-                if (DEBUG && this.messageEnabled(Messages.CPU)) {
-                    this.printMessage("updateTimer(" + nCycles + "): firing " + timer[0] + " with only " + (timer[1] + nCycles) + " cycles left");
+                if (DEBUG) {
+                    this.printf(Messages.CPU, "updateTimer(%d): firing %s with only %d cycles left\n", nCycles, timer[0], (timer[1] + nCycles));
                 }
                 timer[1] = -1;      // zero is technically an "active" value, so ensure the timer is dormant now
                 timer[3]();         // safe to invoke the callback function now
                 if (timer[2] >= 0) {
                     this.setTimer(iTimer, timer[2]);
-                    if (DEBUG && this.messageEnabled(Messages.CPU)) {
-                        this.printMessage("updateTimer(" + nCycles + "): rearming " + timer[0] + " for " + timer[2] + "ms (" + timer[1] + " cycles)");
+                    if (DEBUG) {
+                        this.printf(Messages.CPU, "updateTimer(%d): rearming %s for %dms (%d cycles)\n", nCycles, timer[0], timer[2], timer[1]);
                     }
                 }
             }
@@ -12833,7 +12837,7 @@ class ChipSetX80 extends Component {
         case ChipSetX80.VT100.NVR.CMD.ERASE:
             addr = this.getNVRAddr();
             this.aNVRWords[addr] = ChipSetX80.VT100.NVR.WORDMASK;
-            this.printMessage("doNVRCommand(): erase data at addr " + Str.toHexWord(addr));
+            this.printf("doNVRCommand(): erase data at addr %#06x\n", addr);
             break;
 
         case ChipSetX80.VT100.NVR.CMD.ACCEPT_DATA:
@@ -12844,7 +12848,7 @@ class ChipSetX80 extends Component {
             addr = this.getNVRAddr();
             data = this.wNVRData & ChipSetX80.VT100.NVR.WORDMASK;
             this.aNVRWords[addr] = data;
-            this.printMessage("doNVRCommand(): write data " + Str.toHexWord(data) + " to addr " + Str.toHexWord(addr));
+            this.printf("doNVRCommand(): write data %#06x to addr %#06x\n", data, addr);
             break;
 
         case ChipSetX80.VT100.NVR.CMD.READ:
@@ -12855,7 +12859,7 @@ class ChipSetX80 extends Component {
              */
             if (data == null) data = ChipSetX80.VT100.NVR.WORDMASK;
             this.wNVRData = data;
-            this.printMessage("doNVRCommand():  read data " + Str.toHexWord(data) + " from addr " + Str.toHexWord(addr));
+            this.printf("doNVRCommand():  read data %#06x from addr %#06x\n", data, addr);
             break;
 
         case ChipSetX80.VT100.NVR.CMD.SHIFT_OUT:
@@ -12867,7 +12871,7 @@ class ChipSetX80 extends Component {
             break;
 
         default:
-            this.printMessage("doNVRCommand(): unrecognized command " + Str.toHexByte(bCmd));
+            this.printf("doNVRCommand(): unrecognized command %#04x\n", bCmd);
             break;
         }
     }
@@ -14612,9 +14616,7 @@ class KeyboardX80 extends Component {
         var fPass = true;
         var keyCode = event.keyCode;
 
-        if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
-            this.printMessage("onKey" + (fDown? "Down" : "Up") + "(" + keyCode + ")", true);
-        }
+        this.printf(Messages.KEYS, "onKey%s(%d)\n", (fDown? "Down" : "Up"), keyCode);
 
         /*
          * A note about Firefox: it uses different keyCodes for certain keys; there's a logic to the differences
@@ -14690,11 +14692,7 @@ class KeyboardX80 extends Component {
                 }
             }
         }
-
-        if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
-            this.printMessage("onKey" + (fDown? "Down" : "Up") + "(" + keyCode + "): softCode=" + softCode + ", pass=" + fPass, true);
-        }
-
+        this.printf(Messages.KEYS, "onKey%s(%d): softCode=%s, pass=%b\n", (fDown? "Down" : "Up"), keyCode, softCode, fPass);
         return fPass;
     }
 
@@ -14734,11 +14732,7 @@ class KeyboardX80 extends Component {
                 this.updateLEDs();
             }
         }
-
-        if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
-            this.printMessage("onKeyPress(" + charCode + ")", true);
-        }
-
+        this.printf(Messages.KEYS, "onKeyPress(%d)\n", charCode);
         return true;
     }
 
@@ -14773,9 +14767,7 @@ class KeyboardX80 extends Component {
                 if (!this.indexOfCharMap(bMapping)) {
                     fPass = this.onSoftKeyDown(keyCode, fDown, true);
                     if (event.preventDefault) event.preventDefault();
-                    if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
-                        this.printMessage("oniOSKey" + (fDown ? "Down" : "Up") + "(" + keyCode + "): pass=" + fPass, true);
-                    }
+                    this.printf(Messages.KEYS, "oniOSKey%s(%d): pass=%b\n", (fDown ? "Down" : "Up"), keyCode, fPass);
                 }
             }
         }
@@ -14824,11 +14816,7 @@ class KeyboardX80 extends Component {
                 this.onSoftKeyDown(softCode, true, true);
             }
         }
-
-        if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
-            this.printMessage("oniOSKeyPress(" + charCode + ")", true);
-        }
-
+        this.printf(Messages.KEYS, "oniOSKeyPress(%d)\n", charCode);
         return true;
     }
 
@@ -15887,7 +15875,7 @@ class VideoX80 extends Component {
             this.bindings[sBinding] = control;
             if (this.container && this.container.doFullScreen) {
                 control.onclick = function onClickFullScreen() {
-                    if (DEBUG) video.printMessage("fullScreen()");
+                    if (DEBUG) video.printf("fullScreen()\n");
                     video.doFullScreen();
                 };
             } else {
@@ -16257,7 +16245,7 @@ class VideoX80 extends Component {
      */
     updateDimensions(nCols, nRows)
     {
-        this.printMessage("updateDimensions(" + nCols + "," + nRows + ")");
+        this.printf("updateDimensions(%d,%d)\n", nCols, nRows);
         this.nColsBuffer = nCols;
         /*
          * Even when the number of effective rows is 14 (or 15 counting the scroll line buffer), we want
@@ -16283,7 +16271,7 @@ class VideoX80 extends Component {
      */
     updateRate(nRate)
     {
-        this.printMessage("updateRate(" + nRate + ")");
+        this.printf("updateRate(%d)\n", nRate);
         this.rateMonitor = nRate;
     }
 
@@ -16297,7 +16285,7 @@ class VideoX80 extends Component {
      */
     updateScrollOffset(bScroll)
     {
-        this.printMessage("updateScrollOffset(" + bScroll + ")");
+        this.printf("updateScrollOffset(%s)\n", bScroll);
         if (this.bScrollOffset !== bScroll) {
             this.bScrollOffset = bScroll;
             /*
@@ -16407,7 +16395,7 @@ class VideoX80 extends Component {
                 this.canvasScreen.style.width = this.canvasScreen.style.height = "";
             }
         }
-        this.printMessage("notifyFullScreen(" + fFullScreen + ")");
+        this.printf("notifyFullScreen(%s)\n", fFullScreen);
     }
 
     /**
@@ -17622,7 +17610,7 @@ class SerialPortX80 extends Component {
     receiveByte(b)
     {
         if (MAXDEBUG) this.echoByte(b);
-        this.printMessage("receiveByte(" + Str.toHexByte(b) + "), status=" + Str.toHexByte(this.bStatus));
+        this.printf("receiveByte(%#04x), status=%#04x\n", b, this.bStatus);
         if (!this.fAutoStop && !(this.bStatus & SerialPortX80.UART8251.STATUS.RECV_FULL)) {
             this.bDataIn = b;
             this.bStatus |= SerialPortX80.UART8251.STATUS.RECV_FULL;
@@ -17692,7 +17680,7 @@ class SerialPortX80 extends Component {
     {
         var fTransmitted = false;
 
-        this.printMessage("transmitByte(" + Str.toHexByte(b) + ")");
+        this.printf("transmitByte(%#04x)\n", b);
 
         if (this.fAutoXOFF) {
             if (b == 0x13) {        // XOFF
@@ -23808,7 +23796,7 @@ class ComputerX80 extends Component {
 
         this.printf("%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
-        if (DEBUG && this.messageEnabled()) this.printMessage("TYPEDARRAYS: " + TYPEDARRAYS);
+        if (DEBUG) this.printf(Messages.DEBUG, "TYPEDARRAYS: %s\n", TYPEDARRAYS);
 
         /*
          * Iterate through all the components again and call their initBus() handler, if any
@@ -24015,8 +24003,8 @@ class ComputerX80 extends Component {
         if (!nErrorCode) {
             this.sStateData = sStateData;
             this.fStateData = true;
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("loaded state file " + sURL.replace(this.sUserID || "xxx", "xxx"));
+            if (DEBUG) {
+                this.printf("loaded state file %s\n", sURL.replace(this.sUserID || "xxx", "xxx"));
             }
         } else {
             this.sResumePath = null;
@@ -24057,7 +24045,7 @@ class ComputerX80 extends Component {
                 return;
             }
         }
-        if (DEBUG && this.messageEnabled()) this.printMessage("ComputerX80.wait(ready)");
+        if (DEBUG) this.printf("ComputerX80.wait(ready)\n");
         fn.call(this, parms);
     }
 
@@ -24082,8 +24070,8 @@ class ComputerX80 extends Component {
                 fValid = false;
                 if (!stateComputer) stateValidate.clear();
             } else {
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage("Last state: " + sTimestampComputer + " (validate: " + sTimestampValidate + ")");
+                if (DEBUG) {
+                    this.printf("Last state: %s (validate: %s)\n", sTimestampComputer, sTimestampValidate);
                 }
             }
         }
@@ -24104,8 +24092,8 @@ class ComputerX80 extends Component {
             resume = this.resume || (this.sStateData? ComputerX80.RESUME_AUTO : ComputerX80.RESUME_NONE);
         }
 
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("ComputerX80.powerOn(" + (resume == ComputerX80.RESUME_REPOWER ? "repower" : (resume ? "resume" : "")) + ")");
+        if (DEBUG) {
+            this.printf("ComputerX80.powerOn(%s)\n", (resume == ComputerX80.RESUME_REPOWER ? "repower" : (resume ? "resume" : "")));
         }
 
         if (this.nPowerChange) {
@@ -24350,8 +24338,8 @@ class ComputerX80 extends Component {
         var fRepower = (aParms[1] < 0);
         var fRestore = aParms[2];
 
-        if (DEBUG && this.flags.powered && this.messageEnabled()) {
-            this.printMessage("ComputerX80.donePowerOn(): redundant");
+        if (DEBUG && this.flags.powered) {
+            this.printf("ComputerX80.donePowerOn(): redundant\n");
         }
 
         this.fInitialized = true;
@@ -24471,8 +24459,8 @@ class ComputerX80 extends Component {
         var data;
         var sState = "none";
 
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("ComputerX80.powerOff(" + (fSave ? "save" : "nosave") + (fShutdown ? ",shutdown" : "") + ")");
+        if (DEBUG) {
+            this.printf("ComputerX80.powerOff(%s%s)\n", (fSave ? "save" : "nosave"), (fShutdown ? ",shutdown" : ""));
         }
 
         if (this.nPowerChange) {
@@ -24594,14 +24582,14 @@ class ComputerX80 extends Component {
              * TODO: Why does WebStorm think that this.bus.type is undefined? The base class (Component)
              * constructor defines it.
              */
-            this.printMessage("Resetting " + this.bus.type);
+            this.printf("Resetting %s\n", this.bus.type);
             this.bus.reset();
         }
         var aComponents = Component.getComponents(this.id);
         for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
             var component = aComponents[iComponent];
             if (component !== this && component !== this.bus && component.reset) {
-                this.printMessage("Resetting " + component.type);
+                this.printf("Resetting %s\n", component.type);
                 component.reset();
             }
         }
@@ -24800,7 +24788,7 @@ class ComputerX80 extends Component {
     {
         this.sUserID = null;
         var fMessages = DEBUG && this.messageEnabled();
-        if (fMessages) this.printMessage("verifyUserID(" + sUserID + ")");
+        if (fMessages) this.printf("verifyUserID(%s)\n", sUserID);
         var sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
         var response = Web.getResource(sRequest);
         var nErrorCode = response[0];
@@ -24810,16 +24798,16 @@ class ComputerX80 extends Component {
                 response = eval("(" + sResponse + ")");
                 if (response.code && response.code == UserAPI.CODE.OK) {
                     Web.setLocalStorageItem(ComputerX80.STATE_USERID, response.data);
-                    if (fMessages) this.printMessage(ComputerX80.STATE_USERID + " updated: " + response.data);
+                    if (fMessages) this.printf("%s updated: %s\n", ComputerX80.STATE_USERID, response.data);
                     this.sUserID = response.data;
                 } else {
-                    if (fMessages) this.printMessage(response.code + ": " + response.data);
+                    if (fMessages) this.printf("%s: %s\n", response.code, response.data);
                 }
             } catch (e) {
                 Component.error(e.message + " (" + sResponse + ")");
             }
         } else {
-            if (fMessages) this.printMessage("invalid response (error " + nErrorCode + ")");
+            if (fMessages) this.printf("invalid response (error %d)\n", nErrorCode);
         }
         return this.sUserID;
     }
@@ -24834,13 +24822,13 @@ class ComputerX80 extends Component {
     {
         var sStatePath = null;
         if (this.sUserID) {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage(ComputerX80.STATE_USERID + " for load: " + this.sUserID);
+            if (DEBUG) {
+                this.printf("%s for load: %s\n", ComputerX80.STATE_USERID, this.sUserID);
             }
             sStatePath = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, APPVERSION);
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage(ComputerX80.STATE_USERID + " unavailable");
+            if (DEBUG) {
+                this.printf("%s unavailable\n", ComputerX80.STATE_USERID);
             }
         }
         return sStatePath;
@@ -24861,8 +24849,8 @@ class ComputerX80 extends Component {
          * tend to blow off alerts() and the like when closing down.
          */
         if (sState) {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("size of server state: " + sState.length + " bytes");
+            if (DEBUG) {
+                this.printf("size of server state: %d bytes\n", sState.length);
             }
             var response = this.storeServerState(sUserID, sState, true);
             if (response && response[UserAPI.RES.CODE] == UserAPI.CODE.OK) {
@@ -24878,8 +24866,8 @@ class ComputerX80 extends Component {
                 this.resetUserID();
             }
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("no state to store");
+            if (DEBUG) {
+                this.printf("no state to store\n");
             }
         }
     }
@@ -24895,8 +24883,8 @@ class ComputerX80 extends Component {
      */
     storeServerState(sUserID, sState, fSync)
     {
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage(ComputerX80.STATE_USERID + " for store: " + sUserID);
+        if (DEBUG) {
+            this.printf("%s for store: %s\n", ComputerX80.STATE_USERID, sUserID);
         }
         /*
          * TODO: Determine whether or not any browsers cancel our request if we're called during a browser "shutdown" event,
@@ -24921,7 +24909,7 @@ class ComputerX80 extends Component {
                 }
                 sResponse = '{"' + UserAPI.RES.CODE + '":' + response[1] + ',"' + UserAPI.RES.DATA + '":"' + sResponse + '"}';
             }
-            if (DEBUG && this.messageEnabled()) this.printMessage(sResponse);
+            if (DEBUG) this.printf("%s\n", sResponse);
             return JSON.parse(sResponse);
         }
         return null;
@@ -25140,8 +25128,8 @@ class ComputerX80 extends Component {
                  */
                 var computer = new ComputerX80(parmsComputer, parmsMachine, true);
 
-                if (DEBUG && computer.messageEnabled()) {
-                    computer.printMessage("onInit(" + computer.flags.powered + ")");
+                if (DEBUG) {
+                    computer.printf("onInit(%b)\n", computer.flags.powered);
                 }
 
                 /*
@@ -25179,8 +25167,8 @@ class ComputerX80 extends Component {
 
                 computer.flags.unloading = false;
 
-                if (DEBUG && computer.messageEnabled()) {
-                    computer.printMessage("onShow(" + computer.fInitialized + "," + computer.flags.powered + ")");
+                if (DEBUG) {
+                    computer.printf("onShow(%b,%b)\n", computer.fInitialized, computer.flags.powered);
                 }
 
                 /*
@@ -25238,8 +25226,8 @@ class ComputerX80 extends Component {
                  */
                 computer.flags.unloading = true;
 
-                if (DEBUG && computer.messageEnabled()) {
-                    computer.printMessage("onExit(" + computer.flags.powered + ")");
+                if (DEBUG) {
+                    computer.printf("onExit(%b)\n", computer.flags.powered);
                 }
 
                 if (computer.flags.powered) {

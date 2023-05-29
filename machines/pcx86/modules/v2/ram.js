@@ -523,7 +523,7 @@ class CompaqController extends Controller {
     {
         let b = this.controller.getByte(off);
         if (DEBUG) {
-            this.controller.ram.printMessage("CompaqController.readByte(" + Str.toHexWord(off) + ") returned " + Str.toHexByte(b), 0, true);
+            this.controller.ram.printf(0 + Messages.ADDRESS, "CompaqController.readByte(%#06x) returned %#04x\n", off, b);
         }
         return b;
     }
@@ -549,7 +549,7 @@ class CompaqController extends Controller {
          * All bits in 0x80C00001 and 0x80C00003 are reserved, so we can simply ignore those writes.
          */
         if (DEBUG) {
-            this.controller.ram.printMessage("CompaqController.writeByte(" + Str.toHexWord(off) + "," + Str.toHexByte(b) + ")", 0, true);
+            this.controller.ram.printf(Messages.ADDRESS, "CompaqController.writeByte(%#06x,%#04x)\n", off, b);
         }
     }
 }

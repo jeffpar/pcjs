@@ -851,7 +851,7 @@ export default class DriveController extends Component {
                 if (fAutoMount) {
                     drive.fAutoMount = true;
                     this.cAutoMount++;
-                    if (this.messageEnabled()) this.printMessage("auto-loading disk: " + sDiskName);
+                    this.printf("auto-loading disk \"%s\"\n", sDiskName);
                 }
                 drive.fLocal = !!file;
                 var disk = new DiskPDP11(this, drive, DiskAPI.MODE.PRELOAD);
@@ -1193,14 +1193,14 @@ export default class DriveController extends Component {
         for (i = 0; i < this.aDiskHistory.length; i++) {
             if (this.aDiskHistory[i][1] == sDiskPath) {
                 var nChanges = disk.restore(this.aDiskHistory[i][2]);
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage("disk '" + sDiskName + "' restored from history (" + nChanges + " changes)");
+                if (DEBUG) {
+                    this.printf("disk \"%s\" restored from history (%d changes)\n", sDiskName, nChanges);
                 }
                 return;
             }
         }
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("disk '" + sDiskName + "' added to history (nothing to restore)");
+        if (DEBUG) {
+            this.printf("disk \"%s\" added to history (nothing to restore)\n", sDiskName);
         }
         this.aDiskHistory[i] = [sDiskName, sDiskPath, []];
     }
@@ -1218,14 +1218,14 @@ export default class DriveController extends Component {
         for (i = 0; i < this.aDiskHistory.length; i++) {
             if (this.aDiskHistory[i][1] == sDiskPath) {
                 this.aDiskHistory.splice(i, 1);
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage("disk '" + sDiskName + "' removed from history");
+                if (DEBUG) {
+                    this.printf("disk \"%s\" removed from history\n", sDiskName);
                 }
                 return;
             }
         }
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("unable to remove disk '" + sDiskName + "' from history (" + sDiskPath + ")");
+        if (DEBUG) {
+            this.printf("unable to remove disk \"%s\" from history (%s)\n", sDiskName, sDiskPath);
         }
     }
 
@@ -1243,8 +1243,8 @@ export default class DriveController extends Component {
         for (i = 0; i < this.aDiskHistory.length; i++) {
             if (this.aDiskHistory[i][1] == sDiskPath) {
                 this.aDiskHistory[i][2] = disk.save();
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage("disk '" + sDiskName + "' updated in history");
+                if (DEBUG) {
+                    this.printf("disk \"%s\" updated in history\n", sDiskName);
                 }
                 return;
             }
@@ -1255,8 +1255,8 @@ export default class DriveController extends Component {
          * unload, and then reload/remount.  And since unloadDrive's normal behavior is to call updateDiskHistory()
          * before unloading, the fact that the disk is no longer listed here can't be treated as an error.
          */
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("unable to update disk '" + sDiskName + "' in history (" + sDiskPath + ")");
+        if (DEBUG) {
+            this.printf("unable to update disk \"%s\" in history (%s)\n", sDiskName, sDiskPath);
         }
     }
 

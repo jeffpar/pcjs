@@ -350,7 +350,7 @@ export default class VideoX80 extends Component {
             this.bindings[sBinding] = control;
             if (this.container && this.container.doFullScreen) {
                 control.onclick = function onClickFullScreen() {
-                    if (DEBUG) video.printMessage("fullScreen()");
+                    if (DEBUG) video.printf("fullScreen()\n");
                     video.doFullScreen();
                 };
             } else {
@@ -720,7 +720,7 @@ export default class VideoX80 extends Component {
      */
     updateDimensions(nCols, nRows)
     {
-        this.printMessage("updateDimensions(" + nCols + "," + nRows + ")");
+        this.printf("updateDimensions(%d,%d)\n", nCols, nRows);
         this.nColsBuffer = nCols;
         /*
          * Even when the number of effective rows is 14 (or 15 counting the scroll line buffer), we want
@@ -746,7 +746,7 @@ export default class VideoX80 extends Component {
      */
     updateRate(nRate)
     {
-        this.printMessage("updateRate(" + nRate + ")");
+        this.printf("updateRate(%d)\n", nRate);
         this.rateMonitor = nRate;
     }
 
@@ -760,7 +760,7 @@ export default class VideoX80 extends Component {
      */
     updateScrollOffset(bScroll)
     {
-        this.printMessage("updateScrollOffset(" + bScroll + ")");
+        this.printf("updateScrollOffset(%s)\n", bScroll);
         if (this.bScrollOffset !== bScroll) {
             this.bScrollOffset = bScroll;
             /*
@@ -870,7 +870,7 @@ export default class VideoX80 extends Component {
                 this.canvasScreen.style.width = this.canvasScreen.style.height = "";
             }
         }
-        this.printMessage("notifyFullScreen(" + fFullScreen + ")");
+        this.printf("notifyFullScreen(%s)\n", fFullScreen);
     }
 
     /**

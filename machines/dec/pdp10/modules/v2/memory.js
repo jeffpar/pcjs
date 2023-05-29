@@ -301,8 +301,8 @@ export default class MemoryPDP10 {
      */
     printAddr(sMessage)
     {
-        if (DEBUG && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
-            this.dbg.printMessage(sMessage + ' ' + (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id), true);
+        if (DEBUG && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "%s %s\n", sMessage, (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id));
         }
     }
 
@@ -385,8 +385,8 @@ export default class MemoryPDP10 {
      */
     readNone(off, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY) /* && !off */) {
-            this.dbg.printMessage("attempt to read invalid address " + this.dbg.toStrBase(addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "attempt to read invalid address %s\n", this.dbg.toStrBase(addr));
         }
         this.bus.fault(addr);
         return PDP10.WORD_INVALID;
@@ -402,8 +402,8 @@ export default class MemoryPDP10 {
      */
     writeNone(v, off, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY) /* && !off */) {
-            this.dbg.printMessage("attempt to write " + this.dbg.toStrBase(v) + " to invalid addresses " + this.dbg.toStrBase(addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "attempt to write %s to invalid addresses %s\n", this.dbg.toStrBase(v), this.dbg.toStrBase(addr));
         }
         this.bus.fault(addr);
     }

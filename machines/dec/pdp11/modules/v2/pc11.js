@@ -429,7 +429,7 @@ export default class PC11 extends Component {
                 // this.printf(Messages.STATUS, "tape queued: %s\n", sTapeName);
                 if (fAutoMount) {
                     this.cAutoMount++;
-                    if (this.messageEnabled()) this.printMessage("auto-loading tape: " + sTapeName);
+                    this.printf("auto-loading tape \"%s\"\n", sTapeName);
                 }
                 if (this.load(sTapeName, sTapePath, nTapeTarget, file)) {
                     nResult++;
@@ -467,7 +467,7 @@ export default class PC11 extends Component {
 
         if (DEBUG) {
             var sMessage = 'load("' + sTapeName + '","' + sTapePath + '")';
-            this.printMessage(sMessage);
+            this.printf("%s\n", sMessage);
         }
 
         if (file) {
@@ -529,8 +529,8 @@ export default class PC11 extends Component {
             this.notice("Unable to load tape \"" + sTapeName + "\" (error " + nErrorCode + ": " + sURL + ")", fPrintOnly);
         }
         else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage('finishLoad("' + sTapePath + '")');
+            if (DEBUG) {
+                this.printf("finishLoad(\"%s\")\n", sTapePath);
             }
             Component.addMachineResource(this.idMachine, sURL, sTapeData);
             var resource = Web.parseMemoryResource(sURL, sTapeData);
@@ -808,7 +808,7 @@ export default class PC11 extends Component {
                      * the data assigned to PRB with 0xff.
                      */
                     this.regPRB = this.aTapeData[this.iTapeData] & 0xff;
-                    if (this.messageEnabled()) this.printMessage(this.type + ".advanceReader(" + this.iTapeData + "): " + Str.toHexByte(this.regPRB), true);
+                    this.printf("%s.advanceReader(%d): %#04x\n", this.type, this.iTapeData, this.regPRB);
                     this.iTapeData++;
                     this.displayProgress(this.iTapeData / this.aTapeData.length * 100);
                 }

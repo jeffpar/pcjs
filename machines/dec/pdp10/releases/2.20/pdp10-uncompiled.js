@@ -4284,7 +4284,7 @@ class Component {
     }
 
     /**
-     * status(format, ...args) [DEPRECATED: Use printf(Messages.STATUS, format, ...args) instead]
+     * status(format, ...args) [DEPRECATED: use printf(Messages.STATUS, format, ...args) instead]
      *
      * status() is a print function that also includes information about the component (ie, the component type),
      * which is why there is no corresponding Component.status() function.
@@ -4568,8 +4568,12 @@ class Component {
      */
     messageEnabled(bitsMessage = 0)
     {
-        bitsMessage = bitsMessage || this.bitsMessage;
+        /*
+         * It's important to subtract Messages.ADDRESS from bitsMessage before testing for Messages.DEFAULT, because
+         * if Messages.ADDRESS was the ONLY bit specified, we still want to default to the component's message category.
+         */
         if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
+        bitsMessage = bitsMessage || this.bitsMessage;
         if (!bitsMessage || this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
             return true;
         }
@@ -4615,7 +4619,7 @@ class Component {
     }
 
     /**
-     * printMessage(sMessage, bitsMessage, fAddress)
+     * printMessage(sMessage, bitsMessage, fAddress) [DEPRECATED: use printf(bitsMessage, ...) instead]
      *
      * If bitsMessage is not specified, the component's Messages category is used, and if bitsMessage is true,
      * the message is displayed regardless.
@@ -8236,8 +8240,8 @@ class BusPDP10 extends Component {
     {
         this.fFault = true;
         if (!this.nDisableFaults) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.FAULT)) {
-                this.dbg.printMessage("memory fault on " + this.dbg.toStrBase(addr), true, true);
+            if (DEBUGGER && this.dbg) {
+                this.dbg.printf(Messages.FAULT + Messages.ADDRESS, "memory fault on %s\n", this.dbg.toStrBase(addr));
             }
             this.cpu.haltCPU();
         }
@@ -8708,8 +8712,8 @@ class MemoryPDP10 {
      */
     printAddr(sMessage)
     {
-        if (DEBUG && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
-            this.dbg.printMessage(sMessage + ' ' + (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id), true);
+        if (DEBUG && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "%s %s\n", sMessage, (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id));
         }
     }
 
@@ -8792,8 +8796,8 @@ class MemoryPDP10 {
      */
     readNone(off, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY) /* && !off */) {
-            this.dbg.printMessage("attempt to read invalid address " + this.dbg.toStrBase(addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "attempt to read invalid address %s\n", this.dbg.toStrBase(addr));
         }
         this.bus.fault(addr);
         return PDP10.WORD_INVALID;
@@ -8809,8 +8813,8 @@ class MemoryPDP10 {
      */
     writeNone(v, off, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY) /* && !off */) {
-            this.dbg.printMessage("attempt to write " + this.dbg.toStrBase(v) + " to invalid addresses " + this.dbg.toStrBase(addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "attempt to write %s to invalid addresses %s\n", this.dbg.toStrBase(v), this.dbg.toStrBase(addr));
         }
         this.bus.fault(addr);
     }
@@ -10734,9 +10738,7 @@ class CPUStatePDP10 extends CPUPDP10 {
     {
         if (irq) {
             this.insertIRQ(irq);
-            if (irq.message && this.messageEnabled(irq.message | Messages.INT)) {
-                this.printMessage("setIRQ(vector=" + Str.toOct(irq.vector) + ",priority=" + irq.priority + ")", true, true);
-            }
+            this.printf(irq.message + Messages.INT + Messages.ADDRESS, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
         }
     }
 
@@ -10750,9 +10752,7 @@ class CPUStatePDP10 extends CPUPDP10 {
     {
         if (irq) {
             this.removeIRQ(irq);
-            if (irq.message && this.messageEnabled(irq.message | Messages.INT)) {
-                this.printMessage("clearIRQ(vector=" + Str.toOct(irq.vector) + ",priority=" + irq.priority + ")", true, true);
-            }
+            this.printf(irq.message + Messages.INT + Messages.ADDRESS, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
         }
     }
 
@@ -20588,7 +20588,7 @@ class DebuggerPDP10 extends DbgLib {
     undefinedInstruction(opCode)
     {
         if (this.messageEnabled(Messages.CPU)) {
-            this.printMessage("undefined opcode " + this.toStrBase(opCode), true, true);
+            this.printf(Messages.CPU + Messages.ADDRESS, "undefined opcode %s\n", this.toStrBase(opCode));
             return this.stopInstruction();  // allow the caller to step over it if they really want a trap generated
         }
         return false;
@@ -24092,7 +24092,7 @@ class SerialPortPDP10 extends Component {
              * the data assigned to RBUF with 0xff.
              */
             b = this.abReceive.shift() & 0xff;
-            this.printMessage("receiveByte(" + Str.toHexByte(b) + ")");
+            this.printf("receiveByte(%#04x)\n", b);
             if (this.fUpperCase) {
                 /*
                  * Automatically transform lower-case ASCII codes to upper-case; fUpperCase should
@@ -24144,7 +24144,7 @@ class SerialPortPDP10 extends Component {
     {
         var fTransmitted = false;
 
-        if (MAXDEBUG) this.printMessage("transmitByte(" + Str.toHexByte(b) + ")");
+        if (MAXDEBUG) this.printf("transmitByte(%#04x)\n", b);
 
         if (this.sendData) {
             if (this.sendData.call(this.connection, b)) {
@@ -26638,8 +26638,8 @@ class ComputerPDP10 extends Component {
         if (!nErrorCode) {
             this.sStateData = sStateData;
             this.fStateData = true;
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("loaded state file " + sURL.replace(this.sUserID || "xxx", "xxx"));
+            if (DEBUG) {
+                this.printf("loaded state file %s\n", sURL.replace(this.sUserID || "xxx", "xxx"));
             }
         } else {
             this.sResumePath = null;
@@ -26680,7 +26680,7 @@ class ComputerPDP10 extends Component {
                 return;
             }
         }
-        if (DEBUG && this.messageEnabled()) this.printMessage("ComputerPDP10.wait(ready)");
+        if (DEBUG) this.printf("ComputerPDP10.wait(ready)\n");
         fn.call(this, parms);
     }
 
@@ -26705,8 +26705,8 @@ class ComputerPDP10 extends Component {
                 fValid = false;
                 if (!stateComputer) stateValidate.clear();
             } else {
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage("Last state: " + sTimestampComputer + " (validate: " + sTimestampValidate + ")");
+                if (DEBUG) {
+                    this.printf("Last state: %s (validate: %s)\n", sTimestampComputer, sTimestampValidate);
                 }
             }
         }
@@ -26727,8 +26727,8 @@ class ComputerPDP10 extends Component {
             resume = this.resume || (this.sStateData? ComputerPDP10.RESUME_AUTO : ComputerPDP10.RESUME_NONE);
         }
 
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("ComputerPDP10.powerOn(" + (resume == ComputerPDP10.RESUME_REPOWER ? "repower" : (resume ? "resume" : "")) + ")");
+        if (DEBUG) {
+            this.printf("ComputerPDP10.powerOn(%s)\n", (resume == ComputerPDP10.RESUME_REPOWER ? "repower" : (resume ? "resume" : "")));
         }
 
         if (this.nPowerChange) {
@@ -26978,8 +26978,8 @@ class ComputerPDP10 extends Component {
         var fRepower = (aParms[1] < 0);
         var fRestore = aParms[2];
 
-        if (DEBUG && this.flags.powered && this.messageEnabled()) {
-            this.printMessage("ComputerPDP10.donePowerOn(): redundant");
+        if (DEBUG && this.flags.powered) {
+            this.printf("ComputerPDP10.donePowerOn(): redundant\n");
         }
 
         this.fInitialized = true;
@@ -27100,8 +27100,8 @@ class ComputerPDP10 extends Component {
         var data;
         var sState = "none";
 
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("ComputerPDP10.powerOff(" + (fSave ? "save" : "nosave") + (fShutdown ? ",shutdown" : "") + ")");
+        if (DEBUG) {
+            this.printf("ComputerPDP10.powerOff(%s%s)\n", (fSave ? "save" : "nosave"), (fShutdown ? ",shutdown" : ""));
         }
 
         if (this.nPowerChange) {
@@ -27227,18 +27227,18 @@ class ComputerPDP10 extends Component {
     {
         this.flags.reset = true;
         if (this.bus && this.bus.reset) {
-            this.printMessage("Resetting " + this.bus.type);
+            this.printf("Resetting %s\n", this.bus.type);
             this.bus.reset();
         }
         if (this.cpu && this.cpu.reset) {
-            this.printMessage("Resetting " + this.cpu.type);
+            this.printf("Resetting %s\n", this.cpu.type);
             this.cpu.reset();
         }
         var aComponents = Component.getComponents(this.id);
         for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
             var component = aComponents[iComponent];
             if (component !== this && component !== this.bus && component !== this.cpu && component.reset) {
-                this.printMessage("Resetting " + component.type);
+                this.printf("Resetting %s\n", component.type);
                 component.reset();
             }
         }
@@ -27482,7 +27482,7 @@ class ComputerPDP10 extends Component {
     {
         this.sUserID = null;
         var fMessages = DEBUG && this.messageEnabled();
-        if (fMessages) this.printMessage("verifyUserID(" + sUserID + ")");
+        if (fMessages) this.printf("verifyUserID(%s)\n", sUserID);
         var sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
         var response = Web.getResource(sRequest);
         var nErrorCode = response[0];
@@ -27492,16 +27492,16 @@ class ComputerPDP10 extends Component {
                 response = eval("(" + sResponse + ")");
                 if (response.code && response.code == UserAPI.CODE.OK) {
                     Web.setLocalStorageItem(ComputerPDP10.STATE_USERID, response.data);
-                    if (fMessages) this.printMessage(ComputerPDP10.STATE_USERID + " updated: " + response.data);
+                    if (fMessages) this.printf("%s updated: %s\n", ComputerPDP10.STATE_USERID, response.data);
                     this.sUserID = response.data;
                 } else {
-                    if (fMessages) this.printMessage(response.code + ": " + response.data);
+                    if (fMessages) this.printf("%s: %s\n", response.code, response.data);
                 }
             } catch (e) {
                 Component.error(e.message + " (" + sResponse + ")");
             }
         } else {
-            if (fMessages) this.printMessage("invalid response (error " + nErrorCode + ")");
+            if (fMessages) this.printf("invalid response (error %d)\n", nErrorCode);
         }
         return this.sUserID;
     }
@@ -27516,13 +27516,13 @@ class ComputerPDP10 extends Component {
     {
         var sStatePath = null;
         if (this.sUserID) {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage(ComputerPDP10.STATE_USERID + " for load: " + this.sUserID);
+            if (DEBUG) {
+                this.printf("%s for load: %s\n", ComputerPDP10.STATE_USERID, this.sUserID);
             }
             sStatePath = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, APPVERSION);
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage(ComputerPDP10.STATE_USERID + " unavailable");
+            if (DEBUG) {
+                this.printf("%s unavailable\n", ComputerPDP10.STATE_USERID);
             }
         }
         return sStatePath;
@@ -27544,8 +27544,8 @@ class ComputerPDP10 extends Component {
          * tend to blow off alerts() and the like when closing down.
          */
         if (sState) {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("size of server state: " + sState.length + " bytes");
+            if (DEBUG) {
+                this.printf("size of server state: %d bytes\n", sState.length);
             }
             var response = this.storeServerState(sUserID, sState, true);
             if (response && response[UserAPI.RES.CODE] == UserAPI.CODE.OK) {
@@ -27561,8 +27561,8 @@ class ComputerPDP10 extends Component {
                 this.resetUserID();
             }
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("no state to store");
+            if (DEBUG) {
+                this.printf("no state to store\n");
             }
         }
     }
@@ -27578,8 +27578,8 @@ class ComputerPDP10 extends Component {
      */
     storeServerState(sUserID, sState, fSync)
     {
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage(ComputerPDP10.STATE_USERID + " for store: " + sUserID);
+        if (DEBUG) {
+            this.printf("%s for store: %s\n", ComputerPDP10.STATE_USERID, sUserID);
         }
         /*
          * TODO: Determine whether or not any browsers cancel our request if we're called during a browser "shutdown" event,
@@ -27604,7 +27604,7 @@ class ComputerPDP10 extends Component {
                 }
                 sResponse = '{"' + UserAPI.RES.CODE + '":' + response[1] + ',"' + UserAPI.RES.DATA + '":"' + sResponse + '"}';
             }
-            if (DEBUG && this.messageEnabled()) this.printMessage(sResponse);
+            if (DEBUG) this.printf("%s\n", sResponse);
             return JSON.parse(sResponse);
         }
         return null;
@@ -27770,8 +27770,8 @@ class ComputerPDP10 extends Component {
                  */
                 var computer = new ComputerPDP10(parmsComputer, parmsMachine, true);
 
-                if (DEBUG && computer.messageEnabled()) {
-                    computer.printMessage("onInit(" + computer.flags.powered + ")");
+                if (DEBUG) {
+                    computer.printf("onInit(%b)\n", computer.flags.powered);
                 }
 
                 /*
@@ -27809,8 +27809,8 @@ class ComputerPDP10 extends Component {
 
                 computer.flags.unloading = false;
 
-                if (DEBUG && computer.messageEnabled()) {
-                    computer.printMessage("onShow(" + computer.fInitialized + "," + computer.flags.powered + ")");
+                if (DEBUG) {
+                    computer.printf("onShow(%b,%b)\n", computer.fInitialized, computer.flags.powered);
                 }
 
                 /*
@@ -27868,8 +27868,8 @@ class ComputerPDP10 extends Component {
                  */
                 computer.flags.unloading = true;
 
-                if (DEBUG && computer.messageEnabled()) {
-                    computer.printMessage("onExit(" + computer.flags.powered + ")");
+                if (DEBUG) {
+                    computer.printf("onExit(%b)\n", computer.flags.powered);
                 }
 
                 if (computer.flags.powered) {

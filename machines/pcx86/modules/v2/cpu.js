@@ -916,12 +916,12 @@ export default class CPULib extends Component {
             msRemainsThisRun = 0;
         }
 
-        if (DEBUG && this.messageEnabled(Messages.CPU)) {
+        if (DEBUG) {
             /*
              * Every time the browser gives us another chance to run, we want to display our targets for that run
              * here, followed by what we accomplished in that run.
              */
-            this.printMessage(Str.sprintf("%3dms run  %3dms wait  %6dcy  %6.2fmhz  %6dms total  %8dcy total  %6.2fmhz total",
+            this.printf(Messages.CPU, "%3dms run  %3dms wait  %6dcy  %6.2fmhz  %6dms total  %8dcy total  %6.2fmhz total",
                 msElapsedThisRun,
                 msRemainsThisRun,
                 this.nCyclesThisRun,
@@ -929,7 +929,7 @@ export default class CPULib extends Component {
                 msElapsed,
                 nCycles,
                 this.mhzCurrent
-            ));
+            );
         }
 
         this.msEndThisRun += msRemainsThisRun;
@@ -1142,15 +1142,15 @@ export default class CPULib extends Component {
             if (timer[1] < 0) continue;
             timer[1] -= nCycles;
             if (timer[1] <= 0) {
-                if (DEBUG && this.messageEnabled(Messages.CPU + Messages.TIMER)) {      // CPU TIMER message (as opposed to CHIPSET TIMER message)
-                    this.printMessage("updateTimer(" + nCycles + "): firing " + timer[0] + " with only " + (timer[1] + nCycles) + " cycles left");
+                if (DEBUG) {
+                    this.printf(Messages.CPU + Messages.TIMER, "updateTimer(%d): firing %s with only %d cycles left\n", nCycles, timer[0], (timer[1] + nCycles));
                 }
                 timer[1] = -1;      // zero is technically an "active" value, so ensure the timer is dormant now
                 timer[3]();         // safe to invoke the callback function now
                 if (timer[2]) {
                     this.setTimer(iTimer, timer[2]);
-                    if (DEBUG && this.messageEnabled(Messages.CPU + Messages.TIMER)) {  // CPU TIMER message (as opposed to CHIPSET TIMER message)
-                        this.printMessage("updateTimer(" + nCycles + "): rearming " + timer[0] + " for " + timer[2] + "ms (" + timer[1] + " cycles)");
+                    if (DEBUG) {
+                        this.printf(Messages.CPU + Messages.TIMER, "updateTimer(%d): rearming %s for %dms (%d cycles)\n", nCycles, timer[0], timer[2], timer[1]);
                     }
                 }
             }

@@ -618,9 +618,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
     {
         if (irq) {
             this.insertIRQ(irq);
-            if (irq.message && this.messageEnabled(irq.message | Messages.INT)) {
-                this.printMessage("setIRQ(vector=" + Str.toOct(irq.vector) + ",priority=" + irq.priority + ")", true, true);
-            }
+            this.printf(irq.message + Messages.INT + Messages.ADDRESS, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
         }
     }
 
@@ -634,9 +632,7 @@ export default class CPUStatePDP10 extends CPUPDP10 {
     {
         if (irq) {
             this.removeIRQ(irq);
-            if (irq.message && this.messageEnabled(irq.message | Messages.INT)) {
-                this.printMessage("clearIRQ(vector=" + Str.toOct(irq.vector) + ",priority=" + irq.priority + ")", true, true);
-            }
+            this.printf(irq.message + Messages.INT + Messages.ADDRESS, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
         }
     }
 

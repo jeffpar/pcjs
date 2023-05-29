@@ -552,7 +552,7 @@ export default class SerialPortX80 extends Component {
     receiveByte(b)
     {
         if (MAXDEBUG) this.echoByte(b);
-        this.printMessage("receiveByte(" + Str.toHexByte(b) + "), status=" + Str.toHexByte(this.bStatus));
+        this.printf("receiveByte(%#04x), status=%#04x\n", b, this.bStatus);
         if (!this.fAutoStop && !(this.bStatus & SerialPortX80.UART8251.STATUS.RECV_FULL)) {
             this.bDataIn = b;
             this.bStatus |= SerialPortX80.UART8251.STATUS.RECV_FULL;
@@ -622,7 +622,7 @@ export default class SerialPortX80 extends Component {
     {
         var fTransmitted = false;
 
-        this.printMessage("transmitByte(" + Str.toHexByte(b) + ")");
+        this.printf("transmitByte(%#04x)\n", b);
 
         if (this.fAutoXOFF) {
             if (b == 0x13) {        // XOFF

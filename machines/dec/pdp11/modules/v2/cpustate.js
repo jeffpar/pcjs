@@ -1076,9 +1076,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
     {
         if (irq) {
             this.insertIRQ(irq);
-            if (irq.message && this.messageEnabled(irq.message | Messages.INT)) {
-                this.printMessage("setIRQ(vector=" + Str.toOct(irq.vector) + ",priority=" + irq.priority + ")", true, true);
-            }
+            this.printf(irq.message + Messages.INT + Messages.ADDRESS, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
         }
     }
 
@@ -1092,9 +1090,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
     {
         if (irq) {
             this.removeIRQ(irq);
-            if (irq.message && this.messageEnabled(irq.message | Messages.INT)) {
-                this.printMessage("clearIRQ(vector=" + Str.toOct(irq.vector) + ",priority=" + irq.priority + ")", true, true);
-            }
+            this.printf(irq.message + Messages.INT + Messages.ADDRESS, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
         }
     }
 
@@ -1574,7 +1570,7 @@ export default class CPUStatePDP11 extends CPUPDP11 {
         if (DEBUG && this.dbg) {
             if (this.messageEnabled(Messages.TRAP)) {
                 var sReason = reason < 0? PDP11.REASONS[-reason] : this.dbg.toStrBase(reason);
-                this.printMessage("trap to vector " + this.dbg.toStrBase(vector, 8) + " (" + sReason + ")", Messages.TRAP, true);
+                this.printf(Messages.TRAP + Messages.ADDRESS, "trap to vector %s (%s)\n", this.dbg.toStrBase(vector, 8), sReason);
             }
         }
 

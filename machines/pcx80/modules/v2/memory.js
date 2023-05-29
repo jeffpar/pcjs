@@ -382,8 +382,8 @@ export default class MemoryX80 {
      */
     printAddr(sMessage)
     {
-        if (DEBUG && this.dbg && this.dbg.messageEnabled(Messages.MEM)) {
-            this.dbg.printMessage(sMessage + ' ' + (this.addr != null? ('%' + Str.toHex(this.addr)) : '#' + this.id), true);
+        if (DEBUG && this.dbg) {
+            this.dbg.printf(Messages.MEM, "%s %d\n", sMessage, (this.addr != null? ('%' + Str.toHex(this.addr)) : '#' + this.id));
         }
     }
 

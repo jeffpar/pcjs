@@ -479,7 +479,7 @@ export default class Mouse extends Component {
             default:
                 break;
             }
-            this.printMessage(sDiag + ": ignored");
+            this.printf("%s: ignored\n", sDiag);
         }
     }
 
@@ -500,15 +500,13 @@ export default class Mouse extends Component {
              * rounds negative numbers toward +infinity if the fraction is exactly 0.5.  All positive numbers are
              * rounded correctly, so we convert the value to positive and restore its sign afterward.  Additionally,
              * if the scaling factor turns a non-zero value into zero, we restore the value to its smallest legal
-             * non-zero value (thanks to Math.sign() again).  This ensures that tiniest movement of the physical
+             * non-zero value (thanks to Math.sign() again).  This ensures that the tiniest movement of the physical
              * mouse always results in at least the tiniest movement of the virtual mouse.
              */
             let xScaled = (Math.round(Math.abs(xDelta) * this.scale) * Math.sign(xDelta)) || Math.sign(xDelta);
             let yScaled = (Math.round(Math.abs(yDelta) * this.scale) * Math.sign(yDelta)) || Math.sign(yDelta);
             if (xScaled || yScaled) {
-                if (this.messageEnabled(Messages.MOUSE)) {
-                    this.printMessage("moveMouse(" + xScaled + "," + yScaled + ")");
-                }
+                this.printf(Messages.MOUSE, "moveMouse(%s,%s)\n", xScaled, yScaled);
                 /*
                  * As sendPacket() indicates, any x and y coordinates we supply are for diagnostic purposes only.
                  * sendPacket() only cares about the xDelta and yDelta properties we provide above, which it then zeroes
@@ -543,9 +541,7 @@ export default class Mouse extends Component {
         let b1 = 0x40 | (this.fButton1? 0x20 : 0) | (this.fButton2? 0x10 : 0) | ((this.yDelta & 0xC0) >> 4) | ((this.xDelta & 0xC0) >> 6);
         let b2 = this.xDelta & 0x3F;
         let b3 = this.yDelta & 0x3F;
-        if (this.messageEnabled(Messages.SERIAL)) {
-            this.printMessage((sDiag? (sDiag + ": ") : "") + (yDiag !== undefined? ("mouse (" + xDiag + "," + yDiag + "): ") : "") + "serial packet [" + Str.toHexByte(b1) + "," + Str.toHexByte(b2) + "," + Str.toHexByte(b3) + "]", 0, true);
-        }
+        this.printf(Messages.SERIAL + Messages.ADDRESS, "%s%sserial packet [%#04x,%#04x,%#04x]\n", (sDiag? (sDiag + ": ") : ""), (yDiag !== undefined? ("mouse (" + xDiag + "," + yDiag + "): ") : ""), b1, b2, b3);
         this.componentDevice.receiveData([b1, b2, b3]);
         this.xDelta = this.yDelta = 0;
     }
@@ -576,11 +572,11 @@ export default class Mouse extends Component {
                 let fIdentify = false;
                 if (!(this.pins & RS232.RTS.MASK)) {
                     this.reset();
-                    this.printMessage("serial mouse reset");
+                    this.printf("serial mouse reset\n");
                     fIdentify = true;
                 }
                 if (!(this.pins & RS232.DTR.MASK)) {
-                    this.printMessage("serial mouse ID requested");
+                    this.printf("serial mouse ID requested\n");
                     fIdentify = true;
                 }
                 if (fIdentify) {
@@ -605,7 +601,7 @@ export default class Mouse extends Component {
                      * I'm calling this good enough for now.
                      */
                     this.componentDevice.receiveData([Mouse.SERIAL.ID, Mouse.SERIAL.ID]);
-                    this.printMessage("serial mouse ID sent");
+                    this.printf("serial mouse ID sent\n");
                 }
                 this.captureAll();
                 this.setActive(fActive);
@@ -624,7 +620,7 @@ export default class Mouse extends Component {
                  * a mouse device that's still powered may still send event data to the serial port, and if there was software
                  * polling the serial port, it might expect to see that data.  Unlikely, but not impossible.
                  */
-                this.printMessage("serial mouse inactive");
+                this.printf("serial mouse inactive\n");
                 this.releaseAll();
                 this.setActive(fActive);
             }

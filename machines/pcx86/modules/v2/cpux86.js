@@ -1748,8 +1748,8 @@ export default class CPUx86 extends CPULib {
         if (fV86 === undefined) {
             fV86 = this.isV86Mode();
         }
-        if (DEBUG && (fProt != this.isProtMode() || fV86 != this.isV86Mode()) && this.messageEnabled()) {
-            this.printMessage("CPU switching to " + (fProt? (fV86? "v86" : "protected") : "real") + "-mode", this.bitsMessage, true);
+        if (DEBUG && (fProt != this.isProtMode() || fV86 != this.isV86Mode())) {
+            this.printf(Messages.ADDRESS, "CPU switching to %s-mode\n", (fProt? (fV86? "v86" : "protected") : "real"));
         }
         this.aOpGrp6 = (fProt && !fV86? X86.aOpGrp6Prot : X86.aOpGrp6Real);
         this.segCS.updateMode(false, fProt, fV86);
@@ -3007,7 +3007,7 @@ export default class CPUx86 extends CPULib {
             }
         }
         if (bitsPorts) {
-            if (this.messageEnabled(Messages.IOPM)) this.printMessage("checkIOPM(" + Str.toHexWord(port) + "," + nPorts + "," + (fInput? "input" : "output") + "): trapped", true, true);
+            this.printf(Messages.IOPM + Messages.ADDRESS, "checkIOPM(%#06x,%d,%s): trapped\n", port, nPorts, (fInput? "input" : "output"));
             X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
             return false;
         }

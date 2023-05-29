@@ -298,11 +298,11 @@ export default class RAMPDP11 extends Component {
                 }
                 var offBlock = off;
                 if (w != 0x0001) {
-                    this.printMessage("invalid signature (" + Str.toHexWord(w) + ") at offset " + Str.toHexWord(offBlock), Messages.PAPER);
+                    this.printf(Messages.PAPER, "invalid signature (%#06x) at offset %#06x\n", w, offBlock);
                     break;
                 }
                 if (off + 6 >= aBytes.length) {
-                    this.printMessage("invalid block at offset " + Str.toHexWord(offBlock), Messages.PAPER);
+                    this.printf(Messages.PAPER, "invalid block at offset %#06x\n", offBlock);
                     break;
                 }
                 off += 2;
@@ -316,12 +316,12 @@ export default class RAMPDP11 extends Component {
                     len--;
                 }
                 if (len != 0 || off >= aBytes.length) {
-                    this.printMessage("insufficient data for block at offset " + Str.toHexWord(offBlock), Messages.PAPER);
+                    this.printf(Messages.PAPER, "insufficient data for block at offset %#06x\n", offBlock);
                     break;
                 }
                 checksum += aBytes[off++] & 0xff;
                 if (checksum & 0xff) {
-                    this.printMessage("invalid checksum (" + Str.toHexByte(checksum) + ") for block at offset " + Str.toHexWord(offBlock), Messages.PAPER);
+                    this.printf(Messages.PAPER, "invalid checksum (%#04x) for block at offset %#06x\n", checksum, offBlock);
                     break;
                 }
                 if (!cbData) {
@@ -330,9 +330,9 @@ export default class RAMPDP11 extends Component {
                     } else {
                         if (addrExec == null) addrExec = addr;
                     }
-                    if (addrExec != null) this.printMessage("starting address: " + Str.toHexWord(addrExec), Messages.PAPER);
+                    if (addrExec != null) this.printf(Messages.PAPER, "starting address: %#06x\n", addrExec);
                 } else {
-                    this.printMessage("loading " + Str.toHexWord(cbData) + " bytes at " + Str.toHexWord(addr) + "-" + Str.toHexWord(addr + cbData), Messages.PAPER);
+                    this.printf(Messages.PAPER, "loading %#06x bytes at %#06x-%%#06x\n", cbData, addr, addr + cbData);
                     while (cbData--) {
                         this.bus.setByteDirect(addr++, aBytes[offData++] & 0xff);
                     }

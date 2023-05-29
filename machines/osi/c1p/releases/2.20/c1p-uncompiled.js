@@ -3925,7 +3925,7 @@ class Component {
     }
 
     /**
-     * status(format, ...args) [DEPRECATED: Use printf(Messages.STATUS, format, ...args) instead]
+     * status(format, ...args) [DEPRECATED: use printf(Messages.STATUS, format, ...args) instead]
      *
      * status() is a print function that also includes information about the component (ie, the component type),
      * which is why there is no corresponding Component.status() function.
@@ -4209,8 +4209,12 @@ class Component {
      */
     messageEnabled(bitsMessage = 0)
     {
-        bitsMessage = bitsMessage || this.bitsMessage;
+        /*
+         * It's important to subtract Messages.ADDRESS from bitsMessage before testing for Messages.DEFAULT, because
+         * if Messages.ADDRESS was the ONLY bit specified, we still want to default to the component's message category.
+         */
         if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
+        bitsMessage = bitsMessage || this.bitsMessage;
         if (!bitsMessage || this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
             return true;
         }
@@ -4256,7 +4260,7 @@ class Component {
     }
 
     /**
-     * printMessage(sMessage, bitsMessage, fAddress)
+     * printMessage(sMessage, bitsMessage, fAddress) [DEPRECATED: use printf(bitsMessage, ...) instead]
      *
      * If bitsMessage is not specified, the component's Messages category is used, and if bitsMessage is true,
      * the message is displayed regardless.

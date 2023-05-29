@@ -4523,7 +4523,7 @@ class Component {
     }
 
     /**
-     * status(format, ...args) [DEPRECATED: Use printf(Messages.STATUS, format, ...args) instead]
+     * status(format, ...args) [DEPRECATED: use printf(Messages.STATUS, format, ...args) instead]
      *
      * status() is a print function that also includes information about the component (ie, the component type),
      * which is why there is no corresponding Component.status() function.
@@ -4807,8 +4807,12 @@ class Component {
      */
     messageEnabled(bitsMessage = 0)
     {
-        bitsMessage = bitsMessage || this.bitsMessage;
+        /*
+         * It's important to subtract Messages.ADDRESS from bitsMessage before testing for Messages.DEFAULT, because
+         * if Messages.ADDRESS was the ONLY bit specified, we still want to default to the component's message category.
+         */
         if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
+        bitsMessage = bitsMessage || this.bitsMessage;
         if (!bitsMessage || this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
             return true;
         }
@@ -4854,7 +4858,7 @@ class Component {
     }
 
     /**
-     * printMessage(sMessage, bitsMessage, fAddress)
+     * printMessage(sMessage, bitsMessage, fAddress) [DEPRECATED: use printf(bitsMessage, ...) instead]
      *
      * If bitsMessage is not specified, the component's Messages category is used, and if bitsMessage is true,
      * the message is displayed regardless.
@@ -14321,12 +14325,12 @@ class CPULib extends Component {
             msRemainsThisRun = 0;
         }
 
-        if (DEBUG && this.messageEnabled(Messages.CPU)) {
+        if (DEBUG) {
             /*
              * Every time the browser gives us another chance to run, we want to display our targets for that run
              * here, followed by what we accomplished in that run.
              */
-            this.printMessage(Str.sprintf("%3dms run  %3dms wait  %6dcy  %6.2fmhz  %6dms total  %8dcy total  %6.2fmhz total",
+            this.printf(Messages.CPU, "%3dms run  %3dms wait  %6dcy  %6.2fmhz  %6dms total  %8dcy total  %6.2fmhz total",
                 msElapsedThisRun,
                 msRemainsThisRun,
                 this.nCyclesThisRun,
@@ -14334,7 +14338,7 @@ class CPULib extends Component {
                 msElapsed,
                 nCycles,
                 this.mhzCurrent
-            ));
+            );
         }
 
         this.msEndThisRun += msRemainsThisRun;
@@ -14547,15 +14551,15 @@ class CPULib extends Component {
             if (timer[1] < 0) continue;
             timer[1] -= nCycles;
             if (timer[1] <= 0) {
-                if (DEBUG && this.messageEnabled(Messages.CPU + Messages.TIMER)) {      // CPU TIMER message (as opposed to CHIPSET TIMER message)
-                    this.printMessage("updateTimer(" + nCycles + "): firing " + timer[0] + " with only " + (timer[1] + nCycles) + " cycles left");
+                if (DEBUG) {
+                    this.printf(Messages.CPU + Messages.TIMER, "updateTimer(%d): firing %s with only %d cycles left\n", nCycles, timer[0], (timer[1] + nCycles));
                 }
                 timer[1] = -1;      // zero is technically an "active" value, so ensure the timer is dormant now
                 timer[3]();         // safe to invoke the callback function now
                 if (timer[2]) {
                     this.setTimer(iTimer, timer[2]);
-                    if (DEBUG && this.messageEnabled(Messages.CPU + Messages.TIMER)) {  // CPU TIMER message (as opposed to CHIPSET TIMER message)
-                        this.printMessage("updateTimer(" + nCycles + "): rearming " + timer[0] + " for " + timer[2] + "ms (" + timer[1] + " cycles)");
+                    if (DEBUG) {
+                        this.printf(Messages.CPU + Messages.TIMER, "updateTimer(%d): rearming %s for %dms (%d cycles)\n", nCycles, timer[0], timer[2], timer[1]);
                     }
                 }
             }
@@ -16582,8 +16586,8 @@ class CPUx86 extends CPULib {
         if (fV86 === undefined) {
             fV86 = this.isV86Mode();
         }
-        if (DEBUG && (fProt != this.isProtMode() || fV86 != this.isV86Mode()) && this.messageEnabled()) {
-            this.printMessage("CPU switching to " + (fProt? (fV86? "v86" : "protected") : "real") + "-mode", this.bitsMessage, true);
+        if (DEBUG && (fProt != this.isProtMode() || fV86 != this.isV86Mode())) {
+            this.printf(Messages.ADDRESS, "CPU switching to %s-mode\n", (fProt? (fV86? "v86" : "protected") : "real"));
         }
         this.aOpGrp6 = (fProt && !fV86? X86.aOpGrp6Prot : X86.aOpGrp6Real);
         this.segCS.updateMode(false, fProt, fV86);
@@ -17841,7 +17845,7 @@ class CPUx86 extends CPULib {
             }
         }
         if (bitsPorts) {
-            if (this.messageEnabled(Messages.IOPM)) this.printMessage("checkIOPM(" + Str.toHexWord(port) + "," + nPorts + "," + (fInput? "input" : "output") + "): trapped", true, true);
+            this.printf(Messages.IOPM + Messages.ADDRESS, "checkIOPM(%#06x,%d,%s): trapped\n", port, nPorts, (fInput? "input" : "output"));
             X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
             return false;
         }
@@ -28297,7 +28301,7 @@ X86.helpINT = function(nIDT, nError, nCycles)
             case 0xCC:
                 if (DEBUGGER && this.dbg && this.flags.running) {
                     this.getIPByte();
-                    this.printMessage("debugger halting on INT 0x06,0xCC", DEBUGGER || this.bitsMessage);
+                    this.printf("debugger halting on INT 0x06,0xCC\n");
                     this.dbg.stopCPU();
                     return;
                 }
@@ -28798,10 +28802,11 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
 
         let fRunning = this.flags.running;
         let sMessage = "Fault " + Str.toHexByte(nFault) + (nError != null? " (" + Str.toHexWord(nError) + ")" : "") + " on opcode " + Str.toHexByte(bOpcode);
-        if (fHalt && fRunning) sMessage += " (blocked)";
-
+        if (fHalt) {
+            if (fRunning) sMessage += " (blocked)";
+        }
         if (DEBUGGER && this.dbg) {
-            this.printMessage(sMessage, fHalt || bitsMessage, true);
+            this.printf((fHalt? Messages.PROGRESS : bitsMessage) + Messages.ADDRESS, "%s\n", sMessage);
             if (fHalt) {
                 /*
                  * By setting fHalt to fRunning (which is true while running but false while single-stepping),
@@ -32897,7 +32902,7 @@ X86.opADDmb = function()
      * because its trace ("t") command doesn't "run" the CPU; it merely "steps" the CPU.
      */
     if (DEBUG && !this.bModRM && this.flags.running) {
-        this.printMessage("suspicious opcode: 0x00 0x00", DEBUGGER || this.bitsMessage);
+        this.printf("suspicious opcode (0x00,0x00)\n");
         if (DEBUGGER && this.dbg) this.dbg.stopCPU();
     }
 };
@@ -35383,7 +35388,7 @@ X86.opPUSHF = function()
     let regPS = this.getPS();
     if (I386) {
         if ((regPS & X86.PS.VM) && this.nIOPL < 3) {
-            if (DEBUG) this.printMessage("PUSHF in v86-mode (IOPL < 3)", this.bitsMessage, true);
+            if (DEBUG) this.printf(Messages.ADDRESS, "PUSHF in v86-mode (IOPL < 3)\n");
             X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
             return;
         }
@@ -35418,7 +35423,7 @@ X86.opPOPF = function()
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
-        if (DEBUG) this.printMessage("POPF in v86-mode (IOPL < 3)", this.bitsMessage, true);
+        if (DEBUG) this.printf(Messages.ADDRESS, "POPF in v86-mode (IOPL < 3)\n");
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
@@ -36354,7 +36359,7 @@ X86.opINT3 = function()
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
-        if (DEBUG) this.printMessage("INT 0x03 in v86-mode (IOPL < 3)", this.bitsMessage, true);
+        if (DEBUG) this.printf(Messages.ADDRESS, "INT 0x03 in v86-mode (IOPL < 3)\n");
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
@@ -36379,7 +36384,7 @@ X86.opINTn = function()
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
-        if (DEBUG && this.messageEnabled()) this.printMessage("INT " + Str.toHexByte(nInt) + " in v86-mode (IOPL < 3)", true, true);
+        if (DEBUG) this.printf(Messages.ADDRESS, "INT %#04x in v86-mode (IOPL < 3)\n", nInt);
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
@@ -36406,7 +36411,7 @@ X86.opINTO = function()
          * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
          */
         if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
-            if (DEBUG) this.printMessage("INTO in v86-mode (IOPL < 3)", this.bitsMessage, true);
+            if (DEBUG) this.printf(Messages.ADDRESS, "INTO in v86-mode (IOPL < 3)\n");
             X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
             return;
         }
@@ -36427,7 +36432,7 @@ X86.opIRET = function()
      * TODO: Consider swapping out this function whenever setProtMode() changes the mode to V86-mode.
      */
     if (I386 && (this.regPS & X86.PS.VM) && this.nIOPL < 3) {
-        if (DEBUG) this.printMessage("IRET in v86-mode (IOPL < 3)", this.bitsMessage, true);
+        if (DEBUG) this.printf(Messages.ADDRESS, "IRET in v86-mode (IOPL < 3)\n");
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
@@ -37176,7 +37181,7 @@ X86.opCLI = function()
      * and in V86-mode, CPL is always 3.
      */
     if (this.nCPL > this.nIOPL) {
-        if (DEBUG && (this.regPS & X86.PS.VM)) this.printMessage("CLI in v86-mode (IOPL < 3)", this.bitsMessage, true);
+        if (DEBUG && (this.regPS & X86.PS.VM)) this.printf(Messages.ADDRESS, "CLI in v86-mode (IOPL < 3)\n");
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
@@ -37196,7 +37201,7 @@ X86.opSTI = function()
      * and in V86-mode, CPL is always 3.
      */
     if (this.nCPL > this.nIOPL) {
-        if (DEBUG && (this.regPS & X86.PS.VM)) this.printMessage("STI in v86-mode (IOPL < 3)", this.bitsMessage, true);
+        if (DEBUG && (this.regPS & X86.PS.VM)) this.printf(Messages.ADDRESS, "STI in v86-mode (IOPL < 3)\n");
         X86.helpFault.call(this, X86.EXCEPTION.GP_FAULT, 0);
         return;
     }
@@ -37277,7 +37282,7 @@ X86.opUndefined = function()
 X86.opTBD = function()
 {
     this.setIP(this.opLIP - this.segCS.base);
-    this.printMessage("unimplemented 80386 opcode", true);
+    this.printf(Messages.DEFAULT, "unimplemented 80386 opcode\n");
     this.stopCPU();
 };
 
@@ -46650,7 +46655,7 @@ class CompaqController extends Controller {
     {
         let b = this.controller.getByte(off);
         if (DEBUG) {
-            this.controller.ram.printMessage("CompaqController.readByte(" + Str.toHexWord(off) + ") returned " + Str.toHexByte(b), 0, true);
+            this.controller.ram.printf(0 + Messages.ADDRESS, "CompaqController.readByte(%#06x) returned %#04x\n", off, b);
         }
         return b;
     }
@@ -46676,7 +46681,7 @@ class CompaqController extends Controller {
          * All bits in 0x80C00001 and 0x80C00003 are reserved, so we can simply ignore those writes.
          */
         if (DEBUG) {
-            this.controller.ram.printMessage("CompaqController.writeByte(" + Str.toHexWord(off) + "," + Str.toHexByte(b) + ")", 0, true);
+            this.controller.ram.printf(Messages.ADDRESS, "CompaqController.writeByte(%#06x,%#04x)\n", off, b);
         }
     }
 }
@@ -58970,7 +58975,7 @@ class ParallelPort extends Component {
     {
         let fTransmitted = false;
 
-        this.printMessage("transmitByte(" + Str.toHexByte(b) + ")");
+        this.printf("transmitByte(%#04x)\n", b);
 
         if (this.controlBuffer) {
             if (b == 0x0D) {
@@ -60033,7 +60038,7 @@ class SerialPort extends Component {
     {
         let fTransmitted = false;
 
-        this.printMessage("transmitByte(" + Str.toHexByte(b) + ")");
+        this.printf("transmitByte(%#04x)\n", b);
 
         if (this.sendData) {
             if (this.sendData.call(this.connection, b)) {
@@ -61522,7 +61527,7 @@ class Mouse extends Component {
             default:
                 break;
             }
-            this.printMessage(sDiag + ": ignored");
+            this.printf("%s: ignored\n", sDiag);
         }
     }
 
@@ -61543,15 +61548,13 @@ class Mouse extends Component {
              * rounds negative numbers toward +infinity if the fraction is exactly 0.5.  All positive numbers are
              * rounded correctly, so we convert the value to positive and restore its sign afterward.  Additionally,
              * if the scaling factor turns a non-zero value into zero, we restore the value to its smallest legal
-             * non-zero value (thanks to Math.sign() again).  This ensures that tiniest movement of the physical
+             * non-zero value (thanks to Math.sign() again).  This ensures that the tiniest movement of the physical
              * mouse always results in at least the tiniest movement of the virtual mouse.
              */
             let xScaled = (Math.round(Math.abs(xDelta) * this.scale) * Math.sign(xDelta)) || Math.sign(xDelta);
             let yScaled = (Math.round(Math.abs(yDelta) * this.scale) * Math.sign(yDelta)) || Math.sign(yDelta);
             if (xScaled || yScaled) {
-                if (this.messageEnabled(Messages.MOUSE)) {
-                    this.printMessage("moveMouse(" + xScaled + "," + yScaled + ")");
-                }
+                this.printf(Messages.MOUSE, "moveMouse(%s,%s)\n", xScaled, yScaled);
                 /*
                  * As sendPacket() indicates, any x and y coordinates we supply are for diagnostic purposes only.
                  * sendPacket() only cares about the xDelta and yDelta properties we provide above, which it then zeroes
@@ -61586,9 +61589,7 @@ class Mouse extends Component {
         let b1 = 0x40 | (this.fButton1? 0x20 : 0) | (this.fButton2? 0x10 : 0) | ((this.yDelta & 0xC0) >> 4) | ((this.xDelta & 0xC0) >> 6);
         let b2 = this.xDelta & 0x3F;
         let b3 = this.yDelta & 0x3F;
-        if (this.messageEnabled(Messages.SERIAL)) {
-            this.printMessage((sDiag? (sDiag + ": ") : "") + (yDiag !== undefined? ("mouse (" + xDiag + "," + yDiag + "): ") : "") + "serial packet [" + Str.toHexByte(b1) + "," + Str.toHexByte(b2) + "," + Str.toHexByte(b3) + "]", 0, true);
-        }
+        this.printf(Messages.SERIAL + Messages.ADDRESS, "%s%sserial packet [%#04x,%#04x,%#04x]\n", (sDiag? (sDiag + ": ") : ""), (yDiag !== undefined? ("mouse (" + xDiag + "," + yDiag + "): ") : ""), b1, b2, b3);
         this.componentDevice.receiveData([b1, b2, b3]);
         this.xDelta = this.yDelta = 0;
     }
@@ -61619,11 +61620,11 @@ class Mouse extends Component {
                 let fIdentify = false;
                 if (!(this.pins & RS232.RTS.MASK)) {
                     this.reset();
-                    this.printMessage("serial mouse reset");
+                    this.printf("serial mouse reset\n");
                     fIdentify = true;
                 }
                 if (!(this.pins & RS232.DTR.MASK)) {
-                    this.printMessage("serial mouse ID requested");
+                    this.printf("serial mouse ID requested\n");
                     fIdentify = true;
                 }
                 if (fIdentify) {
@@ -61648,7 +61649,7 @@ class Mouse extends Component {
                      * I'm calling this good enough for now.
                      */
                     this.componentDevice.receiveData([Mouse.SERIAL.ID, Mouse.SERIAL.ID]);
-                    this.printMessage("serial mouse ID sent");
+                    this.printf("serial mouse ID sent\n");
                 }
                 this.captureAll();
                 this.setActive(fActive);
@@ -61667,7 +61668,7 @@ class Mouse extends Component {
                  * a mouse device that's still powered may still send event data to the serial port, and if there was software
                  * polling the serial port, it might expect to see that data.  Unlikely, but not impossible.
                  */
-                this.printMessage("serial mouse inactive");
+                this.printf("serial mouse inactive\n");
                 this.releaseAll();
                 this.setActive(fActive);
             }
@@ -62376,8 +62377,8 @@ class Disk extends Component {
          * it wouldn't hurt to let create() do its thing, too, but it's a waste of time.
          */
         if (this.mode != DiskAPI.MODE.PRELOAD) {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("blank disk for \"" + this.sDiskName + "\": " + this.nCylinders + " cylinders, " + this.nHeads + " head(s)");
+            if (DEBUG) {
+                this.printf("blank disk for \"%s\": %d cylinders, %d head(s)\n", this.sDiskName, this.nCylinders, this.nHeads);
             }
             let aCylinders = new Array(this.nCylinders);
             for (let iCylinder = 0; iCylinder < aCylinders.length; iCylinder++) {
@@ -62599,8 +62600,8 @@ class Disk extends Component {
 
         if (this.fOnDemand) {
             if (!nErrorCode) {
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage('doneLoad("' + this.sDiskPath + '")');
+                if (DEBUG) {
+                    this.printf("doneLoad(\"%s\")\n", this.sDiskPath);
                 }
                 this.fRemote = true;
                 disk = this;
@@ -62618,8 +62619,8 @@ class Disk extends Component {
              */
             this.notice("Unable to load disk \"" + this.sDiskName + "\" (error " + nErrorCode + ": " + sURL + ")", fPrintOnly);
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage('doneLoad("' + this.sDiskPath + '")');
+            if (DEBUG) {
+                this.printf("doneLoad(\"%s\")\n", this.sDiskPath);
             }
 
             /*
@@ -62731,7 +62732,7 @@ class Disk extends Component {
                         let sHeads = nHeads + " head" + (nHeads > 1 ? "s" : "");
                         let nSectorsPerTrack = aDiskData[0][0].length;
                         let sSectorsPerTrack = nSectorsPerTrack + " sector" + (nSectorsPerTrack > 1 ? "s" : "") + "/track";
-                        this.printMessage(sCylinders + ", " + sHeads + ", " + sSectorsPerTrack);
+                        this.printf("%s, %s, %s\n", sCylinders, sHeads, sSectorsPerTrack);
                     }
                     /*
                      * Before the image is usable, we must "normalize" all the sectors.  In the past, this meant
@@ -63147,8 +63148,8 @@ class Disk extends Component {
      */
     readRemoteSectors(iCylinder, iHead, iSector, nSectors, fAsync, done)
     {
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("readRemoteSectors(CHS=" + iCylinder + ':' + iHead + ':' + iSector + ",N=" + nSectors + ")");
+        if (DEBUG) {
+            this.printf("readRemoteSectors(CHS=%d:%d:%d,N=%d)\n", iCylinder, iHead, iSector, nSectors);
         }
 
         if (this.fRemote) {
@@ -63201,8 +63202,8 @@ class Disk extends Component {
                  */
                 let sector = this.seek(iCylinder, iHead, iSector, null, true);
                 if (!sector) {
-                    if (DEBUG && this.messageEnabled()) {
-                        this.printMessage("doneReadRemoteSectors(): seek(CHS=" + iCylinder + ':' + iHead + ':' + iSector + ") failed");
+                    if (DEBUG) {
+                        this.printf("doneReadRemoteSectors(): seek(CHS=%d:%d:%d) failed\n", iCylinder, iHead, iSector);
                     }
                     break;
                 }
@@ -63216,8 +63217,8 @@ class Disk extends Component {
             }
             fAsync = aRequest[4];
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("doneReadRemoteSectors(CHS=" + iCylinder + ':' + iHead + ':' + iSector + ",N=" + nSectors + ") returned error " + nErrorCode);
+            if (DEBUG) {
+                this.printf("doneReadRemoteSectors(CHS=%d:%d:%d,N=%d) returned error %d\n", iCylinder, iHead, iSector, nSectors, nErrorCode);
             }
         }
         let done = aRequest[5];
@@ -63247,8 +63248,8 @@ class Disk extends Component {
      */
     writeRemoteSectors(iCylinder, iHead, iSector, nSectors, abSectors, fAsync)
     {
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("writeRemoteSectors(CHS=" + iCylinder + ':' + iHead + ':' + iSector + ",N=" + nSectors + ")");
+        if (DEBUG) {
+            this.printf("writeRemoteSectors(CHS=%d:%d:%d,N=%d)\n", iCylinder, iHead, iSector, nSectors);
         }
 
         if (this.fRemote) {
@@ -63297,8 +63298,8 @@ class Disk extends Component {
                         sector.iModify = sector.cModify = 0;
                     }
                 } else {
-                    if (DEBUG && this.messageEnabled()) {
-                        this.printMessage("doneWriteRemoteSectors(CHS=" + iCylinder + ':' + iHead + ':' + sector[Disk.SECTOR.ID] + ") returned error " + nErrorCode);
+                    if (DEBUG) {
+                        this.printf("doneWriteRemoteSectors(CHS=%d:%d:%d) returned error %d\n", iCylinder, iHead, sector[Disk.SECTOR.ID], nErrorCode);
                     }
                     this.queueDirtySector(sector, false);
                 }
@@ -63357,8 +63358,8 @@ class Disk extends Component {
         this.aDirtySectors.push(sector);
         this.aDirtyTimestamps.push(Component.getTime());
 
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("queueDirtySector(CHS=" + sector[Disk.SECTOR.CYLINDER] + ':' + sector[Disk.SECTOR.HEAD] + ':' + sector[Disk.SECTOR.ID] + "): " + this.aDirtySectors.length + " dirty");
+        if (DEBUG) {
+            this.printf("queueDirtySector(CHS=%d:%d:%d): %d dirty\n", sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID], this.aDirtySectors.length);
         }
 
         return fAsync && this.updateWriteTimer();
@@ -63430,8 +63431,8 @@ class Disk extends Component {
                 if (!sectorNext.fDirty) break;
                 let j = this.aDirtySectors.indexOf(sectorNext);
 
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage("findDirtySectors(CHS=" + iCylinder + ':' + iHead + ':' + sectorNext[Disk.SECTOR.ID] + ")");
+                if (DEBUG) {
+                    this.printf("findDirtySectors(CHS=%d:%d:%d)\n", iCylinder, iHead, sectorNext[Disk.SECTOR.ID]);
                 }
                 this.aDirtySectors.splice(j, 1);
                 this.aDirtyTimestamps.splice(j, 1);
@@ -63646,8 +63647,8 @@ class Disk extends Component {
     {
         let b = -1;
         if (sector) {
-            if (DEBUG && !iByte && !fCompare && this.messageEnabled()) {
-                this.printMessage('read("' + this.sDiskFile + '",CHS=' + sector[Disk.SECTOR.CYLINDER] + ':' + sector[Disk.SECTOR.HEAD] + ':' + sector[Disk.SECTOR.ID] + '): ' + this.getFileInfo(sector));
+            if (DEBUG && !iByte && !fCompare) {
+                this.printf("read(\"%s\",CHS=%d:%d:%d): %s\n", this.sDiskFile, sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID], this.getFileInfo(sector));
             }
             if (iByte < sector[Disk.SECTOR.LENGTH]) {
                 let adw = sector[Disk.SECTOR.DATA];
@@ -63673,8 +63674,8 @@ class Disk extends Component {
         if (this.fWriteProtected)
             return false;
 
-        if (DEBUG && !iByte && this.messageEnabled()) {
-            this.printMessage('write("' + this.sDiskFile + '",CHS=' + sector[Disk.SECTOR.CYLINDER] + ':' + sector[Disk.SECTOR.HEAD] + ':' + sector[Disk.SECTOR.ID] + ')');
+        if (DEBUG && !iByte) {
+            this.printf("write(\"%s\",CHS=%d:%d:%d)\n", this.sDiskFile, sector[Disk.SECTOR.CYLINDER], sector[Disk.SECTOR.HEAD], sector[Disk.SECTOR.ID]);
         }
 
         if (iByte < sector[Disk.SECTOR.LENGTH]) {
@@ -63782,8 +63783,8 @@ class Disk extends Component {
                 }
             }
         }
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage('save("' + this.sDiskName + '"): saved ' + (deltas.length - 1) + ' change(s)');
+        if (DEBUG) {
+            this.printf("save(\"%s\"): saved %d change(s)\n", this.sDiskName, (deltas.length - 1));
         }
         return deltas;
     }
@@ -63923,8 +63924,8 @@ class Disk extends Component {
                 this.notice("Unable to restore disk '" + this.sDiskName + ": " + sReason);
             }
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage('restore("' + this.sDiskName + '"): restored ' + nChanges + ' change(s)');
+            if (DEBUG) {
+                this.printf("restore(\"%s\"): restored %d change(s)\n", this.sDiskName, nChanges);
             }
             /*
              * Last but not least, rebuild the disk's file table if BACKTRACK or SYMBOLS support is enabled.
@@ -66699,10 +66700,10 @@ class FDC extends Component {
     {
 
         let bCmd = this.regDataArray[this.regDataIndex];
-        if (DEBUG && this.messageEnabled(Messages.PORT + Messages.FDC)) {
+        if (DEBUG) {
             let bCmdMasked = bCmd & FDC.REG_DATA.CMD.MASK;
             if (!name && !this.regDataIndex && FDC.aCmdInfo[bCmdMasked]) name = FDC.aCmdInfo[bCmdMasked].name;
-            this.printMessage(this.idComponent + ".popCmd(" + (name || this.regDataIndex) + "): " + Str.toHexByte(bCmd), true);
+            this.printf(Messages.PORT + Messages.FDC, "%s.popCmd(%s): %#04x\n", this.idComponent, (name || this.regDataIndex), bCmd);
         }
         this.regDataIndex++;
         return bCmd;
@@ -66769,9 +66770,7 @@ class FDC extends Component {
      */
     pushResult(bResult, name)
     {
-        if (DEBUG && this.messageEnabled(Messages.PORT + Messages.FDC)) {
-            this.printMessage(this.idComponent + ".pushResult(" + (name || this.regDataTotal) + "): " + Str.toHexByte(bResult), true);
-        }
+        if (DEBUG) this.printf(Messages.PORT + Messages.FDC, "%s.pushResult(%s): %#04x\n", this.idComponent, (name || this.regDataTotal), bResult);
 
         this.regDataArray[this.regDataTotal++] = bResult;
     }
@@ -67955,9 +67954,7 @@ class HDC extends Component {
             this.drive = this.aDrives[this.iDrive];
         }
 
-        if (this.messageEnabled()) {
-            this.printMessage("HDC initialized for " + this.aDrives.length + " drive(s)");
-        }
+        this.printf("HDC initialized for %d drive(s)\n", this.aDrives.length);
         return fSuccess;
     }
 
@@ -68374,7 +68371,7 @@ class HDC extends Component {
         if (fAutoMount) {
             drive.fAutoMount = true;
             this.cAutoMount++;
-            if (this.messageEnabled()) this.printMessage("loading " + sDiskName);
+            this.printf("loading \"%s\"\n", sDiskName);
         }
         let disk = drive.disk || new Disk(this, drive, drive.mode);
         sDiskPath = Web.redirectResource(sDiskPath);
@@ -68630,8 +68627,8 @@ class HDC extends Component {
             bIn = this.readData(drive, function onATCReadData(b, fAsync, obj, off) {
 
                 if (BACKTRACK && obj) {
-                    if (!off && obj.file && hdc.messageEnabled(Messages.DISK)) {
-                        hdc.printMessage("loading " + obj.file.path + '[' + obj.offFile + "] via port " + Str.toHexWord(port), true);
+                    if (!off && obj.file) {
+                        hdc.printf(Messages.DISK, "loading %s[%d] via port %#06x\n", obj.file.path, obj.offFile, port);
                     }
                     /*
                      * TODO: We could define a cached BTO that's reset prior to a new ATC command, and then pass that
@@ -68703,7 +68700,7 @@ class HDC extends Component {
                                  */
                                 hdc.regStatus = HDC.ATC.STATUS.ERROR;
                                 hdc.regError = HDC.ATC.ERROR.NO_CHS;
-                                if (DEBUG) hdc.printMessage(this.idComponent + ".inATCByte(): read failed");
+                                if (DEBUG) hdc.printf("%s.inATCByte(): read failed\n", this.idComponent);
                             }
                         }, false);
                     } else {
@@ -68757,8 +68754,8 @@ class HDC extends Component {
                      */
                     this.regStatus = HDC.ATC.STATUS.ERROR;
                     this.regError = HDC.ATC.ERROR.NO_CHS;
-                    if (DEBUG && this.messageEnabled()) {
-                        this.printMessage(this.idComponent + ".outATCByte(" + Str.toHexByte(bOut) + "): write failed");
+                    if (DEBUG) {
+                        this.printf("%s.outATCByte(%#04x): write failed\n", this.idComponent, bOut);
                     }
                 }
                 else if (drive.iByte == 1 || drive.iByte == drive.cbTransfer) {
@@ -68793,16 +68790,16 @@ class HDC extends Component {
                 /*
                  * TODO: What to do about unexpected writes? The number of bytes has exceeded what the command specified.
                  */
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage(this.idComponent + ".outATCByte(" + Str.toHexByte(bOut) + "): write exceeds count (" + this.drive.nBytes + ")");
+                if (DEBUG) {
+                    this.printf("%s.outATCByte(%#04x): write exceeds count (%d)\n", this.idComponent, bOut, this.drive.nBytes);
                 }
             }
         } else {
             /*
              * TODO: What to do about unexpected writes? No command was specified.
              */
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage(this.idComponent + ".outATCByte(" + Str.toHexByte(bOut) + "): write without command");
+            if (DEBUG) {
+                this.printf("%s.outATCByte(%#04x): write without command\n", this.idComponent, bOut);
             }
         }
     }
@@ -69134,9 +69131,7 @@ class HDC extends Component {
         this.regStatus = HDC.ATC.STATUS.READY | HDC.ATC.STATUS.SEEK_OK;
         let drive = this.aDrives[iDrive];
 
-        if (this.messageEnabled(Messages.HDC)) {
-            this.printMessage(this.idComponent + ".doATC(" + (this.nInterface*2+iDrive) + "," + Str.toHexByte(bCmd) + "): " + HDC.aATACommands[bCmd] + (drive? "" : " (drive " + iDrive + " not present)"), true, true);
-        }
+        this.printf(Messages.HDC + Messages.ADDRESS, "%s.doATC(%d,%#04x): %s%s\n", this.idComponent, (this.nInterface*2+iDrive), bCmd, HDC.aATACommands[bCmd], (drive? "" : " (drive " + iDrive + " not present)"));
 
         if (!drive) return;
         this.iDrive = iDrive;
@@ -69185,8 +69180,8 @@ class HDC extends Component {
             /* falls through */
 
         case HDC.ATC.COMMAND.READ_DATA:             // 0x20 (ATA)
-            if (this.messageEnabled(Messages.HDC) && !drive.useBuffer) {
-                this.printMessage(this.idComponent + ".doATCRead(" + iDrive + ',' + drive.wCylinder + ':' + drive.bHead + ':' + drive.bSector + ',' + nSectors + ")", true);
+            if (!drive.useBuffer) {
+                this.printf(Messages.HDC, "%s.doATCRead(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
             }
             /*
              * We're using a call to readData() that disables auto-increment, so that once we've got the first
@@ -69225,8 +69220,8 @@ class HDC extends Component {
             /* falls through */
 
         case HDC.ATC.COMMAND.WRITE_DATA:            // 0x30 (ATA)
-            if (this.messageEnabled(Messages.HDC) && !drive.useBuffer) {
-                this.printMessage(this.idComponent + ".doATCWrite(" + iDrive + ',' + drive.wCylinder + ':' + drive.bHead + ':' + drive.bSector + ',' + nSectors + ")", true);
+            if (!drive.useBuffer) {
+                this.printf(Messages.HDC, "%s.doATCWrite(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
             }
             this.regStatus = HDC.ATC.STATUS.DATA_REQ;
             fProcessed = true;
@@ -69287,7 +69282,7 @@ class HDC extends Component {
             this.regStatus = HDC.ATC.STATUS.ERROR;
             this.regError = HDC.ATC.ERROR.CMD_ABORT;
             if (this.messageEnabled()) {
-                this.printMessage(this.idComponent + ".doATC(" + Str.toHexByte(this.regCommand) + "): unsupported operation");
+                this.printf("%s.doATC(%#04x): unsupported operation\n", this.idComponent, this.regCommand);
                 if (MAXDEBUG) this.dbg.stopCPU();
             }
         }
@@ -69328,9 +69323,9 @@ class HDC extends Component {
                  * has a low tolerance for fast controller interrupts during multi-sector operations.
                  */
                 this.chipset.setIRR(ChipSet.IRQ.ATC1 + this.nInterface, 120);
-                if (DEBUG) this.printMessage(this.idComponent + ".setATCIRR(): enabled", Messages.PIC + Messages.HDC);
+                if (DEBUG) this.printf(Messages.PIC + Messages.HDC, "%s.setATCIRR(): enabled\n", this.idComponent);
             } else {
-                if (DEBUG) this.printMessage(this.idComponent + ".setATCIRR(): disabled", Messages.PIC + Messages.HDC);
+                if (DEBUG) this.printf(Messages.PIC + Messages.HDC, "%s.setATCIRR(): disabled\n", this.idComponent);
             }
         }
     }
@@ -69413,7 +69408,7 @@ class HDC extends Component {
             bDataStatus = HDC.XTC.DATA.STATUS.OK;
             if (!drive && this.iDriveAllowFail == iDrive) {
                 this.iDriveAllowFail = -1;
-                if (DEBUG) this.printMessage(this.idComponent + ".doXTC(): fake failure triggered");
+                if (DEBUG) this.printf("%s.doXTC(): fake failure triggered\n", this.idComponent);
                 bDataStatus = HDC.XTC.DATA.STATUS.ERROR;
             }
             this.beginResult(bDataStatus | bDrive);
@@ -69449,8 +69444,8 @@ class HDC extends Component {
 
             case HDC.XTC.DATA.CMD.RECALIBRATE:      // 0x01
                 drive.bControl = bControl;
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage(this.idComponent + ".doXTC(): drive " + iDrive + " control byte: " + Str.toHexByte(bControl));
+                if (DEBUG) {
+                    this.printf("%s.doXTC(): drive %d control byte: %#04x\n", this.idComponent, iDrive, bControl);
                 }
                 this.beginResult(HDC.XTC.DATA.STATUS.OK | bDrive);
                 break;
@@ -69488,7 +69483,7 @@ class HDC extends Component {
             default:
                 this.beginResult(HDC.XTC.DATA.STATUS.ERROR | bDrive);
                 if (this.messageEnabled()) {
-                    this.printMessage(this.idComponent + ".doXTC(" + Str.toHexByte(bCmdOrig) + "): " + (bCmd < 0? ("invalid drive (" + iDrive + ")") : "unsupported operation"));
+                    this.printf("%s.doXTC(%#04x): %d\n", this.idComponent, bCmdOrig, (bCmd < 0? ("invalid drive (" + iDrive + ")") : "unsupported operation"));
                     if (MAXDEBUG && bCmd >= 0) this.dbg.stopCPU();
                 }
                 break;
@@ -69508,9 +69503,7 @@ class HDC extends Component {
         let bCmdIndex = this.regDataIndex;
         if (bCmdIndex < this.regDataTotal) {
             bCmd = this.regDataArray[this.regDataIndex++];
-            if (this.messageEnabled((bCmdIndex > 0? Messages.PORT : 0) + Messages.HDC)) {
-                this.printMessage(this.idComponent + ".popCmd(" + bCmdIndex + "): " + Str.toHexByte(bCmd) + (!bCmdIndex && HDC.aXTACommands[bCmd]? (" (" + HDC.aXTACommands[bCmd] + ")") : ""), true);
-            }
+            this.printf((bCmdIndex > 0? Messages.PORT : 0) + Messages.HDC, "%s.popCmd(%d): %#04x%s\n", this.idComponent, bCmdIndex, bCmd, (!bCmdIndex && HDC.aXTACommands[bCmd]? (" (" + HDC.aXTACommands[bCmd] + ")") : ""));
         }
         return bCmd;
     }
@@ -69542,8 +69535,8 @@ class HDC extends Component {
      */
     pushResult(bResult)
     {
-        if (DEBUG && this.messageEnabled((this.regDataTotal > 0? Messages.PORT : 0) + Messages.HDC)) {
-            this.printMessage(this.idComponent + ".pushResult(" + this.regDataTotal + "): " + Str.toHexByte(bResult), true);
+        if (DEBUG) {
+            this.printf((this.regDataTotal > 0? Messages.PORT : 0) + Messages.HDC, "%s.pushResult(%d): %#04x\n", this.idComponent, this.regDataTotal, bResult);
         }
         this.regDataArray[this.regDataTotal++] = bResult;
     }
@@ -69565,7 +69558,7 @@ class HDC extends Component {
         /*
          * The DMA controller should be ASKING for data, not GIVING us data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printMessage(this.idComponent + ".doDMARead(): invalid DMA acknowledgement");
+        if (DEBUG) this.printf("%s.doDMARead(): invalid DMA acknowledgement\n", this.idComponent);
         done(-1, false);
     }
 
@@ -69584,7 +69577,7 @@ class HDC extends Component {
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printMessage(this.idComponent + ".doDMAWrite(): invalid DMA acknowledgement");
+        if (DEBUG) this.printf("%s.doDMAWrite(): invalid DMA acknowledgement\n", this.idComponent);
         return -1;
     }
 
@@ -69603,7 +69596,7 @@ class HDC extends Component {
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printMessage(this.idComponent + ".doDMAWriteBuffer(): invalid DMA acknowledgement");
+        if (DEBUG) this.printf("%s.doDMAWriteBuffer(): invalid DMA acknowledgement\n", this.idComponent);
         return -1;
     }
 
@@ -69622,7 +69615,7 @@ class HDC extends Component {
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printMessage(this.idComponent + ".doDMAWriteFormat(): invalid DMA acknowledgement");
+        if (DEBUG) this.printf("%s.doDMAWriteFormat(): invalid DMA acknowledgement\n", this.idComponent);
         return -1;
     }
 
@@ -69637,9 +69630,7 @@ class HDC extends Component {
     {
         drive.errorCode = HDC.XTC.DATA.ERR.NOT_READY;
 
-        if (this.messageEnabled()) {
-            this.printMessage(this.idComponent + ".doRead(" + drive.iDrive + ',' + drive.wCylinder + ':' + drive.bHead + ':' + drive.bSector + ',' + ((drive.nBytes / drive.cbSector)|0) + ")");
-        }
+        this.printf("%s.doRead(%d,%d:%d:%d,%d)\n", this.idComponent, drive.iDrive, drive.wCylinder, drive.bHead, drive.bSector, ((drive.nBytes / drive.cbSector)|0));
 
         if (drive.disk) {
             drive.sector = null;
@@ -69681,9 +69672,7 @@ class HDC extends Component {
     {
         drive.errorCode = HDC.XTC.DATA.ERR.NOT_READY;
 
-        if (this.messageEnabled()) {
-            this.printMessage(this.idComponent + ".doWrite(" + drive.iDrive + ',' + drive.wCylinder + ':' + drive.bHead + ':' + drive.bSector + ',' + ((drive.nBytes / drive.cbSector)|0) + ")");
-        }
+        this.printf("%s.doWrite(%d,%d:%d:%d,%d)\n", this.idComponent, drive.iDrive, drive.wCylinder, drive.bHead, drive.bSector, ((drive.nBytes / drive.cbSector)|0));
 
         if (drive.disk) {
             drive.sector = null;
@@ -69732,7 +69721,7 @@ class HDC extends Component {
     {
         drive.errorCode = HDC.XTC.DATA.ERR.NOT_READY;
 
-        if (DEBUG) this.printMessage(this.idComponent + ".doWriteBuffer()");
+        if (DEBUG) this.printf("%s.doWriteBuffer()\n", this.idComponent);
 
         this.initBuffer(drive);
 
@@ -69997,9 +69986,7 @@ class HDC extends Component {
             drive.nBytes = 128 << drive.abFormat[3];// N (0 => 128, 1 => 256, 2 => 512, 3 => 1024)
             drive.cbFormat = 0;
 
-            if (this.messageEnabled()) {
-                this.printMessage(this.idComponent + ".writeFormat(" + drive.wCylinder + ":" + drive.bHead + ":" + drive.bSector + ":" + drive.nBytes + ")");
-            }
+            this.printf("%s.writeFormat(%d:%d:%d:%d)\n", this.idComponent, drive.wCylinder, drive.bHead, drive.bSector, drive.nBytes);
 
             for (let i = 0; i < drive.nBytes; i++) {
                 if (this.writeData(drive, drive.bFiller) < 0) {
@@ -70198,9 +70185,7 @@ class HDC extends Component {
 
         bPacketCmd = getByte(0);
 
-        if (this.messageEnabled(Messages.HDC)) {
-            this.printMessage(this.idComponent + ".packet(" + Str.toHexByte(bPacketCmd) + "): " + HDC.aATAPICommands[bPacketCmd] + " (drive " + drive.iDrive + ")", true);
-        }
+        this.printf(Messages.HDC, "%s.packet(%#04x): %s (drive %d)\n", this.idComponent, bPacketCmd, HDC.aATAPICommands[bPacketCmd], drive.iDrive);
 
         switch(bPacketCmd) {
         case HDC.ATC.PACKET.COMMAND.TEST_UNIT:  // 0x00
@@ -70291,9 +70276,7 @@ class HDC extends Component {
                 break;
 
             default:
-                if (this.messageEnabled(Messages.HDC)) {
-                    this.printMessage(this.idComponent + ".packet(" + Str.toHexByte(bPacketCmd) + "): unsupported format " + format, true);
-                }
+                this.printf(Messages.HDC, "%s.packet(%#04x): unsupported format %d\n", this.idComponent, bPacketCmd, format);
                 if (MAXDEBUG) this.dbg.stopCPU();
                 bPacketCmd = -1;                // TODO: Add support for other READ_TOC formats
                 break;
@@ -70396,9 +70379,7 @@ class HDC extends Component {
                 break;
 
             default:
-                if (this.messageEnabled(Messages.HDC)) {
-                    this.printMessage(this.idComponent + ".packet(" + Str.toHexByte(bPacketCmd) + "): unsupported page code " + pageCode, true);
-                }
+                this.printf(Messages.HDC, "%s.packet(%#04x): unsupported page code %d\n", this.idComponent, bPacketCmd, pageCode);
                 if (MAXDEBUG) this.dbg.stopCPU();
                 bPacketCmd = -1;        // TODO: Add support for other Page Codes
                 break;
@@ -70512,7 +70493,7 @@ class HDC extends Component {
     {
         let AH = this.cpu.regEAX >> 8;
         if ((!AH && this.chipset && this.chipset.checkIMR(ChipSet.IRQ.FDC))) {
-            if (DEBUG) this.printMessage(this.idComponent + ".intBIOSDiskette(): skipping useless INT 0x40 diskette reset");
+            if (DEBUG) this.printf("%s.intBIOSDiskette(): skipping useless INT 0x40 diskette reset\n", this.idComponent);
             return false;
         }
         return true;
@@ -80766,7 +80747,7 @@ class Computer extends Component {
 
         this.printf(Messages.DEFAULT, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
-        if (MAXDEBUG) this.printf(Messages.DEBUG, "PREFETCH: %b, TYPEDARRAYS: %b\n", PREFETCH, TYPEDARRAYS);
+        if (DEBUG) this.printf(Messages.DEBUG, "PREFETCH: %b, TYPEDARRAYS: %b\n", PREFETCH, TYPEDARRAYS);
 
         /*
          * Iterate through all the components again and call their initBus() handler, if any
@@ -82153,7 +82134,7 @@ class Computer extends Component {
                 }
                 sResponse = '{"' + UserAPI.RES.CODE + '":' + response[1] + ',"' + UserAPI.RES.DATA + '":"' + sResponse + '"}';
             }
-            if (DEBUG) this.printMessage(sResponse);
+            if (DEBUG) this.printf("%s\n", sResponse);
             return JSON.parse(sResponse);
         }
         return null;

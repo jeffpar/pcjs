@@ -1144,9 +1144,7 @@ export default class DevicePDP11 extends Component {
      */
     writeIgnored(data, addr)
     {
-        if (this.messageEnabled()) {
-            this.printMessage("writeIgnored(" + Str.toOct(addr) + "): " + Str.toOct(data), true, true);
-        }
+        this.printf(Messages.ADDRESS, "writeIgnored(%o): %o\n", addr, data);
     }
 
     /**

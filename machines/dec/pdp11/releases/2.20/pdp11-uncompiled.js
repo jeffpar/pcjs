@@ -4523,7 +4523,7 @@ class Component {
     }
 
     /**
-     * status(format, ...args) [DEPRECATED: Use printf(Messages.STATUS, format, ...args) instead]
+     * status(format, ...args) [DEPRECATED: use printf(Messages.STATUS, format, ...args) instead]
      *
      * status() is a print function that also includes information about the component (ie, the component type),
      * which is why there is no corresponding Component.status() function.
@@ -4807,8 +4807,12 @@ class Component {
      */
     messageEnabled(bitsMessage = 0)
     {
-        bitsMessage = bitsMessage || this.bitsMessage;
+        /*
+         * It's important to subtract Messages.ADDRESS from bitsMessage before testing for Messages.DEFAULT, because
+         * if Messages.ADDRESS was the ONLY bit specified, we still want to default to the component's message category.
+         */
         if (bitsMessage & Messages.ADDRESS) bitsMessage -= Messages.ADDRESS;
+        bitsMessage = bitsMessage || this.bitsMessage;
         if (!bitsMessage || this.testBits(Messages.TYPES, bitsMessage) || this.dbg && this.testBits(this.dbg.bitsMessage, bitsMessage)) {
             return true;
         }
@@ -4854,7 +4858,7 @@ class Component {
     }
 
     /**
-     * printMessage(sMessage, bitsMessage, fAddress)
+     * printMessage(sMessage, bitsMessage, fAddress) [DEPRECATED: use printf(bitsMessage, ...) instead]
      *
      * If bitsMessage is not specified, the component's Messages category is used, and if bitsMessage is true,
      * the message is displayed regardless.
@@ -8361,8 +8365,8 @@ class BusPDP11 extends Component {
     {
         this.fFault = true;
         if (!this.nDisableFaults) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.FAULT)) {
-                this.dbg.printMessage("memory fault (" + access + ") on " + this.dbg.toStrBase(addr), true, true);
+            if (DEBUGGER && this.dbg) {
+                this.dbg.printf(Messages.FAULT + Messages.ADDRESS, "memory fault (%d) on %s\n", access, this.dbg.toStrBase(addr));
             }
             if (err) this.cpu.regErr |= err;
             this.cpu.trap(PDP11.TRAP.BUS, 0, addr);
@@ -8515,15 +8519,15 @@ BusPDP11.IOController = {
             }
         }
         if (b >= 0) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
-                this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".readByte(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(b), true, !bus.nDisableFaults);
+            if (DEBUGGER && this.dbg) {
+                this.dbg.printf(Messages.BUS + afn[BusPDP11.IOHANDLER.MSG_CATEGORY], "%s.readByte(%s): %s\n", afn[BusPDP11.IOHANDLER.REG_NAME], this.dbg.toStrBase(addr), this.dbg.toStrBase(b));
             }
             return b;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.READ_BYTE);
         b = 0xff;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS)) {
-            this.dbg.printMessage("warning: unconverted read access to byte @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(b), true, !bus.nDisableFaults);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.BUS, "warning: unconverted read access to byte @%s: %s\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(b));
         }
         return b;
     },
@@ -8596,14 +8600,14 @@ BusPDP11.IOController = {
             }
         }
         if (fWrite) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
-                this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".writeByte(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(b) + ")", true, !bus.nDisableFaults);
+            if (DEBUGGER && this.dbg) {
+                this.dbg.printf(Messages.BUS + afn[BusPDP11.IOHANDLER.MSG_CATEGORY], "%s.writeByte(%s,%s)\n", afn[BusPDP11.IOHANDLER.REG_NAME], this.dbg.toStrBase(addr), this.dbg.toStrBase(b));
             }
             return;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.WRITE_BYTE);
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS)) {
-            this.dbg.printMessage("warning: unconverted write access to byte @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(b), true, !bus.nDisableFaults);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.BUS, "warning: unconverted write access to byte @%s: %s\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(b));
         }
     },
 
@@ -8635,15 +8639,15 @@ BusPDP11.IOController = {
             }
         }
         if (w >= 0) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
-                this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".readWord(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(w), true, !bus.nDisableFaults);
+            if (DEBUGGER && this.dbg) {
+                this.dbg.printf(Messages.BUS + afn[BusPDP11.IOHANDLER.MSG_CATEGORY], "%s.readWord(%s): %s\n", afn[BusPDP11.IOHANDLER.REG_NAME], this.dbg.toStrBase(addr), this.dbg.toStrBase(w));
             }
             return w;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.READ_WORD);
         w = 0xffff;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS)) {
-            this.dbg.printMessage("warning: unconverted read access to word @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(w), true, !bus.nDisableFaults);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.BUS, "warning: unconverted read access to word @%s: %s\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(w));
         }
         return w;
     },
@@ -8679,14 +8683,14 @@ BusPDP11.IOController = {
             }
         }
         if (fWrite) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
-                this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".writeWord(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(w) + ")", true, !bus.nDisableFaults);
+            if (DEBUGGER && this.dbg) {
+                this.dbg.printf(Messages.BUS + afn[BusPDP11.IOHANDLER.MSG_CATEGORY], "%s.writeWord(%s,%s)\n", afn[BusPDP11.IOHANDLER.REG_NAME], this.dbg.toStrBase(addr), this.dbg.toStrBase(w));
             }
             return;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.WRITE_WORD);
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS)) {
-            this.dbg.printMessage("warning: unconverted write access to word @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(w), true, !bus.nDisableFaults);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.BUS, "warning: unconverted write access to word @%s: %s\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(w));
         }
     }
 };
@@ -9816,9 +9820,7 @@ class DevicePDP11 extends Component {
      */
     writeIgnored(data, addr)
     {
-        if (this.messageEnabled()) {
-            this.printMessage("writeIgnored(" + Str.toOct(addr) + "): " + Str.toOct(data), true, true);
-        }
+        this.printf(Messages.ADDRESS, "writeIgnored(%o): %o\n", addr, data);
     }
 
     /**
@@ -10355,8 +10357,8 @@ class MemoryPDP11 {
      */
     printAddr(sMessage)
     {
-        if (DEBUG && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
-            this.dbg.printMessage(sMessage + ' ' + (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id), true);
+        if (DEBUG && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "%s %s\n", sMessage, (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id));
         }
     }
 
@@ -10453,8 +10455,8 @@ class MemoryPDP11 {
      */
     readNone(off, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY) /* && !off */) {
-            this.dbg.printMessage("attempt to read invalid address " + this.dbg.toStrBase(addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "attempt to read invalid address %s\n", this.dbg.toStrBase(addr));
         }
         this.bus.fault(addr, PDP11.CPUERR.NOMEMORY, PDP11.ACCESS.READ);
         return 0xff;
@@ -10470,8 +10472,8 @@ class MemoryPDP11 {
      */
     writeNone(off, v, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY) /* && !off */) {
-            this.dbg.printMessage("attempt to write " + this.dbg.toStrBase(v) + " to invalid addresses " + this.dbg.toStrBase(addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "attempt to write %s to invalid addresses %s\n", this.dbg.toStrBase(v), this.dbg.toStrBase(addr));
         }
         this.bus.fault(addr, PDP11.CPUERR.NOMEMORY, PDP11.ACCESS.WRITE);
     }
@@ -10685,8 +10687,8 @@ class MemoryPDP11 {
     readByteLE(off, addr)
     {
         var b = this.ab[off];
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
-            this.dbg.printMessage("Memory.readByte(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(b), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "Memory.readByte(%s): %s\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(b));
         }
         return b;
     }
@@ -10730,8 +10732,8 @@ class MemoryPDP11 {
         } else {
             w = this.ab[off] | (this.ab[off+1] << 8);
         }
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
-            this.dbg.printMessage("Memory.readWord(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(w), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "Memory.readWord(%s): %s\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(w));
         }
         return w;
     }
@@ -10762,8 +10764,8 @@ class MemoryPDP11 {
     {
         this.ab[off] = b;
         this.fDirty = true;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
-            this.dbg.printMessage("Memory.writeByte(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(b) + ")", true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "Memory.writeByte(%s,%s)\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(b));
         }
     }
 
@@ -10808,8 +10810,8 @@ class MemoryPDP11 {
             this.ab[off+1] = w >> 8;
         }
         this.fDirty = true;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
-            this.dbg.printMessage("Memory.writeWord(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(w) + ")", true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "Memory.writeWord(%s,%s)\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(w));
         }
     }
 }
@@ -13162,9 +13164,7 @@ class CPUStatePDP11 extends CPUPDP11 {
     {
         if (irq) {
             this.insertIRQ(irq);
-            if (irq.message && this.messageEnabled(irq.message | Messages.INT)) {
-                this.printMessage("setIRQ(vector=" + Str.toOct(irq.vector) + ",priority=" + irq.priority + ")", true, true);
-            }
+            this.printf(irq.message + Messages.INT + Messages.ADDRESS, "setIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
         }
     }
 
@@ -13178,9 +13178,7 @@ class CPUStatePDP11 extends CPUPDP11 {
     {
         if (irq) {
             this.removeIRQ(irq);
-            if (irq.message && this.messageEnabled(irq.message | Messages.INT)) {
-                this.printMessage("clearIRQ(vector=" + Str.toOct(irq.vector) + ",priority=" + irq.priority + ")", true, true);
-            }
+            this.printf(irq.message + Messages.INT + Messages.ADDRESS, "clearIRQ(vector=%o,priority=%d)\n", irq.vector, irq.priority);
         }
     }
 
@@ -13660,7 +13658,7 @@ class CPUStatePDP11 extends CPUPDP11 {
         if (DEBUG && this.dbg) {
             if (this.messageEnabled(Messages.TRAP)) {
                 var sReason = reason < 0? PDP11.REASONS[-reason] : this.dbg.toStrBase(reason);
-                this.printMessage("trap to vector " + this.dbg.toStrBase(vector, 8) + " (" + sReason + ")", Messages.TRAP, true);
+                this.printf(Messages.TRAP + Messages.ADDRESS, "trap to vector %s (%s)\n", this.dbg.toStrBase(vector, 8), sReason);
             }
         }
 
@@ -18302,11 +18300,11 @@ class RAMPDP11 extends Component {
                 }
                 var offBlock = off;
                 if (w != 0x0001) {
-                    this.printMessage("invalid signature (" + Str.toHexWord(w) + ") at offset " + Str.toHexWord(offBlock), Messages.PAPER);
+                    this.printf(Messages.PAPER, "invalid signature (%#06x) at offset %#06x\n", w, offBlock);
                     break;
                 }
                 if (off + 6 >= aBytes.length) {
-                    this.printMessage("invalid block at offset " + Str.toHexWord(offBlock), Messages.PAPER);
+                    this.printf(Messages.PAPER, "invalid block at offset %#06x\n", offBlock);
                     break;
                 }
                 off += 2;
@@ -18320,12 +18318,12 @@ class RAMPDP11 extends Component {
                     len--;
                 }
                 if (len != 0 || off >= aBytes.length) {
-                    this.printMessage("insufficient data for block at offset " + Str.toHexWord(offBlock), Messages.PAPER);
+                    this.printf(Messages.PAPER, "insufficient data for block at offset %#06x\n", offBlock);
                     break;
                 }
                 checksum += aBytes[off++] & 0xff;
                 if (checksum & 0xff) {
-                    this.printMessage("invalid checksum (" + Str.toHexByte(checksum) + ") for block at offset " + Str.toHexWord(offBlock), Messages.PAPER);
+                    this.printf(Messages.PAPER, "invalid checksum (%#04x) for block at offset %#06x\n", checksum, offBlock);
                     break;
                 }
                 if (!cbData) {
@@ -18334,9 +18332,9 @@ class RAMPDP11 extends Component {
                     } else {
                         if (addrExec == null) addrExec = addr;
                     }
-                    if (addrExec != null) this.printMessage("starting address: " + Str.toHexWord(addrExec), Messages.PAPER);
+                    if (addrExec != null) this.printf(Messages.PAPER, "starting address: %#06x\n", addrExec);
                 } else {
-                    this.printMessage("loading " + Str.toHexWord(cbData) + " bytes at " + Str.toHexWord(addr) + "-" + Str.toHexWord(addr + cbData), Messages.PAPER);
+                    this.printf(Messages.PAPER, "loading %#06x bytes at %#06x-%%#06x\n", cbData, addr, addr + cbData);
                     while (cbData--) {
                         this.bus.setByteDirect(addr++, aBytes[offData++] & 0xff);
                     }
@@ -19048,7 +19046,7 @@ class SerialPortPDP11 extends Component {
              * the data assigned to RBUF with 0xff.
              */
             b = this.abReceive.shift() & 0xff;
-            this.printMessage("receiveByte(" + Str.toHexByte(b) + ")");
+            this.printf("receiveByte(%#04x)\n", b);
             if (this.fUpperCase) {
                 /*
                  * Automatically transform lower-case ASCII codes to upper-case; fUpperCase should
@@ -19115,7 +19113,7 @@ class SerialPortPDP11 extends Component {
     {
         var fTransmitted = false;
 
-        if (MAXDEBUG) this.printMessage("transmitByte(" + Str.toHexByte(b) + ")");
+        if (MAXDEBUG) this.printf("transmitByte(%#04x)\n", b);
 
         if (this.sendData) {
             if (this.sendData.call(this.connection, b)) {
@@ -19768,7 +19766,7 @@ class PC11 extends Component {
                 // this.printf(Messages.STATUS, "tape queued: %s\n", sTapeName);
                 if (fAutoMount) {
                     this.cAutoMount++;
-                    if (this.messageEnabled()) this.printMessage("auto-loading tape: " + sTapeName);
+                    this.printf("auto-loading tape \"%s\"\n", sTapeName);
                 }
                 if (this.load(sTapeName, sTapePath, nTapeTarget, file)) {
                     nResult++;
@@ -19806,7 +19804,7 @@ class PC11 extends Component {
 
         if (DEBUG) {
             var sMessage = 'load("' + sTapeName + '","' + sTapePath + '")';
-            this.printMessage(sMessage);
+            this.printf("%s\n", sMessage);
         }
 
         if (file) {
@@ -19868,8 +19866,8 @@ class PC11 extends Component {
             this.notice("Unable to load tape \"" + sTapeName + "\" (error " + nErrorCode + ": " + sURL + ")", fPrintOnly);
         }
         else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage('finishLoad("' + sTapePath + '")');
+            if (DEBUG) {
+                this.printf("finishLoad(\"%s\")\n", sTapePath);
             }
             Component.addMachineResource(this.idMachine, sURL, sTapeData);
             var resource = Web.parseMemoryResource(sURL, sTapeData);
@@ -20147,7 +20145,7 @@ class PC11 extends Component {
                      * the data assigned to PRB with 0xff.
                      */
                     this.regPRB = this.aTapeData[this.iTapeData] & 0xff;
-                    if (this.messageEnabled()) this.printMessage(this.type + ".advanceReader(" + this.iTapeData + "): " + Str.toHexByte(this.regPRB), true);
+                    this.printf("%s.advanceReader(%d): %#04x\n", this.type, this.iTapeData, this.regPRB);
                     this.iTapeData++;
                     this.displayProgress(this.iTapeData / this.aTapeData.length * 100);
                 }
@@ -20492,8 +20490,8 @@ class DiskPDP11 extends Component {
          * it wouldn't hurt to let create() do its thing, too, but it's a waste of time.
          */
         if (this.mode != DiskAPI.MODE.PRELOAD) {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("blank disk for \"" + this.sDiskName + "\": " + this.nCylinders + " cylinders, " + this.nHeads + " head(s)");
+            if (DEBUG) {
+                this.printf("blank disk for \"%s\": %d cylinders, %d head(s)\n", this.sDiskName, this.nCylinders, this.nHeads);
             }
             var aCylinders = new Array(this.nCylinders);
             for (var iCylinder = 0; iCylinder < aCylinders.length; iCylinder++) {
@@ -20551,7 +20549,7 @@ class DiskPDP11 extends Component {
         if (DEBUG) {
             var sMessage = 'load("' + sDiskName + '","' + sDiskPath + '")';
             this.controller.log(sMessage);
-            this.printMessage(sMessage);
+            this.printf("%s\n", sMessage);
         }
 
         if (this.fnNotify) {
@@ -20709,8 +20707,8 @@ class DiskPDP11 extends Component {
              */
             this.controller.notice("Unable to load disk \"" + this.sDiskName + "\" (error " + nErrorCode + ": " + sURL + ")", fPrintOnly);
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage('doneLoad("' + this.sDiskPath + '")');
+            if (DEBUG) {
+                this.printf("doneLoad(\"%s\")\n", this.sDiskPath);
             }
 
             Component.addMachineResource(this.controller.idMachine, sURL, sDiskData);
@@ -20812,7 +20810,7 @@ class DiskPDP11 extends Component {
                         var sHeads = nHeads + " head" + (nHeads > 1 ? "s" : "");
                         var nSectorsPerTrack = aDiskData[0][0].length;
                         var sSectorsPerTrack = nSectorsPerTrack + " sector" + (nSectorsPerTrack > 1 ? "s" : "") + "/track";
-                        this.printMessage(sCylinders + ", " + sHeads + ", " + sSectorsPerTrack);
+                        this.printf("%s, %s, %s\n", sCylinders, sHeads, sSectorsPerTrack);
                     }
                     /*
                      * Before the image is usable, we must "normalize" all the sectors.  In the past, this meant
@@ -21105,8 +21103,8 @@ class DiskPDP11 extends Component {
                 var dw = (idw < adw.length ? adw[idw] : sector['pattern']);
                 b = ((dw >> ((ibSector & 0x3) << 3)) & 0xff);
             }
-            if (DEBUG && !fCompare && this.messageEnabled()) {
-                this.printMessage('read("' + this.sDiskFile + '",CHS=' + sector.iCylinder + ':' + sector.iHead + ':' + sector['sector'] + ',index=' + ibSector + ',value=' + Str.toHexByte(b) + ')');
+            if (DEBUG && !fCompare) {
+                this.printf("read(\"%s\",CHS=%d:%d:%d,index=%d,value=%#04x)\n", this.sDiskFile, sector.iCylinder, sector.iHead, sector['sector'], ibSector, b);
             }
         }
         return b;
@@ -21126,8 +21124,8 @@ class DiskPDP11 extends Component {
         if (this.fWriteProtected)
             return false;
 
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage('write("' + this.sDiskFile + '",CHS=' + sector.iCylinder + ':' + sector.iHead + ':' + sector['sector'] + ',index=' + ibSector + ',value=' + Str.toHexByte(b) + ')');
+        if (DEBUG) {
+            this.printf("write(\"%s\",CHS=%d:%d:%d,index=%d,value=%#04x)\n", this.sDiskFile, sector.iCylinder, sector.iHead, sector['sector'], ibSector, b);
         }
 
         if (ibSector < sector['length']) {
@@ -21271,8 +21269,8 @@ class DiskPDP11 extends Component {
                 }
             }
         }
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage('save("' + this.sDiskName + '"): saved ' + (deltas.length - 1) + ' change(s)');
+        if (DEBUG) {
+            this.printf("save(\"%s\"): saved %d change(s)\n", this.sDiskName, (deltas.length - 1));
         }
         return deltas;
     }
@@ -21407,8 +21405,8 @@ class DiskPDP11 extends Component {
                 this.controller.notice("Unable to restore disk '" + this.sDiskName + ": " + sReason);
             }
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage('restore("' + this.sDiskName + '"): restored ' + nChanges + ' change(s)');
+            if (DEBUG) {
+                this.printf("restore(\"%s\"): restored %d change(s)\n", this.sDiskName, nChanges);
             }
         }
         return nChanges;
@@ -22387,7 +22385,7 @@ class DriveController extends Component {
                 if (fAutoMount) {
                     drive.fAutoMount = true;
                     this.cAutoMount++;
-                    if (this.messageEnabled()) this.printMessage("auto-loading disk: " + sDiskName);
+                    this.printf("auto-loading disk \"%s\"\n", sDiskName);
                 }
                 drive.fLocal = !!file;
                 var disk = new DiskPDP11(this, drive, DiskAPI.MODE.PRELOAD);
@@ -22729,14 +22727,14 @@ class DriveController extends Component {
         for (i = 0; i < this.aDiskHistory.length; i++) {
             if (this.aDiskHistory[i][1] == sDiskPath) {
                 var nChanges = disk.restore(this.aDiskHistory[i][2]);
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage("disk '" + sDiskName + "' restored from history (" + nChanges + " changes)");
+                if (DEBUG) {
+                    this.printf("disk \"%s\" restored from history (%d changes)\n", sDiskName, nChanges);
                 }
                 return;
             }
         }
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("disk '" + sDiskName + "' added to history (nothing to restore)");
+        if (DEBUG) {
+            this.printf("disk \"%s\" added to history (nothing to restore)\n", sDiskName);
         }
         this.aDiskHistory[i] = [sDiskName, sDiskPath, []];
     }
@@ -22754,14 +22752,14 @@ class DriveController extends Component {
         for (i = 0; i < this.aDiskHistory.length; i++) {
             if (this.aDiskHistory[i][1] == sDiskPath) {
                 this.aDiskHistory.splice(i, 1);
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage("disk '" + sDiskName + "' removed from history");
+                if (DEBUG) {
+                    this.printf("disk \"%s\" removed from history\n", sDiskName);
                 }
                 return;
             }
         }
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("unable to remove disk '" + sDiskName + "' from history (" + sDiskPath + ")");
+        if (DEBUG) {
+            this.printf("unable to remove disk \"%s\" from history (%s)\n", sDiskName, sDiskPath);
         }
     }
 
@@ -22779,8 +22777,8 @@ class DriveController extends Component {
         for (i = 0; i < this.aDiskHistory.length; i++) {
             if (this.aDiskHistory[i][1] == sDiskPath) {
                 this.aDiskHistory[i][2] = disk.save();
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage("disk '" + sDiskName + "' updated in history");
+                if (DEBUG) {
+                    this.printf("disk \"%s\" updated in history\n", sDiskName);
                 }
                 return;
             }
@@ -22791,8 +22789,8 @@ class DriveController extends Component {
          * unload, and then reload/remount.  And since unloadDrive's normal behavior is to call updateDiskHistory()
          * before unloading, the fact that the disk is no longer listed here can't be treated as an error.
          */
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("unable to update disk '" + sDiskName + "' in history (" + sDiskPath + ")");
+        if (DEBUG) {
+            this.printf("unable to update disk \"%s\" in history (%s)\n", sDiskName, sDiskPath);
         }
     }
 
@@ -22977,7 +22975,7 @@ class RK11 extends DriveController {
         switch(func = this.regRKCS & RK11.RKCS.FUNC) {
 
         case RK11.FUNC.CRESET:
-            if (this.messageEnabled()) this.printMessage(this.type + ": CRESET(" + iDrive + ")", true);
+            this.printf("%s: CRESET(%d)\n", this.type, iDrive);
             this.regRKER = this.regRKDA = 0;
             this.regRKCS = RK11.RKCS.CRDY;
             break;
@@ -23006,7 +23004,7 @@ class RK11 extends DriveController {
             addr = (((this.regRKCS & RK11.RKCS.MEX)) << (16 - RK11.RKCS.SHIFT.MEX)) | this.regRKBA;
             inc = (this.regRKCS & RK11.RKCS.IBA)? 0 : 2;
 
-            if (this.messageEnabled()) this.printMessage(this.type + ": " + sFunc + "(" + iCylinder + ":" + iHead + ":" + iSector + ") " + Str.toOct(addr) + "--" + Str.toOct(addr + (nWords << 1)), true, true);
+            this.printf(Messages.ADDRESS, "%s: %s(%d:%d:%d) %o-%o\n", this.type, sFunc, iCylinder, iHead, iSector, addr, addr + (nWords << 1));
 
             if (iCylinder >= drive.nCylinders) {
                 this.regRKER |= RK11.RKER.NXC;
@@ -23022,7 +23020,7 @@ class RK11 extends DriveController {
 
         case RK11.FUNC.SEEK:
             iCylinder = (this.regRKDA & RK11.RKDA.CA) >> RK11.RKDA.SHIFT.CA;
-            if (this.messageEnabled()) this.printMessage(this.type + ": SEEK(" + iCylinder + ")", true);
+            this.printf("%s: SEEK(%d)\n", this.type, iCylinder);
             if (iCylinder < drive.nCylinders) {
                 this.regRKCS |= RK11.RKCS.SCP;
             } else {
@@ -23031,13 +23029,13 @@ class RK11 extends DriveController {
             break;
 
         case RK11.FUNC.DRESET:
-            if (this.messageEnabled()) this.printMessage(this.type + ": DRESET(" + iDrive + ")");
+            this.printf("%s: DRESET(%d)\n", this.type, iDrive);
             this.regRKER = this.regRKDA = 0;
             this.regRKCS = RK11.RKCS.CRDY | RK11.RKCS.SCP;
             break;
 
         default:
-            if (this.messageEnabled()) this.printMessage(this.type + ": UNSUPPORTED(" + func + ")");
+            this.printf("%s: UNSUPPORTED(%s)\n", this.type, func);
             break;
         }
 
@@ -23258,7 +23256,7 @@ class RK11 extends DriveController {
             this.regRKER |= RK11.RKER.DRE;
             this.regRKCS |= RK11.RKCS.ERR;
             if (this.regRKER & RK11.RKER.HE) this.regRKCS |= RK11.RKCS.HE;
-            if (this.messageEnabled()) this.printMessage(this.type + ": ERROR: " + Str.toOct(this.regRKER));
+            this.printf("%s: ERROR: %o\n", this.type, this.regRKER);
         }
     }
 
@@ -23619,7 +23617,7 @@ class RL11 extends DriveController {
             nWords = (0x10000 - this.regRLMP) & 0xffff;
             addr = (((this.regRLBE & RL11.RLBE.MASK)) << 16) | this.regRLBA;   // 22 bit mode
 
-            if (this.messageEnabled()) this.printMessage(this.type + ": " + sFunc + "(" + iCylinder + ":" + iHead + ":" + iSector + ") " + Str.toOct(addr) + "--" + Str.toOct(addr + (nWords << 1)), true, true);
+            this.printf(Messages.ADDRESS, "%s: %s(%d:%d:%d) %o-%o\n", this.type, sFunc, iCylinder, iHead, iSector, addr, addr + (nWords << 1));
 
             fInterrupt = fnReadWrite.call(this, drive, iCylinder, iHead, iSector, nWords, addr, 2, false, this.doneReadWrite.bind(this));
             break;
@@ -24128,7 +24126,7 @@ class RX11 extends DriveController {
         this.regRXCS &= ~(RX11.RXCS.GO | RX11.RXCS.TR | RX11.RXCS.DONE | RX11.RXCS.ERR);
         this.cpu.clearIRQ(this.irq);
 
-        if (this.messageEnabled()) this.printMessage(this.type + ".processCommand(" + RX11.FUNCS[this.funCode >> 1]+ ")", true, true);
+        this.printf(Messages.ADDRESS, "%s.processCommand(%s)\n", this.type, RX11.FUNCS[this.funCode >> 1]);
 
         switch(this.funCode) {
 
@@ -24205,7 +24203,7 @@ class RX11 extends DriveController {
         var disk = drive.disk;
         var sector = null, ibSector;
 
-        if (this.messageEnabled()) this.printMessage(this.type + ".readData(" + iCylinder + ":" + iHead + ":" + iSector + ") " + Str.toOct(addr) + "--" + Str.toOct(addr + (nWords << 1)), true, true);
+        this.printf(Messages.ADDRESS, "%s.readData(%d:%d:%d) %o-%o\n", this.type, iCylinder, iHead, iSector, addr, addr + (nWords << 1));
 
         if (!disk) {
             nError = drive.iDrive?  RX11.ERROR.HOME1 : RX11.ERROR.HOME0;
@@ -24273,7 +24271,7 @@ class RX11 extends DriveController {
 
         if (disk) {
             this.regRXES |= RX11.RXES.DRDY;
-            if (this.messageEnabled()) this.printMessage(this.type + ".readSector(" + iCylinder + ":" + iHead + ":" + nSector + ")", true, true);
+            this.printf(Messages.ADDRESS, "%s.readSector(%d:%d:%d)\n", this.type, iCylinder, iHead, nSector);
 
             var sector = disk.seek(iCylinder, iHead, nSector, true);
             if (sector) {
@@ -24314,7 +24312,7 @@ class RX11 extends DriveController {
 
         if (disk) {
             this.regRXES |= RX11.RXES.DRDY;
-            if (this.messageEnabled()) this.printMessage(this.type + ".writeSector(" + iCylinder + ":" + iHead + ":" + nSector + ")", true, true);
+            this.printf(Messages.ADDRESS, "%s.writeSector(%d:%d:%d)\n", this.type, iCylinder, iHead, nSector);
 
             var sector = disk.seek(iCylinder, iHead, nSector, true);
             if (sector) {
@@ -24448,7 +24446,7 @@ class RX11 extends DriveController {
                     this.regRXCS &= ~RX11.RXCS.TR;
 
                     this.regRXDB = this.abBuffer[this.iBuffer] & 0xff;
-                    if (this.messageEnabled()) this.printMessage(this.type + ".readByte(" + this.iBuffer + "): " + Str.toHexByte(this.regRXDB), true, true);
+                    this.printf(Messages.ADDRESS, "%s.readByte(%d): %#04x\n", this.type, this.iBuffer, this.regRXDB);
                     if (++this.iBuffer >= this.abBuffer.length) {
                         this.doneCommand();
                     }
@@ -24475,7 +24473,7 @@ class RX11 extends DriveController {
                 this.regRXCS &= ~RX11.RXCS.TR;
 
                 this.abBuffer[this.iBuffer] = data & 0xff;
-                if (this.messageEnabled()) this.printMessage(this.type + ".writeByte(" + this.iBuffer + "," + Str.toHexByte(data) + ")", true, true);
+                this.printf(Messages.ADDRESS, "%s.writeByte(%d,%#04x)\n", this.type, this.iBuffer, data);
                 if (++this.iBuffer >= this.abBuffer.length) {
                     this.doneCommand();
                 }
@@ -27379,7 +27377,7 @@ class DebuggerPDP11 extends DbgLib {
     undefinedInstruction(opCode)
     {
         if (this.messageEnabled(Messages.CPU)) {
-            this.printMessage("undefined opcode " + this.toStrBase(opCode), true, true);
+            this.printf(Messages.CPU + Messages.ADDRESS, "undefined opcode %s\n", this.toStrBase(opCode));
             return this.stopInstruction();  // allow the caller to step over it if they really want a trap generated
         }
         return false;
@@ -30300,7 +30298,7 @@ class ComputerPDP11 extends Component {
 
         this.printf("Portions adapted from the PDP-11/70 Emulator by Paul Nankervis <http://skn.noip.me/pdp11/pdp11.html>\n");
 
-        if (DEBUG && this.messageEnabled()) this.printMessage("TYPEDARRAYS: " + TYPEDARRAYS);
+        if (DEBUG) this.printf(Messages.DEBUG, "TYPEDARRAYS: %s\n", TYPEDARRAYS);
 
         /*
          * Iterate through all the components again and call their initBus() handler, if any
@@ -30517,8 +30515,8 @@ class ComputerPDP11 extends Component {
         if (!nErrorCode) {
             this.sStateData = sStateData;
             this.fStateData = true;
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("loaded state file " + sURL.replace(this.sUserID || "xxx", "xxx"));
+            if (DEBUG) {
+                this.printf("loaded state file %s\n", sURL.replace(this.sUserID || "xxx", "xxx"));
             }
         } else {
             this.sResumePath = null;
@@ -30559,7 +30557,7 @@ class ComputerPDP11 extends Component {
                 return;
             }
         }
-        if (DEBUG && this.messageEnabled()) this.printMessage("ComputerPDP11.wait(ready)");
+        if (DEBUG) this.printf("ComputerPDP11.wait(ready)\n");
         fn.call(this, parms);
     }
 
@@ -30584,8 +30582,8 @@ class ComputerPDP11 extends Component {
                 fValid = false;
                 if (!stateComputer) stateValidate.clear();
             } else {
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage("Last state: " + sTimestampComputer + " (validate: " + sTimestampValidate + ")");
+                if (DEBUG) {
+                    this.printf("Last state: %s (validate: %s)\n", sTimestampComputer, sTimestampValidate);
                 }
             }
         }
@@ -30606,8 +30604,8 @@ class ComputerPDP11 extends Component {
             resume = this.resume || (this.sStateData? ComputerPDP11.RESUME_AUTO : ComputerPDP11.RESUME_NONE);
         }
 
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("ComputerPDP11.powerOn(" + (resume == ComputerPDP11.RESUME_REPOWER ? "repower" : (resume ? "resume" : "")) + ")");
+        if (DEBUG) {
+            this.printf("ComputerPDP11.powerOn(%s)\n", (resume == ComputerPDP11.RESUME_REPOWER ? "repower" : (resume ? "resume" : "")));
         }
 
         if (this.nPowerChange) {
@@ -30859,8 +30857,8 @@ class ComputerPDP11 extends Component {
         var fRepower = (aParms[1] < 0);
         var fRestore = aParms[2];
 
-        if (DEBUG && this.flags.powered && this.messageEnabled()) {
-            this.printMessage("ComputerPDP11.donePowerOn(): redundant");
+        if (DEBUG && this.flags.powered) {
+            this.printf("ComputerPDP11.donePowerOn(): redundant\n");
         }
 
         this.fInitialized = true;
@@ -30981,8 +30979,8 @@ class ComputerPDP11 extends Component {
         var data;
         var sState = "none";
 
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage("ComputerPDP11.powerOff(" + (fSave ? "save" : "nosave") + (fShutdown ? ",shutdown" : "") + ")");
+        if (DEBUG) {
+            this.printf("ComputerPDP11.powerOff(%s%s)\n", (fSave ? "save" : "nosave"), (fShutdown ? ",shutdown" : ""));
         }
 
         if (this.nPowerChange) {
@@ -31108,18 +31106,18 @@ class ComputerPDP11 extends Component {
     {
         this.flags.reset = true;
         if (this.bus && this.bus.reset) {
-            this.printMessage("Resetting " + this.bus.type);
+            this.printf("Resetting %s\n", this.bus.type);
             this.bus.reset();
         }
         if (this.cpu && this.cpu.reset) {
-            this.printMessage("Resetting " + this.cpu.type);
+            this.printf("Resetting %s\n", this.cpu.type);
             this.cpu.reset();
         }
         var aComponents = Component.getComponents(this.id);
         for (var iComponent = 0; iComponent < aComponents.length; iComponent++) {
             var component = aComponents[iComponent];
             if (component !== this && component !== this.bus && component !== this.cpu && component.reset) {
-                this.printMessage("Resetting " + component.type);
+                this.printf("Resetting %s\n", component.type);
                 component.reset();
             }
         }
@@ -31363,7 +31361,7 @@ class ComputerPDP11 extends Component {
     {
         this.sUserID = null;
         var fMessages = DEBUG && this.messageEnabled();
-        if (fMessages) this.printMessage("verifyUserID(" + sUserID + ")");
+        if (fMessages) this.printf("verifyUserID(%s)\n", sUserID);
         var sRequest = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.VERIFY + '&' + UserAPI.QUERY.USER + '=' + sUserID;
         var response = Web.getResource(sRequest);
         var nErrorCode = response[0];
@@ -31373,16 +31371,16 @@ class ComputerPDP11 extends Component {
                 response = eval("(" + sResponse + ")");
                 if (response.code && response.code == UserAPI.CODE.OK) {
                     Web.setLocalStorageItem(ComputerPDP11.STATE_USERID, response.data);
-                    if (fMessages) this.printMessage(ComputerPDP11.STATE_USERID + " updated: " + response.data);
+                    if (fMessages) this.printf("%s updated: %s\n", ComputerPDP11.STATE_USERID, response.data);
                     this.sUserID = response.data;
                 } else {
-                    if (fMessages) this.printMessage(response.code + ": " + response.data);
+                    if (fMessages) this.printf("%s: %s\n", response.code, response.data);
                 }
             } catch (e) {
                 Component.error(e.message + " (" + sResponse + ")");
             }
         } else {
-            if (fMessages) this.printMessage("invalid response (error " + nErrorCode + ")");
+            if (fMessages) this.printf("invalid response (error %d)\n", nErrorCode);
         }
         return this.sUserID;
     }
@@ -31397,13 +31395,13 @@ class ComputerPDP11 extends Component {
     {
         var sStatePath = null;
         if (this.sUserID) {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage(ComputerPDP11.STATE_USERID + " for load: " + this.sUserID);
+            if (DEBUG) {
+                this.printf("%s for load: %s\n", ComputerPDP11.STATE_USERID, this.sUserID);
             }
             sStatePath = Web.getHostOrigin() + UserAPI.ENDPOINT + '?' + UserAPI.QUERY.REQ + '=' + UserAPI.REQ.LOAD + '&' + UserAPI.QUERY.USER + '=' + this.sUserID + '&' + UserAPI.QUERY.STATE + '=' + State.getKey(this, APPVERSION);
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage(ComputerPDP11.STATE_USERID + " unavailable");
+            if (DEBUG) {
+                this.printf("%s unavailable\n", ComputerPDP11.STATE_USERID);
             }
         }
         return sStatePath;
@@ -31425,8 +31423,8 @@ class ComputerPDP11 extends Component {
          * tend to blow off alerts() and the like when closing down.
          */
         if (sState) {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("size of server state: " + sState.length + " bytes");
+            if (DEBUG) {
+                this.printf("size of server state: %d bytes\n", sState.length);
             }
             var response = this.storeServerState(sUserID, sState, true);
             if (response && response[UserAPI.RES.CODE] == UserAPI.CODE.OK) {
@@ -31442,8 +31440,8 @@ class ComputerPDP11 extends Component {
                 this.resetUserID();
             }
         } else {
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage("no state to store");
+            if (DEBUG) {
+                this.printf("no state to store\n");
             }
         }
     }
@@ -31459,8 +31457,8 @@ class ComputerPDP11 extends Component {
      */
     storeServerState(sUserID, sState, fSync)
     {
-        if (DEBUG && this.messageEnabled()) {
-            this.printMessage(ComputerPDP11.STATE_USERID + " for store: " + sUserID);
+        if (DEBUG) {
+            this.printf("%s for store: %s\n", ComputerPDP11.STATE_USERID, sUserID);
         }
         /*
          * TODO: Determine whether or not any browsers cancel our request if we're called during a browser "shutdown" event,
@@ -31485,7 +31483,7 @@ class ComputerPDP11 extends Component {
                 }
                 sResponse = '{"' + UserAPI.RES.CODE + '":' + response[1] + ',"' + UserAPI.RES.DATA + '":"' + sResponse + '"}';
             }
-            if (DEBUG && this.messageEnabled()) this.printMessage(sResponse);
+            if (DEBUG) this.printf("%s\n", sResponse);
             return JSON.parse(sResponse);
         }
         return null;
@@ -31651,8 +31649,8 @@ class ComputerPDP11 extends Component {
                  */
                 var computer = new ComputerPDP11(parmsComputer, parmsMachine, true);
 
-                if (DEBUG && computer.messageEnabled()) {
-                    computer.printMessage("onInit(" + computer.flags.powered + ")");
+                if (DEBUG) {
+                    computer.printf("onInit(%b)\n", computer.flags.powered);
                 }
 
                 /*
@@ -31690,8 +31688,8 @@ class ComputerPDP11 extends Component {
 
                 computer.flags.unloading = false;
 
-                if (DEBUG && computer.messageEnabled()) {
-                    computer.printMessage("onShow(" + computer.fInitialized + "," + computer.flags.powered + ")");
+                if (DEBUG) {
+                    computer.printf("onShow(%b,%b)\n", computer.fInitialized, computer.flags.powered);
                 }
 
                 /*
@@ -31749,8 +31747,8 @@ class ComputerPDP11 extends Component {
                  */
                 computer.flags.unloading = true;
 
-                if (DEBUG && computer.messageEnabled()) {
-                    computer.printMessage("onExit(" + computer.flags.powered + ")");
+                if (DEBUG) {
+                    computer.printf("onExit(%b)\n", computer.flags.powered);
                 }
 
                 if (computer.flags.powered) {

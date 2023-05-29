@@ -114,7 +114,7 @@ export default class RK11 extends DriveController {
         switch(func = this.regRKCS & RK11.RKCS.FUNC) {
 
         case RK11.FUNC.CRESET:
-            if (this.messageEnabled()) this.printMessage(this.type + ": CRESET(" + iDrive + ")", true);
+            this.printf("%s: CRESET(%d)\n", this.type, iDrive);
             this.regRKER = this.regRKDA = 0;
             this.regRKCS = RK11.RKCS.CRDY;
             break;
@@ -143,7 +143,7 @@ export default class RK11 extends DriveController {
             addr = (((this.regRKCS & RK11.RKCS.MEX)) << (16 - RK11.RKCS.SHIFT.MEX)) | this.regRKBA;
             inc = (this.regRKCS & RK11.RKCS.IBA)? 0 : 2;
 
-            if (this.messageEnabled()) this.printMessage(this.type + ": " + sFunc + "(" + iCylinder + ":" + iHead + ":" + iSector + ") " + Str.toOct(addr) + "--" + Str.toOct(addr + (nWords << 1)), true, true);
+            this.printf(Messages.ADDRESS, "%s: %s(%d:%d:%d) %o-%o\n", this.type, sFunc, iCylinder, iHead, iSector, addr, addr + (nWords << 1));
 
             if (iCylinder >= drive.nCylinders) {
                 this.regRKER |= RK11.RKER.NXC;
@@ -159,7 +159,7 @@ export default class RK11 extends DriveController {
 
         case RK11.FUNC.SEEK:
             iCylinder = (this.regRKDA & RK11.RKDA.CA) >> RK11.RKDA.SHIFT.CA;
-            if (this.messageEnabled()) this.printMessage(this.type + ": SEEK(" + iCylinder + ")", true);
+            this.printf("%s: SEEK(%d)\n", this.type, iCylinder);
             if (iCylinder < drive.nCylinders) {
                 this.regRKCS |= RK11.RKCS.SCP;
             } else {
@@ -168,13 +168,13 @@ export default class RK11 extends DriveController {
             break;
 
         case RK11.FUNC.DRESET:
-            if (this.messageEnabled()) this.printMessage(this.type + ": DRESET(" + iDrive + ")");
+            this.printf("%s: DRESET(%d)\n", this.type, iDrive);
             this.regRKER = this.regRKDA = 0;
             this.regRKCS = RK11.RKCS.CRDY | RK11.RKCS.SCP;
             break;
 
         default:
-            if (this.messageEnabled()) this.printMessage(this.type + ": UNSUPPORTED(" + func + ")");
+            this.printf("%s: UNSUPPORTED(%s)\n", this.type, func);
             break;
         }
 
@@ -395,7 +395,7 @@ export default class RK11 extends DriveController {
             this.regRKER |= RK11.RKER.DRE;
             this.regRKCS |= RK11.RKCS.ERR;
             if (this.regRKER & RK11.RKER.HE) this.regRKCS |= RK11.RKCS.HE;
-            if (this.messageEnabled()) this.printMessage(this.type + ": ERROR: " + Str.toOct(this.regRKER));
+            this.printf("%s: ERROR: %o\n", this.type, this.regRKER);
         }
     }
 

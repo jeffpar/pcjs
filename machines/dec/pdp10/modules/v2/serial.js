@@ -499,7 +499,7 @@ export default class SerialPortPDP10 extends Component {
              * the data assigned to RBUF with 0xff.
              */
             b = this.abReceive.shift() & 0xff;
-            this.printMessage("receiveByte(" + Str.toHexByte(b) + ")");
+            this.printf("receiveByte(%#04x)\n", b);
             if (this.fUpperCase) {
                 /*
                  * Automatically transform lower-case ASCII codes to upper-case; fUpperCase should
@@ -551,7 +551,7 @@ export default class SerialPortPDP10 extends Component {
     {
         var fTransmitted = false;
 
-        if (MAXDEBUG) this.printMessage("transmitByte(" + Str.toHexByte(b) + ")");
+        if (MAXDEBUG) this.printf("transmitByte(%#04x)\n", b);
 
         if (this.sendData) {
             if (this.sendData.call(this.connection, b)) {

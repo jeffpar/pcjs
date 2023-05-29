@@ -499,7 +499,7 @@ X86.helpINT = function(nIDT, nError, nCycles)
             case 0xCC:
                 if (DEBUGGER && this.dbg && this.flags.running) {
                     this.getIPByte();
-                    this.printMessage("debugger halting on INT 0x06,0xCC", DEBUGGER || this.bitsMessage);
+                    this.printf("debugger halting on INT 0x06,0xCC\n");
                     this.dbg.stopCPU();
                     return;
                 }
@@ -1000,10 +1000,11 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
 
         let fRunning = this.flags.running;
         let sMessage = "Fault " + Str.toHexByte(nFault) + (nError != null? " (" + Str.toHexWord(nError) + ")" : "") + " on opcode " + Str.toHexByte(bOpcode);
-        if (fHalt && fRunning) sMessage += " (blocked)";
-
+        if (fHalt) {
+            if (fRunning) sMessage += " (blocked)";
+        }
         if (DEBUGGER && this.dbg) {
-            this.printMessage(sMessage, fHalt || bitsMessage, true);
+            this.printf((fHalt? Messages.PROGRESS : bitsMessage) + Messages.ADDRESS, "%s\n", sMessage);
             if (fHalt) {
                 /*
                  * By setting fHalt to fRunning (which is true while running but false while single-stepping),

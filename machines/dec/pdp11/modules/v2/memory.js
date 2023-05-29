@@ -446,8 +446,8 @@ export default class MemoryPDP11 {
      */
     printAddr(sMessage)
     {
-        if (DEBUG && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
-            this.dbg.printMessage(sMessage + ' ' + (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id), true);
+        if (DEBUG && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "%s %s\n", sMessage, (this.addr != null? ('@' + this.dbg.toStrBase(this.addr)) : '#' + this.id));
         }
     }
 
@@ -544,8 +544,8 @@ export default class MemoryPDP11 {
      */
     readNone(off, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY) /* && !off */) {
-            this.dbg.printMessage("attempt to read invalid address " + this.dbg.toStrBase(addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "attempt to read invalid address %s\n", this.dbg.toStrBase(addr));
         }
         this.bus.fault(addr, PDP11.CPUERR.NOMEMORY, PDP11.ACCESS.READ);
         return 0xff;
@@ -561,8 +561,8 @@ export default class MemoryPDP11 {
      */
     writeNone(off, v, addr)
     {
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY) /* && !off */) {
-            this.dbg.printMessage("attempt to write " + this.dbg.toStrBase(v) + " to invalid addresses " + this.dbg.toStrBase(addr), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "attempt to write %s to invalid addresses %s\n", this.dbg.toStrBase(v), this.dbg.toStrBase(addr));
         }
         this.bus.fault(addr, PDP11.CPUERR.NOMEMORY, PDP11.ACCESS.WRITE);
     }
@@ -776,8 +776,8 @@ export default class MemoryPDP11 {
     readByteLE(off, addr)
     {
         var b = this.ab[off];
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
-            this.dbg.printMessage("Memory.readByte(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(b), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "Memory.readByte(%s): %s\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(b));
         }
         return b;
     }
@@ -821,8 +821,8 @@ export default class MemoryPDP11 {
         } else {
             w = this.ab[off] | (this.ab[off+1] << 8);
         }
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
-            this.dbg.printMessage("Memory.readWord(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(w), true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "Memory.readWord(%s): %s\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(w));
         }
         return w;
     }
@@ -853,8 +853,8 @@ export default class MemoryPDP11 {
     {
         this.ab[off] = b;
         this.fDirty = true;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
-            this.dbg.printMessage("Memory.writeByte(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(b) + ")", true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "Memory.writeByte(%s,%s)\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(b));
         }
     }
 
@@ -899,8 +899,8 @@ export default class MemoryPDP11 {
             this.ab[off+1] = w >> 8;
         }
         this.fDirty = true;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.MEMORY)) {
-            this.dbg.printMessage("Memory.writeWord(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(w) + ")", true);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.MEMORY, "Memory.writeWord(%s,%s)\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(w));
         }
     }
 }

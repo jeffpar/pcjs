@@ -686,8 +686,8 @@ export default class BusPDP10 extends Component {
     {
         this.fFault = true;
         if (!this.nDisableFaults) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.FAULT)) {
-                this.dbg.printMessage("memory fault on " + this.dbg.toStrBase(addr), true, true);
+            if (DEBUGGER && this.dbg) {
+                this.dbg.printf(Messages.FAULT + Messages.ADDRESS, "memory fault on %s\n", this.dbg.toStrBase(addr));
             }
             this.cpu.haltCPU();
         }

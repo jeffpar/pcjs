@@ -171,7 +171,7 @@ export default class RL11 extends DriveController {
             nWords = (0x10000 - this.regRLMP) & 0xffff;
             addr = (((this.regRLBE & RL11.RLBE.MASK)) << 16) | this.regRLBA;   // 22 bit mode
 
-            if (this.messageEnabled()) this.printMessage(this.type + ": " + sFunc + "(" + iCylinder + ":" + iHead + ":" + iSector + ") " + Str.toOct(addr) + "--" + Str.toOct(addr + (nWords << 1)), true, true);
+            this.printf(Messages.ADDRESS, "%s: %s(%d:%d:%d) %o-%o\n", this.type, sFunc, iCylinder, iHead, iSector, addr, addr + (nWords << 1));
 
             fInterrupt = fnReadWrite.call(this, drive, iCylinder, iHead, iSector, nWords, addr, 2, false, this.doneReadWrite.bind(this));
             break;

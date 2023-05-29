@@ -220,6 +220,7 @@ function replaceText(sText, sType, verbose)
             sTextNew += sNew;
             iTextLast = match.index + match[0].length;
         }
+        sTextNew += sText.slice(iTextLast);
     }
     else if (sType == "printMessage") {
         /*
@@ -238,10 +239,10 @@ function replaceText(sText, sType, verbose)
          * Notes: We can eliminate the first "true" parameter because it's just signalling that messageEnabled() was already
          * called, and we can eliminate the second "true" parameter by adding MessagePDP10.ADDRESS to the message number.
          */
-        let matches = sText.matchAll(/if \((.*? && |)this\.messageEnabled\((.*?)\)\)\s*\{(\s*)this.printMessage\((.*?)\);(\s*)\}/g);
+        let matches = sText.matchAll(/if \((.*? && |)\S+?\.messageEnabled\((.*?)\)\)\s*(\{\s*|)(\S+?)\.printMessage\((.*?)\);(\s*\}|)/g);
         for (let match of matches) {
             let sNew = match[0];
-            let args = splitArgs(match[4], ',');
+            let args = splitArgs(match[5], ',');
             let [sFormat, sList] = replaceArgs(args[0]);
             let sMessages = match[2].replace(/\s*\|\s*/g, " + ");
             let messageMatch = sMessages.match(/(Messages[^.]*)\./);
@@ -251,18 +252,21 @@ function replaceText(sText, sType, verbose)
                     if (sMessages) sMessages += " + ";
                     sMessages += messageClass + ".ADDRESS";
                 }
+                if (args[1] && args[1] != "true") {
+                    printf("warning: unexpected value (%s) for printMessage parameter 2\n", args[1]);
+                }
                 sFormat = (sMessages? sMessages + ", " : "") + "\"" + sFormat + "\\n\"";
                 if (!match[1]) {
                     /*
                      * We can remove the "if" completely...
                      */
-                    sNew = "this.printf(" + sFormat + (sList? ", " + sList : "") + ");";
+                    sNew = match[4] + ".printf(" + sFormat + (sList? ", " + sList : "") + ");";
                 } else {
                     /*
                      * We can remove the "if" partially...
                      */
                     let sCondition = match[1].replace(/ && $/, "");
-                    sNew = "if (" + sCondition + ") {" + match[3] + "this.printf(" + sFormat + (sList? ", " + sList : "") + ");" + match[5] + "}";
+                    sNew = "if (" + sCondition + ") " + match[3] + match[4] + ".printf(" + sFormat + (sList? ", " + sList : "") + ");" + match[6];
                 }
                 if (verbose) {
                     printf("replacing '%s'\n     with '%s'\n\n", match[0], sNew);
@@ -270,16 +274,50 @@ function replaceText(sText, sType, verbose)
             } else {
                 printf("unable to replace: '%s'\n", match[0]);
             }
-
             sTextNew += sText.slice(iTextLast, match.index);
             sTextNew += sNew;
             iTextLast = match.index + match[0].length;
         }
+        sTextNew += sText.slice(iTextLast);
+        /*
+         * Round 2: printMessage() calls OUTSIDE of messageEnabled() IF blocks...
+         */
+        sText = sTextNew;
+        sTextNew = "";
+        iTextLast = 0;
+        matches = sText.matchAll(/(\S+?)\.printMessage\((.*?)\);/g);
+        for (let match of matches) {
+            let sNew = match[0];
+            let args = splitArgs(match[2], ',');
+            let [sFormat, sList] = replaceArgs(args[0]);
+            let sMessages = args[1] && args[1].replace(/\s*\|\s*/g, " + ") || "";
+            let messageMatch = sMessages.match(/(Messages[^.]*)\./);
+            let messageClass = messageMatch && messageMatch[1] || "Messages";
+            if (sFormat) {
+                if (args[1] == "true" && !sMessages) {
+                    sMessages = messageClass + ".DEFAULT";
+                }
+                if (args[2] == "true") {
+                    if (sMessages) sMessages += " + ";
+                    sMessages += messageClass + ".ADDRESS";
+                }
+                sFormat = (sMessages? sMessages + ", " : "") + "\"" + sFormat + "\\n\"";
+                sNew = match[1] + ".printf(" + sFormat + (sList? ", " + sList : "") + ");";
+                if (verbose) {
+                    printf("replacing '%s'\n     with '%s'\n\n", match[0], sNew);
+                }
+            } else {
+                printf("unable to replace: '%s'\n", match[0]);
+            }
+            sTextNew += sText.slice(iTextLast, match.index);
+            sTextNew += sNew;
+            iTextLast = match.index + match[0].length;
+        }
+        sTextNew += sText.slice(iTextLast);
     }
     else {
         printf("unknown replacement type: %s\n", sType);
     }
-    sTextNew += sText.slice(iTextLast);
     return sTextNew;
 }
 

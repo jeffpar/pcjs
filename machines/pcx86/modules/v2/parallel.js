@@ -374,7 +374,7 @@ export default class ParallelPort extends Component {
     {
         let fTransmitted = false;
 
-        this.printMessage("transmitByte(" + Str.toHexByte(b) + ")");
+        this.printf("transmitByte(%#04x)\n", b);
 
         if (this.controlBuffer) {
             if (b == 0x0D) {

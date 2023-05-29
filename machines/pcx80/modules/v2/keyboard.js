@@ -508,9 +508,7 @@ export default class KeyboardX80 extends Component {
         var fPass = true;
         var keyCode = event.keyCode;
 
-        if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
-            this.printMessage("onKey" + (fDown? "Down" : "Up") + "(" + keyCode + ")", true);
-        }
+        this.printf(Messages.KEYS, "onKey%s(%d)\n", (fDown? "Down" : "Up"), keyCode);
 
         /*
          * A note about Firefox: it uses different keyCodes for certain keys; there's a logic to the differences
@@ -586,11 +584,7 @@ export default class KeyboardX80 extends Component {
                 }
             }
         }
-
-        if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
-            this.printMessage("onKey" + (fDown? "Down" : "Up") + "(" + keyCode + "): softCode=" + softCode + ", pass=" + fPass, true);
-        }
-
+        this.printf(Messages.KEYS, "onKey%s(%d): softCode=%s, pass=%b\n", (fDown? "Down" : "Up"), keyCode, softCode, fPass);
         return fPass;
     }
 
@@ -630,11 +624,7 @@ export default class KeyboardX80 extends Component {
                 this.updateLEDs();
             }
         }
-
-        if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
-            this.printMessage("onKeyPress(" + charCode + ")", true);
-        }
-
+        this.printf(Messages.KEYS, "onKeyPress(%d)\n", charCode);
         return true;
     }
 
@@ -669,9 +659,7 @@ export default class KeyboardX80 extends Component {
                 if (!this.indexOfCharMap(bMapping)) {
                     fPass = this.onSoftKeyDown(keyCode, fDown, true);
                     if (event.preventDefault) event.preventDefault();
-                    if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
-                        this.printMessage("oniOSKey" + (fDown ? "Down" : "Up") + "(" + keyCode + "): pass=" + fPass, true);
-                    }
+                    this.printf(Messages.KEYS, "oniOSKey%s(%d): pass=%b\n", (fDown ? "Down" : "Up"), keyCode, fPass);
                 }
             }
         }
@@ -720,11 +708,7 @@ export default class KeyboardX80 extends Component {
                 this.onSoftKeyDown(softCode, true, true);
             }
         }
-
-        if (!COMPILED && this.messageEnabled(Messages.KEYS)) {
-            this.printMessage("oniOSKeyPress(" + charCode + ")", true);
-        }
-
+        this.printf(Messages.KEYS, "oniOSKeyPress(%d)\n", charCode);
         return true;
     }
 

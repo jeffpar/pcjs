@@ -918,7 +918,7 @@ export default class SerialPort extends Component {
     {
         let fTransmitted = false;
 
-        this.printMessage("transmitByte(" + Str.toHexByte(b) + ")");
+        this.printf("transmitByte(%#04x)\n", b);
 
         if (this.sendData) {
             if (this.sendData.call(this.connection, b)) {

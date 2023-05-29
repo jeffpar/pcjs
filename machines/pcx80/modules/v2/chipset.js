@@ -540,7 +540,7 @@ export default class ChipSetX80 extends Component {
         case ChipSetX80.VT100.NVR.CMD.ERASE:
             addr = this.getNVRAddr();
             this.aNVRWords[addr] = ChipSetX80.VT100.NVR.WORDMASK;
-            this.printMessage("doNVRCommand(): erase data at addr " + Str.toHexWord(addr));
+            this.printf("doNVRCommand(): erase data at addr %#06x\n", addr);
             break;
 
         case ChipSetX80.VT100.NVR.CMD.ACCEPT_DATA:
@@ -551,7 +551,7 @@ export default class ChipSetX80 extends Component {
             addr = this.getNVRAddr();
             data = this.wNVRData & ChipSetX80.VT100.NVR.WORDMASK;
             this.aNVRWords[addr] = data;
-            this.printMessage("doNVRCommand(): write data " + Str.toHexWord(data) + " to addr " + Str.toHexWord(addr));
+            this.printf("doNVRCommand(): write data %#06x to addr %#06x\n", data, addr);
             break;
 
         case ChipSetX80.VT100.NVR.CMD.READ:
@@ -562,7 +562,7 @@ export default class ChipSetX80 extends Component {
              */
             if (data == null) data = ChipSetX80.VT100.NVR.WORDMASK;
             this.wNVRData = data;
-            this.printMessage("doNVRCommand():  read data " + Str.toHexWord(data) + " from addr " + Str.toHexWord(addr));
+            this.printf("doNVRCommand():  read data %#06x from addr %#06x\n", data, addr);
             break;
 
         case ChipSetX80.VT100.NVR.CMD.SHIFT_OUT:
@@ -574,7 +574,7 @@ export default class ChipSetX80 extends Component {
             break;
 
         default:
-            this.printMessage("doNVRCommand(): unrecognized command " + Str.toHexByte(bCmd));
+            this.printf("doNVRCommand(): unrecognized command %#04x\n", bCmd);
             break;
         }
     }

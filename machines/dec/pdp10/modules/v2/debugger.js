@@ -1890,7 +1890,7 @@ export default class DebuggerPDP10 extends DbgLib {
     undefinedInstruction(opCode)
     {
         if (this.messageEnabled(Messages.CPU)) {
-            this.printMessage("undefined opcode " + this.toStrBase(opCode), true, true);
+            this.printf(Messages.CPU + Messages.ADDRESS, "undefined opcode %s\n", this.toStrBase(opCode));
             return this.stopInstruction();  // allow the caller to step over it if they really want a trap generated
         }
         return false;

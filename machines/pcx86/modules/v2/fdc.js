@@ -2573,10 +2573,10 @@ export default class FDC extends Component {
     {
         this.assert((!this.regDataIndex || name !== undefined) && this.regDataIndex < this.regDataTotal);
         let bCmd = this.regDataArray[this.regDataIndex];
-        if (DEBUG && this.messageEnabled(Messages.PORT + Messages.FDC)) {
+        if (DEBUG) {
             let bCmdMasked = bCmd & FDC.REG_DATA.CMD.MASK;
             if (!name && !this.regDataIndex && FDC.aCmdInfo[bCmdMasked]) name = FDC.aCmdInfo[bCmdMasked].name;
-            this.printMessage(this.idComponent + ".popCmd(" + (name || this.regDataIndex) + "): " + Str.toHexByte(bCmd), true);
+            this.printf(Messages.PORT + Messages.FDC, "%s.popCmd(%s): %#04x\n", this.idComponent, (name || this.regDataIndex), bCmd);
         }
         this.regDataIndex++;
         return bCmd;
@@ -2643,9 +2643,7 @@ export default class FDC extends Component {
      */
     pushResult(bResult, name)
     {
-        if (DEBUG && this.messageEnabled(Messages.PORT + Messages.FDC)) {
-            this.printMessage(this.idComponent + ".pushResult(" + (name || this.regDataTotal) + "): " + Str.toHexByte(bResult), true);
-        }
+        if (DEBUG) this.printf(Messages.PORT + Messages.FDC, "%s.pushResult(%s): %#04x\n", this.idComponent, (name || this.regDataTotal), bResult);
         this.assert(!(bResult & ~0xff));
         this.regDataArray[this.regDataTotal++] = bResult;
     }

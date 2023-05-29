@@ -539,9 +539,7 @@ export default class HDC extends Component {
             this.drive = this.aDrives[this.iDrive];
         }
 
-        if (this.messageEnabled()) {
-            this.printMessage("HDC initialized for " + this.aDrives.length + " drive(s)");
-        }
+        this.printf("HDC initialized for %d drive(s)\n", this.aDrives.length);
         return fSuccess;
     }
 
@@ -958,7 +956,7 @@ export default class HDC extends Component {
         if (fAutoMount) {
             drive.fAutoMount = true;
             this.cAutoMount++;
-            if (this.messageEnabled()) this.printMessage("loading " + sDiskName);
+            this.printf("loading \"%s\"\n", sDiskName);
         }
         let disk = drive.disk || new Disk(this, drive, drive.mode);
         sDiskPath = Web.redirectResource(sDiskPath);
@@ -1214,8 +1212,8 @@ export default class HDC extends Component {
             bIn = this.readData(drive, function onATCReadData(b, fAsync, obj, off) {
                 hdc.assert(!fAsync);
                 if (BACKTRACK && obj) {
-                    if (!off && obj.file && hdc.messageEnabled(Messages.DISK)) {
-                        hdc.printMessage("loading " + obj.file.path + '[' + obj.offFile + "] via port " + Str.toHexWord(port), true);
+                    if (!off && obj.file) {
+                        hdc.printf(Messages.DISK, "loading %s[%d] via port %#06x\n", obj.file.path, obj.offFile, port);
                     }
                     /*
                      * TODO: We could define a cached BTO that's reset prior to a new ATC command, and then pass that
@@ -1287,7 +1285,7 @@ export default class HDC extends Component {
                                  */
                                 hdc.regStatus = HDC.ATC.STATUS.ERROR;
                                 hdc.regError = HDC.ATC.ERROR.NO_CHS;
-                                if (DEBUG) hdc.printMessage(this.idComponent + ".inATCByte(): read failed");
+                                if (DEBUG) hdc.printf("%s.inATCByte(): read failed\n", this.idComponent);
                             }
                         }, false);
                     } else {
@@ -1341,8 +1339,8 @@ export default class HDC extends Component {
                      */
                     this.regStatus = HDC.ATC.STATUS.ERROR;
                     this.regError = HDC.ATC.ERROR.NO_CHS;
-                    if (DEBUG && this.messageEnabled()) {
-                        this.printMessage(this.idComponent + ".outATCByte(" + Str.toHexByte(bOut) + "): write failed");
+                    if (DEBUG) {
+                        this.printf("%s.outATCByte(%#04x): write failed\n", this.idComponent, bOut);
                     }
                 }
                 else if (drive.iByte == 1 || drive.iByte == drive.cbTransfer) {
@@ -1377,16 +1375,16 @@ export default class HDC extends Component {
                 /*
                  * TODO: What to do about unexpected writes? The number of bytes has exceeded what the command specified.
                  */
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage(this.idComponent + ".outATCByte(" + Str.toHexByte(bOut) + "): write exceeds count (" + this.drive.nBytes + ")");
+                if (DEBUG) {
+                    this.printf("%s.outATCByte(%#04x): write exceeds count (%d)\n", this.idComponent, bOut, this.drive.nBytes);
                 }
             }
         } else {
             /*
              * TODO: What to do about unexpected writes? No command was specified.
              */
-            if (DEBUG && this.messageEnabled()) {
-                this.printMessage(this.idComponent + ".outATCByte(" + Str.toHexByte(bOut) + "): write without command");
+            if (DEBUG) {
+                this.printf("%s.outATCByte(%#04x): write without command\n", this.idComponent, bOut);
             }
         }
     }
@@ -1718,9 +1716,7 @@ export default class HDC extends Component {
         this.regStatus = HDC.ATC.STATUS.READY | HDC.ATC.STATUS.SEEK_OK;
         let drive = this.aDrives[iDrive];
 
-        if (this.messageEnabled(Messages.HDC)) {
-            this.printMessage(this.idComponent + ".doATC(" + (this.nInterface*2+iDrive) + "," + Str.toHexByte(bCmd) + "): " + HDC.aATACommands[bCmd] + (drive? "" : " (drive " + iDrive + " not present)"), true, true);
-        }
+        this.printf(Messages.HDC + Messages.ADDRESS, "%s.doATC(%d,%#04x): %s%s\n", this.idComponent, (this.nInterface*2+iDrive), bCmd, HDC.aATACommands[bCmd], (drive? "" : " (drive " + iDrive + " not present)"));
 
         if (!drive) return;
         this.iDrive = iDrive;
@@ -1769,8 +1765,8 @@ export default class HDC extends Component {
             /* falls through */
 
         case HDC.ATC.COMMAND.READ_DATA:             // 0x20 (ATA)
-            if (this.messageEnabled(Messages.HDC) && !drive.useBuffer) {
-                this.printMessage(this.idComponent + ".doATCRead(" + iDrive + ',' + drive.wCylinder + ':' + drive.bHead + ':' + drive.bSector + ',' + nSectors + ")", true);
+            if (!drive.useBuffer) {
+                this.printf(Messages.HDC, "%s.doATCRead(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
             }
             /*
              * We're using a call to readData() that disables auto-increment, so that once we've got the first
@@ -1809,8 +1805,8 @@ export default class HDC extends Component {
             /* falls through */
 
         case HDC.ATC.COMMAND.WRITE_DATA:            // 0x30 (ATA)
-            if (this.messageEnabled(Messages.HDC) && !drive.useBuffer) {
-                this.printMessage(this.idComponent + ".doATCWrite(" + iDrive + ',' + drive.wCylinder + ':' + drive.bHead + ':' + drive.bSector + ',' + nSectors + ")", true);
+            if (!drive.useBuffer) {
+                this.printf(Messages.HDC, "%s.doATCWrite(%d,%d:%d:%d,%d)\n", this.idComponent, iDrive, drive.wCylinder, drive.bHead, drive.bSector, nSectors);
             }
             this.regStatus = HDC.ATC.STATUS.DATA_REQ;
             fProcessed = true;
@@ -1871,7 +1867,7 @@ export default class HDC extends Component {
             this.regStatus = HDC.ATC.STATUS.ERROR;
             this.regError = HDC.ATC.ERROR.CMD_ABORT;
             if (this.messageEnabled()) {
-                this.printMessage(this.idComponent + ".doATC(" + Str.toHexByte(this.regCommand) + "): unsupported operation");
+                this.printf("%s.doATC(%#04x): unsupported operation\n", this.idComponent, this.regCommand);
                 if (MAXDEBUG) this.dbg.stopCPU();
             }
         }
@@ -1912,9 +1908,9 @@ export default class HDC extends Component {
                  * has a low tolerance for fast controller interrupts during multi-sector operations.
                  */
                 this.chipset.setIRR(ChipSet.IRQ.ATC1 + this.nInterface, 120);
-                if (DEBUG) this.printMessage(this.idComponent + ".setATCIRR(): enabled", Messages.PIC + Messages.HDC);
+                if (DEBUG) this.printf(Messages.PIC + Messages.HDC, "%s.setATCIRR(): enabled\n", this.idComponent);
             } else {
-                if (DEBUG) this.printMessage(this.idComponent + ".setATCIRR(): disabled", Messages.PIC + Messages.HDC);
+                if (DEBUG) this.printf(Messages.PIC + Messages.HDC, "%s.setATCIRR(): disabled\n", this.idComponent);
             }
         }
     }
@@ -1997,7 +1993,7 @@ export default class HDC extends Component {
             bDataStatus = HDC.XTC.DATA.STATUS.OK;
             if (!drive && this.iDriveAllowFail == iDrive) {
                 this.iDriveAllowFail = -1;
-                if (DEBUG) this.printMessage(this.idComponent + ".doXTC(): fake failure triggered");
+                if (DEBUG) this.printf("%s.doXTC(): fake failure triggered\n", this.idComponent);
                 bDataStatus = HDC.XTC.DATA.STATUS.ERROR;
             }
             this.beginResult(bDataStatus | bDrive);
@@ -2033,8 +2029,8 @@ export default class HDC extends Component {
 
             case HDC.XTC.DATA.CMD.RECALIBRATE:      // 0x01
                 drive.bControl = bControl;
-                if (DEBUG && this.messageEnabled()) {
-                    this.printMessage(this.idComponent + ".doXTC(): drive " + iDrive + " control byte: " + Str.toHexByte(bControl));
+                if (DEBUG) {
+                    this.printf("%s.doXTC(): drive %d control byte: %#04x\n", this.idComponent, iDrive, bControl);
                 }
                 this.beginResult(HDC.XTC.DATA.STATUS.OK | bDrive);
                 break;
@@ -2072,7 +2068,7 @@ export default class HDC extends Component {
             default:
                 this.beginResult(HDC.XTC.DATA.STATUS.ERROR | bDrive);
                 if (this.messageEnabled()) {
-                    this.printMessage(this.idComponent + ".doXTC(" + Str.toHexByte(bCmdOrig) + "): " + (bCmd < 0? ("invalid drive (" + iDrive + ")") : "unsupported operation"));
+                    this.printf("%s.doXTC(%#04x): %d\n", this.idComponent, bCmdOrig, (bCmd < 0? ("invalid drive (" + iDrive + ")") : "unsupported operation"));
                     if (MAXDEBUG && bCmd >= 0) this.dbg.stopCPU();
                 }
                 break;
@@ -2092,9 +2088,7 @@ export default class HDC extends Component {
         let bCmdIndex = this.regDataIndex;
         if (bCmdIndex < this.regDataTotal) {
             bCmd = this.regDataArray[this.regDataIndex++];
-            if (this.messageEnabled((bCmdIndex > 0? Messages.PORT : 0) + Messages.HDC)) {
-                this.printMessage(this.idComponent + ".popCmd(" + bCmdIndex + "): " + Str.toHexByte(bCmd) + (!bCmdIndex && HDC.aXTACommands[bCmd]? (" (" + HDC.aXTACommands[bCmd] + ")") : ""), true);
-            }
+            this.printf((bCmdIndex > 0? Messages.PORT : 0) + Messages.HDC, "%s.popCmd(%d): %#04x%s\n", this.idComponent, bCmdIndex, bCmd, (!bCmdIndex && HDC.aXTACommands[bCmd]? (" (" + HDC.aXTACommands[bCmd] + ")") : ""));
         }
         return bCmd;
     }
@@ -2126,8 +2120,8 @@ export default class HDC extends Component {
      */
     pushResult(bResult)
     {
-        if (DEBUG && this.messageEnabled((this.regDataTotal > 0? Messages.PORT : 0) + Messages.HDC)) {
-            this.printMessage(this.idComponent + ".pushResult(" + this.regDataTotal + "): " + Str.toHexByte(bResult), true);
+        if (DEBUG) {
+            this.printf((this.regDataTotal > 0? Messages.PORT : 0) + Messages.HDC, "%s.pushResult(%d): %#04x\n", this.idComponent, this.regDataTotal, bResult);
         }
         this.regDataArray[this.regDataTotal++] = bResult;
     }
@@ -2149,7 +2143,7 @@ export default class HDC extends Component {
         /*
          * The DMA controller should be ASKING for data, not GIVING us data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printMessage(this.idComponent + ".doDMARead(): invalid DMA acknowledgement");
+        if (DEBUG) this.printf("%s.doDMARead(): invalid DMA acknowledgement\n", this.idComponent);
         done(-1, false);
     }
 
@@ -2168,7 +2162,7 @@ export default class HDC extends Component {
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printMessage(this.idComponent + ".doDMAWrite(): invalid DMA acknowledgement");
+        if (DEBUG) this.printf("%s.doDMAWrite(): invalid DMA acknowledgement\n", this.idComponent);
         return -1;
     }
 
@@ -2187,7 +2181,7 @@ export default class HDC extends Component {
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printMessage(this.idComponent + ".doDMAWriteBuffer(): invalid DMA acknowledgement");
+        if (DEBUG) this.printf("%s.doDMAWriteBuffer(): invalid DMA acknowledgement\n", this.idComponent);
         return -1;
     }
 
@@ -2206,7 +2200,7 @@ export default class HDC extends Component {
         /*
          * The DMA controller should be GIVING us data, not ASKING for data; this suggests an internal DMA miscommunication
          */
-        if (DEBUG) this.printMessage(this.idComponent + ".doDMAWriteFormat(): invalid DMA acknowledgement");
+        if (DEBUG) this.printf("%s.doDMAWriteFormat(): invalid DMA acknowledgement\n", this.idComponent);
         return -1;
     }
 
@@ -2221,9 +2215,7 @@ export default class HDC extends Component {
     {
         drive.errorCode = HDC.XTC.DATA.ERR.NOT_READY;
 
-        if (this.messageEnabled()) {
-            this.printMessage(this.idComponent + ".doRead(" + drive.iDrive + ',' + drive.wCylinder + ':' + drive.bHead + ':' + drive.bSector + ',' + ((drive.nBytes / drive.cbSector)|0) + ")");
-        }
+        this.printf("%s.doRead(%d,%d:%d:%d,%d)\n", this.idComponent, drive.iDrive, drive.wCylinder, drive.bHead, drive.bSector, ((drive.nBytes / drive.cbSector)|0));
 
         if (drive.disk) {
             drive.sector = null;
@@ -2265,9 +2257,7 @@ export default class HDC extends Component {
     {
         drive.errorCode = HDC.XTC.DATA.ERR.NOT_READY;
 
-        if (this.messageEnabled()) {
-            this.printMessage(this.idComponent + ".doWrite(" + drive.iDrive + ',' + drive.wCylinder + ':' + drive.bHead + ':' + drive.bSector + ',' + ((drive.nBytes / drive.cbSector)|0) + ")");
-        }
+        this.printf("%s.doWrite(%d,%d:%d:%d,%d)\n", this.idComponent, drive.iDrive, drive.wCylinder, drive.bHead, drive.bSector, ((drive.nBytes / drive.cbSector)|0));
 
         if (drive.disk) {
             drive.sector = null;
@@ -2316,7 +2306,7 @@ export default class HDC extends Component {
     {
         drive.errorCode = HDC.XTC.DATA.ERR.NOT_READY;
 
-        if (DEBUG) this.printMessage(this.idComponent + ".doWriteBuffer()");
+        if (DEBUG) this.printf("%s.doWriteBuffer()\n", this.idComponent);
 
         this.initBuffer(drive);
 
@@ -2581,9 +2571,7 @@ export default class HDC extends Component {
             drive.nBytes = 128 << drive.abFormat[3];// N (0 => 128, 1 => 256, 2 => 512, 3 => 1024)
             drive.cbFormat = 0;
 
-            if (this.messageEnabled()) {
-                this.printMessage(this.idComponent + ".writeFormat(" + drive.wCylinder + ":" + drive.bHead + ":" + drive.bSector + ":" + drive.nBytes + ")");
-            }
+            this.printf("%s.writeFormat(%d:%d:%d:%d)\n", this.idComponent, drive.wCylinder, drive.bHead, drive.bSector, drive.nBytes);
 
             for (let i = 0; i < drive.nBytes; i++) {
                 if (this.writeData(drive, drive.bFiller) < 0) {
@@ -2782,9 +2770,7 @@ export default class HDC extends Component {
 
         bPacketCmd = getByte(0);
 
-        if (this.messageEnabled(Messages.HDC)) {
-            this.printMessage(this.idComponent + ".packet(" + Str.toHexByte(bPacketCmd) + "): " + HDC.aATAPICommands[bPacketCmd] + " (drive " + drive.iDrive + ")", true);
-        }
+        this.printf(Messages.HDC, "%s.packet(%#04x): %s (drive %d)\n", this.idComponent, bPacketCmd, HDC.aATAPICommands[bPacketCmd], drive.iDrive);
 
         switch(bPacketCmd) {
         case HDC.ATC.PACKET.COMMAND.TEST_UNIT:  // 0x00
@@ -2875,9 +2861,7 @@ export default class HDC extends Component {
                 break;
 
             default:
-                if (this.messageEnabled(Messages.HDC)) {
-                    this.printMessage(this.idComponent + ".packet(" + Str.toHexByte(bPacketCmd) + "): unsupported format " + format, true);
-                }
+                this.printf(Messages.HDC, "%s.packet(%#04x): unsupported format %d\n", this.idComponent, bPacketCmd, format);
                 if (MAXDEBUG) this.dbg.stopCPU();
                 bPacketCmd = -1;                // TODO: Add support for other READ_TOC formats
                 break;
@@ -2980,9 +2964,7 @@ export default class HDC extends Component {
                 break;
 
             default:
-                if (this.messageEnabled(Messages.HDC)) {
-                    this.printMessage(this.idComponent + ".packet(" + Str.toHexByte(bPacketCmd) + "): unsupported page code " + pageCode, true);
-                }
+                this.printf(Messages.HDC, "%s.packet(%#04x): unsupported page code %d\n", this.idComponent, bPacketCmd, pageCode);
                 if (MAXDEBUG) this.dbg.stopCPU();
                 bPacketCmd = -1;        // TODO: Add support for other Page Codes
                 break;
@@ -3096,7 +3078,7 @@ export default class HDC extends Component {
     {
         let AH = this.cpu.regEAX >> 8;
         if ((!AH && this.chipset && this.chipset.checkIMR(ChipSet.IRQ.FDC))) {
-            if (DEBUG) this.printMessage(this.idComponent + ".intBIOSDiskette(): skipping useless INT 0x40 diskette reset");
+            if (DEBUG) this.printf("%s.intBIOSDiskette(): skipping useless INT 0x40 diskette reset\n", this.idComponent);
             return false;
         }
         return true;

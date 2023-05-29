@@ -1100,8 +1100,8 @@ export default class BusPDP11 extends Component {
     {
         this.fFault = true;
         if (!this.nDisableFaults) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.FAULT)) {
-                this.dbg.printMessage("memory fault (" + access + ") on " + this.dbg.toStrBase(addr), true, true);
+            if (DEBUGGER && this.dbg) {
+                this.dbg.printf(Messages.FAULT + Messages.ADDRESS, "memory fault (%d) on %s\n", access, this.dbg.toStrBase(addr));
             }
             if (err) this.cpu.regErr |= err;
             this.cpu.trap(PDP11.TRAP.BUS, 0, addr);
@@ -1254,15 +1254,15 @@ BusPDP11.IOController = {
             }
         }
         if (b >= 0) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
-                this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".readByte(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(b), true, !bus.nDisableFaults);
+            if (DEBUGGER && this.dbg) {
+                this.dbg.printf(Messages.BUS + afn[BusPDP11.IOHANDLER.MSG_CATEGORY], "%s.readByte(%s): %s\n", afn[BusPDP11.IOHANDLER.REG_NAME], this.dbg.toStrBase(addr), this.dbg.toStrBase(b));
             }
             return b;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.READ_BYTE);
         b = 0xff;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS)) {
-            this.dbg.printMessage("warning: unconverted read access to byte @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(b), true, !bus.nDisableFaults);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.BUS, "warning: unconverted read access to byte @%s: %s\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(b));
         }
         return b;
     },
@@ -1335,14 +1335,14 @@ BusPDP11.IOController = {
             }
         }
         if (fWrite) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
-                this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".writeByte(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(b) + ")", true, !bus.nDisableFaults);
+            if (DEBUGGER && this.dbg) {
+                this.dbg.printf(Messages.BUS + afn[BusPDP11.IOHANDLER.MSG_CATEGORY], "%s.writeByte(%s,%s)\n", afn[BusPDP11.IOHANDLER.REG_NAME], this.dbg.toStrBase(addr), this.dbg.toStrBase(b));
             }
             return;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.WRITE_BYTE);
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS)) {
-            this.dbg.printMessage("warning: unconverted write access to byte @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(b), true, !bus.nDisableFaults);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.BUS, "warning: unconverted write access to byte @%s: %s\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(b));
         }
     },
 
@@ -1374,15 +1374,15 @@ BusPDP11.IOController = {
             }
         }
         if (w >= 0) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
-                this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".readWord(" + this.dbg.toStrBase(addr) + "): " + this.dbg.toStrBase(w), true, !bus.nDisableFaults);
+            if (DEBUGGER && this.dbg) {
+                this.dbg.printf(Messages.BUS + afn[BusPDP11.IOHANDLER.MSG_CATEGORY], "%s.readWord(%s): %s\n", afn[BusPDP11.IOHANDLER.REG_NAME], this.dbg.toStrBase(addr), this.dbg.toStrBase(w));
             }
             return w;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.READ_WORD);
         w = 0xffff;
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS)) {
-            this.dbg.printMessage("warning: unconverted read access to word @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(w), true, !bus.nDisableFaults);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.BUS, "warning: unconverted read access to word @%s: %s\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(w));
         }
         return w;
     },
@@ -1418,14 +1418,14 @@ BusPDP11.IOController = {
             }
         }
         if (fWrite) {
-            if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS | afn[BusPDP11.IOHANDLER.MSG_CATEGORY])) {
-                this.dbg.printMessage(afn[BusPDP11.IOHANDLER.REG_NAME] + ".writeWord(" + this.dbg.toStrBase(addr) + "," + this.dbg.toStrBase(w) + ")", true, !bus.nDisableFaults);
+            if (DEBUGGER && this.dbg) {
+                this.dbg.printf(Messages.BUS + afn[BusPDP11.IOHANDLER.MSG_CATEGORY], "%s.writeWord(%s,%s)\n", afn[BusPDP11.IOHANDLER.REG_NAME], this.dbg.toStrBase(addr), this.dbg.toStrBase(w));
             }
             return;
         }
         bus.fault(addr, PDP11.CPUERR.TIMEOUT, PDP11.ACCESS.WRITE_WORD);
-        if (DEBUGGER && this.dbg && this.dbg.messageEnabled(Messages.BUS)) {
-            this.dbg.printMessage("warning: unconverted write access to word @" + this.dbg.toStrBase(addr) + ": " + this.dbg.toStrBase(w), true, !bus.nDisableFaults);
+        if (DEBUGGER && this.dbg) {
+            this.dbg.printf(Messages.BUS, "warning: unconverted write access to word @%s: %s\n", this.dbg.toStrBase(addr), this.dbg.toStrBase(w));
         }
     }
 };
