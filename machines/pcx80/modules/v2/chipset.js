@@ -196,7 +196,7 @@ export default class ChipSetX80 extends Component {
                 }
                 sDump += Str.toHexWord(this.aNVRWords[iWord]);
             }
-            this.dbg.println(sDump);
+            this.dbg.printf("%s\n", sDump);
         }
     }
 

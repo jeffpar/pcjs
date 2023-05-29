@@ -1000,7 +1000,7 @@ export default class DebuggerPDP11 extends DbgLib {
         this.print(sMessage, bitsMessage); // + " (" + this.cpu.getCycles() + " cycles)"
 
         /*
-         * We have no idea what the frequency of println() calls might be; all we know is that they easily
+         * We have no idea what the frequency of print() calls might be; all we know is that they easily
          * screw up the CPU's careful assumptions about cycles per burst.  So we call yieldCPU() after every
          * message, to effectively end the current burst and start fresh.
          *
@@ -2845,12 +2845,12 @@ export default class DebuggerPDP11 extends DbgLib {
                     this.printf("    OFFSET:             %s  %08o\n", Str.toBin(a[3], 13, 3), a[3]);
                     this.printf("UNIMAP[%s]: %s  %08o\n", Str.toDec(a[1], 2), Str.toBin(a[2], 22, 3), a[2]);
                 }
-                this.println("  PHYSICAL: " + Str.toBin(a[0], 22, 3) + "  " + Str.toOct(a[0], 8))
+                this.printf("  PHYSICAL: %s  %08o\n", Str.toBin(a[0], 22, 3), a[0]);
             } else {
                 this.printf("    OFFSET:             %s  %08o\n", Str.toBin(a[1], 13, 3), a[1]);
                 this.printf("+   %sPAR%s: %s  %08o\n", DebuggerPDP11.MODES[a[2]], a[3], Str.toBin(a[4], 22, 3), a[4]);
                 this.printf("&  MMUMASK: %s  %08o\n", Str.toBin(a[5], 22, 3), a[5]);
-                this.println("= PHYSICAL: " + Str.toBin(a[0], 22, 3) + "  " + Str.toOct(a[0], 8))
+                this.printf("= PHYSICAL: %s  %08o\n", Str.toBin(a[0], 22, 3), a[0]);
             }
             return;
         }
@@ -3721,7 +3721,7 @@ export default class DebuggerPDP11 extends DbgLib {
                     /*
                      * Limiting the amount of disassembled code to 256 bytes in non-DEBUG builds is partly to
                      * prevent the user from wedging the browser by dumping too many lines, but also a recognition
-                     * that, in non-DEBUG builds, this.println() keeps print output buffer truncated to 8Kb anyway.
+                     * that, in non-DEBUG builds, this.printf() keeps print output buffer truncated to 8Kb anyway.
                      */
                     this.printf("range too large\n");
                     return;

@@ -820,7 +820,7 @@ export default class KeyboardX80 extends Component {
     {
         var i = this.indexOfSoftKey(softCode);
         if (fDown) {
-            // this.println(softCode + " down");
+            // this.printf("%s down\n", softCode);
             if (i < 0) {
                 this.aKeysActive.push({
                     softCode: softCode,
@@ -833,13 +833,13 @@ export default class KeyboardX80 extends Component {
             }
             if (fAutoRelease) this.checkSoftKeysToRelease();        // prime the pump
         } else if (i >= 0) {
-            // this.println(softCode + " up");
+            // this.printf("%s up\n", softCode);
             if (!this.aKeysActive[i].fAutoRelease) {
                 var msDown = this.aKeysActive[i].msDown;
                 if (msDown) {
                     var msElapsed = Date.now() - msDown;
                     if (msElapsed < KeyboardX80.MINPRESSTIME) {
-                        // this.println(softCode + " released after only " + msElapsed + "ms");
+                        // this.printf("%s released after only %dms\n", softCode, msElapsed);
                         this.aKeysActive[i].fAutoRelease = true;
                         this.checkSoftKeysToRelease();
                         return true;
@@ -848,7 +848,7 @@ export default class KeyboardX80 extends Component {
             }
             this.aKeysActive.splice(i, 1);
         } else {
-            // this.println(softCode + " up with no down?");
+            // this.printf("%s up with no down?\n", softCode);
         }
 
         if (this.chipset) {

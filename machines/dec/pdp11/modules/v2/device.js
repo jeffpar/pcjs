@@ -141,7 +141,7 @@ export default class DevicePDP11 extends Component {
                 }
                 sDump += ' ' + dbg.toStrBase(aRegs[offset + i], nBits);
             }
-            dbg.println(sDump + (fBreak? '\n' : ''));
+            dbg.printf("%s", sDump + (fBreak? '\n' : ''));
         }
     }
 

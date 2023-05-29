@@ -3683,44 +3683,21 @@ class Component {
     }
 
     /**
-     * Component.print(s)
+     * Component.print(s, type, id)
      *
      * Components that inherit from this class should use this.print(), rather than Component.print(), because
      * if a Control Panel is loaded, it will override only the instance method, not the class method (overriding the
      * class method would improperly affect any other machines loaded on the same page).
      *
      * @this {Component}
-     * @param {string} s
+     * @param {string} s (message text)
+     * @param {string} [type] (message type)
+     * @param {string} [id] (caller's ID, if any)
      */
-    static print(s)
+    static print(s, type, id)
     {
         if (!COMPILED) {
-            let i = s.lastIndexOf('\n');
-            if (i >= 0) {
-                Component.println(s.substr(0, i));
-                s = s.substr(i + 1);
-            }
-            Component.printBuffer += s;
-        }
-    }
-
-    /**
-     * Component.println(s, type, id)
-     *
-     * Components that inherit from this class should use this.println(), rather than Component.println(), because
-     * if a Control Panel is loaded, it will override only the instance method, not the class method (overriding the
-     * class method would improperly affect any other machines loaded on the same page).
-     *
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     * @param {string} [id] is the caller's ID, if any
-     */
-    static println(s, type, id)
-    {
-        if (!COMPILED) {
-            s = Component.printBuffer + (s || "");
             Component.log((id? (id + ": ") : "") + (s? ("\"" + s + "\"") : ""), type);
-            Component.printBuffer = "";
         }
     }
 
@@ -3737,7 +3714,7 @@ class Component {
     static notice(s, fPrintOnly, id)
     {
         if (!COMPILED) {
-            Component.println(s, Component.PRINT.NOTICE, id);
+            Component.print(s, Component.PRINT.NOTICE, id);
         }
         if (!fPrintOnly) Component.alertUser((id? (id + ": ") : "") + s);
         return true;
@@ -3751,7 +3728,7 @@ class Component {
     static warning(s)
     {
         if (!COMPILED) {
-            Component.println(s, Component.PRINT.WARNING);
+            Component.print(s, Component.PRINT.WARNING);
         }
         Component.alertUser(s);
     }
@@ -3764,7 +3741,7 @@ class Component {
     static error(s)
     {
         if (!COMPILED) {
-            Component.println(s, Component.PRINT.ERROR);
+            Component.print(s, Component.PRINT.ERROR);
         }
         Component.alertUser(s);
     }
@@ -4252,11 +4229,11 @@ class Component {
             let sCommand = aTokens[0];
 
             /*
-             * It's possible to route this output to the Debugger window with dbg.println()
+             * It's possible to route this output to the Debugger window with dbg.printf()
              * instead, but it's a bit too confusing mingling script output in a window that
              * already mingles Debugger and machine output.
              */
-            Component.println(aTokens.join(' '), Component.PRINT.SCRIPT);
+            Component.print(aTokens.join(' '), Component.PRINT.SCRIPT);
 
             let fnCallReady = null;
             if (Component.asyncCommands.indexOf(sCommand) >= 0) {
@@ -4434,7 +4411,7 @@ class Component {
                  * @returns {boolean}
                  */
                 this.notice = function noticeControl(sMessage /*, fPrintOnly, id*/) {
-                    this.println(sMessage, this.type);
+                    this.printf(Messages.STATUS, "%s\n", sMessage);
                     return true;
                 };
                 /*
@@ -4520,7 +4497,7 @@ class Component {
                     try {
                         throw new Error(s);
                     } catch(e) {
-                        this.println(e.stack || e.message);
+                        this.printf("%s\n", e.stack || e.message);
                     }
                     return;
                 }
@@ -4546,23 +4523,6 @@ class Component {
     }
 
     /**
-     * println(s, type, id) [DEPRECATED]
-     *
-     * Components using println() should wait until after their constructor has run to display any messages;
-     * if a Control Panel has been loaded, its override will not take effect until its own constructor has run.
-     *
-     * @this {Component}
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     * @param {string} [id] is the caller's ID, if any
-     */
-    println(s, type, id)
-    {
-        this.print(s + "\n");
-        // Component.println(s, type, id || this.id);
-    }
-
-    /**
      * status(format, ...args) [DEPRECATED: Use printf(Messages.STATUS, format, ...args) instead]
      *
      * status() is a print function that also includes information about the component (ie, the component type),
@@ -4580,7 +4540,7 @@ class Component {
     /**
      * notice(s, fPrintOnly, id)
      *
-     * notice() is like println() but implies a need for user notification, so we alert() as well; however, if this.println()
+     * notice() is like print() but implies a need for user notification, so we alert() as well; however, if this.print()
      * is overridden, this.notice will be replaced with a similar override, on the assumption that the override is taking care
      * of alerting the user.
      *
@@ -4984,7 +4944,6 @@ Component.globalCommands = {
 Component.componentCommands = {
     'select':   Component.scriptSelect
 };
-Component.printBuffer = "";
 
 /*
  * The following polyfills provide ES5 functionality that's missing in older browsers (eg, IE8),
@@ -71831,7 +71790,7 @@ class DbgLib extends Component {
             }
         }
         if (v != vNew) {
-            if (MAXDEBUG) this.println("warning: value " + v + " truncated to " + vNew);
+            if (MAXDEBUG) this.printf("warning: value %d truncated to %d\n", v, vNew);
             v = vNew;
         }
         return v;
@@ -72129,7 +72088,7 @@ class DbgLib extends Component {
             value = aVals.pop();
 
         } else if (!aUndefined) {
-            this.println("parse error (" + (sValue || sOp) + ")");
+            this.printf("parse error (%s)\n", (sValue || sOp));
         }
 
         this.nBase = nBasePrev;
@@ -72170,7 +72129,7 @@ class DbgLib extends Component {
                 v = this.truncate(v * Math.pow(2, nBits) + c, nBits * cchMax, true);
             }
             if (cch >= 0) {
-                this.println("parse error (" + chDelim + sExp + chDelim + ")");
+                this.printf("parse error (%s%s%s)\n", chDelim, sExp, chDelim);
                 return undefined;
             } else {
                 sExp = sExp.substr(0, i) + this.toStrBase(v, -1) + sExp.substr(j);
@@ -72435,7 +72394,7 @@ class DbgLib extends Component {
                                 value += valueUndefined;
                             } else {
                                 if (!fQuiet) {
-                                    this.println("undefined " + (sName || "value") + ": " + sValue + " (" + sUndefined + ")");
+                                    this.printf("undefined %s: %s (%s)\n", (sName || "value"), sValue, sUndefined);
                                 }
                                 value = undefined;
                             }
@@ -72452,12 +72411,12 @@ class DbgLib extends Component {
                 value = this.truncate(this.parseUnary(value, nUnary));
             } else {
                 if (!fQuiet) {
-                    this.println("invalid " + (sName || "value") + ": " + sValue);
+                    this.printf("invalid %s: %s\n", (sName || "value"), sValue);
                 }
             }
         } else {
             if (!fQuiet) {
-                this.println("missing " + (sName || "value"));
+                this.printf("missing %s\n", (sName || "value"));
             }
         }
         return value;
@@ -72487,7 +72446,7 @@ class DbgLib extends Component {
             }
         }
         sVar = (sVar != null? (sVar + ": ") : "");
-        this.println(sVar + sValue);
+        this.printf("%s%s\n", sVar, sValue);
         return fDefined;
     }
 

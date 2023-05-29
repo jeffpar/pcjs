@@ -208,7 +208,7 @@ export default class CPUx80 extends Component {
             if (DEBUGGER && this.dbg) {
                 this.dbg.init();
             } else {
-                this.println("No debugger detected");
+                this.printf("No debugger detected\n");
             }
         }
         /*
@@ -272,7 +272,7 @@ export default class CPUx80 extends Component {
     isPowered()
     {
         if (!this.flags.powered) {
-            this.println(this.toString() + " not powered");
+            this.printf("%s not powered\n", this.toString());
             return false;
         }
         return true;
@@ -377,7 +377,7 @@ export default class CPUx80 extends Component {
      */
     displayChecksum()
     {
-        this.println(this.getCycles() + " cycles: " + "checksum=" + Str.toHex(this.nChecksum));
+        this.printf("%d cycles: checksum=%x\n", this.getCycles(), this.nChecksum);
     }
 
     /**
@@ -713,7 +713,7 @@ export default class CPUx80 extends Component {
                 var sSpeed = this.getSpeedTarget();
                 var controlSpeed = this.bindings["setSpeed"];
                 if (controlSpeed) controlSpeed.textContent = sSpeed;
-                this.println("target speed: " + sSpeed);
+                this.printf("target speed: %s\n", sSpeed);
             }
             if (fUpdateFocus && this.cmp) this.cmp.updateFocus();
         }
@@ -784,7 +784,7 @@ export default class CPUx80 extends Component {
         if (this.msEndThisRun) {
             var msDelta = this.msStartThisRun - this.msEndThisRun;
             if (msDelta > this.msPerYield) {
-                if (MAXDEBUG) this.println("large time delay: " + msDelta + "ms");
+                if (MAXDEBUG) this.printf("large time delay: %dms\n", msDelta);
                 this.msStartRun += msDelta;
                 /*
                  * Bumping msStartRun forward should NEVER cause it to exceed msStartThisRun; however, just
@@ -842,7 +842,7 @@ export default class CPUx80 extends Component {
         var msElapsed = this.msEndThisRun - this.msStartRun;
 
         if (MAXDEBUG && msRemainsThisRun < 0 && this.nCyclesMultiplier > 1) {
-            this.println("warning: updates @" + msElapsedThisRun + "ms (prefer " + Math.round(msYield) + "ms)");
+            this.printf("warning: updates @%dms (prefer %dms)\n", msElapsedThisRun, Math.round(msYield));
         }
 
         this.calcSpeed(nCycles, msElapsed);

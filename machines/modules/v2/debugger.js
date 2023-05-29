@@ -453,7 +453,7 @@ export default class DbgLib extends Component {
             }
         }
         if (v != vNew) {
-            if (MAXDEBUG) this.println("warning: value " + v + " truncated to " + vNew);
+            if (MAXDEBUG) this.printf("warning: value %d truncated to %d\n", v, vNew);
             v = vNew;
         }
         return v;
@@ -751,7 +751,7 @@ export default class DbgLib extends Component {
             value = aVals.pop();
             this.assert(!aVals.length);
         } else if (!aUndefined) {
-            this.println("parse error (" + (sValue || sOp) + ")");
+            this.printf("parse error (%s)\n", (sValue || sOp));
         }
 
         this.nBase = nBasePrev;
@@ -792,7 +792,7 @@ export default class DbgLib extends Component {
                 v = this.truncate(v * Math.pow(2, nBits) + c, nBits * cchMax, true);
             }
             if (cch >= 0) {
-                this.println("parse error (" + chDelim + sExp + chDelim + ")");
+                this.printf("parse error (%s%s%s)\n", chDelim, sExp, chDelim);
                 return undefined;
             } else {
                 sExp = sExp.substr(0, i) + this.toStrBase(v, -1) + sExp.substr(j);
@@ -1057,7 +1057,7 @@ export default class DbgLib extends Component {
                                 value += valueUndefined;
                             } else {
                                 if (!fQuiet) {
-                                    this.println("undefined " + (sName || "value") + ": " + sValue + " (" + sUndefined + ")");
+                                    this.printf("undefined %s: %s (%s)\n", (sName || "value"), sValue, sUndefined);
                                 }
                                 value = undefined;
                             }
@@ -1074,12 +1074,12 @@ export default class DbgLib extends Component {
                 value = this.truncate(this.parseUnary(value, nUnary));
             } else {
                 if (!fQuiet) {
-                    this.println("invalid " + (sName || "value") + ": " + sValue);
+                    this.printf("invalid %s: %s\n", (sName || "value"), sValue);
                 }
             }
         } else {
             if (!fQuiet) {
-                this.println("missing " + (sName || "value"));
+                this.printf("missing %s\n", (sName || "value"));
             }
         }
         return value;
@@ -1109,7 +1109,7 @@ export default class DbgLib extends Component {
             }
         }
         sVar = (sVar != null? (sVar + ": ") : "");
-        this.println(sVar + sValue);
+        this.printf("%s%s\n", sVar, sValue);
         return fDefined;
     }
 

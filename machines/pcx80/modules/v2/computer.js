@@ -172,7 +172,7 @@ export default class ComputerX80 extends Component {
             }
         }
 
-        this.println(APPNAME + " v" + APPVERSION + "\n" + COPYRIGHT + "\n" + LICENSE);
+        this.printf("%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
         if (DEBUG && this.messageEnabled()) this.printMessage("TYPEDARRAYS: " + TYPEDARRAYS);
 
@@ -531,7 +531,7 @@ export default class ComputerX80 extends Component {
                                     this.notice("Error: " + sData);
                                     if (sData == UserAPI.FAIL.VERIFY) this.resetUserID();
                                 } else {
-                                    this.println(sCode + ": " + sData);
+                                    this.printf("%s: %s\n", sCode, sData);
                                 }
                                 /*
                                  * Try falling back to the state that we should have saved in localStorage, as a backup to the

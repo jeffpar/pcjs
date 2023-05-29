@@ -215,7 +215,7 @@ export default class DriveController extends Component {
                          */
                         var disk = drive.disk;
                         if (disk) {
-                            if (DEBUG) dc.println("saving disk " + disk.sDiskPath + "...");
+                            if (DEBUG) dc.printf("saving disk %s...\n", disk.sDiskPath);
                             var sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
                             Component.alertUser(sAlert);
                         } else {

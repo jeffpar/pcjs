@@ -3683,44 +3683,21 @@ class Component {
     }
 
     /**
-     * Component.print(s)
+     * Component.print(s, type, id)
      *
      * Components that inherit from this class should use this.print(), rather than Component.print(), because
      * if a Control Panel is loaded, it will override only the instance method, not the class method (overriding the
      * class method would improperly affect any other machines loaded on the same page).
      *
      * @this {Component}
-     * @param {string} s
+     * @param {string} s (message text)
+     * @param {string} [type] (message type)
+     * @param {string} [id] (caller's ID, if any)
      */
-    static print(s)
+    static print(s, type, id)
     {
         if (!COMPILED) {
-            let i = s.lastIndexOf('\n');
-            if (i >= 0) {
-                Component.println(s.substr(0, i));
-                s = s.substr(i + 1);
-            }
-            Component.printBuffer += s;
-        }
-    }
-
-    /**
-     * Component.println(s, type, id)
-     *
-     * Components that inherit from this class should use this.println(), rather than Component.println(), because
-     * if a Control Panel is loaded, it will override only the instance method, not the class method (overriding the
-     * class method would improperly affect any other machines loaded on the same page).
-     *
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     * @param {string} [id] is the caller's ID, if any
-     */
-    static println(s, type, id)
-    {
-        if (!COMPILED) {
-            s = Component.printBuffer + (s || "");
             Component.log((id? (id + ": ") : "") + (s? ("\"" + s + "\"") : ""), type);
-            Component.printBuffer = "";
         }
     }
 
@@ -3737,7 +3714,7 @@ class Component {
     static notice(s, fPrintOnly, id)
     {
         if (!COMPILED) {
-            Component.println(s, Component.PRINT.NOTICE, id);
+            Component.print(s, Component.PRINT.NOTICE, id);
         }
         if (!fPrintOnly) Component.alertUser((id? (id + ": ") : "") + s);
         return true;
@@ -3751,7 +3728,7 @@ class Component {
     static warning(s)
     {
         if (!COMPILED) {
-            Component.println(s, Component.PRINT.WARNING);
+            Component.print(s, Component.PRINT.WARNING);
         }
         Component.alertUser(s);
     }
@@ -3764,7 +3741,7 @@ class Component {
     static error(s)
     {
         if (!COMPILED) {
-            Component.println(s, Component.PRINT.ERROR);
+            Component.print(s, Component.PRINT.ERROR);
         }
         Component.alertUser(s);
     }
@@ -4252,11 +4229,11 @@ class Component {
             let sCommand = aTokens[0];
 
             /*
-             * It's possible to route this output to the Debugger window with dbg.println()
+             * It's possible to route this output to the Debugger window with dbg.printf()
              * instead, but it's a bit too confusing mingling script output in a window that
              * already mingles Debugger and machine output.
              */
-            Component.println(aTokens.join(' '), Component.PRINT.SCRIPT);
+            Component.print(aTokens.join(' '), Component.PRINT.SCRIPT);
 
             let fnCallReady = null;
             if (Component.asyncCommands.indexOf(sCommand) >= 0) {
@@ -4434,7 +4411,7 @@ class Component {
                  * @returns {boolean}
                  */
                 this.notice = function noticeControl(sMessage /*, fPrintOnly, id*/) {
-                    this.println(sMessage, this.type);
+                    this.printf(Messages.STATUS, "%s\n", sMessage);
                     return true;
                 };
                 /*
@@ -4520,7 +4497,7 @@ class Component {
                     try {
                         throw new Error(s);
                     } catch(e) {
-                        this.println(e.stack || e.message);
+                        this.printf("%s\n", e.stack || e.message);
                     }
                     return;
                 }
@@ -4546,23 +4523,6 @@ class Component {
     }
 
     /**
-     * println(s, type, id) [DEPRECATED]
-     *
-     * Components using println() should wait until after their constructor has run to display any messages;
-     * if a Control Panel has been loaded, its override will not take effect until its own constructor has run.
-     *
-     * @this {Component}
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     * @param {string} [id] is the caller's ID, if any
-     */
-    println(s, type, id)
-    {
-        this.print(s + "\n");
-        // Component.println(s, type, id || this.id);
-    }
-
-    /**
      * status(format, ...args) [DEPRECATED: Use printf(Messages.STATUS, format, ...args) instead]
      *
      * status() is a print function that also includes information about the component (ie, the component type),
@@ -4580,7 +4540,7 @@ class Component {
     /**
      * notice(s, fPrintOnly, id)
      *
-     * notice() is like println() but implies a need for user notification, so we alert() as well; however, if this.println()
+     * notice() is like print() but implies a need for user notification, so we alert() as well; however, if this.print()
      * is overridden, this.notice will be replaced with a similar override, on the assumption that the override is taking care
      * of alerting the user.
      *
@@ -4984,7 +4944,6 @@ Component.globalCommands = {
 Component.componentCommands = {
     'select':   Component.scriptSelect
 };
-Component.printBuffer = "";
 
 /*
  * The following polyfills provide ES5 functionality that's missing in older browsers (eg, IE8),
@@ -8854,7 +8813,7 @@ class DevicePDP11 extends Component {
                 }
                 sDump += ' ' + dbg.toStrBase(aRegs[offset + i], nBits);
             }
-            dbg.println(sDump + (fBreak? '\n' : ''));
+            dbg.printf("%s", sDump + (fBreak? '\n' : ''));
         }
     }
 
@@ -19205,7 +19164,7 @@ class SerialPortPDP11 extends Component {
         }
         else if (this.consoleBuffer != null) {
             if (b == 0x0A || this.consoleBuffer.length >= 1024) {
-                this.println(this.consoleBuffer);
+                this.print(this.consoleBuffer);
                 this.consoleBuffer = "";
             }
             if (b != 0x0A) {
@@ -20458,8 +20417,8 @@ class DiskPDP11 extends Component {
         super("Disk", {'id': controller.idMachine + ".disk" + Str.toHex(++DiskPDP11.nDisks, 4)}, Messages.DISK);
 
         /*
-         * Route all non-Debugger messages (eg, notice() and println() calls) through
-         * this.controller (eg, controller.notice() and controller.println()), because
+         * Route all non-Debugger messages (eg, notice() and print() calls) through
+         * this.controller (eg, controller.notice() and controller.print()), because
          * the Computer component is unaware of any Disk objects and therefore will not
          * set up the usual overrides when a Control Panel is installed.
          */
@@ -21792,7 +21751,7 @@ class DriveController extends Component {
                          */
                         var disk = drive.disk;
                         if (disk) {
-                            if (DEBUG) dc.println("saving disk " + disk.sDiskPath + "...");
+                            if (DEBUG) dc.printf("saving disk %s...\n", disk.sDiskPath);
                             var sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
                             Component.alertUser(sAlert);
                         } else {
@@ -25014,7 +24973,7 @@ class DbgLib extends Component {
             }
         }
         if (v != vNew) {
-            if (MAXDEBUG) this.println("warning: value " + v + " truncated to " + vNew);
+            if (MAXDEBUG) this.printf("warning: value %d truncated to %d\n", v, vNew);
             v = vNew;
         }
         return v;
@@ -25312,7 +25271,7 @@ class DbgLib extends Component {
             value = aVals.pop();
 
         } else if (!aUndefined) {
-            this.println("parse error (" + (sValue || sOp) + ")");
+            this.printf("parse error (%s)\n", (sValue || sOp));
         }
 
         this.nBase = nBasePrev;
@@ -25353,7 +25312,7 @@ class DbgLib extends Component {
                 v = this.truncate(v * Math.pow(2, nBits) + c, nBits * cchMax, true);
             }
             if (cch >= 0) {
-                this.println("parse error (" + chDelim + sExp + chDelim + ")");
+                this.printf("parse error (%s%s%s)\n", chDelim, sExp, chDelim);
                 return undefined;
             } else {
                 sExp = sExp.substr(0, i) + this.toStrBase(v, -1) + sExp.substr(j);
@@ -25618,7 +25577,7 @@ class DbgLib extends Component {
                                 value += valueUndefined;
                             } else {
                                 if (!fQuiet) {
-                                    this.println("undefined " + (sName || "value") + ": " + sValue + " (" + sUndefined + ")");
+                                    this.printf("undefined %s: %s (%s)\n", (sName || "value"), sValue, sUndefined);
                                 }
                                 value = undefined;
                             }
@@ -25635,12 +25594,12 @@ class DbgLib extends Component {
                 value = this.truncate(this.parseUnary(value, nUnary));
             } else {
                 if (!fQuiet) {
-                    this.println("invalid " + (sName || "value") + ": " + sValue);
+                    this.printf("invalid %s: %s\n", (sName || "value"), sValue);
                 }
             }
         } else {
             if (!fQuiet) {
-                this.println("missing " + (sName || "value"));
+                this.printf("missing %s\n", (sName || "value"));
             }
         }
         return value;
@@ -25670,7 +25629,7 @@ class DbgLib extends Component {
             }
         }
         sVar = (sVar != null? (sVar + ": ") : "");
-        this.println(sVar + sValue);
+        this.printf("%s%s\n", sVar, sValue);
         return fDefined;
     }
 
@@ -26883,7 +26842,7 @@ class DebuggerPDP11 extends DbgLib {
         this.print(sMessage, bitsMessage); // + " (" + this.cpu.getCycles() + " cycles)"
 
         /*
-         * We have no idea what the frequency of println() calls might be; all we know is that they easily
+         * We have no idea what the frequency of print() calls might be; all we know is that they easily
          * screw up the CPU's careful assumptions about cycles per burst.  So we call yieldCPU() after every
          * message, to effectively end the current burst and start fresh.
          *
@@ -28728,12 +28687,12 @@ class DebuggerPDP11 extends DbgLib {
                     this.printf("    OFFSET:             %s  %08o\n", Str.toBin(a[3], 13, 3), a[3]);
                     this.printf("UNIMAP[%s]: %s  %08o\n", Str.toDec(a[1], 2), Str.toBin(a[2], 22, 3), a[2]);
                 }
-                this.println("  PHYSICAL: " + Str.toBin(a[0], 22, 3) + "  " + Str.toOct(a[0], 8))
+                this.printf("  PHYSICAL: %s  %08o\n", Str.toBin(a[0], 22, 3), a[0]);
             } else {
                 this.printf("    OFFSET:             %s  %08o\n", Str.toBin(a[1], 13, 3), a[1]);
                 this.printf("+   %sPAR%s: %s  %08o\n", DebuggerPDP11.MODES[a[2]], a[3], Str.toBin(a[4], 22, 3), a[4]);
                 this.printf("&  MMUMASK: %s  %08o\n", Str.toBin(a[5], 22, 3), a[5]);
-                this.println("= PHYSICAL: " + Str.toBin(a[0], 22, 3) + "  " + Str.toOct(a[0], 8))
+                this.printf("= PHYSICAL: %s  %08o\n", Str.toBin(a[0], 22, 3), a[0]);
             }
             return;
         }
@@ -29604,7 +29563,7 @@ class DebuggerPDP11 extends DbgLib {
                     /*
                      * Limiting the amount of disassembled code to 256 bytes in non-DEBUG builds is partly to
                      * prevent the user from wedging the browser by dumping too many lines, but also a recognition
-                     * that, in non-DEBUG builds, this.println() keeps print output buffer truncated to 8Kb anyway.
+                     * that, in non-DEBUG builds, this.printf() keeps print output buffer truncated to 8Kb anyway.
                      */
                     this.printf("range too large\n");
                     return;
@@ -30337,9 +30296,9 @@ class ComputerPDP11 extends Component {
             }
         }
 
-        this.println(APPNAME + " v" + APPVERSION + "\n" + COPYRIGHT + "\n" + LICENSE);
+        this.printf("%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
-        this.println("Portions adapted from the PDP-11/70 Emulator by Paul Nankervis <http://skn.noip.me/pdp11/pdp11.html>");
+        this.printf("Portions adapted from the PDP-11/70 Emulator by Paul Nankervis <http://skn.noip.me/pdp11/pdp11.html>\n");
 
         if (DEBUG && this.messageEnabled()) this.printMessage("TYPEDARRAYS: " + TYPEDARRAYS);
 
@@ -30708,7 +30667,7 @@ class ComputerPDP11 extends Component {
                                     this.notice("Error: " + sData);
                                     if (sData == UserAPI.FAIL.VERIFY) this.resetUserID();
                                 } else {
-                                    this.println(sCode + ": " + sData);
+                                    this.printf("%s: %s\n", sCode, sData);
                                 }
                                 /*
                                  * Try falling back to the state that we should have saved in localStorage, as a backup to the

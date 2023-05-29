@@ -91,8 +91,8 @@ export default class DiskPDP11 extends Component {
         super("Disk", {'id': controller.idMachine + ".disk" + Str.toHex(++DiskPDP11.nDisks, 4)}, Messages.DISK);
 
         /*
-         * Route all non-Debugger messages (eg, notice() and println() calls) through
-         * this.controller (eg, controller.notice() and controller.println()), because
+         * Route all non-Debugger messages (eg, notice() and print() calls) through
+         * this.controller (eg, controller.notice() and controller.print()), because
          * the Computer component is unaware of any Disk objects and therefore will not
          * set up the usual overrides when a Control Panel is installed.
          */

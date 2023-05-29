@@ -268,7 +268,7 @@ export default class RAMx80 extends Component {
                 CPUDefX80.opRET.call(cpu);     // for recognized calls, automatically return
             }
             else if (dbg) {
-                this.println("\nCP/M vector " + Str.toHexWord(addr));
+                this.print("\nCP/M vector %#06x\n", addr);
                 cpu.setPC(addr);                // this is purely for the Debugger's benefit, to show the HLT
                 dbg.stopCPU();
             }
