@@ -11,7 +11,7 @@ import fs from "fs";
 import path from "path";
 import Proc from "./proclib.js";
 import { globals } from "./defines.js";
-import DataBuffer from "../v3/databuffer.js";
+import DataBuffer from "../v1/databuffer.js";
 
 let args = Proc.getArgs();
 let argv = args.argv;

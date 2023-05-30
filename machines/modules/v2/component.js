@@ -235,15 +235,16 @@ export default class Component {
     {
         if (!COMPILED && (type != Component.PRINT.DEBUG || MAXDEBUG)) {
             if (s) {
-                let sElapsed = "", sMsg = (type? (type + ": ") : "") + s;
+                let sElapsed = "";
+                let sMessage = (type? (type + ": ") : "") + s;
                 if (typeof Usr != "undefined") {
                     if (Component.msStart === undefined) {
                         Component.msStart = Component.getTime();
                     }
                     sElapsed = (Component.getTime() - Component.msStart) + "ms: ";
                 }
-                sMsg = sMsg.replace(/\r/g, '\\r').replace(/\n/g, ' ');
-                console.log(sElapsed + sMsg);
+                sMessage = sMessage.replace(/\r/g, '\\r').replace(/\n/g, ' ');
+                console.log(sElapsed + sMessage);
             }
         }
     }
@@ -1108,21 +1109,6 @@ export default class Component {
     print(s, bitsMessage = 0)
     {
         Component.print(s);
-    }
-
-    /**
-     * status(format, ...args) [DEPRECATED: use printf(Messages.STATUS, format, ...args) instead]
-     *
-     * status() is a print function that also includes information about the component (ie, the component type),
-     * which is why there is no corresponding Component.status() function.
-     *
-     * @this {Component}
-     * @param {string} format
-     * @param {...} args
-     */
-    status(format, ...args)
-    {
-        this.printf(Messages.STATUS, format, ...args);
     }
 
     /**

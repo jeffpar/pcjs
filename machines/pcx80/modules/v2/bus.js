@@ -8,6 +8,7 @@
  */
 
 import MemoryX80 from "./memory.js";
+import Messages from "./messages.js";
 import Component from "../../../modules/v2/component.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
@@ -255,7 +256,7 @@ export default class BusX80 extends Component {
         }
 
         if (sizeLeft <= 0) {
-            this.status("%dKb %s at 0x%04X", Math.floor(size / 1024), MemoryX80.TYPE.NAMES[type], addr);
+            this.printf(Messages.STATUS, "%dKb %s at 0x%04X\n", Math.floor(size / 1024), MemoryX80.TYPE.NAMES[type], addr);
             return true;
         }
 

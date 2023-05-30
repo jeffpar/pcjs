@@ -158,7 +158,7 @@ export default class ComputerPDP10 extends Component {
             }
         }
 
-        this.printf("%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
+        this.printf(Messages.DEFAULT, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
         /*
          * Iterate through all the components again and call their initBus() handler, if any

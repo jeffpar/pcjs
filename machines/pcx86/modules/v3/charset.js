@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import DataBuffer from "../../../modules/v3/databuffer.js";
+import DataBuffer from "../../../modules/v1/databuffer.js";
 
 /**
  * This class is primarily concerned with converting characters between CP437 and UTF-8, when

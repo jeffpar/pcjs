@@ -1,281 +1,4 @@
 /**
- * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
- */
-
-/**
- * @define {string}
- */
-const APPVERSION = "2.00";              // this @define is overridden by the Closure Compiler with the version in machines.json
-
-/**
- * @define {string}
- */
-const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
-
-/**
- * @define {string}
- */
-const LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
-
-/**
- * @define {string}
- */
-const CSSCLASS = "pcjs";
-
-/**
- * @define {string}
- */
-const SITEURL = "http://localhost:8088";// this @define is overridden by the Closure Compiler with "https://www.pcjs.org"
-
-/**
- * COMPILED is false by default; overridden with true in the Closure Compiler release.
- *
- * @define {boolean}
- */
-const COMPILED = false;                 // this @define is overridden by the Closure Compiler (to true)
-
-/**
- * DEBUG is true by default, enabling assertions and other runtime checks; overridden with false
- * in the Closure Compiler release, which generally results in the removal of any DEBUG code.  Our
- * gulpfile, however, takes the extra precaution of physically removing all "assert" method calls
- * from the concatenated file that is generated for the Closure Compiler.
- *
- * @define {boolean}
- */
-const DEBUG = true;                     // this @define is overridden by the Closure Compiler (to false) to remove DEBUG-only code
-
-/**
- * WARNING: DEBUGGER needs to accurately reflect whether or not the Debugger component is (or will be) loaded.
- * In the compiled case, we rely on the Closure Compiler to override DEBUGGER as appropriate.  When it's *false*,
- * nearly all of debugger.js will be conditionally removed by the compiler, reducing it to little more than a
- * "type skeleton", which also solves some type-related warnings we would otherwise have if we tried to remove
- * debugger.js from the compilation process altogether.
- *
- * However, when we're in "development mode" and running uncompiled code in debugger-less configurations,
- * I would like to skip loading debugger.js altogether.  When doing that, we must ALSO arrange for an additional file
- * (nodebugger.js) to be loaded immediately after this file, which *explicitly* overrides DEBUGGER with *false*.
- *
- * @define {boolean}
- */
-var DEBUGGER = true;                    // this @define is overridden by the Closure Compiler to remove Debugger-related support
-
-/**
- * MAXDEBUG is false by default; overridden with false in the Closure Compiler release.  Set it to
- * true to manually to enable any hyper-aggressive DEBUG checks.
- *
- * @define {boolean}
- */
-const MAXDEBUG = false;                 // this @define is overridden by the Closure Compiler (to false) to remove MAXDEBUG-only code
-
-/**
- * @define {boolean}
- */
-const PRIVATE = false;                  // this @define is overridden by the Closure Compiler (to false) to enable PRIVATE code
-
-/*
- * RS-232 DB-25 Pin Definitions, mapped to bits 1-25 in a 32-bit status value.
- *
- * SerialPorts in PCjs machines are considered DTE (Data Terminal Equipment), which means they should be "virtually"
- * connected to each other via a null-modem cable, which assumes the following cross-wiring:
- *
- *     G       1  <->  1        G       (Ground)
- *     TD      2  <->  3        RD      (Received Data)
- *     RD      3  <->  2        TD      (Transmitted Data)
- *     RTS     4  <->  5        CTS     (Clear To Send)
- *     CTS     5  <->  4        RTS     (Request To Send)
- *     DSR   6+8  <->  20       DTR     (Data Terminal Ready)
- *     SG      7  <->  7        SG      (Signal Ground)
- *     DTR    20  <->  6+8      DSR     (Data Set Ready + Carrier Detect)
- *     RI     22  <->  22       RI      (Ring Indicator)
- *
- * TODO: Move these definitions to a more appropriate shared file at some point.
- */
-const RS232 = {
-    RTS: {
-        PIN:  4,
-        MASK: 0x00000010
-    },
-    CTS: {
-        PIN:  5,
-        MASK: 0x00000020
-    },
-    DSR: {
-        PIN:  6,
-        MASK: 0x00000040
-    },
-    CD: {
-        PIN:  8,
-        MASK: 0x00000100
-    },
-    DTR: {
-        PIN:  20,
-        MASK: 0x00100000
-    },
-    RI: {
-        PIN:  22,
-        MASK: 0x00400000
-    }
-};
-
-/*
- * This is my initial effort to isolate the use of global variables in a way that is environment-agnostic.
- */
-let globals = {
-    browser: (typeof window != "undefined")? {} : null,
-    node: (typeof window != "undefined")? {} : global,
-    window: (typeof window != "undefined")? window : global,
-    document: (typeof document != "undefined")? document : {}
-};
-
-if (!globals.window['PCjs']) globals.window['PCjs'] = {};
-
-globals.pcjs = globals.window['PCjs'];
-if (!globals.pcjs['machines']) globals.pcjs['machines'] = {};
-if (!globals.pcjs['components']) globals.pcjs['components'] = [];
-if (!globals.pcjs['commands']) globals.pcjs['commands'] = {};
-
-
-
-/**
- * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
- */
-
-/*
- * Standard machine message flags.
- *
- * NOTE: Because this machine defines more than 32 message categories, some of these message flags
- * exceed 32 bits, so when concatenating, be sure to use "+", not "|".
- */
-const Messages = {
-    NONE:       0x000000000000,
-    DEFAULT:    0x000000000000,
-    ADDRESS:    0x000000000001,
-    LOG:        0x001000000000,         // to replace component.log()
-    STATUS:     0x002000000000,         // to replace component.status()
-    NOTICE:     0x004000000000,         // to replace Component.PRINT.NOTICE
-    WARNING:    0x008000000000,         // to replace Component.PRINT.WARNING
-    ERROR:      0x010000000000,         // to replace Component.PRINT.ERROR
-    DEBUG:      0x020000000000,         // to replace Component.PRINT.DEBUG
-    PROGRESS:   0x040000000000,         // to replace Component.PRINT.PROGRESS
-    SCRIPT:     0x080000000000,         // to replace Component.PRINT.SCRIPT
-    TYPES:      0x0ff000000000,         // all the above message types; only one (at most) of these should be set
-    HALT:       0x400000000000,
-    BUFFER:     0x800000000000,
-    ALL:        0x000ffffffffe
-};
-
-/*
- * Message categories supported by the messageEnabled() function and other assorted message
- * functions. Each category has a corresponding bit value that can be combined (ie, OR'ed) as
- * needed.  The Debugger's message command ("m") is used to turn message categories on and off,
- * like so:
- *
- *      m port on
- *      m port off
- *      ...
- *
- * NOTE: The order of these categories can be rearranged, alphabetized, etc, as desired; just be
- * aware that changing the bit values could break saved Debugger states (not a huge concern, just
- * something to be aware of).
- */
-Messages.CATEGORIES = {
-    "warn":     Messages.WARNING,
-    /*
-     * Now we turn to message actions rather than message types; for example, setting "halt"
-     * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
-     *
-     * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
-     * until "m buffer off" is issued.
-     */
-    "halt":     Messages.HALT,
-    "buffer":   Messages.BUFFER
-};
-
-
-/**
- * @copyright https://www.pcjs.org/modules/v2/dumpapi.js (C) 2012-2023 Jeff Parsons
- */
-
-/*
- * Our "DiskDump API", such as it was, used to look like:
- *
- *      http://pcjs.org/bin/convdisk.php?disk=/disks/pc/dos/ibm/2.00/PCDOS200-DISK1.json&format=img
- *
- * To make it (a bit) more "REST-like", the above request now looks like:
- *
- *      https://www.pcjs.org/api/v1/dump?disk=/disks/pc/dos/ibm/2.00/PCDOS200-DISK1.json&format=img
- *
- * Similarly, our "FileDump API" used to look like:
- *
- *      http://pcjs.org/bin/convrom.php?rom=/devices/pc/rom/5150/1981-04-24/PCBIOS-REV1.rom&format=json
- *
- * and that request now looks like:
- *
- *      https://www.pcjs.org/api/v1/dump?file=/devices/pc/rom/5150/1981-04-24/PCBIOS-REV1.rom&format=json
- *
- * I don't think it makes sense to avoid "query" parameters, because blending the path of a disk image with the
- * the rest of the URL would be (a) confusing, and (b) more work to parse.
- */
-const DumpAPI = {
-    ENDPOINT:       "/api/v1/dump",
-    QUERY: {
-        DIR:        "dir",      // value is path of a directory (DiskDump only)
-        DISK:       "disk",     // value is path of a disk image (DiskDump only)
-        FILE:       "file",     // value is path of a ROM image file (FileDump only)
-        IMG:        "img",      // alias for DISK
-        PATH:       "path",     // value is path of a one or more files (DiskDump only)
-        FORMAT:     "format",   // value is one of FORMAT values below
-        COMMENTS:   "comments", // value is either "true" or "false"
-        DECIMAL:    "decimal",  // value is either "true" to force all numbers to decimal, "false" or undefined otherwise
-        MBHD:       "mbhd",     // value is hard drive size in Mb (formerly "mbsize") (DiskDump only) (DEPRECATED)
-        SIZE:       "size"      // value is target disk size in Kb (supersedes "mbhd") (DiskDump only)
-    },
-    FORMAT: {
-        JSON:       "json",     // default
-        JSON_GZ:    "gz",       // gzip is currently used ONLY for compressed JSON
-        DATA:       "data",     // same as "json", but built without JSON.stringify() (DiskDump only)
-        HEX:        "hex",      // deprecated
-        OCTAL:      "octal",    // displays data as octal words
-        BYTES:      "bytes",    // displays data as hex bytes; normally used only when comments are enabled
-        WORDS:      "words",    // displays data as hex words; normally used only when comments are enabled
-        LONGS:      "longs",    // displays data as dwords
-        IMG:        "img",      // returns the raw disk data (ie, using a Buffer object) (DiskDump only)
-        ROM:        "rom"       // returns the raw file data (ie, using a Buffer object) (FileDump only)
-    }
-};
-
-/*
- * Because we use an overloaded API endpoint (ie, one that's shared with the FileDump module), we must
- * also provide a list of commands which, when combined with the endpoint, define a unique request.
- */
-DumpAPI.asDiskCommands = [DumpAPI.QUERY.DIR, DumpAPI.QUERY.DISK, DumpAPI.QUERY.PATH];
-DumpAPI.asFileCommands = [DumpAPI.QUERY.FILE];
-
-
-/**
- * @copyright https://www.pcjs.org/modules/v2/reportapi.js (C) 2012-2023 Jeff Parsons
- */
-
-const ReportAPI = {
-    ENDPOINT:       "/api/v1/report",
-    QUERY: {
-        APP:        "app",
-        VER:        "ver",
-        URL:        "url",
-        USER:       "user",
-        TYPE:       "type",
-        DATA:       "data"
-    },
-    TYPE: {
-        BUG:        "bug"
-    },
-    RES: {
-        OK:         "Thank you"
-    }
-};
-
-
-/**
  * @copyright https://www.pcjs.org/modules/v1/format.js (C) 2012-2023 Jeff Parsons
  */
 
@@ -798,6 +521,283 @@ Format.HexLowerCase = "0123456789abcdef?";
 Format.HexUpperCase = "0123456789ABCDEF?";
 Format.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 Format.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+/**
+ * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
+ */
+
+/**
+ * @define {string}
+ */
+const APPVERSION = "2.00";              // this @define is overridden by the Closure Compiler with the version in machines.json
+
+/**
+ * @define {string}
+ */
+const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
+
+/**
+ * @define {string}
+ */
+const LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
+
+/**
+ * @define {string}
+ */
+const CSSCLASS = "pcjs";
+
+/**
+ * @define {string}
+ */
+const SITEURL = "http://localhost:8088";// this @define is overridden by the Closure Compiler with "https://www.pcjs.org"
+
+/**
+ * COMPILED is false by default; overridden with true in the Closure Compiler release.
+ *
+ * @define {boolean}
+ */
+const COMPILED = false;                 // this @define is overridden by the Closure Compiler (to true)
+
+/**
+ * DEBUG is true by default, enabling assertions and other runtime checks; overridden with false
+ * in the Closure Compiler release, which generally results in the removal of any DEBUG code.  Our
+ * gulpfile, however, takes the extra precaution of physically removing all "assert" method calls
+ * from the concatenated file that is generated for the Closure Compiler.
+ *
+ * @define {boolean}
+ */
+const DEBUG = true;                     // this @define is overridden by the Closure Compiler (to false) to remove DEBUG-only code
+
+/**
+ * WARNING: DEBUGGER needs to accurately reflect whether or not the Debugger component is (or will be) loaded.
+ * In the compiled case, we rely on the Closure Compiler to override DEBUGGER as appropriate.  When it's *false*,
+ * nearly all of debugger.js will be conditionally removed by the compiler, reducing it to little more than a
+ * "type skeleton", which also solves some type-related warnings we would otherwise have if we tried to remove
+ * debugger.js from the compilation process altogether.
+ *
+ * However, when we're in "development mode" and running uncompiled code in debugger-less configurations,
+ * I would like to skip loading debugger.js altogether.  When doing that, we must ALSO arrange for an additional file
+ * (nodebugger.js) to be loaded immediately after this file, which *explicitly* overrides DEBUGGER with *false*.
+ *
+ * @define {boolean}
+ */
+var DEBUGGER = true;                    // this @define is overridden by the Closure Compiler to remove Debugger-related support
+
+/**
+ * MAXDEBUG is false by default; overridden with false in the Closure Compiler release.  Set it to
+ * true to manually to enable any hyper-aggressive DEBUG checks.
+ *
+ * @define {boolean}
+ */
+const MAXDEBUG = false;                 // this @define is overridden by the Closure Compiler (to false) to remove MAXDEBUG-only code
+
+/**
+ * @define {boolean}
+ */
+const PRIVATE = false;                  // this @define is overridden by the Closure Compiler (to false) to enable PRIVATE code
+
+/*
+ * RS-232 DB-25 Pin Definitions, mapped to bits 1-25 in a 32-bit status value.
+ *
+ * SerialPorts in PCjs machines are considered DTE (Data Terminal Equipment), which means they should be "virtually"
+ * connected to each other via a null-modem cable, which assumes the following cross-wiring:
+ *
+ *     G       1  <->  1        G       (Ground)
+ *     TD      2  <->  3        RD      (Received Data)
+ *     RD      3  <->  2        TD      (Transmitted Data)
+ *     RTS     4  <->  5        CTS     (Clear To Send)
+ *     CTS     5  <->  4        RTS     (Request To Send)
+ *     DSR   6+8  <->  20       DTR     (Data Terminal Ready)
+ *     SG      7  <->  7        SG      (Signal Ground)
+ *     DTR    20  <->  6+8      DSR     (Data Set Ready + Carrier Detect)
+ *     RI     22  <->  22       RI      (Ring Indicator)
+ *
+ * TODO: Move these definitions to a more appropriate shared file at some point.
+ */
+const RS232 = {
+    RTS: {
+        PIN:  4,
+        MASK: 0x00000010
+    },
+    CTS: {
+        PIN:  5,
+        MASK: 0x00000020
+    },
+    DSR: {
+        PIN:  6,
+        MASK: 0x00000040
+    },
+    CD: {
+        PIN:  8,
+        MASK: 0x00000100
+    },
+    DTR: {
+        PIN:  20,
+        MASK: 0x00100000
+    },
+    RI: {
+        PIN:  22,
+        MASK: 0x00400000
+    }
+};
+
+/*
+ * This is my initial effort to isolate the use of global variables in a way that is environment-agnostic.
+ */
+let globals = {
+    browser: (typeof window != "undefined")? {} : null,
+    node: (typeof window != "undefined")? {} : global,
+    window: (typeof window != "undefined")? window : global,
+    document: (typeof document != "undefined")? document : {}
+};
+
+if (!globals.window['PCjs']) globals.window['PCjs'] = {};
+
+globals.pcjs = globals.window['PCjs'];
+if (!globals.pcjs['machines']) globals.pcjs['machines'] = {};
+if (!globals.pcjs['components']) globals.pcjs['components'] = [];
+if (!globals.pcjs['commands']) globals.pcjs['commands'] = {};
+
+
+
+/**
+ * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
+ */
+
+/*
+ * Standard machine message flags.
+ *
+ * NOTE: Because this machine defines more than 32 message categories, some of these message flags
+ * exceed 32 bits, so when concatenating, be sure to use "+", not "|".
+ */
+const Messages = {
+    NONE:       0x000000000000,
+    DEFAULT:    0x000000000000,
+    ADDRESS:    0x000000000001,
+    LOG:        0x001000000000,         // to replace component.log()
+    STATUS:     0x002000000000,         // to replace component.status()
+    NOTICE:     0x004000000000,         // to replace Component.PRINT.NOTICE
+    WARNING:    0x008000000000,         // to replace Component.PRINT.WARNING
+    ERROR:      0x010000000000,         // to replace Component.PRINT.ERROR
+    DEBUG:      0x020000000000,         // to replace Component.PRINT.DEBUG
+    PROGRESS:   0x040000000000,         // to replace Component.PRINT.PROGRESS
+    SCRIPT:     0x080000000000,         // to replace Component.PRINT.SCRIPT
+    TYPES:      0x0ff000000000,         // all the above message types; only one (at most) of these should be set
+    HALT:       0x400000000000,
+    BUFFER:     0x800000000000,
+    ALL:        0x000ffffffffe
+};
+
+/*
+ * Message categories supported by the messageEnabled() function and other assorted message
+ * functions. Each category has a corresponding bit value that can be combined (ie, OR'ed) as
+ * needed.  The Debugger's message command ("m") is used to turn message categories on and off,
+ * like so:
+ *
+ *      m port on
+ *      m port off
+ *      ...
+ *
+ * NOTE: The order of these categories can be rearranged, alphabetized, etc, as desired; just be
+ * aware that changing the bit values could break saved Debugger states (not a huge concern, just
+ * something to be aware of).
+ */
+Messages.CATEGORIES = {
+    "warn":     Messages.WARNING,
+    /*
+     * Now we turn to message actions rather than message types; for example, setting "halt"
+     * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
+     *
+     * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
+     * until "m buffer off" is issued.
+     */
+    "halt":     Messages.HALT,
+    "buffer":   Messages.BUFFER
+};
+
+
+/**
+ * @copyright https://www.pcjs.org/modules/v2/dumpapi.js (C) 2012-2023 Jeff Parsons
+ */
+
+/*
+ * Our "DiskDump API", such as it was, used to look like:
+ *
+ *      http://pcjs.org/bin/convdisk.php?disk=/disks/pc/dos/ibm/2.00/PCDOS200-DISK1.json&format=img
+ *
+ * To make it (a bit) more "REST-like", the above request now looks like:
+ *
+ *      https://www.pcjs.org/api/v1/dump?disk=/disks/pc/dos/ibm/2.00/PCDOS200-DISK1.json&format=img
+ *
+ * Similarly, our "FileDump API" used to look like:
+ *
+ *      http://pcjs.org/bin/convrom.php?rom=/devices/pc/rom/5150/1981-04-24/PCBIOS-REV1.rom&format=json
+ *
+ * and that request now looks like:
+ *
+ *      https://www.pcjs.org/api/v1/dump?file=/devices/pc/rom/5150/1981-04-24/PCBIOS-REV1.rom&format=json
+ *
+ * I don't think it makes sense to avoid "query" parameters, because blending the path of a disk image with the
+ * the rest of the URL would be (a) confusing, and (b) more work to parse.
+ */
+const DumpAPI = {
+    ENDPOINT:       "/api/v1/dump",
+    QUERY: {
+        DIR:        "dir",      // value is path of a directory (DiskDump only)
+        DISK:       "disk",     // value is path of a disk image (DiskDump only)
+        FILE:       "file",     // value is path of a ROM image file (FileDump only)
+        IMG:        "img",      // alias for DISK
+        PATH:       "path",     // value is path of a one or more files (DiskDump only)
+        FORMAT:     "format",   // value is one of FORMAT values below
+        COMMENTS:   "comments", // value is either "true" or "false"
+        DECIMAL:    "decimal",  // value is either "true" to force all numbers to decimal, "false" or undefined otherwise
+        MBHD:       "mbhd",     // value is hard drive size in Mb (formerly "mbsize") (DiskDump only) (DEPRECATED)
+        SIZE:       "size"      // value is target disk size in Kb (supersedes "mbhd") (DiskDump only)
+    },
+    FORMAT: {
+        JSON:       "json",     // default
+        JSON_GZ:    "gz",       // gzip is currently used ONLY for compressed JSON
+        DATA:       "data",     // same as "json", but built without JSON.stringify() (DiskDump only)
+        HEX:        "hex",      // deprecated
+        OCTAL:      "octal",    // displays data as octal words
+        BYTES:      "bytes",    // displays data as hex bytes; normally used only when comments are enabled
+        WORDS:      "words",    // displays data as hex words; normally used only when comments are enabled
+        LONGS:      "longs",    // displays data as dwords
+        IMG:        "img",      // returns the raw disk data (ie, using a Buffer object) (DiskDump only)
+        ROM:        "rom"       // returns the raw file data (ie, using a Buffer object) (FileDump only)
+    }
+};
+
+/*
+ * Because we use an overloaded API endpoint (ie, one that's shared with the FileDump module), we must
+ * also provide a list of commands which, when combined with the endpoint, define a unique request.
+ */
+DumpAPI.asDiskCommands = [DumpAPI.QUERY.DIR, DumpAPI.QUERY.DISK, DumpAPI.QUERY.PATH];
+DumpAPI.asFileCommands = [DumpAPI.QUERY.FILE];
+
+
+/**
+ * @copyright https://www.pcjs.org/modules/v2/reportapi.js (C) 2012-2023 Jeff Parsons
+ */
+
+const ReportAPI = {
+    ENDPOINT:       "/api/v1/report",
+    QUERY: {
+        APP:        "app",
+        VER:        "ver",
+        URL:        "url",
+        USER:       "user",
+        TYPE:       "type",
+        DATA:       "data"
+    },
+    TYPE: {
+        BUG:        "bug"
+    },
+    RES: {
+        OK:         "Thank you"
+    }
+};
+
 
 /**
  * @copyright https://www.pcjs.org/modules/v2/strlib.js (C) 2012-2023 Jeff Parsons
@@ -3189,15 +3189,16 @@ class Component {
     {
         if (!COMPILED && (type != Component.PRINT.DEBUG || MAXDEBUG)) {
             if (s) {
-                let sElapsed = "", sMsg = (type? (type + ": ") : "") + s;
+                let sElapsed = "";
+                let sMessage = (type? (type + ": ") : "") + s;
                 if (typeof Usr != "undefined") {
                     if (Component.msStart === undefined) {
                         Component.msStart = Component.getTime();
                     }
                     sElapsed = (Component.getTime() - Component.msStart) + "ms: ";
                 }
-                sMsg = sMsg.replace(/\r/g, '\\r').replace(/\n/g, ' ');
-                console.log(sElapsed + sMsg);
+                sMessage = sMessage.replace(/\r/g, '\\r').replace(/\n/g, ' ');
+                console.log(sElapsed + sMessage);
             }
         }
     }
@@ -4062,21 +4063,6 @@ class Component {
     print(s, bitsMessage = 0)
     {
         Component.print(s);
-    }
-
-    /**
-     * status(format, ...args) [DEPRECATED: use printf(Messages.STATUS, format, ...args) instead]
-     *
-     * status() is a print function that also includes information about the component (ie, the component type),
-     * which is why there is no corresponding Component.status() function.
-     *
-     * @this {Component}
-     * @param {string} format
-     * @param {...} args
-     */
-    status(format, ...args)
-    {
-        this.printf(Messages.STATUS, format, ...args);
     }
 
     /**
@@ -14603,7 +14589,7 @@ class C1PComputer extends Component {
          */
         computer.setReady();
 
-        computer.printf("%s v%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT);
+        computer.printf(Messages.DEFAULT, "%s v%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT);
 
         /*
          * Once we get to this point, we're guaranteed that all components are ready, so it's safe to "power" the CPU;

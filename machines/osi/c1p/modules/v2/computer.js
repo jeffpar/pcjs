@@ -8,6 +8,7 @@
  */
 
 import Component from "../../../../modules/v2/component.js";
+import Messages from "../../../../modules/v2/messages.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, APPNAME, APPVERSION, COPYRIGHT, DEBUG } from "./defines.js";
 
@@ -201,7 +202,7 @@ export default class C1PComputer extends Component {
          */
         computer.setReady();
 
-        computer.printf("%s v%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT);
+        computer.printf(Messages.DEFAULT, "%s v%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT);
 
         /*
          * Once we get to this point, we're guaranteed that all components are ready, so it's safe to "power" the CPU;

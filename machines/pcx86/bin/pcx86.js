@@ -10,17 +10,18 @@
 
 import fs from "fs";
 import repl from "repl";
-import File from "../../modules/v2/filelib.js";
-import Proc from "../../modules/v2/proclib.js";
+import filelib from "../../modules/v2/filelib.js";
+import proclib from "../../modules/v2/proclib.js";
 
 //
 // The following list of imports should be a strict subset of the scripts listed in machines.json for 'pcx86'.
 //
-import Usr from "../../modules/v2/usrlib.js";
-import Web from "../../modules/v2/weblib.js";
+import "../../modules/v1/format.js";
+import "../../modules/v1/databuffer.js";
+import strlib from "../../modules/v2/strlib.js";
+import weblib from "../../modules/v2/weblib.js";
 import Component from "../../modules/v2/component.js";
-import "../../modules/v3/databuffer.js";
-import "../../modules/v3/jsonlib.js";
+import "../../modules/v2/jsonlib.js";
 import "../modules/v2/defines.js";
 import "../modules/v2/x86.js";
 import "../modules/v3/charset.js";
@@ -55,13 +56,23 @@ import "../modules/v2/debugger.js";
 import "../modules/v2/computer.js";
 import { embedPCx86 } from "../../modules/v2/embed.js";
 
-let args = Proc.getArgs();
+let args = proclib.getArgs();
 let argv = args.argv;
 
 let dbg;
-let fConsole = (argv['console'] || false);
-let fDebug = (argv['debug'] || false);
 let sCmdPrev = "";
+let fConsole = (argv['console'] || false), fDebug = (argv['debug'] || false);
+
+/**
+ * printf(format, ...args)
+ *
+ * @param {string} format
+ * @param {...} args
+ */
+function printf(format, ...args)
+{
+    process.stdout.write(strlib.sprintf(format, ...args));
+}
 
 /**
  * loadMachine(sFile)
@@ -71,12 +82,12 @@ let sCmdPrev = "";
  */
 function loadMachine(sFile)
 {
-    if (fDebug) console.log('loadMachine("' + sFile + '")');
+    if (fDebug) printf("loadMachine(\"%s\")\n", sFile);
 
     let machine;
     try {
         let sMachine = /** @type {string} */ (fs.readFileSync(sFile, {encoding: "utf8"}));
-        if (fDebug) console.log(sMachine);
+        if (fDebug) printf(sMachine);
         /*
          * Since our JSON files may contain comments, hex values, and other tokens deemed unacceptable
          * by the JSON Overlords, we must use eval() instead of JSON.parse().
@@ -98,11 +109,12 @@ function loadMachine(sFile)
             }
 
             embedPCx86(idMachine, null, null, sMachine);
-            Web.doPageInit();
+            weblib.doPageInit();
+
             dbg = Component.getComponentByType("Debugger");
             if (dbg) {
-                dbg.log = dbg.print = function(s, type) {
-                    console.log((type !== undefined? (type + ": ") : "") + (s || ""));
+                dbg.log = dbg.print = function(s) {
+                    printf(s);
                 };
             }
 
@@ -112,7 +124,7 @@ function loadMachine(sFile)
             if (!fDebug) machine = true;
         }
     } catch(err) {
-        console.log(err.message);
+        printf("%s\n", err.message);
     }
     return machine;
 }
@@ -148,13 +160,12 @@ function doCommand(sCmd)
     default:
         if (sCmd) {
             try {
-                console.log("doCommand(" + sCmd + "): " + dbg);
                 if (dbg && !dbg.doCommands(sCmd, true)) {
                     sCmd = '(' + sCmd + ')';
                     result = eval(sCmd);
                 }
             } catch(err) {
-                console.log(err.message);
+                printf("%s\n", err.message);
             }
         }
         break;

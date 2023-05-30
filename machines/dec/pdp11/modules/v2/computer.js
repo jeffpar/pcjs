@@ -15,7 +15,7 @@ import Str from "../../../../modules/v2/strlib.js";
 import UserAPI from "../../../../modules/v2/userapi.js";
 import Usr from "../../../../modules/v2/usrlib.js";
 import Web from "../../../../modules/v2/weblib.js";
-import { APPCLASS, APPNAME, APPVERSION, COPYRIGHT, DEBUG, LICENSE, TYPEDARRAYS, globals } from "./defines.js";
+import { APPCLASS, APPNAME, APPVERSION, COPYRIGHT, DEBUG, LICENSE, MAXDEBUG, TYPEDARRAYS, globals } from "./defines.js";
 
 export default class ComputerPDP11 extends Component {
     /**
@@ -158,11 +158,11 @@ export default class ComputerPDP11 extends Component {
             }
         }
 
-        this.printf("%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
+        this.printf(Messages.DEFAULT, "%s v%s\n%s\n%s\n", APPNAME, APPVERSION, COPYRIGHT, LICENSE);
 
-        this.printf("Portions adapted from the PDP-11/70 Emulator by Paul Nankervis <http://skn.noip.me/pdp11/pdp11.html>\n");
+        this.printf(Messages.DEFAULT, "Portions adapted from the PDP-11/70 Emulator by Paul Nankervis <http://skn.noip.me/pdp11/pdp11.html>\n");
 
-        if (DEBUG) this.printf(Messages.DEBUG, "TYPEDARRAYS: %s\n", TYPEDARRAYS);
+        if (MAXDEBUG) this.printf(Messages.DEBUG, "TYPEDARRAYS: %s\n", TYPEDARRAYS);
 
         /*
          * Iterate through all the components again and call their initBus() handler, if any
