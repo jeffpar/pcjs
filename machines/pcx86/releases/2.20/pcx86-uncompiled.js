@@ -1503,9 +1503,8 @@ class Str {
     /**
      * sprintf(format, ...args)
      *
-     * Copied from the CCjs project (https://github.com/jeffpar/ccjs/blob/master/lib/stdio.js) and extended.
-     * Far from complete, let alone sprintf-compatible, but it's adequate for the handful of sprintf-style format
-     * specifiers that I use.
+     * This C-like version of sprintf() supports only a subset of the standard C formatting specifiers, plus a few
+     * non-standard ones (eg, to display booleans, dates, times, etc).
      *
      * TODO: The %c and %s specifiers support a negative width for left-justified output, but the numeric specifiers
      * (eg, %d and %x) do not; they support only positive widths and right-justified output.  That's one of the more
@@ -1568,7 +1567,7 @@ class Str {
             }
             let precision = aParts[iPart+3];
             precision = precision? +precision.substr(1) : -1;
-            // let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L' (all currently ignored)
+            let length = aParts[iPart+4];       // eg, 'h', 'l' or 'L'; we also allow 'w' (instead of 'h') and 'b' (instead of 'hh')
             let ach = null, s, radix = 0, prefix = "";
 
             /*
@@ -1623,12 +1622,11 @@ class Str {
              *
              * because unlike the C runtime, we reuse the final parameter once the format string has exhausted all parameters.
              */
-            let ch, date = /** @type {Date} */ (iType < 12 && typeof arg != "object"? Str.parseDate(arg) : arg), dateUndefined;
+            let date = /** @type {Date} */ (iType < 12 && typeof arg != "object"? Str.parseDate(arg) : arg);
 
             switch(type) {
             case 'C':
-                ch = hash? '#' : '';
-                buffer += (Str.isValidDate(date)? Str.sprintf(Str.sprintf("%%%sW, %%%sF %%%sD, %%%sY", ch), date) : dateUndefined);
+                buffer += (Str.isValidDate(date)? Str.sprintf("%#W, %#F %#D, %#Y".replace(/#/g, hash? '#' : ''), date) : undefined);
                 continue;
 
             case 'D':
@@ -1675,8 +1673,7 @@ class Str {
                 break;
 
             case 'T':
-                ch = hash? '#' : '';
-                buffer += (Str.isValidDate(date)? Str.sprintf(Str.sprintf("%%%sY-%%%s02M-%%%s02D %%%s02H:%%%s02N:%%%s02S", ch), date) : dateUndefined);
+                buffer += (Str.isValidDate(date)? Str.sprintf("%#Y-%#02M-%#02D %#02H:%#02N:%#02S".replace(/#/g, hash? '#' : ''), date) : undefined);
                 continue;
 
             case 'W':
@@ -1697,7 +1694,7 @@ class Str {
             switch(type) {
             case 'b':
                 /*
-                 * This non-standard "boolean" format specifier seems handy.
+                 * "%b" for boolean-like values is a non-standard format specifier that seems handy.
                  */
                 buffer += (arg? "true" : "false");
                 break;
@@ -1740,6 +1737,7 @@ class Str {
                 /* falls through */
 
             case 'f':
+                arg = +arg;             // convert to a number, if it isn't already
                 s = arg + "";
                 if (precision >= 0) {
                     s = arg.toFixed(precision);
@@ -1823,18 +1821,29 @@ class Str {
                 }
                 if (zeroPad && !width) {
                     /*
-                     * Here we replicate a bit of logic from toHex(), which selects a width based on the value, and
-                     * is triggered by the format specification "%0x", where zero-padding is requested without a width.
+                     * When zero padding is specified without a width (eg, "%0x"), select an appropriate width.
                      */
-                    let v = Math.abs(arg);
-                    if (v <= 0xff) {
-                        width = 2;
-                    } else if (v <= 0xffff) {
-                        width = 4;
-                    } else if (v <= 0xffffffff) {
-                        width = 8;
+                    if (length == 'b') {
+                        width = 2;      // if an 8-bit length was specified (eg, "%0bx"), then default to 2
+                    } else if (length == 'h' || length == 'w') {
+                        width = 4;      // if a 16-bit length was specified (eg, "%0wx"), then default to 4
+                    } else if (length == 'l') {
+                        width = 8;      // if a 32-bit length was specified (eg, "%0lx"), then default to 8
                     } else {
-                        width = 9;
+                        /*
+                         * Here we replicate a bit of logic from toHex(), which selects a width based on the value, and
+                         * is triggered by the format specification "%0x", where zero-padding is requested without a width.
+                         */
+                        let v = Math.abs(arg);
+                        if (v <= 0xff) {
+                            width = 2;
+                        } else if (v <= 0xffff) {
+                            width = 4;
+                        } else if (v <= 0xffffffff) {
+                            width = 8;
+                        } else {
+                            width = 9;
+                        }
                     }
                     width += prefix.length;
                 }

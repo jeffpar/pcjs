@@ -34,6 +34,7 @@ export default class StdIO extends NumIO {
      *
      *      addFormatType()
      *      flush()
+     *      getBaseName()
      *      isDate()
      *      parseDate()
      *      print()
@@ -270,12 +271,10 @@ export default class StdIO extends NumIO {
     /**
      * sprintf(format, ...args)
      *
-     * Copied from the CCjs project (https://github.com/jeffpar/ccjs/blob/master/lib/stdio.js) and extended.
-     * Far from complete, let alone sprintf-compatible, but it's adequate for the handful of sprintf-style format
-     * specifiers that I use.
+     * This C-like version of sprintf() supports only a subset of the standard C formatting specifiers, plus a few
+     * non-standard ones (eg, to display booleans, dates, times, etc).
      *
-     * In addition to supporting lots of handy Date formatting types (see below), it also supports custom format
-     * types; see addFormatType() for details.
+     * This version also supports custom format specifiers; see addFormatType() for details.
      *
      * TODO: The %c and %s specifiers support a negative width for left-justified output, but the numeric specifiers
      * (eg, %d and %x) do not; they support only positive widths and right-justified output.  That's one of the more
@@ -384,13 +383,11 @@ export default class StdIO extends NumIO {
              *
              * because unlike the C runtime, we reuse the final parameter once the format string has exhausted all parameters.
              */
-            let ch;
-            let date = /** @type {Date} */ ("ACDFGHMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg), dateUndefined;
+            let date = /** @type {Date} */ ("ACDFGHMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg);
 
             switch(type) {
             case 'C':
-                ch = hash? '#' : '';
-                buffer += (this.isDate(date)? this.sprintf(this.sprintf("%%%sW, %%%sF %%%sD, %%%sY", ch), date) : dateUndefined);
+                buffer += (this.isDate(date)? this.sprintf("%#W, %#F %#D, %#Y".replaceAll('#', hash? '#' : ''), date) : undefined);
                 continue;
 
             case 'D':
@@ -437,8 +434,7 @@ export default class StdIO extends NumIO {
                 break;
 
             case 'T':
-                ch = hash? '#' : '';
-                buffer += (this.isDate(date)? this.sprintf(this.sprintf("%%%sY-%%%s02M-%%%s02D %%%s02H:%%%s02N:%%%s02S", ch), date) : dateUndefined);
+                buffer += (this.isDate(date)? this.sprintf("%#Y-%#02M-%#02D %#02H:%#02N:%#02S".replaceAll('#', hash? '#' : ''), date) : undefined);
                 continue;
 
             case 'W':
@@ -502,7 +498,7 @@ export default class StdIO extends NumIO {
                 /* falls through */
 
             case 'f':
-                arg = +arg;
+                arg = +arg;             // convert to a number, if it isn't already
                 s = arg + "";
                 if (precision >= 0) {
                     s = arg.toFixed(precision);
@@ -663,7 +659,7 @@ export default class StdIO extends NumIO {
      * This is a helper function mainly intended for use in a debugging console, allowing you to display numbers
      * as hex by evaluating the expression "this.toHex(n)".
      *
-     * In a C runtime, you might use "itoa(n, buffer, 16)", which would be in "stdlib" instead of "stdio", and
+     * With a C runtime, you might use "itoa(n, buffer, 16)", which would be in "stdlib" instead of "stdio", and
      * it would not display a "0x" prefix; however, since we're relying on sprintf() to perform all our number
      * to string conversions, and sprintf() is a "stdio" function, we're keeping all these related functions here.
      *
