@@ -799,7 +799,6 @@ class StdIO extends NumIO {
      *      parseDate()
      *      print()
      *      printf()
-     *      println()
      *      sprintf()
      *      toHex()
      *

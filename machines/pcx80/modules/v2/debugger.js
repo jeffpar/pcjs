@@ -1006,7 +1006,7 @@ export default class DebuggerX80 extends DbgLib {
         this.print(sMessage, bitsMessage); // + " (" + this.cpu.getCycles() + " cycles)"
 
         /*
-         * We have no idea what the frequency of println() calls might be; all we know is that they easily
+         * We have no idea what the frequency of print() calls might be; all we know is that they easily
          * screw up the CPU's careful assumptions about cycles per burst.  So we call yieldCPU() after every
          * message, to effectively end the current burst and start fresh.
          *

@@ -163,12 +163,11 @@ export default class ComputerX80 extends Component {
                 component = aComponents[iComponent];
                 /*
                  * I can think of many "cleaner" ways for the Control Panel component to pass its
-                 * notice(), println(), etc, overrides on to all the other components, but it's just
+                 * notice(), print(), etc, overrides on to all the other components, but it's just
                  * too darn convenient to slam those overrides into the components directly.
                  */
-                component.notice = this.panel.notice;
                 component.print = this.panel.print;
-                component.println = this.panel.println;
+                component.notice = this.panel.notice;
             }
         }
 

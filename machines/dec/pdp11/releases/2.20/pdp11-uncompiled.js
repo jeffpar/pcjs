@@ -3713,7 +3713,7 @@ class Component {
     /**
      * Component.notice(s, fPrintOnly, id)
      *
-     * notice() is like println() but implies a need for user notification, so we alert() as well.
+     * notice() is like print() but implies a need for user notification, so we alert() as well.
      *
      * @param {string} s is the message text
      * @param {boolean} [fPrintOnly]
@@ -4925,7 +4925,7 @@ Component.TYPE = {
 };
 
 /*
- * These are the standard PRINT values you can pass as an optional argument to println(); in reality,
+ * These are the standard PRINT values you can pass as an optional argument to print(); in reality,
  * you can pass anything you want, because they are simply prepended to the message, although PROGRESS
  * messages may also be merged with earlier similar messages to keep the output buffer under control.
  */
@@ -30294,12 +30294,11 @@ class ComputerPDP11 extends Component {
                 component = aComponents[iComponent];
                 /*
                  * I can think of many "cleaner" ways for the Control Panel component to pass its
-                 * notice(), println(), etc, overrides on to all the other components, but it's just
+                 * notice(), print(), etc, overrides on to all the other components, but it's just
                  * too darn convenient to slam those overrides into the components directly.
                  */
-                component.notice = this.panel.notice;
                 component.print = this.panel.print;
-                component.println = this.panel.println;
+                component.notice = this.panel.notice;
             }
         }
 

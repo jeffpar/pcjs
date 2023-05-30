@@ -101,7 +101,7 @@ function loadMachine(sFile)
             Web.doPageInit();
             dbg = Component.getComponentByType("Debugger");
             if (dbg) {
-                dbg.log = dbg.println = function(s, type) {
+                dbg.log = dbg.print = function(s, type) {
                     console.log((type !== undefined? (type + ": ") : "") + (s || ""));
                 };
             }
