@@ -1905,7 +1905,7 @@ export default class ChipSet extends Component {
         let channel = controller.aChannels[iChannel];
         let b = channel.addrCurrent[controller.bIndex];
         if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
-            this.printMessageIO(port, undefined, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".ADDR[" + controller.bIndex + "]", b, true);
+            this.printIO(port, undefined, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".ADDR[" + controller.bIndex + "]", b, true);
         }
         controller.bIndex ^= 0x1;
         /*
@@ -1943,7 +1943,7 @@ export default class ChipSet extends Component {
     {
         let controller = this.aDMACs[iDMAC];
         if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
-            this.printMessageIO(port, bOut, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".ADDR[" + controller.bIndex + "]", undefined, true);
+            this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".ADDR[" + controller.bIndex + "]", undefined, true);
         }
         let channel = controller.aChannels[iChannel];
         channel.addrCurrent[controller.bIndex] = channel.addrInit[controller.bIndex] = bOut;
@@ -1966,7 +1966,7 @@ export default class ChipSet extends Component {
         let channel = controller.aChannels[iChannel];
         let b = channel.countCurrent[controller.bIndex];
         if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
-            this.printMessageIO(port, undefined, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".COUNT[" + controller.bIndex + "]", b, true);
+            this.printIO(port, undefined, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".COUNT[" + controller.bIndex + "]", b, true);
         }
         controller.bIndex ^= 0x1;
         /*
@@ -2008,7 +2008,7 @@ export default class ChipSet extends Component {
     {
         let controller = this.aDMACs[iDMAC];
         if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
-            this.printMessageIO(port, bOut, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".COUNT[" + controller.bIndex + "]", undefined, true);
+            this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".COUNT[" + controller.bIndex + "]", undefined, true);
         }
         let channel = controller.aChannels[iChannel];
         channel.countCurrent[controller.bIndex] = channel.countInit[controller.bIndex] = bOut;
@@ -2051,7 +2051,7 @@ export default class ChipSet extends Component {
         let b = controller.bStatus | ChipSet.DMA_STATUS.CH0_TC;
         controller.bStatus &= ~ChipSet.DMA_STATUS.ALL_TC;
         if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
-            this.printMessageIO(port, undefined, addrFrom, "DMA" + iDMAC + ".STATUS", b, true);
+            this.printIO(port, undefined, addrFrom, "DMA" + iDMAC + ".STATUS", b, true);
         }
         return b;
     }
@@ -2068,7 +2068,7 @@ export default class ChipSet extends Component {
     outDMACmd(iDMAC, port, bOut, addrFrom)
     {
         if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
-            this.printMessageIO(port, bOut, addrFrom, "DMA" + iDMAC + ".CMD", undefined, true);
+            this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".CMD", undefined, true);
         }
         this.aDMACs[iDMAC].bCmd = bOut;
     }
@@ -2096,7 +2096,7 @@ export default class ChipSet extends Component {
     {
         let controller = this.aDMACs[iDMAC];
         if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
-            this.printMessageIO(port, bOut, addrFrom, "DMA" + iDMAC + ".REQ", undefined, true);
+            this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".REQ", undefined, true);
         }
         /*
          * Bits 0-1 contain the channel number
@@ -2123,7 +2123,7 @@ export default class ChipSet extends Component {
     {
         let controller = this.aDMACs[iDMAC];
         if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
-            this.printMessageIO(port, bOut, addrFrom, "DMA" + iDMAC + ".MASK", undefined, true);
+            this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".MASK", undefined, true);
         }
         let iChannel = bOut & ChipSet.DMA_MASK.CHANNEL;
         let channel = controller.aChannels[iChannel];
@@ -2143,7 +2143,7 @@ export default class ChipSet extends Component {
     outDMAMode(iDMAC, port, bOut, addrFrom)
     {
         if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
-            this.printMessageIO(port, bOut, addrFrom, "DMA" + iDMAC + ".MODE", undefined, true);
+            this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".MODE", undefined, true);
         }
         let iChannel = bOut & ChipSet.DMA_MODE.CHANNEL;
         this.aDMACs[iDMAC].aChannels[iChannel].mode = bOut;
@@ -2164,7 +2164,7 @@ export default class ChipSet extends Component {
     outDMAResetFF(iDMAC, port, bOut, addrFrom)
     {
         if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
-            this.printMessageIO(port, bOut, addrFrom, "DMA" + iDMAC + ".RESET_FF", undefined, true);
+            this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".RESET_FF", undefined, true);
         }
         this.aDMACs[iDMAC].bIndex = 0;
     }
@@ -2195,7 +2195,7 @@ export default class ChipSet extends Component {
         let controller = this.aDMACs[iDMAC];
         let b = controller.bTemp;
         if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
-            this.printMessageIO(port, undefined, addrFrom, "DMA" + iDMAC + ".TEMP", b, true);
+            this.printIO(port, undefined, addrFrom, "DMA" + iDMAC + ".TEMP", b, true);
         }
         return b;
     }
@@ -2212,7 +2212,7 @@ export default class ChipSet extends Component {
     outDMAMasterClear(iDMAC, port, bOut, addrFrom)
     {
         if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
-            this.printMessageIO(port, bOut, addrFrom, "DMA" + iDMAC + ".MASTER_CLEAR", undefined, true);
+            this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".MASTER_CLEAR", undefined, true);
         }
         /*
          * The value written to this port doesn't matter; any write triggers a "master clear" operation
@@ -2239,7 +2239,7 @@ export default class ChipSet extends Component {
     {
         let bIn = this.aDMACs[iDMAC].aChannels[iChannel].bPage;
         if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
-            this.printMessageIO(port, undefined, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".PAGE", bIn, true);
+            this.printIO(port, undefined, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".PAGE", bIn, true);
         }
         return bIn;
     }
@@ -2257,7 +2257,7 @@ export default class ChipSet extends Component {
     outDMAPageReg(iDMAC, iChannel, port, bOut, addrFrom)
     {
         if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
-            this.printMessageIO(port, bOut, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".PAGE", undefined, true);
+            this.printIO(port, bOut, addrFrom, "DMA" + iDMAC + ".CHANNEL" + iChannel + ".PAGE", undefined, true);
         }
         this.aDMACs[iDMAC].aChannels[iChannel].bPage = bOut;
     }
@@ -2275,7 +2275,7 @@ export default class ChipSet extends Component {
     {
         let bIn = this.abDMAPageSpare[iSpare];
         if (this.messageEnabled(Messages.DMA + Messages.PORT)) {
-            this.printMessageIO(port, undefined, addrFrom, "DMA.SPARE" + iSpare + ".PAGE", bIn, true);
+            this.printIO(port, undefined, addrFrom, "DMA.SPARE" + iSpare + ".PAGE", bIn, true);
         }
         return bIn;
     }
@@ -2296,7 +2296,7 @@ export default class ChipSet extends Component {
          * it enables logging of all DeskPro 386 ROM checkpoint I/O to port 0x84.
          */
         if (this.messageEnabled(Messages.DMA + Messages.PORT) /* || DEBUG && (this.model|0) == ChipSet.MODEL_COMPAQ_DESKPRO386 */) {
-            this.printMessageIO(port, bOut, addrFrom, "DMA.SPARE" + iSpare + ".PAGE", undefined, true);
+            this.printIO(port, bOut, addrFrom, "DMA.SPARE" + iSpare + ".PAGE", undefined, true);
         }
         this.abDMAPageSpare[iSpare] = bOut;
     }
@@ -2610,7 +2610,7 @@ export default class ChipSet extends Component {
             }
         }
         if (this.messageEnabled(Messages.PIC + Messages.PORT)) {
-            this.printMessageIO(pic.port, undefined, addrFrom, "PIC" + iPIC, b, true);
+            this.printIO(pic.port, undefined, addrFrom, "PIC" + iPIC, b, true);
         }
         return b;
     }
@@ -2627,7 +2627,7 @@ export default class ChipSet extends Component {
     {
         let pic = this.aPICs[iPIC];
         if (this.messageEnabled(Messages.PIC + Messages.PORT)) {
-            this.printMessageIO(pic.port, bOut, addrFrom, "PIC" + iPIC, undefined, true);
+            this.printIO(pic.port, bOut, addrFrom, "PIC" + iPIC, undefined, true);
         }
         if (bOut & ChipSet.PIC_LO.ICW1) {
             /*
@@ -2765,7 +2765,7 @@ export default class ChipSet extends Component {
         let pic = this.aPICs[iPIC];
         let b = pic.bIMR;
         if (this.messageEnabled(Messages.PIC + Messages.PORT)) {
-            this.printMessageIO(pic.port+1, undefined, addrFrom, "PIC" + iPIC, b, true);
+            this.printIO(pic.port+1, undefined, addrFrom, "PIC" + iPIC, b, true);
         }
         return b;
     }
@@ -2782,7 +2782,7 @@ export default class ChipSet extends Component {
     {
         let pic = this.aPICs[iPIC];
         if (this.messageEnabled(Messages.PIC + Messages.PORT)) {
-            this.printMessageIO(pic.port+1, bOut, addrFrom, "PIC" + iPIC, undefined, true);
+            this.printIO(pic.port+1, bOut, addrFrom, "PIC" + iPIC, undefined, true);
         }
         if (pic.nICW < pic.aICW.length) {
             pic.aICW[pic.nICW++] = bOut;
@@ -3090,7 +3090,7 @@ export default class ChipSet extends Component {
             }
         }
         if (this.messageEnabled(Messages.TIMER + Messages.PORT)) {
-            this.printMessageIO(port, undefined, addrFrom, "PIT" + iPIT + ".TIMER" + iPITTimer, b, true);
+            this.printIO(port, undefined, addrFrom, "PIT" + iPIT + ".TIMER" + iPITTimer, b, true);
         }
         return b;
     }
@@ -3113,7 +3113,7 @@ export default class ChipSet extends Component {
     outTimer(iPIT, iPITTimer, port, bOut, addrFrom)
     {
         if (this.messageEnabled(Messages.TIMER + Messages.PORT)) {
-            this.printMessageIO(port, bOut, addrFrom, "PIT" + iPIT + ".TIMER" + iPITTimer, undefined, true);
+            this.printIO(port, bOut, addrFrom, "PIT" + iPIT + ".TIMER" + iPITTimer, undefined, true);
         }
 
         let iBaseTimer = (iPIT? 3 : 0);
@@ -3172,7 +3172,7 @@ export default class ChipSet extends Component {
      */
     inTimerCtrl(iPIT, port, addrFrom)
     {
-        this.printMessageIO(port, undefined, addrFrom, "PIT" + iPIT + ".CTRL", undefined, Messages.TIMER);
+        this.printIO(port, undefined, addrFrom, "PIT" + iPIT + ".CTRL", undefined, Messages.TIMER);
         /*
          * NOTE: Even though reads to port 0x43 are undefined (I think), I'm going to "define" it
          * as returning the last value written, purely for the Debugger's benefit.
@@ -3191,7 +3191,7 @@ export default class ChipSet extends Component {
      */
     outTimerCtrl(iPIT, port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "PIT" + iPIT + ".CTRL", undefined, Messages.TIMER);
+        this.printIO(port, bOut, addrFrom, "PIT" + iPIT + ".CTRL", undefined, Messages.TIMER);
 
         /*
          * Extract the SC (Select Counter) bits.
@@ -3644,7 +3644,7 @@ export default class ChipSet extends Component {
      */
     outMFGTest(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "MFG_TEST");
+        this.printIO(port, bOut, addrFrom, "MFG_TEST");
     }
 
     /**
@@ -3663,11 +3663,11 @@ export default class ChipSet extends Component {
                 b = this.aDIPSwitches[0][1];
             } else {
                 b = this.bKbdData;
-                this.printMessageIO(port, undefined, addrFrom, "PPI_A", b, Messages.KBD);
+                this.printIO(port, undefined, addrFrom, "PPI_A", b, Messages.KBD);
                 return b;
             }
         }
-        this.printMessageIO(port, undefined, addrFrom, "PPI_A", b);
+        this.printIO(port, undefined, addrFrom, "PPI_A", b);
         return b;
     }
 
@@ -3681,7 +3681,7 @@ export default class ChipSet extends Component {
      */
     outPPIA(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "PPI_A");
+        this.printIO(port, bOut, addrFrom, "PPI_A");
         this.bPPIA = bOut;
     }
 
@@ -3696,7 +3696,7 @@ export default class ChipSet extends Component {
     inPPIB(port, addrFrom)
     {
         let b = this.bPPIB;
-        this.printMessageIO(port, undefined, addrFrom, "PPI_B", b);
+        this.printIO(port, undefined, addrFrom, "PPI_B", b);
         return b;
     }
 
@@ -3713,7 +3713,7 @@ export default class ChipSet extends Component {
      */
     outPPIB(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "PPI_B");
+        this.printIO(port, bOut, addrFrom, "PPI_B");
         this.updatePPIB(bOut);
     }
 
@@ -3848,7 +3848,7 @@ export default class ChipSet extends Component {
          * The ROM BIOS polls this port incessantly during its memory tests, checking for memory parity errors
          * (which of course we never report), so you must use both Messages.PORT and Messages.CHIPSET.
          */
-        this.printMessageIO(port, undefined, addrFrom, "PPI_C", b, Messages.CHIPSET);
+        this.printIO(port, undefined, addrFrom, "PPI_C", b, Messages.CHIPSET);
         return b;
     }
 
@@ -3862,7 +3862,7 @@ export default class ChipSet extends Component {
      */
     outPPIC(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "PPI_C");
+        this.printIO(port, bOut, addrFrom, "PPI_C");
         this.bPPIC = bOut;
     }
 
@@ -3877,7 +3877,7 @@ export default class ChipSet extends Component {
     inPPICtrl(port, addrFrom)
     {
         let b = this.bPPICtrl;
-        this.printMessageIO(port, undefined, addrFrom, "PPI_CTRL", b);
+        this.printIO(port, undefined, addrFrom, "PPI_CTRL", b);
         return b;
     }
 
@@ -3891,7 +3891,7 @@ export default class ChipSet extends Component {
      */
     outPPICtrl(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "PPI_CTRL");
+        this.printIO(port, bOut, addrFrom, "PPI_CTRL");
         this.bPPICtrl = bOut;
     }
 
@@ -3906,7 +3906,7 @@ export default class ChipSet extends Component {
     in8041Kbd(port, addrFrom)
     {
         let b = this.bKbdData;
-        this.printMessageIO(port, undefined, addrFrom, "8041_KBD", b, Messages.KBD);
+        this.printIO(port, undefined, addrFrom, "8041_KBD", b, Messages.KBD);
         this.b8041Status &= ~ChipSet.C8042.STATUS.OUTBUFF_FULL;
         return b;
     }
@@ -3921,7 +3921,7 @@ export default class ChipSet extends Component {
      */
     out8041Kbd(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "8041_KBD");
+        this.printIO(port, bOut, addrFrom, "8041_KBD");
         // if (this.kbd) this.kbd.receiveCmd(bOut);
     }
 
@@ -3936,7 +3936,7 @@ export default class ChipSet extends Component {
     in8041Ctrl(port, addrFrom)
     {
         let b = this.bPPIB;
-        this.printMessageIO(port, undefined, addrFrom, "8041_CTRL", b);
+        this.printIO(port, undefined, addrFrom, "8041_CTRL", b);
         return b;
     }
 
@@ -3950,7 +3950,7 @@ export default class ChipSet extends Component {
      */
     out8041Ctrl(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "8041_CTRL");
+        this.printIO(port, bOut, addrFrom, "8041_CTRL");
         this.updatePPIB(bOut);
     }
 
@@ -3965,7 +3965,7 @@ export default class ChipSet extends Component {
     in8041Status(port, addrFrom)
     {
         let b = this.b8041Status;
-        this.printMessageIO(port, undefined, addrFrom, "8041_STATUS", b);
+        this.printIO(port, undefined, addrFrom, "8041_STATUS", b);
         return b;
     }
 
@@ -4003,7 +4003,7 @@ export default class ChipSet extends Component {
     in8042OutBuff(port, addrFrom)
     {
         let b = this.b8042OutBuff;
-        this.printMessageIO(port, undefined, addrFrom, "8042_OUTBUFF", b, Messages.C8042);
+        this.printIO(port, undefined, addrFrom, "8042_OUTBUFF", b, Messages.C8042);
         this.b8042Status &= ~(ChipSet.C8042.STATUS.OUTBUFF_FULL | ChipSet.C8042.STATUS.OUTBUFF_DELAY);
         if (this.kbd) this.kbd.checkBuffer(b);
         return b;
@@ -4023,7 +4023,7 @@ export default class ChipSet extends Component {
      */
     out8042InBuffData(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "8042_INBUF.DATA", undefined, Messages.C8042);
+        this.printIO(port, bOut, addrFrom, "8042_INBUF.DATA", undefined, Messages.C8042);
 
         if (this.b8042Status & ChipSet.C8042.STATUS.CMD_FLAG) {
 
@@ -4150,7 +4150,7 @@ export default class ChipSet extends Component {
          * Thanks to the WAITF function, this has become a very "busy" port, so if this generates too
          * many messages, try adding Messages.WARNING to the criteria.
          */
-        this.printMessageIO(port, undefined, addrFrom, "8042_RWREG", b, Messages.C8042 + Messages.WARNING);
+        this.printIO(port, undefined, addrFrom, "8042_RWREG", b, Messages.C8042 + Messages.WARNING);
         return b;
     }
 
@@ -4164,7 +4164,7 @@ export default class ChipSet extends Component {
      */
     out8042RWReg(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "8042_RWREG", undefined, Messages.C8042);
+        this.printIO(port, bOut, addrFrom, "8042_RWREG", undefined, Messages.C8042);
         this.updatePPIB(bOut);
     }
 
@@ -4178,7 +4178,7 @@ export default class ChipSet extends Component {
      */
     in8042Status(port, addrFrom)
     {
-        this.printMessageIO(port, undefined, addrFrom, "8042_STATUS", this.b8042Status, Messages.C8042);
+        this.printIO(port, undefined, addrFrom, "8042_STATUS", this.b8042Status, Messages.C8042);
         let b = this.b8042Status & 0xff;
         /*
          * There's code in the 5170 BIOS (F000:03BF) that writes an 8042 command (0xAA), waits for
@@ -4228,7 +4228,7 @@ export default class ChipSet extends Component {
      */
     out8042InBuffCmd(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "8042_INBUFF.CMD", undefined, Messages.C8042);
+        this.printIO(port, bOut, addrFrom, "8042_INBUFF.CMD", undefined, Messages.C8042);
         this.assert(!(this.b8042Status & ChipSet.C8042.STATUS.INBUFF_FULL));
         this.b8042InBuff = bOut;
 
@@ -4557,7 +4557,7 @@ export default class ChipSet extends Component {
     in6300DIPSwitches(iDIP, port, addrFrom)
     {
         let b = this.aDIPSwitches[iDIP][1];
-        this.printMessageIO(port, undefined, addrFrom, "DIPSW-" + iDIP, b, Messages.CHIPSET);
+        this.printIO(port, undefined, addrFrom, "DIPSW-" + iDIP, b, Messages.CHIPSET);
         return b;
     }
 
@@ -4571,7 +4571,7 @@ export default class ChipSet extends Component {
      */
     inCMOSAddr(port, addrFrom)
     {
-        this.printMessageIO(port, undefined, addrFrom, "CMOS.ADDR", this.bCMOSAddr, Messages.CMOS);
+        this.printIO(port, undefined, addrFrom, "CMOS.ADDR", this.bCMOSAddr, Messages.CMOS);
         return this.bCMOSAddr;
     }
 
@@ -4585,7 +4585,7 @@ export default class ChipSet extends Component {
      */
     outCMOSAddr(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "CMOS.ADDR", undefined, Messages.CMOS);
+        this.printIO(port, bOut, addrFrom, "CMOS.ADDR", undefined, Messages.CMOS);
         this.bCMOSAddr = bOut;
         this.bNMI = (this.bNMI & ~ChipSet.NMI.ENABLE) | ((bOut & ChipSet.CMOS.ADDR.NMI_DISABLE)? 0 : ChipSet.NMI.ENABLE);
     }
@@ -4603,7 +4603,7 @@ export default class ChipSet extends Component {
         let bAddr = this.bCMOSAddr & ChipSet.CMOS.ADDR.MASK;
         let bIn = (bAddr <= ChipSet.CMOS.ADDR.STATUSD? this.getRTCByte(bAddr) : this.abCMOSData[bAddr]);
         if (this.messageEnabled(Messages.CMOS + Messages.PORT)) {
-            this.printMessageIO(port, undefined, addrFrom, "CMOS.DATA[" + Str.toHexByte(bAddr) + "]", bIn, true);
+            this.printIO(port, undefined, addrFrom, "CMOS.DATA[" + Str.toHexByte(bAddr) + "]", bIn, true);
         }
         if (addrFrom != null) {
             if (bAddr == ChipSet.CMOS.ADDR.STATUSC) {
@@ -4638,7 +4638,7 @@ export default class ChipSet extends Component {
     {
         let bAddr = this.bCMOSAddr & ChipSet.CMOS.ADDR.MASK;
         if (this.messageEnabled(Messages.CMOS + Messages.PORT)) {
-            this.printMessageIO(port, bOut, addrFrom, "CMOS.DATA[" + Str.toHexByte(bAddr) + "]", undefined, true);
+            this.printIO(port, bOut, addrFrom, "CMOS.DATA[" + Str.toHexByte(bAddr) + "]", undefined, true);
         }
         let bDelta = bOut ^ this.abCMOSData[bAddr];
         this.abCMOSData[bAddr] = (bAddr <= ChipSet.CMOS.ADDR.STATUSD? this.setRTCByte(bAddr, bOut) : bOut);
@@ -4667,7 +4667,7 @@ export default class ChipSet extends Component {
     inNMI(port, addrFrom)
     {
         let bIn = this.bNMI;
-        this.printMessageIO(port, undefined, addrFrom, "NMI", bIn);
+        this.printIO(port, undefined, addrFrom, "NMI", bIn);
         this.bNMI &= ~ChipSet.NMI.KBD_LATCH;
         return bIn;
     }
@@ -4684,7 +4684,7 @@ export default class ChipSet extends Component {
      */
     outNMI(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "NMI");
+        this.printIO(port, bOut, addrFrom, "NMI");
         this.bNMI = bOut;
     }
 
@@ -4700,7 +4700,7 @@ export default class ChipSet extends Component {
      */
     outFPUClear(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "FPU.CLEAR");
+        this.printIO(port, bOut, addrFrom, "FPU.CLEAR");
         this.assert(!bOut);
         if (this.fpuActive) this.fpuActive.clearBusy();
     }
@@ -4717,7 +4717,7 @@ export default class ChipSet extends Component {
      */
     outFPUReset(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "FPU.RESET");
+        this.printIO(port, bOut, addrFrom, "FPU.RESET");
         this.assert(!bOut);
         if (this.fpuActive) this.fpuActive.resetFPU();
     }

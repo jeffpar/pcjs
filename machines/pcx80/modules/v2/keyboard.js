@@ -1001,7 +1001,7 @@ export default class KeyboardX80 extends Component {
             this.bVT100Address = b;
             this.cpu.requestINTR(1);
         }
-        this.printMessageIO(port, undefined, addrFrom, "KBDUART.ADDRESS", b);
+        this.printIO(port, undefined, addrFrom, "KBDUART.ADDRESS", b);
         return b;
     }
 
@@ -1015,7 +1015,7 @@ export default class KeyboardX80 extends Component {
      */
     outVT100UARTStatus(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "KBDUART.STATUS");
+        this.printIO(port, b, addrFrom, "KBDUART.STATUS");
         this.bVT100Status = b;
         this.fVT100UARTBusy = true;
         this.nVT100UARTCycleSnap = this.cpu.getCycles();

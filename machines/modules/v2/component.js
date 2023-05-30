@@ -1446,31 +1446,7 @@ export default class Component {
     }
 
     /**
-     * printMessage(sMessage, bitsMessage, fAddress) [DEPRECATED: use printf(bitsMessage, ...) instead]
-     *
-     * If bitsMessage is not specified, the component's Messages category is used, and if bitsMessage is true,
-     * the message is displayed regardless.
-     *
-     * @this {Component}
-     * @param {string} sMessage is any caller-defined message string
-     * @param {number|boolean} [bitsMessage] is zero or more Messages flag(s)
-     * @param {boolean} [fAddress] is true to display the current address
-     */
-    printMessage(sMessage, bitsMessage = this.bitsMessage, fAddress = false)
-    {
-        if (DEBUGGER && this.dbg) {
-            if (typeof bitsMessage == "boolean") {
-                bitsMessage = bitsMessage? Messages.PROGRESS : 0;
-            }
-            if (fAddress) {
-                bitsMessage = this.setBits(bitsMessage, Messages.ADDRESS);
-            }
-            this.dbg.printf(bitsMessage, "%s\n", sMessage);
-        }
-    }
-
-    /**
-     * printMessageIO(port, bOut, addrFrom, name, bIn, bitsMessage)
+     * printIO(port, bOut, addrFrom, name, bIn, bitsMessage)
      *
      * If bitsMessage is not specified, the component's Messages category is used,
      * and if bitsMessage is true, the message is displayed if Messages.PORT is enabled also.
@@ -1483,7 +1459,7 @@ export default class Component {
      * @param {number} [bIn] is the input value, if known, on an input operation
      * @param {number|boolean} [bitsMessage] is zero or more Messages flag(s)
      */
-    printMessageIO(port, bOut, addrFrom, name, bIn, bitsMessage = this.bitsMessage)
+    printIO(port, bOut, addrFrom, name, bIn, bitsMessage = this.bitsMessage)
     {
         if (DEBUGGER && this.dbg) {
             if (bitsMessage === true) {

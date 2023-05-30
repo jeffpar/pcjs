@@ -695,7 +695,7 @@ export default class SerialPortX80 extends Component {
     inData(port, addrFrom)
     {
         var b = this.bDataIn;
-        this.printMessageIO(port, undefined, addrFrom, "DATA", b);
+        this.printIO(port, undefined, addrFrom, "DATA", b);
         this.bStatus &= ~SerialPortX80.UART8251.STATUS.RECV_FULL;
         return b;
     }
@@ -711,7 +711,7 @@ export default class SerialPortX80 extends Component {
     inControl(port, addrFrom)
     {
         var b = this.bStatus;
-        this.printMessageIO(port, undefined, addrFrom, "STATUS", b);
+        this.printIO(port, undefined, addrFrom, "STATUS", b);
         return b;
     }
 
@@ -725,7 +725,7 @@ export default class SerialPortX80 extends Component {
      */
     outData(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "DATA");
+        this.printIO(port, bOut, addrFrom, "DATA");
         this.bDataOut = bOut;
         this.bStatus &= ~(SerialPortX80.UART8251.STATUS.XMIT_READY | SerialPortX80.UART8251.STATUS.XMIT_EMPTY);
         /*
@@ -760,7 +760,7 @@ export default class SerialPortX80 extends Component {
      */
     outControl(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "CONTROL");
+        this.printIO(port, bOut, addrFrom, "CONTROL");
         if (!this.fReady) {
             this.bMode = bOut;
             this.fReady = true;
@@ -799,7 +799,7 @@ export default class SerialPortX80 extends Component {
      */
     outBaudRates(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "BAUDRATES");
+        this.printIO(port, bOut, addrFrom, "BAUDRATES");
         this.bBaudRates = bOut;
     }
 

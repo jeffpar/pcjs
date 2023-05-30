@@ -639,7 +639,7 @@ export default class Mouse extends Component {
     inBusData(port, addrFrom)
     {
         let b = 0;
-        this.printMessageIO(port, undefined, addrFrom, "DATA", b);
+        this.printIO(port, undefined, addrFrom, "DATA", b);
         return b;
     }
 
@@ -654,7 +654,7 @@ export default class Mouse extends Component {
     inBusTPPI(port, addrFrom)
     {
         let b = 0;
-        this.printMessageIO(port, undefined, addrFrom, "TPPI", b);
+        this.printIO(port, undefined, addrFrom, "TPPI", b);
         return b;
     }
 
@@ -669,7 +669,7 @@ export default class Mouse extends Component {
     inBusCtrl(port, addrFrom)
     {
         let b = 0;
-        this.printMessageIO(port, undefined, addrFrom, "CTRL", b);
+        this.printIO(port, undefined, addrFrom, "CTRL", b);
         return b;
     }
 
@@ -684,7 +684,7 @@ export default class Mouse extends Component {
     inBusCPPI(port, addrFrom)
     {
         let b = 0;
-        this.printMessageIO(port, undefined, addrFrom, "CPPI", b);
+        this.printIO(port, undefined, addrFrom, "CPPI", b);
         return b;
     }
 
@@ -698,7 +698,7 @@ export default class Mouse extends Component {
      */
     outBusData(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "DATA");
+        this.printIO(port, bOut, addrFrom, "DATA");
     }
 
     /**
@@ -711,7 +711,7 @@ export default class Mouse extends Component {
      */
     outBusTPPI(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "TPPI");
+        this.printIO(port, bOut, addrFrom, "TPPI");
     }
 
     /**
@@ -724,7 +724,7 @@ export default class Mouse extends Component {
      */
     outBusCtrl(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "CTRL");
+        this.printIO(port, bOut, addrFrom, "CTRL");
     }
 
     /**
@@ -737,7 +737,7 @@ export default class Mouse extends Component {
      */
     outBusCPPI(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "CPPI");
+        this.printIO(port, bOut, addrFrom, "CPPI");
     }
 
     /**

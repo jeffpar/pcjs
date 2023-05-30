@@ -648,7 +648,7 @@ export default class SerialPort extends Component {
     inRBR(port, addrFrom)
     {
         let b = ((this.bLCR & SerialPort.LCR.DLAB) ? (this.wDL & 0xff) : this.bRBR);
-        this.printMessageIO(port, undefined, addrFrom, (this.bLCR & SerialPort.LCR.DLAB) ? "DLL" : "RBR", b);
+        this.printIO(port, undefined, addrFrom, (this.bLCR & SerialPort.LCR.DLAB) ? "DLL" : "RBR", b);
         this.bLSR &= ~SerialPort.LSR.DR;
         this.advanceRBR();
         return b;
@@ -665,7 +665,7 @@ export default class SerialPort extends Component {
     inIER(port, addrFrom)
     {
         let b = ((this.bLCR & SerialPort.LCR.DLAB) ? (this.wDL >> 8) : this.bIER);
-        this.printMessageIO(port, undefined, addrFrom, (this.bLCR & SerialPort.LCR.DLAB) ? "DLM" : "IER", b);
+        this.printIO(port, undefined, addrFrom, (this.bLCR & SerialPort.LCR.DLAB) ? "DLM" : "IER", b);
         return b;
     }
 
@@ -686,7 +686,7 @@ export default class SerialPort extends Component {
         if (b == SerialPort.IIR.INT_THR) {
             this.bIIR = SerialPort.IIR.NO_INT;
         }
-        this.printMessageIO(port, undefined, addrFrom, "IIR", b);
+        this.printIO(port, undefined, addrFrom, "IIR", b);
         return b;
     }
 
@@ -701,7 +701,7 @@ export default class SerialPort extends Component {
     inLCR(port, addrFrom)
     {
         let b = this.bLCR;
-        this.printMessageIO(port, undefined, addrFrom, "LCR", b);
+        this.printIO(port, undefined, addrFrom, "LCR", b);
         return b;
     }
 
@@ -716,7 +716,7 @@ export default class SerialPort extends Component {
     inMCR(port, addrFrom)
     {
         let b = this.bMCR;
-        this.printMessageIO(port, undefined, addrFrom, "MCR", b);
+        this.printIO(port, undefined, addrFrom, "MCR", b);
         return b;
     }
 
@@ -731,7 +731,7 @@ export default class SerialPort extends Component {
     inLSR(port, addrFrom)
     {
         let b = this.bLSR;
-        this.printMessageIO(port, undefined, addrFrom, "LSR", b);
+        this.printIO(port, undefined, addrFrom, "LSR", b);
         return b;
     }
 
@@ -747,7 +747,7 @@ export default class SerialPort extends Component {
     {
         let b = this.bMSR;
         this.bMSR &= ~(SerialPort.MSR.DCTS | SerialPort.MSR.DDSR);
-        this.printMessageIO(port, undefined, addrFrom, "MSR", b);
+        this.printIO(port, undefined, addrFrom, "MSR", b);
         return b;
     }
 
@@ -762,7 +762,7 @@ export default class SerialPort extends Component {
     outTHR(port, bOut, addrFrom)
     {
         let serial = this;
-        this.printMessageIO(port, bOut, addrFrom, (this.bLCR & SerialPort.LCR.DLAB) ? "DLL" : "THR");
+        this.printIO(port, bOut, addrFrom, (this.bLCR & SerialPort.LCR.DLAB) ? "DLL" : "THR");
         if (this.bLCR & SerialPort.LCR.DLAB) {
             this.wDL = (this.wDL & ~0xff) | bOut;
         } else {
@@ -800,7 +800,7 @@ export default class SerialPort extends Component {
      */
     outIER(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, (this.bLCR & SerialPort.LCR.DLAB) ? "DLM" : "IER");
+        this.printIO(port, bOut, addrFrom, (this.bLCR & SerialPort.LCR.DLAB) ? "DLM" : "IER");
         if (this.bLCR & SerialPort.LCR.DLAB) {
             this.wDL = (this.wDL & 0xff) | (bOut << 8);
         } else {
@@ -818,7 +818,7 @@ export default class SerialPort extends Component {
      */
     outLCR(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "LCR");
+        this.printIO(port, bOut, addrFrom, "LCR");
         this.bLCR = bOut;
     }
 
@@ -833,7 +833,7 @@ export default class SerialPort extends Component {
     outMCR(port, bOut, addrFrom)
     {
         let delta = (bOut ^ this.bMCR);
-        this.printMessageIO(port, bOut, addrFrom, "MCR");
+        this.printIO(port, bOut, addrFrom, "MCR");
         this.bMCR = bOut;
         /*
          * Whenever DTR or RTS changes, we also need to notify any connected machine or mouse, via updateStatus().

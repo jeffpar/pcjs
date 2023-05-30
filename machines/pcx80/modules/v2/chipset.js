@@ -361,7 +361,7 @@ export default class ChipSetX80 extends Component {
     inSIStatus0(port, addrFrom)
     {
         var b = this.bStatus0;
-        this.printMessageIO(port, undefined, addrFrom, "STATUS0", b, true);
+        this.printIO(port, undefined, addrFrom, "STATUS0", b, true);
         return b;
     }
 
@@ -376,7 +376,7 @@ export default class ChipSetX80 extends Component {
     inSIStatus1(port, addrFrom)
     {
         var b = this.bStatus1;
-        this.printMessageIO(port, undefined, addrFrom, "STATUS1", b, true);
+        this.printIO(port, undefined, addrFrom, "STATUS1", b, true);
         return b;
     }
 
@@ -391,7 +391,7 @@ export default class ChipSetX80 extends Component {
     inSIStatus2(port, addrFrom)
     {
         var b = this.bStatus2;
-        this.printMessageIO(port, undefined, addrFrom, "STATUS2", b, true);
+        this.printIO(port, undefined, addrFrom, "STATUS2", b, true);
         return b;
     }
 
@@ -406,7 +406,7 @@ export default class ChipSetX80 extends Component {
     inSIShiftResult(port, addrFrom)
     {
         var b = (this.wShiftData >> (8 - this.bShiftCount)) & 0xff;
-        this.printMessageIO(port, undefined, addrFrom, "SHIFT.RESULT", b, true);
+        this.printIO(port, undefined, addrFrom, "SHIFT.RESULT", b, true);
         return b;
     }
 
@@ -420,7 +420,7 @@ export default class ChipSetX80 extends Component {
      */
     outSIShiftCount(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "SHIFT.COUNT", undefined, true);
+        this.printIO(port, b, addrFrom, "SHIFT.COUNT", undefined, true);
         this.bShiftCount = b;
     }
 
@@ -434,7 +434,7 @@ export default class ChipSetX80 extends Component {
      */
     outSISound1(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "SOUND1", undefined, true);
+        this.printIO(port, b, addrFrom, "SOUND1", undefined, true);
         this.bSound1 = b;
     }
 
@@ -448,7 +448,7 @@ export default class ChipSetX80 extends Component {
      */
     outSIShiftData(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "SHIFT.DATA", undefined, true);
+        this.printIO(port, b, addrFrom, "SHIFT.DATA", undefined, true);
         this.wShiftData = (b << 8) | (this.wShiftData >> 8);
     }
 
@@ -462,7 +462,7 @@ export default class ChipSetX80 extends Component {
      */
     outSISound2(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "SOUND2", undefined, true);
+        this.printIO(port, b, addrFrom, "SOUND2", undefined, true);
         this.bSound2 = b;
     }
 
@@ -476,7 +476,7 @@ export default class ChipSetX80 extends Component {
      */
     outSIWatchdog(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "WATCHDOG", undefined, true);
+        this.printIO(port, b, addrFrom, "WATCHDOG", undefined, true);
     }
 
     /**
@@ -618,7 +618,7 @@ export default class ChipSetX80 extends Component {
         }
 
         this.bFlags = b;
-        this.printMessageIO(port, undefined, addrFrom, "FLAGS", b);
+        this.printIO(port, undefined, addrFrom, "FLAGS", b);
         return b;
     }
 
@@ -632,7 +632,7 @@ export default class ChipSetX80 extends Component {
      */
     outVT100Brightness(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "BRIGHTNESS");
+        this.printIO(port, b, addrFrom, "BRIGHTNESS");
         this.bBrightness = b;
     }
 
@@ -646,7 +646,7 @@ export default class ChipSetX80 extends Component {
      */
     outVT100NVRLatch(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "NVR.LATCH");
+        this.printIO(port, b, addrFrom, "NVR.LATCH");
         this.bNVRLatch = b;
     }
 
@@ -663,7 +663,7 @@ export default class ChipSetX80 extends Component {
      */
     outVT100DC012(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "DC012");
+        this.printIO(port, b, addrFrom, "DC012");
 
         var bOpt = b & 0x3;
         var bCmd = (b >> 2) & 0x3;
@@ -705,7 +705,7 @@ export default class ChipSetX80 extends Component {
      */
     outVT100DC011(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "DC011");
+        this.printIO(port, b, addrFrom, "DC011");
         if (b & ChipSetX80.VT100.DC011.RATE60) {
             b &= ChipSetX80.VT100.DC011.RATE50;
             if (this.bDC011Rate != b) {

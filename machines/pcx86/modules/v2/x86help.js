@@ -1011,8 +1011,8 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
                  * this allows a fault to be dispatched when you single-step over a faulting instruction; you can
                  * then continue single-stepping into the fault handler, or start running again.
                  *
-                 * Note that we had to capture fRunning before calling printMessage(), because if MESSAGE.HALT
-                 * is set, printMessage() will have already halted the CPU.
+                 * Note that we had to capture fRunning before calling printf(), because if MESSAGE.HALT is set,
+                 * printf() will have already halted the CPU.
                  */
                 fHalt = fRunning;
                 this.dbg.stopCPU();

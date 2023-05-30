@@ -4759,31 +4759,7 @@ class Component {
     }
 
     /**
-     * printMessage(sMessage, bitsMessage, fAddress) [DEPRECATED: use printf(bitsMessage, ...) instead]
-     *
-     * If bitsMessage is not specified, the component's Messages category is used, and if bitsMessage is true,
-     * the message is displayed regardless.
-     *
-     * @this {Component}
-     * @param {string} sMessage is any caller-defined message string
-     * @param {number|boolean} [bitsMessage] is zero or more Messages flag(s)
-     * @param {boolean} [fAddress] is true to display the current address
-     */
-    printMessage(sMessage, bitsMessage = this.bitsMessage, fAddress = false)
-    {
-        if (DEBUGGER && this.dbg) {
-            if (typeof bitsMessage == "boolean") {
-                bitsMessage = bitsMessage? Messages.PROGRESS : 0;
-            }
-            if (fAddress) {
-                bitsMessage = this.setBits(bitsMessage, Messages.ADDRESS);
-            }
-            this.dbg.printf(bitsMessage, "%s\n", sMessage);
-        }
-    }
-
-    /**
-     * printMessageIO(port, bOut, addrFrom, name, bIn, bitsMessage)
+     * printIO(port, bOut, addrFrom, name, bIn, bitsMessage)
      *
      * If bitsMessage is not specified, the component's Messages category is used,
      * and if bitsMessage is true, the message is displayed if Messages.PORT is enabled also.
@@ -4796,7 +4772,7 @@ class Component {
      * @param {number} [bIn] is the input value, if known, on an input operation
      * @param {number|boolean} [bitsMessage] is zero or more Messages flag(s)
      */
-    printMessageIO(port, bOut, addrFrom, name, bIn, bitsMessage = this.bitsMessage)
+    printIO(port, bOut, addrFrom, name, bIn, bitsMessage = this.bitsMessage)
     {
         if (DEBUGGER && this.dbg) {
             if (bitsMessage === true) {
@@ -12798,7 +12774,7 @@ class ChipSetX80 extends Component {
     inSIStatus0(port, addrFrom)
     {
         var b = this.bStatus0;
-        this.printMessageIO(port, undefined, addrFrom, "STATUS0", b, true);
+        this.printIO(port, undefined, addrFrom, "STATUS0", b, true);
         return b;
     }
 
@@ -12813,7 +12789,7 @@ class ChipSetX80 extends Component {
     inSIStatus1(port, addrFrom)
     {
         var b = this.bStatus1;
-        this.printMessageIO(port, undefined, addrFrom, "STATUS1", b, true);
+        this.printIO(port, undefined, addrFrom, "STATUS1", b, true);
         return b;
     }
 
@@ -12828,7 +12804,7 @@ class ChipSetX80 extends Component {
     inSIStatus2(port, addrFrom)
     {
         var b = this.bStatus2;
-        this.printMessageIO(port, undefined, addrFrom, "STATUS2", b, true);
+        this.printIO(port, undefined, addrFrom, "STATUS2", b, true);
         return b;
     }
 
@@ -12843,7 +12819,7 @@ class ChipSetX80 extends Component {
     inSIShiftResult(port, addrFrom)
     {
         var b = (this.wShiftData >> (8 - this.bShiftCount)) & 0xff;
-        this.printMessageIO(port, undefined, addrFrom, "SHIFT.RESULT", b, true);
+        this.printIO(port, undefined, addrFrom, "SHIFT.RESULT", b, true);
         return b;
     }
 
@@ -12857,7 +12833,7 @@ class ChipSetX80 extends Component {
      */
     outSIShiftCount(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "SHIFT.COUNT", undefined, true);
+        this.printIO(port, b, addrFrom, "SHIFT.COUNT", undefined, true);
         this.bShiftCount = b;
     }
 
@@ -12871,7 +12847,7 @@ class ChipSetX80 extends Component {
      */
     outSISound1(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "SOUND1", undefined, true);
+        this.printIO(port, b, addrFrom, "SOUND1", undefined, true);
         this.bSound1 = b;
     }
 
@@ -12885,7 +12861,7 @@ class ChipSetX80 extends Component {
      */
     outSIShiftData(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "SHIFT.DATA", undefined, true);
+        this.printIO(port, b, addrFrom, "SHIFT.DATA", undefined, true);
         this.wShiftData = (b << 8) | (this.wShiftData >> 8);
     }
 
@@ -12899,7 +12875,7 @@ class ChipSetX80 extends Component {
      */
     outSISound2(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "SOUND2", undefined, true);
+        this.printIO(port, b, addrFrom, "SOUND2", undefined, true);
         this.bSound2 = b;
     }
 
@@ -12913,7 +12889,7 @@ class ChipSetX80 extends Component {
      */
     outSIWatchdog(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "WATCHDOG", undefined, true);
+        this.printIO(port, b, addrFrom, "WATCHDOG", undefined, true);
     }
 
     /**
@@ -13055,7 +13031,7 @@ class ChipSetX80 extends Component {
         }
 
         this.bFlags = b;
-        this.printMessageIO(port, undefined, addrFrom, "FLAGS", b);
+        this.printIO(port, undefined, addrFrom, "FLAGS", b);
         return b;
     }
 
@@ -13069,7 +13045,7 @@ class ChipSetX80 extends Component {
      */
     outVT100Brightness(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "BRIGHTNESS");
+        this.printIO(port, b, addrFrom, "BRIGHTNESS");
         this.bBrightness = b;
     }
 
@@ -13083,7 +13059,7 @@ class ChipSetX80 extends Component {
      */
     outVT100NVRLatch(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "NVR.LATCH");
+        this.printIO(port, b, addrFrom, "NVR.LATCH");
         this.bNVRLatch = b;
     }
 
@@ -13100,7 +13076,7 @@ class ChipSetX80 extends Component {
      */
     outVT100DC012(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "DC012");
+        this.printIO(port, b, addrFrom, "DC012");
 
         var bOpt = b & 0x3;
         var bCmd = (b >> 2) & 0x3;
@@ -13142,7 +13118,7 @@ class ChipSetX80 extends Component {
      */
     outVT100DC011(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "DC011");
+        this.printIO(port, b, addrFrom, "DC011");
         if (b & ChipSetX80.VT100.DC011.RATE60) {
             b &= ChipSetX80.VT100.DC011.RATE50;
             if (this.bDC011Rate != b) {
@@ -15249,7 +15225,7 @@ class KeyboardX80 extends Component {
             this.bVT100Address = b;
             this.cpu.requestINTR(1);
         }
-        this.printMessageIO(port, undefined, addrFrom, "KBDUART.ADDRESS", b);
+        this.printIO(port, undefined, addrFrom, "KBDUART.ADDRESS", b);
         return b;
     }
 
@@ -15263,7 +15239,7 @@ class KeyboardX80 extends Component {
      */
     outVT100UARTStatus(port, b, addrFrom)
     {
-        this.printMessageIO(port, b, addrFrom, "KBDUART.STATUS");
+        this.printIO(port, b, addrFrom, "KBDUART.STATUS");
         this.bVT100Status = b;
         this.fVT100UARTBusy = true;
         this.nVT100UARTCycleSnap = this.cpu.getCycles();
@@ -17893,7 +17869,7 @@ class SerialPortX80 extends Component {
     inData(port, addrFrom)
     {
         var b = this.bDataIn;
-        this.printMessageIO(port, undefined, addrFrom, "DATA", b);
+        this.printIO(port, undefined, addrFrom, "DATA", b);
         this.bStatus &= ~SerialPortX80.UART8251.STATUS.RECV_FULL;
         return b;
     }
@@ -17909,7 +17885,7 @@ class SerialPortX80 extends Component {
     inControl(port, addrFrom)
     {
         var b = this.bStatus;
-        this.printMessageIO(port, undefined, addrFrom, "STATUS", b);
+        this.printIO(port, undefined, addrFrom, "STATUS", b);
         return b;
     }
 
@@ -17923,7 +17899,7 @@ class SerialPortX80 extends Component {
      */
     outData(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "DATA");
+        this.printIO(port, bOut, addrFrom, "DATA");
         this.bDataOut = bOut;
         this.bStatus &= ~(SerialPortX80.UART8251.STATUS.XMIT_READY | SerialPortX80.UART8251.STATUS.XMIT_EMPTY);
         /*
@@ -17958,7 +17934,7 @@ class SerialPortX80 extends Component {
      */
     outControl(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "CONTROL");
+        this.printIO(port, bOut, addrFrom, "CONTROL");
         if (!this.fReady) {
             this.bMode = bOut;
             this.fReady = true;
@@ -17997,7 +17973,7 @@ class SerialPortX80 extends Component {
      */
     outBaudRates(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "BAUDRATES");
+        this.printIO(port, bOut, addrFrom, "BAUDRATES");
         this.bBaudRates = bOut;
     }
 

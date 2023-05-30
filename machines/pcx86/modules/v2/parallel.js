@@ -272,7 +272,7 @@ export default class ParallelPort extends Component {
     inData(port, addrFrom)
     {
         let b = this.bData;
-        this.printMessageIO(port, undefined, addrFrom, "DATA", b);
+        this.printIO(port, undefined, addrFrom, "DATA", b);
         return b;
     }
 
@@ -288,7 +288,7 @@ export default class ParallelPort extends Component {
     {
         let b = this.bStatus;
         this.bStatus |= (ParallelPort.STATUS.NACK | ParallelPort.STATUS.NBUSY);
-        this.printMessageIO(port, undefined, addrFrom, "STAT", b);
+        this.printIO(port, undefined, addrFrom, "STAT", b);
         this.updateIRR();
         return b;
     }
@@ -304,7 +304,7 @@ export default class ParallelPort extends Component {
     inControl(port, addrFrom)
     {
         let b = this.bControl;
-        this.printMessageIO(port, undefined, addrFrom, "CTRL", b);
+        this.printIO(port, undefined, addrFrom, "CTRL", b);
         return b;
     }
 
@@ -319,7 +319,7 @@ export default class ParallelPort extends Component {
     outData(port, bOut, addrFrom)
     {
         let parallel = this;
-        this.printMessageIO(port, bOut, addrFrom, "DATA");
+        this.printIO(port, bOut, addrFrom, "DATA");
         this.bData = bOut;
         this.cpu.nonCPU(function() {
             if (parallel.transmitByte(bOut)) {
@@ -342,7 +342,7 @@ export default class ParallelPort extends Component {
      */
     outControl(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "CTRL");
+        this.printIO(port, bOut, addrFrom, "CTRL");
         this.bControl = bOut | ParallelPort.CONTROL.ALWAYS_SET;
         this.updateIRR();
     }

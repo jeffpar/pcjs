@@ -1036,7 +1036,7 @@ export default class HDC extends Component {
         if (this.chipset) this.chipset.clearIRR(ChipSet.IRQ.XTC);
         this.regStatus &= ~HDC.XTC.STATUS.INTERRUPT;
 
-        this.printMessageIO(port, undefined, addrFrom, "DATA[" + this.regDataIndex + "]", bIn);
+        this.printIO(port, undefined, addrFrom, "DATA[" + this.regDataIndex + "]", bIn);
         if (++this.regDataIndex >= this.regDataTotal) {
             this.regDataIndex = this.regDataTotal = 0;
             this.regStatus &= ~(HDC.XTC.STATUS.IOMODE | HDC.XTC.STATUS.BUS | HDC.XTC.STATUS.BUSY);
@@ -1054,7 +1054,7 @@ export default class HDC extends Component {
      */
     outXTCData(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "DATA[" + this.regDataTotal + "]");
+        this.printIO(port, bOut, addrFrom, "DATA[" + this.regDataTotal + "]");
         if (this.regDataTotal < this.regDataArray.length) {
             this.regDataArray[this.regDataTotal++] = bOut;
         }
@@ -1089,7 +1089,7 @@ export default class HDC extends Component {
     inXTCStatus(port, addrFrom)
     {
         let b = this.regStatus;
-        this.printMessageIO(port, undefined, addrFrom, "STATUS", b);
+        this.printIO(port, undefined, addrFrom, "STATUS", b);
         /*
          * HACK: The HDC BIOS will not finish the HDC.XTC.DATA.CMD.INIT_DRIVE sequence unless it sees XTC.STATUS.REQ set again, nor will
          * it read any of the XTC.DATA bytes returned from a HDC.XTC.DATA.CMD.REQ_SENSE command unless XTC.STATUS.REQ is set again, so
@@ -1111,7 +1111,7 @@ export default class HDC extends Component {
      */
     outXTCReset(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "RESET");
+        this.printIO(port, bOut, addrFrom, "RESET");
         /*
          * Not sure what to do with this value, and the value itself may be "don't care", but we'll save it anyway.
          */
@@ -1130,7 +1130,7 @@ export default class HDC extends Component {
      */
     inXTCConfig(port, addrFrom)
     {
-        this.printMessageIO(port, undefined, addrFrom, "CONFIG", this.regConfig);
+        this.printIO(port, undefined, addrFrom, "CONFIG", this.regConfig);
         return this.regConfig;
     }
 
@@ -1144,7 +1144,7 @@ export default class HDC extends Component {
      */
     outXTCPulse(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "PULSE");
+        this.printIO(port, bOut, addrFrom, "PULSE");
         /*
          * Not sure what to do with this value, and the value itself may be "don't care", but we'll save it anyway.
          */
@@ -1171,7 +1171,7 @@ export default class HDC extends Component {
      */
     outXTCPattern(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "PATTERN");
+        this.printIO(port, bOut, addrFrom, "PATTERN");
         this.regPattern = bOut;
     }
 
@@ -1185,7 +1185,7 @@ export default class HDC extends Component {
      */
     outXTCNoise(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "NOISE");
+        this.printIO(port, bOut, addrFrom, "NOISE");
     }
 
     /**
@@ -1229,11 +1229,11 @@ export default class HDC extends Component {
 
             if (drive.iByte == 1 || drive.iByte == drive.cbTransfer) {
                 /*
-                 * printMessageIO() calls, if enabled, can be overwhelming for this port, so limit them to the first
+                 * printIO() calls, if enabled, can be overwhelming for this port, so limit them to the first
                  * and last bytes of each sector.
                  */
                 if (this.messageEnabled(Messages.PORT + Messages.HDC)) {
-                    this.printMessageIO(port, undefined, addrFrom, "DATA[" + drive.iByte + "]", bIn);
+                    this.printIO(port, undefined, addrFrom, "DATA[" + drive.iByte + "]", bIn);
                 }
                 if (drive.iByte > 1) {          // in other words, if drive.iByte == drive.cbTransfer...
                     if (this.messageEnabled(Messages.DATA + Messages.HDC)) {
@@ -1345,11 +1345,11 @@ export default class HDC extends Component {
                 }
                 else if (drive.iByte == 1 || drive.iByte == drive.cbTransfer) {
                     /*
-                     * printMessageIO() calls, if enabled, can be overwhelming for this port, so limit them to the first
+                     * printIO() calls, if enabled, can be overwhelming for this port, so limit them to the first
                      * and last bytes of each sector.
                      */
                     if (this.messageEnabled(Messages.PORT + Messages.HDC)) {
-                        this.printMessageIO(port, bOut, addrFrom, "DATA[" + drive.iByte + "]");
+                        this.printIO(port, bOut, addrFrom, "DATA[" + drive.iByte + "]");
                     }
                     if (drive.iByte > 1) {          // in other words, if drive.iByte == drive.cbTransfer...
                         if (this.messageEnabled(Messages.DATA + Messages.HDC)) {
@@ -1416,7 +1416,7 @@ export default class HDC extends Component {
     inATCError(port, addrFrom)
     {
         let bIn = this.regError;
-        this.printMessageIO(port, undefined, addrFrom, "ERROR", bIn);
+        this.printIO(port, undefined, addrFrom, "ERROR", bIn);
         return bIn;
     }
 
@@ -1430,7 +1430,7 @@ export default class HDC extends Component {
      */
     outATCWPreC(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "WPREC");
+        this.printIO(port, bOut, addrFrom, "WPREC");
         this.regWPreC = bOut;
     }
 
@@ -1445,7 +1445,7 @@ export default class HDC extends Component {
     inATCSecCnt(port, addrFrom)
     {
         let bIn = this.regSecCnt;
-        this.printMessageIO(port, undefined, addrFrom, "SECCNT", bIn);
+        this.printIO(port, undefined, addrFrom, "SECCNT", bIn);
         return bIn;
     }
 
@@ -1459,7 +1459,7 @@ export default class HDC extends Component {
      */
     outATCSecCnt(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "SECCNT");
+        this.printIO(port, bOut, addrFrom, "SECCNT");
         this.regSecCnt = bOut;
     }
 
@@ -1474,7 +1474,7 @@ export default class HDC extends Component {
     inATCSecNum(port, addrFrom)
     {
         let bIn = this.regSecNum;
-        this.printMessageIO(port, undefined, addrFrom, "SECNUM", bIn);
+        this.printIO(port, undefined, addrFrom, "SECNUM", bIn);
         return bIn;
     }
 
@@ -1488,7 +1488,7 @@ export default class HDC extends Component {
      */
     outATCSecNum(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "SECNUM");
+        this.printIO(port, bOut, addrFrom, "SECNUM");
         this.regSecNum = bOut;
     }
 
@@ -1503,7 +1503,7 @@ export default class HDC extends Component {
     inATCCylLo(port, addrFrom)
     {
         let bIn = this.regCylLo;
-        this.printMessageIO(port, undefined, addrFrom, "CYLLO", bIn);
+        this.printIO(port, undefined, addrFrom, "CYLLO", bIn);
         return bIn;
     }
 
@@ -1517,7 +1517,7 @@ export default class HDC extends Component {
      */
     outATCCylLo(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "CYLLO");
+        this.printIO(port, bOut, addrFrom, "CYLLO");
         this.regCylLo = bOut;
     }
 
@@ -1532,7 +1532,7 @@ export default class HDC extends Component {
     inATCCylHi(port, addrFrom)
     {
         let bIn = this.regCylHi;
-        this.printMessageIO(port, undefined, addrFrom, "CYLHI", bIn);
+        this.printIO(port, undefined, addrFrom, "CYLHI", bIn);
         return bIn;
     }
 
@@ -1546,7 +1546,7 @@ export default class HDC extends Component {
      */
     outATCCylHi(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "CYLHI");
+        this.printIO(port, bOut, addrFrom, "CYLHI");
         this.regCylHi = bOut;
     }
 
@@ -1561,7 +1561,7 @@ export default class HDC extends Component {
     inATCDrvHd(port, addrFrom)
     {
         let bIn = this.regDrvHd;
-        this.printMessageIO(port, undefined, addrFrom, "DRVHD", bIn);
+        this.printIO(port, undefined, addrFrom, "DRVHD", bIn);
         return bIn;
     }
 
@@ -1575,7 +1575,7 @@ export default class HDC extends Component {
      */
     outATCDrvHd(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "DRVHD");
+        this.printIO(port, bOut, addrFrom, "DRVHD");
         this.regDrvHd = bOut;
         /*
          * The MODEL_5170_REV3 BIOS (see "POST2_CHK_HF2" @F000:14FC) probes for a 2nd hard drive when the number
@@ -1615,7 +1615,7 @@ export default class HDC extends Component {
     inATCStatus(port, addrFrom)
     {
         let bIn = this.regStatus;
-        this.printMessageIO(port, undefined, addrFrom, "STATUS", bIn);
+        this.printIO(port, undefined, addrFrom, "STATUS", bIn);
         /*
          * Despite what IBM's documentation for the "Personal Computer AT Fixed Disk and Diskette Drive Adapter"
          * (August 31, 1984) says (ie, "A read of the status register clears interrupt request 14"), we cannot
@@ -1648,7 +1648,7 @@ export default class HDC extends Component {
      */
     outATCCommand(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "COMMAND");
+        this.printIO(port, bOut, addrFrom, "COMMAND");
         this.regCommand = bOut;
         if (this.chipset) this.chipset.clearIRR(ChipSet.IRQ.ATC1 + this.nInterface);
         this.doATC();
@@ -1666,7 +1666,7 @@ export default class HDC extends Component {
      */
     outATCFDR(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "FDR");
+        this.printIO(port, bOut, addrFrom, "FDR");
         /*
          * I'm not really sure if I should set HDC.ATC.DIAG.NO_ERROR in regError after *every* write where
          * HDC.ATC.FDR.RESET is clear, or only after it has transitioned from set to clear; since the BIOS only

@@ -2003,7 +2003,7 @@ export default class FDC extends Component {
      */
     outFDCOutput(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "OUTPUT");
+        this.printIO(port, bOut, addrFrom, "OUTPUT");
         if (!(bOut & FDC.REG_OUTPUT.ENABLE)) {
             this.initController();
             /*
@@ -2119,7 +2119,7 @@ export default class FDC extends Component {
     inFDCDiagnostic(port, addrFrom)
     {
         let b = 0x50;       // we simply return the expected pattern (01010000B); see code excerpt above
-        this.printMessageIO(port, undefined, addrFrom, "DIAG", b);
+        this.printIO(port, undefined, addrFrom, "DIAG", b);
         return b;
     }
 
@@ -2133,7 +2133,7 @@ export default class FDC extends Component {
      */
     inFDCStatus(port, addrFrom)
     {
-        this.printMessageIO(port, undefined, addrFrom, "STATUS", this.regStatus);
+        this.printIO(port, undefined, addrFrom, "STATUS", this.regStatus);
         return this.regStatus;
     }
 
@@ -2158,7 +2158,7 @@ export default class FDC extends Component {
             if (this.chipset) this.chipset.clearIRR(ChipSet.IRQ.FDC);
         }
         if (this.messageEnabled()) {
-            this.printMessageIO(port, undefined, addrFrom, "DATA[" + this.regDataIndex + "]", bIn);
+            this.printIO(port, undefined, addrFrom, "DATA[" + this.regDataIndex + "]", bIn);
         }
         if (++this.regDataIndex >= this.regDataTotal) {
             this.regStatus &= ~(FDC.REG_STATUS.READ_DATA | FDC.REG_STATUS.BUSY);
@@ -2178,7 +2178,7 @@ export default class FDC extends Component {
     outFDCData(port, bOut, addrFrom)
     {
         if (this.messageEnabled()) {
-            this.printMessageIO(port, bOut, addrFrom, "DATA[" + this.regDataTotal + "]");
+            this.printIO(port, bOut, addrFrom, "DATA[" + this.regDataTotal + "]");
         }
 
         if (this.regDataTotal < this.regDataArray.length) {
@@ -2216,7 +2216,7 @@ export default class FDC extends Component {
          * TODO: Determine when the DISK_CHANGE bit is *really* cleared (this is just a guess)
          */
         this.regInput &= ~FDC.REG_INPUT.DISK_CHANGE;
-        this.printMessageIO(port, undefined, addrFrom, "INPUT", bIn);
+        this.printIO(port, undefined, addrFrom, "INPUT", bIn);
         return bIn;
     }
 
@@ -2230,7 +2230,7 @@ export default class FDC extends Component {
      */
     outFDCControl(port, bOut, addrFrom)
     {
-        this.printMessageIO(port, bOut, addrFrom, "CONTROL");
+        this.printIO(port, bOut, addrFrom, "CONTROL");
         this.regControl  = bOut;
     }
 

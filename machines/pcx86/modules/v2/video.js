@@ -6724,7 +6724,7 @@ export default class VideoX86 extends Component {
     outFeat(port, bOut, addrFrom)
     {
         this.cardEGA.regFeat = (this.cardEGA.regFeat & ~Card.FEAT_CTRL.BITS) | (bOut & Card.FEAT_CTRL.BITS);
-        this.printMessageIO(port, bOut, addrFrom, "FEAT");
+        this.printIO(port, bOut, addrFrom, "FEAT");
     }
 
     /**
@@ -6743,7 +6743,7 @@ export default class VideoX86 extends Component {
     {
         let b = this.cardEGA.regATCIndx;
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.ATC.PORT, undefined, addrFrom, "ATC.INDX", b, true);
+            this.printIO(Card.ATC.PORT, undefined, addrFrom, "ATC.INDX", b, true);
         }
         return b;
     }
@@ -6764,7 +6764,7 @@ export default class VideoX86 extends Component {
     {
         let b = this.cardEGA.regATCData[this.cardEGA.regATCIndx & Card.ATC.INDX_MASK];
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.ATC.PORT, undefined, addrFrom, "ATC." + this.cardEGA.asATCRegs[this.cardEGA.regATCIndx & Card.ATC.INDX_MASK], b, true);
+            this.printIO(Card.ATC.PORT, undefined, addrFrom, "ATC." + this.cardEGA.asATCRegs[this.cardEGA.regATCIndx & Card.ATC.INDX_MASK], b, true);
         }
         return b;
     }
@@ -6783,7 +6783,7 @@ export default class VideoX86 extends Component {
         let fPalEnabled = (card.regATCIndx & Card.ATC.INDX_PAL_ENABLE);
         if (!card.fATCData) {
             card.regATCIndx = bOut;
-            this.printMessageIO(port, bOut, addrFrom, "ATC.INDX");
+            this.printIO(port, bOut, addrFrom, "ATC.INDX");
             card.fATCData = true;
             if ((bOut & Card.ATC.INDX_PAL_ENABLE) && !fPalEnabled) {
                 /*
@@ -6827,7 +6827,7 @@ export default class VideoX86 extends Component {
                 let fModified = (card.regATCData[iReg] !== bOut);
                 if (VideoX86.TRAPALL || fModified) {
                     if (!addrFrom || this.messageEnabled()) {
-                        this.printMessageIO(port, bOut, addrFrom, "ATC." + card.asATCRegs[iReg], undefined, true);
+                        this.printIO(port, bOut, addrFrom, "ATC." + card.asATCRegs[iReg], undefined, true);
                     }
                 }
                 if (fModified) {
@@ -6908,7 +6908,7 @@ export default class VideoX86 extends Component {
          * TODO: Figure out where Card.STATUS0.FEAT bits should come from....
          */
         this.cardEGA.regStatus0 = b;
-        this.printMessageIO(Card.STATUS0.PORT, undefined, addrFrom, "STATUS0", b);
+        this.printIO(Card.STATUS0.PORT, undefined, addrFrom, "STATUS0", b);
         return b;
     }
 
@@ -6922,7 +6922,7 @@ export default class VideoX86 extends Component {
     {
         this.cardEGA.regMisc = bOut;
         this.enableEGA();
-        this.printMessageIO(Card.MISC.PORT_WRITE, bOut, addrFrom, "MISC");
+        this.printIO(Card.MISC.PORT_WRITE, bOut, addrFrom, "MISC");
     }
 
     /**
@@ -6936,7 +6936,7 @@ export default class VideoX86 extends Component {
     inVGAEnable(port, addrFrom)
     {
         let b = this.cardEGA.regVGAEnable;
-        this.printMessageIO(Card.VGA_ENABLE.PORT, undefined, addrFrom, "VGA_ENABLE", b);
+        this.printIO(Card.VGA_ENABLE.PORT, undefined, addrFrom, "VGA_ENABLE", b);
         return b;
     }
 
@@ -6951,7 +6951,7 @@ export default class VideoX86 extends Component {
     outVGAEnable(port, bOut, addrFrom)
     {
         this.cardEGA.regVGAEnable = bOut;
-        this.printMessageIO(Card.VGA_ENABLE.PORT, bOut, addrFrom, "VGA_ENABLE");
+        this.printIO(Card.VGA_ENABLE.PORT, bOut, addrFrom, "VGA_ENABLE");
     }
 
     /**
@@ -6965,7 +6965,7 @@ export default class VideoX86 extends Component {
     inSEQIndx(port, addrFrom)
     {
         let b = this.cardEGA.regSEQIndx;
-        this.printMessageIO(Card.SEQ.INDX.PORT, undefined, addrFrom, "SEQ.INDX", b);
+        this.printIO(Card.SEQ.INDX.PORT, undefined, addrFrom, "SEQ.INDX", b);
         return b;
     }
 
@@ -6980,7 +6980,7 @@ export default class VideoX86 extends Component {
     outSEQIndx(port, bOut, addrFrom)
     {
         this.cardEGA.regSEQIndx = bOut;
-        this.printMessageIO(Card.SEQ.INDX.PORT, bOut, addrFrom, "SEQ.INDX");
+        this.printIO(Card.SEQ.INDX.PORT, bOut, addrFrom, "SEQ.INDX");
     }
 
     /**
@@ -6995,7 +6995,7 @@ export default class VideoX86 extends Component {
     {
         let b = this.cardEGA.regSEQData[this.cardEGA.regSEQIndx];
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.SEQ.DATA.PORT, undefined, addrFrom, "SEQ." + this.cardEGA.asSEQRegs[this.cardEGA.regSEQIndx], b, true);
+            this.printIO(Card.SEQ.DATA.PORT, undefined, addrFrom, "SEQ." + this.cardEGA.asSEQRegs[this.cardEGA.regSEQIndx], b, true);
         }
         return b;
     }
@@ -7012,7 +7012,7 @@ export default class VideoX86 extends Component {
     {
         if (VideoX86.TRAPALL || this.cardEGA.regSEQData[this.cardEGA.regSEQIndx] !== bOut) {
             if (!addrFrom || this.messageEnabled()) {
-                this.printMessageIO(Card.SEQ.DATA.PORT, bOut, addrFrom, "SEQ." + this.cardEGA.asSEQRegs[this.cardEGA.regSEQIndx], undefined, true);
+                this.printIO(Card.SEQ.DATA.PORT, bOut, addrFrom, "SEQ." + this.cardEGA.asSEQRegs[this.cardEGA.regSEQIndx], undefined, true);
             }
             this.cardEGA.regSEQData[this.cardEGA.regSEQIndx] = bOut;
         }
@@ -7092,7 +7092,7 @@ export default class VideoX86 extends Component {
     {
         let b = this.cardEGA.regDACMask;
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.DAC.MASK.PORT, undefined, addrFrom, "DAC.MASK", b, true);
+            this.printIO(Card.DAC.MASK.PORT, undefined, addrFrom, "DAC.MASK", b, true);
         }
         return b;
     }
@@ -7109,7 +7109,7 @@ export default class VideoX86 extends Component {
     {
         if (VideoX86.TRAPALL || this.cardEGA.regDACMask !== bOut) {
             if (!addrFrom || this.messageEnabled()) {
-                this.printMessageIO(Card.DAC.MASK.PORT, bOut, addrFrom, "DAC.MASK", undefined, true);
+                this.printIO(Card.DAC.MASK.PORT, bOut, addrFrom, "DAC.MASK", undefined, true);
             }
             this.cardEGA.regDACMask = bOut;
         }
@@ -7127,7 +7127,7 @@ export default class VideoX86 extends Component {
     {
         let b = this.cardEGA.regDACState;
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.DAC.STATE.PORT, undefined, addrFrom, "DAC.STATE", b, true);
+            this.printIO(Card.DAC.STATE.PORT, undefined, addrFrom, "DAC.STATE", b, true);
         }
         return b;
     }
@@ -7143,7 +7143,7 @@ export default class VideoX86 extends Component {
     outDACRead(port, bOut, addrFrom)
     {
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.DAC.ADDR.PORT_READ, bOut, addrFrom, "DAC.READ", undefined, true);
+            this.printIO(Card.DAC.ADDR.PORT_READ, bOut, addrFrom, "DAC.READ", undefined, true);
         }
         this.cardEGA.regDACAddr = bOut;
         this.cardEGA.regDACState = Card.DAC.STATE.MODE_READ;
@@ -7161,7 +7161,7 @@ export default class VideoX86 extends Component {
     outDACWrite(port, bOut, addrFrom)
     {
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.DAC.ADDR.PORT_WRITE, bOut, addrFrom, "DAC.WRITE", undefined, true);
+            this.printIO(Card.DAC.ADDR.PORT_WRITE, bOut, addrFrom, "DAC.WRITE", undefined, true);
         }
         this.cardEGA.regDACAddr = bOut;
         this.cardEGA.regDACState = Card.DAC.STATE.MODE_WRITE;
@@ -7180,7 +7180,7 @@ export default class VideoX86 extends Component {
     {
         let b = (this.cardEGA.regDACData[this.cardEGA.regDACAddr] >> this.cardEGA.regDACShift) & 0x3f;
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.DAC.DATA.PORT, undefined, addrFrom, "DAC.DATA[" + Str.toHexByte(this.cardEGA.regDACAddr) + "][" + Str.toHexByte(this.cardEGA.regDACShift) + "]", b, true);
+            this.printIO(Card.DAC.DATA.PORT, undefined, addrFrom, "DAC.DATA[" + Str.toHexByte(this.cardEGA.regDACAddr) + "][" + Str.toHexByte(this.cardEGA.regDACShift) + "]", b, true);
         }
         this.cardEGA.regDACShift += 6;
         if (this.cardEGA.regDACShift > 12) {
@@ -7202,7 +7202,7 @@ export default class VideoX86 extends Component {
     {
         let dw = this.cardEGA.regDACData[this.cardEGA.regDACAddr];
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.DAC.DATA.PORT, bOut, addrFrom, "DAC.DATA[" + Str.toHexByte(this.cardEGA.regDACAddr) + "][" + Str.toHexByte(this.cardEGA.regDACShift) + "]", undefined, true);
+            this.printIO(Card.DAC.DATA.PORT, bOut, addrFrom, "DAC.DATA[" + Str.toHexByte(this.cardEGA.regDACAddr) + "][" + Str.toHexByte(this.cardEGA.regDACShift) + "]", undefined, true);
         }
         let dwNew = (dw & ~(0x3f << this.cardEGA.regDACShift)) | ((bOut & 0x3f) << this.cardEGA.regDACShift);
         if (dw !== dwNew) {
@@ -7227,7 +7227,7 @@ export default class VideoX86 extends Component {
     inVGAFeat(port, addrFrom)
     {
         let b = this.cardEGA.regFeat;
-        this.printMessageIO(Card.FEAT_CTRL.PORT_READ, undefined, addrFrom, "FEAT", b);
+        this.printIO(Card.FEAT_CTRL.PORT_READ, undefined, addrFrom, "FEAT", b);
         return b;
     }
 
@@ -7247,7 +7247,7 @@ export default class VideoX86 extends Component {
     outGRCPos2(port, bOut, addrFrom)
     {
         this.cardEGA.regGRCPos2 = bOut;
-        this.printMessageIO(Card.GRC.POS2_PORT, bOut, addrFrom, "GRC2");
+        this.printIO(Card.GRC.POS2_PORT, bOut, addrFrom, "GRC2");
     }
 
     /**
@@ -7261,7 +7261,7 @@ export default class VideoX86 extends Component {
     inVGAMisc(port, addrFrom)
     {
         let b = this.cardEGA.regMisc;
-        this.printMessageIO(Card.MISC.PORT_READ, undefined, addrFrom, "MISC", b);
+        this.printIO(Card.MISC.PORT_READ, undefined, addrFrom, "MISC", b);
         return b;
     }
 
@@ -7284,7 +7284,7 @@ export default class VideoX86 extends Component {
     outGRCPos1(port, bOut, addrFrom)
     {
         this.cardEGA.regGRCPos1 = bOut;
-        this.printMessageIO(Card.GRC.POS1_PORT, bOut, addrFrom, "GRC1");
+        this.printIO(Card.GRC.POS1_PORT, bOut, addrFrom, "GRC1");
     }
 
     /**
@@ -7298,7 +7298,7 @@ export default class VideoX86 extends Component {
     inGRCIndx(port, addrFrom)
     {
         let b = this.cardEGA.regGRCIndx;
-        this.printMessageIO(Card.GRC.INDX.PORT, undefined, addrFrom, "GRC.INDX", b);
+        this.printIO(Card.GRC.INDX.PORT, undefined, addrFrom, "GRC.INDX", b);
         return b;
     }
 
@@ -7313,7 +7313,7 @@ export default class VideoX86 extends Component {
     outGRCIndx(port, bOut, addrFrom)
     {
         this.cardEGA.regGRCIndx = bOut;
-        this.printMessageIO(Card.GRC.INDX.PORT, bOut, addrFrom, "GRC.INDX");
+        this.printIO(Card.GRC.INDX.PORT, bOut, addrFrom, "GRC.INDX");
     }
 
     /**
@@ -7328,7 +7328,7 @@ export default class VideoX86 extends Component {
     {
         let b = this.cardEGA.regGRCData[this.cardEGA.regGRCIndx];
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(Card.GRC.DATA.PORT, undefined, addrFrom, "GRC." + this.cardEGA.asGRCRegs[this.cardEGA.regGRCIndx], b);
+            this.printIO(Card.GRC.DATA.PORT, undefined, addrFrom, "GRC." + this.cardEGA.asGRCRegs[this.cardEGA.regGRCIndx], b);
         }
         return b;
     }
@@ -7345,7 +7345,7 @@ export default class VideoX86 extends Component {
     {
         if (VideoX86.TRAPALL || this.cardEGA.regGRCData[this.cardEGA.regGRCIndx] !== bOut) {
             if (!addrFrom || this.messageEnabled()) {
-                this.printMessageIO(Card.GRC.DATA.PORT, bOut, addrFrom, "GRC." + this.cardEGA.asGRCRegs[this.cardEGA.regGRCIndx]);
+                this.printIO(Card.GRC.DATA.PORT, bOut, addrFrom, "GRC." + this.cardEGA.asGRCRegs[this.cardEGA.regGRCIndx]);
             }
             this.cardEGA.regGRCData[this.cardEGA.regGRCIndx] = bOut;
         }
@@ -7472,7 +7472,7 @@ export default class VideoX86 extends Component {
     {
         let b = this.cardColor.regColor;
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(port /* this.cardColor.port + 5 */, undefined, addrFrom, this.cardColor.type + ".COLOR", b);
+            this.printIO(port /* this.cardColor.port + 5 */, undefined, addrFrom, this.cardColor.type + ".COLOR", b);
         }
         return b;
     }
@@ -7488,7 +7488,7 @@ export default class VideoX86 extends Component {
     outCGAColor(port, bOut, addrFrom)
     {
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(port /* this.cardColor.port + 5 */, bOut, addrFrom, this.cardColor.type + ".COLOR");
+            this.printIO(port /* this.cardColor.port + 5 */, bOut, addrFrom, this.cardColor.type + ".COLOR");
         }
         if (this.cardColor.regColor !== bOut) {
             this.cardColor.regColor = bOut;
@@ -7532,7 +7532,7 @@ export default class VideoX86 extends Component {
          * it prefers (normally 0xff).
          */
         if (card.fActive) b = card.regCRTIndx;
-        this.printMessageIO(port, undefined, addrFrom, "CRTC.INDX", b);
+        this.printIO(port, undefined, addrFrom, "CRTC.INDX", b);
         return b;
     }
 
@@ -7549,7 +7549,7 @@ export default class VideoX86 extends Component {
     {
         card.regCRTPrev = card.regCRTIndx;
         card.regCRTIndx = bOut & Card.CGA.CRTC.INDX.MASK;
-        this.printMessageIO(port /* card.port */, bOut, addrFrom, "CRTC.INDX");
+        this.printIO(port /* card.port */, bOut, addrFrom, "CRTC.INDX");
     }
 
     /**
@@ -7582,7 +7582,7 @@ export default class VideoX86 extends Component {
             b = card.regCRTData[card.regCRTIndx];
         }
         if (!addrFrom || this.messageEnabled()) {
-            this.printMessageIO(port /* card.port + 1 */, undefined, addrFrom, "CRTC." + card.asCRTCRegs[card.regCRTIndx], b, true);
+            this.printIO(port /* card.port + 1 */, undefined, addrFrom, "CRTC." + card.asCRTCRegs[card.regCRTIndx], b, true);
         }
         return b;
     }
@@ -7621,7 +7621,7 @@ export default class VideoX86 extends Component {
             let fModified = (card.regCRTData[card.regCRTIndx] !== bOut);
             if (fModified || VideoX86.TRAPALL) {
                 if (!addrFrom || this.messageEnabled()) {
-                    this.printMessageIO(port /* card.port + 1 */, bOut, addrFrom, "CRTC." + card.asCRTCRegs[card.regCRTIndx]);
+                    this.printIO(port /* card.port + 1 */, bOut, addrFrom, "CRTC." + card.asCRTCRegs[card.regCRTIndx]);
                 }
                 card.regCRTData[card.regCRTIndx] = bOut;
             }
@@ -7688,7 +7688,7 @@ export default class VideoX86 extends Component {
     inCardMode(card, addrFrom)
     {
         let b = card.regMode;
-        this.printMessageIO(card.port + 4, undefined, addrFrom, "MODE", b);
+        this.printIO(card.port + 4, undefined, addrFrom, "MODE", b);
         return b;
     }
 
@@ -7702,7 +7702,7 @@ export default class VideoX86 extends Component {
      */
     outCardMode(card, bOut, addrFrom)
     {
-        this.printMessageIO(card.port + 4, bOut, addrFrom, "MODE");
+        this.printIO(card.port + 4, bOut, addrFrom, "MODE");
         if ((card.regMode ^ bOut) & Card.MDA.MODE.BLINK_ENABLE) {
             card.video.iCellCacheValid = 0;
         }
@@ -7795,7 +7795,7 @@ export default class VideoX86 extends Component {
         }
 
         card.regStatus = b;
-        if (MAXDEBUG) this.printMessageIO(card.port + 6, undefined, addrFrom, (card === this.cardEGA? "STATUS1" : "STATUS"), b);
+        if (MAXDEBUG) this.printIO(card.port + 6, undefined, addrFrom, (card === this.cardEGA? "STATUS1" : "STATUS"), b);
         return b;
     }
 
