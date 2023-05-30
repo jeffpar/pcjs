@@ -775,48 +775,25 @@ NumIO.TWO_POW32 = Math.pow(2, 32);
 NumIO.CLASSES["NumIO"] = NumIO;
 
 /**
- * @copyright https://www.pcjs.org/modules/v3/stdio.js (C) 2012-2023 Jeff Parsons
+ * @copyright https://www.pcjs.org/modules/v1/format.js (C) 2012-2023 Jeff Parsons
  */
 
 /** @typedef {Function} */
 let Formatter;
 
 /**
- * @class StdIO
- * @unrestricted
+ * @class Format
  * @property {Object.<string,(Formatter|null)>}>} formatters
  */
-class StdIO extends NumIO {
+class Format {
+
     /**
-     * StdIO()
+     * constructor()
      *
-     * Summary of functions:
-     *
-     *      addFormatType()
-     *      flush()
-     *      getBaseName()
-     *      isDate()
-     *      parseDate()
-     *      print()
-     *      printf()
-     *      sprintf()
-     *      toHex()
-     *
-     * This class is called "StdIO" rather than "stdio" because classes are global entities and I prefer global
-     * entities to begin with a capital letter and use camelCase.  And its methods are primarily object functions
-     * rather than class functions, because the parent objects are typically Device objects which may wish to have
-     * unique "print" bindings.  Mingling every object's print output in the same container may not be desired.
-     *
-     * The filename "stdio.js" is inspired by the C runtime library file "stdio.h", since it includes printf()
-     * and sprintf() functions that have many C-like features, but they also have many differences (both additions
-     * and omissions).  And you will find other functions here that have no counterpart in "stdio.h", so don't take
-     * the name too seriously.
-     *
-     * @this {StdIO}
+     * @this {Format}
      */
     constructor()
     {
-        super();
         /**
          * We populate the sprintf() formatters table with null functions for all the predefined (built-in) types,
          * so that type validation has only one look-up to perform.
@@ -841,14 +818,14 @@ class StdIO extends NumIO {
      * function will be called with all the associated formatting parameters; the function must
      * return a stringified copy of the arg.
      *
-     * @this {StdIO}
+     * @this {Format}
      * @param {string} type (the sprintf standard requires this be a single character)
      * @param {Formatter} func
      * @returns {boolean} (true if successful, false if type character has already been defined)
      */
     addFormatType(type, func)
     {
-
+        // assert(!this.formatters[type]);
         if (!this.formatters[type]) {
             this.formatters[type] = func;
             return true;
@@ -857,64 +834,12 @@ class StdIO extends NumIO {
     }
 
     /**
-     * flush()
-     *
-     * @this {StdIO}
-     */
-    flush()
-    {
-        let buffer = StdIO.PrintBuffer;
-        StdIO.PrintBuffer = "";
-        this.print(buffer);
-    }
-
-    /**
-     * getBaseName(sFileName, fStripExt)
-     *
-     * This is a poor-man's version of Node's path.basename(), which Node-only components should use instead.
-     *
-     * Note that if fStripExt is true, this strips ANY extension, whereas path.basename() strips the extension only
-     * if it matches the second parameter (eg, path.basename("/foo/bar/baz/asdf/quux.html", ".html") returns "quux").
-     *
-     * @this {StdIO}
-     * @param {string} sFileName
-     * @param {boolean} [fStripExt]
-     * @param {boolean} [fAllowAmp]
-     * @returns {string}
-     */
-    getBaseName(sFileName, fStripExt, fAllowAmp)
-    {
-        let sBaseName = sFileName;
-
-        let i = sFileName.lastIndexOf('/');
-        if (i >= 0) sBaseName = sFileName.substr(i + 1);
-
-        /**
-         * This next bit is a kludge to clean up names that are part of a URL that includes unsightly query parameters.
-         * However, don't do that if fAllowAmp (which will be true, for example, when parsing 8.3 filenames in diskimage.js).
-         */
-        if (!fAllowAmp) {
-            i = sBaseName.indexOf('&');
-            if (i > 0) sBaseName = sBaseName.substr(0, i);
-        }
-
-        if (fStripExt) {
-            i = sBaseName.lastIndexOf(".");
-            if (i > 0) {
-                sBaseName = sBaseName.substring(0, i);
-            }
-        }
-        return sBaseName;
-    }
-
-    /**
      * isDate(date)
      *
-     * @this {StdIO}
      * @param {Date} date
      * @returns {boolean}
      */
-    isDate(date)
+    static isDate(date)
     {
         return !isNaN(date.getTime());
     }
@@ -935,11 +860,10 @@ class StdIO extends NumIO {
      * generate a UTC time, but non-ISO date-only strings (eg, "10/1/1945" or "October 1, 1945") generate a
      * local time.
      *
-     * @this {StdIO}
      * @param {...} args
      * @returns {Date} (UTC unless a time string with a timezone is explicitly provided)
      */
-    parseDate(...args)
+    static parseDate(...args)
     {
         let date;
         if (args[0] === undefined) {
@@ -966,52 +890,10 @@ class StdIO extends NumIO {
         else if (args[1] === undefined) {
             date = new Date(args[0]);
         } else {
-
+            // assert(args[1] < 12 && args[2] <= 31 && args[3] < 24 && args[4] < 60 && args[5] < 60);
             date = new Date(Date.UTC(...args));
         }
         return date;
-    }
-
-    /**
-     * print(s, fBuffer)
-     *
-     * @this {StdIO}
-     * @param {string} s
-     * @param {boolean} [fBuffer] (true to always buffer; otherwise, only buffer the last partial line)
-     * @returns {number}
-     */
-    print(s, fBuffer)
-    {
-        let i = s.lastIndexOf('\n');
-        if (!fBuffer) {
-            if (i >= 0) {
-                console.log(StdIO.PrintBuffer + s.substr(0, i));
-                StdIO.PrintBuffer = "";
-                s = s.substr(i + 1);
-            }
-            StdIO.PrintTime = null;
-        } else {
-            if (i >= 0) {
-                let now = Date.now();
-                if (!StdIO.PrintTime) StdIO.PrintTime = now;
-                s = ((now - StdIO.PrintTime) / 1000).toFixed(3) + ": " + s;
-            }
-        }
-        StdIO.PrintBuffer += s;
-        return s.length;
-    }
-
-    /**
-     * printf(format, ...args)
-     *
-     * @this {StdIO}
-     * @param {string} format
-     * @param {...} [args]
-     * @returns {number}
-     */
-    printf(format, ...args)
-    {
-        return this.print(this.sprintf(format, ...args));
     }
 
     /**
@@ -1026,7 +908,7 @@ class StdIO extends NumIO {
      * (eg, %d and %x) do not; they support only positive widths and right-justified output.  That's one of the more
      * glaring omissions at the moment.
      *
-     * @this {StdIO}
+     * @this {Format}
      * @param {string} format
      * @param {...} [args]
      * @returns {string}
@@ -1129,11 +1011,11 @@ class StdIO extends NumIO {
              *
              * because unlike the C runtime, we reuse the final parameter once the format string has exhausted all parameters.
              */
-            let date = /** @type {Date} */ ("ACDFGHMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? this.parseDate(arg) : arg);
+            let date = /** @type {Date} */ ("ACDFGHMNSTWY".indexOf(type) >= 0 && typeof arg != "object"? Format.parseDate(arg) : arg);
 
             switch(type) {
             case 'C':
-                buffer += (this.isDate(date)? this.sprintf("%#W, %#F %#D, %#Y".replaceAll('#', hash? '#' : ''), date) : undefined);
+                buffer += (Format.isDate(date)? this.sprintf("%#W, %#F %#D, %#Y".replaceAll('#', hash? '#' : ''), date) : undefined);
                 continue;
 
             case 'D':
@@ -1161,7 +1043,7 @@ class StdIO extends NumIO {
             case 'M':
                 arg = hash? date.getUTCMonth() : date.getMonth();
                 if (type == 'F') {
-                    arg = StdIO.NamesOfMonths[arg];
+                    arg = Format.NamesOfMonths[arg];
                     type = 's';
                 } else {
                     arg++;
@@ -1180,11 +1062,11 @@ class StdIO extends NumIO {
                 break;
 
             case 'T':
-                buffer += (this.isDate(date)? this.sprintf("%#Y-%#02M-%#02D %#02H:%#02N:%#02S".replaceAll('#', hash? '#' : ''), date) : undefined);
+                buffer += (Format.isDate(date)? this.sprintf("%#Y-%#02M-%#02D %#02H:%#02N:%#02S".replaceAll('#', hash? '#' : ''), date) : undefined);
                 continue;
 
             case 'W':
-                arg = StdIO.NamesOfDays[hash? date.getUTCDay() : date.getDay()];
+                arg = Format.NamesOfDays[hash? date.getUTCDay() : date.getDay()];
                 type = 's';
                 break;
 
@@ -1307,7 +1189,7 @@ class StdIO extends NumIO {
                 /* falls through */
 
             case 'X':
-                ach = StdIO.HexUpperCase;
+                ach = Format.HexUpperCase;
                 // if (hash) prefix = "0X";     // I don't like that %#X uppercases BOTH the prefix and the value
                 /* falls through */
 
@@ -1315,7 +1197,7 @@ class StdIO extends NumIO {
                 s = "";
                 if (!radix) radix = 16;
                 if (!prefix && hash) prefix = "0x";
-                if (!ach) ach = StdIO.HexLowerCase;
+                if (!ach) ach = Format.HexLowerCase;
                 /**
                  * For all the same reasons articulated above (for type 'd'), we pass the arg through Math.trunc(),
                  * and we honor precision, if any, as the minimum number of digits to print.
@@ -1385,7 +1267,7 @@ class StdIO extends NumIO {
                 break;
 
             default:
-
+                // assert(this.formatters[type]);
                 if (this.formatters[type]) {
                     buffer += this.formatters[type](type, flags, width, precision, arg);
                     break;
@@ -1397,6 +1279,157 @@ class StdIO extends NumIO {
 
         buffer += aParts[iPart];
         return buffer;
+    }
+}
+
+//
+// TODO: Put these definitions inside the class once we have a Closure Compiler that doesn't complain about them:
+//
+//      This language feature is only supported for UNSTABLE mode or better: Public class fields
+//
+// static HexLowerCase = "0123456789abcdef?";
+// static HexUpperCase = "0123456789ABCDEF?";
+// static NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+// static NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+//
+
+Format.HexLowerCase = "0123456789abcdef?";
+Format.HexUpperCase = "0123456789ABCDEF?";
+Format.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+Format.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+/**
+ * @copyright https://www.pcjs.org/modules/v3/stdio.js (C) 2012-2023 Jeff Parsons
+ */
+
+/**
+ * @class StdIO
+ */
+class StdIO extends NumIO {
+    /**
+     * StdIO()
+     *
+     * Summary of functions:
+     *
+     *      flush()
+     *      getBaseName()
+     *      print()
+     *      printf()
+     *      toHex()
+     *
+     * This class is called "StdIO" rather than "stdio" because classes are global entities and I prefer global
+     * entities to begin with a capital letter and use camelCase.  And its methods are primarily object functions
+     * rather than class functions, because the parent objects are typically Device objects which may wish to have
+     * unique "print" bindings.  Mingling every object's print output in the same container may not be desired.
+     *
+     * The filename "stdio.js" is inspired by the C runtime library file "stdio.h", since it includes printf()
+     * and sprintf() functions that have many C-like features, but they also have many differences (both additions
+     * and omissions).  And you will find other functions here that have no counterpart in "stdio.h", so don't take
+     * the name too seriously.
+     *
+     * @this {StdIO}
+     */
+    constructor()
+    {
+        super();
+        this.format = new Format();
+        this.addFormatType = this.format.addFormatType.bind(this.format);
+        this.sprintf = this.format.sprintf.bind(this.format);
+        this.isDate = Format.isDate;
+        this.parseDate = Format.parseDate;
+    }
+
+    /**
+     * flush()
+     *
+     * @this {StdIO}
+     */
+    flush()
+    {
+        let buffer = StdIO.PrintBuffer;
+        StdIO.PrintBuffer = "";
+        this.print(buffer);
+    }
+
+    /**
+     * getBaseName(sFileName, fStripExt)
+     *
+     * This is a poor-man's version of Node's path.basename(), which Node-only components should use instead.
+     *
+     * Note that if fStripExt is true, this strips ANY extension, whereas path.basename() strips the extension only
+     * if it matches the second parameter (eg, path.basename("/foo/bar/baz/asdf/quux.html", ".html") returns "quux").
+     *
+     * @this {StdIO}
+     * @param {string} sFileName
+     * @param {boolean} [fStripExt]
+     * @param {boolean} [fAllowAmp]
+     * @returns {string}
+     */
+    getBaseName(sFileName, fStripExt, fAllowAmp)
+    {
+        let sBaseName = sFileName;
+
+        let i = sFileName.lastIndexOf('/');
+        if (i >= 0) sBaseName = sFileName.substr(i + 1);
+
+        /**
+         * This next bit is a kludge to clean up names that are part of a URL that includes unsightly query parameters.
+         * However, don't do that if fAllowAmp (which will be true, for example, when parsing 8.3 filenames in diskimage.js).
+         */
+        if (!fAllowAmp) {
+            i = sBaseName.indexOf('&');
+            if (i > 0) sBaseName = sBaseName.substr(0, i);
+        }
+
+        if (fStripExt) {
+            i = sBaseName.lastIndexOf(".");
+            if (i > 0) {
+                sBaseName = sBaseName.substring(0, i);
+            }
+        }
+        return sBaseName;
+    }
+
+    /**
+     * print(s, fBuffer)
+     *
+     * @this {StdIO}
+     * @param {string} s
+     * @param {boolean} [fBuffer] (true to always buffer; otherwise, only buffer the last partial line)
+     * @returns {number}
+     */
+    print(s, fBuffer)
+    {
+        let i = s.lastIndexOf('\n');
+        if (!fBuffer) {
+            if (i >= 0) {
+                console.log(StdIO.PrintBuffer + s.substr(0, i));
+                StdIO.PrintBuffer = "";
+                s = s.substr(i + 1);
+            }
+            StdIO.PrintTime = null;
+        } else {
+            if (i >= 0) {
+                let now = Date.now();
+                if (!StdIO.PrintTime) StdIO.PrintTime = now;
+                s = ((now - StdIO.PrintTime) / 1000).toFixed(3) + ": " + s;
+            }
+        }
+        StdIO.PrintBuffer += s;
+        return s.length;
+    }
+
+    /**
+     * printf(format, ...args)
+     *
+     * @this {StdIO}
+     * @param {string} format
+     * @param {...} [args]
+     * @returns {number}
+     */
+    printf(format, ...args)
+    {
+        return this.print(this.sprintf(format, ...args));
     }
 
     /**
@@ -1423,14 +1456,6 @@ class StdIO extends NumIO {
  */
 StdIO.PrintBuffer = "";
 StdIO.PrintTime = null;
-
-/**
- * Global constants
- */
-StdIO.HexLowerCase = "0123456789abcdef?";
-StdIO.HexUpperCase = "0123456789ABCDEF?";
-StdIO.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-StdIO.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 StdIO.CLASSES["StdIO"] = StdIO;
 
@@ -6662,7 +6687,7 @@ class Time extends Device {
                 nCycles = (this.nCyclesDeposited += this.nCyclesDepositPerFrame);
             }
             if (nCycles < 0) {
-                this.printf(Device.MESSAGE.WARN, "warning: cycle count dropped below zero: %f\n", nCycles);
+                this.printf(Device.MESSAGE.TIME, "warning: cycle count dropped below zero: %f\n", nCycles);
                 nCycles = this.nCyclesDeposited = 0;
             }
             nCycles |= 0;

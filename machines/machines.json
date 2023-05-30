@@ -41,6 +41,7 @@
       "./machines/modules/v2/reportapi.js",
       "./machines/modules/v2/userapi.js",
       "./machines/modules/v2/keys.js",
+      "./machines/modules/v1/format.js",
       "./machines/modules/v2/strlib.js",
       "./machines/modules/v2/usrlib.js",
       "./machines/modules/v2/weblib.js",
@@ -109,6 +110,7 @@
     "scripts": [
       "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
+      "./machines/modules/v1/format.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
       "./machines/modules/v3/device.js",
@@ -143,6 +145,7 @@
       "./machines/modules/v2/messages.js",
       "./machines/modules/v2/dumpapi.js",
       "./machines/modules/v2/reportapi.js",
+      "./machines/modules/v1/format.js",
       "./machines/modules/v2/strlib.js",
       "./machines/modules/v2/usrlib.js",
       "./machines/modules/v2/weblib.js",
@@ -189,6 +192,7 @@
       "./machines/modules/v2/reportapi.js",
       "./machines/modules/v2/userapi.js",
       "./machines/modules/v2/keys.js",
+      "./machines/modules/v1/format.js",
       "./machines/modules/v2/strlib.js",
       "./machines/modules/v2/usrlib.js",
       "./machines/modules/v2/weblib.js",
@@ -244,6 +248,7 @@
       "./machines/modules/v2/reportapi.js",
       "./machines/modules/v2/userapi.js",
       "./machines/modules/v2/keys.js",
+      "./machines/modules/v1/format.js",
       "./machines/modules/v2/strlib.js",
       "./machines/modules/v2/usrlib.js",
       "./machines/modules/v2/weblib.js",
@@ -298,6 +303,7 @@
       "./machines/modules/v2/reportapi.js",
       "./machines/modules/v2/userapi.js",
       "./machines/modules/v2/keys.js",
+      "./machines/modules/v1/format.js",
       "./machines/modules/v2/strlib.js",
       "./machines/modules/v2/usrlib.js",
       "./machines/modules/v2/weblib.js",
@@ -352,6 +358,7 @@
     "scripts": [
       "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
+      "./machines/modules/v1/format.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
       "./machines/modules/v3/device.js",
@@ -390,6 +397,7 @@
     "scripts": [
       "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
+      "./machines/modules/v1/format.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
       "./machines/modules/v3/device.js",
@@ -422,6 +430,7 @@
     "scripts": [
       "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
+      "./machines/modules/v1/format.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
       "./machines/modules/v3/device.js",
@@ -448,6 +457,7 @@
     "scripts": [
       "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
+      "./machines/modules/v1/format.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
       "./machines/modules/v3/device.js",
@@ -481,6 +491,7 @@
     "scripts": [
       "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
+      "./machines/modules/v1/format.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
       "./machines/modules/v3/device.js",
@@ -516,6 +527,7 @@
     "scripts": [
       "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
+      "./machines/modules/v1/format.js",
       "./machines/modules/v3/stdio.js",
       "./machines/modules/v3/webio.js",
       "./machines/modules/v3/device.js",
