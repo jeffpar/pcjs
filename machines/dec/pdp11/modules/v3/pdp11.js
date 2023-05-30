@@ -594,7 +594,7 @@ export default class PDP11 extends PDP11Ops {
     loadState(stateCPU)
     {
         if (!stateCPU || !stateCPU.length) {
-            this.println("invalid saved state");
+            this.printf("invalid saved state\n");
             return false;
         }
         let idDevice = stateCPU.shift();
@@ -632,7 +632,7 @@ export default class PDP11 extends PDP11Ops {
             this.restoreIRQs(stateCPU.shift());
             // this.restoreTimers(stateCPU.shift());
         } catch(err) {
-            this.println("CPU state error: " + err.message);
+            this.printf("CPU state error: %s\n", err.message);
             return false;
         }
         return true;

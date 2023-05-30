@@ -1003,19 +1003,6 @@ class StdIO extends NumIO {
     }
 
     /**
-     * println(s, fBuffer)
-     *
-     * @this {StdIO}
-     * @param {string} s
-     * @param {boolean} [fBuffer] (true to always buffer; otherwise, only buffer the last partial line)
-     * @returns {number}
-     */
-    println(s, fBuffer)
-    {
-        return this.print(s + '\n', fBuffer);
-    }
-
-    /**
      * printf(format, ...args)
      *
      * @this {StdIO}
@@ -1665,7 +1652,7 @@ class WebIO extends StdIO {
         }
         let s = this.sprintf(format, ...args);
         if (s) {
-            this.println(s);
+            this.printf("%s\n", s);
             if (!fDiag) alert(s);
         }
     }
@@ -2152,7 +2139,7 @@ class WebIO extends StdIO {
                     f = (window.localStorage.getItem(WebIO.LocalStorage.Test) == WebIO.LocalStorage.Test);
                     window.localStorage.removeItem(WebIO.LocalStorage.Test);
                 } catch(err) {
-                    this.println(err.message);
+                    this.printf("%s\n", err.message);
                     f = false;
                 }
             }
@@ -2228,7 +2215,7 @@ class WebIO extends StdIO {
                     sValue = window.localStorage.getItem(this.idMachine);
                     if (sValue) state = /** @type {Array} */ (JSON.parse(sValue));
                 } catch (err) {
-                    this.println(err.message);
+                    this.printf("%s\n", err.message);
                 }
             }
         }
@@ -2329,7 +2316,7 @@ class WebIO extends StdIO {
                     let i = text.lastIndexOf('\n', text.length - 2);
                     let commands = text.slice(i + 1, -1) || "";
                     let result = this.parseCommands(commands);
-                    if (result) this.println(result.replace(/\n$/, ""), false);
+                    if (result) this.printf("%s\n", result.replace(/\n$/, ""));
                 }
             }
         }
@@ -2593,7 +2580,7 @@ class WebIO extends StdIO {
                 window.localStorage.setItem(this.idMachine, sValue);
                 return true;
             } catch(err) {
-                this.println(err.message);
+                this.printf("%s\n", err.message);
             }
         }
         return false;
@@ -3265,7 +3252,7 @@ class Device extends WebIO {
                         }
                     }
                     config[prop] = value;
-                    this.println("overriding " + this.idDevice + " property '" + prop + "' with " + s);
+                    this.printf("overriding %s property '%s' with %s\n", this.idDevice, prop, s);
                 }
             }
         }
@@ -7141,7 +7128,7 @@ class Input extends Device {
             state.xStart = state.yStart = -1;
         }
         else {
-            this.println("unrecognized action: " + action);
+            this.printf("unrecognized action: %d\n", action);
         }
     }
 
@@ -8882,7 +8869,7 @@ class Time extends Device {
     isPowered()
     {
         if (!this.fPowered) {
-            this.println("not powered");
+            this.printf("not powered\n");
             return false;
         }
         return true;
@@ -9022,7 +9009,7 @@ class Time extends Device {
                     this.step(nRepeat);
                 }
             } else {
-                this.println("already running");
+                this.printf("already running\n");
             }
         }
     }
@@ -9110,7 +9097,7 @@ class Time extends Device {
             } while (this.fRunning && !this.fYield);
         }
         catch (err) {
-            this.println(err.message);
+            this.printf("%s\n", err.message);
             this.stop();
         }
     }
@@ -9358,7 +9345,7 @@ class Time extends Device {
     update(fTransition)
     {
         if (fTransition) {
-            this.println(this.fRunning? "started with " + this.getSpeedTarget() + " target" : "stopped");
+            this.printf(this.fRunning? "started with %s target\n" : "stopped\n", this.getSpeedTarget());
         }
         this.setBindingText(Time.BINDING.RUN, this.fRunning? "Halt" : "Run");
         this.setBindingText(Time.BINDING.STEP, this.nStepping? "Stop" : "Step");
@@ -9496,7 +9483,7 @@ class CPU extends Device {
     abort(err)
     {
         this.regPC = this.regPCLast;
-        this.println(err.message);
+        this.printf("%s\n", err.message);
         this.time.stop();
     }
 
@@ -9723,14 +9710,14 @@ class LEDCtrl extends CPU {
                 if (elementSymbol) {
                     sPattern = '"' + elementSymbol.value + '":"' + sPattern.replace(/^([0-9]+\/)*/, "") + '",';
                 }
-                cpu.println(sPattern);
+                cpu.printf("%s\n", sPattern);
             };
             break;
 
         case LEDCtrl.BINDING.SAVE_TO_URL:
             element.onclick = function onClickSaveToURL() {
                 let sPattern = cpu.savePattern();
-                cpu.println(sPattern);
+                cpu.printf("%s\n", sPattern);
                 let href = window.location.href;
                 if (href.indexOf('pattern=') >= 0) {
                     href = href.replace(/(pattern=)[^&]*/, "$1" + sPattern.replace(/\$/g, "$$$$"));
@@ -9821,7 +9808,7 @@ class LEDCtrl extends CPU {
                     nActive = this.doCounting();
                     break;
                 }
-                if (!nCyclesTarget) this.println("active cells: " + nActive);
+                if (!nCyclesTarget) this.printf("active cells: %d\n", nActive);
                 nCyclesClocked += nCycles;
             } while (nCyclesClocked < nCyclesTarget);
         }
@@ -10252,7 +10239,7 @@ class LEDCtrl extends CPU {
                 sPattern = aParts[i];
             }
             else {
-                this.println("unrecognized pattern: " + this.sPattern);
+                this.printf("unrecognized pattern: %s\n", this.sPattern);
                 return false;
             }
             rule = this.sRule;  // TODO: If we ever support multiple rules, then allow rule overrides, too
@@ -10261,20 +10248,20 @@ class LEDCtrl extends CPU {
             let patterns = this.config[LEDCtrl.BINDING.PATTERN_SELECTION];
             let lines = patterns && patterns[id];
             if (!lines) {
-                this.println("unknown pattern: " + id);
+                this.printf("unknown pattern: %s\n", id);
                 return false;
             }
-            this.println("loading pattern '" + id + "'");
+            this.printf("loading pattern \"%s\"\n", id);
             for (let i = 0, n = 0; i < lines.length; i++) {
                 let sLine = lines[i];
                 if (sLine[0] == '#') {
-                    this.println(sLine);
+                    this.printf("%s\n", sLine);
                     continue;
                 }
                 if (!n++) {
                     let match = sLine.match(/x\s*=\s*([0-9]+)\s*,\s*y\s*=\s*([0-9]+)\s*(?:,\s*rule\s*=\s*(\S+)|)/i);
                     if (!match) {
-                        this.println("unrecognized header line");
+                        this.printf("unrecognized header line\n");
                         return false;
                     }
                     width = +match[1];
@@ -10292,7 +10279,7 @@ class LEDCtrl extends CPU {
         }
 
         if (rule != this.sRule) {
-            this.println("unsupported rule: " + rule);
+            this.printf("unsupported rule: %s\n", rule);
             return false;
         }
 
@@ -10417,7 +10404,7 @@ class LEDCtrl extends CPU {
     {
         let stateCPU = state['stateCPU'] || state[0];
         if (!stateCPU || !stateCPU.length) {
-            this.println("Invalid saved state");
+            this.printf("Invalid saved state\n");
             return false;
         }
         let version = stateCPU.shift();
@@ -10431,7 +10418,7 @@ class LEDCtrl extends CPU {
             this.sMessageCmd = stateCPU.shift();
             this.nMessageCount = stateCPU.shift();
         } catch(err) {
-            this.println("Controller state error: " + err.message);
+            this.printf("Controller state error: %s\n", err.message);
             return false;
         }
         if (!this.getURLParms()['message'] && !this.getURLParms()['pattern'] && !this.getURLParms()[LEDCtrl.BINDING.IMAGE_SELECTION]) {
@@ -10547,7 +10534,7 @@ class LEDCtrl extends CPU {
      */
     onReset()
     {
-        this.println("reset");
+        this.printf("reset\n");
         this.leds.clearBuffer(true);
         this.leds.enableDisplay(true);
         if (this.sMessageInit) this.setMessage(this.sMessageInit);
@@ -10605,7 +10592,7 @@ class LEDCtrl extends CPU {
             this.nMessageCount = count;
         }
 
-        // this.println("processing command '" + this.sMessageCmd + "', count " + this.nMessageCount);
+        // this.printf("processing command '%s', count %d\n", this.sMessageCmd, this.nMessageCount);
 
         switch(this.sMessageCmd) {
 
@@ -10683,7 +10670,7 @@ class LEDCtrl extends CPU {
                             this.iMessageNext = i;
                             return this.processMessageCmd(shift, cmd, cols);
                         }
-                        this.println("unrecognized message code: $" + ch);
+                        this.printf("unrecognized message code: $%s\n", ch);
                     }
                 }
             }
@@ -10925,7 +10912,7 @@ class LEDCtrl extends CPU {
     setMessage(s)
     {
         if (this.sMessage != s) {
-            if (s) this.println("new message: '" + s + "'");
+            if (s) this.printf("new message: \"%s\"\n", s);
             this.sMessage = s;
         }
         this.sMessageCmd = LEDCtrl.MESSAGE_CMD.LOAD;
@@ -11007,7 +10994,7 @@ class LEDCtrl extends CPU {
                 let sColorOverride = this.config[color.toLowerCase()];
                 if (sColorOverride) {
                     if (sColorOverride[0] != '#') sColorOverride = '#' + sColorOverride;
-                    this.println("overriding color '" + color + "' with " + sColorOverride + " (formerly " + this.colorPalette[color] + ")");
+                    this.printf("overriding color \"%s\" with %s (formerly %s)\n", color, sColorOverride, this.colorPalette[color]);
                     this.colorPalette[color] = sColorOverride;
                 }
             }
@@ -11635,7 +11622,7 @@ class Machine extends Device {
             if (match) {
                 sError += " ('" + sConfig.substr(+match[1], 40).replace(/\s+/g, ' ') + "...')";
             }
-            this.println("machine '" + this.idMachine + "' initialization error: " + sError);
+            this.printf("machine '%s' initialization error: %s\n", this.idMachine, sError);
         }
     }
 
@@ -11649,7 +11636,7 @@ class Machine extends Device {
     {
         if (this.isReady()) {
             let machine = this;
-            if (on) this.println("power on");
+            if (on) this.printf("power on\n");
             this.enumDevices(function onDevicePower(device) {
                 if (device.onPower && device != machine) {
                     if (device.config['class'] != "CPU" || machine.fAutoStart && machine.isReady()) {
@@ -11666,7 +11653,7 @@ class Machine extends Device {
                 return true;
             });
             this.fPowered = on;
-            if (!on) this.println("power off");
+            if (!on) this.printf("power off\n");
         }
     }
 
@@ -11685,7 +11672,7 @@ class Machine extends Device {
                 }
                 return true;
             });
-            this.println("reset");
+            this.printf("reset\n");
         }
     }
 

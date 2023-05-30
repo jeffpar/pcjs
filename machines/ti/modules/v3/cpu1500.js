@@ -562,7 +562,7 @@ export default class CPU1500 extends CPU {
     {
         if (this.breakConditions[c]) {
             this.breakConditions[c] = false;
-            this.println("break on " + CPU1500.BREAK[c]);
+            this.printf("break on %s\n", CPU1500.BREAK[c]);
             this.time.stop();
             return true;
         }
@@ -613,7 +613,7 @@ export default class CPU1500 extends CPU {
         while (this.nCyclesRemain > 0) {
             if (this.addrStop == this.regPC) {
                 this.addrStop = -1;
-                this.println("break");
+                this.printf("break\n");
                 this.time.stop();
                 break;
             }
@@ -622,7 +622,7 @@ export default class CPU1500 extends CPU {
             this.regPC = (addr + 1) & this.bus.addrLimit;
             if (opcode == undefined || !this.decode(opcode, addr)) {
                 this.regPC = this.regPCLast;
-                this.println("unimplemented opcode");
+                this.printf("unimplemented opcode\n");
                 this.time.stop();
                 break;
             }
@@ -876,7 +876,7 @@ export default class CPU1500 extends CPU {
     {
         let stateCPU = state['stateCPU'] || state[0];
         if (!stateCPU || !stateCPU.length) {
-            this.println("invalid saved state");
+            this.printf("invalid saved state\n");
             return false;
         }
         let version = stateCPU.shift();
@@ -898,7 +898,7 @@ export default class CPU1500 extends CPU {
             this.stack = stateCPU.shift();
             this.regKey = stateCPU.shift();
         } catch(err) {
-            this.println("CPU state error: " + err.message);
+            this.printf("CPU state error: %s\n", err.message);
             return false;
         }
         let stateROM = state['stateROM'] || state[1];
@@ -1081,7 +1081,7 @@ export default class CPU1500 extends CPU {
      */
     onReset()
     {
-        this.println("reset");
+        this.printf("reset\n");
         this.regPC = 0;
         this.clearDisplays();
         if (!this.time.isRunning()) this.print(this.toString());
@@ -1315,7 +1315,7 @@ export default class CPU1500 extends CPU {
                 this.regPC = value;
                 return true;
             default:
-                this.println("unrecognized register: " + name);
+                this.printf("unrecognized register: %s\n", name);
                 break;
             }
         }

@@ -1003,19 +1003,6 @@ class StdIO extends NumIO {
     }
 
     /**
-     * println(s, fBuffer)
-     *
-     * @this {StdIO}
-     * @param {string} s
-     * @param {boolean} [fBuffer] (true to always buffer; otherwise, only buffer the last partial line)
-     * @returns {number}
-     */
-    println(s, fBuffer)
-    {
-        return this.print(s + '\n', fBuffer);
-    }
-
-    /**
      * printf(format, ...args)
      *
      * @this {StdIO}
@@ -1665,7 +1652,7 @@ class WebIO extends StdIO {
         }
         let s = this.sprintf(format, ...args);
         if (s) {
-            this.println(s);
+            this.printf("%s\n", s);
             if (!fDiag) alert(s);
         }
     }
@@ -2152,7 +2139,7 @@ class WebIO extends StdIO {
                     f = (window.localStorage.getItem(WebIO.LocalStorage.Test) == WebIO.LocalStorage.Test);
                     window.localStorage.removeItem(WebIO.LocalStorage.Test);
                 } catch(err) {
-                    this.println(err.message);
+                    this.printf("%s\n", err.message);
                     f = false;
                 }
             }
@@ -2228,7 +2215,7 @@ class WebIO extends StdIO {
                     sValue = window.localStorage.getItem(this.idMachine);
                     if (sValue) state = /** @type {Array} */ (JSON.parse(sValue));
                 } catch (err) {
-                    this.println(err.message);
+                    this.printf("%s\n", err.message);
                 }
             }
         }
@@ -2329,7 +2316,7 @@ class WebIO extends StdIO {
                     let i = text.lastIndexOf('\n', text.length - 2);
                     let commands = text.slice(i + 1, -1) || "";
                     let result = this.parseCommands(commands);
-                    if (result) this.println(result.replace(/\n$/, ""), false);
+                    if (result) this.printf("%s\n", result.replace(/\n$/, ""));
                 }
             }
         }
@@ -2593,7 +2580,7 @@ class WebIO extends StdIO {
                 window.localStorage.setItem(this.idMachine, sValue);
                 return true;
             } catch(err) {
-                this.println(err.message);
+                this.printf("%s\n", err.message);
             }
         }
         return false;
@@ -3265,7 +3252,7 @@ class Device extends WebIO {
                         }
                     }
                     config[prop] = value;
-                    this.println("overriding " + this.idDevice + " property '" + prop + "' with " + s);
+                    this.printf("overriding %s property '%s' with %s\n", this.idDevice, prop, s);
                 }
             }
         }
@@ -5008,7 +4995,7 @@ class Input extends Device {
             state.xStart = state.yStart = -1;
         }
         else {
-            this.println("unrecognized action: " + action);
+            this.printf("unrecognized action: %d\n", action);
         }
     }
 
@@ -6749,7 +6736,7 @@ class Time extends Device {
     isPowered()
     {
         if (!this.fPowered) {
-            this.println("not powered");
+            this.printf("not powered\n");
             return false;
         }
         return true;
@@ -6889,7 +6876,7 @@ class Time extends Device {
                     this.step(nRepeat);
                 }
             } else {
-                this.println("already running");
+                this.printf("already running\n");
             }
         }
     }
@@ -6977,7 +6964,7 @@ class Time extends Device {
             } while (this.fRunning && !this.fYield);
         }
         catch (err) {
-            this.println(err.message);
+            this.printf("%s\n", err.message);
             this.stop();
         }
     }
@@ -7225,7 +7212,7 @@ class Time extends Device {
     update(fTransition)
     {
         if (fTransition) {
-            this.println(this.fRunning? "started with " + this.getSpeedTarget() + " target" : "stopped");
+            this.printf(this.fRunning? "started with %s target\n" : "stopped\n", this.getSpeedTarget());
         }
         this.setBindingText(Time.BINDING.RUN, this.fRunning? "Halt" : "Run");
         this.setBindingText(Time.BINDING.STEP, this.nStepping? "Stop" : "Step");
@@ -9496,7 +9483,7 @@ class CPU extends Device {
     abort(err)
     {
         this.regPC = this.regPCLast;
-        this.println(err.message);
+        this.printf("%s\n", err.message);
         this.time.stop();
     }
 
@@ -10126,7 +10113,7 @@ class CPU1500 extends CPU {
     {
         if (this.breakConditions[c]) {
             this.breakConditions[c] = false;
-            this.println("break on " + CPU1500.BREAK[c]);
+            this.printf("break on %s\n", CPU1500.BREAK[c]);
             this.time.stop();
             return true;
         }
@@ -10177,7 +10164,7 @@ class CPU1500 extends CPU {
         while (this.nCyclesRemain > 0) {
             if (this.addrStop == this.regPC) {
                 this.addrStop = -1;
-                this.println("break");
+                this.printf("break\n");
                 this.time.stop();
                 break;
             }
@@ -10186,7 +10173,7 @@ class CPU1500 extends CPU {
             this.regPC = (addr + 1) & this.bus.addrLimit;
             if (opcode == undefined || !this.decode(opcode, addr)) {
                 this.regPC = this.regPCLast;
-                this.println("unimplemented opcode");
+                this.printf("unimplemented opcode\n");
                 this.time.stop();
                 break;
             }
@@ -10440,7 +10427,7 @@ class CPU1500 extends CPU {
     {
         let stateCPU = state['stateCPU'] || state[0];
         if (!stateCPU || !stateCPU.length) {
-            this.println("invalid saved state");
+            this.printf("invalid saved state\n");
             return false;
         }
         let version = stateCPU.shift();
@@ -10462,7 +10449,7 @@ class CPU1500 extends CPU {
             this.stack = stateCPU.shift();
             this.regKey = stateCPU.shift();
         } catch(err) {
-            this.println("CPU state error: " + err.message);
+            this.printf("CPU state error: %s\n", err.message);
             return false;
         }
         let stateROM = state['stateROM'] || state[1];
@@ -10645,7 +10632,7 @@ class CPU1500 extends CPU {
      */
     onReset()
     {
-        this.println("reset");
+        this.printf("reset\n");
         this.regPC = 0;
         this.clearDisplays();
         if (!this.time.isRunning()) this.print(this.toString());
@@ -10879,7 +10866,7 @@ class CPU1500 extends CPU {
                 this.regPC = value;
                 return true;
             default:
-                this.println("unrecognized register: " + name);
+                this.printf("unrecognized register: %s\n", name);
                 break;
             }
         }
@@ -11672,7 +11659,7 @@ class Machine extends Device {
             if (match) {
                 sError += " ('" + sConfig.substr(+match[1], 40).replace(/\s+/g, ' ') + "...')";
             }
-            this.println("machine '" + this.idMachine + "' initialization error: " + sError);
+            this.printf("machine '%s' initialization error: %s\n", this.idMachine, sError);
         }
     }
 
@@ -11686,7 +11673,7 @@ class Machine extends Device {
     {
         if (this.isReady()) {
             let machine = this;
-            if (on) this.println("power on");
+            if (on) this.printf("power on\n");
             this.enumDevices(function onDevicePower(device) {
                 if (device.onPower && device != machine) {
                     if (device.config['class'] != "CPU" || machine.fAutoStart && machine.isReady()) {
@@ -11703,7 +11690,7 @@ class Machine extends Device {
                 return true;
             });
             this.fPowered = on;
-            if (!on) this.println("power off");
+            if (!on) this.printf("power off\n");
         }
     }
 
@@ -11722,7 +11709,7 @@ class Machine extends Device {
                 }
                 return true;
             });
-            this.println("reset");
+            this.printf("reset\n");
         }
     }
 

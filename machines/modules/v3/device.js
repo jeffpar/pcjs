@@ -175,7 +175,7 @@ export default class Device extends WebIO {
                         }
                     }
                     config[prop] = value;
-                    this.println("overriding " + this.idDevice + " property '" + prop + "' with " + s);
+                    this.printf("overriding %s property '%s' with %s\n", this.idDevice, prop, s);
                 }
             }
         }

@@ -1973,7 +1973,7 @@ export default class Debugger extends Device {
              */
             throw new Error(message);
         }
-        this.println(message);
+        this.printf("%s\n", message);
         this.time.stop();
     }
 
@@ -2528,7 +2528,7 @@ export default class Debugger extends Device {
                     this.print(this.dumpInstruction(this.cpu.regPC, 1));
                 } else {
                     if (this.cInstructions) {
-                        this.cpu.println(this.cInstructions + " instructions executed");
+                        this.cpu.printf("%d instructions executed\n", this.cInstructions);
                         this.cInstructions = 0;
                     }
                     this.cpu.print(this.cpu.toString());

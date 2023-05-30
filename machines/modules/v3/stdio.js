@@ -243,19 +243,6 @@ export default class StdIO extends NumIO {
     }
 
     /**
-     * println(s, fBuffer)
-     *
-     * @this {StdIO}
-     * @param {string} s
-     * @param {boolean} [fBuffer] (true to always buffer; otherwise, only buffer the last partial line)
-     * @returns {number}
-     */
-    println(s, fBuffer)
-    {
-        return this.print(s + '\n', fBuffer);
-    }
-
-    /**
      * printf(format, ...args)
      *
      * @this {StdIO}
