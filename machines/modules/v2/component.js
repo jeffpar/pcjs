@@ -233,7 +233,7 @@ export default class Component {
      */
     static printf(format, ...args)
     {
-        if (DEBUG || format === Messages.ERROR || format === Messages.WARNING || format === Messages.NOTICE) {
+        if (DEBUG || format >= Messages.LOG && format <= Messages.ERROR) {
             let alert = false;
             let bitsMessage = 0;
             if (typeof format == "number") {

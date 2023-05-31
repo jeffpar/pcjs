@@ -182,18 +182,18 @@ export default class Web {
             try {
                 resource = fArrayBuffer? request.response : request.responseText;
             } catch(err) {
-                if (MAXDEBUG) Component.printf(Messages.ERROR, "xmlHTTPRequest(%s) exception: %s\n", sURL, err.message);
+                Component.printf(Messages.LOG, "xmlHTTPRequest(%s) exception: %s\n", sURL, err.message);
             }
             /*
              * The normal "success" case is a non-null resource and an HTTP status code of 200, but when loading files from the
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
             if (resource != null && (request.status == 200 || !request.status && resource.length && Web.getHostProtocol() == "file:")) {
-                if (MAXDEBUG) Component.printf("xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
+                if (MAXDEBUG) Component.printf(Messages.LOG, "xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
             }
             else {
                 nErrorCode = request.status || -1;
-                Component.printf(Messages.ERROR, "xmlHTTPRequest(%s) returned error %d\n", sURL, nErrorCode);
+                Component.printf(Messages.LOG, "xmlHTTPRequest(%s) returned error %d\n", sURL, nErrorCode);
                 if (!request.status && !Web.fAdBlockerWarning) {
                     let match = sURL.match(/(^https?:\/\/[^/]+)(.*)/);
                     if (match) {
