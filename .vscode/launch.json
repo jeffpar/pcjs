@@ -1755,6 +1755,25 @@
       }
     },
     {
+      "name": "Node: printf.js",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/machines/modules/bin/printf.js",
+      "args": [
+      ],
+      "cwd": "${workspaceFolder}",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "tools",
+        "order": 40
+      }
+    },
+    {
       "name": "Node: replace.js",
       "type": "node",
       "request": "launch",

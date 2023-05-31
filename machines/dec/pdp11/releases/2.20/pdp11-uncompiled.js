@@ -29,7 +29,7 @@ class Format {
          * current Debugger preferences.
          */
         this.formatters = {};
-        let predefinedTypes = "ACDFGHMNSTWYbdfjcsoXx%";
+        let predefinedTypes = "ACDFGHMNSTWYBbdfjcsoXx%";
         for (let i = 0; i < predefinedTypes.length; i++) {
             this.formatters[predefinedTypes[i]] = null;
         }
@@ -305,13 +305,16 @@ class Format {
             }
 
             switch(type) {
+            /**
+             * "%b" is for boolean-like values.
+             */
             case 'b':
-                /**
-                 * "%b" for boolean-like values is a non-standard format specifier that seems handy.
-                 */
                 buffer += (arg? "true" : "false");
                 break;
 
+            /**
+             * "%d" is for signed decimal numbers.
+             */
             case 'd':
                 /**
                  * I could use "arg |= 0", but there may be some value to supporting integers > 32 bits,
@@ -349,6 +352,9 @@ class Format {
                 }
                 /* falls through */
 
+            /**
+             * "%f" is for floating-point numbers.
+             */
             case 'f':
                 arg = +arg;             // convert to a number, if it isn't already
                 s = arg + "";
@@ -370,6 +376,9 @@ class Format {
                 buffer += s;
                 break;
 
+            /**
+             * "%j" is for objects (displayed as JSON, with configurable indentation).
+             */
             case 'j':
                 /**
                  * 'j' is one of our non-standard extensions to the sprintf() interface; it signals that
@@ -379,10 +388,16 @@ class Format {
                 buffer += JSON.stringify(arg, null, width || undefined);
                 break;
 
+            /**
+             * "%c" is for characters (which can be either single-character strings or ASCII codes).
+             */
             case 'c':
                 arg = typeof arg == "string"? arg[0] : String.fromCharCode(arg);
                 /* falls through */
 
+            /**
+             * "%s" is for strings.
+             */
             case 's':
                 /**
                  * 's' includes some non-standard benefits, such as coercing non-strings to strings first;
@@ -407,16 +422,33 @@ class Format {
                 buffer += arg;
                 break;
 
-            case 'o':
-                radix = 8;
-                if (hash) prefix = "0o";
+            /**
+             * "%B" is for binary integers.
+             */
+            case 'B':
+                radix = 2;
+                if (hash) prefix = "0b";
                 /* falls through */
 
+            /**
+             * "%o" is for octal integers.
+             */
+            case 'o':
+                if (!radix) radix = 8;
+                if (!prefix && hash) prefix = "0o";
+                /* falls through */
+
+            /**
+             * "%X" is for hexadecimal integers (using upper-case letters).
+             */
             case 'X':
                 ach = Format.HexUpperCase;
-                // if (hash) prefix = "0X";     // I don't like that %#X uppercases BOTH the prefix and the value
+                // if (!prefix && hash) prefix = "0X";  // I don't like that %#X uppercases BOTH the prefix and the value
                 /* falls through */
 
+            /**
+             * "%x" is for hexadecimal integers (using lower-case letters).
+             */
             case 'x':
                 s = "";
                 if (!radix) radix = 16;
@@ -486,6 +518,9 @@ class Format {
                 buffer += prefix + s;
                 break;
 
+            /**
+             * "%%" is for the percent symbol.
+             */
             case '%':
                 buffer += '%';
                 break;
@@ -538,12 +573,12 @@ const Messages = {
     ADDRESS:    0x000000000001,
     LOG:        0x001000000000,         // to replace component.log()
     STATUS:     0x002000000000,         // to replace component.status()
-    NOTICE:     0x004000000000,         // to replace Component.PRINT.NOTICE
-    WARNING:    0x008000000000,         // to replace Component.PRINT.WARNING
-    ERROR:      0x010000000000,         // to replace Component.PRINT.ERROR
-    DEBUG:      0x020000000000,         // to replace Component.PRINT.DEBUG
-    PROGRESS:   0x040000000000,         // to replace Component.PRINT.PROGRESS
-    SCRIPT:     0x080000000000,         // to replace Component.PRINT.SCRIPT
+    NOTICE:     0x004000000000,
+    WARNING:    0x008000000000,
+    ERROR:      0x010000000000,
+    DEBUG:      0x020000000000,
+    PROGRESS:   0x040000000000,
+    SCRIPT:     0x080000000000,
     TYPES:      0x0ff000000000,         // all the above message types; only one (at most) of these should be set
     HALT:       0x400000000000,
     BUFFER:     0x800000000000,
@@ -3801,8 +3836,26 @@ class Component {
         if (DEBUG) {
             if (!f) {
                 if (!s) s = "assertion failure";
-                Component.printf(Messages.ERROR, s);
-                throw new Error(s);
+                /*
+                 * Why do we throw an Error only to immediately catch and ignore it?  Simply to give
+                 * any IDE the opportunity to inspect the application's state.  Even when the IDE has
+                 * control, you should still be able to invoke Debugger commands from the IDE's REPL,
+                 * using the global function that the Debugger constructor defines; eg:
+                 *
+                 *      pcx86('r')
+                 *      pcx86('dw 0:0')
+                 *      pcx86('h')
+                 *      ...
+                 *
+                 * If you have no desire to stop on assertions, consider this a no-op.  However, another
+                 * potential benefit of creating an Error object is that, for browsers like Chrome, we get
+                 * a stack trace, too.
+                 */
+                try {
+                    throw new Error(s);
+                } catch(e) {
+                    Component.printf(Messages.ERROR, "%s\n", e.stack || e.message);
+                }
             }
         }
     }
@@ -4561,30 +4614,8 @@ class Component {
                 s = "assertion failure in " + (this.id || this.type) + (s? ": " + s : "");
                 if (DEBUGGER && this.dbg) {
                     this.dbg.stopCPU();
-                    /*
-                     * Why do we throw an Error only to immediately catch and ignore it?  Simply to give
-                     * any IDE the opportunity to inspect the application's state.  Even when the IDE has
-                     * control, you should still be able to invoke Debugger commands from the IDE's REPL,
-                     * using the global function that the Debugger constructor defines; eg:
-                     *
-                     *      pcx86('r')
-                     *      pcx86('dw 0:0')
-                     *      pcx86('h')
-                     *      ...
-                     *
-                     * If you have no desire to stop on assertions, consider this a no-op.  However, another
-                     * potential benefit of creating an Error object is that, for browsers like Chrome, we get
-                     * a stack trace, too.
-                     */
-                    try {
-                        throw new Error(s);
-                    } catch(e) {
-                        this.printf("%s\n", e.stack || e.message);
-                    }
-                    return;
                 }
-                this.log(s);
-                throw new Error(s);
+
             }
         }
     }
@@ -4956,20 +4987,6 @@ Component.TYPE = {
     NUMBER:     "number",
     OBJECT:     "object",
     STRING:     "string"
-};
-
-/*
- * These are the standard PRINT values you can pass as an optional argument to print(); in reality,
- * you can pass anything you want, because they are simply prepended to the message, although PROGRESS
- * messages may also be merged with earlier similar messages to keep the output buffer under control.
- */
-Component.PRINT = {
-    DEBUG:      "debug",
-    ERROR:      "error",
-    NOTICE:     "notice",
-    PROGRESS:   "progress",
-    SCRIPT:     "script",
-    WARNING:    "warning"
 };
 
 /*

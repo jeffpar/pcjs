@@ -43,7 +43,7 @@ export default class Format {
          * current Debugger preferences.
          */
         this.formatters = {};
-        let predefinedTypes = "ACDFGHMNSTWYbdfjcsoXx%";
+        let predefinedTypes = "ACDFGHMNSTWYBbdfjcsoXx%";
         for (let i = 0; i < predefinedTypes.length; i++) {
             this.formatters[predefinedTypes[i]] = null;
         }
@@ -319,13 +319,16 @@ export default class Format {
             }
 
             switch(type) {
+            /**
+             * "%b" is for boolean-like values.
+             */
             case 'b':
-                /**
-                 * "%b" for boolean-like values is a non-standard format specifier that seems handy.
-                 */
                 buffer += (arg? "true" : "false");
                 break;
 
+            /**
+             * "%d" is for signed decimal numbers.
+             */
             case 'd':
                 /**
                  * I could use "arg |= 0", but there may be some value to supporting integers > 32 bits,
@@ -363,6 +366,9 @@ export default class Format {
                 }
                 /* falls through */
 
+            /**
+             * "%f" is for floating-point numbers.
+             */
             case 'f':
                 arg = +arg;             // convert to a number, if it isn't already
                 s = arg + "";
@@ -384,6 +390,9 @@ export default class Format {
                 buffer += s;
                 break;
 
+            /**
+             * "%j" is for objects (displayed as JSON, with configurable indentation).
+             */
             case 'j':
                 /**
                  * 'j' is one of our non-standard extensions to the sprintf() interface; it signals that
@@ -393,10 +402,16 @@ export default class Format {
                 buffer += JSON.stringify(arg, null, width || undefined);
                 break;
 
+            /**
+             * "%c" is for characters (which can be either single-character strings or ASCII codes).
+             */
             case 'c':
                 arg = typeof arg == "string"? arg[0] : String.fromCharCode(arg);
                 /* falls through */
 
+            /**
+             * "%s" is for strings.
+             */
             case 's':
                 /**
                  * 's' includes some non-standard benefits, such as coercing non-strings to strings first;
@@ -421,16 +436,33 @@ export default class Format {
                 buffer += arg;
                 break;
 
-            case 'o':
-                radix = 8;
-                if (hash) prefix = "0o";
+            /**
+             * "%B" is for binary integers.
+             */
+            case 'B':
+                radix = 2;
+                if (hash) prefix = "0b";
                 /* falls through */
 
+            /**
+             * "%o" is for octal integers.
+             */
+            case 'o':
+                if (!radix) radix = 8;
+                if (!prefix && hash) prefix = "0o";
+                /* falls through */
+
+            /**
+             * "%X" is for hexadecimal integers (using upper-case letters).
+             */
             case 'X':
                 ach = Format.HexUpperCase;
-                // if (hash) prefix = "0X";     // I don't like that %#X uppercases BOTH the prefix and the value
+                // if (!prefix && hash) prefix = "0X";  // I don't like that %#X uppercases BOTH the prefix and the value
                 /* falls through */
 
+            /**
+             * "%x" is for hexadecimal integers (using lower-case letters).
+             */
             case 'x':
                 s = "";
                 if (!radix) radix = 16;
@@ -500,6 +532,9 @@ export default class Format {
                 buffer += prefix + s;
                 break;
 
+            /**
+             * "%%" is for the percent symbol.
+             */
             case '%':
                 buffer += '%';
                 break;
