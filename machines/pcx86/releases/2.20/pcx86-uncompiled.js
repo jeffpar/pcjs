@@ -952,6 +952,13 @@ Messages.Categories = {
 const APPVERSION = "2.00";              // this @define is overridden by the Closure Compiler with the version in machines.json
 
 /**
+ * COMPILED is false by default; overridden with true in the Closure Compiler release.
+ *
+ * @define {boolean}
+ */
+const COMPILED = false;                 // this @define is overridden by the Closure Compiler (to true)
+
+/**
  * @define {string}
  */
 const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
@@ -959,24 +966,7 @@ const COPYRIGHT = "Copyright © 2012-2023 Jeff Parsons <Jeff@pcjs.org>";
 /**
  * @define {string}
  */
-const LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
-
-/**
- * @define {string}
- */
 const CSSCLASS = "pcjs";
-
-/**
- * @define {string}
- */
-const SITEURL = "http://localhost:8088";// this @define is overridden by the Closure Compiler with "https://www.pcjs.org"
-
-/**
- * COMPILED is false by default; overridden with true in the Closure Compiler release.
- *
- * @define {boolean}
- */
-const COMPILED = false;                 // this @define is overridden by the Closure Compiler (to true)
 
 /**
  * DEBUG is true by default, enabling assertions and other runtime checks; overridden with false
@@ -1001,7 +991,12 @@ const DEBUG = true;                     // this @define is overridden by the Clo
  *
  * @define {boolean}
  */
-var DEBUGGER = true;                    // this @define is overridden by the Closure Compiler to remove Debugger-related support
+const DEBUGGER = true;                  // this @define is overridden by the Closure Compiler to remove Debugger-related support
+
+/**
+ * @define {string}
+ */
+const LICENSE = "License: MIT <https://www.pcjs.org/LICENSE.txt>";
 
 /**
  * MAXDEBUG is false by default; overridden with false in the Closure Compiler release.  Set it to
@@ -1061,6 +1056,21 @@ const RS232 = {
     }
 };
 
+/**
+ * @define {string}
+ */
+const SITEURL = "http://localhost:8088";// this @define is overridden by the Closure Compiler with "https://www.pcjs.org"
+
+/**
+ * WEBLOCAL is intended to reflect the webserver's operating mode.  Normally, we assume that all web
+ * resources should be accessed remotely, but if the webserver is running in "developer" mode, then the
+ * webserver will indicate that fact by setting the global variable 'WEBLOCAL' to true on any pages
+ * with embedded machines.
+ *
+ * @define {boolean}
+ */
+var WEBLOCAL = false;
+
 /*
  * This is my initial effort to isolate the use of global variables in a way that is environment-agnostic.
  */
@@ -1077,6 +1087,8 @@ globals.pcjs = globals.window['PCjs'];
 if (!globals.pcjs['machines']) globals.pcjs['machines'] = {};
 if (!globals.pcjs['components']) globals.pcjs['components'] = [];
 if (!globals.pcjs['commands']) globals.pcjs['commands'] = {};
+
+globals.window['WEBLOCAL'] = WEBLOCAL;
 
 
 
@@ -2883,10 +2895,15 @@ class Web {
             return response;
         }
 
-        if (COMPILED || !Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
-            sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
-        } else {
+        /*
+         * While it would be nice to simply import WEBLOCAL from defines.js, that merely defines the *default*
+         * value of the global variable 'WEBLOCAL'; since imported values are immutable, we must look at the global
+         * variable, since that's the only one that can be changed at runtime.
+         */
+        if (globals.window['WEBLOCAL'] && Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
             sURL = sURL.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "/disks/$1/").replace(/^\/discs\/([^/]*)\//, "/disks/cdroms/$1/");
+        } else {
+            sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
         }
 
         if (globals.node.readFileSync) {
@@ -3869,7 +3886,7 @@ Web.addPageEvent(Web.isUserAgent("iOS")? 'onpagehide' : (Web.isUserAgent("Opera"
  *
  * TODO: Consider yet another embedXXX() parameter that would also allow DEBUG to be turned off on a page-by-page basis;
  * it's low priority, because it would only affect machines that explicitly request un-COMPILED code, and there are very
- * few such machines (eg, /_posts/2015-01-17-pcjs-uncompiled.md).
+ * few such machines (eg, /blog/_posts/2015/2015-01-17-pcjs-uncompiled.md).
  *
  * Deal with Web.getURLParm("backtrack") in /machines/pcx86/modules/v2/defines.js at the same time.
  */

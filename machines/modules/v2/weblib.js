@@ -10,7 +10,7 @@
 import Messages from "../v1/messages.js";
 import Component from "./component.js";
 import ReportAPI from "./reportapi.js";
-import { COMPILED, DEBUG, MAXDEBUG, SITEURL, globals } from "./defines.js";
+import { DEBUG, MAXDEBUG, SITEURL, globals } from "./defines.js";
 
 /*
  * According to http://www.w3schools.com/jsref/jsref_obj_global.asp, these are the *global* properties
@@ -136,10 +136,15 @@ export default class Web {
             return response;
         }
 
-        if (COMPILED || !Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
-            sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
-        } else {
+        /*
+         * While it would be nice to simply import WEBLOCAL from defines.js, that merely defines the *default*
+         * value of the global variable 'WEBLOCAL'; since imported values are immutable, we must look at the global
+         * variable, since that's the only one that can be changed at runtime.
+         */
+        if (globals.window['WEBLOCAL'] && Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
             sURL = sURL.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "/disks/$1/").replace(/^\/discs\/([^/]*)\//, "/disks/cdroms/$1/");
+        } else {
+            sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");
         }
 
         if (globals.node.readFileSync) {
@@ -1122,7 +1127,7 @@ Web.addPageEvent(Web.isUserAgent("iOS")? 'onpagehide' : (Web.isUserAgent("Opera"
  *
  * TODO: Consider yet another embedXXX() parameter that would also allow DEBUG to be turned off on a page-by-page basis;
  * it's low priority, because it would only affect machines that explicitly request un-COMPILED code, and there are very
- * few such machines (eg, /_posts/2015-01-17-pcjs-uncompiled.md).
+ * few such machines (eg, /blog/_posts/2015/2015-01-17-pcjs-uncompiled.md).
  *
  * Deal with Web.getURLParm("backtrack") in /machines/pcx86/modules/v2/defines.js at the same time.
  */

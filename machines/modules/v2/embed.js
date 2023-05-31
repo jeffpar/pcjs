@@ -750,4 +750,4 @@ globals.window['commandMachine'] = commandMachine;
 globals.window['enableEvents'] = Web.enablePageEvents;
 globals.window['sendEvent']    = Web.doPageEvent;
 
-export { embedC1P, embedPCx86, embedPCx80, embedPDP10, embedPDP11, commandMachine };
+export { embedC1P, embedPCx86, embedPCx80, embedPDP10, embedPDP11, commandMachine, globals };

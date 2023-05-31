@@ -41,6 +41,18 @@
       }
     },
     {
+      "name": "COMPAQ LTE/286 [Debugger] (Unbundled)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:4000/machines/pcx86/compaq/lte286/",
+      "webRoot": "${workspaceFolder}",
+      "presentation": {
+        "hidden": false,
+        "group": "hardware",
+        "order": 10
+      }
+    },
+    {
       "name": "COMPAQ LTE/286 with CGA",
       "type": "chrome",
       "request": "launch",

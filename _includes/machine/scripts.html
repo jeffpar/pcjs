@@ -244,18 +244,27 @@ template doesn't add them to the Computer component anymore, since we started su
   {%- if machine_factory contains "embed" %}
     {%- if site.pcjs.unbundled or machine.unbundled %}
     <script type="module">
-      import { {{ machine_factory }} } from "/machines/modules/v2/embed.js";
+      import { {{ machine_factory }}, globals } from "/machines/modules/v2/embed.js";
+      {%- if site.developer %}
+      globals.window['WEBLOCAL'] = true;
+      {%- endif %}
       {{ machine_factory }}('{{ machine_id }}','{{ machine_config }}','{{ machine_template }}','{{ machine_parms }}'{{ machine_class }});
     </script>
     {%- else %}
-    <script>{{ machine_factory }}('{{ machine_id }}','{{ machine_config }}','{{ machine_template }}','{{ machine_parms }}'{{ machine_class }});</script>
+    <script>{% if site.developer %}WEBLOCAL = true; {% endif %}{{ machine_factory }}('{{ machine_id }}','{{ machine_config }}','{{ machine_template }}','{{ machine_parms }}'{{ machine_class }});</script>
     {%- endif %}
   {%- elsif site.pcjs.unbundled or machine.unbundled %}
-    <script type="module">PCjsMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
+    <script type="module">
+      {%- if site.developer %}
+      import { globals } from "/machines/modules/v2/defines.js";
+      globals.window['WEBLOCAL'] = true;
+      {%- endif %}
+      PCjsMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');
+    </script>
   {%- elsif site.pcjs.uncompiled or machine.uncompiled %}
-    <script>PCjsMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
+    <script>{% if site.developer %}WEBLOCAL = true; {% endif %}PCjsMachine('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
   {%- else %}
-    <script>{{ machine_factory }}('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
+    <script>{% if site.developer %}WEBLOCAL = true; {% endif %}{{ machine_factory }}('{{ machine_id }}','{{ machine_config | strip_newlines }}','{{ machine_parms }}');</script>
   {%- endif %}
   {%- if machine.sticky == "top" %}
     <script src="{{ site.baseurl }}/machines/modules/v2/sticky.js"></script>
