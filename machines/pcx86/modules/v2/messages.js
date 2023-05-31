@@ -7,7 +7,10 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Messages from "../../../modules/v2/messages.js";
+import CommonMessages from "../../../modules/v1/messages.js";
+
+const Messages = { ...CommonMessages };
+Messages.Categories = { ...CommonMessages.Categories };
 
 /*
  * PCx86 machine message flags.
@@ -51,39 +54,39 @@ Messages.EVENT       = 0x000200000000;
 Messages.KEY         = 0x000400000000;
 Messages.RESERVED    = 0xfff000000000;
 
-Messages.CATEGORIES['cpu']       = Messages.CPU;
-Messages.CATEGORIES['seg']       = Messages.SEG;
-Messages.CATEGORIES['desc']      = Messages.DESC;
-Messages.CATEGORIES['port']      = Messages.PORT;
-Messages.CATEGORIES['tss']       = Messages.TSS;
-Messages.CATEGORIES['iopm']      = Messages.IOPM;
-Messages.CATEGORIES['int']       = Messages.INT;
-Messages.CATEGORIES['nmi']       = Messages.NMI;
-Messages.CATEGORIES['fault']     = Messages.FAULT;
-Messages.CATEGORIES['trap']      = Messages.TRAP;
-Messages.CATEGORIES['bus']       = Messages.BUS;
-Messages.CATEGORIES['irq']       = Messages.IRQ;
-Messages.CATEGORIES['mem']       = Messages.MEM;
-Messages.CATEGORIES['dma']       = Messages.DMA;
-Messages.CATEGORIES['fdc']       = Messages.FDC;
-Messages.CATEGORIES['hdc']       = Messages.HDC;
-Messages.CATEGORIES['disk']      = Messages.DISK;
-Messages.CATEGORIES['pic']       = Messages.PIC;
-Messages.CATEGORIES['timer']     = Messages.TIMER;
-Messages.CATEGORIES['cmos']      = Messages.CMOS;
-Messages.CATEGORIES['rtc']       = Messages.RTC;
-Messages.CATEGORIES['8042']      = Messages.C8042;
-Messages.CATEGORIES['kbd']       = Messages.KBD;
-Messages.CATEGORIES['parallel']  = Messages.PARALLEL;
-Messages.CATEGORIES['serial']    = Messages.SERIAL;
-Messages.CATEGORIES['mouse']     = Messages.MOUSE;
-Messages.CATEGORIES['speaker']   = Messages.SPEAKER;
-Messages.CATEGORIES['chipset']   = Messages.CHIPSET;
-Messages.CATEGORIES['video']     = Messages.VIDEO;
-Messages.CATEGORIES['computer']  = Messages.COMPUTER;
-Messages.CATEGORIES['dos']       = Messages.DOS;
-Messages.CATEGORIES['data']      = Messages.DATA;
-Messages.CATEGORIES['event']     = Messages.EVENT;
-Messages.CATEGORIES['key']       = Messages.KEY;
+Messages.Categories['cpu']       = Messages.CPU;
+Messages.Categories['seg']       = Messages.SEG;
+Messages.Categories['desc']      = Messages.DESC;
+Messages.Categories['port']      = Messages.PORT;
+Messages.Categories['tss']       = Messages.TSS;
+Messages.Categories['iopm']      = Messages.IOPM;
+Messages.Categories['int']       = Messages.INT;
+Messages.Categories['nmi']       = Messages.NMI;
+Messages.Categories['fault']     = Messages.FAULT;
+Messages.Categories['trap']      = Messages.TRAP;
+Messages.Categories['bus']       = Messages.BUS;
+Messages.Categories['irq']       = Messages.IRQ;
+Messages.Categories['mem']       = Messages.MEM;
+Messages.Categories['dma']       = Messages.DMA;
+Messages.Categories['fdc']       = Messages.FDC;
+Messages.Categories['hdc']       = Messages.HDC;
+Messages.Categories['disk']      = Messages.DISK;
+Messages.Categories['pic']       = Messages.PIC;
+Messages.Categories['timer']     = Messages.TIMER;
+Messages.Categories['cmos']      = Messages.CMOS;
+Messages.Categories['rtc']       = Messages.RTC;
+Messages.Categories['8042']      = Messages.C8042;
+Messages.Categories['kbd']       = Messages.KBD;
+Messages.Categories['parallel']  = Messages.PARALLEL;
+Messages.Categories['serial']    = Messages.SERIAL;
+Messages.Categories['mouse']     = Messages.MOUSE;
+Messages.Categories['speaker']   = Messages.SPEAKER;
+Messages.Categories['chipset']   = Messages.CHIPSET;
+Messages.Categories['video']     = Messages.VIDEO;
+Messages.Categories['computer']  = Messages.COMPUTER;
+Messages.Categories['dos']       = Messages.DOS;
+Messages.Categories['data']      = Messages.DATA;
+Messages.Categories['event']     = Messages.EVENT;
+Messages.Categories['key']       = Messages.KEY;
 
 export default Messages;

@@ -97,7 +97,7 @@ export default class C1PPanel extends Component {
         for (var iPanel=0; iPanel < aePanels.length; iPanel++) {
             var ePanel = aePanels[iPanel];
             var parmsPanel = Component.getComponentParms(ePanel);
-            var panel = Component.getComponentByID(parmsPanel['id']);
+            var panel = Component.getComponentByID(parmsPanel['id'], false);
             if (!panel) {
                 fReady = true;
                 panel = new C1PPanel(parmsPanel);

@@ -7,7 +7,10 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Messages from "../../../modules/v2/messages.js";
+import CommonMessages from "../../../modules/v1/messages.js";
+
+const Messages = { ...CommonMessages };
+Messages.Categories = { ...CommonMessages.Categories };
 
 Messages.CPU        = 0x00000002;
 Messages.BUS        = 0x00000004;
@@ -38,19 +41,19 @@ Messages.COMPUTER   = 0x00004000;
  * aware that changing the bit values could break saved Debugger states (not a huge concern, just
  * something to be aware of).
  */
-Messages.CATEGORIES["cpu"]      = Messages.CPU;
-Messages.CATEGORIES["bus"]      = Messages.BUS;
-Messages.CATEGORIES["mem"]      = Messages.MEM;
-Messages.CATEGORIES["port"]     = Messages.PORT;
-Messages.CATEGORIES["nvr"]      = Messages.NVR;
-Messages.CATEGORIES["chipset"]  = Messages.CHIPSET;
-Messages.CATEGORIES["keyboard"] = Messages.KEYBOARD; // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
-Messages.CATEGORIES["key"]      = Messages.KEYS;     // using "key" instead of "keys", since the latter is a method on JavasScript objects
-Messages.CATEGORIES["video"]    = Messages.VIDEO;
-Messages.CATEGORIES["fdc"]      = Messages.FDC;
-Messages.CATEGORIES["disk"]     = Messages.DISK;
-Messages.CATEGORIES["serial"]   = Messages.SERIAL;
-Messages.CATEGORIES["speaker"]  = Messages.SPEAKER;
-Messages.CATEGORIES["computer"] = Messages.COMPUTER;
+Messages.Categories["cpu"]      = Messages.CPU;
+Messages.Categories["bus"]      = Messages.BUS;
+Messages.Categories["mem"]      = Messages.MEM;
+Messages.Categories["port"]     = Messages.PORT;
+Messages.Categories["nvr"]      = Messages.NVR;
+Messages.Categories["chipset"]  = Messages.CHIPSET;
+Messages.Categories["keyboard"] = Messages.KEYBOARD; // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
+Messages.Categories["key"]      = Messages.KEYS;     // using "key" instead of "keys", since the latter is a method on JavasScript objects
+Messages.Categories["video"]    = Messages.VIDEO;
+Messages.Categories["fdc"]      = Messages.FDC;
+Messages.Categories["disk"]     = Messages.DISK;
+Messages.Categories["serial"]   = Messages.SERIAL;
+Messages.Categories["speaker"]  = Messages.SPEAKER;
+Messages.Categories["computer"] = Messages.COMPUTER;
 
 export default Messages;

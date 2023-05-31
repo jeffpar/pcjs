@@ -887,6 +887,62 @@ Format.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "F
 Format.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 /**
+ * @copyright https://www.pcjs.org/modules/v1/messages.js (C) 2012-2023 Jeff Parsons
+ */
+
+/*
+ * Standard machine message flags.
+ *
+ * NOTE: Because this machine defines more than 32 message categories, some of these message flags
+ * exceed 32 bits, so when concatenating, be sure to use "+", not "|".
+ */
+const Messages = {
+    NONE:       0x000000000000,
+    DEFAULT:    0x000000000000,
+    ADDRESS:    0x000000000001,
+    LOG:        0x001000000000,         // to replace component.log()
+    STATUS:     0x002000000000,         // to replace component.status()
+    NOTICE:     0x004000000000,         // to replace Component.PRINT.NOTICE
+    WARNING:    0x008000000000,         // to replace Component.PRINT.WARNING
+    ERROR:      0x010000000000,         // to replace Component.PRINT.ERROR
+    DEBUG:      0x020000000000,         // to replace Component.PRINT.DEBUG
+    PROGRESS:   0x040000000000,         // to replace Component.PRINT.PROGRESS
+    SCRIPT:     0x080000000000,         // to replace Component.PRINT.SCRIPT
+    TYPES:      0x0ff000000000,         // all the above message types; only one (at most) of these should be set
+    HALT:       0x400000000000,
+    BUFFER:     0x800000000000,
+    ALL:        0x000ffffffffe
+};
+
+/*
+ * Message categories supported by the messageEnabled() function and other assorted message
+ * functions. Each category has a corresponding bit value that can be combined (ie, OR'ed) as
+ * needed.  The Debugger's message command ("m") is used to turn message categories on and off,
+ * like so:
+ *
+ *      m port on
+ *      m port off
+ *      ...
+ *
+ * NOTE: The order of these categories can be rearranged, alphabetized, etc, as desired; just be
+ * aware that changing the bit values could break saved Debugger states (not a huge concern, just
+ * something to be aware of).
+ */
+Messages.Categories = {
+    "warn":     Messages.WARNING,
+    /*
+     * Now we turn to message actions rather than message types; for example, setting "halt"
+     * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
+     *
+     * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
+     * until "m buffer off" is issued.
+     */
+    "halt":     Messages.HALT,
+    "buffer":   Messages.BUFFER
+};
+
+
+/**
  * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
  */
 
@@ -1022,62 +1078,6 @@ if (!globals.pcjs['machines']) globals.pcjs['machines'] = {};
 if (!globals.pcjs['components']) globals.pcjs['components'] = [];
 if (!globals.pcjs['commands']) globals.pcjs['commands'] = {};
 
-
-
-/**
- * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
- */
-
-/*
- * Standard machine message flags.
- *
- * NOTE: Because this machine defines more than 32 message categories, some of these message flags
- * exceed 32 bits, so when concatenating, be sure to use "+", not "|".
- */
-const Messages = {
-    NONE:       0x000000000000,
-    DEFAULT:    0x000000000000,
-    ADDRESS:    0x000000000001,
-    LOG:        0x001000000000,         // to replace component.log()
-    STATUS:     0x002000000000,         // to replace component.status()
-    NOTICE:     0x004000000000,         // to replace Component.PRINT.NOTICE
-    WARNING:    0x008000000000,         // to replace Component.PRINT.WARNING
-    ERROR:      0x010000000000,         // to replace Component.PRINT.ERROR
-    DEBUG:      0x020000000000,         // to replace Component.PRINT.DEBUG
-    PROGRESS:   0x040000000000,         // to replace Component.PRINT.PROGRESS
-    SCRIPT:     0x080000000000,         // to replace Component.PRINT.SCRIPT
-    TYPES:      0x0ff000000000,         // all the above message types; only one (at most) of these should be set
-    HALT:       0x400000000000,
-    BUFFER:     0x800000000000,
-    ALL:        0x000ffffffffe
-};
-
-/*
- * Message categories supported by the messageEnabled() function and other assorted message
- * functions. Each category has a corresponding bit value that can be combined (ie, OR'ed) as
- * needed.  The Debugger's message command ("m") is used to turn message categories on and off,
- * like so:
- *
- *      m port on
- *      m port off
- *      ...
- *
- * NOTE: The order of these categories can be rearranged, alphabetized, etc, as desired; just be
- * aware that changing the bit values could break saved Debugger states (not a huge concern, just
- * something to be aware of).
- */
-Messages.CATEGORIES = {
-    "warn":     Messages.WARNING,
-    /*
-     * Now we turn to message actions rather than message types; for example, setting "halt"
-     * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
-     *
-     * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
-     * until "m buffer off" is issued.
-     */
-    "halt":     Messages.HALT,
-    "buffer":   Messages.BUFFER
-};
 
 
 /**
@@ -4402,10 +4402,10 @@ class Component {
      *
      * @param {string} sType of the desired component
      * @param {string} [idRelated] of related component
-     * @param {Component|null} [componentPrev] of previously returned component, if any
+     * @param {Component|boolean|null} [componentPrev] of previously returned component, if any
      * @returns {Component|null}
      */
-    static getComponentByType(sType, idRelated, componentPrev)
+    static getComponentByType(sType, idRelated, componentPrev = null)
     {
         if (sType !== undefined) {
             let i;
@@ -4431,7 +4431,9 @@ class Component {
                     return components[i];
                 }
             }
-            if (MAXDEBUG) Component.printf(Messages.WARNING, "Component type \"%s\" not found\n", sType);
+            if (MAXDEBUG && componentPrev !== false) {
+                Component.printf(Messages.WARNING, "Component type \"%s\" not found\n", sType);
+            }
         }
         return null;
     }
@@ -5684,6 +5686,88 @@ if (DEBUG) {
     }
 }
 
+
+
+/**
+ * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
+ */
+
+/*
+ * PCx86 machine message flags.
+ *
+ * NOTE: Because this machine defines more than 32 message categories, some of these message flags
+ * exceed 32 bits, so when concatenating, be sure to use "+", not "|".
+ */
+Messages.CPU         = 0x000000000002;
+Messages.SEG         = 0x000000000004;
+Messages.DESC        = 0x000000000008;
+Messages.TSS         = 0x000000000010;
+Messages.PORT        = 0x000000000020;
+Messages.IOPM        = 0x000000000040;
+Messages.NMI         = 0x000000000080;
+Messages.TRAP        = 0x000000000100;
+Messages.FAULT       = 0x000000000200;
+Messages.INT         = 0x000000000400;
+Messages.IRQ         = 0x000000000800;
+Messages.BUS         = 0x000000001000;
+Messages.MEM         = 0x000000002000;
+Messages.DMA         = 0x000000004000;
+Messages.FDC         = 0x000000008000;
+Messages.HDC         = 0x000000010000;
+Messages.DISK        = 0x000000020000;
+Messages.PIC         = 0x000000040000;
+Messages.TIMER       = 0x000000080000;
+Messages.CMOS        = 0x000000100000;
+Messages.RTC         = 0x000000200000;
+Messages.C8042       = 0x000000400000;
+Messages.KBD         = 0x000000800000;
+Messages.PARALLEL    = 0x000001000000;
+Messages.SERIAL      = 0x000002000000;
+Messages.MOUSE       = 0x000004000000;
+Messages.SPEAKER     = 0x000008000000;
+Messages.CHIPSET     = 0x000010000000;
+Messages.VIDEO       = 0x000020000000;
+Messages.COMPUTER    = 0x000040000000;
+Messages.DATA        = 0x000080000000;
+Messages.DOS         = 0x000100000000;
+Messages.EVENT       = 0x000200000000;
+Messages.KEY         = 0x000400000000;
+Messages.RESERVED    = 0xfff000000000;
+
+Messages.Categories['cpu']       = Messages.CPU;
+Messages.Categories['seg']       = Messages.SEG;
+Messages.Categories['desc']      = Messages.DESC;
+Messages.Categories['port']      = Messages.PORT;
+Messages.Categories['tss']       = Messages.TSS;
+Messages.Categories['iopm']      = Messages.IOPM;
+Messages.Categories['int']       = Messages.INT;
+Messages.Categories['nmi']       = Messages.NMI;
+Messages.Categories['fault']     = Messages.FAULT;
+Messages.Categories['trap']      = Messages.TRAP;
+Messages.Categories['bus']       = Messages.BUS;
+Messages.Categories['irq']       = Messages.IRQ;
+Messages.Categories['mem']       = Messages.MEM;
+Messages.Categories['dma']       = Messages.DMA;
+Messages.Categories['fdc']       = Messages.FDC;
+Messages.Categories['hdc']       = Messages.HDC;
+Messages.Categories['disk']      = Messages.DISK;
+Messages.Categories['pic']       = Messages.PIC;
+Messages.Categories['timer']     = Messages.TIMER;
+Messages.Categories['cmos']      = Messages.CMOS;
+Messages.Categories['rtc']       = Messages.RTC;
+Messages.Categories['8042']      = Messages.C8042;
+Messages.Categories['kbd']       = Messages.KBD;
+Messages.Categories['parallel']  = Messages.PARALLEL;
+Messages.Categories['serial']    = Messages.SERIAL;
+Messages.Categories['mouse']     = Messages.MOUSE;
+Messages.Categories['speaker']   = Messages.SPEAKER;
+Messages.Categories['chipset']   = Messages.CHIPSET;
+Messages.Categories['video']     = Messages.VIDEO;
+Messages.Categories['computer']  = Messages.COMPUTER;
+Messages.Categories['dos']       = Messages.DOS;
+Messages.Categories['data']      = Messages.DATA;
+Messages.Categories['event']     = Messages.EVENT;
+Messages.Categories['key']       = Messages.KEY;
 
 
 /**
@@ -8832,88 +8916,6 @@ Interrupts.FUNCS[Interrupts.WINDBG.VECTOR] = {
 
 
 /**
- * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
- */
-
-/*
- * PCx86 machine message flags.
- *
- * NOTE: Because this machine defines more than 32 message categories, some of these message flags
- * exceed 32 bits, so when concatenating, be sure to use "+", not "|".
- */
-Messages.CPU         = 0x000000000002;
-Messages.SEG         = 0x000000000004;
-Messages.DESC        = 0x000000000008;
-Messages.TSS         = 0x000000000010;
-Messages.PORT        = 0x000000000020;
-Messages.IOPM        = 0x000000000040;
-Messages.NMI         = 0x000000000080;
-Messages.TRAP        = 0x000000000100;
-Messages.FAULT       = 0x000000000200;
-Messages.INT         = 0x000000000400;
-Messages.IRQ         = 0x000000000800;
-Messages.BUS         = 0x000000001000;
-Messages.MEM         = 0x000000002000;
-Messages.DMA         = 0x000000004000;
-Messages.FDC         = 0x000000008000;
-Messages.HDC         = 0x000000010000;
-Messages.DISK        = 0x000000020000;
-Messages.PIC         = 0x000000040000;
-Messages.TIMER       = 0x000000080000;
-Messages.CMOS        = 0x000000100000;
-Messages.RTC         = 0x000000200000;
-Messages.C8042       = 0x000000400000;
-Messages.KBD         = 0x000000800000;
-Messages.PARALLEL    = 0x000001000000;
-Messages.SERIAL      = 0x000002000000;
-Messages.MOUSE       = 0x000004000000;
-Messages.SPEAKER     = 0x000008000000;
-Messages.CHIPSET     = 0x000010000000;
-Messages.VIDEO       = 0x000020000000;
-Messages.COMPUTER    = 0x000040000000;
-Messages.DATA        = 0x000080000000;
-Messages.DOS         = 0x000100000000;
-Messages.EVENT       = 0x000200000000;
-Messages.KEY         = 0x000400000000;
-Messages.RESERVED    = 0xfff000000000;
-
-Messages.CATEGORIES['cpu']       = Messages.CPU;
-Messages.CATEGORIES['seg']       = Messages.SEG;
-Messages.CATEGORIES['desc']      = Messages.DESC;
-Messages.CATEGORIES['port']      = Messages.PORT;
-Messages.CATEGORIES['tss']       = Messages.TSS;
-Messages.CATEGORIES['iopm']      = Messages.IOPM;
-Messages.CATEGORIES['int']       = Messages.INT;
-Messages.CATEGORIES['nmi']       = Messages.NMI;
-Messages.CATEGORIES['fault']     = Messages.FAULT;
-Messages.CATEGORIES['trap']      = Messages.TRAP;
-Messages.CATEGORIES['bus']       = Messages.BUS;
-Messages.CATEGORIES['irq']       = Messages.IRQ;
-Messages.CATEGORIES['mem']       = Messages.MEM;
-Messages.CATEGORIES['dma']       = Messages.DMA;
-Messages.CATEGORIES['fdc']       = Messages.FDC;
-Messages.CATEGORIES['hdc']       = Messages.HDC;
-Messages.CATEGORIES['disk']      = Messages.DISK;
-Messages.CATEGORIES['pic']       = Messages.PIC;
-Messages.CATEGORIES['timer']     = Messages.TIMER;
-Messages.CATEGORIES['cmos']      = Messages.CMOS;
-Messages.CATEGORIES['rtc']       = Messages.RTC;
-Messages.CATEGORIES['8042']      = Messages.C8042;
-Messages.CATEGORIES['kbd']       = Messages.KBD;
-Messages.CATEGORIES['parallel']  = Messages.PARALLEL;
-Messages.CATEGORIES['serial']    = Messages.SERIAL;
-Messages.CATEGORIES['mouse']     = Messages.MOUSE;
-Messages.CATEGORIES['speaker']   = Messages.SPEAKER;
-Messages.CATEGORIES['chipset']   = Messages.CHIPSET;
-Messages.CATEGORIES['video']     = Messages.VIDEO;
-Messages.CATEGORIES['computer']  = Messages.COMPUTER;
-Messages.CATEGORIES['dos']       = Messages.DOS;
-Messages.CATEGORIES['data']      = Messages.DATA;
-Messages.CATEGORIES['event']     = Messages.EVENT;
-Messages.CATEGORIES['key']       = Messages.KEY;
-
-
-/**
  * @copyright https://www.pcjs.org/modules/v2/panel.js (C) 2012-2023 Jeff Parsons
  */
 
@@ -9904,7 +9906,7 @@ class Panel extends Component {
         for (let iPanel=0; iPanel < aePanels.length; iPanel++) {
             let ePanel = aePanels[iPanel];
             let parmsPanel = Component.getComponentParms(ePanel);
-            let panel = Component.getComponentByID(parmsPanel['id']);
+            let panel = Component.getComponentByID(parmsPanel['id'], false);
             if (!panel) {
                 fReady = true;
                 panel = new Panel(parmsPanel);
@@ -10929,10 +10931,10 @@ class BusX86 extends Component {
                 if (btiPrev && slotPrev) {
                     let btoPrev = this.abtObjects[slotPrev-1];
                     if (!btoPrev) {
-                        this.printf(Messages.DEBUG + Messages.WARNING, "writeBackTrack(%%x,%x): previous index (%x) refers to empty slot (%d)\n", addr, bti, btiPrev, slotPrev);
+                        this.printf(Messages.DEBUG + Messages.WARNING, "writeBackTrack(%%%x,%x): previous index (%x) refers to empty slot (%d)\n", addr, bti, btiPrev, slotPrev);
                     }
                     else if (btoPrev.refs <= 0) {
-                        this.printf(Messages.DEBUG + Messages.WARNING, "writeBackTrack(%%x,%x): previous index (%x) refers to object with bad ref count (%d)\n", addr, bti, btiPrev, btoPrev.refs);
+                        this.printf(Messages.DEBUG + Messages.WARNING, "writeBackTrack(%%%x,%x): previous index (%x) refers to object with bad ref count (%d)\n", addr, bti, btiPrev, btoPrev.refs);
                         /*
                          * We used to just slam a null into the previous slot and consider it gone, but there may still
                          * be "weak references" to that slot (ie, it may still be associated with a register bti).
@@ -12232,7 +12234,7 @@ class MemoryX86 {
     printAddr(sMessage)
     {
         if (DEBUG && this.dbg) {
-            this.dbg.printf(Messages.MEM, "%s %%x #%s\n", this.addr, this.id);
+            this.dbg.printf(Messages.MEM, "%s %%%x #%s\n", this.addr, this.id);
         }
     }
 
@@ -12345,7 +12347,7 @@ class MemoryX86 {
     readNone(off, addr)
     {
         if (DEBUGGER && this.dbg) {
-            this.dbg.printf(Messages.CPU + Messages.MEM, "attempt to read invalid block %%x\n", addr);
+            this.dbg.printf(Messages.CPU + Messages.MEM, "attempt to read invalid block %%%x\n", addr);
         }
         return 0xff;
     }
@@ -12361,7 +12363,7 @@ class MemoryX86 {
     writeNone(off, v, addr)
     {
         if (DEBUGGER && this.dbg) {
-            this.dbg.printf(Messages.CPU + Messages.MEM, "attempt to write %#06x to invalid block %%x\n", v, addr);
+            this.dbg.printf(Messages.CPU + Messages.MEM, "attempt to write %#06x to invalid block %%%x\n", v, addr);
         }
     }
 
@@ -52725,7 +52727,7 @@ class VideoX86 extends Component {
             this.kbd.setBinding(this.inputTextArea? "textarea" : "canvas", "screen", this.inputScreen);
         }
 
-        this.panel = cmp.getMachineComponent("Panel");
+        this.panel = cmp.getMachineComponent("Panel", false);
         for (let i = 0; i < this.bindingsExternal.length; i++) {
             let binding = this.bindingsExternal[i];
             if (this.kbd && this.kbd.setBinding(...binding)) continue;
@@ -52746,7 +52748,7 @@ class VideoX86 extends Component {
          * touch-screen support.
          */
         if (this.sTouchScreen == "mouse") {
-            this.mouse = cmp.getMachineComponent("Mouse");
+            this.mouse = cmp.getMachineComponent("Mouse", false);
             if (this.mouse) this.captureTouch(VideoX86.TOUCH.MOUSE);
         }
         else if (this.sTouchScreen == "keygrid") {
@@ -64574,7 +64576,7 @@ class FDC extends Component {
         this.chipset = cmp.getMachineComponent("ChipSet");
         this.configMount = this.parseMount(this.cmp.getMachineParm('autoMount'), this.configMount);
 
-        this.panel = cmp.getMachineComponent("Panel");
+        this.panel = cmp.getMachineComponent("Panel", false);
 
         /*
          * If we didn't need auto-mount support, we could defer controller initialization until we received a powerUp() notification,
@@ -74786,10 +74788,10 @@ class DebuggerX86 extends DbgLib {
         this.aMessageBuffer = [];
         let aEnable = this.parseCommand(sEnable, false, '|');
         if (aEnable.length) {
-            this.bitsMessage = Messages.NONE;   // when specific messages are being enabled, WARN must be explicitly set
-            for (let m in Messages.CATEGORIES) {
+            this.bitsMessage = Messages.NONE;   // when specific messages are being enabled, WARNING must be explicitly set
+            for (let m in Messages.Categories) {
                 if (Usr.indexOf(aEnable, m) >= 0) {
-                    this.bitsMessage += Messages.CATEGORIES[m];
+                    this.bitsMessage += Messages.Categories[m];
                     this.printf("%s messages enabled\n", m);
                 }
             }
@@ -74807,8 +74809,8 @@ class DebuggerX86 extends DbgLib {
      */
     messageDump(bitMessage, fnDumper)
     {
-        for (let m in Messages.CATEGORIES) {
-            if (bitMessage == Messages.CATEGORIES[m]) {
+        for (let m in Messages.Categories) {
+            if (bitMessage == Messages.Categories[m]) {
                 this.afnDumpers[m] = fnDumper;
                 return true;
             }
@@ -75126,7 +75128,7 @@ class DebuggerX86 extends DbgLib {
     message(sMessage, bitsMessage = 0)
     {
         if ((bitsMessage & Messages.ADDRESS) && this.cpu) {
-            let sAddress = Str.sprintf(" at %s (%%x)$1",  this.toHexAddr(this.newAddr(this.cpu.getIP(), this.cpu.getCS())), this.cpu.regLIP);
+            let sAddress = Str.sprintf(" at %s (%%%X)$1",  this.toHexAddr(this.newAddr(this.cpu.getIP(), this.cpu.getCS())), this.cpu.regLIP);
             sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
 
@@ -75260,7 +75262,7 @@ class DebuggerX86 extends DbgLib {
          */
         bitsMessage = this.setBits(bitsMessage || 0, Messages.PORT);
         /*
-         * We don't want to see "unknown" I/O messages unless WARN is enabled.
+         * We don't want to see "unknown" I/O messages unless WARNING is enabled.
          */
         if (!name) bitsMessage = this.setBits(bitsMessage, Messages.WARNING);
 
@@ -77483,7 +77485,7 @@ class DebuggerX86 extends DbgLib {
 
         if (sAddr == '?') {
             let sDumpers = "";
-            for (m in Messages.CATEGORIES) {
+            for (m in Messages.Categories) {
                 if (this.afnDumpers[m]) {
                     if (sDumpers) sDumpers += ',';
                     sDumpers += m;
@@ -77571,7 +77573,7 @@ class DebuggerX86 extends DbgLib {
                 this.doLoad(asArgs);
                 return;
             }
-            for (m in Messages.CATEGORIES) {
+            for (m in Messages.Categories) {
                 if (asArgs[1] == m) {
                     let fnDumper = this.afnDumpers[m];
                     if (fnDumper) {
@@ -78161,9 +78163,9 @@ class DebuggerX86 extends DbgLib {
                 fCriteria = false;
                 sCategory = null;
             } else {
-                for (m in Messages.CATEGORIES) {
+                for (m in Messages.Categories) {
                     if (sCategory == m) {
-                        bitsMessage = Messages.CATEGORIES[m];
+                        bitsMessage = Messages.Categories[m];
                         fCriteria = this.testBits(this.bitsMessage, bitsMessage);
                         break;
                     }
@@ -78194,9 +78196,9 @@ class DebuggerX86 extends DbgLib {
          */
         let n = 0;
         let sCategories = "";
-        for (m in Messages.CATEGORIES) {
+        for (m in Messages.Categories) {
             if (!sCategory || sCategory == m) {
-                let bitsMessage = Messages.CATEGORIES[m];
+                let bitsMessage = Messages.Categories[m];
                 let fEnabled = this.testBits(this.bitsMessage, bitsMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';

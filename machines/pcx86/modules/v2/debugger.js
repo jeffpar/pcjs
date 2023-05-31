@@ -2141,10 +2141,10 @@ export default class DebuggerX86 extends DbgLib {
         this.aMessageBuffer = [];
         let aEnable = this.parseCommand(sEnable, false, '|');
         if (aEnable.length) {
-            this.bitsMessage = Messages.NONE;   // when specific messages are being enabled, WARN must be explicitly set
-            for (let m in Messages.CATEGORIES) {
+            this.bitsMessage = Messages.NONE;   // when specific messages are being enabled, WARNING must be explicitly set
+            for (let m in Messages.Categories) {
                 if (Usr.indexOf(aEnable, m) >= 0) {
-                    this.bitsMessage += Messages.CATEGORIES[m];
+                    this.bitsMessage += Messages.Categories[m];
                     this.printf("%s messages enabled\n", m);
                 }
             }
@@ -2162,8 +2162,8 @@ export default class DebuggerX86 extends DbgLib {
      */
     messageDump(bitMessage, fnDumper)
     {
-        for (let m in Messages.CATEGORIES) {
-            if (bitMessage == Messages.CATEGORIES[m]) {
+        for (let m in Messages.Categories) {
+            if (bitMessage == Messages.Categories[m]) {
                 this.afnDumpers[m] = fnDumper;
                 return true;
             }
@@ -2481,7 +2481,7 @@ export default class DebuggerX86 extends DbgLib {
     message(sMessage, bitsMessage = 0)
     {
         if ((bitsMessage & Messages.ADDRESS) && this.cpu) {
-            let sAddress = Str.sprintf(" at %s (%%x)$1",  this.toHexAddr(this.newAddr(this.cpu.getIP(), this.cpu.getCS())), this.cpu.regLIP);
+            let sAddress = Str.sprintf(" at %s (%%%X)$1",  this.toHexAddr(this.newAddr(this.cpu.getIP(), this.cpu.getCS())), this.cpu.regLIP);
             sMessage = sMessage.replace(/(\n?)$/, sAddress);
         }
 
@@ -2615,7 +2615,7 @@ export default class DebuggerX86 extends DbgLib {
          */
         bitsMessage = this.setBits(bitsMessage || 0, Messages.PORT);
         /*
-         * We don't want to see "unknown" I/O messages unless WARN is enabled.
+         * We don't want to see "unknown" I/O messages unless WARNING is enabled.
          */
         if (!name) bitsMessage = this.setBits(bitsMessage, Messages.WARNING);
 
@@ -4838,7 +4838,7 @@ export default class DebuggerX86 extends DbgLib {
 
         if (sAddr == '?') {
             let sDumpers = "";
-            for (m in Messages.CATEGORIES) {
+            for (m in Messages.Categories) {
                 if (this.afnDumpers[m]) {
                     if (sDumpers) sDumpers += ',';
                     sDumpers += m;
@@ -4926,7 +4926,7 @@ export default class DebuggerX86 extends DbgLib {
                 this.doLoad(asArgs);
                 return;
             }
-            for (m in Messages.CATEGORIES) {
+            for (m in Messages.Categories) {
                 if (asArgs[1] == m) {
                     let fnDumper = this.afnDumpers[m];
                     if (fnDumper) {
@@ -5516,9 +5516,9 @@ export default class DebuggerX86 extends DbgLib {
                 fCriteria = false;
                 sCategory = null;
             } else {
-                for (m in Messages.CATEGORIES) {
+                for (m in Messages.Categories) {
                     if (sCategory == m) {
-                        bitsMessage = Messages.CATEGORIES[m];
+                        bitsMessage = Messages.Categories[m];
                         fCriteria = this.testBits(this.bitsMessage, bitsMessage);
                         break;
                     }
@@ -5549,9 +5549,9 @@ export default class DebuggerX86 extends DbgLib {
          */
         let n = 0;
         let sCategories = "";
-        for (m in Messages.CATEGORIES) {
+        for (m in Messages.Categories) {
             if (!sCategory || sCategory == m) {
-                let bitsMessage = Messages.CATEGORIES[m];
+                let bitsMessage = Messages.Categories[m];
                 let fEnabled = this.testBits(this.bitsMessage, bitsMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';

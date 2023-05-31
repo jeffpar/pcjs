@@ -7,8 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import Messages from "../v1/messages.js";
 import Component from "./component.js";
-import Messages from "./messages.js";
 import ReportAPI from "./reportapi.js";
 import { COMPILED, DEBUG, MAXDEBUG, SITEURL, globals } from "./defines.js";
 

@@ -947,10 +947,10 @@ export default class BusX86 extends Component {
                 if (btiPrev && slotPrev) {
                     let btoPrev = this.abtObjects[slotPrev-1];
                     if (!btoPrev) {
-                        this.printf(Messages.DEBUG + Messages.WARNING, "writeBackTrack(%%x,%x): previous index (%x) refers to empty slot (%d)\n", addr, bti, btiPrev, slotPrev);
+                        this.printf(Messages.DEBUG + Messages.WARNING, "writeBackTrack(%%%x,%x): previous index (%x) refers to empty slot (%d)\n", addr, bti, btiPrev, slotPrev);
                     }
                     else if (btoPrev.refs <= 0) {
-                        this.printf(Messages.DEBUG + Messages.WARNING, "writeBackTrack(%%x,%x): previous index (%x) refers to object with bad ref count (%d)\n", addr, bti, btiPrev, btoPrev.refs);
+                        this.printf(Messages.DEBUG + Messages.WARNING, "writeBackTrack(%%%x,%x): previous index (%x) refers to object with bad ref count (%d)\n", addr, bti, btiPrev, btoPrev.refs);
                         /*
                          * We used to just slam a null into the previous slot and consider it gone, but there may still
                          * be "weak references" to that slot (ie, it may still be associated with a register bti).

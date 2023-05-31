@@ -45,7 +45,7 @@ const Messages = {
  * aware that changing the bit values could break saved Debugger states (not a huge concern, just
  * something to be aware of).
  */
-Messages.CATEGORIES = {
+Messages.Categories = {
     "warn":     Messages.WARNING,
     /*
      * Now we turn to message actions rather than message types; for example, setting "halt"

@@ -28,7 +28,7 @@
  * default parameters.
  */
 
-import Messages from "./messages.js";
+import Messages from "../v1/messages.js";
 import Str from "./strlib.js";
 import { COMPILED, DEBUG, DEBUGGER, MAXDEBUG, globals } from "./defines.js";
 
@@ -528,10 +528,10 @@ export default class Component {
      *
      * @param {string} sType of the desired component
      * @param {string} [idRelated] of related component
-     * @param {Component|null} [componentPrev] of previously returned component, if any
+     * @param {Component|boolean|null} [componentPrev] of previously returned component, if any
      * @returns {Component|null}
      */
-    static getComponentByType(sType, idRelated, componentPrev)
+    static getComponentByType(sType, idRelated, componentPrev = null)
     {
         if (sType !== undefined) {
             let i;
@@ -557,7 +557,9 @@ export default class Component {
                     return components[i];
                 }
             }
-            if (MAXDEBUG) Component.printf(Messages.WARNING, "Component type \"%s\" not found\n", sType);
+            if (MAXDEBUG && componentPrev !== false) {
+                Component.printf(Messages.WARNING, "Component type \"%s\" not found\n", sType);
+            }
         }
         return null;
     }

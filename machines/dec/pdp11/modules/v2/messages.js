@@ -7,7 +7,10 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Messages from "../../../../modules/v2/messages.js";
+import CommonMessages from "../../../../modules/v1/messages.js";
+
+const Messages = { ...CommonMessages };
+Messages.Categories = { ...CommonMessages.Categories };
 
 Messages.CPU         = 0x00000002;
 Messages.TRAP        = 0x00000004;
@@ -50,31 +53,31 @@ Messages.COMPUTER    = 0x04000000;
  * aware that changing the bit values could break saved Debugger states (not a huge concern, just
  * something to be aware of).
  */
-Messages.CATEGORIES["cpu"]       = Messages.CPU;
-Messages.CATEGORIES["trap"]      = Messages.TRAP;
-Messages.CATEGORIES["fault"]     = Messages.FAULT;
-Messages.CATEGORIES["int"]       = Messages.INT;
-Messages.CATEGORIES["bus"]       = Messages.BUS;
-Messages.CATEGORIES["memory"]    = Messages.MEMORY;
-Messages.CATEGORIES["mmu"]       = Messages.MMU;
-Messages.CATEGORIES["rom"]       = Messages.ROM;
-Messages.CATEGORIES["device"]    = Messages.DEVICE;
-Messages.CATEGORIES["panel"]     = Messages.PANEL;
-Messages.CATEGORIES["keyboard"]  = Messages.KEYBOARD;   // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
-Messages.CATEGORIES["key"]       = Messages.KEYS,       // using "key" instead of "keys"; since the latter is a method on JavasScript objects
-Messages.CATEGORIES["pc11"]      = Messages.PC11;
-Messages.CATEGORIES["paper"]     = Messages.PAPER;
-Messages.CATEGORIES["disk"]      = Messages.DISK;
-Messages.CATEGORIES["read"]      = Messages.READ;
-Messages.CATEGORIES["write"]     = Messages.WRITE;
-Messages.CATEGORIES["rk11"]      = Messages.RK11;
-Messages.CATEGORIES["rl11"]      = Messages.RL11;
-Messages.CATEGORIES["rx11"]      = Messages.RX11;
-Messages.CATEGORIES["dl11"]      = Messages.DL11;
-Messages.CATEGORIES["serial"]    = Messages.SERIAL;
-Messages.CATEGORIES["kw11"]      = Messages.KW11;
-Messages.CATEGORIES["timer"]     = Messages.TIMER;
-Messages.CATEGORIES["speaker"]   = Messages.SPEAKER;
-Messages.CATEGORIES["computer"]  = Messages.COMPUTER;
+Messages.Categories["cpu"]       = Messages.CPU;
+Messages.Categories["trap"]      = Messages.TRAP;
+Messages.Categories["fault"]     = Messages.FAULT;
+Messages.Categories["int"]       = Messages.INT;
+Messages.Categories["bus"]       = Messages.BUS;
+Messages.Categories["memory"]    = Messages.MEMORY;
+Messages.Categories["mmu"]       = Messages.MMU;
+Messages.Categories["rom"]       = Messages.ROM;
+Messages.Categories["device"]    = Messages.DEVICE;
+Messages.Categories["panel"]     = Messages.PANEL;
+Messages.Categories["keyboard"]  = Messages.KEYBOARD;   // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
+Messages.Categories["key"]       = Messages.KEYS,       // using "key" instead of "keys"; since the latter is a method on JavasScript objects
+Messages.Categories["pc11"]      = Messages.PC11;
+Messages.Categories["paper"]     = Messages.PAPER;
+Messages.Categories["disk"]      = Messages.DISK;
+Messages.Categories["read"]      = Messages.READ;
+Messages.Categories["write"]     = Messages.WRITE;
+Messages.Categories["rk11"]      = Messages.RK11;
+Messages.Categories["rl11"]      = Messages.RL11;
+Messages.Categories["rx11"]      = Messages.RX11;
+Messages.Categories["dl11"]      = Messages.DL11;
+Messages.Categories["serial"]    = Messages.SERIAL;
+Messages.Categories["kw11"]      = Messages.KW11;
+Messages.Categories["timer"]     = Messages.TIMER;
+Messages.Categories["speaker"]   = Messages.SPEAKER;
+Messages.Categories["computer"]  = Messages.COMPUTER;
 
 export default Messages;

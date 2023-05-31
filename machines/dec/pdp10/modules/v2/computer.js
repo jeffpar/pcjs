@@ -1426,10 +1426,10 @@ export default class ComputerPDP10 extends Component {
      *
      * @this {ComputerPDP10}
      * @param {string} sType
-     * @param {Component|null} [componentPrev] of previously returned component, if any
+     * @param {Component|boolean|null} [componentPrev] of previously returned component, if any
      * @returns {Component|null}
      */
-    getMachineComponent(sType, componentPrev)
+    getMachineComponent(sType, componentPrev = null)
     {
         var componentLast = componentPrev;
         var aComponents = Component.getComponents(this.id);
@@ -1441,7 +1441,9 @@ export default class ComputerPDP10 extends Component {
             }
             if (component.type == sType) return component;
         }
-        if (!componentLast && DEBUG) this.printf(Messages.LOG, "Machine component type \"%s\" not found\n", sType);
+        if (!componentLast && DEBUG && componentPrev !== false) {
+            this.printf(Messages.WARNING, "Machine component type \"%s\" not found\n", sType);
+        }
         return null;
     }
 

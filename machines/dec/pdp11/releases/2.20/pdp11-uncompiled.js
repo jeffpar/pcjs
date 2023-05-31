@@ -523,6 +523,62 @@ Format.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "F
 Format.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 /**
+ * @copyright https://www.pcjs.org/modules/v1/messages.js (C) 2012-2023 Jeff Parsons
+ */
+
+/*
+ * Standard machine message flags.
+ *
+ * NOTE: Because this machine defines more than 32 message categories, some of these message flags
+ * exceed 32 bits, so when concatenating, be sure to use "+", not "|".
+ */
+const Messages = {
+    NONE:       0x000000000000,
+    DEFAULT:    0x000000000000,
+    ADDRESS:    0x000000000001,
+    LOG:        0x001000000000,         // to replace component.log()
+    STATUS:     0x002000000000,         // to replace component.status()
+    NOTICE:     0x004000000000,         // to replace Component.PRINT.NOTICE
+    WARNING:    0x008000000000,         // to replace Component.PRINT.WARNING
+    ERROR:      0x010000000000,         // to replace Component.PRINT.ERROR
+    DEBUG:      0x020000000000,         // to replace Component.PRINT.DEBUG
+    PROGRESS:   0x040000000000,         // to replace Component.PRINT.PROGRESS
+    SCRIPT:     0x080000000000,         // to replace Component.PRINT.SCRIPT
+    TYPES:      0x0ff000000000,         // all the above message types; only one (at most) of these should be set
+    HALT:       0x400000000000,
+    BUFFER:     0x800000000000,
+    ALL:        0x000ffffffffe
+};
+
+/*
+ * Message categories supported by the messageEnabled() function and other assorted message
+ * functions. Each category has a corresponding bit value that can be combined (ie, OR'ed) as
+ * needed.  The Debugger's message command ("m") is used to turn message categories on and off,
+ * like so:
+ *
+ *      m port on
+ *      m port off
+ *      ...
+ *
+ * NOTE: The order of these categories can be rearranged, alphabetized, etc, as desired; just be
+ * aware that changing the bit values could break saved Debugger states (not a huge concern, just
+ * something to be aware of).
+ */
+Messages.Categories = {
+    "warn":     Messages.WARNING,
+    /*
+     * Now we turn to message actions rather than message types; for example, setting "halt"
+     * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
+     *
+     * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
+     * until "m buffer off" is issued.
+     */
+    "halt":     Messages.HALT,
+    "buffer":   Messages.BUFFER
+};
+
+
+/**
  * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
  */
 
@@ -658,62 +714,6 @@ if (!globals.pcjs['machines']) globals.pcjs['machines'] = {};
 if (!globals.pcjs['components']) globals.pcjs['components'] = [];
 if (!globals.pcjs['commands']) globals.pcjs['commands'] = {};
 
-
-
-/**
- * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
- */
-
-/*
- * Standard machine message flags.
- *
- * NOTE: Because this machine defines more than 32 message categories, some of these message flags
- * exceed 32 bits, so when concatenating, be sure to use "+", not "|".
- */
-const Messages = {
-    NONE:       0x000000000000,
-    DEFAULT:    0x000000000000,
-    ADDRESS:    0x000000000001,
-    LOG:        0x001000000000,         // to replace component.log()
-    STATUS:     0x002000000000,         // to replace component.status()
-    NOTICE:     0x004000000000,         // to replace Component.PRINT.NOTICE
-    WARNING:    0x008000000000,         // to replace Component.PRINT.WARNING
-    ERROR:      0x010000000000,         // to replace Component.PRINT.ERROR
-    DEBUG:      0x020000000000,         // to replace Component.PRINT.DEBUG
-    PROGRESS:   0x040000000000,         // to replace Component.PRINT.PROGRESS
-    SCRIPT:     0x080000000000,         // to replace Component.PRINT.SCRIPT
-    TYPES:      0x0ff000000000,         // all the above message types; only one (at most) of these should be set
-    HALT:       0x400000000000,
-    BUFFER:     0x800000000000,
-    ALL:        0x000ffffffffe
-};
-
-/*
- * Message categories supported by the messageEnabled() function and other assorted message
- * functions. Each category has a corresponding bit value that can be combined (ie, OR'ed) as
- * needed.  The Debugger's message command ("m") is used to turn message categories on and off,
- * like so:
- *
- *      m port on
- *      m port off
- *      ...
- *
- * NOTE: The order of these categories can be rearranged, alphabetized, etc, as desired; just be
- * aware that changing the bit values could break saved Debugger states (not a huge concern, just
- * something to be aware of).
- */
-Messages.CATEGORIES = {
-    "warn":     Messages.WARNING,
-    /*
-     * Now we turn to message actions rather than message types; for example, setting "halt"
-     * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
-     *
-     * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
-     * until "m buffer off" is issued.
-     */
-    "halt":     Messages.HALT,
-    "buffer":   Messages.BUFFER
-};
 
 
 /**
@@ -4038,10 +4038,10 @@ class Component {
      *
      * @param {string} sType of the desired component
      * @param {string} [idRelated] of related component
-     * @param {Component|null} [componentPrev] of previously returned component, if any
+     * @param {Component|boolean|null} [componentPrev] of previously returned component, if any
      * @returns {Component|null}
      */
-    static getComponentByType(sType, idRelated, componentPrev)
+    static getComponentByType(sType, idRelated, componentPrev = null)
     {
         if (sType !== undefined) {
             let i;
@@ -4067,7 +4067,9 @@ class Component {
                     return components[i];
                 }
             }
-            if (MAXDEBUG) Component.printf(Messages.WARNING, "Component type \"%s\" not found\n", sType);
+            if (MAXDEBUG && componentPrev !== false) {
+                Component.printf(Messages.WARNING, "Component type \"%s\" not found\n", sType);
+            }
         }
         return null;
     }
@@ -5992,32 +5994,32 @@ Messages.COMPUTER    = 0x04000000;
  * aware that changing the bit values could break saved Debugger states (not a huge concern, just
  * something to be aware of).
  */
-Messages.CATEGORIES["cpu"]       = Messages.CPU;
-Messages.CATEGORIES["trap"]      = Messages.TRAP;
-Messages.CATEGORIES["fault"]     = Messages.FAULT;
-Messages.CATEGORIES["int"]       = Messages.INT;
-Messages.CATEGORIES["bus"]       = Messages.BUS;
-Messages.CATEGORIES["memory"]    = Messages.MEMORY;
-Messages.CATEGORIES["mmu"]       = Messages.MMU;
-Messages.CATEGORIES["rom"]       = Messages.ROM;
-Messages.CATEGORIES["device"]    = Messages.DEVICE;
-Messages.CATEGORIES["panel"]     = Messages.PANEL;
-Messages.CATEGORIES["keyboard"]  = Messages.KEYBOARD;   // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
-Messages.CATEGORIES["key"]       = Messages.KEYS,       // using "key" instead of "keys"; since the latter is a method on JavasScript objects
-Messages.CATEGORIES["pc11"]      = Messages.PC11;
-Messages.CATEGORIES["paper"]     = Messages.PAPER;
-Messages.CATEGORIES["disk"]      = Messages.DISK;
-Messages.CATEGORIES["read"]      = Messages.READ;
-Messages.CATEGORIES["write"]     = Messages.WRITE;
-Messages.CATEGORIES["rk11"]      = Messages.RK11;
-Messages.CATEGORIES["rl11"]      = Messages.RL11;
-Messages.CATEGORIES["rx11"]      = Messages.RX11;
-Messages.CATEGORIES["dl11"]      = Messages.DL11;
-Messages.CATEGORIES["serial"]    = Messages.SERIAL;
-Messages.CATEGORIES["kw11"]      = Messages.KW11;
-Messages.CATEGORIES["timer"]     = Messages.TIMER;
-Messages.CATEGORIES["speaker"]   = Messages.SPEAKER;
-Messages.CATEGORIES["computer"]  = Messages.COMPUTER;
+Messages.Categories["cpu"]       = Messages.CPU;
+Messages.Categories["trap"]      = Messages.TRAP;
+Messages.Categories["fault"]     = Messages.FAULT;
+Messages.Categories["int"]       = Messages.INT;
+Messages.Categories["bus"]       = Messages.BUS;
+Messages.Categories["memory"]    = Messages.MEMORY;
+Messages.Categories["mmu"]       = Messages.MMU;
+Messages.Categories["rom"]       = Messages.ROM;
+Messages.Categories["device"]    = Messages.DEVICE;
+Messages.Categories["panel"]     = Messages.PANEL;
+Messages.Categories["keyboard"]  = Messages.KEYBOARD;   // "kbd" is also allowed as shorthand for "keyboard"; see doMessages()
+Messages.Categories["key"]       = Messages.KEYS,       // using "key" instead of "keys"; since the latter is a method on JavasScript objects
+Messages.Categories["pc11"]      = Messages.PC11;
+Messages.Categories["paper"]     = Messages.PAPER;
+Messages.Categories["disk"]      = Messages.DISK;
+Messages.Categories["read"]      = Messages.READ;
+Messages.Categories["write"]     = Messages.WRITE;
+Messages.Categories["rk11"]      = Messages.RK11;
+Messages.Categories["rl11"]      = Messages.RL11;
+Messages.Categories["rx11"]      = Messages.RX11;
+Messages.Categories["dl11"]      = Messages.DL11;
+Messages.Categories["serial"]    = Messages.SERIAL;
+Messages.Categories["kw11"]      = Messages.KW11;
+Messages.Categories["timer"]     = Messages.TIMER;
+Messages.Categories["speaker"]   = Messages.SPEAKER;
+Messages.Categories["computer"]  = Messages.COMPUTER;
 
 
 /**
@@ -26689,9 +26691,9 @@ class DebuggerPDP11 extends DbgLib {
          */
         var aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, '|');
         if (aEnable.length) {
-            for (var m in Messages.CATEGORIES) {
+            for (var m in Messages.Categories) {
                 if (Usr.indexOf(aEnable, m) >= 0) {
-                    this.bitsMessage |= Messages.CATEGORIES[m];
+                    this.bitsMessage |= Messages.Categories[m];
                     this.printf("%s messages enabled\n", m);
                 }
             }
@@ -26708,8 +26710,8 @@ class DebuggerPDP11 extends DbgLib {
      */
     messageDump(bitMessage, fnDumper)
     {
-        for (var m in Messages.CATEGORIES) {
-            if (bitMessage == Messages.CATEGORIES[m]) {
+        for (var m in Messages.Categories) {
+            if (bitMessage == Messages.Categories[m]) {
                 this.afnDumpers[m] = fnDumper;
                 return true;
             }
@@ -28609,7 +28611,7 @@ class DebuggerPDP11 extends DbgLib {
 
         if (sAddr == '?') {
             var sDumpers = "";
-            for (m in Messages.CATEGORIES) {
+            for (m in Messages.Categories) {
                 if (this.afnDumpers[m]) {
                     if (sDumpers) sDumpers += ',';
                     sDumpers += m;
@@ -28656,7 +28658,7 @@ class DebuggerPDP11 extends DbgLib {
         }
 
         if (sCmd == "d") {
-            for (m in Messages.CATEGORIES) {
+            for (m in Messages.Categories) {
                 if (asArgs[1] == m) {
                     var fnDumper = this.afnDumpers[m];
                     if (fnDumper) {
@@ -29019,9 +29021,9 @@ class DebuggerPDP11 extends DbgLib {
                  */
                 if (sCategory == "keys") sCategory = "key";
                 if (sCategory == "kbd") sCategory = "keyboard";
-                for (m in Messages.CATEGORIES) {
+                for (m in Messages.Categories) {
                     if (sCategory == m) {
-                        bitsMessage = Messages.CATEGORIES[m];
+                        bitsMessage = Messages.Categories[m];
                         fCriteria = !!(this.bitsMessage & bitsMessage);
                         break;
                     }
@@ -29055,9 +29057,9 @@ class DebuggerPDP11 extends DbgLib {
          */
         var n = 0;
         var sCategories = "";
-        for (m in Messages.CATEGORIES) {
+        for (m in Messages.Categories) {
             if (!sCategory || sCategory == m) {
-                var bitMessage = Messages.CATEGORIES[m];
+                var bitMessage = Messages.Categories[m];
                 var fEnabled = !!(this.bitsMessage & bitMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';
@@ -31591,10 +31593,10 @@ class ComputerPDP11 extends Component {
      *
      * @this {ComputerPDP11}
      * @param {string} sType
-     * @param {Component|null} [componentPrev] of previously returned component, if any
+     * @param {Component|boolean|null} [componentPrev] of previously returned component, if any
      * @returns {Component|null}
      */
-    getMachineComponent(sType, componentPrev)
+    getMachineComponent(sType, componentPrev = null)
     {
         var componentLast = componentPrev;
         var aComponents = Component.getComponents(this.id);
@@ -31606,7 +31608,9 @@ class ComputerPDP11 extends Component {
             }
             if (component.type == sType) return component;
         }
-        if (!componentLast && DEBUG) this.printf(Messages.LOG, "Machine component type \"%s\" not found\n", sType);
+        if (!componentLast && DEBUG && componentPrev !== false) {
+            this.printf(Messages.WARNING, "Machine component type \"%s\" not found\n", sType);
+        }
         return null;
     }
 

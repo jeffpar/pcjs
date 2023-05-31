@@ -523,6 +523,62 @@ Format.NamesOfDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "F
 Format.NamesOfMonths = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 /**
+ * @copyright https://www.pcjs.org/modules/v1/messages.js (C) 2012-2023 Jeff Parsons
+ */
+
+/*
+ * Standard machine message flags.
+ *
+ * NOTE: Because this machine defines more than 32 message categories, some of these message flags
+ * exceed 32 bits, so when concatenating, be sure to use "+", not "|".
+ */
+const Messages = {
+    NONE:       0x000000000000,
+    DEFAULT:    0x000000000000,
+    ADDRESS:    0x000000000001,
+    LOG:        0x001000000000,         // to replace component.log()
+    STATUS:     0x002000000000,         // to replace component.status()
+    NOTICE:     0x004000000000,         // to replace Component.PRINT.NOTICE
+    WARNING:    0x008000000000,         // to replace Component.PRINT.WARNING
+    ERROR:      0x010000000000,         // to replace Component.PRINT.ERROR
+    DEBUG:      0x020000000000,         // to replace Component.PRINT.DEBUG
+    PROGRESS:   0x040000000000,         // to replace Component.PRINT.PROGRESS
+    SCRIPT:     0x080000000000,         // to replace Component.PRINT.SCRIPT
+    TYPES:      0x0ff000000000,         // all the above message types; only one (at most) of these should be set
+    HALT:       0x400000000000,
+    BUFFER:     0x800000000000,
+    ALL:        0x000ffffffffe
+};
+
+/*
+ * Message categories supported by the messageEnabled() function and other assorted message
+ * functions. Each category has a corresponding bit value that can be combined (ie, OR'ed) as
+ * needed.  The Debugger's message command ("m") is used to turn message categories on and off,
+ * like so:
+ *
+ *      m port on
+ *      m port off
+ *      ...
+ *
+ * NOTE: The order of these categories can be rearranged, alphabetized, etc, as desired; just be
+ * aware that changing the bit values could break saved Debugger states (not a huge concern, just
+ * something to be aware of).
+ */
+Messages.Categories = {
+    "warn":     Messages.WARNING,
+    /*
+     * Now we turn to message actions rather than message types; for example, setting "halt"
+     * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
+     *
+     * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
+     * until "m buffer off" is issued.
+     */
+    "halt":     Messages.HALT,
+    "buffer":   Messages.BUFFER
+};
+
+
+/**
  * @copyright https://www.pcjs.org/modules/v2/defines.js (C) 2012-2023 Jeff Parsons
  */
 
@@ -658,62 +714,6 @@ if (!globals.pcjs['machines']) globals.pcjs['machines'] = {};
 if (!globals.pcjs['components']) globals.pcjs['components'] = [];
 if (!globals.pcjs['commands']) globals.pcjs['commands'] = {};
 
-
-
-/**
- * @copyright https://www.pcjs.org/modules/v2/messages.js (C) 2012-2023 Jeff Parsons
- */
-
-/*
- * Standard machine message flags.
- *
- * NOTE: Because this machine defines more than 32 message categories, some of these message flags
- * exceed 32 bits, so when concatenating, be sure to use "+", not "|".
- */
-const Messages = {
-    NONE:       0x000000000000,
-    DEFAULT:    0x000000000000,
-    ADDRESS:    0x000000000001,
-    LOG:        0x001000000000,         // to replace component.log()
-    STATUS:     0x002000000000,         // to replace component.status()
-    NOTICE:     0x004000000000,         // to replace Component.PRINT.NOTICE
-    WARNING:    0x008000000000,         // to replace Component.PRINT.WARNING
-    ERROR:      0x010000000000,         // to replace Component.PRINT.ERROR
-    DEBUG:      0x020000000000,         // to replace Component.PRINT.DEBUG
-    PROGRESS:   0x040000000000,         // to replace Component.PRINT.PROGRESS
-    SCRIPT:     0x080000000000,         // to replace Component.PRINT.SCRIPT
-    TYPES:      0x0ff000000000,         // all the above message types; only one (at most) of these should be set
-    HALT:       0x400000000000,
-    BUFFER:     0x800000000000,
-    ALL:        0x000ffffffffe
-};
-
-/*
- * Message categories supported by the messageEnabled() function and other assorted message
- * functions. Each category has a corresponding bit value that can be combined (ie, OR'ed) as
- * needed.  The Debugger's message command ("m") is used to turn message categories on and off,
- * like so:
- *
- *      m port on
- *      m port off
- *      ...
- *
- * NOTE: The order of these categories can be rearranged, alphabetized, etc, as desired; just be
- * aware that changing the bit values could break saved Debugger states (not a huge concern, just
- * something to be aware of).
- */
-Messages.CATEGORIES = {
-    "warn":     Messages.WARNING,
-    /*
-     * Now we turn to message actions rather than message types; for example, setting "halt"
-     * on or off doesn't enable "halt" messages, but rather halts the CPU on any message above.
-     *
-     * Similarly, "m buffer on" turns on message buffering, deferring the display of all messages
-     * until "m buffer off" is issued.
-     */
-    "halt":     Messages.HALT,
-    "buffer":   Messages.BUFFER
-};
 
 
 /**
@@ -3440,10 +3440,10 @@ class Component {
      *
      * @param {string} sType of the desired component
      * @param {string} [idRelated] of related component
-     * @param {Component|null} [componentPrev] of previously returned component, if any
+     * @param {Component|boolean|null} [componentPrev] of previously returned component, if any
      * @returns {Component|null}
      */
-    static getComponentByType(sType, idRelated, componentPrev)
+    static getComponentByType(sType, idRelated, componentPrev = null)
     {
         if (sType !== undefined) {
             let i;
@@ -3469,7 +3469,9 @@ class Component {
                     return components[i];
                 }
             }
-            if (MAXDEBUG) Component.printf(Messages.WARNING, "Component type \"%s\" not found\n", sType);
+            if (MAXDEBUG && componentPrev !== false) {
+                Component.printf(Messages.WARNING, "Component type \"%s\" not found\n", sType);
+            }
         }
         return null;
     }
@@ -4534,7 +4536,7 @@ class C1PPanel extends Component {
         for (var iPanel=0; iPanel < aePanels.length; iPanel++) {
             var ePanel = aePanels[iPanel];
             var parmsPanel = Component.getComponentParms(ePanel);
-            var panel = Component.getComponentByID(parmsPanel['id']);
+            var panel = Component.getComponentByID(parmsPanel['id'], false);
             if (!panel) {
                 fReady = true;
                 panel = new C1PPanel(parmsPanel);
@@ -14589,7 +14591,7 @@ class C1PComputer extends Component {
              * the Debugger needs our setBuffer(), setPower() and reset() notifications, and this relieves us from having an explicit
              * <module> entry for type="debugger".
              */
-            component = Component.getComponentByID('debugger', parmsComputer['id']);
+            component = Component.getComponentByType('C1PDebugger', parmsComputer['id'], false);
             if (component) {
                 modules['debugger'] = [component];
                 if (component.setBuffer) {
@@ -14603,7 +14605,7 @@ class C1PComputer extends Component {
              * Let's see if the Control Panel is installed (NOTE: its ID must be "panel", and only one per machine is supported);
              * the Panel needs our setPower() notifications, and this relieves us from having an explicit <module> entry for type="panel".
              */
-            var panel = Component.getComponentByID('panel', parmsComputer['id']);
+            var panel = Component.getComponentByType('C1PPanel', parmsComputer['id'], false);
             if (panel) {
                 modules['panel'] = [panel];
                 /*

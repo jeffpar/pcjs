@@ -1009,7 +1009,7 @@ export default class Panel extends Component {
         for (let iPanel=0; iPanel < aePanels.length; iPanel++) {
             let ePanel = aePanels[iPanel];
             let parmsPanel = Component.getComponentParms(ePanel);
-            let panel = Component.getComponentByID(parmsPanel['id']);
+            let panel = Component.getComponentByID(parmsPanel['id'], false);
             if (!panel) {
                 fReady = true;
                 panel = new Panel(parmsPanel);

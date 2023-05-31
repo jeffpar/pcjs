@@ -7,8 +7,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import Messages from "../../../../modules/v1/messages.js";
 import Component from "../../../../modules/v2/component.js";
-import Messages from "../../../../modules/v2/messages.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, APPNAME, APPVERSION, COPYRIGHT, DEBUG } from "./defines.js";
 
@@ -280,7 +280,7 @@ export default class C1PComputer extends Component {
              * the Debugger needs our setBuffer(), setPower() and reset() notifications, and this relieves us from having an explicit
              * <module> entry for type="debugger".
              */
-            component = Component.getComponentByID('debugger', parmsComputer['id']);
+            component = Component.getComponentByType('C1PDebugger', parmsComputer['id'], false);
             if (component) {
                 modules['debugger'] = [component];
                 if (component.setBuffer) {
@@ -294,7 +294,7 @@ export default class C1PComputer extends Component {
              * Let's see if the Control Panel is installed (NOTE: its ID must be "panel", and only one per machine is supported);
              * the Panel needs our setPower() notifications, and this relieves us from having an explicit <module> entry for type="panel".
              */
-            var panel = Component.getComponentByID('panel', parmsComputer['id']);
+            var panel = Component.getComponentByType('C1PPanel', parmsComputer['id'], false);
             if (panel) {
                 modules['panel'] = [panel];
                 /*

@@ -18,15 +18,16 @@ import proclib from "../../modules/v2/proclib.js";
 //
 import "../../modules/v1/format.js";
 import "../../modules/v1/databuffer.js";
+import "../../modules/v1/messages.js";
 import strlib from "../../modules/v2/strlib.js";
 import weblib from "../../modules/v2/weblib.js";
 import Component from "../../modules/v2/component.js";
 import "../../modules/v2/jsonlib.js";
 import "../modules/v2/defines.js";
+import "../modules/v2/messages.js";
 import "../modules/v2/x86.js";
 import "../modules/v3/charset.js";
 import "../modules/v2/interrupts.js";
-import "../modules/v2/messages.js";
 import "../modules/v2/bus.js";
 import "../modules/v2/memory.js";
 import "../modules/v2/cpu.js";

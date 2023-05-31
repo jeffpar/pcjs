@@ -2715,7 +2715,7 @@ export default class VideoX86 extends Component {
             this.kbd.setBinding(this.inputTextArea? "textarea" : "canvas", "screen", this.inputScreen);
         }
 
-        this.panel = cmp.getMachineComponent("Panel");
+        this.panel = cmp.getMachineComponent("Panel", false);
         for (let i = 0; i < this.bindingsExternal.length; i++) {
             let binding = this.bindingsExternal[i];
             if (this.kbd && this.kbd.setBinding(...binding)) continue;
@@ -2736,7 +2736,7 @@ export default class VideoX86 extends Component {
          * touch-screen support.
          */
         if (this.sTouchScreen == "mouse") {
-            this.mouse = cmp.getMachineComponent("Mouse");
+            this.mouse = cmp.getMachineComponent("Mouse", false);
             if (this.mouse) this.captureTouch(VideoX86.TOUCH.MOUSE);
         }
         else if (this.sTouchScreen == "keygrid") {

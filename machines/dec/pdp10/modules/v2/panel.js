@@ -1191,7 +1191,7 @@ export default class PanelPDP10 extends Component {
         for (var iPanel=0; iPanel < aePanels.length; iPanel++) {
             var ePanel = aePanels[iPanel];
             var parmsPanel = Component.getComponentParms(ePanel);
-            var panel = Component.getComponentByID(parmsPanel['id']);
+            var panel = Component.getComponentByID(parmsPanel['id'], false);
             if (!panel) panel = new PanelPDP10(parmsPanel, true);
             Component.bindComponentControls(panel, ePanel, APPCLASS);
         }

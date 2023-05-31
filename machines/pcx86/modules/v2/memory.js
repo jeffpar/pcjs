@@ -543,7 +543,7 @@ export default class MemoryX86 {
     printAddr(sMessage)
     {
         if (DEBUG && this.dbg) {
-            this.dbg.printf(Messages.MEM, "%s %%x #%s\n", this.addr, this.id);
+            this.dbg.printf(Messages.MEM, "%s %%%x #%s\n", this.addr, this.id);
         }
     }
 
@@ -656,7 +656,7 @@ export default class MemoryX86 {
     readNone(off, addr)
     {
         if (DEBUGGER && this.dbg) {
-            this.dbg.printf(Messages.CPU + Messages.MEM, "attempt to read invalid block %%x\n", addr);
+            this.dbg.printf(Messages.CPU + Messages.MEM, "attempt to read invalid block %%%x\n", addr);
         }
         return 0xff;
     }
@@ -672,7 +672,7 @@ export default class MemoryX86 {
     writeNone(off, v, addr)
     {
         if (DEBUGGER && this.dbg) {
-            this.dbg.printf(Messages.CPU + Messages.MEM, "attempt to write %#06x to invalid block %%x\n", v, addr);
+            this.dbg.printf(Messages.CPU + Messages.MEM, "attempt to write %#06x to invalid block %%%x\n", v, addr);
         }
     }
 

@@ -848,9 +848,9 @@ export default class DebuggerPDP10 extends DbgLib {
          */
         var aEnable = this.parseCommand(sEnable.replace("keys","key").replace("kbd","keyboard"), false, '|');
         if (aEnable.length) {
-            for (var m in Messages.CATEGORIES) {
+            for (var m in Messages.Categories) {
                 if (Usr.indexOf(aEnable, m) >= 0) {
-                    this.bitsMessage |= Messages.CATEGORIES[m];
+                    this.bitsMessage |= Messages.Categories[m];
                     this.printf("%s messages enabled\n", m);
                 }
             }
@@ -867,8 +867,8 @@ export default class DebuggerPDP10 extends DbgLib {
      */
     messageDump(bitMessage, fnDumper)
     {
-        for (var m in Messages.CATEGORIES) {
-            if (bitMessage == Messages.CATEGORIES[m]) {
+        for (var m in Messages.Categories) {
+            if (bitMessage == Messages.Categories[m]) {
                 this.afnDumpers[m] = fnDumper;
                 return true;
             }
@@ -2839,7 +2839,7 @@ export default class DebuggerPDP10 extends DbgLib {
 
         if (sAddr == '?') {
             var sDumpers = "";
-            for (m in Messages.CATEGORIES) {
+            for (m in Messages.Categories) {
                 if (this.afnDumpers[m]) {
                     if (sDumpers) sDumpers += ',';
                     sDumpers = sDumpers + m;
@@ -2883,7 +2883,7 @@ export default class DebuggerPDP10 extends DbgLib {
         }
 
         if (sCmd == "d") {
-            for (m in Messages.CATEGORIES) {
+            for (m in Messages.Categories) {
                 if (asArgs[1] == m) {
                     var fnDumper = this.afnDumpers[m];
                     if (fnDumper) {
@@ -3174,9 +3174,9 @@ export default class DebuggerPDP10 extends DbgLib {
                  */
                 if (sCategory == "keys") sCategory = "key";
                 if (sCategory == "kbd") sCategory = "keyboard";
-                for (m in Messages.CATEGORIES) {
+                for (m in Messages.Categories) {
                     if (sCategory == m) {
-                        bitsMessage = Messages.CATEGORIES[m];
+                        bitsMessage = Messages.Categories[m];
                         fCriteria = !!(this.bitsMessage & bitsMessage);
                         break;
                     }
@@ -3210,9 +3210,9 @@ export default class DebuggerPDP10 extends DbgLib {
          */
         var n = 0;
         var sCategories = "";
-        for (m in Messages.CATEGORIES) {
+        for (m in Messages.Categories) {
             if (!sCategory || sCategory == m) {
-                var bitMessage = Messages.CATEGORIES[m];
+                var bitMessage = Messages.Categories[m];
                 var fEnabled = !!(this.bitsMessage & bitMessage);
                 if (fCriteria !== null && fCriteria != fEnabled) continue;
                 if (sCategories) sCategories += ',';

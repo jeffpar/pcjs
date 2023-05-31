@@ -423,7 +423,7 @@ export default class FDC extends Component {
         this.chipset = cmp.getMachineComponent("ChipSet");
         this.configMount = this.parseMount(this.cmp.getMachineParm('autoMount'), this.configMount);
 
-        this.panel = cmp.getMachineComponent("Panel");
+        this.panel = cmp.getMachineComponent("Panel", false);
 
         /*
          * If we didn't need auto-mount support, we could defer controller initialization until we received a powerUp() notification,
