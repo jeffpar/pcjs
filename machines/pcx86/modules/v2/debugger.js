@@ -209,9 +209,9 @@ export default class DebuggerX86 extends DbgLib {
         this.bus = bus;
         this.cpu = cpu;
         this.cmp = cmp;
-        this.fdc = cmp.getMachineComponent("FDC");
-        this.hdc = cmp.getMachineComponent("HDC");
-        this.mouse = cmp.getMachineComponent("Mouse");
+        this.fdc = cmp.getMachineComponent("FDC", false);
+        this.hdc = cmp.getMachineComponent("HDC", false);
+        this.mouse = cmp.getMachineComponent("Mouse", false);
 
         /*
          * Re-initialize Debugger message and command support as needed

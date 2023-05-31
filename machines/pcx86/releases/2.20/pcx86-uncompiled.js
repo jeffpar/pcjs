@@ -2845,48 +2845,6 @@ Usr.aMonthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
 class Web {
     /**
-     * log(s, type)
-     *
-     * For diagnostic output only.  DEBUG must be true (or "--debug" specified via the command-line)
-     * for Component.log() to display anything.
-     *
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     */
-    static log(s, type)
-    {
-        Component.log(s, type);
-    }
-
-    /**
-     * notice(s, fPrintOnly, id)
-     *
-     * @param {string} s is the message text
-     * @param {boolean} [fPrintOnly]
-     * @param {string} [id] is the caller's ID, if any
-     */
-    static notice(s, fPrintOnly, id)
-    {
-        Component.notice(s, fPrintOnly, id);
-    }
-
-    /**
-     * alertUser(sMessage)
-     *
-     * NOTE: Legacy function for older modules (eg, DiskDump); see Component.alertUser().
-     *
-     * @param {string} sMessage
-     */
-    static alertUser(sMessage)
-    {
-        if (globals.window) {
-            globals.window.alert(sMessage);
-        } else {
-            Web.log(sMessage);
-        }
-    }
-
-    /**
      * getResource(sURL, type, fAsync, done, progress)
      *
      * Request the specified resource (sURL), and once the request is complete, notify done().
@@ -2971,18 +2929,18 @@ class Web {
             try {
                 resource = fArrayBuffer? request.response : request.responseText;
             } catch(err) {
-                if (MAXDEBUG) Web.log("xmlHTTPRequest(" + sURL + ") exception: " + err.message);
+                if (MAXDEBUG) Component.printf(Messages.ERROR, "xmlHTTPRequest(%s) exception: %s\n", sURL, err.message);
             }
             /*
              * The normal "success" case is a non-null resource and an HTTP status code of 200, but when loading files from the
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
             if (resource != null && (request.status == 200 || !request.status && resource.length && Web.getHostProtocol() == "file:")) {
-                if (MAXDEBUG) Web.log("xmlHTTPRequest(" + sURL + "): returned " + resource.length + " bytes");
+                if (MAXDEBUG) Component.printf("xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
             }
             else {
                 nErrorCode = request.status || -1;
-                Web.log("xmlHTTPRequest(" + sURL + "): error code " + nErrorCode);
+                Component.printf(Messages.ERROR, "xmlHTTPRequest(%s) returned error %d\n", sURL, nErrorCode);
                 if (!request.status && !Web.fAdBlockerWarning) {
                     let match = sURL.match(/(^https?:\/\/[^/]+)(.*)/);
                     if (match) {
@@ -3010,12 +2968,12 @@ class Web {
                 sPost += p + '=' + encodeURIComponent(type[p]);
             }
             sPost = sPost.replace(/%20/g, '+');
-            if (MAXDEBUG) Web.log("Web.getResource(POST " + sURL + "): " + sPost.length + " bytes");
+            if (MAXDEBUG) Component.printf("Web.getResource(POST %s): %d bytes\n", sURL, sPost.length);
             request.open("POST", sURL, fAsync);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(sPost);
         } else {
-            if (MAXDEBUG) Web.log("Web.getResource(GET " + sURL + ")");
+            if (MAXDEBUG) Component.printf("Web.getResource(GET %s)\n", sURL);
             request.open("GET", sURL, fAsync);
             if (type == "arraybuffer") {
                 if (fXHR2) {
@@ -3327,7 +3285,7 @@ class Web {
                     f = (globals.window.localStorage.getItem(Web.sLocalStorageTest) == Web.sLocalStorageTest);
                     globals.window.localStorage.removeItem(Web.sLocalStorageTest);
                 } catch (e) {
-                    Web.logLocalStorageError(e);
+                    Web.printLocalStorageError(e);
                     f = false;
                 }
             }
@@ -3337,13 +3295,13 @@ class Web {
     }
 
     /**
-     * logLocalStorageError(e)
+     * printLocalStorageError(e)
      *
      * @param {Error} e is an exception
      */
-    static logLocalStorageError(e)
+    static printLocalStorageError(e)
     {
-        Web.log(e.message, "localStorage error");
+        Component.printf(Messages.ERROR, "Local storage error: %s\n", e.message);
     }
 
     /**
@@ -3361,7 +3319,7 @@ class Web {
             try {
                 sValue = globals.window.localStorage.getItem(sKey);
             } catch (e) {
-                Web.logLocalStorageError(e);
+                Web.printLocalStorageError(e);
             }
         }
         return sValue;
@@ -3381,7 +3339,7 @@ class Web {
                 globals.window.localStorage.setItem(sKey, sValue);
                 return true;
             } catch (e) {
-                Web.logLocalStorageError(e);
+                Web.printLocalStorageError(e);
             }
         }
         return false;
@@ -3398,7 +3356,7 @@ class Web {
             try {
                 globals.window.localStorage.removeItem(sKey);
             } catch (e) {
-                Web.logLocalStorageError(e);
+                Web.printLocalStorageError(e);
             }
         }
     }
@@ -3417,7 +3375,7 @@ class Web {
                     a.push(globals.window.localStorage.key(i));
                 }
             } catch (e) {
-                Web.logLocalStorageError(e);
+                Web.printLocalStorageError(e);
             }
         }
         return a;
@@ -3470,7 +3428,7 @@ class Web {
              * Here's one case where we have to be careful with Component, because when isUserAgent() is called by
              * the init code below, component.js hasn't been loaded yet.  The simple solution for now is to remove the call.
              *
-             *      Web.log("agent: " + userAgent);
+             *      Component.printf("agent: %s\n", userAgent);
              *
              * And yes, it would be pointless to use the conditional (?) operator below, if not for the Google Closure
              * Compiler (v20130823) failing to detect the entire expression as a boolean.
@@ -3694,7 +3652,7 @@ class Web {
         };
         e.onmousedown = function()
         {
-            // Web.log("onMouseDown()");
+            // Component.printf(Messages.DEBUG, "onMouseDown()\n");
             if (!fIgnoreMouseEvents) {
                 if (!timer) {
                     ms = msDelay;
@@ -3704,7 +3662,7 @@ class Web {
         };
         e.ontouchstart = function()
         {
-            // Web.log("onTouchStart()");
+            // Component.printf(Messages.DEBUG, "onTouchStart()\n");
             if (!timer) {
                 ms = msDelay;
                 fnRepeat();
@@ -3712,7 +3670,7 @@ class Web {
         };
         e.onmouseup = e.onmouseout = function()
         {
-            // Web.log("onMouseUp()/onMouseOut()");
+            // Component.printf(Messages.DEBUG, "onMouseUp()/onMouseOut()\n");
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -3720,7 +3678,7 @@ class Web {
         };
         e.ontouchend = e.ontouchcancel = function()
         {
-            // Web.log("onTouchEnd()/onTouchCancel()");
+            // Component.printf(Messages.DEBUG, "onTouchEnd()/onTouchCancel()\n");
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -3803,7 +3761,7 @@ class Web {
      */
     static onError(sMessage)
     {
-        Web.notice(sMessage + "\n\nIf it happens again, please send the URL to support@pcjs.org. Thanks.");
+        Component.printf(Messages.NOTICE, "%s\n\nIf it happens again, please send the URL to support@pcjs.org. Thanks.\n", sMessage);
     }
 
     /**
@@ -4072,7 +4030,7 @@ class Component {
         /*
          * This just generates a lot of useless noise, handy in the early days, not so much these days....
          *
-         *      if (DEBUG) Component.log("Component.add(" + component.type + "," + component.id + ")");
+         *      if (DEBUG) Component.printf("Component.add(%s,%s)\n", component.type, component.id);
          */
         globals.pcjs['components'].push(component);
     }
@@ -4140,27 +4098,36 @@ class Component {
     }
 
     /**
-     * Component.log(s, type)
+     * Component.printf(format, ...args)
      *
-     * For diagnostic output only.
+     * If format is a number, it's used as a message number, and the format string is the first arg.
      *
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
+     * @param {string|number} format
+     * @param {...} args
      */
-    static log(s, type)
+    static printf(format, ...args)
     {
-        if (!COMPILED && (type != Component.PRINT.DEBUG || MAXDEBUG)) {
-            if (s) {
-                let sElapsed = "";
-                let sMessage = (type? (type + ": ") : "") + s;
-                if (typeof Usr != "undefined") {
-                    if (Component.msStart === undefined) {
-                        Component.msStart = Component.getTime();
-                    }
-                    sElapsed = (Component.getTime() - Component.msStart) + "ms: ";
+        if (DEBUG || format === Messages.ERROR || format === Messages.WARNING || format === Messages.NOTICE) {
+            let alert = false;
+            let bitsMessage = 0;
+            if (typeof format == "number") {
+                bitsMessage = format;
+                format = args.shift();
+                if (bitsMessage == Messages.ERROR) {
+                    alert = true;
+                    format = "Error: " + format;
+                } else if (bitsMessage == Messages.WARNING) {
+                    alert = true;
+                    format = "Warning: " + format;
+                } else if (bitsMessage == Messages.NOTICE) {
+                    alert = true;
                 }
-                sMessage = sMessage.replace(/\r/g, '\\r').replace(/\n/g, ' ');
-                console.log(sElapsed + sMessage);
+            }
+            let sMessage = Str.sprintf(format, ...args).trim();
+            if (!alert) {
+                console.log(sMessage);
+            } else {
+                Component.alertUser(sMessage);
             }
         }
     }
@@ -4181,48 +4148,10 @@ class Component {
         if (DEBUG) {
             if (!f) {
                 if (!s) s = "assertion failure";
-                Component.log(s);
+                Component.printf(Messages.ERROR, s);
                 throw new Error(s);
             }
         }
-    }
-
-    /**
-     * Component.print(s, type, id)
-     *
-     * Components that inherit from this class should use this.print(), rather than Component.print(), because
-     * if a Control Panel is loaded, it will override only the instance method, not the class method (overriding the
-     * class method would improperly affect any other machines loaded on the same page).
-     *
-     * @this {Component}
-     * @param {string} s (message text)
-     * @param {string} [type] (message type)
-     * @param {string} [id] (caller's ID, if any)
-     */
-    static print(s, type, id)
-    {
-        if (!COMPILED) {
-            Component.log((id? (id + ": ") : "") + (s? ("\"" + s + "\"") : ""), type);
-        }
-    }
-
-    /**
-     * Component.notice(s, fPrintOnly, id)
-     *
-     * notice() is like print() but implies a need for user notification, so we alert() as well.
-     *
-     * @param {string} s is the message text
-     * @param {boolean} [fPrintOnly]
-     * @param {string} [id] is the caller's ID, if any
-     * @returns {boolean}
-     */
-    static notice(s, fPrintOnly, id)
-    {
-        if (!COMPILED) {
-            Component.print(s, Component.PRINT.NOTICE, id);
-        }
-        if (!fPrintOnly) Component.alertUser((id? (id + ": ") : "") + s);
-        return true;
     }
 
     /**
@@ -4232,10 +4161,7 @@ class Component {
      */
     static warning(s)
     {
-        if (!COMPILED) {
-            Component.print(s, Component.PRINT.WARNING);
-        }
-        Component.alertUser(s);
+        Component.printf(Messages.WARNING, s);
     }
 
     /**
@@ -4245,10 +4171,7 @@ class Component {
      */
     static error(s)
     {
-        if (!COMPILED) {
-            Component.print(s, Component.PRINT.ERROR);
-        }
-        Component.alertUser(s);
+        Component.printf(Messages.ERROR, s);
     }
 
     /**
@@ -4258,11 +4181,10 @@ class Component {
      */
     static alertUser(sMessage)
     {
-        if (window) {
-            window.alert(sMessage);
-        } else {
-            Component.log(sMessage);
+        if (globals.window.alert) {
+            globals.window.alert(sMessage);
         }
+        console.log(sMessage);
     }
 
     /**
@@ -4274,8 +4196,8 @@ class Component {
     static confirmUser(sPrompt)
     {
         let fResponse = false;
-        if (window) {
-            fResponse = window.confirm(sPrompt);
+        if (globals.window.confirm) {
+            fResponse = globals.window.confirm(sPrompt);
         }
         return fResponse;
     }
@@ -4290,8 +4212,8 @@ class Component {
     static promptUser(sPrompt, sDefault)
     {
         let sResponse = null;
-        if (window) {
-            sResponse = window.prompt(sPrompt, sDefault === undefined? "" : sDefault);
+        if (globals.window.prompt) {
+            sResponse = globals.window.prompt(sPrompt, sDefault === undefined? "" : sDefault);
         }
         return sResponse;
     }
@@ -4391,12 +4313,12 @@ class Component {
                             if (parms && parms['binding'] !== undefined) {
                                 component.setBinding(parms['type'], parms['binding'], /** @type {HTMLElement} */(control), parms['value']);
                             } else if (!parms || parms['type'] != "description") {
-                                Component.log("Component '" + component.toString() + "' missing binding" + (parms? " for " + parms['type'] : ""), Component.PRINT.WARNING);
+                                Component.printf(Messages.WARNING, "Component \"%s\" missing binding%s\n", component.toString(), (parms? " for " + parms['type'] : ""));
                             }
                             iClass = aClasses.length;
                             break;
                         default:
-                            // if (DEBUG) Component.log("Component.bindComponentControls(" + component.toString() + "): unrecognized control class \"" + sClass + "\"", Component.PRINT.WARNING);
+                            // if (DEBUG) Component.printf(Messages.WARNING, "Component.bindComponentControls(%s): unrecognized control class \"%s\"\n", component.toString(), sClass);
                             break;
                     }
                 }
@@ -4447,10 +4369,10 @@ class Component {
      * this linear lookup into a property lookup, but some components may have no ID.
      *
      * @param {string} id of the desired component
-     * @param {string} [idRelated] of related component
+     * @param {string|boolean|null} [idRelated] of related component
      * @returns {Component|null}
      */
-    static getComponentByID(id, idRelated)
+    static getComponentByID(id, idRelated = null)
     {
         if (id !== undefined) {
             let i;
@@ -4468,8 +4390,8 @@ class Component {
                     return components[i];
                 }
             }
-            if (components.length) {
-                Component.log("Component ID '" + id + "' not found", Component.PRINT.WARNING);
+            if (components.length && idRelated !== false) {
+                Component.printf(Messages.WARNING, "Component ID \"%s\" not found\n", id);
             }
         }
         return null;
@@ -4509,7 +4431,7 @@ class Component {
                     return components[i];
                 }
             }
-            Component.log("Component type '" + sType + "' not found", Component.PRINT.DEBUG);
+            if (MAXDEBUG) Component.printf(Messages.WARNING, "Component type \"%s\" not found\n", sType);
         }
         return null;
     }
@@ -4609,7 +4531,7 @@ class Component {
             }
         }
         if (!ae.length) {
-            Component.log('No elements of class "' + sClass + '" found', Component.PRINT.DEBUG);
+            if (MAXDEBUG) Component.printf(Messages.WARNING, "No elements of class \"%s\" found\n", sClass);
         }
         return ae;
     }
@@ -4738,7 +4660,7 @@ class Component {
              * instead, but it's a bit too confusing mingling script output in a window that
              * already mingles Debugger and machine output.
              */
-            Component.print(aTokens.join(' '), Component.PRINT.SCRIPT);
+            Component.printf(Messages.SCRIPT, aTokens.join(' '));
 
             let fnCallReady = null;
             if (Component.asyncCommands.indexOf(sCommand) >= 0) {
@@ -4931,7 +4853,7 @@ class Component {
                         } else {
                             Component.appendControl(control, sMessage);
                         }
-                        if (!COMPILED) Component.print(sMessage);
+                        if (!COMPILED) Component.printf(sMessage);
                     };
                 }(this, controlTextArea);
             }
@@ -4949,7 +4871,7 @@ class Component {
      *
      * WARNING: Even though this function's body is completely wrapped in DEBUG, that won't prevent the Closure Compiler
      * from including it, so all calls must still be prefixed with "if (DEBUG) ....".  For this reason, the class method,
-     * Component.log(), is preferred, because the compiler IS smart enough to remove those calls.
+     * Component.printf(), is preferred, because the compiler IS smart enough to remove those calls.
      *
      * @this {Component}
      * @param {string} [s] is the message text
@@ -4957,8 +4879,8 @@ class Component {
      */
     log(s, type)
     {
-        if (!COMPILED) {
-            Component.log(s, type || this.id || this.type);
+        if (!COMPILED && s) {
+            Component.printf(Messages.LOG, "%s: %s\n", type || this.id || this.type || "log", s);
         }
     }
 
@@ -5024,7 +4946,7 @@ class Component {
      */
     print(s, bitsMessage = 0)
     {
-        Component.print(s);
+        Component.printf(bitsMessage, s);
     }
 
     /**
@@ -5052,7 +4974,7 @@ class Component {
                 return false;
             }
         }
-        Component.notice(s, fPrintOnly, id || this.type);
+        Component.printf(fPrintOnly? Messages.DEFAULT : Messages.NOTICE, "%s: %s\n", id || this.type, s);
         return true;
     }
 
@@ -13693,7 +13615,7 @@ class CPULib extends Component {
         }
 
         this.fpuActive = null;
-        this.fpu = cmp.getMachineComponent("FPU");
+        this.fpu = cmp.getMachineComponent("FPU", false);
 
         /*
          * Attach the ChipSet component to the CPU so that it can obtain the IDT vector number
@@ -39376,7 +39298,7 @@ class ChipSet extends Component {
          * model numbers, you should generally compare (this.model|0) to the target value, which truncates it.
          */
         if (model && !ChipSet.MODELS[model]) {
-            Component.notice("Unrecognized ChipSet model: " + model);
+            Component.printf(Messages.NOTICE, "Unrecognized ChipSet model: %s\n", model);
         }
 
         this.model = ChipSet.MODELS[model] || ChipSet.MODEL_5150_OTHER;
@@ -72932,9 +72854,9 @@ class DebuggerX86 extends DbgLib {
         this.bus = bus;
         this.cpu = cpu;
         this.cmp = cmp;
-        this.fdc = cmp.getMachineComponent("FDC");
-        this.hdc = cmp.getMachineComponent("HDC");
-        this.mouse = cmp.getMachineComponent("Mouse");
+        this.fdc = cmp.getMachineComponent("FDC", false);
+        this.hdc = cmp.getMachineComponent("HDC", false);
+        this.mouse = cmp.getMachineComponent("Mouse", false);
 
         /*
          * Re-initialize Debugger message and command support as needed
@@ -82328,10 +82250,10 @@ class Computer extends Component {
      *
      * @this {Computer}
      * @param {string} sType
-     * @param {Component|null} [componentPrev] of previously returned component, if any
+     * @param {Component|boolean|null} [componentPrev] of previously returned component, if any
      * @returns {Component|null}
      */
-    getMachineComponent(sType, componentPrev)
+    getMachineComponent(sType, componentPrev = null)
     {
         let componentLast = componentPrev;
         let aComponents = Component.getComponents(this.id);
@@ -82343,8 +82265,8 @@ class Computer extends Component {
             }
             if (component.type == sType) return component;
         }
-        if (!componentLast && sType != "FPU") {
-            Component.log("Machine component type '" + sType + "' not found", "warning");
+        if (!componentLast && DEBUG && componentPrev !== false) {
+            this.printf(Messages.WARNING, "Machine component type \"%s\" not found\n", sType);
         }
         return null;
     }
@@ -82646,7 +82568,7 @@ class State {
         try {
             this.state[id] = data;
         } catch(e) {
-            Component.log(e.message);
+            Component.printf(Messages.ERROR, e.message);
         }
     }
 
@@ -82702,7 +82624,7 @@ class State {
             if (s) {
                 this.json = s;
                 this.fLoaded = true;
-                if (DEBUG) Component.log("localStorage(" + this.key + "): " + s.length + " bytes loaded");
+                if (DEBUG) Component.printf("localStorage(%s): %d bytes loaded\n", this.key, s.length);
                 return true;
             }
         }
@@ -82746,7 +82668,7 @@ class State {
         if (Web.hasLocalStorage()) {
             let s = JSON.stringify(this.state);
             if (Web.setLocalStorageItem(this.key, s)) {
-                if (DEBUG) Component.log("localStorage(" + this.key + "): " + s.length + " bytes stored");
+                if (DEBUG) Component.printf("localStorage(%s): %d bytes stored\n", this.key, s.length);
             } else {
                 /*
                  * WARNING: Because browsers tend to disable all alerts() during an "unload" operation,
@@ -82754,7 +82676,7 @@ class State {
                  * think of some way to notify the user that there's a problem, and offer a way of cleaning
                  * up old states.
                  */
-                Component.error("Unable to store " + s.length + " bytes in browser local storage");
+                Component.printf(Messages.ERROR, "Unable to store %d bytes in browser local storage\n", s.length);
                 fSuccess = false;
             }
         }
@@ -82807,7 +82729,7 @@ class State {
             let sKey = aKeys[i];
             if (sKey && (fAll || sKey.substr(0, this.key.length) == this.key)) {
                 Web.removeLocalStorageItem(sKey);
-                if (DEBUG) Component.log("localStorage(" + sKey + ") removed");
+                Component.printf(Messages.DEBUG, "localStorage(%s) removed\n", sKey);
                 aKeys.splice(i, 1);
                 i = 0;
             }
@@ -83343,7 +83265,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
                 if (match) sError = match[1];
             }
         }
-        Component.log(sError);
+        Component.printf(Messages.ERROR, "%s\n", sError);
         displayMessage("Error: " + sError + (sURL? " (" + sURL + ")" : ""));
         if (fSuccess) doneMachine();
         fSuccess = false;
@@ -83836,7 +83758,7 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
                 let path = matchDisk[2];
                 if (path) {
                     if (res[path]) {
-                        Component.log("recording disk: '" + path + "'");
+                        Component.printf("recording disk: \"%s\"\n", path);
                     } else {
                         data = data.replace(matchDisk[0], "");
                     }
@@ -83847,23 +83769,23 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
         else if (sExt == "xsl") {
             sXSLFile = sName = Str.getBaseName(sName);
         }
-        Component.log("saving resource: '" + sName + "' (" + data.length + " bytes)");
+        Component.printf("saving resource: \"%s\" (%d bytes)\n", sName, data.length);
         resNew[sName] = data;
     }
 
     if (sCSS) {
         resNew[sName = 'css'] = sCSS;
-        Component.log("saving resource: '" + sName + "' (" + sCSS.length + " bytes)");
+        Component.printf("saving resource: \"%s\" (%d bytes)\n", sName, sCSS.length);
     }
 
     if (aMachineInfo[2]) {
         let sParms = resNew[sName = 'parms'] = aMachineInfo[2];
-        Component.log("saving resource: '" + sName + "' (" + sParms.length + " bytes)");
+        Component.printf("saving resource: \"%s\" (%d bytes)\n", sName, sParms.length);
     }
 
     if (aMachineInfo[3]) {
         let sState = resNew[sName = 'state'] = aMachineInfo[3];
-        Component.log("saving resource: '" + sName + "' (" + sState.length + " bytes)");
+        Component.printf("saving resource: \"%s\" (%d bytes)\n", sName, sState.length);
     }
 
     if (sXMLFile && sXSLFile) {
@@ -83871,7 +83793,7 @@ function downloadPC(sURL, sCSS, nErrorCode, aMachineInfo)
 
         sScript += ".js";
         sPCJS = matchScript[1] + "var resources=" + sResources + ";" + matchScript[2] + matchScript[3];
-        Component.log("saving machine: '" + idMachine + "' (" + sPCJS.length + " bytes)");
+        Component.printf("saving machine: \"%s\" (%d bytes)\n", idMachine, sPCJS.length);
 
         /*
          * I don't recall exactly why I did this, because I just tested FireFox with copyright symbols intact,

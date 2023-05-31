@@ -1665,10 +1665,10 @@ export default class Computer extends Component {
      *
      * @this {Computer}
      * @param {string} sType
-     * @param {Component|null} [componentPrev] of previously returned component, if any
+     * @param {Component|boolean|null} [componentPrev] of previously returned component, if any
      * @returns {Component|null}
      */
-    getMachineComponent(sType, componentPrev)
+    getMachineComponent(sType, componentPrev = null)
     {
         let componentLast = componentPrev;
         let aComponents = Component.getComponents(this.id);
@@ -1680,8 +1680,8 @@ export default class Computer extends Component {
             }
             if (component.type == sType) return component;
         }
-        if (!componentLast && sType != "FPU") {
-            Component.log("Machine component type '" + sType + "' not found", "warning");
+        if (!componentLast && DEBUG && componentPrev !== false) {
+            this.printf(Messages.WARNING, "Machine component type \"%s\" not found\n", sType);
         }
         return null;
     }

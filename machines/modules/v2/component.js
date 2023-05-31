@@ -156,7 +156,7 @@ export default class Component {
         /*
          * This just generates a lot of useless noise, handy in the early days, not so much these days....
          *
-         *      if (DEBUG) Component.log("Component.add(" + component.type + "," + component.id + ")");
+         *      if (DEBUG) Component.printf("Component.add(%s,%s)\n", component.type, component.id);
          */
         globals.pcjs['components'].push(component);
     }
@@ -224,27 +224,36 @@ export default class Component {
     }
 
     /**
-     * Component.log(s, type)
+     * Component.printf(format, ...args)
      *
-     * For diagnostic output only.
+     * If format is a number, it's used as a message number, and the format string is the first arg.
      *
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
+     * @param {string|number} format
+     * @param {...} args
      */
-    static log(s, type)
+    static printf(format, ...args)
     {
-        if (!COMPILED && (type != Component.PRINT.DEBUG || MAXDEBUG)) {
-            if (s) {
-                let sElapsed = "";
-                let sMessage = (type? (type + ": ") : "") + s;
-                if (typeof Usr != "undefined") {
-                    if (Component.msStart === undefined) {
-                        Component.msStart = Component.getTime();
-                    }
-                    sElapsed = (Component.getTime() - Component.msStart) + "ms: ";
+        if (DEBUG || format === Messages.ERROR || format === Messages.WARNING || format === Messages.NOTICE) {
+            let alert = false;
+            let bitsMessage = 0;
+            if (typeof format == "number") {
+                bitsMessage = format;
+                format = args.shift();
+                if (bitsMessage == Messages.ERROR) {
+                    alert = true;
+                    format = "Error: " + format;
+                } else if (bitsMessage == Messages.WARNING) {
+                    alert = true;
+                    format = "Warning: " + format;
+                } else if (bitsMessage == Messages.NOTICE) {
+                    alert = true;
                 }
-                sMessage = sMessage.replace(/\r/g, '\\r').replace(/\n/g, ' ');
-                console.log(sElapsed + sMessage);
+            }
+            let sMessage = Str.sprintf(format, ...args).trim();
+            if (!alert) {
+                console.log(sMessage);
+            } else {
+                Component.alertUser(sMessage);
             }
         }
     }
@@ -265,48 +274,10 @@ export default class Component {
         if (DEBUG) {
             if (!f) {
                 if (!s) s = "assertion failure";
-                Component.log(s);
+                Component.printf(Messages.ERROR, s);
                 throw new Error(s);
             }
         }
-    }
-
-    /**
-     * Component.print(s, type, id)
-     *
-     * Components that inherit from this class should use this.print(), rather than Component.print(), because
-     * if a Control Panel is loaded, it will override only the instance method, not the class method (overriding the
-     * class method would improperly affect any other machines loaded on the same page).
-     *
-     * @this {Component}
-     * @param {string} s (message text)
-     * @param {string} [type] (message type)
-     * @param {string} [id] (caller's ID, if any)
-     */
-    static print(s, type, id)
-    {
-        if (!COMPILED) {
-            Component.log((id? (id + ": ") : "") + (s? ("\"" + s + "\"") : ""), type);
-        }
-    }
-
-    /**
-     * Component.notice(s, fPrintOnly, id)
-     *
-     * notice() is like print() but implies a need for user notification, so we alert() as well.
-     *
-     * @param {string} s is the message text
-     * @param {boolean} [fPrintOnly]
-     * @param {string} [id] is the caller's ID, if any
-     * @returns {boolean}
-     */
-    static notice(s, fPrintOnly, id)
-    {
-        if (!COMPILED) {
-            Component.print(s, Component.PRINT.NOTICE, id);
-        }
-        if (!fPrintOnly) Component.alertUser((id? (id + ": ") : "") + s);
-        return true;
     }
 
     /**
@@ -316,10 +287,7 @@ export default class Component {
      */
     static warning(s)
     {
-        if (!COMPILED) {
-            Component.print(s, Component.PRINT.WARNING);
-        }
-        Component.alertUser(s);
+        Component.printf(Messages.WARNING, s);
     }
 
     /**
@@ -329,10 +297,7 @@ export default class Component {
      */
     static error(s)
     {
-        if (!COMPILED) {
-            Component.print(s, Component.PRINT.ERROR);
-        }
-        Component.alertUser(s);
+        Component.printf(Messages.ERROR, s);
     }
 
     /**
@@ -342,11 +307,10 @@ export default class Component {
      */
     static alertUser(sMessage)
     {
-        if (window) {
-            window.alert(sMessage);
-        } else {
-            Component.log(sMessage);
+        if (globals.window.alert) {
+            globals.window.alert(sMessage);
         }
+        console.log(sMessage);
     }
 
     /**
@@ -358,8 +322,8 @@ export default class Component {
     static confirmUser(sPrompt)
     {
         let fResponse = false;
-        if (window) {
-            fResponse = window.confirm(sPrompt);
+        if (globals.window.confirm) {
+            fResponse = globals.window.confirm(sPrompt);
         }
         return fResponse;
     }
@@ -374,8 +338,8 @@ export default class Component {
     static promptUser(sPrompt, sDefault)
     {
         let sResponse = null;
-        if (window) {
-            sResponse = window.prompt(sPrompt, sDefault === undefined? "" : sDefault);
+        if (globals.window.prompt) {
+            sResponse = globals.window.prompt(sPrompt, sDefault === undefined? "" : sDefault);
         }
         return sResponse;
     }
@@ -475,12 +439,12 @@ export default class Component {
                             if (parms && parms['binding'] !== undefined) {
                                 component.setBinding(parms['type'], parms['binding'], /** @type {HTMLElement} */(control), parms['value']);
                             } else if (!parms || parms['type'] != "description") {
-                                Component.log("Component '" + component.toString() + "' missing binding" + (parms? " for " + parms['type'] : ""), Component.PRINT.WARNING);
+                                Component.printf(Messages.WARNING, "Component \"%s\" missing binding%s\n", component.toString(), (parms? " for " + parms['type'] : ""));
                             }
                             iClass = aClasses.length;
                             break;
                         default:
-                            // if (DEBUG) Component.log("Component.bindComponentControls(" + component.toString() + "): unrecognized control class \"" + sClass + "\"", Component.PRINT.WARNING);
+                            // if (DEBUG) Component.printf(Messages.WARNING, "Component.bindComponentControls(%s): unrecognized control class \"%s\"\n", component.toString(), sClass);
                             break;
                     }
                 }
@@ -531,10 +495,10 @@ export default class Component {
      * this linear lookup into a property lookup, but some components may have no ID.
      *
      * @param {string} id of the desired component
-     * @param {string} [idRelated] of related component
+     * @param {string|boolean|null} [idRelated] of related component
      * @returns {Component|null}
      */
-    static getComponentByID(id, idRelated)
+    static getComponentByID(id, idRelated = null)
     {
         if (id !== undefined) {
             let i;
@@ -552,8 +516,8 @@ export default class Component {
                     return components[i];
                 }
             }
-            if (components.length) {
-                Component.log("Component ID '" + id + "' not found", Component.PRINT.WARNING);
+            if (components.length && idRelated !== false) {
+                Component.printf(Messages.WARNING, "Component ID \"%s\" not found\n", id);
             }
         }
         return null;
@@ -593,7 +557,7 @@ export default class Component {
                     return components[i];
                 }
             }
-            Component.log("Component type '" + sType + "' not found", Component.PRINT.DEBUG);
+            if (MAXDEBUG) Component.printf(Messages.WARNING, "Component type \"%s\" not found\n", sType);
         }
         return null;
     }
@@ -693,7 +657,7 @@ export default class Component {
             }
         }
         if (!ae.length) {
-            Component.log('No elements of class "' + sClass + '" found', Component.PRINT.DEBUG);
+            if (MAXDEBUG) Component.printf(Messages.WARNING, "No elements of class \"%s\" found\n", sClass);
         }
         return ae;
     }
@@ -822,7 +786,7 @@ export default class Component {
              * instead, but it's a bit too confusing mingling script output in a window that
              * already mingles Debugger and machine output.
              */
-            Component.print(aTokens.join(' '), Component.PRINT.SCRIPT);
+            Component.printf(Messages.SCRIPT, aTokens.join(' '));
 
             let fnCallReady = null;
             if (Component.asyncCommands.indexOf(sCommand) >= 0) {
@@ -1015,7 +979,7 @@ export default class Component {
                         } else {
                             Component.appendControl(control, sMessage);
                         }
-                        if (!COMPILED) Component.print(sMessage);
+                        if (!COMPILED) Component.printf(sMessage);
                     };
                 }(this, controlTextArea);
             }
@@ -1033,7 +997,7 @@ export default class Component {
      *
      * WARNING: Even though this function's body is completely wrapped in DEBUG, that won't prevent the Closure Compiler
      * from including it, so all calls must still be prefixed with "if (DEBUG) ....".  For this reason, the class method,
-     * Component.log(), is preferred, because the compiler IS smart enough to remove those calls.
+     * Component.printf(), is preferred, because the compiler IS smart enough to remove those calls.
      *
      * @this {Component}
      * @param {string} [s] is the message text
@@ -1041,8 +1005,8 @@ export default class Component {
      */
     log(s, type)
     {
-        if (!COMPILED) {
-            Component.log(s, type || this.id || this.type);
+        if (!COMPILED && s) {
+            Component.printf(Messages.LOG, "%s: %s\n", type || this.id || this.type || "log", s);
         }
     }
 
@@ -1108,7 +1072,7 @@ export default class Component {
      */
     print(s, bitsMessage = 0)
     {
-        Component.print(s);
+        Component.printf(bitsMessage, s);
     }
 
     /**
@@ -1136,7 +1100,7 @@ export default class Component {
                 return false;
             }
         }
-        Component.notice(s, fPrintOnly, id || this.type);
+        Component.printf(fPrintOnly? Messages.DEFAULT : Messages.NOTICE, "%s: %s\n", id || this.type, s);
         return true;
     }
 

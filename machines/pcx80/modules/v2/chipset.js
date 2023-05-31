@@ -41,7 +41,7 @@ export default class ChipSetX80 extends Component {
         var model = parmsChipSet['model'];
 
         if (model && !ChipSetX80.MODELS[model]) {
-            Component.notice("Unrecognized ChipSet model: " + model);
+            Component.printf(Messages.NOTICE, "Unrecognized ChipSet model: %s\n", model);
         }
 
         this.config = ChipSetX80.MODELS[model] || {};

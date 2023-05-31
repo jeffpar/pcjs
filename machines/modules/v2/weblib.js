@@ -8,6 +8,7 @@
  */
 
 import Component from "./component.js";
+import Messages from "./messages.js";
 import ReportAPI from "./reportapi.js";
 import { COMPILED, DEBUG, MAXDEBUG, SITEURL, globals } from "./defines.js";
 
@@ -97,48 +98,6 @@ import { COMPILED, DEBUG, MAXDEBUG, SITEURL, globals } from "./defines.js";
 
 export default class Web {
     /**
-     * log(s, type)
-     *
-     * For diagnostic output only.  DEBUG must be true (or "--debug" specified via the command-line)
-     * for Component.log() to display anything.
-     *
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     */
-    static log(s, type)
-    {
-        Component.log(s, type);
-    }
-
-    /**
-     * notice(s, fPrintOnly, id)
-     *
-     * @param {string} s is the message text
-     * @param {boolean} [fPrintOnly]
-     * @param {string} [id] is the caller's ID, if any
-     */
-    static notice(s, fPrintOnly, id)
-    {
-        Component.notice(s, fPrintOnly, id);
-    }
-
-    /**
-     * alertUser(sMessage)
-     *
-     * NOTE: Legacy function for older modules (eg, DiskDump); see Component.alertUser().
-     *
-     * @param {string} sMessage
-     */
-    static alertUser(sMessage)
-    {
-        if (globals.window) {
-            globals.window.alert(sMessage);
-        } else {
-            Web.log(sMessage);
-        }
-    }
-
-    /**
      * getResource(sURL, type, fAsync, done, progress)
      *
      * Request the specified resource (sURL), and once the request is complete, notify done().
@@ -223,18 +182,18 @@ export default class Web {
             try {
                 resource = fArrayBuffer? request.response : request.responseText;
             } catch(err) {
-                if (MAXDEBUG) Web.log("xmlHTTPRequest(" + sURL + ") exception: " + err.message);
+                if (MAXDEBUG) Component.printf(Messages.ERROR, "xmlHTTPRequest(%s) exception: %s\n", sURL, err.message);
             }
             /*
              * The normal "success" case is a non-null resource and an HTTP status code of 200, but when loading files from the
              * local file system (ie, when using the "file:" protocol), we have to be a bit more flexible.
              */
             if (resource != null && (request.status == 200 || !request.status && resource.length && Web.getHostProtocol() == "file:")) {
-                if (MAXDEBUG) Web.log("xmlHTTPRequest(" + sURL + "): returned " + resource.length + " bytes");
+                if (MAXDEBUG) Component.printf("xmlHTTPRequest(%s): returned %d bytes\n", sURL, resource.length);
             }
             else {
                 nErrorCode = request.status || -1;
-                Web.log("xmlHTTPRequest(" + sURL + "): error code " + nErrorCode);
+                Component.printf(Messages.ERROR, "xmlHTTPRequest(%s) returned error %d\n", sURL, nErrorCode);
                 if (!request.status && !Web.fAdBlockerWarning) {
                     let match = sURL.match(/(^https?:\/\/[^/]+)(.*)/);
                     if (match) {
@@ -262,12 +221,12 @@ export default class Web {
                 sPost += p + '=' + encodeURIComponent(type[p]);
             }
             sPost = sPost.replace(/%20/g, '+');
-            if (MAXDEBUG) Web.log("Web.getResource(POST " + sURL + "): " + sPost.length + " bytes");
+            if (MAXDEBUG) Component.printf("Web.getResource(POST %s): %d bytes\n", sURL, sPost.length);
             request.open("POST", sURL, fAsync);
             request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             request.send(sPost);
         } else {
-            if (MAXDEBUG) Web.log("Web.getResource(GET " + sURL + ")");
+            if (MAXDEBUG) Component.printf("Web.getResource(GET %s)\n", sURL);
             request.open("GET", sURL, fAsync);
             if (type == "arraybuffer") {
                 if (fXHR2) {
@@ -579,7 +538,7 @@ export default class Web {
                     f = (globals.window.localStorage.getItem(Web.sLocalStorageTest) == Web.sLocalStorageTest);
                     globals.window.localStorage.removeItem(Web.sLocalStorageTest);
                 } catch (e) {
-                    Web.logLocalStorageError(e);
+                    Web.printLocalStorageError(e);
                     f = false;
                 }
             }
@@ -589,13 +548,13 @@ export default class Web {
     }
 
     /**
-     * logLocalStorageError(e)
+     * printLocalStorageError(e)
      *
      * @param {Error} e is an exception
      */
-    static logLocalStorageError(e)
+    static printLocalStorageError(e)
     {
-        Web.log(e.message, "localStorage error");
+        Component.printf(Messages.ERROR, "Local storage error: %s\n", e.message);
     }
 
     /**
@@ -613,7 +572,7 @@ export default class Web {
             try {
                 sValue = globals.window.localStorage.getItem(sKey);
             } catch (e) {
-                Web.logLocalStorageError(e);
+                Web.printLocalStorageError(e);
             }
         }
         return sValue;
@@ -633,7 +592,7 @@ export default class Web {
                 globals.window.localStorage.setItem(sKey, sValue);
                 return true;
             } catch (e) {
-                Web.logLocalStorageError(e);
+                Web.printLocalStorageError(e);
             }
         }
         return false;
@@ -650,7 +609,7 @@ export default class Web {
             try {
                 globals.window.localStorage.removeItem(sKey);
             } catch (e) {
-                Web.logLocalStorageError(e);
+                Web.printLocalStorageError(e);
             }
         }
     }
@@ -669,7 +628,7 @@ export default class Web {
                     a.push(globals.window.localStorage.key(i));
                 }
             } catch (e) {
-                Web.logLocalStorageError(e);
+                Web.printLocalStorageError(e);
             }
         }
         return a;
@@ -722,7 +681,7 @@ export default class Web {
              * Here's one case where we have to be careful with Component, because when isUserAgent() is called by
              * the init code below, component.js hasn't been loaded yet.  The simple solution for now is to remove the call.
              *
-             *      Web.log("agent: " + userAgent);
+             *      Component.printf("agent: %s\n", userAgent);
              *
              * And yes, it would be pointless to use the conditional (?) operator below, if not for the Google Closure
              * Compiler (v20130823) failing to detect the entire expression as a boolean.
@@ -946,7 +905,7 @@ export default class Web {
         };
         e.onmousedown = function()
         {
-            // Web.log("onMouseDown()");
+            // Component.printf(Messages.DEBUG, "onMouseDown()\n");
             if (!fIgnoreMouseEvents) {
                 if (!timer) {
                     ms = msDelay;
@@ -956,7 +915,7 @@ export default class Web {
         };
         e.ontouchstart = function()
         {
-            // Web.log("onTouchStart()");
+            // Component.printf(Messages.DEBUG, "onTouchStart()\n");
             if (!timer) {
                 ms = msDelay;
                 fnRepeat();
@@ -964,7 +923,7 @@ export default class Web {
         };
         e.onmouseup = e.onmouseout = function()
         {
-            // Web.log("onMouseUp()/onMouseOut()");
+            // Component.printf(Messages.DEBUG, "onMouseUp()/onMouseOut()\n");
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -972,7 +931,7 @@ export default class Web {
         };
         e.ontouchend = e.ontouchcancel = function()
         {
-            // Web.log("onTouchEnd()/onTouchCancel()");
+            // Component.printf(Messages.DEBUG, "onTouchEnd()/onTouchCancel()\n");
             if (timer) {
                 clearTimeout(timer);
                 timer = null;
@@ -1055,7 +1014,7 @@ export default class Web {
      */
     static onError(sMessage)
     {
-        Web.notice(sMessage + "\n\nIf it happens again, please send the URL to support@pcjs.org. Thanks.");
+        Component.printf(Messages.NOTICE, "%s\n\nIf it happens again, please send the URL to support@pcjs.org. Thanks.\n", sMessage);
     }
 
     /**

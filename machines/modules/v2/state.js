@@ -7,6 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
+import Messages from "./messages.js";
 import Web from "./weblib.js";
 import Component from "./component.js";
 import { DEBUG } from "./defines.js";
@@ -59,7 +60,7 @@ export default class State {
         try {
             this.state[id] = data;
         } catch(e) {
-            Component.log(e.message);
+            Component.printf(Messages.ERROR, e.message);
         }
     }
 
@@ -115,7 +116,7 @@ export default class State {
             if (s) {
                 this.json = s;
                 this.fLoaded = true;
-                if (DEBUG) Component.log("localStorage(" + this.key + "): " + s.length + " bytes loaded");
+                if (DEBUG) Component.printf("localStorage(%s): %d bytes loaded\n", this.key, s.length);
                 return true;
             }
         }
@@ -159,7 +160,7 @@ export default class State {
         if (Web.hasLocalStorage()) {
             let s = JSON.stringify(this.state);
             if (Web.setLocalStorageItem(this.key, s)) {
-                if (DEBUG) Component.log("localStorage(" + this.key + "): " + s.length + " bytes stored");
+                if (DEBUG) Component.printf("localStorage(%s): %d bytes stored\n", this.key, s.length);
             } else {
                 /*
                  * WARNING: Because browsers tend to disable all alerts() during an "unload" operation,
@@ -167,7 +168,7 @@ export default class State {
                  * think of some way to notify the user that there's a problem, and offer a way of cleaning
                  * up old states.
                  */
-                Component.error("Unable to store " + s.length + " bytes in browser local storage");
+                Component.printf(Messages.ERROR, "Unable to store %d bytes in browser local storage\n", s.length);
                 fSuccess = false;
             }
         }
@@ -220,7 +221,7 @@ export default class State {
             let sKey = aKeys[i];
             if (sKey && (fAll || sKey.substr(0, this.key.length) == this.key)) {
                 Web.removeLocalStorageItem(sKey);
-                if (DEBUG) Component.log("localStorage(" + sKey + ") removed");
+                Component.printf(Messages.DEBUG, "localStorage(%s) removed\n", sKey);
                 aKeys.splice(i, 1);
                 i = 0;
             }

@@ -394,7 +394,7 @@ function embedMachine(sAppName, sAppClass, idMachine, sXMLFile, sXSLFile, sParms
                 if (match) sError = match[1];
             }
         }
-        Component.log(sError);
+        Component.printf(Messages.ERROR, "%s\n", sError);
         displayMessage("Error: " + sError + (sURL? " (" + sURL + ")" : ""));
         if (fSuccess) doneMachine();
         fSuccess = false;

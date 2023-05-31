@@ -42,7 +42,7 @@ export default class KeyboardX80 extends Component {
         var model = parmsKbd['model'];
 
         if (model && !KeyboardX80.MODELS[model]) {
-            Component.notice("Unrecognized KeyboardX80 model: " + model);
+            Component.printf(Messages.NOTICE, "Unrecognized KeyboardX80 model: %s\n", model);
         }
 
         this.config = KeyboardX80.MODELS[model] || {};

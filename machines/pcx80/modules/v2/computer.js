@@ -1386,7 +1386,7 @@ export default class ComputerX80 extends Component {
             }
             if (component.type == sType) return component;
         }
-        if (!componentLast) Component.log("Machine component type '" + sType + "' not found", "warning");
+        if (!componentLast && DEBUG) this.printf(Messages.LOG, "Machine component type \"%s\" not found\n", sType);
         return null;
     }
 

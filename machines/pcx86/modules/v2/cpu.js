@@ -182,7 +182,7 @@ export default class CPULib extends Component {
         }
 
         this.fpuActive = null;
-        this.fpu = cmp.getMachineComponent("FPU");
+        this.fpu = cmp.getMachineComponent("FPU", false);
 
         /*
          * Attach the ChipSet component to the CPU so that it can obtain the IDT vector number

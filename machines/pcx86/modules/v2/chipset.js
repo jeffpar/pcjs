@@ -75,7 +75,7 @@ export default class ChipSet extends Component {
          * model numbers, you should generally compare (this.model|0) to the target value, which truncates it.
          */
         if (model && !ChipSet.MODELS[model]) {
-            Component.notice("Unrecognized ChipSet model: " + model);
+            Component.printf(Messages.NOTICE, "Unrecognized ChipSet model: %s\n", model);
         }
 
         this.model = ChipSet.MODELS[model] || ChipSet.MODEL_5150_OTHER;
