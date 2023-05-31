@@ -63147,8 +63147,12 @@ class Disk extends Component {
         } else {
             sector[Disk.SECTOR.CYLINDER] = iCylinder;
             sector[Disk.SECTOR.HEAD] = iHead;
-
-
+            //
+            // These asserts will fail on disks with non-standard formats (eg, copy-protected disks
+            // like "ZORK1-READONLY.json"), so they have been disabled.
+            //
+            //
+            //
         }
         sector[Disk.SECTOR.PATTERN] = dwPattern;
         sector.iModify = sector.cModify = 0;

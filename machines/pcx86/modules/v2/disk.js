@@ -1178,8 +1178,12 @@ export default class Disk extends Component {
         } else {
             sector[Disk.SECTOR.CYLINDER] = iCylinder;
             sector[Disk.SECTOR.HEAD] = iHead;
-            this.assert(sector[Disk.SECTOR.ID] == idSector);
-            this.assert(sector[Disk.SECTOR.LENGTH] == cbSector);
+            //
+            // These asserts will fail on disks with non-standard formats (eg, copy-protected disks
+            // like "ZORK1-READONLY.json"), so they have been disabled.
+            //
+            // this.assert(sector[Disk.SECTOR.ID] == idSector);
+            // this.assert(sector[Disk.SECTOR.LENGTH] == cbSector);
         }
         sector[Disk.SECTOR.PATTERN] = dwPattern;
         sector.iModify = sector.cModify = 0;
