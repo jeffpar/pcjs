@@ -335,7 +335,7 @@ export default class KbdX86 extends Component {
                 sCode = sBinding.toUpperCase().replace(/-/g, '_');
                 if (KbdX86.CLICKCODES[sCode] !== undefined && sHTMLType == "button") {
                     this.bindings[id] = controlText;
-                    if (MAXDEBUG) printf("binding click-code '%s'\n", sCode);
+                    if (MAXDEBUG) this.printf("binding click-code '%s'\n", sCode);
                     controlText.onclick = function(kbd, sKey, simCode) {
                         return function onKeyboardBindingClick(event) {
                             kbd.printf(Messages.EVENT + Messages.KEY, "%s clicked\n", sKey);

@@ -57,35 +57,7 @@ async function loadModules(factory, modules)
             break;
         }
     }
-    /*
-     * Before falling into the REPL, process any command-line (--cmd) commands -- which should eventually include batch files.
-     */
-    if (argv['cmd'] !== undefined) {
-        let cmds = argv['cmd'];
-        let aCmds = (typeof cmds == "string"? [cmds] : cmds);
-        for (let i = 0; i < aCmds.length; i++) {
-            doCommand(aCmds[i]);
-        }
-        sCmdPrev = "";
-    }
-
-    let stdin = process.stdin, stdout = process.stdout;
-
-    if (kbd) {
-        stdin.setEncoding("utf8");
-        stdin.on('data', function(key) {
-            if (kbd && injectKeys) {
-                kbd.injectKeys.call(kbd, key, 0);
-            }
-        });
-    }
-
-    repl.start({
-        prompt: factory + "> ",
-        input: stdin,
-        output: stdout,
-        eval: onCommand
-    });
+    readInput(factory, process.stdin, process.stdout);
 }
 
 /**
@@ -104,9 +76,54 @@ function printf(format, ...args)
 }
 
 /**
+ * readInput(prompt, stdin, stdout)
+ *
+ * @param {string} prompt
+ * @param {Object} stdin
+ * @param {Object} stdout
+ */
+function readInput(prompt, stdin, stdout)
+{
+    let command = "";
+
+    /*
+     * Process any command-line (--cmd) commands first.
+     */
+    if (argv['cmd'] !== undefined) {
+        let cmds = argv['cmd'];
+        let aCmds = (typeof cmds == "string"? [cmds] : cmds);
+        for (let i = 0; i < aCmds.length; i++) {
+            doCommand(aCmds[i]);
+        }
+        sCmdPrev = "";
+    }
+
+    stdin.resume();
+    stdin.setEncoding("utf-8");
+    stdin.setRawMode(true);
+
+    stdin.on("data", function(input) {
+        command += input;
+        if (command == "exit\n") {
+            process.exit();
+            return;
+        }
+        if (kbd && injectKeys) {
+            kbd.injectKeys.call(kbd, input, 0);
+        }
+    });
+
+    // repl.start({
+    //     prompt: prompt + "> ",
+    //     input: stdin,
+    //     output: stdout,
+    //     eval: onCommand
+    // });
+}
+
+/**
  * intVideo(addr)
  *
- * @this {CPUx86}
  * @param {number} addr
  * @returns {boolean} true to proceed with the INT 0x10 software interrupt, false to skip
  */
@@ -256,7 +273,7 @@ let onCommand = function (cmd, context, filename, callback)
     let result = false;
     /*
      * WARNING: After updating from Node v0.10.x to v0.11.x, the incoming expression in "cmd" is no longer
-     * parenthesized, so I had to tweak the RegExp below.  But... WTF.  Do we not care what we break, folks?
+     * parenthesized, so I had to tweak the RegExp below.  WTF?
      */
     let match = cmd.match(/^\(?\s*(.*?)\s*\)?$/);
     if (match) result = doCommand(match[1]);
