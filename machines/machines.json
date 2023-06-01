@@ -15,7 +15,7 @@
       "'copy' is an optional property used by new machines to refer to another machine configuration that will be used",
       "for all other machine properties; it saves a bit of repetition for machines that are very similar.",
       "",
-      "'scripts' is a list of all the JavaScript files that comprise the machine; PCjs 'gulp' tasks will concatenate and",
+      "'modules' is a list of all the JavaScript files that comprise the machine; PCjs 'gulp' tasks will concatenate and",
       "compile the files in the order listed, and if the web server is configured to load uncompiled files, they will",
       "be loaded on their respective web pages in the order listed.",
       "",
@@ -33,7 +33,7 @@
       "I386"
     ],
     "factory": "embedPCx86",
-    "scripts": [
+    "modules": [
       "./machines/modules/v1/databuffer.js",
       "./machines/modules/v1/format.js",
       "./machines/modules/v1/messages.js",
@@ -107,7 +107,7 @@
       "VERSION"
     ],
     "factory": "PCx86v3",
-    "scripts": [
+    "modules": [
       "./machines/modules/v1/format.js",
       "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
@@ -140,7 +140,7 @@
       "SITEURL"
     ],
     "factory": "embedC1P",
-    "scripts": [
+    "modules": [
       "./machines/modules/v1/format.js",
       "./machines/modules/v1/messages.js",
       "./machines/modules/v2/defines.js",
@@ -185,7 +185,7 @@
       "SITEURL"
     ],
     "factory": "embedPCx80",
-    "scripts": [
+    "modules": [
       "./machines/modules/v1/format.js",
       "./machines/modules/v1/messages.js",
       "./machines/modules/v2/defines.js",
@@ -241,7 +241,7 @@
       "SITEURL"
     ],
     "factory": "embedPDP10",
-    "scripts": [
+    "modules": [
       "./machines/modules/v1/format.js",
       "./machines/modules/v1/messages.js",
       "./machines/modules/v2/defines.js",
@@ -295,7 +295,7 @@
       "SITEURL"
     ],
     "factory": "embedPDP11",
-    "scripts": [
+    "modules": [
       "./machines/modules/v1/format.js",
       "./machines/modules/v1/messages.js",
       "./machines/modules/v2/defines.js",
@@ -355,7 +355,7 @@
       "VERSION"
     ],
     "factory": "TMS1500",
-    "scripts": [
+    "modules": [
       "./machines/modules/v1/format.js",
       "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
@@ -394,7 +394,7 @@
       "VERSION"
     ],
     "factory": "Invaders",
-    "scripts": [
+    "modules": [
       "./machines/modules/v1/format.js",
       "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
@@ -427,7 +427,7 @@
       "VERSION"
     ],
     "factory": "LEDs",
-    "scripts": [
+    "modules": [
       "./machines/modules/v1/format.js",
       "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
@@ -454,7 +454,7 @@
       "VERSION"
     ],
     "factory": "Pilot",
-    "scripts": [
+    "modules": [
       "./machines/modules/v1/format.js",
       "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
@@ -488,7 +488,7 @@
       "VERSION"
     ],
     "factory": "VT100",
-    "scripts": [
+    "modules": [
       "./machines/modules/v1/format.js",
       "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",
@@ -524,7 +524,7 @@
       "VERSION"
     ],
     "factory": "PDP11v3",
-    "scripts": [
+    "modules": [
       "./machines/modules/v1/format.js",
       "./machines/modules/v3/defines.js",
       "./machines/modules/v3/numio.js",

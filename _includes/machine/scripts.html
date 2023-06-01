@@ -206,7 +206,7 @@ template doesn't add them to the Computer component anymore, since we started su
   {%- if machine_parms != "" -%}{%- capture machine_parms -%}{{ site.left_brace }}{{ machine_parms | prepend: "@" | replace: "@,","" }}{{ site.right_brace }}{%- endcapture -%}{%- endif -%}
   {%- if site.pcjs.uncompiled or site.pcjs.unbundled or machine.unbundled -%}
     {%- if site.pcjs.unbundled or machine.unbundled -%}
-      {%- for script in machine_data.scripts -%}
+      {%- for script in machine_data.modules -%}
         {%- if script contains "/embed.js" -%}{% continue %}{%- endif -%}
         {%- capture page_script %}
     <script type="module" src="{{ site.baseurl }}/{{ script | replace: './','' }}"></script>

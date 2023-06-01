@@ -52,7 +52,7 @@ const DEBUG = true;                     // this @define is overridden by the Clo
  *
  * @define {boolean}
  */
-const DEBUGGER = true;                  // this @define is overridden by the Closure Compiler to remove Debugger-related support
+var DEBUGGER = true;                    // this @define is overridden by the Closure Compiler to remove Debugger-related support
 
 /**
  * @define {string}
@@ -125,7 +125,7 @@ const SITEURL = "http://localhost:8088";// this @define is overridden by the Clo
 /**
  * WEBLOCAL is intended to reflect the webserver's operating mode.  Normally, we assume that all web
  * resources should be accessed remotely, but if the webserver is running in "developer" mode, then the
- * webserver will indicate that fact by setting the global variable 'WEBLOCAL' to true on any pages
+ * webserver should indicate that fact by setting the global variable 'WEBLOCAL' to true on any pages
  * with embedded machines.
  *
  * @define {boolean}

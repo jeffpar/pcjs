@@ -9,60 +9,67 @@
  */
 
 import fs from "fs";
+import path from "path";
 import repl from "repl";
 import filelib from "../../modules/v2/filelib.js";
 import proclib from "../../modules/v2/proclib.js";
 
-//
-// The following list of imports should be a strict subset of the scripts listed in machines.json for 'pcx86'.
-//
-import "../../modules/v1/format.js";
-import "../../modules/v1/databuffer.js";
-import "../../modules/v1/messages.js";
-import strlib from "../../modules/v2/strlib.js";
-import weblib from "../../modules/v2/weblib.js";
-import Component from "../../modules/v2/component.js";
-import "../../modules/v2/jsonlib.js";
-import "../modules/v2/defines.js";
-import "../modules/v2/messages.js";
-import "../modules/v2/x86.js";
-import "../modules/v3/charset.js";
-import "../modules/v2/interrupts.js";
-import "../modules/v2/bus.js";
-import "../modules/v2/memory.js";
-import "../modules/v2/cpu.js";
-import "../modules/v2/cpux86.js";
-import "../modules/v2/fpux86.js";
-import "../modules/v2/segx86.js";
-import "../modules/v2/x86func.js";
-import "../modules/v2/x86help.js";
-import "../modules/v2/x86mods.js";
-import "../modules/v2/x86ops.js";
-import "../modules/v2/x86op0f.js";
-import "../modules/v2/chipset.js";
-import "../modules/v2/rom.js";
-import "../modules/v2/ram.js";
-import "../modules/v2/keyboard.js";
-import "../modules/v2/video.js";
-import "../modules/v2/parallel.js";
-import "../modules/v2/serial.js";
-import "../modules/v2/testctl.js";
-import "../modules/v2/testmon.js";
-import "../modules/v2/mouse.js";
-import "../modules/v2/disk.js";
-import "../modules/v2/fdc.js";
-import "../modules/v2/hdc.js";
-import "../../modules/v2/debugger.js";
-import "../modules/v2/debugger.js";
-import "../modules/v2/computer.js";
-import { embedPCx86 } from "../../modules/v2/embed.js";
-
 let args = proclib.getArgs();
 let argv = args.argv;
+let fDebug = (argv['debug'] || false);
 
-let dbg;
 let sCmdPrev = "";
-let fConsole = (argv['console'] || false), fDebug = (argv['debug'] || false);
+let strlib, weblib, component, embedMachine, dbg;
+
+let machines = JSON.parse(fs.readFileSync("../../machines.json", {encoding: "utf8"}));
+
+/**
+ * loadModules(factory, modules)
+ *
+ * @param {string} factory
+ * @param {Array.<string>} modules
+ */
+async function loadModules(factory, modules) {
+    for (let modulePath of modules) {
+        modulePath = path.join("../../..", modulePath);
+        let name = path.basename(modulePath, ".js");
+        if (name == "embed") {
+            let { [factory]: embed } = await import(modulePath);
+            embedMachine = embed;
+            continue;
+        }
+        let { default: module } = await import(modulePath);
+        switch(name) {
+        case "strlib":
+            strlib = module;
+            break;
+        case "weblib":
+            weblib = module;
+            break;
+        case "component":
+            component = module;
+            break;
+        }
+    }
+    /*
+     * Before falling into the REPL, process any command-line (--cmd) commands -- which should eventually include batch files.
+     */
+    if (argv['cmd'] !== undefined) {
+        let cmds = argv['cmd'];
+        let aCmds = (typeof cmds == "string"? [cmds] : cmds);
+        for (let i = 0; i < aCmds.length; i++) {
+            doCommand(aCmds[i]);
+        }
+        sCmdPrev = "";
+    }
+
+    repl.start({
+        prompt: factory + "> ",
+        input: process.stdin,
+        output: process.stdout,
+        eval: onCommand
+    });
+}
 
 /**
  * printf(format, ...args)
@@ -109,12 +116,12 @@ function loadMachine(sFile)
                 idMachine = machine['machine']['id'];
             }
 
-            embedPCx86(idMachine, null, null, sMachine);
+            embedMachine(idMachine, null, null, sMachine);
             weblib.doPageInit();
 
-            dbg = Component.getComponentByType("Debugger");
+            dbg = component.getComponentByType("Debugger");
             if (dbg) {
-                dbg.log = dbg.print = function(s) {
+                dbg.print = function(s) {
                     printf(s);
                 };
             }
@@ -199,7 +206,7 @@ function doCommand(sCmd)
  * @param {string} filename
  * @param {function(Object|null, Object)} callback
  */
-var onCommand = function (cmd, context, filename, callback)
+let onCommand = function (cmd, context, filename, callback)
 {
     let result = false;
     /*
@@ -211,21 +218,4 @@ var onCommand = function (cmd, context, filename, callback)
     callback(null, result);
 };
 
-/*
- * Before falling into the REPL, process any command-line (--cmd) commands -- which should eventually include batch files.
- */
-if (argv['cmd'] !== undefined) {
-    var cmds = argv['cmd'];
-    var aCmds = (typeof cmds == "string"? [cmds] : cmds);
-    for (let i = 0; i < aCmds.length; i++) {
-        doCommand(aCmds[i]);
-    }
-    sCmdPrev = "";
-}
-
-repl.start({
-    prompt: "PCx86> ",
-    input: process.stdin,
-    output: process.stdout,
-    eval: onCommand
-});
+loadModules(machines['pcx86']['factory'], machines['pcx86']['modules']);
