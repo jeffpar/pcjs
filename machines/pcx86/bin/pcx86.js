@@ -19,9 +19,11 @@ let argv = args.argv;
 let fDebug = (argv['debug'] || false);
 
 let sCmdPrev = "";
-let strlib, weblib, component, embedMachine, dbg;
+let Component, Interrupts;
+let strlib, weblib, embedMachine, cpu, dbg, kbd;
 
-let machines = JSON.parse(fs.readFileSync("../../machines.json", {encoding: "utf8"}));
+let injectKeys = false;
+let machines = JSON.parse(fs.readFileSync("../../machines.json", "utf8"));
 
 /**
  * loadModules(factory, modules)
@@ -29,7 +31,8 @@ let machines = JSON.parse(fs.readFileSync("../../machines.json", {encoding: "utf
  * @param {string} factory
  * @param {Array.<string>} modules
  */
-async function loadModules(factory, modules) {
+async function loadModules(factory, modules)
+{
     for (let modulePath of modules) {
         modulePath = path.join("../../..", modulePath);
         let name = path.basename(modulePath, ".js");
@@ -47,7 +50,10 @@ async function loadModules(factory, modules) {
             weblib = module;
             break;
         case "component":
-            component = module;
+            Component = module;
+            break;
+        case "interrupts":
+            Interrupts = module;
             break;
         }
     }
@@ -63,10 +69,21 @@ async function loadModules(factory, modules) {
         sCmdPrev = "";
     }
 
+    let stdin = process.stdin, stdout = process.stdout;
+
+    if (kbd) {
+        stdin.setEncoding("utf8");
+        stdin.on('data', function(key) {
+            if (kbd && injectKeys) {
+                kbd.injectKeys.call(kbd, key, 0);
+            }
+        });
+    }
+
     repl.start({
         prompt: factory + "> ",
-        input: process.stdin,
-        output: process.stdout,
+        input: stdin,
+        output: stdout,
         eval: onCommand
     });
 }
@@ -79,7 +96,28 @@ async function loadModules(factory, modules) {
  */
 function printf(format, ...args)
 {
-    process.stdout.write(strlib.sprintf(format, ...args));
+    if (strlib) {
+        process.stdout.write(strlib.sprintf(format, ...args));
+        return;
+    }
+    console.log(format, ...args);
+}
+
+/**
+ * intVideo(addr)
+ *
+ * @this {CPUx86}
+ * @param {number} addr
+ * @returns {boolean} true to proceed with the INT 0x10 software interrupt, false to skip
+ */
+function intVideo(addr)
+{
+    let AH = ((cpu.regEAX >> 8) & 0xff), AL = (cpu.regEAX & 0xff);
+    if (AH == 0x0e) {
+        printf("%c", AL);
+        injectKeys = true;
+    }
+    return true;
 }
 
 /**
@@ -119,12 +157,19 @@ function loadMachine(sFile)
             embedMachine(idMachine, null, null, sMachine);
             weblib.doPageInit();
 
-            dbg = component.getComponentByType("Debugger");
+            cpu = Component.getComponentByType("CPU");
+            if (cpu) {
+                cpu.addIntNotify(Interrupts.VIDEO, intVideo.bind(cpu));
+            }
+
+            dbg = Component.getComponentByType("Debugger");
             if (dbg) {
                 dbg.print = function(s) {
                     printf(s);
                 };
             }
+
+            kbd = Component.getComponentByType("Keyboard");
 
             /*
              * Return the original machine object only in DEBUG mode

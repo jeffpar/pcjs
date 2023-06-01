@@ -16,7 +16,7 @@ import Keys from "../../../modules/v2/keys.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, COMPILED, DESKPRO386, MAXDEBUG } from "./defines.js";
+import { APPCLASS, COMPILED, DEBUG, DESKPRO386, MAXDEBUG } from "./defines.js";
 
 /**
  * @class KbdX86
@@ -335,7 +335,7 @@ export default class KbdX86 extends Component {
                 sCode = sBinding.toUpperCase().replace(/-/g, '_');
                 if (KbdX86.CLICKCODES[sCode] !== undefined && sHTMLType == "button") {
                     this.bindings[id] = controlText;
-                    if (MAXDEBUG) console.log("binding click-code '" + sCode + "'");
+                    if (MAXDEBUG) printf("binding click-code '%s'\n", sCode);
                     controlText.onclick = function(kbd, sKey, simCode) {
                         return function onKeyboardBindingClick(event) {
                             kbd.printf(Messages.EVENT + Messages.KEY, "%s clicked\n", sKey);
@@ -357,7 +357,7 @@ export default class KbdX86 extends Component {
                     }
                     this.cSoftCodes++;
                     this.bindings[id] = controlText;
-                    if (MAXDEBUG) console.log("binding soft-code '" + sBinding + "'");
+                    if (MAXDEBUG) this.printf("binding soft-code '%s'\n", sBinding);
                     let msLastEvent = 0, nClickState = 0;
                     let fStateKey = (KbdX86.KEYSTATES[KbdX86.SOFTCODES[sBinding]] <= KbdX86.STATE.ALL_MODIFIERS);
                     let fnDown = function(kbd, sKey, simCode) {
@@ -379,7 +379,7 @@ export default class KbdX86 extends Component {
                                 if (nClickState < 8) {
                                     kbd.removeActiveKey(simCode);
                                 } else {
-                                    if (MAXDEBUG) console.log("soft-locking '" + sBinding + "'");
+                                    if (MAXDEBUG) this.printf("soft-locking '%s'\n", sBinding);
                                     nClickState = 0;
                                 }
                             }
@@ -1109,15 +1109,15 @@ export default class KbdX86 extends Component {
      * @param {number} [msDelay] is an optional injection delay (default is msInjectDefault)
      * @returns {boolean}
      */
-    injectKeys(sKeys, msDelay)
+    injectKeys(sKeys, msDelay = this.msInjectDefault)
     {
         if (sKeys) {
             let sInjectBuffer = this.parseKeys(sKeys);
             if (sInjectBuffer) {
                 this.nInjection = KbdX86.INJECTION.NONE;
                 this.sInjectBuffer = sInjectBuffer;
-                if (!COMPILED) this.log("injectKeys(\"" + this.sInjectBuffer.split("\n").join("\\n") + "\")");
-                this.msInjectDelay = msDelay || this.msInjectDefault;
+                if (DEBUG) this.printf("injectKeys(\"%s\")\n", this.sInjectBuffer.split("\n").join("\\n"));
+                this.msInjectDelay = msDelay || 0;
                 this.injectKeys();
                 return true;
             }
