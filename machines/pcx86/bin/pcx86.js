@@ -10,7 +10,6 @@
 
 import fs from "fs";
 import path from "path";
-import Messages from "../../modules/v1/messages.js";
 import filelib from "../../modules/v2/filelib.js";
 import proclib from "../../modules/v2/proclib.js";
 
@@ -92,69 +91,77 @@ function readInput(prompt, stdin, stdout)
         let cmds = argv['cmd'];
         let aCmds = (typeof cmds == "string"? [cmds] : cmds);
         for (let i = 0; i < aCmds.length; i++) {
-            doCommand(aCmds[i]);
+            printf(doCommand(aCmds[i]));
         }
         sCmdPrev = "";
     }
 
     let command = "";
-    let debugMode = !kbd;
+    let debugMode = undefined;
+
     prompt = ">";
-    printf("Press ctrl-a to enter debug mode, ctrl-a again to exit\n");
-    if (debugMode) {
-        printf("%s> ", prompt);
-    }
+
+    let setDebugMode = function(f) {
+        if (!f && debugMode != f) {
+            printf("Press ctrl-a to enter debugger, ctrl-c to terminate debugger\n");
+        }
+        debugMode = f;
+        if (debugMode) {
+            printf("%s> ", prompt);
+        }
+    };
+
+    setDebugMode(!kbd);
 
     stdin.resume();
-    stdin.setEncoding("utf-8");
+    stdin.setEncoding("utf8");
     stdin.setRawMode(true);
 
     stdin.on("data", function(data) {
         let code = data.charCodeAt(0);
-        if (code == 0x01) {
-            if (debugMode) {
-                process.exit();
-                return;
-            }
+        if (code == 0x01 && !debugMode) {
             cpu.stopCPU();
-            debugMode = true;
-            command = data = "";
-            printf("%s> ", prompt);
+            command = "";
+            setDebugMode(true);
+            return;
+        }
+        if (code == 0x03 && debugMode) {
+            printf("terminating...\n");
+            process.exit();
+            return;
         }
         if (!debugMode) {
             kbd.injectKeys.call(kbd, data, 0);
             return;
         }
-        if (data) {
-            if (data == "\x7f") {
-                if (command.length) {
-                    command = command.slice(0, -1);
-                    printf("\b \b");
-                }
-                return;
+        if (data == "\x7f") {
+            if (command.length) {
+                command = command.slice(0, -1);
+                printf("\b \b");
             }
-            if (data == "\x1b[A" && !command.length) {
-                data = sCmdPrev;
-            }
-            else if (code < 0x20 && code != 0x0d) {
-                return;
-            }
-            printf("%s", data);
-            command += data;
-            do {
-                let i = command.indexOf("\r");
-                if (i < 0) break;
-                let sCmd = command.slice(0, i);
-                if (prompt != ">" || !sCmd) printf("\n");
-                doCommand(sCmd);
-                if (cpu.isRunning()) {
-                    debugMode = false;
-                    break;
-                }
-                printf("%s> ", prompt);
-                command = command.slice(i+1);
-            } while (command.length);
+            return;
         }
+        if (data == "\x1b[A" && !command.length) {
+            data = sCmdPrev;
+        }
+        else if (code < 0x20 && code != 0x0d) {
+            return;
+        }
+        printf("%s", data);
+        command += data;
+        do {
+            let i = command.indexOf("\r");
+            if (i < 0) break;
+            let sCmd = command.slice(0, i);
+            if (prompt != ">" || !sCmd) printf("\n");
+            printf(doCommand(sCmd));
+            if (cpu.isRunning()) {
+                setDebugMode(false);
+                break;
+            }
+            printf("%s> ", prompt);
+            command = command.slice(i+1);
+        } while (command.length);
     });
 }
 
@@ -178,19 +185,19 @@ function intVideo(addr)
  * loadMachine(sFile)
  *
  * @param {string} sFile
- * @returns {Object} machine structure if successful
+ * @returns {string}
  */
 function loadMachine(sFile)
 {
-    let machine;
+    let result = "";
     if (fDebug) printf("loadMachine(\"%s\")\n", sFile);
     try {
         let sMachine = fs.readFileSync(sFile, "utf8");
         /*
          * Since our JSON files may contain comments, hex values, and other tokens deemed unacceptable
-         * by the JSON Overlords, we must use eval() instead of JSON.parse().
+         * by the JSON.parse(), we must use eval() instead.
          */
-        machine = eval('(' + sMachine + ')');
+        let machine = eval('(' + sMachine + ')');
         if (machine) {
             /*
              * 'machine' is a pseudo-component that is only used to define an ID for the entire machine;
@@ -221,22 +228,23 @@ function loadMachine(sFile)
                 };
             }
             kbd = Component.getComponentByType("Keyboard");
+            result = "Machine loaded: " + idMachine;;
         }
     } catch(err) {
-        printf("%s\n", err.message);
+        result = err.message;
     }
-    return machine;
+    return result;
 }
 
 /**
  * doCommand(sCmd)
  *
  * @param {string} sCmd
- * @returns {*}
+ * @returns {string} (result of command)
  */
 function doCommand(sCmd)
 {
-    let result = false;
+    let result = "";
     let aTokens = sCmd.split(' ');
 
     switch(aTokens[0]) {
@@ -248,7 +256,6 @@ function doCommand(sCmd)
         break;
     case "quit":
         process.exit();
-        result = true;
         break;
     default:
         if (sCmd) {
@@ -257,13 +264,13 @@ function doCommand(sCmd)
                     result = eval('(' + sCmd + ')');
                 }
             } catch(err) {
-                printf("%s\n", err.message);
+                result = err.message;
             }
         }
         break;
     }
     sCmdPrev = sCmd;
-    return result;
+    return result? result + "\n" : "";
 }
 
 loadModules(machines['pcx86']['factory'], machines['pcx86']['modules']);
