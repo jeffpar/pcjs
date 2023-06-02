@@ -18,11 +18,6 @@ let argv = args.argv;
 let moduleDir = path.dirname(argv[0]);
 let rootDir = path.join(moduleDir, "../../..");
 
-//
-// TODO: add fetch support.
-//
-globals.window['WEBLOCAL'] = true;
-
 /**
  * @class File
  */
@@ -56,7 +51,7 @@ export default class File {
     static readFileSync(sFile, encoding = "utf8")
     {
         let data;
-        if (sFile) {
+        if (sFile && sFile.indexOf("http") != 0) {
             sFile = File.getServerPath(sFile);
             data = fs.readFileSync(sFile, encoding);
             if (!encoding) data = new DataBuffer(data);

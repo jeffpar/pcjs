@@ -153,7 +153,7 @@ function readInput(prompt, stdin, stdout)
             let i = command.indexOf("\r");
             if (i < 0) break;
             let sCmd = command.slice(0, i);
-            if (prompt != ">" || !sCmd) printf("\n");
+            printf("\n");
             printf(doCommand(sCmd));
             if (cpu.isRunning()) {
                 setDebugMode(false);
@@ -260,11 +260,11 @@ function doCommand(sCmd)
     default:
         if (sCmd) {
             try {
-                if (dbg && !dbg.doCommands(sCmd, true)) {
+                if (dbg && !dbg.doCommands(sCmd, true, true)) {
                     result = eval('(' + sCmd + ')');
                 }
             } catch(err) {
-                result = err.message;
+                result =  err.message;
             }
         }
         break;

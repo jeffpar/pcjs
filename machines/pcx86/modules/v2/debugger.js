@@ -6555,6 +6555,11 @@ export default class DebuggerX86 extends DbgLib {
     {
         let result = true;
 
+        if (!this.cpu) {
+            this.printf("no CPU attached\n");
+            return false;
+        }
+
         try {
             if (!sCmd.length || sCmd == "end") {
                 if (this.fAssemble) {
@@ -6719,18 +6724,19 @@ export default class DebuggerX86 extends DbgLib {
     }
 
     /**
-     * doCommands(sCommands, fSave)
+     * doCommands(sCommands, fSave, fQuiet)
      *
      * @this {DebuggerX86}
      * @param {string} sCommands
      * @param {boolean} [fSave]
+     * @param {boolean} [fQuiet]
      * @returns {boolean} true if all commands processed, false if not
      */
-    doCommands(sCommands, fSave)
+    doCommands(sCommands, fSave = false, fQuiet = false)
     {
         let a = this.parseCommand(sCommands, fSave);
         for (let s in a) {
-            if (!this.doCommand(a[+s])) return false;
+            if (!this.doCommand(a[+s], fQuiet)) return false;
         }
         return true;
     }

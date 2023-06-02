@@ -139,7 +139,7 @@ export default class Web {
         /*
          * While it would be nice to simply import WEBLOCAL from defines.js, that merely defines the *default*
          * value of the global variable 'WEBLOCAL'; since imported values are immutable, we must look at the global
-         * variable, since that's the only one that can be changed at runtime.
+         * variable, since that's the only one that *might* have been changed at runtime.
          */
         if (globals.window['WEBLOCAL'] && Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
             sURL = sURL.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "/disks/$1/").replace(/^\/discs\/([^/]*)\//, "/disks/cdroms/$1/");
@@ -149,11 +149,39 @@ export default class Web {
 
         if (globals.node.readFileSync) {
             resource = globals.node.readFileSync(sURL);
-            if (done) done(sURL, resource, nErrorCode);
+            if (resource !== undefined) {
+                if (done) done(sURL, resource, nErrorCode);
+                return [resource, nErrorCode];
+            }
+        }
+
+        let request;
+        if (globals.window.XMLHttpRequest) {
+            request = new globals.window.XMLHttpRequest();
+        } else if (globals.window.ActiveXObject) {
+            request = new globals.window.ActiveXObject("Microsoft.XMLHTTP");
+        } else if (globals.window.fetch) {
+            fetch(sURL)
+            .then(response => {
+                switch(type) {
+                case "json":
+                case "text":
+                    return response.text();
+                case "arraybuffer":
+                    return response.arrayBuffer();
+                default:
+                    throw new Error("unsupported response type: " + type);
+                }
+            })
+            .then(resource => {
+                if (done) done(sURL, resource, nErrorCode);
+            })
+            .catch(error => {
+                if (done) done(sURL, resource, nErrorCode);
+            });
             return response;
         }
 
-        let request = (globals.window.XMLHttpRequest? new globals.window.XMLHttpRequest() : new globals.window.ActiveXObject("Microsoft.XMLHTTP"));
         let fArrayBuffer = false, fXHR2 = (typeof request.responseType === 'string');
 
         let callback = function() {

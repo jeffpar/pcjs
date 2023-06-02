@@ -2933,7 +2933,7 @@ class Web {
         /*
          * While it would be nice to simply import WEBLOCAL from defines.js, that merely defines the *default*
          * value of the global variable 'WEBLOCAL'; since imported values are immutable, we must look at the global
-         * variable, since that's the only one that can be changed at runtime.
+         * variable, since that's the only one that *might* have been changed at runtime.
          */
         if (globals.window['WEBLOCAL'] && Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
             sURL = sURL.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "/disks/$1/").replace(/^\/discs\/([^/]*)\//, "/disks/cdroms/$1/");
@@ -2943,11 +2943,39 @@ class Web {
 
         if (globals.node.readFileSync) {
             resource = globals.node.readFileSync(sURL);
-            if (done) done(sURL, resource, nErrorCode);
+            if (resource !== undefined) {
+                if (done) done(sURL, resource, nErrorCode);
+                return [resource, nErrorCode];
+            }
+        }
+
+        let request;
+        if (globals.window.XMLHttpRequest) {
+            request = new globals.window.XMLHttpRequest();
+        } else if (globals.window.ActiveXObject) {
+            request = new globals.window.ActiveXObject("Microsoft.XMLHTTP");
+        } else if (globals.window.fetch) {
+            fetch(sURL)
+            .then(response => {
+                switch(type) {
+                case "json":
+                case "text":
+                    return response.text();
+                case "arraybuffer":
+                    return response.arrayBuffer();
+                default:
+                    throw new Error("unsupported response type: " + type);
+                }
+            })
+            .then(resource => {
+                if (done) done(sURL, resource, nErrorCode);
+            })
+            .catch(error => {
+                if (done) done(sURL, resource, nErrorCode);
+            });
             return response;
         }
 
-        let request = (globals.window.XMLHttpRequest? new globals.window.XMLHttpRequest() : new globals.window.ActiveXObject("Microsoft.XMLHTTP"));
         let fArrayBuffer = false, fXHR2 = (typeof request.responseType === 'string');
 
         let callback = function() {
@@ -5302,7 +5330,10 @@ class Component {
         if (typeof format == "number") {
             bitsMessage = format || Messages.PROGRESS;
             format = args.shift();
-            if (bitsMessage == Messages.STATUS) {
+            if (bitsMessage == Messages.LOG) {
+                format = (this.id || this.type || "log") + ": " + format;
+            }
+            else if (bitsMessage == Messages.STATUS) {
                 format = this.type + ": " + format;
             }
         }
@@ -39414,7 +39445,7 @@ class ChipSet extends Component {
             if (this.classAudio) {
                 this.contextAudio = new this.classAudio();
             } else {
-                if (DEBUG) this.log("AudioContext not available");
+                if (DEBUG) this.printf("AudioContext not available");
             }
         }
         /*
@@ -42866,8 +42897,8 @@ class ChipSet extends Component {
                 }
             }
 
-            if (MAXDEBUG && this.messageEnabled(Messages.TIMER + Messages.WARNING)) {
-                this.log("TIMER" + iTimer + " count: " + count + ", ticks: " + ticksElapsed + ", fired: " + (fFired? "true" : "false"));
+            if (MAXDEBUG) {
+                this.printf(Messages.TIMER + Messages.WARNING, "TIMER%d count: %d, ticks: %d, fired: %b\n", iTimer, count, ticksElapsed, fFired);
             }
 
             timer.countCurrent[0] = count & 0xff;
@@ -45574,7 +45605,7 @@ class ROMx86 extends Component {
      */
     constructor(parmsROM)
     {
-        super("ROMx86", parmsROM);
+        super("ROMx86", parmsROM, Messages.MEM);
 
         this.abROM = null;
         this.addrROM = +parmsROM['addr'];       // we allow numbers or strings (JSON strings permit hex)
@@ -45618,7 +45649,7 @@ class ROMx86 extends Component {
 
         if (this.sFileURL) {
             let sFileName = Str.getBaseName(this.sFileURL);
-            if (DEBUG) this.log('load("' + this.sFileURL + '")');
+            if (DEBUG) this.printf("load(\"%s\")\n", this.sFileURL);
             /*
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -47168,7 +47199,7 @@ class KbdX86 extends Component {
                 sCode = sBinding.toUpperCase().replace(/-/g, '_');
                 if (KbdX86.CLICKCODES[sCode] !== undefined && sHTMLType == "button") {
                     this.bindings[id] = controlText;
-                    if (MAXDEBUG) this.printf("binding click-code '%s'\n", sCode);
+                    if (MAXDEBUG) this.printf(Messages.LOG, "binding click-code '%s'\n", sCode);
                     controlText.onclick = function(kbd, sKey, simCode) {
                         return function onKeyboardBindingClick(event) {
                             kbd.printf(Messages.EVENT + Messages.KEY, "%s clicked\n", sKey);
@@ -47190,7 +47221,7 @@ class KbdX86 extends Component {
                     }
                     this.cSoftCodes++;
                     this.bindings[id] = controlText;
-                    if (MAXDEBUG) this.printf("binding soft-code '%s'\n", sBinding);
+                    if (MAXDEBUG) this.printf(Messages.LOG, "binding soft-code '%s'\n", sBinding);
                     let msLastEvent = 0, nClickState = 0;
                     let fStateKey = (KbdX86.KEYSTATES[KbdX86.SOFTCODES[sBinding]] <= KbdX86.STATE.ALL_MODIFIERS);
                     let fnDown = function(kbd, sKey, simCode) {
@@ -47212,7 +47243,7 @@ class KbdX86 extends Component {
                                 if (nClickState < 8) {
                                     kbd.removeActiveKey(simCode);
                                 } else {
-                                    if (MAXDEBUG) this.printf("soft-locking '%s'\n", sBinding);
+                                    if (MAXDEBUG) this.printf(Messages.LOG, "soft-locking '%s'\n", sBinding);
                                     nClickState = 0;
                                 }
                             }
@@ -64492,7 +64523,7 @@ class FDC extends Component {
              * is an "orthogonality" to disabling both features in tandem, let's just let it slide, OK?
              */
             if (!this.fLocalDisks) {
-                if (DEBUG) this.log("Local disk support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available");
                 /*
                  * We could also simply remove the control; eg:
                  *
@@ -64532,7 +64563,7 @@ class FDC extends Component {
 
         case "mountDisk":
             if (!this.fLocalDisks) {
-                if (DEBUG) this.log("Local disk support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -65578,7 +65609,7 @@ class FDC extends Component {
                 if (fAutoMount) {
                     drive.fAutoMount = true;
                     this.cAutoMount++;
-                    this.printf("loading diskette '%s'\n", sDiskName);
+                    this.printf("loading diskette \"%s\"\n", sDiskName);
                 }
                 drive.fLocal = !!file;
                 let disk = new Disk(this, drive, DiskAPI.MODE.PRELOAD);
@@ -79240,6 +79271,11 @@ class DebuggerX86 extends DbgLib {
     {
         let result = true;
 
+        if (!this.cpu) {
+            this.printf("no CPU attached\n");
+            return false;
+        }
+
         try {
             if (!sCmd.length || sCmd == "end") {
                 if (this.fAssemble) {
@@ -79404,18 +79440,19 @@ class DebuggerX86 extends DbgLib {
     }
 
     /**
-     * doCommands(sCommands, fSave)
+     * doCommands(sCommands, fSave, fQuiet)
      *
      * @this {DebuggerX86}
      * @param {string} sCommands
      * @param {boolean} [fSave]
+     * @param {boolean} [fQuiet]
      * @returns {boolean} true if all commands processed, false if not
      */
-    doCommands(sCommands, fSave)
+    doCommands(sCommands, fSave = false, fQuiet = false)
     {
         let a = this.parseCommand(sCommands, fSave);
         for (let s in a) {
-            if (!this.doCommand(a[+s])) return false;
+            if (!this.doCommand(a[+s], fQuiet)) return false;
         }
         return true;
     }
