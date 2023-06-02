@@ -18,6 +18,11 @@ let argv = args.argv;
 let moduleDir = path.dirname(argv[0]);
 let rootDir = path.join(moduleDir, "../../..");
 
+//
+// TODO: add fetch support.
+//
+globals.window['WEBLOCAL'] = true;
+
 /**
  * @class File
  */

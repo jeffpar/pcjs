@@ -45887,7 +45887,7 @@ class ROMx86 extends Component {
     addROM(addr)
     {
         if (this.bus.addMemory(addr, this.sizeROM, MemoryX86.TYPE.ROM)) {
-            if (DEBUG) this.log("addROM(): copying ROM to " + Str.toHexLong(addr) + " (" + Str.toHexLong(this.abROM.length) + " bytes)");
+            if (DEBUG) this.printf("addROM(%#010x): copying %#06x bytes\n", addr, this.abROM.length);
             let bto = null;
             for (let off = 0; off < this.abROM.length; off++) {
                 this.bus.setByteDirect(addr + off, this.abROM[off]);
@@ -47168,7 +47168,7 @@ class KbdX86 extends Component {
                 sCode = sBinding.toUpperCase().replace(/-/g, '_');
                 if (KbdX86.CLICKCODES[sCode] !== undefined && sHTMLType == "button") {
                     this.bindings[id] = controlText;
-                    if (MAXDEBUG) printf("binding click-code '%s'\n", sCode);
+                    if (MAXDEBUG) this.printf("binding click-code '%s'\n", sCode);
                     controlText.onclick = function(kbd, sKey, simCode) {
                         return function onKeyboardBindingClick(event) {
                             kbd.printf(Messages.EVENT + Messages.KEY, "%s clicked\n", sKey);

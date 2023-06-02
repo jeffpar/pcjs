@@ -42,7 +42,7 @@ export default class ROMx86 extends Component {
      */
     constructor(parmsROM)
     {
-        super("ROMx86", parmsROM);
+        super("ROMx86", parmsROM, Messages.MEM);
 
         this.abROM = null;
         this.addrROM = +parmsROM['addr'];       // we allow numbers or strings (JSON strings permit hex)
@@ -86,7 +86,7 @@ export default class ROMx86 extends Component {
 
         if (this.sFileURL) {
             let sFileName = Str.getBaseName(this.sFileURL);
-            if (DEBUG) this.log('load("' + this.sFileURL + '")');
+            if (DEBUG) this.printf("load(\"%s\")\n", this.sFileURL);
             /*
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -355,7 +355,7 @@ export default class ROMx86 extends Component {
     addROM(addr)
     {
         if (this.bus.addMemory(addr, this.sizeROM, MemoryX86.TYPE.ROM)) {
-            if (DEBUG) this.log("addROM(): copying ROM to " + Str.toHexLong(addr) + " (" + Str.toHexLong(this.abROM.length) + " bytes)");
+            if (DEBUG) this.printf("addROM(%#010x): copying %#06x bytes\n", addr, this.abROM.length);
             let bto = null;
             for (let off = 0; off < this.abROM.length; off++) {
                 this.bus.setByteDirect(addr + off, this.abROM[off]);

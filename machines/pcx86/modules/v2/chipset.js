@@ -155,7 +155,7 @@ export default class ChipSet extends Component {
             if (this.classAudio) {
                 this.contextAudio = new this.classAudio();
             } else {
-                if (DEBUG) this.log("AudioContext not available");
+                if (DEBUG) this.printf("AudioContext not available");
             }
         }
         /*
@@ -3607,8 +3607,8 @@ export default class ChipSet extends Component {
                 }
             }
 
-            if (MAXDEBUG && this.messageEnabled(Messages.TIMER + Messages.WARNING)) {
-                this.log("TIMER" + iTimer + " count: " + count + ", ticks: " + ticksElapsed + ", fired: " + (fFired? "true" : "false"));
+            if (MAXDEBUG) {
+                this.printf(Messages.TIMER + Messages.WARNING, "TIMER%d count: %d, ticks: %d, fired: %b\n", iTimer, count, ticksElapsed, fFired);
             }
 
             timer.countCurrent[0] = count & 0xff;

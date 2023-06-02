@@ -1376,7 +1376,10 @@ export default class Component {
         if (typeof format == "number") {
             bitsMessage = format || Messages.PROGRESS;
             format = args.shift();
-            if (bitsMessage == Messages.STATUS) {
+            if (bitsMessage == Messages.LOG) {
+                format = (this.id || this.type || "log") + ": " + format;
+            }
+            else if (bitsMessage == Messages.STATUS) {
                 format = this.type + ": " + format;
             }
         }

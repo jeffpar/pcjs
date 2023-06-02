@@ -301,7 +301,7 @@ export default class FDC extends Component {
              * is an "orthogonality" to disabling both features in tandem, let's just let it slide, OK?
              */
             if (!this.fLocalDisks) {
-                if (DEBUG) this.log("Local disk support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available");
                 /*
                  * We could also simply remove the control; eg:
                  *
@@ -341,7 +341,7 @@ export default class FDC extends Component {
 
         case "mountDisk":
             if (!this.fLocalDisks) {
-                if (DEBUG) this.log("Local disk support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -1387,7 +1387,7 @@ export default class FDC extends Component {
                 if (fAutoMount) {
                     drive.fAutoMount = true;
                     this.cAutoMount++;
-                    this.printf("loading diskette '%s'\n", sDiskName);
+                    this.printf("loading diskette \"%s\"\n", sDiskName);
                 }
                 drive.fLocal = !!file;
                 let disk = new Disk(this, drive, DiskAPI.MODE.PRELOAD);

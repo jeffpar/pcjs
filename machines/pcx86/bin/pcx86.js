@@ -10,7 +10,7 @@
 
 import fs from "fs";
 import path from "path";
-import repl from "repl";
+import Messages from "../../modules/v1/messages.js";
 import filelib from "../../modules/v2/filelib.js";
 import proclib from "../../modules/v2/proclib.js";
 
@@ -20,7 +20,8 @@ let fDebug = (argv['debug'] || false);
 
 let sCmdPrev = "";
 let Component, Interrupts;
-let strlib, weblib, embedMachine, cpu, dbg, kbd;
+let strlib, weblib, embedMachine;
+let cpu, dbg, kbd;
 
 let injectKeys = false;
 let machines = JSON.parse(fs.readFileSync("../../machines.json", "utf8"));
@@ -57,7 +58,7 @@ async function loadModules(factory, modules)
             break;
         }
     }
-    readInput(factory, process.stdin, process.stdout);
+    readInput(factory.replace("embed", ""), process.stdin, process.stdout);
 }
 
 /**
@@ -84,8 +85,6 @@ function printf(format, ...args)
  */
 function readInput(prompt, stdin, stdout)
 {
-    let command = "";
-
     /*
      * Process any command-line (--cmd) commands first.
      */
@@ -98,27 +97,65 @@ function readInput(prompt, stdin, stdout)
         sCmdPrev = "";
     }
 
+    let command = "";
+    let debugMode = !kbd;
+    prompt = ">";
+    printf("Press ctrl-a to enter debug mode, ctrl-a again to exit\n");
+    if (debugMode) {
+        printf("%s> ", prompt);
+    }
+
     stdin.resume();
     stdin.setEncoding("utf-8");
     stdin.setRawMode(true);
 
-    stdin.on("data", function(input) {
-        command += input;
-        if (command == "exit\n") {
-            process.exit();
+    stdin.on("data", function(data) {
+        let code = data.charCodeAt(0);
+        if (code == 0x01) {
+            if (debugMode) {
+                process.exit();
+                return;
+            }
+            cpu.stopCPU();
+            debugMode = true;
+            command = data = "";
+            printf("%s> ", prompt);
+        }
+        if (!debugMode) {
+            kbd.injectKeys.call(kbd, data, 0);
             return;
         }
-        if (kbd && injectKeys) {
-            kbd.injectKeys.call(kbd, input, 0);
+        if (data) {
+            if (data == "\x7f") {
+                if (command.length) {
+                    command = command.slice(0, -1);
+                    printf("\b \b");
+                }
+                return;
+            }
+            if (data == "\x1b[A" && !command.length) {
+                data = sCmdPrev;
+            }
+            else if (code < 0x20 && code != 0x0d) {
+                return;
+            }
+            printf("%s", data);
+            command += data;
+            do {
+                let i = command.indexOf("\r");
+                if (i < 0) break;
+                let sCmd = command.slice(0, i);
+                if (prompt != ">" || !sCmd) printf("\n");
+                doCommand(sCmd);
+                if (cpu.isRunning()) {
+                    debugMode = false;
+                    break;
+                }
+                printf("%s> ", prompt);
+                command = command.slice(i+1);
+            } while (command.length);
         }
     });
-
-    // repl.start({
-    //     prompt: prompt + "> ",
-    //     input: stdin,
-    //     output: stdout,
-    //     eval: onCommand
-    // });
 }
 
 /**
@@ -141,16 +178,14 @@ function intVideo(addr)
  * loadMachine(sFile)
  *
  * @param {string} sFile
- * @returns {Object} representing the machine whose component objects have been loaded into aComponents
+ * @returns {Object} machine structure if successful
  */
 function loadMachine(sFile)
 {
-    if (fDebug) printf("loadMachine(\"%s\")\n", sFile);
-
     let machine;
+    if (fDebug) printf("loadMachine(\"%s\")\n", sFile);
     try {
-        let sMachine = /** @type {string} */ (fs.readFileSync(sFile, {encoding: "utf8"}));
-        if (fDebug) printf(sMachine);
+        let sMachine = fs.readFileSync(sFile, "utf8");
         /*
          * Since our JSON files may contain comments, hex values, and other tokens deemed unacceptable
          * by the JSON Overlords, we must use eval() instead of JSON.parse().
@@ -178,20 +213,14 @@ function loadMachine(sFile)
             if (cpu) {
                 cpu.addIntNotify(Interrupts.VIDEO, intVideo.bind(cpu));
             }
-
             dbg = Component.getComponentByType("Debugger");
             if (dbg) {
-                dbg.print = function(s) {
+                dbg.print = function(s, bitMessage) {
+                    // if (bitsMessage != Messages.LOG) printf(s);
                     printf(s);
                 };
             }
-
             kbd = Component.getComponentByType("Keyboard");
-
-            /*
-             * Return the original machine object only in DEBUG mode
-             */
-            if (!fDebug) machine = true;
         }
     } catch(err) {
         printf("%s\n", err.message);
@@ -207,12 +236,6 @@ function loadMachine(sFile)
  */
 function doCommand(sCmd)
 {
-    if (!sCmd) {
-        sCmd = sCmdPrev;
-    } else {
-        sCmdPrev = sCmd;
-    }
-
     let result = false;
     let aTokens = sCmd.split(' ');
 
@@ -231,8 +254,7 @@ function doCommand(sCmd)
         if (sCmd) {
             try {
                 if (dbg && !dbg.doCommands(sCmd, true)) {
-                    sCmd = '(' + sCmd + ')';
-                    result = eval(sCmd);
+                    result = eval('(' + sCmd + ')');
                 }
             } catch(err) {
                 printf("%s\n", err.message);
@@ -240,44 +262,8 @@ function doCommand(sCmd)
         }
         break;
     }
+    sCmdPrev = sCmd;
     return result;
 }
-
-/**
- * onCommand(cmd, context, filename, callback)
- *
- * The Node docs (http://nodejs.org/api/repl.html) say that repl.start's "eval" option is:
- *
- *      a function that will be used to eval each given line; defaults to an async wrapper for eval()
- *
- * and it gives this example of such a function:
- *
- *      function eval(cmd, context, filename, callback) {
- *          callback(null, result);
- *      }
- *
- * but it defines NEITHER the parameters for the function NOR the parameters for the callback().
- *
- * It's pretty clear that "result" is expected to return whatever "eval()" would return for the expression
- * in "cmd" (which is always parenthesized in preparation for a call to "eval()"), but it's not clear what
- * the first callback() parameter (represented by null) is supposed to be.  Should we assume it's an Error
- * object, in case we want to report an error?
- *
- * @param {string} cmd
- * @param {Object} context
- * @param {string} filename
- * @param {function(Object|null, Object)} callback
- */
-let onCommand = function (cmd, context, filename, callback)
-{
-    let result = false;
-    /*
-     * WARNING: After updating from Node v0.10.x to v0.11.x, the incoming expression in "cmd" is no longer
-     * parenthesized, so I had to tweak the RegExp below.  WTF?
-     */
-    let match = cmd.match(/^\(?\s*(.*?)\s*\)?$/);
-    if (match) result = doCommand(match[1]);
-    callback(null, result);
-};
 
 loadModules(machines['pcx86']['factory'], machines['pcx86']['modules']);

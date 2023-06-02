@@ -335,7 +335,7 @@ export default class KbdX86 extends Component {
                 sCode = sBinding.toUpperCase().replace(/-/g, '_');
                 if (KbdX86.CLICKCODES[sCode] !== undefined && sHTMLType == "button") {
                     this.bindings[id] = controlText;
-                    if (MAXDEBUG) this.printf("binding click-code '%s'\n", sCode);
+                    if (MAXDEBUG) this.printf(Messages.LOG, "binding click-code '%s'\n", sCode);
                     controlText.onclick = function(kbd, sKey, simCode) {
                         return function onKeyboardBindingClick(event) {
                             kbd.printf(Messages.EVENT + Messages.KEY, "%s clicked\n", sKey);
@@ -357,7 +357,7 @@ export default class KbdX86 extends Component {
                     }
                     this.cSoftCodes++;
                     this.bindings[id] = controlText;
-                    if (MAXDEBUG) this.printf("binding soft-code '%s'\n", sBinding);
+                    if (MAXDEBUG) this.printf(Messages.LOG, "binding soft-code '%s'\n", sBinding);
                     let msLastEvent = 0, nClickState = 0;
                     let fStateKey = (KbdX86.KEYSTATES[KbdX86.SOFTCODES[sBinding]] <= KbdX86.STATE.ALL_MODIFIERS);
                     let fnDown = function(kbd, sKey, simCode) {
@@ -379,7 +379,7 @@ export default class KbdX86 extends Component {
                                 if (nClickState < 8) {
                                     kbd.removeActiveKey(simCode);
                                 } else {
-                                    if (MAXDEBUG) this.printf("soft-locking '%s'\n", sBinding);
+                                    if (MAXDEBUG) this.printf(Messages.LOG, "soft-locking '%s'\n", sBinding);
                                     nClickState = 0;
                                 }
                             }
