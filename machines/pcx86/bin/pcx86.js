@@ -10,6 +10,12 @@
 
 import fs from "fs";
 import path from "path";
+
+/*
+ * We don't use the File class (filelib.js) here, but the simple act of loading it will make
+ * readFileSync() visible to the WebLib class (weblib.js), which in turn will allow it load any
+ * local files referenced by the machine's JSON file locally instead of remotely.
+ */
 import filelib from "../../modules/v2/filelib.js";
 import proclib from "../../modules/v2/proclib.js";
 
@@ -22,7 +28,6 @@ let Component, Interrupts;
 let strlib, weblib, embedMachine;
 let cpu, dbg, kbd;
 
-let injectKeys = false;
 let machines = JSON.parse(fs.readFileSync("../../machines.json", "utf8"));
 
 /**
@@ -119,32 +124,33 @@ function readInput(prompt, stdin, stdout)
 
     stdin.on("data", function(data) {
         let code = data.charCodeAt(0);
-        if (code == 0x01 && !debugMode) {
+        if (code == 0x01 && !debugMode) {           // check for CTRL-A when NOT in debug mode
             cpu.stopCPU();
             command = "";
             setDebugMode(true);
             return;
         }
-        if (code == 0x03 && debugMode) {
+        if (code == 0x03 && debugMode) {            // check for CTRL-C when in debug mode
             printf("terminating...\n");
             process.exit();
             return;
         }
         if (!debugMode) {
+            data = data.replace(/\x7f/g, "\b");     // convert DEL to BS
             kbd.injectKeys.call(kbd, data, 0);
             return;
         }
-        if (data == "\x7f") {
+        if (data == "\x7f") {                       // implement DEL ourselves (since we're in "raw" mode)
             if (command.length) {
                 command = command.slice(0, -1);
-                printf("\b \b");
+                printf("\b \b");                    // by converting it to BS + SPACE + BS
             }
             return;
         }
-        if (data == "\x1b[A" && !command.length) {
+        if (data == "\x1b[A" && !command.length) {  // implement UP ARROW ourselves (since we're in "raw" mode)
             data = sCmdPrev;
         }
-        else if (code < 0x20 && code != 0x0d) {
+        else if (code < 0x20 && code != 0x0d) {     // anything else (including any ESC codes) is ignored
             return;
         }
         printf("%s", data);
@@ -176,7 +182,6 @@ function intVideo(addr)
     let AH = ((cpu.regEAX >> 8) & 0xff), AL = (cpu.regEAX & 0xff);
     if (AH == 0x0e) {
         printf("%c", AL);
-        injectKeys = true;
     }
     return true;
 }
