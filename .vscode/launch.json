@@ -41,7 +41,7 @@
       }
     },
     {
-      "name": "COMPAQ LTE/286 [Debugger] (Unbundled)",
+      "name": "COMPAQ LTE/286 (Unbundled)",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/compaq/lte286/",
@@ -77,82 +77,10 @@
       }
     },
     {
-      "name": "COMPAQ LTE/286 with CGA [Debugger] (Uncompiled)",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/machines/pcx86/compaq/lte286/cga/debugger/uncompiled/machine.xml",
-      "webRoot": "${workspaceFolder}",
-      "presentation": {
-        "hidden": false,
-        "group": "hardware",
-        "order": 10
-      }
-    },
-    {
-      "name": "COMPAQ DeskPro 386, 2Mb RAM, IBM EGA [Debugger]",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/machines/pcx86/compaq/deskpro386/ega/2048kb/debugger/machine.xml",
-      "webRoot": "${workspaceFolder}",
-      "presentation": {
-        "hidden": false,
-        "group": "hardware",
-        "order": 10
-      }
-    },
-    {
-      "name": "COMPAQ DeskPro 386, 2Mb RAM, IBM EGA [Debugger] (Uncompiled)",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/machines/pcx86/compaq/deskpro386/ega/2048kb/debugger/uncompiled/machine.xml",
-      "webRoot": "${workspaceFolder}",
-      "presentation": {
-        "hidden": false,
-        "group": "hardware",
-        "order": 10
-      }
-    },
-    {
       "name": "COMPAQ DeskPro 386, 2Mb RAM, IBM VGA [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/",
-      "webRoot": "${workspaceFolder}",
-      "presentation": {
-        "hidden": false,
-        "group": "hardware",
-        "order": 10
-      }
-    },
-    {
-      "name": "COMPAQ DeskPro 386, 2Mb RAM, IBM VGA [Debugger] (Uncompiled)",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/machines/pcx86/compaq/deskpro386/vga/2048kb/debugger/uncompiled/machine.xml",
-      "webRoot": "${workspaceFolder}",
-      "presentation": {
-        "hidden": false,
-        "group": "hardware",
-        "order": 10
-      }
-    },
-    {
-      "name": "COMPAQ DeskPro 386, 4Mb RAM, IBM VGA [Debugger]",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/machines/pcx86/compaq/deskpro386/vga/4096kb/debugger/machine.xml",
-      "webRoot": "${workspaceFolder}",
-      "presentation": {
-        "hidden": false,
-        "group": "hardware",
-        "order": 10
-      }
-    },
-    {
-      "name": "COMPAQ DeskPro 386, 4Mb RAM, IBM VGA [Debugger] (Uncompiled)",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/machines/pcx86/compaq/deskpro386/vga/4096kb/debugger/uncompiled/machine.xml",
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -197,7 +125,7 @@
       }
     },
     {
-      "name": "DEC PDP-11/20 BASIC (V3) [Debugger]",
+      "name": "DEC PDP-11/20 BASIC (v3) [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/pdp11/1120/basic/debugger/v3/",
@@ -233,34 +161,10 @@
       }
     },
     {
-      "name": "DEC PDP-11/70 with VT100 Terminal",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/machines/dec/pdp11/1170/vt100/",
-      "webRoot": "${workspaceFolder}",
-      "presentation": {
-        "hidden": false,
-        "group": "hardware",
-        "order": 10
-      }
-    },
-    {
       "name": "DEC PDP-11/70 with VT100 Terminal [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/dec/pdp11/1170/vt100/debugger/",
-      "webRoot": "${workspaceFolder}",
-      "presentation": {
-        "hidden": false,
-        "group": "hardware",
-        "order": 10
-      }
-    },
-    {
-      "name": "DEC VT100 Terminal connected to IBM PC AT",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/machines/dec/vt100/5170/",
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -281,34 +185,10 @@
       }
     },
     {
-      "name": "IBM PC with CGA",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/machines/pcx86/ibm/5150/cga/",
-      "webRoot": "${workspaceFolder}",
-      "presentation": {
-        "hidden": false,
-        "group": "hardware",
-        "order": 10
-      }
-    },
-    {
       "name": "IBM PC with CGA [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/cga/debugger/",
-      "webRoot": "${workspaceFolder}",
-      "presentation": {
-        "hidden": false,
-        "group": "hardware",
-        "order": 10
-      }
-    },
-    {
-      "name": "IBM PC with MDA",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/",
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -329,7 +209,7 @@
       }
     },
     {
-      "name": "IBM PC (V3) with MDA [Debugger]",
+      "name": "IBM PC (v3) with MDA [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/mda/debugger/v3/",
@@ -353,34 +233,10 @@
       }
     },
     {
-      "name": "IBM PC with VGA",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/machines/pcx86/ibm/5150/vga/",
-      "webRoot": "${workspaceFolder}",
-      "presentation": {
-        "hidden": false,
-        "group": "hardware",
-        "order": 10
-      }
-    },
-    {
       "name": "IBM PC with VGA [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5150/vga/debugger/",
-      "webRoot": "${workspaceFolder}",
-      "presentation": {
-        "hidden": false,
-        "group": "hardware",
-        "order": 10
-      }
-    },
-    {
-      "name": "IBM PC XT with CGA",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/machines/pcx86/ibm/5160/cga/",
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
@@ -401,18 +257,6 @@
       }
     },
     {
-      "name": "IBM PC XT with EGA",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/machines/pcx86/ibm/5160/ega/",
-      "webRoot": "${workspaceFolder}",
-      "presentation": {
-        "hidden": false,
-        "group": "hardware",
-        "order": 10
-      }
-    },
-    {
       "name": "IBM PC XT with EGA [Debugger]",
       "type": "chrome",
       "request": "launch",
@@ -425,34 +269,10 @@
       }
     },
     {
-      "name": "IBM PC XT with MDA",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/machines/pcx86/ibm/5160/mda/",
-      "webRoot": "${workspaceFolder}",
-      "presentation": {
-        "hidden": false,
-        "group": "hardware",
-        "order": 10
-      }
-    },
-    {
       "name": "IBM PC XT with MDA [Debugger]",
       "type": "chrome",
       "request": "launch",
       "url": "http://localhost:4000/machines/pcx86/ibm/5160/mda/debugger/",
-      "webRoot": "${workspaceFolder}",
-      "presentation": {
-        "hidden": false,
-        "group": "hardware",
-        "order": 10
-      }
-    },
-    {
-      "name": "IBM PC AT with CGA",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:4000/machines/pcx86/ibm/5170/cga/",
       "webRoot": "${workspaceFolder}",
       "presentation": {
         "hidden": false,
