@@ -4,7 +4,7 @@ Load a machine JSON file, such as [ibm5150.json5](ibm5150.json5) or [deskpro386.
 
 For example:
 
-	node pcx86.js --cmd="load ibm5150.json5"
+	pcx86.js --cmd="load ibm5150.json5"
 
 should produce the following output:
 

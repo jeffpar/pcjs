@@ -10,7 +10,7 @@
 
 import fs from "fs";
 import path from "path";
-
+import Messages from "../../modules/v2/messages.js";
 /*
  * We don't use the File class (filelib.js) here, but the simple act of loading it will make
  * readFileSync() visible to the WebLib class (weblib.js), which in turn will allow getResource()
@@ -216,9 +216,10 @@ function loadMachine(sFile)
              */
             dbg = Component.getComponentByType("Debugger");
             if (dbg) {
-                dbg.print = function(s, bitMessage) {
-                    // if (bitsMessage != Messages.LOG) printf(s);
-                    printf(s);
+                dbg.print = function(s, bitsMessage) {
+                    if (fDebug || bitsMessage != Messages.LOG) {
+                        printf(s);
+                    }
                 };
             }
 
@@ -253,6 +254,7 @@ function doCommand(sCmd)
     case "load":
         result = loadMachine(aTokens[1]);
         break;
+    case "q":
     case "quit":
         process.exit();
         break;
