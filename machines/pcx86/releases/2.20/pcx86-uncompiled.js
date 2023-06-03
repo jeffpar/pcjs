@@ -46436,7 +46436,9 @@ class RAMx86 extends Component {
                  * and perhaps better alternative is to add "comment" attributes to the XML configuration file
                  * for these components, which the Computer component will display as it "powers up" components.
                  */
-                if (MAXDEBUG && !this.addrRAM && this.fInstalled) this.printf(Messages.STATUS, "specified size overrides SW1\n");
+                if (MAXDEBUG && !this.addrRAM && this.fInstalled) {
+                    this.printf(Messages.STATUS, "specified size overrides SW1\n");
+                }
 
                 /*
                  * Memory with an ID of "ramCPQ" is reserved for built-in memory located just below the 16Mb
@@ -46470,7 +46472,9 @@ class RAMx86 extends Component {
                  * HACK: Set the word at 40:72 in the ROM BIOS Data Area (RBDA) to 0x1234 to bypass the ROM BIOS
                  * memory storage tests. See rom.js for more RBDA definitions.
                  */
-                if (MAXDEBUG) this.printf(Messages.STATUS, "ROM BIOS memory test has been disabled\n");
+                if (MAXDEBUG) {
+                    this.printf(Messages.STATUS, "ROM BIOS memory test has been disabled\n");
+                }
                 this.bus.setShortDirect(ROMx86.BIOS.RESET_FLAG.ADDR, ROMx86.BIOS.RESET_FLAG.WARMBOOT);
             }
             /*
@@ -46726,7 +46730,7 @@ class CompaqController extends Controller {
     {
         let b = this.controller.getByte(off);
         if (DEBUG) {
-            this.controller.ram.printf(0 + Messages.ADDRESS, "CompaqController.readByte(%#06x) returned %#04x\n", off, b);
+            this.controller.ram.printf(Messages.MEM + Messages.ADDRESS, "CompaqController.readByte(%#06x) returned %#04x\n", off, b);
         }
         return b;
     }
@@ -46752,7 +46756,7 @@ class CompaqController extends Controller {
          * All bits in 0x80C00001 and 0x80C00003 are reserved, so we can simply ignore those writes.
          */
         if (DEBUG) {
-            this.controller.ram.printf(Messages.ADDRESS, "CompaqController.writeByte(%#06x,%#04x)\n", off, b);
+            this.controller.ram.printf(Messages.MEM + Messages.ADDRESS, "CompaqController.writeByte(%#06x,%#04x)\n", off, b);
         }
     }
 }
