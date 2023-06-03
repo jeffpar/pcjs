@@ -2152,8 +2152,8 @@ function processFile(argv)
  * To add files to a disk in a specific order, use --files=[comma-separated list of files].  And if you
  * want a particular boot sector, use --boot=[sector image file].
  *
- * You can also use the contents of a ZIP archive as your input source with --zip=[zipfile]; to also display
- * a listing of the archive's contents, include --verbose.
+ * You can also use the contents of a ZIP archive as your input source with --zip=[zipfile]; ditto for
+ * ARC files using --arc=[arcfile].  To also print a listing of an archive's contents, include --verbose.
  *
  * Use --all to process all files that match the "globbed" filespec (eg, "--all='/Volumes/PCSIG_13B/*.ZIP'");
  * when using --all, --output can be used to specify an output directory, and --type can be used to specify
@@ -2161,7 +2161,8 @@ function processFile(argv)
  *
  * Use --collection to process all disk collections with the specified options, or --collection=[subset]
  * to process only disks whose path or name contains [subset]; any input/output disk/directory names are
- * ignored when using --collection.
+ * ignored when using --collection.  NOTE: This feature only work with PCjs diskette collections, which
+ * must have a corresponding diskettes.json.
  *
  * @param {number} argc
  * @param {Array} argv

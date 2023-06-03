@@ -13,8 +13,8 @@ import path from "path";
 
 /*
  * We don't use the File class (filelib.js) here, but the simple act of loading it will make
- * readFileSync() visible to the WebLib class (weblib.js), which in turn will allow it load any
- * local files referenced by the machine's JSON file locally instead of remotely.
+ * readFileSync() visible to the WebLib class (weblib.js), which in turn will allow getResource()
+ * to load any local files referenced by the machine's JSON file locally instead of remotely.
  */
 import filelib from "../../modules/v2/filelib.js";
 import proclib from "../../modules/v2/proclib.js";
@@ -199,32 +199,34 @@ function loadMachine(sFile)
     try {
         let sMachine = fs.readFileSync(sFile, "utf8");
         /*
-         * Since our JSON files may contain comments, hex values, and other tokens deemed unacceptable
-         * by the JSON.parse(), we must use eval() instead.
+         * Since our JSON files may contain comments, hex values, etc, use eval() instead of JSON.parse().
          */
         let machine = eval('(' + sMachine + ')');
         if (machine) {
-            /*
-             * 'machine' is a pseudo-component that is only used to define an ID for the entire machine;
-             * if it exists, then that ID is prepended to every component ID, just as our XSLT code would
-             * do for a machine XML file.  This relieves the JSON file from having to manually prepend
-             * a machine ID to every component ID itself.
-             *
-             * This doesn't mean I anticipate a Node environment running multiple machines, as we do in
-             * a browser; it only means that I'm trying to make both environments operate similarly.
-             */
             let idMachine = "";
             if (machine['machine']) {
                 idMachine = machine['machine']['id'];
             }
 
+            /*
+             * Simulate the page embedding and page initialization process now.
+             */
             embedMachine(idMachine, null, null, sMachine);
             weblib.doPageInit();
 
+            /*
+             * Get the CPU component so we can keep tabs on its running state and also hook
+             * a few interrupts (eg, INT 0x10).  Get the Debugger component so we can override
+             * the debugger's print() function.
+             */
             cpu = Component.getComponentByType("CPU");
             if (cpu) {
                 cpu.addIntNotify(Interrupts.VIDEO, intVideo.bind(cpu));
             }
+
+            /*
+             * Get the Debugger component so we can override the debugger's print() function.
+             */
             dbg = Component.getComponentByType("Debugger");
             if (dbg) {
                 dbg.print = function(s, bitMessage) {
@@ -232,6 +234,11 @@ function loadMachine(sFile)
                     printf(s);
                 };
             }
+
+            /*
+             * Get the Keyboard component to get access to injectKeys(), which simplifies the
+             * injection of keystrokes into the machine.
+             */
             kbd = Component.getComponentByType("Keyboard");
             result = "Machine loaded: " + idMachine;;
         }
