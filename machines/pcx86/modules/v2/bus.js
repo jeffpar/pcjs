@@ -1252,7 +1252,7 @@ export default class BusX86 extends Component {
                     continue;
                 }
                 this.aPortInputNotify[port] = [fn, false];
-                if (MAXDEBUG) this.log("addPortInputNotify(" + Str.toHexWord(port) + ")");
+                if (MAXDEBUG) this.printf(Messages.LOG, "addPortInputNotify(%#06x)\n", port);
             }
         }
     }
@@ -1394,7 +1394,7 @@ export default class BusX86 extends Component {
                     continue;
                 }
                 this.aPortOutputNotify[port] = [fn, false];
-                if (MAXDEBUG) this.log("addPortOutputNotify(" + Str.toHexWord(port) + ")");
+                if (MAXDEBUG) this.printf(Messages.LOG, "addPortOutputNotify(%#06x)\n", port);
             }
         }
     }

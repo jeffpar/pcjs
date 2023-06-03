@@ -571,15 +571,15 @@ const Messages = {
     NONE:       0x000000000000,
     DEFAULT:    0x000000000000,
     ADDRESS:    0x000000000001,
-    LOG:        0x001000000000,         // to replace component.log()
-    STATUS:     0x002000000000,         // to replace component.status()
+    LOG:        0x001000000000,
+    STATUS:     0x002000000000,
     NOTICE:     0x004000000000,
     WARNING:    0x008000000000,
     ERROR:      0x010000000000,
     DEBUG:      0x020000000000,
     PROGRESS:   0x040000000000,
     SCRIPT:     0x080000000000,
-    TYPES:      0x0ff000000000,         // all the above message types; only one (at most) of these should be set
+    TYPES:      0x0ff000000000,
     HALT:       0x400000000000,
     BUFFER:     0x800000000000,
     ALL:        0x000ffffffffe
@@ -4362,26 +4362,6 @@ class Component {
     }
 
     /**
-     * log(s, type)
-     *
-     * For diagnostic output only.
-     *
-     * WARNING: Even though this function's body is completely wrapped in DEBUG, that won't prevent the Closure Compiler
-     * from including it, so all calls must still be prefixed with "if (DEBUG) ....".  For this reason, the class method,
-     * Component.printf(), is preferred, because the compiler IS smart enough to remove those calls.
-     *
-     * @this {Component}
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     */
-    log(s, type)
-    {
-        if (!COMPILED && s) {
-            Component.printf(Messages.LOG, "%s: %s\n", type || this.id || this.type || "log", s);
-        }
-    }
-
-    /**
      * assert(f, s)
      *
      * Verifies conditions that must be true (for DEBUG builds only).
@@ -4514,7 +4494,7 @@ class Component {
             if (this.flags.ready) {
                 fnReady();
             } else {
-                if (MAXDEBUG) this.log("NOT ready");
+                if (MAXDEBUG) this.printf(Messages.LOG, "NOT ready\n");
                 this.fnReady = fnReady;
             }
         }
@@ -4534,7 +4514,7 @@ class Component {
         if (!this.flags.error) {
             this.flags.ready = (fReady !== false);
             if (this.flags.ready) {
-                if (MAXDEBUG /* || this.name */) this.log("ready");
+                if (MAXDEBUG /* || this.name */) this.printf(Messages.LOG, "ready\n");
                 let fnReady = this.fnReady;
                 this.fnReady = null;
                 if (fnReady) fnReady();
@@ -5881,7 +5861,7 @@ class BusX80 extends Component {
                     continue;
                 }
                 this.aPortInputNotify[port] = [fn, false];
-                if (MAXDEBUG) this.log("addPortInputNotify(" + Str.toHexWord(port) + ")");
+                if (MAXDEBUG) this.printf(Messages.LOG, "addPortInputNotify(%#06x)\n", port);
             }
         }
     }
@@ -6021,7 +6001,7 @@ class BusX80 extends Component {
                     continue;
                 }
                 this.aPortOutputNotify[port] = [fn, false];
-                if (MAXDEBUG) this.log("addPortOutputNotify(" + Str.toHexWord(port) + ")");
+                if (MAXDEBUG) this.printf(Messages.LOG, "addPortOutputNotify(%#06x)\n", port);
             }
         }
     }
@@ -12458,7 +12438,7 @@ class ChipSetX80 extends Component {
             if (this.classAudio) {
                 this.contextAudio = new this.classAudio();
             } else {
-                if (DEBUG) this.log("AudioContext not available");
+                if (DEBUG) this.printf(Messages.LOG, "AudioContext not available\n");
             }
         }
 
@@ -13557,7 +13537,7 @@ class ROMx80 extends Component {
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.log('load("' + sFileURL + '")');
+            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\"\n", sFileURL);
             /*
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -13780,7 +13760,9 @@ class ROMx80 extends Component {
     addROM(addr)
     {
         if (this.bus.addMemory(addr, this.sizeROM, MemoryX80.TYPE.ROM)) {
-            if (DEBUG) this.log("addROM(): copying ROM to " + Str.toHexLong(addr) + " (" + Str.toHexLong(this.abROM.length) + " bytes)");
+            if (DEBUG) {
+                this.printf(Messages.LOG, "addROM(%#010x): %#010x bytes\n", addr, this.abROM.length);
+            }
             var i;
             for (i = 0; i < this.abROM.length; i++) {
                 this.bus.setByteDirect(addr + i, this.abROM[i]);
@@ -13901,7 +13883,7 @@ class RAMx80 extends Component {
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.log('load("' + sFileURL + '")');
+            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected data file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -15970,7 +15952,7 @@ class VideoX80 extends Component {
                     video.doFullScreen();
                 };
             } else {
-                if (DEBUG) this.log("FullScreen API not available");
+                if (DEBUG) this.printf(Messages.LOG, "FullScreen API not available\n");
                 control.parentNode.removeChild(/** @type {Node} */ (control));
             }
             return true;
@@ -19626,7 +19608,7 @@ class DebuggerX80 extends DbgLib {
                         dbg.doCommands(sCmds, true);
                         return true;
                     }
-                    if (DEBUG) dbg.log("no debugger input buffer");
+                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer\n");
                     return false;
                 }
             );
@@ -24775,7 +24757,7 @@ class ComputerX80 extends Component {
              * particular host.
              */
             if (Str.endsWith(Web.getHostName(), "pcjs.org")) {
-                if (DEBUG) this.log("Remote user API not available");
+                if (DEBUG) this.printf(Messages.LOG, "Remote user API not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *

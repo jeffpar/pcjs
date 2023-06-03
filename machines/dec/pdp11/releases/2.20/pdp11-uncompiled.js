@@ -571,15 +571,15 @@ const Messages = {
     NONE:       0x000000000000,
     DEFAULT:    0x000000000000,
     ADDRESS:    0x000000000001,
-    LOG:        0x001000000000,         // to replace component.log()
-    STATUS:     0x002000000000,         // to replace component.status()
+    LOG:        0x001000000000,
+    STATUS:     0x002000000000,
     NOTICE:     0x004000000000,
     WARNING:    0x008000000000,
     ERROR:      0x010000000000,
     DEBUG:      0x020000000000,
     PROGRESS:   0x040000000000,
     SCRIPT:     0x080000000000,
-    TYPES:      0x0ff000000000,         // all the above message types; only one (at most) of these should be set
+    TYPES:      0x0ff000000000,
     HALT:       0x400000000000,
     BUFFER:     0x800000000000,
     ALL:        0x000ffffffffe
@@ -4601,26 +4601,6 @@ class Component {
     }
 
     /**
-     * log(s, type)
-     *
-     * For diagnostic output only.
-     *
-     * WARNING: Even though this function's body is completely wrapped in DEBUG, that won't prevent the Closure Compiler
-     * from including it, so all calls must still be prefixed with "if (DEBUG) ....".  For this reason, the class method,
-     * Component.printf(), is preferred, because the compiler IS smart enough to remove those calls.
-     *
-     * @this {Component}
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     */
-    log(s, type)
-    {
-        if (!COMPILED && s) {
-            Component.printf(Messages.LOG, "%s: %s\n", type || this.id || this.type || "log", s);
-        }
-    }
-
-    /**
      * assert(f, s)
      *
      * Verifies conditions that must be true (for DEBUG builds only).
@@ -4753,7 +4733,7 @@ class Component {
             if (this.flags.ready) {
                 fnReady();
             } else {
-                if (MAXDEBUG) this.log("NOT ready");
+                if (MAXDEBUG) this.printf(Messages.LOG, "NOT ready\n");
                 this.fnReady = fnReady;
             }
         }
@@ -4773,7 +4753,7 @@ class Component {
         if (!this.flags.error) {
             this.flags.ready = (fReady !== false);
             if (this.flags.ready) {
-                if (MAXDEBUG /* || this.name */) this.log("ready");
+                if (MAXDEBUG /* || this.name */) this.printf(Messages.LOG, "ready\n");
                 let fnReady = this.fnReady;
                 this.fnReady = null;
                 if (fnReady) fnReady();
@@ -8322,7 +8302,7 @@ class BusPDP11 extends Component {
             var s = sName || "unknown";
             if (s && index >= 0) s += index++;
             this.aIOHandlers[off] = [fnReadByte, fnWriteByte, fnReadWord, fnWriteWord, s, message || Messages.BUS, false];
-            if (MAXDEBUG) this.log("addIOHandlers(" + Str.toHexLong(addr) + ")");
+            if (MAXDEBUG) this.printf(Messages.LOG, "addIOHandlers(%#010x)\n", addr);
         }
         return true;
     }
@@ -11806,8 +11786,8 @@ class CPUPDP11 extends Component {
          */
         this.nCyclesRecalc += this.nCyclesThisRun;
 
-        if (DEBUG && this.messageEnabled(Messages.BUFFER) && msRemainsThisRun) {
-            this.log("calcRemainingTime: " + msRemainsThisRun + "ms to sleep after " + this.msEndThisRun + "ms");
+        if (DEBUG && msRemainsThisRun) {
+            this.printf(Messages.LOG + Messages.BUFFER, "calcRemainingTime: %dms to sleep after %dms\n", msRemainsThisRun, this.msEndThisRun);
         }
 
         this.msEndThisRun += msRemainsThisRun;
@@ -17807,7 +17787,7 @@ class ROMPDP11 extends Component {
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.log('load("' + sFileURL + '")');
+            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -18003,9 +17983,10 @@ class ROMPDP11 extends Component {
             }
         }
         else if (this.bus.addMemory(addr, this.sizeROM, MemoryPDP11.TYPE.ROM)) {
-            if (DEBUG) this.log("addROM(): copying ROM to " + Str.toHexLong(addr) + " (" + Str.toHexLong(this.abInit.length) + " bytes)");
-            var i;
-            for (i = 0; i < this.abInit.length; i++) {
+            if (DEBUG) {
+                this.printf(Messages.LOG, "addROM(%#010x): %#010x bytes\n", addr, this.abInit.length);
+            }
+            for (let i = 0; i < this.abInit.length; i++) {
                 this.bus.setByteDirect(addr + i, this.abInit[i]);
             }
             return true;
@@ -18153,7 +18134,7 @@ class RAMPDP11 extends Component {
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.log('load("' + sFileURL + '")');
+            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected data file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -19607,7 +19588,7 @@ class PC11 extends Component {
             var controlInput = /** @type {Object} */ (control);
 
             if (!this.fLocalTapes) {
-                if (DEBUG) this.log("Local tape support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local tape support not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -20634,17 +20615,13 @@ class DiskPDP11 extends Component {
     {
         var sDiskURL = sDiskPath;
 
-        /*
-         * We could use this.log() as well, but it wouldn't display which component initiated the load.
-         */
         if (DEBUG) {
-            var sMessage = 'load("' + sDiskName + '","' + sDiskPath + '")';
-            this.controller.log(sMessage);
-            this.printf("%s\n", sMessage);
+            this.controller.printf(Messages.LOG, "load(\"%s\",\"%s\")\n", sDiskName, sDiskPath);
+            this.printf("load(\"%s\",\"%s\")\n", sDiskName, sDiskPath);
         }
 
         if (this.fnNotify) {
-            if (DEBUG) this.controller.log('too many load requests for "' + sDiskName + '" (' + sDiskPath + ')');
+            if (DEBUG) this.controller.printf(Messages.LOG, "too many load requests for \"%s\" (%s)\n", sDiskName, sDiskPath);
             return true;
         }
 
@@ -21815,7 +21792,7 @@ class DriveController extends Component {
              * is an "orthogonality" to disabling both features in tandem, let's just let it slide, OK?
              */
             if (!this.fLocalDisks) {
-                if (DEBUG) this.log("Local disk support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -21857,7 +21834,7 @@ class DriveController extends Component {
             var controlInput = /** @type {Object} */ (control);
 
             if (!this.fLocalDisks) {
-                if (DEBUG) this.log("Local disk support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -26280,7 +26257,7 @@ class DebuggerPDP11 extends DbgLib {
                         dbg.doCommands(sCmd, true);
                         return true;
                     }
-                    if (DEBUG) dbg.log("no debugger input buffer");
+                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer");
                     return false;
                 }
             );
@@ -31345,7 +31322,7 @@ class ComputerPDP11 extends Component {
              * particular host.
              */
             if (Str.endsWith(Web.getHostName(), "pcjs.org")) {
-                if (DEBUG) this.log("Remote user API not available");
+                if (DEBUG) this.printf(Messages.LOG, "Remote user API not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *

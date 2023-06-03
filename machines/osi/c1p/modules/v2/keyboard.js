@@ -581,7 +581,7 @@ export default class C1PKeyboard extends Component {
     injectKeys(sKeyCodes, msDelay)
     {
         this.sInjectBuffer = sKeyCodes;
-        if (DEBUG) this.log("injectKeys(" + this.sInjectBuffer.split("\n").join("\\n") + ")");
+        if (DEBUG) this.printf(Messages.LOG, "injectKeys(%s)\n", this.sInjectBuffer.split("\n").join("\\n"));
         this.injectKeysFromBuffer(msDelay || this.msInjectDelay);
     }
 

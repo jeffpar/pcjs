@@ -190,7 +190,7 @@ export default class DriveController extends Component {
              * is an "orthogonality" to disabling both features in tandem, let's just let it slide, OK?
              */
             if (!this.fLocalDisks) {
-                if (DEBUG) this.log("Local disk support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -232,7 +232,7 @@ export default class DriveController extends Component {
             var controlInput = /** @type {Object} */ (control);
 
             if (!this.fLocalDisks) {
-                if (DEBUG) this.log("Local disk support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *

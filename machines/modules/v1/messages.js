@@ -17,15 +17,15 @@ const Messages = {
     NONE:       0x000000000000,
     DEFAULT:    0x000000000000,
     ADDRESS:    0x000000000001,
-    LOG:        0x001000000000,         // to replace component.log()
-    STATUS:     0x002000000000,         // to replace component.status()
+    LOG:        0x001000000000,
+    STATUS:     0x002000000000,
     NOTICE:     0x004000000000,
     WARNING:    0x008000000000,
     ERROR:      0x010000000000,
     DEBUG:      0x020000000000,
     PROGRESS:   0x040000000000,
     SCRIPT:     0x080000000000,
-    TYPES:      0x0ff000000000,         // all the above message types; only one (at most) of these should be set
+    TYPES:      0x0ff000000000,
     HALT:       0x400000000000,
     BUFFER:     0x800000000000,
     ALL:        0x000ffffffffe

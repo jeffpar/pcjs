@@ -655,7 +655,7 @@ export default class WebIO extends StdIO {
              * from the local file system (ie, when using the "file:" protocol), we have to be a bit more "flexible".
              */
             if (xmlHTTP.status == 200 || !xmlHTTP.status && sResource.length && webIO.getHostProtocol() == "file:") {
-                // if (MAXDEBUG) Web.log("xmlHTTP.onreadystatechange(" + url + "): returned " + sResource.length + " bytes");
+                // if (MAXDEBUG) Web.printf("xmlHTTP.onreadystatechange(%s): returned %d bytes\n", url, sResource.length);
             }
             else {
                 nErrorCode = xmlHTTP.status || -1;

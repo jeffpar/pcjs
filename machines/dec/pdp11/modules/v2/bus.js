@@ -966,7 +966,7 @@ export default class BusPDP11 extends Component {
             var s = sName || "unknown";
             if (s && index >= 0) s += index++;
             this.aIOHandlers[off] = [fnReadByte, fnWriteByte, fnReadWord, fnWriteWord, s, message || Messages.BUS, false];
-            if (MAXDEBUG) this.log("addIOHandlers(" + Str.toHexLong(addr) + ")");
+            if (MAXDEBUG) this.printf(Messages.LOG, "addIOHandlers(%#010x)\n", addr);
         }
         return true;
     }

@@ -571,15 +571,15 @@ const Messages = {
     NONE:       0x000000000000,
     DEFAULT:    0x000000000000,
     ADDRESS:    0x000000000001,
-    LOG:        0x001000000000,         // to replace component.log()
-    STATUS:     0x002000000000,         // to replace component.status()
+    LOG:        0x001000000000,
+    STATUS:     0x002000000000,
     NOTICE:     0x004000000000,
     WARNING:    0x008000000000,
     ERROR:      0x010000000000,
     DEBUG:      0x020000000000,
     PROGRESS:   0x040000000000,
     SCRIPT:     0x080000000000,
-    TYPES:      0x0ff000000000,         // all the above message types; only one (at most) of these should be set
+    TYPES:      0x0ff000000000,
     HALT:       0x400000000000,
     BUFFER:     0x800000000000,
     ALL:        0x000ffffffffe
@@ -4003,26 +4003,6 @@ class Component {
     }
 
     /**
-     * log(s, type)
-     *
-     * For diagnostic output only.
-     *
-     * WARNING: Even though this function's body is completely wrapped in DEBUG, that won't prevent the Closure Compiler
-     * from including it, so all calls must still be prefixed with "if (DEBUG) ....".  For this reason, the class method,
-     * Component.printf(), is preferred, because the compiler IS smart enough to remove those calls.
-     *
-     * @this {Component}
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     */
-    log(s, type)
-    {
-        if (!COMPILED && s) {
-            Component.printf(Messages.LOG, "%s: %s\n", type || this.id || this.type || "log", s);
-        }
-    }
-
-    /**
      * assert(f, s)
      *
      * Verifies conditions that must be true (for DEBUG builds only).
@@ -4155,7 +4135,7 @@ class Component {
             if (this.flags.ready) {
                 fnReady();
             } else {
-                if (MAXDEBUG) this.log("NOT ready");
+                if (MAXDEBUG) this.printf(Messages.LOG, "NOT ready\n");
                 this.fnReady = fnReady;
             }
         }
@@ -4175,7 +4155,7 @@ class Component {
         if (!this.flags.error) {
             this.flags.ready = (fReady !== false);
             if (this.flags.ready) {
-                if (MAXDEBUG /* || this.name */) this.log("ready");
+                if (MAXDEBUG /* || this.name */) this.printf(Messages.LOG, "ready\n");
                 let fnReady = this.fnReady;
                 this.fnReady = null;
                 if (fnReady) fnReady();
@@ -5235,7 +5215,9 @@ class C1PCPU extends Component {
             if (this.addrReadUpper < end)
                 this.addrReadUpper = end;
             this.aReadNotify.push([start, end, component, fn]);
-            if (DEBUG) this.log("addReadNotify(" + Str.toHexWord(start) + "," + Str.toHexWord(end) + "," + component.id + "): new read range: " + Str.toHexWord(this.addrReadLower) + "-" + Str.toHexWord(this.addrReadUpper));
+            if (DEBUG) {
+                this.printf(Messages.LOG, "addReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
+            }
         }
     }
 
@@ -5271,7 +5253,9 @@ class C1PCPU extends Component {
         if (aBounds.length == 4) {
             this.addrReadLower = aBounds[2];
             this.addrReadUpper = aBounds[3];
-            if (DEBUG) this.log("removeReadNotify(" + Str.toHexWord(start) + "," + Str.toHexWord(end) + "," + component.id + "): new read range: " + Str.toHexWord(this.addrReadLower) + "-" + Str.toHexWord(this.addrReadUpper));
+            if (DEBUG) {
+                this.printf(Messages.LOG, "removeReadNotify(%#06x,%#06x,%s): new read range: %#06x-%#06x\n", start, end, component.id, this.addrReadLower, this.addrReadUpper);
+            }
             return true;
         }
         return false;
@@ -5294,7 +5278,9 @@ class C1PCPU extends Component {
             if (this.addrWriteUpper < end)
                 this.addrWriteUpper = end;
             this.aWriteNotify.push([start, end, component, fn]);
-            if (DEBUG) this.log("addWriteNotify(" + Str.toHexWord(start) + "," + Str.toHexWord(end) + "," + component.id + "): new write range: " + Str.toHexWord(this.addrWriteLower) + "-" + Str.toHexWord(this.addrWriteUpper));
+            if (DEBUG) {
+                this.printf(Messages.LOG, "addWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
+            }
         }
     }
 
@@ -5330,7 +5316,9 @@ class C1PCPU extends Component {
         if (aBounds.length == 4) {
             this.addrWriteLower = aBounds[2];
             this.addrWriteUpper = aBounds[3];
-            if (DEBUG) this.log("removeWriteNotify(" + Str.toHexWord(start) + "," + Str.toHexWord(end) + "," + component.id + "): new write range: " + Str.toHexWord(this.addrWriteLower) + "-" + Str.toHexWord(this.addrWriteUpper));
+            if (DEBUG) {
+                this.printf(Messages.LOG, "removeWriteNotify(%#06x,%#06x,%s): new write range: %#06x-%#06x\n", start, end, component.id, this.addrWriteLower, this.addrWriteUpper);
+            }
             return true;
         }
         return false;
@@ -8677,7 +8665,7 @@ class C1PROM extends Component {
                     this.setError("ROM image size (" + Str.toHexWord(cbImage) + ") does not match component-specified size (" + Str.toHexWord(this.cbROM) + ")");
                     return;
                 }
-                if (DEBUG) this.log("copyImage(): copying ROM to " + Str.toHexWord(this.offROM) + " (" + Str.toHexWord(cbImage) + " bytes)");
+                if (DEBUG) this.printf(Messages.LOG, "copyImage(%#06x): %#06x bytes\n", this.offROM, cbImage);
                 for (var i=0; i < cbImage; i++) {
                     this.abMem[this.offROM + i] = this.abImage[i];
                 }
@@ -9356,7 +9344,7 @@ class C1PKeyboard extends Component {
     injectKeys(sKeyCodes, msDelay)
     {
         this.sInjectBuffer = sKeyCodes;
-        if (DEBUG) this.log("injectKeys(" + this.sInjectBuffer.split("\n").join("\\n") + ")");
+        if (DEBUG) this.printf(Messages.LOG, "injectKeys(%s)\n", this.sInjectBuffer.split("\n").join("\\n"));
         this.injectKeysFromBuffer(msDelay || this.msInjectDelay);
     }
 
@@ -10386,7 +10374,7 @@ class C1PVideo extends Component {
                 var xSrc = xChar % this.imgChars.width;
                 var xDst = col * this.cxCharDst;
                 var yDst = row * this.cyCharDst;
-                // if (DEBUG) this.log("updateWindow(" + col + "," + row + "," + b +"): drawing from " + xSrc + "," + ySrc + " to " + xDst + "," + yDst);
+                // if (DEBUG) this.printf(Messages.LOG, "updateWindow(%d,%d,%#04x): drawing from %d,%d to %d,%d\n", col, row, b, xSrc, ySrc, xDst, yDst);
                 this.contextScreen.drawImage(this.imgChars, xSrc, ySrc, this.cxChar, this.cyChar, xDst, yDst, this.cxCharDst, this.cyCharDst);
             }
         }
@@ -10468,7 +10456,7 @@ class C1PVideo extends Component {
             var sCharSet = parmsVideo['fontROM'] || parmsVideo['charSet'];
             imgCharSet.onload = function(video, sCharSet) {
                 return function() {
-                    if (DEBUG) video.log("onload(): finished loading " + sCharSet);
+                    if (DEBUG) video.printf(Messages.LOG, "onload(): finished loading %s\n", sCharSet);
                     video.setReady();
                 };
             }(video, sCharSet);
@@ -10715,7 +10703,7 @@ class C1PSerialPort extends Component {
                 };
             }
             else {
-                if (DEBUG) this.log("Local file support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local file support not available\n");
                 controlInput.parentNode.removeChild(/** @type {Node} */ (controlInput));
             }
             return true;
@@ -10874,12 +10862,12 @@ class C1PSerialPort extends Component {
                     if (b == 0x0a) b = 0x0d;
                 }
                 this.bInput = b;
-                // if (DEBUG) this.log("advanceInput(" + Str.toHexByte(b) + ")");
+                // if (DEBUG) this.printf(Messages.LOG, "advanceInput(%#04x)\n", b);
             }
             else {
                 this.sInput = "";
                 this.iInput = 0;
-                if (DEBUG) this.log("advanceInput(): out of data");
+                if (DEBUG) this.printf(Messages.LOG, "advanceInput(): out of data\n");
                 if (this.autoLoad == C1PSerialPort.AUTOLOAD_BASIC && this.kbd) {
                     this.kbd.injectKeys(" \nRUN\n");
                 }
@@ -10887,7 +10875,7 @@ class C1PSerialPort extends Component {
             }
             this.updateMemory();
         }
-        // else if (DEBUG) this.log("advanceInput(): no input");
+        // else if (DEBUG) this.printf(Messages.LOG, "advanceInput(): no input\n");
     }
 
     /**
@@ -12699,7 +12687,7 @@ class C1PDebugger extends Component {
                         C1PDebugger.input(dbg, sBinding);
                         return true;
                     }
-                    if (DEBUG) dbg.log("no debugger input buffer");
+                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer\n");
                     return false;
                 }
             );

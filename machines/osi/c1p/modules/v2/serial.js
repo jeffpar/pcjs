@@ -235,7 +235,7 @@ export default class C1PSerialPort extends Component {
                 };
             }
             else {
-                if (DEBUG) this.log("Local file support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local file support not available\n");
                 controlInput.parentNode.removeChild(/** @type {Node} */ (controlInput));
             }
             return true;
@@ -394,12 +394,12 @@ export default class C1PSerialPort extends Component {
                     if (b == 0x0a) b = 0x0d;
                 }
                 this.bInput = b;
-                // if (DEBUG) this.log("advanceInput(" + Str.toHexByte(b) + ")");
+                // if (DEBUG) this.printf(Messages.LOG, "advanceInput(%#04x)\n", b);
             }
             else {
                 this.sInput = "";
                 this.iInput = 0;
-                if (DEBUG) this.log("advanceInput(): out of data");
+                if (DEBUG) this.printf(Messages.LOG, "advanceInput(): out of data\n");
                 if (this.autoLoad == C1PSerialPort.AUTOLOAD_BASIC && this.kbd) {
                     this.kbd.injectKeys(" \nRUN\n");
                 }
@@ -407,7 +407,7 @@ export default class C1PSerialPort extends Component {
             }
             this.updateMemory();
         }
-        // else if (DEBUG) this.log("advanceInput(): no input");
+        // else if (DEBUG) this.printf(Messages.LOG, "advanceInput(): no input\n");
     }
 
     /**

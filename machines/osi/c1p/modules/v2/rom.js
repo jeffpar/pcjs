@@ -196,7 +196,7 @@ export default class C1PROM extends Component {
                     this.setError("ROM image size (" + Str.toHexWord(cbImage) + ") does not match component-specified size (" + Str.toHexWord(this.cbROM) + ")");
                     return;
                 }
-                if (DEBUG) this.log("copyImage(): copying ROM to " + Str.toHexWord(this.offROM) + " (" + Str.toHexWord(cbImage) + " bytes)");
+                if (DEBUG) this.printf(Messages.LOG, "copyImage(%#06x): %#06x bytes\n", this.offROM, cbImage);
                 for (var i=0; i < cbImage; i++) {
                     this.abMem[this.offROM + i] = this.abImage[i];
                 }

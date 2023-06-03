@@ -1011,26 +1011,6 @@ export default class Component {
     }
 
     /**
-     * log(s, type)
-     *
-     * For diagnostic output only.
-     *
-     * WARNING: Even though this function's body is completely wrapped in DEBUG, that won't prevent the Closure Compiler
-     * from including it, so all calls must still be prefixed with "if (DEBUG) ....".  For this reason, the class method,
-     * Component.printf(), is preferred, because the compiler IS smart enough to remove those calls.
-     *
-     * @this {Component}
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     */
-    log(s, type)
-    {
-        if (!COMPILED && s) {
-            Component.printf(Messages.LOG, "%s: %s\n", type || this.id || this.type || "log", s);
-        }
-    }
-
-    /**
      * assert(f, s)
      *
      * Verifies conditions that must be true (for DEBUG builds only).
@@ -1163,7 +1143,7 @@ export default class Component {
             if (this.flags.ready) {
                 fnReady();
             } else {
-                if (MAXDEBUG) this.log("NOT ready");
+                if (MAXDEBUG) this.printf(Messages.LOG, "NOT ready\n");
                 this.fnReady = fnReady;
             }
         }
@@ -1183,7 +1163,7 @@ export default class Component {
         if (!this.flags.error) {
             this.flags.ready = (fReady !== false);
             if (this.flags.ready) {
-                if (MAXDEBUG /* || this.name */) this.log("ready");
+                if (MAXDEBUG /* || this.name */) this.printf(Messages.LOG, "ready\n");
                 let fnReady = this.fnReady;
                 this.fnReady = null;
                 if (fnReady) fnReady();

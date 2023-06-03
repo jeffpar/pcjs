@@ -935,15 +935,15 @@ const Messages = {
     NONE:       0x000000000000,
     DEFAULT:    0x000000000000,
     ADDRESS:    0x000000000001,
-    LOG:        0x001000000000,         // to replace component.log()
-    STATUS:     0x002000000000,         // to replace component.status()
+    LOG:        0x001000000000,
+    STATUS:     0x002000000000,
     NOTICE:     0x004000000000,
     WARNING:    0x008000000000,
     ERROR:      0x010000000000,
     DEBUG:      0x020000000000,
     PROGRESS:   0x040000000000,
     SCRIPT:     0x080000000000,
-    TYPES:      0x0ff000000000,         // all the above message types; only one (at most) of these should be set
+    TYPES:      0x0ff000000000,
     HALT:       0x400000000000,
     BUFFER:     0x800000000000,
     ALL:        0x000ffffffffe
@@ -4965,26 +4965,6 @@ class Component {
     }
 
     /**
-     * log(s, type)
-     *
-     * For diagnostic output only.
-     *
-     * WARNING: Even though this function's body is completely wrapped in DEBUG, that won't prevent the Closure Compiler
-     * from including it, so all calls must still be prefixed with "if (DEBUG) ....".  For this reason, the class method,
-     * Component.printf(), is preferred, because the compiler IS smart enough to remove those calls.
-     *
-     * @this {Component}
-     * @param {string} [s] is the message text
-     * @param {string} [type] is the message type
-     */
-    log(s, type)
-    {
-        if (!COMPILED && s) {
-            Component.printf(Messages.LOG, "%s: %s\n", type || this.id || this.type || "log", s);
-        }
-    }
-
-    /**
      * assert(f, s)
      *
      * Verifies conditions that must be true (for DEBUG builds only).
@@ -5117,7 +5097,7 @@ class Component {
             if (this.flags.ready) {
                 fnReady();
             } else {
-                if (MAXDEBUG) this.log("NOT ready");
+                if (MAXDEBUG) this.printf(Messages.LOG, "NOT ready\n");
                 this.fnReady = fnReady;
             }
         }
@@ -5137,7 +5117,7 @@ class Component {
         if (!this.flags.error) {
             this.flags.ready = (fReady !== false);
             if (this.flags.ready) {
-                if (MAXDEBUG /* || this.name */) this.log("ready");
+                if (MAXDEBUG /* || this.name */) this.printf(Messages.LOG, "ready\n");
                 let fnReady = this.fnReady;
                 this.fnReady = null;
                 if (fnReady) fnReady();
@@ -9454,7 +9434,7 @@ class Panel extends Component {
         this.xMouse = x;
         this.yMouse = y;
 
-        if (MAXDEBUG) this.log("Panel.moveMouse(" + x + "," + y + ")");
+        if (MAXDEBUG) this.printf(Messages.LOG, "Panel.moveMouse(%d,%d)\n", x, y);
 
         if (x >= 0 && x < Panel.LIVECANVAS.CX && y >= 0 && y < Panel.LIVECANVAS.CY) {
             /*
@@ -9504,7 +9484,7 @@ class Panel extends Component {
 
                     addr |= 0;
                     if (addr > addrLimit) addr = addrLimit;
-                    if (MAXDEBUG) this.log("Panel.findAddress(" + x + "," + y + ") found type " + MemoryX86.TYPE.NAMES[region.type] + ", address %" + Str.toHex(addr));
+                    if (MAXDEBUG) this.printf(Messages.LOG, "Panel.findAddress(%d,%d) found type %s, address %#010x\n", x, y, MemoryX86.TYPE.NAMES[region.type], addr);
                     return addr;
                 }
             }
@@ -9531,7 +9511,7 @@ class Panel extends Component {
             this.initPen(10, Panel.LIVECANVAS.FONT.CY, this.canvasLiveMem, this.contextLiveMem, this.canvas.style.color);
 
             if (this.fVisual) {
-                if (DEBUG) this.log("begin scanMemory()");
+                if (DEBUG) this.printf(Messages.LOG, "begin scanMemory()\n");
                 this.busInfo = this.bus.scanMemory(this.busInfo);
                 /*
                  * Calculate the pixel-to-memory-address ratio
@@ -9558,7 +9538,7 @@ class Panel extends Component {
                     for (i = 0; i < this.busInfo.cRegions; i++) {
                         let cBlocksRegion = this.busInfo.aRegions[i].cBlocks;
                         this.busInfo.aRects.push(rect = rectAvail.subDivide(cBlocksRegion, cBlocksRemaining, !i));
-                        if (MAXDEBUG) this.log("region " + i + " rectangle: (" + rect.x + "," + rect.y + " " + rect.cx + "," + rect.cy + ")");
+                        if (MAXDEBUG) this.printf(Messages.LOG, "region %d rectangle (x=%d,y=%d cx=%d,cy=%d)\n", i, rect.x, rect.y, rect.cx, rect.cy);
                         cBlocksRemaining -= cBlocksRegion;
                     }
 
@@ -9579,7 +9559,7 @@ class Panel extends Component {
                         this.centerText(MemoryX86.TYPE.NAMES[region.type] + " (" + (((region.cBlocks * this.bus.nBlockSize) / 1024) | 0) + "Kb)");
                     }
                 }
-                if (DEBUG) this.log("end scanMemory(): total bytes: " + this.busInfo.cbTotal + ", total blocks: " + this.busInfo.cBlocks + ", total regions: " + this.busInfo.cRegions);
+                if (DEBUG) this.printf(Messages.LOG, "end scanMemory(): %d total bytes, %d total blocks, %d total regions\n", this.busInfo.cbTotal, this.busInfo.cBlocks, this.busInfo.cRegions);
             } else {
                 this.drawText("This space intentionally left blank");
             }
@@ -9665,7 +9645,7 @@ class Panel extends Component {
      */
     addRegion(addr, iBlock, cBlocks, type)
     {
-        if (DEBUG) this.log("region " + this.busInfo.cRegions + " (addr " + Str.toHexLong(addr) + ", type " + MemoryX86.TYPE.NAMES[type] + ") contains " + cBlocks + " blocks");
+        if (DEBUG) this.printf(Messages.LOG, "region %d (addr %#010x, type %s) contains %d blocks\n", this.busInfo.cRegions, addr, MemoryX86.TYPE.NAMES[type], cBlocks);
         this.busInfo.aRegions[this.busInfo.cRegions++] = {iBlock: iBlock, cBlocks: cBlocks, type: type};
         return Usr.initBitFields(BusX86.BlockInfo, iBlock, cBlocks, 0, type);
     }
@@ -11301,7 +11281,7 @@ class BusX86 extends Component {
                     continue;
                 }
                 this.aPortInputNotify[port] = [fn, false];
-                if (MAXDEBUG) this.log("addPortInputNotify(" + Str.toHexWord(port) + ")");
+                if (MAXDEBUG) this.printf(Messages.LOG, "addPortInputNotify(%#06x)\n", port);
             }
         }
     }
@@ -11443,7 +11423,7 @@ class BusX86 extends Component {
                     continue;
                 }
                 this.aPortOutputNotify[port] = [fn, false];
-                if (MAXDEBUG) this.log("addPortOutputNotify(" + Str.toHexWord(port) + ")");
+                if (MAXDEBUG) this.printf(Messages.LOG, "addPortOutputNotify(%#06x)\n", port);
             }
         }
     }
@@ -52872,7 +52852,7 @@ class VideoX86 extends Component {
                         video.goFullScreen();
                     };
                 } else {
-                    if (DEBUG) this.log("FullScreen API not available");
+                    if (DEBUG) this.printf(Messages.LOG, "FullScreen API not available\n");
                     control.parentNode.removeChild(/** @type {Node} */ (control));
                 }
                 return true;
@@ -52885,7 +52865,7 @@ class VideoX86 extends Component {
                         video.lockPointer(true);
                     };
                 } else {
-                    if (DEBUG) this.log("Pointer Lock API not available");
+                    if (DEBUG) this.printf(Messages.LOG, "Pointer Lock API not available\n");
                     control.parentNode.removeChild(/** @type {Node} */ (control));
                 }
                 return true;
@@ -53227,7 +53207,7 @@ class VideoX86 extends Component {
                     );
                 }
 
-                // this.log("touch events captured");
+                // this.printf(Messages.LOG, "touch events captured\n");
 
                 this.xTouch = this.yTouch = this.timeTouch = -1;
 
@@ -67693,7 +67673,7 @@ class HDC extends Component {
              * is an "orthogonality" to disabling both features in tandem, let's just let it slide, OK?
              */
             if (!this.fLocalDisks) {
-                if (DEBUG) this.log("Local disk support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available\n");
                 /*
                  * We could also simply remove the control; eg:
                  *
@@ -73636,7 +73616,7 @@ class DebuggerX86 extends DbgLib {
                         dbg.doCommands(sCommands, true);
                         return true;
                     }
-                    if (DEBUG) dbg.log("no debugger input buffer");
+                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer\n");
                     return false;
                 }
             );
@@ -82018,7 +81998,7 @@ class Computer extends Component {
              * particular host.
              */
             if (Str.endsWith(Web.getHostName(), "pcjs.org")) {
-                if (DEBUG) this.log("Remote user API not available");
+                if (DEBUG) this.printf(Messages.LOG, "Remote user API not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *

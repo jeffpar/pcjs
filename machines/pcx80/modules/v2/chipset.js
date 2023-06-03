@@ -70,7 +70,7 @@ export default class ChipSetX80 extends Component {
             if (this.classAudio) {
                 this.contextAudio = new this.classAudio();
             } else {
-                if (DEBUG) this.log("AudioContext not available");
+                if (DEBUG) this.printf(Messages.LOG, "AudioContext not available\n");
             }
         }
 

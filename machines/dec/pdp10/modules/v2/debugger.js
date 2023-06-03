@@ -384,7 +384,7 @@ export default class DebuggerPDP10 extends DbgLib {
                         dbg.doCommands(sCmd, true);
                         return true;
                     }
-                    if (DEBUG) dbg.log("no debugger input buffer");
+                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer\n");
                     return false;
                 }
             );

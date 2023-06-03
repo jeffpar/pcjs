@@ -60,7 +60,7 @@ export default class RAMPDP11 extends Component {
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.log('load("' + sFileURL + '")');
+            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected data file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded data, so we load it as-is; ditto for ROM files with a ".hex" extension.

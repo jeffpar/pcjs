@@ -238,7 +238,7 @@ export default class DebuggerX80 extends DbgLib {
                         dbg.doCommands(sCmds, true);
                         return true;
                     }
-                    if (DEBUG) dbg.log("no debugger input buffer");
+                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer\n");
                     return false;
                 }
             );

@@ -528,7 +528,7 @@ export default class C1PVideo extends Component {
                 var xSrc = xChar % this.imgChars.width;
                 var xDst = col * this.cxCharDst;
                 var yDst = row * this.cyCharDst;
-                // if (DEBUG) this.log("updateWindow(" + col + "," + row + "," + b +"): drawing from " + xSrc + "," + ySrc + " to " + xDst + "," + yDst);
+                // if (DEBUG) this.printf(Messages.LOG, "updateWindow(%d,%d,%#04x): drawing from %d,%d to %d,%d\n", col, row, b, xSrc, ySrc, xDst, yDst);
                 this.contextScreen.drawImage(this.imgChars, xSrc, ySrc, this.cxChar, this.cyChar, xDst, yDst, this.cxCharDst, this.cyCharDst);
             }
         }
@@ -610,7 +610,7 @@ export default class C1PVideo extends Component {
             var sCharSet = parmsVideo['fontROM'] || parmsVideo['charSet'];
             imgCharSet.onload = function(video, sCharSet) {
                 return function() {
-                    if (DEBUG) video.log("onload(): finished loading " + sCharSet);
+                    if (DEBUG) video.printf(Messages.LOG, "onload(): finished loading %s\n", sCharSet);
                     video.setReady();
                 };
             }(video, sCharSet);

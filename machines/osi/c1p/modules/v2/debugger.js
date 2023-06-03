@@ -514,7 +514,7 @@ export default class C1PDebugger extends Component {
                         C1PDebugger.input(dbg, sBinding);
                         return true;
                     }
-                    if (DEBUG) dbg.log("no debugger input buffer");
+                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer\n");
                     return false;
                 }
             );

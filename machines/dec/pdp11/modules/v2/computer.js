@@ -1119,7 +1119,7 @@ export default class ComputerPDP11 extends Component {
              * particular host.
              */
             if (Str.endsWith(Web.getHostName(), "pcjs.org")) {
-                if (DEBUG) this.log("Remote user API not available");
+                if (DEBUG) this.printf(Messages.LOG, "Remote user API not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *

@@ -219,17 +219,13 @@ export default class DiskPDP11 extends Component {
     {
         var sDiskURL = sDiskPath;
 
-        /*
-         * We could use this.log() as well, but it wouldn't display which component initiated the load.
-         */
         if (DEBUG) {
-            var sMessage = 'load("' + sDiskName + '","' + sDiskPath + '")';
-            this.controller.log(sMessage);
-            this.printf("%s\n", sMessage);
+            this.controller.printf(Messages.LOG, "load(\"%s\",\"%s\")\n", sDiskName, sDiskPath);
+            this.printf("load(\"%s\",\"%s\")\n", sDiskName, sDiskPath);
         }
 
         if (this.fnNotify) {
-            if (DEBUG) this.controller.log('too many load requests for "' + sDiskName + '" (' + sDiskPath + ')');
+            if (DEBUG) this.controller.printf(Messages.LOG, "too many load requests for \"%s\" (%s)\n", sDiskName, sDiskPath);
             return true;
         }
 

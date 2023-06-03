@@ -920,7 +920,7 @@ export default class DebuggerX86 extends DbgLib {
                         dbg.doCommands(sCommands, true);
                         return true;
                     }
-                    if (DEBUG) dbg.log("no debugger input buffer");
+                    if (DEBUG) dbg.printf(Messages.LOG, "no debugger input buffer\n");
                     return false;
                 }
             );

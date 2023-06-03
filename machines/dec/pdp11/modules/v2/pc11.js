@@ -179,7 +179,7 @@ export default class PC11 extends Component {
             var controlInput = /** @type {Object} */ (control);
 
             if (!this.fLocalTapes) {
-                if (DEBUG) this.log("Local tape support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local tape support not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *

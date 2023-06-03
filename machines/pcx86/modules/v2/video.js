@@ -2795,7 +2795,7 @@ export default class VideoX86 extends Component {
                         video.goFullScreen();
                     };
                 } else {
-                    if (DEBUG) this.log("FullScreen API not available");
+                    if (DEBUG) this.printf(Messages.LOG, "FullScreen API not available\n");
                     control.parentNode.removeChild(/** @type {Node} */ (control));
                 }
                 return true;
@@ -2808,7 +2808,7 @@ export default class VideoX86 extends Component {
                         video.lockPointer(true);
                     };
                 } else {
-                    if (DEBUG) this.log("Pointer Lock API not available");
+                    if (DEBUG) this.printf(Messages.LOG, "Pointer Lock API not available\n");
                     control.parentNode.removeChild(/** @type {Node} */ (control));
                 }
                 return true;
@@ -3150,7 +3150,7 @@ export default class VideoX86 extends Component {
                     );
                 }
 
-                // this.log("touch events captured");
+                // this.printf(Messages.LOG, "touch events captured\n");
 
                 this.xTouch = this.yTouch = this.timeTouch = -1;
 

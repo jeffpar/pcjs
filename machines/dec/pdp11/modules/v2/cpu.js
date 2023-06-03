@@ -821,8 +821,8 @@ export default class CPUPDP11 extends Component {
          */
         this.nCyclesRecalc += this.nCyclesThisRun;
 
-        if (DEBUG && this.messageEnabled(Messages.BUFFER) && msRemainsThisRun) {
-            this.log("calcRemainingTime: " + msRemainsThisRun + "ms to sleep after " + this.msEndThisRun + "ms");
+        if (DEBUG && msRemainsThisRun) {
+            this.printf(Messages.LOG + Messages.BUFFER, "calcRemainingTime: %dms to sleep after %dms\n", msRemainsThisRun, this.msEndThisRun);
         }
 
         this.msEndThisRun += msRemainsThisRun;

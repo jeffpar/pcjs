@@ -67,7 +67,7 @@ export default class ROMPDP11 extends Component {
 
         if (this.sFilePath) {
             var sFileURL = this.sFilePath;
-            if (DEBUG) this.log('load("' + sFileURL + '")');
+            if (DEBUG) this.printf(Messages.LOG, "load(\"%s\")\n", sFileURL);
             /*
              * If the selected ROM file has a ".json" extension, then we assume it's pre-converted
              * JSON-encoded ROM data, so we load it as-is; ditto for ROM files with a ".hex" extension.
@@ -263,9 +263,10 @@ export default class ROMPDP11 extends Component {
             }
         }
         else if (this.bus.addMemory(addr, this.sizeROM, MemoryPDP11.TYPE.ROM)) {
-            if (DEBUG) this.log("addROM(): copying ROM to " + Str.toHexLong(addr) + " (" + Str.toHexLong(this.abInit.length) + " bytes)");
-            var i;
-            for (i = 0; i < this.abInit.length; i++) {
+            if (DEBUG) {
+                this.printf(Messages.LOG, "addROM(%#010x): %#010x bytes\n", addr, this.abInit.length);
+            }
+            for (let i = 0; i < this.abInit.length; i++) {
                 this.bus.setByteDirect(addr + i, this.abInit[i]);
             }
             return true;

@@ -354,7 +354,7 @@ export default class VideoX80 extends Component {
                     video.doFullScreen();
                 };
             } else {
-                if (DEBUG) this.log("FullScreen API not available");
+                if (DEBUG) this.printf(Messages.LOG, "FullScreen API not available\n");
                 control.parentNode.removeChild(/** @type {Node} */ (control));
             }
             return true;
