@@ -136,16 +136,4 @@ export default class PCJSLib {
         argc = argv.length;
         return [argc, argv];
     }
-
-    /**
-     * printf(format, ...args)
-     *
-     * @this {PCJSLib}
-     * @param {string} format
-     * @param {...} args
-     */
-    printf(format, ...args)
-    {
-        process.stdout.write(this.stdio.sprintf(format, ...args));
-    }
 }

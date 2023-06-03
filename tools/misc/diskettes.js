@@ -14,8 +14,8 @@ import mkdirp from "mkdirp";
 import os from "os";
 import path from "path";
 import xml2js from "xml2js";
-import strlib from "../../machines/modules/v2/strlib.js";
 import proclib from "../../machines/modules/v2/proclib.js";
+import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 
 let args = proclib.getArgs();
 let idAttrs = '@';
@@ -55,17 +55,6 @@ let remappings = {
     "/unix": "/sys/unix",
     "/windows": "/sys/windows"
 };
-
-/**
- * printf(format, ...args)
- *
- * @param {string} format
- * @param {...} args
- */
-function printf(format, ...args)
-{
-    process.stdout.write(strlib.sprintf(format, ...args));
-}
 
 /**
  * fileCopy(srcPath, dstPath, overwrite)
@@ -877,7 +866,7 @@ if (args.argc < 2) {
     if (argv['manifests']) {
         let diskettes = processManifests(sDir, output, fDebug);
         if (processFiles(sDir, diskettes)) {
-            let json = strlib.sprintf("%2j\n", diskettes);
+            let json = sprintf("%2j\n", diskettes);
             if (typeof output == "string") {
                 fs.writeFileSync(output, json);
             } else {

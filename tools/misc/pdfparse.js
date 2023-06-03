@@ -10,34 +10,12 @@
 
 import fs from "fs";
 import pdf from "pdf-parse";
-import strlib from "../../machines/modules/v2/strlib.js";
 import proclib from "../../machines/modules/v2/proclib.js";
+import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 
 const args = proclib.getArgs();
 
 let dataBuffer;
-
-/**
- * printf(format, ...args)
- *
- * @param {string} format
- * @param {...} args
- */
-function printf(format, ...args)
-{
-    process.stdout.write(strlib.sprintf(format, ...args));
-}
-
-/**
- * sprintf(format, ...args)
- *
- * @param {string} format
- * @param {...} args
- */
-function sprintf(format, ...args)
-{
-    return strlib.sprintf(format, ...args);
-}
 
 function renderSheet(pageData)
 {

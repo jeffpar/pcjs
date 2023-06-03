@@ -14,23 +14,13 @@ import os from "os";
 import path from "path";
 import strlib from "../../machines/modules/v2/strlib.js";
 import proclib from "../../machines/modules/v2/proclib.js";
+import { printf } from "../../machines/modules/v2/printf.js";
 
 let args = proclib.getArgs();
 let sRootDir = "../..";
 let remappings = {
     "/tests/pcx86/testmon": "/software/pcx86/test/testmon"
 };
-
-/**
- * printf(format, ...args)
- *
- * @param {string} format
- * @param {...} args
- */
-function printf(format, ...args)
-{
-    process.stdout.write(strlib.sprintf(format, ...args));
-}
 
 /**
  * fileExists(sFile)

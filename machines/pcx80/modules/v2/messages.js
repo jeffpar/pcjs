@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import CommonMessages from "../../../modules/v1/messages.js";
+import CommonMessages from "../../../modules/v2/messages.js";
 
 const Messages = { ...CommonMessages };
 Messages.Categories = { ...CommonMessages.Categories };

@@ -8,7 +8,7 @@
  */
 
 import NumIO from "./numio.js";
-import Format from "../v1/format.js";
+import Format from "../v2/format.js";
 
 /**
  * @class StdIO

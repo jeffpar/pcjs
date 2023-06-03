@@ -18,6 +18,8 @@ import path from "path";
  */
 import filelib from "../../modules/v2/filelib.js";
 import proclib from "../../modules/v2/proclib.js";
+import { printf } from "../../modules/v2/printf.js";
+import { readDir, writeDisk } from "../../../tools/modules/disklib.js";
 
 let args = proclib.getArgs();
 let argv = args.argv;
@@ -63,21 +65,6 @@ async function loadModules(factory, modules)
         }
     }
     readInput(factory.replace("embed", ""), process.stdin, process.stdout);
-}
-
-/**
- * printf(format, ...args)
- *
- * @param {string} format
- * @param {...} args
- */
-function printf(format, ...args)
-{
-    if (strlib) {
-        process.stdout.write(strlib.sprintf(format, ...args));
-        return;
-    }
-    console.log(format, ...args);
 }
 
 /**

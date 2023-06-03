@@ -14,6 +14,7 @@ import path from "path";
 import xml2js from "xml2js";
 import strlib from "../../machines/modules/v2/strlib.js";
 import proclib from "../../machines/modules/v2/proclib.js";
+import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 
 let args = proclib.getArgs();
 let idAttrs = '@';
@@ -29,17 +30,6 @@ let sRootDir = "../..";
  *
  * Additional properties will depend on what appears in a given document's YFM (YAML Front Matter).
  */
-
-/**
- * printf(format, ...args)
- *
- * @param {string} format
- * @param {...} args
- */
-function printf(format, ...args)
-{
-    process.stdout.write(strlib.sprintf(format, ...args));
-}
 
 /**
  * processLaunch(aMachines, fDebug)
@@ -220,7 +210,7 @@ function processXML(aMachines, sNameCSV, fDebug)
             ++cXML;
             if (!err) {
                 if (fDebug) printf("XML config %d processed\n", cXML);
-                streamCSV.write(strlib.sprintf("%s%2j\n", cXML > 1? ",\n" : "", xml));
+                streamCSV.write(sprintf("%s%2j\n", cXML > 1? ",\n" : "", xml));
             } else {
                 printf("error: %s\n", err.message);
                 printf("  reference: %s%s%s\n", sRootDir, aMachines[aMachineRefs[i]].directory, "index.md");

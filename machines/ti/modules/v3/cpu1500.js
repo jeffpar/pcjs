@@ -10,7 +10,7 @@
 import CPU    from "../../../modules/v3/cpu.js";
 import Device from "../../../modules/v3/device.js";
 import LED    from "../../../modules/v3/led.js";
-import Format from "../../../modules/v1/format.js";
+import Format from "../../../modules/v2/format.js";
 
 /**
  * 64-bit Register

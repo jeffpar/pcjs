@@ -19,8 +19,8 @@ import Str from "../../../modules/v2/strlib.js";
 //
 // The following list of imports should be a strict subset of the scripts listed in machines.json for 'pdp11'.
 //
-import "../../../modules/v1/format.js";
-import "../../../modules/v1/messages.js";
+import "../../../modules/v2/format.js";
+import "../../../modules/v2/messages.js";
 import "../../../modules/v2/defines.js";
 import "../../../modules/v2/diskapi.js";
 import "../../../modules/v2/dumpapi.js";
@@ -32,7 +32,7 @@ import "../../../modules/v2/usrlib.js";
 import "../../../modules/v2/weblib.js";
 import "../../../modules/v2/component.js";
 import "../modules/v2/defines.js";
-import "../modules/v1/messages.js";
+import "../modules/v2/messages.js";
 import "../modules/v2/panel.js";
 import "../modules/v2/bus.js";
 import "../modules/v2/device.js";

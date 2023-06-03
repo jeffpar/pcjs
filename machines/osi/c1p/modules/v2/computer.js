@@ -7,7 +7,7 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import Messages from "../../../../modules/v1/messages.js";
+import Messages from "../../../../modules/v2/messages.js";
 import Component from "../../../../modules/v2/component.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, APPNAME, APPVERSION, COPYRIGHT, DEBUG } from "./defines.js";
