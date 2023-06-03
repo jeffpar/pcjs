@@ -52820,7 +52820,21 @@ class VideoX86 extends Component {
             }, function(nState) {
                 video.printf(Messages.PROGRESS, "%s\n", sProgress);
             });
+            return;
         }
+
+        /*
+         * TODO: Improve how Video readiness is signalled.  Currently, all the video cards we support either have
+         * a font ROM (which we load ourselves; see above) OR a system ROM (which the ROM component takes care of),
+         * but not both.
+         *
+         * If the former, doneLoad() will call setReady(), and if the latter, onROMLoad() will call setReady().
+         *
+         * However, theoretically, a video card could have NEITHER or BOTH; as things stand, a card with NEITHER
+         * will never be marked ready, and a card with BOTH will be prematurely marked as ready.  The Video component
+         * parameters (parmsVideo) should be updated to reflect how many resources we should be waiting for.
+         */
+        // this.setReady();
     }
 
     /**

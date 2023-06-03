@@ -37,15 +37,23 @@
       "size": 0x8000,
       "alias": [0xf0000,0xffff0000,0xffff8000],
       "file": "/machines/pcx86/compaq/deskpro386/rom/1988-01-28/1988-01-28.json"
-    }
-  ],
-  "video": [
+    },
     {
       "id": "romVGA",
       "addr": 0xc0000,
       "size": 0x6000,
       "file": "/machines/pcx86/ibm/video/vga/1986-10-27/IBM-VGA.json5",
       "notify": "videoVGA[0x378d,0x3f8d,0x4eba]"
+    }
+  ],
+  "video": [
+    {
+      "id": "videoVGA",
+      "name": "vga",
+      "screenWidth": 1280,
+      "screenHeight": 960,
+      "screenColor": "black",
+      "touchScreen": false
     }
   ],
   "cpu": {
