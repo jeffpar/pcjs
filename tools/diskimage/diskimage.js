@@ -14,8 +14,7 @@ import path       from "path";
 import got        from "got";
 import BASConvert from "../bascon/bascon.js";
 import PCJSLib    from "../modules/pcjslib.js";
-import StreamZip  from "../modules/streamzip.js";
-// import StreamZip  from "node-stream-zip";
+import StreamZip  from "../modules/streamzip.js";       // PCjs replacement for "node-stream-zip"
 import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
 import DataBuffer from "../../machines/modules/v2/databuffer.js";
 import Device     from "../../machines/modules/v3/device.js";

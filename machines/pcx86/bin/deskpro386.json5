@@ -1,0 +1,98 @@
+{
+  "machine": {
+    "id": "pc386"
+  },
+  "computer": {
+    "id": "computer",
+    "name": "Compaq DeskPro 386",
+    "resume": 0,
+    "state": "",
+    "busWidth": 32
+  },
+  "ram": [
+    {
+      "id": "ramLow",
+      "name": "",
+      "addr": 0,
+      "size": 0xa0000,
+      "test": false
+    },
+    {
+	    "id": "ramCPQ",
+      "addr": 0xfa0000,
+      "size": 0x60000,
+      "comment": "COMPAQ memory at 0xFA0000"
+    },
+    {
+      "id": "ramExt",
+      "addr": 0x100000,
+      "size": 0x100000,
+      "comment": "Extended memory at 0x100000"
+    }
+  ],
+  "rom": [
+    {
+      "id": "romBIOS",
+      "addr": 0xf8000,
+      "size": 0x8000,
+      "alias": [0xf0000,0xffff0000,0xffff8000],
+      "file": "/machines/pcx86/compaq/deskpro386/rom/1988-01-28/1988-01-28.json"
+    }
+  ],
+  "video": [
+    {
+      "id": "romVGA",
+      "addr": 0xc0000,
+      "size": 0x6000,
+      "file": "/machines/pcx86/ibm/video/vga/1986-10-27/IBM-VGA.json5",
+      "notify": "videoVGA[0x378d,0x3f8d,0x4eba]"
+    }
+  ],
+  "cpu": {
+    "id": "cpu",
+    "name": "",
+    "model": 80386,
+    "clock": 0,
+    "multiplier": 1,
+    "autoStart": true,
+    "csStart": -1,
+    "csInterval": -1,
+    "csStop": -1
+  },
+  "keyboard": {
+    "id": "keyboard",
+    "name": "",
+    "model": ""
+  },
+  "fdc": {
+    "id": "fdcNEC",
+    "name": "",
+    "autoMount": {
+      "A": {
+        "name": "PC DOS 2.00 (Disk 1)",
+        "path": "/disks/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json"
+      },
+      "B": {
+        "name": "PC DOS 2.00 (Disk 2)",
+        "path": "/disks/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK2.json"
+      }
+    }
+  },
+  "chipset": {
+    "id": "chipset",
+    "name": "",
+    "model": "deskpro386",
+    "sound": false
+  },
+	"serial": {
+    "id": "com2",
+    "adapter": 2,
+    "binding": "console"
+  },
+  "debugger": {
+    "id": "debugger",
+    "name": "",
+    "commands": "",
+    "messages": ""
+  }
+}

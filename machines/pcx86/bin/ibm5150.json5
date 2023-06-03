@@ -1,34 +1,44 @@
+
 {
   "machine": {
-    "id": "pc386"
+    "id": "ibm5150"
   },
   "computer": {
-    "id": "computer",
-    "name": "Compaq DeskPro 386",
-    "resume": 0,
-    "state": "",
-    "busWidth": 32
+    "id": "pc-mda-64k",
+    "name": "IBM PC",
+    "resume": "1",
+    "state": ""
   },
   "ram": [
-    { "id": "ramLow",
+    {
+      "id": "ramLow",
       "name": "",
-      "addr": 0,
-      "size": 655360,
-      "test": false
+      "addr": "0x00000",
+      "size": 0,
+      "test": true
     }
   ],
   "rom": [
-    { "id": "test386",
+    {
+      "id": "romBASIC",
       "name": "",
-      "addr": 983296,
-      "size": 65276,
-      "alias": 4294902016,
-      "file": "/machines/pcx86/bin/test386.json",
+      "addr": "0xf6000",
+      "size": "0x08000",
+      "file": "/machines/pcx86/ibm/5150/rom/basic/BASIC100.json5",
+      "notify": ""
+    },
+    {
+      "id": "romBIOS",
+      "name": "",
+      "addr": "0xfe000",
+      "size": "0x02000",
+      "file": "/machines/pcx86/ibm/5150/rom/bios/1981-04-24/PCBIOS-REV1.json5",
       "notify": ""
     }
   ],
   "video": [
-    { "id": "videoMDA",
+    {
+      "id": "videoMDA",
       "name": "Monochrome Display",
       "model": "",
       "mode": 7,
@@ -43,9 +53,9 @@
     }
   ],
   "cpu": {
-    "id": "cpu",
+    "id": "cpu8088",
     "name": "",
-    "model": 80386,
+    "model": 8088,
     "clock": 0,
     "multiplier": 1,
     "autoStart": true,
@@ -64,29 +74,22 @@
     "autoMount": {
       "A": {
         "name": "PC DOS 2.00 (Disk 1)",
-        "path": "/disks/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json"
-      },
-      "B": {
-        "name": "PC DOS 2.00 (Disk 2)",
-        "path": "/disks/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK2.json"
+        "path": "/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json"
       }
     }
   },
   "chipset": {
     "id": "chipset",
     "name": "",
-    "model": "deskpro386",
-    "sound": false
-  },
-	"serial": {
-    "id": "com2",
-    "adapter": 2,
-    "binding": "console"
+    "model": "5150",
+    "sw1": "01000001",
+    "sw2": "11110000",
+    "sound": true
   },
   "debugger": {
     "id": "debugger",
     "name": "",
-    "commands": "",
     "messages": ""
-  }
+  },
+  "xml": "/machines/pcx86/ibm/5150/mda/64kb/machine.xml"
 }

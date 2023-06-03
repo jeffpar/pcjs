@@ -12,7 +12,7 @@ import os         from "os";
 import crypto     from "crypto";
 import glob       from "glob";
 import path       from "path";
-import StreamZip  from "../modules/streamzip.js";
+import StreamZip  from "../modules/streamzip.js";       // PCjs replacement for "node-stream-zip"
 import { DEBUG }  from "../../machines/modules/v2/defines.js";
 import DataBuffer from "../../machines/modules/v2/databuffer.js";
 import Device     from "../../machines/modules/v3/device.js";
