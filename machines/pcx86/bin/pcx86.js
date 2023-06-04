@@ -41,26 +41,39 @@ let machines = JSON.parse(fs.readFileSync("../../machines.json", "utf8"));
 async function loadModules(factory, modules)
 {
     for (let modulePath of modules) {
-        modulePath = path.join("../../..", modulePath);
+        /*
+         * Unless I replace all backslashes in modulePath with forward slashes; eg:
+         *
+         *      .replace(/\\/g, '/')
+         *
+         * "node pcx86.js" will fail on the Windows operating system with the following error:
+         *
+         *      TypeError [ERR_INVALID_MODULE_SPECIFIER]: Invalid module
+         *      "..\..\..\machines\modules\v2\defines.js" is not a valid package name ....
+         *
+         * which is bizzare, because backslash is actually Windows' preferred path separator.
+         * ¯\_(ツ)_/¯
+         */
+        modulePath = path.join("../../..", modulePath).replace(/\\/g, '/');
         let name = path.basename(modulePath, ".js");
         if (name == "embed") {
             let { [factory]: embed } = await import(modulePath);
             embedMachine = embed;
             continue;
         }
-        let { default: module } = await import(modulePath);
+        let module = await import(modulePath);
         switch(name) {
         case "strlib":
-            strlib = module;
+            strlib = module.default;
             break;
         case "weblib":
-            weblib = module;
+            weblib = module.default;
             break;
         case "component":
-            Component = module;
+            Component = module.default;
             break;
         case "interrupts":
-            Interrupts = module;
+            Interrupts = module.default;
             break;
         }
     }
