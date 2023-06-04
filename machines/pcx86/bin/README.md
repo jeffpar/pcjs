@@ -1,4 +1,10 @@
-This directory contains the PCx86 command-line utility [pcx86.js](pcx86.js), which allows you to start a "headless" machine with all TTY I/O redirected to your console.
+---
+layout: page
+title: PCx86 Command-Line Utility
+permalink: /machines/pcx86/bin/
+---
+
+This directory contains the PCx86 command-line utility [pcx86.js](pcx86.js), which allows you to start a "headless" machine with all TTY (INT 0x10) output redirected to your console.
 
 Load a machine JSON file, such as [ibm5150.json5](ibm5150.json5) or [compaq386.json5](compaq386.json5), with the utility's `load` command, either interactively or with the `--cmd` command-line argument.
 
@@ -47,3 +53,11 @@ You can begin interacting with the machine OR you can press CTRL-A to enter the 
     >> 
 
 To destroy the machine, type `quit` at the debugger prompt (or press CTRL-C).
+
+Note that this utility is very much a "work in progress" and is intended for development work and testing only.  Also, since it is "headless", you will not see any output from the machine when running any software that writes directly to video memory.
+
+## Historical Notes
+
+One early use of this utility was running a set of [80386 CPU Tests](/software/pcx86/test/cpu/80386/test386.asm) as a custom ROM image inside an [80386 Test Machine](test386.json5), and then comparing the results to [output](/software/pcx86/test/cpu/80386/test386.txt) from real hardware.
+
+The test program ([test386.asm](/software/pcx86/test/cpu/80386/test386.asm)) was carefully designed to be built as a binary (`test386.com`) that could either be run as a DOS program *or* loaded as a ROM image.  See [PCx86 CPU Tests](/software/pcx86/test/cpu/) for more information.
