@@ -467,6 +467,27 @@
       }
     },
     {
+      "name": "pcx86.js test386.json5",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/machines/pcx86/bin/pcx86.js",
+      "args": [
+        "--cmd=load test386.json5",
+        "--debug"
+      ],
+      "cwd": "${workspaceFolder}/machines/pcx86/bin",
+      "stopOnEntry": false,
+      "console": "integratedTerminal",
+      "outFiles": [
+        "${workspaceFolder}/none/**/*.js"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "machines",
+        "order": 15
+      }
+    },
+    {
       "name": "pdp11.js",
       "type": "node",
       "request": "launch",
