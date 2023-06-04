@@ -95,7 +95,7 @@ function readInput(prompt, stdin, stdout)
 
     let setDebugMode = function(f) {
         if (!f && debugMode != f) {
-            printf("Press ctrl-a to enter debugger, ctrl-c to terminate debugger\n");
+            printf("Press ctrl-a to enter debugger, ctrl-c to terminate process\n");
         }
         debugMode = f;
         if (debugMode) {

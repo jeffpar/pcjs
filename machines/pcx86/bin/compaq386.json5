@@ -1,12 +1,12 @@
 {
   "machine": {
-    "id": "pc386"
+    "id": "compaq386"
   },
   "computer": {
     "id": "computer",
     "name": "Compaq DeskPro 386",
     "resume": 0,
-    "state": "",
+    "state": "/machines/pcx86/bin/compaq386.json",
     "busWidth": 32
   },
   "ram": [
@@ -62,7 +62,7 @@
     "model": 80386,
     "clock": 0,
     "multiplier": 1,
-    "autoStart": true,
+    "autoStart": false,
     "csStart": -1,
     "csInterval": -1,
     "csStop": -1
@@ -77,12 +77,12 @@
     "name": "",
     "autoMount": {
       "A": {
-        "name": "PC DOS 2.00 (Disk 1)",
-        "path": "/disks/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK1.json"
+        "name": "COMPAQ MS-DOS 3.31 (Disk 2)",
+        "path": "/diskettes/pcx86/sys/dos/compaq/3.31/COMPAQ-DOS331-DISK2.json"
       },
       "B": {
-        "name": "PC DOS 2.00 (Disk 2)",
-        "path": "/disks/diskettes/pcx86/sys/dos/ibm/2.00/PCDOS200-DISK2.json"
+        "name": "COMPAQ MS-DOS 3.31 (Disk 3)",
+        "path": "/diskettes/pcx86/sys/dos/compaq/3.31/COMPAQ-DOS331-DISK3.json"
       }
     }
   },
@@ -90,6 +90,7 @@
     "id": "chipset",
     "name": "",
     "model": "deskpro386",
+    "floppies": [1440, 1440],
     "sound": false
   },
 	"serial": {

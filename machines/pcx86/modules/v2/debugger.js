@@ -3406,7 +3406,7 @@ export default class DebuggerX86 extends DbgLib {
     printBreakpoint(aBreak, i, sAction)
     {
         let dbgAddr = aBreak[i];
-        this.printf("%d %s%s\n", aBreak[0], this.toHexAddr(dbgAddr), (sAction? (' ' + sAction) : (dbgAddr.sCmd? (' "' + dbgAddr.sCmd + '"') : '')));
+        this.printf("%s %s%s\n", aBreak[0], this.toHexAddr(dbgAddr), (sAction? (' ' + sAction) : (dbgAddr.sCmd? (' "' + dbgAddr.sCmd + '"') : '')));
     }
 
     /**

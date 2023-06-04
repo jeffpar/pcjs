@@ -7,8 +7,6 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
-
 try {
     /*
      * If Node is running us, this will succeed, and we'll have a print()
@@ -192,7 +190,6 @@ else {
     var cOpMods, mrm;
     var sOpMods, sOpMod, sContainer;
 
-    print('"use strict";\n');
     if (f16Only) {
         print("var X86ModB = {};");
         print("var X86ModW = {};\n");

@@ -446,12 +446,12 @@
       }
     },
     {
-      "name": "pcx86.js deskpro386.json5",
+      "name": "pcx86.js compaq386.json5",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/machines/pcx86/bin/pcx86.js",
       "args": [
-        "--cmd=load deskpro386.json5",
+        "--cmd=load compaq386.json5",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/machines/pcx86/bin",

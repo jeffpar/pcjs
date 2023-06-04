@@ -1,6 +1,6 @@
 This directory contains the PCx86 command-line utility [pcx86.js](pcx86.js), which allows you to start a "headless" machine with all TTY I/O redirected to your console.
 
-Load a machine JSON file, such as [ibm5150.json5](ibm5150.json5) or [deskpro386.json5](deskpro386.json5), with the utility's `load` command, either interactively or with the `--cmd` command-line argument.
+Load a machine JSON file, such as [ibm5150.json5](ibm5150.json5) or [compaq386.json5](compaq386.json5), with the utility's `load` command, either interactively or with the `--cmd` command-line argument.
 
 For example:
 
