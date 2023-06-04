@@ -6,7 +6,7 @@
     "id": "computer",
     "name": "Compaq DeskPro 386",
     "resume": 0,
-    "state": "/machines/pcx86/bin/compaq386.json",
+    "state": "/tools/pcjs/compaq386.json",
     "busWidth": 32
   },
   "ram": [
@@ -62,10 +62,7 @@
     "model": 80386,
     "clock": 0,
     "multiplier": 1,
-    "autoStart": false,
-    "csStart": -1,
-    "csInterval": -1,
-    "csStop": -1
+    "autoStart": true
   },
   "keyboard": {
     "id": "keyboard",

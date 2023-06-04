@@ -31,12 +31,12 @@ export default class File {
     static getServerPath(sFile)
     {
         /*
-         * In addition to disk server paths, we had to add /machines (for diskette config files) and /software
-         * (for Markdown files containing supplementary copy-protection disk data).
+         * In addition to disk server paths, we had to add /machines (for diskette config files), /software
+         * (for Markdown files containing supplementary copy-protection disk data), and /tools (for everything else).
          */
-        let match = sFile.match(/^\/(disks\/|)(machines|software|diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|cdroms|private)(\/.*)$/);
+        let match = sFile.match(/^\/(disks\/|)(machines|software|tools|diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|cdroms|private)(\/.*)$/);
         if (match) {
-            sFile = path.join(rootDir, (match[2] == "machines" || match[2] == "software"? "" : "disks"), match[2], match[3]);
+            sFile = path.join(rootDir, (match[2] == "machines" || match[2] == "software" || match[2] == "tools"? "" : "disks"), match[2], match[3]);
         }
         return sFile;
     }
