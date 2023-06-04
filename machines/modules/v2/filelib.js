@@ -9,14 +9,14 @@
 
 import fs from "fs";
 import path from "path";
-import Proc from "./proclib.js";
+import proclib from "./proclib.js";
 import { globals } from "./defines.js";
 import DataBuffer from "./databuffer.js";
 
-let args = Proc.getArgs();
+let args = proclib.getArgs();
 let argv = args.argv;
 let moduleDir = path.dirname(argv[0]);
-let rootDir = path.join(moduleDir, "../../..");
+let rootDir = path.join(moduleDir, "../..");
 
 /**
  * @class File

@@ -425,15 +425,15 @@
       }
     },
     {
-      "name": "pcx86.js ibm5150.json5",
+      "name": "pc.js ibm5150.json5",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/machines/pcx86/bin/pcx86.js",
+      "program": "${workspaceFolder}/tools/pcjs/pc.js",
       "args": [
         "--cmd=load ibm5150.json5",
         "--debug"
       ],
-      "cwd": "${workspaceFolder}/machines/pcx86/bin",
+      "cwd": "${workspaceFolder}/tools/pcjs",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -446,15 +446,15 @@
       }
     },
     {
-      "name": "pcx86.js compaq386.json5",
+      "name": "pc.js compaq386.json5",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/machines/pcx86/bin/pcx86.js",
+      "program": "${workspaceFolder}/tools/pcjs/pc.js",
       "args": [
         "--cmd=load compaq386.json5",
         "--debug"
       ],
-      "cwd": "${workspaceFolder}/machines/pcx86/bin",
+      "cwd": "${workspaceFolder}/tools/pcjs",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -467,15 +467,15 @@
       }
     },
     {
-      "name": "pcx86.js test386.json5",
+      "name": "pc.js test386.json5",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/machines/pcx86/bin/pcx86.js",
+      "program": "${workspaceFolder}/tools/pcjs/pc.js",
       "args": [
         "--cmd=load test386.json5",
         "--debug"
       ],
-      "cwd": "${workspaceFolder}/machines/pcx86/bin",
+      "cwd": "${workspaceFolder}/tools/pcjs",
       "stopOnEntry": false,
       "console": "integratedTerminal",
       "outFiles": [
@@ -493,6 +493,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/machines/dec/pdp11/bin/pdp11.js",
       "args": [
+        "--cmd=load ../1170/panel/debugger/machine.xml"
       ],
       "cwd": "${workspaceFolder}/machines/dec/pdp11/bin",
       "stopOnEntry": false,

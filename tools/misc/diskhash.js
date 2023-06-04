@@ -11,11 +11,10 @@
 import fs from "fs";
 import path from "path";
 import crypto from "crypto";
-import Str from "../../machines/modules/v2/strlib.js";
-import Proc from "../../machines/modules/v2/proclib.js";
+import proclib from "../../machines/modules/v2/proclib.js";
 import { printf } from "../../machines/modules/v2/printf.js";
 
-var args = Proc.getArgs();
+var args = proclib.getArgs();
 
 /**
  * findFile(buf, name)

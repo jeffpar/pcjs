@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * @fileoverview Implements the PCx86 command-line interface
+ * @fileoverview Implements the PCjs machine command-line interface
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2023 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -10,27 +10,28 @@
 
 import fs from "fs";
 import path from "path";
-import Messages from "../../modules/v2/messages.js";
+import Messages from "../../machines/modules/v2/messages.js";
 /*
  * We don't use the File class (filelib.js) here, but the simple act of loading it will make
  * readFileSync() visible to the WebLib class (weblib.js), which in turn will allow getResource()
  * to load any local files referenced by the machine's JSON file locally instead of remotely.
  */
-import filelib from "../../modules/v2/filelib.js";
-import proclib from "../../modules/v2/proclib.js";
-import { printf } from "../../modules/v2/printf.js";
-import { readDir, writeDisk } from "../../../tools/modules/disklib.js";
+import filelib from "../../machines/modules/v2/filelib.js";
+import proclib from "../../machines/modules/v2/proclib.js";
+import { printf } from "../../machines/modules/v2/printf.js";
+import { readDir, writeDisk } from "../modules/disklib.js";
 
 let args = proclib.getArgs();
 let argv = args.argv;
-let fDebug = (argv['debug'] || false);
+let fDebug = argv['debug'] || false;
+let machineType = argv['type'] || "pcx86";
 
 let sCmdPrev = "";
 let Component, Interrupts;
 let strlib, weblib, embedMachine;
 let cpu, dbg, kbd;
 
-let machines = JSON.parse(fs.readFileSync("../../machines.json", "utf8"));
+let machines = JSON.parse(fs.readFileSync("../../machines/machines.json", "utf8"));
 
 /**
  * loadModules(factory, modules)
@@ -46,15 +47,15 @@ async function loadModules(factory, modules)
          *
          *      .replace(/\\/g, '/')
          *
-         * "node pcx86.js" will fail on the Windows operating system with the following error:
+         * "node pc.js" will fail on Windows operating systems with the following error:
          *
          *      TypeError [ERR_INVALID_MODULE_SPECIFIER]: Invalid module
          *      "..\..\..\machines\modules\v2\defines.js" is not a valid package name ....
          *
-         * which is bizzare, because backslash is actually Windows' preferred path separator.
+         * which is bizarre, because backslash is actually Windows' preferred path separator.
          * ¯\_(ツ)_/¯
          */
-        modulePath = path.join("../../..", modulePath).replace(/\\/g, '/');
+        modulePath = path.join("../..", modulePath).replace(/\\/g, '/');
         let name = path.basename(modulePath, ".js");
         if (name == "embed") {
             let { [factory]: embed } = await import(modulePath);
@@ -220,7 +221,7 @@ function loadMachine(sFile)
              * the debugger's print() function.
              */
             cpu = Component.getComponentByType("CPU");
-            if (cpu) {
+            if (cpu && Interrupts.VIDEO) {
                 cpu.addIntNotify(Interrupts.VIDEO, intVideo.bind(cpu));
             }
 
@@ -287,4 +288,4 @@ function doCommand(sCmd)
     return result? result + "\n" : "";
 }
 
-loadModules(machines['pcx86']['factory'], machines['pcx86']['modules']);
+loadModules(machines[machineType]['factory'], machines[machineType]['modules']);

@@ -9,8 +9,8 @@
  */
 
 import repl from "repl";
-import Int36 from "../v2/int36.js";
-import { DEBUG } from "../v2/defines.js";
+import Int36 from "../../machines/modules/v2/int36.js";
+import { DEBUG } from "../../machines/modules/v2/defines.js";
 
 var i36Reg = new Int36();
 

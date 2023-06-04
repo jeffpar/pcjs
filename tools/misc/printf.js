@@ -8,23 +8,8 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-"use strict";
-
 import repl from "repl";
-import Str from "../v2/strlib.js";
-
-/**
- * printf(format, ...args)
- *
- * @param {string} format
- * @param {...} args
- * @returns {boolean}
- */
-function printf(format, ...args)
-{
-    console.log("printf(" + format + "): \"" + Str.sprintf(format, ...args) + "\"");
-    return true;
-}
+import { printf } from "../../machines/modules/v2/printf.js";
 
 /**
  * onCommand(cmd, context, filename, callback)

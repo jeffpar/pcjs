@@ -9,19 +9,7 @@
  */
 
 import fs from "fs";
-import Str from "../../../modules/v2/strlib.js";
-
-/**
- * printf(format, ...args)
- *
- * @param {string} format
- * @param {...} args
- * @returns {number}
- */
-function printf(format, ...args)
-{
-    console.log(Str.sprintf(format, ...args).replace(/\s*$/, ""));
-}
+import { printf } from "../../machines/modules/v2/printf.js";
 
 /**
  * processFile(sFile)

@@ -10,25 +10,12 @@
 
 import fs from "fs";
 import repl from "repl";
-import Str from "../v2/strlib.js";
+import strlib from "../../machines/modules/v2/strlib.js";
+import { printf } from "../../machines/modules/v2/printf.js";
 
 var buffer = null;
 var offsetPrev = 0;
 var cchOffset = 6;
-
-/**
- * printf(format, ...args)
- *
- * @param {string} format
- * @param {...} args
- * @returns {number}
- */
-function printf(format, ...args)
-{
-    let s = Str.sprintf(format, ...args);
-    console.log(s.replace(/\s*$/, ""));
-    return s.length;
-}
 
 /**
  * validate(v, message, value)
@@ -76,12 +63,12 @@ function dumpFile(offset, length, size = 1, comment = "")
     while (cLines-- && cb > 0) {
         let data = 0, iByte = 0, i;
         let sData = "", sChars = "";
-        let sAddr = Str.toHex(offset, cchOffset, true);
+        let sAddr = strlib.toHex(offset, cchOffset, true);
         for (i = cbLine; i > 0 && cb > 0; i--) {
             var b = buffer[offset++];
             data |= (b << (iByte++ << 3));
             if (iByte == size) {
-                sData += Str.toHex(data, size * 2);
+                sData += strlib.toHex(data, size * 2);
                 sData += (size == 1? (i == 9? '-' : ' ') : "  ");
                 data = iByte = 0;
             }
@@ -89,7 +76,7 @@ function dumpFile(offset, length, size = 1, comment = "")
             cb--;
         }
         if (sDump) sDump += '\n';
-        sDump += sAddr + "  " + sData + Str.pad(sChars, sChars.length + i * 3 + 1, true) + comment;
+        sDump += sAddr + "  " + sData + strlib.pad(sChars, sChars.length + i * 3 + 1, true) + comment;
     }
     if (sDump) printf("%s\n", sDump);
     offsetPrev = offset;
@@ -119,7 +106,7 @@ function searchFile(values)
     let matches = 0;
     validate(buffer, "no file");
     let a = values.map((v) => {
-        let n = Str.parseInt(v, 16);
+        let n = strlib.parseInt(v, 16);
         validate(n !== undefined || n < 0 || n > 0xff, "value out of range", v);
         return n;
     });
@@ -150,7 +137,7 @@ function searchDeltas(values, maxSpread = 8)
     validate(buffer, "no file");
     validate(values.length > 1, "not enough values");
     let a = values.map((v) => {
-        let n = Str.parseInt(v, 16);
+        let n = strlib.parseInt(v, 16);
         validate(n !== undefined || n < 0 || n > 0xffff, "value out of range", v);
         return n;
     });
@@ -200,7 +187,7 @@ var onCommand = function (cmd, context, filename, callback)
             break;
         case "d":
         case "dump":
-            result = dumpFile(Str.parseInt(args[0], 16) || offsetPrev, Str.parseInt(args[1], 16) || 128);
+            result = dumpFile(strlib.parseInt(args[0], 16) || offsetPrev, strlib.parseInt(args[1], 16) || 128);
             break;
         case "open":
             result = openFile(args[0]);

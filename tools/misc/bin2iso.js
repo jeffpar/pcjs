@@ -9,21 +9,10 @@
  */
 
 import fs from "fs";
-import Str from "../v2/strlib.js";
-import Proc from "../v2/proclib.js";
+import proclib from "../../machines/modules/v2/proclib.js";
+import { printf, sprintf } from "../../machines/modules/v2/printf.js";
 
-var args = Proc.getArgs();
-
-/**
- * printf(format, ...args)
- *
- * @param {string} format
- * @param {...} args
- */
-function printf(format, ...args)
-{
-    process.stdout.write(Str.sprintf(format, ...args));
-}
+var args = proclib.getArgs();
 
 /**
  * dumpBytes(buffer, offset, length, desc)
@@ -42,7 +31,7 @@ function dumpBytes(buffer, offset, length, desc)
         let i, bytes = "", chars = "";
         for (i = 0; i < 16 && i < length; i++) {
             let b = buffer[offset + i];
-            bytes += Str.sprintf("%02x ", b);
+            bytes += sprintf("%02x ", b);
             chars += b >= 0x20 && b < 0x7f? String.fromCharCode(b) : '.';
         }
         printf("%08x: %s  %s\n", offset, bytes, chars);

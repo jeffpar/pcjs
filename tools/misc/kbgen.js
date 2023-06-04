@@ -10,23 +10,11 @@
 
 import fs from "fs";
 import mkdirp from "mkdirp";
-import Str from "../v2/strlib.js";
-import CharSet from "../../pcx86/modules/v3/charset.js";
+import CharSet from "../../machines/pcx86/modules/v3/charset.js";
+import { printf } from "../../machines/modules/v2/printf.js";
 
 var aIDs = [];
 var tmpDir = "tmp/";
-
-/**
- * printf(format, ...args)
- *
- * @param {string} format
- * @param {...} args
- * @returns {number}
- */
-function printf(format, ...args)
-{
-    console.log(Str.sprintf(format, ...args).replace(/\s*$/, ""));
-}
 
 /**
  * processFile(sFile)
