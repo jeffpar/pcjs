@@ -141,8 +141,8 @@ function readInput(prompt, stdin, stdout)
             kbd.injectKeys.call(kbd, data, 0);
             return;
         }
-        if (data == "\x7f") {                       // implement DEL ourselves (since we're in "raw" mode)
-            if (command.length) {
+        if (data == "\x08" || data == "\x7f") {     // implement BS/DEL ourselves (since we're in "raw" mode)
+            if (command.length) {                   // (Windows generates BS, macOS generates DEL)
                 command = command.slice(0, -1);
                 printf("\b \b");                    // by converting it to BS + SPACE + BS
             }
