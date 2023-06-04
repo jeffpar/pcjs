@@ -17,8 +17,8 @@
     37                                  ;   The code which attempts to update myGDT and addrGDT will have no effect when installed as a ROM,
     38                                  ;   which is fine, because those data structures are predefined with appropriate ROM-based addresses.
     39                                  ;
-    40                                  ;   See the machine definition file in /modules/pcx86/bin/test386.json for a configuration that can
-    41                                  ;   load this file as a ROM image.
+    40                                  ;   See the machine configuration file "/tools/pcjs/test386.json5" for a test machine that can load
+    41                                  ;   this file as a ROM image.
     42                                  ;
     43                                  ;   REAL32 Notes
     44                                  ;   ------------
@@ -46,7 +46,7 @@
     66                                  	cpu	386
     67                                  	org	0x100
     68                                  	section .text
-    69                                  
+    69
     70                                  	%include "dos.inc"
     71                              <1> INT_DOSEXIT			EQU	20H
     72                              <1> INT_DOS				EQU	21H
@@ -192,7 +192,7 @@
    212                                  	%include "misc.inc"
    213                              <1> CR	equ	0x0d
    214                              <1> LF	equ	0x0a
-   215                              <1> 
+   215                              <1>
    216                              <1> ;
    217                              <1> ; The "set" macro initializes a register to the specified value (eg, "set eax,0")
    218                              <1> ;
@@ -224,10 +224,10 @@
    244                              <1> PS_LOGIC		equ	(PS_CF | PS_PF | PS_ZF | PS_SF | PS_OF)
    245                              <1> PS_MULTIPLY		equ	(PS_CF | PS_OF)	; only CF and OF are "defined" following MUL or IMUL
    246                              <1> PS_DIVIDE		equ	0		; none of the Processor Status flags are "defined" following DIV or IDIV
-   247                              <1> 
+   247                              <1>
    248                              <1> CR0_MSW_PE		equ	0x0001
    249                              <1> CR0_PG			equ	0x80000000	; set if paging enabled
-   250                              <1> 
+   250                              <1>
    251                              <1> ACC_TYPE_GATE386_INT	equ	0x0E00
    252                              <1> ACC_TYPE_SEG		equ	0x1000
    253                              <1> ACC_PRESENT		equ	0x8000
@@ -236,22 +236,22 @@
    256                              <1> ACC_TYPE_WRITABLE	equ	0x0200
    257                              <1> ACC_TYPE_CODE_READABLE	equ	0x1a00
    258                              <1> ACC_TYPE_DATA_WRITABLE	equ	0x1200
-   259                              <1> 
-   260                              <1> 
+   259                              <1>
+   260                              <1>
    261                              <1> EXT_NONE		equ	0x0000
    262                              <1> EXT_BIG			equ	0x0040
-   263                              <1> 
+   263                              <1>
    264                              <1> PTE_FRAME		equ	0xfffff000
    265                              <1> PTE_DIRTY		equ	0x00000040	; page has been modified
    266                              <1> PTE_ACCESSED		equ	0x00000020      ; page has been accessed
    267                              <1> PTE_USER		equ	0x00000004	; set for user level (CPL 3), clear for supervisor level (CPL 0-2)
    268                              <1> PTE_READWRITE		equ	0x00000002	; set for read/write, clear for read-only (affects CPL 3 only)
    269                              <1> PTE_PRESENT		equ	0x00000001   	; set for present page, clear for not-present page
-   270                                  
+   270
    271                                  	bits	16
-   272                                  
+   272
    273                                  PAGING equ 1
-   274                                  
+   274
    275                                  ;
    276                                  ;   If we built our data structures in RAM, we might use the first page of RAM (0x0000-0x0fff) like so:
    277                                  ;
@@ -275,19 +275,19 @@
    295                                  ;RAM_GDTR	equ	0x0d08
    296                                  ;RAM_RETF	equ	0x0d10
    297                                  ;
-   298                                  
+   298
    299                                  CSEG_REAL	equ	0xf000
    300                                  CSEG_PROT16	equ	0x0008
    301                                  CSEG_PROT32	equ	0x0010
    302                                  DSEG_PROT16	equ	0x0018
    303                                  DSEG_PROT32	equ	0x0020
    304                                  SSEG_PROT32	equ	0x0028
-   305                                  
+   305
    306                                  ;
    307                                  ;   We set our exception handlers at fixed addresses to simplify interrupt gate descriptor initialization.
    308                                  ;
    309                                  OFF_INTDIVERR	equ	0xe000
-   310                                  
+   310
    311                                  ;
    312                                  ;   The "defGate" macro defines an interrupt gate, given a selector (%1) and an offset (%2)
    313                                  ;
@@ -297,12 +297,12 @@
    317                                  	dw	ACC_TYPE_GATE386_INT | ACC_PRESENT
    318                                  	dw	(%2 >> 16) & 0xffff
    319                                  %endmacro
-   320                                  
+   320
    321                                  ;
    322                                  ;   The "defDesc" macro defines a descriptor, given a name (%1), base (%2), limit (%3), type (%4), and ext (%5)
    323                                  ;
    324                                  %assign	selDesc	0
-   325                                  
+   325
    326                                  %macro	defDesc	1-5 0,0,0,0
    327                                  	%assign %1 selDesc
    328                                  	dw	(%3 & 0x0000ffff)
@@ -315,7 +315,7 @@
    335                                  	dw	((%3 & 0x000f0000) >> 16) | %5 | ((%2 & 0xff000000) >> 16)
    336                                  	%assign selDesc selDesc+8
    337                                  %endmacro
-   338                                  
+   338
    339                                  ;
    340                                  ;   The "setDesc" macro creates a descriptor, given a name (%1), base (%2), limit (%3), type (%4), and ext (%5)
    341                                  ;
@@ -328,7 +328,7 @@
    348                                  	call	storeDesc
    349                                  	%assign selDesc selDesc+8
    350                                  %endmacro
-   351                                  
+   351
    352 00000000 90                      start:	nop
    353                                  ;
    354                                  ;   If we didn't CALL or PUSH anything on the stack AND we turned interrupts off, the top of our image would be
@@ -341,7 +341,7 @@
    361                                  ;
    362 00000004 66B801000080            	mov	eax,0x80000001
    363 0000000A 66F7E8                  	imul	eax
-   364                                  
+   364
    365 0000000D 66B811223344            	mov	eax,0x44332211
    366 00000013 6689C3                  	mov	ebx,eax
    367 00000016 66B955667788            	mov	ecx,0x88776655
@@ -349,7 +349,7 @@
    369 0000001F 66F7F1                  	div	ecx
    370 00000022 6639D8                  	cmp	eax,ebx
    371 00000025 0F855F8A                	jne	near error		; apparently we have to tell NASM v0.98.40 "near" for all long forward references
-   372                                  
+   372
    373 00000029 31D2                    	xor	dx,dx
    374 0000002B 8EDA                    	mov	ds,dx			; DS -> 0x0000
    375                                  ;
@@ -358,7 +358,7 @@
    378 0000002D 668CD8                  	mov	eax,ds
    379 00000030 6685C0                  	test	eax,eax
    380 00000033 0F85518A                	jnz	near error
-   381                                  
+   381
    382 00000037 E96C80                  	jmp	initGDT
    383 0000003A 90<rept>                	times	32768 nop		; lots of NOPs to test generation of 16-bit conditional jumps
    384                                  tempStack:
@@ -384,12 +384,12 @@
    404 00008058 88FC                    	mov	ah,bh
    405 0000805A AB                      	stosw
    406 0000805B C3                      	ret
-   407                                  
+   407
    408 0000805C 2F00                    addrGDT:dw	myGDTEnd - myGDT - 1	; 16-bit limit of myGDT
    409 0000805E [6280]0F00              	dw	myGDT, 0x000f		; 32-bit base address of myGDT
-   410                                  
+   410
    411                                  myGDT:	defDesc	NULL			; the first descriptor in any descriptor table is always a dud (it corresponds to the null selector)
-   412                              <1> myGDT: 
+   412                              <1> myGDT:
    413                              <1>  %assign %1 selDesc
    414 00008062 0000                <1>  dw (%3 & 0x0000ffff)
    415 00008064 0000                <1>  dw (%2 & 0x0000ffff)
@@ -456,22 +456,22 @@
    476 00008090 4E00                <1>  dw ((%3 & 0x000f0000) >> 16) | %5 | ((%2 & 0xff000000) >> 16)
    477                              <1>  %assign selDesc selDesc+8
    478                                  myGDTEnd:
-   479                                  
+   479
    480 00008092 0700                    addrIDT:dw	myIDTEnd - myIDT - 1	; 16-bit limit of myIDT
    481 00008094 [9880]0F00              	dw	myIDT, 0x000f		; 32-bit base address of myIDT
-   482                                  
+   482
    483                                  myIDT:	defGate	CSEG_PROT32,OFF_INTDIVERR
-   484                              <1> myIDT: 
+   484                              <1> myIDT:
    485 00008098 00E0                <1>  dw (%2 & 0xffff)
    486 0000809A 1000                <1>  dw %1
    487 0000809C 008E                <1>  dw ACC_TYPE_GATE386_INT | ACC_PRESENT
    488 0000809E 0000                <1>  dw (%2 >> 16) & 0xffff
    489                                  myIDTEnd:
-   490                                  
+   490
    491                                  addrIDTReal:
    492 000080A0 FF03                    	dw	0x3FF			; 16-bit limit of real-mode IDT
    493 000080A2 00000000                	dd	0x00000000		; 32-bit base address of real-mode IDT
-   494                                  
+   494
    495                                  initGDT:
    496                                      %ifdef RAM_GDT
    497                                  	set	edi,RAM_GDT
@@ -527,25 +527,25 @@
    547 000080F6 3D00F0                      	cmp	ax,CSEG_REAL
    548 000080F9 B80001                      	mov	ax,0x100			; default to the 2nd physical page in low memory
    549 000080FC 7431                        	je	initPages
-   550                                  
+   550
    551 000080FE BB0010                      	mov	bx,0x1000			; 4K paragraphs == 64K bytes
    552 00008101 B44A                        	mov	ah,DOS_SETBLOCK			; resize the current block so we can allocate a new block
    553 00008103 CD21                        	int	INT_DOS
    554 00008105 731F                        	jnc	allocPages
-   555                                  
+   555
    556                                  exitErrDOSMem:
    557 00008107 BA[1081]                    	mov	dx,errDOSMem
-   558                                  
+   558
    559                                  exitErrDOS:
    560 0000810A B409                    	mov	ah,DOS_STD_CON_STRING_OUTPUT
    561 0000810C CD21                    	int	INT_DOS
    562 0000810E CD20                    	int	INT_DOSEXIT
-   563                                  
+   563
    564                                  errDOSMem:
    565 00008110 496E73756666696369-     	db     "Insufficient memory",CR,LF,'$'
    566 00008119 656E74206D656D6F72-
-   567 00008122 790D0A24           
-   568                                  
+   567 00008122 790D0A24
+   568
    569                                  allocPages:
    570 00008126 BB0020                  	mov	bx,0x2000			; 8K paragraphs == 128K bytes
    571 00008129 B448                    	mov	ah,DOS_ALLOC
@@ -587,7 +587,7 @@
    607 00008183 66B900030000                	mov	ecx,1024-256			; ECX == number of (remaining) PTEs to write
    608 00008189 6629C0                      	sub	eax,eax
    609 0000818C F366AB                      	rep	stosd
-   610                                  
+   610
    611                                  goProt:
    612 0000818F FA                      	cli					; make sure interrupts are off now, since we've not initialized the IDT yet
    613 00008190 662E0F011E[9280]        	o32 lidt [cs:addrIDT]
@@ -601,10 +601,10 @@
    621                                      %endif
    622 000081AA 0F22C0                  	mov	cr0,eax
    623 000081AD EA[B281]1000            	jmp	CSEG_PROT32:toProt32
-   624                                  
+   624
    625                                  toProt32:
    626                                  	bits	32
-   627                                  
+   627
    628 000081B2 66B81800                	mov	ax,DSEG_PROT16
    629 000081B6 8ED8                    	mov	ds,ax
    630 000081B8 8EC0                    	mov	es,ax
@@ -744,37 +744,37 @@
    764                                  ;
    765 000083A1 66B82800                    	mov	ax,SSEG_PROT32			; we want SS != DS for the next tests
    766 000083A5 8ED0                        	mov	ss,ax
-   767                                  
+   767
    768 000083A7 B844332211                  	mov	eax,0x11223344
    769 000083AC A300000400                  	mov	[0x40000],eax			; store a known word at the scratch address
-   770                                  
+   770
    771 000083B1 B900000400                  	mov	ecx,0x40000			; now access that scratch address using various addressing modes
    772 000083B6 3901                        	cmp	[ecx],eax
    773 000083B8 0F85CA060000                	jne	near error
-   774                                  
+   774
    775 000083BE 81C140000000                	add	ecx,64
    776 000083C4 3941C0                      	cmp	[ecx-64],eax
    777 000083C7 0F85BB060000                	jne	near error
    778 000083CD 81E940000000                	sub	ecx,64
-   779                                  
+   779
    780 000083D3 D1E9                        	shr	ecx,1
    781 000083D5 398100000200                	cmp	[ecx+0x20000],eax
    782 000083DB 0F85A7060000                	jne	near error
-   783                                  
+   783
    784 000083E1 390409                      	cmp	[ecx+ecx],eax
    785 000083E4 0F859E060000                	jne	near error
-   786                                  
+   786
    787 000083EA D1E9                        	shr	ecx,1
    788 000083EC 39844900000100              	cmp	[ecx+ecx*2+0x10000],eax
    789 000083F3 0F858F060000                	jne	near error
-   790                                  
+   790
    791 000083F9 39048D00000000              	cmp	[ecx*4],eax
    792 00008400 0F8582060000                	jne	near error
-   793                                  
+   793
    794 00008406 89CD                        	mov	ebp,ecx
    795 00008408 39844D00000100              	cmp	[ebp+ecx*2+0x10000],eax
    796 0000840F 0F8473060000                	je	near error			; since SS != DS, this better be a mismatch
-   797                                  
+   797
    798 00008415 891500000400            	mov	[0x40000],edx			; restore word at scratch address 0x40000
    799                                  ;
    800                                  ;   Now run a series of unverified opcode tests (verification will happen later, by comparing the output of the tests)
@@ -794,7 +794,7 @@
    814 0000844B 2EAC                    .skip:	cs lodsb
    815 0000844D 84C0                    	test	al,al
    816 0000844F 75FA                    	jnz	.skip
-   817                                  
+   817
    818 00008451 51                      	push	ecx
    819 00008452 2E8B0B                  	mov	ecx,[cs:ebx]			; ECX == count of values for dst
    820 00008455 2E8B4304                	mov	eax,[cs:ebx+4]			; EAX -> values for dst
@@ -823,20 +823,20 @@
    843 00008499 81C704000000            	add	edi,4				; EDI -> next src
    844 0000849F 4D                      	dec	ebp				; decrement src count
    845 000084A0 75C5                    	jnz	testSrc
-   846                                  
+   846
    847 000084A2 9D                      	popfd
    848 000084A3 5F                      	pop	edi				; ESI -> restored values for src
    849 000084A4 5D                      	pop	ebp				; EBP == restored count of values for src
    850 000084A5 8D5B04                  	lea	ebx,[ebx+4]			; EBX -> next dst (without modifying flags)
    851 000084A8 E2BA                    	loop	testDst
-   852                                  
+   852
    853 000084AA 59                      	pop	ecx
    854 000084AB 01CE                    	add	esi,ecx				; ESI -> next tableOps entry
    855 000084AD E96FFFFFFF              	jmp	testOps
-   856                                  
+   856
    857                                  testDone:
    858 000084B2 E9625A0000              	jmp	doneProt
-   859                                  
+   859
    860                                  ;
    861                                  ;   printOp(ESI -> instruction sequence)
    862                                  ;
@@ -861,7 +861,7 @@
    881 000084DD 61                      	popad
    882 000084DE 9D                      	popfd
    883 000084DF C3                      	ret
-   884                                  
+   884
    885                                  ;
    886                                  ;   printEAX()
    887                                  ;
@@ -877,7 +877,7 @@
    897 000084F3 61                      	popad
    898 000084F4 9D                      	popfd
    899 000084F5 C3                      	ret
-   900                                  
+   900
    901                                  ;
    902                                  ;   printEDX()
    903                                  ;
@@ -894,7 +894,7 @@
    914 0000850B 61                      	popad
    915 0000850C 9D                      	popfd
    916 0000850D C3                      	ret
-   917                                  
+   917
    918                                  ;
    919                                  ;   printPS(ESI -> instruction sequence)
    920                                  ;
@@ -920,7 +920,7 @@
    940 0000853B 61                      	popad
    941 0000853C 9D                      	popfd
    942 0000853D C3                      	ret
-   943                                  
+   943
    944                                  ;
    945                                  ;   printEOL()
    946                                  ;
@@ -934,7 +934,7 @@
    954 00008541 E802000000              	call	printChar
    955 00008546 58                      	pop	eax
    956 00008547 C3                      	ret
-   957                                  
+   957
    958                                  ;
    959                                  ;   printChar(AL)
    960                                  ;
@@ -954,7 +954,7 @@
    974 0000855A 5A                      	pop	edx
    975 0000855B 9D                      	popfd
    976 0000855C C3                      	ret
-   977                                  
+   977
    978                                  ;
    979                                  ;   printStr(ESI -> zero-terminated string)
    980                                  ;
@@ -969,7 +969,7 @@
    989 00008569 EBF3                    	jmp	.loop
    990 0000856B 58                      .done:	pop	eax
    991 0000856C C3                      	ret
-   992                                  
+   992
    993                                  ;
    994                                  ;   printVal(EAX == value, CL == number of hex digits)
    995                                  ;
@@ -993,17 +993,17 @@
   1013 0000858C B020                    .done:	mov	al,' '
   1014 0000858E E8B5FFFFFF              	call	printChar
   1015 00008593 C3                      	ret
-  1016                                  
+  1016
   1017                                  TYPE_ARITH	equ	0
   1018                                  TYPE_ARITH1	equ	1
   1019                                  TYPE_LOGIC	equ	2
   1020                                  TYPE_MULTIPLY	equ	3
   1021                                  TYPE_DIVIDE	equ	4
-  1022                                  
+  1022
   1023                                  SIZE_BYTE	equ	0
   1024                                  SIZE_SHORT	equ	1
   1025                                  SIZE_LONG	equ	2
-  1026                                  
+  1026
   1027                                  %macro	defOp	6
   1028                                      %ifidni %3,al
   1029                                  	%assign size SIZE_BYTE
@@ -1030,15 +1030,15 @@
   1050                                  	ret
   1051                                  %%end:
   1052                                  %endmacro
-  1053                                  
+  1053
   1054 00008594 4541583D00              strEAX:	db	"EAX=",0
   1055 00008599 4544583D00              strEDX:	db	"EDX=",0
   1056 0000859E 50533D00                strPS:	db	"PS=",0
   1057 000085A2 2344452000              strDE:	db	"#DE ",0			; when this is displayed, it indicates a Divide Error exception
   1058 000085A7 425744                  achSize	db	"BWD"
-  1059                                  
+  1059
   1060                                  ALLOPS equ 1
-  1061                                  
+  1061
   1062                                  tableOps:
   1063                                  	defOp	"ADD",add,al,dl,none,TYPE_ARITH
   1064                              <1>  %ifidni %3,al
@@ -2441,121 +2441,121 @@
   2461 00008835 C3                  <1>  ret
   2462                              <1> %%end:
   2463 00008836 00                      	db	0
-  2464                                  
+  2464
   2465 00008837 90                      	align	4
-  2466                                  
+  2466
   2467                                  typeMasks:
   2468 00008838 D5080000                	dd	PS_ARITH
   2469 0000883C D5080000                	dd	PS_ARITH
   2470 00008840 C5080000                	dd	PS_LOGIC
   2471 00008844 01080000                	dd	PS_MULTIPLY
   2472 00008848 00000000                	dd	PS_DIVIDE
-  2473                                  
+  2473
   2474                                  arithValues:
   2475 0000884C 000000000100000002-     .bvals:	dd	0x00,0x01,0x02,0x7E,0x7F,0x80,0x81,0xFE,0xFF
   2476 00008855 0000007E0000007F00-
   2477 0000885E 000080000000810000-
-  2478 00008867 00FE000000FF000000 
+  2478 00008867 00FE000000FF000000
   2479                                  	ARITH_BYTES equ ($-.bvals)/4
-  2480                                  
+  2480
   2481 00008870 000000000100000002-     .wvals:	dd	0x0000,0x0001,0x0002,0x7FFE,0x7FFF,0x8000,0x8001,0xFFFE,0xFFFF
   2482 00008879 000000FE7F0000FF7F-
   2483 00008882 000000800000018000-
-  2484 0000888B 00FEFF0000FFFF0000 
+  2484 0000888B 00FEFF0000FFFF0000
   2485                                  	ARITH_WORDS equ ($-.wvals)/4
-  2486                                  
+  2486
   2487 00008894 000000000100000002-     .dvals:	dd	0x00000000,0x00000001,0x00000002,0x7FFFFFFE,0x7FFFFFFF,0x80000000,0x80000001,0xFFFFFFFE,0xFFFFFFFF
   2488 0000889D 000000FEFFFF7FFFFF-
   2489 000088A6 FF7F00000080010000-
-  2490 000088AF 80FEFFFFFFFFFFFFFF 
+  2490 000088AF 80FEFFFFFFFFFFFFFF
   2491                                  	ARITH_DWORDS equ ($-.dvals)/4
-  2492                                  
+  2492
   2493                                  muldivValues:
   2494 000088B8 000000000100000002-     .bvals:	dd	0x00,0x01,0x02,0x3F,0x40,0x41,0x7E,0x7F,0x80,0x81,0xFE,0xFF
   2495 000088C1 0000003F0000004000-
   2496 000088CA 0000410000007E0000-
   2497 000088D3 007F00000080000000-
   2498 000088DC 81000000FE000000FF-
-  2499 000088E5 000000             
+  2499 000088E5 000000
   2500                                  	MULDIV_BYTES equ ($-.bvals)/4
-  2501                                  
+  2501
   2502 000088E8 000000000100000002-     .wvals:	dd	0x0000,0x0001,0x0002,0x3FFF,0x4000,0x4001,0x7FFE,0x7FFF,0x8000,0x8001,0xFFFE,0xFFFF
   2503 000088F1 000000FF3F00000040-
   2504 000088FA 000001400000FE7F00-
   2505 00008903 00FF7F000000800000-
   2506 0000890C 01800000FEFF0000FF-
-  2507 00008915 FF0000             
+  2507 00008915 FF0000
   2508                                  	MULDIV_WORDS equ ($-.wvals)/4
-  2509                                  
+  2509
   2510 00008918 000000000100000002-     .dvals:	dd	0x00000000,0x00000001,0x00000002,0x3FFFFFFF,0x40000000,0x40000001,0x7FFFFFFE,0x7FFFFFFF,0x80000000,0x80000001,0xFFFFFFFE,0xFFFFFFFF
   2511 00008921 000000FFFFFF3F0000-
   2512 0000892A 004001000040FEFFFF-
   2513 00008933 7FFFFFFF7F00000080-
   2514 0000893C 01000080FEFFFFFFFF-
-  2515 00008945 FFFFFF             
+  2515 00008945 FFFFFF
   2516                                  	MULDIV_DWORDS equ ($-.dvals)/4
-  2517                                  
+  2517
   2518                                  typeValues:
   2519                                  	;
   2520                                  	; Values for TYPE_ARITH
   2521                                  	;
   2522 00008948 09000000[4C880000]-     	dd	ARITH_BYTES,arithValues,ARITH_BYTES,arithValues
-  2523 00008950 09000000[4C880000] 
+  2523 00008950 09000000[4C880000]
   2524 00008958 12000000[4C880000]-     	dd	ARITH_BYTES+ARITH_WORDS,arithValues,ARITH_BYTES+ARITH_WORDS,arithValues
-  2525 00008960 12000000[4C880000] 
+  2525 00008960 12000000[4C880000]
   2526 00008968 1B000000[4C880000]-     	dd	ARITH_BYTES+ARITH_WORDS+ARITH_DWORDS,arithValues,ARITH_BYTES+ARITH_WORDS+ARITH_DWORDS,arithValues
-  2527 00008970 1B000000[4C880000] 
+  2527 00008970 1B000000[4C880000]
   2528 00008978 000000000000000000-     	dd	0,0,0,0
-  2529 00008981 00000000000000     
+  2529 00008981 00000000000000
   2530                                  	;
   2531                                  	; Values for TYPE_ARITH1
   2532                                  	;
   2533 00008988 09000000[4C880000]-     	dd	ARITH_BYTES,arithValues,1,arithValues
-  2534 00008990 01000000[4C880000] 
+  2534 00008990 01000000[4C880000]
   2535 00008998 12000000[4C880000]-     	dd	ARITH_BYTES+ARITH_WORDS,arithValues,1,arithValues
-  2536 000089A0 01000000[4C880000] 
+  2536 000089A0 01000000[4C880000]
   2537 000089A8 1B000000[4C880000]-     	dd	ARITH_BYTES+ARITH_WORDS+ARITH_DWORDS,arithValues,1,arithValues
-  2538 000089B0 01000000[4C880000] 
+  2538 000089B0 01000000[4C880000]
   2539 000089B8 000000000000000000-     	dd	0,0,0,0
-  2540 000089C1 00000000000000     
+  2540 000089C1 00000000000000
   2541                                  	;
   2542                                  	; Values for TYPE_LOGIC (using ARITH values for now)
   2543                                  	;
   2544 000089C8 09000000[4C880000]-     	dd	ARITH_BYTES,arithValues,ARITH_BYTES,arithValues
-  2545 000089D0 09000000[4C880000] 
+  2545 000089D0 09000000[4C880000]
   2546 000089D8 12000000[4C880000]-     	dd	ARITH_BYTES+ARITH_WORDS,arithValues,ARITH_BYTES+ARITH_WORDS,arithValues
-  2547 000089E0 12000000[4C880000] 
+  2547 000089E0 12000000[4C880000]
   2548 000089E8 1B000000[4C880000]-     	dd	ARITH_BYTES+ARITH_WORDS+ARITH_DWORDS,arithValues,ARITH_BYTES+ARITH_WORDS+ARITH_DWORDS,arithValues
-  2549 000089F0 1B000000[4C880000] 
+  2549 000089F0 1B000000[4C880000]
   2550 000089F8 000000000000000000-     	dd	0,0,0,0
-  2551 00008A01 00000000000000     
+  2551 00008A01 00000000000000
   2552                                  	;
   2553                                  	; Values for TYPE_MULTIPLY (a superset of ARITH values)
   2554                                  	;
   2555 00008A08 0C000000[B8880000]-     	dd	MULDIV_BYTES,muldivValues,MULDIV_BYTES,muldivValues
-  2556 00008A10 0C000000[B8880000] 
+  2556 00008A10 0C000000[B8880000]
   2557 00008A18 18000000[B8880000]-     	dd	MULDIV_BYTES+MULDIV_WORDS,muldivValues,MULDIV_BYTES+MULDIV_WORDS,muldivValues
-  2558 00008A20 18000000[B8880000] 
+  2558 00008A20 18000000[B8880000]
   2559 00008A28 24000000[B8880000]-     	dd	MULDIV_BYTES+MULDIV_WORDS+MULDIV_DWORDS,muldivValues,MULDIV_BYTES+MULDIV_WORDS+MULDIV_DWORDS,muldivValues
-  2560 00008A30 24000000[B8880000] 
+  2560 00008A30 24000000[B8880000]
   2561 00008A38 000000000000000000-     	dd	0,0,0,0
-  2562 00008A41 00000000000000     
+  2562 00008A41 00000000000000
   2563                                  	;
   2564                                  	; Values for TYPE_DIVIDE
   2565                                  	;
   2566 00008A48 0C000000[B8880000]-     	dd	MULDIV_BYTES,muldivValues,MULDIV_BYTES,muldivValues
-  2567 00008A50 0C000000[B8880000] 
+  2567 00008A50 0C000000[B8880000]
   2568 00008A58 18000000[B8880000]-     	dd	MULDIV_BYTES+MULDIV_WORDS,muldivValues,MULDIV_BYTES+MULDIV_WORDS,muldivValues
-  2569 00008A60 18000000[B8880000] 
+  2569 00008A60 18000000[B8880000]
   2570 00008A68 24000000[B8880000]-     	dd	MULDIV_BYTES+MULDIV_WORDS+MULDIV_DWORDS,muldivValues,MULDIV_BYTES+MULDIV_WORDS+MULDIV_DWORDS,muldivValues
-  2571 00008A70 24000000[B8880000] 
+  2571 00008A70 24000000[B8880000]
   2572 00008A78 000000000000000000-     	dd	0,0,0,0
-  2573 00008A81 00000000000000     
-  2574                                  
+  2573 00008A81 00000000000000
+  2574
   2575 00008A88 EBFE                    error:	jmp	error
-  2576                                  
+  2576
   2577 00008A8A 90<rept>                	times	OFF_INTDIVERR-0x100-($-$$) nop
-  2578                                  
+  2578
   2579                                  intDivErr:
   2580 0000DF00 56                      	push	esi
   2581 0000DF01 BE[A2850000]            	mov	esi,strDE
@@ -2567,16 +2567,16 @@
   2587                                  ;   that RET is, we simply set EIP on the stack to point to our own RET.
   2588                                  ;
   2589 0000DF0C C7842400000000-         	mov	dword [esp],intDivRet
-  2590 0000DF13 [18DF0000]         
+  2590 0000DF13 [18DF0000]
   2591 0000DF17 CF                      	iretd
   2592                                  intDivRet:
   2593 0000DF18 C3                      	ret
-  2594                                  
+  2594
   2595                                  doneProt:
   2596 0000DF19 66B81800                	mov	ax,DSEG_PROT16
   2597 0000DF1D 8ED0                    	mov	ss,ax
   2598 0000DF1F 29E4                    	sub	esp,esp
-  2599                                  
+  2599
   2600                                      %ifndef REAL32
   2601                                  ;
   2602                                  ;   Return to real-mode, after first resetting the IDTR and loading CS with a 16-bit code segment
@@ -2586,31 +2586,31 @@
   2606                                  toProt16:
   2607                                  	bits	16
   2608                                      %endif
-  2609                                  
+  2609
   2610                                  goReal:
   2611 0000DF30 0F20C0                  	mov	eax,cr0
   2612 0000DF33 6625FEFFFF7F            	and	eax,~(CR0_MSW_PE | CR0_PG) & 0xffffffff
   2613 0000DF39 0F22C0                  	mov	cr0,eax
   2614                                  jmpReal:
   2615 0000DF3C EA[41DF]00F0            	jmp	CSEG_REAL:toReal
-  2616                                  
+  2616
   2617                                  toReal:
   2618 0000DF41 8CC8                    	mov	ax,cs				; revert to the usual .COM register conventions
   2619 0000DF43 8ED8                    	mov	ds,ax
   2620 0000DF45 8EC0                    	mov	es,ax
   2621 0000DF47 8ED0                    	mov	ss,ax
   2622 0000DF49 BCFEFF                  	mov	sp,0xfffe
-  2623                                  
+  2623
   2624 0000DF4C 3D00F0                  	cmp	ax,CSEG_REAL			; is CS equal to 0xf000?
   2625 0000DF4F 74FE                    spin:	je	spin ; near jmpStart		; yes, so loop around, because we have nowhere else to go
   2626 0000DF51 CD20                    	int	INT_DOSEXIT			; no, so assume we're running under DOS and exit
-  2627                                  
+  2627
   2628                                  ;
   2629                                  ;   Fill the remaining space with NOPs until we get to target offset 0xFFF0.
   2630                                  ;   Note that we subtract 0x100 from the target offset because we're ORG'ed at 0x100.
   2631                                  ;
   2632 0000DF53 90<rept>                	times	0xfff0-0x100-($-$$) nop
-  2633                                  
+  2633
   2634                                  ;
   2635                                  ;   Unfortunately, when PC-DOS 2.0 loads our .COM file, the last 4 bytes are not valid, in part because DOS must
   2636                                  ;   zero the last 2 bytes so that a near RET will return to the PSP's INT 0x20 and gracefully terminate the program.
@@ -2619,7 +2619,7 @@
   2639                                  ;   To avoid these loading issues, I now omit the last 4 bytes from image, and it will still work as a ROM image as
   2640                                  ;   long as jmpStart is at offset 0xFFF0.
   2641                                  ;
-  2642                                  
+  2642
   2643                                  jmpStart:
   2644 0000FEF0 EA[0000]00F0            	jmp	CSEG_REAL:start			; 0000FFF0
   2645                                  signedWord:

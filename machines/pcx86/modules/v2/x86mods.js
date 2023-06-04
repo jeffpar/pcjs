@@ -28,7 +28,7 @@ import { BACKTRACK } from "./defines.js";
  * smaller file (x86mods.js) replaces a host of older files (x86modb.js, x86modw.js, x86modb16.js, x86modw16.js,
  * x86modb32.js, x86modw32.js, and x86modsib.js).
  *
- * You can dig up the older files from the repository if you're curious, or you can run /modules/pcx86/bin/x86gen.js to
+ * You can dig up the older files from the repository if you're curious, or you can run /tools/misc/x86gen.js to
  * get a sense of what they contained (x86gen.js created most of the code, but it still had to be massaged afterward).
  */
 
