@@ -10,12 +10,8 @@
 
 import fs from "fs";
 import path from "path";
+import xml2js from "xml2js";
 import Messages from "../../machines/modules/v2/messages.js";
-/*
- * We don't use the File class (filelib.js) here, but the simple act of loading it will make
- * readFileSync() visible to the WebLib class (weblib.js), which in turn will allow getResource()
- * to load any local files referenced by the machine's JSON file locally instead of remotely.
- */
 import filelib from "../../machines/modules/v2/filelib.js";
 import proclib from "../../machines/modules/v2/proclib.js";
 import { printf } from "../../machines/modules/v2/printf.js";
@@ -31,7 +27,7 @@ let Component, Interrupts;
 let strlib, weblib, embedMachine;
 let cpu, dbg, kbd;
 
-let machines = JSON.parse(fs.readFileSync("../../machines/machines.json", "utf8"));
+let machines = JSON.parse(filelib.readFileSync("/machines/machines.json", "utf8"));
 
 /**
  * loadModules(factory, modules)
@@ -188,6 +184,63 @@ function intVideo(addr)
 }
 
 /**
+ * initMachine(machine, sMachine)
+ *
+ * @param {Object} machine
+ * @param {string} [sMachine]
+ * @returns {string}
+ */
+function initMachine(machine, sMachine)
+{
+    let result = "";
+    if (fDebug) printf("initMachine()\n");
+    try {
+        let idMachine = "";
+        if (machine['machine']) {
+            idMachine = machine['machine']['id'];
+        }
+
+        /*
+         * Simulate the page embedding and page initialization process now.
+         */
+        embedMachine(idMachine, null, null, sMachine);
+        weblib.doPageInit();
+
+        /*
+         * Get the CPU component so we can keep tabs on its running state and also hook
+         * a few interrupts (eg, INT 0x10).  Get the Debugger component so we can override
+         * the debugger's print() function.
+         */
+        cpu = Component.getComponentByType("CPU");
+        if (cpu && Interrupts.VIDEO) {
+            cpu.addIntNotify(Interrupts.VIDEO, intVideo.bind(cpu));
+        }
+
+        /*
+         * Get the Debugger component so we can override the debugger's print() function.
+         */
+        dbg = Component.getComponentByType("Debugger");
+        if (dbg) {
+            dbg.print = function(s, bitsMessage) {
+                if (fDebug || bitsMessage != Messages.LOG) {
+                    printf(s);
+                }
+            };
+        }
+
+        /*
+         * Get the Keyboard component to get access to injectKeys(), which simplifies the
+         * injection of keystrokes into the machine.
+         */
+        kbd = Component.getComponentByType("Keyboard");
+        result = "Machine loaded: " + idMachine;;
+    } catch(err) {
+        result = err.message;
+    }
+    return result;
+}
+
+/**
  * loadMachine(sFile)
  *
  * @param {string} sFile
@@ -197,53 +250,90 @@ function loadMachine(sFile)
 {
     let result = "";
     if (fDebug) printf("loadMachine(\"%s\")\n", sFile);
+
+    if (sFile.endsWith(".json") || sFile.endsWith(".json5")) {
+        result = readJSON(sFile, initMachine);
+    }
+    else if (sFile.endsWith(".xml")) {
+        let xml = {_resolving: 0};
+        result = readXML(sFile, xml, 'machine', null, 0, initMachine);
+    } else {
+        result = "unsupported machine configuration file: " + sFile;
+    }
+    return result;
+}
+
+/**
+ * readJSON(sFile, done)
+ *
+ * @param {string} sFile
+ * @param {function(Object, string)} done
+ * @returns {string}
+ */
+function readJSON(sFile, done)
+{
+    let result = "";
     try {
-        let sMachine = fs.readFileSync(sFile, "utf8");
+        let sMachine = filelib.readFileSync(sFile, "utf8");
         /*
          * Since our JSON files may contain comments, hex values, etc, use eval() instead of JSON.parse().
          */
         let machine = eval('(' + sMachine + ')');
-        if (machine) {
-            let idMachine = "";
-            if (machine['machine']) {
-                idMachine = machine['machine']['id'];
+        done(machine, sMachine);
+    }
+    catch(err) {
+        result = err.message;
+    }
+    return result;
+}
+
+/**
+ * readXML(sFile, xml, sNode, sFile, aTags, iTag, done)
+ *
+ * @param {string} sFile
+ * @param {Object} xml
+ * @param {string} sNode
+ * @param {Array|null} aTags
+ * @param {number} iTag
+ * @param {function(Object)} done
+ * @returns {string}
+ */
+function readXML(sFile, xml, sNode, aTags, iTag, done)
+{
+    let result = "";
+    let idAttrs = '@';
+    try {
+        xml._resolving++;
+        let sXML = filelib.readFileSync(sFile, {encoding: "utf8"});
+        let parser = new xml2js.Parser({attrkey: idAttrs});
+        parser.parseString(sXML, function(err, xmlNode) {
+            if (!aTags) {
+                xml[sNode] = xmlNode[sNode];
+            } else {
+                aTags[iTag] = xmlNode[sNode];
             }
-
-            /*
-             * Simulate the page embedding and page initialization process now.
-             */
-            embedMachine(idMachine, null, null, sMachine);
-            weblib.doPageInit();
-
-            /*
-             * Get the CPU component so we can keep tabs on its running state and also hook
-             * a few interrupts (eg, INT 0x10).  Get the Debugger component so we can override
-             * the debugger's print() function.
-             */
-            cpu = Component.getComponentByType("CPU");
-            if (cpu && Interrupts.VIDEO) {
-                cpu.addIntNotify(Interrupts.VIDEO, intVideo.bind(cpu));
+            if (err) {
+                printf("%s\n", err.message);
             }
-
-            /*
-             * Get the Debugger component so we can override the debugger's print() function.
-             */
-            dbg = Component.getComponentByType("Debugger");
-            if (dbg) {
-                dbg.print = function(s, bitsMessage) {
-                    if (fDebug || bitsMessage != Messages.LOG) {
-                        printf(s);
+            else if (xmlNode && xmlNode[sNode]) {
+                for (let sTag in xmlNode[sNode]) {
+                    let aTagsXML = xmlNode[sNode][sTag];
+                    for (let iTagXML = 0; iTagXML < aTagsXML.length; iTagXML++) {
+                        let tag = aTagsXML[iTagXML];
+                        let attrs = tag[idAttrs];
+                        if (attrs) {
+                            for (let attr in attrs) {
+                                if (attr == "ref") {
+                                    let sFileXML = attrs[attr];
+                                    readXML(sFileXML, xml, sTag, aTagsXML, iTagXML, done);
+                                }
+                            }
+                        }
                     }
-                };
+                }
+                if (!--xml._resolving) done(xml);
             }
-
-            /*
-             * Get the Keyboard component to get access to injectKeys(), which simplifies the
-             * injection of keystrokes into the machine.
-             */
-            kbd = Component.getComponentByType("Keyboard");
-            result = "Machine loaded: " + idMachine;;
-        }
+        });
     } catch(err) {
         result = err.message;
     }
