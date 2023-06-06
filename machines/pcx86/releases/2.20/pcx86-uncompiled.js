@@ -118,14 +118,14 @@ const RS232 = {
 const SITEURL = "http://localhost:8088";// this @define is overridden by the Closure Compiler with "https://www.pcjs.org"
 
 /**
- * WEBLOCAL is intended to reflect the webserver's operating mode.  Normally, we assume that all web
+ * LOCALDISKS is intended to reflect the webserver's operating mode.  Normally, we assume that all web
  * resources should be accessed remotely, but if the webserver is running in "developer" mode, then the
- * webserver should indicate that fact by setting the global variable 'WEBLOCAL' to true on any pages
+ * webserver should indicate that fact by setting the global variable 'LOCALDISKS' to true on any pages
  * with embedded machines.
  *
  * @define {boolean}
  */
-var WEBLOCAL = false;
+var LOCALDISKS = false;
 
 /*
  * This is my initial effort to isolate the use of global variables in a way that is environment-agnostic.
@@ -144,7 +144,7 @@ if (!globals.pcjs['machines']) globals.pcjs['machines'] = {};
 if (!globals.pcjs['components']) globals.pcjs['components'] = [];
 if (!globals.pcjs['commands']) globals.pcjs['commands'] = {};
 
-globals.window['WEBLOCAL'] = WEBLOCAL;
+globals.window['LOCALDISKS'] = LOCALDISKS;
 
 
 
@@ -2931,11 +2931,11 @@ class Web {
         }
 
         /*
-         * While it would be nice to simply import WEBLOCAL from defines.js, that merely defines the *default*
-         * value of the global variable 'WEBLOCAL'; since imported values are immutable, we must look at the global
+         * While it would be nice to simply import LOCALDISKS from defines.js, that merely defines the *default*
+         * value of the global variable 'LOCALDISKS'; since imported values are immutable, we must look at the global
          * variable, since that's the only one that *might* have been changed at runtime.
          */
-        if (globals.window['WEBLOCAL'] && Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
+        if (globals.window['LOCALDISKS'] && Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
             sURL = sURL.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "/disks/$1/").replace(/^\/discs\/([^/]*)\//, "/disks/cdroms/$1/");
         } else {
             sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");

@@ -123,14 +123,14 @@ const RS232 = {
 const SITEURL = "http://localhost:8088";// this @define is overridden by the Closure Compiler with "https://www.pcjs.org"
 
 /**
- * WEBLOCAL is intended to reflect the webserver's operating mode.  Normally, we assume that all web
+ * LOCALDISKS is intended to reflect the webserver's operating mode.  Normally, we assume that all web
  * resources should be accessed remotely, but if the webserver is running in "developer" mode, then the
- * webserver should indicate that fact by setting the global variable 'WEBLOCAL' to true on any pages
+ * webserver should indicate that fact by setting the global variable 'LOCALDISKS' to true on any pages
  * with embedded machines.
  *
  * @define {boolean}
  */
-var WEBLOCAL = false;
+var LOCALDISKS = false;
 
 /*
  * This is my initial effort to isolate the use of global variables in a way that is environment-agnostic.
@@ -149,6 +149,6 @@ if (!globals.pcjs['machines']) globals.pcjs['machines'] = {};
 if (!globals.pcjs['components']) globals.pcjs['components'] = [];
 if (!globals.pcjs['commands']) globals.pcjs['commands'] = {};
 
-globals.window['WEBLOCAL'] = WEBLOCAL;
+globals.window['LOCALDISKS'] = LOCALDISKS;
 
-export { APPVERSION, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, LICENSE, MAXDEBUG, PRIVATE, RS232, SITEURL, WEBLOCAL, globals }
+export { APPVERSION, COMPILED, COPYRIGHT, CSSCLASS, DEBUG, DEBUGGER, LICENSE, LOCALDISKS, MAXDEBUG, PRIVATE, RS232, SITEURL, globals }

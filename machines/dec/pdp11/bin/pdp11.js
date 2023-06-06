@@ -12,7 +12,7 @@ import path from "path";
 import fs from "fs";
 import repl from "repl";
 import xml2js from "xml2js";
-import File from "../../../modules/v2/filelib.js";
+import FileLib from "../../../modules/v2/filelib.js";
 import Proc from "../../../modules/v2/proclib.js";
 import Str from "../../../modules/v2/strlib.js";
 

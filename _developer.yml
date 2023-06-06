@@ -3,14 +3,23 @@ baseurl: ""
 url: "http://localhost:4000"
 
 #
-# In the following pcjs section, setting "uncompiled: true" works only for pages with a single machine,
-# because the uncompiled scripts use shared classes that can only be instantiated once on a page (unless
-# they're compiled and/or wrapped inside a function).
+# 'site.pcjs.unbundled' is now preferred when 'site.developer' is true, and it takes precedence in our
+# Jekyll scripts over 'site.pcjs.uncompiled'; unbundled means JavaScript modules are loaded individually
+# as-is, whereas uncompiled means all the modules are concatenated into a single script with all module
+# imports/exports stripped out.
+#
+# We had to use uncompiled scripts before JavaScript module support was fully baked, and there were
+# restrictions (eg, only one type of machine could be loaded on a single page).  Those restrictions are
+# gone now, so of the three server modes (compiled, uncompiled, and unbundled), compiled is preferred
+# for production servers and unbundled is preferred for development servers.
+#
+# 'site.pcjs.localdisks' can be turned if on you have local copies of PCjs disk images; see
+# https://github.com/jeffpar/pcjs/wiki/Running-PCjs-locally#accessing-disk-images-locally for more information.
 #
 pcjs:
+  localdisks: false
   unbundled: true
-  debug: false
-  private: true
+  uncompiled: false
 
 exclude:
   - Dockerfile

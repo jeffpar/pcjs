@@ -137,11 +137,11 @@ export default class Web {
         }
 
         /*
-         * While it would be nice to simply import WEBLOCAL from defines.js, that merely defines the *default*
-         * value of the global variable 'WEBLOCAL'; since imported values are immutable, we must look at the global
+         * While it would be nice to simply import LOCALDISKS from defines.js, that merely defines the *default*
+         * value of the global variable 'LOCALDISKS'; since imported values are immutable, we must look at the global
          * variable, since that's the only one that *might* have been changed at runtime.
          */
-        if (globals.window['WEBLOCAL'] && Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
+        if (globals.window['LOCALDISKS'] && Web.getHostName().match(/^(.+\.local|localhost|0\.0\.0\.0|pcjs)$/)) {
             sURL = sURL.replace(/^\/(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "/disks/$1/").replace(/^\/discs\/([^/]*)\//, "/disks/cdroms/$1/");
         } else {
             sURL = sURL.replace(/^\/(disks\/|)(diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|pcsig[0-9a-z]*-disks|private)\//, "https://$2.pcjs.org/").replace(/^\/(disks\/cdroms|discs)\/([^/]*)\//, "https://$2.pcjs.org/");

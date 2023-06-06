@@ -9,19 +9,15 @@
 
 import fs from "fs";
 import path from "path";
-import proclib from "./proclib.js";
 import { globals } from "./defines.js";
 import DataBuffer from "./databuffer.js";
 
-let args = proclib.getArgs();
-let argv = args.argv;
-let moduleDir = path.dirname(argv[0]);
-let rootDir = path.join(moduleDir, "../..");
+let rootDir = "";
 
 /**
- * @class File
+ * @class FileLib
  */
-export default class File {
+export default class FileLib {
     /**
      * getServerPath(sFile)
      *
@@ -52,13 +48,22 @@ export default class File {
     {
         let data;
         if (sFile && sFile.indexOf("http") != 0) {
-            sFile = File.getServerPath(sFile);
+            sFile = FileLib.getServerPath(sFile);
             data = fs.readFileSync(sFile, encoding);
             if (!encoding) data = new DataBuffer(data);
         }
         return data;
     }
+
+    /**
+     * setRootDir(sDir)
+     *
+     * @param {string} sDir
+     */
+    static setRootDir(sDir)
+    {
+        rootDir = sDir;
+    }
 }
 
-globals.node.rootDir = rootDir;
-globals.node.readFileSync = File.readFileSync;
+globals.node.readFileSync = FileLib.readFileSync;

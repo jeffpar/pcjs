@@ -1,9 +1,9 @@
 ---
 layout: page
 title: BASIC Conversion Utility
-permalink: /tools/bascon/
+permalink: /tools/basconvert/
 modules_init:
-  - import BASConvertUI from "/tools/bascon/basconui.js";
+  - import BASConvertUI from "/tools/basconvert/basconvertui.js";
   - new BASConvertUI("convertBAS", "displayBAS");
 ---
 

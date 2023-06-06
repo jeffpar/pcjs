@@ -8,7 +8,6 @@
  * This file is part of PCjs, a computer emulation software project at <https://www.pcjs.org>.
  */
 
-import fs from "fs";
 import path from "path";
 import xml2js from "xml2js";
 import Messages from "../../machines/modules/v2/messages.js";
@@ -26,8 +25,6 @@ let sCmdPrev = "";
 let Component, Interrupts;
 let strlib, weblib, embedMachine;
 let cpu, dbg, kbd;
-
-let machines = JSON.parse(filelib.readFileSync("/machines/machines.json", "utf8"));
 
 /**
  * loadModules(factory, modules)
@@ -304,7 +301,7 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
     let idAttrs = '@';
     try {
         xml._resolving++;
-        let sXML = filelib.readFileSync(sFile, {encoding: "utf8"});
+        let sXML = filelib.readFileSync(sFile, "utf8");
         let parser = new xml2js.Parser({attrkey: idAttrs});
         parser.parseString(sXML, function(err, xmlNode) {
             if (!aTags) {
@@ -378,4 +375,6 @@ function doCommand(sCmd)
     return result? result + "\n" : "";
 }
 
+filelib.setRootDir("../..");
+let machines = JSON.parse(filelib.readFileSync("/machines/machines.json", "utf8"));
 loadModules(machines[machineType]['factory'], machines[machineType]['modules']);

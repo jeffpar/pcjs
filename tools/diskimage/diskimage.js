@@ -8,11 +8,10 @@
  */
 
 import fs         from "fs";
-import os         from "os";
 import glob       from "glob";
 import path       from "path";
 import got        from "got";
-import BASConvert from "../bascon/bascon.js";
+import BASConvert from "../basconvert/basconvert.js";
 import PCJSLib    from "../modules/pcjslib.js";
 import StreamZip  from "../modules/streamzip.js";       // PCjs replacement for "node-stream-zip"
 import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
@@ -23,7 +22,7 @@ import JSONLib    from "../../machines/modules/v2/jsonlib.js";
 import { addMetaData, device, existsFile, getArchiveFiles, getFullPath, getHash, isArchiveFile, isTextFile, makeDir, printError, printf, readDir, readFile, readJSON, setRootDir, sprintf, writeDisk  } from "../modules/disklib.js";
 
 let pcjslib = new PCJSLib();
-let moduleDir, rootDir, sFileIndex, useServer;
+let rootDir, sFileIndex, useServer;
 
 /**
  * compareDisks(sDisk1, sDisk2)
@@ -1495,8 +1494,7 @@ function main(argc, argv)
     let argv0 = argv[0].split(' ');
     let options = argv0.slice(1).join(' ');
 
-    moduleDir = path.dirname(argv0[0]);
-    rootDir = path.join(moduleDir, "../..");
+    rootDir = path.join(path.dirname(argv0[0]), "../..");
     setRootDir(rootDir);
 
     Device.DEBUG = !!argv['debug'];

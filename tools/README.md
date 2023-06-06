@@ -4,9 +4,9 @@ title: PCjs Tools
 permalink: /tools/
 ---
 
-## BASCON.js
+## BASConvert.js
 
-[BASCON.js](bascon/) is a JavaScript library that converts encrypted and/or binary IBM PC BASIC program files to plain-text; this library is built into the [DiskImage.js](diskimage/) command-line utility.
+[BASConvert.js](basconvert/) is a JavaScript library that converts encrypted and/or binary IBM PC BASIC program files to plain-text; this library is built into the [DiskImage.js](diskimage/) command-line utility.
 
 ## DiskImage.js
 

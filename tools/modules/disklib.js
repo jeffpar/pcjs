@@ -15,6 +15,7 @@ import path       from "path";
 import StreamZip  from "../modules/streamzip.js";       // PCjs replacement for "node-stream-zip"
 import { DEBUG }  from "../../machines/modules/v2/defines.js";
 import DataBuffer from "../../machines/modules/v2/databuffer.js";
+import FileLib    from "../../machines/modules/v2/filelib.js";
 import Device     from "../../machines/modules/v3/device.js";
 import DiskInfo   from "../../machines/pcx86/modules/v3/diskinfo.js";
 import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
@@ -144,26 +145,7 @@ export function getFullPath(sFile)
         sFile = os.homedir() + sFile.substr(1);
     }
     else {
-        sFile = getServerPath(sFile);
-    }
-    return sFile;
-}
-
-/**
- * getServerPath(sFile)
- *
- * @param {string} sFile
- * @returns {string}
- */
-function getServerPath(sFile)
-{
-    /*
-     * In addition to disk server paths, we had to add /machines (for diskette config files) and /software
-     * (for Markdown files containing supplementary copy-protection disk data).
-     */
-    let match = sFile.match(/^\/(disks\/|)(machines|software|diskettes|gamedisks|miscdisks|harddisks|decdisks|pcsigdisks|cdroms|private)(\/.*)$/);
-    if (match) {
-        sFile = path.join(rootDir, (match[2] == "machines" || match[2] == "software"? "" : "disks"), match[2], match[3]);
+        sFile = FileLib.getServerPath(sFile);
     }
     return sFile;
 }
@@ -644,8 +626,7 @@ export function readFile(sFile, encoding = "utf8")
     if (sFile) {
         try {
             sFile = getFullPath(sFile);
-            data = fs.readFileSync(sFile, encoding);
-            if (!encoding) data = new DataBuffer(data);
+            data = FileLib.readFileSync(sFile, encoding);
         } catch(err) {
             printError(err);
         }
@@ -724,5 +705,5 @@ export function writeDisk(diskFile, di, fLegacy = false, indent = 0, fOverwrite 
  */
 export function setRootDir(sDir)
 {
-    rootDir = sDir;
+    FileLib.setRootDir(sDir);
 }
