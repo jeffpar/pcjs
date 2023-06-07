@@ -26,13 +26,78 @@ let Component, Interrupts;
 let strlib, weblib, embedMachine;
 let cpu, dbg, kbd;
 
+filelib.setRootDir("../..");
+let machines = JSON.parse(filelib.readFileSync("/machines/machines.json", "utf8"));
+
 /**
- * loadModules(factory, modules)
+ * convertXML(xml, idAttrs)
+ *
+ * @param {Object} xml
+ * @param {string} [idAttrs]
+ * @returns {Object} (JSON-style machine configuration)
+ */
+function convertXML(xml, idAttrs = '@')
+{
+    let machine = {};
+    /*
+     * Walk the XML tree and add all the objects to the root of the machine object.
+     */
+    let addXML = function(xml, xid, obj, oid) {
+        if (!obj || obj == machine) {
+            obj = {};
+            if (!oid) oid = xid;
+        }
+        if (oid) {
+            if (!machine[oid]) {
+                machine[oid] = obj;
+            } else {
+                if (Array.isArray(machine[oid])) {
+                    machine[oid].push(obj);
+                } else {
+                    machine[oid] = [machine[oid], obj];
+                }
+            }
+        }
+        xml = xml[xid];
+        if (typeof xml != "object") {
+            obj['value'] = xml;
+            return;
+        }
+        for (let key in xml) {
+            if (key == idAttrs) {
+                addXML(xml, key, obj);
+            } else {
+                if (key == 'br' || key == 'comment' || key == 'control' || key == 'menu') {
+                    continue;
+                }
+                if (Array.isArray(xml[key])) {
+                    for (let i = 0; i < xml[key].length; i++) {
+                        addXML(xml[key], i, machine, key);
+                    }
+                } else {
+                    if (key == '_') {
+                        obj['value'] = xml[key];
+                    } else if (key == 'floppies') {
+                        obj[key] = JSON.parse(xml[key]);
+                    } else {
+                        obj[key] = xml[key];
+                    }
+                }
+            }
+        }
+    };
+    addXML(xml, 'machine');
+    return machine;
+}
+
+/**
+ * loadModules(factory, modules, done)
  *
  * @param {string} factory
  * @param {Array.<string>} modules
+ * @param {function()} done
  */
-async function loadModules(factory, modules)
+async function loadModules(factory, modules, done)
 {
     for (let modulePath of modules) {
         /*
@@ -71,113 +136,7 @@ async function loadModules(factory, modules)
             break;
         }
     }
-    readInput(factory.replace("embed", ""), process.stdin, process.stdout);
-}
-
-/**
- * readInput(prompt, stdin, stdout)
- *
- * @param {string} prompt
- * @param {Object} stdin
- * @param {Object} stdout
- */
-function readInput(prompt, stdin, stdout)
-{
-    /*
-     * Process any command-line (--cmd) commands first.
-     */
-    if (argv['cmd'] !== undefined) {
-        let cmds = argv['cmd'];
-        let aCmds = (typeof cmds == "string"? [cmds] : cmds);
-        for (let i = 0; i < aCmds.length; i++) {
-            printf(doCommand(aCmds[i]));
-        }
-        sCmdPrev = "";
-    }
-
-    let command = "";
-    let debugMode = undefined;
-
-    prompt = ">";
-
-    let setDebugMode = function(f) {
-        if (!f && debugMode != f) {
-            printf("Press ctrl-a to enter debugger, ctrl-c to terminate process\n");
-        }
-        debugMode = f;
-        if (debugMode) {
-            printf("%s> ", prompt);
-        }
-    };
-
-    setDebugMode(!kbd);
-
-    stdin.resume();
-    stdin.setEncoding("utf8");
-    stdin.setRawMode(true);
-
-    stdin.on("data", function(data) {
-        let code = data.charCodeAt(0);
-        if (code == 0x01 && !debugMode) {           // check for CTRL-A when NOT in debug mode
-            cpu.stopCPU();
-            command = "";
-            setDebugMode(true);
-            return;
-        }
-        if (code == 0x03 && debugMode) {            // check for CTRL-C when in debug mode
-            printf("terminating...\n");
-            process.exit();
-            return;
-        }
-        if (!debugMode) {
-            data = data.replace(/\x7f/g, "\b");     // convert DEL to BS
-            kbd.injectKeys.call(kbd, data, 0);
-            return;
-        }
-        if (data == "\x08" || data == "\x7f") {     // implement BS/DEL ourselves (since we're in "raw" mode)
-            if (command.length) {                   // (Windows generates BS, macOS generates DEL)
-                command = command.slice(0, -1);
-                printf("\b \b");                    // by converting it to BS + SPACE + BS
-            }
-            return;
-        }
-        if (data == "\x1b[A" && !command.length) {  // implement UP ARROW ourselves (since we're in "raw" mode)
-            data = sCmdPrev;
-        }
-        else if (code < 0x20 && code != 0x0d) {     // anything else (including any ESC codes) is ignored
-            return;
-        }
-        printf("%s", data);
-        command += data;
-        do {
-            let i = command.indexOf("\r");
-            if (i < 0) break;
-            let sCmd = command.slice(0, i);
-            printf("\n");
-            printf(doCommand(sCmd));
-            if (cpu.isRunning()) {
-                setDebugMode(false);
-                break;
-            }
-            printf("%s> ", prompt);
-            command = command.slice(i+1);
-        } while (command.length);
-    });
-}
-
-/**
- * intVideo(addr)
- *
- * @param {number} addr
- * @returns {boolean} true to proceed with the INT 0x10 software interrupt, false to skip
- */
-function intVideo(addr)
-{
-    let AH = ((cpu.regEAX >> 8) & 0xff), AL = (cpu.regEAX & 0xff);
-    if (AH == 0x0e) {
-        printf("%c", AL);
-    }
-    return true;
+    done();
 }
 
 /**
@@ -185,12 +144,9 @@ function intVideo(addr)
  *
  * @param {Object} machine
  * @param {string} [sMachine]
- * @returns {string}
  */
 function initMachine(machine, sMachine)
 {
-    let result = "";
-    if (fDebug) printf("initMachine()\n");
     try {
         let idMachine = "";
         if (machine['machine']) {
@@ -218,7 +174,7 @@ function initMachine(machine, sMachine)
          */
         dbg = Component.getComponentByType("Debugger");
         if (dbg) {
-            dbg.print = function(s, bitsMessage) {
+            dbg.print = function print(s, bitsMessage) {
                 if (fDebug || bitsMessage != Messages.LOG) {
                     printf(s);
                 }
@@ -230,11 +186,25 @@ function initMachine(machine, sMachine)
          * injection of keystrokes into the machine.
          */
         kbd = Component.getComponentByType("Keyboard");
-        result = "Machine loaded: " + idMachine;;
-    } catch(err) {
-        result = err.message;
     }
-    return result;
+    catch(err) {
+        printf("machine initialization error: %s\n", err.message);
+    }
+}
+
+/**
+ * intVideo(addr)
+ *
+ * @param {number} addr
+ * @returns {boolean} true to proceed with the INT 0x10 software interrupt, false to skip
+ */
+function intVideo(addr)
+{
+    let AH = ((cpu.regEAX >> 8) & 0xff), AL = (cpu.regEAX & 0xff);
+    if (AH == 0x0e) {
+        printf("%c", AL);
+    }
+    return true;
 }
 
 /**
@@ -248,12 +218,20 @@ function loadMachine(sFile)
     let result = "";
     if (fDebug) printf("loadMachine(\"%s\")\n", sFile);
 
+    let getFactory = function(machine, sMachine) {
+        let type = machine['type'] || machineType;
+        loadModules(machines[type]['factory'], machines[type]['modules'], function() {
+            initMachine(machine, sMachine);
+        });
+    };
+
+    if (sFile.indexOf('.') < 0) sFile += ".json5";
     if (sFile.endsWith(".json") || sFile.endsWith(".json5")) {
-        result = readJSON(sFile, initMachine);
+        result = readJSON(sFile, getFactory);
     }
     else if (sFile.endsWith(".xml")) {
         let xml = {_resolving: 0};
-        result = readXML(sFile, xml, 'machine', null, 0, initMachine);
+        result = readXML(sFile, xml, 'machine', null, 0, getFactory);
     } else {
         result = "unsupported machine configuration file: " + sFile;
     }
@@ -303,7 +281,7 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
         xml._resolving++;
         let sXML = filelib.readFileSync(sFile, "utf8");
         let parser = new xml2js.Parser({attrkey: idAttrs});
-        parser.parseString(sXML, function(err, xmlNode) {
+        parser.parseString(sXML, function parseXML(err, xmlNode) {
             if (!aTags) {
                 xml[sNode] = xmlNode[sNode];
             } else {
@@ -328,10 +306,14 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
                         }
                     }
                 }
-                if (!--xml._resolving) done(xml);
+                if (!--xml._resolving) {
+                    let machine = convertXML(xml, idAttrs);
+                    done(machine, JSON.stringify(machine));
+                }
             }
         });
-    } catch(err) {
+    }
+    catch(err) {
         result = err.message;
     }
     return result;
@@ -375,6 +357,85 @@ function doCommand(sCmd)
     return result? result + "\n" : "";
 }
 
-filelib.setRootDir("../..");
-let machines = JSON.parse(filelib.readFileSync("/machines/machines.json", "utf8"));
-loadModules(machines[machineType]['factory'], machines[machineType]['modules']);
+/**
+ * readInput(stdin, stdout)
+ *
+ * @param {Object} stdin
+ * @param {Object} stdout
+ */
+function readInput(stdin, stdout)
+{
+    let command = "";
+    let debugMode = undefined;
+    let prompt = ">";
+
+    let setDebugMode = function(f) {
+        if (!f && debugMode != f) {
+            printf("Press ctrl-a to enter debugger, ctrl-c to terminate process\n");
+        }
+        debugMode = f;
+        if (debugMode) {
+            printf("%s> ", prompt);
+        }
+    };
+
+    setDebugMode(!kbd);
+
+    stdin.resume();
+    stdin.setEncoding("utf8");
+    stdin.setRawMode(true);
+
+    if (typeof argv['load'] == "string" ) {         // process --load argument, if any
+        printf(doCommand("load " + argv['load']));
+    }
+
+    stdin.on("data", function(data) {
+        let code = data.charCodeAt(0);
+        if (code == 0x01 && !debugMode) {           // check for CTRL-A when NOT in debug mode
+            if (cpu) cpu.stopCPU();
+            command = "";
+            setDebugMode(true);
+            return;
+        }
+        if (code == 0x03 && debugMode) {            // check for CTRL-C when in debug mode
+            printf("terminating...\n");
+            process.exit();
+            return;
+        }
+        if (!debugMode) {
+            data = data.replace(/\x7f/g, "\b");     // convert DEL to BS
+            kbd.injectKeys.call(kbd, data, 0);
+            return;
+        }
+        if (data == "\x08" || data == "\x7f") {     // implement BS/DEL ourselves (since we're in "raw" mode)
+            if (command.length) {                   // (Windows generates BS, macOS generates DEL)
+                command = command.slice(0, -1);
+                printf("\b \b");                    // by converting it to BS + SPACE + BS
+            }
+            return;
+        }
+        if (data == "\x1b[A" && !command.length) {  // implement UP ARROW ourselves (since we're in "raw" mode)
+            data = sCmdPrev;
+        }
+        else if (code < 0x20 && code != 0x0d) {     // anything else (including any ESC codes) is ignored
+            return;
+        }
+        printf("%s", data);
+        command += data;
+        do {
+            let i = command.indexOf("\r");
+            if (i < 0) break;
+            let sCmd = command.slice(0, i);
+            printf("\n");
+            printf(doCommand(sCmd));
+            if (cpu && cpu.isRunning()) {
+                setDebugMode(false);
+                break;
+            }
+            printf("%s> ", prompt);
+            command = command.slice(i+1);
+        } while (command.length);
+    });
+}
+
+readInput(process.stdin, process.stdout);

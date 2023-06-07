@@ -1,7 +1,8 @@
 
 {
   "machine": {
-    "id": "ibm5150"
+    "id": "ibm5150",
+    "type": "pcx86"
   },
   "computer": {
     "id": "pc-mda-64k",

@@ -1,6 +1,7 @@
 {
   "machine": {
-    "id": "compaq386"
+    "id": "compaq386",
+    "type": "pcx86"
   },
   "computer": {
     "id": "computer",

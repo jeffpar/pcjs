@@ -67656,7 +67656,7 @@ class HDC extends Component {
          * when this flag is set, setBinding() allows local disk bindings and informs initBus() to update the
          * "listDisks" binding accordingly.
          */
-        this.fLocalDisks = (!Web.isMobile() && window && 'FileReader' in window);
+        this.fLocalDisks = (!Web.isMobile() && 'FileReader' in globals.window);
 
         /*
          * The remainder of HDC initialization now takes place in our initBus() handler.

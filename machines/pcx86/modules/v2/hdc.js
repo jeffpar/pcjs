@@ -16,7 +16,7 @@ import DiskAPI from "../../../modules/v2/diskapi.js";
 import State from "../../../modules/v2/state.js";
 import Str from "../../../modules/v2/strlib.js";
 import Web from "../../../modules/v2/weblib.js";
-import { APPCLASS, BACKTRACK, DEBUG, MAXDEBUG } from "./defines.js";
+import { APPCLASS, BACKTRACK, DEBUG, MAXDEBUG, globals } from "./defines.js";
 
 /**
  * @typedef {Object} DriveConfig
@@ -148,7 +148,7 @@ export default class HDC extends Component {
          * when this flag is set, setBinding() allows local disk bindings and informs initBus() to update the
          * "listDisks" binding accordingly.
          */
-        this.fLocalDisks = (!Web.isMobile() && window && 'FileReader' in window);
+        this.fLocalDisks = (!Web.isMobile() && 'FileReader' in globals.window);
 
         /*
          * The remainder of HDC initialization now takes place in our initBus() handler.

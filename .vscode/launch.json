@@ -425,12 +425,12 @@
       }
     },
     {
-      "name": "pc.js ibm5150.json5",
+      "name": "pc.js ibm5150",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pcjs/pc.js",
       "args": [
-        "--cmd=load ibm5150.json5",
+        "--load=ibm5150",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pcjs",
@@ -446,12 +446,12 @@
       }
     },
     {
-      "name": "pc.js compaq386.json5",
+      "name": "pc.js compaq386",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pcjs/pc.js",
       "args": [
-        "--cmd=load compaq386.json5",
+        "--load=compaq386",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pcjs",
@@ -467,12 +467,12 @@
       }
     },
     {
-      "name": "pc.js test386.json5",
+      "name": "pc.js test386",
       "type": "node",
       "request": "launch",
       "program": "${workspaceFolder}/tools/pcjs/pc.js",
       "args": [
-        "--cmd=load test386.json5",
+        "--load=test386",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pcjs",
@@ -493,7 +493,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/tools/pcjs/pc.js",
       "args": [
-        "--cmd=load /machines/pcx86/ibm/5170/ega/1024kb/rev3/machine.xml",
+        "--load=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml",
         "--debug"
       ],
       "cwd": "${workspaceFolder}/tools/pcjs",
