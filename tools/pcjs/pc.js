@@ -300,15 +300,14 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
                     for (let iTagXML = 0; iTagXML < aTagsXML.length; iTagXML++) {
                         let tag = aTagsXML[iTagXML];
                         let attrs = tag[idAttrs];
-                        if (attrs) {
+                        let sFileXML = attrs && attrs['ref'];
+                        if (sFileXML) {
+                            readXML(sFileXML, xml, sTag, aTagsXML, iTagXML, done);
+                            /*
+                             * Any non-ref attributes in the tag override those in the referenced file.
+                             */
                             for (let attr in attrs) {
-                                if (attr == "ref") {
-                                    let sFileXML = attrs[attr];
-                                    readXML(sFileXML, xml, sTag, aTagsXML, iTagXML, done);
-                                }
-                            }
-                            for (let attr in attrs) {
-                                if (attr != "ref") {
+                                if (attr != 'ref') {
                                     aTagsXML[iTagXML][idAttrs][attr] = attrs[attr];
                                 }
                             }
