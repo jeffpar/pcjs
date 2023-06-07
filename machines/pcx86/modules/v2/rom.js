@@ -60,6 +60,13 @@ export default class ROMx86 extends Component {
          * Most ROMs are not aliased, in which case the 'alias' property should have the default value of null.
          */
         this.addrAlias = parmsROM['alias'];
+        if (typeof this.addrAlias == "string") {
+            if (this.addrAlias[0] != '[') {
+                this.addrAlias = +this.addrAlias;
+            } else {
+                this.addrAlias = JSON.parse(this.addrAlias);
+            }
+        }
 
         /*
          * The 'notify' property can now (as of v1.18.2) contain an array of parameters that the notified

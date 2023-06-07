@@ -10117,7 +10117,7 @@ class BusX86 extends Component {
         this.cpu = cpu;
         this.dbg = dbg;
 
-        this.nBusWidth = parmsBus['busWidth'] || 20;
+        this.nBusWidth = +parmsBus['busWidth'] || 20;
 
         /*
          * Compute all Bus memory block parameters, based on the width of the bus.
@@ -39373,6 +39373,9 @@ class ChipSet extends Component {
         if (bSwitches == null) {
             this.aFloppyDrives = [360, 360];
             let aFloppyDrives = parmsChipSet['floppies'];
+            if (typeof aFloppyDrives == "string") {
+                aFloppyDrives = JSON.parse(aFloppyDrives);
+            }
             if (aFloppyDrives && aFloppyDrives.length) this.aFloppyDrives = aFloppyDrives;
             this.setDIPSwitches(ChipSet.SWITCH_TYPE.FLOPNUM, this.aFloppyDrives.length);
 
@@ -45603,6 +45606,13 @@ class ROMx86 extends Component {
          * Most ROMs are not aliased, in which case the 'alias' property should have the default value of null.
          */
         this.addrAlias = parmsROM['alias'];
+        if (typeof this.addrAlias == "string") {
+            if (this.addrAlias[0] != '[') {
+                this.addrAlias = +this.addrAlias;
+            } else {
+                this.addrAlias = JSON.parse(this.addrAlias);
+            }
+        }
 
         /*
          * The 'notify' property can now (as of v1.18.2) contain an array of parameters that the notified
@@ -59286,7 +59296,7 @@ class SerialPort extends Component {
     {
         super("SerialPort", parms, Messages.SERIAL);
 
-        this.iAdapter = parms['adapter'];
+        this.iAdapter = +parms['adapter'];
 
         switch (this.iAdapter) {
         case 1:
@@ -59335,8 +59345,8 @@ class SerialPort extends Component {
          * at the beginning of every line.  This probably isn't generally useful; I use it internally to preformat serial
          * output.
          */
-        this.tabSize = parms['tabSize'] || 0;
-        this.charBOL = parms['charBOL'] || 0;
+        this.tabSize = +parms['tabSize'] || 0;
+        this.charBOL = +parms['charBOL'] || 0;
         this.charPrev = 0;
         this.iLogicalCol = 0;
 

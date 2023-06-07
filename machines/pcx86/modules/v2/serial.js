@@ -77,7 +77,7 @@ export default class SerialPort extends Component {
     {
         super("SerialPort", parms, Messages.SERIAL);
 
-        this.iAdapter = parms['adapter'];
+        this.iAdapter = +parms['adapter'];
 
         switch (this.iAdapter) {
         case 1:
@@ -126,8 +126,8 @@ export default class SerialPort extends Component {
          * at the beginning of every line.  This probably isn't generally useful; I use it internally to preformat serial
          * output.
          */
-        this.tabSize = parms['tabSize'] || 0;
-        this.charBOL = parms['charBOL'] || 0;
+        this.tabSize = +parms['tabSize'] || 0;
+        this.charBOL = +parms['charBOL'] || 0;
         this.charPrev = 0;
         this.iLogicalCol = 0;
 

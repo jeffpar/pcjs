@@ -65,6 +65,12 @@ function convertXML(xml, idAttrs = '@')
         }
         for (let key in xml) {
             if (key == idAttrs) {
+                /*
+                 * Our XSL files include rules to providing default IDs, so we do, too...
+                 */
+                if (!xml[key]['id']) {
+                    obj['id'] = oid;
+                }
                 addXML(xml, key, obj);
             } else {
                 if (key == 'br' || key == 'comment' || key == 'control' || key == 'menu') {
@@ -75,12 +81,10 @@ function convertXML(xml, idAttrs = '@')
                         addXML(xml[key], i, machine, key);
                     }
                 } else {
-                    if (key == '_') {
-                        obj['value'] = xml[key];
-                    } else if (key == 'floppies') {
-                        obj[key] = JSON.parse(xml[key]);
-                    } else {
+                    if (key != '_') {
                         obj[key] = xml[key];
+                    } else {
+                        obj['value'] = xml[key];
                     }
                 }
             }
@@ -301,6 +305,11 @@ function readXML(sFile, xml, sNode, aTags, iTag, done)
                                 if (attr == "ref") {
                                     let sFileXML = attrs[attr];
                                     readXML(sFileXML, xml, sTag, aTagsXML, iTagXML, done);
+                                }
+                            }
+                            for (let attr in attrs) {
+                                if (attr != "ref") {
+                                    aTagsXML[iTagXML][idAttrs][attr] = attrs[attr];
                                 }
                             }
                         }

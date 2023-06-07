@@ -88,7 +88,7 @@ export default class BusX86 extends Component {
         this.cpu = cpu;
         this.dbg = dbg;
 
-        this.nBusWidth = parmsBus['busWidth'] || 20;
+        this.nBusWidth = +parmsBus['busWidth'] || 20;
 
         /*
          * Compute all Bus memory block parameters, based on the width of the bus.

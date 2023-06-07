@@ -103,6 +103,9 @@ export default class ChipSet extends Component {
         if (bSwitches == null) {
             this.aFloppyDrives = [360, 360];
             let aFloppyDrives = parmsChipSet['floppies'];
+            if (typeof aFloppyDrives == "string") {
+                aFloppyDrives = JSON.parse(aFloppyDrives);
+            }
             if (aFloppyDrives && aFloppyDrives.length) this.aFloppyDrives = aFloppyDrives;
             this.setDIPSwitches(ChipSet.SWITCH_TYPE.FLOPNUM, this.aFloppyDrives.length);
 
