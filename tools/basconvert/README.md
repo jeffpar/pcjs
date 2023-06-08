@@ -11,4 +11,4 @@ Select a BASIC file from your machine and click `Convert`.
 
 {% include web/transform.html form="convertBAS" action="Convert" output="displayBAS" %}
 
-This page uses our [BASConvert.js](basconvert.js) JavaScript library that converts encrypted and/or binary IBM PC BASIC program files to plain-text; this library is built into the [DiskImage.js](../diskimage/) command-line utility and is used in conjunction with the **DiskImage** `--normalize` command-line argument.
+This page uses my [BASConvert.js](basconvert.js) JavaScript library that converts encrypted and/or binary IBM PC BASIC program files to plain-text; this library is built into the [DiskImage.js](../diskimage/) command-line utility and is used in conjunction with the `--normalize` option.

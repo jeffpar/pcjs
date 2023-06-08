@@ -18,12 +18,12 @@ permalink: /tools/
 
 ## Assorted Modules
 
-I've also written a few JavaScript modules for use in command-line tools:
+Here are a few JavaScript modules I've written for the project:
 
-  - [BASConvert.js](basconvert/), a library to convert IBM PC BASIC program files to plain-text
+  - [BASConvert.js](basconvert/), a library to convert IBM PC BASIC files to plain-text
   - [StreamZip.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/streamzip.js), an improved version of the [node-stream-zip](https://www.npmjs.com/package/node-stream-zip) package
   - [Structure.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/structure.js), a helper class for defining and reading on-disk structures
-  - [LegacyZip.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/legacyzip.js), a decompression library used by `StreamZip` that supports:
+  - [LegacyZip.js](https://github.com/jeffpar/pcjs/tree/master/tools/modules/legacyzip.js), a decompression library used by **StreamZip** that supports:
       - Packed files (ARC compression format #3)
       - Squeezed files (ARC compression format #4)
       - Crunched files (ARC compression formats #5, #6, and #7)
@@ -33,9 +33,12 @@ I've also written a few JavaScript modules for use in command-line tools:
       - Reduced files (ZIP compression formats #2, #3, #4, and #5)
       - Imploded files (ZIP compression format #6)
       - Deflated files (ZIP compression format #8)
- 
 
-The combination of `StreamZip` with `LegacyZip` should be able to decompress *any* old ARC or ZIP archive, so test it out with the new `--arc` and `--zip` options in the [DiskImage](https://github.com/jeffpar/pcjs/tree/master/tools/diskimage) utility, and if you find one that doesn't work, [let me know](mailto:Jeff@pcjs.org).
+The combination of **StreamZip** with **LegacyZip** should be able to decompress *any* old ARC or ZIP archive, so test it out with the new [DiskImage](diskimage/) `--arc` and `--zip` options.
+
+Similarly, any old IBM PC BASIC files can be converted to plain-text with the [DiskImage](diskimage/) `--normalize` option.
+
+If you find any ARC, ZIP, or BAS files can't be decompressed or converted, [let me know](mailto:Jeff@pcjs.org).
 
 ## Miscellaneous Tools
 
