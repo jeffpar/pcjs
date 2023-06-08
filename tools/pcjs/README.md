@@ -55,9 +55,9 @@ You can begin interacting with the machine OR you can press CTRL-A to enter the 
 
 To destroy the machine, type `quit` (or press CTRL-C) at the debugger prompt.
 
-Unlike its predecessor `pcx86.js`, `pc.js` is more general-purpose and can theoretically load any other machine type listed in [machines.json](/machines/machines.json), not it has only been tested with `pcx86` machines so far.
+`pc.js` is more general-purpose than its predecessor, [pcx86.js](https://github.com/jeffpar/pcjs/tree/2ac6e5e62196212bede02f360634f04a9c358ed9/machines/pcx86/bin), and can theoretically load any other machine type listed in [machines.json](/machines/machines.json), but it has only been tested with `pcx86` machines so far.
 
-Note that this utility is very much a "work in progress" and is intended for development work and testing only.  Also, since it is "headless", you will not see any output from the machine when running any software that writes directly to video memory.
+This utility is very much a "work in progress" and is intended for development work and testing only.  Also, since it is "headless", you will not see any output from the machine when running any software that writes directly to video memory.
 
 ## Support for XML Machine Files
 
