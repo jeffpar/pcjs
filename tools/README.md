@@ -6,7 +6,7 @@ permalink: /tools/
 
 ## BASConvert.js
 
-[BASConvert.js](basconvert/) is a JavaScript library that converts encrypted and/or binary IBM PC BASIC program files to plain-text; this library is built into the [DiskImage.js](diskimage/) command-line utility.
+[BASConvert.js](basconvert/) is a JavaScript library that converts encrypted and/or binary IBM PC BASIC program files to plain-text; this library is built into the [DiskImage.js](diskimage/) command-line utility and is used in conjunction with the **DiskImage** `--normalize` command-line argument.
 
 ## DiskImage.js
 

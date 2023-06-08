@@ -1,5 +1,5 @@
 /**
- * @fileoverview BASIC File Conversion Functions
+ * @fileoverview BASIC File Conversion Library
  * @author Jeff Parsons <Jeff@pcjs.org>
  * @copyright © 2012-2023 Jeff Parsons
  * @license MIT <https://www.pcjs.org/LICENSE.txt>
@@ -11,11 +11,11 @@ import DataBuffer from "../../machines/modules/v2/databuffer.js";
 import CharSet    from "../../machines/pcx86/modules/v3/charset.js";
 
 /**
- * BASIC File Conversion Functions
+ * BASIC File Conversion Library
  *
  * The code in this class is based on https://github.com/rwtodd/bascat, which was a good start but had some issues.
  * I'm sure there are still some lingering issues here (perhaps some magic whitespace rules that I'm unaware of), but
- * this code seems to work pretty well now, and the new tokens dictionary is *much* more straightforward.
+ * this code seems to work pretty well now, and the PCjs tokens dictionary is *much* more straightforward.
  *
  * @class BASConvert
  */
