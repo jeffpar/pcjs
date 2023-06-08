@@ -7,11 +7,11 @@ redirect_from: /machines/pcx86/modules/bin/
 
 This directory contains the PCjs machine command-line utility [pc.js](pc.js), which allows you to start a "headless" machine with all TTY (eg, INT 0x10) output redirected to your console.
 
-Load a machine JSON file, such as [ibm5150.json5](ibm5150.json5) or [compaq386.json5](compaq386.json5), with the utility's `load` command, either interactively or with the `--cmd` command-line argument.
+Load a JSON machine file, such as [ibm5150.json5](ibm5150.json5) or [compaq386.json5](compaq386.json5), with the utility's `load` command, either interactively or with the `--load` command-line argument.
 
 For example:
 
-	pc.js --cmd="load ibm5150.json5"
+	pc.js --load=ibm5150.json5
 
 should produce the following output:
 
@@ -55,7 +55,17 @@ You can begin interacting with the machine OR you can press CTRL-A to enter the 
 
 To destroy the machine, type `quit` (or press CTRL-C) at the debugger prompt.
 
+Unlike its predecessor `pcx86.js`, `pc.js` is more general-purpose and can theoretically load any other machine type listed in [machines.json](/machines/machines.json), not it has only been tested with `pcx86` machines so far.
+
 Note that this utility is very much a "work in progress" and is intended for development work and testing only.  Also, since it is "headless", you will not see any output from the machine when running any software that writes directly to video memory.
+
+## Support for XML Machine Files
+
+Limited support for XML-based machines now exists; eg:
+
+    pc.js --load=/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml
+
+loads and runs the same [machine.xml](/machines/pcx86/ibm/5170/ega/1024kb/rev3/debugger/machine.xml) that also exists on the PCjs website.
 
 ## Historical Notes
 
