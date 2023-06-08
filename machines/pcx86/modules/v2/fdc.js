@@ -426,9 +426,9 @@ export default class FDC extends Component {
         this.panel = cmp.getMachineComponent("Panel", false);
 
         /*
-         * If we didn't need auto-mount support, we could defer controller initialization until we received a powerUp() notification,
-         * at which point reset() would call initController(), or restore() would restore the controller; in that case, all we'd need
-         * to do here is call setReady().
+         * If we didn't need auto-mount support, we could defer controller initialization until we received
+         * a powerUp() notification, at which point reset() would call initController(), or restore() would
+         * restore the controller; in that case, all we'd need to do here is call setReady().
          */
         this.initController();
 
@@ -436,9 +436,10 @@ export default class FDC extends Component {
         bus.addPortOutputTable(this, FDC.aPortOutput);
 
         /*
-         * We now allow the FDC's 'diskettes' parameter to be overridden with a machine parameter; fortunately, that's not a problem,
-         * since we weren't doing anything with the parameter until this point (initBus()) anyway.  It's nothing more than a comma-delimited
-         * list of diskettes.json files (the default one being /machines/pcx86/diskettes.json).
+         * We now allow the FDC's 'diskettes' parameter to be overridden with a machine parameter;
+         * fortunately, that's not a problem, since we weren't doing anything with the parameter until
+         * this point (initBus()) anyway, and it's just a comma-delimited list of "diskettes.json" files,
+         * the default one being "/machines/pcx86/diskettes.json".
          */
         this.aDiskettes = this.cmp.getMachineParm('diskettes') || this.aDiskettes;
 
@@ -447,29 +448,35 @@ export default class FDC extends Component {
             let hostName = Web.getHostName();
             let limits = fdc.getDriveLimits();
             let urls = fdc.aDiskettes.split(',');
-            var cRequested = 0, cLoaded = 0, cSuccessful = 0;
+            let cLoaded = 0, cSuccessful = 0;
+            /*
+             * Preprocess the list of URLs, removing any that are not appropriate for the current host.
+             */
+            for (let i = 0; i < urls.length; i++) {
+                if (hostName != "localhost" && urls[i].indexOf("private") >= 0) {
+                    urls.splice(i--, 1);
+                }
+            }
             fdc.aDiskettes = [];
             for (let i = 0; i < urls.length; i++) {
                 let url = urls[i];
-                if (hostName == "localhost" || url.indexOf("private") < 0) {
-                    cRequested++;
-                    let sProgress = "Loading " + url + "...";
-                    Web.getResource(url, "json", true, function loadDone(url, sResponse, nErrorCode) {
-                        if (sResponse && !nErrorCode) {
-                            try {
-                                JSONLib.parseDiskettes(fdc.aDiskettes, /** @type {Object} */ (JSON.parse(sResponse)), "/pcx86", fdc.sDisketteServer, hostName, limits);
-                                cSuccessful++;
-                            } catch(err) {
-                                fdc.printf(Messages.DEFAULT, "Unable to parse %s: %s\n", url, err.message);
-                            }
-                        } else {
-                            fdc.printf(Messages.DEFAULT, "Unable to open %s (%d)\n", url, nErrorCode);
+                let sProgress = "Loading " + url + "...";
+                Web.getResource(url, "json", true, function loadDone(url, sResponse, nErrorCode) {
+                    let privateURL = url.indexOf("private") >= 0;
+                    if (sResponse && !nErrorCode) {
+                        try {
+                            JSONLib.parseDiskettes(fdc.aDiskettes, /** @type {Object} */ (JSON.parse(sResponse)), "/pcx86", fdc.sDisketteServer, hostName, limits);
+                            cSuccessful++;
+                        } catch(err) {
+                            if (!privateURL || sResponse[0] != '<') fdc.printf(Messages.WARNING, "Unable to parse %s: %s\n", url, err.message);
                         }
-                        if (++cLoaded == cRequested) fdc.addDiskettes(!cSuccessful);
-                    }, function(nState) {
-                        fdc.printf(Messages.PROGRESS, "%s\n", sProgress);
-                    });
-                }
+                    } else {
+                        if (!privateURL) fdc.printf(Messages.WARNING, "Unable to open %s (%d)\n", url, nErrorCode);
+                    }
+                    if (++cLoaded == urls.length) fdc.addDiskettes(!cSuccessful);
+                }, function(nState) {
+                    fdc.printf(Messages.PROGRESS, "%s\n", sProgress);
+                });
             }
             return;
         }

@@ -4273,16 +4273,17 @@ class Component {
     }
 
     /**
-     * Component.alertUser(sMessage)
+     * Component.alertUser(sMessage, fPrinted)
      *
      * @param {string} sMessage
+     * @param {boolean} [fPrinted] (true if the message has already been printed)
      */
-    static alertUser(sMessage)
+    static alertUser(sMessage, fPrinted)
     {
         if (globals.window.alert) {
             globals.window.alert(sMessage);
         }
-        console.log(sMessage);
+        if (!fPrinted) console.log(sMessage);
     }
 
     /**
@@ -5298,7 +5299,7 @@ class Component {
      * Most components provide a default message number to their constructor, so any printf() without an explicit
      * message number will use that default.  If the caller wants a particular call to ALWAYS print, regardless
      * of whether the debugger has enabled it, the caller can use printf(Messages.DEFAULT), and if the caller wants
-     * EVERY call to print, then simply omit the message number from the constructor AND all printf() calls.
+     * EVERY call to print, then simply omit any message number from their constructor AND all printf() calls.
      *
      * @this {Component}
      * @param {string|number} format
@@ -5323,9 +5324,6 @@ class Component {
                 this.dbg.message(sMessage, bitsMessage);
             } else {
                 this.print(sMessage, bitsMessage);
-            }
-            if (bitsMessage == Messages.WARNING || bitsMessage == Messages.ERROR) {
-                Component.alertUser(sMessage.trim());
             }
         }
     }
@@ -55970,6 +55968,11 @@ class VideoX86 extends Component {
     updateScreen(fForce = false)
     {
         /*
+         * Nothing to do for "headless" congfigurations.
+         */
+        if (!this.canvasScreen) return false;
+
+        /*
          * The Computer component maintains the fPowered setting on our behalf, so we use it.
          */
         if (!this.flags.powered) return false;
@@ -64656,9 +64659,9 @@ class FDC extends Component {
         this.panel = cmp.getMachineComponent("Panel", false);
 
         /*
-         * If we didn't need auto-mount support, we could defer controller initialization until we received a powerUp() notification,
-         * at which point reset() would call initController(), or restore() would restore the controller; in that case, all we'd need
-         * to do here is call setReady().
+         * If we didn't need auto-mount support, we could defer controller initialization until we received
+         * a powerUp() notification, at which point reset() would call initController(), or restore() would
+         * restore the controller; in that case, all we'd need to do here is call setReady().
          */
         this.initController();
 
@@ -64666,9 +64669,10 @@ class FDC extends Component {
         bus.addPortOutputTable(this, FDC.aPortOutput);
 
         /*
-         * We now allow the FDC's 'diskettes' parameter to be overridden with a machine parameter; fortunately, that's not a problem,
-         * since we weren't doing anything with the parameter until this point (initBus()) anyway.  It's nothing more than a comma-delimited
-         * list of diskettes.json files (the default one being /machines/pcx86/diskettes.json).
+         * We now allow the FDC's 'diskettes' parameter to be overridden with a machine parameter;
+         * fortunately, that's not a problem, since we weren't doing anything with the parameter until
+         * this point (initBus()) anyway, and it's just a comma-delimited list of "diskettes.json" files,
+         * the default one being "/machines/pcx86/diskettes.json".
          */
         this.aDiskettes = this.cmp.getMachineParm('diskettes') || this.aDiskettes;
 
@@ -64677,29 +64681,35 @@ class FDC extends Component {
             let hostName = Web.getHostName();
             let limits = fdc.getDriveLimits();
             let urls = fdc.aDiskettes.split(',');
-            var cRequested = 0, cLoaded = 0, cSuccessful = 0;
+            let cLoaded = 0, cSuccessful = 0;
+            /*
+             * Preprocess the list of URLs, removing any that are not appropriate for the current host.
+             */
+            for (let i = 0; i < urls.length; i++) {
+                if (hostName != "localhost" && urls[i].indexOf("private") >= 0) {
+                    urls.splice(i--, 1);
+                }
+            }
             fdc.aDiskettes = [];
             for (let i = 0; i < urls.length; i++) {
                 let url = urls[i];
-                if (hostName == "localhost" || url.indexOf("private") < 0) {
-                    cRequested++;
-                    let sProgress = "Loading " + url + "...";
-                    Web.getResource(url, "json", true, function loadDone(url, sResponse, nErrorCode) {
-                        if (sResponse && !nErrorCode) {
-                            try {
-                                JSONLib.parseDiskettes(fdc.aDiskettes, /** @type {Object} */ (JSON.parse(sResponse)), "/pcx86", fdc.sDisketteServer, hostName, limits);
-                                cSuccessful++;
-                            } catch(err) {
-                                fdc.printf(Messages.DEFAULT, "Unable to parse %s: %s\n", url, err.message);
-                            }
-                        } else {
-                            fdc.printf(Messages.DEFAULT, "Unable to open %s (%d)\n", url, nErrorCode);
+                let sProgress = "Loading " + url + "...";
+                Web.getResource(url, "json", true, function loadDone(url, sResponse, nErrorCode) {
+                    let privateURL = url.indexOf("private") >= 0;
+                    if (sResponse && !nErrorCode) {
+                        try {
+                            JSONLib.parseDiskettes(fdc.aDiskettes, /** @type {Object} */ (JSON.parse(sResponse)), "/pcx86", fdc.sDisketteServer, hostName, limits);
+                            cSuccessful++;
+                        } catch(err) {
+                            if (!privateURL || sResponse[0] != '<') fdc.printf(Messages.WARNING, "Unable to parse %s: %s\n", url, err.message);
                         }
-                        if (++cLoaded == cRequested) fdc.addDiskettes(!cSuccessful);
-                    }, function(nState) {
-                        fdc.printf(Messages.PROGRESS, "%s\n", sProgress);
-                    });
-                }
+                    } else {
+                        if (!privateURL) fdc.printf(Messages.WARNING, "Unable to open %s (%d)\n", url, nErrorCode);
+                    }
+                    if (++cLoaded == urls.length) fdc.addDiskettes(!cSuccessful);
+                }, function(nState) {
+                    fdc.printf(Messages.PROGRESS, "%s\n", sProgress);
+                });
             }
             return;
         }
@@ -81730,8 +81740,8 @@ class Computer extends Component {
             }
         }
         if (iComponent == aComponents.length) component = this;
-        let s = "The " + component.type + " component (" + component.id + ") is not " + (!component.flags.ready? "ready yet" + (component.fnReady? " (waiting for notification)" : "") : "powered yet") + ".";
-        Component.alertUser(s);
+        let status = (!component.flags.ready? "ready yet" + (component.fnReady? " (waiting for notification)" : "") : "powered yet")
+        Component.printf(Messages.NOTICE, "The %s component (%s) is not %s\n", component.type, component.id, status);
         return false;
     }
 

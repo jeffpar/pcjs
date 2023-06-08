@@ -3909,16 +3909,17 @@ class Component {
     }
 
     /**
-     * Component.alertUser(sMessage)
+     * Component.alertUser(sMessage, fPrinted)
      *
      * @param {string} sMessage
+     * @param {boolean} [fPrinted] (true if the message has already been printed)
      */
-    static alertUser(sMessage)
+    static alertUser(sMessage, fPrinted)
     {
         if (globals.window.alert) {
             globals.window.alert(sMessage);
         }
-        console.log(sMessage);
+        if (!fPrinted) console.log(sMessage);
     }
 
     /**
@@ -4934,7 +4935,7 @@ class Component {
      * Most components provide a default message number to their constructor, so any printf() without an explicit
      * message number will use that default.  If the caller wants a particular call to ALWAYS print, regardless
      * of whether the debugger has enabled it, the caller can use printf(Messages.DEFAULT), and if the caller wants
-     * EVERY call to print, then simply omit the message number from the constructor AND all printf() calls.
+     * EVERY call to print, then simply omit any message number from their constructor AND all printf() calls.
      *
      * @this {Component}
      * @param {string|number} format
@@ -4959,9 +4960,6 @@ class Component {
                 this.dbg.message(sMessage, bitsMessage);
             } else {
                 this.print(sMessage, bitsMessage);
-            }
-            if (bitsMessage == Messages.WARNING || bitsMessage == Messages.ERROR) {
-                Component.alertUser(sMessage.trim());
             }
         }
     }

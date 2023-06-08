@@ -5899,6 +5899,11 @@ export default class VideoX86 extends Component {
     updateScreen(fForce = false)
     {
         /*
+         * Nothing to do for "headless" congfigurations.
+         */
+        if (!this.canvasScreen) return false;
+
+        /*
          * The Computer component maintains the fPowered setting on our behalf, so we use it.
          */
         if (!this.flags.powered) return false;

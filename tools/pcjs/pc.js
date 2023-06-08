@@ -219,25 +219,25 @@ function intVideo(addr)
  */
 function loadMachine(sFile)
 {
-    let result = "";
-    if (fDebug) printf("loadMachine(\"%s\")\n", sFile);
-
     let getFactory = function(machine, sMachine) {
         let type = machine['type'] || machineType;
         loadModules(machines[type]['factory'], machines[type]['modules'], function() {
             initMachine(machine, sMachine);
         });
     };
-
-    if (sFile.indexOf('.') < 0) sFile += ".json5";
-    if (sFile.endsWith(".json") || sFile.endsWith(".json5")) {
-        result = readJSON(sFile, getFactory);
-    }
-    else if (sFile.endsWith(".xml")) {
-        let xml = {_resolving: 0};
-        result = readXML(sFile, xml, 'machine', null, 0, getFactory);
-    } else {
-        result = "unsupported machine configuration file: " + sFile;
+    let result = "no machine";
+    if (sFile) {
+        if (fDebug) printf("loadMachine(\"%s\")\n", sFile);
+        if (sFile.indexOf('.') < 0) sFile += ".json5";
+        if (sFile.endsWith(".json") || sFile.endsWith(".json5")) {
+            result = readJSON(sFile, getFactory);
+        }
+        else if (sFile.endsWith(".xml")) {
+            let xml = {_resolving: 0};
+            result = readXML(sFile, xml, 'machine', null, 0, getFactory);
+        } else {
+            result = "unsupported machine configuration file: " + sFile;
+        }
     }
     return result;
 }

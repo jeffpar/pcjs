@@ -13,13 +13,17 @@ url: "http://localhost:4000"
 # gone now, so of the three server modes (compiled, uncompiled, and unbundled), compiled is preferred
 # for production servers and unbundled is preferred for development servers.
 #
+# Uncompiled scripts haven't gone away, however.  XSL-rendered XML machines still don't support the use
+# of unbundled modules (yet), and since the server does not offer any means of controlling XSL rendering (yet),
+# the <machine> tag of each XML file must set 'uncompiled' to "true" in order to use uncompiled scripts.
+#
 # 'site.pcjs.localdisks' can be turned if on you have local copies of PCjs disk images; see
 # https://github.com/jeffpar/pcjs/wiki/Running-PCjs-locally#accessing-disk-images-locally for more information.
 #
 pcjs:
   localdisks: false
   unbundled: true
-  uncompiled: false
+  uncompiled: true
 
 exclude:
   - Dockerfile

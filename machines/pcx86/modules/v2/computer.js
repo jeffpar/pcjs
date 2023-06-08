@@ -1060,8 +1060,8 @@ export default class Computer extends Component {
             }
         }
         if (iComponent == aComponents.length) component = this;
-        let s = "The " + component.type + " component (" + component.id + ") is not " + (!component.flags.ready? "ready yet" + (component.fnReady? " (waiting for notification)" : "") : "powered yet") + ".";
-        Component.alertUser(s);
+        let status = (!component.flags.ready? "ready yet" + (component.fnReady? " (waiting for notification)" : "") : "powered yet")
+        Component.printf(Messages.NOTICE, "The %s component (%s) is not %s\n", component.type, component.id, status);
         return false;
     }
 
