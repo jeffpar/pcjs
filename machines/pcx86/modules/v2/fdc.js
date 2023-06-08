@@ -330,10 +330,10 @@ export default class FDC extends Component {
                             let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
                             Component.alertUser(sAlert);
                         } else {
-                            fdc.notice("No diskette loaded in drive.");
+                            fdc.printf(Messages.NOTICE, "No diskette loaded in drive\n");
                         }
                     } else {
-                        fdc.notice("No diskette drive selected.");
+                        fdc.printf(Messages.NOTICE, "No diskette drive selected\n");
                     }
                 }
             };
@@ -341,7 +341,7 @@ export default class FDC extends Component {
 
         case "mountDisk":
             if (!this.fLocalDisks) {
-                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -1247,7 +1247,7 @@ export default class FDC extends Component {
                     }
                     continue;
                 }
-                this.notice("Incorrect auto-mount settings for drive " + sDrive + " (" + JSON.stringify(configDrive) + ")");
+                this.printf(Messages.NOTICE, "Incorrect auto-mount settings for drive %s (%s)\n", sDrive, JSON.stringify(configDrive));
             }
         }
         return !!this.cAutoMount;
@@ -1296,7 +1296,7 @@ export default class FDC extends Component {
             }
 
             if (sDiskPath == "?") {
-                this.notice('Use "Choose File" and "Mount" to select and load a local disk.');
+                this.printf(Messages.NOTICE, "Use \"Choose File\" and \"Mount\" to select and load a local disk\n");
                 return false;
             }
 
@@ -1340,7 +1340,7 @@ export default class FDC extends Component {
             }
             return true;
         }
-        this.notice("Unable to load the selected drive");
+        this.printf(Messages.NOTICE, "Unable to load the selected drive\n");
         return false;
     }
 
@@ -1387,7 +1387,7 @@ export default class FDC extends Component {
             if (drive.sDiskPath.toLowerCase() != sDiskPath.toLowerCase()) {
                 this.unloadDrive(iDrive, fAutoMount, true);
                 if (drive.fBusy) {
-                    this.notice("Drive " + iDrive + " busy");
+                    this.printf(Messages.NOTICE, "Drive %d busy\n", iDrive);
                     return 0;
                 }
                 drive.fBusy = true;
@@ -1434,7 +1434,7 @@ export default class FDC extends Component {
              */
             aDiskInfo = disk.info();
             if (disk && aDiskInfo[0] > drive.nCylinders || aDiskInfo[1] > drive.nHeads /* || aDiskInfo[2] > drive.nSectors */) {
-                this.notice("Diskette \"" + sDiskName + "\" too large for drive " + String.fromCharCode(0x41 + drive.iDrive));
+                this.printf(Messages.NOTICE, "Diskette \"%s\" too large for drive %s\n", sDiskName, String.fromCharCode(0x41 + drive.iDrive));
                 disk = null;
             }
         }
@@ -1491,7 +1491,7 @@ export default class FDC extends Component {
              * theory no message is a good sign, while load errors in disk.js should continue to trigger notifications.
              */
             if (!drive.fnCallReady) {
-                this.notice("Mounted \"" + sDiskName + "\" (format " + (disk.imageInfo && disk.imageInfo.format || "unknown") + ") in drive " + String.fromCharCode(0x41 + drive.iDrive), true /* drive.fAutoMount || fAutoMount */);
+                this.printf(Messages.STATUS, "Mounted \"%s\" (format %s) in drive %s\n", sDiskName, (disk.imageInfo && disk.imageInfo.format || "unknown"), String.fromCharCode(0x41 + drive.iDrive));
             }
 
             /*
@@ -1664,7 +1664,7 @@ export default class FDC extends Component {
                     if (control.text == sName) return control.value;
                 }
             }
-            this.notice("Unable to find diskette \"" + sName + "\"");
+            this.printf(Messages.NOTICE, "Unable to find diskette \"%s\"\n", sName);
         }
         return "";
     }
@@ -1818,7 +1818,7 @@ export default class FDC extends Component {
                     if (drive.fWritable != !(controlDrives.selectedIndex & 0x1)) {
                         drive.fWritable = !drive.fWritable;
                         if (!drive.fWritable) {
-                            this.notice("Any diskette loaded in this drive will now be write-protected.")
+                            this.printf(Messages.NOTICE, "Any diskette loaded in this drive will now be write-protected.");
                         }
                     }
                 }
@@ -1902,7 +1902,7 @@ export default class FDC extends Component {
              * theory no message is a good sign, while load errors in disk.js should continue to trigger notifications.
              */
             if (!fQuiet) {
-                this.notice("Drive " + String.fromCharCode(0x41 + iDrive) + " unloaded", true /* fAutoUnload */);
+                this.printf(Messages.STATUS, "Drive %s unloaded\n", String.fromCharCode(0x41 + iDrive));
             }
             /*
              * Try to avoid any unnecessary hysteresis regarding the diskette display if this unload is merely

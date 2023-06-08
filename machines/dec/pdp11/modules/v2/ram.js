@@ -155,7 +155,7 @@ export default class RAMPDP11 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load RAM resource (error " + nErrorCode + ": " + sURL + ")");
+            this.printf(Messages.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {
@@ -206,7 +206,7 @@ export default class RAMPDP11 extends Component {
                 if (this.loadImage(this.abInit, this.addrLoad, this.addrExec, this.addrRAM)) {
                     this.printf(Messages.STATUS, 'Loaded image "%s"\n', this.sFileName);
                 } else {
-                    this.notice('Error loading image "' + this.sFileName + '"');
+                    this.printf(Messages.NOTICE, "Error loading image \"%s\"\n", this.sFileName);
                 }
 
                 /*

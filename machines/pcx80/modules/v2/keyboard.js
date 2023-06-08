@@ -321,7 +321,7 @@ export default class KeyboardX80 extends Component {
         this.bitsState = 0;
 
         if (this.config.INIT && !this.restore(this.config.INIT)) {
-            this.notice("reset error");
+            this.printf(Messages.NOTICE, "reset error\n");
         }
     }
 

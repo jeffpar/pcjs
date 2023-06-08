@@ -3969,17 +3969,6 @@ class Component {
             if (!this.bindings[sBinding]) {
                 let controlTextArea = /** @type {HTMLTextAreaElement} */(control);
                 this.bindings[sBinding] = controlTextArea;
-                /**
-                 * Override this.notice() with a replacement function that eliminates the Component.alertUser() call.
-                 *
-                 * @this {Component}
-                 * @param {string} sMessage
-                 * @returns {boolean}
-                 */
-                this.notice = function noticeControl(sMessage /*, fPrintOnly, id*/) {
-                    this.printf(Messages.STATUS, "%s\n", sMessage);
-                    return true;
-                };
                 /*
                  * This was added for Firefox (Safari will clear the <textarea> on a page reload, but Firefox does not).
                  */
@@ -4047,38 +4036,11 @@ class Component {
     }
 
     /**
-     * notice(s, fPrintOnly, id)
-     *
-     * notice() is like print() but implies a need for user notification, so we alert() as well; however, if this.print()
-     * is overridden, this.notice will be replaced with a similar override, on the assumption that the override is taking care
-     * of alerting the user.
-     *
-     * @this {Component}
-     * @param {string} s is the message text
-     * @param {boolean} [fPrintOnly]
-     * @param {string} [id] is the caller's ID, if any
-     * @returns {boolean}
-     */
-    notice(s, fPrintOnly, id)
-    {
-        if (!fPrintOnly) {
-            /*
-             * See if the associated computer, if any, is "unloading"....
-             */
-            let computer = Component.getComponentByType("Computer", this.id);
-            if (computer && computer.flags.unloading) {
-                console.log("ignoring notice during unload: " + s);
-                return false;
-            }
-        }
-        Component.printf(fPrintOnly? Messages.DEFAULT : Messages.NOTICE, "%s: %s\n", id || this.type, s);
-        return true;
-    }
-
-    /**
      * setError(s)
      *
      * Set a fatal error condition
+     *
+     * TODO: Any cases where we should still prefix the string with "Fatal error: "?
      *
      * @this {Component}
      * @param {string} s describes a fatal error condition
@@ -4086,7 +4048,7 @@ class Component {
     setError(s)
     {
         this.flags.error = true;
-        this.notice(s);         // TODO: Any cases where we should still prefix this string with "Fatal error: "?
+        this.printf(Messages.NOTICE, "%s\n", s);
     }
 
     /**
@@ -14669,7 +14631,6 @@ class C1PComputer extends Component {
                         component = aComponents[iComponent];
                         if (component == panel) continue;
                         component.print = panel.print;
-                        component.notice = panel.notice;
                     }
                 }
             }

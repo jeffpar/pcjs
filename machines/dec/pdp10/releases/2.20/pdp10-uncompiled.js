@@ -4328,17 +4328,6 @@ class Component {
             if (!this.bindings[sBinding]) {
                 let controlTextArea = /** @type {HTMLTextAreaElement} */(control);
                 this.bindings[sBinding] = controlTextArea;
-                /**
-                 * Override this.notice() with a replacement function that eliminates the Component.alertUser() call.
-                 *
-                 * @this {Component}
-                 * @param {string} sMessage
-                 * @returns {boolean}
-                 */
-                this.notice = function noticeControl(sMessage /*, fPrintOnly, id*/) {
-                    this.printf(Messages.STATUS, "%s\n", sMessage);
-                    return true;
-                };
                 /*
                  * This was added for Firefox (Safari will clear the <textarea> on a page reload, but Firefox does not).
                  */
@@ -4406,38 +4395,11 @@ class Component {
     }
 
     /**
-     * notice(s, fPrintOnly, id)
-     *
-     * notice() is like print() but implies a need for user notification, so we alert() as well; however, if this.print()
-     * is overridden, this.notice will be replaced with a similar override, on the assumption that the override is taking care
-     * of alerting the user.
-     *
-     * @this {Component}
-     * @param {string} s is the message text
-     * @param {boolean} [fPrintOnly]
-     * @param {string} [id] is the caller's ID, if any
-     * @returns {boolean}
-     */
-    notice(s, fPrintOnly, id)
-    {
-        if (!fPrintOnly) {
-            /*
-             * See if the associated computer, if any, is "unloading"....
-             */
-            let computer = Component.getComponentByType("Computer", this.id);
-            if (computer && computer.flags.unloading) {
-                console.log("ignoring notice during unload: " + s);
-                return false;
-            }
-        }
-        Component.printf(fPrintOnly? Messages.DEFAULT : Messages.NOTICE, "%s: %s\n", id || this.type, s);
-        return true;
-    }
-
-    /**
      * setError(s)
      *
      * Set a fatal error condition
+     *
+     * TODO: Any cases where we should still prefix the string with "Fatal error: "?
      *
      * @this {Component}
      * @param {string} s describes a fatal error condition
@@ -4445,7 +4407,7 @@ class Component {
     setError(s)
     {
         this.flags.error = true;
-        this.notice(s);         // TODO: Any cases where we should still prefix this string with "Fatal error: "?
+        this.printf(Messages.NOTICE, "%s\n", s);
     }
 
     /**
@@ -23216,7 +23178,7 @@ class ROMPDP10 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load ROM resource (error " + nErrorCode + ": " + sURL + ")");
+            this.printf(Messages.NOTICE, "Unable to load ROM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {
@@ -23516,7 +23478,7 @@ class RAMPDP10 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load RAM resource (error " + nErrorCode + ": " + sURL + ")");
+            this.printf(Messages.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {
@@ -26482,11 +26444,10 @@ class ComputerPDP10 extends Component {
                 component = aComponents[iComponent];
                 /*
                  * I can think of many "cleaner" ways for the Control Panel component to pass its
-                 * notice(), print(), etc, overrides on to all the other components, but it's just
-                 * too darn convenient to slam those overrides into the components directly.
+                 * print() override on to all the other components, but it's just too darn convenient
+                 * to slam these overrides into the components directly.
                  */
                 component.print = this.panel.print;
-                component.notice = this.panel.notice;
             }
         }
 
@@ -26713,7 +26674,7 @@ class ComputerPDP10 extends Component {
         } else {
             this.sResumePath = null;
             this.fServerState = false;
-            this.notice('Unable to load machine state from server (error ' + nErrorCode + (sStateData? ': ' + Str.trim(sStateData) : '') + ')');
+            this.printf(Messages.NOTICE, "Unable to load machine state from server (error %d%s)\n", nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
         }
         this.setReady();
     }
@@ -26770,7 +26731,7 @@ class ComputerPDP10 extends Component {
             var sTimestampValidate = stateValidate.get(ComputerPDP10.STATE_TIMESTAMP);
             var sTimestampComputer = stateComputer? stateComputer.get(ComputerPDP10.STATE_TIMESTAMP) : "unknown";
             if (sTimestampValidate != sTimestampComputer) {
-                this.notice("Machine state may be out-of-date\n(" + sTimestampValidate + " vs. " + sTimestampComputer + ")\nCheck your browser's local storage limits");
+                this.printf(Messages.NOTICE, "Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n", sTimestampValidate, sTimestampComputer);
                 fValid = false;
                 if (!stateComputer) stateValidate.clear();
             } else {
@@ -26854,7 +26815,7 @@ class ComputerPDP10 extends Component {
                                  * A missing (or not yet created) state file is no cause for alarm, but other errors might be
                                  */
                                 if (sCode == UserAPI.CODE.FAIL && sData != UserAPI.FAIL.NOSTATE) {
-                                    this.notice("Error: " + sData);
+                                    this.printf(Messages.NOTICE, "Error: %s\n", sData);
                                     if (sData == UserAPI.FAIL.VERIFY) this.resetUserID();
                                 } else {
                                     this.printf("%s: %s\n", sCode, sData);
@@ -27472,7 +27433,7 @@ class ComputerPDP10 extends Component {
                     if (fSave) {
                         computer.saveServerState(sUserID, sState);
                     } else {
-                        computer.notice("Resume disabled, machine state not saved");
+                        computer.printf(Messages.NOTICE, "Resume disabled, machine state not saved\n");
                     }
                 }
                 /*
@@ -27530,11 +27491,11 @@ class ComputerPDP10 extends Component {
                     sUserID = Component.promptUser("Saving machine states on the pcjs.org server is currently unsupported.\n\nIf you're running your own server, enter your user ID below.");
                     if (sUserID) {
                         sUserID = this.verifyUserID(sUserID);
-                        if (!sUserID) this.notice("The user ID is invalid.");
+                        if (!sUserID) this.printf(Messages.NOTICE, "The user ID is invalid.\n");
                     }
                 }
             } else if (fPrompt) {
-                this.notice("Browser local storage is not available");
+                this.printf(Messages.NOTICE, "Browser local storage is not available\n");
             }
         }
         return sUserID;
@@ -27618,7 +27579,7 @@ class ComputerPDP10 extends Component {
             }
             var response = this.storeServerState(sUserID, sState, true);
             if (response && response[UserAPI.RES.CODE] == UserAPI.CODE.OK) {
-                this.notice("Machine state saved to server");
+                this.printf(Messages.NOTICE, "Machine state saved to server\n");
             } else if (sState) {
                 var sError = (response && response[UserAPI.RES.DATA]) || UserAPI.FAIL.BADSTORE;
                 if (response[UserAPI.RES.CODE] == UserAPI.CODE.FAIL) {
@@ -27626,7 +27587,7 @@ class ComputerPDP10 extends Component {
                 } else {
                     sError = "Error " + response[UserAPI.RES.CODE] + ": " + sError;
                 }
-                this.notice(sError);
+                this.printf(Messages.NOTICE, "%s\n", sError);
                 this.resetUserID();
             }
         } else {

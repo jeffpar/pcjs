@@ -4567,17 +4567,6 @@ class Component {
             if (!this.bindings[sBinding]) {
                 let controlTextArea = /** @type {HTMLTextAreaElement} */(control);
                 this.bindings[sBinding] = controlTextArea;
-                /**
-                 * Override this.notice() with a replacement function that eliminates the Component.alertUser() call.
-                 *
-                 * @this {Component}
-                 * @param {string} sMessage
-                 * @returns {boolean}
-                 */
-                this.notice = function noticeControl(sMessage /*, fPrintOnly, id*/) {
-                    this.printf(Messages.STATUS, "%s\n", sMessage);
-                    return true;
-                };
                 /*
                  * This was added for Firefox (Safari will clear the <textarea> on a page reload, but Firefox does not).
                  */
@@ -4645,38 +4634,11 @@ class Component {
     }
 
     /**
-     * notice(s, fPrintOnly, id)
-     *
-     * notice() is like print() but implies a need for user notification, so we alert() as well; however, if this.print()
-     * is overridden, this.notice will be replaced with a similar override, on the assumption that the override is taking care
-     * of alerting the user.
-     *
-     * @this {Component}
-     * @param {string} s is the message text
-     * @param {boolean} [fPrintOnly]
-     * @param {string} [id] is the caller's ID, if any
-     * @returns {boolean}
-     */
-    notice(s, fPrintOnly, id)
-    {
-        if (!fPrintOnly) {
-            /*
-             * See if the associated computer, if any, is "unloading"....
-             */
-            let computer = Component.getComponentByType("Computer", this.id);
-            if (computer && computer.flags.unloading) {
-                console.log("ignoring notice during unload: " + s);
-                return false;
-            }
-        }
-        Component.printf(fPrintOnly? Messages.DEFAULT : Messages.NOTICE, "%s: %s\n", id || this.type, s);
-        return true;
-    }
-
-    /**
      * setError(s)
      *
      * Set a fatal error condition
+     *
+     * TODO: Any cases where we should still prefix the string with "Fatal error: "?
      *
      * @this {Component}
      * @param {string} s describes a fatal error condition
@@ -4684,7 +4646,7 @@ class Component {
     setError(s)
     {
         this.flags.error = true;
-        this.notice(s);         // TODO: Any cases where we should still prefix this string with "Fatal error: "?
+        this.printf(Messages.NOTICE, "%s\n", s);
     }
 
     /**
@@ -17871,7 +17833,7 @@ class ROMPDP11 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load ROM resource (error " + nErrorCode + ": " + sURL + ")");
+            this.printf(Messages.NOTICE, "Unable to load ROM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {
@@ -18227,7 +18189,7 @@ class RAMPDP11 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load RAM resource (error " + nErrorCode + ": " + sURL + ")");
+            this.printf(Messages.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {
@@ -18278,7 +18240,7 @@ class RAMPDP11 extends Component {
                 if (this.loadImage(this.abInit, this.addrLoad, this.addrExec, this.addrRAM)) {
                     this.printf(Messages.STATUS, 'Loaded image "%s"\n', this.sFileName);
                 } else {
-                    this.notice('Error loading image "' + this.sFileName + '"');
+                    this.printf(Messages.NOTICE, "Error loading image \"%s\"\n", this.sFileName);
                 }
 
                 /*
@@ -19780,7 +19742,7 @@ class PC11 extends Component {
         }
 
         if (sTapePath == PC11.SOURCE.LOCAL) {
-            this.notice('Use "Choose File" and "Mount" to select and load a local tape.');
+            this.printf(Messages.NOTICE, "Use \"Choose File\" and \"Mount\" to select and load a local tape.\n");
             return;
         }
 
@@ -19830,7 +19792,7 @@ class PC11 extends Component {
             this.unloadTape(true);
 
             if (this.flags.busy) {
-                this.notice("PC11 busy");
+                this.printf(Messages.NOTICE, "PC11 busy\n");
             }
             else {
                 // this.printf(Messages.STATUS, "tape queued: %s\n", sTapeName);
@@ -19933,7 +19895,7 @@ class PC11 extends Component {
              * that yet.  For now, we rely on the lack of a specific error (nErrorCode < 0), and suppress the
              * notify() alert if there's no specific error AND the computer is not powered up yet.
              */
-            this.notice("Unable to load tape \"" + sTapeName + "\" (error " + nErrorCode + ": " + sURL + ")", fPrintOnly);
+            this.printf(Messages.NOTICE, "Unable to load tape \"%s\" (error %d: %s)\n", sTapeName, nErrorCode, sURL);
         }
         else {
             if (DEBUG) {
@@ -20109,7 +20071,7 @@ class PC11 extends Component {
                  *      this.sTapeSource = PC11.SOURCE.NONE;
                  *      this.nTapeTarget = PC11.TARGET.NONE;
                  */
-                this.notice('No valid memory address for tape "' + sTapeName + '"');
+                this.printf(Messages.NOTICE, "No valid memory address for tape \"%s\"\n", sTapeName);
                 return;
             }
             this.printf(Messages.STATUS, 'Read tape "%s"\n', sTapeName);
@@ -20485,10 +20447,9 @@ class DiskPDP11 extends Component {
         super("Disk", {'id': controller.idMachine + ".disk" + Str.toHex(++DiskPDP11.nDisks, 4)}, Messages.DISK);
 
         /*
-         * Route all non-Debugger messages (eg, notice() and print() calls) through
-         * this.controller (eg, controller.notice() and controller.print()), because
-         * the Computer component is unaware of any Disk objects and therefore will not
-         * set up the usual overrides when a Control Panel is installed.
+         * Route all non-Debugger messages (eg, print() calls) through this.controller
+         * (eg, controller.print()), because the Computer component is unaware of any Disk objects
+         * and therefore will not set up the usual overrides when a Control Panel is installed.
          */
         this.controller = controller;
         this.cmp = controller.cmp;
@@ -20736,7 +20697,7 @@ class DiskPDP11 extends Component {
             this.dwChecksum = dwChecksum;
             disk = this;
         } else {
-            this.notice("Unrecognized disk format (" + cbDiskData + " bytes)");
+            this.printf(Messages.NOTICE, "Unrecognized disk format (%d bytes)\n", cbDiskData);
         }
 
         if (this.fnNotify) {
@@ -20771,7 +20732,7 @@ class DiskPDP11 extends Component {
              * that yet.  For now, we rely on the lack of a specific error (nErrorCode < 0), and suppress the
              * notify() alert if there's no specific error AND the computer is not powered up yet.
              */
-            this.controller.notice("Unable to load disk \"" + this.sDiskName + "\" (error " + nErrorCode + ": " + sURL + ")", fPrintOnly);
+            this.controller.printf(Messages.NOTICE, "Unable to load disk \"%s\" (error %d: %s)\n", this.sDiskName, nErrorCode, sURL);
         } else {
             if (DEBUG) {
                 this.printf("doneLoad(\"%s\")\n", this.sDiskPath);
@@ -21468,7 +21429,7 @@ class DiskPDP11 extends Component {
              * We're suppressing checksum messages for the general public for now....
              */
             if (DEBUG || nChanges != -2) {
-                this.controller.notice("Unable to restore disk '" + this.sDiskName + ": " + sReason);
+                this.controller.printf(Messages.NOTICE, "Unable to restore disk \"%s\": %s\n", this.sDiskName, sReason);
             }
         } else {
             if (DEBUG) {
@@ -21819,10 +21780,10 @@ class DriveController extends Component {
                             var sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
                             Component.alertUser(sAlert);
                         } else {
-                            dc.notice("No disk loaded in drive.");
+                            dc.printf(Messages.NOTICE, "No disk loaded in drive.\n");
                         }
                     } else {
-                        dc.notice("No disk drive selected.");
+                        dc.printf(Messages.NOTICE, "No disk drive selected.\n");
                     }
                 }
             };
@@ -22297,7 +22258,7 @@ class DriveController extends Component {
                     continue;
                 }
             }
-            this.notice("Incorrect auto-mount settings for drive " + sDrive + " (" + JSON.stringify(configDisk) + ")");
+            this.printf(Messages.NOTICE, "Incorrect auto-mount settings for drive %s (%s)\n", sDrive, JSON.stringify(configDisk));
         }
         return !!this.cAutoMount;
     }
@@ -22325,7 +22286,7 @@ class DriveController extends Component {
         var iDrive = controlDrives && Str.parseInt(controlDrives.value, 10);
 
         if (iDrive === undefined || iDrive < 0 || iDrive >= this.aDrives.length) {
-            this.notice("Unable to load the selected drive");
+            this.printf(Messages.NOTICE, "Unable to load the selected drive\n");
             return false;
         }
 
@@ -22335,7 +22296,7 @@ class DriveController extends Component {
         }
 
         if (sDiskPath == DriveController.SOURCE.LOCAL) {
-            this.notice('Use "Choose File" and "Mount" to select and load a local disk.');
+            this.printf(Messages.NOTICE, "Use \"Choose File\" and \"Mount\" to select and load a local disk.\n");
             return false;
         }
 
@@ -22376,12 +22337,12 @@ class DriveController extends Component {
         var iDrive = controlDrives && Str.parseInt(controlDrives.value, 10);
 
         if (iDrive == null || iDrive < 0 || iDrive >= this.aDrives.length || !(drive = this.aDrives[iDrive])) {
-            this.notice("Unable to boot the selected drive");
+            this.printf(Messages.NOTICE, "Unable to boot the selected drive\n");
             return false;
         }
 
         if (!drive.disk) {
-            this.notice("Load a disk into the drive first");
+            this.printf(Messages.NOTICE, "Load a disk into the drive first\n");
             return false;
         }
 
@@ -22396,7 +22357,7 @@ class DriveController extends Component {
 
         var err = this.readData(drive, drive.iCylinderBoot, drive.iHeadBoot, drive.iSectorBoot, drive.cbSectorBoot, 0x0000, 2);
         if (err) {
-            this.notice("Unable to read the boot sector (" + err + ")");
+            this.printf(Messages.NOTICE, "Unable to read the boot sector (%s)\n", err);
             return false;
         }
         return true;
@@ -22443,7 +22404,7 @@ class DriveController extends Component {
             this.unloadDrive(iDrive, true);
 
             if (drive.fBusy) {
-                this.notice(this.type + " busy");
+                this.printf(Messages.NOTICE, "%s busy\n", this.type);
             }
             else {
                 // this.printf(Messages.STATUS, "disk queued: %s\n", sDiskName);
@@ -22485,7 +22446,7 @@ class DriveController extends Component {
              * have done this itself, since we passed our Drive object to it (it already knows the drive's limits).
              */
             if (disk.nCylinders > drive.nCylinders || disk.nHeads > drive.nHeads /* || disk.nSectors > drive.nSectors */) {
-                this.notice("Disk \"" + sDiskName + "\" too large for drive " + this.getDriveName(drive.iDrive));
+                this.printf(Messages.NOTICE, "Disk \"%s\" too large for drive %s\n", sDiskName, this.getDriveName(drive.iDrive));
                 disk = null;
             }
         }
@@ -22518,7 +22479,7 @@ class DriveController extends Component {
              * With the addition of notify(), users are now "alerted" whenever a disk has finished loading;
              * notify() is selective about its output, using print() if a print window is open, alert() otherwise.
              */
-            this.notice("Loaded disk \"" + sDiskName + "\" in drive " + this.getDriveName(drive.iDrive), drive.fAutoMount || fAutoMount);
+            this.printf(Messages.NOTICE, "Loaded disk \"%s\" in drive %s\n", sDiskName, this.getDriveName(drive.iDrive));
 
             /*
              * Since you usually want the Computer to have focus again after loading a new disk, let's try automatically
@@ -22751,7 +22712,7 @@ class DriveController extends Component {
             drive.fLocal = false;
 
             if (!fLoading) {
-                this.notice("Drive " + this.getDriveName(iDrive) + " unloaded", fLoading);
+                this.printf(Messages.NOTICE, "Drive %s unloaded\n", this.getDriveName(iDrive));
                 this.sDiskSource = DriveController.SOURCE.NONE;
                 this.displayDisk(iDrive);
             }
@@ -30351,11 +30312,10 @@ class ComputerPDP11 extends Component {
                 component = aComponents[iComponent];
                 /*
                  * I can think of many "cleaner" ways for the Control Panel component to pass its
-                 * notice(), print(), etc, overrides on to all the other components, but it's just
-                 * too darn convenient to slam those overrides into the components directly.
+                 * print() override on to all the other components, but it's just too darn convenient
+                 * to slam these overrides into the components directly.
                  */
                 component.print = this.panel.print;
-                component.notice = this.panel.notice;
             }
         }
 
@@ -30586,7 +30546,7 @@ class ComputerPDP11 extends Component {
         } else {
             this.sResumePath = null;
             this.fServerState = false;
-            this.notice('Unable to load machine state from server (error ' + nErrorCode + (sStateData? ': ' + Str.trim(sStateData) : '') + ')');
+            this.printf(Messages.NOTICE, "Unable to load machine state from server (error %d%s)\n", nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
         }
         this.setReady();
     }
@@ -30643,7 +30603,7 @@ class ComputerPDP11 extends Component {
             var sTimestampValidate = stateValidate.get(ComputerPDP11.STATE_TIMESTAMP);
             var sTimestampComputer = stateComputer? stateComputer.get(ComputerPDP11.STATE_TIMESTAMP) : "unknown";
             if (sTimestampValidate != sTimestampComputer) {
-                this.notice("Machine state may be out-of-date\n(" + sTimestampValidate + " vs. " + sTimestampComputer + ")\nCheck your browser's local storage limits");
+                this.printf(Messages.NOTICE, "Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n", sTimestampValidate, sTimestampComputer);
                 fValid = false;
                 if (!stateComputer) stateValidate.clear();
             } else {
@@ -30727,7 +30687,7 @@ class ComputerPDP11 extends Component {
                                  * A missing (or not yet created) state file is no cause for alarm, but other errors might be
                                  */
                                 if (sCode == UserAPI.CODE.FAIL && sData != UserAPI.FAIL.NOSTATE) {
-                                    this.notice("Error: " + sData);
+                                    this.printf(Messages.NOTICE, "Error: %s\n", sData);
                                     if (sData == UserAPI.FAIL.VERIFY) this.resetUserID();
                                 } else {
                                     this.printf("%s: %s\n", sCode, sData);
@@ -31347,7 +31307,7 @@ class ComputerPDP11 extends Component {
                     if (fSave) {
                         computer.saveServerState(sUserID, sState);
                     } else {
-                        computer.notice("Resume disabled, machine state not saved");
+                        computer.printf(Messages.NOTICE, "Resume disabled, machine state not saved\n");
                     }
                 }
                 /*
@@ -31405,11 +31365,11 @@ class ComputerPDP11 extends Component {
                     sUserID = Component.promptUser("Saving machine states on the pcjs.org server is currently unsupported.\n\nIf you're running your own server, enter your user ID below.");
                     if (sUserID) {
                         sUserID = this.verifyUserID(sUserID);
-                        if (!sUserID) this.notice("The user ID is invalid.");
+                        if (!sUserID) this.printf(Messages.NOTICE, "The user ID is invalid.\n");
                     }
                 }
             } else if (fPrompt) {
-                this.notice("Browser local storage is not available");
+                this.printf(Messages.NOTICE, "Browser local storage is not available\n");
             }
         }
         return sUserID;
@@ -31493,7 +31453,7 @@ class ComputerPDP11 extends Component {
             }
             var response = this.storeServerState(sUserID, sState, true);
             if (response && response[UserAPI.RES.CODE] == UserAPI.CODE.OK) {
-                this.notice("Machine state saved to server");
+                this.printf(Messages.NOTICE, "Machine state saved to server\n");
             } else if (sState) {
                 var sError = (response && response[UserAPI.RES.DATA]) || UserAPI.FAIL.BADSTORE;
                 if (response[UserAPI.RES.CODE] == UserAPI.CODE.FAIL) {
@@ -31501,7 +31461,7 @@ class ComputerPDP11 extends Component {
                 } else {
                     sError = "Error " + response[UserAPI.RES.CODE] + ": " + sError;
                 }
-                this.notice(sError);
+                this.printf(Messages.NOTICE, "%s\n", sError);
                 this.resetUserID();
             }
         } else {

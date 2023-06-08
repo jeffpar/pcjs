@@ -91,10 +91,9 @@ export default class DiskPDP11 extends Component {
         super("Disk", {'id': controller.idMachine + ".disk" + Str.toHex(++DiskPDP11.nDisks, 4)}, Messages.DISK);
 
         /*
-         * Route all non-Debugger messages (eg, notice() and print() calls) through
-         * this.controller (eg, controller.notice() and controller.print()), because
-         * the Computer component is unaware of any Disk objects and therefore will not
-         * set up the usual overrides when a Control Panel is installed.
+         * Route all non-Debugger messages (eg, print() calls) through this.controller
+         * (eg, controller.print()), because the Computer component is unaware of any Disk objects
+         * and therefore will not set up the usual overrides when a Control Panel is installed.
          */
         this.controller = controller;
         this.cmp = controller.cmp;
@@ -342,7 +341,7 @@ export default class DiskPDP11 extends Component {
             this.dwChecksum = dwChecksum;
             disk = this;
         } else {
-            this.notice("Unrecognized disk format (" + cbDiskData + " bytes)");
+            this.printf(Messages.NOTICE, "Unrecognized disk format (%d bytes)\n", cbDiskData);
         }
 
         if (this.fnNotify) {
@@ -377,7 +376,7 @@ export default class DiskPDP11 extends Component {
              * that yet.  For now, we rely on the lack of a specific error (nErrorCode < 0), and suppress the
              * notify() alert if there's no specific error AND the computer is not powered up yet.
              */
-            this.controller.notice("Unable to load disk \"" + this.sDiskName + "\" (error " + nErrorCode + ": " + sURL + ")", fPrintOnly);
+            this.controller.printf(Messages.NOTICE, "Unable to load disk \"%s\" (error %d: %s)\n", this.sDiskName, nErrorCode, sURL);
         } else {
             if (DEBUG) {
                 this.printf("doneLoad(\"%s\")\n", this.sDiskPath);
@@ -1074,7 +1073,7 @@ export default class DiskPDP11 extends Component {
              * We're suppressing checksum messages for the general public for now....
              */
             if (DEBUG || nChanges != -2) {
-                this.controller.notice("Unable to restore disk '" + this.sDiskName + ": " + sReason);
+                this.controller.printf(Messages.NOTICE, "Unable to restore disk \"%s\": %s\n", this.sDiskName, sReason);
             }
         } else {
             if (DEBUG) {

@@ -9,6 +9,7 @@
 
 import CPUDefX80 from "./cpudef.js";
 import MemoryX80 from "./memory.js";
+import Messages from "./messages.js";
 import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
 import Str from "../../../modules/v2/strlib.js";
@@ -144,7 +145,7 @@ export default class RAMx80 extends Component {
     doneLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load RAM resource (error " + nErrorCode + ": " + sURL + ")");
+            this.printf(Messages.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 

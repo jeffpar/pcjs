@@ -184,7 +184,7 @@ export default class ROMx86 extends Component {
     doneLoad(sURL, sROMData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load system ROM (error " + nErrorCode + ": " + sURL + ")", nErrorCode < 0);
+            this.printf(nErrorCode < 0? Messages.STATUS : Messages.NOTICE, "Unable to load system ROM (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 
@@ -261,7 +261,7 @@ export default class ROMx86 extends Component {
                     return;
                 }
             } catch (e) {
-                this.notice("ROM data error: " + e.message);
+                this.printf(Messages.NOTICE, "ROM data error: %s\n", e.message);
                 return;
             }
         }
@@ -332,7 +332,7 @@ export default class ROMx86 extends Component {
                         if (component) {
                             component.onROMLoad(this.abROM, this.aNotifyParms);
                         } else {
-                            this.notice("Unable to find component: " + this.idNotify);
+                            this.printf(Messages.NOTICE, "Unable to find component: %s\n", this.idNotify);
                         }
                     }
                     /*

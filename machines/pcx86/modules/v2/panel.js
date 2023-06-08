@@ -9,6 +9,7 @@
 
 import BusX86 from "./bus.js";
 import MemoryX86 from "./memory.js";
+import Messages from "./messages.js";
 import X86 from "./x86.js";
 import Component from "../../../modules/v2/component.js";
 import Str from "../../../modules/v2/strlib.js";

@@ -1023,7 +1023,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
              * be true.  Which means we should shut the machine down.
              */
             this.assert(fHalt);
-            this.notice(sMessage);
+            this.printf(Messages.NOTICE, "%s\n", sMessage);
             this.stopCPU();
         }
     }

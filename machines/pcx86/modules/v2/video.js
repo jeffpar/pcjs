@@ -3778,7 +3778,7 @@ export default class VideoX86 extends Component {
     doneLoad(sURL, sFontData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load font ROM (error " + nErrorCode + ": " + sURL + ")", nErrorCode < 0);
+            this.printf(nErrorCode < 0? Messages.STATUS : Messages.NOTICE, "Unable to load font ROM (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 
@@ -3878,12 +3878,12 @@ export default class VideoX86 extends Component {
                 this.setFontData(ab, [0x0000]);
             }
             else {
-                this.notice("Unrecognized font data length (" + ab.length + ")");
+                this.printf(Messages.NOTICE, "Unrecognized font data length (%d)\n", ab.length);
                 return;
             }
 
         } catch (e) {
-            this.notice("Font ROM data error: " + e.message);
+            this.printf(Messages.NOTICE, "Font ROM data error: %s\n", e.message);
             return;
         }
         /*

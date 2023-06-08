@@ -4877,7 +4877,7 @@ export default class ChipSet extends Component {
                     return true;
                 }
             } catch(e) {
-                this.notice("AudioContext exception: " + e.message);
+                this.printf(Messages.NOTICE, "AudioContext exception: %s\n", e.message);
                 this.contextAudio = null;
             }
         }

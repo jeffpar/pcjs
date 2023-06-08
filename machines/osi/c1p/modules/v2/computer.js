@@ -307,7 +307,6 @@ export default class C1PComputer extends Component {
                         component = aComponents[iComponent];
                         if (component == panel) continue;
                         component.print = panel.print;
-                        component.notice = panel.notice;
                     }
                 }
             }

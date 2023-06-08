@@ -150,7 +150,7 @@ export default class RAMPDP10 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load RAM resource (error " + nErrorCode + ": " + sURL + ")");
+            this.printf(Messages.NOTICE, "Unable to load RAM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {

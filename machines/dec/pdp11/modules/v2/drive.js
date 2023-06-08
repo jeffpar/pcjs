@@ -8,6 +8,7 @@
  */
 
 import DiskPDP11 from "./disk.js";
+import Messages from "./messages.js";
 import Component from "../../../../modules/v2/component.js";
 import DiskAPI from "../../../../modules/v2/diskapi.js";
 import State from "../../../../modules/v2/state.js";
@@ -219,10 +220,10 @@ export default class DriveController extends Component {
                             var sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
                             Component.alertUser(sAlert);
                         } else {
-                            dc.notice("No disk loaded in drive.");
+                            dc.printf(Messages.NOTICE, "No disk loaded in drive.\n");
                         }
                     } else {
-                        dc.notice("No disk drive selected.");
+                        dc.printf(Messages.NOTICE, "No disk drive selected.\n");
                     }
                 }
             };
@@ -697,7 +698,7 @@ export default class DriveController extends Component {
                     continue;
                 }
             }
-            this.notice("Incorrect auto-mount settings for drive " + sDrive + " (" + JSON.stringify(configDisk) + ")");
+            this.printf(Messages.NOTICE, "Incorrect auto-mount settings for drive %s (%s)\n", sDrive, JSON.stringify(configDisk));
         }
         return !!this.cAutoMount;
     }
@@ -725,7 +726,7 @@ export default class DriveController extends Component {
         var iDrive = controlDrives && Str.parseInt(controlDrives.value, 10);
 
         if (iDrive === undefined || iDrive < 0 || iDrive >= this.aDrives.length) {
-            this.notice("Unable to load the selected drive");
+            this.printf(Messages.NOTICE, "Unable to load the selected drive\n");
             return false;
         }
 
@@ -735,7 +736,7 @@ export default class DriveController extends Component {
         }
 
         if (sDiskPath == DriveController.SOURCE.LOCAL) {
-            this.notice('Use "Choose File" and "Mount" to select and load a local disk.');
+            this.printf(Messages.NOTICE, "Use \"Choose File\" and \"Mount\" to select and load a local disk.\n");
             return false;
         }
 
@@ -776,12 +777,12 @@ export default class DriveController extends Component {
         var iDrive = controlDrives && Str.parseInt(controlDrives.value, 10);
 
         if (iDrive == null || iDrive < 0 || iDrive >= this.aDrives.length || !(drive = this.aDrives[iDrive])) {
-            this.notice("Unable to boot the selected drive");
+            this.printf(Messages.NOTICE, "Unable to boot the selected drive\n");
             return false;
         }
 
         if (!drive.disk) {
-            this.notice("Load a disk into the drive first");
+            this.printf(Messages.NOTICE, "Load a disk into the drive first\n");
             return false;
         }
 
@@ -796,7 +797,7 @@ export default class DriveController extends Component {
 
         var err = this.readData(drive, drive.iCylinderBoot, drive.iHeadBoot, drive.iSectorBoot, drive.cbSectorBoot, 0x0000, 2);
         if (err) {
-            this.notice("Unable to read the boot sector (" + err + ")");
+            this.printf(Messages.NOTICE, "Unable to read the boot sector (%s)\n", err);
             return false;
         }
         return true;
@@ -843,7 +844,7 @@ export default class DriveController extends Component {
             this.unloadDrive(iDrive, true);
 
             if (drive.fBusy) {
-                this.notice(this.type + " busy");
+                this.printf(Messages.NOTICE, "%s busy\n", this.type);
             }
             else {
                 // this.printf(Messages.STATUS, "disk queued: %s\n", sDiskName);
@@ -885,7 +886,7 @@ export default class DriveController extends Component {
              * have done this itself, since we passed our Drive object to it (it already knows the drive's limits).
              */
             if (disk.nCylinders > drive.nCylinders || disk.nHeads > drive.nHeads /* || disk.nSectors > drive.nSectors */) {
-                this.notice("Disk \"" + sDiskName + "\" too large for drive " + this.getDriveName(drive.iDrive));
+                this.printf(Messages.NOTICE, "Disk \"%s\" too large for drive %s\n", sDiskName, this.getDriveName(drive.iDrive));
                 disk = null;
             }
         }
@@ -918,7 +919,7 @@ export default class DriveController extends Component {
              * With the addition of notify(), users are now "alerted" whenever a disk has finished loading;
              * notify() is selective about its output, using print() if a print window is open, alert() otherwise.
              */
-            this.notice("Loaded disk \"" + sDiskName + "\" in drive " + this.getDriveName(drive.iDrive), drive.fAutoMount || fAutoMount);
+            this.printf(Messages.NOTICE, "Loaded disk \"%s\" in drive %s\n", sDiskName, this.getDriveName(drive.iDrive));
 
             /*
              * Since you usually want the Computer to have focus again after loading a new disk, let's try automatically
@@ -1151,7 +1152,7 @@ export default class DriveController extends Component {
             drive.fLocal = false;
 
             if (!fLoading) {
-                this.notice("Drive " + this.getDriveName(iDrive) + " unloaded", fLoading);
+                this.printf(Messages.NOTICE, "Drive %s unloaded\n", this.getDriveName(iDrive));
                 this.sDiskSource = DriveController.SOURCE.NONE;
                 this.displayDisk(iDrive);
             }

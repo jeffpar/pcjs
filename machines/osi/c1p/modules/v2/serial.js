@@ -8,7 +8,7 @@
  */
 
 import Component from "../../../../modules/v2/component.js";
-import Str from "../../../../modules/v2/strlib.js";
+import Messages from "../../../../modules/v2/messages.js";
 import Web from "../../../../modules/v2/weblib.js";
 import { APPCLASS, DEBUG, DEBUGGER } from "./defines.js";
 

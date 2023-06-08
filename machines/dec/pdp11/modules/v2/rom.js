@@ -153,7 +153,7 @@ export default class ROMPDP11 extends Component {
     finishLoad(sURL, sData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load ROM resource (error " + nErrorCode + ": " + sURL + ")");
+            this.printf(Messages.NOTICE, "Unable to load ROM resource (error %d: %s)\n", nErrorCode, sURL);
             this.sFilePath = null;
         }
         else {

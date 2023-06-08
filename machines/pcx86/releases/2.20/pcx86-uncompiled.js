@@ -4931,17 +4931,6 @@ class Component {
             if (!this.bindings[sBinding]) {
                 let controlTextArea = /** @type {HTMLTextAreaElement} */(control);
                 this.bindings[sBinding] = controlTextArea;
-                /**
-                 * Override this.notice() with a replacement function that eliminates the Component.alertUser() call.
-                 *
-                 * @this {Component}
-                 * @param {string} sMessage
-                 * @returns {boolean}
-                 */
-                this.notice = function noticeControl(sMessage /*, fPrintOnly, id*/) {
-                    this.printf(Messages.STATUS, "%s\n", sMessage);
-                    return true;
-                };
                 /*
                  * This was added for Firefox (Safari will clear the <textarea> on a page reload, but Firefox does not).
                  */
@@ -5009,38 +4998,11 @@ class Component {
     }
 
     /**
-     * notice(s, fPrintOnly, id)
-     *
-     * notice() is like print() but implies a need for user notification, so we alert() as well; however, if this.print()
-     * is overridden, this.notice will be replaced with a similar override, on the assumption that the override is taking care
-     * of alerting the user.
-     *
-     * @this {Component}
-     * @param {string} s is the message text
-     * @param {boolean} [fPrintOnly]
-     * @param {string} [id] is the caller's ID, if any
-     * @returns {boolean}
-     */
-    notice(s, fPrintOnly, id)
-    {
-        if (!fPrintOnly) {
-            /*
-             * See if the associated computer, if any, is "unloading"....
-             */
-            let computer = Component.getComponentByType("Computer", this.id);
-            if (computer && computer.flags.unloading) {
-                console.log("ignoring notice during unload: " + s);
-                return false;
-            }
-        }
-        Component.printf(fPrintOnly? Messages.DEFAULT : Messages.NOTICE, "%s: %s\n", id || this.type, s);
-        return true;
-    }
-
-    /**
      * setError(s)
      *
      * Set a fatal error condition
+     *
+     * TODO: Any cases where we should still prefix the string with "Fatal error: "?
      *
      * @this {Component}
      * @param {string} s describes a fatal error condition
@@ -5048,7 +5010,7 @@ class Component {
     setError(s)
     {
         this.flags.error = true;
-        this.notice(s);         // TODO: Any cases where we should still prefix this string with "Fatal error: "?
+        this.printf(Messages.NOTICE, "%s\n", s);
     }
 
     /**
@@ -28894,7 +28856,7 @@ X86.helpCheckFault = function(nFault, nError, fHalt)
              * be true.  Which means we should shut the machine down.
              */
 
-            this.notice(sMessage);
+            this.printf(Messages.NOTICE, "%s\n", sMessage);
             this.stopCPU();
         }
     }
@@ -44145,7 +44107,7 @@ class ChipSet extends Component {
                     return true;
                 }
             } catch(e) {
-                this.notice("AudioContext exception: " + e.message);
+                this.printf(Messages.NOTICE, "AudioContext exception: %s\n", e.message);
                 this.contextAudio = null;
             }
         }
@@ -45728,7 +45690,7 @@ class ROMx86 extends Component {
     doneLoad(sURL, sROMData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load system ROM (error " + nErrorCode + ": " + sURL + ")", nErrorCode < 0);
+            this.printf(nErrorCode < 0? Messages.STATUS : Messages.NOTICE, "Unable to load system ROM (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 
@@ -45805,7 +45767,7 @@ class ROMx86 extends Component {
                     return;
                 }
             } catch (e) {
-                this.notice("ROM data error: " + e.message);
+                this.printf(Messages.NOTICE, "ROM data error: %s\n", e.message);
                 return;
             }
         }
@@ -45876,7 +45838,7 @@ class ROMx86 extends Component {
                         if (component) {
                             component.onROMLoad(this.abROM, this.aNotifyParms);
                         } else {
-                            this.notice("Unable to find component: " + this.idNotify);
+                            this.printf(Messages.NOTICE, "Unable to find component: %s\n", this.idNotify);
                         }
                     }
                     /*
@@ -53847,7 +53809,7 @@ class VideoX86 extends Component {
     doneLoad(sURL, sFontData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load font ROM (error " + nErrorCode + ": " + sURL + ")", nErrorCode < 0);
+            this.printf(nErrorCode < 0? Messages.STATUS : Messages.NOTICE, "Unable to load font ROM (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 
@@ -53947,12 +53909,12 @@ class VideoX86 extends Component {
                 this.setFontData(ab, [0x0000]);
             }
             else {
-                this.notice("Unrecognized font data length (" + ab.length + ")");
+                this.printf(Messages.NOTICE, "Unrecognized font data length (%d)\n", ab.length);
                 return;
             }
 
         } catch (e) {
-            this.notice("Font ROM data error: " + e.message);
+            this.printf(Messages.NOTICE, "Font ROM data error: %s\n", e.message);
             return;
         }
         /*
@@ -60490,7 +60452,7 @@ class TestController extends Component {
     doneLoad(sURL, sTestData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load tests (error " + nErrorCode + ": " + sURL + ")", nErrorCode < 0);
+            this.printf(nErrorCode < 0? Messages.STATUS : Messages.NOTICE, "Unable to load tests (error %d: %s)\n", nErrorCode, sURL);
         }
         else {
             try {
@@ -60501,7 +60463,7 @@ class TestController extends Component {
                 }
                 Component.addMachineResource(this.idMachine, sURL, sTestData);
             } catch (err) {
-                this.notice("Test parsing error: " + err.message);
+                this.printf(Messages.NOTICE, "Test parsing error: %s\n", err.message);
             }
         }
         this.setReady();
@@ -62288,12 +62250,11 @@ class Disk extends Component {
         this.controller = controller;
 
         /*
-         * Route all printing through this.controller (eg, controller.print() and controller.notice()),
-         * because the Computer component is unaware of any Disk objects and therefore will not set up the
-         * usual overrides when a Control Panel is installed.
+         * Route all printing through this.controller (eg, controller.print()), because
+         * the Computer component is unaware of any Disk objects and therefore will not set
+         * up the usual overrides when a Control Panel is installed.
          */
         this.print = controller.print;
-        this.notice = controller.notice;
 
         this.cmp = controller.cmp;
         this.dbg = controller.dbg;
@@ -62436,7 +62397,7 @@ class Disk extends Component {
             }
             while ((response = this.findDirtySectors(false))) {
                 if ((nErrorCode = response[0])) {
-                    this.notice('Unable to save "' + this.sDiskName + '" (error ' + nErrorCode + ')');
+                    this.printf(Messages.NOTICE, "Unable to save \"%s\" (error %d)\n", this.sDiskName, nErrorCode);
                     break;
                 }
             }
@@ -62449,7 +62410,7 @@ class Disk extends Component {
              * all diskettes to their original state) and discarding remote changes (which could leave the remote disk
              * in a bad state).
              */
-            if (!nErrorCode && fSave) this.notice(this.sDiskName + " saved");
+            if (!nErrorCode && fSave) this.printf(Messages.NOTICE, "\"%s\" saved\n", this.sDiskName);
         }
         return true;
     }
@@ -62674,7 +62635,7 @@ class Disk extends Component {
             this.dwChecksum = dwChecksum;
             disk = this;
         } else {
-            this.notice(message || ("Unrecognized disk format (" + cbDiskData + " bytes)"));
+            this.printf(Messages.NOTICE, "%s\n", message || ("Unrecognized disk format (" + cbDiskData + " bytes)"));
         }
 
         if (this.fnNotify) {
@@ -62698,7 +62659,7 @@ class Disk extends Component {
     {
         let disk = null;
         this.fWriteProtected = false;
-        let fPrintOnly = !!(nErrorCode < 0 && this.cmp && !this.cmp.flags.powered);
+        let idMessage = (nErrorCode < 0 && this.cmp && !this.cmp.flags.powered)? Messages.STATUS : Messages.NOTICE;
 
         if (this.fOnDemand) {
             if (!nErrorCode) {
@@ -62708,7 +62669,7 @@ class Disk extends Component {
                 this.fRemote = true;
                 disk = this;
             } else {
-                this.notice('Unable to connect to disk "' + this.sDiskPath + '" (error ' + nErrorCode + ': ' + imageData + ')', fPrintOnly);
+                this.printf(idMessage, "Unable to connect to disk \"%s\" (error %d: %s)\n", this.sDiskPath, nErrorCode, imageData);
             }
         }
         else if (nErrorCode) {
@@ -62719,7 +62680,7 @@ class Disk extends Component {
              * that yet.  For now, we rely on the lack of a specific error (nErrorCode < 0), and suppress the
              * notify() alert if there's no specific error AND the computer is not powered up yet.
              */
-            this.notice("Unable to load disk \"" + this.sDiskName + "\" (error " + nErrorCode + ": " + sURL + ")", fPrintOnly);
+            this.printf(idMessage, "Unable to load disk \"%s\" (error %d: %s)\n", this.sDiskName, nErrorCode, sURL);
         } else {
             if (DEBUG) {
                 this.printf("doneLoad(\"%s\")\n", this.sDiskPath);
@@ -64027,7 +63988,7 @@ class Disk extends Component {
              * We're suppressing checksum messages for the general public for now....
              */
             if (DEBUG || nChanges != -2) {
-                this.notice("Unable to restore disk '" + this.sDiskName + ": " + sReason);
+                this.printf(Messages.NOTICE, "Unable to restore disk \"%s\": %s\n", this.sDiskName, sReason);
             }
         } else {
             if (DEBUG) {
@@ -64563,10 +64524,10 @@ class FDC extends Component {
                             let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, disk.sDiskFile.replace(".json", ".img"));
                             Component.alertUser(sAlert);
                         } else {
-                            fdc.notice("No diskette loaded in drive.");
+                            fdc.printf(Messages.NOTICE, "No diskette loaded in drive\n");
                         }
                     } else {
-                        fdc.notice("No diskette drive selected.");
+                        fdc.printf(Messages.NOTICE, "No diskette drive selected\n");
                     }
                 }
             };
@@ -64574,7 +64535,7 @@ class FDC extends Component {
 
         case "mountDisk":
             if (!this.fLocalDisks) {
-                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available");
+                if (DEBUG) this.printf(Messages.LOG, "Local disk support not available\n");
                 /*
                  * We could also simply hide the control; eg:
                  *
@@ -65480,7 +65441,7 @@ class FDC extends Component {
                     }
                     continue;
                 }
-                this.notice("Incorrect auto-mount settings for drive " + sDrive + " (" + JSON.stringify(configDrive) + ")");
+                this.printf(Messages.NOTICE, "Incorrect auto-mount settings for drive %s (%s)\n", sDrive, JSON.stringify(configDrive));
             }
         }
         return !!this.cAutoMount;
@@ -65529,7 +65490,7 @@ class FDC extends Component {
             }
 
             if (sDiskPath == "?") {
-                this.notice('Use "Choose File" and "Mount" to select and load a local disk.');
+                this.printf(Messages.NOTICE, "Use \"Choose File\" and \"Mount\" to select and load a local disk\n");
                 return false;
             }
 
@@ -65573,7 +65534,7 @@ class FDC extends Component {
             }
             return true;
         }
-        this.notice("Unable to load the selected drive");
+        this.printf(Messages.NOTICE, "Unable to load the selected drive\n");
         return false;
     }
 
@@ -65620,7 +65581,7 @@ class FDC extends Component {
             if (drive.sDiskPath.toLowerCase() != sDiskPath.toLowerCase()) {
                 this.unloadDrive(iDrive, fAutoMount, true);
                 if (drive.fBusy) {
-                    this.notice("Drive " + iDrive + " busy");
+                    this.printf(Messages.NOTICE, "Drive %d busy\n", iDrive);
                     return 0;
                 }
                 drive.fBusy = true;
@@ -65667,7 +65628,7 @@ class FDC extends Component {
              */
             aDiskInfo = disk.info();
             if (disk && aDiskInfo[0] > drive.nCylinders || aDiskInfo[1] > drive.nHeads /* || aDiskInfo[2] > drive.nSectors */) {
-                this.notice("Diskette \"" + sDiskName + "\" too large for drive " + String.fromCharCode(0x41 + drive.iDrive));
+                this.printf(Messages.NOTICE, "Diskette \"%s\" too large for drive %s\n", sDiskName, String.fromCharCode(0x41 + drive.iDrive));
                 disk = null;
             }
         }
@@ -65724,7 +65685,7 @@ class FDC extends Component {
              * theory no message is a good sign, while load errors in disk.js should continue to trigger notifications.
              */
             if (!drive.fnCallReady) {
-                this.notice("Mounted \"" + sDiskName + "\" (format " + (disk.imageInfo && disk.imageInfo.format || "unknown") + ") in drive " + String.fromCharCode(0x41 + drive.iDrive), true /* drive.fAutoMount || fAutoMount */);
+                this.printf(Messages.STATUS, "Mounted \"%s\" (format %s) in drive %s\n", sDiskName, (disk.imageInfo && disk.imageInfo.format || "unknown"), String.fromCharCode(0x41 + drive.iDrive));
             }
 
             /*
@@ -65897,7 +65858,7 @@ class FDC extends Component {
                     if (control.text == sName) return control.value;
                 }
             }
-            this.notice("Unable to find diskette \"" + sName + "\"");
+            this.printf(Messages.NOTICE, "Unable to find diskette \"%s\"\n", sName);
         }
         return "";
     }
@@ -66051,7 +66012,7 @@ class FDC extends Component {
                     if (drive.fWritable != !(controlDrives.selectedIndex & 0x1)) {
                         drive.fWritable = !drive.fWritable;
                         if (!drive.fWritable) {
-                            this.notice("Any diskette loaded in this drive will now be write-protected.")
+                            this.printf(Messages.NOTICE, "Any diskette loaded in this drive will now be write-protected.");
                         }
                     }
                 }
@@ -66135,7 +66096,7 @@ class FDC extends Component {
              * theory no message is a good sign, while load errors in disk.js should continue to trigger notifications.
              */
             if (!fQuiet) {
-                this.notice("Drive " + String.fromCharCode(0x41 + iDrive) + " unloaded", true /* fAutoUnload */);
+                this.printf(Messages.STATUS, "Drive %s unloaded\n", String.fromCharCode(0x41 + iDrive));
             }
             /*
              * Try to avoid any unnecessary hysteresis regarding the diskette display if this unload is merely
@@ -67747,7 +67708,7 @@ class HDC extends Component {
                         let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, sDiskName);
                         Component.alertUser(sAlert);
                     } else {
-                        hdc.notice("Hard drive " + iDrive + " is not available.");
+                        hdc.printf(Messages.NOTICE, "Hard drive %d is not available.\n", iDrive);
                     }
                 };
             }(+sBinding.slice(-1));
@@ -68213,7 +68174,7 @@ class HDC extends Component {
          */
         if (drive.disk === undefined) {
             drive.disk = null;
-            this.notice("Type " + drive.type + " \"" + drive.name + "\" is fixed disk " + iDrive, true);
+            this.printf(Messages.STATUS, "Type %d \"%s\" is fixed disk %d\n", drive.type, drive.name, iDrive);
         }
 
         /*
@@ -68355,7 +68316,7 @@ class HDC extends Component {
                 let driveType = HDC.aDriveTypes[this.iDriveTable][drive.type];
                 if (driveType) {
                     if (nCylinders != driveType[0] && nHeads != driveType[1]) {
-                        this.notice("Warning: drive parameters (" + nCylinders + "," + nHeads + ") do not match drive type " + drive.type + " (" + driveType[0] + "," + driveType[1] + ")");
+                        this.printf(Messages.NOTICE, "Warning: drive parameters (%d,%d) do not match drive type %d (%d,%d)\n", nCylinders, nHeads, drive.type, driveType[0], driveType[1]);
                     }
                 }
                 drive.nCylinders = nCylinders;
@@ -68477,7 +68438,7 @@ class HDC extends Component {
         let drive = this.aDrives[iDrive];
         if (!drive.type) return true;
         if (drive.fBusy) {
-            this.notice("Drive " + iDrive + " busy");
+            this.printf(Messages.NOTICE, "Drive %d busy\n", iDrive);
             return true;
         }
         drive.fBusy = true;
@@ -68529,7 +68490,7 @@ class HDC extends Component {
              * WARNING: This conversion of drive number to drive letter, starting with "C:" (0x43), is very simplistic
              * and is not guaranteed to match the drive mapping that DOS ultimately uses.
              */
-            this.notice("Mounted disk \"" + sDiskName + "\" in drive " + String.fromCharCode(0x43 + drive.iDrive), drive.fAutoMount);
+            this.printf(drive.fAutoMount? Messages.STATUS : Messages.NOTICE, "Mounted disk \"%s\" in drive %s\n", sDiskName, String.fromCharCode(0x43 + drive.iDrive));
 
             let aDiskInfo = disk.info();
             if (aDiskInfo[0] != drive.nCylinders || aDiskInfo[1] != drive.nHeads || aDiskInfo[2] != drive.nSectors || aDiskInfo[3] != drive.cbSector) {
@@ -68538,7 +68499,7 @@ class HDC extends Component {
                  * map the controller's I/O requests to the disk's geometry.  Also, we should provide a way to reformat such a
                  * disk so that its geometry matches the controller requirements.
                  */
-                this.notice("Warning: disk geometry (" + aDiskInfo[0] + ':' + aDiskInfo[1] + ':' + aDiskInfo[2] + ") does not match " + HDC.aDriveTables[this.iDriveTable] + " drive type " + drive.type + " (" + drive.nCylinders + ':' + drive.nHeads + ':' + drive.nSectors + ")");
+                this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], HDC.aDriveTables[this.iDriveTable], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
             }
         }
         if (drive.fAutoMount) {
@@ -70628,7 +70589,7 @@ class HDC extends Component {
     //     // WARNING: This conversion of drive number to drive letter, starting with "C:" (0x43), is very simplistic
     //     // and is not guaranteed to match the drive mapping that DOS ultimately uses.
     //     //
-    //     this.notice("Drive " + String.fromCharCode(0x43 + iDrive) + " unloaded");
+    //     this.printf(Messages.NOTICE, "Drive %s unloaded\n", String.fromCharCode(0x43 + iDrive));
     // }
 
     /**
@@ -80841,10 +80802,8 @@ class Computer extends Component {
         this.controlPanel = this.panel && this.panel.bindings['print'];
 
         this.printComputer = this.print;
-        this.noticeComputer = this.notice;
         if (this.controlPanel) {
             this.printComputer = this.panel.print;
-            this.noticeComputer = this.panel.notice;
         }
 
         for (iComponent = 0; iComponent < aComponents.length; iComponent++) {
@@ -80852,10 +80811,6 @@ class Computer extends Component {
             component.print = function printComputer(s, bitsMessage) {
                 cmp.outputDiagnostics(s, bitsMessage);
                 return cmp.printComputer.call(this, s, bitsMessage);
-            }.bind(component);
-            component.notice = function noticeComputer(s, fPrintOnly, id) {
-                cmp.outputDiagnostics(s + "\n");
-                return cmp.noticeComputer.call(this, s, fPrintOnly, id);
             }.bind(component);
         }
 
@@ -81322,7 +81277,7 @@ class Computer extends Component {
         } else {
             this.sResumePath = null;
             this.fServerState = false;
-            this.notice('Unable to load machine state from server (error ' + nErrorCode + (sStateData? ': ' + Str.trim(sStateData) : '') + ')');
+            this.printf(Messages.NOTICE, "Unable to load machine state from server (error %d%s)\n", nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
         }
         this.setReady();
     }
@@ -81379,7 +81334,7 @@ class Computer extends Component {
             let sTimestampValidate = stateValidate.get(Computer.STATE_TIMESTAMP);
             let sTimestampComputer = stateComputer ? stateComputer.get(Computer.STATE_TIMESTAMP) : "unknown";
             if (sTimestampValidate != sTimestampComputer) {
-                this.notice("Machine state may be out-of-date\n(" + sTimestampValidate + " vs. " + sTimestampComputer + ")\nCheck your browser's local storage limits");
+                this.printf(Messages.NOTICE, "Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n", sTimestampValidate, sTimestampComputer);
                 fValid = false;
                 if (!stateComputer) stateValidate.clear();
             } else {
@@ -81459,7 +81414,7 @@ class Computer extends Component {
                                  * A missing (or not yet created) state file is no cause for alarm, but other errors might be
                                  */
                                 if (sCode == UserAPI.CODE.FAIL && sData != UserAPI.FAIL.NOSTATE) {
-                                    this.notice("Error: " + sData);
+                                    this.printf(Messages.NOTICE, "Error: %s\n", sData);
                                     if (sData == UserAPI.FAIL.VERIFY) this.resetUserID();
                                 } else {
                                     this.printf(Messages.DEBUG, "%s: %s\n", sCode, sData);
@@ -81587,7 +81542,8 @@ class Computer extends Component {
                  */
                 if (!component.powerUp(data, fRepower) && data) {
 
-                    if (component.notice("Unable to restore hardware state")) {
+                    if (!this.flags.unloading) {
+                        this.printf(Messages.NOTICE, "Unable to restore hardware state\n");
                         /*
                          * If this is a resume error for a machine that also has a predefined state
                          * AND we're not restoring from that state, then throw away the current state,
@@ -82063,7 +82019,7 @@ class Computer extends Component {
                     if (fSave) {
                         computer.saveServerState(sUserID, sState);
                     } else {
-                        computer.notice("Resume disabled, machine state not saved");
+                        computer.printf(Messages.NOTICE, "Resume disabled, machine state not saved\n");
                     }
                 }
                 /*
@@ -82121,11 +82077,11 @@ class Computer extends Component {
                     sUserID = Component.promptUser("Saving machine states on the pcjs.org server is currently unsupported.\n\nIf you're running your own server, enter your user ID below.");
                     if (sUserID) {
                         sUserID = this.verifyUserID(sUserID);
-                        if (!sUserID) this.notice("The user ID is invalid.");
+                        if (!sUserID) this.printf(Messages.NOTICE, "The user ID is invalid.\n");
                     }
                 }
             } else if (fPrompt) {
-                this.notice("Browser local storage is not available");
+                this.printf(Messages.NOTICE, "Browser local storage is not available\n");
             }
         }
         return sUserID;
@@ -82202,7 +82158,7 @@ class Computer extends Component {
             if (DEBUG) this.printf("size of server state: %d bytes\n", sState.length);
             let response = this.storeServerState(sUserID, sState, true);
             if (response && response[UserAPI.RES.CODE] == UserAPI.CODE.OK) {
-                this.notice("Machine state saved to server");
+                this.printf(Messages.NOTICE, "Machine state saved to server\n");
             } else if (sState) {
                 let sError = (response && response[UserAPI.RES.DATA]) || UserAPI.FAIL.BADSTORE;
                 if (response[UserAPI.RES.CODE] == UserAPI.CODE.FAIL) {
@@ -82210,7 +82166,7 @@ class Computer extends Component {
                 } else {
                     sError = "Error " + response[UserAPI.RES.CODE] + ": " + sError;
                 }
-                this.notice(sError);
+                this.printf(Messages.NOTICE, "%s\n", sError);
                 this.resetUserID();
             }
         } else {

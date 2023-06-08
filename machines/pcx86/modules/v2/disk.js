@@ -260,12 +260,11 @@ export default class Disk extends Component {
         this.controller = controller;
 
         /*
-         * Route all printing through this.controller (eg, controller.print() and controller.notice()),
-         * because the Computer component is unaware of any Disk objects and therefore will not set up the
-         * usual overrides when a Control Panel is installed.
+         * Route all printing through this.controller (eg, controller.print()), because
+         * the Computer component is unaware of any Disk objects and therefore will not set
+         * up the usual overrides when a Control Panel is installed.
          */
         this.print = controller.print;
-        this.notice = controller.notice;
 
         this.cmp = controller.cmp;
         this.dbg = controller.dbg;
@@ -408,7 +407,7 @@ export default class Disk extends Component {
             }
             while ((response = this.findDirtySectors(false))) {
                 if ((nErrorCode = response[0])) {
-                    this.notice('Unable to save "' + this.sDiskName + '" (error ' + nErrorCode + ')');
+                    this.printf(Messages.NOTICE, "Unable to save \"%s\" (error %d)\n", this.sDiskName, nErrorCode);
                     break;
                 }
             }
@@ -421,7 +420,7 @@ export default class Disk extends Component {
              * all diskettes to their original state) and discarding remote changes (which could leave the remote disk
              * in a bad state).
              */
-            if (!nErrorCode && fSave) this.notice(this.sDiskName + " saved");
+            if (!nErrorCode && fSave) this.printf(Messages.NOTICE, "\"%s\" saved\n", this.sDiskName);
         }
         return true;
     }
@@ -646,7 +645,7 @@ export default class Disk extends Component {
             this.dwChecksum = dwChecksum;
             disk = this;
         } else {
-            this.notice(message || ("Unrecognized disk format (" + cbDiskData + " bytes)"));
+            this.printf(Messages.NOTICE, "%s\n", message || ("Unrecognized disk format (" + cbDiskData + " bytes)"));
         }
 
         if (this.fnNotify) {
@@ -670,7 +669,7 @@ export default class Disk extends Component {
     {
         let disk = null;
         this.fWriteProtected = false;
-        let fPrintOnly = !!(nErrorCode < 0 && this.cmp && !this.cmp.flags.powered);
+        let idMessage = (nErrorCode < 0 && this.cmp && !this.cmp.flags.powered)? Messages.STATUS : Messages.NOTICE;
 
         if (this.fOnDemand) {
             if (!nErrorCode) {
@@ -680,7 +679,7 @@ export default class Disk extends Component {
                 this.fRemote = true;
                 disk = this;
             } else {
-                this.notice('Unable to connect to disk "' + this.sDiskPath + '" (error ' + nErrorCode + ': ' + imageData + ')', fPrintOnly);
+                this.printf(idMessage, "Unable to connect to disk \"%s\" (error %d: %s)\n", this.sDiskPath, nErrorCode, imageData);
             }
         }
         else if (nErrorCode) {
@@ -691,7 +690,7 @@ export default class Disk extends Component {
              * that yet.  For now, we rely on the lack of a specific error (nErrorCode < 0), and suppress the
              * notify() alert if there's no specific error AND the computer is not powered up yet.
              */
-            this.notice("Unable to load disk \"" + this.sDiskName + "\" (error " + nErrorCode + ": " + sURL + ")", fPrintOnly);
+            this.printf(idMessage, "Unable to load disk \"%s\" (error %d: %s)\n", this.sDiskName, nErrorCode, sURL);
         } else {
             if (DEBUG) {
                 this.printf("doneLoad(\"%s\")\n", this.sDiskPath);
@@ -1999,7 +1998,7 @@ export default class Disk extends Component {
              * We're suppressing checksum messages for the general public for now....
              */
             if (DEBUG || nChanges != -2) {
-                this.notice("Unable to restore disk '" + this.sDiskName + ": " + sReason);
+                this.printf(Messages.NOTICE, "Unable to restore disk \"%s\": %s\n", this.sDiskName, sReason);
             }
         } else {
             if (DEBUG) {

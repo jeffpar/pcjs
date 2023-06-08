@@ -108,7 +108,7 @@ export default class VideoX80 extends Component {
             this.rotateBuffer = this.rotateBuffer % 360;
             if (this.rotateBuffer > 0) this.rotateBuffer -= 360;
             if (this.rotateBuffer != -90) {
-                this.notice("unsupported buffer rotation: " + this.rotateBuffer);
+                this.printf(Messages.NOTICE, "unsupported buffer rotation: %d\n", this.rotateBuffer);
                 this.rotateBuffer = 0;
             }
         }
@@ -163,7 +163,7 @@ export default class VideoX80 extends Component {
              * both is most likely a mistake, but who knows, maybe someone wants to use both for 180-degree rotation?
              */
             if (this.rotateScreen != -90) {
-                this.notice("unsupported screen rotation: " + this.rotateScreen);
+                this.printf(Messages.NOTICE, "unsupported screen rotation: %d\n", this.rotateScreen);
                 this.rotateScreen = 0;
             } else {
                 this.contextScreen.translate(0, this.cyScreen);
@@ -421,7 +421,7 @@ export default class VideoX80 extends Component {
     doneLoad(sURL, sFontData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load font ROM (error " + nErrorCode + ": " + sURL + ")");
+            this.printf(Messages.NOTICE, "Unable to load font ROM (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 
@@ -452,12 +452,12 @@ export default class VideoX80 extends Component {
                 this.createFonts();
             }
             else {
-                this.notice("Unrecognized font data length (" + abFontData.length + ")");
+                this.printf(Messages.NOTICE, "Unrecognized font data length (%d)\n", abFontData.length);
                 return;
             }
 
         } catch (e) {
-            this.notice("Font ROM data error: " + e.message);
+            this.printf(Messages.NOTICE, "Font ROM data error: %s\n", e.message);
             return;
         }
 

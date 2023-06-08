@@ -219,7 +219,7 @@ export default class HDC extends Component {
                         let sAlert = Web.downloadFile(disk.encodeAsBinary(), "octet-stream", true, sDiskName);
                         Component.alertUser(sAlert);
                     } else {
-                        hdc.notice("Hard drive " + iDrive + " is not available.");
+                        hdc.printf(Messages.NOTICE, "Hard drive %d is not available.\n", iDrive);
                     }
                 };
             }(+sBinding.slice(-1));
@@ -685,7 +685,7 @@ export default class HDC extends Component {
          */
         if (drive.disk === undefined) {
             drive.disk = null;
-            this.notice("Type " + drive.type + " \"" + drive.name + "\" is fixed disk " + iDrive, true);
+            this.printf(Messages.STATUS, "Type %d \"%s\" is fixed disk %d\n", drive.type, drive.name, iDrive);
         }
 
         /*
@@ -827,7 +827,7 @@ export default class HDC extends Component {
                 let driveType = HDC.aDriveTypes[this.iDriveTable][drive.type];
                 if (driveType) {
                     if (nCylinders != driveType[0] && nHeads != driveType[1]) {
-                        this.notice("Warning: drive parameters (" + nCylinders + "," + nHeads + ") do not match drive type " + drive.type + " (" + driveType[0] + "," + driveType[1] + ")");
+                        this.printf(Messages.NOTICE, "Warning: drive parameters (%d,%d) do not match drive type %d (%d,%d)\n", nCylinders, nHeads, drive.type, driveType[0], driveType[1]);
                     }
                 }
                 drive.nCylinders = nCylinders;
@@ -949,7 +949,7 @@ export default class HDC extends Component {
         let drive = this.aDrives[iDrive];
         if (!drive.type) return true;
         if (drive.fBusy) {
-            this.notice("Drive " + iDrive + " busy");
+            this.printf(Messages.NOTICE, "Drive %d busy\n", iDrive);
             return true;
         }
         drive.fBusy = true;
@@ -1001,7 +1001,7 @@ export default class HDC extends Component {
              * WARNING: This conversion of drive number to drive letter, starting with "C:" (0x43), is very simplistic
              * and is not guaranteed to match the drive mapping that DOS ultimately uses.
              */
-            this.notice("Mounted disk \"" + sDiskName + "\" in drive " + String.fromCharCode(0x43 + drive.iDrive), drive.fAutoMount);
+            this.printf(drive.fAutoMount? Messages.STATUS : Messages.NOTICE, "Mounted disk \"%s\" in drive %s\n", sDiskName, String.fromCharCode(0x43 + drive.iDrive));
 
             let aDiskInfo = disk.info();
             if (aDiskInfo[0] != drive.nCylinders || aDiskInfo[1] != drive.nHeads || aDiskInfo[2] != drive.nSectors || aDiskInfo[3] != drive.cbSector) {
@@ -1010,7 +1010,7 @@ export default class HDC extends Component {
                  * map the controller's I/O requests to the disk's geometry.  Also, we should provide a way to reformat such a
                  * disk so that its geometry matches the controller requirements.
                  */
-                this.notice("Warning: disk geometry (" + aDiskInfo[0] + ':' + aDiskInfo[1] + ':' + aDiskInfo[2] + ") does not match " + HDC.aDriveTables[this.iDriveTable] + " drive type " + drive.type + " (" + drive.nCylinders + ':' + drive.nHeads + ':' + drive.nSectors + ")");
+                this.printf(Messages.NOTICE, "Warning: disk geometry (%d:%d:%d) does not match %s drive type %d (%d:%d:%d)\n", aDiskInfo[0], aDiskInfo[1], aDiskInfo[2], HDC.aDriveTables[this.iDriveTable], drive.type, drive.nCylinders, drive.nHeads, drive.nSectors);
             }
         }
         if (drive.fAutoMount) {
@@ -3100,7 +3100,7 @@ export default class HDC extends Component {
     //     // WARNING: This conversion of drive number to drive letter, starting with "C:" (0x43), is very simplistic
     //     // and is not guaranteed to match the drive mapping that DOS ultimately uses.
     //     //
-    //     this.notice("Drive " + String.fromCharCode(0x43 + iDrive) + " unloaded");
+    //     this.printf(Messages.NOTICE, "Drive %s unloaded\n", String.fromCharCode(0x43 + iDrive));
     // }
 
     /**

@@ -8,6 +8,7 @@
  */
 
 import MemoryX80 from "./memory.js";
+import Messages from "./messages.js";
 import Component from "../../../modules/v2/component.js";
 import DumpAPI from "../../../modules/v2/dumpapi.js";
 import Str from "../../../modules/v2/strlib.js";
@@ -154,7 +155,7 @@ export default class ROMx80 extends Component {
     doneLoad(sURL, sROMData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load system ROM (error " + nErrorCode + ": " + sURL + ")");
+            this.printf(Messages.NOTICE, "Unable to load system ROM (error %d: %s)\n", nErrorCode, sURL);
             return;
         }
 
@@ -203,7 +204,7 @@ export default class ROMx80 extends Component {
                     return;
                 }
             } catch (e) {
-                this.notice("ROM data error: " + e.message);
+                this.printf(Messages.NOTICE, "ROM data error: %s\n", e.message);
                 return;
             }
         }

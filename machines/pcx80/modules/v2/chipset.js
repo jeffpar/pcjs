@@ -208,7 +208,7 @@ export default class ChipSetX80 extends Component {
     reset()
     {
         if (this.config.INIT && !this.restore(this.config.INIT)) {
-            this.notice("reset error");
+            this.printf(Messages.NOTICE, "reset error\n");
         }
     }
 

@@ -373,7 +373,7 @@ export default class PC11 extends Component {
         }
 
         if (sTapePath == PC11.SOURCE.LOCAL) {
-            this.notice('Use "Choose File" and "Mount" to select and load a local tape.');
+            this.printf(Messages.NOTICE, "Use \"Choose File\" and \"Mount\" to select and load a local tape.\n");
             return;
         }
 
@@ -423,7 +423,7 @@ export default class PC11 extends Component {
             this.unloadTape(true);
 
             if (this.flags.busy) {
-                this.notice("PC11 busy");
+                this.printf(Messages.NOTICE, "PC11 busy\n");
             }
             else {
                 // this.printf(Messages.STATUS, "tape queued: %s\n", sTapeName);
@@ -526,7 +526,7 @@ export default class PC11 extends Component {
              * that yet.  For now, we rely on the lack of a specific error (nErrorCode < 0), and suppress the
              * notify() alert if there's no specific error AND the computer is not powered up yet.
              */
-            this.notice("Unable to load tape \"" + sTapeName + "\" (error " + nErrorCode + ": " + sURL + ")", fPrintOnly);
+            this.printf(Messages.NOTICE, "Unable to load tape \"%s\" (error %d: %s)\n", sTapeName, nErrorCode, sURL);
         }
         else {
             if (DEBUG) {
@@ -702,7 +702,7 @@ export default class PC11 extends Component {
                  *      this.sTapeSource = PC11.SOURCE.NONE;
                  *      this.nTapeTarget = PC11.TARGET.NONE;
                  */
-                this.notice('No valid memory address for tape "' + sTapeName + '"');
+                this.printf(Messages.NOTICE, "No valid memory address for tape \"%s\"\n", sTapeName);
                 return;
             }
             this.printf(Messages.STATUS, 'Read tape "%s"\n', sTapeName);

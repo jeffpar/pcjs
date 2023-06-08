@@ -161,10 +161,8 @@ export default class Computer extends Component {
         this.controlPanel = this.panel && this.panel.bindings['print'];
 
         this.printComputer = this.print;
-        this.noticeComputer = this.notice;
         if (this.controlPanel) {
             this.printComputer = this.panel.print;
-            this.noticeComputer = this.panel.notice;
         }
 
         for (iComponent = 0; iComponent < aComponents.length; iComponent++) {
@@ -172,10 +170,6 @@ export default class Computer extends Component {
             component.print = function printComputer(s, bitsMessage) {
                 cmp.outputDiagnostics(s, bitsMessage);
                 return cmp.printComputer.call(this, s, bitsMessage);
-            }.bind(component);
-            component.notice = function noticeComputer(s, fPrintOnly, id) {
-                cmp.outputDiagnostics(s + "\n");
-                return cmp.noticeComputer.call(this, s, fPrintOnly, id);
             }.bind(component);
         }
 
@@ -642,7 +636,7 @@ export default class Computer extends Component {
         } else {
             this.sResumePath = null;
             this.fServerState = false;
-            this.notice('Unable to load machine state from server (error ' + nErrorCode + (sStateData? ': ' + Str.trim(sStateData) : '') + ')');
+            this.printf(Messages.NOTICE, "Unable to load machine state from server (error %d%s)\n", nErrorCode, (sStateData? ': ' + Str.trim(sStateData) : ''));
         }
         this.setReady();
     }
@@ -699,7 +693,7 @@ export default class Computer extends Component {
             let sTimestampValidate = stateValidate.get(Computer.STATE_TIMESTAMP);
             let sTimestampComputer = stateComputer ? stateComputer.get(Computer.STATE_TIMESTAMP) : "unknown";
             if (sTimestampValidate != sTimestampComputer) {
-                this.notice("Machine state may be out-of-date\n(" + sTimestampValidate + " vs. " + sTimestampComputer + ")\nCheck your browser's local storage limits");
+                this.printf(Messages.NOTICE, "Machine state may be out-of-date\n(%s vs. %s)\nCheck your browser's local storage limits\n", sTimestampValidate, sTimestampComputer);
                 fValid = false;
                 if (!stateComputer) stateValidate.clear();
             } else {
@@ -779,7 +773,7 @@ export default class Computer extends Component {
                                  * A missing (or not yet created) state file is no cause for alarm, but other errors might be
                                  */
                                 if (sCode == UserAPI.CODE.FAIL && sData != UserAPI.FAIL.NOSTATE) {
-                                    this.notice("Error: " + sData);
+                                    this.printf(Messages.NOTICE, "Error: %s\n", sData);
                                     if (sData == UserAPI.FAIL.VERIFY) this.resetUserID();
                                 } else {
                                     this.printf(Messages.DEBUG, "%s: %s\n", sCode, sData);
@@ -907,7 +901,8 @@ export default class Computer extends Component {
                  */
                 if (!component.powerUp(data, fRepower) && data) {
 
-                    if (component.notice("Unable to restore hardware state")) {
+                    if (!this.flags.unloading) {
+                        this.printf(Messages.NOTICE, "Unable to restore hardware state\n");
                         /*
                          * If this is a resume error for a machine that also has a predefined state
                          * AND we're not restoring from that state, then throw away the current state,
@@ -1383,7 +1378,7 @@ export default class Computer extends Component {
                     if (fSave) {
                         computer.saveServerState(sUserID, sState);
                     } else {
-                        computer.notice("Resume disabled, machine state not saved");
+                        computer.printf(Messages.NOTICE, "Resume disabled, machine state not saved\n");
                     }
                 }
                 /*
@@ -1441,11 +1436,11 @@ export default class Computer extends Component {
                     sUserID = Component.promptUser("Saving machine states on the pcjs.org server is currently unsupported.\n\nIf you're running your own server, enter your user ID below.");
                     if (sUserID) {
                         sUserID = this.verifyUserID(sUserID);
-                        if (!sUserID) this.notice("The user ID is invalid.");
+                        if (!sUserID) this.printf(Messages.NOTICE, "The user ID is invalid.\n");
                     }
                 }
             } else if (fPrompt) {
-                this.notice("Browser local storage is not available");
+                this.printf(Messages.NOTICE, "Browser local storage is not available\n");
             }
         }
         return sUserID;
@@ -1522,7 +1517,7 @@ export default class Computer extends Component {
             if (DEBUG) this.printf("size of server state: %d bytes\n", sState.length);
             let response = this.storeServerState(sUserID, sState, true);
             if (response && response[UserAPI.RES.CODE] == UserAPI.CODE.OK) {
-                this.notice("Machine state saved to server");
+                this.printf(Messages.NOTICE, "Machine state saved to server\n");
             } else if (sState) {
                 let sError = (response && response[UserAPI.RES.DATA]) || UserAPI.FAIL.BADSTORE;
                 if (response[UserAPI.RES.CODE] == UserAPI.CODE.FAIL) {
@@ -1530,7 +1525,7 @@ export default class Computer extends Component {
                 } else {
                     sError = "Error " + response[UserAPI.RES.CODE] + ": " + sError;
                 }
-                this.notice(sError);
+                this.printf(Messages.NOTICE, "%s\n", sError);
                 this.resetUserID();
             }
         } else {

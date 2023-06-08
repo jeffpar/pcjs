@@ -181,7 +181,37 @@ function replaceText(sText, sType, verbose)
 {
     let sTextNew = "";
     let iTextLast = 0;
-    if (sType == "println") {
+    if (sType == "notice") {
+        let matches = sText.matchAll(/\.notice\((.*?)\);/g);
+        for (let match of matches) {
+            let sNew = match[0];
+            if (match[1]) {
+                /*
+                 * Technically (albeit infrequently), notice() can specify a "print only" flag for the second argument
+                 * and an ID for the third argument.
+                 */
+                let args = splitArgs(match[1], ',');
+                let [sFormat, sList] = replaceArgs(args[0]);
+                if (sFormat) {
+                    sFormat = "\"" + sFormat + "\\n\"";
+                    for (let i = 1; i < args.length; i++) {
+                        printf("unsupported notice args[%d]: %s\n", i, args[i]);
+                    }
+                    sNew = ".printf(Messages.NOTICE, " + sFormat + (sList? ", " + sList : "") + ");";
+                    if (verbose) {
+                        printf("replacing '%s'\n     with '%s\n\n", match[0], sNew);
+                    }
+                } else {
+                    printf("unable to replace: '%s'\n", match[0]);
+                }
+            }
+            sTextNew += sText.slice(iTextLast, match.index);
+            sTextNew += sNew;
+            iTextLast = match.index + match[0].length;
+        }
+        sTextNew += sText.slice(iTextLast);
+    }
+    else if (sType == "println") {
         let matches = sText.matchAll(/\.println\((.*?)\);/g);
         for (let match of matches) {
             let sNew = match[0];

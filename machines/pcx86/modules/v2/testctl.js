@@ -12,6 +12,7 @@
  * our 'binding' property indicates, if any.
  */
 
+import Messages from "./messages.js";
 import TestMonitor from "./testmon.js";
 import Component from "../../../modules/v2/component.js";
 import Str from "../../../modules/v2/strlib.js";
@@ -104,7 +105,7 @@ export default class TestController extends Component {
     doneLoad(sURL, sTestData, nErrorCode)
     {
         if (nErrorCode) {
-            this.notice("Unable to load tests (error " + nErrorCode + ": " + sURL + ")", nErrorCode < 0);
+            this.printf(nErrorCode < 0? Messages.STATUS : Messages.NOTICE, "Unable to load tests (error %d: %s)\n", nErrorCode, sURL);
         }
         else {
             try {
@@ -115,7 +116,7 @@ export default class TestController extends Component {
                 }
                 Component.addMachineResource(this.idMachine, sURL, sTestData);
             } catch (err) {
-                this.notice("Test parsing error: " + err.message);
+                this.printf(Messages.NOTICE, "Test parsing error: %s\n", err.message);
             }
         }
         this.setReady();
